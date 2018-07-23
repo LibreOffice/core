@@ -82,6 +82,9 @@ public:
     void testDataLabelDoughnutChartDOCX();
     void testDataLabelAreaChartDOCX();
     void testDataLabelDefaultLineChartDOCX();
+    void testChartTitlePropertiesColorFillDOCX();
+    void testChartTitlePropertiesGradientFillDOCX();
+    void testChartTitlePropertiesBitmapFillDOCX();
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
     void testDispBlanksAsXLSX();
@@ -96,6 +99,9 @@ public:
     void testTitleManualLayoutXLSX();
     void testPlotAreaManualLayoutXLSX();
     void testLegendManualLayoutXLSX();
+    void testChartTitlePropertiesColorFillXLSX();
+    void testChartTitlePropertiesGradientFillXLSX();
+    void testChartTitlePropertiesBitmapFillXLSX();
     void testAxisCharacterPropertiesXLSX();
     void testTitleCharacterPropertiesXLSX();
     void testPlotVisOnlyXLSX();
@@ -104,6 +110,9 @@ public:
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testNumberFormatExportPPTX();
+    void testChartTitlePropertiesColorFillPPTX();
+    void testChartTitlePropertiesGradientFillPPTX();
+    void testChartTitlePropertiesBitmapFillPPTX();
     void testTdf116163();
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
@@ -152,6 +161,9 @@ public:
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
     CPPUNIT_TEST(testDataLabelAreaChartDOCX);
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
+    CPPUNIT_TEST(testChartTitlePropertiesColorFillDOCX);
+    CPPUNIT_TEST(testChartTitlePropertiesGradientFillDOCX);
+    CPPUNIT_TEST(testChartTitlePropertiesBitmapFillDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
     CPPUNIT_TEST(testDispBlanksAsXLSX);
@@ -166,6 +178,9 @@ public:
     CPPUNIT_TEST(testTitleManualLayoutXLSX);
     CPPUNIT_TEST(testPlotAreaManualLayoutXLSX);
     CPPUNIT_TEST(testLegendManualLayoutXLSX);
+    CPPUNIT_TEST(testChartTitlePropertiesColorFillXLSX);
+    CPPUNIT_TEST(testChartTitlePropertiesGradientFillXLSX);
+    CPPUNIT_TEST(testChartTitlePropertiesBitmapFillXLSX);
     CPPUNIT_TEST(testAxisCharacterPropertiesXLSX);
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
@@ -174,6 +189,9 @@ public:
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testNumberFormatExportPPTX);
+    CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
+    CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
+    CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
@@ -1057,6 +1075,34 @@ void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line chart's default label placement should be 'right'.", chart::DataLabelPlacement::RIGHT, nLabelPlacement );
 }
 
+void Chart2ExportTest::testChartTitlePropertiesColorFillDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testChartTitlePropertiesColorFill.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesGradientFillDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testChartTitlePropertiesGradientFill.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "cccccc");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "666666");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesBitmapFillDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testChartTitlePropertiesBitmapFill.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed", "rId1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
 void Chart2ExportTest::testBarChartRotation()
 {
     load ("/chart2/qa/extras/data/docx/", "barChartRotation.docx");
@@ -1494,6 +1540,34 @@ void Chart2ExportTest::testLegendManualLayoutXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:txPr/a:p/a:pPr/a:defRPr", "sz", "900");
 }
 
+void Chart2ExportTest::testChartTitlePropertiesColorFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testChartTitlePropertiesColorFill.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesGradientFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testChartTitlePropertiesGradientFill.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "cccccc");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "666666");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesBitmapFillXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testChartTitlePropertiesBitmapFill.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed", "rId1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
 void Chart2ExportTest::testAxisCharacterPropertiesXLSX()
 {
     load("/chart2/qa/extras/data/xlsx/", "axis_character_properties.xlsx");
@@ -1581,6 +1655,34 @@ void Chart2ExportTest::testNumberFormatExportPPTX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "formatCode", "#,##0.00,\\K");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
+}
+
+void Chart2ExportTest::testChartTitlePropertiesColorFillPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testChartTitlePropertiesColorFill.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesGradientFillPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testChartTitlePropertiesGradientFill.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "f6f8fc");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "c7d5ed");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testChartTitlePropertiesBitmapFillPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testChartTitlePropertiesBitmapFill.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed", "rId1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
 void Chart2ExportTest::testTdf116163()
