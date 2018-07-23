@@ -29,7 +29,7 @@ class XMLPersAttrListTContext : public XMLTransformerContext
 
     css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
     OUString m_aElemQName;
-    sal_uInt16 m_nActionMap;
+    sal_uInt16 const m_nActionMap;
 
 protected:
 

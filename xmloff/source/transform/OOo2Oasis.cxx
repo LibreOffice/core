@@ -1086,7 +1086,7 @@ static XMLTokenEnum aTokenMap[] =
 
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
-    OUString m_aElemQName;
+    OUString const m_aElemQName;
     OUString m_aOldClass;
 
 public:
@@ -1367,8 +1367,8 @@ void XMLTabStopOOoTContext_Impl::StartElement(
 
 class XMLTrackedChangesOOoTContext_Impl : public XMLTransformerContext
 {
-    sal_uInt16 m_nPrefix;
-    XMLTokenEnum m_eToken;
+    sal_uInt16 const m_nPrefix;
+    XMLTokenEnum const m_eToken;
 
 public:
     XMLTrackedChangesOOoTContext_Impl( XMLTransformerBase& rTransformer,
@@ -1432,7 +1432,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
 
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
 {
-    OUString m_aElemQName;
+    OUString const m_aElemQName;
 
 public:
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
@@ -1741,19 +1741,14 @@ OUString OOo2OasisTransformer::GetEventName( const OUString& rName, bool )
     return aNewName;
 }
 
-OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
-                                            const sal_Char *pSubServiceName )
+OOo2OasisTransformer::OOo2OasisTransformer( OUString const & rImplName,
+                                            OUString const & rSubServiceName )
         throw() :
     XMLTransformerBase( aActionTable, aTokenMap ),
+    m_aImplName(rImplName),
+    m_aSubServiceName(rSubServiceName),
     m_pEventMap( nullptr )
 {
-    if( pImplName )
-        m_aImplName = OUString::createFromAscii( pImplName );
-    else
-        m_aImplName = OOo2OasisTransformer_getImplementationName();
-    if( pSubServiceName )
-        m_aSubServiceName = OUString::createFromAscii( pSubServiceName );
-
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
 
@@ -2001,13 +1996,13 @@ Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw()
 Reference< XInterface > OOo2OasisTransformer_createInstance(
         const Reference< XMultiServiceFactory > & )
 {
-    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer());
+    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer(OOo2OasisTransformer_getImplementationName(), OUString()));
 }
 
 #define OOO_IMPORTER( className, implName, subServiceName )             \
 OUString className##_getImplementationName() throw()           \
 {                                                                       \
-    return OUString( implName );         \
+    return OUString(implName);         \
 }                                                                       \
                                                                         \
 Sequence< OUString > className##_getSupportedServiceNames() throw()\

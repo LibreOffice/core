@@ -37,7 +37,7 @@ class SchemaRestrictionContext : public TokenContext
 {
     css::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
     css::uno::Reference<css::beans::XPropertySet> mxDataType;
-    OUString msTypeName;
+    OUString const msTypeName;
     OUString msBaseName;
 
 public:

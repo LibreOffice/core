@@ -25,12 +25,12 @@
 
 struct XMLTransformerActionInit
 {
-    sal_uInt16 m_nPrefix;
-    ::xmloff::token::XMLTokenEnum m_eLocalName;
-    sal_uInt32 m_nActionType;
-    sal_uInt32 m_nParam1;
-    sal_uInt32 m_nParam2;
-    sal_uInt32 m_nParam3;
+    sal_uInt16 const m_nPrefix;
+    ::xmloff::token::XMLTokenEnum const m_eLocalName;
+    sal_uInt32 const m_nActionType;
+    sal_uInt32 const m_nParam1;
+    sal_uInt32 const m_nParam2;
+    sal_uInt32 const m_nParam3;
 
     static sal_uInt32 QNameParam( sal_uInt16 nPrefix,
                                     ::xmloff::token::XMLTokenEnum eLocalName )
