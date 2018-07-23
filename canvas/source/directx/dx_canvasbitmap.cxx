@@ -68,7 +68,8 @@ namespace dxcanvas
             {
                 // this here fills palette with grey level colors, starting
                 // from 0,0,0 up to 255,255,255
-                bmiColors[i] = { (byte)i, (byte)i, (byte)i, (byte)i };
+                BYTE const b(i);
+                bmiColors[i] = { b,b,b,b };
             }
         }
     };
