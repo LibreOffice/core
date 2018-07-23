@@ -729,7 +729,7 @@ void ChartController::impl_createDrawViewController()
     {
         if( m_pDrawModelWrapper )
         {
-            m_pDrawViewWrapper = new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),GetChartWindow());
+            m_pDrawViewWrapper.reset( new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),GetChartWindow()) );
             m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }
@@ -742,7 +742,7 @@ void ChartController::impl_deleteDrawViewController()
         SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
-        DELETEZ( m_pDrawViewWrapper );
+        m_pDrawViewWrapper.reset();
     }
 }
 
@@ -1470,7 +1470,7 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
     {
         impl_createDrawViewController();
     }
-    return m_pDrawViewWrapper;
+    return m_pDrawViewWrapper.get();
 }
 
 

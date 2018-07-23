@@ -389,7 +389,7 @@ private:
     css::uno::Reference<css::awt::XWindow> m_xViewWindow;
     css::uno::Reference<css::uno::XInterface> m_xChartView;
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
-    DrawViewWrapper* m_pDrawViewWrapper;
+    std::unique_ptr<DrawViewWrapper> m_pDrawViewWrapper;
 
     Selection m_aSelection;
     SdrDragMode m_eDragMode;
