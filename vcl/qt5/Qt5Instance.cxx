@@ -140,6 +140,7 @@ std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 
 bool Qt5Instance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 {
+    // Re-aquire the guard for user events when called via Q_EMIT ImplYieldSignal
     SolarMutexGuard aGuard;
     bool wasEvent = DispatchUserEvents(bHandleAllCurrentEvents);
     if (!bHandleAllCurrentEvents && wasEvent)
@@ -149,6 +150,7 @@ bool Qt5Instance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
      * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
      * pending events that match flags until there are no more events to process.
      */
+    SolarMutexReleaser aReleaser;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance(qApp->thread());
     if (bWait && !wasEvent)
         wasEvent = dispatcher->processEvents(QEventLoop::WaitForMoreEvents);
@@ -162,8 +164,6 @@ bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     bool bWasEvent = false;
     if (qApp->thread() == QThread::currentThread())
     {
-        // release YieldMutex (and re-acquire in ImplYield)
-        SolarMutexReleaser aReleaser;
         bWasEvent = ImplYield(bWait, bHandleAllCurrentEvents);
         if (bWasEvent)
             m_aWaitingYieldCond.set();
