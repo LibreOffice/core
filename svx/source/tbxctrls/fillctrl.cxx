@@ -526,6 +526,8 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
         mpLbFillType = mpFillControl->mpLbFillType;
         mpLbFillAttr = mpFillControl->mpLbFillAttr;
         mpToolBoxColor = mpFillControl->mpToolBoxColor;
+        mpFillControl->SetBackground();
+        mpFillControl->SetPaintTransparent( true );
         mpFillControl->Resize();
         mpToolBoxColor->InsertItem(".uno:FillColor", m_xFrame, ToolBoxItemBits::DROPDOWNONLY, Size(mpToolBoxColor->GetSizePixel().Width(), 0));
 
