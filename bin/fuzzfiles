@@ -37,5 +37,5 @@ for file in $@; do
                 zzuf -r $ratio < $file > "$basename-$ratio-$i"
                 done #end of for i in {1..
             done #end of for ratio in ...
-    fi #end if of file vailidity check
+    fi #end if of file validity check
 done #end for file in $@

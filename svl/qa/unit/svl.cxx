@@ -1294,7 +1294,7 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#101096: different detection of month/minute with Excel
-        sCode =     "HH DD MM"; // month detectected because of previous DD
+        sCode =     "HH DD MM"; // month detected because of previous DD
         sExpected = "03 02 01";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "HH:MM HH DD/MM"; // month detected because of previous DD

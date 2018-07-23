@@ -584,7 +584,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_target,Langpack-$*.xcu)</filename></list>' > $@
 
 # It can happen that localized fcfg_langpack_*.zip contains
-# zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
+# zero-sized org/openoffice/TypeDetection/Filter.xcu; filter them out in the
 # find shell command below (see issue 110041):
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
