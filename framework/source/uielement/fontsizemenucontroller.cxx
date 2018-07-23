@@ -175,11 +175,11 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
             if ( pAry == FontList::GetStdSizeAry() )
             {
                 // for scalable fonts all font size names
-                sal_uLong nCount = aFontSizeNames.Count();
-                for( sal_uLong i = 0; i < nCount; i++ )
+                sal_Int32 nCount = aFontSizeNames.Count();
+                for( sal_Int32 i = 0; i < nCount; i++ )
                 {
-                    OUString  aSizeName = aFontSizeNames.GetIndexName( i );
-                    long      nSize = aFontSizeNames.GetIndexSize( i );
+                    OUString   aSizeName = aFontSizeNames.GetIndexName( i );
+                    sal_Int32  nSize = aFontSizeNames.GetIndexSize( i );
                     m_pHeightArray[nPos] = nSize;
                     nPos++; // Id is nPos+1
                     pVCLPopupMenu->InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );

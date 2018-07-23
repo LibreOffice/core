@@ -163,7 +163,7 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
-ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
+ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uInt32* pIndex) const
 {
     // Append if there is no entry in the list or if the entry is larger
     // then the last one. We only compare to the last entry as the list of VCL
@@ -172,7 +172,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     if (m_Entries.empty())
     {
         if ( pIndex )
-            *pIndex = ULONG_MAX;
+            *pIndex = SAL_MAX_UINT32;
         return nullptr;
     }
     else
@@ -182,7 +182,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
         if (nComp > 0)
         {
             if ( pIndex )
-                *pIndex = ULONG_MAX;
+                *pIndex = SAL_MAX_UINT32;
             return nullptr;
         }
         else if (nComp == 0)
@@ -261,7 +261,7 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
         FontMetric aFontMetric = pDevice->GetDevFont( i );
         OUString aSearchName(aFontMetric.GetFamilyName());
         ImplFontListNameInfo*   pData;
-        sal_uLong                   nIndex;
+        sal_uInt32              nIndex;
         aSearchName = ImplMakeSearchString(aSearchName);
         pData = ImplFind( aSearchName, &nIndex );
 
@@ -784,7 +784,7 @@ const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
 
 struct ImplFSNameItem
 {
-    long        mnSize;
+    sal_Int32   mnSize;
     const char* mszUtf8Name;
 };
 
@@ -828,7 +828,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-long FontSizeNames::Name2Size( const OUString& rName ) const
+sal_Int32 FontSizeNames::Name2Size( const OUString& rName ) const
 {
     if ( mnElem )
     {
@@ -866,7 +866,7 @@ OUString FontSizeNames::Size2Name( long nValue ) const
     return aStr;
 }
 
-OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
+OUString FontSizeNames::GetIndexName( sal_Int32 nIndex ) const
 {
     OUString aStr;
 
@@ -876,7 +876,7 @@ OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
     return aStr;
 }
 
-long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
+sal_Int32 FontSizeNames::GetIndexSize( sal_Int32 nIndex ) const
 {
     if ( nIndex >= mnElem )
         return 0;
