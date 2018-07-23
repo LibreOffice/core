@@ -26,7 +26,7 @@
 
 /** this set of constants describes different writing directions
 
-    <p>In addition to numerous explicit writing directions, it allows allows to specify to take the writing
+    <p>In addition to numerous explicit writing directions, it allows to specify to take the writing
     direction from the object's context.</p>
  */
 published constants WritingMode2
