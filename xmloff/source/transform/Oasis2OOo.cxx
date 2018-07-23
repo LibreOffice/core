@@ -1510,7 +1510,7 @@ void XMLConfigItemTContext_Impl::EndElement()
 
 class XMLTrackedChangesOASISTContext_Impl : public XMLTransformerContext
 {
-    OUString m_aAttrQName;
+    OUString const m_aAttrQName;
 
 public:
 

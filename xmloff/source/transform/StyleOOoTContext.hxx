@@ -31,7 +31,7 @@ class XMLStyleOOoTContext : public XMLPersElemContentTContext
 {
     XMLFamilyType m_eFamily;
 
-    bool m_bPersistent;
+    bool const m_bPersistent;
 
 public:
     XMLStyleOOoTContext( XMLTransformerBase& rTransformer,

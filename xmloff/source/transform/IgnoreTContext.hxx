@@ -25,10 +25,10 @@
 
 class XMLIgnoreTransformerContext : public XMLTransformerContext
 {
-    bool m_bIgnoreCharacters;
-    bool m_bIgnoreElements;
-    bool m_bAllowCharactersRecursive;
-    bool m_bRecursiveUse;
+    bool const m_bIgnoreCharacters;
+    bool const m_bIgnoreElements;
+    bool const m_bAllowCharactersRecursive;
+    bool const m_bRecursiveUse;
 
 public:
     // A contexts constructor does anything that is required if an element

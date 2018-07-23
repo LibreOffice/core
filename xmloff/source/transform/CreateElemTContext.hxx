@@ -25,7 +25,7 @@
 
 class XMLCreateElemTransformerContext : public XMLTransformerContext
 {
-    sal_uInt16 m_nActionMap;
+    sal_uInt16 const m_nActionMap;
 
 public:
     XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,

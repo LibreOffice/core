@@ -24,7 +24,7 @@
 
 class XMLFrameOOoTransformerContext : public XMLPersElemContentTContext
 {
-    OUString m_aElemQName;
+    OUString const m_aElemQName;
 
 public:
     XMLFrameOOoTransformerContext( XMLTransformerBase& rTransformer,
