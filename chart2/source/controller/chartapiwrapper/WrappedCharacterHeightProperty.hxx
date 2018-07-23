@@ -58,7 +58,7 @@ public:
     explicit WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedCharacterHeightProperty() override;
 
-    static void addWrappedProperties( std::vector< WrappedProperty* >& rList, ReferenceSizePropertyProvider* pRefSizePropProvider );
+    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList, ReferenceSizePropertyProvider* pRefSizePropProvider );
 };
 
 class WrappedAsianCharacterHeightProperty : public WrappedCharacterHeightProperty_Base

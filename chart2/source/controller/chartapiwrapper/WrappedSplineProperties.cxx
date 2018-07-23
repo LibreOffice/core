@@ -198,15 +198,15 @@ void WrappedSplineProperties::addProperties( std::vector< Property > & rOutPrope
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
+void WrappedSplineProperties::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
                                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
-    rList.push_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
-    rList.push_back(
+    rList.emplace_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
+    rList.emplace_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_ORDER, CHART_UNONAME_SPLINE_ORDER,
             uno::Any(sal_Int32(3)), spChart2ModelContact));
-    rList.push_back(
+    rList.emplace_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_RESOLUTION, CHART_UNONAME_CURVE_RESOLUTION,
             uno::Any(sal_Int32(20)), spChart2ModelContact));

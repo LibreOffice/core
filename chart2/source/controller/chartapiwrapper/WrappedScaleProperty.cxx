@@ -103,25 +103,25 @@ WrappedScaleProperty::~WrappedScaleProperty()
 {
 }
 
-void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
+void WrappedScaleProperty::addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList
             , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_MAX, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_MIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_ORIGIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPMAIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP_COUNT, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MAX, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_ORIGIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPMAIN, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPHELP, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AXIS_TYPE, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_DATE_INCREMENT, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_EXPLICIT_DATE_INCREMENT, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_LOGARITHMIC, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_REVERSEDIRECTION, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_MAX, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_MIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_ORIGIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_STEPMAIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP_COUNT, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MAX, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AUTO_ORIGIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPMAIN, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPHELP, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_AXIS_TYPE, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_DATE_INCREMENT, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_EXPLICIT_DATE_INCREMENT, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_LOGARITHMIC, spChart2ModelContact ) );
+    rList.emplace_back( new WrappedScaleProperty( SCALE_PROP_REVERSEDIRECTION, spChart2ModelContact ) );
 }
 
 void WrappedScaleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const

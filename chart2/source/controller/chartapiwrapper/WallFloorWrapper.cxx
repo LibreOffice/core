@@ -135,16 +135,16 @@ const Sequence< beans::Property >& WallFloorWrapper::getPropertySequence()
     return *StaticWallFloorWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties()
+const std::vector< std::unique_ptr<WrappedProperty> > WallFloorWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
     // use direct state always, so that in XML the value is always
     // exported. Because in the old chart the defaults is as follows:
     // Floor: SOLID (new and old model default), Wall: NONE, except for some chart types (line, scatter)
     if( m_bWall )
-        aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillStyle", "FillStyle" ));
-    aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillColor", "FillColor" ));
+        aWrappedProperties.emplace_back( new WrappedDirectStateProperty( "FillStyle", "FillStyle" ));
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty( "FillColor", "FillColor" ));
 
     return aWrappedProperties;
 }

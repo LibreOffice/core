@@ -92,7 +92,7 @@ protected: //methods
     The base class 'WrappedPropertySet' will take ownership on the contained pointer.
     It is not allowed to have duplicate entries in this list.
     */
-    virtual const std::vector< WrappedProperty* > createWrappedProperties()=0;
+    virtual const std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties()=0;
 
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
     SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
