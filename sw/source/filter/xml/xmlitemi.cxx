@@ -318,21 +318,21 @@ SvXMLImportContextRef SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::InitItemImport()
 {
-    m_pTwipUnitConv = new SvXMLUnitConverter( GetComponentContext(),
-            util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
+    m_pTwipUnitConv.reset( new SvXMLUnitConverter( GetComponentContext(),
+            util::MeasureUnit::TWIP, util::MeasureUnit::TWIP ) );
 
     m_xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     m_xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );
     m_xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
     m_xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
 
-    m_pTableItemMapper = new SwXMLImportTableItemMapper_Impl( m_xTableItemMap );
+    m_pTableItemMapper.reset( new SwXMLImportTableItemMapper_Impl( m_xTableItemMap ) );
 }
 
 void SwXMLImport::FinitItemImport()
 {
-    delete m_pTableItemMapper;
-    delete m_pTwipUnitConv;
+    m_pTableItemMapper.reset();
+    m_pTwipUnitConv.reset();
 }
 
 SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
