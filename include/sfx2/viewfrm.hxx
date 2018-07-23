@@ -66,7 +66,7 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     std::unique_ptr<struct SfxViewFrame_Impl>   m_pImpl;
 
     SfxObjectShellRef           m_xObjSh;
-    SfxDispatcher*              m_pDispatcher;
+    std::unique_ptr<SfxDispatcher> m_pDispatcher;
     SfxBindings*                m_pBindings;
     sal_uInt16                  m_nAdjustPosPixelLock;
 
@@ -112,7 +112,7 @@ public:
             void            DoDeactivate(bool bMDI, SfxViewFrame const *pOld);
 
     using SfxShell::GetDispatcher;
-    SfxDispatcher*          GetDispatcher() { return m_pDispatcher; }
+    SfxDispatcher*          GetDispatcher() { return m_pDispatcher.get(); }
     SfxBindings&            GetBindings() { return *m_pBindings; }
     const SfxBindings&      GetBindings() const  { return *m_pBindings; }
     vcl::Window&            GetWindow() const;
