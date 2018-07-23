@@ -91,7 +91,7 @@ protected:
     ::std::vector< css::uno::Reference<
                       css::xml::sax::XAttributeList > > _subElems;
 private:
-    OUString _name;
+    OUString const _name;
     ::std::vector< OUString > _attrNames;
     ::std::vector< OUString > _attrValues;
 

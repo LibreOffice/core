@@ -47,7 +47,7 @@ namespace xmlscript
         rtl::Reference<BasicImport> m_xImport;
     private:
         rtl::Reference<BasicElementBase> m_xParent;
-        OUString m_aLocalName;
+        OUString const m_aLocalName;
         css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
 
     protected:
@@ -104,8 +104,8 @@ namespace xmlscript
     private:
         css::uno::Reference< css::script::XLibraryContainer2 > m_xLibContainer;
         css::uno::Reference< css::container::XNameContainer > m_xLib;
-        OUString m_aLibName;
-        bool m_bReadOnly;
+        OUString const m_aLibName;
+        bool const m_bReadOnly;
 
     public:
         BasicEmbeddedLibraryElement( const OUString& rLocalName,
@@ -127,7 +127,7 @@ namespace xmlscript
     {
     private:
         css::uno::Reference< css::container::XNameContainer > m_xLib;
-        OUString m_aName;
+        OUString const m_aName;
 
     public:
         BasicModuleElement( const OUString& rLocalName,
@@ -149,7 +149,7 @@ namespace xmlscript
     {
     private:
         css::uno::Reference< css::container::XNameContainer > m_xLib;
-        OUString m_aName;
+        OUString const m_aName;
         OUStringBuffer m_aBuffer;
 
     public:
@@ -180,7 +180,7 @@ namespace xmlscript
         sal_Int32 XMLNS_UID;
         sal_Int32 XMLNS_XLINK_UID;
         css::uno::Reference< css::frame::XModel > m_xModel;
-        bool m_bOasis;
+        bool const m_bOasis;
 
     public:
         BasicImport( const css::uno::Reference< css::frame::XModel >& rxModel, bool bOasis );
@@ -212,7 +212,7 @@ namespace xmlscript
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
         css::uno::Reference< css::frame::XModel >                 m_xModel;
-        bool                                                      m_bOasis;
+        bool const                                                m_bOasis;
 
     public:
         XMLBasicImporterBase(
