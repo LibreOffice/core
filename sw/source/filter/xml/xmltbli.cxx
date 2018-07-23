@@ -1412,9 +1412,9 @@ SwXMLTableContext::~SwXMLTableContext()
 {
     if (m_bOwnsBox1)
         delete m_pBox1;
-    delete m_pColumnDefaultCellStyleNames;
-    delete m_pSharedBoxFormats;
-    delete m_pRows;
+    m_pColumnDefaultCellStyleNames.reset();
+    m_pSharedBoxFormats.reset();
+    m_pRows.reset();
 
     // close redlines on table end nodes
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(false);
@@ -1492,7 +1492,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
     {
         if( !m_pColumnDefaultCellStyleNames )
         {
-            m_pColumnDefaultCellStyleNames = new std::vector<OUString>;
+            m_pColumnDefaultCellStyleNames.reset(new std::vector<OUString>);
             sal_uLong nCount = m_aColumnWidths.size() - 1;
             while( nCount-- )
                 m_pColumnDefaultCellStyleNames->push_back(OUString());
@@ -1830,7 +1830,7 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
     bool* pModifyLocked )
 {
     if ( m_pSharedBoxFormats == nullptr )
-        m_pSharedBoxFormats = new map_BoxFormat;
+        m_pSharedBoxFormats.reset(new map_BoxFormat);
 
     SwTableBoxFormat* pBoxFormat2;
 
