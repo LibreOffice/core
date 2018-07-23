@@ -104,6 +104,9 @@ public:
         // SaveLine::pBox, pNext
         if (fn == SRCDIR "/sw/source/core/undo/untbl.cxx")
             return;
+        // RedlineInfo::pNextRedline
+        if (fn == SRCDIR "/sw/source/filter/xml/XMLRedlineImportHelper.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }

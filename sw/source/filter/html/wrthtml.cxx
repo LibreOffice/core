@@ -97,7 +97,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_eCSS1Unit(FUNIT_NONE)
     , m_pFootEndNotes(nullptr)
     , mxFormComps()
-    , m_pDfltColor(nullptr)
     , m_pStartNdIdx(nullptr)
     , m_pCurrPageDesc(nullptr)
     , m_pFormatFootnote(nullptr)
@@ -324,7 +323,7 @@ ErrCode SwHTMLWriter::WriteStream()
         ::StartProgress( STR_STATSTR_W4WWRITE, 0, m_pDoc->GetNodes().Count(),
                          m_pDoc->GetDocShell());
 
-    m_pDfltColor = nullptr;
+    m_xDfltColor.reset();
     m_pFootEndNotes = nullptr;
     m_pFormatFootnote = nullptr;
     m_bOutTable = m_bOutHeader = m_bOutFooter = m_bOutFlyFrame = false;
@@ -487,8 +486,7 @@ ErrCode SwHTMLWriter::WriteStream()
     if( m_pHTMLPosFlyFrames )
     {
         m_pHTMLPosFlyFrames->DeleteAndDestroyAll();
-        delete m_pHTMLPosFlyFrames;
-        m_pHTMLPosFlyFrames = nullptr;
+        m_pHTMLPosFlyFrames.reset();
     }
 
     m_aHTMLControls.DeleteAndDestroyAll();
@@ -513,8 +511,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_aScriptParaStyles.clear();
     m_aScriptTextStyles.clear();
 
-    delete m_pDfltColor;
-    m_pDfltColor = nullptr;
+    m_xDfltColor.reset();
 
     delete m_pStartNdIdx;
     m_pStartNdIdx = nullptr;
@@ -928,7 +925,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
             aColor = COL_BLACK;
         HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor );
         if( RES_POOLCOLL_STANDARD==pFormat->GetPoolFormatId() )
-            rHWrt.m_pDfltColor = new Color( aColor );
+            rHWrt.m_xDfltColor = aColor;
     }
 }
 
@@ -1523,7 +1520,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     // Only then also the numbering information of the next paragraph will be valid.
     if( bSaveNum )
     {
-        pOldNumRuleInfo = new SwHTMLNumRuleInfo( rWrt.GetNumInfo() );
+        pOldNumRuleInfo.reset( new SwHTMLNumRuleInfo( rWrt.GetNumInfo() ) );
         pOldNextNumRuleInfo = rWrt.ReleaseNextNumInfo();
     }
     else
@@ -1558,7 +1555,7 @@ HTMLSaveData::~HTMLSaveData()
     if( pOldNumRuleInfo )
     {
         rWrt.GetNumInfo().Set( *pOldNumRuleInfo );
-        delete pOldNumRuleInfo;
+        pOldNumRuleInfo.reset();
         rWrt.SetNextNumInfo( std::move(pOldNextNumRuleInfo) );
     }
     else
