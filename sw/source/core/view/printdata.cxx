@@ -321,7 +321,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            aHelpIds,
                                                            "PrintAnnotationMode",
                                                            aChoices,
-                                                           static_cast<sal_uInt16>(nPrintPostIts),
+                                                           bHasPostIts ? static_cast<sal_uInt16>(nPrintPostIts) : 0,
                                                            uno::Sequence< sal_Bool >(),
                                                            aAnnotOpt);
 
