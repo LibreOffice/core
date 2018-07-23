@@ -34,7 +34,7 @@ namespace sw
         class OverlayRanges final : public sdr::overlay::OverlayObject
         {
         public:
-            static OverlayRanges* CreateOverlayRange(
+            static std::unique_ptr<OverlayRanges> CreateOverlayRange(
                 SwView const & rDocView,
                 const Color& rColor,
                 const std::vector< basegfx::B2DRange >& rRanges,
