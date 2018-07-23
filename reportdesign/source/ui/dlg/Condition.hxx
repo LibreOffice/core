@@ -96,9 +96,9 @@ namespace rptui
         VclPtr<FixedText>                  m_pHeader;
         VclPtr<ListBox>                    m_pConditionType;
         VclPtr<ListBox>                    m_pOperationList;
-        ConditionField*                    m_pCondLHS;
+        std::unique_ptr<ConditionField>    m_pCondLHS;
         VclPtr<FixedText>                  m_pOperandGlue;
-        ConditionField*                    m_pCondRHS;
+        std::unique_ptr<ConditionField>    m_pCondRHS;
         VclPtr<ToolBox>                    m_pActions;
         VclPtr<SvxFontPrevWindow>          m_pPreview;
         VclPtr<PushButton>                 m_pMoveUp;
@@ -107,8 +107,8 @@ namespace rptui
         VclPtr<PushButton>                 m_pRemoveCondition;
         VclPtr<SvxColorWindow>             m_pColorFloat;
 
-        svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
-        svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
+        std::unique_ptr<svx::ToolboxButtonColorUpdater> m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
+        std::unique_ptr<svx::ToolboxButtonColorUpdater> m_pBtnUpdaterBackgroundColor;
 
 
         size_t                          m_nCondIndex;

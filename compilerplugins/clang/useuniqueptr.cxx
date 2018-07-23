@@ -107,6 +107,9 @@ public:
         // RedlineInfo::pNextRedline
         if (fn == SRCDIR "/sw/source/filter/xml/XMLRedlineImportHelper.cxx")
             return;
+        // SfxObjectShell::pMedium
+        if (fn == SRCDIR "/sfx2/source/doc/objxtor.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
