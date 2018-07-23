@@ -171,10 +171,10 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 {
     SetName( "StarWriter" );
     SvxErrorHandler::ensure();
-    m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
+    m_pErrorHandler.reset( new SfxErrorHandler( RID_SW_ERRHDL,
                                      ErrCodeArea::Sw,
                                      ErrCodeArea::Sw,
-                                     GetResLocale() );
+                                     GetResLocale() ) );
 
     m_pModuleConfig = new SwModuleOptions;
 
@@ -225,7 +225,7 @@ SwModule::~SwModule()
 {
     css::uno::Sequence< css::uno::Any > aArgs;
     CallAutomationApplicationEventSinks( "Quit", aArgs );
-    delete m_pErrorHandler;
+    m_pErrorHandler.reset();
     EndListening( *SfxGetpApp() );
 }
 
