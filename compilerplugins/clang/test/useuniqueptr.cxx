@@ -154,11 +154,16 @@ class Foo12 {
 class Foo13 {
     int * m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
     int * m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    int * m_pbar3; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo13()
     {
         if (m_pbar1)
             DELETEZ(m_pbar1); // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
         DELETEZ(m_pbar2); // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        if (m_pbar3)
+        {
+            DELETEZ(m_pbar3); // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        }
     }
 };
 // check for unconditional inner compound statements
