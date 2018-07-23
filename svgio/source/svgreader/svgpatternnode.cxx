@@ -47,6 +47,7 @@ namespace svgio
             mpPatternUnits(nullptr),
             mpPatternContentUnits(nullptr),
             mpaPatternTransform(nullptr),
+            mbResolvingLink(false),
             maXLink(),
             mpXLink(nullptr)
         {
@@ -271,9 +272,12 @@ namespace svgio
             {
                 const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-                if(mpXLink)
+                if (mpXLink && !mbResolvingLink)
                 {
-                    return mpXLink->getPatternPrimitives();
+                    mbResolvingLink = true;
+                    const drawinglayer::primitive2d::Primitive2DContainer& ret = mpXLink->getPatternPrimitives();
+                    mbResolvingLink = false;
+                    return ret;
                 }
             }
 
@@ -301,9 +305,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getViewBox();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getViewBox();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
@@ -318,9 +325,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getSvgAspectRatio();
+                mbResolvingLink = true;
+                const SvgAspectRatio& ret = mpXLink->getSvgAspectRatio();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return maSvgAspectRatio;
@@ -335,9 +345,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getX();
+                mbResolvingLink = true;
+                const SvgNumber& ret = mpXLink->getX();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return maX;
@@ -352,9 +365,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getY();
+                mbResolvingLink = true;
+                const SvgNumber& ret = mpXLink->getY();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return maY;
@@ -369,9 +385,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getWidth();
+                mbResolvingLink = true;
+                const SvgNumber& ret = mpXLink->getWidth();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return maWidth;
@@ -386,9 +405,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getHeight();
+                mbResolvingLink = true;
+                const SvgNumber& ret = mpXLink->getHeight();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return maHeight;
@@ -403,9 +425,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getPatternUnits();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getPatternUnits();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
@@ -420,9 +445,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getPatternContentUnits();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getPatternContentUnits();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
@@ -437,9 +465,12 @@ namespace svgio
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
 
-            if(mpXLink)
+            if (mpXLink && !mbResolvingLink)
             {
-                return mpXLink->getPatternTransform();
+                mbResolvingLink = true;
+                auto ret = mpXLink->getPatternTransform();
+                mbResolvingLink = false;
+                return ret;
             }
 
             return nullptr;
