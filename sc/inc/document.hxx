@@ -357,7 +357,7 @@ private:
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
     std::unique_ptr<ScDrawLayer> mpDrawLayer;           // SdrModel
     rtl::Reference<XColorList> pColorList;
-    ScValidationDataList* pValidationList;              // validity
+    std::unique_ptr<ScValidationDataList> pValidationList;              // validity
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
     std::vector<OUString> maTabNames;               // for undo document, we need the information tab name <-> index
@@ -1703,8 +1703,8 @@ public:
 
     SC_DLLPUBLIC ScConditionalFormatList*   GetCondFormList( SCTAB nTab ) const;
 
-    const ScValidationDataList*             GetValidationList() const { return pValidationList;}
-    ScValidationDataList*                   GetValidationList() { return pValidationList;}
+    const ScValidationDataList*             GetValidationList() const { return pValidationList.get();}
+    ScValidationDataList*                   GetValidationList() { return pValidationList.get();}
 
     SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                            const SfxPoolItem& rAttr );

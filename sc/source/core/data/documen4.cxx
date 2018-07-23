@@ -744,13 +744,13 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     if (!pValidationList)
     {
         ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
-        pValidationList = new ScValidationDataList;
+        pValidationList.reset(new ScValidationDataList);
     }
 
     sal_uLong nMax = 0;
     for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
     {
-        const ScValidationData* pData = *it;
+        const ScValidationData* pData = it->get();
         sal_uLong nKey = pData->GetKey();
         if ( pData->EqualEntries( rNew ) )
             return nKey;
@@ -761,10 +761,10 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     // might be called from ScPatternAttr::PutInPool; thus clone (real copy)
 
     sal_uLong nNewKey = nMax + 1;
-    ScValidationData* pInsert = rNew.Clone(this);
+    std::unique_ptr<ScValidationData> pInsert(rNew.Clone(this));
     pInsert->SetKey( nNewKey );
     ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
-    pValidationList->InsertNew( pInsert );
+    pValidationList->InsertNew( std::move(pInsert) );
     return nNewKey;
 }
 

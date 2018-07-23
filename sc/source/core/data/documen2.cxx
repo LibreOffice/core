@@ -405,13 +405,7 @@ ScDocument::~ScDocument()
 
     Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
 
-    if (pValidationList)
-    {
-        for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
-            delete *it;
-        pValidationList->clear();
-        DELETEZ(pValidationList);
-    }
+    pValidationList.reset();
     pRangeName.reset();
     pDBCollection.reset();
     pSelectionAttr.reset();
@@ -455,13 +449,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
 
-    if (pValidationList)
-    {
-        for(ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
-            delete *it;
-        pValidationList->clear();
-        DELETEZ(pValidationList);
-    }
+    pValidationList.reset();
 
     Clear();
 
@@ -469,9 +457,9 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     //  conditional Formats / validations
     // TODO: Copy Templates?
-    const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList;
+    const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList.get();
     if ( pSourceValid )
-        pValidationList = new ScValidationDataList(this, *pSourceValid);
+        pValidationList.reset(new ScValidationDataList(this, *pSourceValid));
 
     // store Links in Stream
     pClipData.reset();
