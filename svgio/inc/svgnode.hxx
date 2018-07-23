@@ -114,6 +114,8 @@ namespace svgio
             /// possible local CssStyle, e.g. style="fill:red; stroke:red;"
             std::unique_ptr<SvgStyleAttributes>        mpLocalCssStyle;
 
+            mutable bool                mbDecomposing;
+
             // flag if maCssStyleVector is already computed (done only once)
             bool                        mbCssStyleVectorBuilt : 1;
 
