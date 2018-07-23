@@ -63,11 +63,11 @@ class SwXMLImport: public SvXMLImport
 {
     std::unique_ptr<SwNodeIndex> m_pSttNdIdx;
 
-    SvXMLUnitConverter      *m_pTwipUnitConv;
-    SvXMLImportItemMapper   *m_pTableItemMapper;// paragraph item import
-    SvXMLTokenMap           *m_pDocElemTokenMap;
-    SvXMLTokenMap           *m_pTableElemTokenMap;
-    SvXMLTokenMap           *m_pTableCellAttrTokenMap;
+    std::unique_ptr<SvXMLUnitConverter> m_pTwipUnitConv;
+    std::unique_ptr<SvXMLImportItemMapper> m_pTableItemMapper;// paragraph item import
+    std::unique_ptr<SvXMLTokenMap> m_pDocElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> m_pTableElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap> m_pTableCellAttrTokenMap;
 
     rtl::Reference<SvXMLGraphicHelper> m_xGraphicStorageHandler;
 

@@ -59,6 +59,7 @@
 #include <strings.hrc>
 #include <svl/stritem.hxx>
 #include "xmlimp.hxx"
+#include "xmlimpit.hxx"
 #include "xmltexti.hxx"
 #include <list.hxx>
 #include <swdll.hxx>
@@ -358,7 +359,7 @@ void SwXMLDocStylesContext_Impl::EndElement()
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
 {
     if( !m_pDocElemTokenMap )
-        m_pDocElemTokenMap = new SvXMLTokenMap( aDocTokenMap );
+        m_pDocElemTokenMap.reset( new SvXMLTokenMap( aDocTokenMap ) );
 
     return *m_pDocElemTokenMap;
 }
@@ -436,9 +437,9 @@ SwXMLImport::~SwXMLImport() throw ()
         SAL_WARN("sw", "endDocument skipped, dropping shapes now to avoid dangling SvTextShapeImportHelper pointing to this");
         ClearShapeImport();
     }
-    delete m_pDocElemTokenMap;
-    delete m_pTableElemTokenMap;
-    delete m_pTableCellAttrTokenMap;
+    m_pDocElemTokenMap.reset();
+    m_pTableElemTokenMap.reset();
+    m_pTableCellAttrTokenMap.reset();
     FinitItemImport();
 }
 
