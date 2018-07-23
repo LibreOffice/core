@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_e182a4c8",
+        "filename": "sfx2/classification/xAL.xsd",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-23T09:56:27Z",
+      "side": 1,
+      "message": "\"Premises\" is a plural word, shouldn\u0027t it be \"Premises can have...\" and no \"A premises can have...\"?",
+      "range": {
+        "startLine": 271,
+        "startChar": 391,
+        "endLine": 271,
+        "endChar": 401
+      },
+      "revId": "0c0eaade17669c0f03179a35c02ac8f8d2a6edd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
