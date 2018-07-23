@@ -827,7 +827,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
             }
         }
 
-        DELETEZ(m_pOLEChildList);
+        m_pOLEChildList.reset();
         if( bResetModified )
             EnableSetModified();
     }
@@ -1080,7 +1080,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
         case SID_ATTR_CHAR_FONTLIST:
         {
-            rSet.Put( SvxFontListItem(m_pFontList, SID_ATTR_CHAR_FONTLIST) );
+            rSet.Put( SvxFontListItem(m_pFontList.get(), SID_ATTR_CHAR_FONTLIST) );
         }
         break;
         case SID_MAIL_PREPAREEXPORT:
@@ -1235,7 +1235,7 @@ void SwDocShell::RemoveOLEObjects()
                         pOLENd->IsInGlobalDocSection() ) )
         {
             if (!m_pOLEChildList)
-                m_pOLEChildList = new comphelper::EmbeddedObjectContainer;
+                m_pOLEChildList.reset( new comphelper::EmbeddedObjectContainer );
 
             OUString aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
             GetEmbeddedObjectContainer().MoveEmbeddedObject( aObjName, *m_pOLEChildList );

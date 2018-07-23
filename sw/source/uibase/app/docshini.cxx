@@ -391,13 +391,13 @@ SwDocShell::~SwDocShell()
     }
 
     RemoveLink();
-    delete m_pFontList;
+    m_pFontList.reset();
 
     // we, as BroadCaster also become our own Listener
     // (for DocInfo/FileNames/....)
     EndListening( *this );
 
-    delete m_pOLEChildList;
+    m_pOLEChildList.reset();
 }
 
 void  SwDocShell::Init_Impl()
@@ -441,9 +441,8 @@ void SwDocShell::UpdateFontList()
         OSL_ENSURE(m_xDoc.get(), "No Doc no FontList");
         if (m_xDoc.get())
         {
-            delete m_pFontList;
-            m_pFontList = new FontList( m_xDoc->getIDocumentDeviceAccess().getReferenceDevice(true) );
-            PutItem( SvxFontListItem( m_pFontList, SID_ATTR_CHAR_FONTLIST ) );
+            m_pFontList.reset( new FontList( m_xDoc->getIDocumentDeviceAccess().getReferenceDevice(true) ) );
+            PutItem( SvxFontListItem( m_pFontList.get(), SID_ATTR_CHAR_FONTLIST ) );
         }
         m_IsInUpdateFontList = false;
     }
