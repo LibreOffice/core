@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_019a2813",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-23T12:18:34Z",
+      "side": 1,
+      "message": "The repetition of \"Table\" must be let as it is.\nIndeed, the file \"sw/qa/extras/ooxmlexport/data/table_cross_reference_custom_format.odt\" contains it.",
+      "range": {
+        "startLine": 346,
+        "startChar": 42,
+        "endLine": 346,
+        "endChar": 48
+      },
+      "revId": "dad07216407bfc14fb3aa4104fddc89e782dc742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
