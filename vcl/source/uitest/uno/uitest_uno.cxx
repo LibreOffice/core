@@ -40,6 +40,9 @@ public:
 
     sal_Bool SAL_CALL executeCommand(const OUString& rCommand) override;
 
+    sal_Bool SAL_CALL executeCommandWithParameters(const OUString& rCommand,
+        const css::uno::Sequence< css::beans::PropertyValue >& rArgs) override;
+
     sal_Bool SAL_CALL executeDialog(const OUString& rCommand) override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
@@ -63,6 +66,13 @@ sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
     return UITest::executeCommand(rCommand);
+}
+
+sal_Bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
+    const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
+{
+    SolarMutexGuard aGuard;
+    return UITest::executeCommandWithParameters(rCommand,rArgs);
 }
 
 sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)

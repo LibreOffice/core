@@ -25,6 +25,25 @@ bool UITest::executeCommand(const OUString& rCommand)
           css::beans::PropertyState_DIRECT_VALUE}});
 }
 
+bool UITest::executeCommandWithParameters(const OUString& rCommand,
+    const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
+{
+    css::uno::Sequence< css::beans::PropertyValue > lNewArgs =
+        {{"SynchronMode", -1, css::uno::Any(true),
+          css::beans::PropertyState_DIRECT_VALUE}};
+
+    sal_uInt32 nArgs = rArgs.getLength();
+    if ( nArgs > 0 )
+    {
+        sal_uInt32 nIndex( lNewArgs.getLength() );
+        lNewArgs.realloc( lNewArgs.getLength()+rArgs.getLength() );
+
+        for ( sal_uInt32 i = 0; i < nArgs; i++ )
+            lNewArgs[nIndex++] = rArgs[i];
+    }
+    return comphelper::dispatchCommand(rCommand,lNewArgs);
+}
+
 bool UITest::executeDialog(const OUString& rCommand)
 {
     return comphelper::dispatchCommand(

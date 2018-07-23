@@ -12,6 +12,11 @@
 #include <vcl/dllapi.h>
 
 #include <memory>
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue; }
+} } }
 
 class UIObject;
 
@@ -20,6 +25,9 @@ class UITEST_DLLPUBLIC UITest
 public:
 
     static bool executeCommand(const OUString& rCommand);
+
+    static bool executeCommandWithParameters(const OUString& rCommand,
+        const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 
     static bool executeDialog(const OUString& rCommand);
 
