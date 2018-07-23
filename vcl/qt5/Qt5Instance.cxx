@@ -140,7 +140,7 @@ std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 
 bool Qt5Instance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    // Re-aquire the guard for user events when called via Q_EMIT ImplYieldSignal
+    // Re-acquire the guard for user events when called via Q_EMIT ImplYieldSignal
     SolarMutexGuard aGuard;
     bool wasEvent = DispatchUserEvents(bHandleAllCurrentEvents);
     if (!bHandleAllCurrentEvents && wasEvent)
