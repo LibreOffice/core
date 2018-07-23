@@ -190,13 +190,13 @@ private:
 
 struct CompareScValidationDataPtr
 {
-  bool operator()( ScValidationData* const& lhs, ScValidationData* const& rhs ) const { return (*lhs)<(*rhs); }
+  bool operator()( std::unique_ptr<ScValidationData> const& lhs, std::unique_ptr<ScValidationData> const& rhs ) const { return (*lhs)<(*rhs); }
 };
 
 class ScValidationDataList
 {
 private:
-    typedef std::set<ScValidationData*, CompareScValidationDataPtr> ScValidationDataListDataType;
+    typedef std::set<std::unique_ptr<ScValidationData>, CompareScValidationDataPtr> ScValidationDataListDataType;
     ScValidationDataListDataType maData;
 
 public:
@@ -212,8 +212,8 @@ public:
     iterator end();
     const_iterator end() const;
 
-    void InsertNew( ScValidationData* pNew )
-                { if (!maData.insert(pNew).second) delete pNew; }
+    void InsertNew( std::unique_ptr<ScValidationData> pNew )
+                { maData.insert(std::move(pNew)); }
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
