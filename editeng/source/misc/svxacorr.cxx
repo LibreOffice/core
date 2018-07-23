@@ -2568,9 +2568,9 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sUserAutoCorrFile, embed::ElementModes::READWRITE );
+        bool bRet = rAutoCorrect.PutText( xStg, sUserAutoCorrFile, rShort, rShell, sLong );
         xStg = nullptr;
 
-        bool bRet = rAutoCorrect.PutText( xStg, sUserAutoCorrFile, rShort, rShell, sLong );
         // Update the word list
         if( bRet )
         {
