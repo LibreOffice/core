@@ -241,6 +241,16 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             rParent[XML_r] = rShape->getSize().Width;
             rParent[XML_b] = rShape->getSize().Height;
 
+            const double ar = maMap.count(XML_ar) ? maMap.find(XML_ar)->second : 0;
+
+            if(ar)
+            {
+                if(rParent[XML_w]>rParent[XML_h])
+                    rParent[XML_w] = ar*rParent[XML_h];
+                else
+                    rParent[XML_h] = ar*rParent[XML_w];
+            }
+
             for (const auto & rConstr : rConstraints)
             {
                 const LayoutPropertyMap::const_iterator aRef = aProperties.find(rConstr.msRefForName);
