@@ -20,4 +20,4 @@ done
 
 unset glv_var
 unset glv_value
-unset glv_vonfig
+unset glv_config
