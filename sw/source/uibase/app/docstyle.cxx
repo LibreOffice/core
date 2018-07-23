@@ -92,7 +92,7 @@ using namespace com::sun::star;
 class SwImplShellAction
 {
     SwWrtShell* pSh;
-    CurrShell* pCurrSh;
+    std::unique_ptr<CurrShell> pCurrSh;
 public:
     explicit SwImplShellAction( SwDoc& rDoc );
     ~SwImplShellAction() COVERITY_NOEXCEPT_FALSE;
@@ -110,7 +110,7 @@ SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
 
     if( pSh )
     {
-        pCurrSh = new CurrShell( pSh );
+        pCurrSh.reset( new CurrShell( pSh ) );
         pSh->StartAllAction();
     }
 }
@@ -120,7 +120,7 @@ SwImplShellAction::~SwImplShellAction() COVERITY_NOEXCEPT_FALSE
     if( pCurrSh )
     {
         pSh->EndAllAction();
-        delete pCurrSh;
+        pCurrSh.reset();
     }
 }
 
