@@ -25,6 +25,7 @@
 
 #include "file-impl.hxx"
 #include "procimpl.hxx"
+#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.hxx"
