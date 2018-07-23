@@ -73,7 +73,7 @@ sub check_headers
 sub check_routine
 {
   my ($dir) = @_;
-  opendir(my $fh, $dir) or die "Program stopping, could't open directory \n";
+  opendir(my $fh, $dir) or die "Program stopping, couldn't open directory \n";
   while(my $file = readdir($fh)){
     if($file =~ m/\.(cxx|hxx|c|h|hrc|src)$/i ){
       check_headers($dir,"$dir/$file",@subdirs);

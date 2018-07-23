@@ -349,7 +349,7 @@ public:
     SimpleXMLParser();
     ~SimpleXMLParser();
 
-    /// parse a file, returns NULL on criticall errors
+    /// parse a file, returns NULL on critical errors
     XMLFile *Execute(
         const OString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile

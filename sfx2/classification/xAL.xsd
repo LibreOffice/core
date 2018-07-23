@@ -268,7 +268,7 @@
 			</xs:element>
 			<xs:element name="Premises" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Details of the Premises (could be building(s), site, loaction, property, premise, place) which is a landmark place which has a main address such as large mail user (e.g. Airport, Hospital, University) or could be a building (e.g. apartment, house)  or a building or complex of buildings (e.g. an apartment complex or shopping centre) or even a vacant land (e.g. LOT). A premises can have many sub-addresses such as apartments in a building having its own addresses or buildings within an airport having its own addresses including its own thoroughfares</xs:documentation>
+					<xs:documentation>Details of the Premises (could be building(s), site, location, property, premise, place) which is a landmark place which has a main address such as large mail user (e.g. Airport, Hospital, University) or could be a building (e.g. apartment, house)  or a building or complex of buildings (e.g. an apartment complex or shopping centre) or even a vacant land (e.g. LOT). Premises can have many sub-addresses such as apartments in a building having its own addresses or buildings within an airport having its own addresses including its own thoroughfares</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>

@@ -313,7 +313,7 @@ void CHatchWin::ChildSet(HWND hWndKid)
     {
         SetParent(hWndKid, m_hWnd);
 
-        //Insure this is visible when the hatch window becomes visible.
+        //Ensure this is visible when the hatch window becomes visible.
         ShowWindow(hWndKid, SW_SHOW);
     }
 

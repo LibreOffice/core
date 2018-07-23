@@ -123,7 +123,7 @@ public:
     bool            HasSelectionList() const;
     /** Tries to fill the passed collection with list validation entries.
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
-        @param rStrings  (out-param) The string list to fill with list validation entires.
+        @param rStrings  (out-param) The string list to fill with list validation entries.
         @return  true = rStrings has been filled with at least one entry. */
     bool FillSelectionList(std::vector<ScTypedStrData>& rStrings, const ScAddress& rPos) const;
 
@@ -169,7 +169,7 @@ public:
 private:
     /** Tries to fill the passed collection with list validation entries.
         @descr  Fills the list only if it is non-NULL,
-        @param pStrings  (out-param) Optionally NULL, string list to fill with list validation entires.
+        @param pStrings  (out-param) Optionally NULL, string list to fill with list validation entries.
         @param pCell     can be NULL if it is not necessary to which element in the list is selected.
         @param rPos      the base address for relative references.
         @param rTokArr   Formula token array.

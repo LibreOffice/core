@@ -811,7 +811,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         sal_uInt16 nPage, nPageCount;
 
         // create missing layout style sheets for broken documents
-        //         that where created with the 5.2
+        //         that were created with the 5.2
         nPageCount = GetMasterSdPageCount( PageKind::Standard );
         for (nPage = 0; nPage < nPageCount; nPage++)
         {

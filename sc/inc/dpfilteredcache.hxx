@@ -156,7 +156,7 @@ private:
 
 private:
 
-    /** unique field entires for each field (column). */
+    /** unique field entries for each field (column). */
     ::std::vector< ::std::vector<SCROW> > maFieldEntries;
 
     /** Rows visible by standard filter query. */

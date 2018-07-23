@@ -82,7 +82,7 @@ Sub Initialize()
 
 	REM pizzas in list box
 	oListBox = oDialog.getControl(&quot;ListBox1&quot;)
-	sPizzas = Array(&quot;Margarita&quot;,&quot;Vegeterian&quot;,&quot;Ham &amp; Pineapple&quot;,&quot;Mexican&quot;,&quot;Seafood&quot;)		
+	sPizzas = Array(&quot;Margarita&quot;,&quot;Vegetarian&quot;,&quot;Ham &amp; Pineapple&quot;,&quot;Mexican&quot;,&quot;Seafood&quot;)		
 	oListBox.addItems( sPizzas, 0 )
 	oListBox.selectItem( sPizzas(0), True )
 

@@ -598,9 +598,9 @@ sub write_idt_header
 }
 
 ##############################################################
-# Returning the name of the rranslation file for a
+# Returning the name of the translation file for a
 # given language.
-# Sample: "01" oder "en-US" -> "1033.txt"
+# Sample: "01" order "en-US" -> "1033.txt"
 ##############################################################
 
 sub get_languagefilename

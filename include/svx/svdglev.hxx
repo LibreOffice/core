@@ -59,7 +59,7 @@ public:
     TriState IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);
 
-    // bVert=FALSE: check/set hotizontal alignment
+    // bVert=FALSE: check/set horizontal alignment
     //      SdrAlign::HORZ_CENTER
     //      SdrAlign::HORZ_LEFT
     //      SdrAlign::HORZ_RIGHT

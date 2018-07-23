@@ -102,7 +102,7 @@ interface XContextChangeEventMultiplexer : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** Call all event listeners that where added for the specified event focus.
+    /** Call all event listeners that were added for the specified event focus.
     */
     void broadcastContextChangeEvent (
         [in] com::sun::star::ui::ContextChangeEventObject aEvent,
