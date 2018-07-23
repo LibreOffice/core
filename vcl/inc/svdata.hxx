@@ -210,7 +210,7 @@ struct ImplSVWinData
     std::vector<Image>      maMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     VclPtr<vcl::Window>     mpLastWheelWindow;              // window, that last received a mouse wheel event
-    SalWheelMouseEvent      maLastWheelEvent;               // the last received mouse whell event
+    SalWheelMouseEvent      maLastWheelEvent;               // the last received mouse wheel event
 
     StartTrackingFlags      mnTrackFlags = StartTrackingFlags::NONE; // tracking flags
     StartAutoScrollFlags    mnAutoScrollFlags = StartAutoScrollFlags::NONE; // auto scroll flags

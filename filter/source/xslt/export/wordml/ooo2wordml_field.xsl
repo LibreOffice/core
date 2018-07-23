@@ -509,7 +509,7 @@
         <xsl:call-template name="export_hyoerlink"/>
     </xsl:template>
     <xsl:template name="export_hyoerlink">
-        <!-- all params are useed by draw -->
+        <!-- all params are used by draw -->
         <xsl:param name="TargetMeasure"/>
         <xsl:param name="x-adjust"/>
         <xsl:param name="y-adjust"/>

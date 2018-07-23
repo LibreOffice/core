@@ -274,7 +274,7 @@ public class TypeDetection extends ComplexTestCase {
         }
     }
 
-    /** To check the <CODE>TypeDedection</CODE> by URL the <CODE>MediaDescriptor</CODE>
+    /** To check the <CODE>TypeDetection</CODE> by URL the <CODE>MediaDescriptor</CODE>
      * was filled at first with the URL only, at second with <CODE>XInputStream</CODE>
      * only. The <CODE>TypeDetection</CODE> must return the expected value
      * @param fileAlias the alias name of the test file

@@ -373,7 +373,7 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType )
 Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  )
 {
     Reference<XTypeProvider> xTypes(m_xTable,UNO_QUERY);
-    OSL_ENSURE(xTypes.is(),"Table must be a TypePropvider!");
+    OSL_ENSURE(xTypes.is(),"Table must be a TypeProvider!");
     return xTypes->getTypes();
 }
 

@@ -3233,7 +3233,7 @@ printf ("hello world\n");
 fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
-# Use -isystem (gcc) if possible, to avoid warnigs in 3rd party headers.
+# Use -isystem (gcc) if possible, to avoid warnings in 3rd party headers.
 # NOTE: must _not_ be used for bundled external libraries!
 ISYSTEM=
 if test "$GCC" = "yes"; then
