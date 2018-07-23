@@ -320,7 +320,7 @@ private:
     // multiple shapes with a unified fill, e.g think about CustomShapes.
     // Currently this is *only* used for CustomShapes, but may be developed to get a
     // common mechanism - usages for it are easy to be found. The current limitation
-    // to CustomShapes allows to to think about these SdrObjects to 'vanish' during the
+    // to CustomShapes allows to think about these SdrObjects to 'vanish' during the
     // lifetime of 'this' - the SdrObjects without SdrPage and SdrModel are used as helper
     // objects for SdrObjCustomShape and thus their lifetime is limited to the lifetime
     // of this local object. For unifying this mechanism, some weak reference of
