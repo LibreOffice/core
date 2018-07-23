@@ -143,17 +143,8 @@ void SwAnnotationWin::dispose()
     }
     mpSidebarTextControl.disposeAndClear();
 
-    if ( mpOutlinerView )
-    {
-        delete mpOutlinerView;
-        mpOutlinerView = nullptr;
-    }
-
-    if (mpOutliner)
-    {
-        delete mpOutliner;
-        mpOutliner = nullptr;
-    }
+    mpOutlinerView.reset();
+    mpOutliner.reset();
 
     if (mpMetadataAuthor)
     {
@@ -181,8 +172,7 @@ void SwAnnotationWin::dispose()
     sidebarwindows::ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
     mpShadow = nullptr;
 
-    delete mpTextRangeOverlay;
-    mpTextRangeOverlay = nullptr;
+    mpTextRangeOverlay.reset();
 
     mpMenuButton.disposeAndClear();
 

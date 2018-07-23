@@ -104,13 +104,13 @@ class SwAnnotationWin : public vcl::Window
         SwEditWin& EditWin();
         SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
 
-        OutlinerView* GetOutlinerView() { return mpOutlinerView;}
+        OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
         ScrollBar* Scrollbar() { return mpVScrollbar; }
         ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor;}
         ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow;}
-        ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay;}
+        ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
 
         long            GetPostItTextHeight();
 
@@ -212,8 +212,8 @@ class SwAnnotationWin : public vcl::Window
 
         ImplSVEvent *   mnEventId;
 
-        OutlinerView*   mpOutlinerView;
-        Outliner*       mpOutliner;
+        std::unique_ptr<OutlinerView>   mpOutlinerView;
+        std::unique_ptr<Outliner>       mpOutliner;
 
         VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
         VclPtr<ScrollBar>      mpVScrollbar;
@@ -223,7 +223,7 @@ class SwAnnotationWin : public vcl::Window
 
         sw::sidebarwindows::AnchorOverlayObject* mpAnchor;
         sw::sidebarwindows::ShadowOverlayObject* mpShadow;
-        sw::overlay::OverlayRanges* mpTextRangeOverlay;
+        std::unique_ptr<sw::overlay::OverlayRanges> mpTextRangeOverlay;
 
         Color           mColorAnchor;
         Color           mColorDark;

@@ -486,15 +486,15 @@ void SwAnnotationWin::InitControls()
     }
 
     SwDocShell* aShell = mrView.GetDocShell();
-    mpOutliner = new Outliner(&aShell->GetPool(),OutlinerMode::TextObject);
-    aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
+    mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
+    aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
     mpSidebarTextControl->EnableRTL( false );
-    mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTextControl );
+    mpOutlinerView.reset(new OutlinerView ( mpOutliner.get(), mpSidebarTextControl ));
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
-    mpOutliner->InsertView(mpOutlinerView );
+    mpOutliner->InsertView(mpOutlinerView.get() );
     mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
@@ -837,8 +837,7 @@ void SwAnnotationWin::SetPosAndSize()
     }
     else
     {
-        delete mpTextRangeOverlay;
-        mpTextRangeOverlay = nullptr;
+        mpTextRangeOverlay.reset();
     }
 }
 
