@@ -118,9 +118,9 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     get(m_pHeader, "headerLabel");
     get(m_pConditionType, "typeCombobox");
     get(m_pOperationList, "opCombobox");
-    m_pCondLHS = new ConditionField(this, get<Edit>("lhsEntry"), get<PushButton>("lhsButton"));
+    m_pCondLHS.reset( new ConditionField(this, get<Edit>("lhsEntry"), get<PushButton>("lhsButton")) );
     get(m_pOperandGlue, "andLabel");
-    m_pCondRHS = new ConditionField(this, get<Edit>("rhsEntry"), get<PushButton>("rhsButton"));
+    m_pCondRHS.reset( new ConditionField(this, get<Edit>("rhsEntry"), get<PushButton>("rhsButton")) );
     get(m_pActions, "formatToolbox");
     get(m_pPreview, "previewDrawingarea");
     get(m_pMoveUp, "upButton");
@@ -162,10 +162,10 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     m_nFontColorId = m_pActions->GetItemId(".uno:FontColor");
     m_nFontDialogId = m_pActions->GetItemId(".uno:FontDialog");
 
-    m_pBtnUpdaterBackgroundColor = new svx::ToolboxButtonColorUpdater(
-                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions );
-    m_pBtnUpdaterFontColor = new svx::ToolboxButtonColorUpdater(
-                                            SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions );
+    m_pBtnUpdaterBackgroundColor.reset( new svx::ToolboxButtonColorUpdater(
+                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions ) );
+    m_pBtnUpdaterFontColor.reset( new svx::ToolboxButtonColorUpdater(
+                                            SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions ) );
 
     Show();
 
@@ -198,10 +198,10 @@ void Condition::dispose()
 {
     m_bInDestruction = true;
 
-    delete m_pBtnUpdaterFontColor;
-    delete m_pCondLHS;
-    delete m_pCondRHS;
-    delete m_pBtnUpdaterBackgroundColor;
+    m_pBtnUpdaterFontColor.reset();
+    m_pCondLHS.reset();
+    m_pCondRHS.reset();
+    m_pBtnUpdaterBackgroundColor.reset();
     m_pHeader.clear();
     m_pConditionType.clear();
     m_pOperationList.clear();
