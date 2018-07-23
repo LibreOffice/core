@@ -458,9 +458,9 @@ char const * XmlReader::handleReference(char const * position, char const * end)
     } else {
         struct EntityRef {
             char const * inBegin;
-            sal_Int32 inLength;
+            sal_Int32 const inLength;
             char const * outBegin;
-            sal_Int32 outLength;
+            sal_Int32 const outLength;
         };
         static EntityRef const refs[] = {
             { RTL_CONSTASCII_STRINGPARAM("amp;"),
