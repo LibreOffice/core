@@ -1037,6 +1037,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
             XML_val, "0",
             FSEND);
 
+    // shape properties
+	if( xPropSet.is() )
+	{
+		exportShapeProps( xPropSet );
+	}
+
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
@@ -2311,7 +2317,7 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
     pFS->startElement( FSNS( XML_c, XML_spPr ),
             FSEND );
 
-    WriteFill( xPropSet );
+    exportFill( xPropSet );
     WriteOutline( xPropSet );
 
     pFS->endElement( FSNS( XML_c, XML_spPr ) );

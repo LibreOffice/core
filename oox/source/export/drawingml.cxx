@@ -811,8 +811,8 @@ const char* DrawingML::GetRelationCompPrefix()
     switch ( meDocumentType )
     {
         case DOCUMENT_DOCX: return "";
-        case DOCUMENT_PPTX:
-        case DOCUMENT_XLSX: return "../";
+        case DOCUMENT_PPTX: return "";
+        case DOCUMENT_XLSX: return "";
     }
 
     return "unknown";
