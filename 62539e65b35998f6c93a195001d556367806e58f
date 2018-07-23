@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_8152b866",
+        "filename": "offapi/com/sun/star/rendering/XColorSpace.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-23T11:03:43Z",
+      "side": 1,
+      "message": "No, it should be \"Background information for these are available\", since subject is \"Background information for these\" and information is plural",
+      "range": {
+        "startLine": 87,
+        "startChar": 24,
+        "endLine": 87,
+        "endChar": 28
+      },
+      "revId": "62539e65b35998f6c93a195001d556367806e58f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
