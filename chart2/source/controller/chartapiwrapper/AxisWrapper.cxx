@@ -604,23 +604,23 @@ const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
     return *StaticAxisWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
+std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
-    aWrappedProperties.push_back( new WrappedProperty("Marks","MajorTickmarks") );
-    aWrappedProperties.push_back( new WrappedProperty("HelpMarks","MinorTickmarks") );
-    aWrappedProperties.push_back( new WrappedProperty("TextCanOverlap","TextOverlap") );
-    aWrappedProperties.push_back( new WrappedProperty("ArrangeOrder","ArrangeOrder") );
-    aWrappedProperties.push_back( new WrappedProperty("Visible","Show") );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("DisplayLabels","DisplayLabels") );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("TryStaggeringFirst","TryStaggeringFirst") );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
-    aWrappedProperties.push_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
-    aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty );
-    aWrappedProperties.push_back( new WrappedProperty("StackedText","StackCharacters") );
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("CrossoverPosition","CrossoverPosition") );
+    aWrappedProperties.emplace_back( new WrappedTextRotationProperty() );
+    aWrappedProperties.emplace_back( new WrappedProperty("Marks","MajorTickmarks") );
+    aWrappedProperties.emplace_back( new WrappedProperty("HelpMarks","MinorTickmarks") );
+    aWrappedProperties.emplace_back( new WrappedProperty("TextCanOverlap","TextOverlap") );
+    aWrappedProperties.emplace_back( new WrappedProperty("ArrangeOrder","ArrangeOrder") );
+    aWrappedProperties.emplace_back( new WrappedProperty("Visible","Show") );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("DisplayLabels","DisplayLabels") );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("TryStaggeringFirst","TryStaggeringFirst") );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
+    aWrappedProperties.emplace_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
+    aWrappedProperties.emplace_back( new WrappedLinkNumberFormatProperty );
+    aWrappedProperties.emplace_back( new WrappedProperty("StackedText","StackCharacters") );
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("CrossoverPosition","CrossoverPosition") );
     {
         WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
         WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );
@@ -632,8 +632,8 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
             nAxisIndex = 1;
         pWrappedGapwidthProperty->setDimensionAndAxisIndex( nDimensionIndex, nAxisIndex );
         pWrappedBarOverlapProperty->setDimensionAndAxisIndex( nDimensionIndex, nAxisIndex );
-        aWrappedProperties.push_back( pWrappedGapwidthProperty );
-        aWrappedProperties.push_back( pWrappedBarOverlapProperty );
+        aWrappedProperties.emplace_back( pWrappedGapwidthProperty );
+        aWrappedProperties.emplace_back( pWrappedBarOverlapProperty );
     }
 
     WrappedScaleProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );

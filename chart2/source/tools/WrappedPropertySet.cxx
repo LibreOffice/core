@@ -52,16 +52,6 @@ void WrappedPropertySet::clearWrappedPropertySet()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
 
-    //delete all wrapped properties
-    if(m_pWrappedPropertyMap)
-    {
-        for (auto const& elem : *m_pWrappedPropertyMap)
-        {
-            const WrappedProperty* pWrappedProperty = elem.second;
-            DELETEZ(pWrappedProperty);
-        }
-    }
-
     m_pPropertyArrayHelper.reset();
     m_pWrappedPropertyMap.reset();
 
@@ -313,7 +303,7 @@ const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle
 {
     tWrappedPropertyMap::const_iterator aFound( getWrappedPropertyMap().find( nHandle ) );
     if( aFound != getWrappedPropertyMap().end() )
-        return (*aFound).second;
+        return (*aFound).second.get();
     return nullptr;
 }
 
@@ -422,29 +412,24 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
         p = m_pWrappedPropertyMap.get();
         if(!p)
         {
-            std::vector< WrappedProperty* > aPropList( createWrappedProperties() );
+            std::vector< std::unique_ptr<WrappedProperty> > aPropList( createWrappedProperties() );
             p = new tWrappedPropertyMap;
 
-            for (auto const& elem : aPropList)
+            for (auto & elem : aPropList)
             {
-                if(elem)
-                {
-                    sal_Int32 nHandle = getInfoHelper().getHandleByName( elem->getOuterName() );
+                sal_Int32 nHandle = getInfoHelper().getHandleByName( elem->getOuterName() );
 
-                    if( nHandle == -1 )
-                    {
-                        OSL_FAIL( "missing property in property list" );
-                        delete elem;//we are owner or the created WrappedProperties
-                    }
-                    else if( p->find( nHandle ) != p->end() )
-                    {
-                        //duplicate Wrapped property
-                        OSL_FAIL( "duplicate Wrapped property" );
-                        delete elem;//we are owner or the created WrappedProperties
-                    }
-                    else
-                        (*p)[ nHandle ] = elem;
+                if( nHandle == -1 )
+                {
+                    OSL_FAIL( "missing property in property list" );
                 }
+                else if( p->find( nHandle ) != p->end() )
+                {
+                    //duplicate Wrapped property
+                    OSL_FAIL( "duplicate Wrapped property" );
+                }
+                else
+                    (*p)[ nHandle ] = std::move(elem);
             }
 
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
