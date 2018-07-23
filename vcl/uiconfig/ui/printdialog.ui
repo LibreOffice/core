@@ -87,6 +87,23 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore4">Print only in one side</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore4">Print in both sides (long edge)</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="printdialog|liststore4">Print in both sides (short edge)</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -690,6 +707,7 @@
                                               <object class="GtkComboBox" id="sidesbox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="model">liststore4</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>

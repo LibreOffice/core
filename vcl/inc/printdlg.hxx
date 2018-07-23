@@ -121,6 +121,7 @@ namespace vcl
         VclPtr<NumericField>                    mpCopyCountField;
         VclPtr<CheckBox>                        mpCollateBox;
         VclPtr<FixedImage>                      mpCollateImage;
+        VclPtr<ListBox>                         mpPaperSidesBox;
         VclPtr<CheckBox>                        mpReverseOrderBox;
 
         VclPtr<OKButton>                        mpOKButton;
@@ -199,6 +200,7 @@ namespace vcl
         css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
+        void setupPaperSidesBox();
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();

@@ -309,6 +309,7 @@ public:
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
     void                        SetDuplexMode( DuplexMode );
+    DuplexMode                  GetDuplexMode() const;
 
     bool                        SetPaperBin( sal_uInt16 nPaperBin );
     sal_uInt16                  GetPaperBin() const;
