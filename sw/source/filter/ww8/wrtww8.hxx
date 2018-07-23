@@ -708,7 +708,7 @@ public:
     /// Setter for pISet.
     void SetCurItemSet( const SfxItemSet* pS ) { m_pISet = pS; }
 
-    /// Remember some of the memebers so that we can recurse in WriteText().
+    /// Remember some of the members so that we can recurse in WriteText().
     virtual void SaveData( sal_uLong nStt, sal_uLong nEnd );
 
     /// Restore what was saved in SaveData().
@@ -1149,7 +1149,7 @@ public:
     SwWW8Writer& GetWriter() const { return *m_pWriter; }
     SvStream& Strm() const { return m_pWriter->Strm(); }
 
-    /// Remember some of the memebers so that we can recurse in WriteText().
+    /// Remember some of the members so that we can recurse in WriteText().
     virtual void SaveData( sal_uLong nStt, sal_uLong nEnd ) override;
 
     /// Restore what was saved in SaveData().

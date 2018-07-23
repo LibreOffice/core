@@ -6368,7 +6368,7 @@ void SwUiWriterTest::testFontEmbedding()
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     CPPUNIT_ASSERT(aTempFile.IsValid());
 
-    // Check setting - No font enbedding should be enabled
+    // Check setting - No font embedding should be enabled
     pXmlDoc = parseExportInternal(aTempFile.GetURL(),"settings.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", "false");
