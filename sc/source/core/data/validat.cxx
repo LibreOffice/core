@@ -966,7 +966,7 @@ ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 
     for (const_iterator it = rList.begin(); it != rList.end(); ++it)
     {
-        InsertNew( (*it)->Clone() );
+        InsertNew( std::unique_ptr<ScValidationData>((*it)->Clone()) );
     }
 
     //TODO: faster insert for sorted entries from rList ???
@@ -979,7 +979,7 @@ ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
 
     for (const_iterator it = rList.begin(); it != rList.end(); ++it)
     {
-        InsertNew( (*it)->Clone(pNewDoc) );
+        InsertNew( std::unique_ptr<ScValidationData>((*it)->Clone(pNewDoc)) );
     }
 
     //TODO: faster insert for sorted entries from rList ???
@@ -991,7 +991,7 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 
     for( iterator it = begin(); it != end(); ++it )
         if( (*it)->GetKey() == nKey )
-            return *it;
+            return it->get();
 
     OSL_FAIL("ScValidationDataList: Entry not found");
     return nullptr;
