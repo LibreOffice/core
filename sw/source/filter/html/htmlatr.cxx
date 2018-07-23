@@ -1079,7 +1079,7 @@ class HTMLEndPosLst
 
     SwDoc *pDoc;            // the current document
     SwDoc* pTemplate;       // the HTML template (or 0)
-    const Color* pDfltColor;// the default foreground colors
+    boost::optional<Color> xDfltColor;// the default foreground colors
     std::set<OUString>& rScriptTextStyles;
 
     sal_uLong nHTMLMode;
@@ -1123,7 +1123,7 @@ class HTMLEndPosLst
 
 public:
 
-    HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, const Color* pDfltColor,
+    HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, boost::optional<Color> xDfltColor,
                    bool bOutStyles, sal_uLong nHTMLMode,
                    const OUString& rText, std::set<OUString>& rStyles );
     ~HTMLEndPosLst();
@@ -1570,12 +1570,12 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
 }
 
 HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
-                              const Color* pDfltCol, bool bStyles,
+                              boost::optional<Color> xDfltCol, bool bStyles,
                               sal_uLong nMode, const OUString& rText,
                               std::set<OUString>& rStyles ):
     pDoc( pD ),
     pTemplate( pTempl ),
-    pDfltColor( pDfltCol ),
+    xDfltColor( xDfltCol ),
     rScriptTextStyles( rStyles ),
     nHTMLMode( nMode ),
     bOutStyles( bStyles )
@@ -1681,8 +1681,8 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
                 if( COL_AUTO == aColor )
                     aColor = COL_BLACK;
-                bSet = !bParaAttrs || !pDfltColor ||
-                       !pDfltColor->IsRGBEqual( aColor );
+                bSet = !bParaAttrs || !xDfltColor ||
+                       !xDfltColor->IsRGBEqual( aColor );
             }
             break;
 
@@ -2259,7 +2259,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     // are there any hard attributes that must be written as tags?
     aFullText += rStr;
     HTMLEndPosLst aEndPosLst( rWrt.m_pDoc, rHTMLWrt.m_xTemplate.get(),
-                              rHTMLWrt.m_pDfltColor, rHTMLWrt.m_bCfgOutStyles,
+                              rHTMLWrt.m_xDfltColor, rHTMLWrt.m_bCfgOutStyles,
                               rHTMLWrt.GetHTMLMode(), aFullText,
                                  rHTMLWrt.m_aScriptTextStyles );
     if( aFormatInfo.pItemSet )
