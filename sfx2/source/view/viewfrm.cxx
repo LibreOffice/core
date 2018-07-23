@@ -1408,9 +1408,9 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     m_pImpl->pWindow = nullptr;
 
     SetPool( &SfxGetpApp()->GetPool() );
-    m_pDispatcher = new SfxDispatcher(this);
+    m_pDispatcher.reset( new SfxDispatcher(this) );
     if ( !GetBindings().GetDispatcher() )
-        GetBindings().SetDispatcher( m_pDispatcher );
+        GetBindings().SetDispatcher( m_pDispatcher.get() );
 
     m_xObjSh = pObjSh;
     if ( m_xObjSh.is() && m_xObjSh->IsPreview() )
@@ -1513,7 +1513,7 @@ void SfxViewFrame::KillDispatcher_Impl()
             m_pDispatcher->Pop( *pModule, SfxDispatcherPopFlags::POP_UNTIL );
         else
             m_pDispatcher->Pop( *this );
-        DELETEZ(m_pDispatcher);
+        m_pDispatcher.reset();
     }
 }
 
