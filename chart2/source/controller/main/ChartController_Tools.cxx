@@ -361,7 +361,7 @@ void ChartController::impl_PasteGraphic(
             }
             //select new shape
             m_aSelection.setSelection( xGraphicShape );
-            m_aSelection.applySelection( m_pDrawViewWrapper );
+            m_aSelection.applySelection( m_pDrawViewWrapper.get() );
         }
         xGraphicShapeProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
@@ -427,7 +427,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
 
             // select last inserted shape
             m_aSelection.setSelection( xSelShape );
-            m_aSelection.applySelection( m_pDrawViewWrapper );
+            m_aSelection.applySelection( m_pDrawViewWrapper.get() );
 
             m_pDrawViewWrapper->EndUndo();
 
@@ -470,7 +470,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
                 xTextShape->setPosition( rPosition );
 
                 m_aSelection.setSelection( xTextShape );
-                m_aSelection.applySelection( m_pDrawViewWrapper );
+                m_aSelection.applySelection( m_pDrawViewWrapper.get() );
 
                 SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
                 if ( pObj )

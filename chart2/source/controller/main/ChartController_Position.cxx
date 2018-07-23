@@ -131,7 +131,7 @@ void ChartController::executeDispatch_PositionAndSize()
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
 
         //prepare and open dialog
-        SdrView* pSdrView = m_pDrawViewWrapper;
+        SdrView* pSdrView = m_pDrawViewWrapper.get();
         bool bResizePossible = m_aSelection.isResizeableObjectSelected();
 
         SolarMutexGuard aGuard;
