@@ -42,16 +42,14 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 
 SwDBConfig::SwDBConfig() :
     ConfigItem("Office.DataAccess",
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    pAdrImpl(nullptr),
-    pBibImpl(nullptr)
+        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
 {
 };
 
 SwDBConfig::~SwDBConfig()
 {
-    delete pAdrImpl;
-    delete pBibImpl;
+    pAdrImpl.reset();
+    pBibImpl.reset();
 }
 
 void SwDBConfig::Load()
@@ -59,10 +57,9 @@ void SwDBConfig::Load()
     const Sequence<OUString>& rNames = GetPropertyNames();
     if(!pAdrImpl)
     {
-
-        pAdrImpl = new SwDBData;
+        pAdrImpl.reset(new SwDBData);
         pAdrImpl->nCommandType = 0;
-        pBibImpl = new SwDBData;
+        pBibImpl.reset(new SwDBData);
         pBibImpl->nCommandType = 0;
     }
     Sequence<Any> aValues = GetProperties(rNames);

@@ -30,8 +30,8 @@ private:
     SAL_DLLPRIVATE static const css::uno::Sequence<OUString>& GetPropertyNames();
     virtual void ImplCommit() override;
 
-    SwDBData*       pAdrImpl;
-    SwDBData*       pBibImpl;
+    std::unique_ptr<SwDBData> pAdrImpl;
+    std::unique_ptr<SwDBData> pBibImpl;
 
 public:
     SwDBConfig();
