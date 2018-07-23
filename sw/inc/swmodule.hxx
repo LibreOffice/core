@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     SvtCTLOptions*      m_pCTLOptions;
     SvtUserOptions*     m_pUserOptions;
 
-    SfxErrorHandler*    m_pErrorHandler;
+    std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
 
     SwAttrPool          *m_pAttrPool;
 
