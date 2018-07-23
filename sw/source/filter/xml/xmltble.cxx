@@ -569,7 +569,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     // pass 1: calculate columns
     SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
     if( !m_pTableLines )
-        m_pTableLines = new SwXMLTableLinesCache_Impl;
+        m_pTableLines.reset(new SwXMLTableLinesCache_Impl);
 
     m_pTableLines->push_back( pLines );
 
@@ -995,10 +995,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     m_pTableLines->erase( it );
 
     if( m_pTableLines->empty() )
-    {
-        delete m_pTableLines ;
-        m_pTableLines = nullptr;
-    }
+        m_pTableLines.reset();
 
     // pass 2: export columns
     const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
@@ -1201,7 +1198,7 @@ void SwXMLExport::DeleteTableLines()
         for (SwXMLTableLines_Impl* p : *m_pTableLines)
             delete p;
         m_pTableLines->clear();
-        delete m_pTableLines;
+        m_pTableLines.reset();
     }
 }
 
