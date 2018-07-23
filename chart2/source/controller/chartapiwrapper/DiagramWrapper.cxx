@@ -1838,9 +1838,9 @@ const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
     return *StaticDiagramWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
+std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
     WrappedAxisAndGridExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisTitleExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
@@ -1855,18 +1855,18 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     WrappedStockProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
 
-    aWrappedProperties.push_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::YStacked,m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::YStackedPercent, m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::ZStacked, m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedDim3DProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedVerticalProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedNumberOfLinesProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedAttributedDataPointsProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedProperty( "StackedBarsConnected", "ConnectBars" ) );
-    aWrappedProperties.push_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedAutomaticSizeProperty() );
-    aWrappedProperties.push_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedStackingProperty( StackMode::YStacked,m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedStackingProperty( StackMode::YStackedPercent, m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedStackingProperty( StackMode::ZStacked, m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedDim3DProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedVerticalProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedNumberOfLinesProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedAttributedDataPointsProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedProperty( "StackedBarsConnected", "ConnectBars" ) );
+    aWrappedProperties.emplace_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.emplace_back( new WrappedAutomaticSizeProperty() );
+    aWrappedProperties.emplace_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
 
     return aWrappedProperties;
 }

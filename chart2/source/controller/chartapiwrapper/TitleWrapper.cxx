@@ -462,13 +462,13 @@ const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
     return *StaticTitleWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
+std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
-    aWrappedProperties.push_back( new WrappedTextRotationProperty( true ) );
-    aWrappedProperties.push_back( new WrappedStackedTextProperty() );
+    aWrappedProperties.emplace_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
+    aWrappedProperties.emplace_back( new WrappedTextRotationProperty( true ) );
+    aWrappedProperties.emplace_back( new WrappedStackedTextProperty() );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );

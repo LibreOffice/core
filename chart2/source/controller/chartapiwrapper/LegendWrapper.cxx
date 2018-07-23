@@ -383,16 +383,16 @@ const Sequence< beans::Property >& LegendWrapper::getPropertySequence()
     return *StaticLegendWrapperPropertyArray::get();
 }
 
-const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
+std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProperties()
 {
-    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedLegendAlignmentProperty() );
-    aWrappedProperties.push_back( new WrappedProperty( "Expansion", "Expansion"));
+    aWrappedProperties.emplace_back( new WrappedLegendAlignmentProperty() );
+    aWrappedProperties.emplace_back( new WrappedProperty( "Expansion", "Expansion"));
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     //same problem as for wall: the defaults in the old chart are different for different charttypes, so we need to export explicitly
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("FillStyle", "FillStyle"));
-    aWrappedProperties.push_back( new WrappedDirectStateProperty("FillColor", "FillColor"));
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("FillStyle", "FillStyle"));
+    aWrappedProperties.emplace_back( new WrappedDirectStateProperty("FillColor", "FillColor"));
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
