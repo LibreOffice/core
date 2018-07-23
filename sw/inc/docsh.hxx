@@ -67,7 +67,7 @@ class SW_DLLPUBLIC SwDocShell
 {
     rtl::Reference< SwDoc >                 m_xDoc;      ///< Document.
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool; ///< Passing through for formats.
-    FontList*   m_pFontList;          ///< Current Fontlist.
+    std::unique_ptr<FontList> m_pFontList;          ///< Current Fontlist.
     bool        m_IsInUpdateFontList; ///< prevent nested calls of UpdateFontList
 
     std::unique_ptr<sfx2::StyleManager> m_pStyleManager;
@@ -80,7 +80,7 @@ class SW_DLLPUBLIC SwDocShell
     SwView*     m_pView;
     SwWrtShell* m_pWrtShell;
 
-    comphelper::EmbeddedObjectContainer* m_pOLEChildList;
+    std::unique_ptr<comphelper::EmbeddedObjectContainer> m_pOLEChildList;
     sal_Int16   m_nUpdateDocMode;   ///< contains the css::document::UpdateDocMode
     bool        m_IsATemplate;      ///< prevent nested calls of UpdateFontList
 
