@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_01946836",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-23T05:05:34Z",
+      "side": 1,
+      "message": "This is really ugly, and there is probably a better way to handle this. It seems like enums are not consistently used in this property, and I was a little surprised to see that sal_Int16/32 rejected an enum during Any \u003e\u003e\u003d sal_Int.\n\nSo far I have failed to find all the places where these non-enums are being entered (somewhere in table properties). I think my task for today is hunting that down.",
+      "range": {
+        "startLine": 1460,
+        "startChar": 0,
+        "endLine": 1468,
+        "endChar": 0
+      },
+      "revId": "e0b5a25ab25b15a4a2c6fe0af59ac8563f51359a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
