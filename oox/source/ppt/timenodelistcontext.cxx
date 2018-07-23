@@ -673,7 +673,11 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    maBy = convertPointPercent(GetPointPercent(rAttribs.getFastAttributeList()));
+                    css::awt::Point aPoint = GetPointPercent(rAttribs.getFastAttributeList());
+                    // We got ending values instead of offset values, so substract 100% from them.
+                    aPoint.X -= 100000;
+                    aPoint.Y -= 100000;
+                    maBy = convertPointPercent(aPoint);
                     return this;
                 }
                 default:

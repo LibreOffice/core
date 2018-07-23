@@ -857,7 +857,7 @@ void SdExportTest::testTdf98477()
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
-    assertXPath(pXmlDoc, "//anim:animateTransform", "by", "1.5,1.5");
+    assertXPath(pXmlDoc, "//anim:animateTransform", "by", "0.5,0.5");
     xDocShRef->DoClose();
 }
 
