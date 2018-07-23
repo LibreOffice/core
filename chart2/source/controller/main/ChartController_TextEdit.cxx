@@ -209,7 +209,7 @@ uno::Reference< css::accessibility::XAccessibleContext >
     ChartController::impl_createAccessibleTextContext()
 {
     uno::Reference< css::accessibility::XAccessibleContext > xResult(
-        new AccessibleTextHelper( m_pDrawViewWrapper ));
+        new AccessibleTextHelper( m_pDrawViewWrapper.get() ));
 
     return xResult;
 }

@@ -437,7 +437,7 @@ void SAL_CALL ChartController::removePaintListener(
 void ChartController::PrePaint()
 {
     // forward VCLs PrePaint window event to DrawingLayer
-    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
 
     if (pDrawViewWrapper)
     {
@@ -477,7 +477,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
 
         {
             SolarMutexGuard aGuard;
-            DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+            DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
             if (pDrawViewWrapper)
                 pDrawViewWrapper->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
         }
@@ -557,7 +557,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
     m_aSelection.remindSelectionBeforeMouseDown();
 
-    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
     auto pChartWindow(GetChartWindow());
     if(!pChartWindow || !pDrawViewWrapper )
         return;
@@ -707,7 +707,7 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 {
     SolarMutexGuard aGuard;
 
-    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
     auto pChartWindow(GetChartWindow());
     if(!pChartWindow || !pDrawViewWrapper)
         return;
@@ -735,7 +735,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
     {
         SolarMutexGuard aGuard;
 
-        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
         auto pChartWindow(GetChartWindow());
         if(!pChartWindow || !pDrawViewWrapper)
             return;
@@ -967,7 +967,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
     auto pChartWindow(GetChartWindow());
     bool bIsAction = false;
     {
-        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
         if(!pChartWindow || !pDrawViewWrapper)
             return;
         bIsAction = m_pDrawViewWrapper->IsAction();
@@ -1306,7 +1306,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     SolarMutexGuard aGuard;
     bool bReturn=false;
 
-    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
     auto pChartWindow(GetChartWindow());
     if(!pChartWindow || !pDrawViewWrapper)
         return bReturn;
@@ -1724,11 +1724,11 @@ void ChartController::impl_selectObjectAndNotiy()
 {
     {
         SolarMutexGuard aGuard;
-        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
         if( pDrawViewWrapper )
         {
             pDrawViewWrapper->SetDragMode( m_eDragMode );
-            m_aSelection.applySelection( m_pDrawViewWrapper );
+            m_aSelection.applySelection( m_pDrawViewWrapper.get() );
         }
     }
     impl_notifySelectionChangeListeners();
