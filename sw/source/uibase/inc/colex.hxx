@@ -47,18 +47,14 @@ class SwTextGridItem;
 
 class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
-    SwTextGridItem*     pGridItem;
+    std::unique_ptr<SwTextGridItem> pGridItem;
 protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
                           const Point& rPoint,
                           const bool bSecond,
                           const bool bEnabled) override;
 public:
-    SwPageGridExample(vcl::Window* pPar)
-        : SwPageExample(pPar)
-        , pGridItem(nullptr)
-    {}
-
+    SwPageGridExample(vcl::Window* pPar);
     virtual ~SwPageGridExample() override;
     virtual void dispose() override;
     void UpdateExample( const SfxItemSet& rSet );
