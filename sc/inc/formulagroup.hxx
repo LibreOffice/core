@@ -94,6 +94,8 @@ struct FormulaGroupContext
     ColArray* setCachedColArray(
         SCTAB nTab, SCCOL nCol, NumArrayType* pNumArray, StrArrayType* pStrArray );
 
+    void discardCachedColArray(SCTAB nTab, SCCOL nCol);
+
     void ensureStrArray( ColArray& rColArray, size_t nArrayLen );
     void ensureNumArray( ColArray& rColArray, size_t nArrayLen );
 
