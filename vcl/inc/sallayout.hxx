@@ -344,7 +344,7 @@ private:
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 
-    bool            GetCharWidths(DeviceCoordinate* pCharWidths) const;
+    void            GetCharWidths(DeviceCoordinate* pCharWidths) const;
 
     void            SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
 
