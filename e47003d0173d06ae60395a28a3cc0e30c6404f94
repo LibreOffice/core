@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_472ba093",
+        "filename": "sw/source/ui/dbui/mmgreetingspage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T12:46:59Z",
+      "side": 1,
+      "message": "Although technically correct, please change this to better reflect the condition:\n\nchange the var name: let it be bEnableNeutral\nadd comment \"// Disable neutral if all greetings are disabled, or if personalized greeting is checked\".\n\nI hope this would be clearer. My concern is about the m_pPersonalizedCB-\u003eIsEnabled() which makes impression that we somehow only depend on enabled state of personalized greeting, while in reality that is simply the indication of any greeting being enabled.\n\nI\u0027d suppose that even better would be to use radio buttons instead of \"Insert personalized salutation\"/\"General salutation\" - maybe you\u0027d think about that?",
+      "range": {
+        "startLine": 96,
+        "startChar": 9,
+        "endLine": 96,
+        "endChar": 23
+      },
+      "revId": "e47003d0173d06ae60395a28a3cc0e30c6404f94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_271adc7c",
+        "filename": "sw/source/ui/dbui/mmgreetingspage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T12:46:59Z",
+      "side": 1,
+      "message": "bEnableNeutral; with analogous comment as above please, if we don\u0027t go the radiobuttons route.",
+      "range": {
+        "startLine": 226,
+        "startChar": 9,
+        "endLine": 226,
+        "endChar": 27
+      },
+      "revId": "e47003d0173d06ae60395a28a3cc0e30c6404f94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
