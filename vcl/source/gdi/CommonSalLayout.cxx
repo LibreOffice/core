@@ -572,7 +572,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     return true;
 }
 
-bool GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
+void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
@@ -586,8 +586,6 @@ bool GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
             continue;
         pCharWidths[nIndex] += aGlyphItem.mnNewWidth;
     }
-
-    return true;
 }
 
 // A note on how Kashida justification is implemented (because it took me 5
