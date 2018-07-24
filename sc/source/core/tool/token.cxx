@@ -1599,11 +1599,10 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // Don't change the state.
             break;
             case svSingleRef:
+            case svDoubleRef:
                 // Depends on the reference state.
                 meVectorState = FormulaVectorCheckReference;
             break;
-            case svDoubleRef:
-                // Does not work yet, see ScGroupTokenConverter::convert()
             case svError:
             case svEmptyCell:
             case svExternal:
