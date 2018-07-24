@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_FRMSIDEBARWINCONTAINER_HXX
 
 #include <sal/types.h>
+#include <memory>
 #include <vector>
 
 class SwFrame;
@@ -55,7 +56,7 @@ class SwFrameSidebarWinContainer
                      std::vector< vcl::Window* >* pSidebarWins );
 
     private:
-        FrameSidebarWinContainer* mpFrameSidebarWinContainer;
+        std::unique_ptr<FrameSidebarWinContainer> mpFrameSidebarWinContainer;
 };
 
 } } // eof of namespace sw::sidebarwindows::
