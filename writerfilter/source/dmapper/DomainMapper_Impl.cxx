@@ -1458,46 +1458,60 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
-                if (pStyleSheetProperties && pParaContext && m_xPreviousParagraph.is() &&
-                        pParaContext->isSet(PROP_PARA_TOP_MARGIN) != pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN))
+                if ( pParaContext && m_xPreviousParagraph.is() )
                 {
-                    boost::optional<PropertyMap::Property> oProperty;
-                    if (pParaContext->isSet(PROP_PARA_TOP_MARGIN))
+                    const bool bTopSet = pParaContext->isSet(PROP_PARA_TOP_MARGIN);
+                    const bool bBottomSet = pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN);
+                    const bool bContextSet = pParaContext->isSet(PROP_PARA_CONTEXT_MARGIN);
+                    if ( !(bTopSet == bBottomSet && bBottomSet == bContextSet) )
                     {
-                        if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_BOTTOM_MARGIN)) )
-                            m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", oProperty->second);
-                    }
-                    else
-                    {
-                        if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_TOP_MARGIN)) )
-                            m_xPreviousParagraph->setPropertyValue("ParaTopMargin", oProperty->second);
+                        if ( !bTopSet )
+                        {
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_TOP_MARGIN);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaTopMargin", aMargin);
+                        }
+                        if ( !bBottomSet )
+                        {
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_BOTTOM_MARGIN);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", aMargin);
+                        }
+                        if ( !bContextSet )
+                        {
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_CONTEXT_MARGIN);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaContextMargin", aMargin);
+                        }
                     }
                 }
 
                 // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
                 // m_xPreviousParagraph was set earlier, so really it still is the current paragraph...
-                if ( pStyleSheetProperties && pParaContext && m_xPreviousParagraph.is() )
+                if ( pParaContext && m_xPreviousParagraph.is() )
                 {
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
                     const bool bFirstSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT);
                     if ( !(bLeftSet == bRightSet && bRightSet == bFirstSet) )
                     {
-                        boost::optional<PropertyMap::Property> oProperty;
                         if ( !bLeftSet )
                         {
-                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN)) )
-                                m_xPreviousParagraph->setPropertyValue("ParaLeftMargin", oProperty->second);
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_LEFT_MARGIN);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaLeftMargin", aMargin);
                         }
                         if ( !bRightSet )
                         {
-                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) )
-                                m_xPreviousParagraph->setPropertyValue("ParaRightMargin", oProperty->second);
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_RIGHT_MARGIN);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaRightMargin", aMargin);
                         }
                         if ( !bFirstSet )
                         {
-                            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)) )
-                                m_xPreviousParagraph->setPropertyValue("ParaFirstLineIndent", oProperty->second);
+                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
+                            if ( aMargin != uno::Any() )
+                                m_xPreviousParagraph->setPropertyValue("ParaFirstLineIndent", aMargin);
                         }
                     }
                 }

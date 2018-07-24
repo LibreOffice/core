@@ -470,6 +470,18 @@ DECLARE_OOXMLEXPORT_TEST(testMarginsFromStyle, "margins_from_style.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104348_contextMargin, "tdf104348_contextMargin.docx")
+{
+    // tdf#104348 shows that ContextMargin belongs with Top/Bottom handling
+
+    uno::Reference<beans::XPropertySet> xMyStyle(getStyles("ParagraphStyles")->getByName("MyStyle"), uno::UNO_QUERY);
+    // from paragraph style - this is what direct formatting should equal
+    sal_Int32 nMargin = getProperty<sal_Int32>(xMyStyle, "ParaBottomMargin");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMargin);
+    // from direct formatting
+    CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
 {
     // tdf#118521 paragraphs with direct formatting of only some of left, right, or first margins have
