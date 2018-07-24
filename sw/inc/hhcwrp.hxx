@@ -34,8 +34,8 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
     VclPtr<vcl::Window>     m_pWin;
     SwWrtShell &m_rWrtShell;
 
-    SwConversionArgs *m_pConvArgs;    /**< object for arguments (and results) needed
-                                       to find of next convertible text portion */
+    std::unique_ptr<SwConversionArgs> m_pConvArgs;    /**< object for arguments (and results) needed
+                                                       to find of next convertible text portion */
 
     sal_Int32       m_nLastPos;       /**< starting position of the last found text part
                                        (needs to be sth that gets not moved like

@@ -113,7 +113,7 @@ SwHHCWrapper::SwHHCWrapper(
 
 SwHHCWrapper::~SwHHCWrapper()
 {
-    delete m_pConvArgs;
+    m_pConvArgs.reset();
 
     SwViewShell::SetCareWin( nullptr );
 
@@ -522,9 +522,9 @@ void SwHHCWrapper::Convert()
         if (pSttPos->nNode.GetNode().IsTextNode() &&
             pEndPos->nNode.GetNode().IsTextNode())
         {
-            m_pConvArgs = new SwConversionArgs( GetSourceLanguage(),
+            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(),
                             pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent,
-                            pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent );
+                            pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent ) );
         }
         else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
         {
@@ -538,9 +538,9 @@ void SwHHCWrapper::Convert()
             // just in case we check anyway...
             if (!pTextNode || !pTextNode->IsTextNode())
                 return;
-            m_pConvArgs = new SwConversionArgs( GetSourceLanguage(),
+            m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(),
                             pTextNode, pSttPos->nContent,
-                            pTextNode, pSttPos->nContent );
+                            pTextNode, pSttPos->nContent ) );
         }
         OSL_ENSURE( m_pConvArgs->pStartNode && m_pConvArgs->pStartNode->IsTextNode(),
                 "failed to get proper start text node" );
@@ -596,16 +596,16 @@ void SwHHCWrapper::Convert()
     }
 
     if ( m_bIsOtherContent )
-        ConvStart_impl( m_pConvArgs, SvxSpellArea::Other );
+        ConvStart_impl( m_pConvArgs.get(), SvxSpellArea::Other );
     else
     {
         m_bStartChk = false;
-        ConvStart_impl( m_pConvArgs, SvxSpellArea::BodyEnd );
+        ConvStart_impl( m_pConvArgs.get(), SvxSpellArea::BodyEnd );
     }
 
     ConvertDocument();
 
-    ConvEnd_impl( m_pConvArgs );
+    ConvEnd_impl( m_pConvArgs.get() );
 }
 
 bool SwHHCWrapper::ConvNext_impl( )
@@ -628,7 +628,7 @@ bool SwHHCWrapper::ConvNext_impl( )
     if ( m_bIsOtherContent )
     {
         m_bStartChk = false;
-        ConvStart_impl( m_pConvArgs, SvxSpellArea::Body );
+        ConvStart_impl( m_pConvArgs.get(), SvxSpellArea::Body );
         bGoOn = true;
     }
     else if ( m_bStartDone && m_bEndDone )
@@ -636,14 +636,14 @@ bool SwHHCWrapper::ConvNext_impl( )
         // body region done, ask about special region
         if( !m_bIsSelection && m_rWrtShell.HasOtherCnt() )
         {
-            ConvStart_impl( m_pConvArgs, SvxSpellArea::Other );
+            ConvStart_impl( m_pConvArgs.get(), SvxSpellArea::Other );
             m_bIsOtherContent = bGoOn = true;
         }
     }
     else
     {
             m_bStartChk = !m_bStartDone;
-            ConvStart_impl( m_pConvArgs, m_bStartChk ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
+            ConvStart_impl( m_pConvArgs.get(), m_bStartChk ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
             bGoOn = true;
     }
     return bGoOn;
@@ -660,14 +660,14 @@ void SwHHCWrapper::FindConvText_impl()
 
     while ( bConv )
     {
-        bFound = ConvContinue_impl( m_pConvArgs );
+        bFound = ConvContinue_impl( m_pConvArgs.get() );
         if (bFound)
         {
             bConv = false;
         }
         else
         {
-            ConvEnd_impl( m_pConvArgs );
+            ConvEnd_impl( m_pConvArgs.get() );
             bConv = ConvNext_impl();
         }
     }
