@@ -71,7 +71,7 @@ SwFrameSidebarWinContainer::SwFrameSidebarWinContainer()
 SwFrameSidebarWinContainer::~SwFrameSidebarWinContainer()
 {
     mpFrameSidebarWinContainer->clear();
-    delete mpFrameSidebarWinContainer;
+    mpFrameSidebarWinContainer.reset();
 }
 
 bool SwFrameSidebarWinContainer::insert( const SwFrame& rFrame,
