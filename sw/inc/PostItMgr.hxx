@@ -132,7 +132,7 @@ class SwPostItMgr: public SfxListener
         SwWrtShell*                     mpWrtShell;
         VclPtr<SwEditWin>               mpEditWin;
         std::vector<SwSidebarItem*>     mvPostItFields;
-        std::vector<SwPostItPageItem*>  mPages;
+        std::vector<std::unique_ptr<SwPostItPageItem>>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
         VclPtr<sw::annotation::SwAnnotationWin> mpActivePostIt;
