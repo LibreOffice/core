@@ -292,12 +292,10 @@ void SwSrcEditWindow::dispose()
     if ( m_pTextEngine )
     {
         EndListening( *m_pTextEngine );
-        m_pTextEngine->RemoveView( m_pTextView );
+        m_pTextEngine->RemoveView( m_pTextView.get() );
 
-        delete m_pTextView;
-        m_pTextView = nullptr;
-        delete m_pTextEngine;
-        m_pTextEngine = nullptr;
+        m_pTextView.reset();
+        m_pTextEngine.reset();
     }
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
@@ -518,13 +516,13 @@ void SwSrcEditWindow::CreateTextEngine()
     m_pHScrollbar->EnableDrag();
     m_pVScrollbar->Show();
 
-    m_pTextEngine = new ExtTextEngine;
-    m_pTextView = new TextView( m_pTextEngine, m_pOutWin );
+    m_pTextEngine.reset(new ExtTextEngine);
+    m_pTextView.reset(new TextView( m_pTextEngine.get(), m_pOutWin ));
     m_pTextView->SetAutoIndentMode(true);
-    m_pOutWin->SetTextView(m_pTextView);
+    m_pOutWin->SetTextView(m_pTextView.get());
 
     m_pTextEngine->SetUpdateMode( false );
-    m_pTextEngine->InsertView( m_pTextView );
+    m_pTextEngine->InsertView( m_pTextView.get() );
 
     vcl::Font aFont;
     aFont.SetTransparent( false );
