@@ -892,13 +892,13 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // but by simply rewiring them
     bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHidden() &&
                    GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    SwNode2Layout *pNode2Layout = nullptr;
+    SwNode2LayoutSaveUpperFrames *pNode2Layout = nullptr;
     if( bInsFrame )
     {
         SwNodeIndex aTmp( *pSectNd );
         if( !pSectNd->GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() ) )
             // Collect all Uppers
-            pNode2Layout = new SwNode2Layout( *pSectNd );
+            pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pSectNd);
     }
 
     // Set the right StartNode for all in this Area

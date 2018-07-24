@@ -842,7 +842,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             ? ::lcl_FindChapterNode( *pSectNd )
             : nullptr;
 
-    SwNode2Layout aN2L( *pSectNd );
+    SwNode2LayoutSaveUpperFrames aN2L(*pSectNd);
     const_cast<SwSectionNode*>(pSectNd)->DelFrames();
 
     // remove old content an insert one empty textnode (to hold the layout!)

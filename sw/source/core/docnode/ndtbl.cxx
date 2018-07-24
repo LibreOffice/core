@@ -689,7 +689,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // We always use Upper to insert the Table
-    SwNode2Layout aNode2Layout( aRg.aStart.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout( aRg.aStart.GetNode() );
 
     GetIDocumentUndoRedo().DoUndo( nullptr != pUndo );
 
@@ -1216,7 +1216,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     }
 
     // We always use Upper to insert the Table
-    SwNode2Layout aNode2Layout( aRg.aStart.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout( aRg.aStart.GetNode() );
 
     GetIDocumentUndoRedo().DoUndo(bUndo);
 
@@ -1591,12 +1591,12 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         return false;
 
     // If the Table was alone in a Section, create the Frames via the Table's Upper
-    SwNode2Layout* pNode2Layout = nullptr;
+    SwNode2LayoutSaveUpperFrames * pNode2Layout = nullptr;
     SwNodeIndex aFrameIdx( rRange.aStart );
     SwNode* pFrameNd = FindPrvNxtFrameNode( aFrameIdx, &rRange.aEnd.GetNode() );
     if( !pFrameNd )
         // Collect all Uppers
-        pNode2Layout = new SwNode2Layout( *pTableNd );
+        pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pTableNd);
 
     // Delete the Frames
     pTableNd->DelFrames();

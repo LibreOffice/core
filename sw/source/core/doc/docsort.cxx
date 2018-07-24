@@ -536,7 +536,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // #i37739# A simple 'MakeFrames' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
-    SwNode2Layout aNode2Layout( *pTableNd );
+    SwNode2LayoutSaveUpperFrames aNode2Layout(*pTableNd);
 
     // Delete the Table's Frames
     pTableNd->DelFrames();

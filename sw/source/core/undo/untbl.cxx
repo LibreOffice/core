@@ -460,7 +460,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->DeleteMark();
 
     // now collect all Uppers
-    SwNode2Layout aNode2Layout( aFrameIdx.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout(aFrameIdx.GetNode());
 
     // create TableNode structure
     SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *m_pBoxSaves );
