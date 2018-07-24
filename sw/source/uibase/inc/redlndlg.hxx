@@ -136,7 +136,7 @@ public:
 
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 {
-    SwRedlineAcceptDlg*     pImplDlg;
+    std::unique_ptr<SwRedlineAcceptDlg> pImplDlg;
     SwChildWinWrapper*      pChildWin;
 
 public:
@@ -165,7 +165,7 @@ public:
 /// Redline (Manage Changes) panel for the sidebar.
 class SwRedlineAcceptPanel : public PanelLayout, public SfxListener
 {
-    SwRedlineAcceptDlg* mpImplDlg;
+    std::unique_ptr<SwRedlineAcceptDlg> mpImplDlg;
 public:
     SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual ~SwRedlineAcceptPanel() override;
