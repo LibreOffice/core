@@ -574,13 +574,18 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
 bool GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 {
-    int nCharCount = mnEndCharPos - mnMinCharPos;
+    const int nCharCount = mnEndCharPos - mnMinCharPos;
 
     for (int i = 0; i < nCharCount; ++i)
         pCharWidths[i] = 0;
 
     for (auto const& aGlyphItem : m_GlyphItems)
-        pCharWidths[aGlyphItem.mnCharPos - mnMinCharPos] += aGlyphItem.mnNewWidth;
+    {
+        const int nIndex = aGlyphItem.mnCharPos - mnMinCharPos;
+        if (nIndex >= nCharCount)
+            continue;
+        pCharWidths[nIndex] += aGlyphItem.mnNewWidth;
+    }
 
     return true;
 }
