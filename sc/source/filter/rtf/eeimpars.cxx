@@ -156,7 +156,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         SCCOL nCol = nStartCol + pE->nCol + nMergeColAdd;
         // Determine RowMerge
         // Pure ColMerge and ColMerge of the first MergeRow already done during parsing
-        if ( nRow <= nOverlapRowMax )
+        if (nRow <= nOverlapRowMax && ValidCol(nCol))
         {
             while ( nCol <= MAXCOL && mpDoc->HasAttrib( nCol, nRow, nTab,
                 nCol, nRow, nTab, HasAttrFlags::Overlapped ) )
