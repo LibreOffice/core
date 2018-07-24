@@ -409,7 +409,7 @@ public:
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
-    void MakeFrames( SwContentNode& rNode );
+    void MakeFramesForAdjacentContentNode(SwContentNode& rNode);
 
     /** Method deletes all views of document for the node. The content-
         frames are removed from the respective layout.
@@ -504,7 +504,7 @@ public:
     SwTabFrame *MakeFrame( SwFrame* );
 
     /// Creates the frms for the table node (i.e. the TabFrames).
-    void MakeFrames( SwNodeIndex* pIdxBehind );
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind);
 
     /** Method deletes all views of document for the node.
        The content frames are removed from the respective layout. */
@@ -512,7 +512,7 @@ public:
 
     /** Method creates all views of the document for the previous node.
        The content frames that are created are put into the respective layout. */
-    void MakeFrames( const SwNodeIndex & rIdx );
+    void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
     void SetNewTable( std::unique_ptr<SwTable> , bool bNewFrames=true );
@@ -552,7 +552,7 @@ public:
        On default the frames are created until the end of the range.
        When another NodeIndex pEnd is passed a MakeFrames is called up to it.
        Used by TableToText. */
-    void MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr );
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr);
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */
@@ -560,7 +560,7 @@ public:
 
     /** Method creates all views of document for the previous node.
        The content frames created are put into the respective layout. */
-    void MakeFrames( const SwNodeIndex & rIdx );
+    void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
     SwSectionNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
