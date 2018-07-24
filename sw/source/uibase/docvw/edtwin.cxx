@@ -352,8 +352,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         PointerStyle eStyle = PointerStyle::Fill;
         if ( rSh.IsOverReadOnlyPos( rLPt ) )
         {
-            delete m_pUserMarker;
-            m_pUserMarker = nullptr;
+            m_pUserMarker.reset();
 
             eStyle = PointerStyle::NotAllowed;
         }
@@ -378,13 +377,12 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 
                 if ( !m_pUserMarker )
                 {
-                    m_pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp );
+                    m_pUserMarker.reset(new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp ));
                 }
             }
             else
             {
-                delete m_pUserMarker;
-                m_pUserMarker = nullptr;
+                m_pUserMarker.reset();
             }
 
             rSh.SwCursorShell::SetVisibleCursor( rLPt );
@@ -410,13 +408,12 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 
             if ( !m_pUserMarker )
             {
-                m_pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp );
+                m_pUserMarker.reset(new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp ));
             }
         }
         else
         {
-            delete m_pUserMarker;
-            m_pUserMarker = nullptr;
+            m_pUserMarker.reset();
         }
 
         SetPointer( eStyle );
@@ -644,10 +641,10 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
     }
     if ( !bDone && !(g_bFrameDrag || m_bInsDraw) )
     {
-        if ( m_pRowColumnSelectionStart )
+        if ( m_xRowColumnSelectionStart )
         {
             Point aPos( aModPt );
-            rSh.SelectTableRowCol( *m_pRowColumnSelectionStart, &aPos, m_bIsRowDrag );
+            rSh.SelectTableRowCol( *m_xRowColumnSelectionStart, &aPos, m_bIsRowDrag );
         }
         else
             rSh.CallSetCursor( &aModPt, false );
@@ -691,8 +688,7 @@ void SwEditWin::LeaveArea(const Point &rPos)
     JustifyAreaTimer();
     if( !m_aTimer.IsActive() )
         m_aTimer.Start();
-    delete m_pShadCursor;
-    m_pShadCursor = nullptr;
+    m_pShadCursor.reset();
 }
 
 inline void SwEditWin::EnterArea()
@@ -1379,8 +1375,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // running on a document, no order is being taken
         return;
 
-    delete m_pShadCursor;
-    m_pShadCursor = nullptr;
+    m_pShadCursor.reset();
     m_aKeyInputFlushTimer.Stop();
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
@@ -2741,8 +2736,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     }
 
     m_bWasShdwCursor = nullptr != m_pShadCursor;
-    delete m_pShadCursor;
-    m_pShadCursor = nullptr;
+    m_pShadCursor.reset();
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -2904,7 +2898,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             rSh.SelectTableRowCol( aDocPos );
             if( SwTab::SEL_HORI  != nMouseTabCol && SwTab::SEL_HORI_RTL  != nMouseTabCol)
             {
-                m_pRowColumnSelectionStart = new Point( aDocPos );
+                m_xRowColumnSelectionStart = aDocPos;
                 m_bIsRowDrag = SwTab::ROWSEL_HORI == nMouseTabCol||
                             SwTab::ROWSEL_HORI_RTL == nMouseTabCol ||
                             SwTab::COLSEL_VERT == nMouseTabCol;
@@ -3001,7 +2995,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     {
                         // #i121463# Set selected during drag
                         pHdl->SetSelected();
-                        m_pAnchorMarker = new SwAnchorMarker( pHdl );
+                        m_pAnchorMarker.reset( new SwAnchorMarker( pHdl ) );
                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
                         return;
                     }
@@ -3156,7 +3150,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 ( pHdl->GetKind() == SdrHdlKind::Anchor ||
                                   pHdl->GetKind() == SdrHdlKind::Anchor_TR ) )
                         {
-                            m_pAnchorMarker = new SwAnchorMarker( pHdl );
+                            m_pAnchorMarker.reset( new SwAnchorMarker( pHdl ) );
                             UpdatePointer( aDocPos, rMEvt.GetModifier() );
                             return;
                         }
@@ -3701,8 +3695,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     if( m_pShadCursor && 0 != (rMEvt.GetModifier() + rMEvt.GetButtons() ) )
     {
-        delete m_pShadCursor;
-        m_pShadCursor = nullptr;
+        m_pShadCursor.reset();
     }
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
@@ -3736,15 +3729,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     if( m_pShadCursor && !bInsWin )
     {
-        delete m_pShadCursor;
-        m_pShadCursor = nullptr;
+        m_pShadCursor.reset();
     }
 
-    if( bInsWin && m_pRowColumnSelectionStart )
+    if( bInsWin && m_xRowColumnSelectionStart )
     {
         EnterArea();
         Point aPos( aDocPt );
-        if( rSh.SelectTableRowCol( *m_pRowColumnSelectionStart, &aPos, m_bIsRowDrag ))
+        if( rSh.SelectTableRowCol( *m_xRowColumnSelectionStart, &aPos, m_bIsRowDrag ))
             return;
     }
 
@@ -3895,8 +3887,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
                 else
                 {
-                    delete m_pAnchorMarker;
-                    m_pAnchorMarker = nullptr;
+                    m_pAnchorMarker.reset();
                 }
             }
             if ( m_bInsDraw )
@@ -4173,8 +4164,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, eOrient ))
                     {
                         if( !m_pShadCursor )
-                            m_pShadCursor = new SwShadowCursor( *this,
-                                SwViewOption::GetDirectCursorColor() );
+                            m_pShadCursor.reset( new SwShadowCursor( *this,
+                                SwViewOption::GetDirectCursorColor() ) );
                         if( text::HoriOrientation::RIGHT != eOrient && text::HoriOrientation::CENTER != eOrient )
                             eOrient = text::HoriOrientation::LEFT;
                         m_pShadCursor->SetPos( aRect.Pos(), aRect.Height(), static_cast< sal_uInt16 >(eOrient) );
@@ -4195,8 +4186,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     if( bDelShadCursor && m_pShadCursor )
     {
-        delete m_pShadCursor;
-        m_pShadCursor = nullptr;
+        m_pShadCursor.reset();
     }
     m_bWasShdwCursor = false;
 }
@@ -4221,12 +4211,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     m_bWasShdwCursor = false;
     if( m_pShadCursor )
     {
-        delete m_pShadCursor;
-        m_pShadCursor = nullptr;
+        m_pShadCursor.reset();
     }
 
-    if( m_pRowColumnSelectionStart )
-        DELETEZ( m_pRowColumnSelectionStart );
+    m_xRowColumnSelectionStart.reset();
 
     SdrHdlKind eOldSdrMoveHdl = g_eSdrMoveHdl;
     g_eSdrMoveHdl = SdrHdlKind::User;     // for MoveEvents - reset again
@@ -4308,7 +4296,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
 
         Point aPnt( m_pAnchorMarker->GetLastPos() );
-        DELETEZ( m_pAnchorMarker );
+        m_pAnchorMarker.reset();
         if( aPnt.X() || aPnt.Y() )
             rSh.FindAnchorPos( aPnt, true );
     }
@@ -4878,12 +4866,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 {
     static bool bIdle = false;
-    DELETEZ(m_pApplyTempl);
+    m_pApplyTempl.reset();
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
     if(rTempl.m_pFormatClipboard)
     {
-        m_pApplyTempl = new SwApplyTemplate( rTempl );
+        m_pApplyTempl.reset(new SwApplyTemplate( rTempl ));
         m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
         SetPointer( PointerStyle::Fill );//@todo #i20119# maybe better a new brush pointer here in future
         rSh.NoEdit( false );
@@ -4892,7 +4880,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     }
     else if(rTempl.nColor)
     {
-        m_pApplyTempl = new SwApplyTemplate( rTempl );
+        m_pApplyTempl.reset(new SwApplyTemplate( rTempl ));
         m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
         SetPointer( PointerStyle::Fill );
         rSh.NoEdit( false );
@@ -4901,7 +4889,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     }
     else if( rTempl.eType != SfxStyleFamily::None )
     {
-        m_pApplyTempl = new SwApplyTemplate( rTempl );
+        m_pApplyTempl.reset(new SwApplyTemplate( rTempl ));
         m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
         SetPointer( PointerStyle::Fill  );
         rSh.NoEdit( false );
@@ -4942,7 +4930,6 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_pUserMarker( nullptr ),
     m_pUserMarkerObj( nullptr ),
     m_pShadCursor( nullptr ),
-    m_pRowColumnSelectionStart( nullptr ),
 
     m_rView( rMyView ),
 
@@ -5012,29 +4999,21 @@ SwEditWin::~SwEditWin()
 
 void SwEditWin::dispose()
 {
-    delete m_pShadCursor;
-    m_pShadCursor = nullptr;
-
-    delete m_pRowColumnSelectionStart;
-    m_pRowColumnSelectionStart = nullptr;
+    m_pShadCursor.reset();
 
     if( m_pQuickHlpData->m_bIsDisplayed && m_rView.GetWrtShellPtr() )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
     g_bExecuteDrag = false;
-    delete m_pApplyTempl;
-    m_pApplyTempl = nullptr;
+    m_pApplyTempl.reset();
 
     m_rView.SetDrawFuncPtr(nullptr);
 
-    delete m_pUserMarker;
-    m_pUserMarker = nullptr;
+    m_pUserMarker.reset();
 
-    delete m_pAnchorMarker;
-    m_pAnchorMarker = nullptr;
+    m_pAnchorMarker.reset();
 
     m_pFrameControlsManager->dispose();
-    delete m_pFrameControlsManager;
-    m_pFrameControlsManager = nullptr;
+    m_pFrameControlsManager.reset();
 
     DragSourceHelper::dispose();
     DropTargetHelper::dispose();
@@ -5237,11 +5216,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     case CommandEventId::Wheel:
     case CommandEventId::StartAutoScroll:
     case CommandEventId::AutoScroll:
-            if( m_pShadCursor )
-            {
-                delete m_pShadCursor;
-                m_pShadCursor = nullptr;
-            }
+            m_pShadCursor.reset();
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 
@@ -5801,11 +5776,7 @@ void SwEditWin::SetChainMode( bool bOn )
     if ( !m_bChainMode )
         StopInsFrame();
 
-    if ( m_pUserMarker )
-    {
-        delete m_pUserMarker;
-        m_pUserMarker = nullptr;
-    }
+    m_pUserMarker.reset();
 
     m_bChainMode = bOn;
 
