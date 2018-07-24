@@ -104,6 +104,13 @@ FormulaGroupContext::ColArray* FormulaGroupContext::setCachedColArray(
     return &rArray;
 }
 
+void FormulaGroupContext::discardCachedColArray( SCTAB nTab, SCCOL nCol )
+{
+    ColArraysType::iterator itColArray = maColArrays.find(ColKey(nTab, nCol));
+    if (itColArray != maColArrays.end())
+        maColArrays.erase(itColArray);
+}
+
 void FormulaGroupContext::ensureStrArray( ColArray& rColArray, size_t nArrayLen )
 {
     if (rColArray.mpStrArray)

@@ -2711,7 +2711,10 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            {
+                rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
+            }
 
             rtl_uString** pStr = nullptr;
             if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
@@ -2744,7 +2747,10 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            {
+                rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
+            }
 
             assert(pColArray->mpStrArray);
 
@@ -2781,13 +2787,18 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
 
             pColArray = copyFirstFormulaBlock(rCxt, itBlk, nRow2+1, nTab, nCol);
             if (!pColArray)
+            {
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
+            }
 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            {
+                rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
+            }
 
             const double* pNum = nullptr;
             rtl_uString** pStr = nullptr;
@@ -2817,7 +2828,10 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            {
+                rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
+            }
 
             if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
