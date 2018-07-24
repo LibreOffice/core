@@ -143,7 +143,7 @@ void SwInputWindow::dispose()
         pView->GetHRuler().SetActive();
         pView->GetVRuler().SetActive();
     }
-    delete pMgr;
+    pMgr.reset();
     if(pWrtShell)
         pWrtShell->EndSelTableCells();
 
@@ -215,7 +215,7 @@ void SwInputWindow::ShowWin()
 
         // Edit current field
         OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");
-        pMgr = new SwFieldMgr;
+        pMgr.reset(new SwFieldMgr);
 
         // Form should always begin with "=" , so set here
         OUString sEdit('=');
