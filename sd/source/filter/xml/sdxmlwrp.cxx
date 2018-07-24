@@ -1103,16 +1103,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     {
         ret = xFilter->filter(aArgs);
     }
-    catch (const css::io::IOException&)
-    {
-    }
-    catch (const css::xml::sax::SAXException&)
-    {
-    }
-    catch (const css::lang::IllegalArgumentException&)
-    {
-    }
-    catch (const css::lang::WrappedTargetRuntimeException&)
+    catch (...)
     {
     }
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
