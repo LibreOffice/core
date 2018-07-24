@@ -1398,20 +1398,21 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[2 * nCharCount]);
+    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[nCharCount]);
+    std::unique_ptr<DeviceCoordinate[]> const pFallbackCharWidths(new DeviceCoordinate[nCharCount]);
     mpLayouts[0]->FillDXArray( pCharWidths.get() );
 
     for( int n = 1; n < mnLevel; ++n )
     {
         SalLayout& rLayout = *mpLayouts[ n ];
-        rLayout.FillDXArray( &pCharWidths[nCharCount] );
+        rLayout.FillDXArray( pFallbackCharWidths.get() );
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
         {
             if( pCharWidths[ i ] == 0 )
             {
-                DeviceCoordinate w = pCharWidths[ i + nCharCount ];
+                DeviceCoordinate w = pFallbackCharWidths[i];
                 w = static_cast<DeviceCoordinate>(w * fUnitMul + 0.5);
                 pCharWidths[ i ] = w;
             }
