@@ -3064,7 +3064,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // create frames for the new table
     SwNodeIndex aTmpIdx( *pNew );
-    pNew->MakeFrames( &aTmpIdx );
+    pNew->MakeOwnFrames(&aTmpIdx);
 
     // position cursor somewhere in content
     SwContentNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );

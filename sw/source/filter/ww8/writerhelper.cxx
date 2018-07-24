@@ -880,7 +880,7 @@ namespace sw
                     {
                         SwNodeIndex *pIndex = aIter->second;
                         pTable->DelFrames();
-                        pTable->MakeFrames(pIndex);
+                        pTable->MakeOwnFrames(pIndex);
                     }
                 }
             }

@@ -140,7 +140,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
         switch (pNd->GetNodeType())
         {
         case SwNodeType::Table:
-            static_cast<SwTableNode*>(pNd)->MakeFrames( aIdx );
+            static_cast<SwTableNode*>(pNd)->MakeFramesForAdjacentContentNode(aIdx);
             return pNode;
 
         case SwNodeType::Section:
@@ -154,13 +154,13 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                 aTmp = *pNd;
                 break;
             }
-            static_cast<SwSectionNode*>(pNd)->MakeFrames( aIdx );
+            static_cast<SwSectionNode*>(pNd)->MakeFramesForAdjacentContentNode(aIdx);
             return pNode;
 
         case SwNodeType::Text:
         case SwNodeType::Grf:
         case SwNodeType::Ole:
-            static_cast<SwContentNode*>(pNd)->MakeFrames( *pNode );
+            static_cast<SwContentNode*>(pNd)->MakeFramesForAdjacentContentNode(*pNode);
             return pNode;
 
         case SwNodeType::End:
@@ -517,7 +517,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             MoveTextAttr_To_AttrSet();
         }
-        pNode->MakeFrames( *this );
+        pNode->MakeFramesForAdjacentContentNode(*this);
         lcl_ChangeFootnoteRef( *this );
     }
     else
@@ -576,7 +576,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         if ( HasWriterListeners() )
         {
-            MakeFrames( *pNode );
+            MakeFramesForAdjacentContentNode(*pNode);
         }
         lcl_ChangeFootnoteRef( *pNode );
     }
@@ -2724,7 +2724,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
     }
 
     if( HasWriterListeners() )
-        MakeFrames( *pNew );
+        MakeFramesForAdjacentContentNode(*pNew);
     return pNew;
 }
 

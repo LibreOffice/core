@@ -2786,7 +2786,7 @@ void SwXMLTableContext::MakeTable()
     {
         m_pTableNode->DelFrames();
         SwNodeIndex aIdx( *m_pTableNode->EndOfSectionNode(), 1 );
-        m_pTableNode->MakeFrames( &aIdx );
+        m_pTableNode->MakeOwnFrames(&aIdx);
     }
 }
 

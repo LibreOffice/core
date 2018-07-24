@@ -541,7 +541,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
     // Insert Frames
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
-    pTableNd->MakeFrames( &aNdIdx );
+    pTableNd->MakeOwnFrames( &aNdIdx );
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
@@ -1651,18 +1651,18 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
             if( nullptr != ( pCNd = aDelRg.aStart.GetNode().GetContentNode()))
             {
                 if( pFrameNd->IsContentNode() )
-                    static_cast<SwContentNode*>(pFrameNd)->MakeFrames( *pCNd );
+                    static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
                 else if( pFrameNd->IsTableNode() )
-                    static_cast<SwTableNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                    static_cast<SwTableNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aDelRg.aStart);
                 else if( pFrameNd->IsSectionNode() )
-                    static_cast<SwSectionNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                    static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aDelRg.aStart);
                 pFrameNd = pCNd;
             }
             else if( nullptr != ( pSNd = aDelRg.aStart.GetNode().GetSectionNode()))
             {
                 if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
                 {
-                    pSNd->MakeFrames( &aFrameIdx, &aDelRg.aEnd );
+                    pSNd->MakeOwnFrames(&aFrameIdx, &aDelRg.aEnd);
                     break;
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();
@@ -2361,7 +2361,7 @@ SwTabFrame *SwTableNode::MakeFrame( SwFrame* pSib )
  * Creates all Views from the Document for the preceding Node. The resulting ContentFrames
  * are added to the corresponding Layout.
  */
-void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
+void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     if( !GetTable().GetFrameFormat()->HasWriterListeners()) // Do we actually have Frame?
         return;
@@ -2391,7 +2391,7 @@ void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
 /**
  * Create a TableFrame for every Shell and insert before the corresponding ContentFrame.
  */
-void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
+void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
 {
     OSL_ENSURE( pIdxBehind, "No Index" );
     *pIdxBehind = *this;
@@ -2475,7 +2475,7 @@ void SwTableNode::SetNewTable( SwTable* pNewTable, bool bNewFrames )
     {
         SwNodeIndex aIdx( *EndOfSectionNode());
         GetNodes().GoNext( &aIdx );
-        MakeFrames( &aIdx );
+        MakeOwnFrames(&aIdx);
     }
 }
 
@@ -3207,7 +3207,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         // And insert Frames
         SwNodeIndex aNdIdx( *pNew->EndOfSectionNode() );
         GetNodes().GoNext( &aNdIdx ); // To the next ContentNode
-        pNew->MakeFrames( &aNdIdx );
+        pNew->MakeOwnFrames( &aNdIdx );
 
         // Insert a paragraph between the Table
         GetNodes().MakeTextNode( SwNodeIndex( *pNew ),
