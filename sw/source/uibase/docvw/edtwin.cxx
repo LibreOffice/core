@@ -157,6 +157,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <salhelper/singletonref.hxx>
 #include <sfx2/event.hxx>
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 using namespace sw::mark;
@@ -715,9 +716,9 @@ void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, bool bObjSelect )
     SetSdrDrawMode( eSdrObjectKind );
 
     if (bObjSelect)
-        m_rView.SetDrawFuncPtr(new DrawSelection( &m_rView.GetWrtShell(), this, &m_rView ));
+        m_rView.SetDrawFuncPtr(o3tl::make_unique<DrawSelection>( &m_rView.GetWrtShell(), this, &m_rView ));
     else
-        m_rView.SetDrawFuncPtr(new SwDrawBase( &m_rView.GetWrtShell(), this, &m_rView ));
+        m_rView.SetDrawFuncPtr(o3tl::make_unique<SwDrawBase>( &m_rView.GetWrtShell(), this, &m_rView ));
 
     m_rView.SetSelDrawSlot();
     SetSdrDrawMode( eSdrObjectKind );

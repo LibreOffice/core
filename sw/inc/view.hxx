@@ -184,7 +184,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SfxShell            *m_pShell;        // current SubShell at the dispatcher
     FmFormShell         *m_pFormShell;    // DB-FormShell
 
-    SwView_Impl         *m_pViewImpl;     // Impl-data for UNO + Basic
+    std::unique_ptr<SwView_Impl> m_pViewImpl;     // Impl-data for UNO + Basic
 
     VclPtr<SwScrollbar>  m_pHScrollbar,   // MDI control elements
                          m_pVScrollbar;
@@ -199,14 +199,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                         m_pVRuler;
     VclPtr<ImageButton> m_pTogglePageBtn;
 
-    SwGlossaryHdl       *m_pGlosHdl;          // handle text block
-    SwDrawBase          *m_pDrawActual;
+    std::unique_ptr<SwGlossaryHdl> m_pGlosHdl;          // handle text block
+    std::unique_ptr<SwDrawBase>    m_pDrawActual;
 
     const SwFrameFormat      *m_pLastTableFormat;
 
-    SwFormatClipboard   *m_pFormatClipboard; //holds data for format paintbrush
+    std::unique_ptr<SwFormatClipboard> m_pFormatClipboard; //holds data for format paintbrush
 
-    SwPostItMgr         *m_pPostItMgr;
+    std::unique_ptr<SwPostItMgr> m_pPostItMgr;
 
     SelectionType       m_nSelectionType;
     VclPtr<FloatingWindow> m_pFieldPopup;
@@ -334,7 +334,7 @@ public: // #i123922# Needs to be called from a 2nd place now as a helper method
 
 protected:
 
-    SwView_Impl*    GetViewImpl() {return m_pViewImpl;}
+    SwView_Impl*    GetViewImpl() {return m_pViewImpl.get();}
 
     void ImpSetVerb( SelectionType nSelType );
 
@@ -512,8 +512,8 @@ public:
     void            ExecNumberingOutline(SfxItemPool &);
 
     // functions for drawing
-    void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);
-    SwDrawBase* GetDrawFuncPtr() const  { return m_pDrawActual; }
+    void            SetDrawFuncPtr(std::unique_ptr<SwDrawBase> pFuncPtr);
+    SwDrawBase*     GetDrawFuncPtr() const  { return m_pDrawActual.get(); }
     void            GetDrawState(SfxItemSet &rSet);
     void            ExitDraw();
     bool     IsDrawRotate()      { return m_bDrawRotate; }
@@ -620,8 +620,8 @@ public:
 
     void ExecuteScan( SfxRequest& rReq );
 
-    SwPostItMgr* GetPostItMgr() { return m_pPostItMgr;}
-    const SwPostItMgr* GetPostItMgr() const { return m_pPostItMgr;}
+    SwPostItMgr* GetPostItMgr() { return m_pPostItMgr.get();}
+    const SwPostItMgr* GetPostItMgr() const { return m_pPostItMgr.get();}
 
     // exhibition hack (MA,MBA)
     void SelectShellForDrop();

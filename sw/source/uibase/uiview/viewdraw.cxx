@@ -234,13 +234,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if (m_pWrtShell->IsFrameSelected())
         m_pWrtShell->EnterStdMode();  // because bug #45639
 
-    SwDrawBase* pFuncPtr = nullptr;
+    std::unique_ptr<SwDrawBase> pFuncPtr;
 
     switch (nSlotId)
     {
         case SID_OBJECT_SELECT:
         case SID_DRAW_SELECT:
-            pFuncPtr = new DrawSelection(m_pWrtShell.get(), m_pEditWin, this);
+            pFuncPtr.reset( new DrawSelection(m_pWrtShell.get(), m_pEditWin, this) );
             m_nDrawSfxId = m_nFormSfxId = SID_OBJECT_SELECT;
             m_sDrawCustom.clear();
             break;
@@ -262,7 +262,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pFuncPtr = new ConstRectangle(m_pWrtShell.get(), m_pEditWin, this);
+            pFuncPtr.reset( new ConstRectangle(m_pWrtShell.get(), m_pEditWin, this) );
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -275,7 +275,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE_NOFILL:
         case SID_DRAW_FREELINE:
-            pFuncPtr = new ConstPolygon(m_pWrtShell.get(), m_pEditWin, this);
+            pFuncPtr.reset( new ConstPolygon(m_pWrtShell.get(), m_pEditWin, this) );
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -283,7 +283,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pFuncPtr = new ConstArc(m_pWrtShell.get(), m_pEditWin, this);
+            pFuncPtr.reset( new ConstArc(m_pWrtShell.get(), m_pEditWin, this) );
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -293,7 +293,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
             if( pIdentifierItem )
                 nSlotId = pIdentifierItem->GetValue();
-            pFuncPtr = new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this);
+            pFuncPtr.reset( new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this) );
             m_nFormSfxId = nSlotId;
         }
         break;
@@ -306,7 +306,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pFuncPtr = new ConstCustomShape(m_pWrtShell.get(), m_pEditWin, this, rReq );
+            pFuncPtr.reset( new ConstCustomShape(m_pWrtShell.get(), m_pEditWin, this, rReq ) );
             m_nDrawSfxId = nSlotId;
             if ( nSlotId != SID_DRAW_CS_ID )
             {
@@ -333,13 +333,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if (GetDrawFuncPtr())
         {
             GetDrawFuncPtr()->Deactivate();
-            SetDrawFuncPtr(nullptr);
         }
 
-        SetDrawFuncPtr(pFuncPtr);
+        auto pTempFuncPtr = pFuncPtr.get();
+        SetDrawFuncPtr(std::move(pFuncPtr));
         AttrChangedNotify(m_pWrtShell.get());
 
-        pFuncPtr->Activate(nSlotId);
+        pTempFuncPtr->Activate(nSlotId);
         NoRotate();
         if(rReq.GetModifier() == KEY_MOD1)
         {
@@ -349,8 +349,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
             }
             else
             {
-                pFuncPtr->CreateDefaultObject();
-                pFuncPtr->Deactivate();
+                pTempFuncPtr->CreateDefaultObject();
+                pTempFuncPtr->Deactivate();
                 SetDrawFuncPtr(nullptr);
                 LeaveDrawCreate();
                 m_pWrtShell->EnterStdMode();
@@ -633,10 +633,9 @@ bool SwView::IsFormMode() const
     return AreOnlyFormsSelected();
 }
 
-void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
+void SwView::SetDrawFuncPtr(std::unique_ptr<SwDrawBase> pFuncPtr)
 {
-    delete m_pDrawActual;
-    m_pDrawActual = pFuncPtr;
+    m_pDrawActual = std::move(pFuncPtr);
 }
 
 void SwView::SetSelDrawSlot()
