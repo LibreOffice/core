@@ -60,6 +60,7 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
+        case vcl::EnumContext::Application::WriterForm:
             return OUString( "Writer" );
             break;
         case vcl::EnumContext::Application::Calc:
