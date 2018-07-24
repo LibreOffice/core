@@ -102,6 +102,7 @@ private:
 
     SwTwips GetHangingMargin_() const;
 
+    void DeleteNext();
 public:
     // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
