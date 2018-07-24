@@ -425,15 +425,15 @@ SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
 {
 }
 
-SwNode2Layout::SwNode2Layout( const SwNode& rNd )
+SwNode2LayoutSaveUpperFrames::SwNode2LayoutSaveUpperFrames(const SwNode& rNd)
     : pImpl( new SwNode2LayImpl( rNd, rNd.GetIndex(), true ) )
 {
     pImpl->SaveUpperFrames();
 }
 
-void SwNode2Layout::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
+void SwNode2LayoutSaveUpperFrames::RestoreUpperFrames(
+        SwNodes& rNds, sal_uLong const nStt, sal_uLong const nEnd)
 {
-    OSL_ENSURE( pImpl, "RestoreUpperFrames without SaveUpperFrames" );
     pImpl->RestoreUpperFrames( rNds, nStt, nEnd );
 }
 
@@ -448,6 +448,10 @@ SwLayoutFrame* SwNode2Layout::UpperFrame( SwFrame* &rpFrame, const SwNode &rNode
 }
 
 SwNode2Layout::~SwNode2Layout()
+{
+}
+
+SwNode2LayoutSaveUpperFrames::~SwNode2LayoutSaveUpperFrames()
 {
 }
 
