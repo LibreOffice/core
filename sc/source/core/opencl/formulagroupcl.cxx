@@ -83,6 +83,44 @@ static const char* const publicFunc =
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
+ "int is_representable_integer(double a) {\n"
+ "    long kMaxInt = (1L << 53) - 1;\n"
+ "    if (a <= as_double(kMaxInt))\n"
+ "    {\n"
+ "        long nInt = as_long(a);\n"
+ "        double fInt;\n"
+ "        return (nInt <= kMaxInt &&\n"
+ "                (!((fInt = as_double(nInt)) < a) && !(fInt > a)));\n"
+ "    }\n"
+ "    return 0;\n"
+ "}\n"
+ "int approx_equal(double a, double b) {\n"
+ "    double e48 = 1.0 / (16777216.0 * 16777216.0);\n"
+ "    double e44 = e48 * 16.0;\n"
+ "    if (a == b)\n"
+ "        return 1;\n"
+ "    if (a == 0.0 || b == 0.0)\n"
+ "        return 0;\n"
+ "    double d = fabs(a - b);\n"
+ "    if (!isfinite(d))\n"
+ "        return 0;   // Nan or Inf involved\n"
+ "    if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))\n"
+ "        return 0;\n"
+ "    if (is_representable_integer(d) && is_representable_integer(a) && is_representable_integer(b))\n"
+ "        return 0;   // special case for representable integers.\n"
+ "    return (d < a * e48 && d < b * e48);\n"
+ "}\n"
+ "double fsum_approx(double a, double b) {\n"
+ "    if ( ((a < 0.0 && b > 0.0) || (b < 0.0 && a > 0.0))\n"
+ "         && approx_equal( a, -b ) )\n"
+ "        return 0.0;\n"
+ "    return a + b;\n"
+ "}\n"
+ "double fsub_approx(double a, double b) {\n"
+ "    if ( ((a < 0.0 && b < 0.0) || (a > 0.0 && b > 0.0)) && approx_equal( a, b ) )\n"
+ "        return 0.0;\n"
+ "    return a - b;\n"
+ "}\n"
  ;
 
 #include <vector>
@@ -1670,7 +1708,7 @@ public:
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
-        ss << "((" << lhs << ")+(" << rhs << "))";
+        ss << "fsum_approx((" << lhs << "),(" << rhs << "))";
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "fsum"; }
@@ -1700,7 +1738,7 @@ public:
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        return lhs + "-" + rhs;
+        return "fsub_approx(" + lhs + "," + rhs + ")";
     }
     virtual std::string BinFuncName() const override { return "fsub"; }
 };
