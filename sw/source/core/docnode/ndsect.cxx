@@ -879,7 +879,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                     pTNd->SetAttr( rSet );
             }
             // Do not forget to create the Frame!
-            pCpyTNd->MakeFrames( *pTNd );
+            pCpyTNd->MakeFramesForAdjacentContentNode(*pTNd);
         }
         else
             new SwTextNode( aInsPos, GetDoc()->GetDfltTextFormatColl() );
@@ -950,7 +950,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             delete pNode2Layout;
         }
         else
-            pSectNd->MakeFrames( &aInsPos );
+            pSectNd->MakeOwnFrames(&aInsPos);
     }
 
     return pSectNd;
@@ -1021,7 +1021,7 @@ SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
 
 // Creates all Document Views for the preceding Node.
 // The created ContentFrames are attached to the corresponding Layout
-void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
+void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     // Take my succsessive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
@@ -1039,7 +1039,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
                     return;
             }
             pCNd = aIdx.GetNode().GetContentNode();
-            pCNd->MakeFrames( static_cast<SwContentNode&>(rIdx.GetNode()) );
+            pCNd->MakeFramesForAdjacentContentNode(static_cast<SwContentNode&>(rIdx.GetNode()));
         }
         else
         {
@@ -1131,7 +1131,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
 
 // Create a new SectionFrame for every occurrence in the Layout and insert before
 // the corresponding ContentFrame
-void SwSectionNode::MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
+void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 {
     OSL_ENSURE( pIdxBehind, "no Index" );
     SwNodes& rNds = GetNodes();
