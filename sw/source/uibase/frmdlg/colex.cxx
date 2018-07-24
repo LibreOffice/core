@@ -496,6 +496,10 @@ Size SwColumnOnlyExample::GetOptimalSize() const
     return LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
 }
 
+SwPageGridExample::SwPageGridExample(vcl::Window* pPar)
+    : SwPageExample(pPar)
+{}
+
 SwPageGridExample::~SwPageGridExample()
 {
     disposeOnce();
@@ -503,7 +507,7 @@ SwPageGridExample::~SwPageGridExample()
 
 void SwPageGridExample::dispose()
 {
-    delete pGridItem;
+    pGridItem.reset();
     SwPageExample::dispose();
 }
 
@@ -609,10 +613,10 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
 
 void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
-    DELETEZ(pGridItem);
+    pGridItem.reset();
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
-        pGridItem = static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone());
+        pGridItem.reset(static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone()));
     SwPageExample::UpdateExample(rSet);
 }
 
