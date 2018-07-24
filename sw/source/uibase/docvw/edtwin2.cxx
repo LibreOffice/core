@@ -428,8 +428,7 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         if( rRect.IsInside( aRect ) )
         {
             // then cancel
-            delete m_pShadCursor;
-            m_pShadCursor = nullptr;
+            m_pShadCursor.reset();
         }
         else if( rRect.IsOver( aRect ))
         {

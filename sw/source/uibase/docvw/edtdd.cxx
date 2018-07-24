@@ -174,8 +174,7 @@ void SwEditWin::CleanupDropUserMarker()
 {
     if ( m_pUserMarker )
     {
-        delete m_pUserMarker;
-        m_pUserMarker = nullptr;
+        m_pUserMarker.reset();
         m_pUserMarkerObj = nullptr;
     }
 }
@@ -464,7 +463,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
                 if(m_pUserMarkerObj)
                 {
-                    m_pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), *m_pUserMarkerObj );
+                    m_pUserMarker.reset(new SdrDropMarkerOverlay( *rSh.GetDrawView(), *m_pUserMarkerObj ));
                 }
             }
         }
