@@ -236,8 +236,6 @@ SwPostItMgr::~SwPostItMgr()
     RemoveSidebarWin();
     EndListening( *mpView->GetDocShell() );
 
-    for (auto const& page : mPages)
-        delete page;
     mPages.clear();
 }
 
@@ -601,8 +599,9 @@ bool SwPostItMgr::CalcRects()
             if (aPageNum > mPages.size())
             {
                 const unsigned long nNumberOfPages = mPages.size();
+                mPages.reserve(aPageNum);
                 for (unsigned int j=0; j<aPageNum - nNumberOfPages; ++j)
-                    mPages.push_back( new SwPostItPageItem());
+                    mPages.emplace_back( new SwPostItPageItem());
             }
             mPages[aPageNum-1]->mvSidebarItems.push_back(pItem);
             mPages[aPageNum-1]->mPageRect = pItem->maLayoutInfo.mPageFrame;
@@ -651,14 +650,14 @@ void SwPostItMgr::PreparePageContainer()
 
     if (lContainerSize < lPageSize)
     {
+        mPages.reserve(lPageSize);
         for (int i=0; i<lPageSize - lContainerSize;i++)
-            mPages.push_back( new SwPostItPageItem());
+            mPages.emplace_back( new SwPostItPageItem());
     }
     else if (lContainerSize > lPageSize)
     {
         for (int i=mPages.size()-1; i >= lPageSize;--i)
         {
-            delete mPages[i];
             mPages.pop_back();
         }
     }
@@ -686,7 +685,7 @@ void SwPostItMgr::LayoutPostIts()
         // - place SwPostIts on their initial position
         // - calculate necessary height for all PostIts together
         bool bUpdate = false;
-        for (SwPostItPageItem* pPage : mPages)
+        for (std::unique_ptr<SwPostItPageItem>& pPage : mPages)
         {
             // only layout if there are notes on this page
             if (pPage->mvSidebarItems.size()>0)
@@ -1972,7 +1971,7 @@ void SwPostItMgr::CorrectPositions()
     {
         long aAnchorPosX = 0;
         long aAnchorPosY = 0;
-        for (SwPostItPageItem* pPage : mPages)
+        for (std::unique_ptr<SwPostItPageItem>& pPage : mPages)
         {
             for (auto const& item : pPage->mvSidebarItems)
             {
