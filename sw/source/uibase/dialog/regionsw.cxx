@@ -50,6 +50,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include <swabstdlg.hxx>
+#include <tgrditem.hxx>
 #include <memory>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
