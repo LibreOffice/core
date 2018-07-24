@@ -940,8 +940,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
 
-                        // Standard is handled already in applyDefaults().
-                        if (sConvertedStyleName != "Standard")
                         {
                             StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
 
@@ -1006,8 +1004,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     else if( bParaStyle )
                     {
                         // Paragraph styles that don't inherit from some parent need to apply the DocDefaults
-                        if ( sConvertedStyleName != "Standard" )
-                            pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bAllowOverwrite=*/false );
+                        pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bAllowOverwrite=*/false );
 
                         //now it's time to set the default parameters - for paragraph styles
                         //Fonts: Western first entry in font table
@@ -1514,18 +1511,15 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
             uno::Reference<container::XNameAccess> xParagraphStyles;
             xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
-            uno::Reference<beans::XPropertySet> xStandard;
-            xParagraphStyles->getByName("Standard") >>= xStandard;
-
-            uno::Reference<style::XStyle> xStyle(xStandard, uno::UNO_QUERY);
-            StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
+            uno::Reference<beans::XPropertySet> xDefault;
+            xParagraphStyles->getByName("Paragraph style") >>= xDefault;
 
             uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
             {
                 try
                 {
-                    xStandard->setPropertyValue(aPropValues[i].Name, aPropValues[i].Value);
+                    xDefault->setPropertyValue(aPropValues[i].Name, aPropValues[i].Value);
                 }
                 catch( const uno::Exception& )
                 {
