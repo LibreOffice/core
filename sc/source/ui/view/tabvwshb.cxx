@@ -500,6 +500,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     bool bTabProt = GetViewData().GetDocument()->IsTabProtected(GetViewData().GetTabNo());
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
+    SdrView* pSdrView = GetSdrView();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -530,7 +531,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_SIGNATURELINE:
-                if ( bTabProt || bShared )
+                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectCount() != 0))
                     rSet.DisableItem( nWhich );
                 break;
             case SID_EDIT_SIGNATURELINE:

@@ -97,8 +97,13 @@ void SwView::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_GRAPHIC:
-            case SID_INSERT_SIGNATURELINE:
                 if( m_pWrtShell->CursorInsideInputField() )
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                break;
+            case SID_INSERT_SIGNATURELINE:
+                if( m_nSelectionType != SelectionType::Text )
                 {
                     rSet.DisableItem(nWhich);
                 }
