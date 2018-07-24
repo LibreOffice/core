@@ -68,6 +68,7 @@
 #include <listenerqueryids.hxx>
 #include <grouparealistener.hxx>
 #include <formulalogger.hxx>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -4788,9 +4789,26 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
 
         ScTokenArray aCode;
         ScGroupTokenConverter aConverter(aCode, *pDocument, *this, xGroup->mpTopCell->aPos);
-        if (!aConverter.convert(*pCode, aScope))
+        // TODO avoid this extra compilation
+        ScCompiler aComp( pDocument, xGroup->mpTopCell->aPos, *pCode, formula::FormulaGrammar::GRAM_UNSPECIFIED, true, cMatrixFlag != ScMatrixMode::NONE );
+        aComp.CompileTokenArray();
+        if (aComp.HasUnhandledPossibleImplicitIntersections() || !aConverter.convert(*pCode, aScope))
         {
-            SAL_INFO("sc.opencl", "conversion of group " << this << " failed, disabling");
+            if(aComp.HasUnhandledPossibleImplicitIntersections())
+            {
+                SAL_INFO("sc.opencl", "group " << xGroup->mpTopCell->aPos << " has unhandled implicit intersections, disabling");
+#ifdef DBG_UTIL
+                for( const OpCode opcode : aComp.UnhandledPossibleImplicitIntersectionsOpCodes())
+                {
+                    SAL_INFO("sc.opencl", "unhandled implicit intersection opcode "
+                        << formula::FormulaCompiler().GetOpCodeMap(com::sun::star::sheet::FormulaLanguage::ENGLISH)->getSymbol(opcode)
+                        << "(" << int(opcode) << ")");
+                }
+#endif
+            }
+            else
+                SAL_INFO("sc.opencl", "conversion of group " << xGroup->mpTopCell->aPos << " failed, disabling");
+
             mxGroup->meCalcState = sc::GroupCalcDisabled;
 
             // Undo the hack above

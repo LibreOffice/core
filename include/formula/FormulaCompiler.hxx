@@ -330,10 +330,8 @@ protected:
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
     // Returns whether the opcode has implicit intersection ranges as parameters.
-    // This is no-op for this class.
-    virtual bool IsIIOpCode(OpCode /*nOpCode*/) const { return false; }
-    // Handles II opcode and passes the parameter array and number of parameters.
-    virtual void HandleIIOpCode(OpCode /*nOpCode*/, formula::ParamClass /*eClass*/,
+    // Called for (most) opcodes to possibly handle implicit intersection for the parameters.
+    virtual void HandleIIOpCode(FormulaToken* /*token*/,
                                 FormulaToken*** /*pppToken*/, sal_uInt8 /*nNumParams*/) {}
 
     OUString            aCorrectedFormula;      // autocorrected Formula
