@@ -72,13 +72,13 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
      Size aSize( 1, 1 );
     SetPaperSize( aSize );
 
-    pOutlView = new OutlinerView( this, &(pView->GetEditWin()) );
+    pOutlView.reset( new OutlinerView( this, &(pView->GetEditWin()) ) );
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( false ));
 
     // Hack: all SdrTextObj attributes should be transferred to EditEngine
     pOutlView->SetBackgroundColor( COL_WHITE );
 
-    InsertView( pOutlView );
+    InsertView( pOutlView.get() );
     Point aPoint( 0, 0 );
      tools::Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
@@ -96,8 +96,8 @@ SdrHHCWrapper::~SdrHHCWrapper()
         SetUpdateMode(false);
         pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
     }
-    RemoveView( pOutlView );
-    delete pOutlView;
+    RemoveView( pOutlView.get() );
+    pOutlView.reset();
 }
 
 void SdrHHCWrapper::StartTextConversion()
@@ -156,7 +156,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     SetUpdateMode(true);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
 
-                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView, true, true);
+                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView.get(), true, true);
                 }
                 else
                     SetUpdateMode(false);

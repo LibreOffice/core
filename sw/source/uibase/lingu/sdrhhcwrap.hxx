@@ -31,7 +31,7 @@ class SdrHHCWrapper : public SdrOutliner
 
     SwView*             pView;
     SdrTextObj*         pTextObj;
-    OutlinerView*       pOutlView;
+    std::unique_ptr<OutlinerView> pOutlView;
     sal_Int32           nOptions;
     sal_uInt16          nDocIndex;
     LanguageType        nSourceLang;
