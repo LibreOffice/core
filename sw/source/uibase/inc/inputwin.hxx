@@ -49,7 +49,7 @@ friend class InputEdit;
 
     VclPtr<Edit>        aPos;
     VclPtr<InputEdit>   aEdit;
-    SwFieldMgr*     pMgr;
+    std::unique_ptr<SwFieldMgr> pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
     OUString        aCurrentTableName, sOldFormula;
