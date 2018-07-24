@@ -656,6 +656,34 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
     {
         tools::Rectangle aLastCellRect = rData.getLastCellRect();
 
+        // prevent shape resize/reposition when coordinate/size of its cell was not changed
+        if (!aLastCellRect.IsEmpty())
+        {
+            // We calculate based on the last cell rect to be able to scale the image
+            // as much as the cell was scaled.
+            // Still, we keep the image in its current cell (to keep start anchor == end anchor)
+            const tools::Rectangle aCurrentCellRect = GetCellRect(*GetDocument(), rData.maStart, true);
+
+            if (aLastCellRect == aCurrentCellRect)
+            {
+                // nothing was changed
+                return;
+            }
+            else if (aLastCellRect.GetWidth()  == aCurrentCellRect.GetWidth() &&
+                     aLastCellRect.GetHeight() == aCurrentCellRect.GetHeight())
+            {
+                // position of the cell was changed
+                aRect.setX(aRect.getX() - (aLastCellRect.TopLeft().X() - aCurrentCellRect.TopLeft().X()));
+                aRect.setX(aRect.getY() - (aLastCellRect.TopLeft().Y() - aCurrentCellRect.TopLeft().Y()));
+
+                if (bNegativePage)
+                    MirrorRectRTL(aRect);
+
+                rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(aRect), pObj->IsVisible());
+                return;
+            }
+        }
+
         // If the row was hidden before, or we don't have a valid cell rect, calculate the
         // new rect based on the end point.
         // Also when the end point is set, we need to consider it.
