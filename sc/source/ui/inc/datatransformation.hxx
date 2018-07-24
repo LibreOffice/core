@@ -29,7 +29,8 @@ enum class TransformationType
     SORT_TRANSFORMATION,
     TEXT_TRANSFORMATION,
     AGGREGATE_FUNCTION,
-    NUMBER_TRANSFORMATION
+    NUMBER_TRANSFORMATION,
+    REMOVE_NULL_TRANSFORMATION
 };
 
 enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM };
@@ -146,6 +147,19 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
     NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
     int getPrecision() const;
     std::set<SCCOL> getColumn() const;
+};
+
+class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
+{
+    std::set<SCCOL> mnCol;
+    OUString msReplaceWith;
+
+    public:
+    ReplaceNullTransformation(const std::set<SCCOL> nCol, const OUString sReplaceWith);
+    virtual void Transform(ScDocument& rDoc) const override;
+    virtual TransformationType getTransformationType() const override;
+    std::set<SCCOL> getColumn() const;
+    OUString getReplaceString() const;
 };
 
 }

@@ -649,6 +649,55 @@ std::set<SCCOL> NumberTransformation::getColumn() const
 {
     return mnCol;
 }
+
+ReplaceNullTransformation::ReplaceNullTransformation(const std::set<SCCOL> nCol, const OUString sReplaceWith):
+    mnCol(nCol),
+    msReplaceWith(sReplaceWith)
+{
+}
+
+void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
+{
+    if (mnCol.empty())
+        return;
+
+    SCROW nEndRow = 0;
+    for(auto& rCol : mnCol)
+    {
+        nEndRow = getLastRow(rDoc, rCol);
+    }
+
+    for(auto& rCol : mnCol)
+    {
+        for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+        {
+            CellType eType;
+            rDoc.GetCellType(rCol, nRow, 0, eType);
+            if (eType == CELLTYPE_NONE)
+            {
+               // OUString aStr = rDoc.GetString(rCol, nRow, 0);
+               // if (aStr == "" || aStr.isEmpty())
+                    rDoc.SetString(rCol, nRow, 0, msReplaceWith);
+            }
+        }
+    }
+
+}
+
+std::set<SCCOL> ReplaceNullTransformation::getColumn() const
+{
+    return mnCol;
+}
+
+OUString ReplaceNullTransformation::getReplaceString() const
+{
+    return msReplaceWith;
+}
+
+TransformationType ReplaceNullTransformation::getTransformationType() const
+{
+     return TransformationType::REMOVE_NULL_TRANSFORMATION;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
