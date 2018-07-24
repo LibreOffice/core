@@ -34,6 +34,7 @@
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <vector>
 #include <memory>
+#include <set>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <formula/FormulaCompiler.hxx>
@@ -302,6 +303,21 @@ private:
     };
     std::vector<TableRefEntry> maTableRefs;     /// "stack" of currently active ocTableRef tokens
 
+    // Optimizing implicit intersection is done only at the end of code generation, because the usage context may
+    // be important. Store candidate parameters and the operation they are the argument for.
+    struct PendingImplicitIntersectionOptimization
+    {
+        PendingImplicitIntersectionOptimization(formula::FormulaToken** p, const formula::FormulaToken* o)
+            : parameter( p ), operation( o ) {}
+        formula::FormulaToken** parameter;
+        const formula::FormulaToken* operation;
+    };
+    std::vector< PendingImplicitIntersectionOptimization > mPendingImplicitIntersectionOptimizations;
+    std::set<formula::FormulaTokenRef> mUnhandledPossibleImplicitIntersections;
+#ifdef DBG_UTIL
+    std::set<OpCode> mUnhandledPossibleImplicitIntersectionsOpCodes;
+#endif
+
     bool   NextNewToken(bool bInArray);
 
     virtual void SetError(FormulaError nError) override;
@@ -457,6 +473,11 @@ public:
     static bool DoubleRefToPosSingleRefScalarCase(const ScRange& rRange, ScAddress& rAdr,
                                                   const ScAddress& rFormulaPos);
 
+    bool HasUnhandledPossibleImplicitIntersections() const { return !mUnhandledPossibleImplicitIntersections.empty(); }
+#ifdef DBG_UTIL
+    const std::set<OpCode>& UnhandledPossibleImplicitIntersectionsOpCodes() { return mUnhandledPossibleImplicitIntersectionsOpCodes; }
+#endif
+
 private:
     // FormulaCompiler
     virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const override;
@@ -485,8 +506,11 @@ private:
     ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCharFlags::NONE; }
 
-    bool IsIIOpCode(OpCode nOpCode) const override;
-    void HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams) override;
+    virtual void HandleIIOpCode(formula::FormulaToken* token, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams) override;
+    bool HandleIIOpCodeInternal(formula::FormulaToken* token, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams);
+    bool SkipImplicitIntersectionOptimization(const formula::FormulaToken* token) const;
+    virtual void PostProcessCode() override;
+    static bool ParameterMayBeImplicitIntersection(const formula::FormulaToken* token, int parameter);
     void ReplaceDoubleRefII(formula::FormulaToken** ppDoubleRefTok);
     bool AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange);
     void CorrectSumRange(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange, formula::FormulaToken** ppSumRangeToken);
