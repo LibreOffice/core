@@ -104,8 +104,8 @@ class SwView_Impl
     std::shared_ptr<SwMailMergeConfigItem>
                                 xConfigItem;
 
-    sfx2::DocumentInserter*     m_pDocInserter;
-    SfxRequest*                 m_pRequest;
+    std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
+    std::unique_ptr<SfxRequest>             m_pRequest;
     sal_Int16                   m_nParam;
 
     Point                       m_aEditingPosition;
@@ -162,7 +162,7 @@ public:
     SfxMedium*              CreateMedium();
     void                    InitRequest( const SfxRequest& rRequest );
 
-    SfxRequest*      GetRequest() const { return m_pRequest; }
+    SfxRequest*      GetRequest() const { return m_pRequest.get(); }
     sal_Int16        GetParam() const { return m_nParam; }
     void             SetParam( sal_Int16 nParam ) { m_nParam = nParam; }
 };
