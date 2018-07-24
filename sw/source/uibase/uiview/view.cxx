@@ -771,7 +771,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     CreateScrollbar( true );
     CreateScrollbar( false );
 
-    m_pViewImpl = new SwView_Impl(this);
+    m_pViewImpl.reset(new SwView_Impl(this));
     SetName("View");
     SetWindow( m_pEditWin );
 
@@ -925,7 +925,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // Set DocShell
     m_xGlueDocShell.reset(new SwViewGlueDocShell(*this, rDocSh));
-    m_pPostItMgr = new SwPostItMgr(this);
+    m_pPostItMgr.reset(new SwPostItMgr(this));
 
     // Check and process the DocSize. Via the handler, the shell could not
     // be found, because the shell is not known in the SFX management
@@ -1070,8 +1070,7 @@ SwView::~SwView()
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
 
     GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
-    delete m_pPostItMgr;
-    m_pPostItMgr = nullptr;
+    m_pPostItMgr.reset();
 
     m_bInDtor = true;
     m_pEditWin->Hide(); // prevent problems with painting
@@ -1099,8 +1098,8 @@ SwView::~SwView()
     m_pHRuler.disposeAndClear();
     m_pVRuler.disposeAndClear();
     m_pTogglePageBtn.disposeAndClear();
-    delete m_pGlosHdl;
-    delete m_pViewImpl;
+    m_pGlosHdl.reset();
+    m_pViewImpl.reset();
 
     // If this was enabled in the ctor for the frame, then disable it here.
     static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");
@@ -1108,7 +1107,7 @@ SwView::~SwView()
         m_pEditWin->RequestDoubleBuffering(false);
     m_pEditWin.disposeAndClear();
 
-    delete m_pFormatClipboard;
+    m_pFormatClipboard.reset();
 }
 
 SwDocShell* SwView::GetDocShell()
@@ -1608,8 +1607,8 @@ OUString SwView::GetSelectionTextParam( bool bCompleteWrds, bool bEraseTrail )
 SwGlossaryHdl* SwView::GetGlosHdl()
 {
     if(!m_pGlosHdl)
-        m_pGlosHdl = new SwGlossaryHdl(GetViewFrame(), m_pWrtShell.get());
-    return m_pGlosHdl;
+        m_pGlosHdl.reset(new SwGlossaryHdl(GetViewFrame(), m_pWrtShell.get()));
+    return m_pGlosHdl.get();
 }
 
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

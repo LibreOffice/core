@@ -21,6 +21,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
+#include <drawbase.hxx>
 
 /**
    Always:
