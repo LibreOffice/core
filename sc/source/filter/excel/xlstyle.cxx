@@ -659,8 +659,8 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
         case EXC_FONTPROPSET_CONTROL:
         {
             OUString aApiFontName;
-            float fApiHeight, fApiWeight;
-            sal_Int16 nApiFamily, nApiCharSet, nApiPosture, nApiUnderl, nApiStrikeout;
+            float fApiHeight(0.0), fApiWeight(0.0);
+            sal_Int16 nApiFamily(0), nApiCharSet(0), nApiPosture(0), nApiUnderl(0), nApiStrikeout(0);
 
             // read font properties
             maHlpControl.ReadFromPropertySet( rPropSet );
