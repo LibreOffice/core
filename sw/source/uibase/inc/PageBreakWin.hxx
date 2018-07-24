@@ -12,6 +12,7 @@
 #include "FrameControl.hxx"
 #include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
+#include <boost/optional.hpp>
 
 class SwPageFrame;
 
@@ -31,7 +32,7 @@ class SwPageBreakWin : public SwFrameMenuButtonBase
     Timer                 m_aFadeTimer;
     bool                  m_bDestroyed;
 
-    const Point*          m_pMousePt;
+    boost::optional<Point> m_xMousePt;
 
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame );
@@ -43,7 +44,7 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Activate( ) override;
 
-    void UpdatePosition( const Point* pEvtPt = nullptr );
+    void UpdatePosition( boost::optional<Point> xEvtPt = boost::optional<Point>() );
 
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;
