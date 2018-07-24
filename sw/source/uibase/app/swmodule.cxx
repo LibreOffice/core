@@ -192,9 +192,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
         // member <pColorConfig> is created and the color configuration is applied
         // at the view options.
         GetColorConfig();
+        m_xLinguServiceEventListener = new SwLinguServiceEventListener;
     }
-
-    m_xLinguServiceEventListener = new SwLinguServiceEventListener;
 }
 
 OUString SwResId(const char* pId)
