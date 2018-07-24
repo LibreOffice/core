@@ -71,8 +71,8 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
-            VclPtr<AbstractSignSignatureLineDialog> pDialog
-                = pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel);
+            ScopedVclPtr<AbstractSignSignatureLineDialog> pDialog(
+                pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel));
             pDialog->Execute();
             break;
         }

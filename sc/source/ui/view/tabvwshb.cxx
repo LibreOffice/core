@@ -362,8 +362,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     GetViewData().GetDocShell()->GetBaseModel());
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                VclPtr<AbstractSignSignatureLineDialog> pDialog
-                    = pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel);
+                ScopedVclPtr<AbstractSignSignatureLineDialog> pDialog(
+                    pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel));
                 pDialog->Execute();
                 break;
             }
