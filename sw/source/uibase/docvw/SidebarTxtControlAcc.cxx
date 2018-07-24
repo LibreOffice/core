@@ -128,7 +128,6 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 {
     public:
         explicit SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl );
-        virtual ~SidebarTextControlAccessibleContext() override;
 
         virtual sal_Int32 SAL_CALL
                 getAccessibleChildCount() override;
@@ -146,7 +145,7 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     private:
-        ::accessibility::AccessibleTextHelper* mpAccessibleTextHelper;
+        std::unique_ptr<::accessibility::AccessibleTextHelper> mpAccessibleTextHelper;
 
         ::osl::Mutex maMutex;
 
@@ -155,22 +154,15 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 
 SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl )
     : VCLXAccessibleComponent( rSidebarTextControl.GetWindowPeer() )
-    , mpAccessibleTextHelper( nullptr )
     , maMutex()
 {
-    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(rSidebarTextControl) );
+    mpAccessibleTextHelper.reset(new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(rSidebarTextControl) ));
     mpAccessibleTextHelper->SetEventSource( rSidebarTextControl.GetWindowPeer() );
-}
-
-SidebarTextControlAccessibleContext::~SidebarTextControlAccessibleContext()
-{
-    defunc();
 }
 
 void SidebarTextControlAccessibleContext::defunc()
 {
-    delete mpAccessibleTextHelper;
-    mpAccessibleTextHelper = nullptr;
+    mpAccessibleTextHelper.reset();
 }
 
 sal_Int32 SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChildCount()
