@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
        SwWrtShell. */
     const SwFrameShell *m_pCreatorView;
-    SwDocFac        *m_pClpDocFac;
+    std::unique_ptr<SwDocFac>       m_pClpDocFac;
     std::unique_ptr<Graphic>        m_pClpGraphic;
     std::unique_ptr<Graphic>        m_pClpBitmap;
     Graphic                         *m_pOrigGraphic;
