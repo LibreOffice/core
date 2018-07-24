@@ -552,7 +552,7 @@ void SwXViewSettings::_preSetValues ()
     else
         pVOpt = SW_MOD()->GetViewOption(false);
 
-    mpViewOption = new SwViewOption (*pVOpt);
+    mpViewOption.reset( new SwViewOption (*pVOpt) );
     mbApplyZoom = false;
     if(pView)
         mpViewOption->SetStarOneSetting(true);
@@ -782,8 +782,7 @@ void SwXViewSettings::_postSetValues()
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? SvViewOpt::DestViewOnly
                                                   : SvViewOpt::DestText );
 
-    delete mpViewOption;
-    mpViewOption = nullptr;
+    mpViewOption.reset();
 }
 
 void SwXViewSettings::_preGetValues ()
