@@ -51,6 +51,7 @@ public:
     void testNumberEven();
     void testNumberOdd();
     void testNumberSign();
+    void testReplaceNull();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testNumberEven);
     CPPUNIT_TEST(testNumberOdd);
     CPPUNIT_TEST(testNumberSign);
+    CPPUNIT_TEST(testReplaceNull);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -484,6 +486,23 @@ void ScDataTransformationTest::testNumberSign()
     CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(2, 1, 0));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 2, 0));
     CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(2, 3, 0));
+}
+
+void ScDataTransformationTest::testReplaceNull()
+{
+    m_pDoc->SetString(2, 0, 0, "Berlin");
+    m_pDoc->SetString(2, 1, 0, "");
+    m_pDoc->SetString(2, 2, 0, "");
+    m_pDoc->SetString(2, 3, 0, "Peking");
+
+    sc::ReplaceNullTransformation aTransform({2}, "Empty");
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Berlin"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Peking"), m_pDoc->GetString(2, 3, 0));
+
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
