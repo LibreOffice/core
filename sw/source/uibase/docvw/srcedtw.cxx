@@ -45,7 +45,7 @@
 #include <docsh.hxx>
 #include <srcview.hxx>
 #include <helpids.h>
-#include <deque>
+#include <vector>
 
 namespace
 {
@@ -62,7 +62,7 @@ struct TextPortion
 #define MAX_SYNTAX_HIGHLIGHT 20
 #define MAX_HIGHLIGHTTIME 200
 
-typedef std::deque<TextPortion> TextPortions;
+typedef std::vector<TextPortion> TextPortions;
 
 static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
 {
