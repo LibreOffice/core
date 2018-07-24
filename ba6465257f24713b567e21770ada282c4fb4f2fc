@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_7291c499",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1001914
+      },
+      "writtenOn": "2018-07-24T15:28:43Z",
+      "side": 1,
+      "message": "Actually, this type doesn\u0027t fit ComboBox::InsertEntry return which is a signed int (sal_Int32), So, perhaps, it would be more apropriate here to choose sal_Int32. You can see right below when it checks if nIndex !\u003d LISTBOX_ERROR, which is signed int max value. Sugesting that the correct type for nIndex should be sal_Int32 not sal_uInt32.",
+      "parentUuid": "ffe62b97_c713300d",
+      "range": {
+        "startLine": 781,
+        "startChar": 8,
+        "endLine": 781,
+        "endChar": 18
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_a7f82cc4",
         "filename": "svtools/source/control/ctrlbox.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-24T06:30:04Z",
       "side": 1,
       "message": "It only makes sense to change the nCount type if FontSizeNames::Count() returns a different type. What makes sal_uInt32 a better type in this specific case, when we return sal_uLong from FontSizeNames::Count()?",
+      "range": {
+        "startLine": 1405,
+        "startChar": 12,
+        "endLine": 1405,
+        "endChar": 22
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b2974c91",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1001914
+      },
+      "writtenOn": "2018-07-24T15:28:43Z",
+      "side": 1,
+      "message": "Well, considering that class FontSizeNames uses primitive type long for IndexSize and it uses long in some other portions of code when referring to FontSizeNames::Count. I\u0027d say that we could either change the sal_uLong here and at ctrltool.[ch]xx (FontSizeNames class) for long *or* we could normalize this class to use sal_uInt32 which is not as big as long but it should be larger enough since sal_uLong today is already sal_uInt32.",
+      "parentUuid": "ffe62b97_a7f82cc4",
       "range": {
         "startLine": 1405,
         "startChar": 12,
