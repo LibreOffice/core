@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c74a107f",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-24T11:22:40Z",
+      "side": 1,
+      "message": "judging by the code in copyFirstFormulaBlock, this is not necessary. Alternatively, if it really is necessary, there is another call to this method 10 lines up.",
+      "revId": "ef4039e2bf4f4050f75859d1eb52ce0eac85d2a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
