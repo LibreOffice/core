@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_27609ca5",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-24T04:57:07Z",
+      "side": 1,
+      "message": "This probably could be LR_TB as a default, which would quickly eliminate a lot of processing. The result would be one less hard-coded \"default\" property. But I left it in, just in case it is useful in RTL contexts (though my testing suggests it isn\u0027t needed - but what do I know about RTL?). Plus, any failure in value-acceptance will lead to the previous behaviour, so a non-regression move.\n\nI guess it is better to leave it this way for this patch, and then do a separate patch to set to LR-TB default if we want to speed this up, to help isolate a regression.",
+      "range": {
+        "startLine": 1460,
+        "startChar": 36,
+        "endLine": 1460,
+        "endChar": 38
+      },
+      "revId": "f52762d482b420b15c0a0c6331e867c5f6ef8f77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_475160d8",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-24T04:57:07Z",
+      "side": 1,
+      "message": "previously I had all kinds of trouble converting into an enum - but now I can\u0027t find the documents I had problems with. Perhaps I had something wrong in the computer I was developing on and didn\u0027t have that problem on the computer I made the clean patches.\n\nThis could move into the following IF statement...",
+      "range": {
+        "startLine": 1467,
+        "startChar": 15,
+        "endLine": 1467,
+        "endChar": 80
+      },
+      "revId": "f52762d482b420b15c0a0c6331e867c5f6ef8f77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
