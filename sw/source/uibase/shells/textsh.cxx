@@ -89,7 +89,7 @@
 #include <strings.hrc>
 #include <swerror.h>
 #include <unochart.hxx>
-
+#include <tgrditem.hxx>
 #include <chartins.hxx>
 
 #define ShellClass_SwTextShell

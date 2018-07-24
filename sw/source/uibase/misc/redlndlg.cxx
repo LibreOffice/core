@@ -86,7 +86,7 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
     , pChildWin       (pChild)
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, this, get_content_area());
+    pImplDlg.reset(new SwRedlineAcceptDlg(this, this, get_content_area()));
 }
 
 void SwModelessRedlineAcceptDlg::Activate()
@@ -142,7 +142,7 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 
 void SwModelessRedlineAcceptDlg::dispose()
 {
-    delete pImplDlg;
+    pImplDlg.reset();
     SfxModelessDialog::dispose();
 }
 
@@ -1205,7 +1205,7 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
 SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : PanelLayout(pParent, "ManageChangesPanel", "modules/swriter/ui/managechangessidebar.ui", rFrame)
 {
-    mpImplDlg = new SwRedlineAcceptDlg(this, this, get<VclGrid>("content_area"));
+    mpImplDlg.reset(new SwRedlineAcceptDlg(this, this, get<VclGrid>("content_area")));
 
     mpImplDlg->Init();
 
@@ -1220,8 +1220,7 @@ SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 
 void SwRedlineAcceptPanel::dispose()
 {
-    delete mpImplDlg;
-    mpImplDlg = nullptr;
+    mpImplDlg.reset();
     PanelLayout::dispose();
 }
 
