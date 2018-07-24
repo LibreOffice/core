@@ -182,7 +182,7 @@ void SwView::ExecFormatPaintbrush(SfxRequest const & rReq)
         m_pFormatClipboard->Copy( GetWrtShell(), GetPool(), bPersistentCopy );
 
         SwApplyTemplate aTemplate;
-        aTemplate.m_pFormatClipboard = m_pFormatClipboard;
+        aTemplate.m_pFormatClipboard = m_pFormatClipboard.get();
         GetEditWin().SetApplyTemplate(aTemplate);
     }
     GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
