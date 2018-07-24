@@ -34,6 +34,24 @@
       "revId": "e8bf2cb72dbe55f4e9ac7ace48e644a934cfc503",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_47f04091",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-24T08:48:10Z",
+      "side": 0,
+      "message": "Ah yes, sorry for noise :-)",
+      "parentUuid": "ffe62b97_01e10b9b",
+      "revId": "e8bf2cb72dbe55f4e9ac7ace48e644a934cfc503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
