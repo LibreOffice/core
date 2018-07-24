@@ -64,8 +64,8 @@ class SwSrcEditWindow : public vcl::Window, public SfxListener
 private:
     class ChangesListener;
     friend class ChangesListener;
-    TextView*       m_pTextView;
-    ExtTextEngine*  m_pTextEngine;
+    std::unique_ptr<TextView>       m_pTextView;
+    std::unique_ptr<ExtTextEngine>  m_pTextEngine;
 
     VclPtr<TextViewOutWin> m_pOutWin;
     VclPtr<ScrollBar>      m_pHScrollbar,
@@ -121,9 +121,9 @@ public:
     void            Write(SvStream& rOutput) { m_pTextEngine->Write(rOutput); }
 
     TextView*       GetTextView()
-                        {return m_pTextView;}
+                        {return m_pTextView.get();}
     TextEngine*     GetTextEngine()
-                        {return m_pTextEngine;}
+                        {return m_pTextEngine.get();}
     SwSrcView*      GetSrcView() {return m_pSrcView;}
 
     TextViewOutWin* GetOutWin() {return m_pOutWin;}
