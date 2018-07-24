@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c713300d",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T06:30:04Z",
+      "side": 1,
+      "message": "Why this type was chosen? does it fit the InsertEntry return type?",
+      "range": {
+        "startLine": 781,
+        "startChar": 8,
+        "endLine": 781,
+        "endChar": 18
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_a7f82cc4",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T06:30:04Z",
+      "side": 1,
+      "message": "It only makes sense to change the nCount type if FontSizeNames::Count() returns a different type. What makes sal_uInt32 a better type in this specific case, when we return sal_uLong from FontSizeNames::Count()?",
+      "range": {
+        "startLine": 1405,
+        "startChar": 12,
+        "endLine": 1405,
+        "endChar": 22
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
