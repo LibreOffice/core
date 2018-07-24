@@ -86,8 +86,7 @@ namespace
 
         if ( !rMEvt.IsSynthetic() && !m_pWin->IsVisible() )
         {
-            Point* pPtr = new Point( rMEvt.GetPosPixel() );
-            m_pWin->UpdatePosition( pPtr );
+            m_pWin->UpdatePosition( rMEvt.GetPosPixel() );
         }
     }
 }
@@ -100,8 +99,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_nDelayAppearing( 0 ),
-    m_bDestroyed( false ),
-    m_pMousePt( nullptr )
+    m_bDestroyed( false )
 {
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MapUnit::MapPixel ) );
@@ -130,9 +128,6 @@ void SwPageBreakWin::dispose()
     m_pLine.disposeAndClear();
     m_pPopupMenu.clear();
     m_aBuilder.disposeBuilder();
-
-    delete m_pMousePt;
-    m_pMousePt = nullptr;
 
     SwFrameMenuButtonBase::dispose();
 }
@@ -328,14 +323,13 @@ void SwPageBreakWin::Activate( )
     MenuButton::Activate();
 }
 
-void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
+void SwPageBreakWin::UpdatePosition( boost::optional<Point> xEvtPt )
 {
-    if ( pEvtPt != nullptr )
+    if ( xEvtPt )
     {
-        if ( pEvtPt == m_pMousePt )
+        if ( xEvtPt == m_xMousePt )
             return;
-        delete m_pMousePt;
-        m_pMousePt = pEvtPt;
+        m_xMousePt = xEvtPt;
     }
 
     const SwPageFrame* pPageFrame = GetPageFrame();
@@ -380,9 +374,9 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     long nLineRight = std::min( nPgRight, aVisArea.Right() );
     long nBtnLeft = nLineLeft;
 
-    if ( m_pMousePt )
+    if ( m_xMousePt )
     {
-        nBtnLeft = nLineLeft + m_pMousePt->X() - aBtnSize.getWidth() / 2;
+        nBtnLeft = nLineLeft + m_xMousePt->X() - aBtnSize.getWidth() / 2;
 
         if ( nBtnLeft < nLineLeft )
             nBtnLeft = nLineLeft;
