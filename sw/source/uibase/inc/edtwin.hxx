@@ -85,13 +85,13 @@ class SwEditWin final : public vcl::Window,
     // type/object where the mouse pointer is
     SwCallMouseEvent m_aSaveCallEvent;
 
-    SwApplyTemplate     *m_pApplyTempl;
-    SwAnchorMarker      *m_pAnchorMarker; // for relocating the anchor
+    std::unique_ptr<SwApplyTemplate>      m_pApplyTempl;
+    std::unique_ptr<SwAnchorMarker>       m_pAnchorMarker; // for relocating the anchor
 
-    SdrDropMarkerOverlay    *m_pUserMarker;
+    std::unique_ptr<SdrDropMarkerOverlay> m_pUserMarker;
     SdrObject               *m_pUserMarkerObj;
-    SwShadowCursor          *m_pShadCursor;
-    Point                   *m_pRowColumnSelectionStart; // save position where table row/column selection has been started
+    std::unique_ptr<SwShadowCursor>       m_pShadCursor;
+    boost::optional<Point>                m_xRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &m_rView;
 
@@ -124,7 +124,7 @@ class SwEditWin final : public vcl::Window,
     sal_uInt16          m_nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          m_nKS_NUMINDENTINC_Count;
 
-    SwFrameControlsManager *m_pFrameControlsManager;
+    std::unique_ptr<SwFrameControlsManager> m_pFrameControlsManager;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -224,7 +224,7 @@ public:
     static bool     IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCursor );
 
     void             SetApplyTemplate(const SwApplyTemplate &);
-    SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }
+    SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl.get(); }
 
     void            StartExecuteDrag();
     void            DragFinished();
