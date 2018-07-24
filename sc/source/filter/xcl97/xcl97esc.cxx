@@ -191,7 +191,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     if ( nAdditionalText )
         nAdditionalText++;
     bool bInGroup = ( pCurrXclObj != nullptr );
-    if ( bInGroup )
+    if ( bInGroup && pCurrAppData )
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
