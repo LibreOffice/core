@@ -1218,12 +1218,15 @@ HtmlTokenId HTMLParser::GetNextToken_()
 
                         bool bDone = false;
                         // Read until closing %>. If not found restart at first >.
+                        sal_Unicode nLastTokenChar = !aToken.isEmpty() ? aToken[aToken.getLength() - 1] : 0;
+                        OUStringBuffer aTmpBuffer(aToken);
                         while( !bDone && !rInput.eof() && IsParserWorking() )
                         {
-                            bDone = '>'==nNextCh && aToken.endsWith("%");
+                            bDone = '>'==nNextCh && nLastTokenChar == '%';
                             if( !bDone )
                             {
-                                aToken += OUString(&nNextCh,1);
+                                aTmpBuffer.appendUtf32(nNextCh);
+                                nLastTokenChar = nNextCh;
                                 nNextCh = GetNextChar();
                             }
                         }
@@ -1237,6 +1240,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             nRet = HtmlTokenId::TEXTTOKEN;
                             break;
                         }
+                        aToken = aTmpBuffer.makeStringAndClear();
                         if( IsParserWorking() )
                         {
                             sSaveToken = aToken;
