@@ -245,7 +245,7 @@ SwTransferable::~SwTransferable()
     // release reference to the document so that aDocShellRef will delete
     // it (if aDocShellRef is set). Otherwise, the OLE nodes keep references
     // to their sub-storage when the storage is already dead.
-    delete m_pClpDocFac;
+    m_pClpDocFac.reset();
 
     // first close, then the Ref. can be cleared as well, so that
     // the DocShell really gets deleted!
@@ -429,7 +429,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             }
         }
 
-        m_pClpDocFac = new SwDocFac;
+        m_pClpDocFac.reset(new SwDocFac);
         SwDoc *const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
         pTmpDoc->getIDocumentFieldsAccess().LockExpFields();     // never update fields - leave text as it is
@@ -793,7 +793,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
             m_pOrigGraphic = m_pClpBitmap.get();
 
-        m_pClpDocFac = new SwDocFac;
+        m_pClpDocFac.reset(new SwDocFac);
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
         m_pWrtShell->Copy( pDoc );
 
@@ -815,7 +815,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     }
     else if ( nSelection == SelectionType::Ole )
     {
-        m_pClpDocFac = new SwDocFac;
+        m_pClpDocFac.reset(new SwDocFac);
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
         m_aDocShellRef = new SwDocShell( pDoc, SfxObjectCreateMode::EMBEDDED);
         m_aDocShellRef->DoInitNew();
@@ -858,7 +858,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         if( m_pWrtShell->ShouldWait() )
             pWait.reset(new SwWait( *m_pWrtShell->GetView().GetDocShell(), true ));
 
-        m_pClpDocFac = new SwDocFac;
+        m_pClpDocFac.reset(new SwDocFac);
 
         // create additional cursor so that equal treatment of keyboard
         // and mouse selection is possible.
@@ -1020,7 +1020,7 @@ void SwTransferable::CalculateAndCopy()
 
     OUString aStr( m_pWrtShell->Calculate() );
 
-    m_pClpDocFac = new SwDocFac;
+    m_pClpDocFac.reset(new SwDocFac);
     SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
     m_pWrtShell->Copy(pDoc, & aStr);
     m_eBufferType = TransferBufferType::Document;
@@ -1035,7 +1035,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
         return false;
     SwWait aWait( *m_pWrtShell->GetView().GetDocShell(), true );
 
-    m_pClpDocFac = new SwDocFac;
+    m_pClpDocFac.reset(new SwDocFac);
     SwDoc *const pCDoc = lcl_GetDoc(*m_pClpDocFac);
 
     SwNodes& rNds = pCDoc->GetNodes();
