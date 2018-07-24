@@ -1348,6 +1348,10 @@ bool FormulaCompiler::GetToken()
                 return HandleDbData();
             case ocTableRef:
                 return HandleTableRef();
+            case ocPush:
+                if( mbComputeII )
+                    HandleIIOpCode(mpToken.get(), nullptr, 0);
+                break;
             default:
                 ;   // nothing
         }
@@ -1555,7 +1559,6 @@ void FormulaCompiler::Factor()
             else
             {
                 // standard handling of 1-parameter opcodes
-                OpCode eMyLastOp = eOp;
                 pFacToken = mpToken;
                 eOp = NextToken();
                 if( nNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
@@ -1573,10 +1576,10 @@ void FormulaCompiler::Factor()
                 else if ( pArr->GetCodeError() == FormulaError::NONE )
                 {
                     pFacToken->SetByte( 1 );
-                    if (mbComputeII && IsIIOpCode(eMyLastOp))
+                    if (mbComputeII)
                     {
                         FormulaToken** pArg = pCode - 1;
-                        HandleIIOpCode(eMyLastOp, pFacToken->GetInForceArray(), &pArg, 1);
+                        HandleIIOpCode(pFacToken, &pArg, 1);
                     }
                 }
                 PutCode( pFacToken );
@@ -1620,7 +1623,7 @@ void FormulaCompiler::Factor()
             sal_uInt32 nSepCount = 0;
             if( !bNoParam )
             {
-                bool bDoIICompute = mbComputeII && IsIIOpCode(eMyLastOp);
+                bool bDoIICompute = mbComputeII;
                 // Array of FormulaToken double pointers to collect the parameters of II opcodes.
                 FormulaToken*** pArgArray = nullptr;
                 if (bDoIICompute)
@@ -1647,7 +1650,7 @@ void FormulaCompiler::Factor()
                         pArgArray[nSepCount - 1] = pCode - 1; // Add rest of the arguments
                 }
                 if (bDoIICompute)
-                    HandleIIOpCode(eMyLastOp, pFacToken->GetInForceArray(), pArgArray,
+                    HandleIIOpCode(pFacToken, pArgArray,
                                    std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
             }
             if (bBadName)
@@ -1872,10 +1875,10 @@ void FormulaCompiler::UnaryLine()
         FormulaTokenRef p = mpToken;
         NextToken();
         UnaryLine();
-        if (mbComputeII && IsIIOpCode(p->GetOpCode()))
+        if (mbComputeII)
         {
             FormulaToken** pArg = pCode - 1;
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), &pArg, 1);
+            HandleIIOpCode(p.get(), &pArg, 1);
         }
         PutCode( p );
     }
@@ -1888,10 +1891,10 @@ void FormulaCompiler::PostOpLine()
     UnaryLine();
     while ( mpToken->GetOpCode() == ocPercentSign )
     {   // this operator _follows_ its operand
-        if (mbComputeII && IsIIOpCode(mpToken->GetOpCode()))
+        if (mbComputeII)
         {
             FormulaToken** pArg = pCode - 1;
-            HandleIIOpCode(mpToken->GetOpCode(), mpToken->GetInForceArray(), &pArg, 1);
+            HandleIIOpCode(mpToken.get(), &pArg, 1);
         }
         PutCode( mpToken );
         NextToken();
@@ -1904,16 +1907,15 @@ void FormulaCompiler::PowLine()
     while (mpToken->GetOpCode() == ocPow)
     {
         FormulaTokenRef p = mpToken;
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         PostOpLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }
@@ -1925,16 +1927,15 @@ void FormulaCompiler::MulDivLine()
     while (mpToken->GetOpCode() == ocMul || mpToken->GetOpCode() == ocDiv)
     {
         FormulaTokenRef p = mpToken;
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         PowLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }
@@ -1946,16 +1947,15 @@ void FormulaCompiler::AddSubLine()
     while (mpToken->GetOpCode() == ocAdd || mpToken->GetOpCode() == ocSub)
     {
         FormulaTokenRef p = mpToken;
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         MulDivLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }
@@ -1967,16 +1967,15 @@ void FormulaCompiler::ConcatLine()
     while (mpToken->GetOpCode() == ocAmpersand)
     {
         FormulaTokenRef p = mpToken;
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         AddSubLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }
@@ -1988,16 +1987,15 @@ void FormulaCompiler::CompareLine()
     while (mpToken->GetOpCode() >= ocEqual && mpToken->GetOpCode() <= ocGreaterEqual)
     {
         FormulaTokenRef p = mpToken;
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         ConcatLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }
@@ -2017,16 +2015,15 @@ OpCode FormulaCompiler::Expression()
     {
         FormulaTokenRef p = mpToken;
         mpToken->SetByte( 2 );       // 2 parameters!
-        bool bDoIICompute = mbComputeII && IsIIOpCode(p->GetOpCode());
         FormulaToken** pArgArray[2];
-        if (bDoIICompute)
+        if (mbComputeII)
             pArgArray[0] = pCode - 1; // Add first argument
         NextToken();
         CompareLine();
-        if (bDoIICompute)
+        if (mbComputeII)
         {
             pArgArray[1] = pCode - 1; // Add second argument
-            HandleIIOpCode(p->GetOpCode(), p->GetInForceArray(), pArgArray, 2);
+            HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
     }

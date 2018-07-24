@@ -5797,40 +5797,51 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
     return ScParameterClassification::GetParameterType( pToken, nParam);
 }
 
-bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
+static bool parameterMayBeII(const FormulaToken* token, int parameter)
 {
-    if (nOpCode == ocSumIf || nOpCode == ocAverageIf || (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR)
-        || (nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_UN_OP
-             && nOpCode != ocIntersect && nOpCode != ocUnion && nOpCode != ocRange
-             && nOpCode != ocAnd && nOpCode != ocOr && nOpCode != ocXor )
-        || nOpCode == ocPercentSign)
-    {
-        return true;
-    }
-
-    return false;
+    formula::ParamClass param = ScParameterClassification::GetParameterType( token, parameter );
+    assert( param != Bounds ); // incorrect parameter?
+    return param == Value || param == Array;
 }
 
-void ScCompiler::HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+void ScCompiler::HandleIIOpCode(FormulaToken* token, FormulaToken*** pppToken, sal_uInt8 nNumParams)
 {
     if (!mbComputeII)
         return;
+#ifdef DBG_UTIL
+    if(!HandleIIOpCodeInternal(token, pppToken, nNumParams))
+        mUnhandledPossibleImplicitIntersectionsOpCodes.insert(token->GetOpCode());
+#else
+    HandleIIOpCodeInternal(token, pppToken, nNumParams);
+#endif
+}
 
-    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+// return true if opcode is handled
+bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+{
+    const OpCode nOpCode = token->GetOpCode();
+
+    if (nOpCode == ocPush)
+    {
+        if(token->GetType() == svDoubleRef)
+            mUnhandledPossibleImplicitIntersections.insert( token );
+        return true;
+    }
+    else if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
     {
         if (nNumParams != 3)
-            return;
+            return false;
 
         if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
-            return;
+            return false;
 
         if ((*pppToken[0])->GetType() != svDoubleRef)
-            return;
+            return false;
 
         const StackVar eSumRangeType = (*pppToken[2])->GetType();
 
         if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
-            return;
+            return false;
 
         const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
 
@@ -5844,57 +5855,114 @@ void ScCompiler::HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, Form
             aSumRange = *(*pppToken[2])->GetDoubleRef();
 
         CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
+        // TODO mark parameters as handled
+        return true;
     }
     else if (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR)
     {
+        if (nOpCode == ocFormula || nOpCode == ocIsRef)
+        {   // These may take ranges.
+            assert( !parameterMayBeII( token, 0 ));
+            return false;
+        }
+
         if (nNumParams != 1)
-            return;
+            return false;
 
-        // NOTE: eClass is the CurrentFactor token's GetInForceArray() state,
-        // not the function's parameter classification.
-        if (mbMatrixFlag ||
-                eClass == formula::ForceArray ||
-                eClass == formula::ReferenceOrForceArray ||
-                eClass == formula::SuppressedReferenceOrForceArray)
-            return;
+        assert( parameterMayBeII( token, 0 ));
 
-        /* TODO: this assumes that there is no function taking a single
-         * parameter that does evaluate a range reference. There currently
-         * isn't any, but we should rather check that. */
+        if (token->IsInForceArray() || mbMatrixFlag)
+            return false;
 
         if ((*pppToken[0])->GetType() != svDoubleRef)
-            return;
+            return false;
 
         ReplaceDoubleRefII(pppToken[0]);
+        return true;
     }
-    else if (nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP)
+    else if ((nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP)
+              || nOpCode == ocRound || nOpCode == ocRoundUp || nOpCode == ocRoundDown)
     {
-        assert(nOpCode != ocIntersect && nOpCode != ocUnion && nOpCode != ocRange);
+        if (nOpCode == ocIntersect || nOpCode == ocUnion || nOpCode == ocRange
+            || nOpCode == ocAnd || nOpCode == ocOr || nOpCode == ocXor )
+        {   // These actually may take ranges despite being "binary".
+            assert( !parameterMayBeII( token, 0 ) || !parameterMayBeII( token, 1 ));
+            return false;
+        }
 
         if (nNumParams != 2)
-            return;
+            return false;
 
-        if (eClass == formula::ForceArray || mbMatrixFlag)
-            return;
+        assert( parameterMayBeII( token, 0 ));
+        assert( parameterMayBeII( token, 1 ));
+
+        if (token->IsInForceArray() || mbMatrixFlag)
+            return false;
 
         // Convert only if the other parameter is not a matrix nor an array (which would force the result to be a matrix).
         if ((*pppToken[0])->GetType() == svDoubleRef && (*pppToken[1])->GetType() != svMatrix && (*pppToken[1])->IsInForceArray())
             ReplaceDoubleRefII(pppToken[0]);
         if ((*pppToken[1])->GetType() == svDoubleRef && (*pppToken[0])->GetType() != svMatrix && (*pppToken[0])->IsInForceArray())
             ReplaceDoubleRefII(pppToken[1]);
+        return true;
     }
     else if ((nOpCode >= SC_OPCODE_START_UN_OP && nOpCode < SC_OPCODE_STOP_UN_OP)
               || nOpCode == ocPercentSign)
     {
         if (nNumParams != 1)
-            return;
+            return false;
 
-        if (eClass == formula::ForceArray || mbMatrixFlag)
-            return;
+        assert( parameterMayBeII( token, 0 ));
+
+        if (token->IsInForceArray() || mbMatrixFlag)
+            return false;
 
         if ((*pppToken[0])->GetType() == svDoubleRef)
             ReplaceDoubleRefII(pppToken[0]);
+        return true;
     }
+    else if (nOpCode == ocVLookup)
+    {
+        if (nNumParams != 3 && nNumParams != 4)
+            return false;
+
+        if (token->IsInForceArray() || mbMatrixFlag)
+            return false;
+
+        assert( parameterMayBeII( token, 0 ));
+        assert( !parameterMayBeII( token, 1 ));
+        assert( parameterMayBeII( token, 2 ));
+        assert( parameterMayBeII( token, 3 ));
+        if ((*pppToken[2])->GetType() == svDoubleRef)
+            ReplaceDoubleRefII(pppToken[2]);
+        if ((*pppToken[0])->GetType() == svDoubleRef)
+            ReplaceDoubleRefII(pppToken[0]);
+        if (nNumParams == 4 && (*pppToken[3])->GetType() == svDoubleRef)
+            ReplaceDoubleRefII(pppToken[3]);
+        // a range for the second parameters is not an implicit intersection
+        mUnhandledPossibleImplicitIntersections.erase( *pppToken[ 1 ] );
+        return true;
+    }
+    else
+    {
+        switch(nOpCode)
+        {
+            // functions which accept ranges as parameters (i.e. no implicit intersection)
+            case ocPearson:
+            case ocSlope:
+                // all parameters have been handled, they are not implicit intersections
+                for( int i = 0; i < nNumParams; ++i )
+                {
+                    assert( !parameterMayBeII( token, i ));
+                    mUnhandledPossibleImplicitIntersections.erase( *pppToken[ i ] );
+                }
+                return true;
+            default:
+                break;
+        }
+    }
+
+    return false;
 }
 
 void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
