@@ -693,9 +693,8 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect
 
 DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
 {
-    if( pCharWidths )
-        if( !GetCharWidths( pCharWidths ) )
-            return 0;
+    if (pCharWidths)
+        GetCharWidths(pCharWidths);
 
     return GetTextWidth();
 }
@@ -877,8 +876,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
     std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[nCharCapacity]);
-    if (!GetCharWidths(pCharWidths.get()))
-        return -1;
+    GetCharWidths(pCharWidths.get());
 
     DeviceCoordinate nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
