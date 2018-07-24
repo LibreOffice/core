@@ -171,6 +171,29 @@ static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int
      return false;
  }
 
+// This is (meant to be) functionally equivalent to 'delete m_pNext' where
+// deleting a SwLineLayout recursively deletes the owned m_pNext SwLineLayout.
+//
+// Here, instead of using a potentially deep stack, iterate over all the
+// SwLineLayouts that would be deleted recursively and delete them linearly
+void SwLineLayout::DeleteNext()
+{
+    if (!m_pNext)
+        return;
+    std::vector<SwLineLayout*> aNexts;
+    SwLineLayout* pNext = m_pNext;
+    do
+    {
+        aNexts.push_back(pNext);
+        SwLineLayout* pLastNext = pNext;
+        pNext = pNext->GetNext();
+        pLastNext->SetNext(nullptr);
+    }
+    while (pNext);
+    for (auto a : aNexts)
+        delete a;
+}
+
 // class SwLineLayout: This is the layout of a single line, which is made
 // up of its dimension, the character count and the word spacing in the line.
 // Line objects are managed in an own pool, in order to store them continuously
@@ -178,7 +201,7 @@ static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int
 SwLineLayout::~SwLineLayout()
 {
     Truncate();
-    delete m_pNext;
+    DeleteNext();
     if( pBlink )
         pBlink->Delete( this );
     m_pLLSpaceAdd.reset();
