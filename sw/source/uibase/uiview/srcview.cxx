@@ -234,7 +234,7 @@ SwSrcView::~SwSrcView()
     pDocShell->SetAutoLoad(INetURLObject(url), delay,
                             (delay != 0) || !url.isEmpty());
     EndListening(*pDocShell);
-    delete pSearchItem;
+    pSearchItem.reset();
 
     aEditWin.disposeAndClear();
 }
@@ -548,15 +548,14 @@ SvxSearchItem* SwSrcView::GetSearchItem()
 {
     if(!pSearchItem)
     {
-        pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
+        pSearchItem.reset(new SvxSearchItem(SID_SEARCH_ITEM));
     }
-    return pSearchItem;
+    return pSearchItem.get();
 }
 
 void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 {
-    delete pSearchItem;
-    pSearchItem = static_cast<SvxSearchItem*>(rItem.Clone());
+    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
 }
 
 void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,

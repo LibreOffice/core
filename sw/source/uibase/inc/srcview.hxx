@@ -34,7 +34,7 @@ class SwSrcView: public SfxViewShell
 {
     VclPtr<SwSrcEditWindow> aEditWin;
 
-    SvxSearchItem*      pSearchItem;
+    std::unique_ptr<SvxSearchItem> pSearchItem;
 
     bool                bSourceSaved    :1;
     rtl_TextEncoding    eLoadEncoding;
