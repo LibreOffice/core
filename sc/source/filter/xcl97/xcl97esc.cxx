@@ -383,6 +383,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
     {
         pCurrXclObj = aStack.top().first;
         pCurrAppData = std::move(aStack.top().second);
+        aStack.pop();
     }
     if( nAdditionalText == 3 )
         nAdditionalText = 0;
