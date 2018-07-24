@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b23bcccf",
+        "filename": "sw/source/ui/dbui/mmlayoutpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T13:22:37Z",
+      "side": 1,
+      "message": "we use prefix r for references - did you intend to use const ref here maybe? And for rCurrent - should be nCurrent",
+      "range": {
+        "startLine": 420,
+        "startChar": 28,
+        "endLine": 420,
+        "endChar": 29
+      },
+      "revId": "97786d4d78fb0cfb21cca705ff3dc280a764fcbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

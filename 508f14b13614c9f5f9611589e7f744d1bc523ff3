@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f22154a1",
+        "filename": "sw/source/ui/dbui/mmlayoutpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-24T13:22:37Z",
+      "side": 0,
+      "message": "This check gets lost in the result (unlike the one in line 528 above) - is it not required?",
+      "range": {
+        "startLine": 607,
+        "startChar": 24,
+        "endLine": 607,
+        "endChar": 72
+      },
+      "revId": "508f14b13614c9f5f9611589e7f744d1bc523ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
