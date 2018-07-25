@@ -62,7 +62,7 @@ ORowSetValue OOp_Char::operate(const std::vector<ORowSetValue>& lhs) const
     if ( lhs.empty() )
         return ORowSetValue();
 
-    OUString sRet;
+    OUStringBuffer sRet;
     std::vector<ORowSetValue>::const_reverse_iterator aIter = lhs.rbegin();
     std::vector<ORowSetValue>::const_reverse_iterator aEnd = lhs.rend();
     for (; aIter != aEnd; ++aIter)
@@ -71,11 +71,11 @@ ORowSetValue OOp_Char::operate(const std::vector<ORowSetValue>& lhs) const
         {
             sal_Char c = static_cast<sal_Char>(static_cast<sal_Int32>(*aIter));
 
-            sRet += OUString(&c,1,RTL_TEXTENCODING_ASCII_US);
+            sRet.appendAscii(&c, 1);
         }
     }
 
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 ORowSetValue OOp_Concat::operate(const std::vector<ORowSetValue>& lhs) const
