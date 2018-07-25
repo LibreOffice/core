@@ -552,6 +552,20 @@ void ScUndoDeleteCells::Undo()
     BeginUndo();
     DoChange( true );
     EndUndo();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    // Now that DBData have been restored in ScMoveUndo::EndUndo() via its
+    // pRefUndoDoc we can apply the AutoFilter buttons.
+    // Add one row for cases undoing deletion right above a cut AutoFilter
+    // range so the buttons are removed.
+    SCROW nRefreshEndRow = std::min<SCROW>( aEffRange.aEnd.Row() + 1, MAXROW);
+    for (SCTAB i=0; i < nCount; ++i)
+    {
+        rDoc.RefreshAutoFilter( aEffRange.aStart.Col(), aEffRange.aStart.Row(),
+                aEffRange.aEnd.Col(), nRefreshEndRow, pTabs[i]);
+    }
+
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
     // Selection not until EndUndo
@@ -564,7 +578,6 @@ void ScUndoDeleteCells::Undo()
         }
     }
 
-    ScDocument& rDoc = pDocShell->GetDocument();
     for (SCTAB i = 0; i < nCount; ++i)
         rDoc.SetDrawPageSize(pTabs[i]);
 }
@@ -575,13 +588,21 @@ void ScUndoDeleteCells::Redo()
     BeginRedo();
     DoChange( false);
     EndRedo();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    for (SCTAB i=0; i < nCount; ++i)
+    {
+        rDoc.RefreshAutoFilter( aEffRange.aStart.Col(), aEffRange.aStart.Row(),
+                aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]);
+    }
+
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->DoneBlockMode();            // current way
 
-    ScDocument& rDoc = pDocShell->GetDocument();
     for (SCTAB i = 0; i < nCount; ++i)
         rDoc.SetDrawPageSize(pTabs[i]);
 }
