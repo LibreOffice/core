@@ -240,7 +240,7 @@ private:
 private:
     EditEngine&         mrEE;               /// The header/footer edit engine.
     XclImpHFPortionInfoVec maInfos;         /// Edit engine text objects for all portions.
-    OUString            maCurrText;         /// Current text to insert into edit engine.
+    OUStringBuffer      maCurrText;         /// Current text to insert into edit engine.
     XclFontDataPtr      mxFontData;         /// Font data of current text.
     XclImpHFPortion     meCurrObj;          /// The current portion.
 };
