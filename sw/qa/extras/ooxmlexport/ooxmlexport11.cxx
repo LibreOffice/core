@@ -158,6 +158,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116410, "tdf116410.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf117988, "tdf117988.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
 {
     // This was 2096, the horizontal positioning of the star shape affected the
