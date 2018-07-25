@@ -234,7 +234,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCon
         {
             if(pBkmk->GetMarkPos().nContent.GetIndex() < nContent)
             {
-                const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
             else // if a bookmark position is equal nContent, the other position
@@ -246,10 +246,10 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCon
         {
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
-                const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
-            const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
+            const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
             m_aBkmkEntries.push_back(aEntry);
         }
     }
