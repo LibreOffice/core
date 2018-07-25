@@ -39,6 +39,7 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/settings.hxx>
@@ -938,8 +939,7 @@ SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId)
 WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase)
     : WW8PLCFx(rFib, true), pPcdI(pPLCFx_PCD->GetPLCFIter()),
-    pPcd(pPLCFx_PCD), pGrpprls(pBase->m_aPieceGrpprls.data()),
-    nGrpprls(pBase->m_aPieceGrpprls.size())
+    pPcd(pPLCFx_PCD), mrGrpprls(pBase->m_aPieceGrpprls)
 {
 }
 
@@ -986,7 +986,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         // PRM Variant 2
         const sal_uInt16 nSprmIdx = nPrm >> 1;
 
-        if( nSprmIdx >= nGrpprls )
+        if( nSprmIdx >= mrGrpprls.size() )
         {
             // Invalid Index
             p->nStartPos = p->nEndPos = WW8_CP_MAX;
@@ -994,7 +994,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             p->nSprmsLen = 0;
             return;
         }
-        const sal_uInt8* pSprms = pGrpprls[ nSprmIdx ];
+        const sal_uInt8* pSprms = mrGrpprls[ nSprmIdx ].get();
 
         p->nSprmsLen = SVBT16ToShort( pSprms ); // Length
         pSprms += 2;
@@ -1662,7 +1662,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 }
 
 //      class WW8ScannerBase
-WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
+std::unique_ptr<WW8PLCFpcd> WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
 {
     if ( ((8 > m_pWw8Fib->m_nVersion) && !pWwF->m_fComplex) || !pWwF->m_lcbClx )
         return nullptr;
@@ -1696,14 +1696,13 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
                 return nullptr;
             if (nLen > pStr->remainingSize())
                 return nullptr;
-            sal_uInt8* p = new sal_uInt8[nLen+2];         // allocate
-            ShortToSVBT16(nLen, p);             // add length
-            if (!checkRead(*pStr, p+2, nLen))   // read grpprl
+            std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[nLen+2]);         // allocate
+            ShortToSVBT16(nLen, p.get());             // add length
+            if (!checkRead(*pStr, p.get()+2, nLen))   // read grpprl
             {
-                delete[] p;
                 return nullptr;
             }
-            m_aPieceGrpprls.push_back(p);    // add to array
+            m_aPieceGrpprls.push_back(std::move(p));    // add to array
         }
         else
         {
@@ -1723,7 +1722,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     else
         pStr->ReadInt32( nPLCFfLen );
     OSL_ENSURE( 65536 > nPLCFfLen, "PLCFfpcd above 64 k" );
-    return new WW8PLCFpcd( pStr, pStr->Tell(), nPLCFfLen, 8 );
+    return o3tl::make_unique<WW8PLCFpcd>( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
 
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
@@ -1735,11 +1734,11 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     m_pPiecePLCF = OpenPieceTable( pTableSt, m_pWw8Fib );             // Complex
     if( m_pPiecePLCF )
     {
-        m_pPieceIter = new WW8PLCFpcd_Iter( *m_pPiecePLCF );
-        m_pPLCFx_PCD = new WW8PLCFx_PCD(*pWwFib, m_pPiecePLCF, 0,
-            IsSevenMinus(m_pWw8Fib->GetFIBVersion()));
-        m_pPLCFx_PCDAttrs = new WW8PLCFx_PCDAttrs(*pWwFib,
-            m_pPLCFx_PCD, this);
+        m_pPieceIter.reset(new WW8PLCFpcd_Iter( *m_pPiecePLCF ));
+        m_pPLCFx_PCD.reset( new WW8PLCFx_PCD(*pWwFib, m_pPiecePLCF.get(), 0,
+            IsSevenMinus(m_pWw8Fib->GetFIBVersion())));
+        m_pPLCFx_PCDAttrs.reset(new WW8PLCFx_PCDAttrs(*pWwFib,
+            m_pPLCFx_PCD.get(), this));
     }
     else
     {
@@ -1749,38 +1748,38 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     }
 
     // pChpPLCF and pPapPLCF may NOT be created before pPLCFx_PCD !!
-    m_pChpPLCF = new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, CHP ); // CHPX
-    m_pPapPLCF = new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, PAP ); // PAPX
+    m_pChpPLCF.reset(new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, CHP )); // CHPX
+    m_pPapPLCF.reset(new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, PAP )); // PAPX
 
-    m_pSepPLCF = new WW8PLCFx_SEPX(   pSt, pTableSt, *pWwFib, 0 );          // SEPX
+    m_pSepPLCF.reset(new WW8PLCFx_SEPX(   pSt, pTableSt, *pWwFib, 0 ));          // SEPX
 
     // Footnotes
-    m_pFootnotePLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
+    m_pFootnotePLCF.reset(new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcffndRef, pWwFib->m_lcbPlcffndRef, pWwFib->m_fcPlcffndText,
-        pWwFib->m_lcbPlcffndText, 2 );
+        pWwFib->m_lcbPlcffndText, 2 ));
     // Endnotes
-    m_pEdnPLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
+    m_pEdnPLCF.reset(new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcfendRef, pWwFib->m_lcbPlcfendRef, pWwFib->m_fcPlcfendText,
-        pWwFib->m_lcbPlcfendText, 2 );
+        pWwFib->m_lcbPlcfendText, 2 ));
     // Comments
-    m_pAndPLCF = new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
+    m_pAndPLCF.reset(new WW8PLCFx_SubDoc( pTableSt, *pWwFib, 0,
         pWwFib->m_fcPlcfandRef, pWwFib->m_lcbPlcfandRef, pWwFib->m_fcPlcfandText,
-        pWwFib->m_lcbPlcfandText, IsSevenMinus(pWwFib->GetFIBVersion()) ? 20 : 30);
+        pWwFib->m_lcbPlcfandText, IsSevenMinus(pWwFib->GetFIBVersion()) ? 20 : 30));
 
     // Fields Main Text
-    m_pFieldPLCF    = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_MAINTEXT);
+    m_pFieldPLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_MAINTEXT));
     // Fields Header / Footer
-    m_pFieldHdFtPLCF= new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_HDFT);
+    m_pFieldHdFtPLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_HDFT));
     // Fields Footnote
-    m_pFieldFootnotePLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_FTN);
+    m_pFieldFootnotePLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_FTN));
     // Fields Endnote
-    m_pFieldEdnPLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_EDN);
+    m_pFieldEdnPLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_EDN));
     // Fields Comments
-    m_pFieldAndPLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_AND);
+    m_pFieldAndPLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_AND));
     // Fields in Textboxes in Main Text
-    m_pFieldTxbxPLCF= new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_TXBX);
+    m_pFieldTxbxPLCF.reset(new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_TXBX));
     // Fields in Textboxes in Header / Footer
-    m_pFieldTxbxHdFtPLCF = new WW8PLCFx_FLD(pTableSt,*pWwFib,MAN_TXBX_HDFT);
+    m_pFieldTxbxHdFtPLCF.reset(new WW8PLCFx_FLD(pTableSt,*pWwFib,MAN_TXBX_HDFT));
 
     // Note: 6 stands for "6 OR 7",  7 stands for "ONLY 7"
     switch( m_pWw8Fib->m_nVersion )
@@ -1789,49 +1788,49 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
         case 7:
             if( pWwFib->m_fcPlcfdoaMom && pWwFib->m_lcbPlcfdoaMom )
             {
-                m_pMainFdoa = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfdoaMom,
-                    pWwFib->m_lcbPlcfdoaMom, 6 );
+                m_pMainFdoa.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfdoaMom,
+                    pWwFib->m_lcbPlcfdoaMom, 6 ));
             }
             if( pWwFib->m_fcPlcfdoaHdr && pWwFib->m_lcbPlcfdoaHdr )
             {
-                m_pHdFtFdoa = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfdoaHdr,
-                pWwFib->m_lcbPlcfdoaHdr, 6 );
+                m_pHdFtFdoa.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfdoaHdr,
+                pWwFib->m_lcbPlcfdoaHdr, 6 ));
             }
             break;
         case 8:
             if( pWwFib->m_fcPlcfspaMom && pWwFib->m_lcbPlcfspaMom )
             {
-                m_pMainFdoa = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfspaMom,
-                    pWwFib->m_lcbPlcfspaMom, 26 );
+                m_pMainFdoa.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfspaMom,
+                    pWwFib->m_lcbPlcfspaMom, 26 ));
             }
             if( pWwFib->m_fcPlcfspaHdr && pWwFib->m_lcbPlcfspaHdr )
             {
-                m_pHdFtFdoa = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfspaHdr,
-                    pWwFib->m_lcbPlcfspaHdr, 26 );
+                m_pHdFtFdoa.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfspaHdr,
+                    pWwFib->m_lcbPlcfspaHdr, 26 ));
             }
             // PLCF for TextBox break-descriptors in the main text
             if( pWwFib->m_fcPlcftxbxBkd && pWwFib->m_lcbPlcftxbxBkd )
             {
-                m_pMainTxbxBkd = new WW8PLCFspecial( pTableSt,
-                    pWwFib->m_fcPlcftxbxBkd, pWwFib->m_lcbPlcftxbxBkd, 0);
+                m_pMainTxbxBkd.reset(new WW8PLCFspecial( pTableSt,
+                    pWwFib->m_fcPlcftxbxBkd, pWwFib->m_lcbPlcftxbxBkd, 0));
             }
             // PLCF for TextBox break-descriptors in Header/Footer range
             if( pWwFib->m_fcPlcfHdrtxbxBkd && pWwFib->m_lcbPlcfHdrtxbxBkd )
             {
-                m_pHdFtTxbxBkd = new WW8PLCFspecial( pTableSt,
-                    pWwFib->m_fcPlcfHdrtxbxBkd, pWwFib->m_lcbPlcfHdrtxbxBkd, 0);
+                m_pHdFtTxbxBkd.reset(new WW8PLCFspecial( pTableSt,
+                    pWwFib->m_fcPlcfHdrtxbxBkd, pWwFib->m_lcbPlcfHdrtxbxBkd, 0));
             }
             // Sub table cp positions
             if (pWwFib->m_fcPlcfTch && pWwFib->m_lcbPlcfTch)
             {
-                m_pMagicTables = new WW8PLCFspecial( pTableSt,
-                    pWwFib->m_fcPlcfTch, pWwFib->m_lcbPlcfTch, 4);
+                m_pMagicTables.reset(new WW8PLCFspecial( pTableSt,
+                    pWwFib->m_fcPlcfTch, pWwFib->m_lcbPlcfTch, 4));
             }
             // Sub document cp positions
             if (pWwFib->m_fcPlcfwkb && pWwFib->m_lcbPlcfwkb)
             {
-                m_pSubdocs = new WW8PLCFspecial( pTableSt,
-                    pWwFib->m_fcPlcfwkb, pWwFib->m_lcbPlcfwkb, 12);
+                m_pSubdocs.reset(new WW8PLCFspecial( pTableSt,
+                    pWwFib->m_fcPlcfwkb, pWwFib->m_lcbPlcfwkb, 12));
             }
             // Extended ATRD
             if (pWwFib->m_fcAtrdExtra && pWwFib->m_lcbAtrdExtra)
@@ -1857,54 +1856,53 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     sal_uInt32 nLenTxBxS = (8 > m_pWw8Fib->m_nVersion) ? 0 : 22;
     if( pWwFib->m_fcPlcftxbxText && pWwFib->m_lcbPlcftxbxText )
     {
-        m_pMainTxbx = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcftxbxText,
-            pWwFib->m_lcbPlcftxbxText, nLenTxBxS );
+        m_pMainTxbx.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcftxbxText,
+            pWwFib->m_lcbPlcftxbxText, nLenTxBxS ));
     }
 
     // PLCF for TextBox stories in Header/Footer range
     if( pWwFib->m_fcPlcfHdrtxbxText && pWwFib->m_lcbPlcfHdrtxbxText )
     {
-        m_pHdFtTxbx = new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfHdrtxbxText,
-            pWwFib->m_lcbPlcfHdrtxbxText, nLenTxBxS );
+        m_pHdFtTxbx.reset(new WW8PLCFspecial( pTableSt, pWwFib->m_fcPlcfHdrtxbxText,
+            pWwFib->m_lcbPlcfHdrtxbxText, nLenTxBxS ));
     }
 
-    m_pBook = new WW8PLCFx_Book(pTableSt, *pWwFib);
-    m_pAtnBook = new WW8PLCFx_AtnBook(pTableSt, *pWwFib);
-    m_pFactoidBook = new WW8PLCFx_FactoidBook(pTableSt, *pWwFib);
+    m_pBook.reset(new WW8PLCFx_Book(pTableSt, *pWwFib));
+    m_pAtnBook.reset(new WW8PLCFx_AtnBook(pTableSt, *pWwFib));
+    m_pFactoidBook.reset(new WW8PLCFx_FactoidBook(pTableSt, *pWwFib));
 }
 
 WW8ScannerBase::~WW8ScannerBase()
 {
-    for (auto pGrppl : m_aPieceGrpprls)
-        delete[] pGrppl;
-    delete m_pPLCFx_PCDAttrs;
-    delete m_pPLCFx_PCD;
-    delete m_pPieceIter;
-    delete m_pPiecePLCF;
-    delete m_pFactoidBook;
-    delete m_pAtnBook;
-    delete m_pBook;
-    delete m_pFieldEdnPLCF;
-    delete m_pFieldFootnotePLCF;
-    delete m_pFieldAndPLCF;
-    delete m_pFieldHdFtPLCF;
-    delete m_pFieldPLCF;
-    delete m_pFieldTxbxPLCF;
-    delete m_pFieldTxbxHdFtPLCF;
-    delete m_pEdnPLCF;
-    delete m_pFootnotePLCF;
-    delete m_pAndPLCF;
-    delete m_pSepPLCF;
-    delete m_pPapPLCF;
-    delete m_pChpPLCF;
-    delete m_pMainFdoa;
-    delete m_pHdFtFdoa;
-    delete m_pMainTxbx;
-    delete m_pMainTxbxBkd;
-    delete m_pHdFtTxbx;
-    delete m_pHdFtTxbxBkd;
-    delete m_pMagicTables;
-    delete m_pSubdocs;
+    m_aPieceGrpprls.clear();
+    m_pPLCFx_PCDAttrs.reset();
+    m_pPLCFx_PCD.reset();
+    m_pPieceIter.reset();
+    m_pPiecePLCF.reset();
+    m_pFactoidBook.reset();
+    m_pAtnBook.reset();
+    m_pBook.reset();
+    m_pFieldEdnPLCF.reset();
+    m_pFieldFootnotePLCF.reset();
+    m_pFieldAndPLCF.reset();
+    m_pFieldHdFtPLCF.reset();
+    m_pFieldPLCF.reset();
+    m_pFieldTxbxPLCF.reset();
+    m_pFieldTxbxHdFtPLCF.reset();
+    m_pEdnPLCF.reset();
+    m_pFootnotePLCF.reset();
+    m_pAndPLCF.reset();
+    m_pSepPLCF.reset();
+    m_pPapPLCF.reset();
+    m_pChpPLCF.reset();
+    m_pMainFdoa.reset();
+    m_pHdFtFdoa.reset();
+    m_pMainTxbx.reset();
+    m_pMainTxbxBkd.reset();
+    m_pHdFtTxbx.reset();
+    m_pHdFtTxbxBkd.reset();
+    m_pMagicTables.reset();
+    m_pSubdocs.reset();
 }
 
 // Fields
@@ -3326,7 +3324,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     ResetAttrStartEnd();
 
     if (rSBase.m_pPiecePLCF)
-        pPcd.reset( new WW8PLCFx_PCD(GetFIB(), rBase.m_pPiecePLCF, 0, IsSevenMinus(GetFIBVersion())) );
+        pPcd.reset( new WW8PLCFx_PCD(GetFIB(), rBase.m_pPiecePLCF.get(), 0, IsSevenMinus(GetFIBVersion())) );
 
     /*
     Make a copy of the piece attributes for so that the calls to HasSprm on a
@@ -3340,7 +3338,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
             *rSBase.m_pWw8Fib, pPcd.get(), &rSBase) : nullptr);
     }
 
-    pPieceIter = rSBase.m_pPieceIter;
+    pPieceIter = rSBase.m_pPieceIter.get();
 }
 
 WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
@@ -4942,9 +4940,9 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         m_pFootnote = &m_aD[3];
         m_pAnd = &m_aD[4];
 
-        m_pPcd = ( pBase->m_pPLCFx_PCD ) ? &m_aD[5] : nullptr;
+        m_pPcd = pBase->m_pPLCFx_PCD ? &m_aD[5] : nullptr;
         //pPcdA index == pPcd index + 1
-        m_pPcdA = ( pBase->m_pPLCFx_PCDAttrs ) ? &m_aD[6] : nullptr;
+        m_pPcdA = pBase->m_pPLCFx_PCDAttrs ? &m_aD[6] : nullptr;
 
         m_pChp = &m_aD[7];
         m_pPap = &m_aD[8];
@@ -4952,13 +4950,13 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         m_pAtnBkm = &m_aD[10];
         m_pFactoidBkm = &m_aD[11];
 
-        m_pSep->pPLCFx = pBase->m_pSepPLCF;
-        m_pFootnote->pPLCFx = pBase->m_pFootnotePLCF;
-        m_pEdn->pPLCFx = pBase->m_pEdnPLCF;
-        m_pBkm->pPLCFx = pBase->m_pBook;
-        m_pAnd->pPLCFx = pBase->m_pAndPLCF;
-        m_pAtnBkm->pPLCFx = pBase->m_pAtnBook;
-        m_pFactoidBkm->pPLCFx = pBase->m_pFactoidBook;
+        m_pSep->pPLCFx = pBase->m_pSepPLCF.get();
+        m_pFootnote->pPLCFx = pBase->m_pFootnotePLCF.get();
+        m_pEdn->pPLCFx = pBase->m_pEdnPLCF.get();
+        m_pBkm->pPLCFx = pBase->m_pBook.get();
+        m_pAnd->pPLCFx = pBase->m_pAndPLCF.get();
+        m_pAtnBkm->pPLCFx = pBase->m_pAtnBook.get();
+        m_pFactoidBkm->pPLCFx = pBase->m_pFactoidBook.get();
 
     }
     else
@@ -4966,11 +4964,11 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         // search order of the attributes
         m_nPLCF = 7;
         m_pField = &m_aD[0];
-        m_pBkm = ( pBase->m_pBook ) ? &m_aD[1] : nullptr;
+        m_pBkm = pBase->m_pBook ? &m_aD[1] : nullptr;
 
-        m_pPcd = ( pBase->m_pPLCFx_PCD ) ? &m_aD[2] : nullptr;
+        m_pPcd = pBase->m_pPLCFx_PCD ? &m_aD[2] : nullptr;
         //pPcdA index == pPcd index + 1
-        m_pPcdA= ( pBase->m_pPLCFx_PCDAttrs ) ? &m_aD[3] : nullptr;
+        m_pPcdA= pBase->m_pPLCFx_PCDAttrs ? &m_aD[3] : nullptr;
 
         m_pChp = &m_aD[4];
         m_pPap = &m_aD[5];
@@ -4979,56 +4977,56 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         m_pAnd = m_pAtnBkm = m_pFactoidBkm = m_pFootnote = m_pEdn = nullptr;     // not used at SpezText
     }
 
-    m_pChp->pPLCFx = pBase->m_pChpPLCF;
-    m_pPap->pPLCFx = pBase->m_pPapPLCF;
+    m_pChp->pPLCFx = pBase->m_pChpPLCF.get();
+    m_pPap->pPLCFx = pBase->m_pPapPLCF.get();
     if( m_pPcd )
-        m_pPcd->pPLCFx = pBase->m_pPLCFx_PCD;
+        m_pPcd->pPLCFx = pBase->m_pPLCFx_PCD.get();
     if( m_pPcdA )
-        m_pPcdA->pPLCFx= pBase->m_pPLCFx_PCDAttrs;
+        m_pPcdA->pPLCFx= pBase->m_pPLCFx_PCDAttrs.get();
     if( m_pBkm )
-        m_pBkm->pPLCFx = pBase->m_pBook;
+        m_pBkm->pPLCFx = pBase->m_pBook.get();
 
-    m_pMagicTables = pBase->m_pMagicTables;
-    m_pSubdocs = pBase->m_pSubdocs;
+    m_pMagicTables = pBase->m_pMagicTables.get();
+    m_pSubdocs = pBase->m_pSubdocs.get();
     m_pExtendedAtrds = pBase->m_pExtendedAtrds.get();
 
     switch( nType )                 // field initialization
     {
         case MAN_HDFT:
-            m_pField->pPLCFx = pBase->m_pFieldHdFtPLCF;
-            m_pFdoa = pBase->m_pHdFtFdoa;
-            m_pTxbx = pBase->m_pHdFtTxbx;
-            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldHdFtPLCF.get();
+            m_pFdoa = pBase->m_pHdFtFdoa.get();
+            m_pTxbx = pBase->m_pHdFtTxbx.get();
+            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd.get();
             break;
         case MAN_FTN:
-            m_pField->pPLCFx = pBase->m_pFieldFootnotePLCF;
+            m_pField->pPLCFx = pBase->m_pFieldFootnotePLCF.get();
             m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_EDN:
-            m_pField->pPLCFx = pBase->m_pFieldEdnPLCF;
+            m_pField->pPLCFx = pBase->m_pFieldEdnPLCF.get();
             m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_AND:
-            m_pField->pPLCFx = pBase->m_pFieldAndPLCF;
+            m_pField->pPLCFx = pBase->m_pFieldAndPLCF.get();
             m_pFdoa = m_pTxbx = m_pTxbxBkd = nullptr;
             break;
         case MAN_TXBX:
-            m_pField->pPLCFx = pBase->m_pFieldTxbxPLCF;
-            m_pTxbx = pBase->m_pMainTxbx;
-            m_pTxbxBkd = pBase->m_pMainTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldTxbxPLCF.get();
+            m_pTxbx = pBase->m_pMainTxbx.get();
+            m_pTxbxBkd = pBase->m_pMainTxbxBkd.get();
             m_pFdoa = nullptr;
             break;
         case MAN_TXBX_HDFT:
-            m_pField->pPLCFx = pBase->m_pFieldTxbxHdFtPLCF;
-            m_pTxbx = pBase->m_pHdFtTxbx;
-            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldTxbxHdFtPLCF.get();
+            m_pTxbx = pBase->m_pHdFtTxbx.get();
+            m_pTxbxBkd = pBase->m_pHdFtTxbxBkd.get();
             m_pFdoa = nullptr;
             break;
         default:
-            m_pField->pPLCFx = pBase->m_pFieldPLCF;
-            m_pFdoa = pBase->m_pMainFdoa;
-            m_pTxbx = pBase->m_pMainTxbx;
-            m_pTxbxBkd = pBase->m_pMainTxbxBkd;
+            m_pField->pPLCFx = pBase->m_pFieldPLCF.get();
+            m_pFdoa = pBase->m_pMainFdoa.get();
+            m_pTxbx = pBase->m_pMainTxbx.get();
+            m_pTxbxBkd = pBase->m_pMainTxbxBkd.get();
             break;
     }
 
