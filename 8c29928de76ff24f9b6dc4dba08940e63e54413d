@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_b3406e37",
+        "filename": "sc/source/filter/rtf/eeimpars.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-25T22:35:23Z",
+      "side": 1,
+      "message": "This is a tad odd.. additionally to nCol\u003c\u003dMAXCOL, which is also checked below, ValidCol() checks nCol\u003e\u003d0, but nCol above should not be initialized negative unless there\u0027s already maRange.aStart.Col()\u003c0 or a stray pE-\u003enCol\n\nAnyway, in case that is the case it can\u0027t get worse..",
+      "revId": "8c29928de76ff24f9b6dc4dba08940e63e54413d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
