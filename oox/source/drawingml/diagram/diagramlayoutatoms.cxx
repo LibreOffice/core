@@ -254,13 +254,15 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             for (const auto & rConstr : rConstraints)
             {
                 const LayoutPropertyMap::const_iterator aRef = aProperties.find(rConstr.msRefForName);
-                if (aRef != aProperties.end())
+                if(rConstr.mfValue)
+                   aProperties[rConstr.msForName][rConstr.mnType] = rConstr.mfValue;
+                else if (aRef != aProperties.end())
                 {
                     const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstr.mnRefType);
                     if (aRefType != aRef->second.end())
                         aProperties[rConstr.msForName][rConstr.mnType] = aRefType->second * rConstr.mfFactor;
                     else
-                        aProperties[rConstr.msForName][rConstr.mnType] = 0; // TODO: val
+                        aProperties[rConstr.msForName][rConstr.mnType] = 0;
                 }
             }
 
