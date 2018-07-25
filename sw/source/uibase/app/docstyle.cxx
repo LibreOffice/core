@@ -1781,70 +1781,70 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
     {
     case SfxStyleFamily::Char:
         {
-            std::deque<sal_uInt16> aDelArr;
+            std::vector<sal_uInt16> aDelArr;
             const SwCharFormats& rTable = *rDoc.GetCharFormats();
             for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( n );
+                    aDelArr.push_back( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelCharFormat( aDelArr[ n ] );
+            for( auto it = aDelArr.rbegin(); it != aDelArr.rend(); ++it )
+                rDoc.DelCharFormat( *it );
         }
         break;
 
     case SfxStyleFamily::Para :
         {
-            std::deque<sal_uInt16> aDelArr;
+            std::vector<sal_uInt16> aDelArr;
             const SwTextFormatColls& rTable = *rDoc.GetTextFormatColls();
             for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( n );
+                    aDelArr.push_back( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelTextFormatColl( aDelArr[ n ] );
+            for( auto it = aDelArr.rbegin(); it != aDelArr.rend(); ++it )
+                rDoc.DelTextFormatColl( *it );
         }
         break;
 
     case SfxStyleFamily::Frame:
         {
-            std::deque<SwFrameFormat*> aDelArr;
+            std::vector<SwFrameFormat*> aDelArr;
             const SwFrameFormats& rTable = *rDoc.GetFrameFormats();
             for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( rTable[ n ] );
+                    aDelArr.push_back( rTable[ n ] );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelFrameFormat( aDelArr[ n ] );
+            for( auto it = aDelArr.rbegin(); it != aDelArr.rend(); ++it )
+                rDoc.DelFrameFormat( *it );
         }
         break;
 
     case SfxStyleFamily::Page:
         {
-            std::deque<size_t> aDelArr;
+            std::vector<size_t> aDelArr;
             for( n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, &rDoc.GetPageDesc( n ) ))
-                    aDelArr.push_front( n );
+                    aDelArr.push_back( n );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelPageDesc( aDelArr[ n ] );
+            for( auto it = aDelArr.rbegin(); it != aDelArr.rend(); ++it )
+                rDoc.DelPageDesc( *it );
         }
         break;
 
     case SfxStyleFamily::Pseudo:
         {
-            std::deque<SwNumRule*> aDelArr;
+            std::vector<SwNumRule*> aDelArr;
             const SwNumRuleTable& rTable = rDoc.GetNumRuleTable();
             for( n = 0, nCnt = rTable.size(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, rTable[ n ] ))
-                    aDelArr.push_front( rTable[ n ] );
+                    aDelArr.push_back( rTable[ n ] );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelNumRule( aDelArr[ n ]->GetName() );
+            for( auto it = aDelArr.rbegin(); it != aDelArr.rend(); ++it )
+                rDoc.DelNumRule( (*it)->GetName() );
         }
         break;
     default: break;
