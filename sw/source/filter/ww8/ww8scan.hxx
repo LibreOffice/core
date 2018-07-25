@@ -1581,13 +1581,12 @@ private:
     WW8Fonts(const WW8Fonts&) = delete;
     WW8Fonts& operator=(const WW8Fonts&) = delete;
 
-    std::unique_ptr<WW8_FFN[]> pFontA;    // Array of Pointers to Font Description
-    sal_uInt16 nMax;        // Array-Size
+    std::vector<WW8_FFN> m_aFontA; // Array of Pointers to Font Description
 
 public:
     WW8Fonts( SvStream& rSt, WW8Fib const & rFib );
     const WW8_FFN* GetFont( sal_uInt16 nNum ) const;
-    sal_uInt16 GetMax() const { return nMax; }
+    sal_uInt16 GetMax() const { return m_aFontA.size(); }
 };
 
 typedef sal_uInt8 HdFtFlags;
