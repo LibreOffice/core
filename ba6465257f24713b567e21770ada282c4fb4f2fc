@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_7280a48c",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-25T02:51:49Z",
+      "side": 1,
+      "message": "Yes that\u0027s reasonable.",
+      "parentUuid": "ffe62b97_7291c499",
+      "range": {
+        "startLine": 781,
+        "startChar": 8,
+        "endLine": 781,
+        "endChar": 18
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_a7f82cc4",
         "filename": "svtools/source/control/ctrlbox.cxx",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Well, considering that class FontSizeNames uses primitive type long for IndexSize and it uses long in some other portions of code when referring to FontSizeNames::Count. I\u0027d say that we could either change the sal_uLong here and at ctrltool.[ch]xx (FontSizeNames class) for long *or* we could normalize this class to use sal_uInt32 which is not as big as long but it should be larger enough since sal_uLong today is already sal_uInt32.",
       "parentUuid": "ffe62b97_a7f82cc4",
+      "range": {
+        "startLine": 1405,
+        "startChar": 12,
+        "endLine": 1405,
+        "endChar": 22
+      },
+      "revId": "ba6465257f24713b567e21770ada282c4fb4f2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_527da0af",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-25T02:51:49Z",
+      "side": 1,
+      "message": "In reality, it is only used for Simplified Chinese, with 26 elements in aImplSimplifiedChinese. So any type would do :-) - so in this case it is not important which type we choose. Personally I\u0027d prefer sal_uInt32 here, and consistent use of it throughout ctrtool.cxx for all cases where we refer to count. ImplFSNameItem::mnSize is long - it\u0027s signed, and I don\u0027t clearly understand its usage; but I guess that for that, we could use sal_Int32, because it\u0027s equivalent to long on Windows. (By the way: re \"sal_uInt32 which is not as big as long\", note that you cannot depend on long being larger than 32-bit; it\u0027s implementation-dependent, and it\u0027s not true for Windows).\n\nSo - please change the array size to use sal_uInt32 everywhere (and check all places that use it), and you may also change ImplFSNameItem::mnSize to sal_Int32.",
+      "parentUuid": "ffe62b97_b2974c91",
       "range": {
         "startLine": 1405,
         "startChar": 12,
