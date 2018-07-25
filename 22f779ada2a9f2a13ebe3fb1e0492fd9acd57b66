@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ed273564",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-25T09:28:00Z",
+      "side": 1,
+      "message": "What \"related alloc\u0027s and free\u0027s\" are that?  From looking at the implementation of OWeakObject, it looks to me that it doesn\u0027t do anything expensive when m_pWeakConnectionPoint is null (which it usually is, unless the XWeak feature is actually used).",
+      "revId": "22f779ada2a9f2a13ebe3fb1e0492fd9acd57b66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
