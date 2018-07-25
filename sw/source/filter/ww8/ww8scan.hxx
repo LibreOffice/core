@@ -584,7 +584,7 @@ public:
 private:
     SvStream* pFKPStrm;         // input file
     SvStream* pDataStrm;        // input file
-    WW8PLCF* pPLCF;
+    std::unique_ptr<WW8PLCF> pPLCF;
 protected:
     WW8Fkp* pFkp;
 private:
@@ -601,7 +601,7 @@ private:
         == 10     : 18549 pap, 47 chp
         == 5      : 18515 pap, 47 chp
     */
-    std::list<WW8Fkp*> maFkpCache;
+    std::list<std::unique_ptr<WW8Fkp>> maFkpCache;
     enum Limits {eMaxCache = 50000};
 
     bool NewFkp();
@@ -611,7 +611,7 @@ private:
 
 protected:
     ePLCFT ePLCF;
-    WW8PLCFx_PCDAttrs* pPCDAttrs;
+    std::unique_ptr<WW8PLCFx_PCDAttrs> pPCDAttrs;
 
 public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
