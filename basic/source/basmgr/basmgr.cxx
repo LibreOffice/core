@@ -561,7 +561,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
             {
                 uno::Any aLibAny = xScriptCont->getByName( *pScriptLibName );
 
-                if ( *pScriptLibName == "Standard" )
+                if ( *pScriptLibName == "Standard" || *pScriptLibName == "VBAProject")
                     xScriptCont->loadLibrary( *pScriptLibName );
 
                 BasMgrContainerListenerImpl::insertLibraryImpl
