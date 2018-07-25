@@ -1102,7 +1102,7 @@ private:
 
     // Query:
 
-    bool clearQuery();
+    void clearQuery();
 
     bool setQuery(
         OUString const & rTheQuery,
@@ -1298,9 +1298,12 @@ inline bool INetURLObject::SetParam(OUString const & rTheQuery,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    return rTheQuery.isEmpty() ?
-               clearQuery() :
-               setQuery(rTheQuery, eMechanism, eCharset);
+    if (rTheQuery.isEmpty())
+    {
+        clearQuery();
+        return false;
+    }
+    return setQuery(rTheQuery, eMechanism, eCharset);
 }
 
 inline bool INetURLObject::SetMark(OUString const & rTheFragment,
