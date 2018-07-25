@@ -2293,7 +2293,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
         aPaM.Move(fnMoveBackward);
         aPaM.Exchange();
 
-        m_pPostProcessAttrsInfo = new WW8PostProcessAttrsInfo(nCp, nCp, aPaM);
+        m_pPostProcessAttrsInfo.reset(new WW8PostProcessAttrsInfo(nCp, nCp, aPaM));
     }
     else
     {
