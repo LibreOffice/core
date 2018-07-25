@@ -78,8 +78,6 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mpMetadataAuthor(nullptr)
     , mpMetadataDate(nullptr)
     , mpMenuButton(nullptr)
-    , mpAnchor(nullptr)
-    , mpShadow(nullptr)
     , mpTextRangeOverlay(nullptr)
     , mColorAnchor()
     , mColorDark()
@@ -166,11 +164,8 @@ void SwAnnotationWin::dispose()
 
     RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
 
-    delete mpAnchor;
-    mpAnchor = nullptr;
-
-    delete mpShadow;
-    mpShadow = nullptr;
+    mpAnchor.reset();
+    mpShadow.reset();
 
     mpTextRangeOverlay.reset();
 
