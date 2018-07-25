@@ -658,7 +658,7 @@ namespace
 {
     bool lcl_CopyStream(const uno::Reference<io::XInputStream>& xIn, const uno::Reference<io::XOutputStream>& xOut, sal_Int32 nMaxCopy = SAL_MAX_INT32)
     {
-        if (nMaxCopy == 0)
+        if (nMaxCopy <= 0)
             return false;
 
         const sal_Int32 nChunkSize = 4096;
