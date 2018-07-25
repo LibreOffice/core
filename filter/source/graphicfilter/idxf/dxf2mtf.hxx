@@ -51,6 +51,7 @@ private:
     Color       aActLineColor;
     Color       aActFillColor;
     vcl::Font   aActFont;
+    const LineInfo aDefaultLineInfo; // to share between lines to reduce memory
 
     static sal_uLong CountEntities(const DXFEntities & rEntities);
 
@@ -99,6 +100,8 @@ private:
 
     void DrawEntities(const DXFEntities & rEntities,
                       const DXFTransform & rTransform);
+
+    void DrawLine(const Point& rA, const Point& rB);
 
 public:
 
