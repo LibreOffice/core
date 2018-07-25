@@ -461,6 +461,7 @@ vcl_headless_code= \
     vcl/headless/svpdummies \
     vcl/headless/svpinst \
     vcl/headless/svpvd \
+    vcl/headless/CustomWidgetDraw \
     vcl/unx/generic/app/gendisp \
     vcl/unx/generic/app/geninst \
     vcl/unx/generic/app/gensys \
