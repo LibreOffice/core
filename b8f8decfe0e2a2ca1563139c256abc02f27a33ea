@@ -16,6 +16,24 @@
       "revId": "b8f8decfe0e2a2ca1563139c256abc02f27a33ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_cdbc716b",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5945,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2018-07-25T13:18:31Z",
+      "side": 1,
+      "message": "No. The list contains svDoubleRef parameters that can possibly lead to implicit intersections, and if it\u0027s non-empty, then OpenCL is not allowed. But in these cases the functions expect a range for the parameter, so it\u0027s not an implicit intersection.",
+      "parentUuid": "ffe62b97_2da19daa",
+      "revId": "b8f8decfe0e2a2ca1563139c256abc02f27a33ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
