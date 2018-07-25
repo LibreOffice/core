@@ -49,8 +49,8 @@ SalFrameGeometry SalFrame::GetGeometry()
 }
 
 SalGraphics::SalGraphics()
-:   m_nLayout( SalLayoutFlags::NONE ),
-    m_bAntiAliasB2DDraw(false)
+    : m_nLayout(SalLayoutFlags::NONE)
+    , m_bAntiAliasB2DDraw(false)
 {
     // read global RTL settings
     if( AllSettings::GetLayoutRTL() )

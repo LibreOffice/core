@@ -25,6 +25,7 @@
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
+#include <WidgetDrawInterface.hxx>
 
 #include <config_cairo_canvas.h>
 
@@ -648,6 +649,12 @@ protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAliasB2DDraw : 1;
 
+    bool hasWidgetDraw()
+    {
+        return bool(m_pWidgetDraw);
+    }
+
+    std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
 };
 
 #endif // INCLUDED_VCL_INC_SALGDI_HXX
