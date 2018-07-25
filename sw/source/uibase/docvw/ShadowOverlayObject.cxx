@@ -156,9 +156,9 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
 
 ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
-/* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView const & rDocView )
+/* static */ std::unique_ptr<ShadowOverlayObject> ShadowOverlayObject::CreateShadowOverlayObject( SwView const & rDocView )
 {
-    ShadowOverlayObject* pShadowOverlayObject( nullptr );
+    std::unique_ptr<ShadowOverlayObject> pShadowOverlayObject;
 
     if ( rDocView.GetDrawView() )
     {
@@ -169,9 +169,9 @@ ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
             if ( xOverlayManager.is() )
             {
-                pShadowOverlayObject = new ShadowOverlayObject( basegfx::B2DPoint(0,0),
+                pShadowOverlayObject.reset( new ShadowOverlayObject( basegfx::B2DPoint(0,0),
                                                                 basegfx::B2DPoint(0,0),
-                                                                Color(0,0,0) );
+                                                                Color(0,0,0) ) );
                 xOverlayManager->add(*pShadowOverlayObject);
             }
         }

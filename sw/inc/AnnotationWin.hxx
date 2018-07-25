@@ -108,8 +108,8 @@ class SwAnnotationWin : public vcl::Window
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
         ScrollBar* Scrollbar() { return mpVScrollbar; }
-        ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor;}
-        ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow;}
+        ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor.get();}
+        ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow.get();}
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
 
         long            GetPostItTextHeight();
@@ -221,8 +221,8 @@ class SwAnnotationWin : public vcl::Window
         VclPtr<Edit>           mpMetadataDate;
         VclPtr<MenuButton>     mpMenuButton;
 
-        sw::sidebarwindows::AnchorOverlayObject* mpAnchor;
-        sw::sidebarwindows::ShadowOverlayObject* mpShadow;
+        std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
+        std::unique_ptr<sw::sidebarwindows::ShadowOverlayObject> mpShadow;
         std::unique_ptr<sw::overlay::OverlayRanges> mpTextRangeOverlay;
 
         Color           mColorAnchor;
