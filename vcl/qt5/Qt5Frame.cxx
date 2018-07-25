@@ -32,6 +32,7 @@
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
 
 #include <saldatabasic.hxx>
 #include <window.h>
@@ -91,10 +92,14 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Window;
     }
 
-    if (pParent)
-        m_pQWidget.reset(createQt5Widget(*this, aWinFlags));
+    if (!pParent && (aWinFlags & Qt::Window))
+    {
+        m_pTopLevel = new QMainWindow(nullptr, aWinFlags);
+        m_pQWidget = createQt5Widget(*this, aWinFlags);
+        m_pTopLevel->setCentralWidget(m_pQWidget);
+    }
     else
-        m_pQWidget.reset(createQMainWindow(*this, aWinFlags));
+        m_pQWidget = createQt5Widget(*this, aWinFlags);
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -107,7 +112,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if (m_bDefaultPos || m_bDefaultSize)
     {
-        Size aDefSize = CalcDefaultSize();
+        Size aDefSize = Size(0, 0); //CalcDefaultSize();
         maGeometry.nX = -1;
         maGeometry.nY = -1;
         maGeometry.nWidth = aDefSize.Width();
@@ -121,6 +126,10 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
 Qt5Frame::~Qt5Frame()
 {
+    if (m_pTopLevel)
+        delete m_pTopLevel;
+    else
+        delete m_pQWidget;
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->eraseFrame(this);
 }
@@ -146,8 +155,9 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
 
 void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
 {
-    int width = m_pQWidget->size().width();
-    int height = m_pQWidget->size().height();
+    QSize qSize = m_pTopLevel ? m_pTopLevel->size() : m_pQWidget->size();
+    int width = qSize.width();
+    int height = qSize.height();
     m_pSvpGraphics = pSvpSalGraphics;
     m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
@@ -165,6 +175,8 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
+        //if( m_pTopLevel)
+        //    m_pTopLevel->show();
         if (!m_pOurSvpGraphics.get())
         {
             m_pOurSvpGraphics.reset(new SvpSalGraphics());
@@ -202,6 +214,22 @@ bool Qt5Frame::PostEvent(ImplSVEvent* pData)
     return true;
 }
 
+bool Qt5Frame::isWindow()
+{
+    if (m_pTopLevel)
+        return m_pTopLevel->isWindow();
+    else
+        return m_pQWidget->isWindow();
+}
+
+QWindow* Qt5Frame::windowHandle()
+{
+    if (m_pTopLevel)
+        return m_pTopLevel->windowHandle();
+    else
+        return m_pQWidget->windowHandle();
+}
+
 void Qt5Frame::SetTitle(const OUString& rTitle)
 {
     m_pQWidget->window()->setWindowTitle(toQString(rTitle));
@@ -213,7 +241,7 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
             & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD
                | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::INTRO
                | SalFrameStyleFlags::OWNERDRAWDECORATION)
-        || !m_pQWidget->isWindow())
+        || !isWindow())
         return;
 
     const char* appicon;
@@ -245,7 +273,7 @@ void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) {}
 
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
-    assert(m_pQWidget.get());
+    assert(m_pQWidget);
     m_pQWidget->setVisible(bVisible);
 }
 
@@ -273,7 +301,7 @@ void Qt5Frame::Center()
 
 Size Qt5Frame::CalcDefaultSize()
 {
-    assert(m_pQWidget->isWindow());
+    assert(isWindow());
     QScreen* pScreen = m_pQWidget->windowHandle()->screen();
     if (!pScreen)
         return Size();
@@ -289,7 +317,7 @@ void Qt5Frame::SetDefaultSize()
 
 void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
-    if (!m_pQWidget->isWindow() || isChild(true, false))
+    if (isWindow() || isChild(true, false))
         return;
 
     if ((nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
@@ -336,9 +364,9 @@ void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
 
 void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
 {
-    if (!m_pQWidget->isWindow())
+    if (!isWindow())
         return;
-    QScreen* pScreen = m_pQWidget->windowHandle()->screen();
+    QScreen* pScreen = m_pTopLevel->windowHandle()->screen();
     if (!pScreen)
         return;
 
@@ -350,19 +378,21 @@ SalFrame* Qt5Frame::GetParent() const { return m_pParent; }
 
 void Qt5Frame::SetModal(bool bModal)
 {
-    if (m_pQWidget->isWindow())
+    if (isWindow())
     {
+        if (m_pTopLevel)
+            m_pTopLevel->show();
         // modality change is only effective if the window is hidden
-        m_pQWidget->windowHandle()->hide();
-        m_pQWidget->windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
+        windowHandle()->hide();
+        windowHandle()->setModality(bModal ? Qt::WindowModal : Qt::NonModal);
         // and shown again
-        m_pQWidget->windowHandle()->show();
+        windowHandle()->show();
     }
 }
 
 void Qt5Frame::SetWindowState(const SalFrameState* pState)
 {
-    if (!m_pQWidget->isWindow() || !pState || isChild(true, false))
+    if (!isWindow() || !pState || isChild(true, false))
         return;
 
     const WindowStateMask nMaxGeometryMask
@@ -400,7 +430,7 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     }
     else if (pState->mnMask & WindowStateMask::State && !isChild())
     {
-        if ((pState->mnState & WindowStateState::Minimized) && m_pQWidget->isWindow())
+        if ((pState->mnState & WindowStateState::Minimized) && isWindow())
             m_pQWidget->showMinimized();
         else
             m_pQWidget->showNormal();
