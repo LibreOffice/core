@@ -107,7 +107,7 @@ struct WritingDirectionInfo
 };
 
 
-typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
+typedef std::vector<WritingDirectionInfo> WritingDirectionInfos;
 
 class ContentAttribsInfo
 {
