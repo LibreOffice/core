@@ -690,7 +690,7 @@ namespace oox { namespace ppt {
                 {
                     // CT_TLPoint
                     css::awt::Point aPoint = GetPointPercent(rAttribs.getFastAttributeList());
-                    // We got ending values instead of offset values, so substract 100% from them.
+                    // We got ending values instead of offset values, so subtract 100% from them.
                     aPoint.X -= 100000;
                     aPoint.Y -= 100000;
                     maBy = convertPointPercent(aPoint);
