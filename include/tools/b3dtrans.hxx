@@ -190,7 +190,7 @@ public:
 
 private:
     void CalcNewViewportValues();
-    bool CalcFocalLength();
+    void CalcFocalLength();
 
     virtual void DeviceRectangleChange() override;
 

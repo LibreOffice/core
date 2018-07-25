@@ -179,7 +179,7 @@ public:
     bool    SetProperty( sal_Int32 nPropertyHandle,
                          const css::uno::Any &rValue );
 
-    bool    GetOptions( SvtLinguOptions &rOptions ) const;
+    void    GetOptions( SvtLinguOptions &rOptions ) const;
 
     bool    IsReadOnly( const OUString &rPropertyName ) const;
 

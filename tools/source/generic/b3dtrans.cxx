@@ -429,8 +429,7 @@ void B3dCamera::CalcNewViewportValues()
     aNewVUV.normalize();
 
     SetViewportValues(aPosition, aNewVPN, aNewVUV);
-    if(CalcFocalLength())
-        SetViewportValues(aCorrectedPosition, aNewVPN, aNewVUV);
+    CalcFocalLength();
 
     if(fBankAngle != 0.0)
     {
@@ -444,7 +443,7 @@ void B3dCamera::CalcNewViewportValues()
     }
 }
 
-bool B3dCamera::CalcFocalLength()
+void B3dCamera::CalcFocalLength()
 {
     double fWidth = GetDeviceRectangleWidth();
 
@@ -455,7 +454,6 @@ bool B3dCamera::CalcFocalLength()
         fFocalLength = aOldPosition.getZ() / fWidth * 35.0;
     if(fFocalLength < 5.0)
         fFocalLength = 5.0;
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
