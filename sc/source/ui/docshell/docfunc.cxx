@@ -2613,15 +2613,15 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if( bDeletingMerge )
         rDocShell.GetUndoManager()->LeaveListAction();
 
+    if ( eCmd==DelCellCmd::Cols || eCmd==DelCellCmd::CellsLeft )
+        nMergeTestEndCol = MAXCOL;
+    if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
+        nMergeTestEndRow = MAXROW;
     if ( bNeedRefresh )
     {
         // #i51445# old merge flag attributes must be deleted also for single cells,
         // not only for whole columns/rows
 
-        if ( eCmd==DelCellCmd::Cols || eCmd==DelCellCmd::CellsLeft )
-            nMergeTestEndCol = MAXCOL;
-        if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
-            nMergeTestEndRow = MAXROW;
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
 
@@ -2638,6 +2638,15 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
             ScRange aMergedRange( nExtendStartCol, nExtendStartRow, *itr, nMergeTestEndCol, nMergeTestEndRow, *itr+nScenarioCount );
             rDoc.ExtendMerge( aMergedRange, true );
+        }
+    }
+    else
+    {
+        itr = aMark.begin();
+        itrEnd = aMark.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        {
+            rDoc.RefreshAutoFilter( nExtendStartCol, nExtendStartRow, nMergeTestEndCol, nMergeTestEndRow, *itr );
         }
     }
 
