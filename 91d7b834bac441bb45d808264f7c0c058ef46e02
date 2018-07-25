@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_0d513937",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-25T13:37:05Z",
+      "side": 1,
+      "message": "formally -\u003e formerly\n\nthat confused me for a moment :-)",
+      "revId": "91d7b834bac441bb45d808264f7c0c058ef46e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_ed45f571",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-25T13:37:05Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "91d7b834bac441bb45d808264f7c0c058ef46e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
