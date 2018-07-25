@@ -74,7 +74,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 {
     if ( !m_pUsedNumTable )
     {
-        m_pUsedNumTable = new SwNumRuleTable;
+        m_pUsedNumTable.reset(new SwNumRuleTable);
         m_pUsedNumTable->insert( m_pUsedNumTable->begin(), m_pDoc->GetNumRuleTable().begin(), m_pDoc->GetNumRuleTable().end() );
         // Check, if the outline rule is already inserted into <pUsedNumTable>.
         // If yes, do not insert it again.
