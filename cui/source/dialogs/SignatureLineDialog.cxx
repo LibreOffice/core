@@ -176,11 +176,13 @@ void SignatureLineDialog::Apply()
         const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
         if (xTextDocument.is())
         {
-            Reference<XText> xText = xTextDocument->getText();
             Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
             Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
                                                                    UNO_QUERY_THROW);
             Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
+            // use cursor's XText - it might be in table cell, frame, ...
+            Reference<XText> const xText(xCursor->getText());
+            assert(xText.is());
             xText->insertTextContent(xCursor, xTextContent, true);
             return;
         }
