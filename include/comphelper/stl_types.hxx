@@ -132,8 +132,7 @@ inline mem_fun1_t<Tp,Arg> mem_fun(void (Tp::*f)(Arg))
 
 /** output iterator that appends OUStrings into an OUStringBuffer.
  */
-class OUStringBufferAppender :
-    public ::std::iterator< ::std::output_iterator_tag, void, void, void, void>
+class OUStringBufferAppender
 {
 public:
     typedef OUStringBufferAppender Self;
