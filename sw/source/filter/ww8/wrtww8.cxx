@@ -3173,11 +3173,11 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
         if ( rOpt.IsImpress2PowerPoint() )
             nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
 
-        m_pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
+        m_pOLEExp.reset(new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags ));
     }
 
     if ( !m_pOCXExp && m_pDoc->GetDocShell() )
-        m_pOCXExp = new SwMSConvertControls( m_pDoc->GetDocShell(), m_pCurPam );
+        m_pOCXExp.reset(new SwMSConvertControls( m_pDoc->GetDocShell(), m_pCurPam ));
 
     // #i81405# - Collect anchored objects before changing the redline mode.
     m_aFrames = GetFrames( *m_pDoc, bWriteAll? nullptr : m_pOrigPam );
@@ -3631,10 +3631,10 @@ MSWordExportBase::~MSWordExportBase()
         // - it's an auto delete array, so the rest of the array which are
         // duplicated lists that were added during the export will be deleted.
         m_pUsedNumTable->erase(m_pUsedNumTable->begin(), m_pUsedNumTable->begin() + m_pUsedNumTable->size() - m_nUniqueList);
-        delete m_pUsedNumTable;
+        m_pUsedNumTable.reset();
     }
-    delete m_pOLEExp;
-    delete m_pOCXExp;
+    m_pOLEExp.reset();
+    m_pOCXExp.reset();
 }
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,

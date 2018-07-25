@@ -457,15 +457,15 @@ public:
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
     WW8_WrPct*  m_pPiece;         // Pointer to Piece-Table
-    SwNumRuleTable* m_pUsedNumTable;  // all used NumRules
+    std::unique_ptr<SwNumRuleTable> m_pUsedNumTable;  // all used NumRules
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
     WW8_WrtBookmarks* m_pBkmks;
     WW8_WrtRedlineAuthor* m_pRedlAuthors;
     std::shared_ptr<NfKeywordTable> m_pKeyMap;
-    SvxMSExportOLEObjects* m_pOLEExp;
-    SwMSConvertControls* m_pOCXExp;
+    std::unique_ptr<SvxMSExportOLEObjects> m_pOLEExp;
+    std::unique_ptr<SwMSConvertControls> m_pOCXExp;
     WW8OleMap m_aOleMap;    // To remember all already exported ole objects
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;
 
