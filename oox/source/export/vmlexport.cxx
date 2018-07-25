@@ -977,10 +977,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 #if OSL_DEBUG_LEVEL > 0
                 const size_t opt_nProp_size(opt.nProp.size());
                 const sal_uInt8 opt_nProp_empty(0);
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
+                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%zu, %p]\n",
                         nId,
                         opt.nPropValue,
-                        static_cast<unsigned int>(opt_nProp_size),
+                        opt_nProp_size,
                         0 == opt_nProp_size ? &opt_nProp_empty : &opt.nProp[0]);
                 if ( opt.nProp.size() )
                 {
