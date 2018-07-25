@@ -163,8 +163,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     }
 
     D2D1_POINT_2F baseline = {
-        aElement.getExtraOffset(),
-        aElement.getExtraOffset() + aElement.mnBaselineOffset
+        static_cast<FLOAT>(aElement.getExtraOffset()),
+        static_cast<FLOAT>(aElement.getExtraOffset() + aElement.mnBaselineOffset)
     };
 
     DWRITE_GLYPH_RUN glyphs = {
