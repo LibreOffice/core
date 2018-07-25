@@ -117,6 +117,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
 
 bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
 {
+    DBG_TESTSOLARMUTEX();
     static const BitmapPalette aEmptyPalette;
     OpenGLVCLContextZone aContextZone;
 
@@ -160,6 +161,7 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
 
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
+    DBG_TESTSOLARMUTEX();
     OpenGLVCLContextZone aContextZone;
 
     Destroy();
@@ -185,16 +187,19 @@ bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
 
 bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp )
 {
+    DBG_TESTSOLARMUTEX();
     return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
 bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
+    DBG_TESTSOLARMUTEX();
     return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
 }
 
 bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
+    DBG_TESTSOLARMUTEX();
     OpenGLZone aZone;
 
     // check that carefully only in the debug mode
@@ -233,6 +238,7 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 
 bool OpenGLSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
+    DBG_TESTSOLARMUTEX();
     // TODO Is this method needed?
     return false;
 }
