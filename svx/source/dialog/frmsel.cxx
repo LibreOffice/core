@@ -1023,8 +1023,7 @@ void FrameSelector::SetColorToSelection( const Color& rColor )
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
     if( !mxImpl->mxAccess.is() )
-        mxImpl->mxAccess = mxImpl->mxAccess =
-            new a11y::AccFrameSelector( *this, FrameBorderType::NONE );
+        mxImpl->mxAccess = new a11y::AccFrameSelector( *this, FrameBorderType::NONE );
     return mxImpl->mxAccess.get();
 }
 
