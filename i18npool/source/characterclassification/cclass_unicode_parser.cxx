@@ -691,7 +691,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     eState = ssGetChar;
 
     //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
-    OUString aSymbol;
+    OUStringBuffer aSymbol;
     bool isFirst(true);
     sal_Int32 index(nPos); // index of next code point after current
     sal_Int32 postSymbolIndex(index); // index of code point following last quote
@@ -880,13 +880,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         if ( cLast == '\\' )
                         {   // escaped
-                            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
-                            aSymbol += OUString(&current, 1);
+                            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                            aSymbol.append(OUString(&current, 1));
                         }
                         else
                         {
                             eState = ssStop;
-                            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+                            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                         }
                         postSymbolIndex = nextCharIndex;
                     }
@@ -905,13 +905,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( cLast == '\\' )
                     {   // escaped
-                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
-                        aSymbol += OUString(&current, 1);
+                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                        aSymbol.append(OUString(&current, 1));
                     }
                     else if (current == nextChar &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )
                     {   // "" => literal " escaped
-                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex);
+                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex);
                         nextCharIndex = index;
                         if (index < rText.getLength()) { ++nCodePoints; }
                         nextChar = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
@@ -919,7 +919,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     else
                     {
                         eState = ssStop;
-                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                     }
                     postSymbolIndex = nextCharIndex;
                 }
@@ -945,7 +945,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             index = nPos;
             postSymbolIndex = nPos;
             nextCharIndex = nPos;
-            aSymbol.clear();
+            aSymbol.setLength(0);
             current = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
             nCodePoints = (nPos < rText.getLength()) ? 1 : 0;
             isFirst = true;
@@ -1028,10 +1028,10 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     {
         if (postSymbolIndex < nextCharIndex)
         {   //! open quote
-            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
             r.TokenType |= KParseType::MISSING_QUOTE;
         }
-        r.DequotedNameOrString = aSymbol;
+        r.DequotedNameOrString = aSymbol.toString();
     }
 }
 
