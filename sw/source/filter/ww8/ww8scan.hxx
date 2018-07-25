@@ -696,8 +696,8 @@ public:
 class WW8PLCFx_SubDoc : public WW8PLCFx
 {
 private:
-    WW8PLCF* pRef;
-    WW8PLCF* pText;
+    std::unique_ptr<WW8PLCF> pRef;
+    std::unique_ptr<WW8PLCF> pText;
 
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&) = delete;
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) = delete;
@@ -719,7 +719,7 @@ public:
 
     virtual void GetSprms(WW8PLCFxDesc* p) override;
     virtual void advance() override;
-    long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
+    long Count() const { return pRef ? pRef->GetIMax() : 0; }
 };
 
 /// Iterator for fields
