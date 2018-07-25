@@ -351,16 +351,20 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         {
             // It has, so look up its text rectangle, and adjust the position
             // of the textbox accordingly.
+            // Both rectangles are absolute, SwFormatHori/VertOrient's position
+            // is relative to the print area of the anchor text frame.
             tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
 
             SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
             aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
-            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.getFrameArea().Left();
+            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.getFrameArea().Left()
+                              - rFrame.getFramePrintArea().Left();
             aHori.SetPos(nLeft);
 
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
             aVert.SetVertOrient(css::text::VertOrientation::NONE);
-            sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top();
+            sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top()
+                                   - rFrame.getFramePrintArea().Top();
             aVert.SetPos(nTop);
 
             pTextBox->LockModify();

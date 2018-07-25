@@ -27,6 +27,7 @@ public:
     void testTdf117245();
     void testTdf118672();
     void testTdf117923();
+    void testTdf109077();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -39,6 +40,7 @@ public:
     CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST(testTdf118672);
     CPPUNIT_TEST(testTdf117923);
+    CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -234,6 +236,18 @@ void SwLayoutWriter::testTdf117923()
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
     // The numbering height was 960.
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+}
+
+void SwLayoutWriter::testTdf109077()
+{
+    createDoc("tdf109077.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nShapeTop
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
+    sal_Int32 nTextBoxTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
+    // This was 281: the top of the shape and its textbox should match, though
+    // tolerate differences <= 1px (about 15 twips).
+    CPPUNIT_ASSERT_LESS(15, nTextBoxTop - nShapeTop);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
