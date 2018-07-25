@@ -277,26 +277,26 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         switch (rVariant.vt & VT_TYPEMASK)
         {
             case VT_I2:
-                stream << *(short*)rVariant.byref;
+                stream << *static_cast<short*>(rVariant.byref);
                 break;
             case VT_I4:
-                stream << *(int*)rVariant.byref;
+                stream << *static_cast<int*>(rVariant.byref);
                 break;
             case VT_R4:
-                stream << *(float*)rVariant.byref;
+                stream << *static_cast<float*>(rVariant.byref);
                 break;
             case VT_R8:
-                stream << *(double*)rVariant.byref;
+                stream << *static_cast<double*>(rVariant.byref);
                 break;
             case VT_CY:
-                stream << ((CY*)rVariant.byref)->int64;
+                stream << static_cast<CY*>(rVariant.byref)->int64;
                 break;
             case VT_DATE:
-                stream << *(double*)rVariant.byref;
+                stream << *static_cast<double*>(rVariant.byref);
                 break; // FIXME
             case VT_BSTR:
                 stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
-                    *(OLECHAR**)rVariant.byref);
+                    *static_cast<OLECHAR**>(rVariant.byref));
                 break;
             case VT_DISPATCH:
                 stream << rVariant.byref;
@@ -304,70 +304,70 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             case VT_ERROR:
             case VT_HRESULT:
                 flags = stream.flags();
-                stream << std::hex << *(int*)rVariant.byref;
+                stream << std::hex << *static_cast<int*>(rVariant.byref);
                 stream.setf(flags);
                 break;
             case VT_BOOL:
-                stream << (*(VARIANT_BOOL*)rVariant.byref ? "YES" : "NO");
+                stream << (*static_cast<VARIANT_BOOL*>(rVariant.byref) ? "YES" : "NO");
                 break;
             case VT_VARIANT:
-                stream << *(VARIANT*)rVariant.byref;
+                stream << *static_cast<VARIANT*>(rVariant.byref);
                 break;
             case VT_UNKNOWN:
-                stream << *(IUnknown**)rVariant.byref;
+                stream << *static_cast<IUnknown**>(rVariant.byref);
                 break;
             case VT_DECIMAL:
                 flags = stream.flags();
                 width = stream.width();
                 fill = stream.fill();
                 stream << std::hex << std::setw(8) << std::setfill('0')
-                       << ((DECIMAL*)rVariant.byref)->Hi32;
-                stream << std::setw(16) << ((DECIMAL*)rVariant.byref)->Lo64;
+                       << static_cast<DECIMAL*>(rVariant.byref)->Hi32;
+                stream << std::setw(16) << static_cast<DECIMAL*>(rVariant.byref)->Lo64;
                 stream.setf(flags);
                 stream << std::setw(width) << std::setfill(fill);
                 break;
             case VT_I1:
-                stream << (int)*(char*)rVariant.byref;
+                stream << static_cast<int>(*static_cast<char*>(rVariant.byref));
                 break;
             case VT_UI1:
-                stream << (unsigned int)*(unsigned char*)rVariant.byref;
+                stream << static_cast<unsigned int>(*static_cast<unsigned char*>(rVariant.byref));
                 break;
             case VT_UI2:
-                stream << *(unsigned short*)rVariant.byref;
+                stream << *static_cast<unsigned short*>(rVariant.byref);
                 break;
             case VT_UI4:
-                stream << *(unsigned int*)rVariant.byref;
+                stream << *static_cast<unsigned int*>(rVariant.byref);
                 break;
             case VT_I8:
-                stream << *(long long*)rVariant.byref;
+                stream << *static_cast<long long*>(rVariant.byref);
                 break;
             case VT_UI8:
-                stream << *(unsigned long long*)rVariant.byref;
+                stream << *static_cast<unsigned long long*>(rVariant.byref);
                 break;
             case VT_INT:
-                stream << *(int*)rVariant.byref;
+                stream << *static_cast<int*>(rVariant.byref);
                 break;
             case VT_UINT:
-                stream << *(unsigned int*)rVariant.byref;
+                stream << *static_cast<unsigned int*>(rVariant.byref);
                 break;
             case VT_INT_PTR:
-                stream << *(intptr_t*)rVariant.byref;
+                stream << *static_cast<intptr_t*>(rVariant.byref);
                 break;
             case VT_UINT_PTR:
-                stream << *(uintptr_t*)rVariant.byref;
+                stream << *static_cast<uintptr_t*>(rVariant.byref);
                 break;
             case VT_PTR:
             case VT_CARRAY:
-                stream << *(void**)rVariant.byref;
+                stream << *static_cast<void**>(rVariant.byref);
                 break;
             case VT_SAFEARRAY:
                 break; // FIXME
             case VT_LPSTR:
-                stream << *(char**)rVariant.byref;
+                stream << *static_cast<char**>(rVariant.byref);
                 break;
             case VT_LPWSTR:
                 stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
-                    std::wstring(*(wchar_t**)rVariant.byref));
+                    std::wstring(*static_cast<wchar_t**>(rVariant.byref)));
                 break;
             case VT_FILETIME:
                 break; // FIXME
@@ -386,7 +386,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             case VT_CF:
                 break; // FIXME
             case VT_CLSID:
-                stream << *(IID*)rVariant.byref;
+                stream << *static_cast<IID*>(rVariant.byref);
                 break;
             case VT_VERSIONED_STREAM:
                 break; // FIXME
@@ -417,7 +417,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             stream << rVariant.cyVal.int64;
             break;
         case VT_DATE:
-            stream << (double)rVariant.date;
+            stream << static_cast<double>(rVariant.date);
             break; // FIXME
         case VT_BSTR:
             stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
@@ -448,34 +448,34 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             stream << std::setw(width) << std::setfill(fill);
             break;
         case VT_I1:
-            stream << (int)rVariant.bVal;
+            stream << static_cast<int>(rVariant.bVal);
             break;
         case VT_UI1:
-            stream << (unsigned int)rVariant.bVal;
+            stream << static_cast<unsigned int>(rVariant.bVal);
             break;
         case VT_UI2:
-            stream << (unsigned short)rVariant.iVal;
+            stream << static_cast<unsigned short>(rVariant.iVal);
             break;
         case VT_UI4:
-            stream << (unsigned int)rVariant.lVal;
+            stream << static_cast<unsigned int>(rVariant.lVal);
             break;
         case VT_I8:
             stream << rVariant.llVal;
             break;
         case VT_UI8:
-            stream << (unsigned long long)rVariant.llVal;
+            stream << static_cast<unsigned long long>(rVariant.llVal);
             break;
         case VT_INT:
             stream << rVariant.lVal;
             break;
         case VT_UINT:
-            stream << (unsigned int)rVariant.lVal;
+            stream << static_cast<unsigned int>(rVariant.lVal);
             break;
         case VT_INT_PTR:
-            stream << (intptr_t)rVariant.plVal;
+            stream << reinterpret_cast<intptr_t>(rVariant.plVal);
             break;
         case VT_UINT_PTR:
-            stream << (uintptr_t)rVariant.plVal;
+            stream << reinterpret_cast<uintptr_t>(rVariant.plVal);
             break;
         case VT_PTR:
         case VT_CARRAY:
@@ -488,7 +488,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             break;
         case VT_LPWSTR:
             stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
-                std::wstring((wchar_t*)rVariant.byref));
+                std::wstring(static_cast<wchar_t*>(rVariant.byref)));
             break;
         case VT_FILETIME:
             break; // FIXME
