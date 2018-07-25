@@ -86,11 +86,16 @@ void VclQtMixinBase::mixinResizeEvent(QResizeEvent*, QSize aSize)
     {
         int width = aSize.width();
         int height = aSize.height();
-        cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-        cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                    &m_pFrame->m_aDamageHandler, nullptr);
-        m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
-        m_pFrame->m_pSurface.reset(pSurface);
+
+        if (m_pFrame->m_pSvpGraphics)
+        {
+            cairo_surface_t* pSurface
+                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+            cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
+                                        &m_pFrame->m_aDamageHandler, nullptr);
+            m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
+            m_pFrame->m_pSurface.reset(pSurface);
+        }
     }
     else
     {

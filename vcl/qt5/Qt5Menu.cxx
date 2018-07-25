@@ -67,8 +67,7 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
     mpFrame->SetMenu(this);
 
-    QWidget* pWidget = mpFrame->GetQWidget();
-    QMainWindow* pMainWindow = dynamic_cast<QMainWindow*>(pWidget);
+    QMainWindow* pMainWindow = mpFrame->GetTopLevelWindow();
     if (pMainWindow)
         mpQMenuBar = pMainWindow->menuBar();
 
