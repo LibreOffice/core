@@ -3880,15 +3880,15 @@ WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib,
 {
     if( nLenRef && nLenText )
     {
-        pRef = new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp);
-        pText = new WW8PLCF(*pSt, nFcText, nLenText, 0, nStartCp);
+        pRef.reset(new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp));
+        pText.reset(new WW8PLCF(*pSt, nFcText, nLenText, 0, nStartCp));
     }
 }
 
 WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
 {
-    delete pRef;
-    delete pText;
+    pRef.reset();
+    pText.reset();
 }
 
 sal_uInt32 WW8PLCFx_SubDoc::GetIdx() const
@@ -3916,7 +3916,7 @@ bool WW8PLCFx_SubDoc::SeekPos( WW8_CP nCpPos )
 
 WW8_CP WW8PLCFx_SubDoc::Where()
 {
-    return ( pRef ) ? pRef->Where() : WW8_CP_MAX;
+    return pRef ? pRef->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
