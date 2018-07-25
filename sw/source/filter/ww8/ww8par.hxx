@@ -1205,7 +1205,7 @@ private:
     */
     std::set<sal_uLong> m_aGrafPosSet;
 
-    WW8PostProcessAttrsInfo * m_pPostProcessAttrsInfo;
+    std::unique_ptr<WW8PostProcessAttrsInfo> m_pPostProcessAttrsInfo;
 
     std::shared_ptr<WW8Fib> m_xWwFib;
     std::unique_ptr<WW8Fonts> m_xFonts;
