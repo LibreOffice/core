@@ -283,7 +283,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
     meCurrObj = EXC_HF_CENTER;
 
     // parser temporaries
-    maCurrText.clear();
+    maCurrText.truncate();
     OUString aReadFont;           // current font name
     OUString aReadStyle;          // current font style
     sal_uInt16 nReadHeight = 0; // current font height
@@ -321,7 +321,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         InsertLineBreak();
                     break;
                     default:
-                        maCurrText += OUStringLiteral1(*pChar);
+                        maCurrText.append(OUStringLiteral1(*pChar));
                 }
             }
             break;
@@ -333,7 +333,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                 eState = xlPSText;
                 switch( *pChar )
                 {
-                    case '&':   maCurrText += "&";  break;  // the '&' character
+                    case '&':   maCurrText.append("&");  break;  // the '&' character
 
                     case 'L':   SetNewPortion( EXC_HF_LEFT );   break;  // Left portion
                     case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  // Center portion
@@ -538,9 +538,9 @@ void XclImpHFConverter::InsertText()
     if( !maCurrText.isEmpty() )
     {
         ESelection& rSel = GetCurrSel();
-        mrEE.QuickInsertText( maCurrText, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-        rSel.nEndPos = rSel.nEndPos + maCurrText.getLength();
-        maCurrText.clear();
+        OUString sString(maCurrText.makeStringAndClear());
+        mrEE.QuickInsertText( sString, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
+        rSel.nEndPos = rSel.nEndPos + sString.getLength();
         UpdateCurrMaxLineHeight();
     }
 }
