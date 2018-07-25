@@ -57,7 +57,7 @@ Includes::Includes(
         || dependencies.hasShortDependency()
         || dependencies.hasUnsignedShortDependency()
         || dependencies.hasLongDependency()
-        || dependencies.hasUnsignedShortDependency()
+        || dependencies.hasUnsignedLongDependency()
         || dependencies.hasHyperDependency()
         || dependencies.hasUnsignedHyperDependency()
         || dependencies.hasCharDependency()),

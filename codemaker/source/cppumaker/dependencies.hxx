@@ -82,6 +82,9 @@ public:
 
     bool hasLongDependency() const { return m_longDependency; }
 
+    bool hasUnsignedLongDependency() const
+    { return m_unsignedLongDependency; }
+
     bool hasHyperDependency() const { return m_hyperDependency; }
 
     bool hasUnsignedHyperDependency() const
