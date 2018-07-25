@@ -1760,7 +1760,7 @@ namespace svxform
 
     bool DataNavigatorWindow::IsAdditionalPage(sal_uInt16 nId) const
     {
-        return m_pTabCtrl->GetPagePos(nId) >= 3;
+        return m_pTabCtrl->GetPageName(nId).isEmpty();
     }
 
     IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn, void )
@@ -1914,8 +1914,10 @@ namespace svxform
                 XFormsPage* pPage = GetCurrentPage( nId );
                 DBG_ASSERT( pPage, "DataNavigatorWindow::SetPageModel(): no page" );
                 if (IsAdditionalPage(nId) || m_pTabCtrl->GetPageName(nId) == "instance")
+                {
                     // instance page
                     nPagePos = m_pTabCtrl->GetPagePos( nId );
+                }
                 m_bIsNotifyDisabled = true;
                 OUString sText = pPage->SetModel( xFormsModel, nPagePos );
                 m_bIsNotifyDisabled = false;
