@@ -94,6 +94,9 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         aFilterData[ 0 ].Name = "CreateNativeLink";
         aFilterData[ 0 ].Value <<= true;
 
+        // Need to own the solar mutex while creating a SalBitmap.
+        SolarMutexGuard aGuard;
+
         // #i123042# for e.g SVG the path is needed, so hand it over here. I have no real idea
         // what consequences this may have; maybe this is not handed over by purpose here. Not
         // handing it over means that any GraphicFormat that internally needs a path as base
