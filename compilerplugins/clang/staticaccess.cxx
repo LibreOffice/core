@@ -64,6 +64,22 @@ bool StaticAccess::VisitMemberExpr(MemberExpr const * expr) {
     if (!isStatic(decl, &me)) {
         return true;
     }
+    auto const loc = expr->getExprLoc();
+    if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
+        auto const name = Lexer::getImmediateMacroName(
+            loc, compiler.getSourceManager(), compiler.getLangOpts());
+        if (name == "BEGIN_COM_MAP" || name == "DEFAULT_REFLECTION_HANDLER") {
+            // .../VC/Tools/MSVC/14.14.26428/atlmfc/include\atlcom.h(2226,10):  note: expanded from
+            //   macro 'BEGIN_COM_MAP'
+            //     return this->InternalQueryInterface(this, _GetEntries(), iid, ppvObject);
+            //            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // .../VC/Tools/MSVC/14.14.26428/atlmfc/include\atlwin.h(2890,5):  note: expanded from
+            //   macro 'DEFAULT_REFLECTION_HANDLER'
+            //     if(this->DefaultReflectionHandler(hWnd, uMsg, wParam, lParam, lResult))
+            //        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            return true;
+        }
+    }
     report(
         DiagnosticsEngine::Warning,
         ("accessing %select{static class member|member enumerator}0 through"
