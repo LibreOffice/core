@@ -1545,6 +1545,10 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
     return nFallBackCpEnd;
 }
 
+// the fib of WinWord2 has a last entry of cpnBtePap of 2 byte sized type PN at
+// offset 324
+const int nSmallestPossibleFib = 326;
+
 WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     WW8_CP* pNextPieceCp, bool* pTestFlag) const
 {
@@ -1644,6 +1648,16 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         SAL_WARN("sw.ww8", "broken offset, ignoring");
         return WW8_CP_MAX;
     }
+
+    // the text and the fib share the same stream, if the text is inside the fib
+    // then its definitely a bad offset. The smallest FIB supported is that of
+    // WW2 which is 326 bytes in size
+    if (nRet < nSmallestPossibleFib)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
     return nRet;
 }
 
