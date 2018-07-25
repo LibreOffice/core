@@ -511,23 +511,23 @@ private:
     struct CursorStack
     {
         Point aDocPos;
-        CursorStack *pNext;
+        std::unique_ptr<CursorStack> pNext;
         bool bValidCurPos : 1;
         bool bIsFrameSel : 1;
         SwTwips lOffset;
 
         CursorStack( bool bValid, bool bFrameSel, const Point &rDocPos,
-                    SwTwips lOff, CursorStack *pN )
+                    SwTwips lOff, std::unique_ptr<CursorStack> pN )
             : aDocPos(rDocPos),
-            pNext(pN),
+            pNext(std::move(pN)),
             bValidCurPos( bValid ),
             bIsFrameSel( bFrameSel ),
             lOffset(lOff)
         {
-
         }
 
-    } *m_pCursorStack;
+    };
+    std::unique_ptr<CursorStack> m_pCursorStack;
 
     SwView  &m_rView;
     SwNavigationMgr m_aNavigationMgr;
