@@ -858,7 +858,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
         std::vector< sal_Int32 > vec;
         do
         {
-            OUString digits;
+            OUStringBuffer digits;
             do
             {
                 if(!iswspace(c))
@@ -873,10 +873,10 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                     break;
                 if ( start == strlen)
                     return ret;
-                digits += OUString(&c, 1);
+                digits.appendAscii(c);
                 c = str.iterateCodePoints(&start);
             } while ( c );
-            vec.push_back( digits.toInt32() );
+            vec.push_back( digits.makeStringAndClear().toInt32() );
             do
             {
                 if(!iswspace(c))
