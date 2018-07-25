@@ -26,6 +26,7 @@
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <WidgetDrawInterface.hxx>
 
 #include <config_cairo_canvas.h>
 
@@ -663,6 +664,13 @@ protected:
     bool                        m_bAntiAliasB2DDraw : 1;
 
     inline long GetDeviceWidth(const OutputDevice* pOutDev) const;
+
+    bool hasWidgetDraw()
+    {
+        return bool(m_pWidgetDraw);
+    }
+
+    std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
 };
 
 #endif // INCLUDED_VCL_INC_SALGDI_HXX
