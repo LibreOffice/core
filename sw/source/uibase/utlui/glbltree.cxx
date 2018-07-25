@@ -174,9 +174,7 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_pActiveShell(nullptr)
     , m_pEmphasisEntry(nullptr)
     , m_pDDSource(nullptr)
-    , m_pSwGlblDocContents(nullptr)
     , m_pDocContent(nullptr)
-    , m_pDocInserter(nullptr)
     , m_bIsInternalDrag(false)
     , m_bLastEntryEmphasis(false)
 {
@@ -204,10 +202,8 @@ SwGlobalTree::~SwGlobalTree()
 
 void SwGlobalTree::dispose()
 {
-    delete m_pSwGlblDocContents;
-    m_pSwGlblDocContents = nullptr;
-    delete m_pDocInserter;
-    m_pDocInserter = nullptr;
+    m_pSwGlblDocContents.reset();
+    m_pDocInserter.reset();
     m_aUpdateTimer.Stop();
     m_xDialog.clear();
     SvTreeListBox::dispose();
@@ -740,8 +736,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
     Sequence< OUString > aFileNames;
     if ( !pFileName )
     {
-        delete m_pDocInserter;
-        m_pDocInserter = new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter", sfx2::DocumentInserter::Mode::InsertMulti);
+        m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter", sfx2::DocumentInserter::Mode::InsertMulti));
         m_pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( !pFileName->isEmpty() )
@@ -1112,12 +1107,11 @@ bool    SwGlobalTree::Update(bool bHard)
         m_pActiveShell = pActView->GetWrtShellPtr();
         if(m_pActiveShell != pOldShell)
         {
-            delete m_pSwGlblDocContents;
-            m_pSwGlblDocContents = nullptr;
+            m_pSwGlblDocContents.reset();
         }
         if(!m_pSwGlblDocContents)
         {
-            m_pSwGlblDocContents = new SwGlblDocContents;
+            m_pSwGlblDocContents.reset(new SwGlblDocContents);
             bRet = true;
             m_pActiveShell->GetGlobalDocContent(*m_pSwGlblDocContents);
         }

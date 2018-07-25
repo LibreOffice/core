@@ -265,10 +265,10 @@ private:
     SwWrtShell*             m_pActiveShell;
     SvTreeListEntry*        m_pEmphasisEntry; // Drag'n Drop emphasis
     SvTreeListEntry*        m_pDDSource;      // source for Drag'n Drop
-    SwGlblDocContents*      m_pSwGlblDocContents; // array with sorted content
+    std::unique_ptr<SwGlblDocContents> m_pSwGlblDocContents; // array with sorted content
 
     SwGlblDocContent*       m_pDocContent;
-    sfx2::DocumentInserter* m_pDocInserter;
+    std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
     bool                m_bIsInternalDrag     :1;
     bool                m_bLastEntryEmphasis  :1; // Drag'n Drop
