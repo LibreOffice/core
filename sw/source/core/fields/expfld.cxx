@@ -284,25 +284,25 @@ void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
                             sal_uInt16 nSub, sal_uLong nFormat)
     : SwFormulaField( pTyp, nFormat, 0.0 ),
-    bIsInBodyText( true ),
-    nSubType(nSub),
-    bLateInitialization( false )
+    m_bIsInBodyText( true ),
+    m_nSubType(nSub),
+    m_bLateInitialization( false )
 {
     SetFormula( rFormel );
 }
 
 OUString SwGetExpField::Expand() const
 {
-    if(nSubType & nsSwExtendedSubType::SUB_CMD)
+    if(m_nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
 
-    return sExpand;
+    return m_sExpand;
 }
 
 OUString SwGetExpField::GetFieldName() const
 {
     const sal_uInt16 nType = static_cast<sal_uInt16>(
-        (nsSwGetSetExpType::GSE_FORMULA & nSubType)
+        (nsSwGetSetExpType::GSE_FORMULA & m_nSubType)
         ? TYP_FORMELFLD
         : TYP_GETFLD);
 
@@ -312,13 +312,13 @@ OUString SwGetExpField::GetFieldName() const
 std::unique_ptr<SwField> SwGetExpField::Copy() const
 {
     std::unique_ptr<SwGetExpField> pTmp(new SwGetExpField(static_cast<SwGetExpFieldType*>(GetTyp()),
-                                            GetFormula(), nSubType, GetFormat()));
+                                            GetFormula(), m_nSubType, GetFormat()));
     pTmp->SetLanguage(GetLanguage());
     pTmp->SwValueField::SetValue(GetValue());
-    pTmp->sExpand       = sExpand;
-    pTmp->bIsInBodyText  = bIsInBodyText;
+    pTmp->m_sExpand       = m_sExpand;
+    pTmp->m_bIsInBodyText  = m_bIsInBodyText;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
-    if( bLateInitialization )
+    if( m_bLateInitialization )
         pTmp->SetLateInitialization();
 
     return std::unique_ptr<SwField>(pTmp.release());
@@ -326,7 +326,7 @@ std::unique_ptr<SwField> SwGetExpField::Copy() const
 
 void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& rField )
 {
-    if( bIsInBodyText ) // only fields in Footer, Header, FootNote, Flys
+    if( m_bIsInBodyText ) // only fields in Footer, Header, FootNote, Flys
         return;
 
     OSL_ENSURE( !rFrame.IsInDocBody(), "Flag incorrect, frame is in DocBody" );
@@ -344,12 +344,12 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     if(!pTextNode)
         return;
     // #i82544#
-    if( bLateInitialization )
+    if( m_bLateInitialization )
     {
         SwFieldType* pSetExpField = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, GetFormula(), false);
         if( pSetExpField )
         {
-            bLateInitialization = false;
+            m_bLateInitialization = false;
             if( !(GetSubType() & nsSwGetSetExpType::GSE_STRING) &&
                 static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING )
             SetSubType( nsSwGetSetExpType::GSE_STRING );
@@ -361,7 +361,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     {
         SwHashTable<HashStr> aHashTable(0);
         rDoc.getIDocumentFieldsAccess().FieldsToExpand( aHashTable, aEndField );
-        sExpand = LookString( aHashTable, GetFormula() );
+        m_sExpand = LookString( aHashTable, GetFormula() );
     }
     else
     {
@@ -373,7 +373,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
         SetValue(aCalc.Calculate(GetFormula()).GetDouble());
 
         // analyse based on format
-        sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
+        m_sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
                                 GetValue(), GetFormat(), GetLanguage());
     }
 }
@@ -390,17 +390,17 @@ void SwGetExpField::SetPar2(const OUString& rStr)
 
 sal_uInt16 SwGetExpField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 void SwGetExpField::SetSubType(sal_uInt16 nType)
 {
-    nSubType = nType;
+    m_nSubType = nType;
 }
 
 void SwGetExpField::SetLanguage(LanguageType nLng)
 {
-    if (nSubType & nsSwExtendedSubType::SUB_CMD)
+    if (m_nSubType & nsSwExtendedSubType::SUB_CMD)
         SwField::SetLanguage(nLng);
     else
         SwValueField::SetLanguage(nLng);
@@ -417,7 +417,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= static_cast<sal_Int32>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
-         rAny <<= static_cast<sal_Int16>(nSubType);
+         rAny <<= static_cast<sal_Int16>(m_nSubType);
         break;
     case FIELD_PROP_PAR1:
          rAny <<= GetFormula();
@@ -429,10 +429,10 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_BOOL2:
-        rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
+        rAny <<= 0 != (m_nSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= sExpand;
+        rAny <<= m_sExpand;
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);
@@ -454,7 +454,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_USHORT1:
          rAny >>= nTmp;
-         nSubType = static_cast<sal_uInt16>(nTmp);
+         m_nSubType = static_cast<sal_uInt16>(nTmp);
         break;
     case FIELD_PROP_PAR1:
     {
@@ -470,9 +470,9 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL2:
         if(*o3tl::doAccess<bool>(rAny))
-            nSubType |= nsSwExtendedSubType::SUB_CMD;
+            m_nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
+            m_nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
     {
@@ -874,7 +874,7 @@ void SwSetExpField::SetValue( const double& rAny )
 void SwGetExpField::SetValue( const double& rAny )
 {
     SwValueField::SetValue(rAny);
-    sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny, GetFormat(),
+    m_sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
 
