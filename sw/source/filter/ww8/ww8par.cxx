@@ -5285,7 +5285,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_xSBase.reset();
     m_xWDop.reset();
     m_xFonts.reset();
-    delete m_pAtnNames;
+    m_pAtnNames.reset();
     m_xSprmParser.reset();
     m_xProgress.reset();
 
@@ -6018,7 +6018,7 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     if (!m_pAtnNames && m_xWwFib->m_lcbGrpStAtnOwners)
     {
         // Determine authors: can be found in the TableStream
-        m_pAtnNames = new std::vector<OUString>;
+        m_pAtnNames.reset(new std::vector<OUString>);
         SvStream& rStrm = *m_pTableStream;
 
         long nOldPos = rStrm.Tell();
