@@ -49,7 +49,7 @@ struct PluginData
     bool byDefault;
 };
 
-const int MAX_PLUGINS = 100;
+const int MAX_PLUGINS = 200;
 static PluginData plugins[ MAX_PLUGINS ];
 static int pluginCount = 0;
 static bool bPluginObjectsCreated = false;
