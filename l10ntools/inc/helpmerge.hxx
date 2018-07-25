@@ -52,7 +52,7 @@ public:
         const OString& sLanguage , MergeDataFile* pMergeDataFile );
 
 private:
-    bool MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
+    void MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
 
     static void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
 };

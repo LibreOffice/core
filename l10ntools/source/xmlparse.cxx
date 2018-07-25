@@ -164,7 +164,7 @@ void XMLFile::Write( OString const &aFilename )
     s.close();
 }
 
-bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
+void XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 {
     if ( !pCur )
         Write( rStream, this );
@@ -229,7 +229,6 @@ bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             break;
         }
     }
-    return true;
 }
 
 void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )

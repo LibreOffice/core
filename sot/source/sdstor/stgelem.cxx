@@ -317,7 +317,7 @@ static OUString ToUpperUnicode( const OUString & rStr )
     return aCC.uppercase( rStr );
 }
 
-bool StgEntry::SetName( const OUString& rName )
+void StgEntry::SetName( const OUString& rName )
 {
     // I don't know the locale, so en_US is hopefully fine
     m_aName = ToUpperUnicode( rName );
@@ -336,7 +336,6 @@ bool StgEntry::SetName( const OUString& rName )
         m_nName[ i++ ] = 0;
     }
     m_nNameLen = ( rName.getLength() + 1 ) << 1;
-    return true;
 }
 
 sal_Int32 StgEntry::GetLeaf( StgEntryRef eRef ) const
