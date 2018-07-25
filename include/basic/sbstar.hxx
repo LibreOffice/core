@@ -62,7 +62,6 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     bool            bQuit;
 
     SbxObjectRef pVBAGlobals;
-    BASIC_DLLPRIVATE SbxObject* getVBAGlobals( );
 
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
@@ -154,6 +153,8 @@ public:
     bool GetUNOConstant( const OUString& rName, css::uno::Any& aOut );
     void QuitAndExitApplication();
     bool IsQuitApplication() { return bQuit; };
+
+    SbxObject* getVBAGlobals( );
 
     static css::uno::Reference< css::frame::XModel >
         GetModelFromBasic( SbxObject* pBasic );
