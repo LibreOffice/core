@@ -7171,7 +7171,6 @@ namespace
 }
 
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
-    : pFontA(nullptr), nMax(0)
 {
     // Attention: MacWord-Documents have their Fontnames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
@@ -7199,10 +7198,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
 
+    sal_uInt16 nMax(0);
     if( eVersion >= ww::eWW8 )
     {
         // bVer8: read the count of strings in nMax
-        rSt.ReadUInt16( nMax );
+        rSt.ReadUInt16(nMax);
     }
 
     // Ver8:  skip undefined uint16
@@ -7224,11 +7224,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
         nMax = std::min(nMax, nCalcMax);
     }
 
-    if( nMax )
+    if (nMax)
     {
         // allocate Index Array
-        pFontA.reset( new WW8_FFN[ nMax ] );
-        WW8_FFN* p = pFontA.get();
+        m_aFontA.resize(nMax);
+        WW8_FFN* p = m_aFontA.data();
 
         if( eVersion <= ww::eWW2 )
         {
@@ -7426,14 +7426,16 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
             nMax = std::min(nMax, nValidFonts);
         }
     }
+    m_aFontA.resize(nMax);
+    m_aFontA.shrink_to_fit();
 }
 
 const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 {
-    if( !pFontA || nNum >= nMax )
+    if (nNum >= m_aFontA.size())
         return nullptr;
 
-    return &pFontA[ nNum ];
+    return &m_aFontA[nNum];
 }
 
 // Search after a header/footer for a index in the ww list from header/footer
