@@ -3270,7 +3270,7 @@ void WW8Export::ExportDocument_Impl()
 {
     PrepareStorage();
 
-    pFib = new WW8Fib(8, m_bDot);
+    pFib.reset(new WW8Fib(8, m_bDot));
 
     tools::SvRef<SotStorageStream> xWwStrm( GetWriter().GetStorage().OpenSotStream( m_aMainStg ) );
     tools::SvRef<SotStorageStream> xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
@@ -3315,10 +3315,10 @@ void WW8Export::ExportDocument_Impl()
     }
 
     // Default: "Standard"
-    pSepx = new WW8_WrPlcSepx( *this );                         // Sections/headers/footers
+    pSepx.reset(new WW8_WrPlcSepx( *this ));                         // Sections/headers/footers
 
-    pFootnote = new WW8_WrPlcFootnoteEdn( TXT_FTN );                      // Footnotes
-    pEdn = new WW8_WrPlcFootnoteEdn( TXT_EDN );                      // Endnotes
+    pFootnote.reset(new WW8_WrPlcFootnoteEdn( TXT_FTN ));                      // Footnotes
+    pEdn.reset(new WW8_WrPlcFootnoteEdn( TXT_EDN ));                      // Endnotes
     m_pAtn = new WW8_WrPlcAnnotations;                                 // PostIts
     m_pFactoids.reset(new WW8_WrtFactoids); // Smart tags.
     m_pTextBxs = new WW8_WrPlcTextBoxes( TXT_TXTBOX );
@@ -3346,7 +3346,7 @@ void WW8Export::ExportDocument_Impl()
 
     m_pGrf = new SwWW8WrGrf( *this );
     m_pPiece = new WW8_WrPct( pFib->m_fcMin );
-    pDop = new WW8Dop;
+    pDop.reset(new WW8Dop);
 
     pDop->fRevMarking = bool( RedlineFlags::On & m_nOrigRedlineFlags );
     pDop->fRMView = bool( RedlineFlags::ShowDelete & m_nOrigRedlineFlags );
@@ -3417,7 +3417,7 @@ void WW8Export::ExportDocument_Impl()
     DELETEZ( pO );
     DELETEZ( m_pChpPlc );
     DELETEZ( m_pPapPlc );
-    DELETEZ( pSepx );
+    pSepx.reset();
 
     delete m_pRedlAuthors;
     delete m_pSdrObjs;
@@ -3425,12 +3425,12 @@ void WW8Export::ExportDocument_Impl()
     delete m_pTextBxs;
     delete m_pHFTextBxs;
     delete m_pAtn;
-    delete pEdn;
-    delete pFootnote;
+    pEdn.reset();
+    pFootnote.reset();
     delete m_pBkmks;
     delete m_pPiece;
-    delete pDop;
-    delete pFib;
+    pDop.reset();
+    pFib.reset();
     GetWriter().SetStream( nullptr );
 
     xWwStrm->SetBufferSize( 0 );
