@@ -170,7 +170,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             pMod = const_cast<SwModify*>(static_cast<SwModify const *>(pNd->GetContentNode()));
         else
         {
-            OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
+            assert(pNd->IsTableNode());
             pMod = pNd->GetTableNode()->GetTable().GetFrameFormat();
         }
         pIter.reset(new SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>(*pMod));
@@ -211,7 +211,7 @@ SwFrame* SwNode2LayImpl::NextFrame()
     while( pRet )
     {
         SwFlowFrame* pFlow = SwFlowFrame::CastFlowFrame( pRet );
-        OSL_ENSURE( pFlow, "Content or Table expected?!" );
+        assert(pFlow);
         // Follows are pretty volatile, thus we ignore them.
         // Even if we insert after the Frame, we start from the Master
         // and iterate through it until the last Follow
@@ -233,9 +233,9 @@ SwFrame* SwNode2LayImpl::NextFrame()
                 // SectionFrame is also located within the Footnote and not outside of it.
                 if( !pRet->IsInFootnote() || pSct->IsInFootnote() )
                 {
-                    OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
+                    assert(pSct && pSct->GetSection());
                     SwSectionNode* pNd = pSct->GetSection()->GetFormat()->GetSectionNode();
-                    OSL_ENSURE( pNd, "Lost SectionNode" );
+                    assert(pNd);
                     // If the result Frame is located within a Section Frame
                     // whose Section does not contain the Node, we return with
                     // the SectionFrame, else we return with the Content/TabFrame
@@ -307,11 +307,10 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
                     {
                         pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
                     }
-                    OSL_ENSURE( pFrame->IsLayoutFrame(),
-                            "<SwNode2LayImpl::UpperFrame(..)> - expected upper frame isn't a layout frame." );
+                    assert(pFrame->IsLayoutFrame());
                     rpFrame = bMaster ? nullptr
                                     : static_cast<SwLayoutFrame*>(pFrame)->Lower();
-                    OSL_ENSURE( !rpFrame || rpFrame->IsFlowFrame(),
+                    assert((!rpFrame || rpFrame->IsFlowFrame()) &&
                             "<SwNode2LayImpl::UpperFrame(..)> - expected sibling isn't a flow frame." );
                     return static_cast<SwLayoutFrame*>(pFrame);
                 }
@@ -375,7 +374,7 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
                 else
                     pNxt = pUp->Lower();
                 pNew = static_cast<SwTableNode*>(pNd)->MakeFrame( pUp );
-                OSL_ENSURE( pNew->IsTabFrame(), "Table expected" );
+                assert(pNew->IsTabFrame());
                 pNew->Paste( pUp, pNxt );
                 static_cast<SwTabFrame*>(pNew)->RegistFlys();
                 mvUpperFrames[x-2] = pNew;
