@@ -85,11 +85,11 @@ protected:
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
-    OUString        sExpand;
-    bool            bIsInBodyText;
-    sal_uInt16          nSubType;
+    OUString        m_sExpand;
+    bool            m_bIsInBodyText;
+    sal_uInt16          m_nSubType;
 
-    bool            bLateInitialization; // #i82544#
+    bool            m_bLateInitialization; // #i82544#
 
     virtual OUString            Expand() const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -126,19 +126,19 @@ public:
 
     static sal_Int32    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
     // #i82544#
-    void                SetLateInitialization() { bLateInitialization = true;}
+    void                SetLateInitialization() { m_bLateInitialization = true;}
 };
 
 inline void SwGetExpField::ChgExpStr(const OUString& rExpand)
-    { sExpand = rExpand;}
+    { m_sExpand = rExpand;}
 
  /// Called by formatting.
 inline bool SwGetExpField::IsInBodyText() const
-    { return bIsInBodyText; }
+    { return m_bIsInBodyText; }
 
  /// Set by UpdateExpFields where node position is known.
 inline void SwGetExpField::ChgBodyTextFlag( bool bIsInBody )
-    { bIsInBodyText = bIsInBody; }
+    { m_bIsInBodyText = bIsInBody; }
 
 class SwSetExpField;
 
