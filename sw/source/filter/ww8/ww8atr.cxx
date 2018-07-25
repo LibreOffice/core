@@ -3462,9 +3462,9 @@ void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
 {
     WW8_WrPlcFootnoteEdn* pFootnoteEnd;
     if ( rFootnote.IsEndNote() || GetExport().m_pDoc->GetFootnoteInfo().ePos == FTNPOS_CHAPTER )
-        pFootnoteEnd = m_rWW8Export.pEdn;
+        pFootnoteEnd = m_rWW8Export.pEdn.get();
     else
-        pFootnoteEnd = m_rWW8Export.pFootnote;
+        pFootnoteEnd = m_rWW8Export.pFootnote.get();
 
     pFootnoteEnd->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rFootnote );
     m_rWW8Export.WriteFootnoteBegin( rFootnote, m_rWW8Export.pO );
