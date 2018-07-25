@@ -174,7 +174,7 @@ static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenA
             fputs("\n\t", source_fp);
 
 #ifndef DICT_JA_ZH_IN_DATAFILE
-        fprintf(source_fp, "0x%lx, ", static_cast<long unsigned int>(lenArray[k]));
+        fprintf(source_fp, "0x%" SAL_PRIxUINT32 ", ", lenArray[k]);
 #else
         fwrite(&lenArray[k], sizeof(lenArray[k]), 1, source_fp);
 #endif
