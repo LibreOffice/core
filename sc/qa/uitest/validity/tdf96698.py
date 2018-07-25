@@ -18,7 +18,7 @@ class tdf96698(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        #A general valitdity check for the entered new content of the active cell - especially for text
+        #A general validity check for the entered new content of the active cell - especially for text
         #with a custom formula like in Excel is not possible.
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
         self.ui_test.execute_dialog_through_command(".uno:Validation")
