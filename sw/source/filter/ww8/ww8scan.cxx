@@ -3019,7 +3019,7 @@ private:
     long mnPo;
 public:
     explicit SamePos(long nPo) : mnPo(nPo) {}
-    bool operator()(const WW8PLCFx_Fc_FKP::WW8Fkp *pFkp)
+    bool operator()(const std::unique_ptr<WW8PLCFx_Fc_FKP::WW8Fkp>& pFkp)
         {return mnPo == pFkp->GetFilePos();}
 };
 
@@ -3079,21 +3079,20 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             std::find_if(maFkpCache.begin(), maFkpCache.end(), SamePos(nPo));
         if (aIter != maFkpCache.end())
         {
-            pFkp = *aIter;
+            pFkp = aIter->get();
             pFkp->Reset(GetStartFc());
         }
         else
         {
             pFkp = new WW8Fkp(GetFIB(), pFKPStrm, pDataStrm, nPo,
                 pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc());
-            maFkpCache.push_back(pFkp);
+            maFkpCache.push_back(std::unique_ptr<WW8Fkp>(pFkp));
 
             if (maFkpCache.size() > eMaxCache)
             {
-                WW8Fkp* pCachedFkp = maFkpCache.front();
+                WW8Fkp* pCachedFkp = maFkpCache.front().get();
                 if (!pCachedFkp->IsMustRemainCache())
                 {
-                    delete pCachedFkp;
                     maFkpCache.pop_front();
                 }
             }
@@ -3113,23 +3112,21 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
     long nLenStruct = (8 > rFib.m_nVersion) ? 2 : 4;
     if (ePl == CHP)
     {
-        pPLCF = new WW8PLCF(*pTableSt, rFib.m_fcPlcfbteChpx, rFib.m_lcbPlcfbteChpx,
-            nLenStruct, GetStartFc(), rFib.m_pnChpFirst, rFib.m_cpnBteChp);
+        pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbteChpx, rFib.m_lcbPlcfbteChpx,
+            nLenStruct, GetStartFc(), rFib.m_pnChpFirst, rFib.m_cpnBteChp));
     }
     else
     {
-        pPLCF = new WW8PLCF(*pTableSt, rFib.m_fcPlcfbtePapx, rFib.m_lcbPlcfbtePapx,
-            nLenStruct, GetStartFc(), rFib.m_pnPapFirst, rFib.m_cpnBtePap);
+        pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbtePapx, rFib.m_lcbPlcfbtePapx,
+            nLenStruct, GetStartFc(), rFib.m_pnPapFirst, rFib.m_cpnBtePap));
     }
 }
 
 WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 {
-    auto aEnd = maFkpCache.end();
-    for (auto aIter = maFkpCache.begin(); aIter != aEnd; ++aIter)
-        delete *aIter;
-    delete pPLCF;
-    delete pPCDAttrs;
+    maFkpCache.clear();
+    pPLCF.reset();
+    pPCDAttrs.reset();
 }
 
 sal_uInt32 WW8PLCFx_Fc_FKP::GetIdx() const
@@ -3339,8 +3336,8 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     */
     if (pPcd)
     {
-        pPCDAttrs = rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
-            *rSBase.m_pWw8Fib, pPcd.get(), &rSBase) : nullptr;
+        pPCDAttrs.reset( rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
+            *rSBase.m_pWw8Fib, pPcd.get(), &rSBase) : nullptr);
     }
 
     pPieceIter = rSBase.m_pPieceIter;
