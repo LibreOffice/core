@@ -30,6 +30,7 @@ class Qt5Graphics;
 class Qt5Instance;
 class Qt5Menu;
 class QWidget;
+class QMainWindow;
 class QPaintDevice;
 class QImage;
 class SvpSalGraphics;
@@ -39,6 +40,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
     friend class VclQtMixinBase;
 
     std::unique_ptr<QWidget> m_pQWidget;
+    std::unique_ptr<QMainWindow> m_pTopLevel;
 
     const bool m_bUseCairo;
     std::unique_ptr<QImage> m_pQImage;
@@ -75,6 +77,9 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
         return bool(m_nStyle & nMask);
     }
 
+    bool isWindow();
+    QWindow* windowHandle();
+
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
 
@@ -83,6 +88,7 @@ public:
     virtual ~Qt5Frame() override;
 
     QWidget* GetQWidget() const { return m_pQWidget.get(); }
+    QMainWindow* GetTopLevelWindow() const { return m_pTopLevel.get(); }
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
