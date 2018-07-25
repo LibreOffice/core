@@ -35,6 +35,10 @@
 #include <svx/xdash.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+// Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
+// it will define e.g. Yield as a macro:
+#include <prewin.h>
+#include <postwin.h>
 #include <fpdfview.h>
 
 // Forward Declarations
