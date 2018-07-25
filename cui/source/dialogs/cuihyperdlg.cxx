@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
@@ -107,12 +108,15 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP );
     pEntry = AddTabPage ( HyperLinkPageType::MAIL, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
-    aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP );
-    pEntry = AddTabPage ( HyperLinkPageType::DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
-    pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
-    aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-    pEntry = AddTabPage ( HyperLinkPageType::NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
-    pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP );
+        pEntry = AddTabPage ( HyperLinkPageType::DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
+        pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
+        aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP );
+        pEntry = AddTabPage ( HyperLinkPageType::NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
+        pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    }
 
     // set OK/Cancel - button
     GetCancelButton().SetText ( CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT) );
