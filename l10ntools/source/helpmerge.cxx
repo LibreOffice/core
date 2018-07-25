@@ -156,12 +156,12 @@ bool HelpParser::Merge( const OString &rDestinationFile,
         SAL_WARN("l10ntools", "could not parse " << sHelpFile);
         return false;
     }
-    bool hasNoError = MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
+    MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
-    return hasNoError;
+    return true;
 }
 
-bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage ,
+void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage ,
                                   OString const & sPath )
 {
     file->Extract();
@@ -189,7 +189,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
      }
 
     file->Write(sPath);
-    return true;
 }
 
 /* ProcessHelp method: search for en-US entry and replace it with the current language*/

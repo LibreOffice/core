@@ -487,7 +487,7 @@ public:
                                 UCBStorage_Impl( SvStream&, UCBStorage*, bool );
     void                        Init();
     sal_Int16                   Commit();
-    bool                        Revert();
+    void                        Revert();
     bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
     void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool );
@@ -2269,7 +2269,7 @@ sal_Int16 UCBStorage_Impl::Commit()
     return nRet;
 }
 
-bool UCBStorage_Impl::Revert()
+void UCBStorage_Impl::Revert()
 {
     for ( size_t i = 0; i < m_aChildrenList.size(); )
     {
@@ -2295,7 +2295,6 @@ bool UCBStorage_Impl::Revert()
             ++i;
         }
     }
-    return true;
 }
 
 const OUString& UCBStorage::GetName() const
@@ -2541,7 +2540,8 @@ bool UCBStorage::Commit()
 
 bool UCBStorage::Revert()
 {
-    return pImp->Revert();
+    pImp->Revert();
+    return true;
 }
 
 BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode nMode, bool bDirect )

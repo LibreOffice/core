@@ -79,7 +79,7 @@ LngParser::~LngParser()
 {
 }
 
-bool LngParser::CreatePO( const OString &rPOFile )
+void LngParser::CreatePO( const OString &rPOFile )
 {
     PoOfstream aPOStream( rPOFile, PoOfstream::APP );
     if (!aPOStream.isOpen()) {
@@ -109,7 +109,6 @@ bool LngParser::CreatePO( const OString &rPOFile )
         Text.erase("x-comment");
     }
     aPOStream.close();
-    return true;
 }
 
 void LngParser::WritePO(PoOfstream &aPOStream,
@@ -145,7 +144,7 @@ void LngParser::ReadLine(const OString &rLine_in,
     }
 }
 
-bool LngParser::Merge(
+void LngParser::Merge(
     const OString &rPOFile,
     const OString &rDestinationFile,
     const OString &rLanguage )
@@ -290,7 +289,6 @@ bool LngParser::Merge(
         aDestination << mvLines[i] << '\n';
 
     aDestination.close();
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

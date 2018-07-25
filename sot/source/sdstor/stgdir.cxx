@@ -901,11 +901,7 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
     {
         StgEntry aEntry;
         aEntry.Init();
-        if( !aEntry.SetName( rName ) )
-        {
-            m_rIo.SetError( SVSTREAM_GENERALERROR );
-            return nullptr;
-        }
+        aEntry.SetName( rName );
         // Look in the directory attached to the entry
         StgDirEntry aTest( aEntry );
         return static_cast<StgDirEntry*>( rStg.m_pDown->Find( &aTest ) );
@@ -921,11 +917,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     StgEntry aEntry;
     aEntry.Init();
     aEntry.SetType( eType );
-    if( !aEntry.SetName( rName ) )
-    {
-        m_rIo.SetError( SVSTREAM_GENERALERROR );
-        return nullptr;
-    }
+    aEntry.SetName( rName );
     StgDirEntry* pRes = Find( rStg, rName );
     if( pRes )
     {

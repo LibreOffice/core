@@ -157,7 +157,7 @@ public:
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings.get(); }
     void Write( OString const &rFilename );
-    bool Write( std::ofstream &rStream, XMLNode *pCur = nullptr );
+    void Write( std::ofstream &rStream, XMLNode *pCur = nullptr );
 
     bool CheckExportStatus( XMLParentNode *pCur = nullptr );
 

@@ -100,7 +100,7 @@ struct FileHandle_Impl
     static size_t getpagesize();
 
     sal_uInt64   getPos() const;
-    oslFileError setPos(sal_uInt64 uPos);
+    void setPos(sal_uInt64 uPos);
 
     sal_uInt64   getSize() const;
     oslFileError setSize(sal_uInt64 uSize);
@@ -282,10 +282,9 @@ sal_uInt64 FileHandle_Impl::getPos() const
     return sal::static_int_cast< sal_uInt64 >(m_fileptr);
 }
 
-oslFileError FileHandle_Impl::setPos(sal_uInt64 uPos)
+void FileHandle_Impl::setPos(sal_uInt64 uPos)
 {
     m_fileptr = sal::static_int_cast< off_t >(uPos);
-    return osl_File_E_None;
 }
 
 sal_uInt64 FileHandle_Impl::getSize() const
@@ -1490,7 +1489,8 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
             return osl_File_E_INVAL;
     }
 
-    return pImpl->setPos(nPos + nOffset);
+    pImpl->setPos(nPos + nOffset);
+    return osl_File_E_None;
 }
 
 oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64* pSize)

@@ -54,8 +54,8 @@ public:
     LngParser(const OString &rLngFile);
     ~LngParser();
 
-    bool CreatePO( const OString &rPOFile );
-    bool Merge(const OString &rPOFile, const OString &rDestinationFile,
+    void CreatePO( const OString &rPOFile );
+    void Merge(const OString &rPOFile, const OString &rDestinationFile,
          const OString &rLanguage );
 };
 

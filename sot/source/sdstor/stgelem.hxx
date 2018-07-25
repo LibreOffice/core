@@ -118,7 +118,7 @@ class StgEntry
     OUString    m_aName;                      // Name as Compare String (ascii, upper)
 public:
     void        Init();                     // initialize the data
-    bool        SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
+    void        SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
     void        GetName( OUString& rName ) const;
                                         // fill in the name
     sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
