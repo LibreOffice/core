@@ -639,18 +639,6 @@ void OUnoObject::impl_initializeModel_nothrow()
     }
 }
 
-void OUnoObject::impl_setReportComponent_nothrow()
-{
-    if ( m_xReportComponent.is() )
-        return;
-
-    OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
-    OXUndoEnvironment::OUndoEnvLock aLock( rRptModel.GetUndoEnv() );
-    m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
-
-    impl_initializeModel_nothrow();
-}
-
 sal_uInt16 OUnoObject::GetObjIdentifier() const
 {
     return m_nObjectType;
@@ -742,37 +730,6 @@ void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect)
     OObjectBase::StartListening();
 }
 
-
-bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
-{
-    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
-    if ( bResult )
-    {
-        impl_setReportComponent_nothrow();
-        // set labels
-        if ( m_xReportComponent.is() )
-        {
-            try
-            {
-                if ( supportsService( SERVICE_FIXEDTEXT ) )
-                {
-                    m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
-                }
-            }
-            catch(const uno::Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("reportdesign");
-            }
-
-            impl_initializeModel_nothrow();
-        }
-        // set geometry properties
-        SetPropsFromRect(GetLogicRect());
-    }
-
-    return bResult;
-}
-
 OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
     OUString aDefaultName = "HERE WE HAVE TO INSERT OUR NAME!";
@@ -856,11 +813,57 @@ void OUnoObject::CreateMediator(bool _bReverse)
 {
     if ( !m_xMediator.is() )
     {
-        impl_setReportComponent_nothrow();
+        // tdf#118730 Directly do thinigs formally done in
+        // OUnoObject::impl_setReportComponent_nothrow here
+        if(!m_xReportComponent.is())
+        {
+            OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
+            OXUndoEnvironment::OUndoEnvLock aLock( rRptModel.GetUndoEnv() );
+            m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
 
-        Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
-        if ( !m_xMediator.is() && m_xReportComponent.is() && xControlModel.is() )
-            m_xMediator = new OPropertyMediator(m_xReportComponent.get(),xControlModel,getPropertyNameMap(GetObjIdentifier()),_bReverse);
+            impl_initializeModel_nothrow();
+        }
+
+        // tdf#118730 Directly do thinigs formally done in
+        // OUnoObject::EndCreate here
+        if(m_xReportComponent.is())
+        {
+            // set labels
+            if ( m_xReportComponent.is() )
+            {
+                try
+                {
+                    if ( supportsService( SERVICE_FIXEDTEXT ) )
+                    {
+                        m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
+                    }
+                }
+                catch(const uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("reportdesign");
+                }
+
+                impl_initializeModel_nothrow();
+            }
+        }
+
+        // tdf#118730 set geometry properties
+        SetPropsFromRect(GetLogicRect());
+
+        if(!m_xMediator.is() && m_xReportComponent.is())
+        {
+            Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
+
+            if(xControlModel.is())
+            {
+                m_xMediator = new OPropertyMediator(
+                    m_xReportComponent.get(),
+                    xControlModel,
+                    getPropertyNameMap(GetObjIdentifier()),
+                    _bReverse);
+            }
+        }
+
         OObjectBase::StartListening();
     }
 }
