@@ -35,6 +35,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/tencinfo.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>

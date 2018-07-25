@@ -19,6 +19,7 @@
 
 #include <rtl/math.hxx>
 
+#include <iterator>
 #include <valarray>
 
 #include <InternalDataProvider.hxx>
