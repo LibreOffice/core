@@ -959,15 +959,15 @@ private:
 class WW8Export : public MSWordExportBase
 {
 public:
-    ww::bytes* pO;                       ///< Buffer
+    ww::bytes* pO;                      ///< Buffer
 
     SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
 
-    WW8Fib* pFib;                       ///< File Information Block
-    WW8Dop* pDop;                       ///< DOcument Properties
-    WW8_WrPlcFootnoteEdn *pFootnote;              ///< Footnotes - structure to remember them, and output
-    WW8_WrPlcFootnoteEdn *pEdn;              ///< Endnotes - structure to remember them, and output
-    WW8_WrPlcSepx* pSepx;               ///< Sections/headers/footers
+    std::unique_ptr<WW8Fib> pFib;                       ///< File Information Block
+    std::unique_ptr<WW8Dop> pDop;                       ///< DOcument Properties
+    std::unique_ptr<WW8_WrPlcFootnoteEdn> pFootnote;    ///< Footnotes - structure to remember them, and output
+    std::unique_ptr<WW8_WrPlcFootnoteEdn> pEdn;         ///< Endnotes - structure to remember them, and output
+    std::unique_ptr<WW8_WrPlcSepx> pSepx;               ///< Sections/headers/footers
 
     bool m_bDot; ///< Template or document.
 
