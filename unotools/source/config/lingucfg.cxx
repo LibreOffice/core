@@ -867,10 +867,9 @@ bool SvtLinguConfig::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rVa
     return GetConfigItem().SetProperty( nPropertyHandle, rValue );
 }
 
-bool SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
+void SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
 {
     rOptions = GetConfigItem().GetOptions();
-    return true;
 }
 
 bool SvtLinguConfig::IsReadOnly( const OUString &rPropertyName ) const

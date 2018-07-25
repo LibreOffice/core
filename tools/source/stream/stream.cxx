@@ -1500,7 +1500,7 @@ std::size_t SvStream::CryptAndWriteBuffer( const void* pStart, std::size_t nLen)
     return nCount;
 }
 
-bool SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
+void SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
 {
     unsigned char* pTemp = static_cast<unsigned char*>(pStart);
     unsigned char nMask = m_nCryptMask;
@@ -1512,7 +1512,6 @@ bool SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
         aCh ^= nMask;
         *pTemp = aCh;
     }
-    return true;
 }
 
 static unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersion)

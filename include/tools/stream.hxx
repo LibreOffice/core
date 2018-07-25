@@ -195,7 +195,7 @@ protected:
 
     // encrypt and write in blocks
     std::size_t     CryptAndWriteBuffer( const void* pStart, std::size_t nLen );
-    bool            EncryptBuffer( void* pStart, std::size_t nLen ) const;
+    void            EncryptBuffer( void* pStart, std::size_t nLen ) const;
 
 public:
                     SvStream();
