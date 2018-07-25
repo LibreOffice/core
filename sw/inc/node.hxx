@@ -482,6 +482,11 @@ public:
     // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
+    virtual void ModifyNotification(const SfxPoolItem* pOld, const SfxPoolItem* pNew) override
+    {
+        SwClientNotify(*this, sw::LegacyModifyHint(pOld, pNew));
+    }
+
 private:
     SwContentNode( const SwContentNode & rNode ) = delete;
     SwContentNode & operator= ( const SwContentNode & rNode ) = delete;
