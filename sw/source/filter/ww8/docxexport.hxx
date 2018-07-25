@@ -82,7 +82,7 @@ class DocxExport : public MSWordExportBase
     std::unique_ptr<DocxAttributeOutput> m_pAttrOutput;
 
     /// Sections/headers/footers
-    MSWordSections *m_pSections;
+    std::unique_ptr<MSWordSections> m_pSections;
 
     /// Header counter.
     sal_Int32 m_nHeaders;

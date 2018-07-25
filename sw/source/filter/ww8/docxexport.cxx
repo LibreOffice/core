@@ -511,7 +511,7 @@ void DocxExport::ExportDocument_Impl()
     InitStyles();
 
     // init sections
-    m_pSections = new MSWordSections( *this );
+    m_pSections.reset(new MSWordSections( *this ));
 
     // Make sure images are counted from one, even when exporting multiple documents.
     oox::drawingml::DrawingML::ResetCounters();
@@ -541,8 +541,7 @@ void DocxExport::ExportDocument_Impl()
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     delete m_pStyles;
     m_pStyles = nullptr;
-    delete m_pSections;
-    m_pSections = nullptr;
+    m_pSections.reset();
 }
 
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
