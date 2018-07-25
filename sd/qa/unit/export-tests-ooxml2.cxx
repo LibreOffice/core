@@ -1700,7 +1700,6 @@ void SdOOXMLExportTest2::testTdf118783()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    // check that transition attribute didn't change from 'out' to 'in'
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     OUString sAttributeName = getXPathContent(pXmlDocContent, "//p:animRot/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("r"), sAttributeName);
@@ -1764,7 +1763,6 @@ void SdOOXMLExportTest2::testTdf118768()
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
-    // check that transition attribute didn't change from 'out' to 'in'
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:anim[1]", "from", "(-#ppt_w/2)");
     assertXPath(pXmlDocContent, "//p:anim[1]", "to", "(#ppt_x)");
