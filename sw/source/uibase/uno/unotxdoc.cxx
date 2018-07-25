@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
@@ -192,7 +193,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using ::osl::FileBase;
 
-static SwPrintUIOptions * lcl_GetPrintUIOptions(
+static std::unique_ptr<SwPrintUIOptions> lcl_GetPrintUIOptions(
     SwDocShell * pDocShell,
     const SfxViewShell * pView )
 {
@@ -241,7 +242,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
             pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
         }
     }
-    return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
+    return o3tl::make_unique<SwPrintUIOptions>( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
 static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
@@ -465,7 +466,7 @@ SwXTextDocument::~SwXTextDocument()
         xNumFormatAgg->setDelegator(x0);
         xNumFormatAgg = nullptr;
     }
-    delete m_pPrintUIOptions;
+    m_pPrintUIOptions.reset();
     if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
     {   // rhbz#827695: this can happen if the last page is not printed
         // the SwViewShell has been deleted already by SwView::~SwView
@@ -473,7 +474,7 @@ SwXTextDocument::~SwXTextDocument()
         // something less insane that has its own view
         m_pRenderData->ViewOptionAdjustCrashPreventionKludge();
     }
-    delete m_pRenderData;
+    m_pRenderData.reset();
 }
 
 SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
@@ -2519,7 +2520,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
     if (!bIsSwSrcView && !m_pRenderData)
-        m_pRenderData = new SwRenderData;
+        m_pRenderData.reset(new SwRenderData);
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
@@ -2599,7 +2600,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             }
 
             m_pRenderData->MakeSwPrtOptions( pRenderDocShell,
-                    m_pPrintUIOptions, bIsPDFExport );
+                    m_pPrintUIOptions.get(), bIsPDFExport );
 
             if (pSwView)
             {
@@ -2979,7 +2980,7 @@ void SAL_CALL SwXTextDocument::render(
     OSL_ENSURE( m_pRenderData, "data should have been created already in getRendererCount..." );
     OSL_ENSURE( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
     if (!bIsSwSrcView && !m_pRenderData)
-        m_pRenderData = new SwRenderData;
+        m_pRenderData.reset(new SwRenderData);
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
@@ -3107,8 +3108,8 @@ void SAL_CALL SwXTextDocument::render(
     }
     if( bLastPage )
     {
-        delete m_pRenderData;       m_pRenderData     = nullptr;
-        delete m_pPrintUIOptions;   m_pPrintUIOptions = nullptr;
+        m_pRenderData.reset();
+        m_pPrintUIOptions.reset();
     }
 }
 

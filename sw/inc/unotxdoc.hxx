@@ -174,8 +174,8 @@ private:
     SfxViewFrame*                                   m_pHiddenViewFrame;
     rtl::Reference<SwXDocumentPropertyHelper>       mxPropertyHelper;
 
-    SwPrintUIOptions *                              m_pPrintUIOptions;
-    SwRenderData *                                  m_pRenderData;
+    std::unique_ptr<SwPrintUIOptions>               m_pPrintUIOptions;
+    std::unique_ptr<SwRenderData>                   m_pRenderData;
 
     void                    GetNumberFormatter();
 
