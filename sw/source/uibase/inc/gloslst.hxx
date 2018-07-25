@@ -45,7 +45,7 @@ struct AutoTextGroup
 
 class SwGlossaryList : public AutoTimer
 {
-    std::vector<AutoTextGroup*> aGroupArr;
+    std::vector<std::unique_ptr<AutoTextGroup>> aGroupArr;
     OUString        sPath;
     bool            bFilled;
 
