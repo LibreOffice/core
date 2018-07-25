@@ -2839,8 +2839,7 @@ void SwWW8ImplReader::PostProcessAttrs()
             while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
         }
 
-        delete m_pPostProcessAttrsInfo;
-        m_pPostProcessAttrsInfo = nullptr;
+        m_pPostProcessAttrsInfo.reset();
     }
 }
 
