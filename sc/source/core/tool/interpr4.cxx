@@ -3215,6 +3215,11 @@ void ScInterpreter::ScMacro()
     OSL_ENSURE(dynamic_cast<const StarBASIC *>(pObject) != nullptr, "No Basic found!");
     OUString aMacroStr = pObject->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();
     OUString aBasicStr;
+    if (pRoot && bUseVBAObjects)
+    {
+        // just here to make sure the VBA objects when we run the macro during ODF import
+        pRoot->getVBAGlobals();
+    }
     if (pObject->GetParent())
     {
         aBasicStr = pObject->GetParent()->GetName();    // document BASIC
