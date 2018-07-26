@@ -12,8 +12,8 @@ bool openAddressBook(const std::string& path)
     {
         return false;
     }
+
     const int defaultScope = 0x80;
-    MorkTableMap::Map::const_iterator tableIter;
     MorkTableMap *Tables = mork.getTables( defaultScope );
     if ( Tables )
     {
