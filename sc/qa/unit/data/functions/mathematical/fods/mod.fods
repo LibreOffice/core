@@ -3220,12 +3220,12 @@
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:formula="of:=MOD(25.4;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+      <text:p>#DIV/0!</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Err502</text:p>
+     <table:table-cell table:formula="of:#DIV/0!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce66" table:formula="of:=ISERROR([.A36])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce66" table:formula="of:=ERROR.TYPE([.A36])=2" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([Sheet2.A36])" office:value-type="string" office:string-value="=MOD(25.4,0)" calcext:value-type="string">
