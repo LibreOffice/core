@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <svl/zforlist.hxx>
 
 #include <dpcache.hxx>
@@ -234,13 +234,41 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
     {
         // Obtain the source range from the range name first.
         maSourceRange = ScRange();
+
+        // Range names referring a sheet contain a #
+        // See comment of ScCellShell::ExecuteDataPilotDialog
+        // paragraph "Populate named ranges"
+        sal_Int32 nBeforeSheetName = ScGlobal::FindUnquoted( maRangeName, '#');
+
+        // let's consider the range name is global to the doc by default
         ScRangeName* pRangeName = mpDoc->GetRangeName();
+        OUString searchRangeName(maRangeName);
+
+        // the range name concerns a specificsheet
+        if (nBeforeSheetName != -1)
+        {
+            OUString sheetName = maRangeName.copy(0, nBeforeSheetName);
+            ScGlobal::EraseQuotes( sheetName, '\'', false);
+            // - 2 : corresponds to quotes
+            OUString rangeNameSheet = maRangeName.copy(nBeforeSheetName+1, maRangeName.getLength() - 2 - sheetName.getLength() - 1);
+            searchRangeName = rangeNameSheet;
+
+            SCTAB nTab = 0;
+            if (!mpDoc->GetTable(sheetName, nTab))
+            {
+                // the sheetname should exist
+                assert(false);
+                return maSourceRange;
+            }
+            pRangeName = mpDoc->GetRangeName(nTab);
+        }
+
         do
         {
             if (!pRangeName)
                 break;
 
-            OUString aUpper = ScGlobal::pCharClass->uppercase(maRangeName);
+            OUString aUpper = ScGlobal::pCharClass->uppercase(searchRangeName);
             const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
             if (!pData)
                 break;
