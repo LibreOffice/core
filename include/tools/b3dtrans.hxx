@@ -195,7 +195,6 @@ private:
     virtual void DeviceRectangleChange() override;
 
     basegfx::B3DPoint       aPosition;
-    basegfx::B3DPoint       aCorrectedPosition;
     basegfx::B3DVector  aLookAt;
     double                  fFocalLength;
     double                  fBankAngle;

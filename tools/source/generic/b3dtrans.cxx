@@ -389,7 +389,6 @@ B3dCamera::B3dCamera(
     double fFocLen, double fBnkAng)
 :   B3dViewport(),
     aPosition(rPos),
-    aCorrectedPosition(rPos),
     aLookAt(rLkAt),
     fFocalLength(fFocLen),
     fBankAngle(fBnkAng)
