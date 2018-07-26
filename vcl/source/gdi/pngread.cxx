@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <memory>
+#include <unotools/configmgr.hxx>
 #include <vcl/pngread.hxx>
 
 #include <cmath>
@@ -134,6 +135,7 @@ private:
     bool                mbIDATComplete : 1; // true if finished with enough IDAT chunks
     bool                mbpHYs : 1;         // true if physical size of pixel available
     bool                mbIgnoreGammaChunk : 1;
+    bool                mbIgnoreCRC : 1; // skip checking CRCs while fuzzing
 
 #if OSL_DEBUG_LEVEL > 0
     // do some checks in debug mode
@@ -214,6 +216,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbIDATComplete( false ),
     mbpHYs              ( false ),
     mbIgnoreGammaChunk  ( false ),
+    mbIgnoreCRC( utl::ConfigManager::IsFuzzing() ),
 #if OSL_DEBUG_LEVEL > 0
     mnAllocSizeScanline(0),
     mnAllocSizeScanlineAlpha(0),
@@ -306,7 +309,7 @@ bool PNGReaderImpl::ReadNextChunk()
         }
         sal_uInt32 nCheck(0);
         mrPNGStream.ReadUInt32( nCheck );
-        if( nCRC32 != nCheck )
+        if (!mbIgnoreCRC && nCRC32 != nCheck)
             return false;
     }
     else
