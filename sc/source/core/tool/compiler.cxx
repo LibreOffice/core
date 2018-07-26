@@ -5707,6 +5707,7 @@ bool ScCompiler::HandleTableRef()
                     default:
                         ;   // nothing
                 }
+                // coverity[copy_paste_error] - this is correct, aStart in both aDBRange uses
                 if (aColRange.aStart.Row() != aDBRange.aStart.Row() || aColRange.aEnd.Row() != aDBRange.aStart.Row())
                     aRange = ScRange( ScAddress::INITIALIZE_INVALID);
                 else
