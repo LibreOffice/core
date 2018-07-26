@@ -58,11 +58,6 @@ struct SvXMLAttributeList_Impl
         vecAttribute.reserve(20);
     }
 
-    SvXMLAttributeList_Impl( const SvXMLAttributeList_Impl& r ) :
-            vecAttribute( r.vecAttribute )
-    {
-    }
-
     ::std::vector<struct SvXMLTagAttribute_Impl> vecAttribute;
     typedef ::std::vector<struct SvXMLTagAttribute_Impl>::size_type size_type;
 };
