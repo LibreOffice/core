@@ -36,6 +36,11 @@ public:
                 sal_uInt16  );
     virtual ~SvxGrfCrop() override;
 
+    SvxGrfCrop(SvxGrfCrop const &) = default;
+    SvxGrfCrop(SvxGrfCrop &&) = default;
+    SvxGrfCrop & operator =(SvxGrfCrop const &) = default;
+    SvxGrfCrop & operator =(SvxGrfCrop &&) = default;
+
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -57,13 +62,6 @@ public:
     sal_Int32 GetRight() const          { return nRight; }
     sal_Int32 GetTop() const            { return nTop; }
     sal_Int32 GetBottom() const         { return nBottom; }
-
-    SvxGrfCrop& operator=( const SvxGrfCrop& rCrop )
-        {
-            nLeft = rCrop.GetLeft();        nTop = rCrop.GetTop();
-            nRight = rCrop.GetRight();      nBottom = rCrop.GetBottom();
-            return *this;
-        }
 };
 
 #endif  // INCLUDED_SVX_GRFCROP_HXX
