@@ -180,7 +180,7 @@ private:
 
     OUString m_sNone;
 
-    SwFieldMgr* pMgr;
+    std::unique_ptr<SwFieldMgr> pMgr;
     bool bHTMLMode;
 
     TextFilterAutoConvert m_aTextFilter;
