@@ -141,8 +141,8 @@ SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
 
 SwEnvDlg::~SwEnvDlg()
 {
-    delete pAddresseeSet;
-    delete pSenderSet;
+    pAddresseeSet.reset();
+    pSenderSet.reset();
 }
 
 void SwEnvDlg::PageCreated(const OString& rId, SfxTabPage &rPage)

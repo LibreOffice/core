@@ -73,8 +73,8 @@ friend class SwEnvPreview;
     SwEnvItem       aEnvItem;
     SwWrtShell      *pSh;
     VclPtr<Printer> pPrinter;
-    SfxItemSet      *pAddresseeSet;
-    SfxItemSet      *pSenderSet;
+    std::unique_ptr<SfxItemSet> pAddresseeSet;
+    std::unique_ptr<SfxItemSet> pSenderSet;
 
     std::unique_ptr<weld::Button> m_xModify;
 

@@ -321,7 +321,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
 // A temporary Itemset that gets discarded at abort
 SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool bSender)
 {
-    SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
+    std::unique_ptr<SfxItemSet>& pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
     if (!pAddrSet)
     {
         // determine range (merge both Itemsets' ranges)
@@ -346,12 +346,12 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
         aVec2.insert(aVec2.end(), aVec.begin(), aVec.end());
         std::unique_ptr<sal_uInt16[]> pNewRanges(::lcl_convertListToRanges(aVec2));
 
-        pAddrSet = new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
-                                  pNewRanges.get());
+        pAddrSet.reset(new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
+                                  pNewRanges.get()));
         pAddrSet->Put(pColl->GetAttrSet());
     }
 
-    return pAddrSet;
+    return pAddrSet.get();
 }
 
 IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, weld::ComboBoxText&, void)
@@ -484,8 +484,8 @@ void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
     setfieldval(*m_xSizeHeightField , std::min(rItem.m_nWidth, rItem.m_nHeight));
     SetMinMax();
 
-    DELETEZ(GetParentSwEnvDlg()->pSenderSet);
-    DELETEZ(GetParentSwEnvDlg()->pAddresseeSet);
+    GetParentSwEnvDlg()->pSenderSet.reset();
+    GetParentSwEnvDlg()->pAddresseeSet.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
