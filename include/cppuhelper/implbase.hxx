@@ -104,6 +104,11 @@ protected:
     virtual ~WeakImplHelper() override {}
 
 public:
+    WeakImplHelper(WeakImplHelper const &) = default;
+    WeakImplHelper(WeakImplHelper &&) = default;
+    WeakImplHelper & operator =(WeakImplHelper const &) = default;
+    WeakImplHelper & operator =(WeakImplHelper &&) = default;
+
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
@@ -152,6 +157,11 @@ protected:
     virtual ~ImplInheritanceHelper() {}
 
 public:
+    ImplInheritanceHelper(ImplInheritanceHelper const &) = default;
+    ImplInheritanceHelper(ImplInheritanceHelper &&) = default;
+    ImplInheritanceHelper & operator =(ImplInheritanceHelper const &) = default;
+    ImplInheritanceHelper & operator =(ImplInheritanceHelper &&) = default;
+
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     {
         css::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
