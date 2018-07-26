@@ -562,7 +562,7 @@ SwCaptionOptPage::~SwCaptionOptPage()
 void SwCaptionOptPage::dispose()
 {
     DelUserData();
-    delete pMgr;
+    pMgr.reset();
     m_pCheckLB.clear();
     m_pLbCaptionOrder.clear();
     m_pPreview.clear();
