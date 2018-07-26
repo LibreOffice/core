@@ -377,11 +377,11 @@ void FieldEntry::setData(const OString&    name,
                          RTValueType        constValueType,
                          RTConstValueUnion  constValue)
 {
-    sal_Unicode * newValue = nullptr;
+    std::unique_ptr<sal_Unicode[]> newValue;
     if (constValueType == RT_TYPE_STRING && constValue.aString != nullptr) {
         sal_Int32 n = rtl_ustr_getLength(constValue.aString) + 1;
-        newValue = new sal_Unicode[n];
-        memcpy(newValue, constValue.aString, n * sizeof (sal_Unicode));
+        newValue.reset(new sal_Unicode[n]);
+        memcpy(newValue.get(), constValue.aString, n * sizeof (sal_Unicode));
     }
 
     m_name = name;
@@ -407,7 +407,7 @@ void FieldEntry::setData(const OString&    name,
             m_constValue.aString = NULL_WSTRING;
         else
         {
-            m_constValue.aString = newValue;
+            m_constValue.aString = newValue.release();
         }
     }
     else
