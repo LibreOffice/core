@@ -27,7 +27,6 @@
 #include <unonames.hxx>
 
 #include <svtools/controldims.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
@@ -682,8 +681,6 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         m_aChartTypeDialogControllerList.emplace_back(new StockChartDialogController() );
     }
     m_aChartTypeDialogControllerList.emplace_back(new CombiColumnLineChartDialogController() );
-
-    SvtMiscOptions aOpts;
 
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {
