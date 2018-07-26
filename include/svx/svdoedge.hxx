@@ -52,7 +52,6 @@ class SdrObjConnection final
 
 public:
     SdrObjConnection() { ResetVars(); }
-    SVX_DLLPUBLIC ~SdrObjConnection();
 
     void ResetVars();
     bool TakeGluePoint(SdrGluePoint& rGP) const;
