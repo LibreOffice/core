@@ -33,20 +33,6 @@ FontAttributes::FontAttributes()
     mnQuality( 0 )
 {}
 
-FontAttributes::FontAttributes( const FontAttributes& rFontAttributes ) :
-    maFamilyName( rFontAttributes.maFamilyName ),
-    maStyleName( rFontAttributes.maStyleName ),
-    meWeight( rFontAttributes.meWeight ),
-    meFamily( rFontAttributes.meFamily ),
-    mePitch( rFontAttributes.mePitch ),
-    meWidthType( rFontAttributes.meWidthType ),
-    meItalic( rFontAttributes.meItalic ),
-    meCharSet( rFontAttributes.meCharSet ),
-    mbSymbolFlag( rFontAttributes.mbSymbolFlag ),
-    maMapNames( rFontAttributes.maMapNames ),
-    mnQuality( rFontAttributes.mnQuality )
-{}
-
 bool FontAttributes::CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const
 {
     if (maFamilyName != rOther.maFamilyName)

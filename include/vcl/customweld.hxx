@@ -73,6 +73,11 @@ public:
     {
     }
     virtual ~CustomWidgetController();
+
+    CustomWidgetController(CustomWidgetController const&) = default;
+    CustomWidgetController(CustomWidgetController&&) = default;
+    CustomWidgetController& operator=(CustomWidgetController const&) = default;
+    CustomWidgetController& operator=(CustomWidgetController&&) = default;
 };
 
 class VCL_DLLPUBLIC CustomWeld

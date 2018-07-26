@@ -62,8 +62,6 @@ public:
     sal_uInt16          GetRepeat() const       { return mnRepeat;   }
 
     KeyEvent        LogicalTextDirectionality (TextDirectionality eMode) const;
-                    KeyEvent (const KeyEvent& rKeyEvent);
-
 };
 
 inline KeyEvent::KeyEvent()
