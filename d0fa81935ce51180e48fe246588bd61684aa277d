@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_284ce8c5",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-07-26T21:19:10Z",
+      "side": 1,
+      "message": "Please replace this method with  \"exportShapeProps\" as it is identical",
+      "revId": "d0fa81935ce51180e48fe246588bd61684aa277d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_08c7e414",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-07-26T21:19:10Z",
+      "side": 1,
+      "message": "Please remove this method as it is no longer needed.",
+      "revId": "d0fa81935ce51180e48fe246588bd61684aa277d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
