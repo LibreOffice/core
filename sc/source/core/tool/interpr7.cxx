@@ -47,7 +47,7 @@ void ScInterpreter::ScFilterXML()
         // In array/matrix context node elements' results are to be
         // subsequently stored. Check this before obtaining any argument from
         // the stack so the stack type can be used.
-        if (pJumpMatrix || bMatrixFormula || pCur->IsInForceArray())
+        if (pJumpMatrix || IsInArrayContext())
         {
             if (pJumpMatrix)
             {
