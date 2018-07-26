@@ -1314,7 +1314,7 @@ OUString SvTreeListBox::GetEntryLongDescription( SvTreeListEntry* ) const
 OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
 {
     assert(pEntry);
-    OUString sRet;
+    OUStringBuffer sRet;
 
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
@@ -1324,14 +1324,14 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
         if ( (rItem.GetType() == SvLBoxItemType::String) &&
              !static_cast<SvLBoxString&>( rItem ).GetText().isEmpty() )
         {
-            sRet += static_cast<SvLBoxString&>( rItem ).GetText() + ",";
+            sRet.append(static_cast<SvLBoxString&>( rItem ).GetText()).append(",");
         }
         nCur++;
     }
 
     if (!sRet.isEmpty())
         sRet = sRet.copy(0, sRet.getLength() - 1);
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 SvTreeListBox::~SvTreeListBox()

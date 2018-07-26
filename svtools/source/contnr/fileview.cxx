@@ -1843,14 +1843,13 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString aValue;
     OUString const aTab( "\t" );
     OUString const aDateSep( ", " );
 
     for (auto const& elem : maContent)
     {
         // title, type, size, date
-        aValue = elem->GetTitle();
+        OUString aValue = elem->GetTitle();
         ReplaceTabWithString( aValue );
         aValue += aTab + elem->maType + aTab;
         // folders don't have a size

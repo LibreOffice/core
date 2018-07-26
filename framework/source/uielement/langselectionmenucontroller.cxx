@@ -167,7 +167,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     if ( pVCLPopupMenu )
         pPopupMenu = static_cast<PopupMenu *>(pVCLPopupMenu->GetMenu());
 
-    OUString aCmd;
     OUString aCmd_Dialog;
     OUString aCmd_Language;
     if( eMode == MODE_SetLanguageSelectionMenu )
@@ -205,8 +204,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             !langItem.isEmpty()) // 'no language found' from language guessing
         {
             pPopupMenu->InsertItem( nItemId, langItem);
-            aCmd = aCmd_Language;
-            aCmd += langItem;
+            OUString aCmd = aCmd_Language + langItem;
             pPopupMenu->SetItemCommand( nItemId, aCmd );
             if (langItem == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
@@ -220,7 +218,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // entry for LANGUAGE_NONE
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, FwkResId(STR_LANGSTATUS_NONE) );
-    aCmd = aCmd_Language + "LANGUAGE_NONE";
+    OUString aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for 'Reset to default language'

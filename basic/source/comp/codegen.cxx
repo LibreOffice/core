@@ -189,7 +189,7 @@ void SbiCodeGen::Save()
         if( pProc && pProc->IsDefined() )
         {
             OUString aProcName = pProc->GetName();
-            OUString aIfaceProcName;
+            OUStringBuffer aIfaceProcName;
             OUString aIfaceName;
             sal_uInt16 nPassCount = 1;
             if( nIfaceCount )
@@ -210,9 +210,9 @@ void SbiCodeGen::Save()
                     {
                         if( nPropPrefixFound == 0 )
                         {
-                            aIfaceProcName += aPropPrefix;
+                            aIfaceProcName.append(aPropPrefix);
                         }
-                        aIfaceProcName += aPureProcName.copy( rIfaceName.getLength() + 1 );
+                        aIfaceProcName.append(aPureProcName.copy( rIfaceName.getLength() + 1 ));
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;
@@ -224,7 +224,7 @@ void SbiCodeGen::Save()
             {
                 if( nPass == 1 )
                 {
-                    aProcName = aIfaceProcName;
+                    aProcName = aIfaceProcName.toString();
                 }
                 PropertyMode ePropMode = pProc->getPropertyMode();
                 if( ePropMode != PropertyMode::NONE )
