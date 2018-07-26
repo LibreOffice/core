@@ -46,8 +46,8 @@ private:
     // Import/Export
     void                ImpWriteCERN( SvStream& rOStm ) const;
     void                ImpWriteNCSA( SvStream& rOStm ) const;
-    sal_uLong           ImpReadCERN( SvStream& rOStm );
-    sal_uLong           ImpReadNCSA( SvStream& rOStm );
+    void                ImpReadCERN( SvStream& rOStm );
+    void                ImpReadNCSA( SvStream& rOStm );
 
     void                ImpReadCERNLine( const OString& rLine );
     static Point        ImpReadCERNCoords( const char** ppStr );

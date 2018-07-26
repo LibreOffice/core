@@ -121,7 +121,7 @@ public:
     css::uno::Sequence< OUString >  GetSchemeNames() const;
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
-    bool                        LoadScheme(const OUString& rScheme );
+    void                        LoadScheme(const OUString& rScheme );
     const OUString&             GetCurrentSchemeName() const;
     void                        SetCurrentSchemeName(const OUString& rScheme);
 
