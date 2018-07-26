@@ -208,6 +208,7 @@ public:
                 maStartValue = *maFrom;
                 maEndValue = maStartValue + *maBy;
             }
+            maStartInterpolationValue = maStartValue;
         }
         else
         {
