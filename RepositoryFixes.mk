@@ -73,6 +73,7 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst spell:spell.uno%,spell:libspell.uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst jurt:libjpipe.dylib%,jurt:libjpipe.jnilib%,$(gb_Library_FILENAMES))
 
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.4) # default to use libc++
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libc++.dylib,$(gb_Library_FILENAMES))

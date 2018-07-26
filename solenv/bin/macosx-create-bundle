@@ -88,7 +88,7 @@ while [ $# != 0 ]; do
 				rm -Rf "$outputdir/$inputjnilibname"
 			fi
 			# Link jnilib
-			ln -sf "$inputfilename" "$outputdir/$inputjnilibname"
+			ln -shf "$inputfilename" "$outputdir/$inputjnilibname"
 
 			#printf "macosx-create-bundle: $outputdir/$inputjnilibname successfully created\n"
 		fi
