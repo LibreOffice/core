@@ -46,6 +46,8 @@ public:
 
     explicit OOXMLFastContextHandler(OOXMLFastContextHandler * pContext);
 
+    OOXMLFastContextHandler(OOXMLFastContextHandler const &) = default;
+
     virtual ~OOXMLFastContextHandler() override;
 
     // css::xml::sax::XFastContextHandler:
