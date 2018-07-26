@@ -130,6 +130,7 @@
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -382,10 +383,37 @@ bool SwDocShell::Save()
     return !nErr.IsError();
 }
 
+SwDocShell::LockAllViewsGuard::LockAllViewsGuard(SwViewShell* pViewShell)
+{
+    if (!pViewShell)
+        return;
+    for (SwViewShell& rShell : pViewShell->GetRingContainer())
+    {
+        if (!rShell.IsViewLocked())
+        {
+            m_aViewWasUnLocked.push_back(&rShell);
+            rShell.LockView(true);
+        }
+    }
+}
+
+SwDocShell::LockAllViewsGuard::~LockAllViewsGuard()
+{
+    for (SwViewShell* pShell : m_aViewWasUnLocked)
+        pShell->LockView(false);
+}
+
+std::unique_ptr<SwDocShell::LockAllViewsGuard> SwDocShell::LockAllViews()
+{
+    return o3tl::make_unique<LockAllViewsGuard>(GetEditShell());
+}
+
 // Save using the Defaultformat
 bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     SwWait aWait( *this, true );
+    // tdf#41063: prevent jumping to cursor at any temporary modification
+    auto aViewGuard(LockAllViews());
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if (m_pView)
         m_pView->GetEditWin().StopQuickHelp();
