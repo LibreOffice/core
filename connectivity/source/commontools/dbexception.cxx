@@ -72,14 +72,6 @@ SQLExceptionInfo::SQLExceptionInfo( const OUString& _rSimpleErrorMessage )
     implDetermineType();
 }
 
-
-SQLExceptionInfo::SQLExceptionInfo(const SQLExceptionInfo& _rCopySource)
-    :m_aContent(_rCopySource.m_aContent)
-    ,m_eType(_rCopySource.m_eType)
-{
-}
-
-
 SQLExceptionInfo& SQLExceptionInfo::operator=(const css::sdbc::SQLException& _rError)
 {
     m_aContent <<= _rError;
