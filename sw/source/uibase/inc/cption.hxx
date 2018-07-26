@@ -58,7 +58,7 @@ class SwCaptionDialog : public SvxStandardDialog
     VclPtr<SwCaptionPreview> m_pPreview;
 
     SwView       &rView; // search per active, avoid View
-    SwFieldMgr     *pMgr;      // pointer to save the include
+    std::unique_ptr<SwFieldMgr> pMgr;      // pointer to save the include
 
     OUString     sCharacterStyle;
     bool         bCopyAttributes;
