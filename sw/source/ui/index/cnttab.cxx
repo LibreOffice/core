@@ -4033,8 +4033,9 @@ bool SwEntryBrowseBox::SaveModified()
         pController = m_xCheckController.get();
         bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().IsChecked();
     }
-    AutoMarkEntry* pEntry = (nRow >= m_Entries.size()) ? new AutoMarkEntry
-                                                       : m_Entries[nRow].get();
+    const bool bAddEntry = nRow >= m_Entries.size();
+    std::unique_ptr<AutoMarkEntry> xNewEntry(bAddEntry ? new AutoMarkEntry : nullptr);
+    AutoMarkEntry* pEntry = bAddEntry ? xNewEntry.get() : m_Entries[nRow].get();
     switch(nCol)
     {
         case  ITEM_SEARCH       : pEntry->sSearch = sNew; break;
@@ -4045,9 +4046,9 @@ bool SwEntryBrowseBox::SaveModified()
         case  ITEM_CASE         : pEntry->bCase = bVal; break;
         case  ITEM_WORDONLY     : pEntry->bWord = bVal; break;
     }
-    if (nRow >= m_Entries.size())
+    if (bAddEntry)
     {
-        m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pEntry));
+        m_Entries.push_back(std::move(xNewEntry));
         RowInserted(nRow, 1, true, true);
         if(nCol < ITEM_WORDONLY)
         {
