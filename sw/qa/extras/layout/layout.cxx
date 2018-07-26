@@ -24,6 +24,7 @@ public:
     void testTableExtrusion2();
     void testTdf116848();
     void testTdf117245();
+    void testTdf109077();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -34,6 +35,7 @@ public:
     CPPUNIT_TEST(testTableExtrusion2);
     CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST(testTdf117245);
+    CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -192,6 +194,18 @@ void SwLayoutWriter::testTdf117245()
 
     // This was 2, same problem elsewhere due to code duplication.
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+}
+
+void SwLayoutWriter::testTdf109077()
+{
+    createDoc("tdf109077.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nShapeTop
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
+    sal_Int32 nTextBoxTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
+    // This was 281: the top of the shape and its textbox should match, though
+    // tolerate differences <= 1px (about 15 twips).
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
