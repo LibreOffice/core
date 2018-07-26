@@ -66,7 +66,6 @@ class LwpAtomHolder
 {
 public:
     LwpAtomHolder();
-    ~LwpAtomHolder();
 private:
     sal_Int32   m_nAtom;
     sal_Int32   m_nAssocAtom;

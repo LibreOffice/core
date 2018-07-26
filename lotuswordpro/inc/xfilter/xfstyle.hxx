@@ -73,6 +73,11 @@ public:
 
     virtual ~XFStyle() override;
 
+    XFStyle(XFStyle const &) = default;
+    XFStyle(XFStyle &&) = default;
+    XFStyle & operator =(XFStyle const &) = default;
+    XFStyle & operator =(XFStyle &&) = default;
+
 public:
     /**
      * @descr   get style name.
