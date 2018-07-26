@@ -38,15 +38,6 @@ index 3244943..f8e2418 100644
    return pTxtObj->CountChars();
  }
  
-@@ -453,7 +453,7 @@ FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object)
-   if (!text_object)
-     return 0;
- 
--  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
-+  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
-   return pTxtObj->GetFontSize();
- }
- 
 @@ -645,3 +645,23 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
    pPageObj->SetDirty(true);
    return true;
@@ -75,9 +66,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index 602849f..fa9902e 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1016,6 +1016,22 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
+@@ -1125,6 +1125,22 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
  FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
+ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
 +// Get the stroke RGBA of a text. Range of values: 0 - 255.
 +//

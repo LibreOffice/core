@@ -123,9 +123,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index f249e64..e14b2a5 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1088,6 +1088,19 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
+@@ -1125,6 +1125,19 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
  FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
+ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
 +// Get the processed text of a text object.
 +//

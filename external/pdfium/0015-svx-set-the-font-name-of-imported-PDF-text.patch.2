@@ -20,8 +20,8 @@ index a52e1a9..9daffc0 100644
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
  #include "core/fpdfapi/parser/cpdf_number.h"
-@@ -458,6 +459,29 @@ FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object)
-   return pTxtObj->GetFontSize();
+@@ -452,6 +453,29 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object)
+   return pTxtObj->CountChars();
  }
  
 +FPDF_EXPORT int FPDF_CALLCONV
