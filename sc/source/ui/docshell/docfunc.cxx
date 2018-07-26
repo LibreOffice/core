@@ -2640,14 +2640,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             rDoc.ExtendMerge( aMergedRange, true );
         }
     }
-    else
+
+    itr = aMark.begin();
+    itrEnd = aMark.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
-        itr = aMark.begin();
-        itrEnd = aMark.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
-        {
-            rDoc.RefreshAutoFilter( nExtendStartCol, nExtendStartRow, nMergeTestEndCol, nMergeTestEndRow, *itr );
-        }
+        rDoc.RefreshAutoFilter( nExtendStartCol, nExtendStartRow, nMergeTestEndCol, nMergeTestEndRow, *itr );
     }
 
     itr = aMark.begin();
