@@ -1844,7 +1844,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     OString aFilterName = OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
-    OUString aTokens;
+    OUStringBuffer aTokens;
 
     bool bAllGlob = rType == "*.*" || rType == "*";
     if (bAllGlob)
@@ -1852,10 +1852,9 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     else
     {
         sal_Int32 nIndex = 0;
-        OUString aToken;
         do
         {
-            aToken = rType.getToken( 0, ';', nIndex );
+            OUString aToken = rType.getToken( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
             sal_Int32 nStarDot = aToken.lastIndexOf( "*." );
             if (nStarDot >= 0)
@@ -1863,8 +1862,8 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             if (!aToken.isEmpty())
             {
                 if (!aTokens.isEmpty())
-                    aTokens += ",";
-                aTokens = aTokens += aToken;
+                    aTokens.append(",");
+                aTokens.append(aToken);
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
                     g_strdup( OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
@@ -1892,7 +1891,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         gtk_list_store_append (m_pFilterStore, &iter);
         gtk_list_store_set (m_pFilterStore, &iter,
             0, OUStringToOString(shrinkFilterName( rFilter, true ), RTL_TEXTENCODING_UTF8).getStr(),
-            1, OUStringToOString(aTokens, RTL_TEXTENCODING_UTF8).getStr(),
+            1, OUStringToOString(aTokens.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr(),
             2, aFilterName.getStr(),
             3, OUStringToOString(rType, RTL_TEXTENCODING_UTF8).getStr(),
             -1);
@@ -1938,15 +1937,15 @@ void SalGtkFilePicker::SetFilters()
         }
         if (aAllFormats.size() > 1)
         {
-            OUString sAllFilter;
+            OUStringBuffer sAllFilter;
             for (auto const& format : aAllFormats)
             {
                 if (!sAllFilter.isEmpty())
-                    sAllFilter += ";";
-                sAllFilter += format;
+                    sAllFilter.append(";");
+                sAllFilter.append(format);
             }
             sPseudoFilter = getResString(FILE_PICKER_ALLFORMATS);
-            m_pPseudoFilter = implAddFilter( sPseudoFilter, sAllFilter );
+            m_pPseudoFilter = implAddFilter( sPseudoFilter, sAllFilter.makeStringAndClear() );
         }
     }
 

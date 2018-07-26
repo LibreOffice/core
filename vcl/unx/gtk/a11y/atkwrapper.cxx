@@ -55,6 +55,7 @@
 #include <com/sun/star/beans/Property.hpp>
 
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -751,17 +752,18 @@ ensureTypeFor( uno::XInterface *pAccessible )
 {
     int i;
     bool bTypes[ aTypeTableSize ] = { false, };
-    OString aTypeName( "OOoAtkObj" );
+    OStringBuffer aTypeNameBuf( "OOoAtkObj" );
 
     for( i = 0; i < aTypeTableSize; i++ )
     {
         if( isOfType( pAccessible, aTypeTable[i].aGetUnoType() ) )
         {
-            aTypeName += aTypeTable[i].name;
+            aTypeNameBuf.append(aTypeTable[i].name);
             bTypes[i] = true;
         }
     }
 
+    OString aTypeName = aTypeNameBuf.makeStringAndClear();
     GType nType = g_type_from_name( aTypeName.getStr() );
     if( nType == G_TYPE_INVALID )
     {

@@ -9160,14 +9160,14 @@ OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, co
     }
 
     // Build the dictionary entry string.
-    OString sRet = "/" + rKind + "<<";
+    OStringBuffer sRet("/" + rKind + "<<");
     for (const auto& rPair : aRet)
     {
-        sRet += "/" + rPair.first + " " + OString::number(rPair.second) + " 0 R";
+        sRet.append("/").append(rPair.first).append(" ").append(OString::number(rPair.second)).append(" 0 R");
     }
-    sRet += ">>";
+    sRet.append(">>");
 
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
