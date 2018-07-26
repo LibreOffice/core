@@ -1499,9 +1499,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            OSL_ENSURE( pActualSection, "Section end without section?" );
-            OSL_ENSURE( pActualSection->GetSectionNode() == pNd->StartOfSectionNode(),
-                            "Section end with wrong Start Node?" );
+            assert(pActualSection && "Section end without section start?");
+            assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
 
             //Close the section, where appropriate activate the surrounding
             //section again.
@@ -1677,13 +1676,13 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 SwFrame *pMove = pFrame;
                 SwFrame *pPrev = pFrame->GetPrev();
                 SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pMove );
-                OSL_ENSURE( pTmp, "Missing FlowFrame" );
+                assert(pTmp);
 
                 if ( bApres )
                 {
                     // The rest of this page should be empty. Thus, the following one has to move to
                     // the next page (it might also be located in the following column).
-                    OSL_ENSURE( !pTmp->HasFollow(), "Follows forbidden" );
+                    assert(!pTmp->HasFollow() && "prev. node's frame is not last");
                     pPrev = pFrame;
                     // If the surrounding SectionFrame has a "next" one,
                     // so this one needs to be moved as well.
@@ -1734,7 +1733,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 }
                 else
                 {
-                    OSL_ENSURE( !pTmp->IsFollow(), "Follows really forbidden" );
+                    assert(!pTmp->IsFollow() && "next node's frame is not master");
                     // move the _content_ of a section frame
                     if( pMove->IsSctFrame() )
                     {
