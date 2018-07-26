@@ -110,6 +110,14 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, WeakImplHelper7<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7> > > {};
     public:
+#if defined LIBO_INTERNAL_ONLY
+        ImplHelper7() = default;
+        ImplHelper7(ImplHelper7 const &) = default;
+        ImplHelper7(ImplHelper7 &&) = default;
+        ImplHelper7 & operator =(ImplHelper7 const &) = default;
+        ImplHelper7 & operator =(ImplHelper7 &&) = default;
+#endif
+
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakImplHelper_query( rType, cd::get(), this, static_cast<OWeakObject *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
