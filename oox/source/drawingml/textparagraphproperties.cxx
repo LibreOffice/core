@@ -366,10 +366,6 @@ TextParagraphProperties::TextParagraphProperties()
 {
 }
 
-TextParagraphProperties::~TextParagraphProperties()
-{
-}
-
 void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps )
 {
     maTextParagraphPropertyMap.assignAll( rSourceProps.maTextParagraphPropertyMap );
