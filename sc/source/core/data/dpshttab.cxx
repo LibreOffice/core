@@ -234,13 +234,39 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
     {
         // Obtain the source range from the range name first.
         maSourceRange = ScRange();
+
+        // Range names referring a sheet contain a #
+        // See comment of ScCellShell::ExecuteDataPilotDialog
+        // paragraph "Populate named ranges"
+        sal_Int32 nBeforeSheetName = ScGlobal::FindUnquoted( maRangeName, '#');
+
+        // let's consider the range name is global to the doc by default
         ScRangeName* pRangeName = mpDoc->GetRangeName();
+        OUString searchRangeName(maRangeName);
+
+        // the range name concerns a specificsheet
+        if (nBeforeSheetName != -1)
+        {
+            OUString sheetName = maRangeName.copy(0, nBeforeSheetName);
+            OUString rangeNameSheet = maRangeName.copy(nBeforeSheetName+1, maRangeName.getLength() - sheetName.getLength() - 1);
+            searchRangeName = rangeNameSheet;
+
+            SCTAB nTab = 0;
+            if (!mpDoc->GetTable(sheetName, nTab))
+            {
+                // the sheetname should exist
+                assert(false);
+                return maSourceRange;
+            }
+            pRangeName = mpDoc->GetRangeName(nTab);
+        }
+
         do
         {
             if (!pRangeName)
                 break;
 
-            OUString aUpper = ScGlobal::pCharClass->uppercase(maRangeName);
+            OUString aUpper = ScGlobal::pCharClass->uppercase(searchRangeName);
             const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
             if (!pData)
                 break;
