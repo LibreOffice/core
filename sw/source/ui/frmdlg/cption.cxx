@@ -418,7 +418,7 @@ SwCaptionDialog::~SwCaptionDialog()
 
 void SwCaptionDialog::dispose()
 {
-    delete pMgr;
+    pMgr.reset();
     m_pTextEdit.clear();
     m_pCategoryBox.clear();
     m_pFormatText.clear();
