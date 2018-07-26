@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="image1">
@@ -26,6 +26,9 @@
     <property name="title" translatable="yes" context="dropdownfielddialog|DropdownFieldDialog">Choose Item: </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -45,8 +48,10 @@
                   <object class="GtkButton" id="prev">
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Previous field (alt+&lt;)</property>
                     <property name="image">image1</property>
                     <property name="image_position">right</property>
+                    <accelerator key="less" signal="activate" modifiers="GDK_MOD1_MASK"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -57,7 +62,9 @@
                   <object class="GtkButton" id="next">
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Next field (alt+&gt;)</property>
                     <property name="image">image2</property>
+                    <accelerator key="greater" signal="activate" modifiers="GDK_MOD1_MASK"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -230,8 +237,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
