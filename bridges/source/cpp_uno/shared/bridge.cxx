@@ -144,7 +144,7 @@ uno_Mapping * Bridge::createMapping(
     bool bExportCpp2Uno)
 {
     Bridge * bridge = new Bridge(pCppEnv, pUnoEnv, bExportCpp2Uno);
-    //coverity[leaked_storage]
+    // coverity[leaked_storage] - on purpose
     return bExportCpp2Uno ? &bridge->aCpp2Uno : &bridge->aUno2Cpp;
 }
 

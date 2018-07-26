@@ -1134,10 +1134,10 @@ const off_t MAX_OFF_T = std::numeric_limits< off_t >::max();
 
 namespace {
 
-//coverity[result_independent_of_operands]
+// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMaxOffT(T n) { return n > MAX_OFF_T; }
 
-//coverity[result_independent_of_operands]
+// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMinOffT(T n)
 { return n < std::numeric_limits<off_t>::min(); }
 

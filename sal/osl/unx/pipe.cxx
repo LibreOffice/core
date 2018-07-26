@@ -287,10 +287,11 @@ oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
         if (listen(pPipe->m_Socket, 5) < 0)
         {
             SAL_WARN("sal.osl.pipe", "listen() failed: " << strerror(errno));
-            // coverity[toctou] cid#1255391 warns about unlink(name) after
-            // stat(name, &status) above, but the intervening call to bind makes
-            // those two clearly unrelated, as it would fail if name existed at
-            // that point in time:
+            // cid#1255391 warns about unlink(name) after stat(name, &status)
+            // above, but the intervening call to bind makes those two clearly
+            // unrelated, as it would fail if name existed at that point in
+            // time:
+            // coverity[toctou] - this is bogus
             unlink(name);   /* remove filesystem entry */
             close(pPipe->m_Socket);
             destroyPipeImpl(pPipe);
