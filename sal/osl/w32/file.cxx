@@ -776,7 +776,7 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
 
 namespace {
 
-//coverity[result_independent_of_operands]
+// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMaxSIZE_T(T n)
 { return n > std::numeric_limits< SIZE_T >::max(); }
 
@@ -930,7 +930,7 @@ LONGLONG const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
 
 namespace {
 
-//coverity[result_independent_of_operands]
+// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMaxLONGLONG(T n)
 { return n > g_limit_longlong; }
 

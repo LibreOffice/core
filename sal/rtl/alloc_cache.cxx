@@ -817,7 +817,7 @@ void rtl_cache_deactivate(rtl_cache_type * cache)
         /* cleanup cpu layer */
         if ((mag = cache->m_cpu_curr))
         {
-            // coverity[missing_lock]
+            // coverity[missing_lock] - locking is fine
             cache->m_cpu_curr = nullptr;
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
@@ -825,7 +825,7 @@ void rtl_cache_deactivate(rtl_cache_type * cache)
 
         if ((mag = cache->m_cpu_prev))
         {
-            // coverity[missing_lock]
+            // coverity[missing_lock] - locking is fine
             cache->m_cpu_prev = nullptr;
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
@@ -1267,7 +1267,7 @@ static void rtl_cache_depot_wsupdate(
             RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
         }
     }
-    // coverity[missing_unlock]
+    // coverity[missing_unlock] - locking is fine
 }
 
 /**

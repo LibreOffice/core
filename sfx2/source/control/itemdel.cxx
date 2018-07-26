@@ -77,7 +77,7 @@ void DeleteItemOnIdle(SfxPoolItem* pItem)
     DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
     SfxItemDisruptor_Impl *pDesruptor = new SfxItemDisruptor_Impl(pItem);
     pDesruptor->LaunchDeleteOnIdle();
-    // coverity[leaked_storage] pDesruptor takes care of its own destruction at idle time
+    // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
