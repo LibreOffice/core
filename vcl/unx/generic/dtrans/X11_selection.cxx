@@ -521,7 +521,7 @@ SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    OUString aRet;
+    OUStringBuffer aRet;
     if( nLen < 0 )
         nLen = strlen( pText );
 
@@ -539,12 +539,12 @@ OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
                                &nTexts );
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     for( int i = 0; i < nTexts; i++ )
-        aRet += OStringToOUString( pTextList[i], aEncoding );
+        aRet.append(OStringToOUString( pTextList[i], aEncoding ));
 
     if( pTextList )
         XFreeStringList( pTextList );
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 OString SelectionManager::convertToCompound( const OUString& rText )

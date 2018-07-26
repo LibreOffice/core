@@ -262,7 +262,7 @@ OUString TextEngine::GetText( LineEnd aSeparator ) const
 
 OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
 {
-    OUString aText;
+    OUStringBuffer aText;
     const sal_uInt32 nParas = mpTEParaPortions->Count();
     const sal_Unicode* pSep = static_getLineEndText( aSeparator );
     for ( sal_uInt32 nP = 0; nP < nParas; ++nP )
@@ -273,12 +273,12 @@ OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
         for ( size_t nL = 0; nL < nLines; ++nL )
         {
             TextLine& rLine = pTEParaPortion->GetLines()[nL];
-            aText += pTEParaPortion->GetNode()->GetText().copy( rLine.GetStart(), rLine.GetEnd() - rLine.GetStart() );
+            aText.append( pTEParaPortion->GetNode()->GetText().copy( rLine.GetStart(), rLine.GetEnd() - rLine.GetStart() ) );
             if ( pSep && ( ( (nP+1) < nParas ) || ( (nL+1) < nLines ) ) )
-                aText += pSep;
+                aText.append(pSep);
         }
     }
-    return aText;
+    return aText.makeStringAndClear();
 }
 
 OUString TextEngine::GetText( sal_uInt32 nPara ) const
@@ -393,14 +393,13 @@ void TextEngine::ImpInitDoc()
 
 OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) const
 {
-    OUString aText;
-
     if ( !rSel.HasRange() )
-        return aText;
+        return OUString();
 
     TextSelection aSel( rSel );
     aSel.Justify();
 
+    OUStringBuffer aText;
     const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
     const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
     const sal_Unicode* pSep = static_getLineEndText( aSeparator );
@@ -415,11 +414,11 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
         if ( nNode == nEndPara ) // may also be == nStart!
             nEndPos = aSel.GetEnd().GetIndex();
 
-        aText += pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
+        aText.append(pNode->GetText().copy( nStartPos, nEndPos-nStartPos ));
         if ( nNode < nEndPara )
-            aText += pSep;
+            aText.append(pSep);
     }
-    return aText;
+    return aText.makeStringAndClear();
 }
 
 void TextEngine::ImpRemoveText()
