@@ -158,6 +158,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
             break;
         }
     }
+    // coverity[leaked_storage] - on purpose
     return -1;
 }
 
