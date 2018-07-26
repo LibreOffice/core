@@ -540,11 +540,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
         pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
-    if (!pDPCollection->InsertNewTable(pDPObject))
-    {
-        OSL_FAIL("cannot insert DPObject");
-        DELETEZ( pDPObject );
-    }
+    pDPCollection->InsertNewTable(pDPObject);
 
     SetButtons();
 }
