@@ -44,13 +44,6 @@ public:
     const OString&  GetText() const { return aText; }
     void            SetText( const OString& rT ) { aText = rT; }
     bool            IsError() const { return nLine != 0; }
-    SvIdlError &    operator = ( const SvIdlError & rRef )
-                    {
-                        aText   = rRef.aText;
-                        nLine   = rRef.nLine;
-                        nColumn = rRef.nColumn;
-                        return *this;
-                    }
 };
 
 class SvParseException : public std::exception
