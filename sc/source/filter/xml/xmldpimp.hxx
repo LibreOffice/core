@@ -71,7 +71,6 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
         GrandTotalItem();
     };
     ScDocument*     pDoc;
-    ScDPObject*     pDPObject;
     std::unique_ptr<ScDPSaveData> pDPSave;
     std::unique_ptr<ScDPDimensionSaveData> pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
@@ -139,7 +138,7 @@ public:
     void AddDimension(ScDPSaveDimension* pDim);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
-    void SetButtons();
+    void SetButtons(ScDPObject* pDPObject);
     void SetSelectedPage( const OUString& rDimName, const OUString& rSelected );
 };
 

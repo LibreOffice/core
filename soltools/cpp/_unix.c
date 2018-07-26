@@ -204,6 +204,7 @@ void
             error(FATAL, "Can't open output file %s", argv[optind + 1]);
 
         dup2(fdo, 1);
+        // coverity[leaked_handle] - on purpose
     }
     includelist[NINCLUDE - 1].always = 0;
     includelist[NINCLUDE - 1].file = dp;

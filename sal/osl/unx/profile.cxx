@@ -181,6 +181,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
     if (pProfile->m_pFile == nullptr)
         closeFileImpl(pFile,pProfile->m_Flags);
 
+    // coverity[leaked_storage] - pFile is not leaked
     return pProfile;
 }
 

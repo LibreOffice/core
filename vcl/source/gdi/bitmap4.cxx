@@ -1042,10 +1042,10 @@ bool Bitmap::ImplPopArt()
     return bRet;
 }
 
-double* MakeBlurKernel(const double radius, int& rows) {
+std::vector<double> MakeBlurKernel(const double radius, int& rows) {
     int intRadius = (int) radius + 1.0;
     rows = intRadius * 2 + 1;
-    double* matrix = new double[rows];
+    std::vector<double> matrix(rows);
 
     double sigma = radius / 3;
     double radius2 = radius * radius;
@@ -1064,11 +1064,12 @@ double* MakeBlurKernel(const double radius, int& rows) {
 }
 
 void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContributions,
-                                    const double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount )
+                                    const std::vector<double>& rBlurVector,
+                                    std::vector<double>& rWeights, std::vector<int>& rPixels, std::vector<int>& rCounts)
 {
-    pWeights = new double[ aSize*aNumberOfContributions ];
-    pPixels = new int[ aSize*aNumberOfContributions ];
-    pCount = new int[ aSize ];
+    rWeights.resize(aSize*aNumberOfContributions);
+    rPixels.resize(aSize*aNumberOfContributions);
+    rCounts.resize(aSize);
 
     int aLeft, aRight, aCurrentCount, aPixelIndex;
     double aWeight;
@@ -1080,7 +1081,7 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
         aCurrentCount = 0;
         for ( int j = aLeft; j <= aRight; j++ )
         {
-            aWeight = pBlurVector[aCurrentCount];
+            aWeight = rBlurVector[aCurrentCount];
 
             // Mirror edges
             if (j < 0)
@@ -1102,12 +1103,12 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
                 aWeight = 0.0;
             }
 
-            pWeights[ i*aNumberOfContributions + aCurrentCount ] = aWeight;
-            pPixels[ i*aNumberOfContributions + aCurrentCount ] = aPixelIndex;
+            rWeights[ i*aNumberOfContributions + aCurrentCount ] = aWeight;
+            rPixels[ i*aNumberOfContributions + aCurrentCount ] = aPixelIndex;
 
             aCurrentCount++;
         }
-        pCount[ i ] = aCurrentCount;
+        rCounts[ i ] = aCurrentCount;
     }
 }
 
@@ -1126,31 +1127,31 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
 
     // Prepare Blur Vector
     int aNumberOfContributions;
-    double* pBlurVector = MakeBlurKernel(radius, aNumberOfContributions);
+    std::vector<double> aBlurVector(MakeBlurKernel(radius, aNumberOfContributions));
 
-    double* pWeights;
-    int* pPixels;
-    int* pCount;
+    std::vector<double> aWeights;
+    std::vector<int> aPixels;
+    std::vector<int> aCounts;
 
     // Do horizontal filtering
-    ImplBlurContributions( nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
+    ImplBlurContributions( nWidth, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
     ScopedReadAccess pReadAcc(*this);
 
     // switch coordinates as convolution pass transposes result
     Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
 
-    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
+    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, aWeights, aPixels, aCounts );
 
     // Cleanup
     pReadAcc.reset();
-    delete[] pWeights;
-    delete[] pPixels;
-    delete[] pCount;
+    aWeights.clear();
+    aPixels.clear();
+    aCounts.clear();
 
     if ( !bResult )
     {
-        delete[] pBlurVector;
+        aBlurVector.clear();
         return bResult;
     }
 
@@ -1158,18 +1159,18 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     ImplAssignWithSize( aNewBitmap );
 
     // Do vertical filtering
-    ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
+    ImplBlurContributions(nHeight, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts );
 
     pReadAcc = ScopedReadAccess(*this);
     aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
-    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
+    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, aWeights, aPixels, aCounts );
 
     // Cleanup
     pReadAcc.reset();
-    delete[] pWeights;
-    delete[] pCount;
-    delete[] pPixels;
-    delete[] pBlurVector;
+    aWeights.clear();
+    aCounts.clear();
+    aPixels.clear();
+    aBlurVector.clear();
 
     if ( !bResult )
         return bResult;

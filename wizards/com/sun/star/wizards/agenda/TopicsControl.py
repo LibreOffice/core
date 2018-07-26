@@ -458,8 +458,9 @@ class TopicsControl(ControlScroller):
 
     def rowDown(self, guiRow=None, control=None):
         try:
-            if guiRow is None and control is None:
+            if guiRow is None:
                 guiRow = self.lastFocusRow - self.nscrollvalue
+            if control is None:
                 control = self.lastFocusControl
             # only perform if this is not the last row.
             actuallRow = guiRow + self.nscrollvalue
@@ -490,8 +491,9 @@ class TopicsControl(ControlScroller):
 
     def rowUp(self, guiRow=None, control=None):
         try:
-            if guiRow is None and control is None:
+            if guiRow is None:
                 guiRow = self.lastFocusRow - self.nscrollvalue
+            if control is None:
                 control = self.lastFocusControl
             # only perform if this is not the first row
             actuallRow = guiRow + self.nscrollvalue

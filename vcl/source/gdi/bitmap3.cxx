@@ -2127,7 +2127,9 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pReadAcc, int aNumberOfContributions, const double* pWeights, int const * pPixels, const int* pCount)
+bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pReadAcc, int aNumberOfContributions,
+                                 const std::vector<double>& rWeights, const std::vector<int>& rPixels,
+                                 const std::vector<int>& rCounts)
 {
     if (!pReadAcc)
         return false;
@@ -2153,12 +2155,12 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pR
             aBaseIndex = nSourceX * aNumberOfContributions;
             aSum = aValueRed = aValueGreen = aValueBlue = 0.0;
 
-            for (int j = 0; j < pCount[nSourceX]; ++j)
+            for (int j = 0; j < rCounts[nSourceX]; ++j)
             {
                 aIndex = aBaseIndex + j;
-                aSum += aWeight = pWeights[ aIndex ];
+                aSum += aWeight = rWeights[ aIndex ];
 
-                aColor = pReadAcc->GetColor(nSourceY, pPixels[aIndex]);
+                aColor = pReadAcc->GetColor(nSourceY, rPixels[aIndex]);
 
                 aValueRed += aWeight * aColor.GetRed();
                 aValueGreen += aWeight * aColor.GetGreen();

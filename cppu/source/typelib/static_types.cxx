@@ -439,7 +439,7 @@ void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C()
 {
-    // coverity[callee_ptr_arith]
+    // coverity[callee_ptr_arith] - not a bug
     typelib_static_mi_interface_type_init(
         ppRef, pTypeName, pBaseType == nullptr ? 0 : 1, &pBaseType);
 }

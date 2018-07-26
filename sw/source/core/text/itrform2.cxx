@@ -722,6 +722,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
     // Reinit the tab overflow flag after the line
     rInf.SetTabOverflow( false );
+
+    // coverity[leaked_storage] - ownership is too complicated to hazard a fix, it definitely normally doesn't leak
 }
 
 void SwTextFormatter::CalcAdjustLine( SwLineLayout *pCurrent )

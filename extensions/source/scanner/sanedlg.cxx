@@ -495,7 +495,6 @@ void SaneDlg::InitFields()
                         pField->SetMax( (long)pDouble[ nValue-1 ] );
                     else
                         pField->SetMax( (long)pDouble[ 1 ] );
-                    delete [] pDouble;
                 }
                 switch( i ) {
                     case 0: aMinTopLeft.X() = pField->GetMin();break;
@@ -513,6 +512,7 @@ void SaneDlg::InitFields()
                     case 3: aMaxBottomRight.Y() = (int)fValue;break;
                 }
             }
+            delete [] pDouble;
             pField->Enable();
         }
         else
