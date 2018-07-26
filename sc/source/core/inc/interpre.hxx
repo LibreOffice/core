@@ -391,6 +391,10 @@ private:
     void ConvertMatrixJumpConditionToMatrix();
     // If MatrixFormula or ForceArray: ConvertMatrixParameters()
     inline bool MatrixParameterConversion();
+    // If MatrixFormula or ForceArray. Can be used within spreadsheet functions
+    // that do not depend on the formula cell's matrix size, for which only
+    // bMatrixFormula can be used.
+    inline bool IsInArrayContext() const;
     ScMatrixRef PopMatrix();
     sc::RangeMatrix PopRangeMatrix();
     void QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rRetTypeExpr, sal_uInt32& rRetIndexExpr);
@@ -1012,6 +1016,11 @@ public:
     SvNumFormatType             GetRetFormatType() const    { return nRetFmtType; }
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };
+
+inline bool ScInterpreter::IsInArrayContext() const
+{
+    return bMatrixFormula || pCur->IsInForceArray();
+}
 
 inline void ScInterpreter::MatrixJumpConditionToMatrix()
 {

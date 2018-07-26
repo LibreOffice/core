@@ -2691,7 +2691,7 @@ void ScInterpreter::ScIsFormula()
     switch ( GetStackType() )
     {
         case svDoubleRef :
-            if (bMatrixFormula || pCur->IsInForceArray())
+            if (IsInArrayContext())
             {
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
@@ -2759,7 +2759,7 @@ void ScInterpreter::ScFormula()
     switch ( GetStackType() )
     {
         case svDoubleRef :
-            if (bMatrixFormula || pCur->IsInForceArray())
+            if (IsInArrayContext())
             {
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
