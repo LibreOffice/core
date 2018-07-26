@@ -144,7 +144,7 @@ class SwStdFontTabPage : public SfxTabPage
     OUString m_sShellIndex;
 
     VclPtr<SfxPrinter> m_pPrt;
-    FontList* m_pFontList;
+    std::unique_ptr<FontList> m_pFontList;
     SwStdFontConfig* m_pFontConfig;
     SwWrtShell* m_pWrtShell;
     LanguageType m_eLanguage;
