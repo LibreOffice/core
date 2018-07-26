@@ -13,6 +13,8 @@ pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
 # Adds missing editing API
+# Backport of <https://pdfium-review.googlesource.com/35931>.
+pdfium_patches += 0001-Add-FPDFTextObj_GetFontSize-API.patch.patch.1
 pdfium_patches += 0002-svx-more-accurate-PDF-text-importing.patch.2
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
