@@ -104,7 +104,6 @@ struct RefUpdateResult
     bool mbNameModified;
 
     RefUpdateResult();
-    RefUpdateResult(const RefUpdateResult& r);
 };
 
 struct SC_DLLPUBLIC RefUpdateInsertTabContext

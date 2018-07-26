@@ -80,8 +80,6 @@ public:
     ExternalDataSource(const OUString& rURL,
             const OUString& rProvider, ScDocument* pDoc);
 
-    ~ExternalDataSource();
-
     void setUpdateFrequency(double nUpdateFrequency);
 
     void setID(const OUString& rID);

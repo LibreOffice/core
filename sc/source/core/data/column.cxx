@@ -2027,6 +2027,12 @@ namespace {
 class SharedTopFormulaCellPicker
 {
 public:
+    SharedTopFormulaCellPicker() = default;
+    SharedTopFormulaCellPicker(SharedTopFormulaCellPicker const &) = default;
+    SharedTopFormulaCellPicker(SharedTopFormulaCellPicker &&) = default;
+    SharedTopFormulaCellPicker & operator =(SharedTopFormulaCellPicker const &) = default;
+    SharedTopFormulaCellPicker & operator =(SharedTopFormulaCellPicker &&) = default;
+
     virtual ~SharedTopFormulaCellPicker() {}
 
     void operator() ( sc::CellStoreType::value_type& node )

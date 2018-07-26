@@ -25,7 +25,6 @@ struct ScDPNumGroupInfo
     double mfStep;
 
     SC_DLLPUBLIC ScDPNumGroupInfo();
-    SC_DLLPUBLIC ScDPNumGroupInfo(const ScDPNumGroupInfo& r);
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;
