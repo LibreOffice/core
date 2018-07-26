@@ -193,12 +193,12 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
         std::string listTable = oStringTable.getStr();
         pMork->getRecordKeysForListTable(listTable, listRecords);
     }
-    MorkTableMap::Map::iterator tableIter;
+
     MorkTableMap *Tables = pMork->getTables( 0x80 );
     if (!Tables)
         return -1;
+
     MorkRowMap *Rows = nullptr;
-    MorkRowMap::Map::const_iterator rowIter;
 
     // Iterate all tables
     for (auto & table : Tables->map)
