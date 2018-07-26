@@ -84,6 +84,11 @@ public:
     B3dTransformationSet();
     virtual ~B3dTransformationSet();
 
+    B3dTransformationSet(B3dTransformationSet const &) = default;
+    B3dTransformationSet(B3dTransformationSet &&) = default;
+    B3dTransformationSet & operator =(B3dTransformationSet const &) = default;
+    B3dTransformationSet & operator =(B3dTransformationSet &&) = default;
+
     void Reset();
 
     /** Set the orientation
@@ -163,6 +168,11 @@ public:
     B3dViewport();
     virtual ~B3dViewport() override;
 
+    B3dViewport(B3dViewport const &) = default;
+    B3dViewport(B3dViewport &&) = default;
+    B3dViewport & operator =(B3dViewport const &) = default;
+    B3dViewport & operator =(B3dViewport &&) = default;
+
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetViewportValues(
         const basegfx::B3DPoint& rNewVRP,
@@ -187,6 +197,11 @@ public:
         const basegfx::B3DVector& rLkAt = basegfx::B3DVector(0.0, 0.0, 0.0),
         double fFocLen = 35.0, double fBnkAng = 0.0);
     virtual ~B3dCamera() override;
+
+    B3dCamera(B3dCamera const &) = default;
+    B3dCamera(B3dCamera &&) = default;
+    B3dCamera & operator =(B3dCamera const &) = default;
+    B3dCamera & operator =(B3dCamera &&) = default;
 
 private:
     void CalcNewViewportValues();
