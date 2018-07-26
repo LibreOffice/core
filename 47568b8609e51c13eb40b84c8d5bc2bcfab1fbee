@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_c8e9fc80",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5879,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-07-26T22:51:17Z",
+      "side": 1,
+      "message": "ocFormula evaluates the range only if in array context, otherwise does an implicit intersection via PopDoubleRefOrSingleRef(), so SkipImplicitIntersectionOptimization() should hit for the array case and otherwise the II can be forced.\n\nI found quite some single parameter opcodes that handle a range when not in array context, they all have a parameter class type other than ParamClass::Value or ParamClass::Array, so it would work to check for that, effectively skip an opcode\n\n if (!parameterMayBeII( token, 0))\n\nFor a list look for\n\n {{ \\(Reference\\|ForceArray\\)[^,]\\+}, 0,\n\nin sc/source/core/tool/parclass.cxx\n\nThis does include some special cases like ocFormula though that have ParamClass::Reference only because they handle the range in array context, but not in scalar context where they do the intersection (despite what the comment for ParamClass::Reference says). We could fine tune that later with a different ParamClass value that indicates range reference only in array context.",
+      "revId": "47568b8609e51c13eb40b84c8d5bc2bcfab1fbee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
