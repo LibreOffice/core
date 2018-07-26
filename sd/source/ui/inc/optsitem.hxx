@@ -51,6 +51,11 @@ public:
     SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
     virtual ~SdOptionsItem() override;
 
+    SdOptionsItem(SdOptionsItem const &) = default;
+    SdOptionsItem(SdOptionsItem &&) = default;
+    SdOptionsItem & operator =(SdOptionsItem const &) = default;
+    SdOptionsItem & operator =(SdOptionsItem &&) = default;
+
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     css::uno::Sequence< css::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
