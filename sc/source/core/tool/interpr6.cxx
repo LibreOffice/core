@@ -464,7 +464,7 @@ void IterateMatrix(
 size_t ScInterpreter::GetRefListArrayMaxSize( short nParamCount )
 {
     size_t nSize = 0;
-    if (bMatrixFormula || pCur->IsInForceArray())
+    if (IsInArrayContext())
     {
         for (short i=1; i <= nParamCount; ++i)
         {

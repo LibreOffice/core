@@ -1024,13 +1024,13 @@ inline bool ScInterpreter::IsInArrayContext() const
 
 inline void ScInterpreter::MatrixJumpConditionToMatrix()
 {
-    if (bMatrixFormula || pCur->IsInForceArray())
+    if (IsInArrayContext())
         ConvertMatrixJumpConditionToMatrix();
 }
 
 inline bool ScInterpreter::MatrixParameterConversion()
 {
-    if ( (bMatrixFormula || pCur->IsInForceArray() || ScParameterClassification::HasForceArray( pCur->GetOpCode())) &&
+    if ( (IsInArrayContext() || ScParameterClassification::HasForceArray( pCur->GetOpCode())) &&
             !pJumpMatrix && sp > 0 )
         return ConvertMatrixParameters();
     return false;

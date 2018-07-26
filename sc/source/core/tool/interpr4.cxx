@@ -1495,7 +1495,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                             // has ForceArray or ReferenceOrForceArray
                             // parameter *somewhere else*) pick a normal
                             // position dependent implicit intersection later.
-                            (eType != formula::ParamClass::Value || bMatrixFormula || pCur->IsInForceArray()))
+                            (eType != formula::ParamClass::Value || IsInArrayContext()))
                     {
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
