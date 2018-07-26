@@ -106,7 +106,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     OUString        sReadonlyPath;
 
     css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
-    SwOneExampleFrame*  pExampleFrame;
+    std::unique_ptr<SwOneExampleFrame>  pExampleFrame;
 
     SwGlossaryHdl*  pGlossaryHdl;
 
