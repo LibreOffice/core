@@ -555,6 +555,7 @@ extern "C" void typelib_typedescription_newEmpty(
             osl_atomic_increment( &Init::get().nIndirectTypeDescriptionCount );
 #endif
             pTmp->pType = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -572,6 +573,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->aBase.ppTypeRefs = nullptr;
             pTmp->aBase.ppMemberNames = nullptr;
             pTmp->pParameterizedTypes = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -588,6 +590,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->pMemberOffsets = nullptr;
             pTmp->ppTypeRefs = nullptr;
             pTmp->ppMemberNames = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -602,6 +605,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->nEnumValues       = 0;
             pTmp->ppEnumNames       = nullptr;
             pTmp->pEnumValues       = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -623,6 +627,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->pMapMemberIndexToFunctionIndex= nullptr;
             pTmp->nBaseTypes = 0;
             pTmp->ppBaseTypes = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -643,6 +648,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->pInterface = nullptr;
             pTmp->pBaseRef = nullptr;
             pTmp->nIndex = 0;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 
@@ -663,6 +669,7 @@ extern "C" void typelib_typedescription_newEmpty(
             pTmp->ppGetExceptions = nullptr;
             pTmp->nSetExceptions = 0;
             pTmp->ppSetExceptions = nullptr;
+            // coverity[leaked_storage] - this is on purpose
         }
         break;
 

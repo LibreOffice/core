@@ -123,6 +123,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         SAL_INFO("vcl.plugadapt", "could not load shared object " << aModule);
     }
 
+    // coverity[leaked_storage] - this is on purpose
     return pInst;
 }
 
