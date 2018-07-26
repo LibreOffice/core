@@ -48,9 +48,9 @@ class SwColumnDlg : public SfxModalDialog
 
     SwWrtShell&         m_rWrtShell;
     VclPtr<SwColumnPage>       m_pTabPage;
-    SfxItemSet*         m_pPageSet;
-    SfxItemSet*         m_pSectionSet;
-    SfxItemSet*         m_pSelectionSet;
+    std::unique_ptr<SfxItemSet> m_pPageSet;
+    std::unique_ptr<SfxItemSet> m_pSectionSet;
+    std::unique_ptr<SfxItemSet> m_pSelectionSet;
     SfxItemSet*         m_pFrameSet;
 
     long                m_nOldSelection;

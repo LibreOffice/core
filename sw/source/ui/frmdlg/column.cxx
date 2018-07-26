@@ -115,17 +115,17 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
         m_nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFormat());
         if ( !m_nSelectionWidth )
             m_nSelectionWidth = USHRT_MAX;
-        m_pSectionSet = new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds );
+        m_pSectionSet.reset( new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds ) );
         m_pSectionSet->Put( pCurrSection->GetFormat()->GetAttrSet() );
-        pColPgSet = m_pSectionSet;
+        pColPgSet = m_pSectionSet.get();
     }
 
     if( m_rWrtShell.HasSelection() && m_rWrtShell.IsInsRegionAvailable() &&
         ( !pCurrSection || ( 1 != nFullSectCnt &&
             IsMarkInSameSection( m_rWrtShell, pCurrSection ) )))
     {
-        m_pSelectionSet = new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds );
-        pColPgSet = m_pSelectionSet;
+        m_pSelectionSet.reset( new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds ) );
+        pColPgSet = m_pSelectionSet.get();
     }
 
     if( m_rWrtShell.GetFlyFrameFormat() )
@@ -140,12 +140,12 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     const SwPageDesc* pPageDesc = m_rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
-        m_pPageSet = new SfxItemSet(
+        m_pPageSet.reset( new SfxItemSet(
             m_rWrtShell.GetAttrPool(),
             svl::Items<
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 RES_LR_SPACE, RES_LR_SPACE,
-                RES_COL, RES_COL>{});
+                RES_COL, RES_COL>{}) );
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         m_nPageWidth = rFormat.GetFrameSize().GetSize().Width();
@@ -156,7 +156,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
         m_pPageSet->Put(rFormat.GetCol());
         m_pPageSet->Put(rFormat.GetLRSpace());
-        pColPgSet = m_pPageSet;
+        pColPgSet = m_pPageSet.get();
     }
 
     assert(pColPgSet);
@@ -221,9 +221,9 @@ SwColumnDlg::~SwColumnDlg()
 void SwColumnDlg::dispose()
 {
     m_pTabPage.disposeAndClear();
-    delete m_pPageSet;
-    delete m_pSectionSet;
-    delete m_pSelectionSet;
+    m_pPageSet.reset();
+    m_pSectionSet.reset();
+    m_pSelectionSet.reset();
     m_pApplyToLB.clear();
     SfxModalDialog::dispose();
 }
@@ -246,18 +246,18 @@ void SwColumnDlg::ObjectHdl(ListBox const * pBox)
     switch(m_nOldSelection)
     {
         case LISTBOX_SELECTION  :
-            pSet = m_pSelectionSet;
+            pSet = m_pSelectionSet.get();
             if( m_pSelectionSet )
                 pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
-            pSet = m_pSectionSet;
+            pSet = m_pSectionSet.get();
             pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_PAGE       :
             nWidth = m_nPageWidth;
-            pSet = m_pPageSet;
+            pSet = m_pPageSet.get();
             pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_FRAME:
@@ -265,7 +265,7 @@ void SwColumnDlg::ObjectHdl(ListBox const * pBox)
         break;
     }
 
-    bool bIsSection = pSet == m_pSectionSet || pSet == m_pSelectionSet;
+    bool bIsSection = pSet == m_pSectionSet.get() || pSet == m_pSelectionSet.get();
     m_pTabPage->ShowBalance(bIsSection);
     m_pTabPage->SetInSection(bIsSection);
     m_pTabPage->SetFrameMode(true);
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
         const SwSectionFormat* pFormat = pCurrSection->GetFormat();
         const size_t nNewPos = m_rWrtShell.GetSectionFormatPos( *pFormat );
         SwSectionData aData(*pCurrSection);
-        m_rWrtShell.UpdateSection( nNewPos, aData, m_pSectionSet );
+        m_rWrtShell.UpdateSection( nNewPos, aData, m_pSectionSet.get() );
     }
 
     if(m_pSectionSet && m_pSectionSet->Count() && m_bSelSectionChanged )
@@ -339,18 +339,18 @@ SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
     switch(m_nOldSelection)
     {
         case LISTBOX_SELECTION  :
-            pSet = m_pSelectionSet;
+            pSet = m_pSelectionSet.get();
         break;
         case LISTBOX_SECTION    :
-            pSet = m_pSectionSet;
+            pSet = m_pSectionSet.get();
             m_bSectionChanged = true;
         break;
         case LISTBOX_SECTIONS   :
-            pSet = m_pSectionSet;
+            pSet = m_pSectionSet.get();
             m_bSelSectionChanged = true;
         break;
         case LISTBOX_PAGE       :
-            pSet = m_pPageSet;
+            pSet = m_pPageSet.get();
             m_bPageChanged = true;
         break;
         case LISTBOX_FRAME:
