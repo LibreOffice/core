@@ -368,7 +368,7 @@ void XMLRedlineExport::ExportChangedRegion(
         //       be exported there
     }
 
-    // changed change? Hierarchical changes can onl be two levels
+    // changed change? Hierarchical changes can only be two levels
     // deep. Here we check for the second level.
     aAny = rPropSet->getPropertyValue("RedlineSuccessorData");
     Sequence<PropertyValue> aSuccessorData;

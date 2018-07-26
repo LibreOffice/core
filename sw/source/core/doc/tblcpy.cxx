@@ -601,7 +601,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
         if( bReplaceColl &&
             (( 1 < rDstTable.GetTabLines().size() &&
                 pLine == rDstTable.GetTabLines().front() )
-                // Is the Table's content sill valid?
+                // Is the Table's content still valid?
                 ? RES_POOLCOLL_TABLE == nPoolId
                 : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
         {
