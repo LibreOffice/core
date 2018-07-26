@@ -121,7 +121,7 @@ class SwColumnPage : public SfxTabPage
     VclPtr<SwColExample>   m_pPgeExampleWN;
     VclPtr<SwColumnOnlyExample> m_pFrameExampleWN;
 
-    SwColMgr*       m_pColMgr;
+    std::unique_ptr<SwColMgr> m_pColMgr;
 
     sal_uInt16          m_nFirstVis;
     sal_uInt16          m_nCols;
