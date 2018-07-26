@@ -48,9 +48,6 @@ TableProperties::TableProperties()
 , mbBandCol( false )
 {
 }
-TableProperties::~TableProperties()
-{
-}
 
 void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std::vector< TableRow >& rvTableRows )
 {

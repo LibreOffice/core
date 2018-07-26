@@ -1385,12 +1385,6 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
     }
 }
 
-Config::Config( const Config& rParent ) :
-    Base()  // c'tor needs to be called explicitly to avoid compiler warning
-{
-    *this = rParent;
-}
-
 Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     construct( pcEnvVar, rFilter );
