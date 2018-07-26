@@ -53,12 +53,6 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SvxEmphasisMarkItem& operator=(const SvxEmphasisMarkItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        return *this;
-    }
-
     // enum cast
     FontEmphasisMark        GetEmphasisMark() const
                                 { return static_cast<FontEmphasisMark>(GetValue()); }

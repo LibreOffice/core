@@ -50,12 +50,6 @@ public:
     OUString                GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 
-    SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
-        {
-            SetValue( rMap.GetValue() );
-            return *this;
-        }
-
     // enum cast
     SvxCaseMap              GetCaseMap() const { return GetValue(); }
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

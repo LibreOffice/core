@@ -37,18 +37,11 @@ class SwFormatFillOrder: public SfxEnumItem<SwFillOrder>
 {
 public:
     SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );
-    inline SwFormatFillOrder &operator=( const SwFormatFillOrder &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 };
-
-inline SwFormatFillOrder &SwFormatFillOrder::operator=( const SwFormatFillOrder &rCpy )
-{
-    SetValue( rCpy.GetValue() );
-    return *this;
-}
 
 inline const SwFormatFillOrder &SwAttrSet::GetFillOrder(bool bInP) const
     { return Get( RES_FILL_ORDER,bInP); }

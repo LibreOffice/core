@@ -36,8 +36,10 @@ public:
             sal_Int16 _nWrapInfluenceOnPosition = css::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     virtual ~SwFormatWrapInfluenceOnObjPos() override;
 
-    SwFormatWrapInfluenceOnObjPos& operator=(
-            const SwFormatWrapInfluenceOnObjPos& _rSource );
+    SwFormatWrapInfluenceOnObjPos(SwFormatWrapInfluenceOnObjPos const &) = default;
+    SwFormatWrapInfluenceOnObjPos(SwFormatWrapInfluenceOnObjPos &&) = default;
+    SwFormatWrapInfluenceOnObjPos & operator =(SwFormatWrapInfluenceOnObjPos const &) = default;
+    SwFormatWrapInfluenceOnObjPos & operator =(SwFormatWrapInfluenceOnObjPos &&) = default;
 
     /// pure virtual methods of class <SfxPoolItem>
     virtual bool operator==( const SfxPoolItem& _rAttr ) const override;

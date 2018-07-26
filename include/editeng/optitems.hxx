@@ -47,13 +47,6 @@ public:
 
     sal_uInt8 &GetMinTrail() { return nMinTrail; }
     sal_uInt8 GetMinTrail() const { return nMinTrail; }
-
-    SfxHyphenRegionItem& operator=( const SfxHyphenRegionItem& rNew )
-    {
-        nMinLead = rNew.GetMinLead();
-        nMinTrail = rNew.GetMinTrail();
-        return *this;
-    }
 };
 
 #endif

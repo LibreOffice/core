@@ -36,13 +36,6 @@ SwFormatWrapInfluenceOnObjPos::~SwFormatWrapInfluenceOnObjPos()
 {
 }
 
-SwFormatWrapInfluenceOnObjPos& SwFormatWrapInfluenceOnObjPos::operator=( const SwFormatWrapInfluenceOnObjPos& _rSource )
-{
-    mnWrapInfluenceOnPosition = _rSource.GetWrapInfluenceOnObjPos();
-
-    return *this;
-}
-
 bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
