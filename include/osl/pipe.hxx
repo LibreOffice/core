@@ -186,11 +186,6 @@ namespace osl
         : Pipe( strName, Options )
     {}
 
-
-    inline StreamPipe::StreamPipe(const StreamPipe& aPipe)
-        : Pipe( aPipe )
-    {}
-
     inline StreamPipe::StreamPipe( oslPipe pipe, __sal_NoAcquire noacquire )
         : Pipe( pipe , noacquire )
     {}

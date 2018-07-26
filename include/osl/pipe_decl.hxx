@@ -160,11 +160,6 @@ public:
     */
     inline StreamPipe(oslPipe Pipe);
 
-    /** Copy constructor.
-        @param Pipe
-    */
-    inline StreamPipe(const StreamPipe& Pipe);
-
     /** Creates a pipe.
 
         @param[in] strName Pipe name
