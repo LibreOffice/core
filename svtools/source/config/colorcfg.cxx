@@ -540,7 +540,7 @@ void EditableColorConfig::AddScheme(const OUString& rScheme )
     m_pImpl->AddScheme(rScheme);
 }
 
-bool EditableColorConfig::LoadScheme(const OUString& rScheme )
+void EditableColorConfig::LoadScheme(const OUString& rScheme )
 {
     if(m_bModified)
         m_pImpl->SetModified();
@@ -550,7 +550,6 @@ bool EditableColorConfig::LoadScheme(const OUString& rScheme )
     m_pImpl->Load(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
-    return true;
 }
 
 const OUString& EditableColorConfig::GetCurrentSchemeName()const

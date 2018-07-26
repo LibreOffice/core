@@ -702,11 +702,10 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
         ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
-        if ( !GetContent()->transferContent( aSourceContent,
+        GetContent()->transferContent( aSourceContent,
                                             ::ucbhelper::InsertOperation::Move,
                                             aNewName,
-                                            ucb::NameClash::ERROR ) )
-            throw io::IOException(); // TODO: error handling
+                                            ucb::NameClash::ERROR );
     }
     catch( embed::InvalidStorageException& )
     {

@@ -70,11 +70,10 @@ namespace svt
         return bSuccess;
     }
 
-    bool OFileNotation::implInitWithURLNotation( const OUString& _rURL )
+    void OFileNotation::implInitWithURLNotation( const OUString& _rURL )
     {
         m_sFileURL = _rURL;
         osl_getSystemPathFromFileURL( _rURL.pData, &m_sSystem.pData );
-        return true;
     }
 
     void OFileNotation::construct( const OUString& _rUrlOrPath )
@@ -86,7 +85,8 @@ namespace svt
         {
             case INetProtocol::File:
                 // file URL
-                bSuccess = implInitWithURLNotation( _rUrlOrPath );
+                implInitWithURLNotation( _rUrlOrPath );
+                bSuccess = true;
                 break;
 
             case INetProtocol::NotValid:

@@ -87,7 +87,7 @@ public:
 
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
-    bool                        LoadScheme(const OUString& rScheme );
+    void                        LoadScheme(const OUString& rScheme );
     void                        SetCurrentSchemeName(const OUString& rScheme);
 
     sal_Int32                   GetComponentCount() const;
