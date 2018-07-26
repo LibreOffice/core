@@ -108,7 +108,7 @@ std::unique_ptr<SalLayout> SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs,
 
 void SvpSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    m_aTextRenderImpl.DrawTextLayout(rLayout);
+    m_aTextRenderImpl.DrawTextLayout(rLayout, *this);
 }
 
 void SvpSalGraphics::SetTextColor( Color nColor )

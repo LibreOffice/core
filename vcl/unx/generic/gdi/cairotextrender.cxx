@@ -168,7 +168,7 @@ namespace
     }
 }
 
-void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout)
+void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = *rInstance.GetFreetypeFont();
@@ -218,7 +218,17 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout)
 
     ImplSVData* pSVData = ImplGetSVData();
     if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
-        cairo_set_font_options(cr, pFontOptions);
+    {
+        if (!rGraphics.getAntiAliasB2DDraw())
+        {
+            cairo_font_options_t* pOptions = cairo_font_options_copy(pFontOptions);
+            cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
+            cairo_set_font_options(cr, pOptions);
+            cairo_font_options_destroy(pOptions);
+        }
+        else
+            cairo_set_font_options(cr, pFontOptions);
+    }
 
     double nDX, nDY;
     getSurfaceOffset(nDX, nDY);
