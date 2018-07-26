@@ -72,7 +72,7 @@ class ToolBarMerger
     public:
         static bool       IsCorrectContext( const OUString& aContext, const OUString& aModuleIdentifier );
 
-        static bool       ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
+        static void       ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                                  AddonToolbarItemContainer& rContainer );
 
         static void       ConvertSequenceToValues( const css::uno::Sequence< css::beans::PropertyValue >& rSequence,
@@ -104,7 +104,7 @@ class ToolBarMerger
                                                 const OUString&           rMergeFallback,
                                                 const AddonToolbarItemContainer& rItems );
 
-        static bool       MergeItems( ToolBox*                  pToolbar,
+        static void       MergeItems( ToolBox*                  pToolbar,
                                       ToolBox::ImplToolItems::size_type nPos,
                                       sal_uInt16                nModIndex,
                                       sal_uInt16&               rItemId,
@@ -112,14 +112,14 @@ class ToolBarMerger
                                       const OUString&           rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
-        static bool       ReplaceItem( ToolBox*                  pToolbar,
+        static void       ReplaceItem( ToolBox*                  pToolbar,
                                        ToolBox::ImplToolItems::size_type nPos,
                                        sal_uInt16&               rItemId,
                                        CommandToInfoMap&         rCommandMap,
                                        const OUString&           rModuleIdentifier,
                                        const AddonToolbarItemContainer& rAddonToolbarItems );
 
-        static bool       RemoveItems( ToolBox*           pToolbar,
+        static void       RemoveItems( ToolBox*           pToolbar,
                                        ToolBox::ImplToolItems::size_type nPos,
                                        const OUString&    rMergeCommandParameter );
 
