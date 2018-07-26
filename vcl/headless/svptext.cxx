@@ -108,7 +108,7 @@ SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 void SvpSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
-    m_aTextRenderImpl.DrawTextLayout(rLayout);
+    m_aTextRenderImpl.DrawTextLayout(rLayout, *this);
 }
 
 void SvpSalGraphics::SetTextColor( SalColor nSalColor )

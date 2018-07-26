@@ -78,7 +78,7 @@ public:
     virtual bool                GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) override;
     virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void                DrawTextLayout(const CommonSalLayout&) override;
+    virtual void                DrawTextLayout(const CommonSalLayout&, const SalGraphics&) override;
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif

@@ -62,7 +62,7 @@ public:
     virtual bool                    GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) = 0;
     virtual bool                    GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) = 0;
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
-    virtual void                    DrawTextLayout(const CommonSalLayout&) = 0;
+    virtual void                    DrawTextLayout(const CommonSalLayout&, const SalGraphics&) = 0;
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const = 0;
 #endif // ENABLE_CAIRO_CANVAS
