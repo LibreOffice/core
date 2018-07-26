@@ -1290,8 +1290,8 @@ void SAL_CALL Frame::activate()
 
 /*-****************************************************************************************************
     @short      deactivate frame in hierarchy
-    @descr      This feature is used to deactive paths in our frame hierarchy.
-                You can be a listener for this event to react for it ... change some internal states or something else.
+    @descr      This feature is used to deactivate paths in our frame hierarchy.
+                You can be a listener for this event to react for it... change some internal states or something else.
 
     @seealso    method activate()
     @seealso    method isActivate()
