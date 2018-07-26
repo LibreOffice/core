@@ -382,7 +382,7 @@ void SwColumnPage::ResetColWidth()
 {
     if( m_nCols )
     {
-        const sal_uInt16 nWidth = GetMaxWidth( m_pColMgr, m_nCols ) / m_nCols;
+        const sal_uInt16 nWidth = GetMaxWidth( m_pColMgr.get(), m_nCols ) / m_nCols;
 
         for(sal_uInt16 i = 0; i < m_nCols; ++i)
             m_nColWidth[i] = static_cast<long>(nWidth);
@@ -523,7 +523,7 @@ SwColumnPage::~SwColumnPage()
 
 void SwColumnPage::dispose()
 {
-    delete m_pColMgr;
+    m_pColMgr.reset();
     m_pCLNrEdt.clear();
     m_pDefaultVS.clear();
     m_pBalanceColsCB.clear();
@@ -589,8 +589,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     m_aDistEd1.SetPrcntValue(50, FUNIT_CM);
     m_aDistEd2.SetPrcntValue(50, FUNIT_CM);
 
-    delete m_pColMgr;
-    m_pColMgr = new SwColMgr(*rSet);
+    m_pColMgr.reset(new SwColMgr(*rSet));
     m_nCols   = m_pColMgr->GetCount() ;
     m_pCLNrEdt->SetMax(std::max(static_cast<sal_uInt16>(m_pCLNrEdt->GetMax()), m_nCols));
     m_pCLNrEdt->SetLast(std::max(m_nCols,static_cast<sal_uInt16>(m_pCLNrEdt->GetMax())));
@@ -1244,7 +1243,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             }
         }
         m_pFrameExampleWN->Hide();
-        m_pPgeExampleWN->UpdateExample( rSet, m_pColMgr );
+        m_pPgeExampleWN->UpdateExample( rSet, m_pColMgr.get() );
         m_pPgeExampleWN->Show();
 
     }
