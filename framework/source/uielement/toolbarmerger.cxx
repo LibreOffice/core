@@ -99,13 +99,8 @@ bool ToolBarMerger::IsCorrectContext(
 
      A vector of AddonToolbarItems which will hold the
      conversion from the rSequence argument.
-
- @result
-     The result is true if the sequence, sequence of property
-     values could be converted to a vector of structs.
-
 */
-bool ToolBarMerger::ConvertSeqSeqToVector(
+void ToolBarMerger::ConvertSeqSeqToVector(
     const uno::Sequence< uno::Sequence< beans::PropertyValue > >& rSequence,
     AddonToolbarItemContainer& rContainer )
 {
@@ -123,8 +118,6 @@ bool ToolBarMerger::ConvertSeqSeqToVector(
                                  aAddonToolbarItem.nWidth );
         rContainer.push_back( aAddonToolbarItem );
     }
-
-    return true;
 }
 
 /**
@@ -316,15 +309,16 @@ bool ToolBarMerger::ProcessMergeOperation(
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
-        return MergeItems( pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        MergeItems( pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
-        return MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
-        return ReplaceItem( pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        ReplaceItem( pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
-        return RemoveItems( pToolbar, nPos, rMergeCommandParameter );
-
-    return false;
+        RemoveItems( pToolbar, nPos, rMergeCommandParameter );
+    else
+        return false;
+    return true;
 }
 
 /**
@@ -387,9 +381,12 @@ bool ToolBarMerger::ProcessMergeFallback(
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
         if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
-            return MergeItems( pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            MergeItems( pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
         else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
-            return MergeItems( pToolbar, ToolBox::APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            MergeItems( pToolbar, ToolBox::APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        else
+            return false;
+        return true;
     }
 
     return false;
@@ -426,12 +423,8 @@ bool ToolBarMerger::ProcessMergeFallback(
 
      Toolbar items which are associated to the merge
      command.
-
- @result
-     Returns true for a successful operation otherwise
-     false.
 */
-bool ToolBarMerger::MergeItems(
+void ToolBarMerger::MergeItems(
     ToolBox*                               pToolbar,
     ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16                             nModIndex,
@@ -480,8 +473,6 @@ bool ToolBarMerger::MergeItems(
             ++rItemId;
         }
     }
-
-    return true;
 }
 
 /**
@@ -516,12 +507,8 @@ bool ToolBarMerger::MergeItems(
 
      Toolbar items which are associated to the merge
      command.
-
- @result
-     Returns true for a successful operation otherwise
-     false.
 */
-bool ToolBarMerger::ReplaceItem(
+void ToolBarMerger::ReplaceItem(
     ToolBox*                               pToolbar,
     ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16&                            rItemId,
@@ -530,7 +517,7 @@ bool ToolBarMerger::ReplaceItem(
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );
-    return MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
+    MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
 }
 
 /**
@@ -553,12 +540,8 @@ bool ToolBarMerger::ReplaceItem(
      rMergeCommandParameter.
 
      An optional argument for the merge command.
-
- @result
-     Returns true for a successful operation otherwise
-     false.
 */
-bool ToolBarMerger::RemoveItems(
+void ToolBarMerger::RemoveItems(
     ToolBox*                  pToolbar,
     ToolBox::ImplToolItems::size_type nPos,
     const OUString&    rMergeCommandParameter )
@@ -572,7 +555,6 @@ bool ToolBarMerger::RemoveItems(
                 pToolbar->RemoveItem( nPos );
         }
     }
-    return true;
 }
 
 /**

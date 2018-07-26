@@ -161,7 +161,7 @@ namespace framework
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             ImageList*                                implts_getUserImageList( vcl::ImageType nImageType );
-            bool                                      implts_loadUserImages( vcl::ImageType nImageType,
+            void                                      implts_loadUserImages( vcl::ImageType nImageType,
                                                                              const css::uno::Reference< css::embed::XStorage >& xUserImageStorage,
                                                                              const css::uno::Reference< css::embed::XStorage >& xUserBitmapsStorage );
             bool                                      implts_storeUserImages( vcl::ImageType nImageType,
