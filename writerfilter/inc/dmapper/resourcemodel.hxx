@@ -99,6 +99,12 @@ public:
      */
     virtual void resolve(T & rHandler) = 0;
 
+    Reference() = default;
+    Reference(Reference const &) = default;
+    Reference(Reference &&) = default;
+    Reference & operator =(Reference const &) = default;
+    Reference & operator =(Reference &&) = default;
+
 protected:
     ~Reference() override {}
 };
