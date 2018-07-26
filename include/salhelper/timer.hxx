@@ -56,12 +56,6 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
         normalize();
     }
 
-    TTimeValue( const TTimeValue& rTimeValue ):
-        TimeValue(rTimeValue)
-    {
-        normalize();
-    }
-
     TTimeValue( const TimeValue& rTimeValue )
     {
         Seconds = rTimeValue.Seconds;
