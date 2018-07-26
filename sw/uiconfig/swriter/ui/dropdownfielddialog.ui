@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
-  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -26,6 +16,9 @@
     <property name="title" translatable="yes" context="dropdownfielddialog|DropdownFieldDialog">Choose Item: </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -43,9 +36,10 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="prev">
+                    <property name="label">gtk-media-previous</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="image">image1</property>
+                    <property name="use_stock">True</property>
                     <property name="image_position">right</property>
                   </object>
                   <packing>
@@ -55,9 +49,10 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="next">
+                    <property name="label">gtk-media-next</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="image">image2</property>
+                    <property name="use_stock">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -230,8 +225,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
