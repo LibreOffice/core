@@ -165,6 +165,11 @@ namespace utl
         public:
             virtual ~ConfigItem() override;
 
+            ConfigItem(ConfigItem const &) = default;
+            ConfigItem(ConfigItem &&) = default;
+            ConfigItem & operator =(ConfigItem const &) = default;
+            ConfigItem & operator =(ConfigItem &&) = default;
+
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */
             virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames)=0;

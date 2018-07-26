@@ -37,8 +37,6 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         CollatorWrapper (
                 const css::uno::Reference< css::uno::XComponentContext > &rxContext);
 
-        ~CollatorWrapper();
-
            sal_Int32
         compareString (
                 const OUString& s1, const OUString& s2) const;
