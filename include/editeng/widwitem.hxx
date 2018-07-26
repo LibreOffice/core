@@ -45,12 +45,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxWidowsItem& operator=( const SvxWidowsItem& rWidows )
-    {
-        SetValue( rWidows.GetValue() );
-        return *this;
-    }
 };
 
 #endif

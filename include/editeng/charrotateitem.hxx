@@ -48,12 +48,6 @@ public:
     virtual bool            QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool            PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    SvxTextRotateItem& operator=(const SvxTextRotateItem& rItem)
-    {
-        SetValue(rItem.GetValue());
-        return *this;
-    }
-
     virtual bool operator==(const SfxPoolItem&) const override;
 
     // our currently only degree values
@@ -99,13 +93,6 @@ public:
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-    SvxCharRotateItem& operator=( const SvxCharRotateItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        SetFitToLine( rItem.IsFitToLine() );
-        return *this;
-    }
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
 

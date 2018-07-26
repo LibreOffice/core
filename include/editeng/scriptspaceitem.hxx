@@ -44,13 +44,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-
-    SvxScriptSpaceItem& operator=(const SvxScriptSpaceItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        return *this;
-    }
-
 };
 
 #endif

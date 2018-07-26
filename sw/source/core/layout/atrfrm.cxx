@@ -197,18 +197,6 @@ SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips
     m_nWidthPercent = m_eWidthPercentRelation = m_nHeightPercent = m_eHeightPercentRelation = 0;
 }
 
-SwFormatFrameSize& SwFormatFrameSize::operator=( const SwFormatFrameSize& rCpy )
-{
-    SvxSizeItem::operator=(rCpy);
-    m_eFrameHeightType = rCpy.GetHeightSizeType();
-    m_eFrameWidthType = rCpy.GetWidthSizeType();
-    m_nHeightPercent = rCpy.GetHeightPercent();
-    m_eHeightPercentRelation  = rCpy.GetHeightPercentRelation();
-    m_nWidthPercent  = rCpy.GetWidthPercent();
-    m_eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
-    return *this;
-}
-
 bool SwFormatFrameSize::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -2216,23 +2204,6 @@ bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
 {
     return new SwTextGridItem( *this );
-}
-
-SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
-{
-    m_aColor = rCpy.GetColor();
-    m_nLines = rCpy.GetLines();
-    m_nBaseHeight = rCpy.GetBaseHeight();
-    m_nRubyHeight = rCpy.GetRubyHeight();
-    m_eGridType = rCpy.GetGridType();
-    m_bRubyTextBelow = rCpy.GetRubyTextBelow();
-    m_bPrintGrid = rCpy.GetPrintGrid();
-    m_bDisplayGrid = rCpy.GetDisplayGrid();
-    m_nBaseWidth = rCpy.GetBaseWidth();
-    m_bSnapToChars = rCpy.GetSnapToChars();
-    m_bSquaredMode = rCpy.GetSquaredMode();
-
-    return *this;
 }
 
 bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const

@@ -45,11 +45,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxBlinkItem& operator=(const SvxBlinkItem& rBlink) {
-            SetValue(rBlink.GetValue());
-            return *this;
-        }
 };
 
 #endif

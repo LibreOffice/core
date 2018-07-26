@@ -50,6 +50,11 @@ public:
     SwTextGridItem();
     virtual ~SwTextGridItem() override;
 
+    SwTextGridItem(SwTextGridItem const &) = default;
+    SwTextGridItem(SwTextGridItem &&) = default;
+    SwTextGridItem & operator =(SwTextGridItem const &) = default;
+    SwTextGridItem & operator =(SwTextGridItem &&) = default;
+
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -60,8 +65,6 @@ public:
                                   const IntlWrapper& rIntl ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-    SwTextGridItem&  operator=( const SwTextGridItem& );
 
     const Color& GetColor() const { return m_aColor; }
     void SetColor( const Color& rCol )  { m_aColor = rCol; }
