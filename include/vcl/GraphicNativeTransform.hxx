@@ -27,7 +27,7 @@ class VCL_DLLPUBLIC GraphicNativeTransform final
     Graphic& mrGraphic;
 
     bool rotateBitmapOnly (sal_uInt16 aRotation);
-    bool rotateJPEG       (sal_uInt16 aRotation);
+    void rotateJPEG       (sal_uInt16 aRotation);
     bool rotateGeneric    (sal_uInt16 aRotation, const OUString& aType);
 
 public:

@@ -84,7 +84,7 @@ public:
     static void         EnableBalloonHelp();
     static void         DisableBalloonHelp();
     static bool         IsBalloonHelpEnabled();
-    static bool         ShowBalloon( vcl::Window* pParent,
+    static void         ShowBalloon( vcl::Window* pParent,
                                      const Point& rScreenPos,
                                      const tools::Rectangle&,
                                      const OUString& rHelpText );
@@ -92,16 +92,16 @@ public:
     static void         EnableQuickHelp();
     static void         DisableQuickHelp();
     static bool         IsQuickHelpEnabled();
-    static bool         ShowQuickHelp( vcl::Window* pParent,
+    static void         ShowQuickHelp( vcl::Window* pParent,
                                        const tools::Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        const OUString& rLongHelpText,
                                        QuickHelpFlags nStyle );
-    static bool         ShowQuickHelp( vcl::Window* pParent,
+    static void         ShowQuickHelp( vcl::Window* pParent,
                                        const tools::Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        QuickHelpFlags nStyle = QuickHelpFlags::NONE )
-                            { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, OUString(), nStyle ); }
+                            { Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, OUString(), nStyle ); }
 
     static void         HideBalloonAndQuickHelp();
 

@@ -55,7 +55,7 @@ private:
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     bool        LookupGlyphID (sal_GlyphId nGlyphId,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    bool        AddGlyphID (sal_GlyphId nGlyphId,
+    void        AddGlyphID (sal_GlyphId nGlyphId,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     static void     AddNotdef (glyph_map_t &rGlyphMap);

@@ -67,7 +67,7 @@ void OpenGLProgram::Use()
     Reuse();
 }
 
-bool OpenGLProgram::Clean()
+void OpenGLProgram::Clean()
 {
     // unbind all textures
     for (OpenGLTexture& rTexture : maTextures)
@@ -89,8 +89,6 @@ bool OpenGLProgram::Clean()
         }
         mnEnabledAttribs = 0;
     }
-
-    return true;
 }
 
 bool OpenGLProgram::EnableVertexAttrib(GLuint& rAttrib, const OString& rName)

@@ -116,7 +116,7 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
     return true;
 }
 
-bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
+void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 {
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
 
@@ -162,8 +162,6 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         rFilter.ImportGraphic( aGraphic, OUString("import"), aTargetStream );
         mrGraphic = aGraphic;
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

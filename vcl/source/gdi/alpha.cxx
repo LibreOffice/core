@@ -76,7 +76,7 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
     Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
+void AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
     Bitmap::ScopedReadAccess pMaskAcc( const_cast<Bitmap&>(rMask) );
     AlphaScopedWriteAccess pAcc(*this);
@@ -97,7 +97,6 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
                     pAcc->SetPixelOnData( pScanline, nX, aReplace );
         }
     }
-    return false;
 }
 
 void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )

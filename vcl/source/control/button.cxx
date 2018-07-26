@@ -151,7 +151,7 @@ OUString Button::GetStandardText(StandardButtonType eButton)
     return VclResId(aResIdAry[static_cast<sal_uInt16>(eButton)]);
 }
 
-bool Button::SetModeImage( const Image& rImage )
+void Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )
     {
@@ -159,7 +159,6 @@ bool Button::SetModeImage( const Image& rImage )
         StateChanged( StateChangedType::Data );
         queue_resize();
     }
-    return true;
 }
 
 Image const & Button::GetModeImage( ) const
@@ -2617,7 +2616,7 @@ void RadioButton::Toggle()
     ImplCallEventListenersAndHandler( VclEventId::RadiobuttonToggle, [this] () { maToggleHdl.Call(*this); } );
 }
 
-bool RadioButton::SetModeRadioImage( const Image& rImage )
+void RadioButton::SetModeRadioImage( const Image& rImage )
 {
     if ( rImage != maImage )
     {
@@ -2625,7 +2624,6 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
         CompatStateChanged( StateChangedType::Data );
         queue_resize();
     }
-    return true;
 }
 
 

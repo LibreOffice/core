@@ -150,14 +150,12 @@ bool Help::IsBalloonHelpEnabled()
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
 
-bool Help::ShowBalloon( vcl::Window* pParent,
+void Help::ShowBalloon( vcl::Window* pParent,
                         const Point& rScreenPos, const tools::Rectangle& rRect,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, QuickHelpFlags::NONE,
                         rHelpText, OUString(), rScreenPos, rRect );
-
-    return true;
 }
 
 void Help::EnableQuickHelp()
@@ -175,7 +173,7 @@ bool Help::IsQuickHelpEnabled()
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
 
-bool Help::ShowQuickHelp( vcl::Window* pParent,
+void Help::ShowQuickHelp( vcl::Window* pParent,
                           const tools::Rectangle& rScreenRect,
                           const OUString& rHelpText,
                           const OUString& rLongHelpText,
@@ -185,7 +183,6 @@ bool Help::ShowQuickHelp( vcl::Window* pParent,
     ImplShowHelpWindow( pParent, nHelpWinStyle, nStyle,
                         rHelpText, rLongHelpText,
                         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), rScreenRect );
-    return true;
 }
 
 void Help::HideBalloonAndQuickHelp()

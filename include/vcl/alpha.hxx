@@ -58,7 +58,7 @@ public:
     Bitmap const & GetBitmap() const;
 
     void        Erase( sal_uInt8 cTransparency );
-    bool        Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
+    void        Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
     void        Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency );
 
     BitmapReadAccess*  AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }

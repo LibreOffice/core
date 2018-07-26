@@ -250,7 +250,7 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
     return BorderWindowHitTest::NONE;
 }
 
-bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
+void ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
 {
     DrawButtonFlags oldCloseState = pData->mnCloseState;
     DrawButtonFlags oldMenuState = pData->mnMenuState;
@@ -289,8 +289,6 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
         pData->mpBorderWindow->Invalidate( pData->maCloseRect );
     if( pData->mnMenuState != oldMenuState )
         pData->mpBorderWindow->Invalidate( pData->maMenuRect );
-
-    return true;
 }
 
 OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pData,
@@ -764,7 +762,8 @@ ImplStdBorderWindowView::~ImplStdBorderWindowView()
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
 {
-    return ImplMouseMove( &maFrameData, rMEvt );
+    ImplMouseMove( &maFrameData, rMEvt );
+    return true;
 }
 
 bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
