@@ -23,6 +23,11 @@ public:
 
     virtual ~SfxInt64Item() override;
 
+    SfxInt64Item(SfxInt64Item const &) = default;
+    SfxInt64Item(SfxInt64Item &&) = default;
+    SfxInt64Item & operator =(SfxInt64Item const &) = default;
+    SfxInt64Item & operator =(SfxInt64Item &&) = default;
+
     virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 
     virtual bool GetPresentation(
