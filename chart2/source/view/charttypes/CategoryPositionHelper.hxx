@@ -29,6 +29,11 @@ public:
     CategoryPositionHelper( double fSeriesCount, double CategoryWidth = 1.0);
     virtual ~CategoryPositionHelper();
 
+    CategoryPositionHelper(CategoryPositionHelper const &) = default;
+    CategoryPositionHelper(CategoryPositionHelper &&) = default;
+    CategoryPositionHelper & operator =(CategoryPositionHelper const &) = default;
+    CategoryPositionHelper & operator =(CategoryPositionHelper &&) = default;
+
     double getScaledSlotWidth() const;
     virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const;
     void setCategoryWidth( double fCategoryWidth );
