@@ -51,9 +51,6 @@ public:
         {}
     /// @endcond
 
-    OTypeCollection( const OTypeCollection & rCollection )
-        : _aTypes( rCollection._aTypes )
-        {}
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
