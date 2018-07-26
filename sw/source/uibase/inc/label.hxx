@@ -38,7 +38,7 @@ class SwLabDlg : public SfxTabDialogController
     std::vector<sal_uInt16> aTypeIds;
     std::vector<OUString> aMakes;
 
-    SwLabRecs* m_pRecs;
+    std::unique_ptr<SwLabRecs> m_pRecs;
     OUString   aLstGroup;
     OUString   m_sBusinessCardDlg;
     bool       m_bLabel;
