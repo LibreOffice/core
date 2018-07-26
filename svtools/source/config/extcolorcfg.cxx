@@ -596,7 +596,7 @@ void EditableExtendedColorConfig::AddScheme(const OUString& rScheme )
     m_pImpl->AddScheme(rScheme);
 }
 
-bool EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
+void EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
 {
     if(m_bModified)
         m_pImpl->SetModified();
@@ -606,7 +606,6 @@ bool EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
     m_pImpl->Load(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
-    return true;
 }
 
 // Changes the name of the current scheme but doesn't load it!

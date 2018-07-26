@@ -248,7 +248,7 @@ SvLBoxItemType SvLBoxButton::GetType() const
     return SvLBoxItemType::Button;
 }
 
-bool SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
+void SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
 {
     if ( CheckModification() )
     {
@@ -259,7 +259,6 @@ bool SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
         pData->StoreButtonState( pEntry );
         pData->CallLink();
     }
-    return false;
 }
 
 void SvLBoxButton::Paint(

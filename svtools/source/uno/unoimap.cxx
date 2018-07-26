@@ -508,7 +508,7 @@ public:
     explicit SvUnoImageMap();
     SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
 
-    bool fillImageMap( ImageMap& rMap ) const;
+    void fillImageMap( ImageMap& rMap ) const;
     /// @throws IllegalArgumentException
     static SvUnoImageMapObject* getObject( const Any& aElement );
 
@@ -667,7 +667,7 @@ Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
     return Sequence< OUString >( &aSN, 1 );
 }
 
-bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
+void SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 {
     rMap.ClearImageMap();
 
@@ -679,8 +679,6 @@ bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
         rMap.InsertIMapObject( *pNewMapObject );
         delete pNewMapObject;
     }
-
-    return true;
 }
 
 
@@ -718,7 +716,8 @@ bool SvUnoImageMap_fillImageMap( const Reference< XInterface >& xImageMap, Image
     if( nullptr == pUnoImageMap )
         return false;
 
-    return pUnoImageMap->fillImageMap( rMap );
+    pUnoImageMap->fillImageMap( rMap );
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
