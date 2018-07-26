@@ -247,6 +247,7 @@ public:
     void testHiddenRowsColumnsXLSXML();
     void testColumnWidthRowHeightXLSXML();
     void testTdf62268();
+    void testVBAMacroFunctionODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -380,6 +381,7 @@ public:
     CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf62268);
+    CPPUNIT_TEST(testVBAMacroFunctionODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4109,6 +4111,19 @@ void ScFiltersTest::testTdf62268()
     CPPUNIT_ASSERT_LESSEQUAL( 3, abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
     CPPUNIT_ASSERT_LESSEQUAL( 19, abs( 1905 - nHeight ) );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testVBAMacroFunctionODS()
+{
+    ScDocShellRef xDocSh = loadDoc("vba_macro_functions.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aFunction;
+    rDoc.GetFormula(2, 0, 0, aFunction);
+    std::cout << aFunction << std::endl;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, rDoc.GetValue(2, 0, 0), 1e-6);
 
     xDocSh->DoClose();
 }
