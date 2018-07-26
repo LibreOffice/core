@@ -37,12 +37,6 @@ XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 {
 }
 
-XColorEntry::XColorEntry(const XColorEntry& rOther)
-:   XPropertyEntry(rOther),
-aColor(rOther.aColor)
-{
-}
-
 XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
     aB2DPolyPolygon(rB2DPolyPolygon)

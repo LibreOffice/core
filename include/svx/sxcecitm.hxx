@@ -51,6 +51,11 @@ public:
     SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     virtual ~SdrCaptionEscIsRelItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrCaptionEscIsRelItem(SdrCaptionEscIsRelItem const &) = default;
+    SdrCaptionEscIsRelItem(SdrCaptionEscIsRelItem &&) = default;
+    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem const &) = default;
+    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem &&) = default;
 };
 
 
@@ -65,6 +70,11 @@ public:
     SdrCaptionEscRelItem(long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
     virtual ~SdrCaptionEscRelItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrCaptionEscRelItem(SdrCaptionEscRelItem const &) = default;
+    SdrCaptionEscRelItem(SdrCaptionEscRelItem &&) = default;
+    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem const &) = default;
+    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem &&) = default;
 };
 
 
