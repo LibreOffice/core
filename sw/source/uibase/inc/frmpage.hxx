@@ -222,7 +222,7 @@ class SwGrfExtPage: public SfxTabPage
     OUString        aFilterName;
     OUString        aGrfName, aNewGrfName;
 
-    ::sfx2::FileDialogHelper*     pGrfDlg;
+    std::unique_ptr<::sfx2::FileDialogHelper> pGrfDlg;
 
     bool            bHtmlMode;
 

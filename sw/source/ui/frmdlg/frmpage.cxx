@@ -2406,7 +2406,7 @@ SwGrfExtPage::~SwGrfExtPage()
 
 void SwGrfExtPage::dispose()
 {
-    delete pGrfDlg;
+    pGrfDlg.reset();
     m_pMirror.clear();
     m_pMirrorVertBox.clear();
     m_pMirrorHorzBox.clear();
@@ -2603,9 +2603,9 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
 {
     if(!pGrfDlg)
     {
-        pGrfDlg = new FileDialogHelper(
+        pGrfDlg.reset(new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, GetFrameWeld());
+                FileDialogFlags::Graphic, GetFrameWeld()));
         pGrfDlg->SetTitle(get<VclFrame>("linkframe")->get_label());
     }
     pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
