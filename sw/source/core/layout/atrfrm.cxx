@@ -2690,7 +2690,7 @@ void SwFrameFormat::DelFrames()
 
 void SwFrameFormat::MakeFrames()
 {
-    OSL_ENSURE( false, "Sorry not implemented." );
+    assert(false); // unimplemented in base class
 }
 
 SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
