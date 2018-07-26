@@ -110,6 +110,12 @@ public:
         // SfxObjectShell::pMedium
         if (fn == SRCDIR "/sfx2/source/doc/objxtor.cxx")
             return;
+        // various
+        if (fn == SRCDIR "/sw/source/filter/ww8/wrtww8.cxx")
+            return;
+        // WW8TabBandDesc
+        if (fn == SRCDIR "/sw/source/filter/ww8/ww8par2.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
