@@ -2368,7 +2368,7 @@ void ScInterpreter::ScMod()
         double fDenom   = GetDouble();   // Denominator
         if ( fDenom == 0.0 )
         {
-            PushIllegalArgument();
+            PushError(FormulaError::DivisionByZero);
             return;
         }
         double fNum = GetDouble();   // Numerator
