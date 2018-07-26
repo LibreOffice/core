@@ -37,9 +37,9 @@ private:
     bool           m_bIsUrl;
 
     SwScriptField*          m_pField;
-    SwFieldMgr*             m_pMgr;
+    std::unique_ptr<SwFieldMgr>             m_pMgr;
     SwWrtShell*             m_pSh;
-    sfx2::FileDialogHelper* m_pFileDlg;
+    std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
 
     std::unique_ptr<weld::Entry>        m_xTypeED;
     std::unique_ptr<weld::RadioButton>  m_xUrlRB;
