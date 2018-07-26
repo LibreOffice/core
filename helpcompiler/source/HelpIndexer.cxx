@@ -96,7 +96,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
     osl::Directory dir(path);
     if (osl::FileBase::E_None != dir.open()) {
         d_error = "Error reading directory " + path;
-        return true;
+        return false;
     }
 
     osl::DirectoryItem item;

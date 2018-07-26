@@ -439,7 +439,7 @@ void myparser::traverse( xmlNodePtr parentNode )
     }
 }
 
-bool HelpCompiler::compile()
+void HelpCompiler::compile()
 {
     // we now have the jaroutputstream, which will contain the document.
     // now determine the document as a dom tree in variable docResolved
@@ -503,7 +503,6 @@ bool HelpCompiler::compile()
     }
     streamTable.document_module = actMod;
     xmlFreeDoc(docResolvedOrg);
-    return true;
 }
 
 namespace fs

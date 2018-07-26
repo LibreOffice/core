@@ -219,7 +219,7 @@ public:
                 bool in_bExtensionMode);
     /// @throws HelpProcessingException
     /// @throws BasicCodeTagger::TaggerException
-    bool compile();
+    void compile();
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
     static void tagBasicCodeExamples(xmlDocPtr doc);
