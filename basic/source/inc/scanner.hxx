@@ -67,7 +67,6 @@ protected:
     void   GenError( ErrCode );
 public:
     SbiScanner( const OUString&, StarBASIC* = nullptr );
-   ~SbiScanner();
 
     void  EnableErrors()            { bError = false; }
     bool  IsHash()                  { return bHash;   }
