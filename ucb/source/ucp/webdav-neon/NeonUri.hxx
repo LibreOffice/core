@@ -59,7 +59,6 @@ class NeonUri
         explicit NeonUri( const OUString & inUri );
         /// @throws DAVException
         explicit NeonUri( const ne_uri * inUri );
-        ~NeonUri( );
 
         bool operator== ( const NeonUri & rOther ) const;
         bool operator!= ( const NeonUri & rOther ) const
