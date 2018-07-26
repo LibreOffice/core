@@ -66,6 +66,11 @@ namespace dbaccess
         {
         }
 
+        TokenComposer(TokenComposer const &) = default;
+        TokenComposer(TokenComposer &&) = default;
+        TokenComposer & operator =(TokenComposer const &) = default;
+        TokenComposer & operator =(TokenComposer &&) = default;
+
         void operator() (const OUString& lhs)
         {
             append(lhs);
