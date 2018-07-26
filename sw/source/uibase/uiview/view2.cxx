@@ -906,11 +906,16 @@ void SwView::Execute(SfxRequest &rReq)
             const SwTOXBase* pBase = m_pWrtShell->GetCurTOX();
             if(pBase)
             {
+                // tdf#106374: don't jump view on the update
+                const bool bWasLocked = m_pWrtShell->IsViewLocked();
+                m_pWrtShell->LockView(true);
                 m_pWrtShell->StartAction();
                 if(TOX_INDEX == pBase->GetType())
                     m_pWrtShell->ApplyAutoMark();
                 m_pWrtShell->UpdateTableOf( *pBase );
                 m_pWrtShell->EndAction();
+                if (!bWasLocked)
+                    m_pWrtShell->LockView(false);
             }
         }
         break;
