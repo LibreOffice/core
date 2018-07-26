@@ -347,20 +347,8 @@ void HelpLinker::link()
                 compactStylesheet, embeddStylesheet, module, lang, bExtensionMode );
 
             HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
-            bool success = hc.compile();
+            hc.compile();
             HCDBG(std::cerr << "after compile of " << xhpFileName << std::endl);
-
-            if (!success && !bExtensionMode)
-            {
-                std::stringstream aStrStream;
-                aStrStream <<
-                    "\nERROR: compiling help particle '"
-                        << xhpFileName
-                        << "' for language '"
-                        << lang
-                        << "' failed!";
-                throw HelpProcessingException( HelpProcessingErrorClass::General, aStrStream.str() );
-            }
 
             if (!m_bCreateIndex)
                 continue;
