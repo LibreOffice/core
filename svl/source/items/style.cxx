@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <string.h>
 
@@ -328,7 +329,7 @@ bool SfxStyleSheetBase::IsUsed() const
 OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
-    OUString aDesc;
+    OUStringBuffer aDesc;
     const SfxPoolItem* pItem = aIter.FirstItem();
 
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
@@ -341,13 +342,13 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
                 *pItem, eMetric, aItemPresentation, aIntlWrapper ) )
         {
             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
-                aDesc += " + ";
+                aDesc.append(" + ");
             if ( !aItemPresentation.isEmpty() )
-                aDesc += aItemPresentation;
+                aDesc.append(aItemPresentation);
         }
         pItem = aIter.NextItem();
     }
-    return aDesc;
+    return aDesc.makeStringAndClear();
 }
 
 SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const

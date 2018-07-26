@@ -25,6 +25,7 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #define MAX_ADDRESS 0x30000
 #define MAX_INDEX MAX_ADDRESS/0x100
@@ -48,7 +49,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Int32 address[MAX_ADDRESS];
     for (i=0; i<MAX_ADDRESS; i++) address[i]=-1;
     OUString sep=OUString('|');
-    OUString result=sep;
+    OUStringBuffer result=sep;
     sal_Int32 max=0;
 
     sal_Char str[1024];
@@ -78,7 +79,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             address[nChar]=idx;
         } else {
             address[nChar]=result.getLength();
-            result+=key;
+            result.append(key);
         }
     }
     fclose(fp);

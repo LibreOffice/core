@@ -28,7 +28,7 @@
 class GenPoEntry
 {
 private:
-    OString    m_sExtractCom;
+    OStringBuffer m_sExtractCom;
     OString    m_sReference;
     OString    m_sMsgCtxt;
     OString    m_sMsgId;
@@ -129,7 +129,7 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
     if ( !m_sExtractCom.isEmpty() )
         rOFStream
             << "#. "
-            << m_sExtractCom.replaceAll("\n","\n#. ") << std::endl;
+            << m_sExtractCom.toString().replaceAll("\n","\n#. ") << std::endl;
     if ( !m_sReference.isEmpty() )
         rOFStream << "#: " << m_sReference << std::endl;
     if ( m_bFuzzy )
@@ -162,9 +162,9 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         {
             if( !m_sExtractCom.isEmpty() )
             {
-                m_sExtractCom += "\n";
+                m_sExtractCom.append("\n");
             }
-            m_sExtractCom += sLine.copy(3);
+            m_sExtractCom.append(sLine.copy(3));
         }
         else if (sLine.startsWith("#: "))
         {

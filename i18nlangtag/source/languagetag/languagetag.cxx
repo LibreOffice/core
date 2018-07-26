@@ -1636,10 +1636,10 @@ OUString LanguageTagImpl::getRegionFromLangtag()
 
 OUString LanguageTagImpl::getVariantsFromLangtag()
 {
-    OUString aVariants;
+    OUStringBuffer aVariants;
     synCanonicalize();
     if (maBcp47.isEmpty())
-        return aVariants;
+        return OUString();
     if (mpImplLangtag)
     {
         const lt_list_t* pVariantsT = lt_tag_get_variants( mpImplLangtag);
@@ -1651,10 +1651,9 @@ OUString LanguageTagImpl::getVariantsFromLangtag()
                 const char* p = lt_variant_get_tag( pVariantT);
                 if (p)
                 {
-                    if (aVariants.isEmpty())
-                        aVariants = OUString::createFromAscii( p);
-                    else
-                        aVariants += "-" + OUString::createFromAscii( p);
+                    if (!aVariants.isEmpty())
+                        aVariants.append("-");
+                    aVariants.appendAscii(p);
                 }
             }
         }
@@ -1664,7 +1663,7 @@ OUString LanguageTagImpl::getVariantsFromLangtag()
         if (mbCachedVariants || cacheSimpleLSCV())
             aVariants = maCachedVariants;
     }
-    return aVariants;
+    return aVariants.makeStringAndClear();
 }
 
 
