@@ -409,6 +409,11 @@ private:
 public:
     ParagraphProperties();
 
+    ParagraphProperties(ParagraphProperties const &) = default;
+    ParagraphProperties(ParagraphProperties &&) = default;
+    ParagraphProperties & operator =(ParagraphProperties const &) = default;
+    ParagraphProperties & operator =(ParagraphProperties &&) = default;
+
     // Does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
     bool operator==( const ParagraphProperties& );
 
