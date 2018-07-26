@@ -522,7 +522,6 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , &rSet),
     m_pPrt(nullptr),
-    m_pFontList(nullptr),
     m_pFontConfig(nullptr),
     m_pWrtShell(nullptr),
     m_eLanguage( GetAppLanguage() ),
@@ -593,7 +592,7 @@ SwStdFontTabPage::~SwStdFontTabPage()
 
 void SwStdFontTabPage::dispose()
 {
-    delete m_pFontList;
+    m_pFontList.reset();
     m_pLabelFT.clear();
     m_pStandardBox.clear();
     m_pStandardHeightLB.clear();
@@ -795,8 +794,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
         m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));
     }
-    delete m_pFontList;
-    m_pFontList = new FontList( m_pPrt );
+    m_pFontList.reset(new FontList( m_pPrt ));
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
     if( !m_pStandardBox->GetEntryCount() )
     {
@@ -922,15 +920,15 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_pIdxBox->SetText(sIdxBackup );
 
     FontMetric aFontMetric( m_pFontList->Get(sStdBackup, sStdBackup) );
-    m_pStandardHeightLB->Fill( &aFontMetric, m_pFontList );
+    m_pStandardHeightLB->Fill( &aFontMetric, m_pFontList.get() );
     aFontMetric = m_pFontList->Get(sOutBackup, sOutBackup );
-    m_pTitleHeightLB->Fill( &aFontMetric, m_pFontList );
+    m_pTitleHeightLB->Fill( &aFontMetric, m_pFontList.get() );
     aFontMetric = m_pFontList->Get(sListBackup,sListBackup);
-    m_pListHeightLB->Fill( &aFontMetric, m_pFontList );
+    m_pListHeightLB->Fill( &aFontMetric, m_pFontList.get() );
     aFontMetric = m_pFontList->Get(sCapBackup, sCapBackup );
-    m_pLabelHeightLB->Fill( &aFontMetric, m_pFontList );
+    m_pLabelHeightLB->Fill( &aFontMetric, m_pFontList.get() );
     aFontMetric = m_pFontList->Get(sIdxBackup, sIdxBackup );
-    m_pIndexHeightLB->Fill( &aFontMetric, m_pFontList );
+    m_pIndexHeightLB->Fill( &aFontMetric, m_pFontList.get() );
 
     m_pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, MapUnit::MapTwip, 10 ) );
     m_pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , MapUnit::MapTwip, 10 ) );
@@ -1061,7 +1059,7 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
         pHeightLB = m_pIndexHeightLB;
     }
     FontMetric aFontMetric( m_pFontList->Get(sEntry, sEntry) );
-    pHeightLB->Fill( &aFontMetric, m_pFontList );
+    pHeightLB->Fill( &aFontMetric, m_pFontList.get() );
 }
 
 void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
