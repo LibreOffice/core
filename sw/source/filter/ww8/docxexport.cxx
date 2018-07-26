@@ -1083,7 +1083,7 @@ void DocxExport::WriteSettings()
                             pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
                     }
 
-                    // we have document protection from from input DOCX file
+                    // we have document protection from input DOCX file
 
                     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
                     pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
