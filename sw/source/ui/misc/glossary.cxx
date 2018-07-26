@@ -247,7 +247,7 @@ SwGlossaryDlg::~SwGlossaryDlg()
 void SwGlossaryDlg::dispose()
 {
     m_pCategoryBox->Clear();
-    delete pExampleFrame;
+    pExampleFrame.reset();
     m_pInsertTipCB.clear();
     m_pNameED.clear();
     m_pShortNameLbl.clear();
@@ -1067,8 +1067,8 @@ void SwGlossaryDlg::ShowPreview()
     if (!pExampleFrame)
     {
         Link<SwOneExampleFrame&,void> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
-        pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
-                        EX_SHOW_ONLINE_LAYOUT, &aLink );
+        pExampleFrame.reset(new SwOneExampleFrame( *m_pExampleWIN,
+                        EX_SHOW_ONLINE_LAYOUT, &aLink ));
     }
 
     ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
