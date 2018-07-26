@@ -72,6 +72,7 @@ static void * load(void const * address, char const * symbol) {
         dlclose(h);
         abort();
     }
+    // coverity[leaked_storage : FALSE] - this is on purpose
     return func;
 }
 
