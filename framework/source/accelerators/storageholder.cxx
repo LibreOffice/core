@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/io/XSeekable.hpp>
+#include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
 
@@ -350,14 +351,14 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
         return m_xRoot;
 
     // c)
-    OUString sParentPath;
+    OUStringBuffer sParentPath;
     sal_Int32       i = 0;
     for (i=0; i<c-1; ++i)
     {
-        sParentPath += lFolders[i] + PATH_SEPARATOR;
+        sParentPath.append(lFolders[i]).append(PATH_SEPARATOR);
     }
 
-    TPath2StorageInfo::const_iterator pParent = m_lStorages.find(sParentPath);
+    TPath2StorageInfo::const_iterator pParent = m_lStorages.find(sParentPath.makeStringAndClear());
     if (pParent != m_lStorages.end())
         return pParent->second.Storage;
 
