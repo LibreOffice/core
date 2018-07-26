@@ -88,6 +88,11 @@ public:
                     ScMacroInfo();
     virtual         ~ScMacroInfo() override;
 
+    ScMacroInfo(ScMacroInfo const &) = default;
+    ScMacroInfo(ScMacroInfo &&) = default;
+    ScMacroInfo & operator =(ScMacroInfo const &) = default;
+    ScMacroInfo & operator =(ScMacroInfo &&) = default;
+
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 
     void            SetMacro( const OUString& rMacro ) { maMacro = rMacro; }

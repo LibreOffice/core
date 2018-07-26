@@ -61,22 +61,6 @@ void ScGridOptions::SetDefaults()
     nFldDivisionY = 1;
 }
 
-ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
-{
-    nFldDrawX       = rCpy.nFldDrawX;       // UINT32
-    nFldDivisionX   = rCpy.nFldDivisionX;
-    nFldDrawY       = rCpy.nFldDrawY;
-    nFldDivisionY   = rCpy.nFldDivisionY;
-    nFldSnapX       = rCpy.nFldSnapX;
-    nFldSnapY       = rCpy.nFldSnapY;
-    bUseGridsnap    = rCpy.bUseGridsnap;    // BitBool
-    bSynchronize    = rCpy.bSynchronize;
-    bGridVisible    = rCpy.bGridVisible;
-    bEqualGrid      = rCpy.bEqualGrid;
-
-    return *this;
-}
-
 bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
     return (   nFldDrawX        == rCpy.nFldDrawX

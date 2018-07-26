@@ -51,6 +51,11 @@ public:
                                 ScMyIteratorBase();
     virtual                     ~ScMyIteratorBase();
 
+    ScMyIteratorBase(ScMyIteratorBase const &) = default;
+    ScMyIteratorBase(ScMyIteratorBase &&) = default;
+    ScMyIteratorBase & operator =(ScMyIteratorBase const &) = default;
+    ScMyIteratorBase & operator =(ScMyIteratorBase &&) = default;
+
     virtual void                SetCellData( ScMyCell& rMyCell ) = 0;
     virtual void                Sort() = 0;
 
@@ -195,6 +200,12 @@ protected:
 public:
                                 ScMyEmptyDatabaseRangesContainer();
     virtual                     ~ScMyEmptyDatabaseRangesContainer() override;
+
+    ScMyEmptyDatabaseRangesContainer(ScMyEmptyDatabaseRangesContainer const &) = default;
+    ScMyEmptyDatabaseRangesContainer(ScMyEmptyDatabaseRangesContainer &&) = default;
+    ScMyEmptyDatabaseRangesContainer & operator =(ScMyEmptyDatabaseRangesContainer const &) = default;
+    ScMyEmptyDatabaseRangesContainer & operator =(ScMyEmptyDatabaseRangesContainer &&) = default;
+
     void                        AddNewEmptyDatabaseRange(const css::table::CellRangeAddress& aCellRangeAddress);
 
                                 using ScMyIteratorBase::UpdateAddress;
@@ -305,7 +316,6 @@ struct ScMyCell
     bool                        bHasAnnotation;
 
                                 ScMyCell();
-                                ~ScMyCell();
 };
 
 class ScMyNotEmptyCellsIterator

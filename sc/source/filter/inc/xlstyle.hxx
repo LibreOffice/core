@@ -566,6 +566,11 @@ public:
     explicit            XclXFBase( bool bCellXF );
     virtual             ~XclXFBase();
 
+    XclXFBase(XclXFBase const &) = default;
+    XclXFBase(XclXFBase &&) = default;
+    XclXFBase & operator =(XclXFBase const &) = default;
+    XclXFBase & operator =(XclXFBase &&) = default;
+
     /** Sets all "attribute used" flags to the passed state. */
     void                SetAllUsedFlags( bool bUsed );
     /** Returns true, if any "attribute used" flags are ste in this XF. */

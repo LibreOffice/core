@@ -34,10 +34,6 @@ ScPrintOptions::ScPrintOptions()
     SetDefaults();
 }
 
-ScPrintOptions::~ScPrintOptions()
-{
-}
-
 void ScPrintOptions::SetDefaults()
 {
     bSkipEmpty = true;

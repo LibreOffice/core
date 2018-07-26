@@ -48,7 +48,6 @@ struct SC_DLLPUBLIC ScNoteData
     bool                mbShown;            /// True = note is visible.
 
     explicit            ScNoteData( bool bShown = false );
-                        ~ScNoteData();
 };
 
 /**

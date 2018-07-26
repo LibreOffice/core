@@ -112,6 +112,11 @@ public:
     explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
 
                         ~ScfPropertySet();
+    //TOOD:
+    ScfPropertySet(ScfPropertySet const &) = default;
+    ScfPropertySet(ScfPropertySet &&) = default;
+    ScfPropertySet & operator =(ScfPropertySet const &) = default;
+    ScfPropertySet & operator =(ScfPropertySet &&) = default;
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
     void                Set( css::uno::Reference< css::beans::XPropertySet > const & xPropSet );

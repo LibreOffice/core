@@ -21,7 +21,6 @@ struct CellTextAttr
     SvtScriptType mnScriptType;
 
     CellTextAttr();
-    CellTextAttr(const CellTextAttr& r);
 };
 
 }
