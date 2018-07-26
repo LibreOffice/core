@@ -65,7 +65,6 @@ namespace fs
         OUString data;
     public:
         path() {}
-        path(const path &rOther) : data(rOther.data) {}
         path(const std::string &in, convert)
         {
             OUString sWorkingDir;
