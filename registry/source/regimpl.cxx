@@ -323,8 +323,7 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
             printf(
                 "%s    parameter count: %u\n", indent.getStr(),
                 static_cast< unsigned int >(reader.getMethodParameterCount(i)));
-            // coverity[tainted_data] cid#1215304 unhelpfully warns about an
-            // untrusted loop bound here:
+            // coverity[tainted_data] - cid#1215304 unhelpfully warns about untrusted loop bound
             for (sal_uInt16 j = 0; j < reader.getMethodParameterCount(i); ++j)
             {
                 printf(
@@ -365,8 +364,7 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
             printf(
                 "%s    exception count: %u\n", indent.getStr(),
                 static_cast< unsigned int >(reader.getMethodExceptionCount(i)));
-            // coverity[tainted_data] cid#1215304 unhelpfully warns about an
-            // untrusted loop bound here:
+            // coverity[tainted_data] - cid#1215304 unhelpfully warns about untrusted loop bound
             for (sal_uInt16 j = 0; j < reader.getMethodExceptionCount(i); ++j)
             {
                 printf(

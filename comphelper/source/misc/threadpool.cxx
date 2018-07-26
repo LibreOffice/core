@@ -154,7 +154,7 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
     }
     assert( maTasks.empty() );
 
-    // coverity[missing_lock]
+    // coverity[missing_lock] - on purpose
     mbTerminate = true;
 
     maTasksChanged.notify_all();
