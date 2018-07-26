@@ -341,8 +341,11 @@ bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
 void ScChangeAction::RemoveAllDeletedIn()
 {
     //TODO: Not from TopContent, but really this one
-    while ( pLinkDeletedIn )
-        delete pLinkDeletedIn; // Moves up by itself
+    while (pLinkDeletedIn)
+    {
+        // coverity[use_after_free] - Moves up by itself
+        delete pLinkDeletedIn;
+    }
 }
 
 bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
@@ -401,8 +404,11 @@ void ScChangeAction::SetDeletedIn( ScChangeAction* p )
 
 void ScChangeAction::RemoveAllDependent()
 {
-    while ( pLinkDependent )
-        delete pLinkDependent; // Moves up by itself
+    while (pLinkDependent)
+    {
+        // coverity[use_after_free] - Moves up by itself
+        delete pLinkDependent;
+    }
 }
 
 DateTime ScChangeAction::GetDateTime() const
@@ -830,8 +836,11 @@ ScChangeActionDel::ScChangeActionDel(
 ScChangeActionDel::~ScChangeActionDel()
 {
     DeleteCellEntries();
-    while ( pLinkMove )
+    while (pLinkMove)
+    {
+        // coverity[use_after_free] - Moves up by itself
         delete pLinkMove;
+    }
 }
 
 void ScChangeActionDel::AddContent( ScChangeActionContent* pContent )
@@ -1056,6 +1065,7 @@ void ScChangeActionDel::UndoCutOffMoves()
 {   // Restore cut off Moves; delete Entries/Links
     while ( pLinkMove )
     {
+        // coverity[deref_arg] - the call on delete pLinkMove at the block end Moves a new entry into pLinkMode by itself
         ScChangeActionMove* pMove = pLinkMove->GetMove();
         short nFrom = pLinkMove->GetCutOffFrom();
         short nTo = pLinkMove->GetCutOffTo();
