@@ -163,7 +163,7 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     css::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
-    sfx2::DocumentInserter* m_pDocInserter;
+    std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
     DECL_LINK( ChangeHideHdl, Button *, void );
     DECL_LINK( ChangeProtectHdl, Button *, void );
