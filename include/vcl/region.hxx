@@ -90,13 +90,13 @@ public:
     // manipulators
     void Move( long nHorzMove, long nVertMove );
     void Scale( double fScaleX, double fScaleY );
-    bool Union( const tools::Rectangle& rRegion );
-    bool Intersect( const tools::Rectangle& rRegion );
-    bool Exclude( const tools::Rectangle& rRegion );
-    bool XOr( const tools::Rectangle& rRegion );
-    bool Union( const vcl::Region& rRegion );
-    bool Intersect( const vcl::Region& rRegion );
-    bool Exclude( const vcl::Region& rRegion );
+    void Union( const tools::Rectangle& rRegion );
+    void Intersect( const tools::Rectangle& rRegion );
+    void Exclude( const tools::Rectangle& rRegion );
+    void XOr( const tools::Rectangle& rRegion );
+    void Union( const vcl::Region& rRegion );
+    void Intersect( const vcl::Region& rRegion );
+    void Exclude( const vcl::Region& rRegion );
     bool XOr( const vcl::Region& rRegion );
 
     bool IsEmpty() const;

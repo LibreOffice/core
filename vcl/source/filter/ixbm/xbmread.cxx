@@ -55,7 +55,7 @@ class XBMReader : public GraphicReader
     void            InitTable();
     OString         FindTokenLine( SvStream* pInStm, const char* pTok1, const char* pTok2 );
     int             ParseDefine( const sal_Char* pDefine );
-    bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
+    void            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 
 public:
 
@@ -184,7 +184,7 @@ int XBMReader::ParseDefine( const sal_Char* pDefine )
     return nRet;
 }
 
-bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
+void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
 {
     OString    aLine;
     long            nRow = 0;
@@ -257,8 +257,6 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
             }
         }
     }
-
-    return true;
 }
 
 ReadState XBMReader::ReadXBM( Graphic& rGraphic )
@@ -329,7 +327,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                             {
                                 aWhite = pAcc1->GetBestMatchingColor( COL_WHITE );
                                 aBlack = pAcc1->GetBestMatchingColor( COL_BLACK );
-                                bStatus = ParseData( &rIStm, aLine, eFormat );
+                                ParseData( &rIStm, aLine, eFormat );
                             }
                             else
                                 bStatus = false;

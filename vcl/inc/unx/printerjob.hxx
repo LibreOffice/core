@@ -77,7 +77,7 @@ private:
     bool            writeSetup( osl::File* pFile, const JobData& );
     bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures );
     static void     writeJobPatch( osl::File* File, const JobData& );
-    static bool     writeProlog (osl::File* pFile, const JobData& );
+    static void     writeProlog (osl::File* pFile, const JobData& );
 
 public:             // for usage in PrinterGfx
     sal_uInt32      GetResolution () const { return mnResolution; }

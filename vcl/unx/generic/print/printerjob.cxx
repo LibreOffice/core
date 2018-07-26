@@ -833,7 +833,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     }
 }
 
-bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
+void PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
 {
     WritePS( pFile, "%%BeginProlog\n" );
 
@@ -928,8 +928,6 @@ bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
         "%%EndProlog\n"
     };
     WritePS (pFile, pProlog);
-
-    return true;
 }
 
 bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )

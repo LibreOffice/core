@@ -115,7 +115,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
     VCL_GL_INFO( "~OpenGLSalBitmap" );
 }
 
-bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
+void OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
 {
     DBG_TESTSOLARMUTEX();
     static const BitmapPalette aEmptyPalette;
@@ -155,8 +155,6 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
 
     assert(mnWidth == maTexture.GetWidth() &&
            mnHeight == maTexture.GetHeight());
-
-    return true;
 }
 
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )

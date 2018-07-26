@@ -1332,22 +1332,18 @@ static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 
     return true;
 }
 
-bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
+void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
     if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
-        return true;
-    else
-    {
-        double nTempVal = rValue;
-        // caution: precision loss in double cast
-        if ( nTempVal > GetMax() )
-            nTempVal = static_cast<double>(GetMax());
-        else if ( nTempVal < GetMin())
-            nTempVal = static_cast<double>(GetMin());
+        return;
 
-        rOutStr = CreateFieldText( static_cast<sal_Int64>(nTempVal) );
-        return true;
-    }
+    double nTempVal = rValue;
+    // caution: precision loss in double cast
+    if ( nTempVal > GetMax() )
+        nTempVal = static_cast<double>(GetMax());
+    else if ( nTempVal < GetMin())
+        nTempVal = static_cast<double>(GetMin());
+    rOutStr = CreateFieldText( static_cast<sal_Int64>(nTempVal) );
 }
 
 inline void MetricFormatter::ImplInit()
@@ -1507,11 +1503,8 @@ void MetricFormatter::Reformat()
     OUString aStr;
     // caution: precision loss in double cast
     double nTemp = static_cast<double>(mnLastValue);
-    bool bOK = ImplMetricReformat( aText, nTemp, aStr );
+    ImplMetricReformat( aText, nTemp, aStr );
     mnLastValue = static_cast<sal_Int64>(nTemp);
-
-    if ( !bOK )
-        return;
 
     if ( !aStr.isEmpty() )
     {
@@ -1820,22 +1813,18 @@ inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, true );
 }
 
-bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
+void CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
 {
     sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), true ) )
-        return true;
-    else
-    {
-        sal_Int64 nTempVal = nValue;
-        if ( nTempVal > GetMax() )
-            nTempVal = GetMax();
-        else if ( nTempVal < GetMin())
-            nTempVal = GetMin();
+        return;
 
-        rOutStr = CreateFieldText( nTempVal );
-        return true;
-    }
+    sal_Int64 nTempVal = nValue;
+    if ( nTempVal > GetMax() )
+        nTempVal = GetMax();
+    else if ( nTempVal < GetMin())
+        nTempVal = GetMin();
+    rOutStr = CreateFieldText( nTempVal );
 }
 
 CurrencyFormatter::CurrencyFormatter()
@@ -1877,9 +1866,7 @@ void CurrencyFormatter::Reformat()
         return;
 
     OUString aStr;
-    bool bOK = ImplCurrencyReformat( GetField()->GetText(), aStr );
-    if ( !bOK )
-        return;
+    ImplCurrencyReformat( GetField()->GetText(), aStr );
 
     if ( !aStr.isEmpty() )
     {

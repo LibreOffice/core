@@ -189,7 +189,7 @@ public:
     void                SetAutoScroll( bool bAutoScroll );
     bool                IsAutoScroll() const;
 
-    bool                SetCursorAtPoint( const Point& rPointPixel );
+    void                SetCursorAtPoint( const Point& rPointPixel );
     bool                IsSelectionAtPoint( const Point& rPointPixel );
 
     void                SetPaintSelection( bool bPaint);

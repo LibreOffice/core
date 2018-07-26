@@ -1115,11 +1115,11 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     return false;
 }
 
-bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
+void DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
 {
     Date aDate( Date::EMPTY );
     if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
-        return true;
+        return;
 
     Date aTempDate = aDate;
     if ( aTempDate > GetMax() )
@@ -1128,8 +1128,6 @@ bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
         aTempDate = GetMin();
 
     rOutStr = ImplGetDateAsText( aTempDate );
-
-    return true;
 }
 
 OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
@@ -1670,9 +1668,7 @@ void DateFormatter::Reformat()
         return;
 
     OUString aStr;
-    bool bOK = ImplDateReformat( GetField()->GetText(), aStr );
-    if( !bOK )
-        return;
+    ImplDateReformat( GetField()->GetText(), aStr );
 
     if ( !aStr.isEmpty() )
     {
@@ -2157,11 +2153,11 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
     return true;
 }
 
-bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
+void TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 {
     tools::Time aTime( 0, 0, 0 );
     if ( !TextToTime( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
-        return true;
+        return;
 
     tools::Time aTempTime = aTime;
     if ( aTempTime > GetMax() )
@@ -2207,8 +2203,6 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
                 rOutStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
         }
     }
-
-    return true;
 }
 
 bool TimeFormatter::ImplAllowMalformedInput() const
@@ -2507,9 +2501,7 @@ void TimeFormatter::Reformat()
         return;
 
     OUString aStr;
-    bool bOK = ImplTimeReformat( GetField()->GetText(), aStr );
-    if ( !bOK )
-        return;
+    ImplTimeReformat( GetField()->GetText(), aStr );
 
     if ( !aStr.isEmpty() )
     {

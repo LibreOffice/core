@@ -248,7 +248,7 @@ protected:
 
                             MetricFormatter();
 
-    SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
     virtual sal_Int64       GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
@@ -265,7 +265,7 @@ class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
 protected:
                             CurrencyFormatter();
-    SAL_DLLPRIVATE bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
 
 public:
@@ -297,7 +297,7 @@ protected:
                             DateFormatter();
 
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplDateReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
                                              Selection const * pNewSelection = nullptr );
     SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate ) const;
@@ -379,7 +379,7 @@ protected:
 
                             TimeFormatter();
 
-    SAL_DLLPRIVATE bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );
     SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection const * pNewSelection = nullptr );
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
