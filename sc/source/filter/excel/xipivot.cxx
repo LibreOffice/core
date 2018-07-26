@@ -1485,7 +1485,7 @@ void XclImpPivotTable::Convert()
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
-    (void)GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
+    GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
     mpDPObj = pDPObj;
 
     ApplyFieldInfo();
