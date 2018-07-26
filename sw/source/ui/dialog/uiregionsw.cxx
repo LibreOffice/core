@@ -535,7 +535,7 @@ void SwEditRegionDlg::dispose()
         pEntry = m_pTree->Next( pEntry );
     }
 
-    delete m_pDocInserter;
+    m_pDocInserter.reset();
     m_pCurName.clear();
     m_pTree.clear();
     m_pFileCB.clear();
@@ -1040,8 +1040,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl, Button*, void)
 {
     if(!CheckPasswd())
         return;
-    delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter");
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
 }
 

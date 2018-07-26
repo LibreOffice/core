@@ -93,7 +93,7 @@ class SwEditRegionDlg : public SfxModalDialog
     SwWrtShell&             rSh;
     SectReprs_t             m_SectReprs;
     const SwSection*        pCurrSect;
-    sfx2::DocumentInserter* m_pDocInserter;
+    std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
     bool            bDontCheckPasswd :1;
 
