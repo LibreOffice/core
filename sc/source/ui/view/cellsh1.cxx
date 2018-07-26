@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <globalnames.hxx>
 #include <config_features.h>
 
 #include <com/sun/star/i18n/TextConversionOption.hpp>
@@ -2794,12 +2795,20 @@ void ScCellShell::ExecuteDataPilotDialog()
                 pTabViewShell->GetFrameWeld(), bEnableExt));
 
         // Populate named ranges (if any).
-        ScRangeName* pRangeName = pDoc->GetRangeName();
-        if (pRangeName)
+        // We must take into account 2 types of scope : global doc and sheets
+        // for global doc: <name of the range>
+        // for sheets: <sheetname>#<name of the range>
+        std::map<OUString, ScRangeName*> aRangeMap;
+        pDoc->GetRangeNameMap(aRangeMap);
+        for (auto const& elemRangeMap : aRangeMap)
         {
-            ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-            for (; itr != itrEnd; ++itr)
-                pTypeDlg->AppendNamedRange(itr->second->GetName());
+            ScRangeName* pRangeName = elemRangeMap.second;
+            OUString pScope((elemRangeMap.first == STR_GLOBAL_RANGE_NAME)?"":elemRangeMap.first);
+            if (pRangeName)
+            {
+                for (auto const& elem : *pRangeName)
+                    pTypeDlg->AppendNamedRange(pScope.isEmpty()?elem.second->GetName():pScope + "#" + elem.second->GetName());
+            }
         }
 
         if ( pTypeDlg->Execute() == RET_OK )
