@@ -258,10 +258,10 @@
                       <item translatable="yes" context="conditionalentry|typeis">not between</item>
                       <item translatable="yes" context="conditionalentry|typeis">duplicate</item>
                       <item translatable="yes" context="conditionalentry|typeis">not duplicate</item>
-                      <item translatable="yes" context="conditionalentry|typeis">top 10 elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">bottom 10 elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">top 10 percent</item>
-                      <item translatable="yes" context="conditionalentry|typeis">bottom 10 percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">top N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">bottom N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">top N percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">bottom N percent</item>
                       <item translatable="yes" context="conditionalentry|typeis">above average</item>
                       <item translatable="yes" context="conditionalentry|typeis">below average</item>
                       <item translatable="yes" context="conditionalentry|typeis">above or equal average</item>
