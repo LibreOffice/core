@@ -19,6 +19,8 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
 	unzip -q -d source -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_DATA_TARBALL) data/misc/icudata.rc \
 ))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,icu,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-build.patch.1 \
 	external/icu/icu4c-aix.patch.1 \
@@ -34,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-61-werror-shadow.patch.1 \
+	external/icu/gcc9.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
