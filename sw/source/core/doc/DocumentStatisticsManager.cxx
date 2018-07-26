@@ -39,35 +39,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-    class LockAllViews
-    {
-        std::vector<SwViewShell*> m_aViewWasUnLocked;
-        SwViewShell* m_pViewShell;
-    public:
-        explicit LockAllViews(SwViewShell *pViewShell)
-            : m_pViewShell(pViewShell)
-        {
-            if (!m_pViewShell)
-                return;
-            for (SwViewShell& rShell : m_pViewShell->GetRingContainer())
-            {
-                if (!rShell.IsViewLocked())
-                {
-                    m_aViewWasUnLocked.push_back(&rShell);
-                    rShell.LockView(true);
-                }
-            }
-        }
-        ~LockAllViews()
-        {
-            for(SwViewShell* pShell : m_aViewWasUnLocked)
-                pShell->LockView(false);
-        }
-    };
-}
-
 namespace sw
 {
 
@@ -218,7 +189,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         const ModifyBlocker_Impl b(pObjShell);
         // rhbz#1081176: don't jump to cursor pos because of (temporary)
         // activation of modified flag triggering move to input position
-        LockAllViews aViewGuard(pObjShell->GetEditShell());
+        auto aViewGuard(pObjShell->LockAllViews());
         xDocProps->setDocumentStatistics(aStat);
         if (!bDocWasModified)
         {

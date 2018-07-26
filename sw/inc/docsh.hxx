@@ -51,6 +51,7 @@ class IDocumentDeviceAccess;
 class IDocumentChartDataProviderAccess;
 class SwDocShell;
 class SwDrawModel;
+class SwViewShell;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -318,6 +319,17 @@ public:
     void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
+
+    class LockAllViewsGuard
+    {
+        std::vector<SwViewShell*> m_aViewWasUnLocked;
+
+    public:
+        explicit LockAllViewsGuard(SwViewShell* pViewShell);
+        ~LockAllViewsGuard();
+    };
+    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
+    std::unique_ptr<LockAllViewsGuard> LockAllViews();
 };
 
 /** Find the right DocShell and create a new one:
