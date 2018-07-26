@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/inetmime.hxx>
 #include <rtl/character.hxx>
@@ -305,7 +306,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
     return true;
 }
 
-void appendISO88591(OUString & rText, sal_Char const * pBegin,
+void appendISO88591(OUStringBuffer & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd);
 
 struct Parameter
@@ -339,14 +340,14 @@ bool parseParameters(ParameterList const & rInput,
 
 //  appendISO88591
 
-void appendISO88591(OUString & rText, sal_Char const * pBegin,
+void appendISO88591(OUStringBuffer & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
     sal_Int32 nLength = pEnd - pBegin;
     std::unique_ptr<sal_Unicode[]> pBuffer(new sal_Unicode[nLength]);
     for (sal_Unicode * p = pBuffer.get(); pBegin != pEnd;)
         *p++ = static_cast<unsigned char>(*pBegin++);
-    rText += OUString(pBuffer.get(), nLength);
+    rText.append(pBuffer.get(), nLength);
 }
 
 //  parseParameters
@@ -376,7 +377,7 @@ bool parseParameters(ParameterList const & rInput,
                     = getCharsetEncoding(it->m_aCharset.getStr(),
                                                    it->m_aCharset.getStr()
                                                        + it->m_aCharset.getLength());
-            OUString aValue;
+            OUStringBuffer aValue;
             bool bBadEncoding = false;
             itNext = it;
             do
@@ -401,7 +402,7 @@ bool parseParameters(ParameterList const & rInput,
                     bBadEncoding = true;
                     break;
                 }
-                aValue += OUString(pUnicode, static_cast<sal_Int32>(nSize));
+                aValue.append(pUnicode, static_cast<sal_Int32>(nSize));
                 delete[] pUnicode;
                 ++itNext;
             }
@@ -409,22 +410,22 @@ bool parseParameters(ParameterList const & rInput,
 
             if (bBadEncoding)
             {
-                aValue.clear();
+                aValue.setLength(0);
                 itNext = it;
                 do
                 {
                     if (itNext->m_bExtended)
                     {
                         for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
-                            aValue += OUStringLiteral1(
-                                sal_Unicode(
-                                    static_cast<unsigned char>(itNext->m_aValue[i]))
-                                | 0xF800); // map to unicode corporate use sub area
+                            aValue.append(
+                                static_cast<sal_Unicode>(
+                                    static_cast<unsigned char>(itNext->m_aValue[i])
+                                    | 0xF800)); // map to unicode corporate use sub area
                     }
                     else
                     {
                         for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
-                            aValue += OUStringLiteral1( static_cast<unsigned char>(itNext->m_aValue[i]) );
+                            aValue.append( static_cast<char>(itNext->m_aValue[i]) );
                     }
                     ++itNext;
                 }
@@ -432,7 +433,7 @@ bool parseParameters(ParameterList const & rInput,
             }
             auto const ret = pOutput->insert(
                 {it->m_aAttribute,
-                 {it->m_aCharset, it->m_aLanguage, aValue, !bBadEncoding}});
+                 {it->m_aCharset, it->m_aLanguage, aValue.makeStringAndClear(), !bBadEncoding}});
             SAL_INFO_IF(!ret.second, "tools",
                 "INetMIME: dropping duplicate parameter: " << it->m_aAttribute);
         }
@@ -1156,7 +1157,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
     const sal_Char * pBegin = rBody.getStr();
     const sal_Char * pEnd = pBegin + rBody.getLength();
 
-    OUString sDecoded;
+    OUStringBuffer sDecoded;
     const sal_Char * pCopyBegin = pBegin;
 
     /* bool bStartEncodedWord = true; */
@@ -1408,7 +1409,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
             if (bEncodedWord)
             {
                 appendISO88591(sDecoded, pCopyBegin, pWSPBegin);
-                sDecoded += OUString(
+                sDecoded.append(
                     pUnicodeBuffer,
                     static_cast< sal_Int32 >(nUnicodeSize));
                 delete[] pUnicodeBuffer;
@@ -1424,7 +1425,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
         }
 
         if (!sEncodedText.isEmpty())
-            sDecoded += sEncodedText;
+            sDecoded.append(sEncodedText);
 
         if (p == pEnd)
             break;
@@ -1454,7 +1455,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                     appendISO88591(sDecoded, pCopyBegin, p - 1);
                     sal_Unicode aUTF16Buf[2];
                     sal_Int32 nUTF16Len = putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf;
-                    sDecoded += OUString(aUTF16Buf, nUTF16Len);
+                    sDecoded.append(aUTF16Buf, nUTF16Len);
                     p = pUTF8End;
                     pCopyBegin = p;
                 }
@@ -1466,7 +1467,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
     }
 
     appendISO88591(sDecoded, pCopyBegin, pEnd);
-    return sDecoded;
+    return sDecoded.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,6 +49,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/simplifybool \
     compilerplugins/clang/test/simplifydynamiccast \
     compilerplugins/clang/test/stringconstant \
+    compilerplugins/clang/test/stringloop \
     compilerplugins/clang/test/unnecessarycatchthrow \
     compilerplugins/clang/test/unnecessaryoverride \
     compilerplugins/clang/test/unnecessaryoverride-dtor \

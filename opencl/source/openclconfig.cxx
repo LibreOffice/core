@@ -14,6 +14,7 @@
 #include <opencl/openclconfig.hxx>
 #include <opencl/platforminfo.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 
@@ -69,16 +70,16 @@ css::uno::Sequence<OUString> SetOfImplMatcherToStringSequence(const OpenCLConfig
 OUString getToken(const OUString& string, sal_Int32& index)
 {
     OUString token(string.getToken(0, '/', index));
-    OUString result;
+    OUStringBuffer result;
     sal_Int32 i(0);
     sal_Int32 p;
     while ((p = token.indexOf('%', i)) >= 0)
     {
         if (p > i)
-            result += token.copy(i, p - i);
+            result.append(token.copy(i, p - i));
         if (p < token.getLength() - 2)
         {
-            result += OUStringLiteral1(token.copy(p+1, 2).toInt32(16));
+            result.append(OUStringLiteral1(token.copy(p+1, 2).toInt32(16)));
             i = p + 3;
         }
         else
@@ -86,9 +87,9 @@ OUString getToken(const OUString& string, sal_Int32& index)
             i = token.getLength();
         }
     }
-    result += token.copy(i);
+    result.append(token.copy(i));
 
-    return result;
+    return result.makeStringAndClear();
 }
 
 OpenCLConfig::ImplMatcherSet StringSequenceToSetOfImplMatcher(const css::uno::Sequence<OUString>& rSequence)
