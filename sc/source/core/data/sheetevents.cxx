@@ -89,7 +89,7 @@ ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
     {
         mpScriptNames.reset( new boost::optional<OUString>[COUNT] );
         for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
-            mpScriptNames[nEvent] = *rOther.mpScriptNames[nEvent];
+            mpScriptNames[nEvent] = rOther.mpScriptNames[nEvent];
     }
     return *this;
 }
