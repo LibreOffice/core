@@ -403,17 +403,17 @@ OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 {
     sal_uInt32 nNodes = static_cast<sal_uInt32>(maTextNodes.size());
 
-    OUString aASCIIText;
+    OUStringBuffer aASCIIText;
     const sal_uInt32 nLastNode = nNodes-1;
     for ( sal_uInt32 nNode = 0; nNode < nNodes; ++nNode )
     {
         TextNode* pNode = maTextNodes[ nNode ].get();
-        aASCIIText += pNode->GetText();
+        aASCIIText.append(pNode->GetText());
         if ( pSep && ( nNode != nLastNode ) )
-            aASCIIText += pSep;
+            aASCIIText.append(pSep);
     }
 
-    return aASCIIText;
+    return aASCIIText.makeStringAndClear();
 }
 
 OUString TextDoc::GetText( sal_uInt32 nPara ) const
