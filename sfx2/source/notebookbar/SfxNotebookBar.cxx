@@ -72,6 +72,9 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
         case vcl::EnumContext::Application::Draw:
             return OUString( "Draw" );
             break;
+        case vcl::EnumContext::Application::Formula:
+            return OUString( "Formula" );
+            break;
         default:
             return OUString();
             break;
