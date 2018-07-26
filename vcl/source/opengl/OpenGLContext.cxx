@@ -605,7 +605,7 @@ const SystemChildWindow* OpenGLContext::getChildWindow() const
     return m_pChildWindow;
 }
 
-bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
+void OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
     OpenGLZone aZone;
 
@@ -617,8 +617,6 @@ bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
             OpenGLFramebuffer::Unbind();
         mpCurrentFramebuffer = pFramebuffer;
     }
-
-    return true;
 }
 
 void OpenGLContext::AcquireDefaultFramebuffer()

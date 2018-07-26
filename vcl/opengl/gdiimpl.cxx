@@ -132,11 +132,9 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bForceCreate )
     return mpContext.is();
 }
 
-bool OpenGLSalGraphicsImpl::ReleaseContext()
+void OpenGLSalGraphicsImpl::ReleaseContext()
 {
     mpContext.clear();
-
-    return true;
 }
 
 void OpenGLSalGraphicsImpl::Init()
@@ -1738,10 +1736,7 @@ std::shared_ptr<SalBitmap> OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, l
               " " << nWidth << "x" << nHeight );
     //TODO really needed?
     PreDraw();
-    if( !pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight ) )
-    {
-        pBitmap = nullptr;
-    }
+    pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight );
     PostDraw();
     return pBitmap;
 }

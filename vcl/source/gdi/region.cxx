@@ -507,19 +507,19 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
     }
 }
 
-bool vcl::Region::Union( const tools::Rectangle& rRect )
+void vcl::Region::Union( const tools::Rectangle& rRect )
 {
     if(rRect.IsEmpty())
     {
         // empty rectangle will not expand the existing union, nothing to do
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // no local data, the union will be equal to source. Create using rectangle
         *this = rRect;
-        return true;
+        return;
     }
 
     if(HasPolyPolygonOrB2DPolyPolygon())
@@ -551,7 +551,7 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
             *this = vcl::Region(aClip);
         }
 
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -561,7 +561,7 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
     {
         // no region band, create using the rectangle
         *this = rRect;
-        return true;
+        return;
     }
 
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
@@ -585,29 +585,28 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
-bool vcl::Region::Intersect( const tools::Rectangle& rRect )
+void vcl::Region::Intersect( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
         // empty rectangle will create empty region
         SetEmpty();
-        return true;
+        return;
     }
 
     if(IsNull())
     {
         // null region (everything) intersect with rect will give rect
         *this = rRect;
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // no content, cannot get more empty
-        return true;
+        return;
     }
 
     if(HasPolyPolygonOrB2DPolyPolygon())
@@ -644,7 +643,7 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
             mpRegionBand.reset();
         }
 
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -653,7 +652,7 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
     if(!pCurrent)
     {
         // region is empty -> nothing to do!
-        return true;
+        return;
     }
 
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
@@ -677,21 +676,20 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
-bool vcl::Region::Exclude( const tools::Rectangle& rRect )
+void vcl::Region::Exclude( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
         // excluding nothing will do no change
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // cannot exclude from empty, done
-        return true;
+        return;
     }
 
     if(IsNull())
@@ -699,7 +697,7 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
         // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::Exclude error: Cannot exclude from null region (!)");
-        return true;
+        return;
     }
 
     if( HasPolyPolygonOrB2DPolyPolygon() )
@@ -712,7 +710,7 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
         if(!aThisPolyPoly.count())
         {
             // when local polygon is empty, nothing can be excluded
-            return true;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -724,7 +722,7 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
 
         *this = vcl::Region(aClip);
 
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -733,7 +731,7 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
     if(!pCurrent)
     {
         // empty? -> done!
-        return true;
+        return;
     }
 
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
@@ -757,22 +755,21 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
-bool vcl::Region::XOr( const tools::Rectangle& rRect )
+void vcl::Region::XOr( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
         // empty rectangle will not change local content
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // rRect will be the xored-form (local off, rect on)
         *this = rRect;
-        return true;
+        return;
     }
 
     if(IsNull())
@@ -780,7 +777,7 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
         // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::XOr error: Cannot XOr with null region (!)");
-        return true;
+        return;
     }
 
     if( HasPolyPolygonOrB2DPolyPolygon() )
@@ -794,7 +791,7 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
         {
             // no local content, XOr will be equal to rectangle
             *this = rRect;
-            return true;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -806,7 +803,7 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
 
         *this = vcl::Region(aClip);
 
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -816,7 +813,7 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
     {
         // rRect will be the xored-form (local off, rect on)
         *this = rRect;
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -841,35 +838,34 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
-bool vcl::Region::Union( const vcl::Region& rRegion )
+void vcl::Region::Union( const vcl::Region& rRegion )
 {
     if(rRegion.IsEmpty())
     {
         // no extension at all
-        return true;
+        return;
     }
 
     if(rRegion.IsNull())
     {
         // extending with null region -> null region
         *this = vcl::Region(true);
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // local is empty, union will give source region
         *this = rRegion;
-        return true;
+        return;
     }
 
     if(IsNull())
     {
         // already fully expanded (is null region), cannot be extended
-        return true;
+        return;
     }
 
     if( rRegion.HasPolyPolygonOrB2DPolyPolygon() || HasPolyPolygonOrB2DPolyPolygon() )
@@ -883,7 +879,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
         {
             // when no local content, union will be equal to rRegion
             *this = rRegion;
-            return true;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -894,7 +890,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
         basegfx::B2DPolyPolygon aClip(basegfx::utils::solvePolygonOperationOr(aThisPolyPoly, aOtherPolyPoly));
 
         *this = vcl::Region( aClip );
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -904,7 +900,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
     {
         // local is empty, union will give source region
         *this = rRegion;
-        return true;
+        return;
     }
 
     const RegionBand* pSource = rRegion.getRegionBand();
@@ -912,7 +908,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
     if(!pSource)
     {
         // no extension at all
-        return true;
+        return;
     }
 
     // prepare source and target
@@ -928,51 +924,50 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
-bool vcl::Region::Intersect( const vcl::Region& rRegion )
+void vcl::Region::Intersect( const vcl::Region& rRegion )
 {
     // same instance data? -> nothing to do!
     if(getB2DPolyPolygon() && getB2DPolyPolygon() == rRegion.getB2DPolyPolygon())
     {
-        return true;
+        return;
     }
 
     if(getPolyPolygon() && getPolyPolygon() == rRegion.getPolyPolygon())
     {
-        return true;
+        return;
     }
 
     if(getRegionBand() && getRegionBand() == rRegion.getRegionBand())
     {
-        return true;
+        return;
     }
 
     if(rRegion.IsNull())
     {
         // source region is null-region, intersect will not change local region
-        return true;
+        return;
     }
 
     if(IsNull())
     {
         // when local region is null-region, intersect will be equal to source
         *this = rRegion;
-        return true;
+        return;
     }
 
     if(rRegion.IsEmpty())
     {
         // source region is empty, intersection will always be empty
         SetEmpty();
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // local region is empty, cannot get more empty than that. Nothing to do
-        return true;
+        return;
     }
 
     if( rRegion.HasPolyPolygonOrB2DPolyPolygon() || HasPolyPolygonOrB2DPolyPolygon() )
@@ -983,7 +978,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
         if(!aThisPolyPoly.count())
         {
             // local region is empty, cannot get more empty than that. Nothing to do
-            return true;
+            return;
         }
 
         // get the other B2DPolyPolygon
@@ -993,7 +988,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
         {
             // source region is empty, intersection will always be empty
             SetEmpty();
-            return true;
+            return;
         }
 
         const basegfx::B2DPolyPolygon aClip(
@@ -1003,7 +998,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
                 true,
                 false));
         *this = vcl::Region( aClip );
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -1012,7 +1007,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
     if(!pCurrent)
     {
         // local region is empty, cannot get more empty than that. Nothing to do
-        return true;
+        return;
     }
 
     const RegionBand* pSource = rRegion.getRegionBand();
@@ -1021,7 +1016,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
     {
         // source region is empty, intersection will always be empty
         SetEmpty();
-        return true;
+        return;
     }
 
     // both RegionBands exist and are not empty
@@ -1048,29 +1043,27 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
 
         mpRegionBand = std::move(pNew);
     }
-
-    return true;
 }
 
-bool vcl::Region::Exclude( const vcl::Region& rRegion )
+void vcl::Region::Exclude( const vcl::Region& rRegion )
 {
     if ( rRegion.IsEmpty() )
     {
         // excluding nothing will do no change
-        return true;
+        return;
     }
 
     if ( rRegion.IsNull() )
     {
         // excluding everything will create empty region
         SetEmpty();
-        return true;
+        return;
     }
 
     if(IsEmpty())
     {
         // cannot exclude from empty, done
-        return true;
+        return;
     }
 
     if(IsNull())
@@ -1078,7 +1071,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
         // error; cannot exclude from null region since this is not representable
         // in the data
         OSL_ENSURE(false, "Region::Exclude error: Cannot exclude from null region (!)");
-        return true;
+        return;
     }
 
     if( rRegion.HasPolyPolygonOrB2DPolyPolygon() || HasPolyPolygonOrB2DPolyPolygon() )
@@ -1089,7 +1082,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
         if(!aThisPolyPoly.count())
         {
             // cannot exclude from empty, done
-            return true;
+            return;
         }
 
         aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
@@ -1100,7 +1093,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
 
         basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
         *this = vcl::Region( aClip );
-        return true;
+        return;
     }
 
     // only region band mode possibility left here or null/empty
@@ -1109,7 +1102,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
     if(!pCurrent)
     {
         // cannot exclude from empty, done
-        return true;
+        return;
     }
 
     const RegionBand* pSource = rRegion.getRegionBand();
@@ -1117,7 +1110,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
     if(!pSource)
     {
         // excluding nothing will do no change
-        return true;
+        return;
     }
 
     // prepare source and target
@@ -1133,7 +1126,6 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
     }
 
     mpRegionBand = std::move(pNew);
-    return true;
 }
 
 bool vcl::Region::XOr( const vcl::Region& rRegion )

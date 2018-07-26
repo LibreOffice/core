@@ -1697,7 +1697,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
         mpImpl->mpCursor->Show();
 }
 
-bool TextView::SetCursorAtPoint( const Point& rPosPixel )
+void TextView::SetCursorAtPoint( const Point& rPosPixel )
 {
     mpImpl->mpTextEngine->CheckIdleFormatter();
 
@@ -1725,7 +1725,6 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
 
     bool bForceCursor = !mpImpl->mpDDInfo; // && !mbInSelection
     ImpShowCursor( mpImpl->mbAutoScroll, bForceCursor, false );
-    return true;
 }
 
 bool TextView::IsSelectionAtPoint( const Point& rPosPixel )

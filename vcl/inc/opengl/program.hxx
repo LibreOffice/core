@@ -72,7 +72,7 @@ public:
                const rtl::OString& preamble, const rtl::OString& rDigest );
     void Use();
     void Reuse();
-    bool Clean();
+    void Clean();
 
     void SetVertices( const GLvoid* pData );
     void SetTextureCoord( const GLvoid* pData );

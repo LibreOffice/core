@@ -2021,10 +2021,12 @@ static bool ImplHandleMenuEvent( vcl::Window const * pWindow, SalMenuEvent* pEve
             switch( nEvent )
             {
                 case SalEvent::MenuActivate:
-                    bRet = pMenuBar->HandleMenuActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    pMenuBar->HandleMenuActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    bRet = true;
                     break;
                 case SalEvent::MenuDeactivate:
-                    bRet = pMenuBar->HandleMenuDeActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    pMenuBar->HandleMenuDeActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    bRet = true;
                     break;
                 case SalEvent::MenuHighlight:
                     bRet = pMenuBar->HandleMenuHighlightEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );

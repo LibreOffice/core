@@ -563,7 +563,7 @@ public:
         return m_xWindow->GetText();
     }
 
-    bool help()
+    void help()
     {
         //show help for widget with keyboard focus
         vcl::Window* pWidget = ImplGetSVData()->maWinData.mpFocusWin;
@@ -583,7 +583,6 @@ public:
         Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
         if (pHelp)
             pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
-        return false;
     }
 
     virtual void set_busy_cursor(bool bBusy) override
@@ -648,7 +647,8 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
 {
-    return help();
+    help();
+    return false;
 }
 
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog

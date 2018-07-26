@@ -270,7 +270,7 @@ public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
 
     bool    initialCffRead();
-    bool    emitAsType1( class Type1Emitter&,
+    void    emitAsType1( class Type1Emitter&,
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
@@ -1732,7 +1732,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     mpPtr += sprintf( mpPtr, "%s", pLineTail);
 }
 
-bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
+void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,
     GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rFSInfo)
 {
@@ -2027,8 +2027,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontType::TYPE1_PFB : FontType::TYPE1_PFA;
     rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
-
-    return true;
 }
 
 bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
@@ -2043,10 +2041,10 @@ bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
     const bool bPfbSubset(mnReqFontTypeMask & FontType::TYPE1_PFB);
     Type1Emitter aType1Emitter( mpOutFile, bPfbSubset);
     aType1Emitter.setSubsetName( mpReqFontName);
-    bRC = aCff.emitAsType1( aType1Emitter,
+    aCff.emitAsType1( aType1Emitter,
         mpReqGlyphIds, mpReqEncodedIds,
         pOutGlyphWidths, mnReqGlyphCount, *this);
-    return bRC;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

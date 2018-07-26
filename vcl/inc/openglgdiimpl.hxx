@@ -176,7 +176,7 @@ public:
 
 protected:
     bool AcquireContext(bool bForceCreate = false);
-    bool ReleaseContext();
+    void ReleaseContext();
 
     /// create a new context for rendering to the underlying window
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;

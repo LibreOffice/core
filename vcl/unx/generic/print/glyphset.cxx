@@ -105,7 +105,7 @@ GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
         rGlyphMap[0] = 0;
 }
 
-bool
+void
 GlyphSet::AddGlyphID (
                      sal_GlyphId nGlyph,
                      unsigned char* nOutGlyphID,
@@ -136,8 +136,6 @@ GlyphSet::AddGlyphID (
     aGlyphSet [nGlyph] = nSize;
     *nOutGlyphSetID   = maGlyphList.size();
     *nOutGlyphID      = aGlyphSet [nGlyph];
-
-    return true;
 }
 
 OString

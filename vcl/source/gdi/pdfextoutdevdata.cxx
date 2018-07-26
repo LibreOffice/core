@@ -672,19 +672,17 @@ sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, sal_Int3
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
+void PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetLinkDest );
     mpGlobalSyncData->mParaInts.push_back( nLinkId );
     mpGlobalSyncData->mParaInts.push_back( nDestId );
-    return 0;
 }
-sal_Int32 PDFExtOutDevData::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
+void PDFExtOutDevData::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetLinkURL );
     mpGlobalSyncData->mParaInts.push_back( nLinkId );
     mpGlobalSyncData->mParaOUStrings.push_back( rURL );
-    return 0;
 }
 
 void PDFExtOutDevData::SetScreenURL(sal_Int32 nScreenId, const OUString& rURL)
@@ -763,19 +761,17 @@ sal_Int32 PDFExtOutDevData::GetCurrentStructureElement()
 {
     return mpGlobalSyncData->mCurrentStructElement;
 }
-bool PDFExtOutDevData::SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal )
+void PDFExtOutDevData::SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureAttribute );
     mpPageSyncData->mParaStructAttributes.push_back( eAttr );
     mpPageSyncData->mParaStructAttributeValues.push_back( eVal );
-    return true;
 }
-bool PDFExtOutDevData::SetStructureAttributeNumerical( PDFWriter::StructAttribute eAttr, sal_Int32 nValue )
+void PDFExtOutDevData::SetStructureAttributeNumerical( PDFWriter::StructAttribute eAttr, sal_Int32 nValue )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureAttributeNumerical );
     mpPageSyncData->mParaStructAttributes.push_back( eAttr );
     mpPageSyncData->mParaInts.push_back( nValue );
-    return true;
 }
 void PDFExtOutDevData::SetStructureBoundingBox( const tools::Rectangle& rRect )
 {

@@ -82,7 +82,7 @@ public:
 
     // use these methods right after setting a context to make sure drawing happens
     // in the right FBO (default one is for onscreen painting)
-    bool               BindFramebuffer( OpenGLFramebuffer* pFramebuffer );
+    void               BindFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void               AcquireDefaultFramebuffer();
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );

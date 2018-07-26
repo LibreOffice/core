@@ -1209,11 +1209,13 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
 
             if (Help::IsBalloonHelpEnabled())
             {
-                bReturn = Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
+                Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
+                bReturn = true;
             }
             else if (Help::IsQuickHelpEnabled())
             {
-                bReturn = Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
+                Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
+                bReturn = true;
             }
         }
     }
