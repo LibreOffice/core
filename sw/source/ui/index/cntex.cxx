@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         {
             OUString sTmp = "IndexSection_" + OUString::number(i);
             uno::Any aSection = xSections->getByName( sTmp );
-            aSection >>= m_pxIndexSectionsArray[i]->xContainerSection;
+            aSection >>= m_vTypeData[i].m_pxIndexSections->xContainerSection;
          }
          uno::Reference< text::XDocumentIndexesSupplier >  xIdxSupp(xModel, uno::UNO_QUERY);
          uno::Reference< container::XIndexAccess >  xIdxs = xIdxSupp->getDocumentIndexes();
@@ -154,17 +154,17 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             "com.sun.star.text.Bibliography"
         };
 
-         OSL_ENSURE(m_pxIndexSectionsArray[nTOXIndex] &&
-                        m_pxIndexSectionsArray[nTOXIndex]->xContainerSection.is(),
+         OSL_ENSURE(m_vTypeData[nTOXIndex].m_pxIndexSections &&
+                        m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection.is(),
                             "Section not created");
          uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
          bool bInitialCreate = true;
-         if(!m_pxIndexSectionsArray[nTOXIndex]->xDocumentIndex.is())
+         if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex.is())
          {
              bInitialCreate = true;
-             if(!m_pxIndexSectionsArray[nTOXIndex]->xContainerSection.is())
+             if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection.is())
                  throw uno::RuntimeException();
-             uno::Reference< text::XTextRange >  xAnchor = m_pxIndexSectionsArray[nTOXIndex]->xContainerSection->getAnchor();
+             uno::Reference< text::XTextRange >  xAnchor = m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection->getAnchor();
              xAnchor = xAnchor->getStart();
              uno::Reference< text::XTextCursor >  xCursor = xAnchor->getText()->createTextCursorByRange(xAnchor);
 
@@ -172,21 +172,21 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
              OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
-             m_pxIndexSectionsArray[nTOXIndex]->xDocumentIndex.set(xFact->createInstance(sIndexTypeName), uno::UNO_QUERY);
-             uno::Reference< text::XTextContent >  xContent(m_pxIndexSectionsArray[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
+             m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex.set(xFact->createInstance(sIndexTypeName), uno::UNO_QUERY);
+             uno::Reference< text::XTextContent >  xContent(m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex, uno::UNO_QUERY);
              uno::Reference< text::XTextRange >  xRg(xCursor, uno::UNO_QUERY);
              xCursor->getText()->insertTextContent(xRg, xContent, false);
          }
          for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
          {
-            uno::Reference< beans::XPropertySet >  xSectPr(m_pxIndexSectionsArray[i]->xContainerSection, uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySet >  xSectPr(m_vTypeData[i].m_pxIndexSections->xContainerSection, uno::UNO_QUERY);
             if(xSectPr.is())
             {
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, makeAny(i == nTOXIndex));
             }
          }
          // set properties
-         uno::Reference< beans::XPropertySet >  xIdxProps(m_pxIndexSectionsArray[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
+         uno::Reference< beans::XPropertySet >  xIdxProps(m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex, uno::UNO_QUERY);
          uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
          SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
          SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();
@@ -398,7 +398,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     pForm->GetTemplate(i + nOffset));
             }
         }
-        m_pxIndexSectionsArray[nTOXIndex]->xDocumentIndex->update();
+        m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex->update();
 
     }
     catch (const Exception&)

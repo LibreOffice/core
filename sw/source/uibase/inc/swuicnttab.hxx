@@ -65,7 +65,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 {
     VclPtr<vcl::Window>     m_pExampleContainerWIN;
     VclPtr<CheckBox>        m_pShowExampleCB;
-    SwTOXMgr*               m_pMgr;
+    std::unique_ptr<SwTOXMgr> m_pMgr;
     SwWrtShell&             m_rWrtShell;
 
     sal_uInt16              m_nSelectId;
@@ -73,18 +73,21 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     sal_uInt16              m_nBackGroundId;
     sal_uInt16              m_nEntriesId;
 
-    SwOneExampleFrame*      m_pExampleFrame;
+    std::unique_ptr<SwOneExampleFrame> m_pExampleFrame;
 
-    SwTOXDescription**      m_pDescriptionArray;
-    SwForm**                m_pFormArray;
-    SwIndexSections_Impl**  m_pxIndexSectionsArray;
+    struct TypeData
+    {
+        std::unique_ptr<SwForm> m_pForm;
+        std::unique_ptr<SwTOXDescription> m_pDescription;
+        std::unique_ptr<SwIndexSections_Impl> m_pxIndexSections;
+    };
+    std::vector<TypeData>   m_vTypeData;
 
     SwTOXBase*              m_pParamTOXBase;
 
     CurTOXType              m_eCurrentTOXType;
 
     OUString                m_sUserDefinedIndex;
-    sal_uInt16              m_nTypeCount;
     sal_uInt16              m_nInitialTOXType;
 
     bool                m_bEditTOX;
@@ -92,7 +95,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     bool                m_bGlobalFlag;
 
     virtual short       Ok() override;
-    SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
+    std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
     DECL_LINK(CreateExample_Hdl, SwOneExampleFrame&, void);
     DECL_LINK(ShowPreviewHdl, Button*, void);
