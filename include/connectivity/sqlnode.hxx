@@ -103,7 +103,6 @@ namespace connectivity
             bool _bPredicate,
             bool _bParseToSDBC
         );
-        ~SQLParseNodeParameter();
     };
 
     //= OSQLParseNode
