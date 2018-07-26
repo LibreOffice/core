@@ -62,8 +62,6 @@ LwpAtomHolder::LwpAtomHolder()
     : m_nAtom(0), m_nAssocAtom(0)
 {}
 
-LwpAtomHolder::~LwpAtomHolder()
-{}
 /**
  * @descr       read atomholder from object stream
  *          the default encoding used in Word Pro is 1252
