@@ -96,7 +96,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     pDoc(GetScImport().GetDocument()),
-    pDPObject(nullptr),
+    pDPObject(new ScDPObject(pDoc)),
+    pDPSave(new ScDPSaveData()),
     pDPDimSaveData(nullptr),
     sDataPilotTableName(),
     sApplicationData(),
@@ -194,9 +195,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             }
         }
     }
-
-    pDPObject = new ScDPObject(pDoc);
-    pDPSave.reset(new ScDPSaveData());
 }
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
@@ -390,8 +388,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         }
     }
 
-    if ( pDPObject )
-        pDPObject->RefreshAfterLoad();
+    pDPObject->RefreshAfterLoad();
 }
 
 void ScXMLDataPilotTableContext::SetSelectedPage( const OUString& rDimName, const OUString& rSelected )
