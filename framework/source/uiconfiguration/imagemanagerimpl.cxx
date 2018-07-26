@@ -309,7 +309,7 @@ void ImageManagerImpl::implts_initialize()
     }
 }
 
-bool ImageManagerImpl::implts_loadUserImages(
+void ImageManagerImpl::implts_loadUserImages(
     vcl::ImageType nImageType,
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
@@ -358,7 +358,7 @@ bool ImageManagerImpl::implts_loadUserImages(
                     m_pUserImageList[nImageType].reset(new ImageList());
                     m_pUserImageList[nImageType]->InsertFromHorizontalStrip
                         ( aUserBitmap, aUserImagesVector );
-                    return true;
+                    return;
                 }
             }
         }
@@ -381,8 +381,6 @@ bool ImageManagerImpl::implts_loadUserImages(
 
     // Destroy old image list - create a new empty one
     m_pUserImageList[nImageType].reset(new ImageList);
-
-    return true;
 }
 
 bool ImageManagerImpl::implts_storeUserImages(

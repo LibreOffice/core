@@ -67,8 +67,8 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
         nResult = css::frame::DispatchResultState::FAILURE;
         if (implts_isBackingModePossible ())
         {
-            if (implts_establishBackingMode ())
-                nResult = css::frame::DispatchResultState::SUCCESS;
+            implts_establishBackingMode ();
+            nResult = css::frame::DispatchResultState::SUCCESS;
         }
     }
 
@@ -119,7 +119,7 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
     return bIsPossible;
 }
 
-bool StartModuleDispatcher::implts_establishBackingMode()
+void StartModuleDispatcher::implts_establishBackingMode()
 {
     css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
     css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
@@ -130,8 +130,6 @@ bool StartModuleDispatcher::implts_establishBackingMode()
     xFrame->setComponent(xComponentWindow, xStartModule);
     xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(true);
-
-    return true;
 }
 
 void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
