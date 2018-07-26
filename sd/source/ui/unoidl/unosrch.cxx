@@ -54,11 +54,10 @@ class SearchContext_impl
 {
     uno::Reference< drawing::XShapes > mxShapes;
     sal_Int32 mnIndex;
-    SearchContext_impl* mpParent;
 
 public:
-    SearchContext_impl( uno::Reference< drawing::XShapes > const & xShapes, SearchContext_impl* pParent = nullptr )
-        : mxShapes( xShapes ), mnIndex( -1 ), mpParent( pParent ) {}
+    SearchContext_impl(uno::Reference<drawing::XShapes> const& xShapes)
+        : mxShapes( xShapes ), mnIndex( -1 ) {}
 
     uno::Reference< drawing::XShape > firstShape()
     {
@@ -76,8 +75,6 @@ public:
         }
         return xShape;
     }
-
-    SearchContext_impl* getParent() const { return mpParent; }
 };
 
 /* ================================================================= */
@@ -111,7 +108,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     uno::Reference< drawing::XShapes >  xShapes;
     uno::Reference< drawing::XShape >  xShape;
 
-    SearchContext_impl* pContext = nullptr;
+    std::vector<SearchContext_impl> aContexts;
     if(mpPage)
     {
         uno::Reference< drawing::XDrawPage > xPage( mpPage );
@@ -120,8 +117,8 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 
         if( xShapes.is() && (xShapes->getCount() > 0) )
         {
-            pContext = new SearchContext_impl( xShapes );
-            xShape = pContext->firstShape();
+            aContexts.push_back(SearchContext_impl(xShapes));
+            xShape = aContexts.back().firstShape();
         }
         else
         {
@@ -152,34 +149,24 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
         uno::Reference< drawing::XShapes > xGroupShape( xShape, uno::UNO_QUERY );
         if( xGroupShape.is() && ( xGroupShape->getCount() > 0 ) )
         {
-            pContext = new SearchContext_impl( xGroupShape, pContext );
-            xShape = pContext->firstShape();
+            aContexts.push_back(SearchContext_impl(xGroupShape));
+            xShape = aContexts.back().firstShape();
         }
         else
         {
-            if( pContext )
-                xShape = pContext->nextShape();
+            if (!aContexts.empty())
+                xShape = aContexts.back().nextShape();
             else
                 xShape = nullptr;
         }
 
         // test parent contexts for next shape if none
         // is found in the current context
-        while( pContext && !xShape.is() )
+        while (!aContexts.empty() && !xShape.is())
         {
-            if( pContext->getParent() )
-            {
-                SearchContext_impl* pOldContext = pContext;
-                pContext = pContext->getParent();
-                delete pOldContext;
-                xShape = pContext->nextShape();
-            }
-            else
-            {
-                delete pContext;
-                pContext = nullptr;
-                xShape = nullptr;
-            }
+            aContexts.pop_back();
+            if (!aContexts.empty())
+                xShape = aContexts.back().nextShape();
         }
     }
 
@@ -208,7 +195,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     uno::Reference< drawing::XShapes >  xShapes;
     uno::Reference< drawing::XShape >  xShape;
 
-    SearchContext_impl* pContext = nullptr;
+    std::vector<SearchContext_impl> aContexts;
     if(mpPage)
     {
         uno::Reference< drawing::XDrawPage >  xPage( mpPage );
@@ -216,8 +203,8 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
 
         if( xShapes.is() && xShapes->getCount() > 0 )
         {
-            pContext = new SearchContext_impl( xShapes );
-            xShape = pContext->firstShape();
+            aContexts.push_back(SearchContext_impl(xShapes));
+            xShape = aContexts.back().firstShape();
         }
         else
         {
@@ -257,34 +244,24 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
 
         if( xGroupShape.is() && xGroupShape->getCount() > 0 )
         {
-            pContext = new SearchContext_impl( xGroupShape, pContext );
-            xShape = pContext->firstShape();
+            aContexts.push_back(SearchContext_impl(xGroupShape));
+            xShape = aContexts.back().firstShape();
         }
         else
         {
-            if( pContext )
-                xShape = pContext->nextShape();
+            if (!aContexts.empty())
+                xShape = aContexts.back().nextShape();
             else
                 xShape = nullptr;
         }
 
         // test parent contexts for next shape if none
         // is found in the current context
-        while( pContext && !xShape.is() )
+        while (!aContexts.empty() && !xShape.is())
         {
-            if( pContext->getParent() )
-            {
-                SearchContext_impl* pOldContext = pContext;
-                pContext = pContext->getParent();
-                delete pOldContext;
-                xShape = pContext->nextShape();
-            }
-            else
-            {
-                delete pContext;
-                pContext = nullptr;
-                xShape = nullptr;
-            }
+            aContexts.pop_back();
+            if (!aContexts.empty())
+                xShape = aContexts.back().nextShape();
         }
     }
 
