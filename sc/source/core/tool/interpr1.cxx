@@ -2691,6 +2691,52 @@ void ScInterpreter::ScIsFormula()
     switch ( GetStackType() )
     {
         case svDoubleRef :
+            if (bMatrixFormula || pCur->IsInForceArray())
+            {
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                if (nGlobalError != FormulaError::NONE)
+                {
+                    PushError( nGlobalError);
+                    return;
+                }
+                if (nTab1 != nTab2)
+                {
+                    PushIllegalArgument();
+                    return;
+                }
+
+                ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCol2 - nCol1 + 1),
+                        static_cast<SCSIZE>(nRow2 - nRow1 + 1), true);
+                if (!pResMat)
+                {
+                    PushError( FormulaError::MatrixSize);
+                    return;
+                }
+
+                /* TODO: we really should have a gap-aware cell iterator. */
+                SCSIZE i=0, j=0;
+                ScAddress aAdr( 0, 0, nTab1);
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                {
+                    aAdr.SetCol(nCol);
+                    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                    {
+                        aAdr.SetRow(nRow);
+                        ScRefCellValue aCell(*pDok, aAdr);
+                        pResMat->PutBoolean( (aCell.meType == CELLTYPE_FORMULA), i,j);
+                        ++j;
+                    }
+                    ++i;
+                    j = 0;
+                }
+
+                PushMatrix( pResMat);
+                return;
+            }
+        SAL_FALLTHROUGH;
         case svSingleRef :
         {
             ScAddress aAdr;
