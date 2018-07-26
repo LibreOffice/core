@@ -48,7 +48,7 @@ class SwMailConfigPage : public SfxTabPage
     VclPtr<PushButton>      m_pServerAuthenticationPB;
     VclPtr<PushButton>      m_pTestPB;
 
-    SwMailMergeConfigItem*  m_pConfigItem;
+    std::unique_ptr<SwMailMergeConfigItem>  m_pConfigItem;
 
     DECL_LINK(ReplyToHdl, Button*, void);
     DECL_LINK(AuthenticationHdl, Button*, void);

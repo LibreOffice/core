@@ -137,7 +137,7 @@ SwMailConfigPage::~SwMailConfigPage()
 
 void SwMailConfigPage::dispose()
 {
-    delete m_pConfigItem;
+    m_pConfigItem.reset();
     m_pDisplayNameED.clear();
     m_pAddressED.clear();
     m_pReplyToCB.clear();
