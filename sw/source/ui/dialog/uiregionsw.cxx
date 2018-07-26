@@ -1555,7 +1555,7 @@ SwInsertSectionTabPage::~SwInsertSectionTabPage()
 
 void SwInsertSectionTabPage::dispose()
 {
-    delete m_pDocInserter;
+    m_pDocInserter.reset();
     m_pCurName.clear();
     m_pFileCB.clear();
     m_pDDECB.clear();
@@ -1771,8 +1771,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
 
 IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, Button*, void)
 {
-    delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter");
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 
