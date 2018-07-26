@@ -73,6 +73,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_subsequent_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
 	basic/util/sb \
+	basctl/util/basctl \
     chart2/source/chartcore \
     chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
@@ -95,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     scaddins/source/datefunc/date \
     sc/util/sc \
     sc/util/scfilt \
+    sc/util/vbaobj \
     sfx2/util/sfx \
     sot/util/sot \
     svl/util/svl \
