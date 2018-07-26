@@ -1457,9 +1457,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
         }
     }
 
-    if (!rDoc.GetDPCollection()->InsertNewTable(pDestObj.release()))
-        // Insertion into collection failed.
-        return false;
+    rDoc.GetDPCollection()->InsertNewTable(pDestObj.release());
 
     rDestObj.ReloadGroupTableData();
     rDestObj.SyncAllDimensionMembers();
