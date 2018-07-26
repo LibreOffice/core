@@ -154,7 +154,7 @@ public:
                               SvViewDataItem* pViewData = nullptr) override;
 
     virtual SvLBoxItemType GetType() const override;
-    bool ClickHdl( SvTreeListEntry* );
+    void ClickHdl( SvTreeListEntry* );
 
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
