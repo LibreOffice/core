@@ -1930,7 +1930,7 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
 // static
 OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
 {
-    OUString aTmp;
+    OUStringBuffer aTmp;
     sal_Int32 nStartPos, nPos, nLen;
     nLen = rStr.getLength();
     nStartPos = 0;
@@ -1939,12 +1939,12 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
         sal_Int32 nEnd;
         if ( (nEnd = GetQuoteEnd( rStr, nPos )) >= 0 )
         {
-            aTmp += rStr.copy( nStartPos, ++nEnd - nStartPos );
+            aTmp.append(rStr.copy( nStartPos, ++nEnd - nStartPos ));
             nStartPos = nEnd;
         }
         else
         {
-            aTmp += rStr.copy( nStartPos, nPos - nStartPos );
+            aTmp.append(rStr.copy( nStartPos, nPos - nStartPos ));
             nStartPos = nPos + 2;
             sal_Int32 nDash;
             nEnd = nStartPos - 1;
@@ -1975,15 +1975,15 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
             {
                 nPos = nDash;
             }
-            aTmp += rStr.copy( nStartPos, nPos - nStartPos );
+            aTmp.append(rStr.copy( nStartPos, nPos - nStartPos ));
             nStartPos = nClose + 1;
         }
     }
     if ( nLen > nStartPos )
     {
-        aTmp += rStr.copy( nStartPos, nLen - nStartPos );
+        aTmp.append(rStr.copy( nStartPos, nLen - nStartPos ));
     }
-    return aTmp;
+    return aTmp.makeStringAndClear();
 }
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString) const

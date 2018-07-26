@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <stringio.hxx>
+#include <rtl/ustrbuf.hxx>
 
 SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
 
@@ -165,22 +166,22 @@ void SfxStringListItem::SetString( const OUString& rStr )
 
 OUString SfxStringListItem::GetString()
 {
-    OUString aStr;
+    OUStringBuffer aStr;
     if ( mpList )
     {
         std::vector<OUString>::const_iterator iter = mpList->begin();
         for (;;)
         {
-            aStr += *iter;
+            aStr.append(*iter);
             ++iter;
 
             if (iter == mpList->end())
                 break;
 
-            aStr += "\r";
+            aStr.append("\r");
         }
     }
-    return convertLineEnd(aStr, GetSystemLineEnd());
+    return convertLineEnd(aStr.makeStringAndClear(), GetSystemLineEnd());
 }
 
 

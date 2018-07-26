@@ -30,6 +30,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 using namespace ::com::sun::star;
@@ -46,22 +47,22 @@ MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XCo
 
 OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Sequence< sal_Int8 >& aClassID )
 {
-    OUString aResult;
+    OUStringBuffer aResult;
 
     if ( aClassID.getLength() == 16 )
     {
         for ( sal_Int32 nInd = 0; nInd < aClassID.getLength(); nInd++ )
         {
             if ( nInd == 4 || nInd == 6 || nInd == 8 || nInd == 10 )
-                aResult += "-";
+                aResult.append("-");
 
             sal_Int32 nDigit1 = static_cast<sal_Int32>( static_cast<sal_uInt8>(aClassID[nInd]) / 16 );
             sal_Int32 nDigit2 = static_cast<sal_uInt8>(aClassID[nInd]) % 16;
-            aResult += OUString::number( nDigit1, 16 ) + OUString::number( nDigit2, 16 );
+            aResult.append(OUString::number( nDigit1, 16 )).append(OUString::number( nDigit2, 16 ));
         }
     }
 
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 

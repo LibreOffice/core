@@ -721,31 +721,31 @@ void ProgressMonitor::impl_rebuildFixedText ()
     // Rebuild left site of text
     if (m_xTopic_Top.is())
     {
-        OUString aCollectString;
+        OUStringBuffer aCollectString;
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Top)
         {
-            aCollectString  +=  pSearchItem->sTopic + "\n";
+            aCollectString.append(pSearchItem->sTopic).append("\n");
         }
 
-        m_xTopic_Top->setText ( aCollectString );
+        m_xTopic_Top->setText ( aCollectString.makeStringAndClear() );
     }
 
     // Rebuild right site of text
     if (m_xText_Top.is())
     {
-        OUString        aCollectString;
+        OUStringBuffer aCollectString;
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Top)
         {
-            aCollectString  +=  pSearchItem->sText + "\n";
+            aCollectString.append(pSearchItem->sText).append("\n");
         }
 
-        m_xText_Top->setText ( aCollectString );
+        m_xText_Top->setText ( aCollectString.makeStringAndClear() );
     }
 
     // Rebuild fixedtext below progress
@@ -753,31 +753,31 @@ void ProgressMonitor::impl_rebuildFixedText ()
     // Rebuild left site of text
     if (m_xTopic_Bottom.is())
     {
-        OUString        aCollectString;
+        OUStringBuffer aCollectString;
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Bottom)
         {
-            aCollectString  +=  pSearchItem->sTopic + "\n";
+            aCollectString.append(pSearchItem->sTopic).append("\n");
         }
 
-        m_xTopic_Bottom->setText ( aCollectString );
+        m_xTopic_Bottom->setText ( aCollectString.makeStringAndClear() );
     }
 
     // Rebuild right site of text
     if (m_xText_Bottom.is())
     {
-        OUString        aCollectString;
+        OUStringBuffer aCollectString;
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Bottom)
         {
-            aCollectString  +=  pSearchItem->sText + "\n";
+            aCollectString.append(pSearchItem->sText).append("\n");
         }
 
-        m_xText_Bottom->setText ( aCollectString );
+        m_xText_Bottom->setText ( aCollectString.makeStringAndClear() );
     }
 }
 

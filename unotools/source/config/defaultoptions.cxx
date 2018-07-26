@@ -32,6 +32,7 @@
 #include <osl/mutex.hxx>
 
 #include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include "itemholder1.hxx"
 
@@ -234,7 +235,8 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
     if ( aValues.getLength() == aNames.getLength() )
     {
         SvtPathOptions aPathOpt;
-        OUString aTempStr, aFullPath;
+        OUString aTempStr;
+        OUStringBuffer aFullPathBuf;
 
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
@@ -246,7 +248,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     {
                         // multi paths
                         if ( pValues[nProp] >>= aTempStr )
-                            aFullPath = aPathOpt.SubstituteVariable( aTempStr );
+                            aFullPathBuf = aPathOpt.SubstituteVariable( aTempStr );
                         else
                         {
                             SAL_WARN( "unotools.config", "any operator >>= failed" );
@@ -257,17 +259,16 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     case css::uno::TypeClass_SEQUENCE :
                     {
                         // single paths
-                        aFullPath.clear();
+                        aFullPathBuf.setLength(0);
                         Sequence < OUString > aList;
                         if ( pValues[nProp] >>= aList )
                         {
                             sal_Int32 nCount = aList.getLength();
                             for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
                             {
-                                aTempStr = aPathOpt.SubstituteVariable( aList[ nPosition ] );
-                                aFullPath += aTempStr;
+                                aFullPathBuf.append(aPathOpt.SubstituteVariable( aList[ nPosition ] ));
                                 if ( nPosition < nCount-1 )
-                                    aFullPath += ";";
+                                    aFullPathBuf.append(";");
                             }
                         }
                         else
@@ -283,6 +284,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     }
                 }
 
+                auto aFullPath = aFullPathBuf.makeStringAndClear();
                 switch ( nProp )
                 {
                     case DEFAULTPATH_ADDIN:            m_aAddinPath = aFullPath;         break;
