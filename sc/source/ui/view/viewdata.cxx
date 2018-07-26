@@ -178,6 +178,7 @@ ScPositionHelper::getNearestByIndex(index_type nIndex) const
     }
 
     auto posLB = std::prev(posUB);
+    // coverity[copy_paste_error] - posUB is correct
     if (posUB == mData.end())
     {
         return *posLB;
@@ -208,6 +209,7 @@ ScPositionHelper::getNearestByPosition(long nPos) const
     }
 
     auto posLB = std::prev(posUB);
+    // coverity[copy_paste_error] - posUB is correct
     if (posUB == mData.end())
     {
         return *posLB;
