@@ -30,8 +30,9 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	cppuhelper \
 	sal \
 	sax \
-	ucbhelper \
 	salhelper \
+	ucbhelper \
+	utl \
 ))
 
 $(eval $(call gb_Library_use_externals,package2,\

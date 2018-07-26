@@ -32,6 +32,8 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
+#include <unotools/configmgr.hxx>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
@@ -61,7 +63,7 @@ XUnbufferedStream::XUnbufferedStream(
 , mnZipEnd ( 0 )
 , mnZipSize ( 0 )
 , mnMyCurrent ( 0 )
-, mbCheckCRC( !bRecoveryMode )
+, mbCheckCRC(!bRecoveryMode && !utl::ConfigManager::IsFuzzing())
 {
     mnZipCurrent = maEntry.nOffset;
     if ( mbRawStream )
