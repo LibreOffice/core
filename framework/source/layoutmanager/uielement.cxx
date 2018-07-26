@@ -94,28 +94,6 @@ namespace framework
     }
 }
 
-UIElement& UIElement::operator= ( const UIElement& rUIElement )
-{
-    if (&rUIElement != this)
-    {
-        m_aType             = rUIElement.m_aType;
-        m_aName             = rUIElement.m_aName;
-        m_aUIName           = rUIElement.m_aUIName;
-        m_xUIElement        = rUIElement.m_xUIElement;
-        m_bFloating         = rUIElement.m_bFloating;
-        m_bVisible          = rUIElement.m_bVisible;
-        m_bUserActive       = rUIElement.m_bUserActive;
-        m_bMasterHide       = rUIElement.m_bMasterHide;
-        m_bContextSensitive = rUIElement.m_bContextSensitive;
-        m_bNoClose          = rUIElement.m_bNoClose;
-        m_bStateRead        = rUIElement.m_bStateRead;
-        m_nStyle            = rUIElement.m_nStyle;
-        m_aDockedData       = rUIElement.m_aDockedData;
-        m_aFloatingData     = rUIElement.m_aFloatingData;
-    }
-    return *this;
-}
-
 } // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
