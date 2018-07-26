@@ -63,7 +63,7 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
     m_xEditRB->connect_clicked(aLk);
     m_xUrlPB->connect_clicked(LINK(this, SwJavaEditDialog, InsertFileHdl));
 
-    m_pMgr = new SwFieldMgr(m_pSh);
+    m_pMgr.reset(new SwFieldMgr(m_pSh));
     m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
 
     m_bNew = !(m_pField && m_pField->GetTyp()->Which() == SwFieldIds::Script);
@@ -79,8 +79,8 @@ SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
 SwJavaEditDialog::~SwJavaEditDialog()
 {
     m_pSh->EnterStdMode();
-    delete m_pMgr;
-    delete m_pFileDlg;
+    m_pMgr.reset();
+    m_pFileDlg.reset();
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl, weld::Button&, void)
@@ -225,9 +225,9 @@ IMPL_LINK_NOARG( SwJavaEditDialog, InsertFileHdl, weld::Button&, void )
 {
     if (!m_pFileDlg)
     {
-        m_pFileDlg = new ::sfx2::FileDialogHelper(
+        m_pFileDlg.reset(new ::sfx2::FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xDialog.get());
+            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xDialog.get()));
     }
 
     m_pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
