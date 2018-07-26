@@ -259,9 +259,9 @@ rtl::Reference< Entity > readEntity(
                             {
                                 sal_uInt16 m
                                     = reader.getMethodExceptionCount(k);
-                                // coverity[tainted_data] cid#1213376
-                                // unhelpfully warns about an untrusted loop
-                                // bound here:
+                                // cid#1213376 unhelpfully warns about an
+                                // untrusted loop bound here:
+                                // coverity[tainted_data] - trusted data source
                                 for (sal_uInt16 l = 0; l != m; ++l) {
                                     getExcs.push_back(
                                         reader.getMethodExceptionTypeName(k, l).
@@ -273,9 +273,9 @@ rtl::Reference< Entity > readEntity(
                             {
                                 sal_uInt16 m
                                     = reader.getMethodExceptionCount(k);
-                                // coverity[tainted_data] cid#1213376
-                                // unhelpfully warns about an untrusted loop
-                                // bound here:
+                                // cid#1213376 unhelpfully warns about an
+                                // untrusted loop bound here:
+                                // coverity[tainted_data] - trusted data source
                                 for (sal_uInt16 l = 0; l != m; ++l) {
                                     setExcs.push_back(
                                         reader.getMethodExceptionTypeName(k, l).
@@ -309,8 +309,9 @@ rtl::Reference< Entity > readEntity(
                     std::vector< InterfaceTypeEntity::Method::Parameter >
                         params;
                     sal_uInt16 m = reader.getMethodParameterCount(j);
-                    // coverity[tainted_data] cid#1213376 unhelpfully warns
-                    // about an untrusted loop bound here:
+                    // cid#1213376 unhelpfully warns about an untrusted loop
+                    // bound here:
+                    // coverity[tainted_data] - trusted data source
                     for (sal_uInt16 k = 0; k != m; ++k) {
                         RTParamMode mode = reader.getMethodParameterFlags(j, k);
                         InterfaceTypeEntity::Method::Parameter::Direction dir;
@@ -342,8 +343,9 @@ rtl::Reference< Entity > readEntity(
                     }
                     std::vector< OUString > excs;
                     m = reader.getMethodExceptionCount(j);
-                    // coverity[tainted_data] cid#1213376 unhelpfully warns
-                    // about an untrusted loop bound here:
+                    // cid#1213376 unhelpfully warns about an untrusted loop
+                    // bound here:
+                    // coverity[tainted_data] - trusted data source
                     for (sal_uInt16 k = 0; k != m; ++k) {
                         excs.push_back(
                             reader.getMethodExceptionTypeName(j, k).replace(
@@ -607,8 +609,9 @@ rtl::Reference< Entity > readEntity(
                             SingleInterfaceBasedServiceEntity::Constructor::
                             Parameter > params;
                         sal_uInt16 m = reader.getMethodParameterCount(j);
-                        // coverity[tainted_data] cid#1213376 unhelpfully warns
-                        // about an untrusted loop bound here:
+                        // cid#1213376 unhelpfully warns about an untrusted
+                        // loop bound here:
+                        // coverity[tainted_data] - trusted data source
                         for (sal_uInt16 k = 0; k != m; ++k) {
                             RTParamMode mode
                                 = reader.getMethodParameterFlags(j, k);
@@ -647,8 +650,9 @@ rtl::Reference< Entity > readEntity(
                         }
                         std::vector< OUString > excs;
                         m = reader.getMethodExceptionCount(j);
-                        // coverity[tainted_data] cid#1213376 unhelpfully warns
-                        // about an untrusted loop bound here:
+                        // cid#1213376 unhelpfully warns about an untrusted
+                        // loop bound here:
+                        // coverity[tainted_data] - trusted data source
                         for (sal_uInt16 k = 0; k != m; ++k) {
                             excs.push_back(
                                 reader.getMethodExceptionTypeName(j, k).replace(

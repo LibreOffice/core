@@ -287,13 +287,13 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
         }
         free( imp_lib );
         // dlhandle is "leaked"
-        // coverity[leaked_storage]
+        // coverity[leaked_storage] - on purpose
         return pSym( install_path );
     }
 
     free( imp_lib );
     // dlhandle is "leaked"
-    // coverity[leaked_storage]
+    // coverity[leaked_storage] - on purpose
     return pSym2( install_path, user_profile_url );
 #else
     return libreofficekit_hook_2( install_path, user_profile_url );
@@ -330,7 +330,7 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
     free( imp_lib );
 
     // dlhandle is "leaked"
-    // coverity[leaked_storage]
+    // coverity[leaked_storage] - on purpose
     return pSym( install_path, user_profile_url );
 }
 #endif
