@@ -3409,6 +3409,9 @@ void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
         case 4:
             cEra = 'H';
             break;
+        case 5:
+            cEra = 'R';
+            break;
         default:
             cEra = '?';
             break;
