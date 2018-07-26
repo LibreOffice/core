@@ -711,7 +711,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
 
     if ( nStyle > 0 )
     {
-        OUString aValue;
+        OUStringBuffer aValue;
         const ToolboxStyleItem* pStyle = Styles;
 
         for ( sal_Int32 nIndex = 0; nIndex < nStyleItemEntries; ++nIndex, ++pStyle )
@@ -719,13 +719,13 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
             if ( nStyle & pStyle->nBit )
             {
                 if ( !aValue.isEmpty() )
-                    aValue += " ";
-                aValue += OUString::createFromAscii( pStyle->attrName );
+                    aValue.append(" ");
+                aValue.appendAscii( pStyle->attrName );
             }
         }
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,
                              m_aAttributeType,
-                             aValue );
+                             aValue.makeStringAndClear() );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

@@ -140,7 +140,7 @@ static SbxVariableRef Operand
     else if( !bVar && *p == '"' )
     {
         // A string
-        OUString aString;
+        OUStringBuffer aString;
         p++;
         for( ;; )
         {
@@ -157,9 +157,9 @@ static SbxVariableRef Operand
                     break;
                 }
             }
-            aString += OUStringLiteral1(*p++);
+            aString.append(*p++);
         }
-        refVar->PutString( aString );
+        refVar->PutString( aString.makeStringAndClear() );
     }
     else
     {

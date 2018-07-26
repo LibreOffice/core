@@ -778,7 +778,7 @@ bool Converter::convertDuration(double& rfTime,
     if ( *(pStr++) != 'P' )            // duration must start with "P"
         return false;
 
-    OUString sDoubleStr;
+    OUStringBuffer sDoubleStr;
     bool bSuccess = true;
     bool bDone = false;
     bool bTimePart = false;
@@ -807,7 +807,7 @@ bool Converter::convertDuration(double& rfTime,
                 }
                 else
                 {
-                    sDoubleStr += OUStringLiteral1(c);
+                    sDoubleStr.append(c);
                 }
             }
         }
@@ -870,7 +870,7 @@ bool Converter::convertDuration(double& rfTime,
         double fHour = nHours;
         double fMin = nMins;
         double fSec = nSecs;
-        double fFraction = sDoubleStr.toDouble();
+        double fFraction = sDoubleStr.makeStringAndClear().toDouble();
         double fTempTime = fHour / 24;
         fTempTime += fMin / (24 * 60);
         fTempTime += fSec / (24 * 60 * 60);

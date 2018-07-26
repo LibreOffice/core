@@ -233,7 +233,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         return maName;
     }
     sal_Unicode cType = ' ';
-    OUString aTmp( maName );
+    OUStringBuffer aTmp( maName );
     // short type? Then fetch it, possible this is 0.
     SbxDataType et = GetType();
     if( t == SbxNameType::ShortTypes )
@@ -244,10 +244,10 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( cType != ' ' )
         {
-            aTmp += OUStringLiteral1(cType);
+            aTmp.append(cType);
         }
     }
-    aTmp += "(";
+    aTmp.append("(");
 
     for (SbxParams::const_iterator iter = pInfo->m_Params.begin(); iter != pInfo->m_Params.end(); ++iter)
     {
@@ -255,17 +255,17 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         int nt = i->eType & 0x0FFF;
         if (iter != pInfo->m_Params.begin())
         {
-            aTmp += ",";
+            aTmp.append(",");
         }
         if( i->nFlags & SbxFlagBits::Optional )
         {
-            aTmp += GetSbxRes( StringId::Optional );
+            aTmp.append( GetSbxRes( StringId::Optional ) );
         }
         if( i->eType & SbxBYREF )
         {
-            aTmp += GetSbxRes( StringId::ByRef );
+            aTmp.append( GetSbxRes( StringId::ByRef ) );
         }
-        aTmp += i->aName;
+        aTmp.append( i->aName );
         cType = ' ';
         // short type? Then fetch it, possible this is 0.
         if( t == SbxNameType::ShortTypes )
@@ -277,32 +277,32 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( cType != ' ' )
         {
-            aTmp += OUStringLiteral1(cType);
+            aTmp.append(cType);
             if( i->eType & SbxARRAY )
             {
-                aTmp += "()";
+                aTmp.append("()");
             }
         }
         else
         {
             if( i->eType & SbxARRAY )
             {
-                aTmp += "()";
+                aTmp.append("()");
             }
             // long type?
-            aTmp += GetSbxRes( StringId::As );
+            aTmp.append(GetSbxRes( StringId::As ));
             if( nt < 32 )
             {
-                aTmp += GetSbxRes( static_cast<StringId>( static_cast<int>( StringId::Types ) + nt ) );
+                aTmp.append(GetSbxRes( static_cast<StringId>( static_cast<int>( StringId::Types ) + nt ) ));
             }
             else
             {
-                aTmp += GetSbxRes( StringId::Any );
+                aTmp.append(GetSbxRes( StringId::Any ));
             }
         }
     }
-    aTmp += ")";
-    const_cast<SbxVariable*>(this)->aToolString = aTmp;
+    aTmp.append(")");
+    const_cast<SbxVariable*>(this)->aToolString = aTmp.makeStringAndClear();
     return aToolString;
 }
 

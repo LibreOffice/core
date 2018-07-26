@@ -1550,20 +1550,20 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
         {
             aDelim = " ";
         }
-        OUString aRetStr;
+        OUStringBuffer aRetStr;
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
         short aIdx[1];
         for (aIdx[0] = nLower; aIdx[0] <= nUpper; ++aIdx[0])
         {
             OUString aStr = pArr->Get(aIdx)->GetOUString();
-            aRetStr += aStr;
+            aRetStr.append(aStr);
             if (aIdx[0] != nUpper)
             {
-                aRetStr += aDelim;
+                aRetStr.append(aDelim);
             }
         }
-        rPar.Get(0)->PutString( aRetStr );
+        rPar.Get(0)->PutString( aRetStr.makeStringAndClear() );
     }
     else
     {

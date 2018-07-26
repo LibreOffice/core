@@ -232,7 +232,7 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
 OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
-    OUString aResult;
+    OUStringBuffer aResult;
     if( pEntry )
     {
         sal_uInt16 nCount = pEntry->ItemCount();
@@ -245,8 +245,8 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
                 if( nCol == 0xffff )
                 {
                     if (!aResult.isEmpty())
-                        aResult += "\t";
-                    aResult += static_cast<const SvLBoxString&>(rStr).GetText();
+                        aResult.append("\t");
+                    aResult.append(static_cast<const SvLBoxString&>(rStr).GetText());
                 }
                 else
                 {
@@ -258,7 +258,7 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
             nCur++;
         }
     }
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 OUString SvTabListBox::GetEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
@@ -363,7 +363,7 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
 {
     SvTreeListEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     DBG_ASSERT( pEntry, "GetTabEntryText(): Invalid entry " );
-    OUString aResult;
+    OUStringBuffer aResult;
     if ( pEntry )
     {
         sal_uInt16 nCount = pEntry->ItemCount();
@@ -376,8 +376,8 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
                 if ( nCol == 0xffff )
                 {
                     if (!aResult.isEmpty())
-                        aResult += "\t";
-                    aResult += static_cast<const SvLBoxString&>(rBoxItem).GetText();
+                        aResult.append("\t");
+                    aResult.append(static_cast<const SvLBoxString&>(rBoxItem).GetText());
                 }
                 else
                 {
@@ -394,7 +394,7 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
             ++nCur;
         }
     }
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 SvTreeListEntry* SvTabListBox::GetEntryOnPos( sal_uLong _nEntryPos ) const
