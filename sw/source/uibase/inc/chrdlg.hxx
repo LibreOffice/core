@@ -55,7 +55,7 @@ public:
 
 class SwCharURLPage : public SfxTabPage
 {
-    SvxMacroItem*       pINetItem;
+    std::unique_ptr<SvxMacroItem> pINetItem;
     bool                bModified;
 
     std::unique_ptr<weld::Entry> m_xURLED;

@@ -185,7 +185,7 @@ SwCharURLPage::~SwCharURLPage()
 
 void SwCharURLPage::dispose()
 {
-    delete pINetItem;
+    pINetItem.reset();
     SfxTabPage::dispose();
 }
 
@@ -221,7 +221,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         m_xVisitedLB->save_value();
         m_xNotVisitedLB->save_value();
         m_xTargetFrameLB->save_value();
-        pINetItem = new SvxMacroItem(FN_INET_FIELD_MACRO);
+        pINetItem.reset( new SvxMacroItem(FN_INET_FIELD_MACRO) );
 
         if( pINetFormat->GetMacroTable() )
             pINetItem->SetMacroTable(*pINetFormat->GetMacroTable());
