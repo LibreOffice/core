@@ -73,7 +73,6 @@ public:
 
     KeyFuncType     GetFunction() const;
 
-    KeyCode&        operator = ( const KeyCode& rKeyCode );
     bool            operator ==( const KeyCode& rKeyCode ) const;
     bool            operator !=( const KeyCode& rKeyCode ) const;
 };
@@ -114,14 +113,6 @@ inline bool vcl::KeyCode::operator !=( const vcl::KeyCode& rKeyCode ) const
         return (nKeyCodeAndModifiers != rKeyCode.nKeyCodeAndModifiers);
     else
         return (GetFunction() != rKeyCode.GetFunction());
-}
-
-inline vcl::KeyCode& vcl::KeyCode::operator = ( const vcl::KeyCode& rKeyCode )
-{
-    nKeyCodeAndModifiers = rKeyCode.nKeyCodeAndModifiers;
-    eFunc = rKeyCode.eFunc;
-
-    return *this;
 }
 
 #endif // INCLUDED_VCL_KEYCOD_HXX

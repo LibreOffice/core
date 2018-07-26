@@ -184,9 +184,6 @@ IconThemeScanner::GetStandardIconThemePath()
     return aPathOptions.GetIconsetPath();
 }
 
-IconThemeScanner::~IconThemeScanner()
-{}
-
 namespace
 {
     class SameTheme
