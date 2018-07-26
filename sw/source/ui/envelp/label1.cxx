@@ -163,7 +163,7 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
 
 SwLabDlg::~SwLabDlg()
 {
-    delete m_pRecs;
+    m_pRecs.reset();
 }
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
