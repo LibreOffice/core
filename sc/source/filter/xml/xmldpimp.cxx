@@ -96,7 +96,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     pDoc(GetScImport().GetDocument()),
-    pDPObject(new ScDPObject(pDoc)),
     pDPSave(new ScDPSaveData()),
     pDPDimSaveData(nullptr),
     sDataPilotTableName(),
@@ -320,7 +319,7 @@ ScDPOutputGeometry::FieldType toFieldType(sheet::DataPilotFieldOrientation nOrie
 
 }
 
-void ScXMLDataPilotTableContext::SetButtons()
+void ScXMLDataPilotTableContext::SetButtons(ScDPObject* pDPObject)
 {
     ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter);
     aGeometry.setColumnFieldCount(mnColFieldCount);
@@ -452,6 +451,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     if (!bTargetRangeAddress)
         return;
 
+    ScDPObject* pDPObject(new ScDPObject(pDoc));
     pDPObject->SetName(sDataPilotTableName);
     pDPObject->SetTag(sApplicationData);
     pDPObject->SetOutRange(aTargetRangeAddress);
@@ -539,7 +539,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
 
     pDPCollection->InsertNewTable(pDPObject);
 
-    SetButtons();
+    SetButtons(pDPObject);
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(
