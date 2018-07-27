@@ -52,6 +52,11 @@ public:
                             SvxFieldData();
     virtual                 ~SvxFieldData();
 
+    SvxFieldData(SvxFieldData const &) = default;
+    SvxFieldData(SvxFieldData &&) = default;
+    SvxFieldData & operator =(SvxFieldData const &) = default;
+    SvxFieldData & operator =(SvxFieldData &&) = default;
+
     virtual std::unique_ptr<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
 

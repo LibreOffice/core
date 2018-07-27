@@ -38,6 +38,11 @@ public:
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool operator==(const SvxFieldData&) const override;
     SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }
+
+    SdrMeasureField(SdrMeasureField const &) = default;
+    SdrMeasureField(SdrMeasureField &&) = default;
+    SdrMeasureField & operator =(SdrMeasureField const &) = default;
+    SdrMeasureField & operator =(SdrMeasureField &&) = default;
 };
 
 
