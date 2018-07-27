@@ -37,7 +37,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
     VclPtr<PushButton>  m_pUpPB;
     VclPtr<PushButton>  m_pDownPB;
 
-    SwCSVData*   m_pNewData;
+    std::unique_ptr<SwCSVData> m_pNewData;
 
     DECL_LINK(AddRenameHdl_Impl, Button*, void);
     DECL_LINK(DeleteHdl_Impl, Button*, void);
@@ -50,7 +50,7 @@ public:
     virtual ~SwCustomizeAddressListDialog() override;
     virtual void dispose() override;
 
-    SwCSVData*    GetNewData() { return m_pNewData;}
+    std::unique_ptr<SwCSVData>  ReleaseNewData() { return std::move(m_pNewData);}
 };
 
 class SwAddRenameEntryDialog : public SfxModalDialog
