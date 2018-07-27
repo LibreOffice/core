@@ -32,6 +32,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{

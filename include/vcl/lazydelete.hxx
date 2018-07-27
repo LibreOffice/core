@@ -27,6 +27,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <sal/log.hxx>
 
 #include <typeinfo>
 

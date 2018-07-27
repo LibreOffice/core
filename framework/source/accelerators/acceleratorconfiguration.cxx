@@ -49,6 +49,7 @@
 #include <officecfg/Setup.hxx>
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <sal/log.hxx>
 
 #define PRESET_DEFAULT "default"
 #define TARGET_CURRENT "current"

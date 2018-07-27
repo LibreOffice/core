@@ -9,6 +9,7 @@
 
 #include <filter/msfilter/rtfutil.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svtools/rtfkeywd.hxx>
 #include <rtl/character.hxx>

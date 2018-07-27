@@ -20,6 +20,7 @@
 #include "richtextimplcontrol.hxx"
 #include "textattributelistener.hxx"
 #include "richtextengine.hxx"
+#include <sal/log.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>

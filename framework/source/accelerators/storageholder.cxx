@@ -19,6 +19,7 @@
 
 #include <accelerators/storageholder.hxx>
 #include <accelerators/acceleratorconfiguration.hxx>
+#include <sal/log.hxx>
 
 #include <services.h>
 

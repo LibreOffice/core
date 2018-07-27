@@ -22,6 +22,7 @@
 
 #include <string.h>
 
+#include <sal/log.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \

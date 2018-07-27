@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>

@@ -93,6 +93,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>

@@ -24,6 +24,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <tools/color.hxx>
+#include <sal/log.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>

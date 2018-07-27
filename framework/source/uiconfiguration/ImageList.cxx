@@ -18,6 +18,7 @@
  */
 
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/settings.hxx>

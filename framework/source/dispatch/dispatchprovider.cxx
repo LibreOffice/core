@@ -43,6 +43,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 namespace framework{
 

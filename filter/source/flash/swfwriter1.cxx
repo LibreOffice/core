@@ -30,6 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
+#include <sal/log.hxx>
 
 #include <zlib.h>
 

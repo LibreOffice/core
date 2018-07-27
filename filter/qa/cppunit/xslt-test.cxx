@@ -19,6 +19,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <rtl/ref.hxx>
 

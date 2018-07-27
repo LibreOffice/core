@@ -18,6 +18,7 @@
  */
 
 #include <dispatch/loaddispatcher.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 

@@ -30,6 +30,7 @@
 
 #include "image.h"
 #include <memory>
+#include <sal/log.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>

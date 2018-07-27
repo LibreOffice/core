@@ -19,6 +19,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

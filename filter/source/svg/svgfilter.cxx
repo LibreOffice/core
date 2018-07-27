@@ -20,6 +20,7 @@
 
 #include <cstdio>
 
+#include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <uno/environment.h>

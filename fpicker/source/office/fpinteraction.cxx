@@ -24,6 +24,8 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
+#include <sal/log.hxx>
+
 
 namespace svt
 {

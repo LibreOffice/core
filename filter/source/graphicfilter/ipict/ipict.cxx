@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>

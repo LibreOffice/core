@@ -43,6 +43,7 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace framework;

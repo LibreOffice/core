@@ -23,6 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 namespace framework{
 

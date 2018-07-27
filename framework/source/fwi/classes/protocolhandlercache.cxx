@@ -29,6 +29,7 @@
 #include <tools/wldcrd.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #define SETNAME_HANDLER "HandlerSet" // name of configuration set inside package

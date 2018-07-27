@@ -21,6 +21,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
+#include <sal/log.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>

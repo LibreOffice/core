@@ -28,6 +28,7 @@
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>

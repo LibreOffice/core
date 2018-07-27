@@ -21,6 +21,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/outdev.hxx>
+#include <sal/log.hxx>
 #include <tools/fract.hxx>
 #include <memory>
 

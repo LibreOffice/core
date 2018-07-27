@@ -121,6 +121,7 @@
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
 #include <boost/optional.hpp>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cassert>
