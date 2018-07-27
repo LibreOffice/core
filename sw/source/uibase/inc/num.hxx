@@ -37,7 +37,7 @@ class SwOutlineTabDialog;
 
 class SwNumPositionTabPage : public SfxTabPage
 {
-    SwNumRule*          pActNum;
+    std::unique_ptr<SwNumRule> pActNum;
     SwNumRule*          pSaveNum;
     SwWrtShell*         pWrtSh;
 
