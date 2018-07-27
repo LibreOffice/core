@@ -99,9 +99,6 @@ namespace dxcanvas
         css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
-    typedef ::rtl::Reference< Canvas > CanvasRef;
-
-
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
