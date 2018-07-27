@@ -592,6 +592,7 @@ void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpVirtualLayout(objHdr, pStrm)
     , m_bGettingGeometry(false)
+    , m_bGettingBackgroundStuff(false)
 {
 }
 
@@ -659,21 +660,28 @@ rtl::Reference<LwpObject> LwpMiddleLayout::GetBasedOnStyle()
 * @descr:   Get the geometry of current layout
 *
 */
-LwpLayoutGeometry* LwpMiddleLayout::Geometry()
+LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
 {
+    if (m_bGettingGeometry)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingGeometry = true;
+
+    LwpLayoutGeometry* pRet = nullptr;
     if( !m_LayGeometry.IsNull() )
     {
-        return dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
+        pRet = dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            return pLay->GetGeometry();
+            pRet = pLay->GetGeometry();
         }
     }
-    return nullptr;
+
+    m_bGettingGeometry = false;
+    return pRet;
 }
 
 /**
@@ -822,21 +830,30 @@ LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 */
 LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 {
+    if (m_bGettingBackgroundStuff)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingBackgroundStuff = true;
+
+    LwpBackgroundStuff* pRet = nullptr;
+
     if(m_nOverrideFlag & OVER_BACKGROUND)
     {
         LwpLayoutBackground* pLayoutBackground = dynamic_cast<LwpLayoutBackground*>(m_LayBackgroundStuff.obj().get());
-        return pLayoutBackground ? &pLayoutBackground->GetBackgoudStuff() : nullptr;
+        pRet = pLayoutBackground ? &pLayoutBackground->GetBackgoudStuff() : nullptr;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            return pLay->GetBackgroundStuff();
+            pRet = pLay->GetBackgroundStuff();
         }
     }
-    return nullptr;
+
+    m_bGettingBackgroundStuff = false;
+    return pRet;
 }
+
 /**
  * @descr:  create xfborder.
 */
