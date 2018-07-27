@@ -1027,11 +1027,9 @@ void BackendImpl::PackageImpl::exportTo(
                 Reference<ucb::XContentAccess>(
                     xResultSet, UNO_QUERY_THROW )->queryContent(),
                 xCmdEnv, getMyBackend()->getComponentContext() );
-            if (! destFolderContent.transferContent(
+            destFolderContent.transferContent(
                     subContent, ::ucbhelper::InsertOperation::Copy,
-                    OUString(), ucb::NameClash::OVERWRITE ))
-                throw RuntimeException( "UCB transferContent() failed!",
-                                        static_cast<OWeakObject *>(this) );
+                    OUString(), ucb::NameClash::OVERWRITE );
             progress.update( Any() ); // animating progress bar
         }
     }
@@ -1131,12 +1129,10 @@ void BackendImpl::PackageImpl::exportTo(
                 return;
             }
 
-            if (metainfFolderContent.transferContent(
+            metainfFolderContent.transferContent(
                   manifestContent, ::ucbhelper::InsertOperation::Copy,
-                  OUString(), ucb::NameClash::OVERWRITE ))
-            {
-                bSuccess = true;
-            }
+                  OUString(), ucb::NameClash::OVERWRITE );
+            bSuccess = true;
         }
         catch (const css::ucb::ContentCreationException &e)
         {
