@@ -171,6 +171,11 @@ struct ImplStyleData
     StyleSettingsOptions            mnOptions;
     bool                            mbHighContrast;
     bool                            mbUseSystemUIFonts;
+    /**
+     * Disabling AA doesn't actually disable AA of fonts, instead it is taken
+     * from system settings.
+     */
+    bool mbUseFontAAFromSystem;
     bool                            mbAutoMnemonic;
     TriState                        meUseImagesInMenus;
     bool                            mnUseFlatBorders;
@@ -647,6 +652,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mbHighContrast              = rData.mbHighContrast;
     mbUseSystemUIFonts          = rData.mbUseSystemUIFonts;
+    mbUseFontAAFromSystem       = rData.mbUseFontAAFromSystem;
     mnUseFlatBorders            = rData.mnUseFlatBorders;
     mnUseFlatMenus              = rData.mnUseFlatMenus;
     mbAutoMnemonic              = rData.mbAutoMnemonic;
@@ -755,6 +761,7 @@ void ImplStyleData::SetStandardStyles()
     mnTearOffTitleHeight        = 8;
     mbHighContrast              = false;
     mbUseSystemUIFonts          = true;
+    mbUseFontAAFromSystem = true;
     mnUseFlatBorders            = false;
     mnUseFlatMenus              = false;
     mbPreferredUseImagesInMenus = true;
@@ -1433,6 +1440,17 @@ bool
 StyleSettings::GetUseSystemUIFonts() const
 {
     return mxData->mbUseSystemUIFonts;
+}
+
+void StyleSettings::SetUseFontAAFromSystem(bool bUseFontAAFromSystem)
+{
+    CopyData();
+    mxData->mbUseFontAAFromSystem = bUseFontAAFromSystem;
+}
+
+bool StyleSettings::GetUseFontAAFromSystem() const
+{
+    return mxData->mbUseFontAAFromSystem;
 }
 
 void
@@ -2294,6 +2312,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mnAntialiasedMin          == rSet.mxData->mnAntialiasedMin)           &&
          (mxData->mbHighContrast            == rSet.mxData->mbHighContrast)             &&
          (mxData->mbUseSystemUIFonts        == rSet.mxData->mbUseSystemUIFonts)         &&
+         (mxData->mbUseFontAAFromSystem     == rSet.mxData->mbUseFontAAFromSystem)      &&
          (mxData->mnUseFlatBorders          == rSet.mxData->mnUseFlatBorders)           &&
          (mxData->mnUseFlatMenus            == rSet.mxData->mnUseFlatMenus)             &&
          (mxData->maFaceColor               == rSet.mxData->maFaceColor)                &&

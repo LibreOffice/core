@@ -1023,12 +1023,26 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     SvtOptionsDrawinglayer aOptions;
     bool bAntiAliasing = aOptions.IsAntiAliasing();
+    AllSettings aAllSettings = Application::GetSettings();
+    StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+    bool bUseFontAAFromSystem = aStyleSettings.GetUseFontAAFromSystem();
     if (aSettings.meAntiAliasing != TRISTATE_INDET)
+    {
         // This is safe to do globally as we own the solar mutex.
         aOptions.SetAntiAliasing(aSettings.meAntiAliasing == TRISTATE_TRUE);
+        // Opt in to have AA affect font rendering as well.
+        aStyleSettings.SetUseFontAAFromSystem(false);
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::SetSettings(aAllSettings);
+    }
     sal_uInt16 nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
     if (aSettings.meAntiAliasing != TRISTATE_INDET)
+    {
         aOptions.SetAntiAliasing(bAntiAliasing);
+        aStyleSettings.SetUseFontAAFromSystem(bUseFontAAFromSystem);
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::SetSettings(aAllSettings);
+    }
 
     if( nStatus == GRFILTER_OK )
     {
