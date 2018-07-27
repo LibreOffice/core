@@ -53,6 +53,7 @@ namespace NS_ooxml
                         self.tokens.append(token)
                 self.counter += 1
 
+
 parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
 parser.parse(sys.argv[1])
