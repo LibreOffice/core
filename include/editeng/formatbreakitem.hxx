@@ -41,6 +41,7 @@ public:
     inline SvxFormatBreakItem( const SvxBreak eBrk /*= SvxBreak::NONE*/,
                             const sal_uInt16 nWhich );
     inline SvxFormatBreakItem& operator=( const SvxFormatBreakItem& rCpy );
+    SvxFormatBreakItem(SvxFormatBreakItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

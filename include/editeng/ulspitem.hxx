@@ -45,6 +45,7 @@ public:
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                     const sal_uInt16 nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
+    SvxULSpaceItem(SvxULSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

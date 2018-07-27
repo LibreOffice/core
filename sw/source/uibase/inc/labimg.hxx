@@ -34,6 +34,7 @@ public:
     SwLabItem();
 
     SwLabItem& operator =(const SwLabItem& rItem);
+    SwLabItem(SwLabItem const &) = default; // SfxPoolItem copy function dichotomy
 
     virtual bool operator ==(const SfxPoolItem& rItem) const override;
 

@@ -63,6 +63,8 @@ public:
     bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
 
     SwFormatFootnoteEndAtTextEnd & operator=( const SwFormatFootnoteEndAtTextEnd & rAttr );
+    SwFormatFootnoteEndAtTextEnd(SwFormatFootnoteEndAtTextEnd const &) = default;
+        // SfxPoolItem copy function dichotomy
 
     SvxNumType GetNumType() const        { return aFormat.GetNumberingType(); }
     void SetNumType( SvxNumType eType )  { aFormat.SetNumberingType(eType); }

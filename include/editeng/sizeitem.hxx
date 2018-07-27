@@ -42,6 +42,7 @@ public:
     SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
 
     inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );
+    SvxSizeItem(SvxSizeItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
