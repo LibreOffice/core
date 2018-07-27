@@ -22,6 +22,8 @@ gb_CPUDEFS := -D_X86_=1
 
 include $(GBUILDDIR)/platform/com_MSC_defs.mk
 
+# Work around MSVC 2017 compiler bug (see comments at <https://gerrit.libreoffice.org/#/c/57472/>
+# "Fix Win32 warning C4702: unreachable code":
 gb_CXXFLAGS += \
         $(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
 
