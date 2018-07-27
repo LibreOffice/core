@@ -1312,12 +1312,23 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     //the SwActualSection class has a member, which points to an upper(section).
     //When the "inner" section finishes, the upper will used instead.
 
-    while( true )
+    // Do not consider the end node. The caller (Section/MakeFrames()) has to
+    // ensure that the end of this range is positioned before EndIndex!
+    for ( ; nEndIndex == 0 || nIndex < nEndIndex; ++nIndex)
     {
         SwNode *pNd = pDoc->GetNodes()[nIndex];
         if ( pNd->IsContentNode() )
         {
             SwContentNode* pNode = static_cast<SwContentNode*>(pNd);
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                if (pNd->IsTextNode()
+                    && pNd->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
+                {   // must have a frame already
+                    assert(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pLayout))->GetMergedPara());
+                }
+                continue; // skip it
+            }
             pFrame = pNode->MakeFrame(pLay);
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
@@ -1359,6 +1370,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if ( pNd->IsTableNode() )
         {   //Should we have encountered a table?
             SwTableNode *pTableNode = static_cast<SwTableNode*>(pNd);
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
 
             // #108116# loading may produce table structures that GCLines
             // needs to clean up. To keep table formulas correct, change
@@ -1411,6 +1427,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsSectionNode() )
         {
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             SwSectionNode *pNode = static_cast<SwSectionNode*>(pNd);
             if( pNode->GetSection().CalcHiddenFlag() )
                 // is hidden, skip the area
@@ -1498,6 +1519,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             assert(pActualSection && "Section end without section start?");
             assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
 
@@ -1569,6 +1595,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if( pNd->IsStartNode() &&
                  SwFlyStartNode == static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
         {
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
             {
                 SwFlyFrame* pFly = pLay->FindFlyFrame();
@@ -1577,14 +1608,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
         }
         else
-            // Neither Content nor table nor section,
-            // so we have to be ready.
-            break;
-
-        ++nIndex;
-        // Do not consider the end node. The caller (section/MakeFrames()) has to ensure that the end
-        // of this area is positioned before EndIndex!
-        if ( nEndIndex && nIndex >= nEndIndex )
+            // Neither Content nor table nor section, so we are done.
             break;
     }
 
