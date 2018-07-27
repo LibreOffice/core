@@ -2079,7 +2079,12 @@ bool FormulaCompiler::CompileTokenArray()
         pArr->DelRPN();
         maArrIterator.Reset();
         pStack = nullptr;
-        FormulaToken* pData[ FORMULA_MAXTOKENS ];
+        FormulaToken* pDataArray[ FORMULA_MAXTOKENS + 1 ];
+        // Code in some places refers to the last token as 'pCode - 1', which may
+        // point before the first element if the expression is bad. So insert a dummy
+        // node in that place which will make that token be nullptr.
+        pDataArray[ 0 ] = nullptr;
+        FormulaToken** pData = pDataArray + 1;
         pCode = pData;
         bool bWasForced = pArr->IsRecalcModeForced();
         if ( bWasForced )
