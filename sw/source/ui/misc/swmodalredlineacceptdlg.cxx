@@ -43,7 +43,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
     : SfxModalDialog(pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, this, get_content_area(), true);
+    pImplDlg.reset( new SwRedlineAcceptDlg(this, this, get_content_area(), true) );
 
     pImplDlg->Initialize(GetExtraData());
     pImplDlg->Activate();   // for data's initialisation
@@ -59,7 +59,7 @@ void SwModalRedlineAcceptDlg::dispose()
     AcceptAll(false);   // refuse everything remaining
     pImplDlg->FillInfo(GetExtraData());
 
-    delete pImplDlg;
+    pImplDlg.reset();
     SfxModalDialog::dispose();
 }
 
