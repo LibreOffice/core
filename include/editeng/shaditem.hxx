@@ -46,6 +46,7 @@ public:
                  const SvxShadowLocation eLoc = SvxShadowLocation::NONE );
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
+    SvxShadowItem(SvxShadowItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool             operator==( const SfxPoolItem& ) const override;

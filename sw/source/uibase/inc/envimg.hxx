@@ -57,6 +57,7 @@ public:
 
     static SfxPoolItem* CreateDefault();
     SwEnvItem& operator =(const SwEnvItem& rItem);
+    SwEnvItem(SwEnvItem const &) = default; // SfxPoolItem copy function dichotomy
 
     virtual bool operator ==(const SfxPoolItem& rItem) const override;
 

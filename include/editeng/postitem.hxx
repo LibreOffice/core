@@ -63,6 +63,7 @@ public:
         SetValue( rPost.GetValue() );
         return *this;
     }
+    SvxPostureItem(SvxPostureItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // enum cast
     FontItalic              GetPosture() const

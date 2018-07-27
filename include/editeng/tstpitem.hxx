@@ -117,6 +117,7 @@ public:
 
     // Assignment operator, equality operator (caution: expensive!)
     SvxTabStopItem& operator=( const SvxTabStopItem& rTSI );
+    SvxTabStopItem(SvxTabStopItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // this is already included in SfxPoolItem declaration
     //int             operator!=( const SvxTabStopItem& rTSI ) const

@@ -54,6 +54,7 @@ public:
                 SetValue( rHorJustify.GetValue() );
                 return *this;
             }
+    SvxHorJustifyItem(SvxHorJustifyItem const &) = default; // SfxPoolItem copy function dichotomy
 };
 
 
@@ -86,6 +87,7 @@ public:
                 SetValue( rVerJustify.GetValue() );
                 return *this;
             }
+    SvxVerJustifyItem(SvxVerJustifyItem const &) = default; // SfxPoolItem copy function dichotomy
 };
 
 

@@ -64,6 +64,7 @@ public:
             SetValue( rCross.GetValue() );
             return *this;
         }
+    SvxCrossedOutItem(SvxCrossedOutItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // enum cast
     FontStrikeout           GetStrikeout() const
