@@ -45,7 +45,7 @@
 #include <cxxabi.h>
 #endif
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 
 struct DebugData
 {
