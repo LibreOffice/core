@@ -21,7 +21,7 @@ class SwTitlePageDlg : public weld::GenericDialogController
 private:
     SwWrtShell *mpSh;
 
-    const SwFormatPageDesc *mpPageFormatDesc;
+    std::unique_ptr<const SwFormatPageDesc> mpPageFormatDesc;
 
     SwPageDesc *mpTitleDesc;
     const SwPageDesc *mpIndexDesc;
