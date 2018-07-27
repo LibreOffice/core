@@ -30,7 +30,8 @@ enum class TransformationType
     TEXT_TRANSFORMATION,
     AGGREGATE_FUNCTION,
     NUMBER_TRANSFORMATION,
-    REMOVE_NULL_TRANSFORMATION
+    REMOVE_NULL_TRANSFORMATION,
+    DATETIME_TRANSFORMATION
 };
 
 enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM };
@@ -39,6 +40,10 @@ enum class AGGREGATE_FUNCTION { SUM, AVERAGE, MIN, MAX };
 
 enum class NUMBER_TRANSFORM_TYPE { ROUND, ROUND_UP, ROUND_DOWN, ABSOLUTE, LOG_E, LOG_10, CUBE,
     SQUARE, SQUARE_ROOT, EXPONENT, IS_EVEN, IS_ODD, SIGN };
+
+enum class DATETIME_TRANSFORMATION_TYPE { DATE_STRING, YEAR, START_OF_YEAR, END_OF_YEAR, MONTH,
+    MONTH_NAME, START_OF_MONTH, END_OF_MONTH, DAY, DAY_OF_WEEK, DAY_OF_YEAR, QUARTER, START_OF_QUARTER,
+    END_OF_QUARTER, TIME, HOUR, MINUTE, SECOND };
 
 class SC_DLLPUBLIC DataTransformation
 {
@@ -160,6 +165,19 @@ class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
     virtual TransformationType getTransformationType() const override;
     std::set<SCCOL> getColumn() const;
     OUString getReplaceString() const;
+};
+
+class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
+{
+    std::set<SCCOL> mnCol;
+    DATETIME_TRANSFORMATION_TYPE maType;
+
+    public:
+    DateTimeTransformation(const std::set<SCCOL> nCol, const DATETIME_TRANSFORMATION_TYPE rType);
+    virtual void Transform(ScDocument& rDoc) const override;
+    virtual TransformationType getTransformationType() const override;
+    DATETIME_TRANSFORMATION_TYPE getDateTimeTransfromationType() const;
+    std::set<SCCOL> getColumn() const;
 };
 
 }
