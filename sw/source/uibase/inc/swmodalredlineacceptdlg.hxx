@@ -25,7 +25,7 @@ class SwRedlineAcceptDlg;
 
 class SwModalRedlineAcceptDlg : public SfxModalDialog
 {
-    SwRedlineAcceptDlg*     pImplDlg;
+    std::unique_ptr<SwRedlineAcceptDlg> pImplDlg;
 
 public:
     SwModalRedlineAcceptDlg(vcl::Window *pParent);
