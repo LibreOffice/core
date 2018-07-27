@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/dibtools.hxx>

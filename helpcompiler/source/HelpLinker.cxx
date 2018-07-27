@@ -35,6 +35,7 @@
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <sal/log.hxx>
 
 #include <expat.h>
 #include <memory>

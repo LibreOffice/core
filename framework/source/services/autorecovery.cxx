@@ -90,6 +90,7 @@
 #include <osl/time.h>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <svl/documentlockfile.hxx>

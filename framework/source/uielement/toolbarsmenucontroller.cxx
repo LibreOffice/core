@@ -48,6 +48,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>

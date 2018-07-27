@@ -18,6 +18,7 @@
  */
 
 #include <osl/security.hxx>
+#include <sal/log.hxx>
 
 #include <uno/mapping.hxx>
 

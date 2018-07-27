@@ -20,6 +20,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -27,6 +27,7 @@
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 
 namespace xforms

@@ -30,7 +30,8 @@
 #include <libxslt/xsltutils.h>
 #include <osl/thread.hxx>
 #include <chrono>
-#include<rtl/character.hxx>
+#include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 static void impl_sleep( sal_uInt32 nSec )
 {

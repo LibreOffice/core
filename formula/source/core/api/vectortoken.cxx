@@ -8,6 +8,7 @@
  */
 
 #include <formula/vectortoken.hxx>
+#include <sal/log.hxx>
 
 namespace formula {
 

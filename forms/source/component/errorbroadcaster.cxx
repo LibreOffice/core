@@ -20,6 +20,7 @@
 #include "errorbroadcaster.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <sal/log.hxx>
 
 
 namespace frm

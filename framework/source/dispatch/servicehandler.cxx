@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 namespace framework{
 

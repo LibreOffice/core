@@ -28,6 +28,7 @@
 #include <sfx2/passwd.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/resmgr.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>

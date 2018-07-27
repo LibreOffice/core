@@ -21,6 +21,7 @@
 #include <services.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
 using namespace frm;

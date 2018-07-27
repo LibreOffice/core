@@ -58,6 +58,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <memory>
 

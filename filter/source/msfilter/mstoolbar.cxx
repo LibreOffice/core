@@ -8,6 +8,7 @@
  */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <stdarg.h>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>

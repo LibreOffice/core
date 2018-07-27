@@ -61,6 +61,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 
 namespace frm

@@ -15,6 +15,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>

@@ -50,6 +50,7 @@
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <functional>
 #include <algorithm>

@@ -20,6 +20,7 @@
 #include "attributedispatcher.hxx"
 
 #include <editeng/editview.hxx>
+#include <sal/log.hxx>
 
 
 namespace frm

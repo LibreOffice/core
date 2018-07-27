@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>

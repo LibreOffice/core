@@ -31,6 +31,7 @@
 #include <svtools/langtab.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

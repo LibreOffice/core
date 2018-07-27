@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/weakeventlistener.hxx>
 #include <comphelper/types.hxx>

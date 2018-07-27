@@ -76,6 +76,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>

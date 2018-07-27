@@ -34,6 +34,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/character.hxx>
 #include <sfx2/objsh.hxx>

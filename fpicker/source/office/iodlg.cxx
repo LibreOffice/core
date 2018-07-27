@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 #include "PlacesListBox.hxx"

@@ -23,6 +23,7 @@
 #include <config_folders.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>

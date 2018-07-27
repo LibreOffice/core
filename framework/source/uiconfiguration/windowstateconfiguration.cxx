@@ -42,6 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 #include <unordered_map>
 #include <vector>

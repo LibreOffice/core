@@ -76,6 +76,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

@@ -20,6 +20,7 @@
 #include <memory>
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
+#include <sal/log.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>

@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

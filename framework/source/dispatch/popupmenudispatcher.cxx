@@ -38,6 +38,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 

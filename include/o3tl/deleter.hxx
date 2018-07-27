@@ -11,6 +11,7 @@
 #define INCLUDED_O3TL_DELETER_HXX
 
 #include <com/sun/star/uno/Exception.hpp>
+#include <sal/log.hxx>
 
 namespace o3tl {
 

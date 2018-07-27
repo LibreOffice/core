@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 namespace framework{
 

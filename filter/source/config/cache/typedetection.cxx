@@ -30,6 +30,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <tools/wldcrd.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <framework/interaction.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>

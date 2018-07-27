@@ -20,6 +20,7 @@
 #include <helper/ocomponentenumeration.hxx>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 namespace framework{
 

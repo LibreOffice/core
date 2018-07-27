@@ -28,6 +28,7 @@
 #include "elements.hxx"
 #include "outact.hxx"
 #include <memory>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

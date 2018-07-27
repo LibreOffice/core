@@ -23,6 +23,7 @@
 
 #include <comphelper/base64.hxx>
 #include <rtl/crc.h>
+#include <sal/log.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

@@ -43,6 +43,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;
