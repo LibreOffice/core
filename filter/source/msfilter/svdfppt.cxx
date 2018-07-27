@@ -6774,7 +6774,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             if (rPersistEntry.xHeaderFooterEntry->nAtom & 0x20000)    // auto date time
                                                 xEntry->SetDateTime(rPersistEntry.xHeaderFooterEntry->nAtom & 0xff);
                                             else
-                                                xEntry->xString.reset(new OUString(rPersistEntry.xHeaderFooterEntry->pPlaceholder[nVal]));
+                                                xEntry->xString = rPersistEntry.xHeaderFooterEntry->pPlaceholder[nVal];
                                         }
                                     }
                                     break;
@@ -6826,7 +6826,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             else if (!n)
                                                             {
                                                                 // End of format string
-                                                                xEntry->xString.reset(new OUString( aStr ));
+                                                                xEntry->xString = aStr;
                                                                 break;
                                                             }
                                                             else if (!inquote)

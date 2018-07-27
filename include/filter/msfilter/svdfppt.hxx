@@ -45,6 +45,7 @@
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <boost/optional.hpp>
 
 namespace boost {
     template <class T> class optional;
@@ -495,7 +496,7 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
     sal_uInt16          nTextRangeEnd;
     std::unique_ptr<SvxFieldItem> xField1;
     std::unique_ptr<SvxFieldItem> xField2;
-    std::unique_ptr<OUString> xString;
+    boost::optional<OUString> xString;
 
     PPTFieldEntry()
         : nPos(0)
