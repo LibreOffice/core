@@ -538,7 +538,7 @@ void Package::exportTo(
     bool bOk=true;
     try
     {
-        bOk = destFolder.transferContent(
+        destFolder.transferContent(
             sourceContent, ::ucbhelper::InsertOperation::Copy,
             newTitle, nameClashAction);
     }

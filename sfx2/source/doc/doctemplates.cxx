@@ -1957,12 +1957,11 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // transfer source file
     try
     {
-        if( ! aTargetGroup.transferContent( aSourceContent,
-                                                InsertOperation::Copy,
-                                                aNewTemplateTargetName,
-                                                NameClash::OVERWRITE,
-                                                aType ) )
-            return false;
+        aTargetGroup.transferContent( aSourceContent,
+                                      InsertOperation::Copy,
+                                      aNewTemplateTargetName,
+                                      NameClash::OVERWRITE,
+                                      aType );
 
         // allow to edit the added template
         Content aResultContent;

@@ -2205,19 +2205,16 @@ void SfxMedium::Transfer_Impl()
                             sComment = pComments->GetValue( );
                     }
                     OUString sResultURL;
-                    bool isTransferOK = aTransferContent.transferContent(
+                    aTransferContent.transferContent(
                         aSourceContent, eOperation,
                         aFileName, nNameClash, aMimeType, bMajor, sComment,
                         &sResultURL, sObjectId );
 
-                    if ( !isTransferOK )
-                        pImpl->m_eError = ERRCODE_IO_GENERAL;
-                    else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
+                    if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
                         SwitchDocumentToFile( sResultURL );
                     try
                     {
                         if ( GetURLObject().isAnyKnownWebDAVScheme() &&
-                             isTransferOK &&
                              eOperation == ::ucbhelper::InsertOperation::Copy )
                         {
                             // tdf#95272 try to re-issue a lock command when a new file is created.
@@ -2300,15 +2297,13 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
         try
         {
             OUString sMimeType = pImpl->getFilterMimeType();
-            if( aBackupCont.transferContent( aOriginalContent,
+            aBackupCont.transferContent( aOriginalContent,
                                             ::ucbhelper::InsertOperation::Copy,
                                             aBackupName,
                                             NameClash::OVERWRITE,
-                                            sMimeType ) )
-            {
-                pImpl->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                pImpl->m_bRemoveBackup = true;
-            }
+                                            sMimeType );
+            pImpl->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            pImpl->m_bRemoveBackup = true;
         }
         catch( const Exception& )
         {}
@@ -2389,16 +2384,14 @@ void SfxMedium::DoBackup_Impl()
                 {
                     // do the transfer ( copy source file to backup dir )
                     OUString sMimeType = pImpl->getFilterMimeType();
-                    bSuccess = aContent.transferContent( aSourceContent,
+                    aContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation::Copy,
                                                         aFileName,
                                                         NameClash::OVERWRITE,
                                                         sMimeType );
-                    if( bSuccess )
-                    {
-                        pImpl->m_aBackupURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                        pImpl->m_bRemoveBackup = false;
-                    }
+                    pImpl->m_aBackupURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                    pImpl->m_bRemoveBackup = false;
+                    bSuccess = true;
                 }
                 catch ( const css::uno::Exception& )
                 {
@@ -3574,11 +3567,9 @@ void SfxMedium::CreateTempFile( bool bReplace )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     OUString sMimeType = pImpl->getFilterMimeType();
-                    if ( aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation::Copy, aFileName, NameClash::OVERWRITE, sMimeType ) )
-                    {
-                        SetWritableForUserOnly( aTmpURL );
-                        bTransferSuccess = true;
-                    }
+                    aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation::Copy, aFileName, NameClash::OVERWRITE, sMimeType );
+                    SetWritableForUserOnly( aTmpURL );
+                    bTransferSuccess = true;
                 }
             }
             catch( const uno::Exception& )
@@ -3872,14 +3863,11 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
                     uno::Reference< css::ucb::XCommandEnvironment > xComEnv;
                     ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
-                    if ( aTargetContent.transferContent( aSourceContent,
+                    aTargetContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation::Copy,
                                                         aFileName,
-                                                        NameClash::OVERWRITE ) )
-                    {
-                        // Success
-                        aResult = aNewTempFileURL;
-                    }
+                                                        NameClash::OVERWRITE );
+                    aResult = aNewTempFileURL;
                 }
                 catch( const uno::Exception& )
                 {}
