@@ -654,7 +654,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
+    void
     transferContent( const Content& rSourceContent,
                      InsertOperation eOperation,
                      const OUString & rTitle,
