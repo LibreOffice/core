@@ -28,7 +28,7 @@
 
 namespace
 {
-    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, const SwFormatPageDesc **ppPageFormatDesc)
+    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, std::unique_ptr<const SwFormatPageDesc>* ppPageFormatDesc)
     {
         bool bRet = false;
         SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
@@ -41,7 +41,7 @@ namespace
                 if (oNumOffset)
                     rPageNo = oNumOffset.get();
                 if (ppPageFormatDesc)
-                    (*ppPageFormatDesc) = static_cast<const SwFormatPageDesc *>(pItem->Clone());
+                    ppPageFormatDesc->reset(static_cast<const SwFormatPageDesc *>(pItem->Clone()));
                 bRet = true;
             }
         }
@@ -54,7 +54,7 @@ namespace
         const size_t nCurIdx = pSh->GetCurPageDesc();
         const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
 
-        const SwFormatPageDesc *pPageFormatDesc(nullptr);
+        std::unique_ptr<const SwFormatPageDesc> pPageFormatDesc;
         sal_uInt16 nDontCare;
         lcl_GetPageDesc(pSh, nDontCare, &pPageFormatDesc);
 
@@ -97,8 +97,6 @@ namespace
             if (nPgNo) aPageFormatDesc.SetNumOffset(nPgNo);
             pSh->SetAttrItem(aPageFormatDesc);
         }
-
-        delete pPageFormatDesc;
     }
 
     void lcl_PushCursor(SwWrtShell *pSh)
@@ -256,7 +254,6 @@ IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, weld::ToggleButton&, void)
 
 SwTitlePageDlg::~SwTitlePageDlg()
 {
-    delete mpPageFormatDesc;
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
