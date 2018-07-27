@@ -1292,7 +1292,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_DATETIMEFORMAT:
         {
             auto const & rSettings = GetPage()->getHeaderFooterSettings();
-            sal_Int32 x = static_cast<sal_Int32>(rSettings.meDateFormat) & (static_cast<sal_Int32>(rSettings.meTimeFormat) << 4);
+            sal_Int32 x = static_cast<sal_Int32>(rSettings.meDateFormat) | (static_cast<sal_Int32>(rSettings.meTimeFormat) << 4);
             aAny <<= x;
         }
         break;
