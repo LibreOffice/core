@@ -123,8 +123,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     xStore->storeToURL( m_sExampleURL, aValues   );
 
     Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
-    m_pExampleFrame = new SwOneExampleFrame( *m_pExampleContainerWIN,
-                                    EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
+    m_pExampleFrame.reset( new SwOneExampleFrame( *m_pExampleContainerWIN,
+                                    EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL ) );
 
     m_pExampleContainerWIN->Show(false);
 
@@ -165,7 +165,7 @@ SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 
 void SwMailMergeLayoutPage::dispose()
 {
-    delete m_pExampleFrame;
+    m_pExampleFrame.reset();
     File::remove( m_sExampleURL );
     m_pPosition.clear();
     m_pAlignToBodyCB.clear();
