@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <editeng/unoprnms.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>

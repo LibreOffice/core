@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

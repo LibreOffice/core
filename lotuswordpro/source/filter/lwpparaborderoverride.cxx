@@ -64,6 +64,7 @@
 #include "lwpborderstuff.hxx"
 #include "lwpshadow.hxx"
 #include "lwpmargins.hxx"
+#include <sal/log.hxx>
 
 LwpParaBorderOverride::LwpParaBorderOverride()
 {

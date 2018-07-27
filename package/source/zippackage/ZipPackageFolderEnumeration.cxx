@@ -20,6 +20,7 @@
 #include "ZipPackageFolderEnumeration.hxx"
 #include "ContentInfo.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

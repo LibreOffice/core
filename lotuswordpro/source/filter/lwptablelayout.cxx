@@ -83,6 +83,7 @@
 #include <xfilter/xfparastyle.hxx>
 #include <memory>
 #include <set>
+#include <sal/log.hxx>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)

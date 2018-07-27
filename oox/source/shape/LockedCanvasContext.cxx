@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/log.hxx>
+
 #include "LockedCanvasContext.hxx"
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapecontext.hxx>

@@ -23,6 +23,7 @@
 #include "options.hxx"
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <stdio.h>
 #include <string.h>

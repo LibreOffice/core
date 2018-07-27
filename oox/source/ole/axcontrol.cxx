@@ -50,6 +50,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>

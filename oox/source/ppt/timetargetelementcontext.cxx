@@ -21,6 +21,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <oox/helper/attributelist.hxx>
 #include <drawingml/embeddedwavaudiofile.hxx>

@@ -74,6 +74,7 @@
 #include <sfx2/printer.hxx>
 #include <lwpchangemgr.hxx>
 #include <lwpglobalmgr.hxx>
+#include <sal/log.hxx>
 
 LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)

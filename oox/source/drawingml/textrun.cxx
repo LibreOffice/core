@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
+#include <sal/log.hxx>
 
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>

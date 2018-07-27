@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>

@@ -21,6 +21,7 @@
 #include <oox/drawingml/graphicshapecontext.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <drawingml/embeddedwavaudiofile.hxx>
 #include <drawingml/misccontexts.hxx>

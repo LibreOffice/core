@@ -27,6 +27,7 @@
 #include "constraintlistcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <sal/log.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

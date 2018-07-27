@@ -9,6 +9,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/crc.h>
+#include <sal/log.hxx>
 
 #include <cstring>
 #include <ctime>

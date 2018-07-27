@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <sal/log.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
 

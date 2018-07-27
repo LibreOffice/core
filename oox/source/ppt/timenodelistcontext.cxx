@@ -21,6 +21,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
