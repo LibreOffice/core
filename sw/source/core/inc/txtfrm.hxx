@@ -392,7 +392,7 @@ public:
     bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
-    void SetMergedPara(std::unique_ptr<sw::MergedPara> p) { m_pMergedPara = std::move(p); }
+    void SetMergedPara(std::unique_ptr<sw::MergedPara> p);
 #if 0
     sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
 #endif
