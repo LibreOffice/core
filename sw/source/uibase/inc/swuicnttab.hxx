@@ -453,7 +453,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     VclPtr<PushButton>     m_pStdBT;
     VclPtr<PushButton>     m_pEditStyleBT;
 
-    SwForm*         m_pCurrentForm;
+    std::unique_ptr<SwForm> m_pCurrentForm;
 
     DECL_LINK( EditStyleHdl, Button *, void );
     DECL_LINK( StdHdl, Button*, void );
