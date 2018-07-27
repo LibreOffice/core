@@ -582,8 +582,6 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
 OUString OAppDetailPageHelper::getElementIcons(ElementType _eType)
 {
-    ImageProvider aImageProvider;
-
     sal_Int32 nDatabaseObjectType( 0 );
     switch(_eType )
     {
@@ -603,7 +601,6 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
     OString sHelpId;
-    ImageProvider aImageProvider;
     Image aFolderImage;
     switch( _eType )
     {
