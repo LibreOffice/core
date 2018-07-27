@@ -22,6 +22,7 @@
 #include <svx/pagectrl.hxx>
 #include <editeng/paperinf.hxx>
 #include <swdllapi.h>
+#include <tgrditem.hxx>
 #include <fmtclds.hxx>
 #include <frmatr.hxx>
 
@@ -56,8 +57,6 @@ public:
 
     void UpdateExample( const SfxItemSet& rSet );
 };
-
-class SwTextGridItem;
 
 class SW_DLLPUBLIC SwPageGridExample : public PageExample
 {
