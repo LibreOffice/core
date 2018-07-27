@@ -596,9 +596,10 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
 
     const OUString sTitle( StrTitle::getTitle( sourceContent ) );
 
-    if (destFolderContent.transferContent(
+    destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation::Copy,
-            sTitle, css::ucb::NameClash::OVERWRITE ))
+            sTitle, css::ucb::NameClash::OVERWRITE );
+
     {
         //the user may have cancelled the dialog because downloading took to long
         SolarMutexGuard g;

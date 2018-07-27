@@ -258,7 +258,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
 
     try
     {
-        (void)aDestPath.transferContent(aSrc,
+        aDestPath.transferContent(aSrc,
                                         bMoveData
                                          ? ucbhelper::InsertOperation::Move
                                          : ucbhelper::InsertOperation::Copy,

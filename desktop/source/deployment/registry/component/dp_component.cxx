@@ -427,13 +427,9 @@ void BackendImpl::initServiceRdbFiles()
     m_commonRDB = m_commonRDB_orig == "common.rdb" ? OUString("common_.rdb") : OUString("common.rdb");
     if (oldRDB.get().is())
     {
-        if (! cacheDir.transferContent(
+        cacheDir.transferContent(
                 oldRDB, ::ucbhelper::InsertOperation::Copy,
-                m_commonRDB, NameClash::OVERWRITE ))
-        {
-
-            throw RuntimeException( "UCB transferContent() failed!", nullptr );
-        }
+                m_commonRDB, NameClash::OVERWRITE );
         oldRDB = ::ucbhelper::Content();
     }
     // switch native rdb:
@@ -448,10 +444,9 @@ void BackendImpl::initServiceRdbFiles()
     m_nativeRDB = (m_nativeRDB_orig == plt_rdb ) ? plt_rdb_ : plt_rdb;
     if (oldRDB.get().is())
     {
-        if (! cacheDir.transferContent(
+        cacheDir.transferContent(
                 oldRDB, ::ucbhelper::InsertOperation::Copy,
-                m_nativeRDB, NameClash::OVERWRITE ))
-            throw RuntimeException( "UCB transferContent() failed!", nullptr );
+                m_nativeRDB, NameClash::OVERWRITE );
     }
 
     // UNO is bootstrapped, flush for next process start:

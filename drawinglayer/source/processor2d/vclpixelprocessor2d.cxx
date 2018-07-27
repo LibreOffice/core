@@ -105,14 +105,14 @@ namespace drawinglayer
             mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
         }
 
-        bool VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
+        void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
         {
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rSource.getB2DPolyPolygon());
 
             if(!aLocalPolyPolygon.count())
             {
                 // no geometry, done
-                return true;
+                return;
             }
 
             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
@@ -123,8 +123,6 @@ namespace drawinglayer
             mpOutputDevice->DrawTransparent(
                 aLocalPolyPolygon,
                 fTransparency);
-
-            return true;
         }
 
         bool VclPixelProcessor2D::tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency)
@@ -443,8 +441,9 @@ namespace drawinglayer
                     basegfx::B2DPolyPolygon aLocalPolyPolygon;
                     static bool bAllowed(true);
 
-                    if(bAllowed && tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0))
+                    if(bAllowed)
                     {
+                        tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0);
                         // okay, done. In this case no gaps should have to be repaired, too
                     }
                     else
@@ -555,7 +554,8 @@ namespace drawinglayer
                                             // single transparent tools::PolyPolygon identified, use directly
                                             const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
-                                            bDrawTransparentUsed = tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
+                                            bDrawTransparentUsed = true;
+                                            tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
                                             break;
                                         }
                                         case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
