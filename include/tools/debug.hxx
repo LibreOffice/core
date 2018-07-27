@@ -35,7 +35,8 @@
     standard assert.
 */
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
+// we want the solar mutex checking to be enabled in the assert-enabled builds that the QA people use
 
 typedef void (*DbgTestSolarMutexProc)();
 
@@ -49,7 +50,6 @@ do                             \
 } while(false)
 
 #else
-// NO DBG_UTIL
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
 

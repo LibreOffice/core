@@ -367,7 +367,7 @@ bool InitVCL()
     // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, nullptr);
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     DbgGUIInitSolarMutexCheck();
 #endif
 
