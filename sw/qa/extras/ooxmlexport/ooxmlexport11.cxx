@@ -479,6 +479,34 @@ DECLARE_OOXMLEXPORT_TEST(testOpenDocumentAsReadOnly, "open-as-read-only.docx")
     CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNoDefault, "noDefault.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+
+    // Row 1: color directly applied to the paragraph, overrides table and style colors
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(xPara,1), "CharColor"));
+
+    // Row2: (still part of firstRow table-style) ought to use the Normal style color, not the table-style color(5B9BD5)
+    //xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    //xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    //xParaEnum = xParaEnumAccess->createEnumeration();
+    //xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_LIGHTMAGENTA), getProperty<sal_Int32>(getRun(xPara,1), "CharColor"));
+
+    // Row 3+: Normal style still applied, even if nothing is specified with w:default="1"
+    xCell.set(xTable->getCellByName("A3"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_LIGHTMAGENTA), getProperty<sal_Int32>(getRun(xPara,1), "CharColor"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMarginsFromStyle, "margins_from_style.docx")
 {
     // tdf#118521 paragraphs with direct formatting of top or bottom margins have
