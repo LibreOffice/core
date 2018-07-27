@@ -1514,11 +1514,29 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
         const OUString& _rCommand, const sal_Int32 _nCommandType )
 {
-    if  (   !createControlLabelPair( _rOutDev, _nXOffsetMM, _nYOffsetMM,
-                _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, SdrInventor::FmForm, OBJ_FM_FIXEDTEXT,
-                nullptr, nullptr, nullptr, _rpLabel, _rpControl )
-        )
+    if(!createControlLabelPair(
+        _rOutDev,
+        _nXOffsetMM,
+        _nYOffsetMM,
+        _rxField,
+        _rxNumberFormats,
+        _nControlObjectID,
+        _rFieldPostfix,
+        SdrInventor::FmForm,
+        OBJ_FM_FIXEDTEXT,
+        nullptr,
+        nullptr,
+
+        // tdf#118963 Hand over a SdrModel to SdrObject-creation. It uses the local m_pView
+        // and already returning false when nullptr == getView() could be done, but m_pView
+        // is already dereferenced here in many places (see below), so just use it for now.
+        getView()->getSdrModelFromSdrView(),
+
+        _rpLabel,
+        _rpControl))
+    {
         return false;
+    }
 
     // insert the control model(s) into the form component hierarchy
     if ( _rpLabel )
@@ -1539,7 +1557,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
-    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel& _rModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
     OUString sFieldName;
@@ -1582,7 +1600,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     {
         pLabel.reset( dynamic_cast< SdrUnoObj* >(
             SdrObjFactory::MakeNewObject(
-                *_pModel,
+                _rModel,
                 _nInventor,
                 _nLabelObjectID)));
 
@@ -1614,7 +1632,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     // the control
     ::std::unique_ptr< SdrUnoObj, SdrObjectFreeOp > pControl( dynamic_cast< SdrUnoObj* >(
         SdrObjFactory::MakeNewObject(
-            *_pModel,
+            _rModel,
              _nInventor,
              _nControlObjectID)));
 

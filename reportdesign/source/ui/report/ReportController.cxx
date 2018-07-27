@@ -3137,11 +3137,26 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     {
         SdrUnoObj* pLabel( nullptr );
         SdrUnoObj* pControl( nullptr );
-        FmFormView::createControlLabelPair( getDesignView()
-                            ,nLeftMargin,0
-                            ,nullptr,nullptr,_nObjectId,SdrInventor::ReportDesign,OBJ_DLG_FIXEDTEXT,
-                         nullptr,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
-                         pLabel,pControl);
+
+        FmFormView::createControlLabelPair(
+            getDesignView(),
+            nLeftMargin,
+            0,
+            nullptr,
+            nullptr,
+            _nObjectId,
+            SdrInventor::ReportDesign,
+            OBJ_DLG_FIXEDTEXT,
+            nullptr,
+            pSectionWindow->getReportSection().getPage(),
+
+            // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
+            // m_aReportModel seems pretty safe, it's done in other places, initialized
+            // in impl_initialize and throws a RuntimeException if not existing.
+            *m_aReportModel,
+
+            pLabel,
+            pControl);
 
         // always use SdrObject::Free(...) for SdrObjects (!)
         SdrObject* pTemp(pLabel);
@@ -3434,12 +3449,28 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             OSectionView* pSectionViews[2];
             pSectionViews[0] = &pSectionWindow[1]->getReportSection().getSectionView();
             pSectionViews[1] = &pSectionWindow[0]->getReportSection().getSectionView();
+
             // find this in svx
-            FmFormView::createControlLabelPair( getDesignView()
-                ,nLeftMargin,0
-                ,xField,xNumberFormats,nOBJID,SdrInventor::ReportDesign,OBJ_DLG_FIXEDTEXT,
-                pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
-                pControl[0],pControl[1]);
+            FmFormView::createControlLabelPair(
+                getDesignView(),
+                nLeftMargin,
+                0,
+                xField,
+                xNumberFormats,
+                nOBJID,
+                SdrInventor::ReportDesign,
+                OBJ_DLG_FIXEDTEXT,
+                pSectionWindow[1]->getReportSection().getPage(),
+                pSectionWindow[0]->getReportSection().getPage(),
+
+                // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
+                // m_aReportModel seems pretty safe, it's done in other places, initialized
+                // in impl_initialize and throws a RuntimeException if not existing.
+                *m_aReportModel,
+
+                pControl[0],
+                pControl[1]);
+
             if ( pControl[0] && pControl[1] )
             {
                 SdrPageView* pPgViews[2];
