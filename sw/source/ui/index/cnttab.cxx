@@ -3663,7 +3663,7 @@ SwTOXStylesTabPage::~SwTOXStylesTabPage()
 
 void SwTOXStylesTabPage::dispose()
 {
-    delete m_pCurrentForm;
+    m_pCurrentForm.reset();
     m_pLevelLB.clear();
     m_pAssignBT.clear();
     m_pParaLayLB.clear();
@@ -3684,7 +3684,7 @@ void SwTOXStylesTabPage::Reset( const SfxItemSet* rSet )
 
 void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 {
-    m_pCurrentForm = new SwForm(GetForm());
+    m_pCurrentForm.reset(new SwForm(GetForm()));
     m_pParaLayLB->Clear();
     m_pLevelLB->Clear();
 
