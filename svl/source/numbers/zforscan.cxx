@@ -815,7 +815,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     short eType = 0;
     ScanState eState = SsStart;
-    sSymbol.clear();
+    OUStringBuffer sSymbolBuffer;
     while ( nPos < rStr.getLength() && eState != SsStop )
     {
         sal_Unicode cToken = rStr[nPos++];
@@ -858,28 +858,28 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             case ':':
             case '-':
                 eType = NF_SYMBOLTYPE_DEL;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 eState = SsStop;
                 break;
             case '*':
                 eType = NF_SYMBOLTYPE_STAR;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 eState = SsGetStar;
                 break;
             case '_':
                 eType = NF_SYMBOLTYPE_BLANK;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 eState = SsGetBlank;
                 break;
             case '"':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsGetString;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 break;
             case '\\':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsGetChar;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 break;
             case '$':
             case '+':
@@ -887,7 +887,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             case ')':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsStop;
-                sSymbol += OUStringLiteral1(cToken);
+                sSymbolBuffer.append(OUStringLiteral1(cToken));
                 break;
             default :
                 if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cToken) ||
@@ -898,7 +898,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 {
                     // Another separator than pre-known ASCII
                     eType = NF_SYMBOLTYPE_DEL;
-                    sSymbol += OUStringLiteral1(cToken);
+                    sSymbolBuffer.append(OUStringLiteral1(cToken));
                     eState = SsStop;
                 }
                 else if ( pChrCls->isLetter( rStr, nPos-1 ) )
@@ -923,7 +923,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         if ( bCurrency )
                         {
                             eState = SsGetWord;
-                            sSymbol += OUStringLiteral1(cToken);
+                            sSymbolBuffer.append(OUStringLiteral1(cToken));
                         }
                         else
                         {
@@ -936,13 +936,13 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                             {
                                 nLen = sEnglishKeyword[eType].getLength();
                                 // Use the locale's General keyword name, not uppercase.
-                                sSymbol = (eType == NF_KEY_GENERAL ? sNameStandardFormat : sKeyword[eType]);
+                                sSymbolBuffer = (eType == NF_KEY_GENERAL ? sNameStandardFormat : sKeyword[eType]);
                             }
                             else
                             {
                                 nLen = sKeyword[eType].getLength();
                                 // Preserve a locale's keyword's case as entered.
-                                sSymbol = rStr.copy( nPos-1, nLen);
+                                sSymbolBuffer = rStr.copy( nPos-1, nLen);
                             }
                             if ((eType == NF_KEY_E || IsAmbiguousE(eType)) && nPos < rStr.getLength())
                             {
@@ -951,7 +951,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                 {
                                 case '+' :
                                 case '-' :  // E+ E- combine to one symbol
-                                    sSymbol += OUStringLiteral1(cNext);
+                                    sSymbolBuffer.append(OUStringLiteral1(cNext));
                                     eType = NF_KEY_E;
                                     nPos++;
                                     break;
@@ -969,20 +969,20 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     else
                     {
                         eState = SsGetWord;
-                        sSymbol += OUStringLiteral1(cToken);
+                        sSymbolBuffer.append(OUStringLiteral1(cToken));
                     }
                 }
                 else
                 {
                     eType = NF_SYMBOLTYPE_STRING;
                     eState = SsStop;
-                    sSymbol += OUStringLiteral1(cToken);
+                    sSymbolBuffer.append(OUStringLiteral1(cToken));
                 }
                 break;
             }
             break;
         case SsGetChar:
-            sSymbol += OUStringLiteral1(cToken);
+            sSymbolBuffer.append(OUStringLiteral1(cToken));
             eState = SsStop;
             break;
         case SsGetString:
@@ -990,7 +990,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             {
                 eState = SsStop;
             }
-            sSymbol += OUStringLiteral1(cToken);
+            sSymbolBuffer.append(OUStringLiteral1(cToken));
             break;
         case SsGetWord:
             if ( pChrCls->isLetter( rStr, nPos-1 ) )
@@ -1006,7 +1006,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 }
                 else
                 {
-                    sSymbol += OUStringLiteral1(cToken);
+                    sSymbolBuffer.append(OUStringLiteral1(cToken));
                 }
             }
             else
@@ -1021,14 +1021,14 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         cNext = rStr[nPos];
                         if ( cNext == 'P' || cNext == 'p' )
                         {
-                            sal_Int32 nLen = sSymbol.getLength();
+                            sal_Int32 nLen = sSymbolBuffer.getLength();
                             if ( 1 <= nLen &&
-                                    (sSymbol[0] == 'A' || sSymbol[0] == 'a') &&
+                                    (sSymbolBuffer[0] == 'A' || sSymbolBuffer[0] == 'a') &&
                                     (nLen == 1 ||
-                                     (nLen == 2 && (sSymbol[1] == 'M' || sSymbol[1] == 'm')
+                                     (nLen == 2 && (sSymbolBuffer[1] == 'M' || sSymbolBuffer[1] == 'm')
                                       && (rStr[nPos + 1] == 'M' || rStr[nPos + 1] == 'm'))))
                             {
-                                sSymbol += OUStringLiteral1(cToken);
+                                sSymbolBuffer.append(OUStringLiteral1(cToken));
                                 bDontStop = true;
                             }
                         }
@@ -1046,11 +1046,11 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             break;
         case SsGetStar:
             eState = SsStop;
-            sSymbol += OUStringLiteral1(cToken);
+            sSymbolBuffer.append(OUStringLiteral1(cToken));
             break;
         case SsGetBlank:
             eState = SsStop;
-            sSymbol += OUStringLiteral1(cToken);
+            sSymbolBuffer.append(OUStringLiteral1(cToken));
             break;
         default:
             break;
@@ -1060,6 +1060,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
     {
         eType = NF_SYMBOLTYPE_STRING;
     }
+    sSymbol = sSymbolBuffer.makeStringAndClear();
     return eType;
 }
 
