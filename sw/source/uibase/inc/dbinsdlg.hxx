@@ -128,8 +128,8 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     SwView*         pView;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
-    SfxItemSet*     pTableSet;
-    SwTableRep*     pRep;
+    std::unique_ptr<SfxItemSet>  pTableSet;
+    std::unique_ptr<SwTableRep>  pRep;
     sal_Int32       nGBFormatLen;
 
     DECL_LINK( PageHdl, Button*, void );
