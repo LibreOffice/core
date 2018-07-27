@@ -34,6 +34,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
+#include <sal/log.hxx>
 
 using namespace cppu;
 using namespace osl;

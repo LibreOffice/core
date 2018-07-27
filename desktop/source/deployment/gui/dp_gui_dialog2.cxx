@@ -43,6 +43,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <svtools/extensionlistbox.hxx>
 #include <svtools/restartdialog.hxx>

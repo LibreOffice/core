@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include "alterparser.hxx"
 #include "utils.hxx"
 

@@ -55,6 +55,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include "persistence.hxx"
 

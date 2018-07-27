@@ -58,6 +58,7 @@
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
 
+#include <sal/log.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>

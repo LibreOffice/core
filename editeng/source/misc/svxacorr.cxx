@@ -26,6 +26,7 @@
 #include <tools/urlobj.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sot/storinfo.hxx>

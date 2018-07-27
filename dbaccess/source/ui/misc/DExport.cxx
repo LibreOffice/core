@@ -38,6 +38,7 @@
 #include <strings.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>

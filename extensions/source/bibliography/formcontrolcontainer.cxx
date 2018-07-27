@@ -19,6 +19,7 @@
 
 #include "formcontrolcontainer.hxx"
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

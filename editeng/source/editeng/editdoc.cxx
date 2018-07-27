@@ -57,6 +57,7 @@
 #include "impedit.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <svl/grabbagitem.hxx>
 #include <tools/stream.hxx>

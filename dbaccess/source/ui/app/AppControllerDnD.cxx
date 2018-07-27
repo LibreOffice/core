@@ -48,6 +48,7 @@
 #include <connectivity/dbexception.hxx>
 #include <vcl/waitobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include "AppView.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dbaobjectex.hxx>

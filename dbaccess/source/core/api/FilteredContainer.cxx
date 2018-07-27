@@ -28,6 +28,7 @@
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/optional.hpp>
+#include <sal/log.hxx>
 
 namespace dbaccess
 {

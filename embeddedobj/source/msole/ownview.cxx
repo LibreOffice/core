@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <sal/log.hxx>
 
 #include "olepersist.hxx"
 #include "ownview.hxx"

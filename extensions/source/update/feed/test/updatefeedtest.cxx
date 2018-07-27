@@ -28,6 +28,7 @@
 
 #include <sal/main.h>
 #include <osl/process.h>
+#include <sal/log.hxx>
 #include <stdio.h>
 
 namespace deployment = ::com::sun::star::deployment;

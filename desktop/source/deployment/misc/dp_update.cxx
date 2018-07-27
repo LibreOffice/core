@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

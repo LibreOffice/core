@@ -42,6 +42,7 @@
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
 #include <svtools/miscopt.hxx>
+#include <sal/log.hxx>
 
 namespace dbaui
 {

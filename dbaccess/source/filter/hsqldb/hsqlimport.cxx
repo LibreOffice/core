@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
