@@ -25,30 +25,12 @@
 
 class SdrGrafObj;
 
-namespace sdr { namespace event {
-    class AsynchGraphicLoadingEvent;
-}}
-
 namespace sdr
 {
     namespace contact
     {
         class ViewObjectContactOfGraphic final : public ViewObjectContactOfSdrObj
         {
-            // allow async loading event helper to call tooling methods
-            friend class sdr::event::AsynchGraphicLoadingEvent;
-
-            // Member which takes care for the asynch loading events which may be necessary
-            // for asynch graphics loading.
-            std::unique_ptr<sdr::event::AsynchGraphicLoadingEvent>  mpAsynchLoadEvent;
-
-            // async graphics loading helpers. Only to be used internally or from the
-            // event helper class (in .cxx file)
-            void impPrepareGraphicWithAsynchroniousLoading();
-            void impPrepareGraphicWithSynchroniousLoading();
-            void doAsynchGraphicLoading();
-            void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent const * pEvent);
-
             const SdrGrafObj& getSdrGrafObj() const;
             SdrGrafObj& getSdrGrafObj();
 

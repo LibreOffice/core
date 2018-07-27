@@ -153,7 +153,6 @@ public:
     // Keep ATM for SD.
     bool IsAnimated() const;
     bool IsEPS() const;
-    bool IsSwappedOut() const;
 
     MapMode          GetGrafPrefMapMode() const;
     Size             GetGrafPrefSize() const;

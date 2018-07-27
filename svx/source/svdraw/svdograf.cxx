@@ -548,12 +548,6 @@ bool SdrGrafObj::IsEPS() const
     return mpGraphicObject->IsEPS();
 }
 
-// TODO Remove
-bool SdrGrafObj::IsSwappedOut() const
-{
-    return false;
-}
-
 MapMode SdrGrafObj::GetGrafPrefMapMode() const
 {
     return mpGraphicObject->GetPrefMapMode();
