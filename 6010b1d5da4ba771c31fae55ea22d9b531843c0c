@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_fed23a34",
+        "filename": "cui/uiconfig/ui/numberingformatpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-07-27T12:36:20Z",
+      "side": 1,
+      "message": "Spelling: “seperator” → separator",
+      "range": {
+        "startLine": 396,
+        "startChar": 131,
+        "endLine": 396,
+        "endChar": 140
+      },
+      "revId": "6010b1d5da4ba771c31fae55ea22d9b531843c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
