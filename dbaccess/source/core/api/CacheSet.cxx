@@ -39,6 +39,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace comphelper;
 

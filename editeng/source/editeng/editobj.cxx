@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/svapp.hxx>

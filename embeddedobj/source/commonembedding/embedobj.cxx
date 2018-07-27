@@ -41,6 +41,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/lok.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 

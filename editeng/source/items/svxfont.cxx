@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
+#include <sal/log.hxx>
 
 SvxFont::SvxFont()
 {

@@ -78,6 +78,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <svx/fmsearch.hxx>
 #include <svx/svxdlg.hxx>

@@ -19,6 +19,7 @@
 
 #include <memory>
 #include "KeySet.hxx"
+#include <sal/log.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <com/sun/star/beans/XPropertySet.hpp>

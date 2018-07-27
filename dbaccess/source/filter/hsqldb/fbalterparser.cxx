@@ -19,6 +19,7 @@
 
 #include "fbalterparser.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 namespace dbahsql
 {

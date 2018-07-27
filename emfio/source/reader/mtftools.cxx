@@ -31,6 +31,7 @@
 #include <tools/fract.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>

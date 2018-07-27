@@ -116,6 +116,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/multisel.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>

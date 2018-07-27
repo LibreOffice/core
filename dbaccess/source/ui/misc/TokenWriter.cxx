@@ -22,6 +22,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <RtfReader.hxx>
 #include <HtmlReader.hxx>
 #include <stringconstants.hxx>

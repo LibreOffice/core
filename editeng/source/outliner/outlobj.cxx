@@ -30,6 +30,7 @@
 #include <editeng/editobj.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 #include <o3tl/cow_wrapper.hxx>
 #include <libxml/xmlwriter.h>

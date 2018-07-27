@@ -59,6 +59,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <svl/filenotation.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

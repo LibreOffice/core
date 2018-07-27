@@ -52,6 +52,7 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <tools/diagnose_ex.h>
 
+#include <sal/log.hxx>
 #include <svl/intitem.hxx>
 #include <svx/algitem.hxx>
 #include <tools/multisel.hxx>

@@ -27,6 +27,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <editeng/flditem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>

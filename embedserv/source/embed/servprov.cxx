@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

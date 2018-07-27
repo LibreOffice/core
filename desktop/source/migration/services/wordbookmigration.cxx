@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

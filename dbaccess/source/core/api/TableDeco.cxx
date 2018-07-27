@@ -25,6 +25,7 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>

@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 
 #include "impedit.hxx"
+#include <sal/log.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <edtspell.hxx>

@@ -73,6 +73,7 @@
 #include <svtools/rtftoken.h>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
+#include <sal/log.hxx>
 
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>

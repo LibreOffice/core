@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <dp_shared.hxx>
 #include <dp_package.hxx>
