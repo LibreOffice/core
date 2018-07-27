@@ -2004,7 +2004,6 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
     if (_rTableName.isEmpty())
         _rTableName = DBA_RES(RID_STR_TABLES_CONTAINER);
 
-    ImageProvider aImageProvider;
     if (!_rQueryImage)
         _rQueryImage = ImageProvider::getFolderImage( DatabaseObject::QUERY );
     if (!_rTableImage)
