@@ -59,7 +59,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
     OUString                m_sAddressListFilterName;
     OUString                m_sURL;
 
-    SwCSVData*              m_pCSVData;
+    std::unique_ptr<SwCSVData>     m_pCSVData;
     VclPtr<SwFindEntryDialog>      m_pFindDlg;
 
     DECL_LINK(NewHdl_Impl, Button*, void);
