@@ -34,6 +34,7 @@
 #include "eehtml.hxx"
 #include "editobj2.hxx"
 #include <i18nlangtag/lang.h>
+#include <sal/log.hxx>
 
 #include <editxml.hxx>
 

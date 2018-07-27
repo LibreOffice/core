@@ -30,6 +30,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <filter/msfilter/classids.hxx>
+#include <sal/log.hxx>
 
 #if defined(_WIN32)
 #include "olecomponent.hxx"

@@ -59,6 +59,7 @@
 #include <osl/file.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <typelib/typedescription.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>

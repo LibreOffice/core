@@ -30,6 +30,7 @@
 #include "grid.hxx"
 #include <math.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
 #include <strings.hrc>

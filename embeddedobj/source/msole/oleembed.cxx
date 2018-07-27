@@ -48,6 +48,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <sal/log.hxx>
 
 
 #include <targetstatecontrol.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/outliner.hxx>

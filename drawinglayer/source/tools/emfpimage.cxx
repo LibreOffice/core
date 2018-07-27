@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vcl/graphicfilter.hxx>
+#include <sal/log.hxx>
 #include "emfpimage.hxx"
 
 namespace emfplushelper

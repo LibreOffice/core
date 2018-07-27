@@ -51,6 +51,7 @@
 #include <editeng/brushitem.hxx>
 #include <svl/itempool.hxx>
 #include <libxml/xmlwriter.h>
+#include <sal/log.hxx>
 
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>

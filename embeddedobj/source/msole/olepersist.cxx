@@ -46,6 +46,7 @@
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 
 #include <closepreventer.hxx>
 

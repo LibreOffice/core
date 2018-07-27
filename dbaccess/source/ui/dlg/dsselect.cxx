@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
+#include <sal/log.hxx>
 
 namespace dbaui
 {

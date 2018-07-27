@@ -43,6 +43,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <editeng/memberids.h>
 #include <editeng/editids.hrc>
 #include <editeng/itemtype.hxx>

@@ -24,6 +24,7 @@
 #include <boost/optional.hpp>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <osl/endian.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>

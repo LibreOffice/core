@@ -44,6 +44,7 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

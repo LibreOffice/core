@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sot/storage.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

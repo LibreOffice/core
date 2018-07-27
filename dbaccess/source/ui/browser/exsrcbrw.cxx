@@ -32,6 +32,7 @@
 #include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;

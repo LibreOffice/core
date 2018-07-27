@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 
 namespace
 {

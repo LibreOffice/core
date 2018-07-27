@@ -74,6 +74,7 @@
 
 #include <svx/svxids.hrc>
 
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <helpids.h>
 #include <svl/itemset.hxx>

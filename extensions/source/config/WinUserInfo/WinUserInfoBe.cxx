@@ -19,6 +19,7 @@
 #include <map>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <sal/log.hxx>
 
 #include <Iads.h>
 #include <Adshlp.h>

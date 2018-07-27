@@ -53,6 +53,7 @@
 #include <algorithm>
 #include <functional>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 
 // !!! outside the namespace !!!

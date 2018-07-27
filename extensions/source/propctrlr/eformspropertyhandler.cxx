@@ -31,6 +31,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 
 #include <functional>
 

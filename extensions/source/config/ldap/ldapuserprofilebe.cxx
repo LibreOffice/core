@@ -25,6 +25,7 @@
 #include <osl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.h>
+#include <sal/log.hxx>
 
 #include <rtl/instance.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

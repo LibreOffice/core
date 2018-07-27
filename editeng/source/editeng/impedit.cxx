@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 
 #include "impedit.hxx"
+#include <sal/log.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>

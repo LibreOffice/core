@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
+#include <sal/log.hxx>
 
 
 namespace dbp

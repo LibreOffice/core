@@ -35,6 +35,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <vcl/stdtext.hxx>
 #include <unotools/charclass.hxx>
+#include <sal/log.hxx>
 
 #include <editeng/edtdlg.hxx>
 #include <editeng/unolingu.hxx>

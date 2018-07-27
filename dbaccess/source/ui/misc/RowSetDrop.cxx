@@ -21,6 +21,7 @@
 #include <TokenWriter.hxx>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <sal/log.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>

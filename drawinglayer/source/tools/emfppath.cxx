@@ -20,6 +20,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <sal/log.hxx>
 #include "emfppath.hxx"
 
 namespace emfplushelper

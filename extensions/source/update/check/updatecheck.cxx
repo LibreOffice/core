@@ -39,6 +39,7 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #ifdef _WIN32
 #include <objbase.h>

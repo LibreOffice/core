@@ -33,6 +33,7 @@
 #include <comphelper/types.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>
+#include <sal/log.hxx>
 #include "xmlEnums.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -27,6 +27,7 @@
 #include <svl/itempool.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;

@@ -40,6 +40,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;

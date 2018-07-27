@@ -19,6 +19,7 @@
 
 #include "ole2uno.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <osl/diagnose.h>

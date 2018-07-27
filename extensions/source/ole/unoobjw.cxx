@@ -56,6 +56,7 @@
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>

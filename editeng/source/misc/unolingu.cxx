@@ -51,6 +51,7 @@
 #include <editeng/editrids.hrc>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
+#include <sal/log.hxx>
 
 using namespace ::comphelper;
 using namespace ::linguistic;

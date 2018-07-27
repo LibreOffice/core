@@ -20,6 +20,7 @@
 #include "scanner.hxx"
 #include "sanedlg.hxx"
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <memory>
 

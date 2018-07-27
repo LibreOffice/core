@@ -62,6 +62,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>

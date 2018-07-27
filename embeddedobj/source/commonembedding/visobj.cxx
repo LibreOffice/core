@@ -26,6 +26,7 @@
 
 
 #include <commonembobj.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;

@@ -75,6 +75,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <memory>

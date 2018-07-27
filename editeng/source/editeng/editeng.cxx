@@ -74,6 +74,7 @@
 #include <linguistic/lngprops.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>

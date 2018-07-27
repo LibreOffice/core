@@ -24,6 +24,7 @@
 #include "linedescriptor.hxx"
 #include "inspectorhelpwindow.hxx"
 
+#include <sal/log.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>

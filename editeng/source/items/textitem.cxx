@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 #include <math.h>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>

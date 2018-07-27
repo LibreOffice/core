@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <vcl/errinf.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

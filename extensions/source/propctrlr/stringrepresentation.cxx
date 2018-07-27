@@ -36,6 +36,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <connectivity/dbconversion.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <strings.hrc>
 #include <yesno.hrc>
 #include "pcrservices.hxx"

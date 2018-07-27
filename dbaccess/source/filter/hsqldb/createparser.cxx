@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include "createparser.hxx"
 #include "utils.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>

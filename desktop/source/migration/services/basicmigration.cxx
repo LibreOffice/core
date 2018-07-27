@@ -21,6 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;
