@@ -1322,13 +1322,22 @@ void SwContentNode::DelFrames(bool /*removeme*/)
     SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
+        if (pFrame->IsTextFrame())
+        {
+            if (sw::MergedPara const* pMerged =
+                    static_cast<SwTextFrame const*>(pFrame)->GetMergedPara())
+            {
+                if (this != pMerged->pFirstNode)
+                {
+                    continue; // don't delete
+                }
+            }
+
         // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrame->IsTextFrame() )
-        {
             SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
