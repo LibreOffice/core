@@ -97,7 +97,11 @@ public:
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,
-        SdrModel* _pModel,
+
+        // tdf#118963 Need a SdrModel for SdrObject creation. To make the
+        // demand clear, hand over a SdrMldel&
+        SdrModel& _rModel,
+
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl
     );
