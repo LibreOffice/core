@@ -52,7 +52,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     VclPtr<ListBox>            m_pZoomLB;
 
-    SwOneExampleFrame*  m_pExampleFrame;
+    std::unique_ptr<SwOneExampleFrame> m_pExampleFrame;
     SwWrtShell*         m_pExampleWrtShell;
 
     OUString            m_sExampleURL;
