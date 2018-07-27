@@ -141,7 +141,7 @@ SwNumPositionTabPage::~SwNumPositionTabPage()
 
 void SwNumPositionTabPage::dispose()
 {
-    delete pActNum;
+    pActNum.reset();
     pOutlineDlg = nullptr;
     SfxTabPage::dispose();
 }
@@ -434,10 +434,10 @@ void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
     }
 
     if(!pActNum)
-        pActNum = new  SwNumRule(*pSaveNum);
+        pActNum.reset(new  SwNumRule(*pSaveNum));
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    m_aPreviewWIN.SetNumRule(pActNum);
+    m_aPreviewWIN.SetNumRule(pActNum.get());
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
     InitControls();
