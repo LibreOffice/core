@@ -662,6 +662,13 @@ const OUString DomainMapper_Impl::GetCurrentParaStyleName()
     if ( pParaContext && pParaContext->isSet(PROP_PARA_STYLE_NAME) )
         pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;
 
+    // In rare situations the name might still be blank, so use the default style,
+    // despite documentation that states, "If this attribute is not specified for any style,
+    // then no properties shall be applied to objects of the specified type."
+    // Word, however, assigns "Normal" style even in these situations.
+    if ( !m_bInStyleSheetImport && sName.isEmpty() )
+        sName = GetDefaultParaStyleName();
+
     return sName;
 }
 
