@@ -1893,16 +1893,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     {
         ret = xFilter->filter(aArgs);
     }
-    catch (const css::io::IOException&)
-    {
-    }
-    catch (const css::lang::IllegalArgumentException&)
-    {
-    }
-    catch (const css::lang::WrappedTargetRuntimeException&)
-    {
-    }
-    catch (const std::exception&)
+    catch (...)
     {
     }
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
