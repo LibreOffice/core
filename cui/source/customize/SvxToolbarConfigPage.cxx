@@ -73,7 +73,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
