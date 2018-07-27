@@ -56,6 +56,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
+#include <rootfrm.hxx>
 #include <docary.hxx>
 
 #include <cmdid.h>
@@ -280,7 +281,12 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
+                if (getenv("SW_REDLINEHIDE")) // TODO...
+                {
+                    rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
+                }
+                else
+                    rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
             }
             break;
             case SID_AVMEDIA_PLAYER :
