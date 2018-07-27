@@ -204,7 +204,12 @@ void SdrModel::ImpCtor(
 SdrModel::SdrModel(
     SfxItemPool* pPool,
     ::comphelper::IEmbeddedHelper* pPers)
-:   maMaPag(),
+:
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    maAllIncarnatedObjects(),
+#endif
+    maMaPag(),
     maPages()
 {
     ImpCtor(pPool,pPers);
@@ -227,6 +232,21 @@ SdrModel::~SdrModel()
     pCurrentUndoGroup.reset();
 
     ClearModel(true);
+
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    if(!maAllIncarnatedObjects.empty())
+    {
+        SAL_WARN("svx","SdrModel::~SdrModel: Not all incarnations of SdrObjects deleted, possible memory leak (!)");
+        // copy to std::vector - calling SdrObject::Free will change maAllIncarnatedObjects
+        const std::vector< const SdrObject* > maRemainingObjects(maAllIncarnatedObjects.begin(), maAllIncarnatedObjects.end());
+        for(auto pSdrObject : maRemainingObjects)
+        {
+            SdrObject* pCandidate(const_cast<SdrObject*>(pSdrObject));
+            SdrObject::Free(pCandidate);
+        }
+    }
+#endif
 
     pLayerAdmin.reset();
 
