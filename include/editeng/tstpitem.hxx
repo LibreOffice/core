@@ -77,14 +77,6 @@ public:
     bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
-    SvxTabStop&     operator=( const SvxTabStop& rTS )
-                        {
-                            nTabPos = rTS.nTabPos;
-                            eAdjustment = rTS.eAdjustment;
-                            m_cDecimal = rTS.m_cDecimal;
-                            cFill = rTS.cFill;
-                            return *this;
-                        }
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
