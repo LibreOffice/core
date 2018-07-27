@@ -108,6 +108,8 @@ namespace {
         Fraction    maScaleX;
         Fraction    maScaleY;
 
+        TriState meAntiAliasing = TRISTATE_INDET;
+
         explicit ExportSettings(const SdrModel* pSdrModel);
     };
 
@@ -584,6 +586,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                     if( pDataValues->Value >>= nVal )
                         rSettings.maScaleY = Fraction( rSettings.maScaleY.GetNumerator(), nVal );
                 }
+                else if (pDataValues->Name == "AntiAliasing")
+                {
+                    bool bAntiAliasing;
+                    if (pDataValues->Value >>= bAntiAliasing)
+                        rSettings.meAntiAliasing = bAntiAliasing ? TRISTATE_TRUE : TRISTATE_FALSE;
+                }
 
                 pDataValues++;
             }
@@ -1020,7 +1028,16 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     ErrCode nStatus = ERRCODE_NONE;
     if (!maGraphic)
+    {
+        SvtOptionsDrawinglayer aOptions;
+        bool bAntiAliasing = aOptions.IsAntiAliasing();
+        if (aSettings.meAntiAliasing != TRISTATE_INDET)
+            // This is safe to do globally as we own the solar mutex.
+            aOptions.SetAntiAliasing(aSettings.meAntiAliasing == TRISTATE_TRUE);
         nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
+        if (aSettings.meAntiAliasing != TRISTATE_INDET)
+            aOptions.SetAntiAliasing(bAntiAliasing);
+    }
 
     if( nStatus == ERRCODE_NONE )
     {
