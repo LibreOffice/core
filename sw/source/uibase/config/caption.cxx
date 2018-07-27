@@ -36,6 +36,4 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
         m_aOleId = *pOleId;
 }
 
-InsCaptionOpt::~InsCaptionOpt() = default;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

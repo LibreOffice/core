@@ -53,6 +53,12 @@ public:
     virtual size_t GetFormatCount() const = 0;
     virtual SwFormat* GetFormat(size_t idx) const = 0;
     virtual ~SwFormatsBase() {};
+
+    SwFormatsBase() = default;
+    SwFormatsBase(SwFormatsBase const &) = default;
+    SwFormatsBase(SwFormatsBase &&) = default;
+    SwFormatsBase & operator =(SwFormatsBase const &) = default;
+    SwFormatsBase & operator =(SwFormatsBase &&) = default;
 };
 
 template<typename Value>
