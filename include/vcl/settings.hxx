@@ -409,6 +409,9 @@ public:
     void                            SetUseSystemUIFonts( bool bUseSystemUIFonts );
     bool                            GetUseSystemUIFonts() const;
 
+    void SetUseFontAAFromSystem(bool bUseFontAAFromSystem);
+    bool GetUseFontAAFromSystem() const;
+
     void                            SetUseFlatBorders( bool bUseFlatBorders );
     bool                            GetUseFlatBorders() const;
 
