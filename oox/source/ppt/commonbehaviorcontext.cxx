@@ -19,6 +19,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <oox/core/fragmenthandler.hxx>
 #include <oox/helper/attributelist.hxx>

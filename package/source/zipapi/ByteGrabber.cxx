@@ -18,6 +18,7 @@
  */
 
 #include <ByteGrabber.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 

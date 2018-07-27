@@ -21,6 +21,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/multisel.hxx>
 
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

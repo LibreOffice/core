@@ -71,6 +71,7 @@
 #include <xfilter/xflist.hxx>
 #include <lwpglobalmgr.hxx>
 #include <xfilter/xflistitem.hxx>
+#include <sal/log.hxx>
 
 LwpBulletStyleMgr::LwpBulletStyleMgr()
     : m_pFoundry(nullptr)

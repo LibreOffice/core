@@ -25,6 +25,7 @@
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 namespace oox {
 namespace vml {

@@ -82,6 +82,7 @@
 #include <string.h>
 
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 #define EF_NONE 0x0000
 #define EF_ODMA 0x0002

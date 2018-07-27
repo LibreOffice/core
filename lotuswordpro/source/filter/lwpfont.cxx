@@ -60,6 +60,7 @@
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfdefs.hxx>
 #include <xfilter/xfcolor.hxx>
+#include <sal/log.hxx>
 
 void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 {

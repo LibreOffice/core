@@ -87,6 +87,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/wmf.hxx>
 

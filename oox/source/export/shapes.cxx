@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <config_global.h>
+#include <sal/log.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <filter/msfilter/util.hxx>
 #include <oox/core/xmlfilterbase.hxx>

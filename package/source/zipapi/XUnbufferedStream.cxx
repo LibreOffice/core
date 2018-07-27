@@ -31,6 +31,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <unotools/configmgr.hxx>
 

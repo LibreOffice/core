@@ -18,6 +18,7 @@
  */
 
 #include <drawingml/textliststyle.hxx>
+#include <sal/log.hxx>
 
 namespace oox { namespace drawingml {
 

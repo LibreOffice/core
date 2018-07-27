@@ -72,6 +72,7 @@
 #include "lwpdivinfo.hxx"
 #include "lwpgrfobj.hxx"
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)

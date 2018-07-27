@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>

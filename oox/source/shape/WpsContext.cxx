@@ -24,6 +24,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/shape.hxx>
+#include <sal/log.hxx>
 
 #include <boost/optional.hpp>
 

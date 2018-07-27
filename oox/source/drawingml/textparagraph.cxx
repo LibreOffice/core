@@ -23,6 +23,7 @@
 #include <svtools/unitconv.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <com/sun/star/text/XText.hpp>

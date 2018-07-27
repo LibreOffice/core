@@ -63,6 +63,7 @@
 #include <lwpfilehdr.hxx>
 #include "lwpholder.hxx"
 #include "lwppagehint.hxx"
+#include <sal/log.hxx>
 
 LwpDivInfo::LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)

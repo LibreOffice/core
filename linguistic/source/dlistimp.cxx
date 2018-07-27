@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
+#include <sal/log.hxx>
 
 #include "defs.hxx"
 #include "dlistimp.hxx"

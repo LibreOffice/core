@@ -9,6 +9,7 @@
 
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/sequence.hxx>
 

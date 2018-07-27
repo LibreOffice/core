@@ -32,6 +32,7 @@
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 

@@ -27,6 +27,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <tools/stream.hxx>
 #include <comphelper/sequenceashashmap.hxx>

@@ -28,6 +28,7 @@
 #include "xmlControlProperty.hxx"
 #include "xmlHelper.hxx"
 #include <unotools/pathoptions.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertymap.hxx>

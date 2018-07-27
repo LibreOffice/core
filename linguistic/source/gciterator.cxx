@@ -46,6 +46,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <cppuhelper/implementationentry.hxx>

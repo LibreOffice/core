@@ -94,6 +94,7 @@
 #include <lwpdocdata.hxx>
 #include "lwpnotes.hxx"
 #include "lwpverdocument.hxx"
+#include <sal/log.hxx>
 
 //LwpObjectFactory* LwpObjectFactory::m_pMgr = NULL;
 

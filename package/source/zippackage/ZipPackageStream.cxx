@@ -54,6 +54,7 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/random.h>
+#include <sal/log.hxx>
 
 #include <PackageConstants.hxx>
 

@@ -9,6 +9,7 @@
 
 #include <oox/token/relationship.hxx>
 
+#include <sal/log.hxx>
 #include <map>
 
 namespace oox {

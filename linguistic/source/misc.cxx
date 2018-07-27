@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>

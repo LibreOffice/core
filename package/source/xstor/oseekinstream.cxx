@@ -21,6 +21,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include "oseekinstream.hxx"
 #include "owriteablestream.hxx"

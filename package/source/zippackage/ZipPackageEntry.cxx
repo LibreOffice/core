@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>

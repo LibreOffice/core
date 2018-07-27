@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include "thesdsp.hxx"
 #include <linguistic/lngprops.hxx>

@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <osl/diagnose.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

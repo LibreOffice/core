@@ -64,6 +64,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 
 #include <cstring>

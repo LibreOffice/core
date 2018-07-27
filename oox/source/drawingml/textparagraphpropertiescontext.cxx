@@ -23,6 +23,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <svx/unopage.hxx>
+#include <sal/log.hxx>
 
 #include <drawingml/colorchoicecontext.hxx>
 #include <drawingml/textcharacterpropertiescontext.hxx>

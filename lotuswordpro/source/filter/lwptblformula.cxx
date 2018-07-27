@@ -66,6 +66,7 @@
 #include "lwptablelayout.hxx"
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <memory>
 
 LwpFormulaArg::~LwpFormulaArg()

@@ -29,6 +29,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/ole/axcontrol.hxx>
