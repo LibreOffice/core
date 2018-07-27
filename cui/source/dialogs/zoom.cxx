@@ -301,12 +301,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, ViewLayoutUserHdl, weld::ToggleButton&, void)
 {
     m_bModified = true;
 
-    if (m_xAutomaticBtn->get_active())
-    {
-        m_xColumnsEdit->set_sensitive(false);
-        m_xBookModeChk->set_sensitive(false);
-    }
-    else if (m_xSingleBtn->get_active())
+    if (m_xAutomaticBtn->get_active() || m_xSingleBtn->get_active())
     {
         m_xColumnsEdit->set_sensitive(false);
         m_xBookModeChk->set_sensitive(false);
