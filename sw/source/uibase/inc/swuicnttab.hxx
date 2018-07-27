@@ -190,7 +190,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     VclPtr<SvxLanguageBox> m_pLanguageLB;
     VclPtr<ListBox>        m_pSortAlgorithmLB;
 
-    IndexEntryResource* pIndexRes;
+    std::unique_ptr<IndexEntryResource> pIndexRes;
 
     OUString        aStyleArr[MAXLEVEL];
     OUString        sAutoMarkURL;
@@ -198,7 +198,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     OUString        sAddStyleUser;
     OUString        sAddStyleContent;
 
-    const IndexEntrySupplierWrapper* pIndexEntryWrapper;
+    std::unique_ptr<const IndexEntrySupplierWrapper> pIndexEntryWrapper;
 
     bool            m_bWaitingInitialSettings;
 
