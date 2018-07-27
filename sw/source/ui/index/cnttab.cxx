@@ -830,7 +830,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     get(m_pLanguageLB, "lang");
     get(m_pSortAlgorithmLB, "keytype");
 
-    pIndexEntryWrapper = new IndexEntrySupplierWrapper();
+    pIndexEntryWrapper.reset(new IndexEntrySupplierWrapper());
 
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
                                  false );
@@ -891,8 +891,8 @@ SwTOXSelectTabPage::~SwTOXSelectTabPage()
 
 void SwTOXSelectTabPage::dispose()
 {
-    delete pIndexRes;
-    delete pIndexEntryWrapper;
+    pIndexRes.reset();
+    pIndexEntryWrapper.reset();
     m_pTitleED.clear();
     m_pTypeFT.clear();
     m_pTypeLB.clear();
@@ -1430,7 +1430,7 @@ void SwTOXSelectTabPage::LanguageHdl( ListBox const * pBox )
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )
-        pIndexRes = new IndexEntryResource();
+        pIndexRes.reset(new IndexEntryResource());
 
     OUString sOldString;
     void* pUserData;
