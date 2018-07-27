@@ -460,7 +460,8 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
     // dynamic defaults
     const SfxItemPool& rPool = *rFormat.GetAttrSet().GetPool();
     for( n = nStt; n < nEnd; ++n )
-        aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetPoolDefaultItem( n );
+        aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetPoolDefaultItem( n )
+            || SfxItemState::SET == m_rExport.m_pDoc->GetDfltTextFormatColl()->GetItemState( n, false );
 
     // static defaults, that differs between WinWord and SO
     if( bPap )
