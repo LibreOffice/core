@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_1e74be34",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-27T14:21:14Z",
+      "side": 1,
+      "message": "include/osl/diagnose.h:33 says OSL_FAIL() is deprecated, so probably not a great idea to use in NEW code. :-)\n\nReplacements: SAL_WARN() if you just want to warn or assert() if you plan to actually fix all cases when this happens.",
+      "revId": "99ab9d4ea59c1bdc3161894607ccda5bb8010a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
