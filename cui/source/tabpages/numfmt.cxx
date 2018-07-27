@@ -269,6 +269,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     get(m_pIbRemove, "delete");
     get(m_pFtComment, "commentft");
     get(m_pEdComment, "commented");
+    get(m_pCbThinSpace, "thinspace");
 
     m_pLbCategory->SetDropDownLineCount(8);
     m_pWndPreview->set_height_request(GetTextHeight()*3);
@@ -306,6 +307,7 @@ void SvxNumberFormatTabPage::dispose()
     m_pFtLeadZeroes.clear();
     m_pEdLeadZeroes.clear();
     m_pBtnThousand.clear();
+    m_pCbThinSpace.clear();
     m_pBtnEngineering.clear();
     m_pFormatCodeFrame.clear();
     m_pEdFormat.clear();
@@ -352,6 +354,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pBtnThousand->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pBtnEngineering->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
+    m_pCbThinSpace->SetClickHdl( LINK(this, SvxNumberFormatTabPage,SelFormatClickHdl_Impl) );
     m_pLbFormat->SetDoubleClickHdl( HDL( DoubleClickHdl_Impl ) );
     m_pEdFormat->SetModifyHdl( HDL( EditModifyHdl_Impl ) );
     m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
@@ -673,6 +676,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_pEdLeadZeroes->Enable( bEnable );
     m_pBtnNegRed->Enable( bEnable );
     m_pBtnThousand->Enable( bEnable );
+    m_pCbThinSpace->Enable( bEnable );
     m_pBtnEngineering->Enable( bEnable );
     m_pFtOptions->Enable( bEnable );
     m_pFormatCodeFrame->Enable( bEnable );
@@ -979,6 +983,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pFtLeadZeroes->Enable();
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
+            m_pCbThinSpace->Enable();
             if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectedEntryPos() == 0 )
                 m_pEdDecimals->SetText( "" ); //General format tdf#44399
             else
@@ -1012,9 +1017,11 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pBtnNegRed->Disable();
             m_pBtnThousand->Disable();
             m_pBtnEngineering->Disable();
+            m_pCbThinSpace->Disable();
             m_pEdDecimals->SetText( OUString::number( 0 ) );
             m_pEdLeadZeroes->SetText( OUString::number( 0 ) );
             m_pBtnNegRed->Check( false );
+            m_pCbThinSpace->Check( false );
             m_pBtnThousand->Check( false );
             m_pBtnEngineering->Check( false );
     }
@@ -1236,6 +1243,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
             pLb = m_pLbFormat;   // continue with the current format selected
     }
 
+    pNumFmtShell->SetThinSpace( m_pCbThinSpace->IsChecked() );
     sal_Int32 nTmpCatPos;
 
     if(bOneAreaFlag)
@@ -1303,7 +1311,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
 
     // category-ListBox -------------------------------------------------
-    if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
+    if (pLb == m_pLbCategory || pLb == m_pLbCurrency || pLb == m_pCbThinSpace)
     {
         UpdateFormatListBox_Impl( true, true );
         EditHdl_Impl( nullptr );

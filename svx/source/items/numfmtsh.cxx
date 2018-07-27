@@ -97,6 +97,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos(sal_uInt16(SELPOS_NONE))
     , bUseStarFormat  (false)
+    , bThinSpace      (true)
     , bIsDefaultValNum (true)
 {
     nValNum = 0;
@@ -134,6 +135,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos(sal_uInt16(SELPOS_NONE))
     , bUseStarFormat  (false)
+    , bThinSpace      (true)
     , bIsDefaultValNum (false)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
@@ -244,6 +246,8 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
             }
         }
     }
+    if(bThinSpace)
+        SwitchThou(rPreviewStr,true);
 }
 
 
@@ -406,8 +410,24 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
                                        sal_uInt16&      rLeadingZeroes,
                                        sal_uInt16&      rCatLbPos )
 {
+    sal_uInt32 nFmtKey;
+    sal_uInt16 nPos;
+    OUString rFormatCopy;
+    bool bTestBanking = false;
 
-    sal_uInt32 nFmtKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
+    if(bThinSpace)
+    {
+        rFormatCopy = rFormat;
+        SwitchThou(rFormatCopy,false);
+        nFmtKey = pFormatter->GetEntryKey( rFormatCopy, eCurLanguage );
+        nPos=FindCurrencyTableEntry(rFormatCopy, bTestBanking );
+
+    }
+    else
+    {
+        nFmtKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
+        nPos=FindCurrencyTableEntry(rFormat, bTestBanking );
+    }
 
     if(nFmtKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
@@ -419,12 +439,12 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
     }
     else
     {
-        bool bTestBanking = false;
-        sal_uInt16 nPos=FindCurrencyTableEntry(rFormat, bTestBanking );
 
-        if(IsInTable(nPos,bTestBanking,rFormat) &&
+        if((IsInTable(nPos,bTestBanking,rFormat) &&
             pFormatter->GetFormatSpecialInfo( rFormat,rThousand, rNegRed,
-                                  rPrecision, rLeadingZeroes,eCurLanguage)==0)
+                                  rPrecision, rLeadingZeroes,eCurLanguage)==0) || (IsInTable(nPos,bTestBanking,rFormatCopy) &&
+            pFormatter->GetFormatSpecialInfo( rFormatCopy,rThousand, rNegRed,
+                                  rPrecision, rLeadingZeroes,eCurLanguage)==0))
         {
             rCatLbPos = CAT_CURRENCY;
         }
@@ -471,8 +491,11 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
 }
 
 
-bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
+bool SvxNumberFormatShell::IsUserDefined( OUString& rFmtString )
 {
+    if(bThinSpace)
+        SwitchThou(rFmtString,false);
+
     sal_uInt32 nFound = pFormatter->GetEntryKey( rFmtString, eCurLanguage );
 
     bool bFlag=false;
@@ -499,7 +522,16 @@ bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
 bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
     bool bRes=false;
-    sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
+    sal_uInt32 nFound;
+    if(bThinSpace)
+    {
+        OUString rFmtStringCopy = rFmtString;
+        SwitchThou(rFmtStringCopy,false);
+        nFound = pFormatter->TestNewString( rFmtStringCopy, eCurLanguage );
+
+    }
+    else
+        nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
 
     if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
@@ -522,7 +554,6 @@ bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pA
 
     return bRes;
 }
-
 
 void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             LanguageType& rLangType,
@@ -660,7 +691,43 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
         }
     }
 }
+void SvxNumberFormatShell::UpdateSeparatorString( OUString& io_rText,
+                                       const OUString& rOldThSep, const OUString& rNewThSep )
+{
 
+
+    OUStringBuffer aBuf( io_rText.getLength() );
+    sal_Int32 nIndexTh = 0, nIndex = 0;
+    const sal_Unicode* pBuffer = io_rText.getStr();
+    while( nIndex != -1 )
+    {
+        nIndexTh = io_rText.indexOf( rOldThSep, nIndex );
+        if( nIndexTh != -1 )
+        {
+            aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
+            aBuf.append( rNewThSep );
+            nIndex = nIndexTh + rOldThSep.getLength();
+        }
+        else
+        {
+            aBuf.append( pBuffer + nIndex );
+            nIndex = -1;
+        }
+    }
+
+    io_rText = aBuf.makeStringAndClear();
+}
+
+void SvxNumberFormatShell::SwitchThou( OUString& io_rText, bool switchToThin)
+{
+    const OUString& thinSpace = OUString::fromUtf8("\u2009");
+    const OUString& curNumThouSep = pFormatter->GetNumThousandSep();
+    if(switchToThin)
+        UpdateSeparatorString(io_rText,curNumThouSep,thinSpace);
+    else
+        UpdateSeparatorString(io_rText, thinSpace, curNumThouSep);
+
+}
 short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rList,
                                                        short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
@@ -694,6 +761,8 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
             nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
+        if(bThinSpace)
+            SwitchThou(aNewFormNInfo,true);
         rList.push_back( aNewFormNInfo );
         aCurEntryList.push_back( nNFEntry );
     }
@@ -798,7 +867,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
         {
             nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
-
+        if(bThinSpace)
+            SwitchThou(aNewFormNInfo,true);
         rList.push_back( aNewFormNInfo );
         aCurEntryList.push_back( nNFEntry );
     }
@@ -833,6 +903,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
 
                     if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.size();
+                    if(bThinSpace)
+                        SwitchThou(aNewFormNInfo,true);
                     rList.push_back( aNewFormNInfo );
                     aCurEntryList.push_back( nKey );
                 }
@@ -943,6 +1015,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
                 if(bInsFlag)
                 {
+                    if(bThinSpace)
+                        SwitchThou(aNewFormNInfo,true);
                     aList.push_back( aNewFormNInfo );
                     aKeyList.push_back( nKey );
                 }
@@ -1070,6 +1144,8 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
                 if(bFlag)
                 {
                     if ( nKey == nCurFormatKey ) nSelPos = aCurEntryList.size();
+                    if(bThinSpace)
+                        SwitchThou(aNewFormNInfo,true);
                     rList.push_back( aNewFormNInfo );
                     aCurEntryList.push_back( nKey );
                 }
@@ -1278,10 +1354,16 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     if(nEntry < 0)
         return OUString();
 
+    OUString sFormatString;
     if( !aCurrencyFormatList.empty() )
     {
         if( aCurrencyFormatList.size() > static_cast<size_t>(nEntry) )
-            return aCurrencyFormatList[nEntry];
+        {
+            sFormatString = aCurrencyFormatList[nEntry];
+            if(bThinSpace)
+                SwitchThou(sFormatString,true);
+            return (sFormatString);
+        }
     }
     else
     {
@@ -1289,7 +1371,12 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
         const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=nullptr)
-            return pNumEntry->GetFormatstring();
+        {
+            sFormatString = pNumEntry->GetFormatstring();
+            if(bThinSpace)
+                SwitchThou(sFormatString,true);
+            return (sFormatString);
+        }
     }
     return OUString();
 }

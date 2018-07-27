@@ -102,6 +102,7 @@ private:
     VclPtr<FixedText>              m_pFtLeadZeroes;
     VclPtr<NumericField>           m_pEdLeadZeroes;
     VclPtr<CheckBox>               m_pBtnThousand;
+    VclPtr<CheckBox>               m_pCbThinSpace;
     VclPtr<CheckBox>               m_pBtnEngineering;
 
     VclPtr<VclContainer>           m_pFormatCodeFrame;

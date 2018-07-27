@@ -139,7 +139,7 @@ public:
                                                Color*& rpFontColor,
                                                double  nValue);
 
-    bool                IsUserDefined( const OUString& rFmtString );
+    bool                IsUserDefined( OUString& rFmtString );
     bool                IsTmpCurrencyFormat( const OUString& rFmtString );
     bool                FindEntry( const OUString& rFmtString, sal_uInt32* pAt = nullptr );
 
@@ -157,10 +157,13 @@ public:
 
     OUString            GetComment4Entry(short nEntry);
     short               GetCategory4Entry(short nEntry) const;
+    void                SwitchThou(OUString& io_rText, bool switchToThin);
+    void                UpdateSeparatorString(OUString& io_rText, const OUString& rOldThSep, const OUString& rNewThSep);
     bool                GetUserDefined4Entry(short nEntry);
     OUString            GetFormat4Entry(short nEntry);
     void                SetComment4Entry(short nEntry, const OUString& aCommentString);
 
+    void                SetThinSpace(bool ThinSpace) {bThinSpace = ThinSpace;}
     void                SetCurrencySymbol(sal_uInt32 nPos);
     sal_uInt32          GetCurrencySymbol() { return nCurCurrencyEntryPos;}
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
@@ -195,6 +198,7 @@ private:
     sal_uInt32              nCurCurrencyEntryPos;
     std::vector<OUString>   aCurrencyFormatList;
     bool                    bUseStarFormat;
+    bool                    bThinSpace;
     bool                    bIsDefaultValNum;
 
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<OUString>& rList );
