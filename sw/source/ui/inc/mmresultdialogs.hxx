@@ -179,7 +179,7 @@ class SwSendMailDialog : public Dialog
     bool                    m_bCancel;
     bool                    m_bDestructionEnabled;
 
-    SwSendMailDialog_Impl*  m_pImpl;
+    std::unique_ptr<SwSendMailDialog_Impl> m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
     sal_Int32               m_nExpectedCount;
     sal_Int32               m_nSendCount;

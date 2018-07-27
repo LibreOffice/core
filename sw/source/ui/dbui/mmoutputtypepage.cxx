@@ -309,7 +309,7 @@ void SwSendMailDialog::dispose()
         {
         }
     }
-    delete m_pImpl;
+    m_pImpl.reset();
     m_pStatus.disposeAndClear();
     m_pTransferStatus.clear();
     m_pPaused.clear();
