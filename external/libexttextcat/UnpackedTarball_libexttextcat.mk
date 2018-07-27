@@ -13,4 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libexttextcat,$(LIBEXTTEXTCAT_TARBA
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libexttextcat))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libexttextcat,0))
+
+# Work around <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86196> "[9 Regression] Bogus -Wrestrict
+# on memcpy between array elements at unequal indices":
+$(eval $(call gb_UnpackedTarball_add_patches,libexttextcat, \
+    external/libexttextcat/gcc9.patch \
+))
+
 # vim: set noet sw=4 ts=4:
