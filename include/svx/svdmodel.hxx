@@ -49,6 +49,11 @@ class OutputDevice;
 #include <rtl/ref.hxx>
 #include <deque>
 
+#ifdef DBG_UTIL
+// SdrObjectLifetimeWatchDog
+#include <unordered_set>
+#endif
+
 #define DEGREE_CHAR u'\x00B0'   /* U+00B0 DEGREE SIGN */
 
 class SdrOutliner;
@@ -152,6 +157,29 @@ struct SdrModelImpl;
 
 class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public virtual tools::WeakBase
 {
+private:
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    // Use maAllIncarnatedObjects to keep track of all SdrObjects incarnated using this SdrModel
+    // (what is now possible after the paradigm change that a SdrObject stays at a single SdrModel
+    // for it's whole lifetime).
+    // The two methods are exclusive, debug-only, only-accessible-by SdrObject accesses to else
+    // hidden/non-existing maAllIncarnatedObjects.
+    // SdrObject::SdrObject uses impAddIncarnatedSdrObjectToSdrModel, while SdrObject::~SdrObject
+    // uses impRemoveIncarnatedSdrObjectToSdrModel.
+    // There are two places which may trigger OSL_FAIL warnings:
+    // - impRemoveIncarnatedSdrObjectToSdrModel when the to-be-removed SdrObject is not member of SdrModel
+    // - SdrModel::~SdrModel after all SdrObjects *should* be cleaned-up.
+    // SdrModel::~SdrModel will also - for convenience - Free the non-deleted SdrObjects if there
+    // are any.
+    // Using std::unordered_set will use quasi constant access times, so this watchdog will not
+    // be expensive. Nonetheless, only use with debug code. It may be seductive to use this in
+    // product code, too, especially if it will indeed trigger - but it's intention is clearly
+    // to find/identify MemoryLeaks caused by SdrObjects
+    friend void impAddIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel);
+    friend void impRemoveIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel);
+    std::unordered_set< const SdrObject* >  maAllIncarnatedObjects;
+#endif
 protected:
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;

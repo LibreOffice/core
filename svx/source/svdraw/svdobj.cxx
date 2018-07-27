@@ -332,6 +332,20 @@ void SdrObject::SetBoundRectDirty()
     aOutRect = tools::Rectangle();
 }
 
+#ifdef DBG_UTIL
+// SdrObjectLifetimeWatchDog:
+void impAddIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel)
+{
+    rSdrModel.maAllIncarnatedObjects.insert(&rSdrObject);
+}
+void impRemoveIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrModel& rSdrModel)
+{
+    if(!rSdrModel.maAllIncarnatedObjects.erase(&rSdrObject))
+    {
+        SAL_WARN("svx","SdrObject::~SdrObject: Destructed incarnation of SdrObject not member of this SdrModel (!)");
+    }
+}
+#endif
 
 SdrObject::SdrObject(SdrModel& rSdrModel)
 :   mpFillGeometryDefiningShape(nullptr)
@@ -372,6 +386,10 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     bIs3DObj=false;
     bMarkProt=false;
     bIsUnoObj=false;
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
+#endif
 }
 
 SdrObject::~SdrObject()
@@ -396,6 +414,11 @@ SdrObject::~SdrObject()
     pGrabBagItem.reset();
     mpProperties.reset();
     mpViewContact.reset();
+
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    impRemoveIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
+#endif
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
