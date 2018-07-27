@@ -387,6 +387,9 @@ $(call gb_Library_get_target,$(1)) \
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 	$(call gb_Library_get_target,$(1)).$(gb_UDK_MAJOR)
 endif
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += \
+	$(patsubst %.dylib,%.jnilib,$(call gb_Library_get_target,$(1)))
 
 endef
 
