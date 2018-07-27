@@ -7,7 +7,7 @@ This directory uses the PEP 8 (see
 Please run
 
 ----
-pep8 *.py
+pycodestyle *.py
 ----
 
 before committing.

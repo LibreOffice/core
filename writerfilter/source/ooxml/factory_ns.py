@@ -67,6 +67,7 @@ protected:
 }}
 #endif //INCLUDED_OOXML_FACTORY_%s_HXX""" % nsToken.upper())
 
+
 modelPath = sys.argv[1]
 filePath = sys.argv[2]
 model = minidom.parse(modelPath)

@@ -46,6 +46,7 @@ void QNameToString::init()
                         print("""    mMap[NS_ooxml::LN_%s] = "ooxml:%s";""" % (token, token))
                         self.tokens.append(token)
 
+
 parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
 parser.parse(sys.argv[1])
