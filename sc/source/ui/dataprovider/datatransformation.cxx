@@ -12,8 +12,11 @@
 #include <document.hxx>
 #include <rtl/math.hxx>
 #include <cmath>
+#include<ctime>
 
 namespace sc {
+
+std::tm getDateTime(double nDateTime);
 
 DataTransformation::~DataTransformation()
 {
@@ -696,6 +699,212 @@ OUString ReplaceNullTransformation::getReplaceString() const
 TransformationType ReplaceNullTransformation::getTransformationType() const
 {
      return TransformationType::REMOVE_NULL_TRANSFORMATION;
+}
+
+
+DateTimeTransformation::DateTimeTransformation(const std::set<SCCOL> nCol,const DATETIME_TRANSFORMATION_TYPE rType):
+    mnCol(nCol),
+    maType(rType)
+{
+}
+
+void DateTimeTransformation::Transform(ScDocument& rDoc) const
+{
+    SCROW nEndRow = 0;
+    for(auto& rCol : mnCol)
+    {
+        nEndRow = getLastRow(rDoc, rCol);
+    }
+
+    for(auto& rCol : mnCol)
+    {
+        switch (maType)
+        {
+            case DATETIME_TRANSFORMATION_TYPE::DATE_STRING:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        OUString sDate = OUString::createFromAscii(std::asctime(&aDate));
+                        rDoc.SetString(rCol, nRow, 0, sDate);
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::YEAR:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        rDoc.SetValue(rCol, nRow, 0, aDate.tm_year);
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        rDoc.SetString(rCol, nRow, 0, OUString("01-01-").concat(OUString::number(aDate.tm_year)));
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        rDoc.SetString(rCol, nRow, 0, OUString("31-12-").concat(OUString::number(aDate.tm_year)));
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::MONTH:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        rDoc.SetValue(rCol, nRow, 0, aDate.tm_mon);
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::NOMTH_NAME:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        OUString aMonths[] = {"January", "February", "March", "April", "May",
+                       "June", "July", "August", "September", "October", "November", "December"};
+
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+                        rDoc.SetString(rCol, nRow, 0, aMonths[aDate.tm_mon-1]);
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::DAY:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::QUARTER:
+            {
+                for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+                {
+                    CellType eType;
+                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    if (eType == CELLTYPE_VALUE)
+                    {
+                        double nVal = rDoc.GetValue(rCol, nRow, 0);
+                        std::tm aDate = getDateTime(nVal);
+
+                        int nMonth = aDate.tm_mon;
+
+                        if(nMonth >= 1 && nMonth <=3)
+                            rDoc.SetValue(rCol, nRow, 0, 1);
+
+                        else if(nMonth >= 4 && nMonth <=6)
+                            rDoc.SetValue(rCol, nRow, 0, 2);
+
+                        else if(nMonth >= 7 && nMonth <=9)
+                            rDoc.SetValue(rCol, nRow, 0, 3);
+
+                        else if(nMonth >= 10 && nMonth <=12)
+                            rDoc.SetValue(rCol, nRow, 0, 4);
+                        else
+                            rDoc.SetValue(rCol, nRow, 0, -1);
+
+                    }
+                }
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER:
+            {
+            }
+            break;
+            case DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER:
+            {
+            }
+            break;
+            default:
+            break;
+        }
+    }
+}
+
+TransformationType DateTimeTransformation::getTransformationType() const
+{
+    return TransformationType::DATETIME_TRANSFORMATION;
+}
+
+DATETIME_TRANSFORMATION_TYPE DateTimeTransformation::getDateTimeTransfromationType() const
+{
+    return maType;
+}
+
+std::set<SCCOL>DateTimeTransformation::getColumn() const
+{
+    return mnCol;
+}
+
+std::tm getDateTime(double nDateTime)
+{
+    long nDays = std::trunc(nDateTime);
+    std::tm aDate = {};
+    aDate.tm_year = 0;
+    aDate.tm_mon  = 0;
+    aDate.tm_mday = 0;
+    // Add number of days
+    aDate.tm_mday += nDays;
+    std::mktime(&aDate);
+    return aDate;
 }
 }
 
