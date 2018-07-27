@@ -437,12 +437,14 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
         for ( ; nEndIndex < pStartHints->Count(); ++nEndIndex)
         {
             SwTextAttr *const pAttr(pStartHints->GetSortedByEnd(nEndIndex));
+            if (!pAttr->End())
+            {
+                continue;
+            }
             if (nRedlineEnd < *pAttr->End())
             {
                 break;
             }
-            if (!pAttr->End())
-                continue;
             if (pRLStart->nContent.GetIndex() <= pAttr->GetStart())
             {
                 continue;
