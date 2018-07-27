@@ -497,7 +497,7 @@ SwCreateAddressListDialog::~SwCreateAddressListDialog()
 
 void SwCreateAddressListDialog::dispose()
 {
-    delete m_pCSVData;
+    m_pCSVData.reset();
     m_pAddressControl.clear();
     m_pNewPB.clear();
     m_pDeletePB.clear();
@@ -570,8 +570,7 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
     VclPtrInstance< SwCustomizeAddressListDialog > pDlg(pButton, *m_pCSVData);
     if(RET_OK == pDlg->Execute())
     {
-        delete m_pCSVData;
-        m_pCSVData = pDlg->GetNewData();
+        m_pCSVData = pDlg->ReleaseNewData();
         m_pAddressControl->SetData(*m_pCSVData);
         m_pAddressControl->SetCurrentDataSet(m_pAddressControl->GetCurrentDataSet());
     }
