@@ -969,6 +969,23 @@ TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
     return MapModelToView(pNode, nIndex);
 }
 
+void SwTextFrame::SetMergedPara(std::unique_ptr<sw::MergedPara> p)
+{
+    SwTextNode *const pFirst(m_pMergedPara ? m_pMergedPara->pFirstNode : nullptr);
+    m_pMergedPara = std::move(p);
+    if (pFirst)
+    {
+        if (m_pMergedPara)
+        {
+            assert(pFirst == m_pMergedPara->pFirstNode);
+        }
+        else
+        {
+            pFirst->Add(this); // must register at node again
+        }
+    }
+}
+
 const OUString& SwTextFrame::GetText() const
 {
 //nope    assert(GetPara());
