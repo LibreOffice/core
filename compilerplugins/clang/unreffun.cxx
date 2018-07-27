@@ -51,6 +51,19 @@ Decl const * getPreviousNonFriendDecl(Decl const * decl) {
     }
 }
 
+bool isSpecialMemberFunction(FunctionDecl const * decl) {
+    if (auto const ctor = dyn_cast<CXXConstructorDecl>(decl)) {
+        return ctor->isDefaultConstructor() || ctor->isCopyOrMoveConstructor();
+    }
+    if (isa<CXXDestructorDecl>(decl)) {
+        return true;
+    }
+    if (auto const meth = dyn_cast<CXXMethodDecl>(decl)) {
+        return meth->isCopyAssignmentOperator() || meth->isMoveAssignmentOperator();
+    }
+    return false;
+}
+
 class UnrefFun: public RecursiveASTVisitor<UnrefFun>, public loplugin::Plugin {
 public:
     explicit UnrefFun(loplugin::InstantiationData const & data): Plugin(data) {}
@@ -139,6 +152,14 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
                 diag::warn_unused_function, decl->getLocation())
             < DiagnosticsEngine::Warning))
     {
+        return true;
+    }
+    if (canon->isExplicitlyDefaulted() && isSpecialMemberFunction(canon)) {
+        // If a special member function is explicitly defaulted on the first declaration, assume
+        // that its presence is always due to some interface design consideration, not to explicitly
+        // request a definition that might be worth to flag as unused (and C++20 may extend
+        // defaultability beyond special member functions to comparison operators, therefore
+        // explicitly check here for special member functions only):
         return true;
     }
     LinkageInfo info(canon->getLinkageAndVisibility());
