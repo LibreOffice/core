@@ -92,34 +92,25 @@ public:
 
 struct SvXMLNumberInfo
 {
-    sal_Int32   nDecimals;
-    sal_Int32   nInteger;
-    sal_Int32   nExpDigits;
-    sal_Int32   nExpInterval;
-    sal_Int32   nMinNumerDigits;
-    sal_Int32   nMinDenomDigits;
-    sal_Int32   nMaxNumerDigits;
-    sal_Int32   nMaxDenomDigits;
-    sal_Int32   nFracDenominator;
-    sal_Int32   nMinDecimalDigits;
-    sal_Int32   nZerosNumerDigits;
-    sal_Int32   nZerosDenomDigits;
-    bool        bGrouping;
-    bool        bDecReplace;
-    bool        bExpSign;
-    bool        bDecAlign;
-    double      fDisplayFactor;
+    sal_Int32   nDecimals           = -1;
+    sal_Int32   nInteger            = -1;
+    sal_Int32   nExpDigits          = -1;
+    sal_Int32   nExpInterval        = -1;
+    sal_Int32   nMinNumerDigits     = -1;
+    sal_Int32   nMinDenomDigits     = -1;
+    sal_Int32   nMaxNumerDigits     = -1;
+    sal_Int32   nMaxDenomDigits     = -1;
+    sal_Int32   nFracDenominator    = -1;
+    sal_Int32   nMinDecimalDigits   = -1;
+    sal_Int32   nZerosNumerDigits   = -1;
+    sal_Int32   nZerosDenomDigits   = -1;
+    bool        bGrouping           = false;
+    bool        bDecReplace         = false;
+    bool        bExpSign            = true;
+    bool        bDecAlign           = false;
+    double      fDisplayFactor      = 1.0;
     OUString    aIntegerFractionDelimiter;
     std::map<sal_Int32, OUString> m_EmbeddedElements;
-
-    SvXMLNumberInfo()
-    {
-        nDecimals = nInteger = nExpDigits = nExpInterval = nMinNumerDigits = nMinDenomDigits = nMaxNumerDigits = nMaxDenomDigits =
-            nFracDenominator = nMinDecimalDigits = nZerosNumerDigits = nZerosDenomDigits = -1;
-        bGrouping = bDecReplace = bDecAlign = false;
-        bExpSign = true;
-        fDisplayFactor = 1.0;
-    }
 };
 
 class SvXMLNumFmtElementContext : public SvXMLImportContext
