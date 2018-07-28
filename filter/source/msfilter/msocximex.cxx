@@ -105,8 +105,7 @@ const uno::Reference< container::XIndexContainer >&
 
             while( xNameCont->hasByName( sName ) )
             {
-                sName = sWW8_form;
-                sName += OUString::number( ++n );
+                sName = sWW8_form + OUString::number( ++n );
             }
 
             const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory
