@@ -501,7 +501,7 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
                         ? "MDCLXVI--"   // +2 Dummy entries!
                         : "mdclxvi--";  // +2 Dummy entries!
 
-    OUString sRet;
+    OUStringBuffer sRet;
     sal_uInt16 nMask = 1000;
     while( nMask )
     {
@@ -512,30 +512,30 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
         if( 5 < nNumber )
         {
             if( nNumber < 9 )
-                sRet += OUString(*(cRomanArr-1));
+                sRet.append(*(cRomanArr-1));
             ++nDiff;
             nNumber -= 5;
         }
         switch( nNumber )
         {
-        case 3:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
-        case 2:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
-        case 1:     { sRet += OUString(*cRomanArr); }
+        case 3:     { sRet.append(*cRomanArr); SAL_FALLTHROUGH; }
+        case 2:     { sRet.append(*cRomanArr); SAL_FALLTHROUGH; }
+        case 1:     { sRet.append(*cRomanArr); }
                     break;
 
         case 4:     {
-                        sRet += OUString(*cRomanArr);
-                        sRet += OUString(*(cRomanArr-nDiff));
+                        sRet.append(*cRomanArr);
+                        sRet.append(*(cRomanArr-nDiff));
                     }
                     break;
-        case 5:     { sRet += OUString(*(cRomanArr-nDiff)); }
+        case 5:     { sRet.append(*(cRomanArr-nDiff)); }
                     break;
         }
 
         nMask /= 10;            // for the next decade
         cRomanArr += 2;
     }
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 OUString SvxNumberFormat::GetCharFormatName()const
@@ -812,10 +812,11 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
 
 OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
 {
-    OUString aStr;
+    OUStringBuffer aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
     {
         const SvxNumberFormat& rMyNFmt = GetLevel( rNum.GetLevel() );
+        aStr.append(rMyNFmt.GetPrefix());
         if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
         {
             sal_uInt8 i = rNum.GetLevel();
@@ -847,21 +848,21 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
                     if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
                     {
                         const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
-                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], rLang.getLocale()  );
+                        aStr.append(rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], rLang.getLocale()  ));
                     }
                     else
                         bDot = false;
                 }
                 else
-                    aStr += "0";       // all 0-levels are a 0
+                    aStr.append("0");       // all 0-levels are a 0
                 if( i != rNum.GetLevel() && bDot)
-                    aStr += ".";
+                    aStr.append(".");
             }
         }
 
-        aStr = rMyNFmt.GetPrefix() + aStr + rMyNFmt.GetSuffix();
+        aStr.append(rMyNFmt.GetSuffix());
     }
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 // changes linked to embedded bitmaps

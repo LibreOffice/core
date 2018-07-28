@@ -1633,7 +1633,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
     DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
 
     sal_Int32 nIndex = nStartPos;
-    OUString aStr;
+    OUStringBuffer aStr;
     const EditCharAttrib* pNextFeature = GetCharAttribs().FindFeature( nIndex );
     while ( nIndex < nEndPos )
     {
@@ -1646,18 +1646,18 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
         DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
         //!! beware of sub string length  of -1
         if (nEnd > nIndex)
-            aStr += GetString().copy(nIndex, nEnd - nIndex);
+            aStr.append( GetString().copy(nIndex, nEnd - nIndex) );
 
         if ( pNextFeature )
         {
             switch ( pNextFeature->GetItem()->Which() )
             {
-                case EE_FEATURE_TAB:    aStr += "\t";
+                case EE_FEATURE_TAB:    aStr.append( "\t" );
                 break;
-                case EE_FEATURE_LINEBR: aStr += "\x0A";
+                case EE_FEATURE_LINEBR: aStr.append( "\x0A" );
                 break;
                 case EE_FEATURE_FIELD:
-                    aStr += static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
+                    aStr.append( static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue() );
                 break;
                 default:    OSL_FAIL( "What feature?" );
             }
@@ -1665,7 +1665,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
         }
         nIndex = nEnd;
     }
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )

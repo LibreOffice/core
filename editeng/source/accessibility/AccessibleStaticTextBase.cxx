@@ -655,11 +655,11 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         sal_Int32 i, nParas;
-        OUString aRes;
+        OUStringBuffer aRes;
         for( i=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
-            aRes += mpImpl->GetParagraph(i).getText();
+            aRes.append(mpImpl->GetParagraph(i).getText());
 
-        return aRes;
+        return aRes.makeStringAndClear();
     }
 
     OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -697,7 +697,7 @@ namespace accessibility
         {
             nEndIndex++;
         }
-        OUString aRes;
+        OUStringBuffer aRes;
         EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
         EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
 
@@ -717,8 +717,8 @@ namespace accessibility
             // paragraphs inbetween are fully included
             for( ; i<aEndIndex.nPara; ++i )
             {
-                aRes += OUStringLiteral1(cNewLine);
-                aRes += mpImpl->GetParagraph(i).getText();
+                aRes.append(cNewLine);
+                aRes.append(mpImpl->GetParagraph(i).getText());
             }
 
             if( i<=aEndIndex.nPara )
@@ -727,22 +727,22 @@ namespace accessibility
                 //we need to add a "\n" before we add the last part of the string.
                 if ( !bEnd && aEndIndex.nIndex )
                 {
-                    aRes += OUStringLiteral1(cNewLine);
+                    aRes.append(cNewLine);
                 }
-                aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
+                aRes.append(mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex ));
             }
         }
         //According to the flag we marked before, we have to add "\n" at the beginning
         //or at the end of the result string.
         if ( bStart )
         {
-            aRes = OUStringLiteral1(cNewLine) + aRes;
+            aRes.insert(0, OUStringLiteral1(cNewLine));
         }
         if ( bEnd )
         {
-            aRes += OUStringLiteral1(cNewLine);
+            aRes.append(OUStringLiteral1(cNewLine));
         }
-        return aRes;
+        return aRes.makeStringAndClear();
     }
 
     css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
