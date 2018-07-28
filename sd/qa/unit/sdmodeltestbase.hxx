@@ -66,19 +66,19 @@ struct FileFormat
 Taken from filter/source/config/fragments/filters/ too:
 pName: The file extension.
 pFilterName: <node oor:Name="...">
-pTypeName: <prop oor:Name="UIName">...</prop>
+pTypeName: <prop oor:Name="Type">...</prop>
 nFormatType: <prop oor:name="Flags">...</prop>
 */
 FileFormat aFileFormats[] =
 {
     { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
-    { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", "sdfilt", PPT_FORMAT_TYPE },
+    { "ppt",  "MS PowerPoint 97", "impress_MS_PowerPoint_97", "sdfilt", PPT_FORMAT_TYPE },
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
-    { "fodg", "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
-    { "fodp", "OpenDocument Presentation Flat XML", "Flat XML ODF Presentation", "", FODP_FORMAT_TYPE },
-    { "sxi",  "StarOffice XML (Impress)", "OpenOffice.org 1.0 Presentation", "", SXI_FORMAT_TYPE },
+    { "fodg", "OpenDocument Drawing Flat XML", "draw_ODG_FlatXML", "", FODG_FORMAT_TYPE },
+    { "fodp", "OpenDocument Presentation Flat XML", "impress_ODP_FlatXML", "", FODP_FORMAT_TYPE },
+    { "sxi",  "StarOffice XML (Impress)", "impress_StarOffice_XML_Impress", "", SXI_FORMAT_TYPE },
     { "odg",  "draw8", "draw8", "", ODP_FORMAT_TYPE },
     { "pptm", "Impress MS PowerPoint 2007 XML VBA", "MS PowerPoint 2007 XML VBA", "", PPTM_FORMAT_TYPE },
     { nullptr, nullptr, nullptr, nullptr, SfxFilterFlags::NONE }
