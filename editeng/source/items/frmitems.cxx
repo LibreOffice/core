@@ -84,6 +84,7 @@
 #include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/GraphicLoader.hxx>
 
 using namespace ::editeng;
@@ -1127,10 +1128,10 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SHADOW_TRANSPARENCE:
         {
             sal_Int32 nTransparence = 0;
-            if (rVal >>= nTransparence)
+            if ((rVal >>= nTransparence) && !o3tl::checked_multiply<sal_Int32>(nTransparence, 255, nTransparence))
             {
                 Color aColor(aShadow.Color);
-                aColor.SetTransparency(rtl::math::round(float(nTransparence * 255) / 100));
+                aColor.SetTransparency(rtl::math::round(float(nTransparence) / 100));
                 aShadow.Color = sal_Int32(aColor);
             }
             break;
