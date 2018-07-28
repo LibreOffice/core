@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
+#include <sal/log.hxx>
 
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )

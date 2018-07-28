@@ -20,6 +20,7 @@
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/image.hxx>

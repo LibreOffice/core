@@ -33,6 +33,7 @@
 #include <svl/rectitem.hxx>
 #include <svl/rngitem.hxx>
 #include <svl/whiter.hxx>
+#include <sal/log.hxx>
 
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdattr.hxx>

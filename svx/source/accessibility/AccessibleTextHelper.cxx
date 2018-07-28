@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <deque>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>

@@ -45,6 +45,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/strings.hrc>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 #include <algorithm>
 
 using namespace ::accessibility;

@@ -32,6 +32,7 @@
 #include <com/sun/star/i18n/Weekdays.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <sal/log.hxx>
 
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>

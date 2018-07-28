@@ -21,6 +21,8 @@
 #include <datalistener.hxx>
 #include <datanavi.hxx>
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;

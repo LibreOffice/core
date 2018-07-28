@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/help.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include "itemholder2.hxx"
 

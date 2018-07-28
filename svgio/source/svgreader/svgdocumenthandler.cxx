@@ -45,6 +45,7 @@
 #include <svgmarkernode.hxx>
 #include <svgpatternnode.hxx>
 #include <svgtitledescnode.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

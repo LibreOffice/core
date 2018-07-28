@@ -86,6 +86,7 @@
 #include <rtl/ref.hxx>
 #include <bitmaps.hlst>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

@@ -24,6 +24,7 @@
 #include <table/tablecontrol.hxx>
 #include "unocontroltablemodel.hxx"
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>

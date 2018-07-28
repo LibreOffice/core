@@ -19,6 +19,7 @@
 
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>

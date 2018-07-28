@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <svtools/ehdl.hxx>
 #include <svtools/soerr.hxx>

@@ -42,6 +42,7 @@
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 #include <memory>
 #include <vector>
 

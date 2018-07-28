@@ -38,6 +38,7 @@
 #include <svx/xmlsecctrl.hxx>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
+#include <sal/log.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 

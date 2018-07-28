@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>

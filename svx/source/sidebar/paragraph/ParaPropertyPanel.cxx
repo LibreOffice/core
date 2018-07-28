@@ -29,6 +29,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;

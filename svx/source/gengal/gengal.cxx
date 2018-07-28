@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <stdio.h>
 #ifndef _WIN32

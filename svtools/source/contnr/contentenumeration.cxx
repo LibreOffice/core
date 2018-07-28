@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 namespace svt
 {

@@ -25,6 +25,7 @@
 #include <vcl/virdev.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/syslocale.hxx>
+#include <sal/log.hxx>
 
 void MoveXPoly(XPolygon& rPoly, const Size& S)
 {

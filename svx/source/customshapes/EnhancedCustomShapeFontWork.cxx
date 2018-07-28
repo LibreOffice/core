@@ -54,6 +54,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

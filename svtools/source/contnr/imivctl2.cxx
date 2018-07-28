@@ -18,6 +18,7 @@
  */
 
 #include "imivctl.hxx"
+#include <sal/log.hxx>
 
 IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
 {

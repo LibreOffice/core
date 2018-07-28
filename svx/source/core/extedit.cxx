@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <salhelper/thread.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/process.h>

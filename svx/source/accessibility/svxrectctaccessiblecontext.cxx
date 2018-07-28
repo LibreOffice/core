@@ -31,6 +31,7 @@
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <sal/log.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>

@@ -20,6 +20,7 @@
 
 #include <svtools/asynclink.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>

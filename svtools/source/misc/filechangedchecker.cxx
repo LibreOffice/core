@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <svtools/filechangedchecker.hxx>
 

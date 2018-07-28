@@ -24,6 +24,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>

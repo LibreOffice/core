@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
+#include <sal/log.hxx>
 
 #include <svx/svdpool.hxx>
 #include <svx/svditer.hxx>

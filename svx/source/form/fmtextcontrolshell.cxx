@@ -57,6 +57,7 @@
 #include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <vcl/outdev.hxx>
 
 #include <memory>

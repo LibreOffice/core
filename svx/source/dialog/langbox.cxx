@@ -21,6 +21,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/langtab.hxx>

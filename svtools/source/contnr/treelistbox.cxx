@@ -34,6 +34,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>

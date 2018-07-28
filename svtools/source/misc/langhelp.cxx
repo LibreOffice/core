@@ -14,6 +14,7 @@
 #include <officecfg/System.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <svtools/langhelp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>

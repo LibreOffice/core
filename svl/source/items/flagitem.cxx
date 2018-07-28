@@ -21,6 +21,7 @@
 #include <svl/flagitem.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 
 SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

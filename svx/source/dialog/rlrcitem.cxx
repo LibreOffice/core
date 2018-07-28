@@ -18,6 +18,7 @@
  */
 
 #include <svl/rectitem.hxx>
+#include <sal/log.hxx>
 
 #include <svx/svxids.hrc>
 

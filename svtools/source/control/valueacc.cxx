@@ -20,6 +20,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
 #include <comphelper/servicehelper.hxx>

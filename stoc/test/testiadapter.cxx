@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include <sal/main.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <cppuhelper/servicefactory.hxx>

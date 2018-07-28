@@ -51,6 +51,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
+#include <sal/log.hxx>
 
 
 SdrViewEvent::SdrViewEvent()

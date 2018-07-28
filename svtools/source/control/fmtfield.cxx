@@ -36,6 +36,7 @@
 #include <map>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;

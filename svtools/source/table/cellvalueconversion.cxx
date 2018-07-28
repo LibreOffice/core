@@ -29,6 +29,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>

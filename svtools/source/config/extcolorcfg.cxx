@@ -33,6 +33,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/hint.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

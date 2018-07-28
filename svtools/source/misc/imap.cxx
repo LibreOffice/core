@@ -34,6 +34,7 @@
 #include <string.h>
 #include <math.h>
 #include <memory>
+#include <sal/log.hxx>
 
 
 #define SCALEPOINT(aPT,aFracX,aFracY) (aPT).setX(long((aPT).X()*aFracX));  \

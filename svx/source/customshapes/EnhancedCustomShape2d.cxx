@@ -52,6 +52,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <math.h>
 
 using namespace ::com::sun::star;

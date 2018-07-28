@@ -69,6 +69,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <uno/current_context.hxx>
 #include <uno/environment.h>
 #include <jvmfwk/framework.hxx>

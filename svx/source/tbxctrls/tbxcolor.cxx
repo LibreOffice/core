@@ -21,6 +21,7 @@
 #include <svx/tbxcolor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <sal/log.hxx>
 
 
 namespace svx
