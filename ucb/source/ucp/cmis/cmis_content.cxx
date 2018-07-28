@@ -47,6 +47,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <config_oauth2.h>
 #include <o3tl/runtimetooustring.hxx>
+#include <sal/log.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>

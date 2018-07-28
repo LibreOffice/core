@@ -31,6 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include "NeonSession.hxx"
 #include "NeonLockStore.hxx"

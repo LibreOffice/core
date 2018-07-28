@@ -28,6 +28,7 @@
 #include <ooo/vba/msforms/fmEnterFieldBehavior.hpp>
 #include <ooo/vba/msforms/fmListStyle.hpp>
 #include <ooo/vba/msforms/fmTextAlign.hpp>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

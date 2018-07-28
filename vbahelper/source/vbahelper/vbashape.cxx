@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
+#include <sal/log.hxx>
 
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbatextframe.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
 #include "SerfSession.hxx"

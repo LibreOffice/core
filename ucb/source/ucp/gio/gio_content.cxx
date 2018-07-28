@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sal/macros.h>
 #include <osl/time.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <officecfg/Inet.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>

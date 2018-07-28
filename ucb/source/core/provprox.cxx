@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>

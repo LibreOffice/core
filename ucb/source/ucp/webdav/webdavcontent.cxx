@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>

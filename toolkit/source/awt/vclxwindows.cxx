@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/XItemList.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>

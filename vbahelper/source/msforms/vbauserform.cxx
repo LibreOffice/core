@@ -30,6 +30,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
 #include "vbacontrols.hxx"
+#include <sal/log.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

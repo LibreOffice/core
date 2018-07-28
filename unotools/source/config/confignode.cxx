@@ -21,6 +21,7 @@
 #include <unotools/configpaths.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

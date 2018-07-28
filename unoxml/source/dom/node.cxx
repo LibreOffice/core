@@ -30,6 +30,7 @@
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 

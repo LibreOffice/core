@@ -57,6 +57,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

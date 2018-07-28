@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <unotools/configpaths.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>

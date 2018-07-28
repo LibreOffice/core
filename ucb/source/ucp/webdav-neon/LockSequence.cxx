@@ -31,6 +31,7 @@
 #include <ne_xml.h>
 #include "LockSequence.hxx"
 #include <memory>
+#include <sal/log.hxx>
 
 using namespace webdav_ucp;
 using namespace com::sun::star;

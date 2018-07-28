@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include "UCBDeadPropertyValue.hxx"
 
 using namespace http_dav_ucp;

@@ -63,6 +63,7 @@
 #include <sfx2/viewsh.hxx>
 #include <math.h>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>

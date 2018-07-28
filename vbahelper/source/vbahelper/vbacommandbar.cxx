@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <ooo/vba/office/MsoBarType.hpp>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

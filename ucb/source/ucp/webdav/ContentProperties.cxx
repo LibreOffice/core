@@ -26,6 +26,8 @@
 #include "webdavprovider.hxx"
 #include "ContentProperties.hxx"
 
+#include <sal/log.hxx>
+
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 

@@ -29,6 +29,7 @@
 #include <com/sun/star/ucb/Lock.hpp>
 #include <map>
 #include <unordered_map>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

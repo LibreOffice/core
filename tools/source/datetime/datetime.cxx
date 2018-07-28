@@ -18,6 +18,7 @@
  */
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <systemdatetime.hxx>
 

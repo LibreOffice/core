@@ -45,6 +45,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/color.hxx>

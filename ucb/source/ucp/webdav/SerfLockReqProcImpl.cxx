@@ -25,6 +25,7 @@
 
 #include "webdavresponseparser.hxx"
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 namespace http_dav_ucp
 {
