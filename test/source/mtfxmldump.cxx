@@ -670,13 +670,13 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 if (pMetaTextArrayAction->GetDXArray())
                 {
                     rWriter.startElement("dxarray");
-                    OUString sDxLengthString;
+                    OUStringBuffer sDxLengthString;
                     for (sal_Int32 i = 0; i < aLength - aIndex; ++i)
                     {
-                        sDxLengthString += OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
-                        sDxLengthString += " ";
+                        sDxLengthString.append(OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex + i]));
+                        sDxLengthString.append(" ");
                     }
-                    rWriter.content(sDxLengthString);
+                    rWriter.content(sDxLengthString.makeStringAndClear());
                     rWriter.endElement();
                 }
 

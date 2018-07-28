@@ -87,20 +87,21 @@ namespace drawinglayer
             const double fStrikeCharCount(fabs(getWidth()/fStrikeCharWidth));
             const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.5));
             std::vector<double> aDXArray(nStrikeCharCount);
-            OUString aStrikeoutString;
+            OUStringBuffer aStrikeoutString;
 
             for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
             {
-                aStrikeoutString += aSingleCharString;
+                aStrikeoutString.append(aSingleCharString);
                 aDXArray[a] = (a + 1) * fStrikeCharWidth;
             }
 
+            auto len = aStrikeoutString.getLength();
             rContainer.push_back(
                 new TextSimplePortionPrimitive2D(
                     getObjectTransformation(),
-                    aStrikeoutString,
+                    aStrikeoutString.makeStringAndClear(),
                     0,
-                    aStrikeoutString.getLength(),
+                    len,
                     aDXArray,
                     getFontAttribute(),
                     getLocale(),
