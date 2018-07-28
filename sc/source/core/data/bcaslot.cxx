@@ -19,6 +19,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <brdcst.hxx>

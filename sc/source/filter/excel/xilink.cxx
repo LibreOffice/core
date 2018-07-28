@@ -31,6 +31,7 @@
 #include <scmatrix.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <memory>

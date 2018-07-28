@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <brdcst.hxx>

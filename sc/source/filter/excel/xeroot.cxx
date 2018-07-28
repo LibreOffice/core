@@ -18,6 +18,7 @@
  */
 
 #include <rtl/random.h>
+#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>

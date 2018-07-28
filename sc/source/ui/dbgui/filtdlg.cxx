@@ -20,6 +20,7 @@
 #include <rangelst.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/waitobj.hxx>
+#include <sal/log.hxx>
 
 #include <uiitems.hxx>
 #include <dbdata.hxx>

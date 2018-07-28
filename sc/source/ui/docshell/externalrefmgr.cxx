@@ -61,6 +61,7 @@
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 #include <algorithm>

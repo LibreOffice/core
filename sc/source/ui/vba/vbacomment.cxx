@@ -32,6 +32,7 @@
 #include <ooo/vba/office/MsoShapeType.hpp>
 
 #include <vbahelper/vbashape.hxx>
+#include <sal/log.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
 

@@ -21,6 +21,7 @@
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
+#include <sal/log.hxx>
 
 #include <rangenam.hxx>
 #include <compiler.hxx>

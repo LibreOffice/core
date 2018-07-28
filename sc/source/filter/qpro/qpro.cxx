@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <qproform.hxx>

@@ -38,6 +38,7 @@
 #include <scmatrix.hxx>
 #include <documentimport.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 // Excel->Calc cell address/range conversion ==================================
 

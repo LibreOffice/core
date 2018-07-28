@@ -8,6 +8,7 @@
  */
 #include "xltoolbar.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <stdarg.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>

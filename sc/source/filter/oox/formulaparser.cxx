@@ -24,6 +24,7 @@
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/helper/binaryinputstream.hxx>

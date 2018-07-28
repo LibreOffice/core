@@ -20,6 +20,7 @@
 #include <segmenttree.hxx>
 #include <o3tl/safeint.hxx>
 #include <mdds/flat_segment_tree.hpp>
+#include <sal/log.hxx>
 #include <algorithm>
 #include <limits>
 #include <address.hxx>

@@ -27,6 +27,7 @@
 #include <patattr.hxx>
 #include <refupdatecontext.hxx>
 #include <svl/whiter.hxx>
+#include <sal/log.hxx>
 #include <editeng/colritem.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>

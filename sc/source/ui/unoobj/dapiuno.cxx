@@ -22,6 +22,7 @@
 
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <dapiuno.hxx>
 #include <datauno.hxx>

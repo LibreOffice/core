@@ -58,6 +58,7 @@ using namespace ::com::sun::star;
 #include <svl/slstitm.hxx>
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>

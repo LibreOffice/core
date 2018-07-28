@@ -23,6 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/IconSetType.hpp>

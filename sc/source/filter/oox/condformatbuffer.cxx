@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svl/intitem.hxx>
 #include <svl/sharedstringpool.hxx>

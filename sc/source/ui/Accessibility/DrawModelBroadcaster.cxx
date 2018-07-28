@@ -19,6 +19,7 @@
 
 #include <DrawModelBroadcaster.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 

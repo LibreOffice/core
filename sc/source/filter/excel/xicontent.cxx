@@ -66,6 +66,7 @@
 #include <utility>
 #include <o3tl/make_unique.hxx>
 #include <oox/helper/helper.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;

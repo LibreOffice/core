@@ -26,6 +26,7 @@
 #include <table.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <sal/log.hxx>
 
 constexpr double nPPTX = 0.06666;
 constexpr double nPPTY = 0.06666;

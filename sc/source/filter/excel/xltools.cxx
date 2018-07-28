@@ -23,6 +23,7 @@
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <editeng/editstat.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <xestream.hxx>

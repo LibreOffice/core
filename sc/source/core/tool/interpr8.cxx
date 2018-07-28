@@ -14,6 +14,7 @@
 #include <scmatrix.hxx>
 #include <comphelper/random.hxx>
 #include <formula/token.hxx>
+#include <sal/log.hxx>
 
 #include <stack>
 #include <cmath>

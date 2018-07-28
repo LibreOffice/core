@@ -28,6 +28,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <stdlib.h>
 #include <unotools/transliterationwrapper.hxx>
+#include <sal/log.hxx>
 
 #include <table.hxx>
 #include <scitems.hxx>

@@ -11,6 +11,7 @@
 #include "xmlcondformat.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <sal/log.hxx>
 
 #include <colorscale.hxx>
 #include <conditio.hxx>

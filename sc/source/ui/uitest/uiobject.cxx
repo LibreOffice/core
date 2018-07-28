@@ -22,6 +22,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <sal/log.hxx>
 
 namespace {
 

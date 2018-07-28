@@ -20,6 +20,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <qpro.hxx>
 
 #include <qproform.hxx>

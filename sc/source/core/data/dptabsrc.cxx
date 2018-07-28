@@ -27,6 +27,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>

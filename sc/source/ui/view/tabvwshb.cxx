@@ -49,6 +49,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <tabvwsh.hxx>
 #include <scmod.hxx>

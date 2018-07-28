@@ -26,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <sal/log.hxx>
 
 #include <drawview.hxx>
 #include <global.hxx>

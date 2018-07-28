@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/algitem.hxx>
+#include <sal/log.hxx>
 
 #include <attrib.hxx>
 #include <docpool.hxx>

@@ -11,6 +11,7 @@
 #include <test/unoapi_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>

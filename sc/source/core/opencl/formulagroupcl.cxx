@@ -18,6 +18,7 @@
 #include <comphelper/random.hxx>
 #include <formula/vectortoken.hxx>
 #include <scmatrix.hxx>
+#include <sal/log.hxx>
 
 #include <opencl/openclwrapper.hxx>
 

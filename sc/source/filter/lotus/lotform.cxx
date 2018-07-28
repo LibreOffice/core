@@ -29,6 +29,7 @@
 
 #include <math.h>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include <memory>
 
 static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );

@@ -30,6 +30,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
+#include <sal/log.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>

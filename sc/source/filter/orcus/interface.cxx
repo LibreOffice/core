@@ -52,6 +52,7 @@
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 #include <tools/fontenum.hxx>
+#include <sal/log.hxx>
 
 #include <stylesbuffer.hxx>
 

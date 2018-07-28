@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <editeng/editview.hxx>
+#include <sal/log.hxx>
 
 #include <viewfunc.hxx>
 #include <detfunc.hxx>

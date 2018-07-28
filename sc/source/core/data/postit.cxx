@@ -21,6 +21,7 @@
 #include <postit.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>

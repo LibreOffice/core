@@ -50,6 +50,7 @@
 #include <tools/multisel.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
+#include <sal/log.hxx>
 
 #include <float.h>
 

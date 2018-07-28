@@ -41,6 +41,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
 #include <svx/unoapi.hxx>
+#include <sal/log.hxx>
 
 #include <output.hxx>
 #include <document.hxx>

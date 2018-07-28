@@ -28,6 +28,8 @@
 #include <lotattr.hxx>
 #include <fprogressbar.hxx>
 
+#include <sal/log.hxx>
+
 class ScFormulaCell;
 
 ErrCode ImportLotus::parse()

@@ -52,6 +52,7 @@
 #include <comphelper/base64.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <memory>
 

@@ -22,6 +22,7 @@
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>

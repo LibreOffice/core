@@ -34,6 +34,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <sax/tools/converter.hxx>
 

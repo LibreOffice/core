@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/eitem.hxx>

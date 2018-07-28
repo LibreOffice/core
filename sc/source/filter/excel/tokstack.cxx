@@ -23,6 +23,7 @@
 #include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <string.h>

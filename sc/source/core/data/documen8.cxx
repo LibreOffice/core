@@ -42,6 +42,7 @@
 #include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/securityoptions.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

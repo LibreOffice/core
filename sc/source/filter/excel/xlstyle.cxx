@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/font.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <svtools/colorcfg.hxx>
 #include <vcl/unohelp.hxx>

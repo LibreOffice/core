@@ -22,6 +22,7 @@
 #include <formula/errorcodes.hxx>
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
+#include <sal/log.hxx>
 
 #include <orcus/csv_parser.hpp>
 

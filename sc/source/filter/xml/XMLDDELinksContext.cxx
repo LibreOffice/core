@@ -27,6 +27,7 @@
 #include <sax/tools/converter.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

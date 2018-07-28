@@ -27,6 +27,7 @@
 #include <tools/datetime.hxx>
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <formulacell.hxx>

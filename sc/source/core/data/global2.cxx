@@ -28,6 +28,7 @@
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
 #include <formula/errorcodes.hxx>
+#include <sal/log.hxx>
 
 #include <global.hxx>
 #include <rangeutl.hxx>

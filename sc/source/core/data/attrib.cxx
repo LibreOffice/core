@@ -28,6 +28,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
+#include <sal/log.hxx>
 
 #include <libxml/xmlwriter.h>
 

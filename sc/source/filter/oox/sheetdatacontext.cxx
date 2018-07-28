@@ -27,6 +27,7 @@
 #include <formulaparser.hxx>
 #include <richstringcontext.hxx>
 #include <unitconverter.hxx>
+#include <sal/log.hxx>
 
 namespace oox {
 namespace xls {

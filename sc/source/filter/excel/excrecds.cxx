@@ -48,6 +48,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
+#include <sal/log.hxx>
 
 #include <string.h>
 
