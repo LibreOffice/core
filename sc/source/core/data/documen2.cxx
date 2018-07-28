@@ -43,6 +43,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <table.hxx>

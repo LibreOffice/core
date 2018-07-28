@@ -25,6 +25,7 @@
 #include <xlpivot.hxx>
 #include <generalfunction.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using ::com::sun::star::sheet::GeneralFunction;

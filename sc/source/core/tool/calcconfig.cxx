@@ -14,6 +14,7 @@
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/configmgr.hxx>
 

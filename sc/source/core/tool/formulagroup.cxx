@@ -29,6 +29,7 @@
 #endif
 #include <o3tl/make_unique.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 #include <cstdio>
 #include <unordered_map>

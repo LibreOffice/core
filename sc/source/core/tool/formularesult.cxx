@@ -11,6 +11,8 @@
 #include <scmatrix.hxx>
 #include <token.hxx>
 
+#include <sal/log.hxx>
+
 namespace sc {
 
 FormulaResultValue::FormulaResultValue() : meType(Invalid), mfValue(0.0), mnError(FormulaError::NONE) {}

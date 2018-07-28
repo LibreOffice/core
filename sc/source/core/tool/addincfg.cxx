@@ -19,6 +19,8 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <sal/log.hxx>
+
 #include <global.hxx>
 #include <addincol.hxx>
 #include <addincfg.hxx>

@@ -25,6 +25,7 @@
 #include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
+#include <sal/log.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <scextopt.hxx>

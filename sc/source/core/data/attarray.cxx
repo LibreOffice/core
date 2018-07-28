@@ -30,6 +30,7 @@
 #include <svl/poolcach.hxx>
 #include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
+#include <sal/log.hxx>
 
 #include <global.hxx>
 #include <document.hxx>

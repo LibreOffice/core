@@ -21,6 +21,7 @@
 
 #include <rangeutl.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 using ::oox::core::ContextHandlerRef;
 

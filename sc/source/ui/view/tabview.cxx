@@ -24,6 +24,7 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <pagedata.hxx>
 #include <tabview.hxx>

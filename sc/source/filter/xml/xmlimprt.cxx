@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <svl/zforlist.hxx>
 #include <sal/macros.h>

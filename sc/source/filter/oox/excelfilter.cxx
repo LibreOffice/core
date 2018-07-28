@@ -21,6 +21,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <oox/helper/binaryinputstream.hxx>
 #include <excelchartconverter.hxx>

@@ -38,6 +38,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/sdasitm.hxx>
 #include <sfx2/docfile.hxx>
+#include <sal/log.hxx>
 
 #include <sot/exchange.hxx>
 #include <xeescher.hxx>

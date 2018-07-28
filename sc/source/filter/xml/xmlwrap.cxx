@@ -56,6 +56,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <document.hxx>

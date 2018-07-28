@@ -12,6 +12,7 @@
 
 #include <unotools/charclass.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 

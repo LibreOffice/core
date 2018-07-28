@@ -20,6 +20,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <unotools/mediadescriptor.hxx>
 #include <sot/storage.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using utl::MediaDescriptor;

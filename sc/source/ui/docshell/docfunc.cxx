@@ -30,6 +30,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svx/svdocapt.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleType.hpp>

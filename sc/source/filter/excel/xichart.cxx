@@ -80,6 +80,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <drwlayer.hxx>

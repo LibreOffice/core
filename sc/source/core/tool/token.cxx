@@ -24,6 +24,7 @@
 #include <string.h>
 #include <tools/mempool.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 #include <officecfg/Office/Calc.hxx>
 

@@ -46,6 +46,7 @@
 #include <xestyle.hxx>
 #include <xename.hxx>
 #include <rtl/uuid.h>
+#include <sal/log.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>

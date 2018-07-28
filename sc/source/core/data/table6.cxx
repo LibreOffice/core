@@ -21,6 +21,7 @@
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <table.hxx>
 #include <formulacell.hxx>

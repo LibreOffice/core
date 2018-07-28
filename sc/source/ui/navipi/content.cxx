@@ -33,6 +33,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <stdlib.h>
+#include <sal/log.hxx>
 
 #include <content.hxx>
 #include <navipi.hxx>

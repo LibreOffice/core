@@ -18,6 +18,8 @@
 #include <document.hxx>
 #include <table.hxx>
 
+#include <sal/log.hxx>
+
 namespace sc {
 
 namespace {

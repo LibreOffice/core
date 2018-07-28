@@ -33,6 +33,7 @@
 #include <svl/sharedstring.hxx>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <math.h>
 

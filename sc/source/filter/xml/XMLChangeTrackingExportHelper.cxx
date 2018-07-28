@@ -37,6 +37,7 @@
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;

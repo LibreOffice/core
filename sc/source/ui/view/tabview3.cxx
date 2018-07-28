@@ -32,6 +32,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <sal/log.hxx>
 
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
