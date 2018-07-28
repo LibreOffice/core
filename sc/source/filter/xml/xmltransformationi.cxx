@@ -75,6 +75,11 @@ uno::Reference<xml::sax::XFastContextHandler>
             pContext = new ScXMLColumnNumberContext(GetScImport(), pAttribList);
         }
         break;
+        case XML_ELEMENT(CALC_EXT, XML_COLUMN_REPLACENULL_TRANSFORMATION):
+        {
+            pContext = new ScXMLColumnRemoveNullContext(GetScImport(), pAttribList);
+        }
+        break;
     }
 
     if (!pContext)
@@ -478,6 +483,170 @@ ScXMLColumnNumberContext::~ScXMLColumnNumberContext()
 uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnNumberContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    sax_fastparser::FastAttributeList* pAttribList
+        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
+
+    switch (nElement)
+    {
+        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
+        {
+            if (rAttrList.is())
+            {
+                for (auto& aIter : *rAttrList)
+                {
+                    switch (aIter.getToken())
+                    {
+                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
+                        {
+                            maColumns.insert(aIter.toInt32());
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    return new SvXMLImportContext(GetImport());
+}
+
+ScXMLColumnRemoveNullContext::ScXMLColumnRemoveNullContext(
+    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport)
+{
+    if (rAttrList.is())
+    {
+        for (auto& aIter : *rAttrList)
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(CALC_EXT, XML_REPLACE_STRING):
+                {
+                    maReplaceString = aIter.toString();
+                }
+                break;
+            }
+        }
+    }
+}
+
+ScXMLColumnRemoveNullContext::~ScXMLColumnRemoveNullContext()
+{
+    ScDocument* pDoc = GetScImport().GetDocument();
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
+    if (!rDataSources.empty())
+    {
+        rDataSources[rDataSources.size() - 1].AddDataTransformation(
+            std::make_shared<sc::ReplaceNullTransformation>(maColumns, maReplaceString));
+    }
+}
+
+uno::Reference<xml::sax::XFastContextHandler>
+    SAL_CALL ScXMLColumnRemoveNullContext::createFastChildContext(
+        sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    sax_fastparser::FastAttributeList* pAttribList
+        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
+    switch (nElement)
+    {
+        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
+        {
+            if (rAttrList.is())
+            {
+                for (auto& aIter : *rAttrList)
+                {
+                    switch (aIter.getToken())
+                    {
+                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
+                        {
+                            maColumns.insert(aIter.toInt32());
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    return new SvXMLImportContext(GetImport());
+}
+
+ScXMLDateTimeContext::ScXMLDateTimeContext(
+    ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
+    : ScXMLImportContext(rImport)
+{
+    if (rAttrList.is())
+    {
+        for (auto& aIter : *rAttrList)
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(CALC_EXT, XML_TYPE):
+                {
+                    aType = aIter.toString();
+                }
+                break;
+            }
+        }
+    }
+
+    if (!aType.isEmpty())
+    {
+        if (aType == "date-string")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING;
+        else if (aType == "year")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::YEAR;
+        else if (aType == "start-of-year")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR;
+        else if (aType == "end-of-year")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR;
+        else if (aType == "month")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH;
+        else if (aType == "month-name")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME;
+        else if (aType == "start-of-month")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH;
+        else if (aType == "end-of-month")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH;
+        else if (aType == "day")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY;
+        else if (aType == "day-of-week")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK;
+        else if (aType == "day-of-year")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR;
+        else if (aType == "quarter")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::QUARTER;
+        else if (aType == "start-of-quarter")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER;
+        else if (aType == "end-of-quarter")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER;
+        else if (aType == "time")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::TIME;
+        else if (aType == "hour")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::HOUR;
+        else if (aType == "minute")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::MINUTE;
+        else if (aType == "seconds")
+            maType = sc::DATETIME_TRANSFORMATION_TYPE::SECOND;
+    }
+}
+
+ScXMLDateTimeContext::~ScXMLDateTimeContext()
+{
+    ScDocument* pDoc = GetScImport().GetDocument();
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
+    if (!rDataSources.empty())
+    {
+        rDataSources[rDataSources.size() - 1].AddDataTransformation(
+            std::make_shared<sc::DateTimeTransformation>(maColumns, maType));
+    }
+}
+
+uno::Reference<xml::sax::XFastContextHandler> SAL_CALL ScXMLDateTimeContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     sax_fastparser::FastAttributeList* pAttribList
         = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
