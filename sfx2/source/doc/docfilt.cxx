@@ -68,16 +68,16 @@ SfxFilter::SfxFilter( const OUString &rName,
     mbEnabled(bEnabled)
 {
     OUString aExts = GetWildcard().getGlob();
-    OUString glob;
+    OUStringBuffer glob;
     OUString aRet;
     sal_uInt16 nPos = 0;
     while (!(aRet = aExts.getToken(nPos++, ';')).isEmpty() )
     {
         if (!glob.isEmpty())
-            glob += ";";
-        glob += aRet;
+            glob.append(";");
+        glob.append(aRet);
     }
-    aWildCard.setGlob(glob);
+    aWildCard.setGlob(glob.makeStringAndClear());
 }
 
 SfxFilter::~SfxFilter()

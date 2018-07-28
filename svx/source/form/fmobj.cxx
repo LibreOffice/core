@@ -408,14 +408,13 @@ namespace
 
         // while the current content is a form
         OUString sReturn;
-        OUString sCurrentIndex;
         while (xChild.is())
         {
             // get the content's relative pos within its parent container
             sal_Int32 nPos = getElementPos(xParent, xChild);
 
             // prepend this current relative pos
-            sCurrentIndex = OUString::number(nPos);
+            OUString sCurrentIndex = OUString::number(nPos);
             if (!sReturn.isEmpty())
             {
                 sCurrentIndex += "\\";

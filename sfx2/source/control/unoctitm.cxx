@@ -531,13 +531,14 @@ void UsageInfo::save()
 
     if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        OString aUsageInfoMsg = "Document Type;Command;Count";
+        OStringBuffer aUsageInfoMsg("Document Type;Command;Count");
 
         for (auto const& elem : maUsage)
-            aUsageInfoMsg += "\n" + elem.first.toUtf8() + ";" + OString::number(elem.second);
+            aUsageInfoMsg.append("\n").append(elem.first.toUtf8()).append(";").append(OString::number(elem.second));
 
         sal_uInt64 written = 0;
-        file.write(aUsageInfoMsg.pData->buffer, aUsageInfoMsg.getLength(), written);
+        auto s = aUsageInfoMsg.makeStringAndClear();
+        file.write(s.getStr(), s.getLength(), written);
         file.close();
     }
 }
