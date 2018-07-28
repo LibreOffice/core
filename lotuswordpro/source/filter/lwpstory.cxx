@@ -66,6 +66,7 @@
 #include "lwppara.hxx"
 #include <lwpobjfactory.hxx>
 #include "lwppagelayout.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <set>
 
@@ -427,16 +428,16 @@ OUString LwpStory::GetContentText(bool bAllText)
 {
     if (bAllText)//convert all text fribs
     {
-        OUString sText("");
+        OUStringBuffer sText;
         //process para list
         LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara().obj().get());
         while (pPara)
         {
             pPara->SetFoundry(m_pFoundry);
-            sText += pPara->GetContentText(true);
+            sText.append(pPara->GetContentText(true));
             pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
         }
-        return sText;
+        return sText.makeStringAndClear();
     }
     else //only the first text frib
     {

@@ -58,6 +58,7 @@
  * Draw path object.
  ************************************************************************/
 #include <xfilter/xfdrawpath.hxx>
+#include <rtl/ustrbuf.hxx>
 
 XFSvgPathEntry::XFSvgPathEntry()
 {
@@ -66,13 +67,14 @@ XFSvgPathEntry::XFSvgPathEntry()
 OUString XFSvgPathEntry::ToString()
 {
     assert(!m_strCommand.isEmpty());
-    OUString str = m_strCommand;
+    OUStringBuffer str = m_strCommand;
 
     for (auto const& point : m_aPoints)
     {
-        str += OUString::number(point.GetX()*1000) + " " + OUString::number(point.GetY()*1000) + " ";
+        str.append(OUString::number(point.GetX()*1000)).append(" ").append(OUString::number(point.GetY()*1000)).append(" ");
     }
-    return str.trim();
+    str.stripEnd(' ');
+    return str.makeStringAndClear();
 }
 
 XFDrawPath::XFDrawPath()
@@ -132,13 +134,14 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points
-    OUString   strPath;
+    OUStringBuffer strPath;
     for (auto & path : m_aPaths)
     {
-        strPath += path.ToString();
+        strPath.append(path.ToString());
     }
-    strPath = strPath.trim();
-    pAttrList->AddAttribute( "svg:d", strPath);
+    if (!strPath.isEmpty())
+        strPath.setLength(strPath.getLength()-1);
+    pAttrList->AddAttribute( "svg:d", strPath.makeStringAndClear());
 
     SetPosition(rect);
     XFDrawObject::ToXml(pStrm);
