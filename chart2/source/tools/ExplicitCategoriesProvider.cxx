@@ -355,7 +355,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
         aRet.realloc(nMaxCategoryCount);
         for(sal_Int32 nN=0; nN<nMaxCategoryCount; nN++)
         {
-            OUString aText;
+            OUStringBuffer aText;
             for (auto const& complexCatPerIndex : aComplexCatsPerIndex)
             {
                 if ( static_cast<size_t>(nN) < complexCatPerIndex.size() )
@@ -364,12 +364,12 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
                     if( !aAddText.isEmpty() )
                     {
                         if(!aText.isEmpty())
-                            aText += " ";
-                        aText += aAddText;
+                            aText.append(" ");
+                        aText.append(aAddText);
                     }
                 }
             }
-            aRet[nN]=aText;
+            aRet[nN]=aText.makeStringAndClear();
         }
     }
     return aRet;
