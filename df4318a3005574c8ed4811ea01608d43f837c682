@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_142edd42",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-28T21:49:15Z",
+      "side": 1,
+      "message": "Just put the functions into an anonymous namespace at the top. No need to forward declare them if they don\u0027t depend on anything else.",
+      "revId": "df4318a3005574c8ed4811ea01608d43f837c682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d4275564",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-28T21:49:15Z",
+      "side": 1,
+      "message": "Try avoiding the std:: functions. We have for most stuff better functions in LibreOffice. The class to represent a date time is named DateTime.",
+      "revId": "df4318a3005574c8ed4811ea01608d43f837c682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b42cd147",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-28T21:49:15Z",
+      "side": 1,
+      "message": "Additionally, we have variable null dates. You need to take this into account.",
+      "revId": "df4318a3005574c8ed4811ea01608d43f837c682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_540225b6",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-07-28T21:49:15Z",
+      "side": 1,
+      "message": "Free functions that are only used in one source file should go into an anonymous namespace to avoid exposing the symbol.",
+      "revId": "df4318a3005574c8ed4811ea01608d43f837c682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
