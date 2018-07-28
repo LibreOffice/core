@@ -53,6 +53,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/servicedecl.hxx>
 

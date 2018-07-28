@@ -26,6 +26,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/numeric/ftools.hxx>
+#include <sal/log.hxx>
 
 #include <animationnodefactory.hxx>
 #include "paralleltimecontainer.hxx"

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>

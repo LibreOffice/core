@@ -72,6 +72,7 @@
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>
 

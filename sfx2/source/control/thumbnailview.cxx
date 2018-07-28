@@ -30,6 +30,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/decoview.hxx>

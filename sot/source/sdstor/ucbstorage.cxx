@@ -47,6 +47,7 @@
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamhelper.hxx>

@@ -26,6 +26,7 @@
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 
 #define STREAM_BUFFER_SIZE 2048

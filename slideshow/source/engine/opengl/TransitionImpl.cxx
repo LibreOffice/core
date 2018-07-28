@@ -30,6 +30,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <array>

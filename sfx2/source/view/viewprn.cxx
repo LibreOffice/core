@@ -22,6 +22,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/prnsetup.hxx>

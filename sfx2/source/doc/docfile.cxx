@@ -93,6 +93,7 @@
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <sal/log.hxx>
 
 #include <unotools/streamwrap.hxx>
 

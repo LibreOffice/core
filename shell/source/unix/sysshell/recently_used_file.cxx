@@ -19,6 +19,7 @@
 
 #include "recently_used_file.hxx"
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>

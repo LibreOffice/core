@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <sal/log.hxx>
 
 #include <rect.hxx>
 #include <types.hxx>

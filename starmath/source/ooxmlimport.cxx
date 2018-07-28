@@ -16,6 +16,7 @@
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace oox::formulaimport;
 

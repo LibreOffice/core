@@ -37,6 +37,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

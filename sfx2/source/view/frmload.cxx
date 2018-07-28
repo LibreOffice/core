@@ -58,6 +58,7 @@
 #include <framework/interaction.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.h>
+#include <sal/log.hxx>
 #include <sot/storinfo.hxx>
 #include <svtools/ehdl.hxx>
 #include <svl/eitem.hxx>

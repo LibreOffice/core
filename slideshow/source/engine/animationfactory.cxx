@@ -19,6 +19,7 @@
 
 
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <animationfactory.hxx>
 #include <attributemap.hxx>

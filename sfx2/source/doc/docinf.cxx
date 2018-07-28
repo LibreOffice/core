@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/string.hxx>
 #include <sot/storage.hxx>

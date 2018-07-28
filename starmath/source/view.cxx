@@ -53,6 +53,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <unotools/streamwrap.hxx>
 

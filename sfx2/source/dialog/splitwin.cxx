@@ -25,6 +25,7 @@
 
 #include <vcl/wrkwin.hxx>
 #include <unotools/viewoptions.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>

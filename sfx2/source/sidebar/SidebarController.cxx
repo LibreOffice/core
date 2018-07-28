@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>

@@ -20,6 +20,7 @@
 #include "backingwindow.hxx"
 #include <sfx2/inputdlg.hxx>
 
+#include <sal/log.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

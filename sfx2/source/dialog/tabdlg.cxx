@@ -38,6 +38,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <sal/log.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>

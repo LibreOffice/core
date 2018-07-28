@@ -66,6 +66,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/lok.hxx>

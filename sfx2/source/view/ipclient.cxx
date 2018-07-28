@@ -53,6 +53,7 @@
 #include <guisaveas.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/ehdl.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>

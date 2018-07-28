@@ -25,6 +25,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

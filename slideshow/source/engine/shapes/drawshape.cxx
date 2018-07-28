@@ -20,6 +20,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <osl/diagnose.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>

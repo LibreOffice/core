@@ -9,6 +9,7 @@
 
 #include "wordexportbase.hxx"
 #include <node.hxx>
+#include <sal/log.hxx>
 
 SmWordExportBase::SmWordExportBase(const SmNode* pIn)
     : m_pTree(pIn)

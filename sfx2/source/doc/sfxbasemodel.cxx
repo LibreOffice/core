@@ -83,6 +83,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
 #include <framework/titlehelper.hxx>

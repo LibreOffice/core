@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/eitem.hxx>

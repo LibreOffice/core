@@ -20,6 +20,7 @@
 
 #include <osl/diagnose.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 

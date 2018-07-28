@@ -22,6 +22,7 @@
 
 #include <rtl/math.hxx>
 
+#include <sal/log.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <basegfx/numeric/ftools.hxx>

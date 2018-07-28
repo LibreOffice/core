@@ -22,6 +22,7 @@
 
 #include "simplecontinuousactivitybase.hxx"
 
+#include <sal/log.hxx>
 
 namespace slideshow
 {

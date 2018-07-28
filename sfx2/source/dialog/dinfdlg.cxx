@@ -31,6 +31,7 @@
 #include <svtools/controldims.hxx>
 #include <svtools/imagemgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 

@@ -18,6 +18,7 @@
  */
 
 
+#include <sal/log.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <sfx2/app.hxx>

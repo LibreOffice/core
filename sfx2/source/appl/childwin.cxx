@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <sal/log.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>

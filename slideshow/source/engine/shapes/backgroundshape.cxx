@@ -26,6 +26,7 @@
 #include <vcl/gdimtf.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <sal/log.hxx>
 
 #include <cmath>
 #include <algorithm>

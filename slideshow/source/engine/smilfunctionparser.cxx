@@ -26,6 +26,7 @@
 #include <expressionnodefactory.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>

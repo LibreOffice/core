@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <sal/log.hxx>
 
 #include "eqnolefilehdr.hxx"
 

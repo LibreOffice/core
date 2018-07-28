@@ -34,6 +34,8 @@
 #include "nodetools.hxx"
 #include "generateevent.hxx"
 
+#include <sal/log.hxx>
+
 #include <vector>
 #include <algorithm>
 #include <iterator>
