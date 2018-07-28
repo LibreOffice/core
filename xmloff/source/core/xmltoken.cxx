@@ -3294,6 +3294,17 @@ namespace xmloff { namespace token {
         TOKEN( "even", XML_EVEN ),
         TOKEN( "odd", XML_ODD ),
         TOKEN( "sign", XML_SIGN ),
+        TOKEN( "replace-string", XML_REPLACE_STRING ),
+        TOKEN( "column-replacenull-transformation", XML_COLUMN_REPLACENULL_TRANSFORMATION ),
+        TOKEN( "column-datetime-transformation", XML_COLUMN_DATETIME_TRANSFORMATION ),
+        TOKEN( "start-of-year", XML_START_OF_YEAR ),
+        TOKEN( "end-of-year", XML_END_OF_YEAR ),
+        TOKEN( "month-name", XML_MONTH_NAME ),
+        TOKEN( "start-of-month", XML_START_OF_MONTH ),
+        TOKEN( "end-of-month", XML_END_OF_MONTH ),
+        TOKEN( "day-of-year", XML_DAY_OF_YEAR ),
+        TOKEN( "start-of-quarter", XML_START_OF_QUARTER ),
+        TOKEN( "end-of-quarter", XML_END_OF_QUARTER ),
 
         // regina, ODF1.2 additional symbols in charts
         TOKEN( "star",                         XML_STAR ),
