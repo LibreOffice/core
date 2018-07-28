@@ -25,6 +25,7 @@
 #include <sys/poll.h>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>

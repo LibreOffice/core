@@ -31,6 +31,7 @@
 #include <osl/conditn.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

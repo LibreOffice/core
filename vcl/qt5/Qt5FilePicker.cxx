@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>

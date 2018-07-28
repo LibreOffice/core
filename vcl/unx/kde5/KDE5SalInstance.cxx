@@ -25,6 +25,7 @@
 #include <QtWidgets/QFrame>
 
 #include <osl/process.h>
+#include <sal/log.hxx>
 
 #include "KDE5FilePicker.hxx"
 #include "KDE5SalData.hxx"

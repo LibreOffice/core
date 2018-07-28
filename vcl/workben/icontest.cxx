@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <sal/log.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

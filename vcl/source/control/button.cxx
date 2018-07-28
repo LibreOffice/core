@@ -43,6 +43,7 @@
 #include <window.h>
 #include <controldata.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 

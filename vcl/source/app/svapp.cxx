@@ -25,6 +25,7 @@
 
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>

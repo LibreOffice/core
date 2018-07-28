@@ -22,6 +22,8 @@
 #include <QtGui/QCursor>
 #include <QtGui/QBitmap>
 
+#include <sal/log.hxx>
+
 #include <unx/x11_cursors/ase_curs.h>
 #include <unx/x11_cursors/ase_mask.h>
 #include <unx/x11_cursors/asn_curs.h>

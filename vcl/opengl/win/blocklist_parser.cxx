@@ -9,6 +9,8 @@
 
 #include <opengl/win/blocklist_parser.hxx>
 
+#include <sal/log.hxx>
+
 WinBlocklistParser::WinBlocklistParser(const OUString& rURL,
         std::vector<wgl::DriverInfo>& rDriverList)
     : meBlockType(BlockType::UNKNOWN)

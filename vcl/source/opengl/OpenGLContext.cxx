@@ -19,6 +19,7 @@
 #include <vcl/graph.hxx>
 
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 
 #include <svdata.hxx>
 #include <salgdi.hxx>

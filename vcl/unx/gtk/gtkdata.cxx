@@ -38,6 +38,7 @@
 #include <unx/geninst.h>
 #include <osl/thread.h>
 #include <osl/process.h>
+#include <sal/log.hxx>
 
 #include <unx/i18n_im.hxx>
 #include <unx/i18n_xkb.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <osl/file.h>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/tempfile.hxx>

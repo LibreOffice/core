@@ -22,6 +22,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
+#include <sal/log.hxx>
 
 #include <salinst.hxx>
 #include <unx/gensys.h>

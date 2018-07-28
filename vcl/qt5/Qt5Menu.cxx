@@ -14,6 +14,7 @@
 #include <QtWidgets/QtWidgets>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 Qt5Menu::Qt5Menu(bool bMenuBar)
     : mpVCLMenu(nullptr)

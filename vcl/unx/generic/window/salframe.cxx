@@ -64,6 +64,7 @@
 #include <window.h>
 
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <svdata.hxx>

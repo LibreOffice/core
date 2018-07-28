@@ -21,6 +21,7 @@
 #include "textund2.hxx"
 #include <strings.hrc>
 
+#include <sal/log.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/textdata.hxx>

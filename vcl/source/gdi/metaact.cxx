@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>

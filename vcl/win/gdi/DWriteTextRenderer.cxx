@@ -30,6 +30,7 @@
 #include <winver.h>
 
 #include <comphelper/windowserrorstring.hxx>
+#include <sal/log.hxx>
 
 HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;

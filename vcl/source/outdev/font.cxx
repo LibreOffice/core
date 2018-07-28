@@ -26,6 +26,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <font/FeatureCollector.hxx>
+#include <sal/log.hxx>
 
 #include <sallayout.hxx>
 #include <salgdi.hxx>

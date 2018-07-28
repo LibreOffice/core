@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <salgdi.hxx>

@@ -46,6 +46,7 @@
 #include <unx/x11_cursors/salcursors.h>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #ifdef GDK_WINDOWING_X11
 #  include <gdk/gdkx.h>

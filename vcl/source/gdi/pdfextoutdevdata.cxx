@@ -26,6 +26,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <sal/log.hxx>
 
 #include <set>
 #include <memory>

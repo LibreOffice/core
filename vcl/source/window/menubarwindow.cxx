@@ -24,6 +24,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <sal/log.hxx>
 
 #include <salframe.hxx>
 #include <salmenu.hxx>

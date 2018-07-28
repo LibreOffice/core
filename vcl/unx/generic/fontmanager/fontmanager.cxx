@@ -47,6 +47,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <i18nlangtag/applelangid.hxx>
 #include <i18nlangtag/mslangid.hxx>

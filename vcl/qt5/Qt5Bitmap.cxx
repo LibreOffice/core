@@ -25,6 +25,8 @@
 #include <QtCore/QVector>
 #include <QtGui/QColor>
 
+#include <sal/log.hxx>
+
 Qt5Bitmap::Qt5Bitmap() {}
 
 Qt5Bitmap::Qt5Bitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage)); }

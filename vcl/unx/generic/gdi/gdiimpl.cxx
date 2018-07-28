@@ -27,6 +27,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/gradient.hxx>
+#include <sal/log.hxx>
 
 #include <unx/salunx.h>
 #include <unx/saldisp.hxx>

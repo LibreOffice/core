@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <rtl/crc.h>
+#include <sal/log.hxx>
 
 #include <vcl/animate.hxx>
 #include <vcl/virdev.hxx>

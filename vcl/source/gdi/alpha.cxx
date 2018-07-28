@@ -21,6 +21,7 @@
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <sal/log.hxx>
 
 AlphaMask::AlphaMask() = default;
 

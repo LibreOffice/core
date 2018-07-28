@@ -21,6 +21,7 @@
 
 #include <tools/helpers.hxx>
 #include <osl/diagnose.hxx>
+#include <sal/log.hxx>
 
 #include <regband.hxx>
 

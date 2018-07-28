@@ -29,6 +29,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <svmconverter.hxx>
 

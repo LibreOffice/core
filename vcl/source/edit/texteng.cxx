@@ -29,6 +29,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>

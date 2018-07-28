@@ -15,6 +15,8 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
 
+#include <sal/log.hxx>
+
 /*
  * GLOAction
  */

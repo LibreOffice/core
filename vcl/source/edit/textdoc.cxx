@@ -21,6 +21,7 @@
 #include "textdoc.hxx"
 #include <stdlib.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 // compare function called by QuickSort
 static bool CompareStart( const std::unique_ptr<TextCharAttrib>& pFirst, const std::unique_ptr<TextCharAttrib>& pSecond )

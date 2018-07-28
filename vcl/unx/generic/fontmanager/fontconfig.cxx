@@ -30,6 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>

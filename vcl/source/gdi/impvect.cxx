@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 
+#include <sal/log.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <tools/poly.hxx>

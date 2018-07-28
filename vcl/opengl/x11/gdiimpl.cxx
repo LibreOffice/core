@@ -29,6 +29,7 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <sal/log.hxx>
 
 #include <o3tl/lru_map.hxx>
 #include <ControlCacheKey.hxx>

@@ -22,6 +22,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <sal/log.hxx>
 
 #include <window.h>
 #include <svdata.hxx>

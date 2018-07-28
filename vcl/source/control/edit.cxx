@@ -59,6 +59,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>

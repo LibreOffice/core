@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 
+#include <sal/log.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
 

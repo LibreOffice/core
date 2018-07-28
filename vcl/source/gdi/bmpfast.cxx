@@ -24,6 +24,7 @@
 #define FAST_ARGB_BGRA
 
 #include <stdlib.h>
+#include <sal/log.hxx>
 
 typedef unsigned char PIXBYTE;
 

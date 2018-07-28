@@ -37,6 +37,7 @@
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 
 #include <langboost.hxx>
 #include <PhysicalFontCollection.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <svsys.h>
+#include <sal/log.hxx>
 #include <win/saldata.hxx>
 
 SalShlData aSalShlData;

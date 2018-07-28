@@ -37,6 +37,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <unotools/streamwrap.hxx>
 

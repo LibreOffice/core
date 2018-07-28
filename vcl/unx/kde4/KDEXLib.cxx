@@ -39,6 +39,7 @@
 #include <unx/saldata.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/process.h>
+#include <sal/log.hxx>
 
 #include "KDESalDisplay.hxx"
 

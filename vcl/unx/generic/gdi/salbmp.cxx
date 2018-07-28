@@ -29,6 +29,7 @@
 #include <X11/Xproto.h>
 
 #include <osl/endian.h>
+#include <sal/log.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>

@@ -38,6 +38,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 

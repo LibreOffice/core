@@ -22,6 +22,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/sysdata.hxx>
+#include <sal/log.hxx>
 
 #include <unx/pixmap.hxx>
 #include <unx/salunx.h>

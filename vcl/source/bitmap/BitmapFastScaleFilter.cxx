@@ -24,6 +24,7 @@
 
 #include <bitmapwriteaccess.hxx>
 #include <BitmapFastScaleFilter.hxx>
+#include <sal/log.hxx>
 
 BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx)
 {

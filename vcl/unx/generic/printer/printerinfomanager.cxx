@@ -34,6 +34,7 @@
 #include <i18nutil/paper.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>

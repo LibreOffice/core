@@ -28,6 +28,7 @@
 
 #include <vcl/keycodes.hxx>
 #include <vcl/event.hxx>
+#include <sal/log.hxx>
 
 #include <unx/salunx.h>
 #include <unx/salinst.h>

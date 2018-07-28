@@ -18,6 +18,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <fontinstance.hxx>
 #include <impfontcharmap.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <set>

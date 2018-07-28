@@ -17,6 +17,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
+#include <sal/log.hxx>
 
 class VclOutdevTest : public test::BootstrapFixture
 {

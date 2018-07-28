@@ -21,6 +21,7 @@
 #include <boost/multi_array.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/abstdlg.hxx>
+#include <sal/log.hxx>
 
 #include <svdata.hxx>
 #include <strings.hrc>

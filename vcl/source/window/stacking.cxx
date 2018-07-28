@@ -19,6 +19,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <sal/log.hxx>
 
 // declare system types in sysdata.hxx
 #include <vcl/sysdata.hxx>
