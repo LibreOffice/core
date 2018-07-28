@@ -229,8 +229,7 @@ namespace abp
         sal_Int32 nPostfix = 1;
         while ( ( m_pImpl->aDataSourceNames.end() != aPos ) && ( nPostfix < 65535 ) )
         {   // there already is a data source with this name
-            sCheck = _rDataSourceName;
-            sCheck += OUString::number( nPostfix++ );
+            sCheck = _rDataSourceName + OUString::number( nPostfix++ );
 
             aPos = m_pImpl->aDataSourceNames.find( sCheck );
         }

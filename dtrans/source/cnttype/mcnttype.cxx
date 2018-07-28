@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <rtl/ustrbuf.hxx>
 
 #include "mcnttype.hxx"
 
@@ -223,13 +224,13 @@ void CMimeContentType::trailer()
 
 OUString CMimeContentType::pName( )
 {
-    OUString pname;
+    OUStringBuffer pname;
 
     OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, sToken ) )
-            pname += m_nxtSym;
+            pname.append(m_nxtSym);
         else if ( isInRange( m_nxtSym, "= " ) )
             break;
         else
@@ -237,7 +238,7 @@ OUString CMimeContentType::pName( )
         getSym( );
     }
 
-    return pname;
+    return pname.makeStringAndClear();
 }
 
 OUString CMimeContentType::pValue( )
@@ -276,7 +277,7 @@ OUString CMimeContentType::pValue( )
 
 OUString CMimeContentType::quotedPValue( )
 {
-    OUString pvalue;
+    OUStringBuffer pvalue;
     bool bAfterQuoteSign = false;
 
     while ( !m_nxtSym.isEmpty( ) )
@@ -290,7 +291,7 @@ OUString CMimeContentType::quotedPValue( )
         }
         else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + TSPECIALS + SPACE ) )
         {
-            pvalue += m_nxtSym;
+            pvalue.append(m_nxtSym);
             bAfterQuoteSign = m_nxtSym == "\"";
         }
         else
@@ -298,18 +299,18 @@ OUString CMimeContentType::quotedPValue( )
         getSym( );
     }
 
-    return pvalue;
+    return pvalue.makeStringAndClear();
 }
 
 OUString CMimeContentType::nonquotedPValue( )
 {
-    OUString pvalue;
+    OUStringBuffer pvalue;
 
     OUString sToken(TOKEN);
     while ( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, sToken ) )
-            pvalue += m_nxtSym;
+            pvalue.append(m_nxtSym);
         else if ( isInRange( m_nxtSym, "; " ) )
             break;
         else
@@ -317,7 +318,7 @@ OUString CMimeContentType::nonquotedPValue( )
         getSym( );
     }
 
-    return pvalue;
+    return pvalue.makeStringAndClear();
 }
 
 void CMimeContentType::comment()

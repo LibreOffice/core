@@ -1009,7 +1009,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
     if (aSupportedTypes[index].cSymbol)
         return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
     else {
-        OUString result;
+        OUStringBuffer result;
         Locale aLocale("en", OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
         aProperties[0].Name = "NumberingType";
@@ -1017,11 +1017,11 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         aProperties[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
             aProperties[1].Value <<= j;
-            result += makeNumberingString( aProperties, aLocale );
-            result += ", ";
+            result.append( makeNumberingString( aProperties, aLocale ) );
+            result.append(", ");
         }
-        result += "...";
-        return result;
+        result.append("...");
+        return result.makeStringAndClear();
     }
 }
 

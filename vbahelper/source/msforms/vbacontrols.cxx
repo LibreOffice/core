@@ -270,8 +270,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             sal_Int32 nInd = 0;
             while( xDialogContainer->hasByName( aNewName ) && (nInd < SAL_MAX_INT32) )
             {
-                aNewName = aComServiceName;
-                aNewName += OUString::number( nInd++ );
+                aNewName = aComServiceName + OUString::number( nInd++ );
             }
         }
 

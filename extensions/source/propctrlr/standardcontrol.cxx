@@ -1063,16 +1063,16 @@ namespace pcr
 
         OUString lcl_convertListToMultiLine( const StlSyntaxSequence< OUString >& _rStrings )
         {
-            OUString sMultiLineText;
+            OUStringBuffer sMultiLineText;
             for (   StlSyntaxSequence< OUString >::const_iterator item = _rStrings.begin();
                     item != _rStrings.end();
                 )
             {
-                sMultiLineText += *item;
+                sMultiLineText.append(*item);
                 if ( ++item != _rStrings.end() )
-                    sMultiLineText += "\n";
+                    sMultiLineText.append("\n");
             }
-            return sMultiLineText;
+            return sMultiLineText.makeStringAndClear();
         }
 
 

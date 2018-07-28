@@ -140,14 +140,14 @@ void Entry_Impl::checkDependencies()
         deployment::DependencyException depExc;
         if ( e.Cause >>= depExc )
         {
-            OUString aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
+            OUStringBuffer aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
             for ( sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i )
             {
-                aMissingDep += "\n";
-                aMissingDep += dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]);
+                aMissingDep.append("\n");
+                aMissingDep.append(dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]));
             }
-            aMissingDep += "\n";
-            m_sErrorText = aMissingDep;
+            aMissingDep.append("\n");
+            m_sErrorText = aMissingDep.makeStringAndClear();
             m_bMissingDeps = true;
         }
     }
