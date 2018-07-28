@@ -3694,18 +3694,15 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
     const OUString aDirectionPropName("D3DSceneLightDirection");
     const OUString aLightOnPropName("D3DSceneLightOn");
 
-    OUString aPropName;
-    OUString aIndexStr;
     ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D aLightDir;
     bool bLightOnOff = false;
     for(sal_Int32 nLamp = 1; nLamp <= 8; nLamp++)
     {
-        aIndexStr = OUString::number( nLamp );
+        OUString aIndexStr = OUString::number( nLamp );
 
         // lightcolor
-        aPropName = aColorPropName;
-        aPropName += aIndexStr;
+        OUString aPropName = aColorPropName + aIndexStr;
         sal_Int32 nLightColor = 0;
         xPropSet->getPropertyValue( aPropName ) >>= nLightColor;
         ::sax::Converter::convertColor(sStringBuffer, nLightColor);
@@ -3713,8 +3710,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
 
         // lightdirection
-        aPropName = aDirectionPropName;
-        aPropName += aIndexStr;
+        aPropName = aDirectionPropName + aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= aLightDir;
         aLightDirection = ::basegfx::B3DVector(aLightDir.DirectionX, aLightDir.DirectionY, aLightDir.DirectionZ);
         SvXMLUnitConverter::convertB3DVector(sStringBuffer, aLightDirection);
@@ -3722,8 +3718,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
         // lighton
-        aPropName = aLightOnPropName;
-        aPropName += aIndexStr;
+        aPropName = aLightOnPropName + aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= bLightOnOff;
         ::sax::Converter::convertBool(sStringBuffer, bLightOnOff);
         aStr = sStringBuffer.makeStringAndClear();
@@ -4915,9 +4910,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        sPictureName = "TablePreview";
-                        sPictureName += OUString::number( ++nIndex );
-                        sPictureName += ".svm";
+                        sPictureName = "TablePreview" + OUString::number( ++nIndex ) + ".svm";
                     }
                     while( xPictureStorage->hasByName( sPictureName ) );
 

@@ -38,14 +38,13 @@ namespace xmloff
 
         // translate the events
         const ScriptEventDescriptor* pEvents = _rEvents.getConstArray();
-        OUString sName;
         OUString sLibrary, sLocalMacroName;
         for (sal_Int32 i=0; i<nEvents; ++i, ++pEvents)
         {
             // the name of the event is build from listener interface and listener method name
-            sName = pEvents->ListenerType;
-            sName += EVENT_NAME_SEPARATOR;
-            sName += pEvents->EventMethod;
+            OUString sName = pEvents->ListenerType
+                + EVENT_NAME_SEPARATOR
+                + pEvents->EventMethod;
 
             Sequence< PropertyValue >& rMappedEvent = m_aMappedEvents[sName];
 
