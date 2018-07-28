@@ -1842,8 +1842,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         SvTreeListEntry* pEntry = pTreeBox->IsVisible() ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
         const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
-        OUString aMsg = SfxResId(STR_DELETE_STYLE_USED)
-                      + SfxResId(STR_DELETE_STYLE);
+        OUStringBuffer aMsg;
+        aMsg.append(SfxResId(STR_DELETE_STYLE_USED)).append(SfxResId(STR_DELETE_STYLE));
 
         while (pEntry)
         {
@@ -1856,8 +1856,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
             if ( pStyle->IsUsed() )  // pStyle is in use in the document?
             {
                 if (bUsedStyle) // add a separator for the second and later styles
-                    aMsg += ", ";
-                aMsg += aTemplName;
+                    aMsg.append(", ");
+                aMsg.append(aTemplName);
                 bUsedStyle = true;
             }
 
@@ -1871,7 +1871,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         {
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                      VclMessageType::Question, VclButtonsType::YesNo,
-                                                                     aMsg));
+                                                                     aMsg.makeStringAndClear()));
             aApproved = xBox->run() == RET_YES;
         }
 
