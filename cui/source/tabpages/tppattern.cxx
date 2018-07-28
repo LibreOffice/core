@@ -320,6 +320,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
             // update m_pBitmapCtl, rXFSet and m_pCtlPreview
             m_pBitmapCtl->SetPixelColor( aPixelColor );
             m_pBitmapCtl->SetBackgroundColor( aBackColor );
+            m_rXFSet.ClearItem();
+            m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
             m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
             m_pCtlPreview->Invalidate();
