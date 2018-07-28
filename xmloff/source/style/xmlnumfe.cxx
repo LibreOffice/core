@@ -619,16 +619,16 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                                           true, false );
 
         //  text as element content
-        OUString aContent( pObj->aText );
+        OUStringBuffer aContent( pObj->aText );
         while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
         {
             // The array can contain several elements for the same position in the number
             // (for example, literal text and space from underscores). They must be merged
             // into a single embedded-text element.
-            aContent += rEmbeddedEntries[nEntry+1].aText;
+            aContent.append(rEmbeddedEntries[nEntry+1].aText);
             ++nEntry;
         }
-        rExport.Characters( aContent );
+        rExport.Characters( aContent.makeStringAndClear() );
     }
 }
 

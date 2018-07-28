@@ -213,8 +213,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
         while ( mpProcessedLists->find( sNewListId ) != mpProcessedLists->end() )
         {
             ++nHitCount;
-            sNewListId = sTmpStr;
-            sNewListId += OUString::number( nHitCount );
+            sNewListId = sTmpStr + OUString::number( nHitCount );
         }
     }
 
