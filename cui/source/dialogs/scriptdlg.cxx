@@ -1090,12 +1090,12 @@ bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet > const
 
 OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowseNode >& node, int depth )
 {
-    OUString result = "\n";
+    OUStringBuffer result = "\n";
     for( int i=0;i<=depth;i++ )
     {
-        result += "\t";
+        result.append("\t");
     }
-    result += node->getName();
+    result.append(node->getName());
 
     try
     {
@@ -1105,7 +1105,7 @@ OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowse
                 = node->getChildNodes();
             for ( sal_Int32 n = 0; n < children.getLength(); n++ )
             {
-                result += getListOfChildren( children[ n ] , depth+1 );
+                result.append( getListOfChildren( children[ n ] , depth+1 ) );
             }
         }
     }
@@ -1114,7 +1114,7 @@ OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowse
         // ignore, will return an empty string
     }
 
-    return result;
+    return result.makeStringAndClear();
 }
 
 Selection_hash SvxScriptOrgDialog::m_lastSelection;

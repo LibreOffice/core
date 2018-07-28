@@ -978,9 +978,9 @@ namespace cppcanvas
                 nMaxWidth += nWidth + 1;
 
                 long nFullStrikeoutWidth = 0;
-                OUString aStrikeoutText;
+                OUStringBuffer aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
-                    aStrikeoutText += OUStringLiteral1(pChars[0]);
+                    aStrikeoutText.append(pChars[0]);
 
                 sal_Int32 nLen = aStrikeoutText.getLength();
 
@@ -1008,9 +1008,9 @@ namespace cppcanvas
                             aShadowOffset,
                             aShadowColor,
                             aTextFillColor,
-                            aStrikeoutText,
+                            aStrikeoutText.makeStringAndClear(),
                             0/*nStartPos*/,
-                            aStrikeoutText.getLength(),
+                            nLen,
                             pStrikeoutCharWidths,
                             rParms.mrVDev,
                             rParms.mrCanvas,

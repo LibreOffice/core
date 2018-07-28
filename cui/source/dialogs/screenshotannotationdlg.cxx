@@ -599,14 +599,14 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
                         maSelected.insert(mpHilighted);
                     }
 
-                    OUString aBookmarks;
+                    OUStringBuffer aBookmarks(maMainMarkupText);
                     for (auto&& rCandidate : maSelected)
                     {
                         OUString aHelpId = OStringToOUString( rCandidate->GetHelpId(), RTL_TEXTENCODING_UTF8 );
-                        aBookmarks += lcl_Bookmark( aHelpId );
+                        aBookmarks.append(lcl_Bookmark( aHelpId ));
                     }
 
-                    mpText->SetText( maMainMarkupText + aBookmarks );
+                    mpText->SetText( aBookmarks.makeStringAndClear() );
                     bRepaint = true;
                 }
                 break;
