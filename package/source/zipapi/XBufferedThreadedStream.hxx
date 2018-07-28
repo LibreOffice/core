@@ -37,7 +37,7 @@ private:
     std::condition_variable maBufferProduceResume;
     bool mbTerminateThread;                                 /// indicates the failure of one of the threads
 
-    css::uno::Any maSavedException;                         /// exception caught during unzipping is saved to be thrown during reading
+    std::exception_ptr maSavedException;                    /// exception caught during unzipping is saved to be thrown during reading
 
     static const size_t nBufferLowWater = 2;
     static const size_t nBufferHighWater = 4;
@@ -66,7 +66,7 @@ public:
 
     void produce();
     void setTerminateThread();
-    void saveException(const css::uno::Any &rAny) { maSavedException = rAny; }
+    void saveException(std::exception_ptr exception) { maSavedException = exception; }
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
