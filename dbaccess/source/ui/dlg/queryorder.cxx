@@ -219,23 +219,23 @@ OUString DlgOrderCrit::GetOrderList( ) const
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
-    OUString sOrder;
+    OUStringBuffer sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
         if(m_aColumnList[i]->GetSelectedEntryPos() != 0)
         {
             if(!sOrder.isEmpty())
-                sOrder += ",";
+                sOrder.append(",");
 
             OUString sName = m_aColumnList[i]->GetSelectedEntry();
-            sOrder += ::dbtools::quoteName(sQuote,sName);
+            sOrder.append(::dbtools::quoteName(sQuote,sName));
             if(m_aValueList[i]->GetSelectedEntryPos())
-                sOrder += " DESC ";
+                sOrder.append(" DESC ");
             else
-                sOrder += " ASC ";
+                sOrder.append(" ASC ");
         }
     }
-    return sOrder;
+    return sOrder.makeStringAndClear();
 }
 
 void DlgOrderCrit::BuildOrderPart()

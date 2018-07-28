@@ -98,11 +98,10 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
     m_pLB_WHERECOMP2->set_width_request(aSize.Width());
     m_pLB_WHERECOMP3->set_width_request(aSize.Width());
     const sal_Int32 nEntryCount =  m_pLB_WHERECOMP1->GetEntryCount();
+    m_aSTR_COMPARE_OPERATORS.resize(nEntryCount);
     for (sal_Int32 i = 0; i < nEntryCount; ++i)
     {
-        if (i > 0)
-            m_aSTR_COMPARE_OPERATORS += ";";
-        m_aSTR_COMPARE_OPERATORS += m_pLB_WHERECOMP1->GetEntry(i);
+        m_aSTR_COMPARE_OPERATORS[i] = m_pLB_WHERECOMP1->GetEntry(i);
     }
     m_pLB_WHERECOMP1->Clear();
 
@@ -218,8 +217,8 @@ void DlgFilterCrit::dispose()
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
-    for ( sal_Int32 i=0; i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';'); ++i)
-        if ( m_aSTR_COMPARE_OPERATORS.getToken(i, ';') == _rSelectedPredicate )
+    for ( size_t i=0; i < m_aSTR_COMPARE_OPERATORS.size(); ++i)
+        if ( m_aSTR_COMPARE_OPERATORS[i] == _rSelectedPredicate )
         {
             nPredicateIndex = i;
             break;
@@ -675,21 +674,21 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox&, rListBox, void )
 
         if(eColumnSearch  == ColumnSearch::FULL)
         {
-            for(sal_Int32 i=0;i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';');i++)
-                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+            for(size_t i=0;i < m_aSTR_COMPARE_OPERATORS.size(); i++)
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS[i]);
         }
         else if(eColumnSearch == ColumnSearch::CHAR)
         {
             for(sal_Int32 i=6; i<10; i++)
-                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS[i]);
         }
         else if(eColumnSearch == ColumnSearch::BASIC)
         {
-            sal_Int32 i;
+            size_t i;
             for( i = 0; i < 6; i++ )
-                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
-            for(i=8; i < comphelper::string::getTokenCount(m_aSTR_COMPARE_OPERATORS, ';'); ++i)
-                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS.getToken(i, ';'));
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS[i]);
+            for(i=8; i < m_aSTR_COMPARE_OPERATORS.size(); ++i)
+                pComp->InsertEntry(m_aSTR_COMPARE_OPERATORS[i]);
         }
         else
         {
