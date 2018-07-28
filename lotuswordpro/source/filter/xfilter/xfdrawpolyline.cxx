@@ -58,6 +58,7 @@
  * Polyline.
  ************************************************************************/
 #include <xfilter/xfdrawpolyline.hxx>
+#include <rtl/ustrbuf.hxx>
 
 XFDrawPolyline::XFDrawPolyline()
 {
@@ -76,15 +77,15 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points
-    OUString   strPoints;
+    OUStringBuffer strPoints;
     for (auto const& point : m_aPoints)
     {
         double  x = (point.GetX()-rect.GetX())*1000;
         double  y = (point.GetY()-rect.GetY())*1000;
-        strPoints += OUString::number(x) + "," + OUString::number(y) + " ";
+        strPoints.append(OUString::number(x)).append(",").append(OUString::number(y)).append(" ");
     }
-    strPoints = strPoints.trim();
-    pAttrList->AddAttribute( "draw:points", strPoints);
+    strPoints.stripEnd(' ');
+    pAttrList->AddAttribute( "draw:points", strPoints.makeStringAndClear());
 
     SetPosition(rect.GetX(),rect.GetY(),rect.GetWidth(),rect.GetHeight());
     XFDrawObject::ToXml(pStrm);
