@@ -2149,35 +2149,12 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                     {
                         pValue = Atom::findNextChildAtom(pValue);
                         if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
-                            (void)importAttributeValue( pValue, aValue2 );
-
-                        bool bCouldBeFormula = false;
-                        bool bHasValue = aValue2.hasValue();
-                        if( bHasValue )
                         {
-                            if( aValue2.getValueType() == cppu::UnoType<OUString>::get() )
-                            {
-                                OUString aTest;
-                                aValue2 >>= aTest;
-                                bHasValue = !aTest.isEmpty();
-                                bCouldBeFormula = true;
-                            }
+                            // Any occurence of the formula becomes the formula of the whole list.
+                            if (importAttributeValue(pValue, aValue2))
+                                aValue2 >>= aFormula;
                         }
-
-                        if( bHasValue && bCouldBeFormula && (aValue1.getValueType() == cppu::UnoType<double>::get() ))
-                        {
-                            aValue2 >>= aFormula;
-                            bHasValue = false;
-                        }
-
-                        if( bHasValue )
-                        {
-                            aValues[nKeyTime] <<= ValuePair( aValue1, aValue2 );
-                        }
-                        else
-                        {
-                            aValues[nKeyTime] = aValue1;
-                        }
+                        aValues[nKeyTime] = aValue1;
                     }
                 }
             }
