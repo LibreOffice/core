@@ -1110,9 +1110,9 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     if ( !IsUpperLetter(rCC.getCharacterType(rTxt, nSttPos+1)) )
         return false;
 
-    OUString aConverted;
-    aConverted += rCC.uppercase(OUString(rTxt[nSttPos]));
-    aConverted += rCC.lowercase(OUString(rTxt[nSttPos+1]));
+    OUStringBuffer aConverted;
+    aConverted.append( rCC.uppercase(OUString(rTxt[nSttPos])) );
+    aConverted.append( rCC.lowercase(OUString(rTxt[nSttPos+1])) );
 
     for( sal_Int32 i = nSttPos+2; i < nEndPos; ++i )
     {
@@ -1122,15 +1122,15 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted += rCC.lowercase(OUString(rTxt[i]));
+            aConverted.append( rCC.lowercase(OUString(rTxt[i])) );
         else
             // This is not an alphabetic letter.  Leave it as-is.
-            aConverted += OUStringLiteral1( rTxt[i] );
+            aConverted.append( rTxt[i] );
     }
 
     // Replace the word.
     rDoc.Delete(nSttPos, nEndPos);
-    rDoc.Insert(nSttPos, aConverted);
+    rDoc.Insert(nSttPos, aConverted.makeStringAndClear());
 
     return true;
 }

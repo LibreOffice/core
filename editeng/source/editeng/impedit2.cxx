@@ -286,7 +286,7 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
 
     OSL_ENSURE( nStartNode <= nEndNode, "Selection not sorted ?" );
 
-    OUString aText;
+    OUStringBuffer aText;
     const OUString aSep = EditDoc::GetSepStr( LINEEND_LF );
 
     // iterate over the paragraphs ...
@@ -298,11 +298,11 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
 
-        aText += EditDoc::GetParaAsString( pNode, nStartPos, nEndPos );
+        aText.append(EditDoc::GetParaAsString( pNode, nStartPos, nEndPos ));
         if ( nNode < nEndNode )
-            aText += aSep;
+            aText.append(aSep);
     }
-    return aText;
+    return aText.makeStringAndClear();
 }
 
 bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
