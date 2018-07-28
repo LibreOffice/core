@@ -473,9 +473,9 @@ private:
             mpEntry->closeBufferFile();
             mpEntry->setFinished();
         }
-        catch (const uno::Exception&)
+        catch (...)
         {
-            mpEntry->setParallelDeflateException(::cppu::getCaughtException());
+            mpEntry->setParallelDeflateException(std::current_exception());
             try
             {
                 if (mpEntry->m_xOutStream.is())

@@ -29,9 +29,8 @@ private:
         {
             mxStream.produce();
         }
-        catch (const css::uno::Exception &e)
+        catch (...)
         {
-            SAL_WARN("package", "Unexpected " << e );
             mxStream.saveException(std::current_exception());
         }
 

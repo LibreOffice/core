@@ -61,27 +61,26 @@ public:
         typedef GenericSolarThreadExecutor<FuncT, ResultT> ExecutorT;
         ::std::unique_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
         pExecutor->execute();
-        if (pExecutor->m_exc.hasValue())
-            ::cppu::throwException( pExecutor->m_exc );
+        if (pExecutor->m_exc)
+            std::rethrow_exception(pExecutor->m_exc);
         return *pExecutor->m_result;
     }
 
 private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
-        : m_exc(), m_func(func), m_result() {}
+        : m_func(func), m_result() {}
 
     virtual void doIt() override
     {
         try {
             m_result.reset( m_func() );
         }
-        catch (css::uno::Exception &) {
-            // only UNO exceptions can be dispatched:
-            m_exc = ::cppu::getCaughtException();
+        catch (...) {
+            m_exc = std::current_exception();
         }
     }
 
-    css::uno::Any m_exc;
+    std::exception_ptr m_exc;
 #ifdef _MSC_VER
     FuncT m_func; // "const" and std::bind() results in Error C3848 expression would lose const-volatile qualifiers
 #else
@@ -97,20 +96,19 @@ class GenericSolarThreadExecutor<FuncT, void> : public SolarThreadExecutor
 {
 private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
-        : m_exc(), m_func(func) {}
+        : m_func(func) {}
 
     virtual void doIt() override
     {
         try {
             m_func();
         }
-        catch (css::uno::Exception &) {
-            // only UNO exceptions can be dispatched:
-            m_exc = ::cppu::getCaughtException();
+        catch (...) {
+            m_exc = std::current_exception();
         }
     }
 
-    css::uno::Any m_exc;
+    std::exception_ptr m_exc;
     FuncT const m_func;
 };
 
