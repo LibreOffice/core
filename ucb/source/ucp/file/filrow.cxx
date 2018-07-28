@@ -24,6 +24,8 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <sal/log.hxx>
+
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace css::uno;

@@ -34,6 +34,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>

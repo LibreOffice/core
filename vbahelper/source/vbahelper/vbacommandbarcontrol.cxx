@@ -20,6 +20,7 @@
 #include "vbacommandbarcontrols.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

@@ -20,6 +20,7 @@
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/simplecertificatevalidationrequest.hxx>

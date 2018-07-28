@@ -33,6 +33,7 @@
 
  *************************************************************************/
 
+#include <sal/log.hxx>
 #include <o3tl/make_unique.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>

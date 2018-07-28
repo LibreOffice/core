@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/string.h>

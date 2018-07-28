@@ -20,6 +20,7 @@
 #include "ucblockbytes.hxx"
 
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/condition.hxx>
 #include <osl/thread.hxx>

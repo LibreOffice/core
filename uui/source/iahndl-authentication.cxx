@@ -37,6 +37,7 @@
 #include <vcl/errinf.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include "authfallbackdlg.hxx"
 #include <strings.hrc>

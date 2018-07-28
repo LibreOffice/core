@@ -23,6 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include "element.hxx"
 #include "document.hxx"

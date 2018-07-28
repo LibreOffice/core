@@ -28,6 +28,7 @@
 #include <libxml/xpathInternals.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include "nodelist.hxx"
 #include "xpathobject.hxx"

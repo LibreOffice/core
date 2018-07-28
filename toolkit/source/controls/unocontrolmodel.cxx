@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

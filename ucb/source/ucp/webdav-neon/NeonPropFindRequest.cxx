@@ -29,6 +29,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include "NeonSession.hxx"
 #include "NeonTypes.hxx"
 #include "DAVException.hxx"

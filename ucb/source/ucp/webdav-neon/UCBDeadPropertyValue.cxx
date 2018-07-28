@@ -30,6 +30,7 @@
 #include <string.h>
 #include <ne_xml.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include "UCBDeadPropertyValue.hxx"
 #include <memory>
 

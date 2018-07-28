@@ -20,6 +20,7 @@
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/socket.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>

@@ -22,6 +22,7 @@
 #include <codemaker/global.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
+#include <sal/log.hxx>
 #include <options.hxx>
 
 namespace unodevtools {

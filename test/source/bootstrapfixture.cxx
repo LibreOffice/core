@@ -14,6 +14,7 @@
 #include <vcl/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
