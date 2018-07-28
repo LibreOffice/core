@@ -16,6 +16,24 @@
       "revId": "99ab9d4ea59c1bdc3161894607ccda5bb8010a46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_b93f2cd5",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-07-28T16:40:07Z",
+      "side": 1,
+      "message": "Well - I looked at line 86, so line 33 was out of my scope - what is bad. It should be mentioned closer to the definition (or be replaced from whoever deprecated it).\nThanks for telling me :-)",
+      "parentUuid": "ffe62b97_1e74be34",
+      "revId": "99ab9d4ea59c1bdc3161894607ccda5bb8010a46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
