@@ -1680,10 +1680,10 @@ void SortedResultSet::ResortNew( EventList* pList )
 
 
 SortListData::SortListData( sal_IntPtr nPos )
+    : mbModified(false)
+    , mnCurPos(nPos)
+    , mnOldPos(nPos)
 {
-    mbModified = false;
-    mnCurPos = nPos;
-    mnOldPos = nPos;
 };
 
 SortedEntryList::SortedEntryList()

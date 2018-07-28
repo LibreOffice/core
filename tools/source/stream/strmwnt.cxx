@@ -42,9 +42,8 @@ class StreamData
 public:
     HANDLE      hFile;
 
-                StreamData()
+                StreamData() : hFile(nullptr)
                 {
-                    hFile = nullptr;
                 }
 };
 

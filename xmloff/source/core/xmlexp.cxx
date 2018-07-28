@@ -283,17 +283,14 @@ public:
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
+:    mxUriReferenceFactory( uri::UriReferenceFactory::create(comphelper::getProcessComponentContext()) ),
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    : mbOutlineStyleAsNormalListStyle( false )
-        ,mbSaveBackwardCompatibleODF( true )
-        ,mStreamName()
-        ,mNamespaceMaps()
-        ,mDepth(0)
-        ,mpRDFaHelper() // lazy
-        ,mbExportTextNumberElement( false )
-        ,mbNullDateInitialized( false )
+    mbOutlineStyleAsNormalListStyle( false ),
+    mbSaveBackwardCompatibleODF( true ),
+    mDepth( 0 ),
+    mbExportTextNumberElement( false ),
+    mbNullDateInitialized( false )
 {
-    mxUriReferenceFactory = uri::UriReferenceFactory::create( comphelper::getProcessComponentContext() );
 }
 
 void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )

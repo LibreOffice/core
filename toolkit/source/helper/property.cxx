@@ -66,12 +66,12 @@ struct ImplPropertyInfo
 
     ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const css::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
-     : aName( theName )
+         : aName(theName)
+         , nPropId(nId)
+         , aType(rType)
+         , nAttribs(nAttrs)
+         , bDependsOnOthers(bDepends)
      {
-         nPropId = nId;
-        aType = rType;
-        nAttribs = nAttrs;
-           bDependsOnOthers = bDepends;
      }
 
 };

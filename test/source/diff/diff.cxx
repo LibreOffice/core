@@ -97,11 +97,10 @@ private:
 
 
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
-    : fileName(pFileName)
+    : xmlFile1(xmlParseFile(pFileName))
+    , xmlFile2(xmlParseMemory(pContent, size))
+    , fileName(pFileName)
 {
-    xmlFile1 = xmlParseFile(pFileName);
-    xmlFile2 = xmlParseMemory(pContent, size);
-
     if(pToleranceFile)
     {
         xmlDocPtr xmlToleranceFile = xmlParseFile(pToleranceFile);
