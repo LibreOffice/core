@@ -3072,6 +3072,17 @@ square-root
 even
 odd
 sign
+replace-string
+column-replacenull-transformation
+column-datetime-transformation
+start-of-year
+end-of-year
+month-name
+start-of-month
+end-of-month
+day-of-year
+start-of-quarter
+end-of-quarter
 star
 asterisk
 horizontal-bar
