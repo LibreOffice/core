@@ -158,7 +158,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         const OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
         const OUString sTargetNameTemp = sTargetName + ".";
 
-        OUString sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
+        OUStringBuffer sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
 
         for (const std::pair<OUString,OUString> & aPropertie : aProperties)
         {
@@ -168,17 +168,17 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 m_xObject->getPropertyValue( aPropertie.first ) >>= sFilter;
                 if ( !sFilter.isEmpty() )
                 {
-                    sStatement += aPropertie.second;
+                    sStatement.append(aPropertie.second);
                     OUString sReplace = sFilter;
                     sReplace = sReplace.replaceFirst(sSourceName,sTargetNameTemp);
                     sFilter = sReplace;
                     _rxObject->setPropertyValue( aPropertie.first, makeAny(sFilter) );
-                    sStatement += sFilter;
+                    sStatement.append(sFilter);
                 }
             }
         }
 
-        _xConnection->createStatement()->executeQuery(sStatement);
+        _xConnection->createStatement()->executeQuery(sStatement.makeStringAndClear());
 
         if ( m_xObjectPSI->hasPropertyByName( PROPERTY_APPLYFILTER ) )
             _rxObject->setPropertyValue( PROPERTY_APPLYFILTER, m_xObject->getPropertyValue( PROPERTY_APPLYFILTER ) );
@@ -1384,8 +1384,7 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
 
             while(_rCmpFunctor(sName))
             {
-                sName = sAlias;
-                sName += OUString::number(++nPos);
+                sName = sAlias + OUString::number(++nPos);
             }
             sAlias = sName;
             // we have to check again, it could happen that the name is already to long
@@ -1521,8 +1520,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
             sal_Int32 nPos = 0;
             while(m_vSourceColumns.find(sName) != m_vSourceColumns.end())
             {
-                sName = _sName;
-                sName += OUString::number(++nPos);
+                sName = _sName + OUString::number(++nPos);
             }
         }
     }

@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, ComboBox&, void) { upda
 OUString FontFeaturesDialog::createFontNameWithFeatures()
 {
     OUString sResultFontName;
-    OUString sNameSuffix;
+    OUStringBuffer sNameSuffix;
     bool bFirst = true;
 
     for (FontFeatureItem& rItem : m_aFeatureItems)
@@ -187,11 +187,11 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
             if (rItem.m_pCheck->IsChecked())
             {
                 if (!bFirst)
-                    sNameSuffix += OUString(vcl::font::FeatureSeparator);
+                    sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
                 else
                     bFirst = false;
 
-                sNameSuffix += vcl::font::featureCodeAsString(rItem.m_aFeatureCode);
+                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
             }
         }
         else if (rItem.m_pCombo && rItem.m_pText)
@@ -200,19 +200,19 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
             if (nSelection > 0)
             {
                 if (!bFirst)
-                    sNameSuffix += OUString(vcl::font::FeatureSeparator);
+                    sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
                 else
                     bFirst = false;
 
-                sNameSuffix += vcl::font::featureCodeAsString(rItem.m_aFeatureCode);
-                sNameSuffix += "=";
-                sNameSuffix += OUString::number(nSelection);
+                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
+                sNameSuffix.append("=");
+                sNameSuffix.append(OUString::number(nSelection));
             }
         }
     }
     sResultFontName = vcl::font::trimFontNameFeatures(m_sFontName);
     if (!sNameSuffix.isEmpty())
-        sResultFontName += OUString(vcl::font::FeaturePrefix) + sNameSuffix;
+        sResultFontName += OUString(vcl::font::FeaturePrefix) + sNameSuffix.makeStringAndClear();
     return sResultFontName;
 }
 

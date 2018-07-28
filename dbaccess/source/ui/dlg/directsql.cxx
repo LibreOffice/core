@@ -259,7 +259,7 @@ namespace dbaui
         while (xRS->next())
         {
             // initialise the output line for each row
-            OUString out("");
+            OUStringBuffer out;
             // work along the columns until that are none left
             try
             {
@@ -267,7 +267,7 @@ namespace dbaui
                 for (;;)
                 {
                     // be dumb, treat everything as a string
-                    out += xRow->getString(i) + ",";
+                    out.append(xRow->getString(i)).append(",");
                     i++;
                 }
             }
@@ -276,7 +276,7 @@ namespace dbaui
             {
             }
             // report the output
-            addOutputText(out);
+            addOutputText(out.makeStringAndClear());
         }
     }
 

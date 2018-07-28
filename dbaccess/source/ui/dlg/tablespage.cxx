@@ -437,7 +437,6 @@ namespace dbaui
         Sequence< OUString > aTableFilter;
         static const char sWildcard[] = "%";
 
-        OUString sComposedName;
         const SvTreeListEntry* pAllObjectsEntry = m_pTablesList->getAllObjectsEntry();
         if (!pAllObjectsEntry)
             return aTableFilter;
@@ -451,6 +450,7 @@ namespace dbaui
 
             if (m_pTablesList->GetCheckButtonState(pEntry) == SvButtonState::Checked && !m_pTablesList->GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
+                OUStringBuffer sComposedName;
                 OUString sCatalog;
                 if(m_pTablesList->GetModel()->HasParent(pEntry))
                 {
@@ -473,9 +473,9 @@ namespace dbaui
                                 bCatalogWildcard = OTableTreeListBox::isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
-                                    sComposedName += m_pTablesList->GetEntryText( pCatalog ) + m_sCatalogSeparator;
+                                    sComposedName.append(m_pTablesList->GetEntryText( pCatalog )).append(m_sCatalogSeparator);
                                     if (bCatalogWildcard)
-                                        sComposedName += sWildcard;
+                                        sComposedName.append(sWildcard);
                                 }
                                 else
                                 {
@@ -488,26 +488,23 @@ namespace dbaui
                             }
                         }
                         bSchemaWildcard = OTableTreeListBox::isWildcardChecked(pSchema);
-                        sComposedName += m_pTablesList->GetEntryText( pSchema ) + ".";
+                        sComposedName.append(m_pTablesList->GetEntryText( pSchema )).append(".");
                     }
 
                     if (bSchemaWildcard)
-                        sComposedName += sWildcard;
+                        sComposedName.append(sWildcard);
                 }
                 if (!bSchemaWildcard && !bCatalogWildcard)
-                    sComposedName += m_pTablesList->GetEntryText( pEntry );
+                    sComposedName.append(m_pTablesList->GetEntryText( pEntry ));
 
                 if (!m_bCatalogAtStart && !bCatalogWildcard)
-                    sComposedName += sCatalog;
+                    sComposedName.append(sCatalog);
 
                 // need some space
                 sal_Int32 nOldLen = aTableFilter.getLength();
                 aTableFilter.realloc(nOldLen + 1);
                 // add the new name
-                aTableFilter[nOldLen] = sComposedName;
-
-                // reset the composed name
-                sComposedName.clear();
+                aTableFilter[nOldLen] = sComposedName.makeStringAndClear();
             }
 
             if (bCatalogWildcard)

@@ -147,24 +147,23 @@ static OUString getCfgName_Impl( sal_uInt16 _nHandle )
 
 static OUString Convert_Impl( const OUString& rValue )
 {
-    OUString aReturn;
     if (rValue.isEmpty())
-        return aReturn;
+        return OUString();
 
     sal_Int32 nPos = 0;
-
+    OUStringBuffer aReturn;
     for (;;)
     {
         OUString aValue = rValue.getToken( 0, MULTIPATH_DELIMITER, nPos );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
-            aReturn += aObj.PathToFileName();
+            aReturn.append(aObj.PathToFileName());
         if ( nPos < 0 )
             break;
-        aReturn += OUStringLiteral1(MULTIPATH_DELIMITER);
+        aReturn.append(MULTIPATH_DELIMITER);
     }
 
-    return aReturn;
+    return aReturn.makeStringAndClear();
 }
 
 // functions -------------------------------------------------------------
@@ -438,7 +437,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, Button*, void)
             }
             while ( nOldPos >= 0 );
 
-            OUString sUserPath, sWritablePath;
+            OUString sWritablePath;
+            OUStringBuffer sUserPath;
             if ( !sTemp.isEmpty() )
             {
                 sal_Int32 nNextPos = 0;
@@ -452,13 +452,13 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, Button*, void)
                         break;
                     }
                     if ( !sUserPath.isEmpty() )
-                        sUserPath += OUStringLiteral1(MULTIPATH_DELIMITER);
-                    sUserPath += sToken;
+                        sUserPath.append(MULTIPATH_DELIMITER);
+                    sUserPath.append(sToken);
                 }
             }
             pPathBox->SetEntryText( Convert_Impl( sTemp ), pEntry, 1 );
             pPathImpl->eState = SfxItemState::SET;
-            pPathImpl->sUserPath = sUserPath;
+            pPathImpl->sUserPath = sUserPath.makeStringAndClear();
             pPathImpl->sWritablePath = sWritablePath;
         }
         pEntry = pPathBox->NextSelected( pEntry );

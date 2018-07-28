@@ -246,7 +246,7 @@ void SvxMultiPathDialog::dispose()
 
 OUString SvxMultiPathDialog::GetPath() const
 {
-    OUString sNewPath;
+    OUStringBuffer sNewPath;
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
     OUString sWritable;
@@ -258,29 +258,29 @@ OUString SvxMultiPathDialog::GetPath() const
         else
         {
             if ( !sNewPath.isEmpty() )
-                sNewPath += OUStringLiteral1(cDelim);
-            sNewPath += *static_cast<OUString*>(pEntry->GetUserData());
+                sNewPath.append(cDelim);
+            sNewPath.append( *static_cast<OUString*>(pEntry->GetUserData()) );
         }
     }
     if ( !sNewPath.isEmpty() )
-        sNewPath += OUStringLiteral1(cDelim);
-    sNewPath += sWritable;
+        sNewPath.append(cDelim);
+    sNewPath.append(sWritable);
 
-    return sNewPath;
+    return sNewPath.makeStringAndClear();
 }
 
 OUString SvxPathSelectDialog::GetPath() const
 {
-    OUString sNewPath;
+    OUStringBuffer sNewPath;
 
     for (int i = 0; i < m_xPathLB->n_children(); ++i)
     {
         if ( !sNewPath.isEmpty() )
-            sNewPath += OUStringLiteral1(SVT_SEARCHPATH_DELIMITER);
-        sNewPath += m_xPathLB->get_id(i);
+            sNewPath.append(SVT_SEARCHPATH_DELIMITER);
+        sNewPath.append( m_xPathLB->get_id(i));
     }
 
-    return sNewPath;
+    return sNewPath.makeStringAndClear();
 }
 
 void SvxMultiPathDialog::SetPath( const OUString& rPath )

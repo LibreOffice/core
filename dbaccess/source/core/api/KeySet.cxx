@@ -714,10 +714,8 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
     if ( i_sTableName.isEmpty() && !bAutoValuesFetched && m_bInserted )
     {
         // first check if all key column values were set
-        const OUString sMax(" MAX(");
-        const OUString sMaxEnd("),");
         const OUString sQuote = getIdentifierQuoteString();
-        OUString sMaxStmt;
+        OUStringBuffer sMaxStmt;
         auto aEnd = m_pKeyColumnNames->end();
         for (auto const& autoColumn : m_aAutoColumns)
         {
@@ -725,14 +723,14 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
             SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(autoColumn);
             if ( aFind != aEnd )
             {
-                sMaxStmt += sMax + ::dbtools::quoteName( sQuote,aFind->second.sRealName) + sMaxEnd;
+                sMaxStmt.append(" MAX(").append(::dbtools::quoteName( sQuote,aFind->second.sRealName)).append("),");
             }
         }
 
         if(!sMaxStmt.isEmpty())
         {
-            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1," ");
-            OUString sStmt = "SELECT " + sMaxStmt + "FROM ";
+            sMaxStmt[sMaxStmt.getLength()-1] = ' ';
+            OUString sStmt = "SELECT " + sMaxStmt.makeStringAndClear() + "FROM ";
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );

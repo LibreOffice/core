@@ -81,7 +81,7 @@ namespace dbaui
         VclPtr<ListBox>        m_pLB_WHERECOMP3;
         VclPtr<Edit>           m_pET_WHEREVALUE3;
 
-        OUString        m_aSTR_COMPARE_OPERATORS;
+        std::vector<OUString>  m_aSTR_COMPARE_OPERATORS;
 
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
         css::uno::Reference< css::container::XNameAccess>             m_xColumns;

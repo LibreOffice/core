@@ -984,15 +984,15 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
-    OUString sPath;
+    OUStringBuffer sPath;
     int nCount = m_xPathList->n_children();
     for (int i = 0; i < nCount; ++i)
     {
         if (!sPath.isEmpty())
-            sPath += OUStringLiteral1(CLASSPATH_DELIMITER);
-        sPath += m_xPathList->get_text(i);
+            sPath.append(CLASSPATH_DELIMITER);
+        sPath.append(m_xPathList->get_text(i));
     }
-    return sPath;
+    return sPath.makeStringAndClear();
 }
 
 void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
