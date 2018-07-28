@@ -194,11 +194,10 @@ OUString XMLFontAutoStylePool::Add(
         {
             sal_Int32 nCount = 1;
             OUString sPrefix( sName );
-            sName += OUString::number( nCount );
+            sName = sPrefix + OUString::number( nCount );
             while( m_aNames.find(sName) != m_aNames.end() )
             {
-                sName = sPrefix;
-                sName += OUString::number( ++nCount );
+                sName = sPrefix + OUString::number( ++nCount );
             }
         }
 

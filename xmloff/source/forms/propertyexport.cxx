@@ -484,7 +484,7 @@ namespace xmloff
         Sequence< OUString > aItems;
         m_xProps->getPropertyValue( _rPropertyName ) >>= aItems;
 
-        OUString sFinalList;
+        OUStringBuffer sFinalList;
 
         // unfortunately the OUString can't append single sal_Unicode characters ...
         const OUString sQuote(&_aQuoteCharacter, 1);
@@ -504,17 +504,17 @@ namespace xmloff
                 "OPropertyExport::exportStringSequenceAttribute: there is an item which contains the quote character!");
 
             if (bQuote)
-                sFinalList += sQuote;
-            sFinalList += *pItems;
+                sFinalList.append(sQuote);
+            sFinalList.append(*pItems);
             if (bQuote)
-                sFinalList += sQuote;
+                sFinalList.append(sQuote);
 
             if (pItems != pLastElement)
-                sFinalList += sSeparator;
+                sFinalList.append(sSeparator);
         }
 
         if (!sFinalList.isEmpty())
-            AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sFinalList);
+            AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sFinalList.makeStringAndClear());
 
         exportedProperty( _rPropertyName );
     }
