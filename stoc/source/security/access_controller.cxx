@@ -26,6 +26,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <uno/current_context.h>
 #include <uno/lbnames.h>

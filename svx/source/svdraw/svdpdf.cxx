@@ -85,6 +85,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/dibtools.hxx>
 #include <com/sun/star/geometry/Matrix2D.hpp>
+#include <sal/log.hxx>
 
 namespace
 {

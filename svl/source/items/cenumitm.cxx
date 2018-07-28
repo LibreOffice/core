@@ -24,6 +24,7 @@
 
 #include <comphelper/extract.hxx>
 #include <libxml/xmlwriter.h>
+#include <sal/log.hxx>
 
 
 // virtual

@@ -35,6 +35,7 @@
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;

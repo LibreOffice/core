@@ -84,6 +84,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <iterator>

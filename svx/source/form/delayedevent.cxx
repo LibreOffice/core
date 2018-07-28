@@ -19,6 +19,7 @@
 
 #include <delayedevent.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 namespace svxform
 {

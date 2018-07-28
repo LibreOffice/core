@@ -39,6 +39,7 @@
 #include <rtl/ustring>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

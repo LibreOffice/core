@@ -32,6 +32,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/nlsupport.h>
 #include <txenctab.hrc>
 

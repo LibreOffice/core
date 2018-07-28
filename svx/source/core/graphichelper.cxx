@@ -25,6 +25,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

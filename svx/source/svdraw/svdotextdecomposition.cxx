@@ -54,6 +54,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

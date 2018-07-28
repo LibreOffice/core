@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>

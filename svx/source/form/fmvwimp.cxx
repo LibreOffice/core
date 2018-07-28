@@ -78,6 +78,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <vcl/stdtext.hxx>
 #include <connectivity/dbtools.hxx>
 

@@ -12,6 +12,7 @@
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/base64.hxx>

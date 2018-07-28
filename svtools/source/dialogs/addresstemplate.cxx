@@ -29,6 +29,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

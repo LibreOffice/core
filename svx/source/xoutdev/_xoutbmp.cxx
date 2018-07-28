@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/graphicmimetype.hxx>

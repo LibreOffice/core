@@ -34,6 +34,7 @@
 #include <fmitems.hxx>
 #include <fmobj.hxx>
 #include <fmprop.hxx>
+#include <sal/log.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
