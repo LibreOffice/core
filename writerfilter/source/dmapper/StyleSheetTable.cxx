@@ -161,6 +161,26 @@ void StyleSheetEntry::AppendInteropGrabBag(const beans::PropertyValue& rValue)
     m_aInteropGrabBag.push_back(rValue);
 }
 
+PropertyMapPtr StyleSheetEntry::GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable)
+{
+    assert(pStyleSheetTable);
+
+    PropertyMapPtr pRet;
+    if ( pStyleSheetTable && !sBaseStyleIdentifier.isEmpty() && sBaseStyleIdentifier != sStyleIdentifierD )
+    {
+        const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD(sBaseStyleIdentifier);
+        if ( pParentStyleSheet )
+            pRet = pParentStyleSheet->GetMergedInheritedProperties(pStyleSheetTable);
+    }
+
+    if ( !pRet )
+        pRet = new PropertyMap;
+
+    pRet->InsertProps(pProperties);
+
+    return pRet;
+}
+
 void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr& pToAdd, TblStyleType nStyleId )
 {
     static const PropertyIds pPropsToCheck[] =

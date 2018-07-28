@@ -47,6 +47,8 @@ enum StyleType
     STYLE_TYPE_TABLE,
     STYLE_TYPE_LIST
 };
+class StyleSheetTable;
+typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
 
 struct StyleSheetTable_Impl;
 class StyleSheetEntry : public virtual SvRefBase
@@ -70,6 +72,9 @@ public:
     void AppendInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
     css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
+
+    // Get all properties, merged with the all of the parent's properties
+    PropertyMapPtr GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable);
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry() override;
@@ -113,7 +118,6 @@ private:
 
     void applyDefaults(bool bParaProperties);
 };
-typedef tools::SvRef< StyleSheetTable >    StyleSheetTablePtr;
 
 
 class TableStyleSheetEntry :
