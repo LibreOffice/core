@@ -23,9 +23,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 	$(if $(filter FUZZERS,$(BUILD_TYPE)), \
 		-DFORCE_DEFAULT_SIGNAL \
 	) \
-	$(if $(filter SYS_ALLOC,$(ALLOC))$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)), \
-		-DFORCE_SYSALLOC \
-	) \
 	$(if $(filter IOS,$(OS)), \
 		-DNO_CHILD_PROCESSES \
 	) \

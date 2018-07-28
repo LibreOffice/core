@@ -140,21 +140,6 @@ void rtl_cache_hash_rescale(
     }
 }
 
-inline sal_uIntPtr rtl_cache_hash_insert(
-    rtl_cache_type *        cache,
-    rtl_cache_bufctl_type * bufctl
-)
-{
-    rtl_cache_bufctl_type ** ppHead;
-
-    ppHead = &(cache->m_hash_table[RTL_CACHE_HASH_INDEX(cache, bufctl->m_addr)]);
-
-    bufctl->m_next = (*ppHead);
-    (*ppHead) = bufctl;
-
-    return bufctl->m_addr;
-}
-
 rtl_cache_bufctl_type * rtl_cache_hash_remove(
     rtl_cache_type * cache,
     sal_uIntPtr      addr
@@ -228,49 +213,6 @@ void rtl_cache_slab_destructor(void * obj, SAL_UNUSED_PARAMETER void *)
 /**
     @precond cache->m_slab_lock released.
 */
-rtl_cache_slab_type * rtl_cache_slab_create(rtl_cache_type * cache)
-{
-    rtl_cache_slab_type * slab = nullptr;
-    void *                addr;
-    sal_Size              size;
-
-    size = cache->m_slab_size;
-    addr = rtl_arena_alloc (cache->m_source, &size);
-    if (SAL_LIKELY(addr))
-    {
-        assert(size >= cache->m_slab_size);
-
-        if (cache->m_features & RTL_CACHE_FEATURE_HASH)
-        {
-            /* allocate slab struct from slab cache */
-            assert(cache != gp_cache_slab_cache);
-            slab = static_cast<rtl_cache_slab_type*>(rtl_cache_alloc (gp_cache_slab_cache));
-        }
-        else
-        {
-            /* construct embedded slab struct */
-            slab = RTL_CACHE_SLAB(addr, cache->m_slab_size);
-            (void) rtl_cache_slab_constructor (slab, nullptr);
-        }
-        if (SAL_LIKELY(slab))
-        {
-            slab->m_data = reinterpret_cast<sal_uIntPtr>(addr);
-
-            /* dynamic freelist initialization */
-            slab->m_bp = slab->m_data;
-            slab->m_sp = nullptr;
-        }
-        else
-        {
-            rtl_arena_free (cache->m_source, addr, size);
-        }
-    }
-    return slab;
-}
-
-/**
-    @precond cache->m_slab_lock released.
-*/
 void rtl_cache_slab_destroy(
     rtl_cache_type *      cache,
     rtl_cache_slab_type * slab
@@ -310,115 +252,6 @@ void rtl_cache_slab_destroy(
         /* free memory */
         rtl_arena_free (cache->m_source, addr, cache->m_slab_size);
     }
-}
-
-/**
-    @precond cache->m_slab_lock acquired.
-*/
-bool rtl_cache_slab_populate(rtl_cache_type * cache)
-{
-    rtl_cache_slab_type * slab;
-
-    RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
-    slab = rtl_cache_slab_create (cache);
-    RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
-    if (slab)
-    {
-        /* update buffer start addr w/ current color */
-        slab->m_bp += cache->m_ncolor;
-
-        /* update color for next slab */
-        cache->m_ncolor += cache->m_type_align;
-        if (cache->m_ncolor > cache->m_ncolor_max)
-            cache->m_ncolor = 0;
-
-        /* update stats */
-        cache->m_slab_stats.m_mem_total += cache->m_slab_size;
-
-        /* insert onto 'free' queue */
-        QUEUE_INSERT_HEAD_NAMED(&(cache->m_free_head), slab, slab_);
-    }
-    return (slab != nullptr);
-}
-
-/**
-    Allocate a buffer from slab layer; used by magazine layer.
-*/
-void * rtl_cache_slab_alloc (rtl_cache_type * cache)
-{
-    void                * addr = nullptr;
-    rtl_cache_slab_type * head;
-
-    RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
-
-    head = &(cache->m_free_head);
-    if (head->m_slab_next != head || rtl_cache_slab_populate (cache))
-    {
-        rtl_cache_slab_type   * slab;
-        rtl_cache_bufctl_type * bufctl;
-
-        slab = head->m_slab_next;
-        assert(slab->m_ntypes < cache->m_ntypes);
-
-        if (!slab->m_sp)
-        {
-            /* initialize bufctl w/ current 'slab->m_bp' */
-            assert(slab->m_bp < slab->m_data + cache->m_ntypes * cache->m_type_size + cache->m_ncolor_max);
-            if (cache->m_features & RTL_CACHE_FEATURE_HASH)
-            {
-                /* allocate bufctl */
-                assert(cache != gp_cache_bufctl_cache);
-                bufctl = static_cast<rtl_cache_bufctl_type*>(rtl_cache_alloc (gp_cache_bufctl_cache));
-                if (!bufctl)
-                {
-                    /* out of memory */
-                    RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
-                    return nullptr;
-                }
-
-                bufctl->m_addr = slab->m_bp;
-                bufctl->m_slab = reinterpret_cast<sal_uIntPtr>(slab);
-            }
-            else
-            {
-                /* embedded bufctl */
-                bufctl = reinterpret_cast<rtl_cache_bufctl_type*>(slab->m_bp);
-            }
-            bufctl->m_next = nullptr;
-
-            /* update 'slab->m_bp' to next free buffer */
-            slab->m_bp += cache->m_type_size;
-
-            /* assign bufctl to freelist */
-            slab->m_sp = bufctl;
-        }
-
-        /* pop front */
-        bufctl = slab->m_sp;
-        slab->m_sp = bufctl->m_next;
-
-        /* increment usage, check for full slab */
-        if ((slab->m_ntypes += 1) == cache->m_ntypes)
-        {
-            /* remove from 'free' queue */
-            QUEUE_REMOVE_NAMED(slab, slab_);
-
-            /* insert onto 'used' queue (tail) */
-            QUEUE_INSERT_TAIL_NAMED(&(cache->m_used_head), slab, slab_);
-        }
-
-        /* update stats */
-        cache->m_slab_stats.m_alloc     += 1;
-        cache->m_slab_stats.m_mem_alloc += cache->m_type_size;
-
-        if (cache->m_features & RTL_CACHE_FEATURE_HASH)
-            addr = reinterpret_cast<void*>(rtl_cache_hash_insert (cache, bufctl));
-        else
-            addr = bufctl;
-    }
-
-    RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
-    return addr;
 }
 
 /**
@@ -531,22 +364,6 @@ void rtl_cache_magazine_clear(
 /**
     @precond cache->m_depot_lock acquired.
 */
-inline void rtl_cache_depot_enqueue(
-    rtl_cache_depot_type *    depot,
-    rtl_cache_magazine_type * mag
-)
-{
-    /* enqueue empty magazine */
-    mag->m_mag_next = depot->m_mag_next;
-    depot->m_mag_next = mag;
-
-    /* update depot stats */
-    depot->m_mag_count++;
-}
-
-/**
-    @precond cache->m_depot_lock acquired.
-*/
 inline rtl_cache_magazine_type * rtl_cache_depot_dequeue(
     rtl_cache_depot_type * depot
 )
@@ -571,77 +388,6 @@ inline rtl_cache_magazine_type * rtl_cache_depot_dequeue(
     return mag;
 }
 
-/**
-    @precond cache->m_depot_lock acquired.
-*/
-inline rtl_cache_magazine_type * rtl_cache_depot_exchange_alloc(
-    rtl_cache_type *          cache,
-    rtl_cache_magazine_type * empty
-)
-{
-    rtl_cache_magazine_type * full;
-
-    assert(!empty || empty->m_mag_used == 0);
-
-    /* dequeue full magazine */
-    full = rtl_cache_depot_dequeue (&(cache->m_depot_full));
-    if (full && empty)
-    {
-        /* enqueue empty magazine */
-        rtl_cache_depot_enqueue (&(cache->m_depot_empty), empty);
-    }
-
-    assert(!full || (full->m_mag_used > 0));
-
-    return full;
-}
-
-/**
-    @precond cache->m_depot_lock acquired.
-*/
-inline rtl_cache_magazine_type * rtl_cache_depot_exchange_free(
-    rtl_cache_type *          cache,
-    rtl_cache_magazine_type * full
-)
-{
-    rtl_cache_magazine_type * empty;
-
-    assert(!full || (full->m_mag_used > 0));
-
-    /* dequeue empty magazine */
-    empty = rtl_cache_depot_dequeue (&(cache->m_depot_empty));
-    if (empty && full)
-    {
-        /* enqueue full magazine */
-        rtl_cache_depot_enqueue (&(cache->m_depot_full), full);
-    }
-
-    assert(!empty || (empty->m_mag_used == 0));
-
-    return empty;
-}
-
-/**
-    @precond cache->m_depot_lock acquired.
-*/
-bool rtl_cache_depot_populate(rtl_cache_type * cache)
-{
-    rtl_cache_magazine_type * empty = nullptr;
-
-    if (cache->m_magazine_cache)
-    {
-        /* allocate new empty magazine */
-        RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-        empty = static_cast<rtl_cache_magazine_type*>(rtl_cache_alloc (cache->m_magazine_cache));
-        RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-        if (empty)
-        {
-            /* enqueue (new) empty magazine */
-            rtl_cache_depot_enqueue (&(cache->m_depot_empty), empty);
-        }
-    }
-    return (empty != nullptr);
-}
 
 void rtl_cache_constructor(void * obj)
 {
@@ -991,73 +737,13 @@ void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
     if (!cache)
         return nullptr;
 
-    if (alloc_mode == AllocMode::SYSTEM)
+    obj = rtl_allocateMemory(cache->m_type_size);
+    if (obj && cache->m_constructor)
     {
-        obj = rtl_allocateMemory(cache->m_type_size);
-        if (obj && cache->m_constructor)
-        {
-            if (!(cache->m_constructor)(obj, cache->m_userarg))
-            {
-                /* construction failure */
-                rtl_freeMemory(obj);
-                obj = nullptr;
-            }
-        }
-        return obj;
-    }
-
-    RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-    if (SAL_LIKELY(cache->m_cpu_curr))
-    {
-        for (;;)
-        {
-            /* take object from magazine layer */
-            rtl_cache_magazine_type *curr, *prev, *temp;
-
-            curr = cache->m_cpu_curr;
-            if (curr && (curr->m_mag_used > 0))
-            {
-                obj = curr->m_objects[--curr->m_mag_used];
-                cache->m_cpu_stats.m_alloc += 1;
-                RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-
-                return obj;
-            }
-
-            prev = cache->m_cpu_prev;
-            if (prev && (prev->m_mag_used > 0))
-            {
-                temp = cache->m_cpu_curr;
-                cache->m_cpu_curr = cache->m_cpu_prev;
-                cache->m_cpu_prev = temp;
-
-                continue;
-            }
-
-            temp = rtl_cache_depot_exchange_alloc (cache, prev);
-            if (temp)
-            {
-                cache->m_cpu_prev = cache->m_cpu_curr;
-                cache->m_cpu_curr = temp;
-
-                continue;
-            }
-
-            /* no full magazine: fall through to slab layer */
-            break;
-        }
-    }
-    RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-
-    /* alloc buffer from slab layer */
-    obj = rtl_cache_slab_alloc (cache);
-    if (obj && (cache->m_constructor))
-    {
-        /* construct object */
         if (!(cache->m_constructor)(obj, cache->m_userarg))
         {
             /* construction failure */
-            rtl_cache_slab_free (cache, obj);
+            rtl_freeMemory(obj);
             obj = nullptr;
         }
     }
@@ -1071,73 +757,12 @@ void SAL_CALL rtl_cache_free(
 {
     if (obj && cache)
     {
-        if (alloc_mode == AllocMode::SYSTEM)
-        {
-            if (cache->m_destructor)
-            {
-                /* destruct object */
-                (cache->m_destructor)(obj, cache->m_userarg);
-            }
-            rtl_freeMemory(obj);
-            return;
-        }
-
-        RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-
-        for (;;)
-        {
-            /* return object to magazine layer */
-            rtl_cache_magazine_type *curr, *prev, *temp;
-
-            curr = cache->m_cpu_curr;
-            if (curr && (curr->m_mag_used < curr->m_mag_size))
-            {
-                curr->m_objects[curr->m_mag_used++] = obj;
-                cache->m_cpu_stats.m_free += 1;
-                RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-
-                return;
-            }
-
-            prev = cache->m_cpu_prev;
-            if (prev && (prev->m_mag_used == 0))
-            {
-                temp = cache->m_cpu_curr;
-                cache->m_cpu_curr = cache->m_cpu_prev;
-                cache->m_cpu_prev = temp;
-
-                continue;
-            }
-
-            temp = rtl_cache_depot_exchange_free (cache, prev);
-            if (temp)
-            {
-                cache->m_cpu_prev = cache->m_cpu_curr;
-                cache->m_cpu_curr = temp;
-
-                continue;
-            }
-
-            if (rtl_cache_depot_populate(cache))
-            {
-                continue;
-            }
-
-            /* no empty magazine: fall through to slab layer */
-            break;
-        }
-
-        RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
-
-        /* no space for constructed object in magazine layer */
         if (cache->m_destructor)
         {
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
         }
-
-        /* return buffer to slab layer */
-        rtl_cache_slab_free (cache, obj);
+        rtl_freeMemory(obj);
     }
 }
 
