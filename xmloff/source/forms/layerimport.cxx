@@ -390,7 +390,6 @@ void OFormLayerXMLImport_Impl::endPage()
     try
     {
         static const sal_Unicode s_nSeparator = ',';
-        OUString sReferring;
         OUString sCurrentReferring;
         OUString sSeparator(&s_nSeparator, 1);
         Reference< XPropertySet > xCurrentReferring;
@@ -405,8 +404,7 @@ void OFormLayerXMLImport_Impl::endPage()
 
             // in a list of n ids there are only n-1 separators ... have to catch this last id
             // -> normalize the list
-            sReferring = aReferences->second;
-            sReferring += sSeparator;
+            OUString sReferring = aReferences->second + sSeparator;
 
             nPrevSep = -1;
             while (-1 != (nSeparator = sReferring.indexOf(s_nSeparator, nPrevSep + 1)))
