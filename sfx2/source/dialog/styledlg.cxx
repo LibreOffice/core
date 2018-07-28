@@ -133,15 +133,13 @@ IMPL_LINK_NOARG( SfxStyleDialog, CancelHdl, Button *, void )
 
 OUString SfxStyleDialog::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
 {
-    OUString aNoName(SfxResId(STR_NONAME));
-    sal_uInt16 nNo = 1;
-    OUString aNo(aNoName);
-    aNoName += OUString::number(nNo);
+    OUString aNo(SfxResId(STR_NONAME));
+    sal_uInt16 i = 1;
+    OUString aNoName = aNo + OUString::number(i);
     while (rPool.Find(aNoName))
     {
-        ++nNo;
-        aNoName = aNo;
-        aNoName += OUString::number(nNo);
+        ++i;
+        aNoName = aNo + OUString::number(i);
     }
     return aNoName;
 }

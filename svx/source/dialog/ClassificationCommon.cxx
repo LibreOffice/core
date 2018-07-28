@@ -20,7 +20,7 @@ namespace classification
 {
 OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults)
 {
-    OUString sRepresentation = "";
+    OUStringBuffer sRepresentation;
 
     for (svx::ClassificationResult const& rResult : rResults)
     {
@@ -30,15 +30,15 @@ OUString convertClassificationResultToString(std::vector<svx::ClassificationResu
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             case svx::ClassificationType::MARKING:
             case svx::ClassificationType::TEXT:
-                sRepresentation += rResult.msName;
+                sRepresentation.append(rResult.msName);
                 break;
 
             case svx::ClassificationType::PARAGRAPH:
-                sRepresentation += " ";
+                sRepresentation.append(" ");
                 break;
         }
     }
-    return sRepresentation;
+    return sRepresentation.makeStringAndClear();
 }
 
 OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer,

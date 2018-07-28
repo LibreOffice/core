@@ -172,20 +172,22 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0)
         return;
 
-    OString aPayload = OString("{ \"id\": \"") + OString::number(nLOKWindowId) + OString("\"");
-    aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
+    OStringBuffer aPayload;
+    aPayload.append("{ \"id\": \"").append(OString::number(nLOKWindowId)).append("\"");
+    aPayload.append(", \"action\": \"").append(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8)).append("\"");
 
     for (const auto& rItem: rPayload)
     {
         if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
         {
-            aPayload += OString(", \"") + rItem.first + OString("\": \"") +
-                rItem.second + OString("\"");
+            aPayload.append(", \"").append(rItem.first).append("\": \"")
+                .append(rItem.second).append("\"");
         }
     }
-    aPayload += "}";
+    aPayload.append("}");
 
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, aPayload.getStr());
+    auto s = aPayload.makeStringAndClear();
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s.getStr());
 }
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)

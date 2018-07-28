@@ -2759,28 +2759,28 @@ void MathType::HandleEmblishments()
         case 0x05:
             if (!nPostSup)
             {
-                sPost += " sup {}";
+                sPost.append(" sup {}");
                 nPostSup = sPost.getLength();
             }
-            sPost = sPost.replaceAt(nPostSup-1,0," ' ");
+            sPost.insert(nPostSup-1," ' ");
             nPostSup += 3;
             break;
         case 0x06:
             if (!nPostSup)
             {
-                sPost += " sup {}";
+                sPost.append(" sup {}");
                 nPostSup = sPost.getLength();
             }
-            sPost = sPost.replaceAt(nPostSup-1,0," '' ");
+            sPost.insert(nPostSup-1," '' ");
             nPostSup += 4;
             break;
         case 0x07:
             if (!nPostlSup)
             {
-                sPost += " lsup {}";
+                sPost.append(" lsup {}");
                 nPostlSup = sPost.getLength();
             }
-            sPost = sPost.replaceAt(nPostlSup-1,0," ' ");
+            sPost.insert(nPostlSup-1," ' ");
             nPostlSup += 3;
             break;
         case 0x08:
@@ -2801,10 +2801,10 @@ void MathType::HandleEmblishments()
         case 0x12:
             if (!nPostSup)
             {
-                sPost += " sup {}";
+                sPost.append(" sup {}");
                 nPostSup = sPost.getLength();
             }
-            sPost = sPost.replaceAt(nPostSup-1,0," ''' ");
+            sPost.insert(nPostSup-1," ''' ");
             nPostSup += 5;
             break;
         case 0x14:
@@ -2882,7 +2882,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
         //follows the char and nPostSup and nPostlSup are the
         //indexes at which this class of emblishment is
         //collated together
-        sPost.clear();
+        sPost = "";
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.getLength()-rTextStart;
         rRet.append(" {");  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"

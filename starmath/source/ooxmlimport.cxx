@@ -46,7 +46,7 @@ OUString SmOoxmlImport::ConvertToStarMath()
 OUString SmOoxmlImport::handleStream()
 {
     m_rStream.ensureOpeningTag( M_TOKEN( oMath ));
-    OUString ret;
+    OUStringBuffer ret;
     while( !m_rStream.atEnd() && m_rStream.currentToken() != CLOSING( M_TOKEN( oMath )))
     {
         // strictly speaking, it is not OMathArg here, but currently supported
@@ -55,18 +55,18 @@ OUString SmOoxmlImport::handleStream()
         if( item.isEmpty())
             continue;
         if( !ret.isEmpty())
-            ret += " ";
-        ret += item;
+            ret.append(" ");
+        ret.append(item);
     }
     m_rStream.ensureClosingTag( M_TOKEN( oMath ));
     // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
     // which will result in "{}" in the formula text. Fix this up.
-    ret = ret.replaceAll( "{}", "<?>" );
+    ret.replaceAll( "{}", "<?>" );
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
-    ret = ret.replaceAll( "{ }", "{}" );
-    SAL_INFO( "starmath.ooxml", "Formula: " << ret );
-    return ret;
+    ret.replaceAll( "{ }", "{}" );
+    SAL_INFO( "starmath.ooxml", "Formula: " << ret.toString() );
+    return ret.makeStringAndClear();
 }
 
 OUString SmOoxmlImport::readOMathArg( int stoptoken )

@@ -198,7 +198,7 @@ namespace sfx2
     OUString PrepareSearchString( const OUString& rSearchString,
                                 const Reference< XBreakIterator >& xBreak, bool bForSearch )
     {
-        OUString sSearchStr;
+        OUStringBuffer sSearchStr;
         sal_Int32 nStartPos = 0;
         const lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         Boundary aBoundary = xBreak->getWordBoundary(
@@ -220,18 +220,18 @@ namespace sfx2
                     if ( !sSearchStr.isEmpty() )
                     {
                         if ( bForSearch )
-                            sSearchStr += " ";
+                            sSearchStr.append(" ");
                         else
-                            sSearchStr += "|";
+                            sSearchStr.append("|");
                     }
-                    sSearchStr += sSearchToken;
+                    sSearchStr.append(sSearchToken);
                 }
             }
             aBoundary = xBreak->nextWord( rSearchString, nStartPos,
                                           aLocale, WordType::ANYWORD_IGNOREWHITESPACES );
         }
 
-        return sSearchStr;
+        return sSearchStr.makeStringAndClear();
     }
 
 // namespace sfx2
@@ -954,20 +954,21 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 void SearchTabPage_Impl::dispose()
 {
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
-    OUString aUserData =
-        OUString::number( m_pFullWordsCB->IsChecked() ? 1 : 0 ) + ";" +
-        OUString::number( m_pScopeCB->IsChecked() ? 1 : 0 );
+    OUStringBuffer aUserData;
+    aUserData.append(OUString::number( m_pFullWordsCB->IsChecked() ? 1 : 0 ))
+        .append(";")
+        .append(OUString::number( m_pScopeCB->IsChecked() ? 1 : 0 ));
     sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), sal_Int32(10) );  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        aUserData += ";" + INetURLObject::encode(
+        aUserData.append(";").append(INetURLObject::encode(
             m_pSearchED->GetEntry(i),
             INetURLObject::PART_UNO_PARAM_VALUE,
-            INetURLObject::EncodeMechanism::All );
+            INetURLObject::EncodeMechanism::All ));
     }
 
-    Any aUserItem = makeAny( aUserData );
+    Any aUserItem = makeAny( aUserData.makeStringAndClear() );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 
     m_pSearchED.clear();
