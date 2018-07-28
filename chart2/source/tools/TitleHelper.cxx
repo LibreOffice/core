@@ -300,13 +300,13 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
 OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
 {
-    OUString aRet;
     if(!xTitle.is())
-        return aRet;
+        return OUString();
+    OUStringBuffer aRet;
     uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
     for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
-        aRet += aStringList[nN]->getString();
-    return aRet;
+        aRet.append( aStringList[nN]->getString() );
+    return aRet.makeStringAndClear();
 }
 
 void TitleHelper::setCompleteString( const OUString& rNewText

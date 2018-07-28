@@ -33,6 +33,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/types.hxx>
+#include <rtl/strbuf.hxx>
 #include <algorithm>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
@@ -474,18 +475,18 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
-    OString aBatchSql;
+    OStringBuffer aBatchSql;
     sal_Int32 nLen = m_aBatchVector.size();
 
     for (auto const& elem : m_aBatchVector)
     {
-        aBatchSql += OUStringToOString(elem,getOwnConnection()->getTextEncoding());
-        aBatchSql += ";";
+        aBatchSql.append(OUStringToOString(elem,getOwnConnection()->getTextEncoding()));
+        aBatchSql.append(";");
     }
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    THROW_SQL(N3SQLExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aBatchSql.getStr())), aBatchSql.getLength()));
+    auto s = aBatchSql.makeStringAndClear();
+    THROW_SQL(N3SQLExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(s.getStr())), s.getLength()));
 
     Sequence< sal_Int32 > aRet(nLen);
     sal_Int32* pArray = aRet.getArray();

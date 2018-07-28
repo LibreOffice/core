@@ -61,14 +61,12 @@ void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdent
     ObjectHierarchy::tChildContainer aChildren( rHierarchy.getChildren(rParent) );
     for (auto const& child : aChildren)
     {
-        ObjectIdentifier aOID = child;
-        OUString aCID = aOID.getObjectCID();
         ListBoxEntryData aEntry;
-        aEntry.OID = aOID;
-        aEntry.UIName += ObjectNameProvider::getNameForCID( aCID, xChartDoc );
+        aEntry.OID = child;
+        aEntry.UIName = ObjectNameProvider::getNameForCID( child.getObjectCID(), xChartDoc );
         aEntry.nHierarchyDepth = nHierarchyDepth;
         rEntries.push_back(aEntry);
-        lcl_addObjectsToList( rHierarchy, aOID, rEntries, nHierarchyDepth+1, xChartDoc );
+        lcl_addObjectsToList( rHierarchy, child, rEntries, nHierarchyDepth+1, xChartDoc );
     }
 }
 
