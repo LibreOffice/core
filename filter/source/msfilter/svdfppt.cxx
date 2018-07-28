@@ -6813,7 +6813,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     // idea.
                                                     if (nVal == 0)
                                                     {
-                                                        OUString aStr;
+                                                        OUStringBuffer aStr;
                                                         bool inquote = false;
                                                         for (int nLen = 0; nLen < 64; ++nLen)
                                                         {
@@ -6826,7 +6826,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             else if (!n)
                                                             {
                                                                 // End of format string
-                                                                xEntry->xString = aStr;
+                                                                xEntry->xString = aStr.makeStringAndClear();
                                                                 break;
                                                             }
                                                             else if (!inquote)
@@ -6838,7 +6838,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             else
                                                             {
-                                                                aStr += OUStringLiteral1(n);
+                                                                aStr.append(OUStringLiteral1(n));
                                                             }
                                                         }
                                                     }

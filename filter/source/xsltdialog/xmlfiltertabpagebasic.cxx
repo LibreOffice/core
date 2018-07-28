@@ -51,25 +51,25 @@ static OUString checkExtensions( const OUString& rExtensions )
     const sal_Unicode* pSource = rExtensions.getStr();
     sal_Int32 nCount = rExtensions.getLength();
 
-    OUString aRet;
+    OUStringBuffer aRet;
     while( nCount-- )
     {
         switch(*pSource)
         {
         case u',':
-            aRet += ";";
+            aRet.append(";");
             break;
         case u'.':
         case u'*':
             break;
         default:
-            aRet += OUStringLiteral1( *pSource );
+            aRet.append( *pSource );
         }
 
         pSource++;
     }
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
