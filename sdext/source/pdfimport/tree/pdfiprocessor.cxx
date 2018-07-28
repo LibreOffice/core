@@ -28,6 +28,7 @@
 
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

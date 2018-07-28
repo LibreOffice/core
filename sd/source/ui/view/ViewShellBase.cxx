@@ -63,6 +63,7 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <framework/FrameworkHelper.hxx>
 
+#include <sal/log.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>

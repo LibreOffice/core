@@ -46,6 +46,7 @@
 #include <editeng/CustomPropertyField.hxx>
 
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

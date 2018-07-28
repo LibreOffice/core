@@ -30,6 +30,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>

@@ -28,6 +28,7 @@
 #include <sal/main.h>
 #include <osl/process.h>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>

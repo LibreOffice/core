@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

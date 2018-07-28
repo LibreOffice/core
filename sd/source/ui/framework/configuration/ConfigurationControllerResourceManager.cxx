@@ -23,6 +23,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;

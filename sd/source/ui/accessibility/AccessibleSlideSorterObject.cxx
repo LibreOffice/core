@@ -35,6 +35,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <sal/log.hxx>
 
 #include <sdpage.hxx>
 #include <sdresid.hxx>

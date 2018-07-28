@@ -27,6 +27,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
 #include <xmloff/autolayout.hxx>
+#include <sal/log.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

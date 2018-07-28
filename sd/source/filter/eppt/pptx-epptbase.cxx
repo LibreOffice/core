@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/wmf.hxx>
 #include <sfx2/docfile.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/weld.hxx>

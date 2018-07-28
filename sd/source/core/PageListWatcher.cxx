@@ -22,6 +22,7 @@
 #include <sdpage.hxx>
 #include <tools/debug.hxx>
 #include <svx/svdmodel.hxx>
+#include <sal/log.hxx>
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {

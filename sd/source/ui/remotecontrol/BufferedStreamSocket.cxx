@@ -9,6 +9,7 @@
 
 #include "BufferedStreamSocket.hxx"
 
+#include <sal/log.hxx>
 #include <algorithm>
 
 #ifdef _WIN32

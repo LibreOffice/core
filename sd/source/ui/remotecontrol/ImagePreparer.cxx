@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <svl/itemset.hxx>

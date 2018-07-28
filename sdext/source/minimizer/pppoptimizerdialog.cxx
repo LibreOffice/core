@@ -20,6 +20,7 @@
 
 #include "pppoptimizerdialog.hxx"
 #include "optimizerdialog.hxx"
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

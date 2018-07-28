@@ -35,6 +35,7 @@
 #include <cppuhelper/factory.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <tools/poly.hxx>
 

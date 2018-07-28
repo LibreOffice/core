@@ -28,6 +28,7 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
+#include <sal/log.hxx>
 
 #include <zlib.h>
 

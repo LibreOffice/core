@@ -21,6 +21,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
+#include <sal/log.hxx>
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>

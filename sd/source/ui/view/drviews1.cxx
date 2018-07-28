@@ -27,6 +27,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>

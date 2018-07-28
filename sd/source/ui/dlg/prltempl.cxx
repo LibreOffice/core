@@ -19,6 +19,7 @@
 
 #include <editeng/outliner.hxx>
 
+#include <sal/log.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <editeng/flstitem.hxx>

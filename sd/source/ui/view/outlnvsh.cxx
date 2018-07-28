@@ -44,6 +44,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
+#include <sal/log.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>

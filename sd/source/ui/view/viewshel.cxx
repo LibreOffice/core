@@ -28,6 +28,7 @@
 #include <DrawController.hxx>
 #include <LayerTabBar.hxx>
 
+#include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

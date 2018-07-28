@@ -35,6 +35,7 @@
 
 #include <sdabstdlg.hxx>
 
+#include <sal/log.hxx>
 #include <fupoor.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopage.hxx>
