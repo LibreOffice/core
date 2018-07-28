@@ -131,7 +131,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 rtl_locale_fini();
 
                 /* finalize memory management */
-                rtl_memory_fini();
                 rtl_cache_fini();
                 rtl_arena_fini();
             }
