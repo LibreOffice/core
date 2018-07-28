@@ -103,9 +103,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         while( !bDifferent )
         {
-            aName = aNewName;
-            aName += " ";
-            aName += OUString::number(j++);
+            aName = aNewName + " " + OUString::number(j++);
             bDifferent = true;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {

@@ -683,7 +683,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     ::osl::MutexGuard aGuard (maMutex);
 
     uno::Any anyAtrribute;
-    OUString sValue;
+    OUStringBuffer sValue;
     if (nullptr != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
     {
         ::sd::DrawViewShell* pDrViewSh = static_cast< ::sd::DrawViewShell*>(mpViewShell);
@@ -699,13 +699,11 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sDisplay = sDisplay.replaceFirst( ",", "\\," );
         sDisplay = sDisplay.replaceFirst( ":", "\\:" );
         sValue = sName + sDisplay ;
-        sName = ";page-number:";
-        sValue += sName;
-        sValue += OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) ;
-        sName = ";total-pages:";
-        sValue += sName;
-        sValue += OUString::number(pDrViewSh->GetPageTabControl().GetPageCount()) ;
-        sValue += ";";
+        sValue.append(";page-number:");
+        sValue.append(OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) );
+        sValue.append(";total-pages:");
+        sValue.append(OUString::number(pDrViewSh->GetPageTabControl().GetPageCount()) );
+        sValue.append(";");
         if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {
             sName = "page-name:";
@@ -731,14 +729,12 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );
             sDisplay = sDisplay.replaceFirst( ",", "\\," );
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
-            sValue +=  sDisplay;
-            sName = ";page-number:";
-            sValue += sName;
-            sValue += OUString::number(pDrViewSh->GetActiveTabLayerIndex()+1) ;
-            sName = ";total-pages:";
-            sValue += sName;
-            sValue += OUString::number(pDrViewSh->GetLayerTabControl()->GetPageCount()) ;
-            sValue += ";";
+            sValue.append(sDisplay);
+            sValue.append(";page-number:");
+            sValue.append(OUString::number(pDrViewSh->GetActiveTabLayerIndex()+1) );
+            sValue.append(";total-pages:");
+            sValue.append(OUString::number(pDrViewSh->GetLayerTabControl()->GetPageCount()) );
+            sValue.append(";");
         }
     }
     if (dynamic_cast<const ::sd::PresentationViewShell* >(mpViewShell) !=  nullptr )
@@ -755,7 +751,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                 OutlinerParaObject* pPara = pNotesObj->GetOutlinerParaObject();
                 if (pPara)
                 {
-                    sValue += "note:";
+                    sValue.append("note:");
                     const EditTextObject& rEdit = pPara->GetTextObject();
                     for (sal_Int32 i=0;i<rEdit.GetParagraphCount();i++)
                     {
@@ -765,8 +761,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                         strNote = strNote.replaceFirst( ";", "\\;" );
                         strNote = strNote.replaceFirst( ",", "\\," );
                         strNote = strNote.replaceFirst( ":", "\\:" );
-                        sValue += strNote;
-                        sValue += ";";//to divide each paragraph
+                        sValue.append(strNote);
+                        sValue.append(";");//to divide each paragraph
                     }
                 }
             }
@@ -774,30 +770,26 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     }
     if (dynamic_cast<const ::sd::OutlineViewShell* >(mpViewShell ) !=  nullptr )
     {
-        OUString sName;
         OUString sDisplay;
         SdPage* pCurrPge = mpViewShell->GetActualPage();
         SdDrawDocument* pDoc = mpViewShell->GetDoc();
         if(pCurrPge && pDoc)
         {
-            sName = "page-name:";
             sDisplay = pCurrPge->GetName();
             sDisplay = sDisplay.replaceFirst( "=", "\\=" );
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );
             sDisplay = sDisplay.replaceFirst( ",", "\\," );
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
-            sValue = sName + sDisplay ;
-            sName = ";page-number:";
-            sValue += sName;
-            sValue += OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1)) ;
-            sName = ";total-pages:";
-            sValue += sName;
-            sValue += OUString::number(pDoc->GetSdPageCount(PageKind::Standard)) ;
-            sValue += ";";
+            sValue = "page-name:" + sDisplay;
+            sValue.append(";page-number:");
+            sValue.append(OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1)) );
+            sValue.append(";total-pages:");
+            sValue.append(OUString::number(pDoc->GetSdPageCount(PageKind::Standard)) );
+            sValue.append(";");
         }
     }
     if (sValue.getLength())
-        anyAtrribute <<= sValue;
+        anyAtrribute <<= sValue.makeStringAndClear();
     return anyAtrribute;
 }
 

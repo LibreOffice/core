@@ -195,11 +195,11 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone()
 OUString SAL_CALL Configuration::getName()
 {
     ::osl::MutexGuard aGuard (maMutex);
-    OUString aString;
+    OUStringBuffer aString;
 
     if (rBHelper.bDisposed || rBHelper.bInDispose)
-        aString += "DISPOSED ";
-    aString += "Configuration[";
+        aString.append("DISPOSED ");
+    aString.append("Configuration[");
 
     ResourceContainer::const_iterator iResource;
     for (iResource=mpResourceContainer->begin();
@@ -207,12 +207,12 @@ OUString SAL_CALL Configuration::getName()
          ++iResource)
     {
         if (iResource != mpResourceContainer->begin())
-            aString += ", ";
-        aString += FrameworkHelper::ResourceIdToString(*iResource);
+            aString.append(", ");
+        aString.append(FrameworkHelper::ResourceIdToString(*iResource));
     }
-    aString += "]";
+    aString.append("]");
 
-    return aString;
+    return aString.makeStringAndClear();
 }
 
 void SAL_CALL Configuration::setName (const OUString&)
