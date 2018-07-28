@@ -34,6 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
+#include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>

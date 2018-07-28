@@ -35,6 +35,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <svx/svditer.hxx>

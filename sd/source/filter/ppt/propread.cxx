@@ -21,6 +21,7 @@
 #include "propread.hxx"
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 

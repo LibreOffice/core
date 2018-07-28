@@ -20,6 +20,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 
+#include <sal/log.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <Outliner.hxx>

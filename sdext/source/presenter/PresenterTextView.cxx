@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include <sal/log.hxx>
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>

@@ -23,6 +23,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

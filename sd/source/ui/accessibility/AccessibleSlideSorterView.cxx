@@ -44,6 +44,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

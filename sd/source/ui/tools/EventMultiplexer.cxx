@@ -25,6 +25,7 @@
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

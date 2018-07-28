@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <new>
 

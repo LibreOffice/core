@@ -31,6 +31,7 @@
 #include <helpids.h>
 #include <strings.hrc>
 
+#include <sal/log.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 

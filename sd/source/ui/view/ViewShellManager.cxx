@@ -24,6 +24,7 @@
 #include <DrawDocShell.hxx>
 #include <FormShellManager.hxx>
 
+#include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>

@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <memory>

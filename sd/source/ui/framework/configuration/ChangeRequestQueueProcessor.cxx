@@ -25,6 +25,7 @@
 #include "ConfigurationUpdater.hxx"
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>

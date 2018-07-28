@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
+#include <sal/log.hxx>
 #include <EffectMigration.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

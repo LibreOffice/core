@@ -56,6 +56,7 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <basegfx/utils/tools.hxx>
 #include <o3tl/enumarray.hxx>
 #include <xmloff/autolayout.hxx>

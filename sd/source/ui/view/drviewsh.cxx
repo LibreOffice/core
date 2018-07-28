@@ -23,6 +23,7 @@
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
+#include <sal/log.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/lok.hxx>

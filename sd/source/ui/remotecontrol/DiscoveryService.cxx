@@ -16,6 +16,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <config_features.h>
+#include <sal/log.hxx>
 
 #include "DiscoveryService.hxx"
 

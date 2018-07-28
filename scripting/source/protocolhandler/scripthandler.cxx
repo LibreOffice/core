@@ -39,6 +39,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>

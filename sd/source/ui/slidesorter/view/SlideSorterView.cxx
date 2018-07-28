@@ -46,6 +46,7 @@
 #include <sdpage.hxx>
 #include <Window.hxx>
 
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>

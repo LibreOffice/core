@@ -8,6 +8,7 @@
  */
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #include "Listener.hxx"

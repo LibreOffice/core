@@ -20,6 +20,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 
+#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>

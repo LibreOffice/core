@@ -27,6 +27,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <sdcommands.h>
+#include <sal/log.hxx>
 
 #include <tools/poly.hxx>
 #include <svx/fmshell.hxx>

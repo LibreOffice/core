@@ -26,6 +26,7 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

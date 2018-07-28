@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

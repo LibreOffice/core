@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.h>
+#include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/AccessibleShape.hxx>

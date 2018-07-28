@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
+#include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumrange.hxx>

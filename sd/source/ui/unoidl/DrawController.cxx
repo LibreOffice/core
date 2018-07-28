@@ -42,6 +42,7 @@
 
 #include <slideshow.hxx>
 
+#include <sal/log.hxx>
 #include <svx/fmshell.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>

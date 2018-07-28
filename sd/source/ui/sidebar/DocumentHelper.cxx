@@ -37,6 +37,7 @@
 #include <svx/svdundo.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

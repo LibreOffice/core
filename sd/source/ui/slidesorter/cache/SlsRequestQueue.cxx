@@ -20,6 +20,8 @@
 #include "SlsRequestQueue.hxx"
 #include <sdpage.hxx>
 
+#include <sal/log.hxx>
+
 #include <set>
 
 namespace sd { namespace slidesorter { namespace cache {
