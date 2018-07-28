@@ -34,6 +34,7 @@
 #include <documentimport.hxx>
 
 #include <svx/svdpage.hxx>
+#include <sal/log.hxx>
 
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltkmap.hxx>

@@ -66,6 +66,7 @@
 #include <comphelper/threadpool.hxx>
 #include <osl/conditn.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <queue>

@@ -21,6 +21,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <formula/token.hxx>
+#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <table.hxx>

@@ -22,6 +22,8 @@
 #include <queryentry.hxx>
 #include <brdcst.hxx>
 
+#include <sal/log.hxx>
+
 ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
     mfVal(0.0), mbAlloc(false), mbString(false)
 {

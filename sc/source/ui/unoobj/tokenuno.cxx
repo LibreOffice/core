@@ -21,6 +21,7 @@
 #include <tokenuno.hxx>
 
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>

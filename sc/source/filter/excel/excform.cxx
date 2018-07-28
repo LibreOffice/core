@@ -27,6 +27,7 @@
 
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <sal/log.hxx>
 
 #include <imp_op.hxx>
 #include <namebuff.hxx>

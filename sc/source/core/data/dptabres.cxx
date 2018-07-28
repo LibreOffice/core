@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <math.h>
 #include <float.h>

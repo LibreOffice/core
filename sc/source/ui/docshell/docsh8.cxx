@@ -30,6 +30,7 @@
 #include <svx/txenctab.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

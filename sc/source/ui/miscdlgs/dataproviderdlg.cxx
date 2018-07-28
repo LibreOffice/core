@@ -14,6 +14,7 @@
 #include <datatransformation.hxx>
 
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/lstbox.hxx>
 

@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

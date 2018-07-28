@@ -28,6 +28,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>

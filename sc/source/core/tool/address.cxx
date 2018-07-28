@@ -30,6 +30,7 @@
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 

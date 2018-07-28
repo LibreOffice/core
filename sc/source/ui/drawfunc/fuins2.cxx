@@ -43,6 +43,7 @@
 #include <sfx2/msgpool.hxx>
 #include <svx/charthelper.hxx>
 #include <scmod.hxx>
+#include <sal/log.hxx>
 
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>

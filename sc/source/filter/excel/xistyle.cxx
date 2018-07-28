@@ -45,6 +45,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/editids.hrc>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <document.hxx>
 #include <docpool.hxx>

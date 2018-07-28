@@ -32,6 +32,7 @@
 #include <xelink.hxx>
 #include <xename.hxx>
 #include <xestream.hxx>
+#include <sal/log.hxx>
 
 using namespace ::formula;
 

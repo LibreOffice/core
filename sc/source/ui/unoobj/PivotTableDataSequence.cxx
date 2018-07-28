@@ -11,6 +11,7 @@
 #include <PivotTableDataSequence.hxx>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <miscuno.hxx>
 #include <document.hxx>

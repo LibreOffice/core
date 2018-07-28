@@ -34,6 +34,7 @@
 
 #include <rtl/math.hxx>
 #include <rtl/uuid.h>
+#include <sal/log.hxx>
 #include <svl/zformat.hxx>
 #include <formulacell.hxx>
 #include <drwlayer.hxx>

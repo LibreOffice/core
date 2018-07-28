@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>

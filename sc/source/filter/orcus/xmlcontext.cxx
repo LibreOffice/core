@@ -16,6 +16,7 @@
 #include <svtools/treelistentry.hxx>
 #include <ucbhelper/content.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>

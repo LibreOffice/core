@@ -13,6 +13,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <officecfg/Office/Calc.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"

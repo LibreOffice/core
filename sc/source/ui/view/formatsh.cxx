@@ -56,6 +56,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <sal/log.hxx>
 
 #include <formatsh.hxx>
 #include <sc.hrc>

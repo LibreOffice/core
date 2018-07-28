@@ -25,6 +25,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

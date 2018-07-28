@@ -26,6 +26,7 @@
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <string.h>
 
 #if DEBUG_SC_PARCLASSDOC

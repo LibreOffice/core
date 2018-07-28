@@ -30,6 +30,7 @@
 #include <vcl/waitobj.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
