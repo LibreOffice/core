@@ -1117,7 +1117,8 @@ void SdExportTest::testTdf113818()
 {
     utl::TempFile tempFile;
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113818-swivel.pptx"), PPTX);
-
+    xDocShRef = saveAndReload(xDocShRef.get(), PPT);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
