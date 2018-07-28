@@ -1925,8 +1925,7 @@ private:
 
             if (mpOptions->IsPrintPageName())
             {
-                rInfo.msPageString = pPage->GetName();
-                rInfo.msPageString += " ";
+                rInfo.msPageString = pPage->GetName() + " ";
             }
             else
                 rInfo.msPageString.clear();

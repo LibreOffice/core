@@ -60,7 +60,7 @@ static const int DRGPIX     = 2;                               // Drag MinMove i
 
 static OUString getInitials( const OUString& rName )
 {
-    OUString sInitials;
+    OUStringBuffer sInitials;
 
     const sal_Unicode * pStr = rName.getStr();
     sal_Int32 nLength = rName.getLength();
@@ -76,7 +76,7 @@ static OUString getInitials( const OUString& rName )
         // take letter
         if( nLength )
         {
-            sInitials += OUStringLiteral1( *pStr );
+            sInitials.append(*pStr);
             nLength--; pStr++;
         }
 
@@ -87,7 +87,7 @@ static OUString getInitials( const OUString& rName )
         }
     }
 
-    return sInitials;
+    return sInitials.makeStringAndClear();
 }
 
 class AnnotationDragMove : public SdrDragMove

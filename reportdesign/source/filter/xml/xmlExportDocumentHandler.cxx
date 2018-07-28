@@ -370,7 +370,6 @@ void ExportDocumentHandler::exportTableRows()
     pCellAtt->AddAttribute(sValueType, "string");
 
     bool bRemoveString = true;
-    OUString sFormula;
     const sal_Int32 nCount = m_aColumns.getLength();
     if ( m_nColumnCount > nCount )
     {
@@ -391,9 +390,7 @@ void ExportDocumentHandler::exportTableRows()
     }
     for(sal_Int32 i = 0; i < nCount ; ++i)
     {
-        sFormula = "field:[";
-        sFormula += m_aColumns[i];
-        sFormula += "]";
+        OUString sFormula = "field:[" + m_aColumns[i] + "]";
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xAttribs = pList;
         pList->AddAttribute(sFormulaAttrib,sFormula);

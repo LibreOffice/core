@@ -37,6 +37,7 @@
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 
 // disable warnings again because someone along the line has enabled them
@@ -648,16 +649,14 @@ PDFEntry* PDFReader::read( const char* pFileName )
     {
         SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start);
 #if OSL_DEBUG_LEVEL > 0
-        OUString aTmp;
+        OUStringBuffer aTmp;
         unsigned int nElem = aGrammar.m_aObjectStack.size();
         for( unsigned int i = 0; i < nElem; i++ )
         {
-            aTmp += "   ";
-            aTmp += OUString(typeid( *(aGrammar.m_aObjectStack[i]) ).name(),
-                             strlen(typeid( *(aGrammar.m_aObjectStack[i]) ).name()),
-                             RTL_TEXTENCODING_ASCII_US);
+            aTmp.append("   ");
+            aTmp.appendAscii(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
         }
-        SAL_WARN("sdext.pdfimport.pdfparse", "parse error object stack: " << aTmp);
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error object stack: " << aTmp.makeStringAndClear());
 #endif
     }
 

@@ -77,7 +77,7 @@ namespace
 
 OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescList )
 {
-    OUString aExtensions;
+    OUStringBuffer aExtensions;
     ::std::vector< FilterDesc >::const_iterator aIter( rFilterDescList.begin() );
 
     while (aIter != rFilterDescList.end())
@@ -87,14 +87,14 @@ OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescL
         if ( aExtensions.indexOf( sWildcard ) == -1 )
         {
             if ( !aExtensions.isEmpty() )
-                aExtensions += ";";
-            aExtensions += sWildcard;
+                aExtensions.append(";");
+            aExtensions.append(sWildcard);
         }
 
         ++aIter;
     }
 
-    return aExtensions;
+    return aExtensions.makeStringAndClear();
 }
 
 void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
