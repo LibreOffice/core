@@ -18,6 +18,7 @@
  */
 
 #include <sal/main.h>
+#include <sal/log.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>

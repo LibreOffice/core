@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <vcl/notebookbar.hxx>
 #include <vcl/svapp.hxx>

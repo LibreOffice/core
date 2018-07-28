@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/popupmenuwindow.hxx>
+#include <sal/log.hxx>
 
 #include "atkwindow.hxx"
 #include "atkwrapper.hxx"

@@ -20,6 +20,7 @@
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 #include <comphelper/lok.hxx>
+#include <sal/log.hxx>
 
 FunctionSet::~FunctionSet()
 {

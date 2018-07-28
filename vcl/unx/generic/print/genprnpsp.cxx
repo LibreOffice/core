@@ -36,6 +36,7 @@
 
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>

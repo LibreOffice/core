@@ -35,6 +35,7 @@
 
 #include <rtl/string.h>
 #include <rtl/ustring.h>
+#include <sal/log.hxx>
 
 #include <osl/module.h>
 

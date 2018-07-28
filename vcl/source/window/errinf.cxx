@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/errinf.hxx>
 #include <vcl/window.hxx>

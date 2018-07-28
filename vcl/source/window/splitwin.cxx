@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>

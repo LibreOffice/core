@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <sal/log.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>

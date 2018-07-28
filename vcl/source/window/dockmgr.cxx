@@ -18,6 +18,7 @@
  */
 
 #include <tools/time.hxx>
+#include <sal/log.hxx>
 
 #include <brdwin.hxx>
 #include <svdata.hxx>

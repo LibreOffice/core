@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <tools/bigint.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

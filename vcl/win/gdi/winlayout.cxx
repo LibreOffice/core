@@ -20,6 +20,7 @@
 #include <memory>
 #include <osl/module.h>
 #include <osl/file.h>
+#include <sal/log.hxx>
 
 #include <comphelper/windowserrorstring.hxx>
 

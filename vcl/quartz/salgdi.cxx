@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <config_folders.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

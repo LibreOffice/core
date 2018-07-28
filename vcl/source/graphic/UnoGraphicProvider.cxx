@@ -39,6 +39,7 @@
 #include <comphelper/fileformat.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <graphic/UnoGraphicDescriptor.hxx>
 #include <graphic/UnoGraphic.hxx>

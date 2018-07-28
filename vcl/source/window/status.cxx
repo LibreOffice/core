@@ -18,6 +18,7 @@
  */
 
 
+#include <sal/log.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>

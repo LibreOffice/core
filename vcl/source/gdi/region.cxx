@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <vcl/region.hxx>
 #include <regionband.hxx>
 

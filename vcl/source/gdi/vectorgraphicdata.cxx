@@ -18,6 +18,7 @@
  */
 
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

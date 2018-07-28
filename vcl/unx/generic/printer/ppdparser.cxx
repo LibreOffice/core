@@ -40,6 +40,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

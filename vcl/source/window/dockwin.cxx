@@ -18,6 +18,7 @@
  */
 
 #include <tools/time.hxx>
+#include <sal/log.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dockwin.hxx>

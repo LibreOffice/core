@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 #include <controldata.hxx>
 #include <window.h>
 

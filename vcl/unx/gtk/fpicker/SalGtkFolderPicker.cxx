@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <gtk/fpicker/SalGtkFolderPicker.hxx>
+#include <sal/log.hxx>
 
 #include <string.h>
 

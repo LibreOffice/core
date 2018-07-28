@@ -11,6 +11,7 @@
 #include <thread>
 #include <opengl/win/gdiimpl.hxx>
 
+#include <sal/log.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <opengl/zone.hxx>
 #include <win/wincomp.hxx>

@@ -22,6 +22,7 @@
 #include <svsys.h>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>

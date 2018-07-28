@@ -25,6 +25,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <sal/log.hxx>
 
 #include <unx/printergfx.hxx>
 #include <unx/genpspgraphics.h>

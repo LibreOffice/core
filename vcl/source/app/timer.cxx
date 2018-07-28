@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>

@@ -58,6 +58,7 @@
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>

@@ -19,6 +19,7 @@
 
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

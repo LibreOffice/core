@@ -22,6 +22,8 @@
 #include <Qt5Bitmap.hxx>
 #include <Qt5Painter.hxx>
 
+#include <sal/log.hxx>
+
 #include <QtGui/QPainter>
 #include <QtGui/QScreen>
 #include <QtGui/QWindow>

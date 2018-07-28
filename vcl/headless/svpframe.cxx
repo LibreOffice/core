@@ -21,6 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <vcl/syswin.hxx>
+#include <sal/log.hxx>
 
 #include <headless/svpframe.hxx>
 #include <headless/svpinst.hxx>

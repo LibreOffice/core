@@ -45,6 +45,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <rtl/digest.h>
+#include <sal/log.hxx>
 #include <memory>
 
 using namespace vcl;

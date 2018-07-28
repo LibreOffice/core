@@ -19,6 +19,7 @@
 
 #include <limits.h>
 #include <tools/poly.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/dialog.hxx>

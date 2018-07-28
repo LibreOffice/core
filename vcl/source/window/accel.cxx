@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <sal/log.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <accel.h>

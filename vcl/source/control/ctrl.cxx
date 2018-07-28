@@ -26,6 +26,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <sal/log.hxx>
 
 #include <textlayout.hxx>
 #include <svdata.hxx>

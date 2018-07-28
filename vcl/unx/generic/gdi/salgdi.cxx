@@ -44,6 +44,7 @@
 #include <vcl/jobdata.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
+#include <sal/log.hxx>
 
 #include <unx/salunx.h>
 #include <unx/saldisp.hxx>

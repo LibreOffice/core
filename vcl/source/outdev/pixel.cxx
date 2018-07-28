@@ -20,6 +20,7 @@
 #include <cassert>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <memory>
 #include <vcl/gdimtf.hxx>

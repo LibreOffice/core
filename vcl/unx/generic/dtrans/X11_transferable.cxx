@@ -21,6 +21,7 @@
 #include <X11/Xatom.h>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <sal/log.hxx>
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;

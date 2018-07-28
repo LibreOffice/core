@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
+#include <sal/log.hxx>
 
 #include <cstdlib>
 

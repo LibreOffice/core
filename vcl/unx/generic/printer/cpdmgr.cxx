@@ -25,6 +25,7 @@
 #include <osl/thread.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <config_dbus.h>
 #include <config_gio.h>

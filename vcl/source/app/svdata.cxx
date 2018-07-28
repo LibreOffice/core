@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
 #include <uno/current_context.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/configsettings.hxx>

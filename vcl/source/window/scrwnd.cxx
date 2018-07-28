@@ -27,6 +27,7 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
+#include <sal/log.hxx>
 
 #include <math.h>
 

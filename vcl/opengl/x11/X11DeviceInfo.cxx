@@ -13,6 +13,7 @@
 #include <config_features.h>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <unistd.h>
 #include <sys/types.h>

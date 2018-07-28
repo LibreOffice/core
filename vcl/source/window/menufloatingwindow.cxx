@@ -21,6 +21,7 @@
 #include "menuitemlist.hxx"
 #include "menubarwindow.hxx"
 
+#include <sal/log.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>

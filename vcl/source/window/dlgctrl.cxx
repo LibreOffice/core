@@ -31,6 +31,7 @@
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 

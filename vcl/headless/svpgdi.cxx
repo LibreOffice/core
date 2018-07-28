@@ -24,6 +24,7 @@
 #include <headless/svpcairotextrender.hxx>
 #include <saldatabasic.hxx>
 
+#include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>

@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <sal/log.hxx>
 
 namespace {
 

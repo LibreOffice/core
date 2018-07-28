@@ -31,6 +31,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #undef Region
 

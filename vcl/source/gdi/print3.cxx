@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <printdlg.hxx>
 #include <svdata.hxx>

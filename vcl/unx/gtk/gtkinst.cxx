@@ -35,6 +35,7 @@
 #include <vcl/inputtypes.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <rtl/uri.hxx>
 
 #include <vcl/settings.hxx>

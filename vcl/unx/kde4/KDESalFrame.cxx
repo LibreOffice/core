@@ -41,6 +41,7 @@
 
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <unx/fontmanager.hxx>
 

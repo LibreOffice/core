@@ -25,6 +25,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

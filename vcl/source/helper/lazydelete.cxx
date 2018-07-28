@@ -21,6 +21,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/lazydelete.hxx>
 #include <svdata.hxx>
+#include <sal/log.hxx>
 
 namespace vcl {
 

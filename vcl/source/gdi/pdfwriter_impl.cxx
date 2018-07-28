@@ -55,6 +55,7 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>

@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <deque>
 

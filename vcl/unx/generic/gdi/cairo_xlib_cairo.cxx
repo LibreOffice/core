@@ -30,6 +30,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <basegfx/vector/b2isize.hxx>
+#include <sal/log.hxx>
 
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>

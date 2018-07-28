@@ -21,6 +21,7 @@
 #include <impgraph.hxx>
 #include <vcl/lazydelete.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 

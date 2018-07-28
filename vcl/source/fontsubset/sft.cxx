@@ -38,6 +38,7 @@
 #include "xlat.hxx"
 #include <rtl/crc.h>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <algorithm>

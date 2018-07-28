@@ -20,6 +20,7 @@
 #include <rtl/crc.h>
 #include <cstdlib>
 #include <memory>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>

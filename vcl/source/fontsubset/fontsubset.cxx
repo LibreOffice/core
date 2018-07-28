@@ -19,6 +19,7 @@
 
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <fontsubset.hxx>
 #include <sft.hxx>

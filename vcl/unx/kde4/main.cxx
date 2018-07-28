@@ -25,6 +25,7 @@
 #include <vclpluginapi.h>
 
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
 
 /// entry point for the KDE4 VCL plugin
 extern "C" {

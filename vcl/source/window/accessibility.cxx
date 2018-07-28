@@ -83,6 +83,7 @@
 
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <set>
 #include <typeinfo>

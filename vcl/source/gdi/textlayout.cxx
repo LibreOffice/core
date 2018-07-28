@@ -27,6 +27,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
+#include <sal/log.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <rtl/strbuf.hxx>

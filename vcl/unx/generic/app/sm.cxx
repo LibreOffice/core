@@ -28,6 +28,7 @@
 #include <fcntl.h>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <rtl/process.h>
 #include <osl/security.h>

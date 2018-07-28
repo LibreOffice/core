@@ -38,6 +38,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <rtl/process.h>
+#include <sal/log.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>

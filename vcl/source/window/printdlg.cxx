@@ -41,6 +41,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

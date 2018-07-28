@@ -25,6 +25,7 @@
 #include <fontsubset.hxx>
 
 #include <vcl/strhelper.hxx>
+#include <sal/log.hxx>
 
 typedef sal_uInt8 U8;
 typedef sal_uInt16 U16;

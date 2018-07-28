@@ -28,6 +28,7 @@
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <unx/helper.hxx>
 #include <vcl/ppdparser.hxx>
