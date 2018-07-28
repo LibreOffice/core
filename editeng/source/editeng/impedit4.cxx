@@ -1810,7 +1810,6 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Min() = aCurSel.Max();
 
-    OUString aWord;
     Reference< XSpellAlternatives > xSpellAlt;
     Sequence< PropertyValue > aEmptySeq;
     while (!xSpellAlt.is())
@@ -1834,7 +1833,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         }
 
         aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
-        aWord = GetSelected( aCurSel );
+        OUString aWord = GetSelected( aCurSel );
 
         // If afterwards a dot, this must be handed over!
         // If an abbreviation ...
@@ -1872,7 +1871,6 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 {
     EditSelection aCurSel( rSelection.Min() );
 
-    OUString aWord;
     Reference< XSpellAlternatives > xSpellAlt;
     Sequence< PropertyValue > aEmptySeq;
     while (!xSpellAlt.is())
@@ -1885,7 +1883,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
-        aWord = GetSelected( aCurSel );
+        OUString aWord = GetSelected( aCurSel );
 
         // If afterwards a dot, this must be handed over!
         // If an abbreviation ...
