@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <sal/main.h>
+#include <sal/log.hxx>
 #include <rtl/process.h>
 
 #include <cppuhelper/servicefactory.hxx>

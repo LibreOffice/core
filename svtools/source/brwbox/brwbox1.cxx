@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
+#include <sal/log.hxx>
 
 #include <functional>
 #include <algorithm>

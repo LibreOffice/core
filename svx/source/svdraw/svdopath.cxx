@@ -53,6 +53,7 @@
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <o3tl/make_unique.hxx>
 #include <memory>
+#include <sal/log.hxx>
 
 using namespace sdr;
 

@@ -30,6 +30,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoprov.hxx>
 

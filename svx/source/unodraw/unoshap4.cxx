@@ -52,6 +52,7 @@
 #include <svx/svdview.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
+#include <sal/log.hxx>
 
 #include <config_features.h>
 

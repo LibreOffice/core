@@ -14,6 +14,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

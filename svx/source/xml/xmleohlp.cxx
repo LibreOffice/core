@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <sot/storage.hxx>
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 

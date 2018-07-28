@@ -19,6 +19,7 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <svx/SmartTagItem.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 

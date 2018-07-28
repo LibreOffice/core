@@ -67,6 +67,7 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 

@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
+#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>
 

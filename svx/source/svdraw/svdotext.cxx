@@ -61,6 +61,7 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

@@ -19,6 +19,7 @@
 
 #include <svx/frmsel.hxx>
 #include <vcl/builderfactory.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <math.h>

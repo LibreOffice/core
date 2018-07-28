@@ -20,6 +20,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>

@@ -27,6 +27,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/security/RuntimePermission.hpp>
 #include <com/sun/star/security/AllPermission.hpp>

@@ -51,6 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
+#include <sal/log.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;

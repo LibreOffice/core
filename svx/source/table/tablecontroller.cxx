@@ -30,6 +30,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

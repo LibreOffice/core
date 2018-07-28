@@ -47,6 +47,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/charclass.hxx>
 

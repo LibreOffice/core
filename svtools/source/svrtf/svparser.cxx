@@ -23,6 +23,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <climits>

@@ -18,6 +18,7 @@
  */
 
 #include <svgtools.hxx>
+#include <sal/log.hxx>
 #include <osl/thread.h>
 #include <tools/color.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

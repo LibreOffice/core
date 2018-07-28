@@ -69,6 +69,7 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <math.h>
 #include <memory>
