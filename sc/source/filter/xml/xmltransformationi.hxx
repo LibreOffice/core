@@ -135,6 +135,39 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
+
+class ScXMLColumnRemoveNullContext : public ScXMLImportContext
+{
+    std::set<SCCOL> maColumns;
+    OUString maReplaceString;
+
+public:
+    ScXMLColumnRemoveNullContext(
+        ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
+
+    virtual ~ScXMLColumnRemoveNullContext() override;
+
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+};
+
+class ScXMLDateTimeContext : public ScXMLImportContext
+{
+    OUString aType;
+    sc::DATETIME_TRANSFORMATION_TYPE maType;
+    std::set<SCCOL> maColumns;
+
+public:
+    ScXMLDateTimeContext(ScXMLImport& rImport,
+                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
+
+    virtual ~ScXMLDateTimeContext() override;
+
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
