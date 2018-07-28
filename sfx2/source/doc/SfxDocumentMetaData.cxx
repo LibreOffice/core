@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>

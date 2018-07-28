@@ -27,6 +27,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>

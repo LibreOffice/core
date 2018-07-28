@@ -44,6 +44,7 @@
 #include <osl/security.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/globname.hxx>
 
 #include <assert.h>

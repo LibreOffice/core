@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

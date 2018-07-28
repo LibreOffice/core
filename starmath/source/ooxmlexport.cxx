@@ -12,6 +12,7 @@
 
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 using namespace oox;
 using namespace oox::core;

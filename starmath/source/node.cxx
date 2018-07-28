@@ -32,6 +32,7 @@
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
+#include <sal/log.hxx>
 
 #include <cassert>
 #include <math.h>

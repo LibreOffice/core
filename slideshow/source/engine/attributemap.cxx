@@ -22,6 +22,7 @@
 
 #include <attributemap.hxx>
 #include <tools.hxx>
+#include <sal/log.hxx>
 
 
 namespace slideshow

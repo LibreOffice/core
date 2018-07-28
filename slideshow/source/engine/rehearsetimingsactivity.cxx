@@ -28,6 +28,7 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <sal/log.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 

@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include "SysShExec.hxx"
 #include <osl/file.hxx>
 #include <sal/macros.h>

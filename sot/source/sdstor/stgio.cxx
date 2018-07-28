@@ -26,6 +26,7 @@
 #include "stgio.hxx"
 #include <o3tl/safeint.hxx>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 

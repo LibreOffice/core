@@ -22,6 +22,7 @@
 
 #include <set>
 #include <algorithm>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>

@@ -28,6 +28,7 @@
 #include <unotools/securityoptions.hxx>
 
 #include <rtl/ustring.h>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>

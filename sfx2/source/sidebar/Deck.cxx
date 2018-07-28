@@ -31,6 +31,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/svborder.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;

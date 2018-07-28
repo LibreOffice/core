@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <sal/log.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>

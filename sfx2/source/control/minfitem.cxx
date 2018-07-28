@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/minfitem.hxx>
+#include <sal/log.hxx>
 
 SfxPoolItem* SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx", "No SfxMacroInfItem factory available"); return nullptr; }
 

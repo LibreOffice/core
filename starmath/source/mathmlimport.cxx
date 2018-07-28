@@ -40,6 +40,7 @@ one go*/
 #include <comphelper/servicehelper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>

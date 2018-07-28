@@ -24,6 +24,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 #include <parse.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>

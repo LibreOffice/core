@@ -19,6 +19,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include "wininetbackend.hxx"
 

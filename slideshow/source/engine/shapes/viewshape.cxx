@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>

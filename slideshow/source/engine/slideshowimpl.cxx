@@ -46,6 +46,7 @@
 
 #include <vcl/font.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

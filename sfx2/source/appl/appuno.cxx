@@ -38,6 +38,7 @@
 #include <sfxtypes.hxx>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>

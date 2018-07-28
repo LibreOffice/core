@@ -91,6 +91,7 @@
 #include <helpids.h>
 #include <sfx2/strings.hrc>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 
 #ifdef UNX

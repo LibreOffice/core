@@ -20,6 +20,7 @@
 #include <svtools/htmlkywd.hxx>
 
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <svl/urihelper.hxx>

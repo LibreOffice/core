@@ -25,6 +25,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include "cmdmailsuppl.hxx"
 #include "cmdmailmsg.hxx"
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>

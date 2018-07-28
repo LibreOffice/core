@@ -20,6 +20,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <sal/log.hxx>
 #include "transitiontools.hxx"
 #include "clockwipe.hxx"
 #include "fanwipe.hxx"

@@ -29,6 +29,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"

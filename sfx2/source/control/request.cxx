@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <svl/itemiter.hxx>
+#include <sal/log.hxx>
 
 #include <svl/itempool.hxx>
 #include <itemdel.hxx>
