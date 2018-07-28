@@ -253,8 +253,6 @@ bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     if (!ConvertToKey(&aKey, nRec, rValue) || !getRoot()->Find(aKey))
         return false;
 
-    ONDXNode aNewNode(aKey);
-
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
         return false;
