@@ -547,8 +547,7 @@ void XMLTextFrameContext_Impl::Create()
             sal_Int32 i = 0;
             while( xTextImportHelper->HasFrameByName( sName ) )
             {
-                sName = sOldName;
-                sName += OUString::number( ++i );
+                sName = sOldName + OUString::number( ++i );
             }
             xNamed->setName( sName );
             if( sName != sOldName )

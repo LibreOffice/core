@@ -454,14 +454,12 @@ namespace xmloff
             return OUString(sUnnamedName);
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
-        OUString sReturn;
         const OUString* pNames = nullptr;
         const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
         {
             // assemble the new name (suggestion)
-            sReturn = sUnnamedName;
-            sReturn += OUString::number(i);
+            OUString sReturn = sUnnamedName + OUString::number(i);
             // check the existence (this is the bad performance part ....)
             for (pNames = aNames.getConstArray(); pNames<pNamesEnd; ++pNames)
             {
