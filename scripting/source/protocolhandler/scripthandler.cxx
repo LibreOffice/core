@@ -210,7 +210,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             bSuccess = false;
             while ( !bSuccess )
             {
-                Any aFirstCaughtException;
+                std::exception_ptr aFirstCaughtException;
                 try
                 {
                     invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
@@ -218,17 +218,17 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 }
                 catch( const provider::ScriptFrameworkErrorException& se )
                 {
-                    if  ( !aFirstCaughtException.hasValue() )
-                        aFirstCaughtException = ::cppu::getCaughtException();
+                    if  (!aFirstCaughtException)
+                        aFirstCaughtException = std::current_exception();
 
                     if ( se.errorType != provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT )
                         // the only condition which allows us to retry is if there is no method with the
                         // given name/signature
-                        ::cppu::throwException( aFirstCaughtException );
+                        std::rethrow_exception(aFirstCaughtException);
 
                     if ( inArgs.getLength() == 0 )
                         // no chance to retry if we can't strip more in-args
-                        ::cppu::throwException( aFirstCaughtException );
+                        std::rethrow_exception(aFirstCaughtException);
 
                     // strip one argument, then retry
                     inArgs.realloc( inArgs.getLength() - 1 );

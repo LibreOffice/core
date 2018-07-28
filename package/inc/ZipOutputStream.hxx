@@ -40,7 +40,7 @@ class ZipOutputStream
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
     std::vector< ZipOutputEntry* > m_aEntries;
-    ::css::uno::Any m_aDeflateException;
+    std::exception_ptr m_aDeflateException;
 
 public:
     ZipOutputStream(

@@ -464,8 +464,8 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 if( wasOneEvent )
                     bWasEvent = true;
             }
-            if (m_aException.hasValue())
-                ::cppu::throwException(m_aException);
+            if (m_aException)
+                std::rethrow_exception(m_aException);
         }
         else if( bWait )
         {

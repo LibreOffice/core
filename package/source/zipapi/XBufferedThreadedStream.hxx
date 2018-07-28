@@ -66,7 +66,7 @@ public:
 
     void produce();
     void setTerminateThread();
-    void saveException(std::exception_ptr exception) { maSavedException = exception; }
+    void saveException(const std::exception_ptr& exception) { maSavedException = exception; }
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;

@@ -94,10 +94,10 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
 void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
 {
     //Any exceptions thrown in the threads were caught and stored for now
-    ::css::uno::Any aCaughtException(pCandidate->getParallelDeflateException());
-    if (aCaughtException.hasValue())
+    const std::exception_ptr& rCaughtException(pCandidate->getParallelDeflateException());
+    if (rCaughtException)
     {
-        m_aDeflateException = aCaughtException; // store it for later throwing
+        m_aDeflateException = rCaughtException; // store it for later throwing
         // the exception handler in DeflateThread should have cleaned temp file
         delete pCandidate;
         return;
@@ -184,9 +184,9 @@ void ZipOutputStream::finish()
     m_xStream->flush();
     m_aZipList.clear();
 
-    if (m_aDeflateException.hasValue())
+    if (m_aDeflateException)
     {   // throw once all threads are finished and m_aEntries can be released
-        ::cppu::throwException(m_aDeflateException);
+        std::rethrow_exception(m_aDeflateException);
     }
 }
 
