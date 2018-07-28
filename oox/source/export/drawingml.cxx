@@ -2741,41 +2741,57 @@ bool DrawingML::WriteCustomGeometry(
 
 
                 int nPairIndex = 0;
-                for( int j = 0; j < aSegments.getLength(); ++j )
+                bool bOK = true;
+                for (int j = 0; j < aSegments.getLength() && bOK; ++j)
                 {
                     if ( aSegments[ j ].Command == drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
                     {
                         mpFS->singleElementNS( XML_a, XML_close, FSEND );
                     }
-                    for ( int k = 0; k < aSegments[j].Count; ++k )
+                    for (int k = 0; k < aSegments[j].Count && bOK; ++k)
                     {
                         switch( aSegments[ j ].Command )
                         {
                             case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
                             {
-                                mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
-                                WriteCustomGeometryPoint(aPairs[nPairIndex], rSdrObjCustomShape);
-                                mpFS->endElementNS( XML_a, XML_moveTo );
-                                nPairIndex++;
+                                if (nPairIndex >= aPairs.getLength())
+                                    bOK = false;
+                                else
+                                {
+                                    mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
+                                    WriteCustomGeometryPoint(aPairs[nPairIndex], rSdrObjCustomShape);
+                                    mpFS->endElementNS( XML_a, XML_moveTo );
+                                    nPairIndex++;
+                                }
                                 break;
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
                             {
-                                mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
-                                WriteCustomGeometryPoint(aPairs[nPairIndex], rSdrObjCustomShape);
-                                mpFS->endElementNS( XML_a, XML_lnTo );
-                                nPairIndex++;
+                                if (nPairIndex >= aPairs.getLength())
+                                    bOK = false;
+                                else
+                                {
+                                    mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
+                                    WriteCustomGeometryPoint(aPairs[nPairIndex], rSdrObjCustomShape);
+                                    mpFS->endElementNS( XML_a, XML_lnTo );
+                                    nPairIndex++;
+                                }
                                 break;
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
                             {
-                                mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
-                                for( sal_uInt8 l = 0; l <= 2; ++l )
+                                if (nPairIndex + 2 >= aPairs.getLength())
+                                    bOK = false;
+                                else
                                 {
-                                    WriteCustomGeometryPoint(aPairs[nPairIndex+l], rSdrObjCustomShape);
+                                    mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
+                                    for( sal_uInt8 l = 0; l <= 2; ++l )
+                                    {
+                                        WriteCustomGeometryPoint(aPairs[nPairIndex+l], rSdrObjCustomShape);
+                                    }
+                                    mpFS->endElementNS( XML_a, XML_cubicBezTo );
+                                    nPairIndex += 3;
                                 }
-                                mpFS->endElementNS( XML_a, XML_cubicBezTo );
-                                nPairIndex += 3;
                                 break;
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
@@ -2800,13 +2816,18 @@ bool DrawingML::WriteCustomGeometry(
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
                             {
-                                mpFS->startElementNS( XML_a, XML_quadBezTo, FSEND );
-                                for( sal_uInt8 l = 0; l < 2; ++l )
+                                if (nPairIndex + 1 >= aPairs.getLength())
+                                    bOK = false;
+                                else
                                 {
-                                    WriteCustomGeometryPoint(aPairs[nPairIndex+l], rSdrObjCustomShape);
+                                    mpFS->startElementNS( XML_a, XML_quadBezTo, FSEND );
+                                    for( sal_uInt8 l = 0; l < 2; ++l )
+                                    {
+                                        WriteCustomGeometryPoint(aPairs[nPairIndex+l], rSdrObjCustomShape);
+                                    }
+                                    mpFS->endElementNS( XML_a, XML_quadBezTo );
+                                    nPairIndex += 2;
                                 }
-                                mpFS->endElementNS( XML_a, XML_quadBezTo );
-                                nPairIndex += 2;
                                 break;
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
@@ -2823,7 +2844,7 @@ bool DrawingML::WriteCustomGeometry(
                 mpFS->endElementNS( XML_a, XML_path );
                 mpFS->endElementNS( XML_a, XML_pathLst );
                 mpFS->endElementNS( XML_a, XML_custGeom );
-                return true;
+                return bOK;
             }
         }
     }
