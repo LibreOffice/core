@@ -251,20 +251,20 @@ namespace
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
         const OUString sQuote(_xMetaData->getIdentifierQuoteString());
-        OUString sSql( " (" );
+        OUStringBuffer sSql( " (" );
         Reference< XPropertySet > xColProp;
 
         sal_Int32 nColCount  = _xColumns->getCount();
         for(sal_Int32 i=0;i<nColCount;++i)
         {
             if ( (_xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
-                sSql += ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
-                        + ",";
+                sSql.append( ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) )
+                        .append(",");
         }
 
         if ( nColCount )
-            sSql = sSql.replaceAt(sSql.getLength()-1, 1, ")");
-        return sSql;
+            sSql[sSql.getLength()-1] = ')';
+        return sSql.makeStringAndClear();
     }
 }
 

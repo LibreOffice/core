@@ -1890,15 +1890,15 @@ void StackWindow::UpdateCalls()
         SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
         while ( pMethod )
         {
-            OUString aEntry( OUString::number(nScope ));
+            OUStringBuffer aEntry( OUString::number(nScope ));
             if ( aEntry.getLength() < 2 )
-                aEntry = " " + aEntry;
-            aEntry += ": "  + pMethod->GetName();
+                aEntry.insert(0, " ");
+            aEntry.append(": ").append(pMethod->GetName());
             SbxArray* pParams = pMethod->GetParameters();
             SbxInfo* pInfo = pMethod->GetInfo();
             if ( pParams )
             {
-                aEntry += "(";
+                aEntry.append("(");
                 // 0 is the sub's name...
                 for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
                 {
@@ -1906,34 +1906,34 @@ void StackWindow::UpdateCalls()
                     assert(pVar && "Parameter?!");
                     if ( !pVar->GetName().isEmpty() )
                     {
-                        aEntry += pVar->GetName();
+                        aEntry.append(pVar->GetName());
                     }
                     else if ( pInfo )
                     {
                         const SbxParamInfo* pParam = pInfo->GetParam( nParam );
                         if ( pParam )
                         {
-                            aEntry += pParam->aName;
+                            aEntry.append(pParam->aName);
                         }
                     }
-                    aEntry += "=";
+                    aEntry.append("=");
                     SbxDataType eType = pVar->GetType();
                     if( eType & SbxARRAY )
                     {
-                        aEntry += "..." ;
+                        aEntry.append("...");
                     }
                     else if( eType != SbxOBJECT )
                     {
-                        aEntry += pVar->GetOUString();
+                        aEntry.append(pVar->GetOUString());
                     }
                     if ( nParam < ( pParams->Count() - 1 ) )
                     {
-                        aEntry += ", ";
+                        aEntry.append(", ");
                     }
                 }
-                aEntry += ")";
+                aEntry.append(")");
             }
-            aTreeListBox->InsertEntry( aEntry );
+            aTreeListBox->InsertEntry( aEntry.makeStringAndClear() );
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -2168,7 +2168,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
 
             // Copy data and create name
 
-            OUString aIndexStr = "(";
+            OUStringBuffer aIndexStr = "(";
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
@@ -2177,10 +2177,10 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
             for( j = 0 ; j < nParentLevel ; j++ )
             {
                 short n = pChildItem->vIndices[j] = pItem->vIndices[j];
-                aIndexStr += OUString::number( n ) + ",";
+                aIndexStr.append(OUString::number( n )).append(",");
             }
             pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
-            aIndexStr += OUString::number( i ) + ")";
+            aIndexStr.append(OUString::number( i )).append(")");
 
             OUString aDisplayName;
             WatchItem* pArrayRootItem = pChildItem->GetRootItem();
@@ -2188,7 +2188,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
                 aDisplayName = pItem->maDisplayName;
             else
                 aDisplayName = pItem->maName;
-            aDisplayName += aIndexStr;
+            aDisplayName += aIndexStr.makeStringAndClear();
             pChildItem->maDisplayName = aDisplayName;
 
             SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );

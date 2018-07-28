@@ -191,13 +191,13 @@ ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs,const ORowSetValue& rhs
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    OUString sRet;
+    OUStringBuffer sRet;
     sal_Int32 nCount = rhs;
     for (sal_Int32 i=0; i < nCount; ++i)
     {
-        sRet += lhs;
+        sRet.append(lhs.operator OUString());
     }
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 ORowSetValue OOp_Insert::operate(const std::vector<ORowSetValue>& lhs) const
