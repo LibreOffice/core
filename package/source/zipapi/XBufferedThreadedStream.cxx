@@ -31,7 +31,7 @@ private:
         catch (const css::uno::Exception &e)
         {
             SAL_WARN("package", "Unexpected " << e );
-            mxStream.saveException(cppu::getCaughtException());
+            mxStream.saveException(std::current_exception());
         }
 
         mxStream.setTerminateThread();
@@ -106,8 +106,8 @@ const Buffer& XBufferedThreadedStream::getNextBlock()
         if( maPendingBuffers.empty() )
         {
             maInUseBuffer = Buffer();
-            if (maSavedException.hasValue())
-                cppu::throwException(maSavedException);
+            if (maSavedException)
+                std::rethrow_exception(maSavedException);
         }
         else
         {
