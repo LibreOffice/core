@@ -78,36 +78,6 @@ void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 #endif
 }
 
-
-PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr& rStyleSheet, const StyleSheetTablePtr& pStyleSheetTable)
-{
-    PropertyMapPtr pRet;
-
-    if (!rStyleSheet)
-        return pRet;
-
-    if(!rStyleSheet->sBaseStyleIdentifier.isEmpty())
-    {
-        const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD(rStyleSheet->sBaseStyleIdentifier);
-        //a loop in the style hierarchy, bail out
-        if (pParentStyleSheet == rStyleSheet)
-            return pRet;
-
-        pRet = lcl_SearchParentStyleSheetAndMergeProperties( pParentStyleSheet, pStyleSheetTable );
-    }
-    else
-    {
-        pRet = new PropertyMap;
-    }
-
-    if (pRet)
-    {
-        pRet->InsertProps(rStyleSheet->pProperties);
-    }
-
-    return pRet;
-}
-
 void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
 {
     boost::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
@@ -388,7 +358,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
                 m_aTableProperties = pEmptyProps;
 
-                PropertyMapPtr pMergedProperties = lcl_SearchParentStyleSheetAndMergeProperties(pStyleSheet, pStyleSheetTable);
+                PropertyMapPtr pMergedProperties = pStyleSheet->GetMergedInheritedProperties(pStyleSheetTable);
 
                 table::BorderLine2 aBorderLine;
                 TableInfo rStyleInfo;
