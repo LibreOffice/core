@@ -731,6 +731,13 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
             if ( aProperty )
                 return aProperty->second;
         }
+        const PropertyMapPtr& pDefaultCharProps = GetStyleSheetTable()->GetDefaultCharProps();
+        if ( pDefaultCharProps )
+        {
+            boost::optional<PropertyMap::Property> aProperty = pDefaultCharProps->getProperty(eId);
+            if ( aProperty )
+                return aProperty->second;
+        }
     }
     return uno::Any();
 }
