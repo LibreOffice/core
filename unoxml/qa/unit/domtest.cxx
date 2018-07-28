@@ -19,6 +19,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/byteseq.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <comphelper/seqstream.hxx>

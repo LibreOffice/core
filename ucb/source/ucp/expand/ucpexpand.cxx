@@ -20,6 +20,7 @@
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

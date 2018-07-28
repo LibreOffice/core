@@ -55,6 +55,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
+#include <sal/log.hxx>
 #include <tools/link.hxx>
 #include <tools/fract.hxx>
 #include <tools/wintypes.hxx>

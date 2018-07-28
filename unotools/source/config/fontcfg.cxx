@@ -34,6 +34,7 @@
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <string.h>
 #include <list>

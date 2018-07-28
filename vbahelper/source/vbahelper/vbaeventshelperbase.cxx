@@ -29,6 +29,7 @@
 #include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/vbahelper.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

@@ -29,6 +29,7 @@
 #include <o3tl/enumrange.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include "itemholder1.hxx"
 

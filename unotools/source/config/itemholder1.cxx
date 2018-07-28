@@ -44,6 +44,7 @@
 #include <unotools/viewoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <sal/log.hxx>
 
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()

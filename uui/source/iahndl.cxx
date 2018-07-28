@@ -61,6 +61,7 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/errinf.hxx>

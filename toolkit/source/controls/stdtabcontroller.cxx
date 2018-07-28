@@ -30,6 +30,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
 
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

@@ -19,6 +19,7 @@
 
 #include "vbatogglebutton.hxx"
 #include "vbanewfont.hxx"
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

@@ -19,6 +19,7 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 
 #include <osl/diagnose.h>
