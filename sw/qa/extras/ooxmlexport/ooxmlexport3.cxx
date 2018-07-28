@@ -339,6 +339,15 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV", "themeTint", "99");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
+{
+    // TableStyle:firstRow (for header rows 1 and 2) color and size overrides document rPrDefault
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(0x5B9BD5, getProperty<sal_Int32>(getRun(xCell,1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(xCell,1), "CharHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTcBorders, "testTcBorders.docx")
 {
     //fdo#76635 : Table borders are not getting preserved.
