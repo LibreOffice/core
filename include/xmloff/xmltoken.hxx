@@ -3295,6 +3295,18 @@ namespace xmloff { namespace token {
         XML_EVEN,
         XML_ODD,
         XML_SIGN,
+        XML_REPLACE_STRING,
+        XML_COLUMN_REPLACENULL_TRANSFORMATION,
+        XML_COLUMN_DATETIME_TRANSFORMATION,
+        XML_START_OF_YEAR,
+        XML_END_OF_YEAR,
+        XML_MONTH_NAME,
+        XML_START_OF_MONTH,
+        XML_END_OF_MONTH,
+        XML_DAY_OF_YEAR,
+        XML_START_OF_QUARTER,
+        XML_END_OF_QUARTER,
+
         //Already defined XML_SEPARATOR,
 
         // regina, ODF1.2 additional symbols in charts
