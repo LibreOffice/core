@@ -1368,27 +1368,18 @@ bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rC
 OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 {
     const OUString aBaseName(SdResId(STR_LAYOUT_DEFAULT_NAME));
-    OUString aRetval;
     sal_uInt16 nCount(0);
-
-    while (aRetval.isEmpty())
+    for (;;)
     {
-        aRetval = aBaseName;
-
+        OUString aRetval = aBaseName;
         if(nCount)
         {
             aRetval += OUString::number(nCount);
         }
-
+        if (isMasterPageLayoutNameUnique(rDoc, aRetval))
+            return aRetval;
         nCount++;
-
-        if(!isMasterPageLayoutNameUnique(rDoc, aRetval))
-        {
-            aRetval.clear();
-        }
     }
-
-    return aRetval;
 }
 
 void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,

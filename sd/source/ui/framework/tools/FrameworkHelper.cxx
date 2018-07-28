@@ -750,21 +750,21 @@ void FrameworkHelper::UpdateConfiguration()
 
 OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxResourceId)
 {
-    OUString sString;
+    OUStringBuffer sString;
     if (rxResourceId.is())
     {
-        sString += rxResourceId->getResourceURL();
+        sString.append(rxResourceId->getResourceURL());
         if (rxResourceId->hasAnchor())
         {
             Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
             for (sal_Int32 nIndex=0; nIndex < aAnchorURLs.getLength(); ++nIndex)
             {
-                sString += " | ";
-                sString += aAnchorURLs[nIndex];
+                sString.append(" | ");
+                sString.append(aAnchorURLs[nIndex]);
             }
         }
     }
-    return sString;
+    return sString.makeStringAndClear();
 }
 
 Reference<XResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)

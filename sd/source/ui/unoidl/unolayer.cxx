@@ -484,8 +484,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         // Test for existing names
         while( aLayerName.isEmpty() || rLayerAdmin.GetLayer( aLayerName ) )
         {
-            aLayerName = SdResId(STR_LAYER);
-            aLayerName += OUString::number(nLayer);
+            aLayerName = SdResId(STR_LAYER) + OUString::number(nLayer);
             ++nLayer;
         }
 
