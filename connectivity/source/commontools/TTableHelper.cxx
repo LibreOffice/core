@@ -448,12 +448,11 @@ void OTableHelper::refreshIndexes()
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
-            OUString aName;
             OUString sCatalogSep = getMetaData()->getCatalogSeparator();
             OUString sPreviousRoundName;
             while( xResult->next() )
             {
-                aName = xRow->getString(5);
+                OUString aName = xRow->getString(5);
                 if(!aName.isEmpty())
                     aName += sCatalogSep;
                 aName += xRow->getString(6);
