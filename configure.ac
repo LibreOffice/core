@@ -6639,20 +6639,8 @@ AC_SUBST(CLANGLIBDIR)
 # This makes --enable-lto build with clang work.
 AC_SUBST(LD_PLUGIN)
 
-dnl ===================================================================
-dnl allocator
-dnl ===================================================================
-AC_MSG_CHECKING([which memory allocator to use])
-if test "$with_alloc" = "system"; then
-    AC_MSG_RESULT([system])
-    ALLOC="SYS_ALLOC"
-fi
-if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
-    AC_MSG_RESULT([internal])
-fi
 AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
 AC_SUBST(HAVE_POSIX_FALLOCATE)
-AC_SUBST(ALLOC)
 
 dnl ===================================================================
 dnl Custom build version

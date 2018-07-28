@@ -8,7 +8,6 @@
  */
 
 #define DISABLE_DYNLOADING
-#define FORCE_SYSALLOC
 #define NO_CHILD_PROCESSES
 #undef SAL_LOG_INFO
 #undef SAL_LOG_WARN
