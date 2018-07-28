@@ -1017,16 +1017,13 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     SvXMLAutoStylePoolP& rASPool ) :
         mrExport( rExport ),
         mrAutoStylePool( rASPool ),
+        mxPropertySetMapper( new XMLChartPropertySetMapper( true ) ),
+        mxExpPropMapper( new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport ) ),
+        msTableName("local-table"),
         mbHasCategoryLabels( false ),
         mbRowSourceColumns( true ),
         msCLSID( SvGlobalName( SO3_SCH_CLASSID ).GetHexName() )
 {
-    msTableName = "local-table";
-
-    // create property set mapper
-    mxPropertySetMapper = new XMLChartPropertySetMapper( true);
-    mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
-
     // register chart auto-style family
     mrAutoStylePool.AddFamily(
         XML_STYLE_FAMILY_SCH_CHART_ID,
