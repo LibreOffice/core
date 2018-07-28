@@ -1862,10 +1862,9 @@ void FileDialogHelper_Impl::addGraphicFilter()
     for ( i = 0; i < nCount; i++ )
     {
         j = 0;
-        OUString sWildcard;
         while( true )
         {
-            sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
+            OUString sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( sWildcard.isEmpty() )
                 break;
             if ( aExtensions.indexOf( sWildcard ) == -1 )
@@ -1902,10 +1901,9 @@ void FileDialogHelper_Impl::addGraphicFilter()
         OUString aName = mpGraphicFilter->GetImportFormatName( i );
         OUString aExt;
         j = 0;
-        OUString sWildcard;
         while( true )
         {
-            sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
+            OUString sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( sWildcard.isEmpty() )
                 break;
             if ( aExt.indexOf( sWildcard ) == -1 )

@@ -293,9 +293,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew)
 
             while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
             {
-                aTitle = mpExchangeData->aEditedTitle;
-                aTitle += " ";
-                aTitle += OUString::number( nCount );
+                aTitle = mpExchangeData->aEditedTitle + " " + OUString::number( nCount );
             }
 
             mpGallery->RenameTheme( aName, aTitle );
@@ -375,9 +373,7 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
 
                 while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                 {
-                    aName = aNewName;
-                    aName += " ";
-                    aName += OUString::number( nCount );
+                    aName = aNewName + " " + OUString::number( nCount );
                 }
 
                 mpGallery->RenameTheme( aOldName, aName );
@@ -597,9 +593,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {
-        aName = aNewTheme;
-        aName += " ";
-        aName += OUString::number( nCount );
+        aName = aNewTheme + " " + OUString::number( nCount );
     }
 
     if( !mpGallery->HasTheme( aName ) && mpGallery->CreateTheme( aName ) )
