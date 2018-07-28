@@ -4309,6 +4309,99 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
                 }
             }
             break;
+            case sc::TransformationType::REMOVE_NULL_TRANSFORMATION:
+            {
+                // Replace Null Transformation
+                std::shared_ptr<sc::ReplaceNullTransformation> aReplaceNullTransformation = std::dynamic_pointer_cast<sc::ReplaceNullTransformation>(itr);
+                std::set<SCCOL> aColumns = aReplaceNullTransformation->getColumn();
+
+                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_REPLACE_STRING, aReplaceNullTransformation->getReplaceString());
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_REPLACENULL_TRANSFORMATION, true, true);
+
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
+            case sc::TransformationType::DATETIME_TRANSFORMATION:
+            {
+                // Number Transformation
+                std::shared_ptr<sc::DateTimeTransformation> aDateTimeTransformation = std::dynamic_pointer_cast<sc::DateTimeTransformation>(itr);
+
+                sc::DATETIME_TRANSFORMATION_TYPE aDateTimeTransformationType = aDateTimeTransformation->getDateTimeTransfromationType();
+
+                switch ( aDateTimeTransformationType )
+                {
+                    case sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_DATE_STRING);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::YEAR:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_YEAR);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_START_OF_YEAR);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_END_OF_YEAR);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::MONTH:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_MONTH);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_MONTH_NAME);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_START_OF_MONTH);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_END_OF_MONTH);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::DAY:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_DAY);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_DAY_OF_WEEK);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_DAY_OF_YEAR);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::QUARTER:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_QUARTER);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_START_OF_QUARTER);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_END_OF_QUARTER);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::TIME:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TIME);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::HOUR:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_HOUR);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::MINUTE:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_MINUTE);
+                    break;
+                    case sc::DATETIME_TRANSFORMATION_TYPE::SECOND:
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_SECONDS);
+                    break;
+                }
+
+                SvXMLElementExport aTransformation(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN_DATETIME_TRANSFORMATION, true, true);
+
+                std::set<SCCOL> aColumns = aDateTimeTransformation->getColumn();
+                for(auto& col : aColumns)
+                {
+                    // Columns
+                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLUMN, OUString::number(col));
+                    SvXMLElementExport aCol(*this, XML_NAMESPACE_CALC_EXT, XML_COLUMN, true, true);
+                }
+            }
+            break;
             default:
             break;
         }
