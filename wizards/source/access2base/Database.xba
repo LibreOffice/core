@@ -227,8 +227,11 @@ Const cstThisSub = &quot;Database.Close&quot;
 	mClose = False
 	If _DbConnect &lt;&gt; DBCONNECTANY Then Goto Error_NotApplicable
 
-	Connection.close()
-	Connection.dispose()
+	With Connection
+		.flush
+		.close()
+		.dispose()
+	End With
 	Set Connection = Nothing
 	mClose = True
 
