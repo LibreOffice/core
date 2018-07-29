@@ -742,7 +742,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, 
         *(pStr+nLen) = 0;
     }
 
-    if ( nPreSpaces )
+    if (SAL_UNLIKELY( nPreSpaces ))
     {
         IMPL_RTL_STRCODE* pNewStr = pStr+nPreSpaces;
 
@@ -818,6 +818,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) );
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT32];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -828,7 +829,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
         nRadix = 10;
 
     /* is value negative */
-    if ( n < 0 )
+    if (SAL_UNLIKELY( n < 0 ))
     {
         *pStr = '-';
         pStr++;
@@ -873,6 +874,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) ))
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -883,7 +885,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
         nRadix = 10;
 
     /* is value negative */
-    if ( n < 0 )
+    if (SAL_UNLIKELY( n < 0 ))
     {
         *pStr = '-';
         pStr++;
@@ -928,6 +930,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) );
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFUINT64];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -999,6 +1002,7 @@ namespace {
                                                                      sal_Int16 nRadix )
     {
         static_assert(std::numeric_limits<T>::is_signed, "is signed");
+        assert( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) ;
         bool    bNeg;
         sal_Int16   nDigit;
         U           n = 0;
@@ -1010,7 +1014,7 @@ namespace {
         while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
             pStr++;
 
-        if ( *pStr == '-' )
+        if (SAL_UNLIKELY( *pStr == '-' ))
         {
             bNeg = true;
             pStr++;
@@ -1024,7 +1028,7 @@ namespace {
 
         T nDiv;
         sal_Int16 nMod;
-        if ( bNeg )
+        if (SAL_UNLIKELY( bNeg ))
         {
             nDiv = std::numeric_limits<T>::min() / nRadix;
             nMod = std::numeric_limits<T>::min() % nRadix;
@@ -1059,7 +1063,7 @@ namespace {
             pStr++;
         }
 
-        if ( bNeg )
+        if (SAL_UNLIKELY( bNeg ))
             return n == static_cast<U>(std::numeric_limits<T>::min())
                 ? std::numeric_limits<T>::min() : -static_cast<T>(n);
         else
@@ -1089,6 +1093,7 @@ namespace {
                                                                       sal_Int16 nRadix )
     {
         static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
+        assert( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) );
         sal_Int16   nDigit;
         T           n = 0;
 
@@ -1096,11 +1101,11 @@ namespace {
             nRadix = 10;
 
         /* Skip whitespaces */
-        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+        while ( *pStr && SAL_UNLIKELY(rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) )) )
             ++pStr;
 
         // skip optional explicit sign
-        if ( *pStr == '+' )
+        if (SAL_UNLIKELY( *pStr == '+' ))
             ++pStr;
 
         T nDiv = std::numeric_limits<T>::max() / nRadix;
@@ -1196,7 +1201,7 @@ namespace {
 
 void IMPL_RTL_ACQUIRE(IMPL_RTL_STRINGDATA * pThis)
 {
-    if (!SAL_STRING_IS_STATIC (pThis))
+    if (SAL_LIKELY((!SAL_STRING_IS_STATIC (pThis)))
         osl_atomic_increment( &((pThis)->refCount) );
 }
 
@@ -1251,7 +1256,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
 IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
-    if ( nLen < 0 )
+    assert(nLen >= 0);
+    if (SAL_UNLIKELY( nLen < 0 ))
         return nullptr;
     else
         return IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
@@ -1263,6 +1269,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
+    assert(nLen >= 0);
     if ( nLen <= 0 )
         IMPL_RTL_STRINGNAME( new )( ppThis );
     else
@@ -1317,7 +1324,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
     IMPL_RTL_STRINGDATA*    pOrg;
     sal_Int32               nLen;
 
-    if ( pCharStr )
+    if (SAL_LIKELY( pCharStr ))
     {
         const IMPL_RTL_STRCODE* pTempStr = pCharStr;
         while( *pTempStr )
@@ -1389,7 +1396,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppT
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
-    if ( beginIndex == 0 && count == pFrom->length )
+    if (SAL_UNLIKELY( beginIndex == 0 && count == pFrom->length ))
     {
         IMPL_RTL_STRINGNAME( assign )( ppThis, const_cast< IMPL_RTL_STRINGDATA * >( pFrom ) );
         return;
@@ -1416,7 +1423,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
     assert(ppThis);
     assert(nLen >= 0);
     assert(allocExtra >= 0);
-    if ( nLen + allocExtra == 0 )
+    if (SAL_UNLIKELY( nLen + allocExtra == 0 ))
     {
         IMPL_RTL_STRINGNAME( new )( ppThis );
         return;
@@ -1493,18 +1500,18 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     IMPL_RTL_STRINGDATA* pOrg = *ppThis;
 
     /* Test for 0-Pointer - if not, change newReplaceStrAt! */
-    if ( !pRight || !pRight->length )
+    if (SAL_UNLIKELY( !pRight || !pRight->length ))
     {
         *ppThis = pLeft;
         IMPL_RTL_ACQUIRE( pLeft );
     }
-    else if ( !pLeft || !pLeft->length )
+    else if (SAL_UNLIKELY( !pLeft || !pLeft->length ))
     {
         *ppThis = pRight;
         IMPL_RTL_ACQUIRE( pRight );
     }
-    else if (pLeft->length
-             > std::numeric_limits<sal_Int32>::max() - pRight->length)
+    else if (SAL_UNLIKELY(pLeft->length
+             > std::numeric_limits<sal_Int32>::max() - pRight->length))
     {
         *ppThis = nullptr;
     }
@@ -1513,7 +1520,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
         IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( pLeft->length + pRight->length );
         OSL_ASSERT(pTempStr != nullptr);
         *ppThis = pTempStr;
-        if (*ppThis != nullptr) {
+        if (SAL_LIKELY(*ppThis != nullptr)) {
             rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
             rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
 
@@ -1558,6 +1565,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
+    assert(nIndex>=0);
 //    assert(nCount >= 0);
     /* Append? */
     if ( nIndex >= pStr->length )
@@ -1861,6 +1869,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
 {
     assert(ppThis);
     assert(pStr);
+    assert(nIndex>=0);
+    assert(nToken>=0);
     const IMPL_RTL_STRCODE* pCharStr        = pStr->buffer;
     const IMPL_RTL_STRCODE* pCharStrStart;
     const IMPL_RTL_STRCODE* pOrgCharStr;

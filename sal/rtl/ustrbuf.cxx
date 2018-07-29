@@ -99,7 +99,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
     assert(This);
     assert(capacity && *capacity >= 0);
     assert(minimumCapacity >= 0);
-    if (minimumCapacity > *capacity)
+    if (SAL_UNLIKELY(minimumCapacity > *capacity))
     {
         rtl_uString * pTmp = *This;
         rtl_uString * pNew = nullptr;
