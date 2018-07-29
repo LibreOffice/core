@@ -456,17 +456,9 @@ sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 
 Sequence< sal_Int8 > ORowSet::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId s_Id;
+
+    return s_Id.getImplementationId();
 }
 
 // css::XAggregation
