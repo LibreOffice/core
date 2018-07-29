@@ -124,17 +124,9 @@ void SAL_CALL OFileTable::disposing()
 
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId s_Id;
+
+    return s_Id.getImplementationId();
 }
 
 // css::lang::XUnoTunnel
