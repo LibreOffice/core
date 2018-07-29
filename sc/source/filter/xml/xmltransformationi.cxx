@@ -257,6 +257,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 ScXMLColumnTextContext::ScXMLColumnTextContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
+    , maType(sc::TEXT_TRANSFORM_TYPE::TO_LOWER)
 {
     OUString aType = OUString();
 
