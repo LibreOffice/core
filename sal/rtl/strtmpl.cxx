@@ -744,18 +744,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, 
 
     if ( nPreSpaces )
     {
-        IMPL_RTL_STRCODE* pNewStr = pStr+nPreSpaces;
-
         nLen -= nPreSpaces;
-        nIndex = nLen;
-
-        while ( nIndex )
-        {
-            *pStr = *pNewStr;
-            pStr++;
-            pNewStr++;
-            nIndex--;
-        }
+        memmove(pStr, pStr + nPreSpaces, nLen * sizeof(IMPL_RTL_STRCODE));
+        pStr += nLen;
         *pStr = 0;
     }
 
