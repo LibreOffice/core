@@ -21,6 +21,7 @@
 
 #include <osl/interlck.h>
 #include <rtl/strbuf.hxx>
+#include "strimp.hxx"
 
 /*************************************************************************
  *  rtl_stringbuffer_newFromStr_WithLength
@@ -37,9 +38,13 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
         return;
     }
 
-    rtl_string_new_WithLength( newStr, count + 16 );
+    // use raw alloc to avoid overwriting the buffer twice
+    if ( *newStr)
+        rtl_string_release( *newStr );
+    *newStr = rtl_string_ImplAlloc( count + 16 );
     (*newStr)->length = count;
     memcpy( (*newStr)->buffer, value, count );
+    memset( (*newStr)->buffer + count, 0, 16 );
 }
 
 /*************************************************************************
@@ -78,16 +83,19 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity
     {
         rtl_String * pTmp = *This;
         rtl_String * pNew = nullptr;
-        *capacity = ((*This)->length + 1) * 2;
+        auto nLength = (*This)->length;
+        *capacity = (nLength + 1) * 2;
         if (minimumCapacity > *capacity)
             /* still lower, set to the minimum capacity */
             *capacity = minimumCapacity;
 
-        rtl_string_new_WithLength(&pNew, *capacity);
-        pNew->length = (*This)->length;
+        // use raw alloc to avoid overwriting the buffer twice
+        pNew = rtl_string_ImplAlloc( *capacity );
+        pNew->length = nLength;
         *This = pNew;
 
-        memcpy( (*This)->buffer, pTmp->buffer, pTmp->length );
+        memcpy( (*This)->buffer, pTmp->buffer, nLength );
+        memset( (*This)->buffer + nLength, 0, *capacity - nLength );
         rtl_string_release( pTmp );
     }
 }
