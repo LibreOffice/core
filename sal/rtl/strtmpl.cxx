@@ -1618,7 +1618,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    int                     bChanged    = 0;
+    bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
     const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
 
@@ -1650,7 +1650,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
                 }
             }
 
-            bChanged = 1;
+            bChanged = true;
             break;
         }
 
@@ -1679,7 +1679,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    int                     bChanged    = 0;
+    bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
     const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
 
@@ -1708,7 +1708,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
                 }
             }
 
-            bChanged = 1;
+            bChanged = true;
             break;
         }
 
@@ -1737,7 +1737,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    int                     bChanged    = 0;
+    bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
     const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
 
@@ -1766,7 +1766,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
                 }
             }
 
-            bChanged = 1;
+            bChanged = true;
             break;
         }
 
