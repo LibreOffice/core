@@ -2106,14 +2106,12 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 }
 
 static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
-                                 bool& rScriptDependent, bool& rFont,
+                                 bool& rScriptDependent,
                                  sal_uInt16& rScriptType )
 {
     switch( rAttr.GetItem().Which() )
     {
     case RES_CHRATR_FONT:
-        rFont = true;
-        SAL_FALLTHROUGH;
     case RES_CHRATR_FONTSIZE:
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
@@ -2122,8 +2120,6 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
         rScriptDependent = true;
         break;
     case RES_CHRATR_CJK_FONT:
-        rFont = true;
-        SAL_FALLTHROUGH;
     case RES_CHRATR_CJK_FONTSIZE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
@@ -2132,8 +2128,6 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
         rScriptDependent = true;
         break;
     case RES_CHRATR_CTL_FONT:
-        rFont = true;
-        SAL_FALLTHROUGH;
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
@@ -2143,7 +2137,6 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
         break;
     default:
         rScriptDependent = false;
-        rFont = false;
         break;
     }
 }
@@ -2225,10 +2218,10 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                         pAttr->GetSttCnt() == 0;
 
                     sal_Int32 nStt = pAttr->nSttContent;
-                    bool bScript = false, bFont = false;
+                    bool bScript = false;
                     sal_uInt16 nScriptItem;
                     bool bInsert = true;
-                       lcl_swhtml_getItemInfo( *pAttr, bScript, bFont,
+                       lcl_swhtml_getItemInfo( *pAttr, bScript,
                                             nScriptItem );
                         // set previous part
                     if( bScript )
@@ -3099,8 +3092,7 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
         // We do some optimization for script dependent attributes here.
         if( *pEndIdx == pAttr->GetSttPara() )
         {
-            bool bFont = false;
-            lcl_swhtml_getItemInfo( *pAttr, bScript, bFont, nScriptItem );
+            lcl_swhtml_getItemInfo( *pAttr, bScript, nScriptItem );
         }
     }
     else
