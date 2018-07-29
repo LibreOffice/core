@@ -335,6 +335,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 ScXMLColumnAggregateContext::ScXMLColumnAggregateContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
+    , maType(sc::AGGREGATE_FUNCTION::SUM)
 {
     OUString aType = OUString();
 
