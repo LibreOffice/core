@@ -1165,18 +1165,13 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 
     pDest   = pData->buffer;
     pSrc    = pStr->buffer;
-    while ( nCount > 0 )
-    {
-        *pDest = *pSrc;
-        pDest++;
-        pSrc++;
-        nCount--;
-    }
+
+    memcpy( pDest, pSrc, nCount * sizeof(IMPL_RTL_STRCODE));
 
     *ppThis = pData;
 
     RTL_LOG_STRING_NEW( pData );
-    return pDest;
+    return pDest + nCount;
 }
 
 /* ======================================================================= */
