@@ -40,7 +40,7 @@
 #define AZ_VON_OBEN     1
 #define AZ_VON_LINKS    2
 #define AZ_HORIZONTAL   3
-#define AZ_VERTIKAL     4
+#define AZ_VERTICAL     4
 
 #define AT_OBEN         0
 #define AT_MITTE        1
@@ -329,7 +329,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
                 nAnsatzRelPos = AT_OBEN;
             if( nEscRel > 6666 )
                 nAnsatzRelPos = AT_UNTEN;
-            nAnsatzTypePos = AZ_VERTIKAL;
+            nAnsatzTypePos = AZ_VERTICAL;
         }
         else
         {
@@ -401,7 +401,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         nEscDir = SdrCaptionEscDir::Horizontal;
         break;
 
-        case AZ_VERTIKAL:
+        case AZ_VERTICAL:
         m_pLB_ANSATZ_REL->Clear();
         for (OUString & i : m_aStrVertList)
             m_pLB_ANSATZ_REL->InsertEntry(i);
