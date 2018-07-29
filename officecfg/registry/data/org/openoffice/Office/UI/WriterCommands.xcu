@@ -3053,7 +3053,7 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Default ~Character</value>
         </prop>
@@ -3066,7 +3066,7 @@
           <value xml:lang="en-US">Default Character Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles</value>
+          <value>.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=CharacterStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
