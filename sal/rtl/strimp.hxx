@@ -25,8 +25,9 @@
 #include <sys/sdt.h>
 #endif
 
-
 #include <sal/types.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 /* ======================================================================= */
 /* Help functions for String and UString                                   */
@@ -48,6 +49,10 @@
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 
 bool rtl_ImplIsWhitespace( sal_Unicode c );
+
+rtl_uString* rtl_uString_ImplAlloc( sal_Int32 nLen );
+
+rtl_String* rtl_string_ImplAlloc( sal_Int32 nLen );
 
 extern "C" {
 

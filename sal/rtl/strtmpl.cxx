@@ -1134,7 +1134,7 @@ sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( toUInt64 )( const IMPL_RTL_STRCODE* pStr,
 /* Internal String-Class help functions                                    */
 /* ======================================================================= */
 
-static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
+IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
 {
     IMPL_RTL_STRINGDATA * pData
         = (sal::static_int_cast< sal_uInt32 >(nLen)
