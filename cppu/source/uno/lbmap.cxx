@@ -158,17 +158,10 @@ struct MappingsData
 
 static MappingsData & getMappingsData()
 {
-    static MappingsData * s_p = nullptr;
-    if (! s_p)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_p)
-        {
-            //TODO  This memory is leaked; see #i63473# for when this should be
-            // changed again:
-            s_p = new MappingsData;
-        }
-    }
+    //TODO  This memory is leaked; see #i63473# for when this should be
+    // changed again:
+    static MappingsData * s_p(new MappingsData);
+
     return *s_p;
 }
 

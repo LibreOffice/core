@@ -112,21 +112,13 @@ void OComponentHelper::release() throw()
 
 Sequence< Type > OComponentHelper::getTypes()
 {
-    static OTypeCollection * s_pTypes = nullptr;
-    if (! s_pTypes)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pTypes)
-        {
-            static OTypeCollection s_aTypes(
-                cppu::UnoType<lang::XComponent>::get(),
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<XAggregation>::get(),
-                cppu::UnoType<XWeak>::get() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
+    static OTypeCollection s_aTypes(
+        cppu::UnoType<lang::XComponent>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<XAggregation>::get(),
+        cppu::UnoType<XWeak>::get() );
+
+    return s_aTypes.getTypes();
 }
 
 // XComponent
