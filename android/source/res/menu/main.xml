@@ -43,12 +43,12 @@
         <item android:id="@+id/action_add_slide"
             android:title="@string/action_add_slide"
             android:orderInCategory="100"
-            android:enabled="false" />
+            android:visible="false" />
 
         <item android:id="@+id/action_add_worksheet"
             android:title="@string/action_add_worksheet"
             android:orderInCategory="100"
-            android:enabled="false" />
+            android:visible="false" />
     </group>
 
     <group android:id="@+id/group_edit_clipboard"
@@ -90,7 +90,7 @@
     <item android:id="@+id/action_presentation"
         android:title="@string/action_presentation"
         android:orderInCategory="100"
-        android:enabled="false" />
+        android:visible="false" />
 
     <item android:id="@+id/action_parts"
           android:title="@string/action_parts"

@@ -227,6 +227,26 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());
     }
 
+    public void showItem(final int item){
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mMainMenu.findItem(item).setVisible(true);
+
+            }
+        });
+    }
+
+    public void hideItem(final int item){
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mMainMenu.findItem(item).setVisible(false);
+
+            }
+        });
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
