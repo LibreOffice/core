@@ -2231,7 +2231,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                        lcl_swhtml_getItemInfo( *pAttr, bScript, bFont,
                                             nScriptItem );
                         // set previous part
-                    if( bInsert && bScript )
+                    if( bScript )
                     {
                         const SwTextNode *pTextNd =
                             pAttr->GetSttPara().GetNode().GetTextNode();

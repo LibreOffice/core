@@ -709,7 +709,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
 
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bRecord = true;
-    if (bRecord && !rDoc.IsUndoEnabled())
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScEditableTester aTester( &rDoc, rMark );
@@ -1310,7 +1310,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bRecord = true;
-    if ( bRecord && !rDoc.IsUndoEnabled() )
+    if ( !rDoc.IsUndoEnabled() )
         bRecord = false;
 
     bool bImportingXML = rDoc.IsImportingXML();
@@ -1379,7 +1379,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bRecord = true;
-    if ( bRecord && !rDoc.IsUndoEnabled() )
+    if ( !rDoc.IsUndoEnabled() )
         bRecord = false;
 
     bool bImportingXML = rDoc.IsImportingXML();
@@ -2187,7 +2187,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     PaintPartFlags nPaintFlags = PaintPartFlags::Grid;
 
     bool bRecord = true;
-    if (bRecord && !rDoc.IsUndoEnabled())
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScMarkData aMark;
