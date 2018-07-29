@@ -412,6 +412,8 @@ uno::Reference<xml::sax::XFastContextHandler>
 ScXMLColumnNumberContext::ScXMLColumnNumberContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
+    , maType(sc::NUMBER_TRANSFORM_TYPE::ROUND)
+    , maPrecision(0)
 {
     if (rAttrList.is())
     {
