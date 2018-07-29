@@ -601,14 +601,14 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //      a Filter) can be found, which supports
     //      this URL - it must be a loadable content.
     //      Because both items are registered for types
-    //      its enough to check for frame loaders only.
+    //      it's enough to check for frame loaders only.
     //      Mos of our filters are handled by our global
     //      default loader. But there exist some specialized
     //      loader, which does not work on top of filters!
     //      So it's not enough to search on the filter configuration.
     //      Further it's not enough to search for types!
     //      Because there exist some types, which are referenced by
-    //      other objects ... but not by filters nor frame loaders!
+    //      other objects... but not by filters nor frame loaders!
 
     OUString sPROP_TYPES(PROP_TYPES);
 

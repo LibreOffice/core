@@ -112,7 +112,7 @@ public:
     explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
 
                         ~ScfPropertySet();
-    //TOOD:
+    //TODO:
     ScfPropertySet(ScfPropertySet const &) = default;
     ScfPropertySet(ScfPropertySet &&) = default;
     ScfPropertySet & operator =(ScfPropertySet const &) = default;
