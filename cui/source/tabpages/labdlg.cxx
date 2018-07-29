@@ -461,11 +461,6 @@ void SvxCaptionTabPage::SetupType_Impl( SdrCaptionType nType )
     switch( nType )
     {
         case SdrCaptionType::Type1:
-        m_pFT_LAENGE->Disable();
-        m_pCB_LAENGE->Disable();
-        LineOptHdl_Impl( m_pCB_LAENGE );
-        break;
-
         case SdrCaptionType::Type2:
         m_pFT_LAENGE->Disable();
         m_pCB_LAENGE->Disable();
@@ -473,11 +468,6 @@ void SvxCaptionTabPage::SetupType_Impl( SdrCaptionType nType )
         break;
 
         case SdrCaptionType::Type3:
-        m_pFT_LAENGE->Enable();
-        m_pCB_LAENGE->Enable();
-        LineOptHdl_Impl( m_pCB_LAENGE );
-        break;
-
         case SdrCaptionType::Type4:
         m_pFT_LAENGE->Enable();
         m_pCB_LAENGE->Enable();
