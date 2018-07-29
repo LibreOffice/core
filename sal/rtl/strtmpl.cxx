@@ -1313,16 +1313,12 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
-    IMPL_RTL_STRCODE*       pBuffer;
     IMPL_RTL_STRINGDATA*    pOrg;
     sal_Int32               nLen;
 
     if ( pCharStr )
     {
-        const IMPL_RTL_STRCODE* pTempStr = pCharStr;
-        while( *pTempStr )
-            pTempStr++;
-        nLen = pTempStr-pCharStr;
+        nLen = IMPL_RTL_STRNAME( getLength )( pCharStr );
     }
     else
         nLen = 0;
@@ -1336,15 +1332,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
     pOrg = *ppThis;
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
     OSL_ASSERT(*ppThis != nullptr);
-    pBuffer = (*ppThis)->buffer;
-    do
-    {
-        *pBuffer = *pCharStr;
-        pBuffer++;
-        pCharStr++;
-    }
-    while ( *pCharStr );
-
+    rtl_str_ImplCopy( (*ppThis)->buffer, pCharStr, nLen );
     RTL_LOG_STRING_NEW( *ppThis );
 
     /* must be done last, if pCharStr == *ppThis */
