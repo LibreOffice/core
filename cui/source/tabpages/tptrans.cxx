@@ -186,14 +186,6 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
-            m_xFtTrgrCenterX->set_sensitive(true);
-            m_xMtrTrgrCenterX->set_sensitive(true);
-            m_xFtTrgrCenterY->set_sensitive(true);
-            m_xMtrTrgrCenterY->set_sensitive(true);
-            m_xFtTrgrAngle->set_sensitive(true);
-            m_xMtrTrgrAngle->set_sensitive(true);
-            break;
-
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
             m_xFtTrgrCenterX->set_sensitive(true);
