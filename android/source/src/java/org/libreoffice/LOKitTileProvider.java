@@ -123,11 +123,11 @@ class LOKitTileProvider implements TileProvider {
         mContext.getDocumentPartView().clear();
 
         if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION) {
-            mContext.getToolbarController().disableMenuItem(R.id.action_presentation, false);
-            mContext.getToolbarController().disableMenuItem(R.id.action_add_slide, false);
+            mContext.getToolbarController().showItem(R.id.action_presentation);
+            mContext.getToolbarController().showItem(R.id.action_add_slide);
         }
         if (mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET) {
-            mContext.getToolbarController().disableMenuItem(R.id.action_add_worksheet, false);
+            mContext.getToolbarController().showItem(R.id.action_add_worksheet);
         }
 
         // Writer documents always have one part, so hide the navigation drawer.
@@ -146,7 +146,7 @@ class LOKitTileProvider implements TileProvider {
             }
         } else {
             mContext.disableNavigationDrawer();
-            mContext.getToolbarController().disableMenuItem(R.id.action_parts, true);
+            mContext.getToolbarController().hideItem(R.id.action_parts);
         }
 
         // Enable headers for Calc documents
