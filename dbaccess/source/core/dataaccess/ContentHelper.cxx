@@ -332,19 +332,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     {
         const PropertyValue& rValue = pValues[ n ];
 
-        if ( rValue.Name == "ContentType" )
-        {
-            // Read-only property!
-            aRet[ n ] <<= IllegalAccessException("Property is read-only!",
-                            static_cast< cppu::OWeakObject * >( this ) );
-        }
-        else if ( rValue.Name == "IsDocument" )
-        {
-            // Read-only property!
-            aRet[ n ] <<= IllegalAccessException("Property is read-only!",
-                            static_cast< cppu::OWeakObject * >( this ) );
-        }
-        else if ( rValue.Name == "IsFolder" )
+        if ( rValue.Name == "ContentType" || rValue.Name == "IsDocument" || rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException("Property is read-only!",
