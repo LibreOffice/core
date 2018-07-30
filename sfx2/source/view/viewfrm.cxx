@@ -1089,7 +1089,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     GetDispatcher()->SetDisableFlags( SfxDisableFlags::NONE );
 }
 
-bool SfxViewFrame::Close()
+void SfxViewFrame::Close()
 {
 
     DBG_ASSERT( GetFrame().IsClosing_Impl() || !GetFrame().GetFrameInterface().is(), "ViewFrame closed too early!" );
@@ -1107,8 +1107,6 @@ bool SfxViewFrame::Close()
     // manner, thus it is better to let the dispatcher be.
     GetDispatcher()->Lock(true);
     delete this;
-
-    return true;
 }
 
 void SfxViewFrame::DoActivate( bool bUI )

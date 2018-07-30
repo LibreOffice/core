@@ -200,7 +200,7 @@ class SfxDocTplService_Impl
     bool                        needsUpdate();
     OUString                    getLongName( const OUString& rShortName );
     bool                    setTitleForURL( const OUString& rURL, const OUString& aTitle );
-    bool                    getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, bool& bDocHasTitle );
+    void                    getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, bool& bDocHasTitle );
 
     bool                    addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
@@ -641,7 +641,7 @@ bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUString
 }
 
 
-bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, bool& bDocHasTitle )
+void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, bool& bDocHasTitle )
 {
     bDocHasTitle = false;
 
@@ -682,8 +682,6 @@ bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
     }
     else
         bDocHasTitle = true;
-
-    return true;
 }
 
 
@@ -1908,8 +1906,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     OUString aTitle, aType;
 
     bool bDocHasTitle = false;
-    if( !getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle ) )
-        return false;
+    getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle );
 
     INetURLObject   aSourceObj( rSourceURL );
     if ( rTemplateName == aTitle )
@@ -2365,11 +2362,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                     OUString aTmpTitle;
 
                     bool bDocHasTitle = false;
-                    if( !getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle ) )
-                    {
-                        SAL_WARN( "sfx.doc", "addHierGroup(): template of alien format" );
-                        continue;
-                    }
+                    getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle );
 
                     if ( !aType.isEmpty() )
                         bUpdateType = true;
@@ -2461,8 +2454,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                     continue;
 
                 bool bDocHasTitle = false;
-                if( !getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle ) )
-                    continue;
+                getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle );
 
                 pGroup->addEntry( aChildTitle, aTargetURL, aType, OUString() );
             }

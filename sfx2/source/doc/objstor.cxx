@@ -164,7 +164,8 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
 
 bool SfxObjectShell::Save()
 {
-    return SaveChildren();
+    SaveChildren();
+    return true;
 }
 
 
@@ -1545,7 +1546,7 @@ bool SfxObjectShell::SaveTo_Impl
 
         if( bOk && !bCopyTo )
             // we also don't touch any graphical replacements here
-            bOk = SaveChildren( true );
+            SaveChildren( true );
     }
 
     if ( bOk )
@@ -3116,15 +3117,13 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
 }
 
 
-bool SfxObjectShell::SaveChildren( bool bObjectsOnly )
+void SfxObjectShell::SaveChildren( bool bObjectsOnly )
 {
     if ( pImpl->mpObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
         GetEmbeddedObjectContainer().StoreChildren(bOasis,bObjectsOnly);
     }
-
-    return true;
 }
 
 bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
@@ -3134,7 +3133,10 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return false;
 
     if ( xStorage == GetStorage() )
-        return SaveChildren();
+    {
+        SaveChildren();
+        return true;
+    }
 
     if ( pImpl->mpObjectContainer )
     {

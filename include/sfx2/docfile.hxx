@@ -151,7 +151,7 @@ public:
     void                SetError(ErrCode nError);
 
     void                CloseInStream();
-    bool                CloseOutStream();
+    void                CloseOutStream();
 
     void                CloseStorage();
 

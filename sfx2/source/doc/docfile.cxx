@@ -638,10 +638,9 @@ SvStream* SfxMedium::GetOutStream()
 }
 
 
-bool SfxMedium::CloseOutStream()
+void SfxMedium::CloseOutStream()
 {
     CloseOutStream_Impl();
-    return true;
 }
 
 void SfxMedium::CloseOutStream_Impl()

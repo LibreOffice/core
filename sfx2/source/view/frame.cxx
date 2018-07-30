@@ -127,7 +127,7 @@ bool SfxFrame::DoClose()
                 xFrame->dispose();
             }
             else
-                bRet = DoClose_Impl();
+                DoClose_Impl();
         }
         catch( css::util::CloseVetoException& )
         {
@@ -142,7 +142,7 @@ bool SfxFrame::DoClose()
     return bRet;
 }
 
-bool SfxFrame::DoClose_Impl()
+void SfxFrame::DoClose_Impl()
 {
     SfxBindings* pBindings = nullptr;
     if ( pImpl->pCurrentViewFrame )
@@ -158,9 +158,7 @@ bool SfxFrame::DoClose_Impl()
     if ( pImpl->bOwnsBindings )
         DELETEZ( pBindings );
 
-    bool bRet = Close();
-    DBG_ASSERT( bRet, "Impossible state: frame closes, but controller refuses!");
-    return bRet;
+    Close();
 }
 
 bool SfxFrame::DocIsModified_Impl()

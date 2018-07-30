@@ -709,7 +709,7 @@ protected:
 private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2();
-    bool impl_getPrintHelper();
+    void impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE OUString GetMediumFilterName_Impl();
 
