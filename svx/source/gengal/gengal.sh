@@ -59,8 +59,6 @@ for arg in "$@"
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
-       -v) VERBOSE=true;;
-       --verbose) VERBOSE=true;;
   esac
 done
 
