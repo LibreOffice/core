@@ -44,7 +44,7 @@ public:
         return m_aFeatures;
     }
 
-    std::unordered_map<sal_uInt32, sal_uInt32> getFeaturesMap();
+    std::unordered_map<sal_uInt32, sal_uInt32> getFeaturesMap() const;
 };
 
 } // end font namespace
