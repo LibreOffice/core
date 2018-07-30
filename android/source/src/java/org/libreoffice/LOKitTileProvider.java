@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,9 +126,12 @@ class LOKitTileProvider implements TileProvider {
         if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION) {
             mContext.getToolbarController().showItem(R.id.action_presentation);
             mContext.getToolbarController().showItem(R.id.action_add_slide);
+            mContext.getToolbarController().showItem(R.id.action_delete_slide);
         }
         if (mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET) {
             mContext.getToolbarController().showItem(R.id.action_add_worksheet);
+            mContext.getToolbarController().showItem(R.id.action_rename_worksheet);
+            mContext.getToolbarController().showItem(R.id.action_delete_worksheet);
         }
 
         // Writer documents always have one part, so hide the navigation drawer.
@@ -204,6 +208,80 @@ class LOKitTileProvider implements TileProvider {
         final DocumentPartView partView = new DocumentPartView(parts, partName);
         mContext.getDocumentPartView().add(partView);
     }
+
+    public void resetParts(){
+        int parts = mDocument.getParts();
+        mContext.getDocumentPartView().clear();
+        if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
+            for (int i = 0; i < parts; i++) {
+                String partName = mDocument.getPartName(i);
+
+                if (partName.isEmpty()) {
+                    partName = getGenericPartName(i);
+                }
+                Log.i(LOGTAG, "resetParts: " + partName);
+                mDocument.setPart(i);
+                resetDocumentSize();
+                final DocumentPartView partView = new DocumentPartView(i, partName);
+                mContext.getDocumentPartView().add(partView);
+            }
+        }
+    } public void renamePart(String partName) {
+        try{
+            for(int i=0; i<mDocument.getParts(); i++){
+                if(mContext.getDocumentPartView().get(i).partName.equals(partName)){
+                    //part name must be unique
+                    Toast.makeText(mContext, mContext.getString(R.string.name_already_used), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            if(isSpreadsheet() == false) {
+                //document must be spreadsheet
+                return;
+            }
+            JSONObject parameter = new JSONObject();
+            JSONObject name = new JSONObject();
+            JSONObject index = new JSONObject();
+            name.put("type", "string");
+            name.put("value", partName);
+            index.put("type","long");
+            index.put("value", getCurrentPartNumber()+1);
+            parameter.put("Name", name);
+            parameter.put("Index", index);
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Name", parameter.toString(),true));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void removePart() {
+        try{
+            if(isSpreadsheet() == false && isPresentation() == false) {
+                //document must be spreadsheet or presentation
+                return;
+            }
+
+            if(isPresentation()){
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:DeletePage", true));
+                return;
+            }
+
+            if(getPartsCount() < 2){
+                return;
+            }
+
+            JSONObject parameter = new JSONObject();
+            JSONObject index = new JSONObject();
+            index.put("type","long");
+            index.put("value", getCurrentPartNumber()+1);
+            parameter.put("Index", index);
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Remove", parameter.toString(),true));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public void saveDocumentAs(String filePath, String format) {
@@ -506,6 +584,14 @@ class LOKitTileProvider implements TileProvider {
     @Override
     public boolean isSpreadsheet() {
         return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET;
+    }
+
+    /**
+     * @see TileProvider#isPresentation()
+     */
+    @Override
+    public boolean isPresentation(){
+        return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION;
     }
 
     /**

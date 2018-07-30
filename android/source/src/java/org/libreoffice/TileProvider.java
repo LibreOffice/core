@@ -82,6 +82,11 @@ public interface TileProvider {
     boolean isSpreadsheet();
 
     /**
+     * Returns true if the current open document is a presentation
+     */
+    boolean isPresentation();
+
+    /**
      * Trigger a key event.
      *
      * @param keyEvent - contains information about key event
