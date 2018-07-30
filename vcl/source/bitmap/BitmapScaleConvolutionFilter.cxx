@@ -37,9 +37,9 @@ void ImplCalculateContributions(
     const long aSourceSize,
     const long aDestinationSize,
     long& aNumberOfContributions,
-    double*& pWeights,
-    long*& pPixels,
-    long*& pCount,
+    std::vector<double>& rWeights,
+    std::vector<long>& rPixels,
+    std::vector<long>& rCounts,
     const Kernel& aKernel)
 {
     const double fSamplingRadius(aKernel.GetWidth());
@@ -49,9 +49,9 @@ void ImplCalculateContributions(
 
     aNumberOfContributions = (long(fabs(ceil(fScaledRadius))) * 2) + 1;
     const long nAllocSize(aDestinationSize * aNumberOfContributions);
-    pWeights = new double[nAllocSize];
-    pPixels = new long[nAllocSize];
-    pCount = new long[aDestinationSize];
+    rWeights.resize(nAllocSize);
+    rPixels.resize(nAllocSize);
+    rCounts.resize(aDestinationSize);
 
     for(long i(0); i < aDestinationSize; i++)
     {
@@ -75,13 +75,13 @@ void ImplCalculateContributions(
             const long aPixelIndex(MinMax(j, 0, aSourceSize - 1));
             const long nIndex(aIndex + aCurrentCount);
 
-            pWeights[nIndex] = aWeight;
-            pPixels[nIndex] = aPixelIndex;
+            rWeights[nIndex] = aWeight;
+            rPixels[nIndex] = aPixelIndex;
 
             aCurrentCount++;
         }
 
-        pCount[i] = aCurrentCount;
+        rCounts[i] = aCurrentCount;
     }
 }
 
@@ -101,13 +101,13 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
     if(pReadAcc)
     {
-        double* pWeights = nullptr;
-        long* pPixels = nullptr;
-        long* pCount = nullptr;
+        std::vector<double> aWeights;
+        std::vector<long> aPixels;
+        std::vector<long> aCounts;
         long aNumberOfContributions(0);
 
         const long nHeight(rSource.GetSizePixel().Height());
-        ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+        ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
@@ -126,21 +126,21 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[x]; j++)
+                    for(long j(0); j < aCounts[x]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
-                        const double aWeight(pWeights[aIndex]);
+                        const double aWeight(aWeights[aIndex]);
                         BitmapColor aColor;
 
                         aSum += aWeight;
 
                         if(pReadAcc->HasPalette())
                         {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, pPixels[aIndex]));
+                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, aPixels[aIndex]));
                         }
                         else
                         {
-                            aColor = pReadAcc->GetPixelFromData(pScanlineRead, pPixels[aIndex]);
+                            aColor = pReadAcc->GetPixelFromData(pScanlineRead, aPixels[aIndex]);
                         }
 
                         aValueRed += aWeight * aColor.GetRed();
@@ -160,9 +160,9 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
             pWriteAcc.reset();
         }
 
-        delete[] pWeights;
-        delete[] pCount;
-        delete[] pPixels;
+        aWeights.clear();
+        aCounts.clear();
+        aPixels.clear();
 
         if(bResult)
         {
@@ -189,13 +189,13 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
     if(pReadAcc)
     {
-        double* pWeights = nullptr;
-        long* pPixels = nullptr;
-        long* pCount = nullptr;
+        std::vector<double> aWeights;
+        std::vector<long> aPixels;
+        std::vector<long> aCounts;
         long aNumberOfContributions(0);
 
         const long nWidth(rSource.GetSizePixel().Width());
-        ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+        ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
@@ -212,21 +212,21 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[y]; j++)
+                    for(long j(0); j < aCounts[y]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
-                        const double aWeight(pWeights[aIndex]);
+                        const double aWeight(aWeights[aIndex]);
                         BitmapColor aColor;
 
                         aSum += aWeight;
 
                         if(pReadAcc->HasPalette())
                         {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(pPixels[aIndex], x));
+                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(aPixels[aIndex], x));
                         }
                         else
                         {
-                            aColor = pReadAcc->GetPixel(pPixels[aIndex], x);
+                            aColor = pReadAcc->GetPixel(aPixels[aIndex], x);
                         }
 
                         aValueRed += aWeight * aColor.GetRed();
@@ -251,9 +251,9 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
             }
         }
 
-        delete[] pWeights;
-        delete[] pCount;
-        delete[] pPixels;
+        aWeights.clear();
+        aCounts.clear();
+        aPixels.clear();
 
         if(bResult)
         {

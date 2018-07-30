@@ -26,14 +26,13 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx)
 
     // Prepare Blur Vector
     int aNumberOfContributions;
-    double* pBlurVector = makeBlurKernel(mfRadius, aNumberOfContributions);
-
-    double* pWeights;
-    int* pPixels;
-    int* pCount;
+    std::vector<double> aBlurVector(makeBlurKernel(mfRadius, aNumberOfContributions));
+    std::vector<double> aWeights;
+    std::vector<int> aPixels;
+    std::vector<int> aCounts;
 
     // Do horizontal filtering
-    blurContributions(nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
+    blurContributions(nWidth, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
 
@@ -41,17 +40,17 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx)
     Bitmap aNewBitmap(Size(nHeight, nWidth), 24);
 
     bool bResult = convolutionPass(aBitmap, aNewBitmap, pReadAcc.get(), aNumberOfContributions,
-                                   pWeights, pPixels, pCount);
+                                   aWeights.data(), aPixels.data(), aCounts.data());
 
     // Cleanup
     pReadAcc.reset();
-    delete[] pWeights;
-    delete[] pPixels;
-    delete[] pCount;
+    aWeights.clear();
+    aPixels.clear();
+    aCounts.clear();
 
     if (!bResult)
     {
-        delete[] pBlurVector;
+        aBlurVector.clear();
     }
     else
     {
@@ -59,19 +58,19 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx)
         aBitmap.ReassignWithSize(aNewBitmap);
 
         // Do vertical filtering
-        blurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
+        blurContributions(nHeight, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
         pReadAcc = Bitmap::ScopedReadAccess(aBitmap);
         aNewBitmap = Bitmap(Size(nWidth, nHeight), 24);
         bResult = convolutionPass(aBitmap, aNewBitmap, pReadAcc.get(), aNumberOfContributions,
-                                  pWeights, pPixels, pCount);
+                                  aWeights.data(), aPixels.data(), aCounts.data());
 
         // Cleanup
         pReadAcc.reset();
-        delete[] pWeights;
-        delete[] pCount;
-        delete[] pPixels;
-        delete[] pBlurVector;
+        aWeights.clear();
+        aCounts.clear();
+        aPixels.clear();
+        aBlurVector.clear();
 
         if (bResult)
             aBitmap.ReassignWithSize(aNewBitmap); // swap current bitmap with new bitmap
@@ -138,11 +137,12 @@ bool BitmapGaussianSeparableBlurFilter::convolutionPass(Bitmap& rBitmap, Bitmap&
     return true;
 }
 
-double* BitmapGaussianSeparableBlurFilter::makeBlurKernel(const double radius, int& rows)
+std::vector<double> BitmapGaussianSeparableBlurFilter::makeBlurKernel(const double radius,
+                                                                      int& rows)
 {
     int intRadius = static_cast<int>(radius + 1.0);
     rows = intRadius * 2 + 1;
-    double* matrix = new double[rows];
+    std::vector<double> matrix(rows);
 
     double sigma = radius / 3;
     double radius2 = radius * radius;
@@ -163,15 +163,13 @@ double* BitmapGaussianSeparableBlurFilter::makeBlurKernel(const double radius, i
     return matrix;
 }
 
-void BitmapGaussianSeparableBlurFilter::blurContributions(const int aSize,
-                                                          const int aNumberOfContributions,
-                                                          const double* pBlurVector,
-                                                          double*& pWeights, int*& pPixels,
-                                                          int*& pCount)
+void BitmapGaussianSeparableBlurFilter::blurContributions(
+    const int aSize, const int aNumberOfContributions, const std::vector<double>& rBlurVector,
+    std::vector<double>& rWeights, std::vector<int>& rPixels, std::vector<int>& rCounts)
 {
-    pWeights = new double[aSize * aNumberOfContributions];
-    pPixels = new int[aSize * aNumberOfContributions];
-    pCount = new int[aSize];
+    rWeights.resize(aSize * aNumberOfContributions);
+    rPixels.resize(aSize * aNumberOfContributions);
+    rCounts.resize(aSize);
 
     int aLeft, aRight, aCurrentCount, aPixelIndex;
     double aWeight;
@@ -183,7 +181,7 @@ void BitmapGaussianSeparableBlurFilter::blurContributions(const int aSize,
         aCurrentCount = 0;
         for (int j = aLeft; j <= aRight; j++)
         {
-            aWeight = pBlurVector[aCurrentCount];
+            aWeight = rBlurVector[aCurrentCount];
 
             // Mirror edges
             if (j < 0)
@@ -205,12 +203,12 @@ void BitmapGaussianSeparableBlurFilter::blurContributions(const int aSize,
                 aWeight = 0.0;
             }
 
-            pWeights[i * aNumberOfContributions + aCurrentCount] = aWeight;
-            pPixels[i * aNumberOfContributions + aCurrentCount] = aPixelIndex;
+            rWeights[i * aNumberOfContributions + aCurrentCount] = aWeight;
+            rPixels[i * aNumberOfContributions + aCurrentCount] = aPixelIndex;
 
             aCurrentCount++;
         }
-        pCount[i] = aCurrentCount;
+        rCounts[i] = aCurrentCount;
     }
 }
 
