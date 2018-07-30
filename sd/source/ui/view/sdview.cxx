@@ -599,7 +599,8 @@ void View::SelectAll()
 bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     // forward to SdrView
-    return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
+    FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
+    return true;
 }
 
 /**

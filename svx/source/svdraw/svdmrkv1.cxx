@@ -249,11 +249,10 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
     return bChgd;
 }
 
-bool SdrMarkView::MarkNextPoint()
+void SdrMarkView::MarkNextPoint()
 {
     ForceUndirtyMrkPnt();
     SortMarkedObjects();
-    return false;
 }
 
 const tools::Rectangle& SdrMarkView::GetMarkedPointsRect() const
@@ -553,11 +552,10 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) cons
     return nullptr;
 }
 
-bool SdrMarkView::MarkNextGluePoint()
+void SdrMarkView::MarkNextGluePoint()
 {
     ForceUndirtyMrkPnt();
     SortMarkedObjects();
-    return false;
 }
 
 const tools::Rectangle& SdrMarkView::GetMarkedGluePointsRect() const

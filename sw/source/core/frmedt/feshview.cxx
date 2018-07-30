@@ -2133,7 +2133,10 @@ bool SwFEShell::BeginMark( const Point &rPos )
         if (pDView->HasMarkablePoints())
             return pDView->BegMarkPoints( rPos );
         else
-            return pDView->BegMarkObj( rPos );
+        {
+            pDView->BegMarkObj( rPos );
+            return true;
+        }
     }
     else
         return false;

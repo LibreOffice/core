@@ -842,16 +842,15 @@ void SdrCreateView::HideCreateObj()
 }
 
 
-bool SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
+void SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if(pCurrentCreate)
     {
         rTargetSet.Put(pCurrentCreate->GetMergedItemSet());
-        return true;
     }
     else
     {
-        return SdrDragView::GetAttributes(rTargetSet, bOnlyHardAttr);
+        SdrDragView::GetAttributes(rTargetSet, bOnlyHardAttr);
     }
 }
 
@@ -881,16 +880,15 @@ SfxStyleSheet* SdrCreateView::GetStyleSheet() const
     }
 }
 
-bool SdrCreateView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
+void SdrCreateView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     if (pCurrentCreate!=nullptr)
     {
         pCurrentCreate->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-        return true;
     }
     else
     {
-        return SdrDragView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+        SdrDragView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     }
 }
 
