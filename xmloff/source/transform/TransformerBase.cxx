@@ -633,8 +633,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             static_cast<sal_uInt16>(
                                     bRename ? (*aIter).second.m_nParam2
                                             : (*aIter).second.m_nParam1);
-                        if( AddNamespacePrefix( aAttrValue, nValPrefix ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        AddNamespacePrefix( aAttrValue, nValPrefix );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
                 case XML_ATACTION_ADD_APP_NAMESPACE_PREFIX:
@@ -646,8 +646,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             nValPrefix = XML_NAMESPACE_OOOC;
                         else if( IsXMLToken( GetClass(), XML_TEXT  ) )
                             nValPrefix = XML_NAMESPACE_OOOW;
-                        if( AddNamespacePrefix( aAttrValue, nValPrefix ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        AddNamespacePrefix( aAttrValue, nValPrefix );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
                 case XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX:
@@ -1200,11 +1200,10 @@ bool XMLTransformerBase::NegPercent( OUString& rValue )
     return bRet;
 }
 
-bool XMLTransformerBase::AddNamespacePrefix( OUString& rName,
+void XMLTransformerBase::AddNamespacePrefix( OUString& rName,
                              sal_uInt16 nPrefix ) const
 {
     rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, false );
-    return true;
 }
 
 bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
