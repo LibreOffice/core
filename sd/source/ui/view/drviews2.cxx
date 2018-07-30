@@ -359,7 +359,7 @@ public:
 class ClassificationInserter : public ClassificationCommon
 {
 private:
-    /// Delete the previous existing classification object(s) - if they exists
+    /// Delete the previous existing classification object(s) - if they exist
     void deleteExistingObjects()
     {
         OUString sKey = m_aKeyCreator.makeCategoryNameKey();

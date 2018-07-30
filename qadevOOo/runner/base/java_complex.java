@@ -40,7 +40,7 @@ public class java_complex implements TestBase
 
     /**
      * This function executes the complex tests given as parameter "-o" or "TestJob". It queries for the correspond class
-     * and crates the JobDescription.
+     * and creates the JobDescription.
      * @return true of all tests run successfully, else false
      */
     public boolean executeTest(TestParameters param)
