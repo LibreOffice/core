@@ -381,7 +381,7 @@ bool XMLStyleExport::exportStyle(
     return true;
 }
 
-bool XMLStyleExport::exportDefaultStyle(
+void XMLStyleExport::exportDefaultStyle(
         const Reference< XPropertySet >& xPropSet,
           const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper )
@@ -404,7 +404,6 @@ bool XMLStyleExport::exportDefaultStyle(
         rPropMapper->exportXML( GetExport(), aPropStates,
                                      SvXmlExportFlags::IGN_WS );
     }
-    return true;
 }
 
 void XMLStyleExport::exportStyleFamily(
