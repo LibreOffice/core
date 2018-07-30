@@ -154,17 +154,24 @@ void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
 }
 
+void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    SwIterator<SwFormatField, SwFieldType> aIter(*this);
+    if (!aIter.First())
+        return;
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldType"));
+    for (const SwFormatField* pFormatField = aIter.First(); pFormatField;
+         pFormatField = aIter.Next())
+        pFormatField->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
     sal_uInt16 nCount = size();
     for (sal_uInt16 nType = 0; nType < nCount; ++nType)
-    {
-        const SwFieldType *pCurType = (*this)[nType];
-        SwIterator<SwFormatField, SwFieldType> aIter(*pCurType);
-        for (const SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next())
-            pFormatField->dumpAsXml(pWriter);
-    }
+        (*this)[nType]->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -777,6 +784,7 @@ void SwField::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFormat"), BAD_CAST(OString::number(m_nFormat).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nLang"), BAD_CAST(OString::number(m_nLang.get()).getStr()));
 
     xmlTextWriterEndElement(pWriter);
 }
