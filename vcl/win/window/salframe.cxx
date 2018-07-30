@@ -5255,12 +5255,15 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     uno::Reference< accessibility::XMSAAService > xMSAA( pSVData->mxAccessBridge, uno::UNO_QUERY );
     if ( xMSAA.is() )
     {
+        sal_Int32 lParam32 = (sal_Int32)lParam;
+        sal_uInt32 wParam32 = (sal_uInt32)wParam;
+
         // mhOnSetTitleWnd not set to reasonable value anywhere...
-        if ( lParam == OBJID_CLIENT )
+        if ( lParam32 == OBJID_CLIENT )
         {
             nRet = xMSAA->getAccObjectPtr(
-                    reinterpret_cast<sal_Int64>(hWnd), lParam, wParam);
-            if( nRet != 0 )
+                    reinterpret_cast<sal_Int64>(hWnd), lParam32, wParam32);
+            if (nRet != 0)
                 return true;
         }
     }
