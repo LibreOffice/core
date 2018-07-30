@@ -9,8 +9,6 @@
  */
 
 #include <FontFeaturesDialog.hxx>
-
-#include <vcl/font/FeatureParser.hxx>
 #include <svx/dialmgr.hxx>
 
 using namespace css;
@@ -21,7 +19,8 @@ FontFeaturesDialog::FontFeaturesDialog(vcl::Window* pParent, OUString const& rFo
     : ModalDialog(pParent, "FontFeaturesDialog", "cui/ui/fontfeaturesdialog.ui")
     , m_sFontName(rFontName)
 {
-    get(m_pContentGrid, "contentGrid");
+    get(m_pContentGridOpenType, "contentGridOpenType");
+    get(m_pContentGridGraphite, "contentGridGraphite");
     get(m_pPreviewWindow, "preview");
     initialize();
 }
@@ -57,19 +56,48 @@ void FontFeaturesDialog::initialize()
         return;
 
     vcl::font::FeatureParser aParser(m_sFontName);
-    std::unordered_map<sal_uInt32, sal_uInt32> aExistingFeatures = aParser.getFeaturesMap();
 
-    std::unordered_set<sal_uInt32> aDoneFeatures;
+    std::unordered_set<sal_uInt32> aDoneFeaturesOpenType;
+    std::unordered_set<sal_uInt32> aDoneFeaturesGraphite;
+
+    std::vector<vcl::font::Feature> rFontFeaturesOpenType;
+    std::vector<vcl::font::Feature> rFontFeaturesGraphite;
+
+    for (vcl::font::Feature const& rFontFeature : rFontFeatures)
+    {
+        sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
+        if (rFontFeature.m_eType == vcl::font::FeatureType::OpenType)
+        {
+            if (aDoneFeaturesOpenType.find(nFontFeatureCode) != aDoneFeaturesOpenType.end())
+                continue;
+            aDoneFeaturesOpenType.insert(nFontFeatureCode);
+            rFontFeaturesOpenType.push_back(rFontFeature);
+        }
+        else
+        {
+            if (aDoneFeaturesGraphite.find(nFontFeatureCode) != aDoneFeaturesGraphite.end())
+                continue;
+            aDoneFeaturesGraphite.insert(nFontFeatureCode);
+            rFontFeaturesGraphite.push_back(rFontFeature);
+        }
+    }
+
+    fillGrid(rFontFeaturesOpenType, m_pContentGridOpenType, aParser);
+    fillGrid(rFontFeaturesGraphite, m_pContentGridGraphite, aParser);
+
+    updateFontPreview();
+}
+
+void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures,
+                                  VclPtr<VclGrid> const& pParent,
+                                  vcl::font::FeatureParser const& rParser)
+{
+    std::unordered_map<sal_uInt32, sal_uInt32> aExistingFeatures = rParser.getFeaturesMap();
 
     sal_Int32 i = 0;
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
         sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
-
-        if (aDoneFeatures.find(nFontFeatureCode) != aDoneFeatures.end())
-            continue;
-
-        aDoneFeatures.insert(nFontFeatureCode);
 
         vcl::font::FeatureDefinition aDefinition;
         if (rFontFeature.m_aDefinition)
@@ -97,7 +125,7 @@ void FontFeaturesDialog::initialize()
         if (aDefinition.getType() == vcl::font::FeatureParameterType::ENUM)
         {
             aCurrentItem.m_pText
-                = VclPtr<FixedText>::Create(m_pContentGrid, WB_LEFT | WB_VCENTER | WB_3DLOOK);
+                = VclPtr<FixedText>::Create(pParent, WB_LEFT | WB_VCENTER | WB_3DLOOK);
             aCurrentItem.m_pText->set_grid_left_attach(nGridPositionX);
             aCurrentItem.m_pText->set_grid_top_attach(nGridPositionY);
             aCurrentItem.m_pText->set_margin_left(6);
@@ -107,7 +135,7 @@ void FontFeaturesDialog::initialize()
             aCurrentItem.m_pText->SetText(aDefinition.getDescription());
             aCurrentItem.m_pText->Show();
 
-            aCurrentItem.m_pCombo = makeEnumComboBox(m_pContentGrid, aDefinition);
+            aCurrentItem.m_pCombo = makeEnumComboBox(pParent, aDefinition);
 
             aCurrentItem.m_pCombo->SelectEntryPos(nValue);
             aCurrentItem.m_pCombo->set_grid_left_attach(nGridPositionX + 1);
@@ -121,8 +149,8 @@ void FontFeaturesDialog::initialize()
         }
         else
         {
-            aCurrentItem.m_pCheck = VclPtr<CheckBox>::Create(
-                m_pContentGrid, WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_3DLOOK);
+            aCurrentItem.m_pCheck = VclPtr<CheckBox>::Create(pParent, WB_CLIPCHILDREN | WB_LEFT
+                                                                          | WB_VCENTER | WB_3DLOOK);
             aCurrentItem.m_pCheck->set_grid_left_attach(nGridPositionX);
             aCurrentItem.m_pCheck->set_grid_top_attach(nGridPositionY);
             aCurrentItem.m_pCheck->set_grid_width(2);
@@ -138,8 +166,6 @@ void FontFeaturesDialog::initialize()
 
         i++;
     }
-
-    updateFontPreview();
 }
 
 void FontFeaturesDialog::updateFontPreview()
@@ -159,7 +185,8 @@ void FontFeaturesDialog::updateFontPreview()
 
 void FontFeaturesDialog::dispose()
 {
-    m_pContentGrid.clear();
+    m_pContentGridOpenType.clear();
+    m_pContentGridGraphite.clear();
     m_pPreviewWindow.clear();
     for (FontFeatureItem& rItem : m_aFeatureItems)
     {

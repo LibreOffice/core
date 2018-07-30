@@ -195,6 +195,7 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures, eOfficeLanguage);
     aFeatureCollector.collectForTable(HB_OT_TAG_GSUB); // substitution
     aFeatureCollector.collectForTable(HB_OT_TAG_GPOS); // positioning
+    aFeatureCollector.collectGraphite();
 
     return true;
 }

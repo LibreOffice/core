@@ -27,6 +27,19 @@ OUString featureCodeAsString(sal_uInt32 nFeature)
     return OStringToOUString(aString.data(), RTL_TEXTENCODING_ASCII_US);
 }
 
+// Feature
+Feature::Feature()
+    : m_aID({ 0, 0, 0 })
+    , m_eType(FeatureType::OpenType)
+{
+}
+
+Feature::Feature(FeatureID const& rID, FeatureType eType)
+    : m_aID(rID)
+    , m_eType(eType)
+{
+}
+
 // FeatureParameter
 
 FeatureParameter::FeatureParameter(sal_uInt32 nCode, OUString aDescription)

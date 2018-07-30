@@ -37,14 +37,13 @@ public:
     }
 
 private:
-    bool collectGraphiteFeatureDefinition(vcl::font::Feature& rFeature);
-
     void collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript, hb_tag_t aScriptTag,
                             sal_uInt32 nLanguage, hb_tag_t aLanguageTag);
 
     void collectForScript(hb_tag_t aTableTag, sal_uInt32 nScript, hb_tag_t aScriptTag);
 
 public:
+    bool collectGraphite();
     void collectForTable(hb_tag_t aTableTag);
 };
 
