@@ -2944,49 +2944,49 @@ void SwAccessibleParagraph::deselectAccessibleChild(
 
 class SwHyperlinkIter_Impl
 {
-    const SwpHints *pHints;
-    sal_Int32 nStt;
-    sal_Int32 nEnd;
-    size_t nPos;
+    const SwpHints *m_pHints;
+    sal_Int32 m_nStt;
+    sal_Int32 m_nEnd;
+    size_t m_nPos;
 
 public:
     explicit SwHyperlinkIter_Impl( const SwTextFrame *pTextFrame );
     const SwTextAttr *next();
-    size_t getCurrHintPos() const { return nPos-1; }
+    size_t getCurrHintPos() const { return m_nPos-1; }
 
-    sal_Int32 startIdx() const { return nStt; }
-    sal_Int32 endIdx() const { return nEnd; }
+    sal_Int32 startIdx() const { return m_nStt; }
+    sal_Int32 endIdx() const { return m_nEnd; }
 };
 
 SwHyperlinkIter_Impl::SwHyperlinkIter_Impl( const SwTextFrame *pTextFrame ) :
-    pHints( pTextFrame->GetTextNode()->GetpSwpHints() ),
-    nStt( pTextFrame->GetOfst() ),
-    nPos( 0 )
+    m_pHints( pTextFrame->GetTextNode()->GetpSwpHints() ),
+    m_nStt( pTextFrame->GetOfst() ),
+    m_nPos( 0 )
 {
     const SwTextFrame *pFollFrame = pTextFrame->GetFollow();
-    nEnd = pFollFrame ? pFollFrame->GetOfst() : TextFrameIndex(pTextFrame->GetText().getLength());
+    m_nEnd = pFollFrame ? pFollFrame->GetOfst() : TextFrameIndex(pTextFrame->GetText().getLength());
 }
 
 const SwTextAttr *SwHyperlinkIter_Impl::next()
 {
     const SwTextAttr *pAttr = nullptr;
-    if( pHints )
+    if( m_pHints )
     {
-        while( !pAttr && nPos < pHints->Count() )
+        while( !pAttr && m_nPos < m_pHints->Count() )
         {
-            const SwTextAttr *pHt = pHints->Get(nPos);
+            const SwTextAttr *pHt = m_pHints->Get(m_nPos);
             if( RES_TXTATR_INETFMT == pHt->Which() )
             {
                 const sal_Int32 nHtStt = pHt->GetStart();
                 const sal_Int32 nHtEnd = *pHt->GetAnyEnd();
                 if( nHtEnd > nHtStt &&
-                    ( (nHtStt >= nStt && nHtStt < nEnd) ||
-                      (nHtEnd > nStt && nHtEnd <= nEnd) ) )
+                    ( (nHtStt >= m_nStt && nHtStt < m_nEnd) ||
+                      (nHtEnd > m_nStt && nHtEnd <= m_nEnd) ) )
                 {
                     pAttr = pHt;
                 }
             }
-            ++nPos;
+            ++m_nPos;
         }
     }
 

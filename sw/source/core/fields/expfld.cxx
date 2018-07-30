@@ -1111,13 +1111,13 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 SwInputFieldType::SwInputFieldType( SwDoc* pD )
     : SwFieldType( SwFieldIds::Input )
-    , pDoc( pD )
+    , mpDoc( pD )
 {
 }
 
 SwFieldType* SwInputFieldType::Copy() const
 {
-    SwInputFieldType* pType = new SwInputFieldType( pDoc );
+    SwInputFieldType* pType = new SwInputFieldType( mpDoc );
     return pType;
 }
 
@@ -1128,9 +1128,9 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
                             sal_uLong nFormat,
                             bool bIsFormField )
     : SwField( pFieldType, nFormat, LANGUAGE_SYSTEM, false )
-    , aContent(rContent)
-    , aPText(rPrompt)
-    , nSubType(nSub)
+    , maContent(rContent)
+    , maPText(rPrompt)
+    , mnSubType(nSub)
     , mbIsFormField( bIsFormField )
     , mpFormatField( nullptr )
 {
@@ -1148,11 +1148,11 @@ void SwInputField::SetFormatField( SwFormatField& rFormatField )
 
 void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
 {
-    if ( (nSubType & 0x00ff) == INP_TXT )
+    if ( (mnSubType & 0x00ff) == INP_TXT )
     {
-        aContent = rNewFieldContent;
+        maContent = rNewFieldContent;
     }
-    else if( (nSubType & 0x00ff) == INP_USR )
+    else if( (mnSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
             static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
@@ -1185,7 +1185,7 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
 OUString SwInputField::GetFieldName() const
 {
     OUString aStr(SwField::GetFieldName());
-    if ((nSubType & 0x00ff) == INP_USR)
+    if ((mnSubType & 0x00ff) == INP_USR)
     {
         aStr += GetTyp()->GetName() + " " + getContent();
     }
@@ -1198,13 +1198,13 @@ SwField* SwInputField::Copy() const
         new SwInputField(
             static_cast<SwInputFieldType*>(GetTyp()),
             getContent(),
-            aPText,
+            maPText,
             GetSubType(),
             GetFormat(),
             mbIsFormField );
 
-    pField->SetHelp( aHelp );
-    pField->SetToolTip( aToolTip );
+    pField->SetHelp( maHelp );
+    pField->SetToolTip( maToolTip );
 
     pField->SetAutomaticLanguage(IsAutomaticLanguage());
     return pField;
@@ -1212,12 +1212,12 @@ SwField* SwInputField::Copy() const
 
 OUString SwInputField::Expand() const
 {
-    if((nSubType & 0x00ff) == INP_TXT)
+    if((mnSubType & 0x00ff) == INP_TXT)
     {
         return getContent();
     }
 
-    if( (nSubType & 0x00ff) == INP_USR )
+    if( (mnSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
             static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
@@ -1231,8 +1231,8 @@ OUString SwInputField::Expand() const
 bool SwInputField::isFormField() const
 {
     return mbIsFormField
-           || !aHelp.isEmpty()
-           || !aToolTip.isEmpty();
+           || !maHelp.isEmpty()
+           || !maToolTip.isEmpty();
 }
 
 bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -1243,13 +1243,13 @@ bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= getContent();
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= aPText;
+        rAny <<= maPText;
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= aHelp;
+        rAny <<= maHelp;
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= aToolTip;
+        rAny <<= maToolTip;
         break;
     default:
         assert(false);
@@ -1262,16 +1262,16 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny >>= aContent;
+        rAny >>= maContent;
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= aPText;
+        rAny >>= maPText;
         break;
     case FIELD_PROP_PAR3:
-        rAny >>= aHelp;
+        rAny >>= maHelp;
         break;
     case FIELD_PROP_PAR4:
-        rAny >>= aToolTip;
+        rAny >>= maToolTip;
         break;
     default:
         assert(false);
@@ -1282,7 +1282,7 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 /// set condition
 void SwInputField::SetPar1(const OUString& rStr)
 {
-    aContent = rStr;
+    maContent = rStr;
 }
 
 OUString SwInputField::GetPar1() const
@@ -1292,42 +1292,42 @@ OUString SwInputField::GetPar1() const
 
 void SwInputField::SetPar2(const OUString& rStr)
 {
-    aPText = rStr;
+    maPText = rStr;
 }
 
 OUString SwInputField::GetPar2() const
 {
-    return aPText;
+    return maPText;
 }
 
 void SwInputField::SetHelp(const OUString & rStr)
 {
-    aHelp = rStr;
+    maHelp = rStr;
 }
 
 const OUString& SwInputField::GetHelp() const
 {
-    return aHelp;
+    return maHelp;
 }
 
 void SwInputField::SetToolTip(const OUString & rStr)
 {
-    aToolTip = rStr;
+    maToolTip = rStr;
 }
 
 const OUString& SwInputField::GetToolTip() const
 {
-    return aToolTip;
+    return maToolTip;
 }
 
 sal_uInt16 SwInputField::GetSubType() const
 {
-    return nSubType;
+    return mnSubType;
 }
 
 void SwInputField::SetSubType(sal_uInt16 nSub)
 {
-    nSubType = nSub;
+    mnSubType = nSub;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

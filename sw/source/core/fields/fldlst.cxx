@@ -33,12 +33,12 @@
 // sort input values
 
 SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
-    : pSh(pShell)
+    : mpSh(pShell)
 {
     // create sorted list of all  input fields
-    pSrtLst.reset( new SetGetExpFields );
+    mpSrtLst.reset( new SetGetExpFields );
 
-    const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const SwFieldTypes& rFieldTypes = *mpSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nSize = rFieldTypes.size();
 
     // iterate over all types
@@ -64,13 +64,13 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
                 {
                     if( bBuildTmpLst )
                     {
-                        aTmpLst.insert( pTextField );
+                        maTmpLst.insert( pTextField );
                     }
                     else
                     {
                         SwNodeIndex aIdx( rTextNode );
                         SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
-                        pSrtLst->insert( pNew );
+                        mpSrtLst->insert( pNew );
                     }
                 }
             }
@@ -84,13 +84,13 @@ SwInputFieldList::~SwInputFieldList()
 
 size_t SwInputFieldList::Count() const
 {
-    return pSrtLst->size();
+    return mpSrtLst->size();
 }
 
 // get field from list in sorted order
 SwField* SwInputFieldList::GetField(size_t nId)
 {
-    const SwTextField* pTextField = (*pSrtLst)[ nId ]->GetTextField();
+    const SwTextField* pTextField = (*mpSrtLst)[ nId ]->GetTextField();
     OSL_ENSURE( pTextField, "no TextField" );
     return const_cast<SwField*>(pTextField->GetFormatField().GetField());
 }
@@ -98,22 +98,22 @@ SwField* SwInputFieldList::GetField(size_t nId)
 /// save cursor
 void SwInputFieldList::PushCursor()
 {
-    pSh->Push();
-    pSh->ClearMark();
+    mpSh->Push();
+    mpSh->ClearMark();
 }
 
 /// get cursor
 void SwInputFieldList::PopCursor()
 {
-    pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+    mpSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
 
 /// go to position of a field
 void SwInputFieldList::GotoFieldPos(size_t nId)
 {
-    pSh->StartAllAction();
-    (*pSrtLst)[ nId ]->GetPosOfContent( *pSh->GetCursor()->GetPoint() );
-    pSh->EndAllAction();
+    mpSh->StartAllAction();
+    (*mpSrtLst)[ nId ]->GetPosOfContent( *mpSh->GetCursor()->GetPoint() );
+    mpSh->EndAllAction();
 }
 
 /** Compare TmpLst with current fields.
@@ -125,7 +125,7 @@ void SwInputFieldList::GotoFieldPos(size_t nId)
  */
 bool SwInputFieldList::BuildSortLst()
 {
-    const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const SwFieldTypes& rFieldTypes = *mpSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nSize = rFieldTypes.size();
 
     // iterate over all types
@@ -150,23 +150,23 @@ bool SwInputFieldList::BuildSortLst()
                 if( rTextNode.GetNodes().IsDocNodes() )
                 {
                     // not in TempList, thus add to SortList
-                    std::set<const SwTextField*>::iterator it = aTmpLst.find( pTextField );
-                    if( aTmpLst.end() == it )
+                    std::set<const SwTextField*>::iterator it = maTmpLst.find( pTextField );
+                    if( maTmpLst.end() == it )
                     {
                         SwNodeIndex aIdx( rTextNode );
                         SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
-                        pSrtLst->insert( pNew );
+                        mpSrtLst->insert( pNew );
                     }
                     else
-                        aTmpLst.erase( it );
+                        maTmpLst.erase( it );
                 }
             }
         }
     }
 
     // the pointers are not needed anymore
-    aTmpLst.clear();
-    return !pSrtLst->empty();
+    maTmpLst.clear();
+    return !mpSrtLst->empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

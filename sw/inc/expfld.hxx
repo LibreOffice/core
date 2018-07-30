@@ -278,22 +278,22 @@ inline bool SwSetExpField::IsSequenceField() const
 
 class SwInputFieldType : public SwFieldType
 {
-    SwDoc* pDoc;
+    SwDoc* mpDoc;
 public:
     SwInputFieldType( SwDoc* pDoc );
 
     virtual SwFieldType* Copy() const override;
 
-    SwDoc* GetDoc() const { return pDoc; }
+    SwDoc* GetDoc() const { return mpDoc; }
 };
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
-    mutable OUString aContent;
-    OUString aPText;
-    OUString aHelp;
-    OUString aToolTip;
-    sal_uInt16 nSubType;
+    mutable OUString maContent;
+    OUString maPText;
+    OUString maHelp;
+    OUString maToolTip;
+    sal_uInt16 mnSubType;
     bool mbIsFormField;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
@@ -302,7 +302,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
     virtual SwField*        Copy() const override;
 
     // Accessing Input Field's content
-    const OUString& getContent() const { return aContent;}
+    const OUString& getContent() const { return maContent;}
 
 public:
     /// Direct input via dialog; delete old value.
@@ -366,9 +366,9 @@ public:
     bool        BuildSortLst();
 
 private:
-    SwEditShell*                      pSh;
-    std::unique_ptr<SetGetExpFields>  pSrtLst;
-    std::set<const SwTextField*>      aTmpLst;
+    SwEditShell*                      mpSh;
+    std::unique_ptr<SetGetExpFields>  mpSrtLst;
+    std::set<const SwTextField*>      maTmpLst;
 };
 
  /// Implementation in tblcalc.cxx.
