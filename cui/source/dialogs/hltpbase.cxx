@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <osl/file.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/frame.hxx>
@@ -288,10 +289,17 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     mpEdText->SetText ( pHyperlinkItem->GetIntName() );
 
     // Script-button
-    if ( pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE )
-        mpBtScript->Disable();
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        if ( pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE )
+            mpBtScript->Disable();
+        else
+            mpBtScript->Enable();
+    }
     else
-        mpBtScript->Enable();
+    {
+        mpBtScript->Hide();
+    }
 }
 
 // Any action to do after apply-button is pressed
