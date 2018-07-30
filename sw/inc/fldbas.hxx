@@ -446,6 +446,7 @@ public:
     }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 class SW_DLLPUBLIC SwFormulaField : public SwValueField

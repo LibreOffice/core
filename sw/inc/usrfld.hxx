@@ -109,6 +109,7 @@ public:
     virtual void            SetPar2(const OUString& rStr) override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif // INCLUDED_SW_INC_USRFLD_HXX
