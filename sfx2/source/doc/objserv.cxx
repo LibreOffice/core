@@ -1286,6 +1286,38 @@ SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequen
     return nResult;
 }
 
+/// Does this ZIP storage have a signature stream?
+static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
+{
+    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return false;
+
+    if (xNameAccess->hasByName("META-INF"))
+    {
+        // ODF case.
+        try
+        {
+            uno::Reference<embed::XStorage> xMetaInf
+                = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+            uno::Reference<container::XNameAccess> xMetaInfNames(xMetaInf, uno::UNO_QUERY);
+            if (xMetaInfNames.is())
+            {
+                return xMetaInfNames->hasByName("documentsignatures.xml")
+                       || xMetaInfNames->hasByName("macrosignatures.xml")
+                       || xMetaInfNames->hasByName("packagesignatures.xml");
+            }
+        }
+        catch (const css::io::IOException& rException)
+        {
+            SAL_WARN("sfx.doc", "HasSignatureStream: failed to open META-INF: " << rException.Message);
+        }
+    }
+
+    // OOXML case.
+    return xNameAccess->hasByName("_xmlsignatures");
+}
+
 uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnalyzeSignature( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
 {
     uno::Sequence< security::DocumentSignatureInformation > aResult;
@@ -1320,8 +1352,11 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 if (GetMedium()->GetStorage().is())
                 {
                     // Something ZIP-based.
-                    aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
-                                                                    uno::Reference< io::XInputStream >() );
+                    // Only call into xmlsecurity if we see a signature stream,
+                    // as libxmlsec init is expensive.
+                    if (HasSignatureStream(GetMedium()->GetZipStorageToSign_Impl()))
+                        aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
+                                                                        uno::Reference< io::XInputStream >() );
                 }
                 else
                 {
