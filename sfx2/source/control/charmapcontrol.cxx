@@ -196,16 +196,7 @@ IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, Button*, void)
 {
     Close();
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
-    uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "Symbols";
-    aArgs[0].Value <<= OUString();
-
-    aArgs[1].Name = "FontName";
-    aArgs[1].Value <<= OUString();
-    //shortcut to launch dialog.. call uno command with empty arguments
-    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+    comphelper::dispatchCommand(".uno:InsertSymbol", {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
