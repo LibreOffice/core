@@ -742,7 +742,7 @@ SwCalcOper SwCalc::GetToken()
                 case '[':
                     if( aRes.EndPos < m_sCommand.getLength() )
                     {
-                        m_aVarName.clear();
+                        m_aVarName.setLength(0);
                         sal_Int32 nFndPos = aRes.EndPos,
                                   nSttPos = nFndPos;
 
@@ -753,8 +753,8 @@ SwCalcOper SwCalc::GetToken()
                                 // ignore the ]
                                 if ('\\' == m_sCommand[nFndPos-1])
                                 {
-                                    m_aVarName += m_sCommand.copy( nSttPos,
-                                                    nFndPos - nSttPos - 1 );
+                                    m_aVarName.append(m_sCommand.copy( nSttPos,
+                                                    nFndPos - nSttPos - 1 ));
                                     nSttPos = ++nFndPos;
                                 }
                                 else
@@ -765,8 +765,8 @@ SwCalcOper SwCalc::GetToken()
                         if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                m_aVarName += m_sCommand.copy( nSttPos,
-                                                    nFndPos - nSttPos );
+                                m_aVarName.append(m_sCommand.copy( nSttPos,
+                                                    nFndPos - nSttPos ));
                             aRes.EndPos = nFndPos + 1;
                             m_eCurrOper = CALC_NAME;
                         }
@@ -1098,13 +1098,13 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             {
                 case CALC_ASSIGN:
                 {
-                    SwCalcExp* n = VarInsert(m_aVarName);
+                    SwCalcExp* n = VarInsert(m_aVarName.toString());
                     GetToken();
                     nErg = n->nValue = Expr();
                     break;
                 }
                 default:
-                    nErg = VarLook(m_aVarName)->nValue;
+                    nErg = VarLook(m_aVarName.toString())->nValue;
                     // Explicitly disallow unknown function names (followed by "("),
                     // allow unknown variable names (equal to zero)
                     if (nErg.IsVoidValue() && (eOper == CALC_LP))

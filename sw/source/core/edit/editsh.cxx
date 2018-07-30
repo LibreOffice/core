@@ -515,7 +515,7 @@ void SwEditShell::ReplaceDropText( const OUString &rStr, SwPaM* pPaM )
 
 OUString SwEditShell::Calculate()
 {
-    OUString  aFormel;                    // the final formula
+    OUStringBuffer aFormel;                    // the final formula
     SwCalc    aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
 
@@ -531,13 +531,12 @@ OUString SwEditShell::Calculate()
 
             aStr = rCC.lowercase( aStr );
 
-            sal_Unicode ch;
             bool bValidFields = false;
             sal_Int32 nPos = 0;
 
             while( nPos < aStr.getLength() )
             {
-                ch = aStr[ nPos++ ];
+                sal_Unicode ch = aStr[ nPos++ ];
                 if( rCC.isLetter( aStr, nPos-1 ) || ch == '_' )
                 {
                     sal_Int32 nTmpStt = nPos-1;
@@ -562,18 +561,18 @@ OUString SwEditShell::Calculate()
                                                   pStart->nContent.GetIndex() );
                             bValidFields = true;
                         }
-                        aFormel += "(" + aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue ) + ")";
+                        aFormel.append("(").append(aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue )).append(")");
                     }
                     else
-                        aFormel += sVar;
+                        aFormel.append(sVar);
                 }
                 else
-                    aFormel += OUStringLiteral1(ch);
+                    aFormel.append(ch);
             }
         }
     }
 
-    return aCalc.GetStrResult( aCalc.Calculate(aFormel) );
+    return aCalc.GetStrResult( aCalc.Calculate(aFormel.makeStringAndClear()) );
 }
 
 sfx2::LinkManager& SwEditShell::GetLinkManager()

@@ -828,7 +828,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
             GetItemSet();
 
         SfxItemIter aIter( *pSet );
-        OUString aDesc;
+        OUStringBuffer aDesc;
 
         for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
         {
@@ -850,14 +850,14 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                 *pItem, eUnit, aItemPresentation, aIntlWrapper ) )
                         {
                             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
-                                aDesc += sPlus;
-                            aDesc += aItemPresentation;
+                                aDesc.append(sPlus);
+                            aDesc.append(aItemPresentation);
                         }
                     }
                 }
             }
         }
-        return aDesc;
+        return aDesc.makeStringAndClear();
     }
 
     if ( SfxStyleFamily::Frame == nFamily || SfxStyleFamily::Para == nFamily || SfxStyleFamily::Char == nFamily )
@@ -866,7 +866,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
             GetItemSet();
 
         SfxItemIter aIter( *pSet );
-        OUString aDesc;
+        OUStringBuffer aDesc;
         OUString sPageNum;
         OUString sModel;
         OUString sBreak;
@@ -989,8 +989,8 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                             if(bIsDefault)
                             {
                                 if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
-                                    aDesc += sPlus;
-                                aDesc += aItemPresentation;
+                                    aDesc.append(sPlus);
+                                aDesc.append(aItemPresentation);
                             }
                         }
                     }
@@ -1001,20 +1001,20 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         if (!sModel.isEmpty())
         {
             if (!aDesc.isEmpty())
-                aDesc += sPlus;
-            aDesc += SwResId(STR_PAGEBREAK) + sPlus + sModel;
+                aDesc.append(sPlus);
+            aDesc.append(SwResId(STR_PAGEBREAK)).append(sPlus).append(sModel);
             if (sPageNum != "0")
             {
-                aDesc += sPlus + SwResId(STR_PAGEOFFSET) + sPageNum;
+                aDesc.append(sPlus).append(SwResId(STR_PAGEOFFSET)).append(sPageNum);
             }
         }
         else if (!sBreak.isEmpty()) // Break can be valid only when NO Model
         {
             if (!aDesc.isEmpty())
-                aDesc += sPlus;
-            aDesc += sBreak;
+                aDesc.append(sPlus);
+            aDesc.append(sBreak);
         }
-        return aDesc;
+        return aDesc.makeStringAndClear();
     }
 
     if( SfxStyleFamily::Pseudo == nFamily )

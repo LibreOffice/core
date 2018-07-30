@@ -177,21 +177,21 @@ static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 
 void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
 {
-    OUString aTmpStr;
+    OUStringBuffer aTmpStr;
     while( nLevel )
     {
-        aTmpStr += "../";
+        aTmpStr.append("../");
         --nLevel;
     }
     if (!aTmpStr.isEmpty())
-        aTmpStr += rPath;
+        aTmpStr.append(rPath);
     else
         aTmpStr = rPath;
 
     if (!aTmpStr.isEmpty())
     {
         bool bWasAbs = false;
-        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr.makeStringAndClear(), bWasAbs ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
         // full path as stored in SvxURLField must be encoded
     }
 }

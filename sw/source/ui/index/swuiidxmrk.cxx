@@ -1222,10 +1222,10 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
         }
 
         SwFieldMgr aMgr(pSh);
-        OUString sFields;
+        OUStringBuffer sFields;
         for(OUString & s : m_sFields)
         {
-            sFields += s + OUStringLiteral1(TOX_STYLE_DELIMITER);
+            sFields.append(s).append(TOX_STYLE_DELIMITER);
         }
         if(bNewEntry)
         {
@@ -1236,12 +1236,12 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
                     aNewData.SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
-            SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields, OUString(), 0 );
+            SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields.makeStringAndClear(), OUString(), 0 );
             aMgr.InsertField( aData );
         }
         else if(aMgr.GetCurField())
         {
-            aMgr.UpdateCurField(0, sFields, OUString());
+            aMgr.UpdateCurField(0, sFields.makeStringAndClear(), OUString());
         }
     }
     if(!bNewEntry)

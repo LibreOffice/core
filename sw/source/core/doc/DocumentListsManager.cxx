@@ -214,8 +214,7 @@ const OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggeste
     while ( getListByName( aTmpStr ) )
     {
         ++nHitCount;
-        aTmpStr = aSuggestedUniqueListId;
-        aTmpStr += OUString::number( nHitCount );
+        aTmpStr = aSuggestedUniqueListId + OUString::number( nHitCount );
     }
 
     return aTmpStr;

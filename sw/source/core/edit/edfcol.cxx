@@ -1236,19 +1236,19 @@ void lcl_ApplyParagraphClassification(SwDoc* pDoc,
 
     // Correct the order
     std::reverse(aFieldNames.begin(), aFieldNames.end());
-    OUString sFieldNames;
+    OUStringBuffer sFieldNames;
     bool first = true;
     for (const OUString& rFieldName : aFieldNames)
     {
         if (!first)
-            sFieldNames += "/";
-        sFieldNames += rFieldName;
+            sFieldNames.append("/");
+        sFieldNames.append(rFieldName);
         first = false;
     }
 
     const OUString sOldFieldNames = lcl_getRDF(xModel, xNodeSubject, ParagraphClassificationFieldNamesRDFName).second;
     SwRDFHelper::removeStatement(xModel, MetaNS, xNodeSubject, ParagraphClassificationFieldNamesRDFName, sOldFieldNames);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, ParagraphClassificationFieldNamesRDFName, sFieldNames);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, ParagraphClassificationFieldNamesRDFName, sFieldNames.makeStringAndClear());
 }
 
 void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResults)

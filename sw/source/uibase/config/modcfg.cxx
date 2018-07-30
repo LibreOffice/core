@@ -135,7 +135,7 @@ SwModuleOptions::SwModuleOptions() :
 
 OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFromUI)
 {
-    OUString sReturn;
+    OUStringBuffer sReturn;
     const sal_Int32 nDelimLen = rDelim.getLength();
     if(bFromUI)
     {
@@ -147,9 +147,9 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
             {
                 switch (rDelim[i++])
                 {
-                    case 'n':   sReturn += "\n";    break;
-                    case 't':   sReturn += "\t";    break;
-                    case '\\':  sReturn += "\\";    break;
+                    case 'n':   sReturn.append("\n");    break;
+                    case 't':   sReturn.append("\t");    break;
+                    case '\\':  sReturn.append("\\");    break;
 
                     case 'x':
                     {
@@ -175,18 +175,18 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                             nChar += nVal;
                         }
                         if( bValidData )
-                            sReturn += OUStringLiteral1(nChar);
+                            sReturn.append(nChar);
                         break;
                     }
 
                     default:    // Unknown, so insert backslash
-                        sReturn += "\\";
+                        sReturn.append("\\");
                         i--;
                         break;
                 }
             }
             else
-                sReturn += OUStringLiteral1(c);
+                sReturn.append(c);
         }
     }
     else
@@ -197,23 +197,23 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
 
             switch (c)
             {
-                case '\n':  sReturn += "\\n"; break;
-                case '\t':  sReturn += "\\t"; break;
-                case '\\':  sReturn += "\\\\"; break;
+                case '\n':  sReturn.append("\\n"); break;
+                case '\t':  sReturn.append("\\t"); break;
+                case '\\':  sReturn.append("\\\\"); break;
 
                 default:
                     if( c <= 0x1f || c >= 0x7f )
                     {
-                        sReturn += "\\x" + OUString::number( c, 16 );
+                        sReturn.append("\\x").append(OUString::number( c, 16 ));
                     }
                     else
                     {
-                        sReturn += OUStringLiteral1(c);
+                        sReturn.append(c);
                     }
             }
         }
     }
-    return sReturn;
+    return sReturn.makeStringAndClear();
 }
 
 const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()

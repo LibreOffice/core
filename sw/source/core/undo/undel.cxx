@@ -625,7 +625,7 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
 
 OUString DenoteSpecialCharacters(const OUString & rStr)
 {
-    OUString aResult;
+    OUStringBuffer aResult;
 
     if (!rStr.isEmpty())
     {
@@ -649,7 +649,7 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
 
             if (bStart)
             {
-                aResult += lcl_DenotedPortion(rStr, nStart, i);
+                aResult.append(lcl_DenotedPortion(rStr, nStart, i));
 
                 nStart = i;
                 bStart = false;
@@ -658,12 +658,12 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
             cLast = rStr[i];
         }
 
-        aResult += lcl_DenotedPortion(rStr, nStart, rStr.getLength());
+        aResult.append(lcl_DenotedPortion(rStr, nStart, rStr.getLength()));
     }
     else
         aResult = SwRewriter::GetPlaceHolder(UndoArg2);
 
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 SwRewriter SwUndoDelete::GetRewriter() const

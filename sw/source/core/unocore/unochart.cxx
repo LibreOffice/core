@@ -1688,7 +1688,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     if (rRangeRepresentation.isEmpty())
         return OUString();
 
-    OUString aRes;
+    OUStringBuffer aRes;
 
     // multiple ranges are delimited by a ';' like in
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
@@ -1741,12 +1741,12 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         }
         OUString aTmp( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
         if (!aRes.isEmpty()) // in case of multiple ranges add delimiter
-            aRes += " ";
-        aRes += aTmp;
+            aRes.append(" ");
+        aRes.append(aTmp);
     }
     while (nPos>0);
 
-    return aRes;
+    return aRes.makeStringAndClear();
 }
 
 OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXMLRange )
@@ -1758,7 +1758,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
     if (rXMLRange.isEmpty())
         return OUString();
 
-    OUString aRes;
+    OUStringBuffer aRes;
 
     // multiple ranges are delimited by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
@@ -1790,12 +1790,12 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
         }
 
         if (!aRes.isEmpty()) // in case of multiple ranges add delimiter
-            aRes += ";";
-        aRes += aTmp;
+            aRes.append(";");
+        aRes.append(aTmp);
     }
     while (nPos>0);
 
-    return aRes;
+    return aRes.makeStringAndClear();
 }
 
 SwChartDataSource::SwChartDataSource(

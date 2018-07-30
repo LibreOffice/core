@@ -2606,19 +2606,19 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
 
     const sal_Int32 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
-    OUString sSetStyles;
+    OUStringBuffer sSetStyles;
     OUString aString;
     for(sal_Int32 i = 0; i < nStyles; i++)
     {
         if(i)
         {
-            sSetStyles += OUStringLiteral1(TOX_STYLE_DELIMITER);
+            sSetStyles.append(TOX_STYLE_DELIMITER);
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
                 SwGetPoolIdFromName::TxtColl);
-        sSetStyles +=  aString;
+        sSetStyles.append(aString);
     }
-    rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
+    rTOXBase.SetStyleNames(sSetStyles.makeStringAndClear(), static_cast<sal_uInt16>(nIndex));
 }
 
 sal_Int32 SAL_CALL
@@ -2743,7 +2743,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         throw lang::IllegalArgumentException();
     }
 
-    OUString sPattern;
+    OUStringBuffer sPattern;
     const sal_Int32 nTokens = aSeq.getLength();
     const beans::PropertyValues* pTokens = aSeq.getConstArray();
     for(sal_Int32 i = 0; i < nTokens; i++)
@@ -2896,10 +2896,10 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 throw lang::IllegalArgumentException();
             }
         }
-        sPattern += aToken.GetString();
+        sPattern.append(aToken.GetString());
     }
     SwForm aForm(rTOXBase.GetTOXForm());
-    aForm.SetPattern(static_cast<sal_uInt16>(nIndex), sPattern);
+    aForm.SetPattern(static_cast<sal_uInt16>(nIndex), sPattern.makeStringAndClear());
     rTOXBase.SetTOXForm(aForm);
 }
 

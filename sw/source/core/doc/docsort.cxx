@@ -245,7 +245,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
         pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
 
     // Extract the Text
-    OUString aRetStr;
+    OUStringBuffer aRetStr;
     if( pFndBox )
     {   // Get StartNode and skip it
         const SwTableBox* pMyBox = pFndBox->GetBox();
@@ -257,10 +257,10 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
             const SwNode *pNd = nullptr, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
             for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
                 if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTextNode() )
-                    aRetStr += pNd->GetTextNode()->GetText();
+                    aRetStr.append(pNd->GetTextNode()->GetText());
         }
     }
-    return aRetStr;
+    return aRetStr.makeStringAndClear();
 }
 
 double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const

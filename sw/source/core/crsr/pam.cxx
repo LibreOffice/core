@@ -973,7 +973,7 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 OUString SwPaM::GetText() const
 {
-    OUString aResult;
+    OUStringBuffer aResult;
 
     SwNodeIndex aNodeIndex = Start()->nNode;
 
@@ -1000,11 +1000,11 @@ OUString SwPaM::GetText() const
                     ? End()->nContent.GetIndex()
                     : aTmpStr.getLength();
 
-                aResult += aTmpStr.copy(nStart, nEnd-nStart);
+                aResult.append(aTmpStr.getStr() + nStart, nEnd-nStart);
             }
             else
             {
-                aResult += aTmpStr;
+                aResult.append(aTmpStr);
             }
         }
 
@@ -1017,7 +1017,7 @@ OUString SwPaM::GetText() const
         bIsStartNode = false;
     }
 
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 void SwPaM::InvalidatePaM()

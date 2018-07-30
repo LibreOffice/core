@@ -565,12 +565,12 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                     }
                     if( nCount )
                     {
-                        OUString sList;
+                        OUStringBuffer sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList += (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n";
+                            sList.append( (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) ).append("\n");
 
                         SfxStringListItem aItem( nWhich );
-                        aItem.SetString( sList );
+                        aItem.SetString( sList.makeStringAndClear() );
                         rSet.Put( aItem );
                     }
                 }

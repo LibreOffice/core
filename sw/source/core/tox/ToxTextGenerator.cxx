@@ -347,18 +347,18 @@ ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTextNode&
 /*static*/ OUString
 ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
 {
-    OUString retval;
     if (numberOfToxSources == 0) {
-        return retval;
+        return OUString();
     }
+    OUStringBuffer retval;
     // Place holder for the PageNumber; we only respect the first one
-    retval += OUStringLiteral1(C_NUM_REPL);
+    retval.append(C_NUM_REPL);
     for (size_t i = 1; i < numberOfToxSources; ++i) {
-        retval += S_PAGE_DELI;
-        retval += OUStringLiteral1(C_NUM_REPL);
+        retval.append(S_PAGE_DELI);
+        retval.append(C_NUM_REPL);
     }
-    retval += OUStringLiteral1(C_END_PAGE_NUM);
-    return retval;
+    retval.append(C_END_PAGE_NUM);
+    return retval.makeStringAndClear();
 }
 
 /*virtual*/ SwChapterField

@@ -624,7 +624,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                                  SwNumRule::Extremities* pExtremities,
                                  LanguageType nLang ) const
 {
-    OUString aStr;
+    OUStringBuffer aStr;
 
     SwNumberTree::tNumberVector::size_type nLevel = rNumVector.size() - 1;
 
@@ -674,14 +674,14 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 if( rNumVector[ i ] )
                 {
                     if( bOnlyArabic )
-                        aStr += OUString::number( rNumVector[ i ] );
+                        aStr.append(OUString::number( rNumVector[ i ] ));
                     else
-                        aStr += rNFormat.GetNumStr( rNumVector[ i ], aLocale );
+                        aStr.append(rNFormat.GetNumStr( rNumVector[ i ], aLocale ));
                 }
                 else
-                    aStr += "0";        // all 0 level are a 0
+                    aStr.append("0");        // all 0 level are a 0
                 if( i != nLevel && !aStr.isEmpty() )
-                    aStr += ".";
+                    aStr.append(".");
             }
 
             // The type doesn't have any number, so don't append
@@ -693,7 +693,8 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 const OUString& sPrefix = rMyNFormat.GetPrefix();
                 const OUString& sSuffix = rMyNFormat.GetSuffix();
 
-                aStr = sPrefix + aStr + sSuffix;
+                aStr.insert(0, sPrefix);
+                aStr.append(sSuffix);
                 if ( pExtremities )
                 {
                     pExtremities->nPrefixChars = sPrefix.getLength();
@@ -703,7 +704,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         }
     }
 
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,

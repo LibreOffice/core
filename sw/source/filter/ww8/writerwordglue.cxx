@@ -305,8 +305,7 @@ namespace myImplHelpers
                     (nI < SAL_MAX_INT32)
                   )
             {
-                aName = aBaseName;
-                aName += OUString::number(nI++);
+                aName = aBaseName + OUString::number(nI++);
             }
         }
 

@@ -307,8 +307,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         sFoundNode += OUString::number( nIndex );
         while ( lcl_Exists( sFoundNode, aLabels ) )
         {
-            sFoundNode = sPrefix;
-            sFoundNode += OUString::number(nIndex++);
+            sFoundNode = sPrefix + OUString::number(nIndex++);
         }
     }
     else

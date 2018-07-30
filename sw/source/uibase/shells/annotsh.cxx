@@ -1631,11 +1631,11 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                         fnGetComment = &SfxUndoManager::GetRedoActionComment;
                     }
 
-                    OUString sList;
+                    OUStringBuffer sList;
                     if( nCount )
                     {
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList += (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n";
+                            sList.append( (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) ).append("\n");
                     }
 
                     SfxStringListItem aItem( nWhich );
@@ -1650,8 +1650,8 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                         rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
                     }
 
-                    sList += aItem.GetString();
-                    aItem.SetString( sList );
+                    sList.append(aItem.GetString());
+                    aItem.SetString( sList.makeStringAndClear() );
                     rSet.Put( aItem );
                 }
                 else
