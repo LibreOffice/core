@@ -86,7 +86,7 @@ namespace cmis
         if ( !m_sPath.isEmpty( ) )
         {
             sal_Int32 nPos = -1;
-            OUString sEncodedPath;
+            OUStringBuffer sEncodedPath;
             do
             {
                 sal_Int32 nStartPos = nPos + 1;
@@ -98,14 +98,14 @@ namespace cmis
 
                 if ( !sSegment.isEmpty( ) )
                 {
-                    sEncodedPath += "/" + rtl::Uri::encode( sSegment,
+                    sEncodedPath.append("/").append(rtl::Uri::encode( sSegment,
                             rtl_UriCharClassRelSegment,
                             rtl_UriEncodeKeepEscapes,
-                            RTL_TEXTENCODING_UTF8 );
+                            RTL_TEXTENCODING_UTF8 ));
                 }
             }
             while ( nPos != -1 );
-            sUrl += sEncodedPath;
+            sUrl += sEncodedPath.makeStringAndClear();
         } else if ( !m_sId.isEmpty( ) )
         {
             sUrl += "#" + rtl::Uri::encode( m_sId,

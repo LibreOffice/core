@@ -23,6 +23,7 @@
 #include "buffernode.hxx"
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssxw = com::sun::star::xml::wrapper;
@@ -215,37 +216,37 @@ OUString BufferNode::printChildren() const
  *  result - the information string
  ******************************************************************************/
 {
-    OUString rc;
+    OUStringBuffer rc;
     std::vector< const ElementCollector* >::const_iterator ii = m_vElementCollectors.begin();
 
     for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
-        rc += "BufID=" + OUString::number((*ii)->getBufferId());
+        rc.append("BufID=").append(OUString::number((*ii)->getBufferId()));
 
         if ((*ii)->getModify())
         {
-            rc += "[M]";
+            rc.append("[M]");
         }
 
-        rc += ",Pri=";
+        rc.append(",Pri=");
 
         switch ((*ii)->getPriority())
         {
             case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
-                rc += "BEFOREMODIFY";
+                rc.append("BEFOREMODIFY");
                 break;
             case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
-                rc += "AFTERMODIFY";
+                rc.append("AFTERMODIFY");
                 break;
             default:
-                rc += "UNKNOWN";
+                rc.append("UNKNOWN");
                 break;
         }
 
-        rc += "(SecID=" + OUString::number((*ii)->getSecurityId()) + ") ";
+        rc.append("(SecID=").append(OUString::number((*ii)->getSecurityId())).append(") ");
     }
 
-    return rc;
+    return rc.makeStringAndClear();
 }
 
 bool BufferNode::hasAnything() const

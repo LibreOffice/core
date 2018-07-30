@@ -382,7 +382,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
        produces styles with both attributes. (#i49139#)
     */
     bool bExistStyleMirror( false );
-    OUString aStyleMirrorAttrValue;
+    OUStringBuffer aStyleMirrorAttrValue;
     bool bExistDrawMirror( false );
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( nullptr );
@@ -876,20 +876,20 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( !aStyleMirrorAttrValue.isEmpty() )
                     {
-                        aStyleMirrorAttrValue += " ";
+                        aStyleMirrorAttrValue.append(" ");
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
                     {
-                        aStyleMirrorAttrValue += GetXMLToken( XML_HORIZONTAL_ON_EVEN );
+                        aStyleMirrorAttrValue.append(GetXMLToken( XML_HORIZONTAL_ON_EVEN ));
                     }
                     else if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_RIGHT_PAGES ) )
                     {
-                        aStyleMirrorAttrValue += GetXMLToken( XML_HORIZONTAL_ON_ODD );
+                        aStyleMirrorAttrValue.append(GetXMLToken( XML_HORIZONTAL_ON_ODD ));
                     }
                     else
                     {
-                        aStyleMirrorAttrValue += aToken;
+                        aStyleMirrorAttrValue.append(aToken);
                     }
                 }
                 bExistStyleMirror = true;
@@ -937,7 +937,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         pMirrorContext->AddAttribute(
                         GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
-                        aStyleMirrorAttrValue);
+                        aStyleMirrorAttrValue.makeStringAndClear());
     }
     else if ( bExistDrawMirror )
     {
