@@ -117,7 +117,7 @@ bool sw::DropDownFieldDialog::NextButtonPressed() const
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, EditHdl, weld::Button&, void)
 {
     m_pPressedButton = m_xEditPB.get();
-    m_xDialog->response(RET_OK);
+    m_xDialog->response(RET_YES);
 }
 
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, PrevHdl, weld::Button&, void)
