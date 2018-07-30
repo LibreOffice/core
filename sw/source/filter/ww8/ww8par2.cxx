@@ -594,7 +594,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     rtl_TextEncoding eCharSet = m_eStructCharSet;
 
     const WW8_FFN* pF = m_xFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
-    bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
+    bool bListSymbol = pF && ( pF->aFFNBase.chs == 2 );      // Symbol/WingDings/...
 
     OUString sText;
     sal_uInt32 nLen = rAV.cbTextBefore + rAV.cbTextAfter;

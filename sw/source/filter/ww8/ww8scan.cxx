@@ -7247,17 +7247,17 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
             {
                 if (!readU8(
                         pVer2, offsetof(WW8_FFN_BASE, cbFfnM1), pEnd,
-                        &p->cbFfnM1))
+                        &p->aFFNBase.cbFfnM1))
                 {
                     break;
                 }
 
-                p->prg       =  0;
-                p->fTrueType = 0;
-                p->ff        = 0;
+                p->aFFNBase.prg       =  0;
+                p->aFFNBase.fTrueType = 0;
+                p->aFFNBase.ff        = 0;
 
-                if (!(readU8(pVer2, 1, pEnd, &p->wWeight)
-                      && readU8(pVer2, 2, pEnd, &p->chs)))
+                if (!(readU8(pVer2, 1, pEnd, &p->aFFNBase.wWeight)
+                      && readU8(pVer2, 2, pEnd, &p->aFFNBase.chs)))
                 {
                     break;
                 }
@@ -7266,7 +7266,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
                 */
-                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs, rFib.m_lid);
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->aFFNBase.chs, rFib.m_lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
@@ -7276,7 +7276,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 }
                 p->sFontname = OUString(
                     reinterpret_cast<char const *>(pVer2 + 1 + 2), n, eEnc);
-                pVer2 = pVer2 + p->cbFfnM1 + 1;
+                pVer2 = pVer2 + p->aFFNBase.cbFfnM1 + 1;
             }
             nMax = i;
         }
@@ -7288,7 +7288,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
             {
                 if (!readU8(
                         pVer6, offsetof(WW8_FFN_BASE, cbFfnM1), pEnd,
-                        &p->cbFfnM1))
+                        &p->aFFNBase.cbFfnM1))
                 {
                     break;
                 }
@@ -7297,19 +7297,19 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                     break;
                 }
 
-                p->prg       =  c2 & 0x02;
-                p->fTrueType = (c2 & 0x04) >> 2;
+                p->aFFNBase.prg       =  c2 & 0x02;
+                p->aFFNBase.fTrueType = (c2 & 0x04) >> 2;
                 // skip a reserve bit
-                p->ff        = (c2 & 0x70) >> 4;
+                p->aFFNBase.ff        = (c2 & 0x70) >> 4;
 
                 if (!(readS16(
                           pVer6, offsetof(WW8_FFN_BASE, wWeight), pEnd,
-                          &p->wWeight)
+                          &p->aFFNBase.wWeight)
                       && readU8(
-                          pVer6, offsetof(WW8_FFN_BASE, chs), pEnd, &p->chs)
+                          pVer6, offsetof(WW8_FFN_BASE, chs), pEnd, &p->aFFNBase.chs)
                       && readU8(
                           pVer6, offsetof(WW8_FFN_BASE, ibszAlt), pEnd,
-                          &p->ibszAlt)))
+                          &p->aFFNBase.ibszAlt)))
                 {
                     break;
                 }
@@ -7318,7 +7318,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
                  */
-                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs, rFib.m_lid);
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->aFFNBase.chs, rFib.m_lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 sal_Int32 n = getStringLength(
@@ -7330,31 +7330,31 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                     reinterpret_cast<char const *>(
                         pVer6 + offsetof(WW8_FFN_Ver6, szFfn)),
                     n, eEnc);
-                if (p->ibszAlt && p->ibszAlt < maxStrSize) //don't start after end of string
+                if (p->aFFNBase.ibszAlt && p->aFFNBase.ibszAlt < maxStrSize) //don't start after end of string
                 {
                     n = getStringLength(
-                        pVer6, offsetof(WW8_FFN_Ver6, szFfn) + p->ibszAlt,
+                        pVer6, offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt,
                         pEnd);
                     if (n == -1) {
                         break;
                     }
                     p->sFontname += ";" + OUString(
                         reinterpret_cast<char const *>(
-                            pVer6 + offsetof(WW8_FFN_Ver6, szFfn) + p->ibszAlt),
+                            pVer6 + offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt),
                         n, eEnc);
                 }
                 else
                 {
                     //#i18369# if it's a symbol font set Symbol as fallback
                     if (
-                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs, rFib.m_lid)
+                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->aFFNBase.chs, rFib.m_lid)
                          && p->sFontname!="Symbol"
                        )
                     {
                         p->sFontname += ";Symbol";
                     }
                 }
-                pVer6 = pVer6 + p->cbFfnM1 + 1;
+                pVer6 = pVer6 + p->aFFNBase.cbFfnM1 + 1;
             }
             nMax = i;
         }
@@ -7378,26 +7378,26 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 if (cbFfnM1 < cbMinFFNPayload)
                     break;
 
-                p->cbFfnM1 = cbFfnM1;
+                p->aFFNBase.cbFfnM1 = cbFfnM1;
 
                 sal_uInt8 *pVer8 = pRaw;
 
                 sal_uInt8 c2 = *pVer8++;
                 --cbFfnM1;
 
-                p->prg = c2 & 0x02;
-                p->fTrueType = (c2 & 0x04) >> 2;
+                p->aFFNBase.prg = c2 & 0x02;
+                p->aFFNBase.fTrueType = (c2 & 0x04) >> 2;
                 // skip a reserve bit
-                p->ff = (c2 & 0x70) >> 4;
+                p->aFFNBase.ff = (c2 & 0x70) >> 4;
 
-                p->wWeight = SVBT16ToShort(*reinterpret_cast<SVBT16*>(pVer8));
+                p->aFFNBase.wWeight = SVBT16ToShort(*reinterpret_cast<SVBT16*>(pVer8));
                 pVer8+=2;
                 cbFfnM1-=2;
 
-                p->chs = *pVer8++;
+                p->aFFNBase.chs = *pVer8++;
                 --cbFfnM1;
 
-                p->ibszAlt = *pVer8++;
+                p->aFFNBase.ibszAlt = *pVer8++;
                 --cbFfnM1;
 
                 pVer8 += 10; //PANOSE
@@ -7414,9 +7414,9 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 swapEndian(pPrimary);
 #endif
                 p->sFontname = pPrimary;
-                if (p->ibszAlt && p->ibszAlt < nMaxNullTerminatedPossible)
+                if (p->aFFNBase.ibszAlt && p->aFFNBase.ibszAlt < nMaxNullTerminatedPossible)
                 {
-                    sal_Unicode *pSecondary = pPrimary + p->ibszAlt;
+                    sal_Unicode *pSecondary = pPrimary + p->aFFNBase.ibszAlt;
 #ifdef OSL_BIGENDIAN
                     swapEndian(pSecondary);
 #endif
@@ -7427,8 +7427,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 lcl_checkFontname( p->sFontname );
 
                 // set pointer one font back to original array
-                pRaw += p->cbFfnM1;
-                nRemainingFFn -= p->cbFfnM1;
+                pRaw += p->aFFNBase.cbFfnM1;
+                nRemainingFFn -= p->aFFNBase.cbFfnM1;
                 ++nValidFonts;
             }
             OSL_ENSURE(nMax == nValidFonts, "Font count differs with availability");

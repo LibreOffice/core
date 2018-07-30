@@ -215,8 +215,9 @@ static_assert(sizeof (WW8_FFN_BASE) == 6, "this has to match the msword size");
 
 /** This is what we use in the Parser (and Dumper)
 */
-struct WW8_FFN : public WW8_FFN_BASE
+struct WW8_FFN
 {
+    WW8_FFN_BASE aFFNBase;
     // from Ver8 on as Unicode
     OUString sFontname;// 0x6 or 0x40 resp. from Ver8 on zero terminated string that
                                         // records name of font.
