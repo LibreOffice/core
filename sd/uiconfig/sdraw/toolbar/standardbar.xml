@@ -55,7 +55,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Text"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
+  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
