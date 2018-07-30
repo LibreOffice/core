@@ -1154,9 +1154,11 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     &nActionFlags );
     }
 
+    bool bInsertOleTable = ( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+                  rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) );
+
     // content of 1-cell tables is inserted as simple text
-    if( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
-                  rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) )
+    if (bInsertOleTable)
     {
         OUString aExpand;
         if( rData.GetString( SotClipboardFormatId::STRING, aExpand ))
@@ -1172,8 +1174,11 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         }
     }
 
+    bool bInsertOleTableInTable = (bInsertOleTable && !bSingleCellTable &&
+            (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr));
+
     // special case for tables from draw application or 1-cell tables
-    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction || bSingleCellTable )
+    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction || bSingleCellTable || bInsertOleTableInTable )
     {
         if( rData.HasFormat( SotClipboardFormatId::RTF ) )
         {
@@ -1185,6 +1190,26 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             nAction = EXCHG_OUT_ACTION_INSERT_STRING;
             nFormat = SotClipboardFormatId::RICHTEXT;
         }
+    }
+
+    // tdf#37223 insert OLE table in text tables as a native text table
+    // (first as an RTF nested table, and cut and paste that to get a
+    // native table insertion, removing also the temporary nested table)
+    // TODO set a working view lock to avoid of showing the temporary nested table for a moment
+    if (bInsertOleTableInTable && EXCHG_OUT_ACTION_INSERT_STRING == nAction)
+    {
+        bool bPasted = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType );
+        if (bPasted && rSh.DoesUndo())
+        {
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+            pDispatch->Execute(FN_PREV_TABLE, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
+        }
+        return bPasted;
     }
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
