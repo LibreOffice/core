@@ -138,7 +138,7 @@ public:
     static bool DecodeStyleName( OUString& rName );
     static bool NegPercent( OUString& rValue );
 
-    bool AddNamespacePrefix( OUString& rName,
+    void AddNamespacePrefix( OUString& rName,
                                  sal_uInt16 nPrefix ) const;
     bool RemoveNamespacePrefix( OUString& rName,
                                     sal_uInt16 nPrefixOnly=0xffffU ) const;
