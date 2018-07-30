@@ -377,7 +377,8 @@ bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sa
 
 bool SvxOutlinerForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell ) const
 {
-    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rOutliner.GetEditEngine(), nPara, nIndex, bInCell );
+    SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rOutliner.GetEditEngine(), nPara, nIndex, bInCell );
+    return true;
 }
 
 sal_Int32 SvxOutlinerForwarder::GetLineCount( sal_Int32 nPara ) const

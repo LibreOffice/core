@@ -1308,9 +1308,8 @@ void Outliner::RemoveView( OutlinerView const * pView )
     }
 }
 
-OutlinerView* Outliner::RemoveView( size_t nIndex )
+void Outliner::RemoveView( size_t nIndex )
 {
-
     EditView* pEditView = pEditEngine->GetView( nIndex );
     pEditView->HideCursor(); // HACK
 
@@ -1321,8 +1320,6 @@ OutlinerView* Outliner::RemoveView( size_t nIndex )
         advance( it, nIndex );
         aViewList.erase( it );
     }
-
-    return nullptr;    // return superfluous
 }
 
 
