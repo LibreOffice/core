@@ -3563,20 +3563,20 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
     rName = pF->sFontname;
 
     // pF->prg : Pitch
-    rePitch = ePitchA[pF->prg];
+    rePitch = ePitchA[pF->aFFNBase.prg];
 
     // pF->chs: Charset
-    if( 77 == pF->chs )             // Mac font in Mac Charset or
+    if( 77 == pF->aFFNBase.chs )             // Mac font in Mac Charset or
         reCharSet = m_eTextCharSet;   // translated to ANSI charset
     else
     {
         // #i52786#, for word 67 we'll assume that ANSI is basically invalid,
         // might be true for (above) mac as well, but would need a mac example
         // that exercises this to be sure
-        if (m_bVer67 && pF->chs == 0)
+        if (m_bVer67 && pF->aFFNBase.chs == 0)
             reCharSet = RTL_TEXTENCODING_DONTKNOW;
         else
-            reCharSet = rtl_getTextEncodingFromWindowsCharset( pF->chs );
+            reCharSet = rtl_getTextEncodingFromWindowsCharset(pF->aFFNBase.chs);
     }
 
     // make sure Font Family Code is set correctly
@@ -3605,7 +3605,7 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
     }
     else
     {
-        reFamily = eFamilyA[pF->ff];
+        reFamily = eFamilyA[pF->aFFNBase.ff];
     }
 
     return true;
