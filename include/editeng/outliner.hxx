@@ -690,7 +690,7 @@ public:
 
     size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
     void            RemoveView( OutlinerView const * pView );
-    OutlinerView*   RemoveView( size_t nIndex );
+    void            RemoveView( size_t nIndex );
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 
