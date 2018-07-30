@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_2aa9787a",
+        "filename": "oox/source/shape/LockedCanvasContext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-07-30T15:25:35Z",
+      "side": 1,
+      "message": "Just for the future patches you create: if foo.cxx includes foo.hxx, then there is value in having foo.hxx first, as this verifies build-time that the header is self-contained. So when you add sal/log.hxx includes, it\u0027s good if you don\u0027t just insert it at the start, but make sure you keep a \"self include\" first.",
+      "revId": "c6e5d55171b295149a5e93fa8ee23c9c9908c6dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
