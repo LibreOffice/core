@@ -143,7 +143,7 @@ namespace ftp {
             sal_uInt16      nHour,
             DateTime& rDateTime);
 
-        static bool setYear (
+        static void setYear (
             DateTime& rDateTime,
             sal_uInt16  nYear);
 

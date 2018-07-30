@@ -30,10 +30,10 @@ namespace cmis
     {
     }
 
-    bool DataSupplier::getData()
+    void DataSupplier::getData()
     {
         if ( mbCountFinal )
-            return true;
+            return;
 
         std::vector< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
 
@@ -51,8 +51,6 @@ namespace cmis
             }
         }
         mbCountFinal = true;
-
-        return true;
     }
 
     DataSupplier::~DataSupplier()
@@ -90,7 +88,8 @@ namespace cmis
         if ( maResults.size() > nIndex ) // Result already present.
             return true;
 
-        if ( getData() && maResults.size() > nIndex )
+        getData();
+        if ( maResults.size() > nIndex )
             return true;
 
         return false;
