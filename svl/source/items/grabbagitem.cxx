@@ -14,13 +14,12 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-
 using namespace com::sun::star;
 
 SfxGrabBagItem::SfxGrabBagItem() = default;
 
-SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich) :
-    SfxPoolItem(nWhich)
+SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
+    : SfxPoolItem(nWhich)
 {
 }
 

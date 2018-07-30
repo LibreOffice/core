@@ -22,25 +22,18 @@ private:
     std::map<OUString, css::uno::Any> m_aMap;
 
 public:
-
     SfxGrabBagItem();
     SfxGrabBagItem(sal_uInt16 nWhich);
     ~SfxGrabBagItem() override;
 
-    SfxGrabBagItem(SfxGrabBagItem const &) = default;
-    SfxGrabBagItem(SfxGrabBagItem &&) = default;
-    SfxGrabBagItem & operator =(SfxGrabBagItem const &) = default;
-    SfxGrabBagItem & operator =(SfxGrabBagItem &&) = default;
+    SfxGrabBagItem(SfxGrabBagItem const&) = default;
+    SfxGrabBagItem(SfxGrabBagItem&&) = default;
+    SfxGrabBagItem& operator=(SfxGrabBagItem const&) = default;
+    SfxGrabBagItem& operator=(SfxGrabBagItem&&) = default;
 
-    const std::map<OUString, css::uno::Any>& GetGrabBag() const
-    {
-        return m_aMap;
-    }
+    const std::map<OUString, css::uno::Any>& GetGrabBag() const { return m_aMap; }
 
-    std::map<OUString, css::uno::Any>& GetGrabBag()
-    {
-        return m_aMap;
-    }
+    std::map<OUString, css::uno::Any>& GetGrabBag() { return m_aMap; }
 
     bool operator==(const SfxPoolItem& rItem) const override;
     SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;

@@ -6959,7 +6959,6 @@ include/svl/filenotation.hxx
 include/svl/flagitem.hxx
 include/svl/fstathelper.hxx
 include/svl/globalnameitem.hxx
-include/svl/grabbagitem.hxx
 include/svl/gridprinter.hxx
 include/svl/hint.hxx
 include/svl/ilstitem.hxx
@@ -13772,7 +13771,6 @@ svl/source/items/cintitem.cxx
 svl/source/items/custritm.cxx
 svl/source/items/flagitem.cxx
 svl/source/items/globalnameitem.cxx
-svl/source/items/grabbagitem.cxx
 svl/source/items/ilstitem.cxx
 svl/source/items/imageitm.cxx
 svl/source/items/int64item.cxx
