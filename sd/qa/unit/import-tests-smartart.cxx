@@ -39,6 +39,7 @@ public:
     void testBasicRadicals();
     void testEquation();
     void testSegmentedCycle();
+    void testRtlChevron();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testBasicRadicals);
     CPPUNIT_TEST(testEquation);
     CPPUNIT_TEST(testSegmentedCycle);
+    CPPUNIT_TEST(testRtlChevron);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -313,6 +315,32 @@ void SdImportTestSmartArt::testBasicRadicals()
 void SdImportTestSmartArt::testSegmentedCycle()
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testRtlChevron()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rtlchevron.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xShapeGroup->getCount());
+
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
+
+    CPPUNIT_ASSERT(xShape1->getPosition().X < xShape0->getPosition().X);
+    CPPUNIT_ASSERT(xShape2->getPosition().X < xShape1->getPosition().X);
+
+    CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().Y, xShape0->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y, xShape1->getPosition().Y);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
