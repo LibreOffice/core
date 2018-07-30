@@ -1772,7 +1772,11 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_LEFT_BIG;
                     }
-                    break;
+                    goto KEYINPUT_CHECKTABLE_INSDEL;
+                }
+                case KEY_RIGHT | KEY_MOD1:
+                {
+                    goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
                 case KEY_UP:
                 case KEY_UP | KEY_MOD1:
@@ -1783,7 +1787,7 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_UP_BIG;
                     }
-                    break;
+                    goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
                 case KEY_DOWN:
                 case KEY_DOWN | KEY_MOD1:
@@ -1794,8 +1798,26 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_DOWN_BIG;
                     }
-                    break;
+                    goto KEYINPUT_CHECKTABLE_INSDEL;
                 }
+
+KEYINPUT_CHECKTABLE_INSDEL:
+                if( rSh.IsTableMode() || !rSh.GetTableFormat() )
+                {
+                    const SelectionType nSelectionType = rSh.GetSelectionType();
+
+                    eKeyState = SwKeyState::KeyToView;
+                    if(SwKeyState::KeyToView != eFlyState)
+                    {
+                        if((nSelectionType & (SelectionType::DrawObject|SelectionType::DbForm))  &&
+                                rSh.GetDrawView()->AreObjectsMarked())
+                            eKeyState = SwKeyState::Draw_Change;
+                        else if(nSelectionType & (SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic))
+                            eKeyState = SwKeyState::Fly_Change;
+                    }
+                }
+                break;
+
 
                 case KEY_DELETE:
                     if ( !rSh.HasReadonlySel() || rSh.CursorInsideInputField())
@@ -1971,7 +1993,7 @@ KEYINPUT_CHECKTABLE:
                     {
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_RIGHT_BIG;
-                        break;
+                        goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                 case KEY_TAB:
                 {
