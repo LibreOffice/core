@@ -342,7 +342,7 @@ void SdrMarkView::HideSdrPage()
 }
 
 
-bool SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
+void SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
 {
     BrkAction();
 
@@ -353,8 +353,6 @@ bool SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
     maDragStat.Reset(rPnt);
     maDragStat.NextPoint();
     maDragStat.SetMinMove(mnMinMovLog);
-
-    return true;
 }
 
 void SdrMarkView::MovMarkObj(const Point& rPnt)

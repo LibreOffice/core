@@ -1059,7 +1059,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
 #endif
 }
 
-bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
+void SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if(bOnlyHardAttr || !mpDefaultStyleSheet)
     {
@@ -1072,13 +1072,11 @@ bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) con
         rTargetSet.Put(maDefaultAttr, false);
     }
     MergeNotPersistDefaultAttr(rTargetSet);
-    return true;
 }
 
-bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
+void SdrPaintView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     SetDefaultAttr(rSet,bReplaceAll);
-    return true;
 }
 
 SfxStyleSheet* SdrPaintView::GetStyleSheet() const
@@ -1086,10 +1084,9 @@ SfxStyleSheet* SdrPaintView::GetStyleSheet() const
     return mpDefaultStyleSheet;
 }
 
-bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
+void SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     SetDefaultStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-    return true;
 }
 
 

@@ -468,11 +468,11 @@ public:
     virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
     virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
 
-    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
+    void GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
 
-    bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
+    void SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
-    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
+    void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     virtual void MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin);
 
