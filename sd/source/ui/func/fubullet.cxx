@@ -276,6 +276,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, SfxViewFrame* pViewFrame )
 {
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP_CONTROL ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
@@ -302,7 +303,10 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, Sfx
         }
 
         if( !bTextEdit && (dynamic_cast<OutlineViewShell const *>( pViewShell ) == nullptr) )
+        {
             rSet.DisableItem(SID_CHARMAP);
+            rSet.DisableItem(SID_CHARMAP_CONTROL);
+        }
 
         if(!bTextEdit || !bCtlEnabled )
         {
