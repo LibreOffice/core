@@ -164,9 +164,9 @@ OpenTypeFeatureDefinitonListPrivate::handleSpecialFeatureCode(sal_uInt32 nFeatur
     if (!sNumericPart.isEmpty())
     {
         if (isCharacterVariantCode(nFeatureCode))
-            aFeatureDefinition = { nFeatureCode, STR_FONT_FEATURE_ID_SSXX, sNumericPart };
-        else if (isStylisticSetCode(nFeatureCode))
             aFeatureDefinition = { nFeatureCode, STR_FONT_FEATURE_ID_CVXX, sNumericPart };
+        else if (isStylisticSetCode(nFeatureCode))
+            aFeatureDefinition = { nFeatureCode, STR_FONT_FEATURE_ID_SSXX, sNumericPart };
     }
     return aFeatureDefinition;
 }
