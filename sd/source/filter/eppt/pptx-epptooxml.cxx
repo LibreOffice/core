@@ -950,7 +950,7 @@ void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any&
         || aClass == TypeClass_STRING );
 
     if (bWriteToken)
-        pFS->startElementNS(XML_p, XML_to, FSEND);
+        pFS->startElementNS(XML_p, nToken, FSEND);
 
     switch (rAny.getValueType().getTypeClass())
     {
