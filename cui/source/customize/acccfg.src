@@ -20,13 +20,10 @@
  *************************************************************/
 
 
- // include ---------------------------------------------------------------
+// include ---------------------------------------------------------------
 #include "helpid.hrc"
 #include "cuires.hrc"
 #include "acccfg.hrc"
-
-#define MASKCOLOR  MaskColor = \
-    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define PUSHBUTTON_TEXT_SAVE \
     Text [ en-US ] = "~Save..." ; \
@@ -55,70 +52,70 @@
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text [ en-US ] = "Functions" ; \
 
- // TP_CONFIG_ACCEL -------------------------------------------------------
+// TP_CONFIG_ACCEL -------------------------------------------------------
 TabPage RID_SVXPAGE_KEYBOARD
 {
     HelpId = HID_CONFIG_ACCEL ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 273 , 258 ) ;
+    Size = MAP_APPFONT ( 273, 258 ) ;
     RadioButton RB_OFFICE
     {
         HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_OFFICE";
-        Pos = MAP_APPFONT ( 192 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 192, 6 ) ;
+        Size = MAP_APPFONT ( 75, 10 ) ;
         Text = "%PRODUCTNAME" ;
     };
     RadioButton RB_MODULE
     {
         HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_MODULE";
-        Pos = MAP_APPFONT ( 192 , 19 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 192, 19 ) ;
+        Size = MAP_APPFONT ( 75, 10 ) ;
         Text = "$(MODULE)" ;
     };
     PushButton BTN_ACC_CHANGE
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_CHANGE";
-        Pos = MAP_APPFONT ( 192 , 35 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 192, 35 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_CHANGE
     };
     PushButton BTN_ACC_REMOVE
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_REMOVE";
-        Pos = MAP_APPFONT ( 192 , 52 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 192, 52 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_REMOVE
     };
     FixedLine GRP_ACC_KEYBOARD
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 180 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 180, 8 ) ;
         Group = TRUE ;
         Text [ en-US ] = "Shortcut keys";
     };
     Control BOX_ACC_ENTRIES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 174 , 120 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 174, 120 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_ACCELCONFIG_LISTBOX ;
     };
     FixedLine GRP_ACC_FUNCTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 140 ) ;
-        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 140 ) ;
+        Size = MAP_APPFONT ( 258, 8 ) ;
         Group = TRUE ;
         GROUPBOX_TEXT_FUNCTIONS
     };
     FixedText TXT_ACC_GROUP
     {
-        Pos = MAP_APPFONT ( 12 , 151 ) ;
-        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, 151 ) ;
+        Size = MAP_APPFONT ( 78, 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_GROUP
@@ -126,45 +123,45 @@ TabPage RID_SVXPAGE_KEYBOARD
     Control BOX_ACC_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 78 , 91 ) ;
+        Pos = MAP_APPFONT ( 12, 161 ) ;
+        Size = MAP_APPFONT ( 78, 91 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGGROUP_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_FUNCTION
     {
-        Pos = MAP_APPFONT ( 93 , 151 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( 93, 151 ) ;
+        Size = MAP_APPFONT ( 88, 8 ) ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_FUNCTION
     };
     Control BOX_ACC_FUNCTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 161 ) ;
-        Size = MAP_APPFONT ( 88 , 91 ) ;
+        Pos = MAP_APPFONT ( 93, 161 ) ;
+        Size = MAP_APPFONT ( 88, 91 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_KEY
     {
-        Pos = MAP_APPFONT ( 184 , 151 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 184, 151 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
         Text [ en-US ] = "~Keys" ;
         Left = TRUE ;
     };
     Control BOX_ACC_KEY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 161 ) ;
-        Size = MAP_APPFONT ( 80 , 91 ) ;
+        Pos = MAP_APPFONT ( 184, 161 ) ;
+        Size = MAP_APPFONT ( 80, 91 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_LOAD
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_LOAD";
-        Pos = MAP_APPFONT ( 192 , 86 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 192, 86 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_LOAD
@@ -172,8 +169,8 @@ TabPage RID_SVXPAGE_KEYBOARD
     PushButton BTN_SAVE
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_SAVE";
-        Pos = MAP_APPFONT ( 192 , 103 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 192, 103 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_SAVE
@@ -181,8 +178,8 @@ TabPage RID_SVXPAGE_KEYBOARD
     PushButton BTN_RESET
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_RESET";
-        Pos = MAP_APPFONT ( 192 , 120 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 192, 120 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_RESET
@@ -217,11 +214,11 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     };
     String STR_DLG_MACROS
     {
-      Text [ en-US ] = "%PRODUCTNAME Macros" ;
+        Text [ en-US ] = "%PRODUCTNAME Macros" ;
     };
     String STR_HUMAN_APPNAME
     {
-        TEXT = "%PRODUCTNAME" ;
+        Text = "%PRODUCTNAME" ;
     };
     String STR_GROUP_STYLES
     {
@@ -229,124 +226,64 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     };
     Image IMG_HARDDISK
     {
-        ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
-        MASKCOLOR
+        ImageBitmap = Bitmap { File = "harddisk_16.png" ; };
     };
     Image IMG_HARDDISK_HC
     {
-        ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
-        MASKCOLOR
+        ImageBitmap = Bitmap { File = "harddisk_16_h.png" ; };
     };
     Image IMG_LIB
     {
         ImageBitmap = Bitmap { File = "im30820.png"; };
-        MASKCOLOR
     };
     Image IMG_LIB_HC
     {
         ImageBitmap = Bitmap { File = "imh30820.png"; };
-        MASKCOLOR
     };
     Image IMG_MACRO
     {
         ImageBitmap = Bitmap { File = "im30821.png"; };
-        MASKCOLOR
     };
     Image IMG_MACRO_HC
     {
         ImageBitmap = Bitmap { File = "imh30821.png"; };
-        MASKCOLOR
     };
     Image IMG_DOC
     {
         ImageBitmap = Bitmap { File = "im30826.png"; };
-        MASKCOLOR
     };
     Image IMG_DOC_HC
     {
         ImageBitmap = Bitmap { File = "imh30826.png"; };
-        MASKCOLOR
     };
     Image BMP_COLLAPSED
     {
         ImageBitmap = Bitmap
         {
-            File = "plus.bmp" ;
+            File = "plus.png" ;
         };
-         // MaskColor = Color { Predefine = COL_GREEN ; };
     };
     Image BMP_EXPANDED
     {
         ImageBitmap = Bitmap
         {
-            File = "minus.bmp" ;
+            File = "minus.png" ;
         };
-         // MaskColor = Color { Predefine = COL_GREEN ; };
     };
     Image BMP_EXPANDED_HC
     {
         ImageBitmap = Bitmap
         {
-            File = "minus_h.bmp" ;
+            File = "minus_h.png" ;
         };
     };
     Image BMP_COLLAPSED_HC
     {
         ImageBitmap = Bitmap
         {
-            File = "plus_h.bmp" ;
+            File = "plus_h.png" ;
         };
     };
 };
 
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ********************************************************************** EOF
