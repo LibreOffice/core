@@ -57,7 +57,7 @@ FeatureParser::FeatureParser(OUString const& rFontName)
     } while (nIndex >= 0);
 }
 
-std::unordered_map<sal_uInt32, sal_uInt32> FeatureParser::getFeaturesMap()
+std::unordered_map<sal_uInt32, sal_uInt32> FeatureParser::getFeaturesMap() const
 {
     std::unordered_map<sal_uInt32, sal_uInt32> aResultMap;
     for (auto const& rPair : m_aFeatures)
