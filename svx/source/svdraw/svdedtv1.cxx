@@ -1211,26 +1211,24 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
 }
 
 
-bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
+void SdrEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if(GetMarkedObjectCount())
     {
         rTargetSet.Put(GetAttrFromMarked(bOnlyHardAttr), false);
-        return true;
     }
     else
     {
-        return SdrMarkView::GetAttributes(rTargetSet, bOnlyHardAttr);
+        SdrMarkView::GetAttributes(rTargetSet, bOnlyHardAttr);
     }
 }
 
-bool SdrEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
+void SdrEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     if (GetMarkedObjectCount()!=0) {
         SetAttrToMarked(rSet,bReplaceAll);
-        return true;
     } else {
-        return SdrMarkView::SetAttributes(rSet,bReplaceAll);
+        SdrMarkView::SetAttributes(rSet,bReplaceAll);
     }
 }
 
@@ -1243,13 +1241,12 @@ SfxStyleSheet* SdrEditView::GetStyleSheet() const
     }
 }
 
-bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
+void SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     if (GetMarkedObjectCount()!=0) {
         SetStyleSheetToMarked(pStyleSheet,bDontRemoveHardAttr);
-        return true;
     } else {
-        return SdrMarkView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+        SdrMarkView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     }
 }
 

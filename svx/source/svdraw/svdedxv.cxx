@@ -1123,9 +1123,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // remember old cursor
             if (pTextEditOutliner->GetViewCount()!=0)
             {
-                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(static_cast<size_t>(0));
-                if(pTmpOLV!=nullptr && pTmpOLV!=pGivenOutlinerView)
-                    delete pTmpOLV;
+                pTextEditOutliner->RemoveView(static_cast<size_t>(0));
             }
 
             // Determine EditArea via TakeTextEditArea.
@@ -1995,11 +1993,11 @@ SvtScriptType SdrObjEditView::GetScriptType() const
     return nScriptType;
 }
 
-bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
+void SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if( mxSelectionController.is() )
         if( mxSelectionController->GetAttributes( rTargetSet, bOnlyHardAttr ) )
-            return true;
+            return;
 
     if(IsTextEdit())
     {
@@ -2023,12 +2021,10 @@ bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
         {
             MergeNotPersistAttrFromMarked(rTargetSet);
         }
-
-        return true;
     }
     else
     {
-        return SdrGlueEditView::GetAttributes(rTargetSet, bOnlyHardAttr);
+        SdrGlueEditView::GetAttributes(rTargetSet, bOnlyHardAttr);
     }
 }
 
@@ -2047,7 +2043,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
         if( !bRet )
         {
-            bRet=SdrGlueEditView::SetAttributes(*pSet,bReplaceAll);
+            SdrGlueEditView::SetAttributes(*pSet,bReplaceAll);
+            bRet=true;
         }
     }
     else
@@ -2196,12 +2193,12 @@ SfxStyleSheet* SdrObjEditView::GetStyleSheet() const
     return pSheet;
 }
 
-bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
+void SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     if( mxSelectionController.is() )
     {
         if( mxSelectionController->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr ) )
-            return true;
+            return;
     }
 
     // if we are currently in edit mode we must also set the stylesheet
@@ -2217,7 +2214,7 @@ bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
         }
     }
 
-    return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+    SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
 }
 
 
@@ -2242,7 +2239,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
             i--;
             OutlinerView* pOLV=pTextEditOutliner->GetView(i);
             if (pOLV && pOLV->GetWindow()==static_cast<vcl::Window*>(pOldWin)) {
-                delete pTextEditOutliner->RemoveView(i);
+                pTextEditOutliner->RemoveView(i);
             }
         }
     }
@@ -2259,7 +2256,7 @@ bool SdrObjEditView::IsTextEditInSelectionMode() const
 // MacroMode
 
 
-bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin)
+void SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin)
 {
     BrkMacroObj();
     if (pObj!=nullptr && pPV!=nullptr && pWin!=nullptr && pObj->HasMacro()) {
@@ -2272,7 +2269,6 @@ bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj,
         aMacroDownPos=rPnt;
         MovMacroObj(rPnt);
     }
-    return false;
 }
 
 void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
