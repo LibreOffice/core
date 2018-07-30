@@ -613,6 +613,14 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
     return nFormat;
 }
 
+void SwValueField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwValueField"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_fValue"), BAD_CAST(OString::number(m_fValue).getStr()));
+    SwField::dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 /// set language of the format
 void SwValueField::SetLanguage( LanguageType nLng )
 {
@@ -768,6 +776,7 @@ void SwField::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwField"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFormat"), BAD_CAST(OString::number(m_nFormat).getStr()));
 
     xmlTextWriterEndElement(pWriter);
 }

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <libxml/xmlwriter.h>
+
 #include <o3tl/any.hxx>
 
 #include <svl/zforlist.hxx>
@@ -153,6 +155,14 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         return SwField::PutValue(rAny, nWhichId);
     }
     return true;
+}
+
+void SwUserField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserField"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nSubType"), BAD_CAST(OString::number(nSubType).getStr()));
+    SwValueField::dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
