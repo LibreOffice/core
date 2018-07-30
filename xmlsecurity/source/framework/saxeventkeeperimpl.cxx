@@ -27,6 +27,7 @@
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -301,51 +302,51 @@ OUString SAXEventKeeperImpl::printBufferNode(
  *  info - the information string
  ******************************************************************************/
 {
-    OUString rc;
+    OUStringBuffer rc;
 
     for ( int i=0; i<nIndent; ++i )
     {
-        rc += " ";
+        rc.append(" ");
     }
 
     if (pBufferNode == m_pCurrentBufferNode)
     {
-        rc += "[%]";
+        rc.append("[%]");
     }
 
     if (pBufferNode == m_pCurrentBlockingBufferNode)
     {
-        rc += "[B]";
+        rc.append("[B]");
     }
 
-    rc += " " + m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
+    rc.append(" ").append(m_xXMLDocument->getNodeName(pBufferNode->getXMLElement()));
 
     BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
     if (pParent != nullptr)
     {
-        rc += "[" + m_xXMLDocument->getNodeName(pParent->getXMLElement()) + "]";
+        rc.append("[").append(m_xXMLDocument->getNodeName(pParent->getXMLElement())).append("]");
     }
 
-    rc += ":EC=" + pBufferNode->printChildren() + " BR=";
+    rc.append(":EC=").append(pBufferNode->printChildren()).append(" BR=");
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != nullptr)
     {
-        rc += OUString::number( pBlocker->getBufferId() ) + "(SecId="
-            + OUString::number( pBlocker->getSecurityId() ) + ") ";
+        rc.append(OUString::number( pBlocker->getBufferId() )).append("(SecId=")
+            .append(OUString::number( pBlocker->getSecurityId() )).append(") ");
     }
-    rc += "\n";
+    rc.append("\n");
 
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
     for( auto jj = vChildren->begin();
          jj != vChildren->end(); ++jj )
     {
-        rc += printBufferNode(*jj, nIndent+4);
+        rc.append(printBufferNode(*jj, nIndent+4));
     }
 
     delete vChildren;
 
-    return rc;
+    return rc.makeStringAndClear();
 }
 
 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >

@@ -471,30 +471,30 @@ void XMLPropertiesTContext_Impl::StartElement(
                     {
                         // keep original for writer graphic objects
                         // Adapts attribute values (#i49139#)
-                        OUString aNewAttrValue;
+                        OUStringBuffer aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
                         while( aTokenEnum.getNextToken( aToken ) )
                         {
                             if ( !aNewAttrValue.isEmpty() )
                             {
-                                aNewAttrValue += " ";
+                                aNewAttrValue.append(" ");
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
                             {
-                                aNewAttrValue += GetXMLToken( XML_HORIZONTAL_ON_LEFT_PAGES );
+                                aNewAttrValue.append(GetXMLToken( XML_HORIZONTAL_ON_LEFT_PAGES ));
                             }
                             else if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_ODD ) )
                             {
-                                aNewAttrValue += GetXMLToken( XML_HORIZONTAL_ON_RIGHT_PAGES );
+                                aNewAttrValue.append(GetXMLToken( XML_HORIZONTAL_ON_RIGHT_PAGES ));
                             }
                             else
                             {
-                                aNewAttrValue += aToken;
+                                aNewAttrValue.append(aToken);
                             }
                         }
-                        pAttrList->AddAttribute( rAttrName, aNewAttrValue );
+                        pAttrList->AddAttribute( rAttrName, aNewAttrValue.makeStringAndClear() );
 
                         // create old draw:mirror for drawing graphic objects
                         const OUString& aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );

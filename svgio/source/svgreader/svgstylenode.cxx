@@ -114,12 +114,12 @@ namespace svgio
 
                 if(aSelectorParts.size())
                 {
-                    OUString aConcatenatedSelector;
+                    OUStringBuffer aConcatenatedSelector;
 
                     // re-combine without spaces, create a unique name (for now)
                     for(size_t a(0); a < aSelectorParts.size(); a++)
                     {
-                        aConcatenatedSelector += aSelectorParts[a];
+                        aConcatenatedSelector.append(aSelectorParts[a]);
                     }
 
                     // CssStyles in SVG are currently not completely supported; the current idea for
@@ -138,7 +138,7 @@ namespace svgio
                     // SvgStyleAttributes will not do it) will have to be adapted to make use of it.
 
                     // register new style at document for (evtl. concatenated) stylename
-                    const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedSelector, rNewStyle);
+                    const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedSelector.makeStringAndClear(), rNewStyle);
                 }
             }
         }

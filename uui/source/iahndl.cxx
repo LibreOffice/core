@@ -413,15 +413,14 @@ UUIInteractionHelper::handleRequest_impl(
                 = aModSizeException.Names;
             if ( sModules.getLength() )
             {
-                OUString aName;
+                OUStringBuffer aName;
                 for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
                 {
                     if ( index )
-                        aName += "," + sModules[index];
-                    else
-                        aName = sModules[index]; // 1st name
+                        aName.append(",");
+                    aName.append(sModules[index]);
                 }
-                aArguments.push_back( aName );
+                aArguments.push_back( aName.makeStringAndClear() );
             }
             handleErrorHandlerRequest( task::InteractionClassification_WARNING,
                                        ERRCODE_UUI_IO_MODULESIZEEXCEEDED,
