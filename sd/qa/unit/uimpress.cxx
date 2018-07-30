@@ -48,7 +48,7 @@ public:
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
-    SdDrawDocument* m_pDoc;
+    std::unique_ptr<SdDrawDocument> m_pDoc;
 };
 
 Test::Test()
@@ -71,12 +71,12 @@ Test::Test()
 
 void Test::setUp()
 {
-    m_pDoc = new SdDrawDocument(DocumentType::Impress, nullptr);
+    m_pDoc.reset(new SdDrawDocument(DocumentType::Impress, nullptr));
 }
 
 void Test::tearDown()
 {
-    delete m_pDoc;
+    m_pDoc.reset();
 }
 
 Test::~Test()
