@@ -131,7 +131,7 @@ bool sw::DropDownFieldDialog::NextButtonPressed() const
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, EditHdl, Button*, void)
 {
     m_pPressedButton = m_pEditPB;
-    EndDialog(RET_OK);
+    EndDialog(RET_YES);
 }
 
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, PrevHdl, Button*, void)
