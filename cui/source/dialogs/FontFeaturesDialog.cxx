@@ -9,7 +9,6 @@
  */
 
 #include <FontFeaturesDialog.hxx>
-
 #include <vcl/font/FeatureParser.hxx>
 #include <svx/dialmgr.hxx>
 
@@ -56,20 +55,32 @@ void FontFeaturesDialog::initialize()
     if (!aVDev->GetFontFeatures(rFontFeatures))
         return;
 
+    std::unordered_set<sal_uInt32> aDoneFeatures;
+    std::vector<vcl::font::Feature> rFilteredFontFeatures;
+
+    for (vcl::font::Feature const& rFontFeature : rFontFeatures)
+    {
+        sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
+        if (aDoneFeatures.find(nFontFeatureCode) != aDoneFeatures.end())
+            continue;
+        aDoneFeatures.insert(nFontFeatureCode);
+        rFilteredFontFeatures.push_back(rFontFeature);
+    }
+
+    fillGrid(rFilteredFontFeatures);
+
+    updateFontPreview();
+}
+
+void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
+{
     vcl::font::FeatureParser aParser(m_sFontName);
     std::unordered_map<sal_uInt32, sal_uInt32> aExistingFeatures = aParser.getFeaturesMap();
-
-    std::unordered_set<sal_uInt32> aDoneFeatures;
 
     sal_Int32 i = 0;
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
         sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
-
-        if (aDoneFeatures.find(nFontFeatureCode) != aDoneFeatures.end())
-            continue;
-
-        aDoneFeatures.insert(nFontFeatureCode);
 
         vcl::font::FeatureDefinition aDefinition;
         if (rFontFeature.m_aDefinition)
@@ -138,8 +149,6 @@ void FontFeaturesDialog::initialize()
 
         i++;
     }
-
-    updateFontPreview();
 }
 
 void FontFeaturesDialog::updateFontPreview()

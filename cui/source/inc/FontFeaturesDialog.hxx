@@ -45,6 +45,8 @@ private:
     void initialize();
     OUString createFontNameWithFeatures();
 
+    void fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
+
     DECL_LINK(ComboBoxSelectedHdl, ComboBox&, void);
     DECL_LINK(CheckBoxToggledHdl, CheckBox&, void);
 

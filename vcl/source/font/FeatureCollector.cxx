@@ -18,64 +18,65 @@ namespace vcl
 {
 namespace font
 {
-bool FeatureCollector::collectGraphiteFeatureDefinition(vcl::font::Feature& rFeature)
+bool FeatureCollector::collectGraphite()
 {
     gr_face* grFace = hb_graphite2_face_get_gr_face(m_pHbFace);
+
     if (grFace == nullptr)
         return false;
-
-    bool bFound = false;
 
     gr_uint16 nUILanguage = gr_uint16(m_eLanguageType);
 
     gr_uint16 nNumberOfFeatures = gr_face_n_fref(grFace);
-    gr_feature_val* pFeatures = gr_face_featureval_for_lang(grFace, rFeature.m_aID.m_aLanguageCode);
 
-    if (pFeatures)
+    for (gr_uint16 i = 0; i < nNumberOfFeatures; ++i)
     {
-        for (gr_uint16 i = 0; i < nNumberOfFeatures; ++i)
+        const gr_feature_ref* pFeatureRef = gr_face_fref(grFace, i);
+        gr_uint32 nFeatureCode = gr_fref_id(pFeatureRef);
+
+        if (nFeatureCode == 0) // illegal feature code - skip
+            continue;
+
+        gr_uint32 nLabelLength = 0;
+        void* pLabel = gr_fref_label(pFeatureRef, &nUILanguage, gr_utf8, &nLabelLength);
+        OUString sLabel(OUString::createFromAscii(static_cast<char*>(pLabel)));
+        gr_label_destroy(pLabel);
+
+        std::vector<vcl::font::FeatureParameter> aParameters;
+        gr_uint16 nNumberOfValues = gr_fref_n_values(pFeatureRef);
+
+        if (nNumberOfValues > 0)
         {
-            const gr_feature_ref* pFeatureRef = gr_face_fref(grFace, i);
-            gr_uint32 nFeatureCode = gr_fref_id(pFeatureRef);
-
-            if (nFeatureCode == rFeature.m_aID.m_aFeatureCode)
+            for (gr_uint16 j = 0; j < nNumberOfValues; ++j)
             {
-                gr_uint32 nLabelLength = 0;
-                void* pLabel = gr_fref_label(pFeatureRef, &nUILanguage, gr_utf8, &nLabelLength);
-                OUString sLabel(OUString::createFromAscii(static_cast<char*>(pLabel)));
-                gr_label_destroy(pLabel);
-
-                std::vector<vcl::font::FeatureParameter> aParameters;
-                gr_uint16 nNumberOfValues = gr_fref_n_values(pFeatureRef);
-                for (gr_uint16 j = 0; j < nNumberOfValues; ++j)
-                {
-                    gr_uint32 nValueLabelLength = 0;
-                    void* pValueLabel = gr_fref_value_label(pFeatureRef, j, &nUILanguage, gr_utf8,
-                                                            &nValueLabelLength);
-                    OUString sValueLabel(
-                        OUString::createFromAscii(static_cast<char*>(pValueLabel)));
-                    aParameters.emplace_back(sal_uInt32(j), sValueLabel);
-                    gr_label_destroy(pValueLabel);
-                }
-
-                auto eFeatureParameterType = vcl::font::FeatureParameterType::ENUM;
-
-                // Check if the parameters are boolean
-                if (aParameters.size() == 2
-                    && (aParameters[0].getDescription() == "True"
-                        || aParameters[0].getDescription() == "False"))
-                {
-                    eFeatureParameterType = vcl::font::FeatureParameterType::BOOL;
-                    aParameters.clear();
-                }
-                rFeature.m_aDefinition = vcl::font::FeatureDefinition(
-                    rFeature.m_aID.m_aFeatureCode, sLabel, eFeatureParameterType, aParameters);
-                bFound = true;
+                gr_uint32 nValueLabelLength = 0;
+                void* pValueLabel = gr_fref_value_label(pFeatureRef, j, &nUILanguage, gr_utf8,
+                                                        &nValueLabelLength);
+                OUString sValueLabel(OUString::createFromAscii(static_cast<char*>(pValueLabel)));
+                aParameters.emplace_back(sal_uInt32(j), sValueLabel);
+                gr_label_destroy(pValueLabel);
             }
+
+            auto eFeatureParameterType = vcl::font::FeatureParameterType::ENUM;
+
+            // Check if the parameters are boolean
+            if (aParameters.size() == 2
+                && (aParameters[0].getDescription() == "True"
+                    || aParameters[0].getDescription() == "False"))
+            {
+                eFeatureParameterType = vcl::font::FeatureParameterType::BOOL;
+                aParameters.clear();
+            }
+
+            m_rFontFeatures.emplace_back(
+                FeatureID{ nFeatureCode, HB_OT_TAG_DEFAULT_SCRIPT, HB_OT_TAG_DEFAULT_LANGUAGE },
+                vcl::font::FeatureType::Graphite);
+            vcl::font::Feature& rFeature = m_rFontFeatures.back();
+            rFeature.m_aDefinition = vcl::font::FeatureDefinition(
+                nFeatureCode, sLabel, eFeatureParameterType, aParameters);
         }
     }
-    gr_featureval_destroy(pFeatures);
-    return bFound;
+    return true;
 }
 
 void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript,
@@ -98,14 +99,11 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
         rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
 
-        if (!collectGraphiteFeatureDefinition(rFeature))
+        FeatureDefinition aDefinition
+            = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
+        if (aDefinition)
         {
-            FeatureDefinition aDefinition
-                = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
-            if (aDefinition)
-            {
-                rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
-            }
+            rFeature.m_aDefinition = vcl::font::FeatureDefinition(aDefinition);
         }
     }
 }
@@ -135,6 +133,22 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
 
     for (sal_uInt32 nScript = 0; nScript < sal_uInt32(nScriptCount); ++nScript)
         collectForScript(aTableTag, nScript, aScriptTags[nScript]);
+}
+
+bool FeatureCollector::collect()
+{
+    gr_face* grFace = hb_graphite2_face_get_gr_face(m_pHbFace);
+
+    if (grFace)
+    {
+        return collectGraphite();
+    }
+    else
+    {
+        collectForTable(HB_OT_TAG_GSUB); // substitution
+        collectForTable(HB_OT_TAG_GPOS); // positioning
+        return true;
+    }
 }
 
 } // end namespace font
