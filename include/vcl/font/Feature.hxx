@@ -35,6 +35,12 @@ enum class FeatureParameterType
     ENUM
 };
 
+enum class FeatureType
+{
+    OpenType,
+    Graphite
+};
+
 struct VCL_DLLPUBLIC FeatureParameter
 {
 private:
@@ -89,7 +95,11 @@ struct VCL_DLLPUBLIC FeatureID
 
 struct VCL_DLLPUBLIC Feature
 {
+    Feature();
+    Feature(FeatureID const& rID, FeatureType eType);
+
     FeatureID m_aID;
+    FeatureType m_eType;
     FeatureDefinition m_aDefinition;
 };
 
