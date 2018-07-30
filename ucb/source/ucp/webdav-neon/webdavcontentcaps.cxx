@@ -62,7 +62,7 @@ using namespace webdav_ucp;
 // ContentProvider implementation.
 
 
-bool ContentProvider::getProperty(
+void ContentProvider::getProperty(
         const OUString & rPropName, beans::Property & rProp )
 {
     if ( !m_pProps )
@@ -277,8 +277,6 @@ bool ContentProvider::getProperty(
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
     }
-
-    return true;
 }
 
 
