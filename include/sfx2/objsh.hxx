@@ -339,7 +339,7 @@ public:
     // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
     virtual bool                QuerySlotExecutable( sal_uInt16 nSlotId );
 
-    bool                        SaveChildren(bool bObjectsOnly=false);
+    void                        SaveChildren(bool bObjectsOnly=false);
     bool                        SaveAsChildren( SfxMedium &rMedium );
     bool                        SwitchChildrenPersistance(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,

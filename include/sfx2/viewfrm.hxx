@@ -130,7 +130,7 @@ public:
     bool                    IsVisible() const;
     void                    ToTop();
     void                    Enable( bool bEnable );
-    bool                    Close();
+    void                    Close();
     virtual void            Activate( bool bUI ) override;
     virtual void            Deactivate( bool bUI ) override;
 

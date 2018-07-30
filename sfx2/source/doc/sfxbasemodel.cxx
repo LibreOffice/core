@@ -1397,26 +1397,24 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getPrinter()
 {
     SfxModelGuard aGuard( *this );
 
-    if ( impl_getPrintHelper() )
-        return m_pData->m_xPrintable->getPrinter();
-    else
-        return Sequence< beans::PropertyValue >();
+    impl_getPrintHelper();
+    return m_pData->m_xPrintable->getPrinter();
 }
 
 void SAL_CALL SfxBaseModel::setPrinter(const Sequence< beans::PropertyValue >& rPrinter)
 {
     SfxModelGuard aGuard( *this );
 
-    if ( impl_getPrintHelper() )
-        m_pData->m_xPrintable->setPrinter( rPrinter );
+    impl_getPrintHelper();
+    m_pData->m_xPrintable->setPrinter( rPrinter );
 }
 
 void SAL_CALL SfxBaseModel::print(const Sequence< beans::PropertyValue >& rOptions)
 {
     SfxModelGuard aGuard( *this );
 
-    if ( impl_getPrintHelper() )
-        m_pData->m_xPrintable->print( rOptions );
+    impl_getPrintHelper();
+    m_pData->m_xPrintable->print( rOptions );
 }
 
 
@@ -3193,24 +3191,20 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const Reference< view::XPrintJo
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    if ( impl_getPrintHelper() )
-    {
-        Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
-        if ( xPJB.is() )
-            xPJB->addPrintJobListener( xListener );
-    }
+    impl_getPrintHelper();
+    Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
+    if ( xPJB.is() )
+        xPJB->addPrintJobListener( xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const Reference< view::XPrintJobListener >& xListener )
 {
     SfxModelGuard aGuard( *this );
 
-    if ( impl_getPrintHelper() )
-    {
-        Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
-        if ( xPJB.is() )
-            xPJB->removePrintJobListener( xListener );
-    }
+    impl_getPrintHelper();
+    Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
+    if ( xPJB.is() )
+        xPJB->removePrintJobListener( xListener );
 }
 
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIdentifier )
@@ -3725,10 +3719,10 @@ void SAL_CALL SfxBaseModel::removeStorageChangeListener(
                                     cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
-bool SfxBaseModel::impl_getPrintHelper()
+void SfxBaseModel::impl_getPrintHelper()
 {
     if ( m_pData->m_xPrintable.is() )
-        return true;
+        return;
     m_pData->m_xPrintable = new SfxPrintHelper();
     Reference < lang::XInitialization > xInit( m_pData->m_xPrintable, UNO_QUERY );
     Sequence < Any > aValues(1);
@@ -3736,7 +3730,6 @@ bool SfxBaseModel::impl_getPrintHelper()
     xInit->initialize( aValues );
     Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, UNO_QUERY );
     xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
-    return true;
 }
 
 

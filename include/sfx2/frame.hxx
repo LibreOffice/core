@@ -97,7 +97,7 @@ private:
     VclPtr<vcl::Window> pWindow;
 
 protected:
-    bool                Close();
+    void                Close();
     virtual             ~SfxFrame();
 
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow );
@@ -134,7 +134,7 @@ public:
 
     bool                IsInPlace() const;
 
-    SAL_DLLPRIVATE bool DoClose_Impl();
+    SAL_DLLPRIVATE void DoClose_Impl();
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl();
     SAL_DLLPRIVATE void GetViewData_Impl();
