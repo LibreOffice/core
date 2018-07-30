@@ -1052,39 +1052,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
                             }
                         }
-
-                        // Widow/Orphan -> set both to two if not already set
-                        uno::Any aTwo = uno::makeAny(sal_Int8(2));
-                        pEntry->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
-                        pEntry->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
-
-                        // tdf#87533 explicitly set writing mode value based on default paragraph properties
-                        // specified inside styles.xml: <w:docDefaults><w:pPrDefault><w:pPr><w:bidi>
-                        {
-                            const PropertyMapPtr & propertyMap = m_pImpl->m_pDefaultParaProps;
-
-                            boost::optional<PropertyMap::Property> writingMode;
-                            if (propertyMap && (writingMode = propertyMap->getProperty(PROP_WRITING_MODE)))
-                            {
-                                pEntry->pProperties->Insert(PROP_WRITING_MODE, writingMode->second, false);
-                            }
-                            else
-                            {
-                                // Left-to-right direction if not already set
-                                pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny(sal_Int16(text::WritingMode_LR_TB)), false);
-                            }
-
-                            boost::optional<PropertyMap::Property> paraAdjust;
-                            if (propertyMap && (paraAdjust = propertyMap->getProperty(PROP_PARA_ADJUST)))
-                            {
-                                pEntry->pProperties->Insert(PROP_PARA_ADJUST, paraAdjust->second, false);
-                            }
-                            else
-                            {
-                                // Left alignment if not already set
-                                pEntry->pProperties->Insert(PROP_PARA_ADJUST, uno::makeAny(sal_Int16(style::ParagraphAdjust_LEFT)), false);
-                            }
-                        }
                     }
 
                     auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
@@ -1522,6 +1489,15 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
         if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
         {
+            // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
+            m_pImpl->m_pDefaultParaProps->Insert(PROP_WRITING_MODE, uno::makeAny(sal_Int16(text::WritingMode_LR_TB)), /*bOverwrite=*/false);
+            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_ADJUST, uno::makeAny(sal_Int16(style::ParagraphAdjust_LEFT)), false);
+
+            // Widow/Orphan -> set both to two if not already set
+            uno::Any aTwo = uno::makeAny(sal_Int8(2));
+            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_WIDOWS, aTwo, /*bOverwrite=*/false);
+            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_ORPHANS, aTwo, false);
+
             uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
             uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
             uno::Reference<container::XNameAccess> xParagraphStyles;
