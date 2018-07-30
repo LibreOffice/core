@@ -103,7 +103,7 @@ public:
 
     // Non-interface methods.
 
-    bool getProperty( const OUString & rPropName,
+    void getProperty( const OUString & rPropName,
                       css::beans::Property & rProp );
 };
 

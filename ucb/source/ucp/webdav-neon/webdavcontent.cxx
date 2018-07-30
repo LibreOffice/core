@@ -1256,8 +1256,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         while ( it != end )
         {
-            if ( pProvider->getProperty( (*it).first, aProp ) )
-                xRow->appendObject( aProp, (*it).second.value() );
+            pProvider->getProperty( (*it).first, aProp );
+            xRow->appendObject( aProp, (*it).second.value() );
 
             ++it;
         }

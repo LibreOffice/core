@@ -39,7 +39,7 @@ namespace cmis
             ChildrenProvider* m_pChildrenProvider;
             sal_Int32 mnOpenMode;
             bool mbCountFinal;
-            bool getData();
+            void getData();
             ResultList maResults;
 
         public:
