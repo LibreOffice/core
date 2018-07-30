@@ -385,6 +385,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrShape->setChildSize(aChildSize);
                 aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
                 aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+
+                if(nIncX == -1)
+                    aCurrShape->setRotation(180 * PER_DEGREE);
             }
             break;
         }
@@ -585,8 +588,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 case XML_upr:
                 {
-                    if (rShape->getRotation())
+                    if (rShape->getRotation()==45*F_PI180 || rShape->getRotation()==135*F_PI180
+                                                          || rShape->getRotation()==225*F_PI180 || rShape->getRotation()==315*F_PI180)
                         pTextBody->getTextProperties().moRotation = -F_PI180*90*rShape->getRotation();
+                    else
+                        pTextBody->getTextProperties().moRotation = -rShape->getRotation();
                 }
                 break;
                 case XML_grav:
