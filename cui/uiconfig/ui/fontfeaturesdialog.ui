@@ -6,7 +6,7 @@
   <object class="GtkDialog" id="FontFeaturesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="newtabledialog|NewTableDialog">Font Features</property>
+    <property name="title" translatable="yes" context="fontfeaturesdialog|FontFeaturesDialog">Font Features</property>
     <property name="modal">True</property>
     <property name="default_width">1</property>
     <property name="default_height">1</property>
@@ -146,7 +146,7 @@
                     <property name="can_focus">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="preview:border-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="fontfeaturesdialog|preview-atkobject">Preview</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="fontfeaturesdialog|GraphiteLabel">Preview</property>
                       </object>
                     </child>
                   </object>

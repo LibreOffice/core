@@ -72,18 +72,23 @@ void FontFeatureTest::testGetFontFeatures()
 
 #if !defined(_WIN32)
     // periodically fails on windows tinderbox like tb77 with a value of 27
-    CPPUNIT_ASSERT_EQUAL(size_t(20), rDefaultFontFeatures.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(53), rDefaultFontFeatures.size());
 
-    OUString aExpectedFeaturesString = "aalt c2sc case dlig frac hlig liga lnum "
-                                       "onum pnum salt sinf smcp ss01 ss02 ss03 "
-                                       "sups tnum zero cpsp ";
+    OUString aExpectedFeaturesString = "c2sc case dlig fina frac hlig liga lnum "
+                                       "locl onum pnum sa01 sa02 sa03 sa04 sa05 "
+                                       "sa06 sa07 sa08 salt sinf smcp ss01 ss02 "
+                                       "ss03 sups tnum zero ingl cpsp lith litt "
+                                       "itlc para algn arti circ dash dbls foot "
+                                       "frsp grkn hang lng minu nfsp name quot "
+                                       "texm thou vari caps ligc ";
+
     // periodically fails on windows tinderbox like tb72 with a missing "ss02"
     CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
 #endif
 
     // Check C2SC feature
     {
-        vcl::font::Feature& rFeature = rDefaultFontFeatures[1];
+        vcl::font::Feature& rFeature = rDefaultFontFeatures[0];
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("c2sc"), rFeature.m_aID.m_aFeatureCode);
 
         vcl::font::FeatureDefinition& rFracFeatureDefinition = rFeature.m_aDefinition;

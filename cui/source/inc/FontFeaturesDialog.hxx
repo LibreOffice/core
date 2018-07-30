@@ -13,6 +13,7 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/font/Feature.hxx>
+#include <vcl/font/FeatureParser.hxx>
 #include <svx/fntctrl.hxx>
 #include "chardlg.hxx"
 #include <memory>
@@ -44,6 +45,9 @@ private:
 
     void initialize();
     OUString createFontNameWithFeatures();
+
+    void fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures,
+                  VclPtr<VclGrid> const& pParent, vcl::font::FeatureParser const& rParser);
 
     DECL_LINK(ComboBoxSelectedHdl, ComboBox&, void);
     DECL_LINK(CheckBoxToggledHdl, CheckBox&, void);
