@@ -464,7 +464,6 @@ OUString SwAddressPreview::FillData(
                                                 rConfigItem.GetCurrentDBData() );
     const OUString* pAssignment = aAssignment.getConstArray();
     const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
-    OUString sAddress(rAddress);
     OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
 
     bool bIncludeCountry = rConfigItem.IsIncludeCountry();
@@ -480,8 +479,8 @@ OUString SwAddressPreview::FillData(
             sCountryColumn = aSpecialAssignment[MM_PART_COUNTRY];
     }
 
-    SwAddressIterator aIter(sAddress);
-    sAddress.clear();
+    SwAddressIterator aIter(rAddress);
+    OUStringBuffer sAddress;
     while(aIter.HasMore())
     {
         SwMergeAddressItem aItem = aIter.Next();
@@ -540,9 +539,9 @@ OUString SwAddressPreview::FillData(
             }
 
         }
-        sAddress += aItem.sText;
+        sAddress.append(aItem.sText);
     }
-    return sAddress;
+    return sAddress.makeStringAndClear();
 }
 
 SwMergeAddressItem   SwAddressIterator::Next()

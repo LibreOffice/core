@@ -497,15 +497,15 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    OUString aContent;
+    OUStringBuffer aContent;
     for( int i=0; i<nParts; ++i )
     {
         OUString aTmp( pParts[i] );
         aTmp = aTmp.replaceAll( "\\", "\\\\" );
         aTmp = aTmp.replaceAll( ";", "\\;" );
         if( i > 0 )
-            aContent += ";";
-        aContent += aTmp;
+            aContent.append(";");
+        aContent.append(aTmp);
     }
 
     rHTMLWrt.OutNewLine();
@@ -514,7 +514,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
         .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"").append(pName)
         .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear(), rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     rWrt.Strm().WriteCharPtr( "\">" );
 }
 

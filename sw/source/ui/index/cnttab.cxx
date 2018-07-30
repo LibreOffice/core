@@ -3392,7 +3392,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 
 OUString SwTokenWindow::GetPattern() const
 {
-    OUString sRet;
+    OUStringBuffer sRet;
 
     for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
     {
@@ -3403,10 +3403,10 @@ OUString SwTokenWindow::GetPattern() const
                 : static_cast<const SwTOXButton*>(pCtrl)->GetFormToken();
 
         //TODO: prevent input of TOX_STYLE_DELIMITER in KeyInput
-        sRet += rNewToken.GetString();
+        sRet.append(rNewToken.GetString());
     }
 
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 // Check if a control of the specified TokenType is already contained in the list

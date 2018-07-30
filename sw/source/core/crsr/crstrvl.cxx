@@ -1716,7 +1716,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                 if( aSet.Count() )
                 {
-                    OUString sAttrs;
+                    OUStringBuffer sAttrs;
                     SfxItemIter aIter( aSet );
                     const SfxPoolItem* pItem = aIter.FirstItem();
                     const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
@@ -1728,8 +1728,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             GetDoc()->GetAttrPool().GetPresentation(*pItem,
                                 MapUnit::MapCM, aStr, aInt);
                             if (!sAttrs.isEmpty())
-                                sAttrs += ", ";
-                            sAttrs += aStr;
+                                sAttrs.append(", ");
+                            sAttrs.append(aStr);
                         }
                         if( aIter.IsAtEnd() )
                             break;
@@ -1739,7 +1739,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         if( !rContentAtPos.sStr.isEmpty() )
                             rContentAtPos.sStr += "\n";
-                        rContentAtPos.sStr += "Attr: " + sAttrs;
+                        rContentAtPos.sStr += "Attr: " + sAttrs.toString();
                     }
                 }
                 bRet = true;

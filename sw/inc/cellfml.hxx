@@ -54,26 +54,26 @@ public:
 
 class SwTableFormula
 {
-typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
+typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUStringBuffer&,
                                                 OUString&, OUString*, void* ) const;
 
-    void BoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
+    void BoxNmsToPtr( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void PtrToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
+    void PtrToBoxNms( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void RelNmsToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
+    void RelNmsToBoxNms( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void RelBoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
+    void RelBoxNmsToPtr( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString*,
+    void BoxNmsToRelNm( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void MakeFormula_( const SwTable&, OUString&, OUString&, OUString*,
+    void MakeFormula_( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString*,
+    void GetFormulaBoxes( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void HasValidBoxes_( const SwTable&, OUString&, OUString&, OUString*,
+    void HasValidBoxes_( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
-    void SplitMergeBoxNm_( const SwTable&, OUString&, OUString&, OUString*,
+    void SplitMergeBoxNm_( const SwTable&, OUStringBuffer&, OUString&, OUString*,
                         void* pPara ) const;
 
     static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,

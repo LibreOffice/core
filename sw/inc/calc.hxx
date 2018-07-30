@@ -24,6 +24,7 @@
 #include <vector>
 #include <basic/sbxvar.hxx>
 #include <unotools/syslocale.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "swdllapi.h"
 
 class CharClass;
@@ -182,7 +183,8 @@ extern "C" typedef double (*pfCalc)(double);
 class SwCalc
 {
     SwHashTable<SwCalcExp> m_aVarTable;
-    OUString    m_aVarName, m_sCurrSym;
+    OUStringBuffer m_aVarName;
+    OUString    m_sCurrSym;
     OUString    m_sCommand;
     std::vector<const SwUserFieldType*> m_aRekurStack;
     SwSbxValue  m_nLastLeft;

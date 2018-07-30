@@ -923,7 +923,6 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
         }
     }
 
-    OUString aNew;
     for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != mpUpdateFields->GetSortLst()->end(); ++it )
     {
         SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
@@ -1054,7 +1053,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                     if( (!pUpdateField || pUpdateField == pTextField )
                         && pGField->IsInBodyText() )
                     {
-                        aNew = LookString( aHashStrTable, pGField->GetFormula() );
+                        OUString aNew = LookString( aHashStrTable, pGField->GetFormula() );
                         pGField->ChgExpStr( aNew );
                     }
                 }
@@ -1062,7 +1061,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                 {
                     SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
                     // is the "formula" a field?
-                    aNew = LookString( aHashStrTable, pSField->GetFormula() );
+                    OUString aNew = LookString( aHashStrTable, pSField->GetFormula() );
 
                     if( aNew.isEmpty() )               // nothing found then the formula is the new value
                         aNew = pSField->GetFormula();
@@ -1113,7 +1112,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                 {
                     SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
                     SwSetExpFieldType* pSFieldTyp = static_cast<SwSetExpFieldType*>(pField->GetTyp());
-                    aNew = pSFieldTyp->GetName();
+                    OUString aNew = pSFieldTyp->GetName();
 
                     SwNode* pSeqNd = nullptr;
 

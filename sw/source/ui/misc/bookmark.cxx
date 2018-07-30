@@ -145,15 +145,15 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
     if (!m_pBookmarksBox->HasFocus())
         return;
 
-    OUString sEditBoxText;
+    OUStringBuffer sEditBoxText;
     SvTreeListEntry* pSelected = m_pBookmarksBox->FirstSelected();
     for (sal_Int32 i = m_pBookmarksBox->GetSelectionCount(); i; i--)
     {
         sw::mark::IMark* pBookmark = static_cast<sw::mark::IMark*>(pSelected->GetUserData());
         OUString sEntryName = pBookmark->GetName();
-        sEditBoxText = sEditBoxText + sEntryName;
+        sEditBoxText.append(sEntryName);
         if (i > 1)
-            sEditBoxText += ";";
+            sEditBoxText.append(";");
         pSelected = m_pBookmarksBox->NextSelected(pSelected);
     }
     if (m_pBookmarksBox->GetSelectionCount() > 0)
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
         m_pGotoBtn->Enable(m_pBookmarksBox->GetSelectionCount() == 1);
         m_pRenameBtn->Enable(m_pBookmarksBox->GetSelectionCount() == 1);
         m_pDeleteBtn->Enable();
-        m_pEditBox->SetText(sEditBoxText);
+        m_pEditBox->SetText(sEditBoxText.makeStringAndClear());
     }
     else
     {

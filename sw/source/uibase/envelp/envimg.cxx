@@ -53,7 +53,7 @@ OUString MakeSender()
     if (sSenderToken.isEmpty())
         return OUString();
 
-    OUString sRet;
+    OUStringBuffer sRet;
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;
     do {
@@ -61,33 +61,33 @@ OUString MakeSender()
         if (sToken == "COMPANY")
         {
             sal_Int32 nOldLen = sRet.getLength();
-            sRet += rUserOpt.GetCompany();
+            sRet.append(rUserOpt.GetCompany());
             bLastLength = sRet.getLength() != nOldLen;
         }
         else if (sToken == "CR")
         {
             if(bLastLength)
-                sRet += NEXTLINE;
+                sRet.append(NEXTLINE);
             bLastLength = true;
         }
         else if (sToken == "FIRSTNAME")
-            sRet += rUserOpt.GetFirstName();
+            sRet.append(rUserOpt.GetFirstName());
         else if (sToken == "LASTNAME")
-            sRet += rUserOpt.GetLastName();
+            sRet.append(rUserOpt.GetLastName());
         else if (sToken == "ADDRESS")
-            sRet += rUserOpt.GetStreet();
+            sRet.append(rUserOpt.GetStreet());
         else if (sToken == "COUNTRY")
-            sRet += rUserOpt.GetCountry();
+            sRet.append(rUserOpt.GetCountry());
         else if (sToken == "POSTALCODE")
-            sRet += rUserOpt.GetZip();
+            sRet.append(rUserOpt.GetZip());
         else if (sToken == "CITY")
-            sRet += rUserOpt.GetCity();
+            sRet.append(rUserOpt.GetCity());
         else if (sToken == "STATEPROV")
-            sRet += rUserOpt.GetState();
+            sRet.append(rUserOpt.GetState());
         else if (!sToken.isEmpty()) //spaces
-            sRet += sToken;
+            sRet.append(sToken);
     } while (nSttPos>=0);
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 SwEnvItem::SwEnvItem() :

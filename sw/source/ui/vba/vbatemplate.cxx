@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 
 static OUString lcl_CheckGroupName( const OUString& rGroupName )
 {
-    OUString sRet;
+    OUStringBuffer sRet;
     //group name should contain only A-Z and a-z and spaces
     for( sal_Int32 i = 0; i < rGroupName.getLength(); i++ )
     {
@@ -40,10 +40,11 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
         if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
-            sRet += OUStringLiteral1(cChar);
+            sRet.append(cChar);
         }
     }
-    return comphelper::string::strip(sRet, ' ');
+    sRet.strip(' ');
+    return sRet.makeStringAndClear();
 }
 
 SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFullUrl )

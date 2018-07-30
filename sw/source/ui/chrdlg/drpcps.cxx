@@ -107,10 +107,10 @@ void SwDropCapsPict::InitPrinter()
 // Create Default-String from character-count (A, AB, ABC, ...)
 OUString GetDefaultString(sal_Int32 nChars)
 {
-    OUString aStr;
+    OUStringBuffer aStr(nChars);
     for (sal_Int32 i = 0; i < nChars; i++)
-        aStr += OUString(static_cast<char>(i + 65));
-    return aStr;
+        aStr.append(static_cast<sal_Unicode>(i + 65));
+    return aStr.makeStringAndClear();
 }
 
 static void calcFontHeightAnyAscent(vcl::RenderContext& rWin, vcl::Font const & _rFont, long& _nHeight, long& _nAscent)

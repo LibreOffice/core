@@ -1060,7 +1060,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    OUString aName;
+    OUStringBuffer aName;
     rtl_TextEncoding eEnc = rParser.GetDfltEncoding();
     const FontList *pFList = rParser.GetFontList();
     bool bFirst = true;
@@ -1101,8 +1101,8 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                     }
                 }
                 if( !bFirst )
-                    aName += ";";
-                aName += aIdent;
+                    aName.append(";");
+                aName.append(aIdent);
             }
         }
 
@@ -1112,7 +1112,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 
     if( !aName.isEmpty() && !rParser.IsIgnoreFontFamily() )
     {
-        SvxFontItem aFont( FAMILY_DONTKNOW, aName, OUString(), PITCH_DONTKNOW,
+        SvxFontItem aFont( FAMILY_DONTKNOW, aName.makeStringAndClear(), OUString(), PITCH_DONTKNOW,
                             eEnc, aItemIds.nFont );
         rItemSet.Put( aFont );
         aFont.SetWhich( aItemIds.nFontCJK );

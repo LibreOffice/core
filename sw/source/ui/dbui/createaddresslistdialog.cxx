@@ -594,21 +594,21 @@ namespace
 
 void lcl_WriteValues(const std::vector<OUString> *pFields, SvStream* pStream)
 {
-    OUString sLine;
+    OUStringBuffer sLine;
     const std::vector< OUString >::const_iterator aBegin = pFields->begin();
     const std::vector< OUString >::const_iterator aEnd = pFields->end();
     for(std::vector< OUString >::const_iterator aIter = aBegin; aIter != aEnd; ++aIter)
     {
         if (aIter==aBegin)
         {
-            sLine += "\"" + *aIter + "\"";
+            sLine.append("\"").append(*aIter).append("\"");
         }
         else
         {
-            sLine += "\t\"" + *aIter + "\"";
+            sLine.append("\t\"").append(*aIter).append("\"");
         }
     }
-    pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+    pStream->WriteByteStringLine( sLine.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
 }

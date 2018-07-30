@@ -609,7 +609,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 
 static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
 {
-    OUString sReturn;
+    OUStringBuffer sReturn;
     sal_uInt16 nLen = sFormatStr.getLength();
     nSeparator = 0xff;
     while(nUsedPos < nLen && nSeparator == 0xff)
@@ -630,12 +630,12 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
                 nSeparator = DB_SEP_NEWLINE;
             break;
             default:
-                sReturn += OUStringLiteral1(cCurrent);
+                sReturn.append(cCurrent);
         }
         nUsedPos++;
 
     }
-    return sReturn;
+    return sReturn.makeStringAndClear();
 }
 
 void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
@@ -687,7 +687,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
         }
         else
         {
-            OUString sStr;
+            OUStringBuffer sStr;
             uno::Sequence<OUString> aColNames = xCols->getElementNames();
             const OUString* pColNames = aColNames.getConstArray();
             long nLength = aColNames.getLength();
@@ -697,11 +697,11 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
                 uno::Reference< beans::XPropertySet > xColumnProp;
                 aCol >>= xColumnProp;
                 SwDBFormatData aDBFormat;
-                sStr += GetDBField( xColumnProp, aDBFormat);
+                sStr.append(GetDBField( xColumnProp, aDBFormat));
                 if (i < nLength - 1)
-                    sStr += "\t";
+                    sStr.append("\t");
             }
-            pSh->SwEditShell::Insert2(sStr);
+            pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
             pSh->SwFEShell::SplitNode();    // line feed
         }
     }
@@ -1063,7 +1063,7 @@ static SwMailMessage* lcl_CreateMailFromDoc(
     pMessage->addRecipient( sMailRecipient );
     pMessage->SetSenderAddress( rMergeDescriptor.pMailMergeConfigItem->GetMailAddress() );
 
-    OUString sBody;
+    OUStringBuffer sBody;
     if( rMergeDescriptor.bSendAsAttachment )
     {
         sBody = rMergeDescriptor.sMailBody;
@@ -1086,13 +1086,13 @@ static SwMailMessage* lcl_CreateMailFromDoc(
         OString sLine;
         while ( pInStream->ReadLine( sLine ) )
         {
-            sBody += OStringToOUString( sLine, sMailEncoding );
-            sBody += "\n";
+            sBody.append(OStringToOUString( sLine, sMailEncoding ));
+            sBody.append("\n");
         }
     }
     pMessage->setSubject( rMergeDescriptor.sSubject );
     uno::Reference< datatransfer::XTransferable> xBody =
-                new SwMailTransferable( sBody, sMailBodyMimeType );
+                new SwMailTransferable( sBody.makeStringAndClear(), sMailBodyMimeType );
     pMessage->setBody( xBody );
 
     for( const OUString& sCcRecipient : rMergeDescriptor.aCopiesTo )

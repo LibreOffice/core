@@ -596,7 +596,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     const WW8_FFN* pF = m_xFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->aFFNBase.chs == 2 );      // Symbol/WingDings/...
 
-    OUString sText;
+    OUStringBuffer sText;
     sal_uInt32 nLen = rAV.cbTextBefore + rAV.cbTextAfter;
     if (m_bVer67)
     {
@@ -618,7 +618,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
         }
         for(sal_uInt32 i = 0; i < nLen; ++i, pText += 2)
         {
-            sText += OUStringLiteral1(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText)));
+            sText.append(static_cast<sal_Unicode>(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText))));
         }
     }
 
@@ -637,7 +637,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
                 OUStringBuffer aBuf;
                 comphelper::string::padToLength(aBuf, rAV.cbTextBefore
                     + rAV.cbTextAfter, cBulletChar);
-                sText = aBuf.makeStringAndClear();
+                sText = aBuf;
             }
         }
     }
@@ -674,13 +674,13 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     {
         if (rAV.cbTextBefore)
         {
-            OUString sP( sText.copy( 0, rAV.cbTextBefore ) );
+            OUString sP( sText.copy( 0, rAV.cbTextBefore ).makeStringAndClear() );
             rNum.SetPrefix( sP );
         }
         if( rAV.cbTextAfter )
         {
             OUString sP( rNum.GetSuffix() );
-            sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter);
+            sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
             rNum.SetSuffix( sP );
         }
 // The characters before and after multiple digits do not apply because

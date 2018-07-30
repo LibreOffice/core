@@ -125,13 +125,13 @@ void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
     default:;//prevent warning
     }
 
-    OUString buf;
+    OUStringBuffer buf;
     for (const OUString & comment : comments)
     {
         OSL_ENSURE(!comment.isEmpty(), "no Undo/Redo Text set");
-        buf += comment + "\n";
+        buf.append(comment).append("\n");
     }
-    rStrs.SetString(buf);
+    rStrs.SetString(buf.makeStringAndClear());
 }
 
 OUString SwWrtShell::GetRepeatString() const

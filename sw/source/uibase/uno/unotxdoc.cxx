@@ -1071,7 +1071,7 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
 static OUString lcl_CreateOutlineString( size_t nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
-    OUString sEntry;
+    OUStringBuffer sEntry;
     const SwTextNode * pTextNd = rOutlineNodes[ nIndex ]->GetTextNode();
     SwNumberTree::tNumberVector aNumVector = pTextNd->GetNumberVector();
     if( pOutlRule && pTextNd->GetNumRule())
@@ -1082,12 +1082,12 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             long nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
-            sEntry += OUString::number( nVal );
-            sEntry += ".";
+            sEntry.append(OUString::number( nVal ));
+            sEntry.append(".");
         }
-    sEntry += rOutlineNodes[ nIndex ]->
-                    GetTextNode()->GetExpandText();
-    return sEntry;
+    sEntry.append( rOutlineNodes[ nIndex ]->
+                    GetTextNode()->GetExpandText() );
+    return sEntry.makeStringAndClear();
 }
 
 void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue >& aSettings)

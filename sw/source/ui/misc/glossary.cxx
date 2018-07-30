@@ -92,14 +92,15 @@ static OUString lcl_GetValidShortCut( const OUString& rName )
     while( rName[nStart-1]==' ' && nStart < nSz )
         nStart++;
 
-    OUString aBuf = OUString(rName[nStart-1]);
+    OUStringBuffer aBuf;
+    aBuf.append(rName[nStart-1]);
 
     for( ; nStart < nSz; ++nStart )
     {
         if( rName[nStart-1]==' ' && rName[nStart]!=' ')
-            aBuf += OUStringLiteral1(rName[nStart]);
+            aBuf.append(rName[nStart]);
     }
-    return aBuf;
+    return aBuf.makeStringAndClear();
 }
 
 struct GroupUserData

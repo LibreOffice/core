@@ -1114,7 +1114,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
         aDesc.sEMail = sEMail;
-        OUString sBody;
+        OUStringBuffer sBody;
         if(bAsBody)
         {
             {
@@ -1132,8 +1132,8 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
                 bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
-                    sBody += OStringToOUString(sLine, eEncoding);
-                    sBody += "\n";
+                    sBody.append( OStringToOUString(sLine, eEncoding) );
+                    sBody.append("\n");
                     bDone = pInStream->ReadLine( sLine );
                 }
             }
@@ -1183,10 +1183,10 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
 
                 }
                 sGreeting += "\n";
-                sBody = sGreeting + sBody;
+                sBody.insert(0, sGreeting);
             }
         }
-        aDesc.sBodyContent = sBody;
+        aDesc.sBodyContent = sBody.makeStringAndClear();
         if(MM_DOCTYPE_HTML == nDocType)
         {
             aDesc.sBodyMimeType = "text/html; charset=" +

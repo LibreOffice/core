@@ -315,7 +315,7 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     if( nPart>=0 )
     {
         const OUString sOldCmd( GetCmd() );
-        OUString sNewCmd;
+        OUStringBuffer sNewCmd;
         sal_Int32 nIndex = 0;
         for (sal_Int32 i=0; i<3; ++i)
         {
@@ -324,10 +324,10 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             {
                 rVal >>= sToken;
             }
-            sNewCmd += (i < 2)
-                ? sToken + OUStringLiteral1(sfx2::cTokenSeparator) : sToken;
+            sNewCmd.append((i < 2)
+                ? sToken + OUStringLiteral1(sfx2::cTokenSeparator) : sToken);
         }
-        SetCmd( sNewCmd );
+        SetCmd( sNewCmd.makeStringAndClear() );
     }
 }
 

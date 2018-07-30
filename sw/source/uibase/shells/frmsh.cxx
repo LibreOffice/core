@@ -212,9 +212,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     sal_uInt16 i = 1;
                     while (rSh.FindFlyByName(sName))
                     {
-                        sName = sOldName;
-                        sName += "_";
-                        sName += OUString::number(i++);
+                        sName = sOldName + "_" + OUString::number(i++);
                     }
                     rSh.SetFlyName(sName);
                 }
