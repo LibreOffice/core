@@ -515,7 +515,7 @@ bool URLParameter::query()
         else if( parameter == "Active" )
             m_aActive = value;
         else if( parameter == "Version" )
-            ; // ignored (but accepted) in the build-in help, useful only for the online help
+            ; // ignored (but accepted) in the built-in help, useful only for the online help
         else
             ret = false;
     }
