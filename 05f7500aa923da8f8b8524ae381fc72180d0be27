@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_aa60e833",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-07-30T19:06:12Z",
+      "side": 0,
+      "message": "Bail out? Then you skip the properties completely and return nullptr. Why do that?",
+      "range": {
+        "startLine": 92,
+        "startChar": 41,
+        "endLine": 92,
+        "endChar": 49
+      },
+      "revId": "05f7500aa923da8f8b8524ae381fc72180d0be27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
