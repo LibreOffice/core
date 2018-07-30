@@ -11,19 +11,22 @@ import os
 import sys
 import argparse
 
+opened_app = ""
+
 def parse_line(line):
     """
     This function parses a line from log file
     and returns the parsed values as a python dictionary
     """
-    if (line == "" or line.startswith("Action on element")):
+    if (line == ""):
         return
     dict = {}
     if "{" in line:
         start_index_of_parameters = line.find("{")
         end_index_of_parameters = line.find("}") + 1
         parameters = line[start_index_of_parameters:end_index_of_parameters]
-        dict["parameters"] = parameters
+        if parameters != "":
+            dict["parameters"] = parameters
         line = line[:start_index_of_parameters-1]
     word_list = line.split()
     dict["keyword"] = word_list[0]
@@ -54,7 +57,7 @@ def get_log_file(input_address):
         print("Use " + os.path.basename(sys.argv[0]) + " -h to get usage instructions")
         sys.exit(1)
 
-    content = [x.strip() for x in content]
+    content = [x.strip() for x in content if not x.startswith("Action on element")]
     return content
 
 def initiate_test_generation(address):
@@ -65,6 +68,7 @@ def initiate_test_generation(address):
         print("Use " + os.path.basename(sys.argv[0]) + " -h to get usage instructions")
         sys.exit(1)
     initial_text = \
+    "# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-\n\n" + \
     "from uitest.framework import UITestCase\n" + \
     "from libreoffice.uno.propertyvalue import mkPropertyValues\n" + \
     "import importlib\n\n" + \
@@ -112,6 +116,17 @@ def check_app_starting_action(action_dict):
 def get_test_line_from_one_log_line(log_line):
     action_dict = parse_line(log_line)
     test_line = "        "
+    if action_dict["keyword"] =="CurrentApp":
+        global opened_app
+        if opened_app == "writer":
+            action_dict["keyword"] = "SwEditWinUIObject"
+            action_dict["Id"] = "writer_edit"
+        elif opened_app == "calc":
+            action_dict["keyword"] = "ScGridWinUIObject"
+            action_dict["Id"] = "grid_window"
+        elif opened_app == "impress":
+            action_dict["keyword"] = "ImpressWindowUIObject"
+            action_dict["Id"] = "impress_win"
     if action_dict["keyword"].endswith("UIObject"):
         parent = action_dict["Parent"]
         if (check_app_starting_action(action_dict)):
@@ -119,6 +134,7 @@ def get_test_line_from_one_log_line(log_line):
             "MainDoc = self.ui_test.create_doc_in_start_center(\"" + \
             action_dict["Id"][:-4] +"\")\n        MainWindow = " + \
             "self.xUITest.getTopFocusWindow()\n"
+            opened_app = action_dict["Id"][:-4]
             return test_line
         else:
             if (parent == ""):
@@ -135,8 +151,18 @@ def get_test_line_from_one_log_line(log_line):
                 test_line += ",tuple())\n"
             return test_line
     elif action_dict["keyword"] == "CommandSent":
-        test_line += "self.xUITest.executeCommand(\"" + \
-        action_dict["Name"] + "\")\n"
+        if "parameters" not in action_dict:
+            test_line += "self.xUITest.executeCommand(\"" + \
+            action_dict["Name"] + "\")\n"
+            return test_line
+        else:
+            test_line += "self.xUITest.executeCommandWithParameters(\"" + \
+            action_dict["Name"] + "\", mkPropertyValues(" + action_dict["parameters"] + \
+            "))\n"
+            return test_line
+    elif action_dict["keyword"] == "ModalDialogExecuted" or \
+        action_dict["keyword"] == "ModelessDialogConstructed":
+        test_line += action_dict["Id"] + " = " + "self.xUITest.getTopFocusWindow()\n"
         return test_line
 
     return ""
@@ -187,6 +213,7 @@ def main():
             output_stream.write(test_line)
             line_number += 2
     output_stream.write("        self.ui_test.close_doc()")
+    output_stream.write("\n\n# vim: set shiftwidth=4 softtabstop=4 expandtab:")
     output_stream.close()
 
 if __name__ == '__main__':
