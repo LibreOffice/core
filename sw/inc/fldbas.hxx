@@ -262,6 +262,7 @@ public:
     SwFieldIds              Which() const { return m_nWhich; }
 
     inline  void            UpdateFields() const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline void SwFieldType::UpdateFields() const

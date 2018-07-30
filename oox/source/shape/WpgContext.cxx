@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/log.hxx>
 
 #include "WpgContext.hxx"
+#include <sal/log.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>

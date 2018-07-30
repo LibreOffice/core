@@ -339,4 +339,13 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
 }
 
+void SwUserFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserFieldType"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nValue"), BAD_CAST(OString::number(nValue).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContent"), BAD_CAST(aContent.toUtf8().getStr()));
+    SwFieldType::dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
