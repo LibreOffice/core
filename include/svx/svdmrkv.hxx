@@ -189,7 +189,7 @@ public:
     bool IsMarking() const { return IsMarkObj() || IsMarkPoints() || IsMarkGluePoints(); }
 
     // Marking objects by drawing of a selection frame
-    bool BegMarkObj(const Point& rPnt, bool bUnmark = false);
+    void BegMarkObj(const Point& rPnt, bool bUnmark = false);
     void MovMarkObj(const Point& rPnt);
     bool EndMarkObj();
     void BrkMarkObj();
@@ -328,8 +328,8 @@ public:
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
-    // P1 is deleted, a mark is set at P2 and true is returned.
-    bool MarkNextPoint();
+    // P1 is deleted, a mark is set at P2.
+    void MarkNextPoint();
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
@@ -378,8 +378,8 @@ public:
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
-    // P1 is deleted, a mark is set at P2 and true is returned.
-    bool MarkNextGluePoint();
+    // P1 is deleted, a mark is set at P2.
+    void MarkNextGluePoint();
 
     // Draw a selection frame for glue point marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.

@@ -1387,11 +1387,12 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
             if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
             {
                 if(bAdded) aEntryList.clear();
-                bDeleted = pNumFmtShell->RemoveFormat( aFormat,
-                                               nCatLbSelPos,
-                                               nFmtLbSelPos,
-                                               a2EntryList);
-                if(bDeleted) a2EntryList.clear();
+                pNumFmtShell->RemoveFormat( aFormat,
+                                            nCatLbSelPos,
+                                            nFmtLbSelPos,
+                                            a2EntryList);
+                bDeleted = true;
+                a2EntryList.clear();
                 m_pEdFormat->GrabFocus();
                 m_pEdFormat->SetSelection( Selection( 0, SELECTION_MAX ) );
                 nReturn |= nReturnOneArea;
@@ -1444,10 +1445,11 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
         sal_uInt16           nCatLbSelPos = 0;
         short                nFmtLbSelPos = SELPOS_NONE;
 
-        bDeleted = pNumFmtShell->RemoveFormat( aFormat,
-                                               nCatLbSelPos,
-                                               nFmtLbSelPos,
-                                               aEntryList );
+        pNumFmtShell->RemoveFormat( aFormat,
+                                    nCatLbSelPos,
+                                    nFmtLbSelPos,
+                                    aEntryList );
+        bDeleted = true;
 
         m_pEdComment->SetText(m_pLbCategory->GetEntry(1));
         if ( bDeleted )

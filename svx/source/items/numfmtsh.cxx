@@ -318,7 +318,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
 }
 
 
-bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
+void SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
                                          sal_uInt16& rCatLbSelPos,
                                          short& rFmtSelPos,
                                          std::vector<OUString>& rFmtEntries )
@@ -349,7 +349,6 @@ bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
         CategoryToPos_Impl( nCurCategory, rCatLbSelPos );
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
     }
-    return true;
 }
 
 

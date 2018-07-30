@@ -248,9 +248,9 @@ bool SdrView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
     return bRet;
 }
 
-bool SdrView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
+void SdrView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
-    return SdrCreateView::GetAttributes(rTargetSet, bOnlyHardAttr);
+    SdrCreateView::GetAttributes(rTargetSet, bOnlyHardAttr);
 }
 
 SfxStyleSheet* SdrView::GetStyleSheet() const
@@ -864,7 +864,8 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::MarkPoint: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllPoints();
             if (rVEvt.bPrevNextMark) {
-                bRet=MarkNextPoint();
+                MarkNextPoint();
+                bRet=false;
             } else {
                 bRet=MarkPoint(*rVEvt.pHdl,rVEvt.bUnmark);
             }
@@ -876,7 +877,8 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::MarkGluePoint: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllGluePoints();
             if (rVEvt.bPrevNextMark) {
-                bRet=MarkNextGluePoint();
+                MarkNextGluePoint();
+                bRet=false;
             } else {
                 bRet=MarkGluePoint(rVEvt.pObj,rVEvt.nGlueId,rVEvt.bUnmark);
             }
@@ -905,7 +907,8 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             } else bRet=BegCreateObj(aLogicPos);
         } break;
         case SdrEventKind::BeginMacroObj: {
-            bRet=BegMacroObj(aLogicPos,mnHitTolLog,rVEvt.pObj,rVEvt.pPV,static_cast<vcl::Window*>(mpActualOutDev.get()));
+            BegMacroObj(aLogicPos,mnHitTolLog,rVEvt.pObj,rVEvt.pPV,static_cast<vcl::Window*>(mpActualOutDev.get()));
+            bRet=false;
         } break;
         case SdrEventKind::BeginTextEdit: {
             if (!IsObjMarked(rVEvt.pObj)) {
@@ -1428,7 +1431,8 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
         return BegMarkPoints(rPnt,bUnmark);
     } else {
         if (!bAddMark) UnmarkAllObj();
-        return BegMarkObj(rPnt,bUnmark);
+        BegMarkObj(rPnt,bUnmark);
+        return true;
     }
 }
 

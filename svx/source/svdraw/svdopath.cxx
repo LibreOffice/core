@@ -511,7 +511,7 @@ public:
     basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
     // create stuff
-    bool BegCreate(SdrDragStat& rStat);
+    void BegCreate(SdrDragStat& rStat);
     bool MovCreate(SdrDragStat& rStat);
     bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     bool BckCreate(SdrDragStat const & rStat);
@@ -1223,7 +1223,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
     return aRetval.getB2DPolyPolygon();
 }
 
-bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
+void ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
 {
     bool bFreeHand(IsFreeHand(meObjectKind));
     rStat.SetNoSnap(bFreeHand);
@@ -1245,7 +1245,6 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
     pU->eStartKind=meObjectKind;
     pU->eCurrentKind=meObjectKind;
     rStat.SetUser(std::move(pU));
-    return true;
 }
 
 bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
@@ -2192,7 +2191,8 @@ basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag)
 bool SdrPathObj::BegCreate(SdrDragStat& rStat)
 {
     mpDAC.reset();
-    return impGetDAC().BegCreate(rStat);
+    impGetDAC().BegCreate(rStat);
+    return true;
 }
 
 bool SdrPathObj::MovCreate(SdrDragStat& rStat)

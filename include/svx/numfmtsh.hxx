@@ -109,7 +109,7 @@ public:
                                    short&                rFmtSelPos,
                                    std::vector<OUString>& rFmtEntries );
 
-    bool                RemoveFormat( const OUString&       rFormat,
+    void                RemoveFormat( const OUString&       rFormat,
                                       sal_uInt16&           rCatLbSelPos,
                                       short&                rFmtSelPos,
                                       std::vector<OUString>& rFmtEntries );
