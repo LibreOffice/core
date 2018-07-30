@@ -310,7 +310,18 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560d, "fdo72560d.docx")
 {
     // The problem was libreoffice confuse when RTL was specified in "Normal" when not using Normal at all
     CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(1), "ParaAdjust" ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(1), "ParaAdjust" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(2), "ParaAdjust" ));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
+{
+    // The problem was libreoffice confuse when *locale* is RTL, but w:bidi / w:jc are never defined.
+    // This unit test would only be noticed if the testing environment is set to something like an Arabic locale.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_LEFT), getProperty<sal_Int32>( getParagraph(2), "ParaAdjust" ));
+
+    // widow/orphan control is on when never specified.
+    CPPUNIT_ASSERT_EQUAL(sal_Int8(2), getProperty<sal_Int8>( getParagraph(2), "ParaWidows" ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
