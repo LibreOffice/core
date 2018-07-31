@@ -23,11 +23,21 @@
 #include "layfrm.hxx"
 
 class SwContentFrame;
+class SwTextFrame;
+class SwTextNode;
 class SwTextFootnote;
 class SwBorderAttrs;
 class SwFootnoteFrame;
 
 void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNotes );
+
+namespace sw {
+
+void RemoveFootnotesForNode(
+        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode,
+        std::vector<std::pair<sal_Int32, sal_Int32>> const*const pExtents);
+
+}
 
 // There exists a special section on a page for footnotes. It's called
 // SwFootnoteContFrame. Each footnote is separated by a SwFootnoteFrame which contains

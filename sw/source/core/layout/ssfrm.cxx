@@ -443,7 +443,8 @@ SwContentFrame::~SwContentFrame()
 void SwTextFrame::RegisterToNode(SwTextNode & rNode)
 {
     assert(&rNode != GetDep());
-    m_pMergedPara = sw::CheckParaRedlineMerge(*this, rNode);
+    // sw_redlinehide: use New here, because the only caller also calls lcl_ChangeFootnoteRef
+    m_pMergedPara = sw::CheckParaRedlineMerge(*this, rNode, sw::FrameMode::New);
     if (!m_pMergedPara)
     {
         rNode.Add(this);

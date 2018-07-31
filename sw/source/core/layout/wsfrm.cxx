@@ -4195,14 +4195,27 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                         rNode.GetRedlineMergeFlag() == SwNode::Merge::NonFirst);
                     if (rNode.IsCreateFrameWhenHidingRedlines())
                     {
-                        pFrame->SetMergedPara(CheckParaRedlineMerge(*pFrame, rTextNode));
+                        pFrame->SetMergedPara(CheckParaRedlineMerge(*pFrame,
+                                rTextNode, sw::FrameMode::Existing));
                         // ??? TODO flys etc.
                     }
                 }
                 else
                 {
-                    if (pFrame->GetMergedPara())
+                    if (auto const& pMergedPara = pFrame->GetMergedPara())
                     {
+                        // the new text frames don't exist yet, so at this point
+                        // we can only delete the footnote frames so they don't
+                        // point to the merged SwTextFrame any more...
+                        SwTextNode const* pNode(&rTextNode);
+                        for (auto const& rExtent : pMergedPara->extents)
+                        {
+                            if (rExtent.pNode != pNode)
+                            {
+                                sw::RemoveFootnotesForNode(*pFrame, *rExtent.pNode, nullptr);
+                                pNode = rExtent.pNode;
+                            }
+                        }
                         pFrame->SetMergedPara(nullptr);
                         // ??? TODO flys etc.
                         // ??? TODO recreate? or is invalidate enough?
@@ -4216,6 +4229,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             {
                 if (rNode.IsContentNode())
                 {
+                    // note: no-op for NonFirst nodes, only Hidden will delete
                     static_cast<SwContentNode&>(rNode).DelFrames(); // FIXME only those in this layout?
                 }
                 else if (rNode.IsTableNode())

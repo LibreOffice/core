@@ -36,6 +36,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>
+#include <ftnfrm.hxx>
 #include <vcl/svapp.hxx>
 #include "redlnitr.hxx"
 #include <extinput.hxx>
@@ -47,7 +48,8 @@ using namespace ::com::sun::star;
 namespace sw {
 
 std::unique_ptr<sw::MergedPara>
-CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
+CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
+       FrameMode const eMode)
 {
     IDocumentRedlineAccess const& rIDRA = rTextNode.getIDocumentRedlineAccess();
     if (!rFrame.getRootFrame()->IsHideRedlines())
@@ -116,6 +118,39 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
     {
         assert(!mergedText.isEmpty());
         pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+    }
+    if (eMode == FrameMode::Existing)
+    {
+        // remove existing footnote frames for first node;
+        // for non-first notes, DelFrames will remove all
+        // (could possibly call lcl_ChangeFootnoteRef, not sure if worth it)
+        // note: must be done *before* changing listeners!
+        sal_Int32 nLast(0);
+        std::vector<std::pair<sal_Int32, sal_Int32>> hidden;
+        for (auto const& rExtent : extents)
+        {
+            if (rExtent.pNode != &rTextNode)
+            {
+                break;
+            }
+            if (rExtent.nStart != 0)
+            {
+                assert(rExtent.nStart != nLast);
+                hidden.emplace_back(nLast, rExtent.nStart);
+            }
+            nLast = rExtent.nEnd;
+        }
+        if (nLast != rTextNode.Len())
+        {
+            hidden.emplace_back(nLast, rTextNode.Len());
+        }
+        sw::RemoveFootnotesForNode(rFrame, rTextNode, &hidden);
+        // unfortunately DelFrames() must be done before StartListening too,
+        // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
+        for (auto iter = ++nodes.begin(); iter != nodes.end(); ++iter)
+        {
+            (**iter).DelFrames(); // FIXME only those in this layout?
+        }
     }
     auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),
                 mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode));
