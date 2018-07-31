@@ -135,8 +135,18 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
 {
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
-    delete m_pFont;
-    m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+    // It is possible that Init is called more than once, e.g., in a
+    // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
+    // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
+    // is an alias of m_pFont so it must not be deleted!
+    if (m_pFont)
+    {
+        *m_pFont = aFontAccess.Get()->GetFont();
+    }
+    else
+    {
+        m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+    }
 
     // set font to vertical if frame layout is vertical
     // if it's a re-init, the vert flag never changes

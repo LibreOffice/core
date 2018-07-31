@@ -401,8 +401,17 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     }
 
     // It is possible, that Init is called more than once, e.g., in a
-    // SwTextFrame::FormatOnceMore situation.
-    m_pFnt.reset( new SwFont(rFnt) );
+    // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
+    // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
+    // is an alias of m_pFnt so it must not be deleted!
+    if (m_pFnt)
+    {
+        *m_pFnt = rFnt;
+    }
+    else
+    {
+        m_pFnt.reset(new SwFont(rFnt));
+    }
 }
 
 void SwAttrHandler::Reset( )
