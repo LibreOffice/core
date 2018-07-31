@@ -148,4 +148,35 @@ public:
     void f1() { Base3::f1(); }
 };
 
+// check the case where the method occurs more than once in a direct path up the class hierarchy
+struct Base4
+{
+    void f1();
+};
+struct Derived4_1 : public Base4
+{
+    void f1();
+};
+struct Derived4_2 : public Derived4_1
+{
+    void
+    f1() // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+    {
+        Derived4_1::f1();
+    }
+};
+
+struct Base5_1
+{
+    void f1();
+};
+struct Base5_2
+{
+    void f1();
+};
+struct Derived5 : public Base5_1, public Base5_2
+{
+    void f1() { Base5_1::f1(); } // no warning expected
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

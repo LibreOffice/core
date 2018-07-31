@@ -389,7 +389,8 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
         return nullptr;
     }
 
-    std::vector<const CXXMethodDecl*> maSimilarMethods;
+    const CXXMethodDecl* similarMethod = nullptr;
+    CXXBasePath similarBasePath;
 
     auto BaseMatchesCallback = [&](const CXXBaseSpecifier *cxxBaseSpecifier, CXXBasePath& path)
     {
@@ -438,18 +439,31 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
                 }
             }
             if (bParamsMatch)
-                maSimilarMethods.push_back(baseMethod);
+            {
+                // if we have already found a method directly below us in the inheritance hierarchy, just ignore this one
+                auto Compare = [&](CXXBasePathElement const & lhs, CXXBasePathElement const & rhs)
+                {
+                    return lhs.Class == rhs.Class;
+                };
+                if (similarMethod
+                    && similarBasePath.size() < path.size()
+                    && std::equal(similarBasePath.begin(), similarBasePath.end(),
+                                  path.begin(), Compare))
+                    break;
+                if (similarMethod)
+                    return true; // short circuit the process
+                similarMethod = baseMethod;
+                similarBasePath = path;
+            }
         }
         return false;
     };
 
     CXXBasePaths aPaths;
-    methodDecl->getParent()->lookupInBases(BaseMatchesCallback, aPaths);
+    if (methodDecl->getParent()->lookupInBases(BaseMatchesCallback, aPaths))
+        return nullptr;
 
-    if (maSimilarMethods.size() == 1) {
-        return maSimilarMethods[0];
-    }
-    return nullptr;
+    return similarMethod;
 }
 
 
