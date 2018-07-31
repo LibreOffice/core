@@ -217,7 +217,6 @@ static_assert(sizeof (WW8_FFN_BASE) == 6, "this has to match the msword size");
 */
 struct WW8_FFN
 {
-    WW8_FFN_BASE aFFNBase;
     // from Ver8 on as Unicode
     OUString sFontname;// 0x6 or 0x40 resp. from Ver8 on zero terminated string that
                                         // records name of font.
@@ -226,6 +225,7 @@ struct WW8_FFN
                                         // Possibly followed by a second sz which records the
                                         // name of an alternate font to use if the first named
                                         // font does not exist on this system.
+    WW8_FFN_BASE aFFNBase;
 };
 
 struct WW8_BRCVer6  // BoRder Code (WW6 version)
