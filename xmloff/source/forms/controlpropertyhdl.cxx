@@ -267,7 +267,7 @@ namespace xmloff
 
         if ( !_rStrExpValue.isEmpty() )
             _rStrExpValue += " ";
-        _rStrExpValue += aOut.makeStringAndClear();
+        _rStrExpValue += aOut;
 
         return true;
     }

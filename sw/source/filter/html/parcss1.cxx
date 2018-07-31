@@ -151,7 +151,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                              '-' == cNextCh) && !IsEOF() );
 
-                    aToken += sTmpBuffer.makeStringAndClear();
+                    aToken += sTmpBuffer;
 
                     // check if we know it
                     switch( aToken[0] )
@@ -244,7 +244,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                              '-' == cNextCh) && !IsEOF() );
 
-                    aToken += sTmpBuffer.makeStringAndClear();
+                    aToken += sTmpBuffer;
 
                     if( ( 'i'==aToken[0] || 'I'==aToken[0] ) &&
                         aToken.equalsIgnoreAsciiCase( "important" ) )
@@ -282,7 +282,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     cNextCh = GetNextChar();
                 } while( cQuoteChar != cNextCh && !IsEOF() );
 
-                aToken += sTmpBuffer.toString();
+                aToken += sTmpBuffer;
 
                 nRet = CSS1_STRING;
             }
@@ -320,7 +320,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if( sTmpBuffer.getLength()==6 )
                 {
                     // we found a color in hex
-                    aToken += sTmpBuffer.makeStringAndClear();
+                    aToken += sTmpBuffer;
                     nRet = CSS1_HEXCOLOR;
                     bNextCh = false;
 
@@ -342,7 +342,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 } while( (('0'<=cNextCh && '9'>=cNextCh) || '.'==cNextCh) &&
                          !IsEOF() );
 
-                aToken += sTmpBuffer.makeStringAndClear();
+                aToken += sTmpBuffer;
                 nValue = aToken.toDouble();
 
                 // ignore white space
@@ -388,7 +388,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                                  '-' == cNextCh) && !IsEOF() );
 
-                        aIdent += sTmpBuffer2.makeStringAndClear();
+                        aIdent += sTmpBuffer2;
 
                         // Is it an unit?
                         const sal_Char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
@@ -544,7 +544,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if( sTmpBuffer.getLength()==6 || sTmpBuffer.getLength()==3 )
                 {
                     // we found a color in hex
-                    aToken += sTmpBuffer.makeStringAndClear();
+                    aToken += sTmpBuffer;
                     nRet = CSS1_HEXCOLOR;
                     bNextCh = false;
 
@@ -601,7 +601,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                            '-' == cNextCh) && !IsEOF() );
 
-                aToken += sTmpBuffer.makeStringAndClear();
+                aToken += sTmpBuffer;
 
                 if( bHexColor && sTmpBuffer.getLength()==6 )
                 {
@@ -628,7 +628,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         cNextCh = GetNextChar();
                     } while( (nNestCnt>1 || ')'!=cNextCh) && !IsEOF() );
                     sTmpBuffer2.append( cNextCh );
-                    aToken += sTmpBuffer2.makeStringAndClear();
+                    aToken += sTmpBuffer2;
                     bNextCh = true;
                     nRet = 'u'==aToken[0] || 'U'==aToken[0]
                                 ? CSS1_URL

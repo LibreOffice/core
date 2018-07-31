@@ -59,6 +59,7 @@ namespace rtl
  */
 class SAL_WARN_UNUSED OUStringBuffer
 {
+friend class OUString;
 public:
     /**
         Constructs a string buffer with no characters in it and an
@@ -1615,6 +1616,18 @@ private:
     sal_Int32       nCapacity;
 };
 
+#if defined LIBO_INTERNAL_ONLY
+    // Define this here to avoid circular includes
+    inline OUString & OUString::operator+=( const OUStringBuffer & str ) &
+    {
+        // Call operator= if this is empty, otherwise rtl_uString_newConcat will attempt to
+        // acquire() the str.pData buffer, which is part of the OUStringBuffer mutable state.
+        if (isEmpty())
+            return operator=(str.toString());
+        else
+            return internalAppend(str.pData);
+    }
+#endif
 }
 
 #ifdef RTL_STRING_UNITTEST

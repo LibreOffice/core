@@ -1897,7 +1897,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             }
             else
             {   // we just need to append the left-over text to the last portion (which had no errors)
-                aRet[ aRet.size() - 1 ].sText += aLeftOverText.makeStringAndClear();
+                aRet[ aRet.size() - 1 ].sText += aLeftOverText;
             }
         }
    }

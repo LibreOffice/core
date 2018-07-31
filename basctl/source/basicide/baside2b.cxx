@@ -2188,7 +2188,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
                 aDisplayName = pItem->maDisplayName;
             else
                 aDisplayName = pItem->maName;
-            aDisplayName += aIndexStr.makeStringAndClear();
+            aDisplayName += aIndexStr;
             pChildItem->maDisplayName = aDisplayName;
 
             SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
