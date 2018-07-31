@@ -2203,7 +2203,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 catch (const CommandAbortedException&)
                 {
                     // how to tell the content : forget all changes ?!
-                    // or should we assume that the content does it by itself because he throwed an exception ?!
+                    // or should we assume that the content does it by itself because he threw an exception ?!
                     // any command wasn't executed successfully - not specified
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;
@@ -2211,7 +2211,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 catch (const RuntimeException&)
                 {
                     // how to tell the content : forget all changes ?!
-                    // or should we assume that the content does it by itself because he throwed an exception ?!
+                    // or should we assume that the content does it by itself because he threw an exception ?!
                     // any other error - not specified
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;
@@ -2234,7 +2234,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 catch (const Exception&)
                 {
                     // how to tell the content : forget all changes ?!
-                    // or should we assume that the content does it by itself because he throwed an exception ?!
+                    // or should we assume that the content does it by itself because he threw an exception ?!
                     // any other error - not specified
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;

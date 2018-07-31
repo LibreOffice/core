@@ -813,7 +813,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
 {
     if ( !m_xMediator.is() )
     {
-        // tdf#118730 Directly do thinigs formerly done in
+        // tdf#118730 Directly do things formerly done in
         // OUnoObject::impl_setReportComponent_nothrow here
         if(!m_xReportComponent.is())
         {
@@ -824,7 +824,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
             impl_initializeModel_nothrow();
         }
 
-        // tdf#118730 Directly do thinigs formerly done in
+        // tdf#118730 Directly do things formerly done in
         // OUnoObject::EndCreate here
         if(m_xReportComponent.is())
         {
