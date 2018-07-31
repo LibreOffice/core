@@ -46,6 +46,7 @@
 #include <svl/srchitem.hxx>
 #include <tools/link.hxx>
 #include <unotools/configmgr.hxx>
+#include <sal/log.hxx>
 
 class SdrOutliner;
 

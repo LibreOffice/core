@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/misccfg.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <fmtpdsc.hxx>

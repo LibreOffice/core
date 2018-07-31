@@ -55,6 +55,7 @@
 #include <iodetect.hxx>
 #include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

@@ -13,6 +13,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <stdexcept>
 

@@ -94,6 +94,7 @@
 #include <calbck.hxx>
 #include <o3tl/numeric.hxx>
 #include <tools/datetimeutils.hxx>
+#include <sal/log.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

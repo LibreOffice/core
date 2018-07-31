@@ -36,6 +36,7 @@
 #include <libxml/xmlwriter.h>
 #include <comphelper/random.hxx>
 #include <comphelper/anytostring.hxx>
+#include <sal/log.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;

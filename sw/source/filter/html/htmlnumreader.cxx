@@ -27,6 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sal/log.hxx>
 #include <numrule.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

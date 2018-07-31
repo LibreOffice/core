@@ -18,6 +18,7 @@
  */
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <sal/log.hxx>
 
 #include "service.hxx"
 

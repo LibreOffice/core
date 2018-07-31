@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <list>

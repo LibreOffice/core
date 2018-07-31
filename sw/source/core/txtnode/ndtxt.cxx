@@ -30,6 +30,7 @@
 #include <editeng/tstpitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/ctloptions.hxx>
+#include <sal/log.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>

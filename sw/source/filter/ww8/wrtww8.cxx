@@ -29,6 +29,7 @@
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
+#include <sal/log.hxx>
 #include <o3tl/make_unique.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>

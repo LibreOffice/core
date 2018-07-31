@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <limits.h>
 

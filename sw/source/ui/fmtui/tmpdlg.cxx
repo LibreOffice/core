@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>

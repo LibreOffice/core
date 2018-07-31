@@ -42,6 +42,7 @@
 #include <swtblfmt.hxx>
 #include <calbck.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

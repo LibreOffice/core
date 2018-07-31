@@ -21,6 +21,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
+#include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <svtools/unoimap.hxx>

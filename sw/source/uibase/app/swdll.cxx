@@ -37,6 +37,7 @@
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <sal/log.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 #include <editeng/acorrcfg.hxx>

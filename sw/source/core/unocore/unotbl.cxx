@@ -100,6 +100,7 @@
 #include <unochart.hxx>
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <calbck.hxx>
 #include <comphelper/interfacecontainer2.hxx>

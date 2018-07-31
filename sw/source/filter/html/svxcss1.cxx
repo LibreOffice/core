@@ -51,6 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"

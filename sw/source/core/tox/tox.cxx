@@ -34,6 +34,7 @@
 #include <calbck.hxx>
 
 #include <boost/optional.hpp>
+#include <sal/log.hxx>
 
 #include <algorithm>
 

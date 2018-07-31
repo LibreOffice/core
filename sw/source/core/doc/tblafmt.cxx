@@ -42,6 +42,7 @@
 #include <editsh.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 #include <vector>

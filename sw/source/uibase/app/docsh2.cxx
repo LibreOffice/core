@@ -25,6 +25,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 
+#include <sal/log.hxx>
 #include <edtwin.hxx>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>

@@ -125,6 +125,7 @@
 #include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xbtmpit.hxx>

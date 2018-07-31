@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 #include <strings.hrc>
 #include <view.hxx>
 #include <shellres.hxx>

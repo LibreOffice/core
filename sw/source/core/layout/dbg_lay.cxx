@@ -107,6 +107,7 @@
 #include <layfrm.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
+#include <sal/log.hxx>
 
 PROT SwProtocol::nRecord = PROT::FileInit;
 SwImplProtocol* SwProtocol::pImpl = nullptr;

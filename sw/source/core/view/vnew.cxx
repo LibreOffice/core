@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/printer.hxx>
+#include <sal/log.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>

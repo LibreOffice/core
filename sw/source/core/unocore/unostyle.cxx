@@ -81,6 +81,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <svl/stylepool.hxx>
 #include <svx/unobrushitemhelper.hxx>

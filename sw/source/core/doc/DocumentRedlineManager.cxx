@@ -31,6 +31,7 @@
 #include <editsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

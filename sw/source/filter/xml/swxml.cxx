@@ -48,6 +48,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>

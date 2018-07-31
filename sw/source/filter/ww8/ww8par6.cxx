@@ -21,6 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/grabbagitem.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 
 #include <hintids.hxx>
 #include <editeng/lspcitem.hxx>

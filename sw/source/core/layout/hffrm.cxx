@@ -33,6 +33,7 @@
 #include <objectformatter.hxx>
 #include <ndindex.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)
 {

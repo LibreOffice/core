@@ -22,6 +22,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
+#include <sal/log.hxx>
 #include <hintids.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/eitem.hxx>

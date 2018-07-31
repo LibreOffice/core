@@ -35,6 +35,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 
 #include <dcontact.hxx>
 #include <fmtornt.hxx>

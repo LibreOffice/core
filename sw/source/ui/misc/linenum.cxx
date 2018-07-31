@@ -20,6 +20,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/style.hxx>
 #include <svtools/unitconv.hxx>
+#include <sal/log.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>

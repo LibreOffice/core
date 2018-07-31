@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/settings.hxx>
+#include <sal/log.hxx>
 
 #include <svl/zformat.hxx>
 #include <svl/itemiter.hxx>

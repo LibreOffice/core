@@ -45,6 +45,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <sortedobjs.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>

@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>

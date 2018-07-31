@@ -33,6 +33,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sal/log.hxx>
 
 #include <svl/macitem.hxx>
 #include <svx/svxids.hrc>

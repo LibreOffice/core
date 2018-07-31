@@ -40,6 +40,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <fieldhint.hxx>
+#include <sal/log.hxx>
 
 
 // constructor for default item in attribute-pool

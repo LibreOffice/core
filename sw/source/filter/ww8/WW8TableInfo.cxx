@@ -28,6 +28,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <dbgoutsw.hxx>
+#include <sal/log.hxx>
 
 namespace ww8
 {

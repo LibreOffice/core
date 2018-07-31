@@ -25,6 +25,7 @@
 #include "ww8par.hxx"
 #include <fmtcntnt.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
