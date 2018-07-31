@@ -279,20 +279,23 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
     {
         // Skipping to a different node - first seek until the end of this node
         // to get rid of all hint items
-        sal_Int32 nPos(m_nPosition);
-        do
+        if (m_pTextNode->GetpSwpHints())
         {
-            nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
-            if (nPos <= m_pTextNode->Len())
+            sal_Int32 nPos(m_nPosition);
+            do
             {
-                SeekFwd(nPos);
+                nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
+                if (nPos <= m_pTextNode->Len())
+                {
+                    SeekFwd(nPos);
+                }
+                else
+                {
+                    SeekFwd(m_pTextNode->Len());
+                }
             }
-            else
-            {
-                SeekFwd(m_pTextNode->Len());
-            }
+            while (nPos < m_pTextNode->Len());
         }
-        while (nPos < m_pTextNode->Len());
         assert(m_nChgCnt == 0); // should have reset it all? there cannot be ExtOn() inside of a Delete redline, surely?
         // Unapply current para items:
         // the SwAttrHandler doesn't appear to be capable of *unapplying*
