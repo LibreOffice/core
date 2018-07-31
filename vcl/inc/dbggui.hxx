@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_DBGGUI_HXX
 #define INCLUDED_VCL_INC_DBGGUI_HXX
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 
 void DbgGUIInitSolarMutexCheck();
 void DbgGUIDeInitSolarMutexCheck();
