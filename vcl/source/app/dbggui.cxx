@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
 
 #include <limits.h>
 
@@ -57,6 +57,6 @@ void DbgGUIDeInitSolarMutexCheck()
     DbgSetTestSolarMutex( nullptr );
 }
 
-#endif // DBG_UTIL
+#endif // NDEBUG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
