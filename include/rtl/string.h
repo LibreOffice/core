@@ -886,7 +886,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXT
     The reference count of the new string will be 1. The length of the string
     will be nLen. This function does not handle out-of-memory conditions.
 
-    For nLen < 0 or failed allocation this method returns NULL.
+    For failed allocation this method returns NULL.
 
     The characters of the capacity are not cleared, and the length is set to
     nLen, unlike the similar method of rtl_String_new_WithLength which
@@ -897,7 +897,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXT
     alternatively pass ownership to an OUString with
     rtl::OUString(newStr, SAL_NO_ACQUIRE);
 
-    @param[out] nLen the number of characters.
+    @param[out] nLen the number of characters. Must be >= 0.
+
     @return pointer to the new string.
 
     @since LibreOffice 4.1
