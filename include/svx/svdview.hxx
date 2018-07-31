@@ -194,8 +194,6 @@ public:
     /* new interface src537 */
     void GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
 
-    SfxStyleSheet* GetStyleSheet() const;
-
     // incomplete implementation:
     // OutputDevice is necessary to determine HandleSize.
     // If NULL the first signed on Win is used.
