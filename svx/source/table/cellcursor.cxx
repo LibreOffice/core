@@ -251,7 +251,6 @@ void SAL_CALL CellCursor::merge(  )
     try
     {
         mxTable->merge( aStart.mnCol, aStart.mnRow, aEnd.mnCol - aStart.mnCol + 1, aEnd.mnRow - aStart.mnRow + 1 );
-        mxTable->optimize();
         mxTable->setModified(true);
     }
     catch( Exception& )

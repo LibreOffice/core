@@ -177,6 +177,7 @@ public:
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
+    void testTdf119015();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -253,6 +254,7 @@ public:
     CPPUNIT_TEST(testTdf116899);
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testTdf114821);
+    CPPUNIT_TEST(testTdf119015);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2446,6 +2448,28 @@ void SdImportTest::testTdf116266()
     sfx2::LinkManager* rLinkManager = pDoc->GetLinkManager();
     // The document contains one SVG stored as a link.
     CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager->GetLinks().size());
+}
+
+void SdImportTest::testTdf119015()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf119015.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    // The position was previously not properly initialized: (0, 0, 100, 100)
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(6991, 6902), Size(14099, 1999)),
+                         pTableObj->GetLogicRect());
+    uno::Reference<table::XTable> xTable(pTableObj->getTable());
+
+    // Test that we actually have three cells: this threw css.lang.IndexOutOfBoundsException
+    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(2, 0),
+                                                uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
