@@ -171,7 +171,7 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
             pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
             pInf->SetIdx(TextFrameIndex(0));
         }
-        else
+        else if(!pOldText->isEmpty())
         {
             aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
         }
