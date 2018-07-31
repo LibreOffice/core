@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_4a071c1e",
+        "filename": "framework/inc/services/desktop.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-31T08:03:47Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"threw\" since the former verb is also at past tense?",
+      "range": {
+        "startLine": 156,
+        "startChar": 80,
+        "endLine": 156,
+        "endChar": 85
+      },
+      "revId": "18b2c8cfed8820b0ecec3f2a026e0950e7884aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_2a04d816",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-07-31T08:03:47Z",
+      "side": 1,
+      "message": "should be \"threw\" since it\u0027s not a past participle.\nSubject : \"registered close listener\" (\"close\" is adjective here)",
+      "range": {
+        "startLine": 1751,
+        "startChar": 27,
+        "endLine": 1751,
+        "endChar": 29
+      },
+      "revId": "18b2c8cfed8820b0ecec3f2a026e0950e7884aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
