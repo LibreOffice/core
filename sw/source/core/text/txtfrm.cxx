@@ -80,6 +80,7 @@
 #include <IGrammarContact.hxx>
 #include <calbck.hxx>
 #include <ftnidx.hxx>
+#include <ftnfrm.hxx>
 
 
 namespace sw {
@@ -612,7 +613,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mnHeightOfLastLine( 0 )
     , mnAdditionalFirstLineOffset( 0 )
     // note: this may change this->pRegisteredIn to m_pMergedPara->listeners
-    , m_pMergedPara(CheckParaRedlineMerge(*this, *pNode)) // ensure it is inited
+    , m_pMergedPara(CheckParaRedlineMerge(*this, *pNode, sw::FrameMode::New)) // ensure it is inited
     , mnOffset( 0 )
     , mnCacheIndex( USHRT_MAX )
     , mbLocked( false )
@@ -631,9 +632,16 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     mnFrameType = SwFrameType::Txt;
 }
 
-static void RemoveFootnotesForNode(
-        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode)
+namespace sw {
+
+void RemoveFootnotesForNode(
+        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode,
+        std::vector<std::pair<sal_Int32, sal_Int32>> const*const pExtents)
 {
+    if (pExtents && pExtents->empty())
+    {
+        return; // nothing to do
+    }
     const SwFootnoteIdxs &rFootnoteIdxs = rTextNode.GetDoc()->GetFootnoteIdxs();
     size_t nPos = 0;
     sal_uLong const nIndex = rTextNode.GetIndex();
@@ -645,15 +653,32 @@ static void RemoveFootnotesForNode(
         if (nPos || &rTextNode != &(rFootnoteIdxs[ nPos ]->GetTextNode()))
             ++nPos;
     }
-    while (nPos < rFootnoteIdxs.size())
+    size_t iter(0);
+    for ( ; nPos < rFootnoteIdxs.size(); ++nPos)
     {
         SwTextFootnote* pTextFootnote = rFootnoteIdxs[ nPos ];
         if (pTextFootnote->GetTextNode().GetIndex() > nIndex)
             break;
+        if (pExtents)
+        {
+            while ((*pExtents)[iter].second <= pTextFootnote->GetStart())
+            {
+                ++iter;
+                if (iter == pExtents->size())
+                {
+                    return;
+                }
+            }
+            if (pTextFootnote->GetStart() < (*pExtents)[iter].first)
+            {
+                continue;
+            }
+        }
         pTextFootnote->DelFrames( &rTextFrame );
-        ++nPos;
     }
 }
+
+} // namespace sw
 
 void SwTextFrame::DestroyImpl()
 {
@@ -674,7 +699,7 @@ void SwTextFrame::DestroyImpl()
                     // sw_redlinehide: not sure if it's necessary to check
                     // if the nodes are still alive here, which would require
                     // accessing WriterMultiListener::m_vDepends
-                    RemoveFootnotesForNode(*this, *pNode);
+                    sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
                 }
             }
         }
@@ -683,7 +708,7 @@ void SwTextFrame::DestroyImpl()
             SwTextNode *const pNode(static_cast<SwTextNode*>(GetDep()));
             if (pNode)
             {
-                RemoveFootnotesForNode(*this, *pNode);
+                sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
             }
         }
     }
