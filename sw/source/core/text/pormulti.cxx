@@ -875,7 +875,7 @@ namespace sw {
                     rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
                 {
                     m_CurrentHint = 0; // reset
-                    rpNode = rExtent.pNode;
+                    rpNode = m_pMerged->extents[m_CurrentExtent].pNode;
                     return nullptr;
                 }
             }
