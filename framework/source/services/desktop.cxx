@@ -1748,15 +1748,15 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                     ++nNonClosedFrames;
 
                     // Reactivate controller.
-                    // It can happen that XController.suspend() returned true ... but a registered close listener
-                    // throwed these veto exception. Then the controller has to be reactivated. Otherwise
+                    // It can happen that XController.suspend() returned true... but a registered close listener
+                    // threw these veto exception. Then the controller has to be reactivated. Otherwise
                     // these document doesn't work any more.
                     if ( bSuspended && xController.is())
                         xController->suspend(false);
                 }
 
-                // If interface XClosable interface exists and was used ...
-                // it's not allowed to use XComponent->dispose() also !
+                // If interface XClosable interface exists and was used...
+                // it's not allowed to use XComponent->dispose() also!
                 continue;
             }
 

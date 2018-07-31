@@ -229,9 +229,9 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     if (m_eRunState == E_RUNNING)
         m_eRunState = E_STOPPED_OR_FINISHED;
 
-    // If we got a close request from our frame or model ...
+    // If we got a close request from our frame or model...
     // but we disagreed wit that by throwing a veto exception...
-    // and got the ownership ...
+    // and got the ownership...
     // we have to close the resource frame or model now -
     // and to disable ourself!
     if (m_bPendingCloseFrame)
@@ -686,8 +686,8 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& )
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
             We have to accept it and cancel all current processes inside.
-            It can occur only, if job was not already started if queryTermination() was called here ..
-            Then we had not throwed a veto exception. But now we must agree with this situation and break
+            It can occur only, if job was not already started if queryTermination() was called here.
+            Then we had not thrown a veto exception. But now we must agree with this situation and break
             all our internal processes. It's not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was running too. Because that would disable this job and may
             the office does not really shutdown, because another listener has thrown the suitable exception.

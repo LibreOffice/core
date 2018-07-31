@@ -1635,7 +1635,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
     @param      bDeliverOwnership
                     If parameter is set to <FALSE/> the original caller will be the owner after thrown
                     veto exception and must try to close this frame at later time again. Otherwise the
-                    source of throwed exception is the right one. May it will be the frame himself.
+                    source of thrown exception is the right one. May it will be the frame himself.
 
     @throws     CloseVetoException
                     if any internal things willn't be closed
@@ -3175,7 +3175,7 @@ void Frame::implts_checkSuicide()
     m_bSelfClose = false;
     aReadLock.clear();
     /* } SAFE */
-    // force close and deliver ownership to source of possible throwed veto exception
+    // force close and deliver ownership to source of possible thrown veto exception
     // Attention: Because this method is not designed to throw such exception we must suppress
     // it for outside code!
     try

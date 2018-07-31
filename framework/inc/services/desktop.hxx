@@ -153,7 +153,7 @@ class Desktop : private cppu::BaseMutex,
             @seealso    XTerminateListener
             @seealso    XTerminateListener2
 
-            @return     true if all open frames could be closed and no listener throwed
+            @return     true if all open frames could be closed and no listener threw
                         a veto exception; false otherwise.
 
             @onerror    False will be returned.
@@ -318,7 +318,7 @@ class Desktop : private cppu::BaseMutex,
          *          about cancel this termination request.
          *
          *  @param  [out] bVeto
-         *          will be true if at least one listener throwed a veto exception;
+         *          will be true if at least one listener threw a veto exception;
          *          false otherwise.
          *
          *  @see    impl_sendCancelTerminationEvent()
