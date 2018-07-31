@@ -1477,8 +1477,10 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
     {
         if ( nWidth )
         {
-            // Else we may not enter the character-supplying frame...
-            if( !( bChgNode && pPos && pPor->IsFlyCntPortion() ) )
+            // no quick return for as-character frames, we want to peek inside
+            if (!(bChgNode && pPos && pPor->IsFlyCntPortion())
+            // if we want to get the position inside the field, we should not return
+                && (!pCMS || !pCMS->m_pSpecialPos))
             {
                 if ( pPor->InFieldGrp() ||
                      ( pPor->IsMultiPortion() &&
@@ -1507,9 +1509,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                          && ( bRightAllowed || !bLastHyph ))
                     ++nCurrStart;
 
-                // if we want to get the position inside the field, we should not return
-                if ( !pCMS || !pCMS->m_pSpecialPos )
-                    return nCurrStart;
+                return nCurrStart;
             }
         }
         else
