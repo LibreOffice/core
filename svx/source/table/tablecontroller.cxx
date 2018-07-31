@@ -1807,6 +1807,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
             }
 
             xRange->merge();
+            mxTable->optimize();
 
             if( bUndo )
                 mpModel->EndUndo();
