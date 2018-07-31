@@ -2147,7 +2147,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, 
 {
     OUStringBuffer aBuffer;
     const FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP );
-    rFormula += aBuffer.makeStringAndClear();
+    rFormula += aBuffer;
     return p;
 }
 

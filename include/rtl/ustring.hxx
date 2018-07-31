@@ -56,6 +56,8 @@ extern bool rtl_string_unittest_invalid_conversion;
 namespace rtl
 {
 
+class OUStringBuffer;
+
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 #endif
@@ -516,6 +518,18 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Append the contents of an OUStringBuffer to this string.
+
+      @param    str         an OUStringBuffer.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      @since LibreOffice 6.2
+    */
+    inline OUString & operator+=( const OUStringBuffer & str ) &;
+#endif
+
     /**
       Append a string to this string.
 
@@ -528,14 +542,7 @@ public:
         &
 #endif
     {
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newConcat( &pNewData, pData, str.pData );
-        if (pNewData == NULL) {
-            throw std::bad_alloc();
-        }
-        rtl_uString_assign(&pData, pNewData);
-        rtl_uString_release(pNewData);
-        return *this;
+        return internalAppend(str.pData);
     }
 #if defined LIBO_INTERNAL_ONLY
     void operator+=(OUString const &) && = delete;
@@ -3539,6 +3546,20 @@ public:
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
+
+private:
+    OUString & internalAppend( rtl_uString* pOtherData )
+    {
+        rtl_uString* pNewData = NULL;
+        rtl_uString_newConcat( &pNewData, pData, pOtherData );
+        if (pNewData == NULL) {
+            throw std::bad_alloc();
+        }
+        rtl_uString_assign(&pData, pNewData);
+        rtl_uString_release(pNewData);
+        return *this;
+    }
+
 };
 
 #if defined LIBO_INTERNAL_ONLY
