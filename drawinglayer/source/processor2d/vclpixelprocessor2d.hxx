@@ -34,8 +34,17 @@ namespace drawinglayer { namespace primitive2d {
     class PolyPolygonColorPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class PolygonStrokePrimitive2D;
+    class WrongSpellPrimitive2D;
+    class TextSimplePortionPrimitive;
+    class BitmapPrimitive2D;
+    class PolyPolygonGradientPrimitive2D;
+    class UnifiedTransparencePrimitive2D;
+    class ControlPrimitive2D;
+    class PolygonStrokePrimitive2D;
+    class FillHatchPrimitive2D;
+    class BackgroundColorPrimitive2D;
+    class BorderLinePrimitive2D;
 }}
-
 
 namespace drawinglayer
 {
@@ -61,6 +70,22 @@ namespace drawinglayer
             void tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
             bool tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency);
             bool tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency);
+
+            void processWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive);
+            void processTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+            void processTextDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+            void processPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);
+            void processBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
+            void processPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
+            void processPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D);
+            void processUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
+            void processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive);
+            void processPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D);
+            void processFillHatchPrimitive2D(const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive);
+            void processBackgroundColorPrimitive2D(const primitive2d::BackgroundColorPrimitive2D& rPrimitive);
+            void processBorderLinePrimitive2D(const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder);
+            void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             /// constructor/destructor
