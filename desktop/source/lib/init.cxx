@@ -3971,7 +3971,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage == PRE_INIT)
     {
         comphelper::ThreadPool::getSharedOptimalPool().shutdown();
-        rtl_alloc_preInit(rtlAllocPostInit);
     }
 
     return bInitialized;

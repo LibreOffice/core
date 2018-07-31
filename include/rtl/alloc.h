@@ -220,7 +220,7 @@ typedef struct rtl_cache_st rtl_cache_type;
 
 #define RTL_CACHE_NAME_LENGTH 31
 
-#define RTL_CACHE_FLAG_BULKDESTROY 1
+#define RTL_CACHE_FLAG_BULKDESTROY 1 /* obsolete */
 
 /**
  *  @param[in] pName       descriptive name; for debugging purposes.
@@ -230,8 +230,8 @@ typedef struct rtl_cache_st rtl_cache_type;
  *  @param[in] destructor  object destructor callback function.
  *  @param[in] reclaim     reclaim callback function.
  *  @param[in] pUserArg    opaque argument passed to callback functions.
- *  @param[in] pSource     opaque argument passed to callback functions.
- *  @param[in] nFlags      flags.
+ *  @param[in] pSource     unused argument (should be null).
+ *  @param[in] nFlags      flags (unused).
  *
  *  @return pointer to rtl_cache_type, or NULL upon failure.
  *
@@ -299,16 +299,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * spawning per-document instances. This is done
  * by calling rtl_alloc_preInit with rtlAllocPreInitStart.
  *
- * However before forking we need to wind down
- * all threads, which is required by design.
- * This is done by calling rtl_alloc_preInit
- * with rtlAllocPreInitEnd.
- *
- * And of course the stopped threads need restarting
- * after forking to ensure correct cleanup of the
- * caches and other memory allocations. This is done
- * by calling rtl_alloc_preInit with rtlAllocPostInit.
- *
  * @since LibreOffice 6.1
  */
 typedef enum
@@ -317,7 +307,7 @@ typedef enum
     rtlAllocPreInitStart,
     // Finish phase I of pre-init (before forking).
     rtlAllocPreInitEnd,
-    // Post pre-init and after forking.
+    // Post pre-init and after forking; no longer used.
     rtlAllocPostInit
 
 } rtl_alloc_preInit_phase_t;
