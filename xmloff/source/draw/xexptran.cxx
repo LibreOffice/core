@@ -145,7 +145,7 @@ void Imp_PutDoubleChar(OUString& rStr, double fValue)
 {
     OUStringBuffer sStringBuffer;
     ::sax::Converter::convertDouble(sStringBuffer, fValue);
-    rStr += sStringBuffer.makeStringAndClear();
+    rStr += sStringBuffer;
 }
 
 void Imp_PutDoubleChar(OUStringBuffer& rStr, const SvXMLUnitConverter& rConv, double fValue,

@@ -56,6 +56,8 @@ extern bool rtl_string_unittest_invalid_conversion;
 namespace rtl
 {
 
+class OUStringBuffer;
+
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 #endif
@@ -514,6 +516,18 @@ public:
         }
         return *this;
     }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Append the contents of an OUStringBuffer to this string.
+
+      @param    str         an OUStringBuffer.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      @since LibreOffice 6.2
+    */
+    inline OUString & operator+=( const OUStringBuffer & str ) &;
 #endif
 
     /**

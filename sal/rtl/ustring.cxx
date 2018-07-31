@@ -39,6 +39,7 @@
 #include "strimp.hxx"
 #include <rtl/character.hxx>
 #include <rtl/ustring.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <rtl/math.h>
 

@@ -191,8 +191,8 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
     if (aStr2.getLength() < nDecDigits)
         string::padToLength(aStr2, nDecDigits, '0');
 
+    aStr1.append(aStr2);
     aStr  = aStr1.makeStringAndClear();
-    aStr += aStr2.makeStringAndClear();
 
     // check range
     BigInt nValue( aStr );
