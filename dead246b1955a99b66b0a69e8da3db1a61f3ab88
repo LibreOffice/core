@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_6c28bd85",
+        "filename": "sal/rtl/strimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-31T08:36:40Z",
+      "side": 1,
+      "message": "rtl_[u]String could just be forward declared here, right?",
+      "revId": "dead246b1955a99b66b0a69e8da3db1a61f3ab88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
