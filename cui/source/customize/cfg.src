@@ -20,6 +20,7 @@
  *************************************************************/
 
 ﻿
+// include ---------------------------------------------------------------
 #include <cuires.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
@@ -99,125 +100,125 @@ TabDialog RID_SVXDLG_CUSTOMIZE
 TabPage RID_SVXPAGE_MENUS
 {
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 273 , 258 ) ;
+    Size = MAP_APPFONT ( 273, 258 ) ;
     HelpId = HID_SVX_CONFIG_MENU ;
     FixedLine GRP_MENUS
     {
-        Pos = MAP_APPFONT ( 6 , 11 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 11 ) ;
+        Size = MAP_APPFONT ( 261, 8 ) ;
         Text [ en-US ] = "%PRODUCTNAME %MODULENAME Menus" ;
     };
     FixedText FT_MENUS
     {
-        Pos = MAP_APPFONT ( 9 , 24 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Pos = MAP_APPFONT ( 9, 24 ) ;
+        Size = MAP_APPFONT ( 55, 8 ) ;
         TEXT_MENU
     };
     ListBox LB_MENUS
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_MENUS";
+        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_MENUS" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 22 ) ;
-        Size = MAP_APPFONT ( 108 , 108 ) ;
+        Pos = MAP_APPFONT ( 64, 22 ) ;
+        Size = MAP_APPFONT ( 108, 108 ) ;
         DropDown = TRUE ;
     };
     PushButton BTN_NEW
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_NEW";
-        Pos = MAP_APPFONT ( 192 , 22 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_NEW" ;
+        Pos = MAP_APPFONT ( 192, 22 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "New..." ;
     };
     MenuButton BTN_CHANGE
     {
-        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE";
-        Pos = MAP_APPFONT ( 192 , 39 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE" ;
+        Pos = MAP_APPFONT ( 192, 39 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         TEXT_MENU
     };
     FixedLine GRP_MENU_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 56 ) ;
+        Size = MAP_APPFONT ( 261, 8 ) ;
         Text [ en-US ] = "Menu Content" ;
     };
     FixedText GRP_MENU_ENTRIES
     {
-        Pos = MAP_APPFONT ( 9 , 67 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Pos = MAP_APPFONT ( 9, 67 ) ;
+        Size = MAP_APPFONT ( 55, 8 ) ;
         Group = TRUE ;
         Text [ en-US ] = "Entries" ;
     };
     Control BOX_ENTRIES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 67 ) ;
-        Size = MAP_APPFONT ( 108 , 115 ) ;
+        Pos = MAP_APPFONT ( 64, 67 ) ;
+        Size = MAP_APPFONT ( 108, 115 ) ;
         TabStop = TRUE ;
         HelpId = HID_SVX_CONFIG_MENU_CONTENTS ;
     };
     PushButton BTN_ADD_COMMANDS
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_ADD_COMMANDS";
-        Pos = MAP_APPFONT ( 192 , 67 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_ADD_COMMANDS" ;
+        Pos = MAP_APPFONT ( 192, 67 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Add..." ;
     };
     MenuButton BTN_CHANGE_ENTRY
     {
-        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE_ENTRY";
-        Pos = MAP_APPFONT ( 192 , 84 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE_ENTRY" ;
+        Pos = MAP_APPFONT ( 192, 84 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Modify" ;
     };
     ImageButton BTN_UP
     {
-        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_UP";
-        Pos = MAP_APPFONT ( 175 , 102 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
+        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_UP" ;
+        Pos = MAP_APPFONT ( 175, 102 ) ;
+        Size = MAP_APPFONT ( 14, 14 ) ;
         TabStop = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_UP ;
         Disable = TRUE ;
     };
     ImageButton BTN_DOWN
     {
-        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_DOWN";
-        Pos = MAP_APPFONT ( 175 , 119 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
+        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_DOWN" ;
+        Pos = MAP_APPFONT ( 175, 119 ) ;
+        Size = MAP_APPFONT ( 14, 14 ) ;
         TabStop = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_DOWN ;
         Disable = TRUE ;
     };
     FixedText TXT_SAVEIN
     {
-        Pos = MAP_APPFONT ( 9 , 190 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Pos = MAP_APPFONT ( 9, 190 ) ;
+        Size = MAP_APPFONT ( 55, 8 ) ;
         Group = TRUE ;
         TEXT_SAVE_IN
     };
     ListBox LB_SAVEIN
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_SAVEIN";
+        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_SAVEIN" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 188 ) ;
-        Size = MAP_APPFONT ( 108 , 53 ) ;
+        Pos = MAP_APPFONT ( 64, 188 ) ;
+        Size = MAP_APPFONT ( 108, 53 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_DESCRIPTION
     {
-        Pos = MAP_APPFONT ( 6 , 205 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 205 ) ;
+        Size = MAP_APPFONT ( 261, 8 ) ;
         Text [ en-US ] = "Description" ;
     };
     MultiLineEdit ED_DESCRIPTION
     {
-        HelpID = "cui:MultiLineEdit:RID_SVXPAGE_MENUS:ED_DESCRIPTION";
-        Pos = MAP_APPFONT ( 6 , 216 ) ;
-        Size = MAP_APPFONT ( 261 , 36 ) ;
+        HelpID = "cui:MultiLineEdit:RID_SVXPAGE_MENUS:ED_DESCRIPTION" ;
+        Pos = MAP_APPFONT ( 6, 216 ) ;
+        Size = MAP_APPFONT ( 261, 36 ) ;
         Border = TRUE;
         VScroll = TRUE;
         IgnoreTab = TRUE;
@@ -412,63 +413,63 @@ Menu MODIFY_TOOLBAR_CONTENT
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_MENU
 {
-    Text [ en-US ] = "New Menu %n";
+    Text [ en-US ] = "New Menu %n" ;
 };
 
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_TOOLBAR
 {
-    Text [ en-US ] = "New Toolbar %n";
+    Text [ en-US ] = "New Toolbar %n" ;
 };
 
 String RID_SVXSTR_MOVE_MENU
 {
-    Text [ en-US ] = "Move Menu";
+    Text [ en-US ] = "Move Menu" ;
 };
 
 String RID_SVXSTR_ADD_SUBMENU
 {
-    Text [ en-US ] = "Add Submenu";
+    Text [ en-US ] = "Add Submenu" ;
 };
 
 String RID_SVXSTR_SUBMENU_NAME
 {
-    Text [ en-US ] = "Submenu name";
+    Text [ en-US ] = "Submenu name" ;
 };
 
 String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
 {
-    Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
+    Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog." ;
 };
 
 ModalDialog MD_MENU_ORGANISER
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 172 , 154 ) ;
+    Size = MAP_APPFONT ( 172, 154 ) ;
     Text [ en-US ] = "New Menu" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
     HelpId = HID_SVX_CONFIG_MENU_ORGANIZER;
     FixedText TXT_MENU_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 8 ) ;
+        Size = MAP_APPFONT ( 93, 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
         Text [ en-US ] = "Menu name" ;
     };
     Edit EDIT_MENU_NAME
     {
-        HelpID = "cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME";
+        HelpID = "cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 93 , 12 ) ;
+        Pos = MAP_APPFONT ( 6, 19 ) ;
+        Size = MAP_APPFONT ( 93, 12 ) ;
         TabStop = TRUE ;
     };
     FixedText TXT_MENU
     {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 37 ) ;
+        Size = MAP_APPFONT ( 93, 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
         Text [ en-US ] = "Menu position" ;
@@ -477,100 +478,100 @@ ModalDialog MD_MENU_ORGANISER
     {
         HelpId = HID_SVX_CONFIG_MENU_LISTBOX ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 93 , 100 ) ;
+        Pos = MAP_APPFONT ( 6, 48 ) ;
+        Size = MAP_APPFONT ( 93, 100 ) ;
         TabStop = TRUE ;
     };
     ImageButton BTN_MENU_UP
     {
-        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_UP";
-        Pos = MAP_APPFONT ( 102 , 80 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
+        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_UP" ;
+        Pos = MAP_APPFONT ( 102, 80 ) ;
+        Size = MAP_APPFONT ( 14, 14 ) ;
         TabStop = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_UP ;
     };
     ImageButton BTN_MENU_DOWN
     {
-        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_DOWN";
-        Pos = MAP_APPFONT ( 102 , 97 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
+        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_DOWN" ;
+        Pos = MAP_APPFONT ( 102, 97 ) ;
+        Size = MAP_APPFONT ( 14, 14 ) ;
         TabStop = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_DOWN ;
     };
     OKButton BTN_MENU_ADD
     {
         DefButton = TRUE;
-        Pos = MAP_APPFONT ( 119 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 119, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
     CancelButton BTN_MENU_CLOSE
     {
-        Pos = MAP_APPFONT ( 119 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 119, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
     HelpButton BTN_MENU_HELP
     {
-        Pos = MAP_APPFONT ( 119 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 119, 40 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
 };
 
 // MD_NEW_TOOLBAR -------------------------------------------------
 ModalDialog MD_NEW_TOOLBAR
 {
-    HelpID = "cui:ModalDialog:MD_NEW_TOOLBAR";
+    HelpID = "cui:ModalDialog:MD_NEW_TOOLBAR" ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 63 ) ;
+    Size = MAP_APPFONT ( 165, 63 ) ;
     Text [ en-US ] = "Name" ;
     Moveable = TRUE ;
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 98 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 98, 8 ) ;
         TEXT_TOOLBAR_NAME
         WordBreak = TRUE ;
     };
     Edit EDT_STRING
     {
-        HelpID = "cui:Edit:MD_NEW_TOOLBAR:EDT_STRING";
+        HelpID = "cui:Edit:MD_NEW_TOOLBAR:EDT_STRING" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 97 , 12 ) ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( 97, 12 ) ;
         TabStop = TRUE ;
     };
     FixedText TXT_SAVEIN
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 98 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 35 ) ;
+        Size = MAP_APPFONT ( 98, 8 ) ;
         Group = TRUE ;
         TEXT_SAVE_IN
     };
     ListBox LB_SAVEIN
     {
-        HelpID = "cui:ListBox:MD_NEW_TOOLBAR:LB_SAVEIN";
+        HelpID = "cui:ListBox:MD_NEW_TOOLBAR:LB_SAVEIN" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 97 , 53 ) ;
+        Pos = MAP_APPFONT ( 6, 43 ) ;
+        Size = MAP_APPFONT ( 97, 53 ) ;
         DropDown = TRUE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 109, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 109, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 109, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
 };
@@ -583,63 +584,63 @@ ModalDialog MD_ICONSELECTOR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 152 ) ;
+    Size = MAP_APPFONT ( 240, 152 ) ;
     Text [ en-US ] = "Change Icon" ;
     Moveable = TRUE ;
     HelpId = HID_SVX_CONFIG_ICON_SELECTOR;
     FixedText FT_SYMBOLS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 172, 8 ) ;
         Text [ en-US ] = "Icons" ;
     };
     ToolBox TB_SYMBOLS
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 160 , 80 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 160, 80 ) ;
         Scroll = TRUE ;
         LineSpacing = TRUE ;
         Customize = FALSE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 60 , 130 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 60, 130 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 120 , 130 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 120, 130 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 180 , 130 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 180, 130 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_IMPORT
     {
-        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_IMPORT";
-        Pos = MAP_APPFONT ( 184 , 7 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_IMPORT" ;
+        Pos = MAP_APPFONT ( 184, 7 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
-            Text[ en-US ] = "Import...";
+            Text[ en-US ] = "Import..." ;
     };
     PushButton BTN_DELETE
     {
-        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_DELETE";
-        Pos = MAP_APPFONT ( 184 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_DELETE" ;
+        Pos = MAP_APPFONT ( 184, 24 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
-            Text[ en-US ] = "Delete...";
+            Text[ en-US ] = "Delete..." ;
     };
     FixedText FT_NOTE
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 200 , 24 ) ;
+        Pos = MAP_APPFONT ( 12, 95 ) ;
+        Size = MAP_APPFONT ( 200, 24 ) ;
         Text [ en-US ] = "Note:\nThe size of an icon should be 16x16 pixel to achieve best quality. Different sized icons will be scaled automatically." ;
         Left = TRUE ;
         WordBreak = TRUE;
@@ -659,16 +660,16 @@ ModalDialog MD_ICONSELECTOR
 //added for issue83555
 ModalDialog MD_ICONCHANGE
 {
-    HelpID = "cui:ModalDialog:MD_ICONCHANGE";
+    HelpID = "cui:ModalDialog:MD_ICONCHANGE" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 150 ) ;
+    Size = MAP_APPFONT ( 200, 150 ) ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
     Moveable = TRUE ;
     FixedImage FI_INFO
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 24 , 24 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 24, 24 ) ;
         Fixed = Image
         {
 
@@ -677,15 +678,15 @@ ModalDialog MD_ICONCHANGE
     FixedText FTCHGE_DESCRIPTION
     {
         Pos = MAP_APPFONT ( 30 ,15 ) ;
-        Size = MAP_APPFONT ( 200 , 50 ) ;
+        Size = MAP_APPFONT ( 200, 50 ) ;
         Text [ en-US ] = "The files listed below could not be imported.\nThe file format could not be interpreted." ;
     };
 
     MultiLineEdit EDT_ADDR
     {
-        HelpID = "cui:MultiLineEdit:MD_ICONCHANGE:EDT_ADDR";
-        Pos = MAP_APPFONT ( 30 , 38) ;
-        Size = MAP_APPFONT ( 140 , 83 ) ;
+        HelpID = "cui:MultiLineEdit:MD_ICONCHANGE:EDT_ADDR" ;
+        Pos = MAP_APPFONT ( 30, 38) ;
+        Size = MAP_APPFONT ( 140, 83 ) ;
         Border = TRUE;
       //  VScroll = TRUE;
         IgnoreTab = TRUE;
@@ -693,8 +694,8 @@ ModalDialog MD_ICONCHANGE
     };
     OKButton MD_BTN_OK
     {
-        Pos = MAP_APPFONT ( 68 , 131 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 68, 131 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
@@ -714,17 +715,17 @@ String RID_SVXSTR_DELETE_ICON_CONFIRM  //added for issue73355
 
 String RID_SVXSTR_REPLACE_ICON_WARNING  //added for issue73355
 {
-    Text [ en-US ] = "The icon %ICONNAME is already contained in the image list.\nWould you like to replace the existing icon?";
+    Text [ en-US ] = "The icon %ICONNAME is already contained in the image list.\nWould you like to replace the existing icon?" ;
 };
 
 String RID_SVXSTR_REPLACE_ICON_CONFIRM //added for issue73355
 {
-    Text [ en-US ] = "Confirm Icon Replacement";
+    Text [ en-US ] = "Confirm Icon Replacement" ;
 };
 
 String RID_SVXSTR_YESTOALL //added for issue73355
 {
-    Text [ en-US ] = "Yes to All";
+    Text [ en-US ] = "Yes to All" ;
 };
 
 String RID_SVXSTR_PRODUCTNAME_TOOLBARS
@@ -760,14 +761,14 @@ String RID_SVXSTR_TOOLBAR_NAME
 /* %MENUNAME will be replaced at runtime by the name of the selected menu. */
 QueryBox QBX_CONFIRM_DELETE_MENU
 {
-    Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?";
+    Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?" ;
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
 
 QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 {
-    Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
+    Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?" ;
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
@@ -777,28 +778,28 @@ QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 */
 QueryBox QBX_CONFIRM_RESET
 {
-    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
+    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?" ;
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
 
-/* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
+/* Translators: Do not translate %SAVE IN SELECTION%. It is a placeholder
    and will be replaced at runtime by the name of the selected application
    or document.
 */
 String RID_SVXSTR_CONFIRM_MENU_RESET
 {
-    Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
+    Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?" ;
 };
 
 String RID_SVXSTR_CONFIRM_TOOLBAR_RESET
 {
-    Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
+    Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?" ;
 };
 
 QueryBox QBX_CONFIRM_RESTORE_DEFAULT
 {
-    Message [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
+    Message [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?" ;
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
@@ -810,24 +811,25 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 
 String RID_SVXSTR_LABEL_NEW_NAME
 {
-    Text [ en-US ] = "~New name";
+    Text [ en-US ] = "~New name" ;
 };
 
 String RID_SVXSTR_RENAME_MENU
 {
-    Text [ en-US ] = "Rename Menu";
+    Text [ en-US ] = "Rename Menu" ;
 };
 
 String RID_SVXSTR_RENAME_TOOLBAR
 {
-    Text [ en-US ] = "Rename Toolbar";
+    Text [ en-US ] = "Rename Toolbar" ;
 };
 String BUTTON_STR_UP
 {
-    Text [ en-US ] = "Up";
+    Text [ en-US ] = "Up" ;
 };
 String BUTTON_STR_DOWN
 {
-    Text [ en-US ] = "Down";
+    Text [ en-US ] = "Down" ;
 };
 
+// ********************************************************************** EOF

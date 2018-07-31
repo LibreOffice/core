@@ -60,21 +60,21 @@ TabPage RID_SVXPAGE_KEYBOARD
     Size = MAP_APPFONT ( 273, 258 ) ;
     RadioButton RB_OFFICE
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_OFFICE";
+        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_OFFICE" ;
         Pos = MAP_APPFONT ( 192, 6 ) ;
         Size = MAP_APPFONT ( 75, 10 ) ;
         Text = "%PRODUCTNAME" ;
     };
     RadioButton RB_MODULE
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_MODULE";
+        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_MODULE" ;
         Pos = MAP_APPFONT ( 192, 19 ) ;
         Size = MAP_APPFONT ( 75, 10 ) ;
         Text = "$(MODULE)" ;
     };
     PushButton BTN_ACC_CHANGE
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_CHANGE";
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_CHANGE" ;
         Pos = MAP_APPFONT ( 192, 35 ) ;
         Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
@@ -82,7 +82,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_ACC_REMOVE
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_REMOVE";
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_REMOVE" ;
         Pos = MAP_APPFONT ( 192, 52 ) ;
         Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
@@ -94,7 +94,7 @@ TabPage RID_SVXPAGE_KEYBOARD
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 180, 8 ) ;
         Group = TRUE ;
-        Text [ en-US ] = "Shortcut keys";
+        Text [ en-US ] = "Shortcut keys" ;
     };
     Control BOX_ACC_ENTRIES
     {
@@ -159,7 +159,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_LOAD
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_LOAD";
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_LOAD" ;
         Pos = MAP_APPFONT ( 192, 86 ) ;
         Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
@@ -168,7 +168,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_SAVE
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_SAVE";
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_SAVE" ;
         Pos = MAP_APPFONT ( 192, 103 ) ;
         Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
@@ -177,7 +177,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_RESET
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_RESET";
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_RESET" ;
         Pos = MAP_APPFONT ( 192, 120 ) ;
         Size = MAP_APPFONT ( 75, 14 ) ;
         TabStop = TRUE ;
@@ -202,11 +202,11 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
 {
     String STR_MYMACROS
     {
-        Text [ en-US ] = "My Macros";
+        Text [ en-US ] = "My Macros" ;
     };
     String STR_PRODMACROS
     {
-        Text [ en-US ] = "%PRODUCTNAME Macros";
+        Text [ en-US ] = "%PRODUCTNAME Macros" ;
     };
     String STR_BASICMACROS
     {
@@ -234,27 +234,27 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     };
     Image IMG_LIB
     {
-        ImageBitmap = Bitmap { File = "im30820.png"; };
+        ImageBitmap = Bitmap { File = "im30820.png" ; };
     };
     Image IMG_LIB_HC
     {
-        ImageBitmap = Bitmap { File = "imh30820.png"; };
+        ImageBitmap = Bitmap { File = "imh30820.png" ; };
     };
     Image IMG_MACRO
     {
-        ImageBitmap = Bitmap { File = "im30821.png"; };
+        ImageBitmap = Bitmap { File = "im30821.png" ; };
     };
     Image IMG_MACRO_HC
     {
-        ImageBitmap = Bitmap { File = "imh30821.png"; };
+        ImageBitmap = Bitmap { File = "imh30821.png" ; };
     };
     Image IMG_DOC
     {
-        ImageBitmap = Bitmap { File = "im30826.png"; };
+        ImageBitmap = Bitmap { File = "im30826.png" ; };
     };
     Image IMG_DOC_HC
     {
-        ImageBitmap = Bitmap { File = "imh30826.png"; };
+        ImageBitmap = Bitmap { File = "imh30826.png" ; };
     };
     Image BMP_COLLAPSED
     {

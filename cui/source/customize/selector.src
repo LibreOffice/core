@@ -20,24 +20,22 @@
  *************************************************************/
 
 
+// include ---------------------------------------------------------------
 #include "helpid.hrc"
 #include <cuires.hrc>
 #include "selector.hrc"
 
-#define MASKCOLOR  MaskColor = \
-    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
-Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;\
+    Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;\
 
 String STR_SELECTOR_ADD_COMMANDS
 {
-  TEXT [ en-US ] = "Add Commands" ;
+    Text [ en-US ] = "Add Commands" ;
 };
 
 String STR_SELECTOR_MACROS
 {
-  Text [ en-US ] = "%PRODUCTNAME Macros" ;
+    Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
 
 String STR_SELECTOR_CATEGORIES
@@ -47,29 +45,27 @@ String STR_SELECTOR_CATEGORIES
 
 String STR_SELECTOR_COMMANDS
 {
-  Text [ en-US ] = "Commands" ;
+    Text [ en-US ] = "Commands" ;
 };
 
 String STR_SELECTOR_ADD
 {
-  TEXT [ en-US ] = "Add" ;
+    Text [ en-US ] = "Add" ;
 };
 
 String STR_SELECTOR_RUN
 {
-  TEXT [ en-US ] = "Run" ;
-
+    Text [ en-US ] = "Run" ;
 };
 
 String STR_SELECTOR_CLOSE
 {
-  TEXT [ en-US ] = "Close" ;
-
+    Text [ en-US ] = "Close" ;
 };
 
 String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
 {
-  TEXT [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+    Text [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog." ;
 };
 
 String STR_BASICMACROS
@@ -80,129 +76,122 @@ String STR_BASICMACROS
 
 ModelessDialog RID_DLG_SCRIPTSELECTOR
 {
-  OutputSize = TRUE ;
-  Size = MAP_APPFONT ( 256 , 233 ) ;
-  Text [ en-US ] = "Macro Selector" ;
-  HelpId = HID_SELECTOR_DIALOG;
-  SvLook = TRUE ;
-  Moveable = TRUE ;
-  Hide = TRUE;
-  FixedText TXT_SELECTOR_DIALOG_DESCRIPTION
-  {
-    Pos = MAP_APPFONT ( 6 , 8 ) ;
-    Size = MAP_APPFONT ( 190 , 48 ) ;
-    Group = TRUE ;
-    Left = TRUE ;
-    WordBreak = TRUE ;
-    FIXEDTEXT_DIALOG_DESCRIPTION
-  };
-  FixedText TXT_SELECTOR_CATEGORIES
-  {
-    Pos = MAP_APPFONT ( 6 , 62 ) ;
-    Size = MAP_APPFONT ( 83 , 8 ) ;
-    Group = TRUE ;
-    Left = TRUE ;
-    Text [ en-US ] = "Library" ;
-  };
-  Control BOX_SELECTOR_CATEGORIES
-  {
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 6 , 73 ) ;
-    Size = MAP_APPFONT ( 83 , 89 ) ;
-    TabStop = TRUE;
-    HelpId = HID_SELECTOR_CATEGORIES;
-    String STR_MYMACROS
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 256, 233 ) ;
+    Text [ en-US ] = "Macro Selector" ;
+    HelpId = HID_SELECTOR_DIALOG;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Hide = TRUE;
+    FixedText TXT_SELECTOR_DIALOG_DESCRIPTION
     {
-        Text [ en-US ] = "My Macros";
+        Pos = MAP_APPFONT ( 6, 8 ) ;
+        Size = MAP_APPFONT ( 190, 48 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        WordBreak = TRUE ;
+        FIXEDTEXT_DIALOG_DESCRIPTION
     };
-    String STR_PRODMACROS
+    FixedText TXT_SELECTOR_CATEGORIES
     {
-        Text [ en-US ] = "%PRODUCTNAME Macros";
+        Pos = MAP_APPFONT ( 6, 62 ) ;
+        Size = MAP_APPFONT ( 83, 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text [ en-US ] = "Library" ;
     };
-    Image IMG_HARDDISK
+    Control BOX_SELECTOR_CATEGORIES
     {
-        ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
-        MASKCOLOR
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6, 73 ) ;
+        Size = MAP_APPFONT ( 83, 89 ) ;
+        TabStop = TRUE;
+        HelpId = HID_SELECTOR_CATEGORIES;
+        String STR_MYMACROS
+        {
+                Text [ en-US ] = "My Macros" ;
+        };
+        String STR_PRODMACROS
+        {
+                Text [ en-US ] = "%PRODUCTNAME Macros" ;
+        };
+        Image IMG_HARDDISK
+        {
+                ImageBitmap = Bitmap { File = "harddisk_16.png" ; };
+        };
+        Image IMG_HARDDISK_HC
+        {
+                ImageBitmap = Bitmap { File = "harddisk_16_h.png" ; };
+        };
+        Image IMG_LIB
+        {
+                ImageBitmap = Bitmap { File = "im30820.png" ; };
+        };
+        Image IMG_LIB_HC
+        {
+                ImageBitmap = Bitmap { File = "imh30820.png" ; };
+        };
+        Image IMG_MACRO
+        {
+                ImageBitmap = Bitmap { File = "im30821.png" ; };
+        };
+        Image IMG_MACRO_HC
+        {
+                ImageBitmap = Bitmap { File = "imh30821.png" ; };
+        };
+        Image IMG_DOC
+        {
+                ImageBitmap = Bitmap { File = "im30826.png" ; };
+        };
+        Image IMG_DOC_HC
+        {
+                ImageBitmap = Bitmap { File = "imh30826.png" ; };
+        };
     };
-    Image IMG_HARDDISK_HC
+    FixedText TXT_SELECTOR_COMMANDS
     {
-        ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 101, 62 ) ;
+        Size = MAP_APPFONT ( 93, 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Macro name" ;
     };
-    Image IMG_LIB
+    Control BOX_SELECTOR_COMMANDS
     {
-        ImageBitmap = Bitmap { File = "im30820.png"; };
-        MASKCOLOR
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 101, 73 ) ;
+        Size = MAP_APPFONT ( 93, 89 ) ;
+        TabStop = TRUE;
+        HelpId = HID_SELECTOR_COMMANDS;
     };
-    Image IMG_LIB_HC
+    OKButton BTN_SELECTOR_OK
     {
-        ImageBitmap = Bitmap { File = "imh30820.png"; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 200, 73 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        DefButton = TRUE;
     };
-    Image IMG_MACRO
+    CancelButton BTN_SELECTOR_CANCEL
     {
-        ImageBitmap = Bitmap { File = "im30821.png"; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 200, 90 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
-    Image IMG_MACRO_HC
+    HelpButton BTN_SELECTOR_HELP
     {
-        ImageBitmap = Bitmap { File = "imh30821.png"; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 200, 107 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
-    Image IMG_DOC
+    FixedLine GRP_SELECTOR_DESCRIPTION
     {
-        ImageBitmap = Bitmap { File = "im30826.png"; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 6, 168 ) ;
+        Size = MAP_APPFONT ( 224, 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Description" ;
     };
-    Image IMG_DOC_HC
+    FixedText TXT_SELECTOR_DESCRIPTION
     {
-        ImageBitmap = Bitmap { File = "imh30826.png"; };
-        MASKCOLOR
+        Pos = MAP_APPFONT ( 12, 179 ) ;
+        Size = MAP_APPFONT ( 224, 48 ) ;
+        WordBreak = TRUE ;
     };
-  };
-  FixedText TXT_SELECTOR_COMMANDS
-  {
-    Pos = MAP_APPFONT ( 101 , 62 ) ;
-    Size = MAP_APPFONT ( 93 , 8 ) ;
-    Left = TRUE ;
-    Text [ en-US ] = "Macro name" ;
-  };
-  Control BOX_SELECTOR_COMMANDS
-  {
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 101 , 73 ) ;
-    Size = MAP_APPFONT ( 93 , 89 ) ;
-    TabStop = TRUE;
-    HelpId = HID_SELECTOR_COMMANDS;
-  };
-  OKButton BTN_SELECTOR_OK
-  {
-    Pos = MAP_APPFONT ( 200 , 73 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-    DefButton = TRUE;
-  };
-  CancelButton BTN_SELECTOR_CANCEL
-  {
-    Pos = MAP_APPFONT ( 200 , 90 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-  };
-  HelpButton BTN_SELECTOR_HELP
-  {
-    Pos = MAP_APPFONT ( 200 , 107 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-  };
-  FixedLine GRP_SELECTOR_DESCRIPTION
-  {
-    Pos = MAP_APPFONT ( 6 , 168 ) ;
-    Size = MAP_APPFONT ( 224 , 8 ) ;
-    Group = TRUE ;
-    Text [ en-US ] = "Description" ;
-  };
-  FixedText TXT_SELECTOR_DESCRIPTION
-  {
-    Pos = MAP_APPFONT ( 12 , 179 ) ;
-    Size = MAP_APPFONT ( 224 , 48 ) ;
-    WordBreak = TRUE ;
-  };
 };
- // ********************************************************************** EOF
+
+// ********************************************************************** EOF
