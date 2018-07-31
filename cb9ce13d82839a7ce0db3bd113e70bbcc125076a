@@ -22,6 +22,30 @@
       "revId": "cb9ce13d82839a7ce0db3bd113e70bbcc125076a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_6c379db2",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-07-31T11:03:10Z",
+      "side": 0,
+      "message": "you are correct, I got parts of another change\n   https://gerrit.libreoffice.org/#/c/58336\nmixed in here, thanks for spotting that.\n\nIn that other change, I do make RemoveView return void, so this should be OK",
+      "parentUuid": "ffe62b97_ccc22986",
+      "range": {
+        "startLine": 1126,
+        "startChar": 16,
+        "endLine": 1128,
+        "endChar": 35
+      },
+      "revId": "cb9ce13d82839a7ce0db3bd113e70bbcc125076a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
