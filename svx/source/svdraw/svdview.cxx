@@ -253,11 +253,6 @@ bool SdrView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
     return SdrCreateView::GetAttributes(rTargetSet, bOnlyHardAttr);
 }
 
-SfxStyleSheet* SdrView::GetStyleSheet() const
-{
-    return SdrCreateView::GetStyleSheet();
-}
-
 SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, SdrMouseEventKind nEventKind, SdrViewEvent& rVEvt) const
 {
     rVEvt.bMouseDown=nEventKind==SdrMouseEventKind::BUTTONDOWN;
