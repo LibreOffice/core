@@ -82,8 +82,7 @@ ModalDialog DLG_COPY
         Size = MAP_APPFONT ( 14, 14 ) ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "pipette.bmp" ; };
-            MaskColor = IMAGE_MASK_STDCOLOR;
+            ImageBitmap = Bitmap { File = "pipette.png" ; };
         };
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Values from Selection" ;
