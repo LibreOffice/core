@@ -47,6 +47,28 @@ namespace drawinglayer { namespace attribute {
     class LineStartEndAttribute;
 }}
 
+namespace drawinglayer { namespace primitive2d {
+    class GraphicPrimitive2D;
+    class ControlPrimitive2D;
+    class TextHierarchyFieldPrimitive2D;
+    class TextHierarchyLinePrimitive2D;
+    class TextHierarchyBulletPrimitive2D;
+    class TextHierarchyParagraphPrimitive2D;
+    class TextHierarchyBlockPrimitive2D;
+    class TextSimplePortionPrimitive2D;
+    class PolygonHairlinePrimitive2D;
+    class PolygonStrokePrimitive2D;
+    class PolygonStrokeArrowPrimitive2D;
+    class PolyPolygonGraphicPrimitive2D;
+    class PolyPolygonHatchPrimitive2D;
+    class PolyPolygonGradientPrimitive2D;
+    class PolyPolygonColorPrimitive2D;
+    class MaskPrimitive2D;
+    class UnifiedTransparencePrimitive2D;
+    class TransparencePrimitive2D;
+    class StructureTagPrimitive2D;
+}}
+
 namespace basegfx {
     class BColor;
 }
@@ -90,6 +112,26 @@ namespace drawinglayer
                 const attribute::LineStartEndAttribute* pEnd);
             void impStartSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
+
+            void processGraphicPrimitive2D(const primitive2d::GraphicPrimitive2D& rGraphicPrimitive);
+            void processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive);
+            void processTextHierarchyFieldPrimitive2D(const primitive2d::TextHierarchyFieldPrimitive2D& rFieldPrimitive);
+            void processTextHierarchyLinePrimitive2D(const primitive2d::TextHierarchyLinePrimitive2D& rLinePrimitive);
+            void processTextHierarchyBulletPrimitive2D(const primitive2d::TextHierarchyBulletPrimitive2D& rBulletPrimitive);
+            void processTextHierarchyParagraphPrimitive2D(const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive);
+            void processTextHierarchyBlockPrimitive2D(const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive);
+            void processTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
+            void processPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rHairlinePrimitive);
+            void processPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rStrokePrimitive);
+            void processPolygonStrokeArrowPrimitive2D(const primitive2d::PolygonStrokeArrowPrimitive2D& rStrokeArrowPrimitive);
+            void processPolyPolygonGraphicPrimitive2D(const primitive2d::PolyPolygonGraphicPrimitive2D& rBitmapCandidate);
+            void processPolyPolygonHatchPrimitive2D(const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate);
+            void processPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate);
+            void processPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate);
+            void processMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate);
+            void processUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
+            void processTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
+            void processStructureTagPrimitive2D(const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate);
 
             /// Convert the fWidth to the same space as its coordinates.
             double getTransformedLineWidth( double fWidth ) const;
