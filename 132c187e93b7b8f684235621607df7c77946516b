@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_cc7a2923",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-31T13:30:12Z",
+      "side": 1,
+      "message": "I guess I\u0027d rather prefer the hack of making this inline and defining it in rtl/ustrbuf.hxx",
+      "revId": "132c187e93b7b8f684235621607df7c77946516b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
