@@ -27,6 +27,11 @@
 #include "alloc_impl.hxx"
 #include "alloc_arena.hxx"
 
+// So we can disable some asserts for unit-testing purposes, which helps us ensure
+// that code exposed to the outside world acts reasonably when bad params are passed,
+// but we still have asserts to catch dodgy stuff in our own code.
+bool g_sal_disable_string_asserts = false;
+
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix )
 {
     sal_Int16 n = -1;

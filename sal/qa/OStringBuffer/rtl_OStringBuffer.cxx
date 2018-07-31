@@ -33,13 +33,18 @@ using ::rtl::OString;
 // This file contains cppunit tests for the
 // OString and OStringBuffer classes
 
-// testing constructors
+extern SAL_DLLPUBLIC_IMPORT bool g_sal_disable_string_asserts;
 
+// testing constructors
 namespace rtl_OStringBuffer
 {
     class  ctors : public CppUnit::TestFixture
     {
     public:
+        void setUp() override
+        {
+            g_sal_disable_string_asserts = true;
+        }
 
         void ctor_001()
         {

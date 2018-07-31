@@ -91,6 +91,8 @@ extern rtl_freeStringFn rtl_freeString;
 #  define RTL_LOG_STRING_INTERN_DELETE(s)
 #endif /* USE_SDT_PROBES */
 
+extern SAL_DLLPUBLIC_EXPORT bool g_sal_disable_string_asserts;
+
 #endif // INCLUDED_SAL_RTL_STRIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
