@@ -493,7 +493,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     if( bNewFrames )
                         // delete all frames
-                        pTableNd->DelFrames();
+                        pTableNd->DelFrames(nullptr);
                     if( &rNodes == this ) // move into self?
                     {
                         // move all Start/End/ContentNodes
@@ -794,7 +794,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             //Add special function to text node.
             {
                 if( bNewFrames && pCurrentNode->GetContentNode() )
-                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames();
+                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames(nullptr);
                 pCurrentNode->m_pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
                 --aRg.aEnd;
@@ -804,7 +804,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case SwNodeType::Ole:
             {
                 if( bNewFrames && pCurrentNode->GetContentNode() )
-                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames();
+                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames(nullptr);
 
                 pCurrentNode->m_pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
@@ -1394,7 +1394,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
             if( pNd->IsContentNode() )
             {
                 static_cast<SwContentNode*>(pNd)->InvalidateNumRule();
-                static_cast<SwContentNode*>(pNd)->DelFrames();
+                static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
             }
         }
         RemoveNode( nSttIdx, nCnt, true );
@@ -1862,7 +1862,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                                             pDoc, aInsPos );
                 // frames are always created as default, so delete if needed
                 if( !bNewFrames )
-                    pNew->DelFrames();
+                    pNew->DelFrames(nullptr);
             }
             break;
 

@@ -1015,7 +1015,7 @@ SwContentNode::~SwContentNode()
     // Thus, we need to delete all Frames in the dependency list.
     if (!IsTextNode()) // see ~SwTextNode
     {
-        DelFrames(false);
+        DelFrames(nullptr);
     }
 
     m_pCondColl.reset();
@@ -1311,10 +1311,8 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
 /**
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
- *
- * An input param to identify if the acc table should be disposed.
  */
-void SwContentNode::DelFrames(bool /*removeme*/)
+void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
 {
     if( !HasWriterListeners() )
         return;
@@ -1322,6 +1320,10 @@ void SwContentNode::DelFrames(bool /*removeme*/)
     SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
+        if (pLayout && pLayout != pFrame->getRootFrame())
+        {
+            continue; // skip it
+        }
         if (pFrame->IsTextFrame())
         {
             if (sw::MergedPara const* pMerged =

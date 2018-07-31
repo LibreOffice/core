@@ -935,7 +935,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             }
         }
         else if( pNd->IsContentNode() )
-            static_cast<SwContentNode*>(pNd)->DelFrames();
+            static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
     }
 
     sw_DeleteFootnote( pSectNd, nStart, nEnde );
@@ -1150,7 +1150,7 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
     }
 }
 
-void SwSectionNode::DelFrames()
+void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/)
 {
     sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )

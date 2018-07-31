@@ -4230,15 +4230,15 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 if (rNode.IsContentNode())
                 {
                     // note: no-op for NonFirst nodes, only Hidden will delete
-                    static_cast<SwContentNode&>(rNode).DelFrames(); // FIXME only those in this layout?
+                    static_cast<SwContentNode&>(rNode).DelFrames(&rLayout);
                 }
                 else if (rNode.IsTableNode())
                 {
-                    static_cast<SwTableNode&>(rNode).DelFrames(); // FIXME only those in this layout?
+                    static_cast<SwTableNode&>(rNode).DelFrames(&rLayout);
                 }
                 else if (rNode.IsSectionNode())
                 {
-                    static_cast<SwSectionNode&>(rNode).DelFrames(); // FIXME only those in this layout?
+                    static_cast<SwSectionNode&>(rNode).DelFrames(&rLayout);
                 }
             }
             else

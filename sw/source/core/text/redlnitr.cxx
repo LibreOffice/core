@@ -149,7 +149,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
         for (auto iter = ++nodes.begin(); iter != nodes.end(); ++iter)
         {
-            (**iter).DelFrames(); // FIXME only those in this layout?
+            (**iter).DelFrames(rFrame.getRootFrame());
         }
     }
     auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),

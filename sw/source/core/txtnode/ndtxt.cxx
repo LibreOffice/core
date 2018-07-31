@@ -263,7 +263,7 @@ SwTextNode::~SwTextNode()
 
     InitSwParaStatistics( false );
 
-    DelFrames(false); // must be called here while it's still a SwTextNode
+    DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
 }
 
