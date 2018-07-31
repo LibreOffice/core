@@ -118,19 +118,11 @@ void SAL_CALL rtl_alloc_preInit (rtl_alloc_preInit_phase_t phase) SAL_THROW_EXTE
             rtl_allocateString = rtl_allocateMemory;
             rtl_freeString = rtl_freeMemory;
 
-            // Stop the rtl cache thread to have no extra threads while forking.
-            rtl_cache_stop_threads();
-
             // TODO: also re-initialize main allocator as well.
         }
         break;
 
-        case rtlAllocPostInit:
-        {
-            // We have forked and need to restart threads and anything
-            // that must start after forking.
-            rtl_cache_start_threads();
-        }
+        case rtlAllocPostInit: // no longer used
         break;
     }
 }
