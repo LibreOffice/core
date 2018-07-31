@@ -49,6 +49,7 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
         holder.colorBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LibreOfficeMainActivity.setDocumentChanged(true);
                 setPosition(holder.getAdapterPosition());
             }
         });
