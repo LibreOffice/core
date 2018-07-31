@@ -2322,7 +2322,7 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         // manipulate at all - that may change aGeo rapidly (and wrongly) in
         // SdrTextObj::NbcResize. Combined with the UNO API trying to not 'apply'
         // a rotation but to manipulate the existing one, this is fatal. So just
-        // avoid this error as long as we have to deal with unprecise geometry
+        // avoid this error as long as we have to deal with imprecise geometry
         // manipulations
         return;
     }

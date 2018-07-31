@@ -2150,7 +2150,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                         pValue = Atom::findNextChildAtom(pValue);
                         if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
                         {
-                            // Any occurence of the formula becomes the formula of the whole list.
+                            // Any occurrence of the formula becomes the formula of the whole list.
                             if (importAttributeValue(pValue, aValue2))
                                 aValue2 >>= aFormula;
                         }
