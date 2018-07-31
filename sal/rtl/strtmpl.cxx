@@ -562,7 +562,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
                                                                   sal_Int32 nSubLen )
     SAL_THROW_EXTERN_C()
 {
-//    assert(nStrLen >= 0);
+    assert(nStrLen >= 0);
     assert(nSubLen >= 0);
     /* faster search for a single character */
     if ( nSubLen < 2 )
@@ -809,6 +809,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT32];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -864,6 +865,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -919,6 +921,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
+    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFUINT64];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
@@ -990,6 +993,7 @@ namespace {
                                                                      sal_Int16 nRadix )
     {
         static_assert(std::numeric_limits<T>::is_signed, "is signed");
+        assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
         bool    bNeg;
         sal_Int16   nDigit;
         U           n = 0;
@@ -1080,6 +1084,7 @@ namespace {
                                                                       sal_Int16 nRadix )
     {
         static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
+        assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
         sal_Int16   nDigit;
         T           n = 0;
 
@@ -1242,6 +1247,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
 IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
+    assert(nLen >= 0);
     if ( nLen < 0 )
         return nullptr;
     else
@@ -1254,6 +1260,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
+    assert(nLen >= 0);
     if ( nLen <= 0 )
         IMPL_RTL_STRINGNAME( new )( ppThis );
     else
@@ -1339,6 +1346,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
+    assert(nLen >= 0);
     IMPL_RTL_STRINGDATA* pOrg;
 
     if ( !pCharStr || (nLen <= 0) )
@@ -1537,7 +1545,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
-//    assert(nCount >= 0);
+    assert(nIndex >= 0 && nIndex <= pStr->length);
+    assert(nCount >= 0);
+    assert(nIndex + nCount <= pStr->length);
     /* Append? */
     if ( nIndex >= pStr->length )
     {

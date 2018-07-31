@@ -2612,11 +2612,17 @@ style::NumberingType::
 
 static OUString lcl_ParseFormat( const OUString& rCommand )
 {
-    //  The command looks like: " DATE \@"dd MMMM yyyy"
+    //  The command looks like: " DATE \@"dd MMMM yyyy" or "09/02/2014"
     //  Remove whitespace permitted by standard between \@ and "
+    OUString command;
     sal_Int32 delimPos = rCommand.indexOf("\\@");
-    sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
-    OUString command = rCommand.replaceAt(delimPos+2, wsChars, "");
+    if (delimPos != -1)
+    {
+        sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
+        command = rCommand.replaceAt(delimPos+2, wsChars, "");
+    }
+    else
+        command = rCommand;
 
     return msfilter::util::findQuotedText(command, "\\@\"", '\"');
 }

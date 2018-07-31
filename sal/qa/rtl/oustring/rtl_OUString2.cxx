@@ -584,7 +584,7 @@ public:
             // search for sun, start at the end, found (pos==0)
             rtl::OUString aStr("sun java system");
             rtl::OUString aSearchStr("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, -1);
+            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 1);
         }
 
     void lastIndexOf_test_oustring_001()
