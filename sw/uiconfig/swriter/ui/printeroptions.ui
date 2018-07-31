@@ -121,6 +121,8 @@
                         <property name="can_focus">False</property>
                         <property name="margin_left">5</property>
                         <property name="label" translatable="yes" context="printeroptions|formcontrols">Comments:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">writercomments</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
