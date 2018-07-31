@@ -3409,7 +3409,7 @@ void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
         {
             OUStringBuffer sBuf;
             comphelper::string::padToLength(sBuf, nNumDigitsAfterDecimal - nActualDigits, '0');
-            aResult += sBuf.makeStringAndClear();
+            aResult += sBuf;
         }
     }
 
