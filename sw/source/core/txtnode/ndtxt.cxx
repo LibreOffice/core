@@ -2344,7 +2344,8 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
     const sal_Int32 nCnt = (nCount==SAL_MAX_INT32)
                       ? m_Text.getLength() - nStartIdx : nCount;
     const sal_Int32 nEndIdx = nStartIdx + nCnt;
-    m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
+    if (nEndIdx <= m_Text.getLength())
+        m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
 
     // GCAttr(); don't remove all empty ones, just the ones that are in the
     // range but not at the end of the range.
