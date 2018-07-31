@@ -335,9 +335,6 @@ void TestString::testToken()
     OString aIn("10.11.12");
     OString aOut;
 
-    aOut = aIn.getToken(-1, '.');
-    CPPUNIT_ASSERT(aOut.isEmpty());
-
     aOut = aIn.getToken(0, '.');
     CPPUNIT_ASSERT_EQUAL(OString("10"), aOut);
 

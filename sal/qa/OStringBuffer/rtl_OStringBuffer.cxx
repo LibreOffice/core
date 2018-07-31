@@ -33,13 +33,18 @@ using ::rtl::OString;
 // This file contains cppunit tests for the
 // OString and OStringBuffer classes
 
-// testing constructors
+extern SAL_DLLPUBLIC_IMPORT bool g_sal_disable_string_asserts;
 
+// testing constructors
 namespace rtl_OStringBuffer
 {
     class  ctors : public CppUnit::TestFixture
     {
     public:
+        void setUp() override
+        {
+            g_sal_disable_string_asserts = true;
+        }
 
         void ctor_001()
         {
@@ -8276,135 +8281,6 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// testing the method append( sal_Int32 i, sal_Int16 radix ) where radix = -5
-
-    class  append_006_Int32_WrongRadix : public CppUnit::TestFixture
-    {
-        OString* arrOUS[5];
-        static const sal_Int32 intVal = 11;
-
-    public:
-        void setUp() override
-        {
-            arrOUS[0] = new OString( kTestStr7 );
-            arrOUS[1] = new OString(  );
-            arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "" );
-            arrOUS[4] = new OString( kTestStr28 );
-        }
-
-        void tearDown() override
-        {
-            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
-            delete arrOUS[3]; delete arrOUS[4];
-        }
-
-        void append_001()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            OString                expVal( kTestStr59 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-        }
-
-        void append_002()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-        }
-
-        void append_003()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-
-        }
-
-        void append_004()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-
-        }
-
-        void append_005()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            OString                expVal( kTestStr61 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[4]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-#ifdef WITH_CORE
-        void append_006()
-        {
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer(with INT_MAX)",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-
-        }
-#endif
-
-        CPPUNIT_TEST_SUITE( append_006_Int32_WrongRadix );
-        CPPUNIT_TEST( append_001 );
-        CPPUNIT_TEST( append_002 );
-        CPPUNIT_TEST( append_003 );
-        CPPUNIT_TEST( append_004 );
-        CPPUNIT_TEST( append_005 );
-#ifdef WITH_CORE
-        CPPUNIT_TEST( append_006 );
-#endif
-        CPPUNIT_TEST_SUITE_END();
-    };
-
     class  append_006_Int32_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -14026,132 +13902,6 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// testing the method append( sal_Int64 i, sal_Int16 radix ) where radix = -5
-
-    class  append_007_Int64_WrongRadix : public CppUnit::TestFixture
-    {
-        OString* arrOUS[5];
-        static const sal_Int64 intVal = 11;
-
-    public:
-        void setUp() override
-        {
-            arrOUS[0] = new OString( kTestStr7 );
-            arrOUS[1] = new OString(  );
-            arrOUS[2] = new OString( kTestStr25 );
-            arrOUS[3] = new OString( "" );
-            arrOUS[4] = new OString( kTestStr28 );
-        }
-
-        void tearDown() override
-        {
-            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
-            delete arrOUS[3]; delete arrOUS[4];
-        }
-
-        void append_001()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            OString                expVal( kTestStr59 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[0]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-
-        void append_002()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[1]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-
-        void append_003()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[2]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-
-        void append_004()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[3]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-
-        void append_005()
-        {
-            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            OString                expVal( kTestStr61 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer arrOUS[4]",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-#ifdef WITH_CORE
-        void append_006()
-        {
-            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
-            OString                expVal( kTestStr60 );
-
-            aStrBuf.append( intVal, -5 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the WrongRadix to the string buffer(with INT_MAX)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
-            );
-        }
-#endif
-
-        CPPUNIT_TEST_SUITE( append_007_Int64_WrongRadix );
-        CPPUNIT_TEST( append_001 );
-        CPPUNIT_TEST( append_002 );
-        CPPUNIT_TEST( append_003 );
-        CPPUNIT_TEST( append_004 );
-        CPPUNIT_TEST( append_005 );
-#ifdef WITH_CORE
-        CPPUNIT_TEST( append_006 );
-#endif
-        CPPUNIT_TEST_SUITE_END();
-    };
-
     class  append_007_Int64_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -16076,12 +15826,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_005);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Bounderies);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Negative);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_WrongRadix);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_defaultParam);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Bounderies);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Negative);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_WrongRadix);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_defaultParam);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_float);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative);
