@@ -64,6 +64,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/event.hxx>
+#include <sal/log.hxx>
 
 void SwWrtShell::Insert(SwField const &rField)
 {

@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <sal/log.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>

@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/make_shared.hxx>
 #include <tools/stream.hxx>
+#include <sal/log.hxx>
 
 namespace ww8
 {

@@ -37,6 +37,7 @@
 #include <vcl/mapmod.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
+#include <sal/log.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>

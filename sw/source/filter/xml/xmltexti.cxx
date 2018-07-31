@@ -27,6 +27,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <xmloff/prstylei.hxx>

@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>

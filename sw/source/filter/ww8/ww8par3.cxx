@@ -21,6 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/form/XForm.hpp>

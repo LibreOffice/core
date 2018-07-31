@@ -98,6 +98,7 @@
 #include <tools/datetimeutils.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 
 #include <docufld.hxx>
 #include <authfld.hxx>

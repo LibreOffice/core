@@ -18,6 +18,7 @@
  */
 
 #include <tools/bigint.hxx>
+#include <sal/log.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>

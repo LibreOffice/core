@@ -27,6 +27,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sal/log.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

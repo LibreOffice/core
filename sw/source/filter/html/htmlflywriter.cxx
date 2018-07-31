@@ -39,6 +39,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <sal/log.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>

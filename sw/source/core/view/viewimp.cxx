@@ -35,6 +35,7 @@
 #include <pagepreviewlayout.hxx>
 #include <svx/svdundo.hxx>
 #include <comphelper/lok.hxx>
+#include <sal/log.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>

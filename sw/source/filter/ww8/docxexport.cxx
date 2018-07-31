@@ -82,6 +82,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 

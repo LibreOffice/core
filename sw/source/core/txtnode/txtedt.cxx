@@ -31,6 +31,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <sal/log.hxx>
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <splargs.hxx>

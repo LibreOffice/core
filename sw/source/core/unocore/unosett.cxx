@@ -75,6 +75,7 @@
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
 #include <paratr.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

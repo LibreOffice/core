@@ -18,6 +18,7 @@
  */
 #include "vbalisthelper.hxx"
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <ooo/vba/word/WdListGalleryType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

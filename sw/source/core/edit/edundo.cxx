@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdview.hxx>
+#include <sal/log.hxx>
 
 #include <editsh.hxx>
 #include <fesh.hxx>

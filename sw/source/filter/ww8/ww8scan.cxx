@@ -30,6 +30,7 @@
 #include "sprmids.hxx"
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <swerror.h>
 #include <swtypes.hxx>

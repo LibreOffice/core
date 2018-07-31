@@ -97,6 +97,7 @@
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <formatclipboard.hxx>

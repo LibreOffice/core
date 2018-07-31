@@ -26,6 +26,7 @@
 #include <svx/svdobj.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sal/log.hxx>
 #include <drawdoc.hxx>
 #include <swwait.hxx>
 #include <swmodule.hxx>

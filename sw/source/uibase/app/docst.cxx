@@ -25,6 +25,7 @@
 
 #include <comphelper/flagguard.hxx>
 
+#include <sal/log.hxx>
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/styledlg.hxx>

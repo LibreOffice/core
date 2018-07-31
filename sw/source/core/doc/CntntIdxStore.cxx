@@ -35,6 +35,7 @@
 #include <redline.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <unocrsr.hxx>
 #include <edimp.hxx>

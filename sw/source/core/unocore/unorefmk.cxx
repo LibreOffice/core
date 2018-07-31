@@ -30,6 +30,7 @@
 #include <sal/config.h>
 #include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <unomid.h>
 #include <unotextrange.hxx>

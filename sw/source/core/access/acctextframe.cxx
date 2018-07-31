@@ -20,6 +20,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

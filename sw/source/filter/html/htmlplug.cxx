@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>

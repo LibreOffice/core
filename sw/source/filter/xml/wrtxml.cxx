@@ -31,6 +31,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <vcl/errinf.hxx>
 #include <o3tl/any.hxx>
+#include <sal/log.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>

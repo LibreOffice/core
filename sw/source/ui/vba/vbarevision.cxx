@@ -19,6 +19,7 @@
 #include "vbarevision.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>

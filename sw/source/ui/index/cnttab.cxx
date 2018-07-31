@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <sal/log.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svl/style.hxx>
 #include <vcl/help.hxx>

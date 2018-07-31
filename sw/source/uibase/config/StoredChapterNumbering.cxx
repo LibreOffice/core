@@ -33,6 +33,7 @@
 #include <xmloff/xmlnumi.hxx>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <unosett.hxx>
 

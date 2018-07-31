@@ -20,6 +20,7 @@
 #include "vbastyle.hxx"
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

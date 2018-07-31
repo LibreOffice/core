@@ -91,6 +91,7 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <oox/export/vmlexport.hxx>
 #include <sfx2/docfile.hxx>
+#include <sal/log.hxx>
 
 #include "sprmids.hxx"
 

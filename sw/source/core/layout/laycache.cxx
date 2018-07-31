@@ -18,6 +18,7 @@
  */
 
 #include <editeng/formatbreakitem.hxx>
+#include <sal/log.hxx>
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>

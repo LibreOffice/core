@@ -41,6 +41,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <unotools/eventcfg.hxx>
+#include <sal/log.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>

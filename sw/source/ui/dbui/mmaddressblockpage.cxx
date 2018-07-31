@@ -32,6 +32,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>
 #include <svtools/treelistentry.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <globals.hrc>

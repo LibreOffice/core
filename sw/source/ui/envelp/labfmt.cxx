@@ -22,6 +22,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <sal/log.hxx>
 
 #include <viewopt.hxx>
 
