@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_ccc22986",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-07-31T10:59:32Z",
+      "side": 0,
+      "message": "As far as I see, the change doesn\u0027t remove the return of nullptr from Outliner::RemoveView; so is this change safe? I mean, now someone could decide to return a meaningful value from there, but there wouldn\u0027t be code that handles that, and nothing would hint the one who introduced the returning of that value that the existing code is not prepared for that?",
+      "range": {
+        "startLine": 1126,
+        "startChar": 16,
+        "endLine": 1128,
+        "endChar": 35
+      },
+      "revId": "cb9ce13d82839a7ce0db3bd113e70bbcc125076a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
