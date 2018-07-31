@@ -39,6 +39,7 @@
 #include "strimp.hxx"
 #include <rtl/character.hxx>
 #include <rtl/ustring.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <rtl/math.h>
 
@@ -1551,4 +1552,8 @@ void rtl_uString_newReplaceAllUtf16LUtf16L(
     }
 }
 
+OUString & OUString::operator+=( const OUStringBuffer & str ) &
+{
+    return operator+=(str.pData);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

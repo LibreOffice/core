@@ -459,7 +459,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
         nNumber /= 1000;
         nSection++;
     }
-    rsResult += aTemp.makeStringAndClear();
+    rsResult += aTemp;
 }
 
 
@@ -536,7 +536,7 @@ void lcl_formatCharsGR(const sal_Unicode table[], int n, OUString& s )
     }
     sb.append(gr_smallNum(table,n));
 
-    s += sb.makeStringAndClear();
+    s += sb;
 }
 
 static

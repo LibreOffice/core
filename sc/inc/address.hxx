@@ -945,7 +945,7 @@ inline void ScColToAlpha( OUString& rStr, SCCOL nCol)
 {
     OUStringBuffer aBuf(2);
     ScColToAlpha( aBuf, nCol);
-    rStr += aBuf.makeStringAndClear();
+    rStr += aBuf;
 }
 
 inline OUString ScColToAlpha( SCCOL nCol )

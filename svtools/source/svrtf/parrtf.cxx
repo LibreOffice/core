@@ -106,14 +106,14 @@ int SvRTFParser::GetNextToken_()
                                 aStrBuffer[nStrLen++] = nNextCh;
                                 if( MAX_TOKEN_LEN == nStrLen )
                                 {
-                                    aToken += aStrBuffer.toString();
+                                    aToken += aStrBuffer;
                                     nStrLen = 0;
                                 }
                                 nNextCh = GetNextChar();
                             } while( RTF_ISALPHA( nNextCh ) );
                             if( nStrLen )
                             {
-                                aToken += aStrBuffer.makeStringAndClear();
+                                aToken += aStrBuffer;
                             }
                         }
 
@@ -505,7 +505,7 @@ void SvRTFParser::ScanText()
                     if (sal_Unicode(EOF) == (nNextCh = GetNextChar()))
                     {
                         if (!aStrBuffer.isEmpty())
-                            aToken += aStrBuffer.toString();
+                            aToken += aStrBuffer;
                         return;
                     }
                 } while
@@ -522,7 +522,7 @@ void SvRTFParser::ScanText()
     }
 
     if (!aStrBuffer.isEmpty())
-        aToken += aStrBuffer.makeStringAndClear();
+        aToken += aStrBuffer;
 }
 
 

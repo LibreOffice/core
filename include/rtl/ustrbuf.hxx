@@ -59,6 +59,7 @@ namespace rtl
  */
 class SAL_WARN_UNUSED OUStringBuffer
 {
+friend class OUString;
 public:
     /**
         Constructs a string buffer with no characters in it and an

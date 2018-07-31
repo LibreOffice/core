@@ -1729,7 +1729,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             sTemp += andCriteria ? OUString(STR_AND) : OUString(STR_OR);
             sFilter = sTemp;
         }
-        sFilter += aSQL.makeStringAndClear();
+        sFilter += aSQL;
 
         // add the filter and the sort order
         _aSetFunctor(this,sFilter);
