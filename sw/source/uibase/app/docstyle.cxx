@@ -2884,13 +2884,6 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwExtra )
             AppendStyleList(SwStyleNameMapper::GetExtraUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
-        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwCondColl )
-        {
-            if( !bIsSearchUsed ||
-                rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( RES_POOLCOLL_TEXT ))
-                aLst.Append( cPARA, SwStyleNameMapper::GetTextUINameArray()[
-                        RES_POOLCOLL_TEXT - RES_POOLCOLL_TEXT_BEGIN ] );
-        }
         if ( bAll ||
             (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwHtml ||
             (nSMask & ~SfxStyleSearchBits::Used) ==
