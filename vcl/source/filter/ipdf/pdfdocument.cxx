@@ -1769,16 +1769,16 @@ const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
 }
 
 /// Visits the page tree recursively, looking for page objects.
-void PDFObjectElement::visitPages(std::vector<PDFObjectElement*>& rRet)
+static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>& rRet)
 {
-    auto pKids = dynamic_cast<PDFArrayElement*>(Lookup("Kids"));
+    auto pKids = dynamic_cast<PDFArrayElement*>(pPages->Lookup("Kids"));
     if (!pKids)
     {
         SAL_WARN("vcl.filter", "visitPages: pages has no kids");
         return;
     }
 
-    m_bVisiting = true;
+    pPages->setVisiting(true);
 
     for (const auto& pKid : pKids->GetElements())
     {
@@ -1791,7 +1791,7 @@ void PDFObjectElement::visitPages(std::vector<PDFObjectElement*>& rRet)
             continue;
 
         // detect if visiting reenters itself
-        if (pKidObject->m_bVisiting)
+        if (pKidObject->alreadyVisiting())
         {
             SAL_WARN("vcl.filter", "visitPages: loop in hierarchy");
             continue;
@@ -1800,13 +1800,13 @@ void PDFObjectElement::visitPages(std::vector<PDFObjectElement*>& rRet)
         auto pName = dynamic_cast<PDFNameElement*>(pKidObject->Lookup("Type"));
         if (pName && pName->GetValue() == "Pages")
             // Pages inside pages: recurse.
-            pKidObject->visitPages(rRet);
+            visitPages(pKidObject, rRet);
         else
             // Found an actual page.
             rRet.push_back(pKidObject);
     }
 
-    m_bVisiting = false;
+    pPages->setVisiting(false);
 }
 
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
@@ -1851,7 +1851,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
         return aRet;
     }
 
-    pPages->visitPages(aRet);
+    visitPages(pPages, aRet);
 
     return aRet;
 }
@@ -2149,7 +2149,6 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
     : m_rDoc(rDoc),
       m_fObjectValue(fObjectValue),
       m_fGenerationValue(fGenerationValue),
-      m_bVisiting(false),
       m_pNumberElement(nullptr),
       m_nDictionaryOffset(0),
       m_nDictionaryLength(0),
@@ -2176,6 +2175,8 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
 
     if (!rDictionary.empty())
         return nRet;
+
+    pThis->setParsing(true);
 
     auto pThisObject = dynamic_cast<PDFObjectElement*>(pThis);
     // This is set to non-nullptr here for nested dictionaries only.
@@ -2222,7 +2223,7 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
                     pThisObject->SetDictionaryOffset(nDictionaryOffset);
                 }
             }
-            else
+            else if (!pDictionary->alreadyParsing())
             {
                 // Nested dictionary.
                 i = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
@@ -2395,6 +2396,8 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
         aName.clear();
         aNumbers.clear();
     }
+
+    pThis->setParsing(false);
 
     return nRet;
 }
