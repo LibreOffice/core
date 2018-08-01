@@ -200,7 +200,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
-            OUString sTmp = "$";
+            OUStringBuffer sTmp = "$";
             uno::Reference< ov::XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY );
             for ( sal_Int32 nArea = 1; nArea <= xCol->getCount(); ++nArea )
             {
@@ -208,10 +208,10 @@ ScVbaNames::Add( const css::uno::Any& Name ,
 
                 OUString sRangeAdd = xArea->Address( aAny2, aAny2 , aAny2 , aAny2, aAny2 );
                 if ( nArea > 1 )
-                    sTmp += ",";
-                sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;
+                    sTmp.append(",");
+                sTmp.append("'").append(xRange->getWorksheet()->getName()).append("'.").append(sRangeAdd);
             }
-            mxNames->addNewByName( sName, sTmp, aCellAddr, 0/*nUnoType*/);
+            mxNames->addNewByName( sName, sTmp.makeStringAndClear(), aCellAddr, 0/*nUnoType*/);
             return Item( uno::makeAny( sName ), uno::Any() );
         }
     }

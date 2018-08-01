@@ -395,14 +395,14 @@ std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE,
 {
     ESelection aSelection;
 
-    OUString sString;
+    OUStringBuffer sString;
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
-        sString += (*aIt)->getText();
+        sString.append((*aIt)->getText());
 
     // fdo#84370 - diving into editeng is not thread safe.
     SolarMutexGuard aGuard;
 
-    rEE.SetText( sString );
+    rEE.SetText( sString.makeStringAndClear() );
 
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {

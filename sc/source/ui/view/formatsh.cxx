@@ -1199,7 +1199,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     OUString aCode = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     sal_uInt16 aLen = aCode.getLength();
                     std::unique_ptr<OUString[]> sFormat( new OUString[4] );
-                    OUString sTmpStr = "";
+                    OUStringBuffer sTmpStr;
                     sal_uInt16 nCount(0);
                     sal_uInt16 nStrCount(0);
 
@@ -1209,13 +1209,12 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
                         if(cChar == ',')
                         {
-                            sFormat[nStrCount] = sTmpStr;
-                            sTmpStr.clear();
+                            sFormat[nStrCount] = sTmpStr.makeStringAndClear();
                             nStrCount++;
                         }
                         else
                         {
-                            sTmpStr += OUStringLiteral1(cChar);
+                            sTmpStr.append(cChar);
                         }
 
                         nCount++;

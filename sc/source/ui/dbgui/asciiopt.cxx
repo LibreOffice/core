@@ -57,10 +57,10 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 
 static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
 {
-    OUString aFieldSeps;
     if ( rSepNums.isEmpty() )
-        return aFieldSeps;
+        return OUString();
 
+    OUStringBuffer aFieldSeps;
     sal_Int32 nPos = 0;
     do
     {
@@ -71,12 +71,12 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
         {
             sal_Int32 nVal = aCode.toInt32();
             if ( nVal )
-                aFieldSeps += OUStringLiteral1(nVal);
+                aFieldSeps.append(OUStringLiteral1(nVal));
         }
     }
     while ( nPos >= 0 );
 
-    return aFieldSeps;
+    return aFieldSeps.makeStringAndClear();
 }
 
 // The options string must not contain semicolons (because of the pick list),
@@ -179,68 +179,68 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
 
 OUString ScAsciiOptions::WriteToString() const
 {
-    OUString aOutStr;
+    OUStringBuffer aOutStr;
 
     // Token 0: Field separator.
     if ( bFixedLen )
-        aOutStr += pStrFix;
+        aOutStr.append(pStrFix);
     else if ( aFieldSeps.isEmpty() )
-        aOutStr += "0";
+        aOutStr.append("0");
     else
     {
         sal_Int32 nLen = aFieldSeps.getLength();
         for (sal_Int32 i=0; i<nLen; i++)
         {
             if (i)
-                aOutStr += "/";
-            aOutStr += OUString::number(aFieldSeps[i]);
+                aOutStr.append("/");
+            aOutStr.append(OUString::number(aFieldSeps[i]));
         }
         if ( bMergeFieldSeps )
         {
-            aOutStr += "/";
-            aOutStr += pStrMrg;
+            aOutStr.append("/");
+            aOutStr.append(pStrMrg);
         }
     }
 
     // Token 1: Text Quote character.
-    aOutStr += "," + OUString::number(cTextSep) + ",";
+    aOutStr.append(",").append(OUString::number(cTextSep)).append(",");
 
     //Token 2: Text encoding.
     if ( bCharSetSystem )           // force "SYSTEM"
-        aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
+        aOutStr.append(ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW ));
     else
-        aOutStr += ScGlobal::GetCharsetString( eCharSet );
+        aOutStr.append(ScGlobal::GetCharsetString( eCharSet ));
 
     //Token 3: Number of start row.
-    aOutStr += "," + OUString::number(nStartRow) + ",";
+    aOutStr.append(",").append(OUString::number(nStartRow)).append(",");
 
     //Token 4: Column info.
     for (size_t nInfo=0; nInfo<mvColStart.size(); nInfo++)
     {
         if (nInfo)
-            aOutStr += "/";
-        aOutStr += OUString::number(mvColStart[nInfo]) +
-                   "/" +
-                   OUString::number(mvColFormat[nInfo]);
+            aOutStr.append("/");
+        aOutStr.append(OUString::number(mvColStart[nInfo]))
+               .append("/")
+               .append(OUString::number(mvColFormat[nInfo]));
     }
 
     // #i112025# the options string is used in macros and linked sheets,
     // so new options must be added at the end, to remain compatible
 
-    aOutStr += "," +
+    aOutStr.append(",")
                //Token 5: Language
-               OUString::number(static_cast<sal_uInt16>(eLang)) + "," +
+               .append(OUString::number(static_cast<sal_uInt16>(eLang))).append(",")
                //Token 6: Import quoted field as text.
-               OUString::boolean( bQuotedFieldAsText ) + "," +
+               .append(OUString::boolean( bQuotedFieldAsText )).append(",")
                //Token 7: Detect special numbers.
-               OUString::boolean( bDetectSpecialNumber ) + "," +
+               .append(OUString::boolean( bDetectSpecialNumber )).append(",")
                // Token 8: used for "Save as shown" in export options
-               OUString::boolean( bSaveAsShown ) + "," +
+               .append(OUString::boolean( bSaveAsShown )).append(",")
                // Token 9: used for "Save cell formulas" in export options
-               OUString::boolean( bSaveFormulas ) + "," +
+               .append(OUString::boolean( bSaveFormulas )).append(",")
                //Token 10: Trim Space
-               OUString::boolean( bRemoveSpace );
-    return aOutStr;
+               .append(OUString::boolean( bRemoveSpace ));
+    return aOutStr.makeStringAndClear();
 }
 
 // static

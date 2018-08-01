@@ -826,7 +826,7 @@ std::size_t XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlag
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
-    OUString aRet;
+    OUStringBuffer aRet;
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
@@ -866,14 +866,14 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         }
 
         *pcEndChar = '\0';
-        aRet += OUString( pcBuffer.get() );
+        aRet.append( pcBuffer.get(), pcUniChar - pcBuffer.get()  );
 
         nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
             JumpToNextStringContinue( b16Bit );
     }
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 OUString XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )

@@ -541,16 +541,16 @@ void lcl_GetColumnTypes(
             // No duplicated names.
             if ( !rtl::isAsciiAlpha(aFieldName[0]) )
                 aFieldName = "N" + aFieldName;
-            OUString aTmpStr;
+            OUStringBuffer aTmpStr;
             sal_Unicode c;
             for ( const sal_Unicode* p = aFieldName.getStr(); ( c = *p ) != 0; p++ )
             {
                 if ( rtl::isAsciiAlpha(c) || rtl::isAsciiDigit(c) || c == '_' )
-                    aTmpStr += OUStringLiteral1(c);
+                    aTmpStr.append(c);
                 else
-                    aTmpStr += "_";
+                    aTmpStr.append("_");
             }
-            aFieldName = aTmpStr;
+            aFieldName = aTmpStr.makeStringAndClear();
             if ( aFieldName.getLength() > 10 )
                 aFieldName = aFieldName.copy(0,  10);
 
@@ -564,8 +564,7 @@ void lcl_GetColumnTypes(
                     OUString aVarPart = OUString::number( nSub );
                     if ( aFixPart.getLength() + aVarPart.getLength() > 10 )
                         aFixPart = aFixPart.copy( 0, 10 - aVarPart.getLength() );
-                    aFieldName = aFixPart;
-                    aFieldName += aVarPart;
+                    aFieldName = aFixPart + aVarPart;
                 } while (!aFieldNames.insert(aFieldName).second);
             }
         }

@@ -3042,7 +3042,7 @@ void ScInterpreter::ScRoman()
             static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
             static const sal_uInt16 nMaxIndex = sal_uInt16(SAL_N_ELEMENTS(pValues) - 1);
 
-            OUString aRoman;
+            OUStringBuffer aRoman;
             sal_uInt16 nVal = static_cast<sal_uInt16>(fVal);
             sal_uInt16 nMode = static_cast<sal_uInt16>(fMode);
 
@@ -3066,8 +3066,7 @@ void ScInterpreter::ScRoman()
                         else
                             nSteps = nMode;
                     }
-                    aRoman += OUStringLiteral1( pChars[ nIndex ] )
-                        + OUStringLiteral1( pChars[ nIndex2 ] );
+                    aRoman.append( pChars[ nIndex ] ).append( pChars[ nIndex2 ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal + pValues[ nIndex ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal - pValues[ nIndex2 ] );
                 }
@@ -3077,7 +3076,7 @@ void ScInterpreter::ScRoman()
                     {
                         // assert can't happen with nVal<4000 precondition
                         assert( nIndex >= 1 );
-                        aRoman += OUStringLiteral1( pChars[ nIndex - 1 ] );
+                        aRoman.append( pChars[ nIndex - 1 ] );
                     }
                     sal_Int32 nPad = nDigit % 5;
                     if (nPad)
@@ -3091,7 +3090,7 @@ void ScInterpreter::ScRoman()
                 }
             }
 
-            PushString( aRoman );
+            PushString( aRoman.makeStringAndClear() );
         }
         else
             PushIllegalArgument();

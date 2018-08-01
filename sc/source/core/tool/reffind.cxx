@@ -241,7 +241,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
     ExpandToText(pSource, nLen, nStartPos, nEndPos, meConv);
 
-    OUString aResult;
+    OUStringBuffer aResult;
     OUString aExpr;
     OUString aSep;
     ScAddress aAddr;
@@ -314,14 +314,14 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
         // assemble
 
-        aResult += aSep;
-        aResult += aExpr;
+        aResult.append(aSep);
+        aResult.append(aExpr);
 
         nLoopStart = nEEnd;
     }
 
     OUString aTotal = maFormula.copy(0, nStartPos);
-    aTotal += aResult;
+    aTotal += aResult.makeStringAndClear();
     if (nEndPos < maFormula.getLength()-1)
         aTotal += maFormula.copy(nEndPos+1);
 

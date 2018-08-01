@@ -480,7 +480,8 @@ static bool lcl_parseExternalName(
     const sal_Unicode* const pStart = rSymbol.getStr();
     const sal_Unicode* p = pStart;
     sal_Int32 nLen = rSymbol.getLength();
-    OUString aTmpFile, aTmpName;
+    OUString aTmpFile;
+    OUStringBuffer aTmpName;
     sal_Int32 i = 0;
     bool bInName = false;
     if (cSep == '!')
@@ -543,7 +544,7 @@ static bool lcl_parseExternalName(
 
                         i = j;
                         bInName = true;
-                        aTmpName += OUStringLiteral1(c); // Keep the separator as part of the name.
+                        aTmpName.append(c); // Keep the separator as part of the name.
                         break;
                     }
                     aTmpFile += OUStringLiteral1(c);
@@ -573,14 +574,14 @@ static bool lcl_parseExternalName(
                 // A second separator ?  Not a valid external name.
                 return false;
             }
-            aTmpName += OUStringLiteral1(c);
+            aTmpName.append(c);
         }
         else
         {
             if (c == cSep)
             {
                 bInName = true;
-                aTmpName += OUStringLiteral1(c); // Keep the separator as part of the name.
+                aTmpName.append(c); // Keep the separator as part of the name.
             }
             else
             {
@@ -637,12 +638,12 @@ static bool lcl_parseExternalName(
     if (aTmpName[nNameLen-1] == '!')
     {
         // Check against #REF!.
-        if (aTmpName.equalsIgnoreAsciiCase("#REF!"))
+        if (aTmpName.toString().equalsIgnoreAsciiCase("#REF!"))
             return false;
     }
 
     rFile = aTmpFile;
-    rName = aTmpName.copy(1); // Skip the first char as it is always the separator.
+    rName = aTmpName.makeStringAndClear().copy(1); // Skip the first char as it is always the separator.
     return true;
 }
 
@@ -3981,7 +3982,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 sal_Int32 nIndex = 0;
                 OUString aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
                 sal_Int32 nLen1 = aTmp1.getLength();
-                OUString aSym, aTmp2;
+                OUStringBuffer aSym;
+                OUString aTmp2;
                 bool bLastAlp, bNextNum;
                 bLastAlp = bNextNum = true;
                 sal_Int32 nStrip = 0;
@@ -3994,7 +3996,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     {
                         if ( nLen1 )
                         {
-                            aSym += aTmp1;
+                            aSym.append(aTmp1);
                             bLastAlp = CharClass::isAsciiAlpha( aTmp1 );
                         }
                         if ( nLen2 )
@@ -4009,8 +4011,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                             }
                             else
                             {
-                                if ( !aSym.isEmpty() && !aSym.endsWith(":"))
-                                    aSym += ":";
+                                if ( !aSym.isEmpty() && aSym[aSym.getLength()-1] != ':')
+                                    aSym.append(":");
                                 nStrip = 0;
                             }
                             bLastAlp = !bNextNum;
@@ -4030,7 +4032,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     else
                         nRefs--;
                 }
-                aSymbol = aSym;
+                aSymbol = aSym.makeStringAndClear();
                 aSymbol += aTmp1;
             }
             else
@@ -4062,12 +4064,12 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         aRef[j] = aRef[j].copy( nDotPos + 1 );
                     }
                     OUString aOld( aRef[j] );
-                    OUString aStr2;
+                    OUStringBuffer aStr2;
                     const sal_Unicode* p = aRef[j].getStr();
                     while ( *p && rtl::isAsciiDigit( *p ) )
-                        aStr2 += OUStringLiteral1(*p++);
+                        aStr2.append(*p++);
                     aRef[j] = OUString( p );
-                    aRef[j] += aStr2;
+                    aRef[j] += aStr2.makeStringAndClear();
                     if ( bColons || aRef[j] != aOld )
                     {
                         bChanged = true;
