@@ -31,17 +31,18 @@ class regression(UITestCase):
         document = self.ui_test.get_component()
 
         # Initially the final check status is "FALSE" (failed).
-        self.assertEqual(get_cell_by_position(document, 11, 1, 5).getString(), "FALSE",
+        self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "FALSE",
                          "Check status must be FALSE before the test")
-        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column)
+        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = True)
+        self._do_regression(regression_type = "LINEAR", data_groupedby_column = data_groupedby_column, calc_intercept = False)
         self._do_regression(regression_type = "LOG", data_groupedby_column = data_groupedby_column)
         self._do_regression(regression_type = "POWER", data_groupedby_column = data_groupedby_column)
-        self.assertEqual(get_cell_by_position(document, 11, 1, 5).getString(), "TRUE",
+        self.assertEqual(get_cell_by_position(document, 14, 1, 6).getString(), "TRUE",
                          "One of more of the checks failed for data_groupedby_column = {}, manually try with the document".
                          format(data_groupedby_column))
         self.ui_test.close_doc()
 
-    def _do_regression(self, regression_type, data_groupedby_column = True):
+    def _do_regression(self, regression_type, data_groupedby_column = True, calc_intercept = True):
         assert(regression_type == "LINEAR" or regression_type == "LOG" or regression_type == "POWER")
         self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -54,6 +55,7 @@ class regression(UITestCase):
         xlinearradio = xDialog.getChild("linear-radio")
         xlogarithmicradio = xDialog.getChild("logarithmic-radio")
         xpowerradio = xDialog.getChild("power-radio")
+        xnointerceptcheck = xDialog.getChild("nointercept-check")
 
         ## Set the X, Y and output ranges
         xvariable1rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
@@ -79,7 +81,10 @@ class regression(UITestCase):
         xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         if regression_type == "LINEAR":
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinear.$A$1"}))
+            if calc_intercept:
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinear.$A$1"}))
+            else:
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinearNoIntercept.$A$1"}))
         elif regression_type == "LOG":
             xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLog.$A$1"}))
         else:
@@ -96,6 +101,9 @@ class regression(UITestCase):
             xlogarithmicradio.executeAction("CLICK", tuple())
         else:
             xpowerradio.executeAction("CLICK", tuple())
+
+        if not calc_intercept:
+            xnointerceptcheck.executeAction("CLICK", tuple())
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

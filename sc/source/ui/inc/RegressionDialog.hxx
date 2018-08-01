@@ -22,11 +22,13 @@ class ScRegressionDialog : public ScStatisticsTwoVariableDialog
     VclPtr<FixedText>    mpErrorMessage;
     VclPtr<NumericField> mpConfidenceLevelField;
     VclPtr<CheckBox>     mpCalcResidualsCheckBox;
+    VclPtr<CheckBox>     mpNoInterceptCheckBox;
 
     bool mbUnivariate;
     size_t mnNumIndependentVars;
     size_t mnNumObservations;
     bool mbUse3DAddresses;
+    bool mbCalcIntercept;
 
 public:
     ScRegressionDialog(
