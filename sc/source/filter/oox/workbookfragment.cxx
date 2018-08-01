@@ -525,6 +525,7 @@ public:
     {
     }
     bool get_active() const { return m_xWarningOnBox->get_active(); }
+    void hide_ask() const { m_xWarningOnBox->set_visible(false); };
 };
 
 }
@@ -546,6 +547,9 @@ void WorkbookFragment::recalcFormulaCells()
             MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(), "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
             aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aQueryBox.set_default_response(RET_YES);
+
+            if ( officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::isReadOnly() )
+                aQueryBox.hide_ask();
 
             bHardRecalc = aQueryBox.run() == RET_YES;
 
