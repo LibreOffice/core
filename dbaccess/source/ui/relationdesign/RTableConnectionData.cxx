@@ -75,7 +75,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 {
 }
 
-bool ORelationTableConnectionData::DropRelation()
+void ORelationTableConnectionData::DropRelation()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // delete relation
@@ -102,7 +102,6 @@ bool ORelationTableConnectionData::DropRelation()
             }
         }
     }
-    return true;
 }
 
 void ORelationTableConnectionData::ChangeOrientation()
@@ -173,15 +172,13 @@ bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
     return nPrimKeysCount && nPrimKeysCount == nValidLinesCount;
 }
 
-bool ORelationTableConnectionData::IsConnectionPossible()
+void ORelationTableConnectionData::IsConnectionPossible()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // if the SourceFields are a PrimKey, it's only the orientation which is wrong
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
-
-    return true;
 }
 
 OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
@@ -244,8 +241,7 @@ bool ORelationTableConnectionData::Update()
     // delete old relation
     {
         DropRelation();
-        if( !IsConnectionPossible() )
-            return false;
+        IsConnectionPossible();
     }
 
     // reassign the keys because the orientation could be changed

@@ -1233,11 +1233,13 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     {
         if ( m_bBeforeFirst )
         {
-            bSuccess = m_pCache->beforeFirst();
+            m_pCache->beforeFirst();
+            bSuccess = true;
         }
         else if ( m_bAfterLast )
         {
-            bSuccess = m_pCache->afterLast();
+            m_pCache->afterLast();
+            bSuccess = true;
         }
         else
         {
