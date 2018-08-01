@@ -532,11 +532,11 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
         rRenderContext.DrawText(aTextPt, aText, 0, aText.getLength());
         rRenderContext.Pop();
         if (aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER)
-            aDecoView.DrawSeparator(Point(aStartPt.X(), aOutSize.Height() - 1),
-                                    Point(aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER));
+            aDecoView.DrawSeparator(Point(aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER),
+                                    Point(aStartPt.X(), aOutSize.Height() - 1));
         if (aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER > 0)
-            aDecoView.DrawSeparator(Point(aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER),
-                                    Point(aStartPt.X(), 0));
+            aDecoView.DrawSeparator(Point(aStartPt.X(), 0),
+                                    Point(aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER));
     }
     else
     {
