@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include <scresid.hxx>
 #include <formula/grammar.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include "calcoptionsdlg.hxx"
 #include <vcl/edit.hxx>
 
@@ -321,18 +322,22 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     }
 
     mpLbFormulaSyntax->SaveValue();
+    mpLbFormulaSyntax->Enable( !officecfg::Office::Calc::Formula::Syntax::Grammar::isReadOnly() );
 
     ScRecalcOptions eOOXMLRecalc = aOpt.GetOOXMLRecalcOptions();
     mpLbOOXMLRecalcOptions->SelectEntryPos(static_cast<sal_uInt16>(eOOXMLRecalc));
     mpLbOOXMLRecalcOptions->SaveValue();
+    mpLbOOXMLRecalcOptions->Enable( !officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::isReadOnly() );
 
     ScRecalcOptions eODFRecalc = aOpt.GetODFRecalcOptions();
     mpLbODFRecalcOptions->SelectEntryPos(static_cast<sal_uInt16>(eODFRecalc));
     mpLbODFRecalcOptions->SaveValue();
+    mpLbODFRecalcOptions->Enable( !officecfg::Office::Calc::Formula::Load::ODFRecalcMode::isReadOnly() );
 
     // english function name.
     mpCbEnglishFuncName->Check( aOpt.GetUseEnglishFuncName() );
     mpCbEnglishFuncName->SaveValue();
+    mpCbEnglishFuncName->Enable( !officecfg::Office::Calc::Formula::Syntax::EnglishFunctionName::isReadOnly() );
 
     // Separators
     OUString aSep = aOpt.GetFormulaSepArg();
@@ -352,6 +357,13 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     }
     else
         ResetSeparators();
+
+    mpEdSepFuncArg->Enable( !officecfg::Office::Calc::Formula::Syntax::SeparatorArg::isReadOnly() );
+    mpEdSepArrayCol->Enable( !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayCol::isReadOnly() );
+    mpEdSepArrayRow->Enable( !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayRow::isReadOnly() );
+    mpBtnSepReset->Enable ( !officecfg::Office::Calc::Formula::Syntax::SeparatorArg::isReadOnly()  ||
+                            !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayCol::isReadOnly() ||
+                            !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayRow::isReadOnly() );
 
     // detailed calc settings.
     ScFormulaOptions aDefaults;
