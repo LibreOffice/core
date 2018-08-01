@@ -22,6 +22,30 @@
       "revId": "5a61cbd9307c394b55047821d633f54d148cb812",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d29f624e",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-01T14:54:49Z",
+      "side": 0,
+      "message": "Yeah, that seems to date back around the year 2000 or so in the original commit, no idea what the intention was",
+      "parentUuid": "ffe62b97_52947237",
+      "range": {
+        "startLine": 606,
+        "startChar": 33,
+        "endLine": 606,
+        "endChar": 58
+      },
+      "revId": "5a61cbd9307c394b55047821d633f54d148cb812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
