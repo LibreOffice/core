@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_522d9293",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T11:46:51Z",
+      "side": 1,
+      "message": "this is UB on overflow; as we already know that nIndex \u003c\u003d pStr-\u003elength, use\n\n  nCount \u003c\u003d pStr-\u003elength - nIndex\n\ninstead",
+      "revId": "a677b21d2b1c1b7549cca60bbfdd40f09a57078f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
