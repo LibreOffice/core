@@ -351,7 +351,7 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
         rAvailableMigrations.push_back( aSupportedMigration );
 }
 
-bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
+void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
 {
     // get supported version names
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
@@ -375,8 +375,6 @@ bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
         insertSorted( rAvailableMigrations, aSupportedMigration );
         SAL_INFO( "desktop.migration", " available migration '" << aSupportedMigration.name << "'" );
     }
-
-    return true;
 }
 
 migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
