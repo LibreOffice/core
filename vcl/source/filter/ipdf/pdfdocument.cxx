@@ -1815,14 +1815,16 @@ size_t PDFDocument::GetObjectOffset(size_t nIndex) const
 const std::vector<std::unique_ptr<PDFElement>>& PDFDocument::GetElements() { return m_aElements; }
 
 /// Visits the page tree recursively, looking for page objects.
-static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>& rRet)
+void PDFObjectElement::visitPages(std::vector<PDFObjectElement*>& rRet)
 {
-    auto pKids = dynamic_cast<PDFArrayElement*>(pPages->Lookup("Kids"));
+    auto pKids = dynamic_cast<PDFArrayElement*>(Lookup("Kids"));
     if (!pKids)
     {
         SAL_WARN("vcl.filter", "visitPages: pages has no kids");
         return;
     }
+
+    m_bVisiting = true;
 
     for (const auto& pKid : pKids->GetElements())
     {
@@ -1834,14 +1836,23 @@ static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>&
         if (!pKidObject)
             continue;
 
+        // detect if visiting reenters itself
+        if (pKidObject->m_bVisiting)
+        {
+            SAL_WARN("vcl.filter", "visitPages: loop in hierarchy");
+            continue;
+        }
+
         auto pName = dynamic_cast<PDFNameElement*>(pKidObject->Lookup("Type"));
         if (pName && pName->GetValue() == "Pages")
             // Pages inside pages: recurse.
-            visitPages(pKidObject, rRet);
+            pKidObject->visitPages(rRet);
         else
             // Found an actual page.
             rRet.push_back(pKidObject);
     }
+
+    m_bVisiting = false;
 }
 
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
@@ -1886,7 +1897,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
         return aRet;
     }
 
-    visitPages(pPages, aRet);
+    pPages->visitPages(aRet);
 
     return aRet;
 }
@@ -2122,6 +2133,7 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
     : m_rDoc(rDoc)
     , m_fObjectValue(fObjectValue)
     , m_fGenerationValue(fGenerationValue)
+    , m_bVisiting(false)
     , m_pNumberElement(nullptr)
     , m_nDictionaryOffset(0)
     , m_nDictionaryLength(0)
