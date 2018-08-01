@@ -1736,6 +1736,14 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     fAdjust = getAdjustmentValue( xShape1 );
     CPPUNIT_ASSERT_EQUAL( 213.25, fAdjust );
 
+    // Export
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textArchUp");
+    assertXPath(pXmlDocContent, "//p:sp[14]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textCircle");
+
     xDocShRef->DoClose();
 }
 
