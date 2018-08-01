@@ -6607,7 +6607,7 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     return true;
 }
 
-bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
+void SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
                                           std::unique_ptr<char[]>& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
@@ -6616,10 +6616,9 @@ bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
         rpBuff.reset( new char[rBuffLen] );
         rBuffLen = rStData.ReadBytes(rpBuff.get(), rBuffLen);
     }
-    return true;
 }
 
-bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
+void SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
                                         std::unique_ptr<char[]>& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
@@ -6628,7 +6627,6 @@ bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
         rpBuff.reset( new char[rBuffLen] );
         rBuffLen = rStData.ReadBytes(rpBuff.get(), rBuffLen);
     }
-    return true;
 }
 
 

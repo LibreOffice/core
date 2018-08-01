@@ -724,7 +724,7 @@ bool TypeDetection::impl_getPreselectionForType(
     return false;
 }
 
-bool TypeDetection::impl_getPreselectionForDocumentService(
+void TypeDetection::impl_getPreselectionForDocumentService(
     const OUString& sPreSelDocumentService, const util::URL& aParsedURL, FlatDetection& rFlatTypes)
 {
     // get all filters, which match to this doc service
@@ -765,8 +765,6 @@ bool TypeDetection::impl_getPreselectionForDocumentService(
 
         impl_getPreselectionForType(aType, aParsedURL, rFlatTypes, true);
     }
-
-    return true;
 }
 
 OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)

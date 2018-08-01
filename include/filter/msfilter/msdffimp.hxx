@@ -493,14 +493,14 @@ protected:
                 OUString const& rBaseURL);
 
 // the following methods need to be overridden for Excel imports
-    static bool ProcessClientAnchor( SvStream& rStData,
+    static void ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
                                           std::unique_ptr<char[]>& rpBuff,
                                           sal_uInt32& rBuffLen );
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
                                        void* pData, DffObjData& );
-    static bool ProcessClientData( SvStream& rStData,
+    static void ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         std::unique_ptr<char[]>& rpBuff,
                                         sal_uInt32& rBuffLen );
