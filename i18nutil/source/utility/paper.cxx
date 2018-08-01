@@ -155,13 +155,13 @@ static const PageDesc aDinTab[] =
 
 static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
-#define MAXSLOPPY 21
+#define MAXSLOPPY 75
 
 void PaperInfo::doSloppyFit()
 {
     if (m_eType != PAPER_USER)
         return;
-
+    printf("\n\ndoSloppyFit:\n");
     for ( size_t i = 0; i < nTabSize; ++i )
     {
         if (i == PAPER_USER) continue;
@@ -170,6 +170,7 @@ void PaperInfo::doSloppyFit()
         long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
         long lFlipDiffW = labs(aDinTab[i].m_nHeight - m_nPaperWidth);
         long lFlipDiffH = labs(aDinTab[i].m_nWidth - m_nPaperHeight);
+        printf("%d: lDiff = %d, %d | lFlipDiff = %d, %d\n", i, lDiffW, lDiffH, lFlipDiffW, lFlipDiffH);
 
         if ( (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY) ||
             (lFlipDiffW < MAXSLOPPY && lFlipDiffH < MAXSLOPPY) )
