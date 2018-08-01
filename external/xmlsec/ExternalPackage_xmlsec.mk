@@ -12,7 +12,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,xmlsec,xmlsec))
 $(eval $(call gb_ExternalPackage_use_external_project,xmlsec,xmlsec))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec-mscrypto.dll,win32/binaries/libxmlsec-mscrypto.dll))
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec-mscng.dll,win32/binaries/libxmlsec-mscng.dll))
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec.dll,win32/binaries/libxmlsec.dll))
 endif
