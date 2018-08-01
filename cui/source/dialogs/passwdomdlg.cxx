@@ -76,7 +76,9 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_xOptionsExpander(m_xBuilder->weld_expander("expander"))
     , m_xOk(m_xBuilder->weld_button("ok"))
     , m_xOpenReadonlyCB(m_xBuilder->weld_check_button("readonly"))
+    , m_xPasswdToModifyFT(m_xBuilder->weld_label("label7"))
     , m_xPasswdToModifyED(m_xBuilder->weld_entry("newpassroEntry"))
+    , m_xReenterPasswdToModifyFT(m_xBuilder->weld_label("label8"))
     , m_xReenterPasswdToModifyED(m_xBuilder->weld_entry("confirmropassEntry"))
     , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
     , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
@@ -99,6 +101,9 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     m_xOptionsExpander->set_sensitive(bIsPasswordToModify);
     if (!bIsPasswordToModify)
         m_xOptionsExpander->hide();
+
+    m_xOpenReadonlyCB->connect_clicked(LINK(this, PasswordToOpenModifyDialog, ReadonlyOnOffHdl));
+    ReadonlyOnOffHdl(*m_xOpenReadonlyCB);
 }
 
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
@@ -124,5 +129,13 @@ bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
     return m_xOpenReadonlyCB->get_active();
 }
 
+IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::Button&, void)
+{
+    bool bEnable = m_xOpenReadonlyCB->get_active();
+    m_xPasswdToModifyED->set_sensitive(bEnable);
+    m_xPasswdToModifyFT->set_sensitive(bEnable);
+    m_xReenterPasswdToModifyED->set_sensitive(bEnable);
+    m_xReenterPasswdToModifyFT->set_sensitive(bEnable);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
