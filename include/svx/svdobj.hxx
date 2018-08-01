@@ -312,7 +312,6 @@ private:
     friend class                SdrObjListIter;
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
-    friend class                SdrDelayBroadcastObjectChange;
 
     // OperationSmiley: Allow at each SdrObject to set a FillGeometryDefiningShape,
     // so that for SdrObjects where this is set, the definition of a defined FillStyle
@@ -1016,8 +1015,6 @@ private:
                                       mpProperties;
     std::unique_ptr<sdr::contact::ViewContact>
                                       mpViewContact;
-    bool                              mbDelayBroadcastObjectChange : 1;
-    mutable bool                      mbBroadcastObjectChangePending : 1;
 
     // global static ItemPool for not-yet-inserted items
     static SdrItemPool*         mpGlobalItemPool;
@@ -1044,20 +1041,6 @@ struct SVX_DLLPUBLIC SdrObjectFreeOp
     {
         SdrObject::Free(obj);
     }
-};
-
-/** Suppress BroadcastObjectChange() until destruction of the (last) instance.
-    Prevents multiple broadcasts for a sequence of calls that would trigger a
-    broadcast each. Instances may be nested in levels, the outer instance will
-    trigger the final broadcast.
- */
-class SVX_DLLPUBLIC SdrDelayBroadcastObjectChange
-{
-    SdrObject&  mrObj;
-    bool        mbOldDelayBroadcastObjectChange;
-public:
-    SdrDelayBroadcastObjectChange( SdrObject& rObj );
-    ~SdrDelayBroadcastObjectChange();
 };
 
 struct SdrObjCreatorParams

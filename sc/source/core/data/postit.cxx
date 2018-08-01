@@ -700,8 +700,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             if( maNoteData.m_pCaption )
             {
                 // Prevent triple change broadcasts of the same object.
-                SdrDelayBroadcastObjectChange aDelayChange( *maNoteData.m_pCaption);
-
+                maNoteData.m_pCaption->getSdrModelFromSdrObject().setLock(true);
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
 
                 // transfer ownership of outliner object to caption, or set simple text
@@ -736,6 +735,10 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                     maNoteData.m_pCaption->SetLogicRect( aCaptRect );
                     aCreator.FitCaptionToRect();
                 }
+
+                // End prevent triple change broadcasts of the same object.
+                maNoteData.m_pCaption->getSdrModelFromSdrObject().setLock(false);
+                maNoteData.m_pCaption->BroadcastObjectChange();
             }
         }
         // forget the initial caption data struct
