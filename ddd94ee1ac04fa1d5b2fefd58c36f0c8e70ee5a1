@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_92479a4c",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T12:10:22Z",
+      "side": 1,
+      "message": "Yeah, that might indeed be the (rather poor) rationale there.  Seeing these functions are only @since LibreOffice 4.1 (thus unlikely used widely in external code, if at all, and even less likely to rely on the---added even later with that 09123760860f99756d37b70557d83f707fda6b17---broad contract for negative nLen), it may be best to do an [API CHANGE] to a narrow contract and assert unconditionally.",
+      "parentUuid": "ffe62b97_9232faf0",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_6ff0af68",
         "filename": "sal/rtl/strtmpl.cxx",
         "patchSetId": 2
