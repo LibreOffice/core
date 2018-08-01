@@ -165,7 +165,7 @@ private:
      MigrationHashMap     m_aOldVersionItemsHashMap;
 
     // functions to control the migration process
-    static bool   readAvailableMigrations(migrations_available&);
+    static void   readAvailableMigrations(migrations_available&);
     bool          alreadyMigrated();
     static migrations_vr readMigrationSteps(const OUString& rMigrationName);
     sal_Int32     findPreferredMigrationProcess(const migrations_available&);

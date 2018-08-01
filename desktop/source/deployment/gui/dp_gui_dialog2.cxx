@@ -1026,19 +1026,15 @@ IMPL_STATIC_LINK(ExtMgrDialog, Restart, void*, pParent, void)
 
 bool ExtMgrDialog::Close()
 {
-    bool bRet = TheExtensionManager::queryTermination();
-    if ( bRet )
+    bool bRet = ModelessDialog::Close();
+    m_pManager->terminateDialog();
+    //only suggest restart if modified and this is the first close attempt
+    if (!m_bClosed && m_pManager->isModified())
     {
-        bRet = ModelessDialog::Close();
-        m_pManager->terminateDialog();
-        //only suggest restart if modified and this is the first close attempt
-        if (!m_bClosed && m_pManager->isModified())
-        {
-            m_pManager->clearModified();
-            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
-        }
-        m_bClosed = true;
+        m_pManager->clearModified();
+        Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
     }
+    m_bClosed = true;
     return bRet;
 }
 
