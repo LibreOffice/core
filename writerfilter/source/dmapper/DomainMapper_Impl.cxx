@@ -2676,15 +2676,17 @@ void DomainMapper_Impl::PushFieldContext()
     TagLogger::getInstance().element("pushFieldContext");
 #endif
 
-    uno::Reference< text::XTextAppend >  xTextAppend;
+    uno::Reference<text::XTextCursor> xCrsr;
     if (!m_aTextAppendStack.empty())
-        xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    uno::Reference< text::XTextRange > xStart;
-    if (xTextAppend.is())
     {
-        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
-        xStart = xCrsr->getStart();
+        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        if (xTextAppend.is())
+            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
     }
+
+    uno::Reference< text::XTextRange > xStart;
+    if (xCrsr.is())
+        xStart = xCrsr->getStart();
     m_aFieldStack.push( std::make_shared<FieldContext>( xStart ) );
 }
 /*-------------------------------------------------------------------------
