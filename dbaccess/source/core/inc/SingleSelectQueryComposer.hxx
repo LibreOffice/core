@@ -114,7 +114,7 @@ namespace dbaccess
             std::vector< std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setANDCriteria(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
             std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
-        bool setLikePredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
+        void setLikePredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
             std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setComparsionPredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
             std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
@@ -136,7 +136,7 @@ namespace dbaccess
 
         void setConditionByColumn( const css::uno::Reference< css::beans::XPropertySet >& column
                                 , bool andCriteria
-                                , std::function<bool(OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor
+                                , std::function<void SAL_CALL (OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
@@ -151,10 +151,6 @@ namespace dbaccess
 
         css::uno::Reference< css::container::XIndexAccess >
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
-
-        //helper methods for mem_fun_t
-        bool implSetFilter(const OUString& _sFilter) { setFilter(_sFilter); return true;}
-        bool implSetHavingClause(const OUString& _sFilter) { setHavingClause(_sFilter); return true;}
 
         /** returns the part of the select statement
             @param  _ePart

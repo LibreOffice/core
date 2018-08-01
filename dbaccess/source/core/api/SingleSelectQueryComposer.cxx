@@ -416,13 +416,13 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getSt
 
 void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
 {
-    auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::implSetHavingClause);
+    auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::setHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
 void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
 {
-    auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::implSetFilter);
+    auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::setFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
@@ -1005,7 +1005,8 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode const * pConditio
     }
     else if (SQL_ISRULE(pCondition,like_predicate))
     {
-        return setLikePredicate(pCondition,_rIterator,rFilter,xFormatter);
+        setLikePredicate(pCondition,_rIterator,rFilter,xFormatter);
+        return true;
     }
     else if (SQL_ISRULE(pCondition,test_for_null) ||
              SQL_ISRULE(pCondition,in_predicate) ||
@@ -1102,7 +1103,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode const * _pP
     return nPredicate;
 }
 
-bool OSingleSelectQueryComposer::setLikePredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
+void OSingleSelectQueryComposer::setLikePredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
                                             std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
     OSL_ENSURE(SQL_ISRULE(pCondition, like_predicate),"setLikePredicate: pCondition is not a LikePredicate");
@@ -1165,7 +1166,6 @@ bool OSingleSelectQueryComposer::setLikePredicate(OSQLParseNode const * pConditi
         aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
-    return true;
 }
 
 bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
@@ -1576,7 +1576,9 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Seque
     setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
 }
 
-void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria, std::function<bool(OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor, sal_Int32 filterOperator)
+void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria, 
+                                                       std::function<void SAL_CALL (OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor,
+                                                       sal_Int32 filterOperator)
 {
     try
     {

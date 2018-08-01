@@ -74,9 +74,9 @@ namespace dbaui
         sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
         Cardinality  GetCardinality() const { return m_nCardinality; }
 
-        bool        IsConnectionPossible();
+        void        IsConnectionPossible();
         void        ChangeOrientation();
-        bool        DropRelation();
+        void        DropRelation();
     };
 }
 
