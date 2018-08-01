@@ -5916,7 +5916,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CC supports -fstack-protector-strong])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -fstack-protector-strong"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_STACK_PROTECTOR_STRONG=TRUE ],[])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ char a[8]; return 0; ]])],[ HAVE_GCC_STACK_PROTECTOR_STRONG=TRUE ],[])
     CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_STACK_PROTECTOR_STRONG" = "TRUE"; then
         AC_MSG_RESULT([yes])
