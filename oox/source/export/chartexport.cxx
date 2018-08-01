@@ -2313,18 +2313,32 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 }
 
-void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet, bool bAxis)
+void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_txPr), FSEND);
 
     sal_Int32 nRotation = 0;
-    if (bAxis)
+    if (auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xPropSet, uno::UNO_QUERY))
     {
-        double fTextRotation = 0;
-        uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
-        if (aAny.hasValue() && (aAny >>= fTextRotation))
-            nRotation = fTextRotation * -600.0;
+        double fMultiplier = 0;
+        // We have at least two possible units of returned value: degrees (e.g., for data labels),
+        // and 100ths of degree (e.g., for axes labels). The latter is returned as an Any wrapping
+        // a sal_Int32 value (see WrappedTextRotationProperty::convertInnerToOuterValue), while
+        // the former is double. So we could test the contained type to decide which multiplier to
+        // use. But testing the service info should be more robust.
+        if (xServiceInfo->supportsService("com.sun.star.chart.ChartAxis"))
+            fMultiplier = -600.0;
+        else if (xServiceInfo->supportsService("com.sun.star.chart2.DataSeries"))
+            fMultiplier = -60000.0;
+
+        if (fMultiplier)
+        {
+            double fTextRotation = 0;
+            uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+            if (aAny.hasValue() && (aAny >>= fTextRotation))
+                nRotation = std::round(fTextRotation * fMultiplier);
+        }
     }
 
     if (nRotation)
@@ -2737,7 +2751,7 @@ void ChartExport::_exportAxis(
     // shape properties
     exportShapeProps( xAxisProp );
 
-    exportTextProps(xAxisProp, true);
+    exportTextProps(xAxisProp);
 
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
             XML_val, I32S( rAxisIdPair.nCrossAx ),
