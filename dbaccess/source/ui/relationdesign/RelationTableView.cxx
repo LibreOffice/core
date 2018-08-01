@@ -262,8 +262,9 @@ bool ORelationTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool 
     ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(rConn->GetData().get());
     try
     {
-        if ( m_bInRemove || pTabConnData->DropRelation())
-            return OJoinTableView::RemoveConnection(rConn, true);
+        if (!m_bInRemove)
+            pTabConnData->DropRelation();
+        return OJoinTableView::RemoveConnection(rConn, true);
     }
     catch(SQLException& e)
     {

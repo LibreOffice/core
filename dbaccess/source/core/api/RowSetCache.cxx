@@ -686,7 +686,7 @@ bool ORowSetCache::isLast(  )
     return m_nPosition == m_nRowCount;
 }
 
-bool ORowSetCache::beforeFirst(  )
+void ORowSetCache::beforeFirst(  )
 {
     if(!m_bBeforeFirst)
     {
@@ -697,10 +697,9 @@ bool ORowSetCache::beforeFirst(  )
         moveWindow();
         m_aMatrixIter = m_pMatrix->end();
     }
-    return true;
 }
 
-bool ORowSetCache::afterLast(  )
+void ORowSetCache::afterLast(  )
 {
     if(!m_bAfterLast)
     {
@@ -718,7 +717,6 @@ bool ORowSetCache::afterLast(  )
         m_nPosition = 0;
         m_aMatrixIter = m_pMatrix->end();
     }
-    return true;
 }
 
 bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
