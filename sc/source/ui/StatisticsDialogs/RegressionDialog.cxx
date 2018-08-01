@@ -116,9 +116,9 @@ namespace
 
     OUString constTemplateLINEST[] =
     {
-        "=LINEST(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE% ; TRUE ; TRUE)",
-        "=LINEST(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%) ; TRUE ; TRUE)",
-        "=LINEST(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%) ; TRUE ; TRUE)"
+        "=LINEST(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE% ; %CALC_INTERCEPT% ; TRUE)",
+        "=LINEST(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)",
+        "=LINEST(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"
     };
 
     OUString constRegressionFormula[] =
@@ -147,7 +147,8 @@ ScRegressionDialog::ScRegressionDialog(
     mbUnivariate(true),
     mnNumIndependentVars(1),
     mnNumObservations(0),
-    mbUse3DAddresses(false)
+    mbUse3DAddresses(false),
+    mbCalcIntercept(true)
 {
     get(mpWithLabelsCheckBox, "withlabels-check");
     get(mpLinearRadioButton, "linear-radio");
@@ -155,10 +156,10 @@ ScRegressionDialog::ScRegressionDialog(
     get(mpPowerRadioButton, "power-radio");
     get(mpConfidenceLevelField, "confidencelevel-spin");
     get(mpCalcResidualsCheckBox, "calcresiduals-check");
+    get(mpNoInterceptCheckBox, "nointercept-check");
     get(mpErrorMessage, "error-message");
     mpWithLabelsCheckBox->SetToggleHdl(LINK(this, ScRegressionDialog, CheckBoxHdl));
     mpConfidenceLevelField->SetModifyHdl(LINK(this, ScRegressionDialog, NumericFieldHdl));
-    mpCalcResidualsCheckBox->SetToggleHdl(LINK(this, ScRegressionDialog, CheckBoxHdl));
 }
 
 ScRegressionDialog::~ScRegressionDialog()
@@ -179,6 +180,7 @@ void ScRegressionDialog::dispose()
     mpPowerRadioButton.disposeAndClear();
     mpConfidenceLevelField.disposeAndClear();
     mpCalcResidualsCheckBox.disposeAndClear();
+    mpNoInterceptCheckBox.disposeAndClear();
     mpErrorMessage.disposeAndClear();
     ScStatisticsTwoVariableDialog::dispose();
 }
@@ -194,6 +196,7 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);
+    mbCalcIntercept = !mpNoInterceptCheckBox->IsChecked();
 
     // max col of our output should account for
     // 1. constant term column,
@@ -378,7 +381,10 @@ void ScRegressionDialog::WriteRawRegressionResults(AddressWalkerWriter& rOutput,
     rOutput.writeString(ScResId(STR_LINEST_RAW_OUTPUT_TITLE));
     rOutput.newLine();
     rOutput.push();
-    rTemplate.setTemplate(constTemplateLINEST[nRegressionIndex]);
+
+    rTemplate.setTemplate(constTemplateLINEST[nRegressionIndex].
+                          replaceFirst("%CALC_INTERCEPT%",
+                                       mbCalcIntercept ? OUString("TRUE") : OUString("FALSE")));
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), 1 + mnNumIndependentVars, 5);
     // Add LINEST result components to template
     // 1. Add ranges for coefficients and standard errors for indep. vars and the intercept.
@@ -423,7 +429,8 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
         "=%SERRORY_ADDR%",
         "=" + OUString::number(mnNumIndependentVars),
         "=" + OUString::number(mnNumObservations),
-        "=1 - (1 - %RSQUARED_ADDR%)*(%NUMOBS_ADDR% - 1)/(%NUMOBS_ADDR% - %NUMXVARS_ADDR% - 1)"
+        "=1 - (1 - %RSQUARED_ADDR%)*(%NUMOBS_ADDR% - 1)/(%NUMOBS_ADDR% - %NUMXVARS_ADDR%" +
+            (mbCalcIntercept ? OUString(" - 1)") : OUString(")"))
     };
 
     rTemplate.autoReplaceAddress("%NUMXVARS_ADDR%", rOutput.current(1, 2));
