@@ -277,7 +277,7 @@ void ScFunctionWin::UpdateFunctionList()
 void ScFunctionWin::DoEnter()
 {
     OUString aFirstArgStr;
-    OUString aArgStr;
+    OUStringBuffer aArgStr;
     OUString aString=aFuncList->GetSelectedEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
@@ -327,11 +327,11 @@ void ScFunctionWin::DoEnter()
                     for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {
-                        aArgStr += "; ";
+                        aArgStr.append("; ");
                         OUString sTmp = pDesc->maDefArgNames[nArg];
                         sTmp = comphelper::string::strip(sTmp, ' ');
                         sTmp = sTmp.replaceAll(" ", "_");
-                        aArgStr += sTmp;
+                        aArgStr.append(sTmp);
                     }
                 }
             }
@@ -349,7 +349,7 @@ void ScFunctionWin::DoEnter()
                 if(nArgs>0)
                 {
                     pHdl->InsertFunction(aString);
-                    pEdView->InsertText(aArgStr,true);
+                    pEdView->InsertText(aArgStr.makeStringAndClear(),true);
                     ESelection  aESel=pEdView->GetSelection();
                     aESel.nEndPos = aESel.nStartPos + aFirstArgStr.getLength();
                     pEdView->SetSelection(aESel);

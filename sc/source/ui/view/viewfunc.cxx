@@ -418,7 +418,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             bool bCorrected = aComp.IsCorrected();
             if ( bCorrected )
             {   // try to parse with first parser-correction
-                pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
+                pArr = aComp.CompileString( aComp.GetCorrectedFormula().toString() );
             }
             if ( pArr->GetCodeError() == FormulaError::NONE )
             {
@@ -431,10 +431,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 OUString aCorrectedFormula;
                 if ( bAddEqual )
                 {
-                    aCorrectedFormula = "=" + aComp.GetCorrectedFormula();
+                    aCorrectedFormula = "=" + aComp.GetCorrectedFormula().toString();
                 }
                 else
-                    aCorrectedFormula = aComp.GetCorrectedFormula();
+                    aCorrectedFormula = aComp.GetCorrectedFormula().toString();
                 short nResult;
                 if ( aCorrectedFormula.getLength() == 1 )
                     nResult = RET_NO;   // empty formula, just '='

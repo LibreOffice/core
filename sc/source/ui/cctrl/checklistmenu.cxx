@@ -1948,7 +1948,7 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     {
         if ( maMembers[i].mbLeaf )
         {
-            OUString aLabel = maMembers[i].maName;
+            OUStringBuffer aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScResId(STR_EMPTYDATA);
 
@@ -1959,9 +1959,9 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
                     pParent && pParent->GetFirstItem( SvLBoxItemType::String);
                     pParent = pParent->GetParent())
             {
-                aLabel += ";" + maChecks->GetEntryText( pParent);
+                aLabel.append(";").append(maChecks->GetEntryText( pParent));
             }
-            bool bState = vCheckeds.find(aLabel) != vCheckeds.end();
+            bool bState = vCheckeds.find(aLabel.makeStringAndClear()) != vCheckeds.end();
 
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;

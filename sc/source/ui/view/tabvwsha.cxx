@@ -70,8 +70,6 @@ using namespace com::sun::star;
 
 bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
 {
-    OUString aStr;
-
     sal_uInt32 nFuncs = SC_MOD()->GetAppOptions().GetStatusFunc();
     ScViewData& rViewData   = GetViewData();
     ScMarkData& rMark       = rViewData.GetMarkData();
@@ -115,7 +113,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
             SCROW       nPosY       = rViewData.GetCurY();
             SCTAB       nTab        = rViewData.GetTabNo();
 
-            aStr = ScResId(pGlobStrId);
+            OUString aStr = ScResId(pGlobStrId);
             aStr += ": ";
 
             ScAddress aCursor( nPosX, nPosY, nTab );

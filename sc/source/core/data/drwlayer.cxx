@@ -1882,8 +1882,7 @@ OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
     while (bThere)
     {
         ++nId;
-        aGraphicName = aBase;
-        aGraphicName += OUString::number( nId );
+        aGraphicName = aBase + OUString::number( nId );
         bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != nullptr );
     }
 

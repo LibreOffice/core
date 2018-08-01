@@ -201,7 +201,6 @@ void ScMoveTableDlg::InitDocListBox()
     ScDocShell*     pScSh   = nullptr;
     sal_uInt16          nSelPos = 0;
     sal_uInt16          i       = 0;
-    OUString          aEntryName;
 
     m_xLbDoc->clear();
     m_xLbDoc->freeze();
@@ -212,7 +211,7 @@ void ScMoveTableDlg::InitDocListBox()
 
         if ( pScSh )
         {
-            aEntryName = pScSh->GetTitle();
+            OUString aEntryName = pScSh->GetTitle();
 
             if ( pScSh == SfxObjectShell::Current() )
             {

@@ -2880,15 +2880,15 @@ XclImpPictureObj::XclImpPictureObj( const XclImpRoot& rRoot ) :
 
 OUString XclImpPictureObj::GetOleStorageName() const
 {
-    OUString aStrgName;
+    OUStringBuffer aStrgName;
     if( (mbEmbedded || mbLinked) && !mbControl && (mnStorageId > 0) )
     {
         aStrgName = mbEmbedded ? OUString(EXC_STORAGE_OLE_EMBEDDED) : OUString(EXC_STORAGE_OLE_LINKED);
         static const sal_Char spcHexChars[] = "0123456789ABCDEF";
         for( sal_uInt8 nIndex = 32; nIndex > 0; nIndex -= 4 )
-            aStrgName += OUStringLiteral1( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] );
+            aStrgName.append(OUStringLiteral1( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ));
     }
-    return aStrgName;
+    return aStrgName.makeStringAndClear();
 }
 
 void XclImpPictureObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
@@ -4188,7 +4188,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
     if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
     {
         sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
-        OUString aNoteText = rStrm.ReadRawByteString( nPartLen );
+        OUStringBuffer aNoteText = rStrm.ReadRawByteString( nPartLen );
         nTotalLen = nTotalLen - nPartLen;
         while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
         {
@@ -4198,7 +4198,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
             if( aXclPos.mnRow == 0xFFFF )
             {
                 OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
-                aNoteText += rStrm.ReadRawByteString( nPartLen );
+                aNoteText.append(rStrm.ReadRawByteString( nPartLen ));
                 nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
             }
             else
@@ -4209,7 +4209,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
                 nTotalLen = 0;
             }
         }
-        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText, false, false );
+        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText.makeStringAndClear(), false, false );
     }
 }
 

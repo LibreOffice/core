@@ -64,16 +64,16 @@ OUString lclCreateMultiParameterFormula(
             const OUString&     aWildcard,  const ScDocument*     pDocument,
             const ScAddress::Details& aAddressDetails)
 {
-    OUString aResult;
+    OUStringBuffer aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
         OUString aRangeString(aRangeList[i].Format(ScRefFlags::RANGE_ABS, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
-        aResult += aFormulaString;
+        aResult.append(aFormulaString);
         if(i != aRangeList.size() - 1) // Not Last
-            aResult+= ";";
+            aResult.append(";");
     }
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)

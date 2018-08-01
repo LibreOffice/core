@@ -376,7 +376,8 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
         // the 1st character must be '#'.
         return;
 
-    OUString aNewUrl('#'), aTabName;
+    OUStringBuffer aNewUrl("#");
+    OUStringBuffer aTabName;
 
     bool bInQuote = false;
     bool bQuoteTabName = false;
@@ -391,7 +392,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
                 // quite.  When this occurs, the whole table name needs to be
                 // quoted.
                 bQuoteTabName = true;
-                aTabName += OUStringLiteral1(c) + OUStringLiteral1(c);
+                aTabName.append(c).append(c);
                 ++i;
                 continue;
             }
@@ -400,16 +401,16 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
             if (!bInQuote && !aTabName.isEmpty())
             {
                 if (bQuoteTabName)
-                    aNewUrl += "'";
-                aNewUrl += aTabName;
+                    aNewUrl.append("'");
+                aNewUrl.append(aTabName);
                 if (bQuoteTabName)
-                    aNewUrl += "'";
+                    aNewUrl.append("'");
             }
         }
         else if (bInQuote)
-            aTabName += OUStringLiteral1(c);
+            aTabName.append(c);
         else
-            aNewUrl += OUStringLiteral1(c);
+            aNewUrl.append(c);
     }
 
     if (bInQuote)
@@ -417,7 +418,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
         return;
 
     // All is good.  Pass the new URL.
-    rUrl = aNewUrl;
+    rUrl = aNewUrl.makeStringAndClear();
 }
 
 void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const OUString& rUrl )

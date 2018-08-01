@@ -1133,7 +1133,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
 
 void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
 {
-    OUString aTipStr;
+    OUStringBuffer aTipStr;
     OUString aFuncNameStr;
     OUString aDescFuncNameStr;
     ::std::vector<OUString>::const_iterator itStr = rFuncStrVec.begin();
@@ -1157,21 +1157,20 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
         }
         else
         {
-            aTipStr = aTipStr + ", ";
+            aTipStr.append(", ");
         }
-        aTipStr = aTipStr + aFuncNameStr;
+        aTipStr.append(aFuncNameStr);
         if ( itStr == rFuncStrVec.begin() )
-            aTipStr += "]";
+            aTipStr.append("]");
         if ( --nRemainFindNumber <= 0 )
             break;
     }
     sal_Int32 nRemainNumber = rFuncStrVec.size() - nMaxFindNumber;
     if ( nRemainFindNumber == 0 && nRemainNumber > 0 )
     {
-        OUString aBufStr( aTipStr );
         OUString aMessage( ScResId( STR_FUNCTIONS_FOUND ) );
         aMessage = aMessage.replaceFirst("%2", OUString::number(nRemainNumber));
-        aMessage = aMessage.replaceFirst("%1", aBufStr);
+        aMessage = aMessage.replaceFirst("%1", aTipStr.makeStringAndClear());
         aTipStr = aMessage;
     }
     FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
@@ -1183,10 +1182,10 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     {
         if ( !ppFDesc->getFunctionName().isEmpty() )
         {
-            aTipStr += " : " + ppFDesc->getDescription();
+            aTipStr.append(" : ").append(ppFDesc->getDescription());
         }
     }
-    ShowTip( aTipStr );
+    ShowTip( aTipStr.makeStringAndClear() );
 }
 
 void ScInputHandler::UseFormulaData()
