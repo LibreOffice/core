@@ -290,7 +290,7 @@ public:
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
-    bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
+    void ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
     TBCGeneralInfo& getGeneralInfo() { return controlGeneralInfo; }
     TBCMenuSpecific* getMenuSpecific();
 };

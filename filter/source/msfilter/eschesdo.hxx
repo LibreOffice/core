@@ -117,7 +117,7 @@ class ImplEESdrWriter
     const SdrPage*          mpSdrPage;
     std::unique_ptr<EscherSolverContainer> mpSolverContainer;
 
-    bool                ImplInitPageValues();
+    void                ImplInitPageValues();
     void                ImplWritePage( EscherSolverContainer& rSolver );
     sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                             EscherSolverContainer& rSolver,

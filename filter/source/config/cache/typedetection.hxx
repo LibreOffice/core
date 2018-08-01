@@ -75,7 +75,7 @@ private:
     bool impl_getPreselectionForType(
         const OUString& sPreSelType, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService);
 
-    bool impl_getPreselectionForDocumentService(
+    void impl_getPreselectionForDocumentService(
         const OUString& sPreSelDocumentService, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes);
 
     OUString impl_getTypeFromFilter(const OUString& rFilterName);

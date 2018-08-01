@@ -94,7 +94,7 @@ private:
     sal_Int32           mnDefaultLinkAction;
     bool                mbConvertOOoTargetToPDFTarget;
     bool                mbExportBmkToDest;
-    bool                ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
+    void                ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                         const GDIMetaFile& rMtf );
 
     bool                mbSignPDF;

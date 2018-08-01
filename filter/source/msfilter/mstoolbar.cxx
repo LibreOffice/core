@@ -266,7 +266,7 @@ TBCMenuSpecific* TBCData::getMenuSpecific()
     TBCMenuSpecific* pMenu = dynamic_cast< TBCMenuSpecific* >( controlSpecificInfo.get() );
     return pMenu;
 }
-bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vector< css::beans::PropertyValue >& props, bool& bBeginGroup, bool bIsMenuBar )
+void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vector< css::beans::PropertyValue >& props, bool& bBeginGroup, bool bIsMenuBar )
 {
     sal_uInt16  nStyle = 0;
     bBeginGroup = rHeader.isBeginGroup();
@@ -359,7 +359,6 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     aProp.Value <<= nStyle;
     props.push_back( aProp );
-    return true; // just ignore
 }
 
 #ifdef DEBUG_FILTER_MSTOOLBAR

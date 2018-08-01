@@ -438,11 +438,10 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     return true;
 }
 
-bool T602ImportFilter::test()
+void T602ImportFilter::test()
 {
     Reset602();
     Read602();
-    return true;
 }
 
 void T602ImportFilter::Reset602()
@@ -1159,7 +1158,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImport602(SvStream &rStream)
     css::uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
     rtl::Reference<T602ImportFilter::T602ImportFilter> aImport(
         new T602ImportFilter::T602ImportFilter(xStream));
-    return aImport->test();
+    aImport->test();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
