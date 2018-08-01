@@ -122,7 +122,7 @@ protected:
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvxConfigEntry *pMenuData );
 
-    bool LoadSubMenus(
+    void LoadSubMenus(
         const css::uno::Reference< css::container::XIndexAccess >& xMenuSettings,
         const OUString& rBaseTitle, SvxConfigEntry const * pParentData, bool bContextMenu );
 

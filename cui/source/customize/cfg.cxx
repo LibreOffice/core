@@ -449,14 +449,14 @@ MenuSaveInData::SetEntries( std::unique_ptr<SvxEntries> pNewEntries )
     pRootEntry->SetEntries( std::move(pNewEntries) );
 }
 
-bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& xMenuSettings,
+void SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& xMenuSettings,
     const OUString& rBaseTitle, SvxConfigEntry const * pParentData, bool bContextMenu )
 {
     SvxEntries* pEntries = pParentData->GetEntries();
 
     // Don't access non existing menu configuration!
     if ( !xMenuSettings.is() )
-        return true;
+        return;
 
     for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); ++nIndex )
     {
@@ -559,7 +559,6 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
             }
         }
     }
-    return true;
 }
 
 bool MenuSaveInData::Apply()

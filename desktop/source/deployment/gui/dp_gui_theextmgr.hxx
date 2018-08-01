@@ -96,7 +96,6 @@ public:
     bool installPackage( const OUString &rPackageURL, bool bWarnUser = false );
     void createPackageList();
 
-    static bool queryTermination();
     void terminateDialog();
 
     // Tools
