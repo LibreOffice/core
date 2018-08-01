@@ -242,6 +242,8 @@ void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int3
 sal_Int32 lcl_getTextLineHeight( const std::vector< sal_Int32 >& aRowHeights, const sal_Int32 nNumberOfRows, double fViewFontSize )
 {
     const sal_Int32 nFontHeight = static_cast< sal_Int32 >( fViewFontSize );
+    if (!nFontHeight)
+        return 0;
     sal_Int32 nTextLineHeight = nFontHeight;
     for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
     {
