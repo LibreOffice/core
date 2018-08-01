@@ -4616,7 +4616,7 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() )
+                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() && xCrsr.is())
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
                             xToInsert.set(xFormField, uno::UNO_QUERY);
@@ -4632,7 +4632,7 @@ void DomainMapper_Impl::PopFieldContext()
                                 pFormControlHelper->insertControl(xTxtRange);
                             }
                         }
-                        else if(!pContext->GetHyperlinkURL().isEmpty())
+                        else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
                         {
                             xCrsr->gotoEnd( true );
 
