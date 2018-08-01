@@ -60,16 +60,16 @@ namespace XSLT
     void OleHandler::ensureCreateRootStorage()
     {
         if (m_storage == nullptr || m_rootStream == nullptr)
-            {
-                m_rootStream = createTempFile();
-                Sequence<Any> args(1);
-                args[0] <<= m_rootStream->getInputStream();
+        {
+            m_rootStream = createTempFile();
+            Sequence<Any> args(1);
+            args[0] <<= m_rootStream->getInputStream();
 
-                Reference<XNameContainer> cont(
-                     Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
-                         ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
-                m_storage = cont;
-            }
+            Reference<XNameContainer> cont(
+                 Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
+                     ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
+            m_storage = cont;
+        }
     }
 
     void OleHandler::initRootStorageFromBase64(const OString& content)
@@ -98,15 +98,15 @@ namespace XSLT
     OleHandler::encodeSubStorage(const OUString& streamName)
     {
         if (!m_storage || !m_storage->hasByName(streamName))
-            {
-                return "Not Found:";// + streamName;
-            }
-        ;
+        {
+            return "Not Found:";// + streamName;
+        }
+
         Reference<XInputStream> subStream(m_storage->getByName(streamName), UNO_QUERY);
         if (!subStream.is())
-            {
-                return "Not Found:";// + streamName;
-            }
+        {
+            return "Not Found:";// + streamName;
+        }
         //The first four byte are the length of the uncompressed data
         Sequence<sal_Int8> aLength(4);
         Reference<XSeekable> xSeek(subStream, UNO_QUERY);
@@ -114,9 +114,9 @@ namespace XSLT
         //Get the uncompressed length
         int readbytes = subStream->readBytes(aLength, 4);
         if (4 != readbytes)
-            {
-                return "Can not read the length.";
-            }
+        {
+            return "Can not read the length.";
+        }
         sal_Int32 const oleLength = (static_cast<sal_uInt8>(aLength[0]) <<  0U)
                                   | (static_cast<sal_uInt8>(aLength[1]) <<  8U)
                                   | (static_cast<sal_uInt8>(aLength[2]) << 16U)
@@ -129,9 +129,9 @@ namespace XSLT
         //Read all bytes. The compressed length should less then the uncompressed length
         readbytes = subStream->readBytes(content, oleLength);
         if (oleLength < readbytes)
-            {
-                return "oleLength";// +oleLength + readBytes;
-            }
+        {
+            return "oleLength";// +oleLength + readBytes;
+        }
 
         // Decompress the bytes
         std::unique_ptr< ::ZipUtils::Inflater> decompresser(new ::ZipUtils::Inflater(false));
@@ -150,14 +150,14 @@ namespace XSLT
     OleHandler::insertByName(const OUString& streamName, const OString& content)
     {
         if ( streamName == "oledata.mso" )
-            {
-                initRootStorageFromBase64(content);
-            }
+        {
+            initRootStorageFromBase64(content);
+        }
         else
-            {
-                ensureCreateRootStorage();
-                insertSubStorage(streamName, content);
-            }
+        {
+            ensureCreateRootStorage();
+            insertSubStorage(streamName, content);
+        }
     }
 
     const OString
