@@ -436,6 +436,7 @@ static inline SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
 
 static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShape,
                                    const OUString& rClass,
+                                   const OUString& rPresetType,
                                    const CustomShapePropertiesPtr pCustomShapePropertiesPtr,
                                    const TextBodyPtr pTextBody,
                                    const GraphicHelper& rGraphicHelper )
@@ -540,6 +541,7 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
     const OUString sPath( "Path" );
     const OUString sTextPath( "TextPath" );
     const OUString sAdjustmentValues( "AdjustmentValues" );
+    const OUString sPresetTextWarp( "PresetTextWarp" );
 
     lcl_resetPropertyValue( aGeomPropVec, sCoordinateSize );
     lcl_resetPropertyValue( aGeomPropVec, sEquations );
@@ -555,6 +557,9 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
 
     lcl_setPropertyValue( aGeomPropVec, sTextPath,
         comphelper::makePropertyValue( sTextPath, aPropertyValues ) );
+
+    lcl_setPropertyValue( aGeomPropVec, sPresetTextWarp,
+        comphelper::makePropertyValue( sPresetTextWarp, rPresetType ) );
 
     if ( rClass == "fontwork-arch-up-curve" || rClass == "fontwork-circle-curve"
         || rClass == "fontwork-arch-down-curve" || rClass == "fontwork-open-circle-curve" )
@@ -1309,7 +1314,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     const OUString sPresetType = mpTextBody->getTextProperties().msPrst;
                     sClass = PresetGeometryTypeNames::GetFontworkType( sPresetType );
 
-                    lcl_createPresetShape( mxShape, sClass, mpCustomShapePropertiesPtr, mpTextBody, rGraphicHelper );
+                    lcl_createPresetShape( mxShape, sClass, sPresetType, mpCustomShapePropertiesPtr, mpTextBody, rGraphicHelper );
                 }
             }
         }
