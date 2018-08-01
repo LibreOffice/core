@@ -264,8 +264,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
     {
         std::vector< css::beans::PropertyValue > props;
         bool bBeginGroup = false;
-        if ( ! tbcd->ImportToolBarControl( helper, props, bBeginGroup, bIsMenuToolbar ) )
-            return false;
+        tbcd->ImportToolBarControl( helper, props, bBeginGroup, bIsMenuToolbar );
         TBCMenuSpecific* pMenu = tbcd->getMenuSpecific();
         if ( pMenu )
         {
