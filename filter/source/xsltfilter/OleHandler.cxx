@@ -97,7 +97,7 @@ namespace XSLT
     OString SAL_CALL
     OleHandler::encodeSubStorage(const OUString& streamName)
     {
-        if (!m_storage->hasByName(streamName))
+        if (!m_storage.is() || !m_storage->hasByName(streamName))
             {
                 return "Not Found:";// + streamName;
             }
