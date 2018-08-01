@@ -249,16 +249,6 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
 }
 
 
-bool TheExtensionManager::queryTermination()
-{
-    if ( dp_misc::office_is_running() )
-        return true;
-    // the standalone application unopkg must not close ( and quit ) the dialog
-    // when there are still actions in the queue
-    return true;
-}
-
-
 void TheExtensionManager::terminateDialog()
 {
     if ( ! dp_misc::office_is_running() )
