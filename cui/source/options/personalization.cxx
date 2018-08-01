@@ -30,6 +30,8 @@
 #include <dialmgr.hxx>
 #include <strings.hrc>
 #include <personalization.hrc>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -361,6 +363,8 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
         // broadcast the change
         DataChangedEvent aDataChanged( DataChangedEventType::SETTINGS, nullptr, AllSettingsFlags::STYLE );
         Application::NotifyAllWindows( aDataChanged );
+        if (SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        sfx2::SfxNotebookBar::RefreshNotebookBar();
     }
 
     return bModified;

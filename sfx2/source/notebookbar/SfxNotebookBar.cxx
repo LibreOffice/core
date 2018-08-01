@@ -26,6 +26,9 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace sfx2;
 using namespace css::uno;
@@ -444,6 +447,86 @@ void SfxNotebookBar::ToggleMenubar()
                 aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
                 aRoot.commit();
             }
+        }
+    }
+}
+
+void SfxNotebookBar::RefreshNotebookBar()
+{
+    struct ExecuteInfo
+    {
+        uno::Reference< frame::XDispatch >  xDispatch;
+        util::URL                           aTargetURL;
+        uno::Sequence< beans::PropertyValue >      aArgs;
+    };
+
+    const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+    OUString aModuleName = xModuleManager->identify( xFrame );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
+
+    {
+        OUString Notebookbarfile = lcl_getNotebookbarFileName( eApp );
+        if(Notebookbarfile=="notebookbar.ui")
+            Notebookbarfile="notebookbar_compact.ui";
+        else
+            Notebookbarfile="notebookbar.ui";
+
+        OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+        aBuf.append( Notebookbarfile );
+        css::util::URL aTargetURL;
+        uno::Sequence< beans::PropertyValue > aArgs;
+
+        aTargetURL.Complete = aBuf.makeStringAndClear();
+        uno::Reference< util::XURLTransformer > xURLTransformer =
+        util::URLTransformer::create(comphelper::getProcessComponentContext());
+        xURLTransformer->parseStrict( aTargetURL );
+
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
+        if ( xDispatchProvider.is() )
+        {
+            uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+            pExecuteInfo->xDispatch     = xDispatch;
+            pExecuteInfo->aTargetURL    = aTargetURL;
+            pExecuteInfo->aArgs         = aArgs;
+            if ( pExecuteInfo->xDispatch.is() )
+            {
+                pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+            }
+
+        }
+    }
+    {
+        OUString Notebookbarfile = lcl_getNotebookbarFileName( eApp );
+        OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+        aBuf.append( Notebookbarfile );
+        css::util::URL aTargetURL;
+        uno::Sequence< beans::PropertyValue > aArgs;
+
+        aTargetURL.Complete = aBuf.makeStringAndClear();
+        uno::Reference< util::XURLTransformer > xURLTransformer =
+        util::URLTransformer::create(comphelper::getProcessComponentContext());
+        xURLTransformer->parseStrict( aTargetURL );
+
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
+        if ( xDispatchProvider.is() )
+        {
+            uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+            pExecuteInfo->xDispatch     = xDispatch;
+            pExecuteInfo->aTargetURL    = aTargetURL;
+            pExecuteInfo->aArgs         = aArgs;
+            if ( pExecuteInfo->xDispatch.is() )
+            {
+                pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+            }
+
         }
     }
 }

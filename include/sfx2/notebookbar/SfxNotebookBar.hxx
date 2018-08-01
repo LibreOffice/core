@@ -46,6 +46,8 @@ public:
     static void ShowMenubar(bool bShow);
     static void ToggleMenubar();
 
+    static void RefreshNotebookBar();
+
 private:
     static bool m_bLock;
     static bool m_bHide;
