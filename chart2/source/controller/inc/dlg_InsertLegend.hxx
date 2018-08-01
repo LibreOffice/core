@@ -40,7 +40,7 @@ public:
     SchLegendDlg( vcl::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC );
 
     void init( const css::uno::Reference< css::frame::XModel >& xChartModel );
-    bool writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
 };
 
 } //namespace chart

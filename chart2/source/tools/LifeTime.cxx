@@ -259,7 +259,7 @@ void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
     impl_unregisterApiCall(false);
 }
 
-bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException const & ex )
+void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException const & ex )
 {
     //this method is called when no closelistener has had a veto during queryclosing
     //the method returns false, if nothing stands against closing anymore
@@ -269,7 +269,7 @@ bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
     //this count cannot grow after try of close has started, because we wait in all those methods for end of try closing
     if( !m_nLongLastingCallCount )
-        return false;
+        return;
 
     impl_setOwnership( bDeliverOwnership, true );
 

@@ -37,7 +37,7 @@ public:
     DataLabelResources( VclBuilderContainer* pWindow, vcl::Window* pParent, const SfxItemSet& rInAttrs );
     ~DataLabelResources();
 
-    bool FillItemSet(SfxItemSet* rOutAttrs) const;
+    void FillItemSet(SfxItemSet* rOutAttrs) const;
     void Reset(const SfxItemSet& rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );

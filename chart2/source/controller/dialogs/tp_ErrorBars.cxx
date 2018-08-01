@@ -48,7 +48,8 @@ VclPtr<SfxTabPage> ErrorBarsTabPage::Create(
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
-    return m_aErrorBarResources.FillItemSet( *rOutAttrs );
+    m_aErrorBarResources.FillItemSet( *rOutAttrs );
+    return true;
 }
 
 void ErrorBarsTabPage::Reset( const SfxItemSet* rInAttrs )

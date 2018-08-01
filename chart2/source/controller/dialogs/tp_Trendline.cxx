@@ -38,7 +38,8 @@ VclPtr<SfxTabPage> TrendlineTabPage::Create(
 
 bool TrendlineTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
-    return m_aTrendlineResources.FillItemSet( rOutAttrs );
+    m_aTrendlineResources.FillItemSet( rOutAttrs );
+    return true;
 }
 
 void TrendlineTabPage::Reset( const SfxItemSet* rInAttrs )

@@ -54,7 +54,7 @@ public:
     void SetChartDocumentForRangeChoosing(
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
     void Reset(const SfxItemSet& rInAttrs);
-    bool FillItemSet(SfxItemSet& rOutAttrs) const;
+    void FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
 

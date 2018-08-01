@@ -228,9 +228,8 @@ void ChartController::executeDispatch_OpenLegendDialog()
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
-            bool bChanged = aDlg->writeToModel( getModel() );
-            if( bChanged )
-                aUndoGuard.commit();
+            aDlg->writeToModel( getModel() );
+            aUndoGuard.commit();
         }
     }
     catch(const uno::RuntimeException& e)
