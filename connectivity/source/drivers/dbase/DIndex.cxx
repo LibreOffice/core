@@ -260,7 +260,8 @@ bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     m_aRoot->PrintPage();
 #endif
 
-    return m_aCurLeaf->Delete(m_nCurNode);
+    m_aCurLeaf->Delete(m_nCurNode);
+    return true;
 }
 
 void ODbaseIndex::Collect(ONDXPage* pPage)
@@ -423,7 +424,7 @@ void ODbaseIndex::createINFEntry()
     aInfFile.WriteKey(aNewEntry, OUStringToOString(sEntry, m_pTable->getConnection()->getTextEncoding()));
 }
 
-bool ODbaseIndex::DropImpl()
+void ODbaseIndex::DropImpl()
 {
     closeImpl();
 
@@ -463,7 +464,6 @@ bool ODbaseIndex::DropImpl()
             }
         }
     }
-    return true;
 }
 
 void ODbaseIndex::impl_killFileAndthrowError_throw(const char* pErrorId, const OUString& _sFile)
@@ -474,7 +474,7 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(const char* pErrorId, const O
     m_pTable->getConnection()->throwGenericSQLException(pErrorId, *this);
 }
 
-bool ODbaseIndex::CreateImpl()
+void ODbaseIndex::CreateImpl()
 {
     // Create the Index
     const OUString sFile = getCompletePath();
@@ -610,7 +610,6 @@ bool ODbaseIndex::CreateImpl()
     }
     Release();
     createINFEntry();
-    return true;
 }
 
 
