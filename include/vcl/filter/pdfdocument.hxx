@@ -37,9 +37,21 @@ class PDFNumberElement;
 /// A byte range in a PDF file.
 class VCL_DLLPUBLIC PDFElement
 {
+    bool m_bVisiting;
+    bool m_bParsing;
+
 public:
+    PDFElement()
+        : m_bVisiting(false)
+        , m_bParsing(false)
+    {
+    }
     virtual bool Read(SvStream& rStream) = 0;
     virtual ~PDFElement() { }
+    void setVisiting(bool bVisiting) { m_bVisiting = bVisiting; }
+    bool alreadyVisiting() const { return m_bVisiting; }
+    void setParsing(bool bParsing) { m_bParsing = bParsing; }
+    bool alreadyParsing() const { return m_bParsing; }
 };
 
 /// Indirect object: something with a unique ID.
@@ -49,7 +61,6 @@ class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
     PDFDocument& m_rDoc;
     double m_fObjectValue;
     double m_fGenerationValue;
-    bool m_bVisiting;
     std::map<OString, PDFElement*> m_aDictionary;
     /// If set, the object contains this number element (outside any dictionary/array).
     PDFNumberElement* m_pNumberElement;
@@ -109,9 +120,6 @@ public:
     SvMemoryStream* GetStreamBuffer() const;
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
     PDFDocument& GetDocument();
-
-    /// Visits the page tree recursively, looking for page objects.
-    void visitPages(std::vector<PDFObjectElement*>& rRet);
 };
 
 /// Array object: a list.
