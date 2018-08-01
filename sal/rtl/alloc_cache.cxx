@@ -68,7 +68,7 @@ rtl_cache_type * rtl_cache_activate(
     }
     assert(RTL_MEMORY_ISP2(objalign));
 
-    cache->m_type_size  = objsize = RTL_MEMORY_P2ROUNDUP(objsize, objalign);
+    cache->m_type_size = RTL_MEMORY_P2ROUNDUP(objsize, objalign);
 
     cache->m_constructor = constructor;
     cache->m_destructor  = destructor;
