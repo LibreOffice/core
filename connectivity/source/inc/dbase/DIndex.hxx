@@ -116,8 +116,8 @@ namespace connectivity
             bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
 
             void createINFEntry();
-            bool CreateImpl();
-            bool DropImpl();
+            void CreateImpl();
+            void DropImpl();
 
             DECLARE_SERVICE_INFO();
         protected:

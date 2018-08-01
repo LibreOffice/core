@@ -40,7 +40,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
 }
 
-bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
+void MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
                                                    std::vector< OUString >& _rStrings)
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
@@ -75,11 +75,9 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
         // remember the list in the mork parser, we'll use it later
         pMork->lists_.push_back(groupTableName);
     }
-
-    return true;
 }
 
-bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
+void MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                                              const OUString& tableNamePattern,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
@@ -97,8 +95,7 @@ bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     std::vector< OUString > tables;
 
-    if ( !getTableStrings( _pCon, tables ) )
-        return false;
+    getTableStrings( _pCon, tables );
 
     for (OUString& aTableName : tables) {
         ODatabaseMetaDataResultSet::ORow aRow { nullptr, nullptr, nullptr };
@@ -130,7 +127,6 @@ bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     }
 
     _rRows = aRows;
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
