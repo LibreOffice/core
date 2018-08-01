@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_9232faf0",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-01T11:52:56Z",
+      "side": 1,
+      "message": "It looks like 09123760860f99756d37b70557d83f707fda6b17 made it __easier__ to crash by returning a nullptr instead of a valid object. In which case this assert makes the problem even more obvious by failing at a useful location instead of later on in the control flow when we deref a null pointer.",
+      "parentUuid": "ffe62b97_b21cde6a",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_6ff0af68",
         "filename": "sal/rtl/strtmpl.cxx",
         "patchSetId": 2
