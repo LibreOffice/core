@@ -544,7 +544,7 @@ void ODbaseTable::construct()
     }
 }
 
-bool ODbaseTable::ReadMemoHeader()
+void ODbaseTable::ReadMemoHeader()
 {
     m_pMemoStream->SetEndian(SvStreamEndian::LITTLE);
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
@@ -590,7 +590,6 @@ bool ODbaseTable::ReadMemoHeader()
             SAL_WARN( "connectivity.drivers", "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
-    return true;
 }
 
 OUString ODbaseTable::getEntry(OConnection const * _pConnection,const OUString& _sName )
@@ -1916,8 +1915,9 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
-                    if (!m_pMemoStream || !WriteMemo(thisColVal, nBlockNo))
+                    if (!m_pMemoStream)
                         break;
+                    WriteMemo(thisColVal, nBlockNo);
 
                     OString aBlock(OString::number(nBlockNo));
                     //align aBlock at the right of a nLen sequence, fill to the left with '0'
@@ -1969,7 +1969,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 }
 
 
-bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr)
+void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr)
 {
     // if the BlockNo 0 is given, the block will be appended at the end
     std::size_t nSize = 0;
@@ -2099,7 +2099,6 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
         (*m_pMemoStream).WriteUInt32( m_aMemoHeader.db_next );
         m_pMemoStream->Flush();
     }
-    return true;
 }
 
 

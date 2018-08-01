@@ -64,14 +64,7 @@ ODatabaseMetaDataResultSet::ORows& ODatabaseMetaData::getColumnRows(
 
     ::osl::MutexGuard aGuard( m_aMutex );
     std::vector< OUString > tables;
-    if (!connectivity::mork::MDatabaseMetaDataHelper::getTableStrings(m_pConnection, tables))
-    {
-        ::connectivity::SharedResources aResources;
-        // TODO:
-        // get better message here?
-        const OUString sMessage = aResources.getResourceString(STR_UNKNOWN_COLUMN_TYPE);
-        ::dbtools::throwGenericSQLException(sMessage ,*this);
-    }
+    connectivity::mork::MDatabaseMetaDataHelper::getTableStrings(m_pConnection, tables);
 
     // ****************************************************
     // Some entries in a row never change, so set them now
@@ -907,13 +900,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // aRows = m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern );
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
-    if ( !connectivity::mork::MDatabaseMetaDataHelper::getTables( m_pConnection, tableNamePattern, _rRows ) ) {
-        ::connectivity::SharedResources aResources;
-        // TODO:
-        // get better message here?
-        const OUString sMessage = aResources.getResourceString(STR_UNKNOWN_COLUMN_TYPE);
-        ::dbtools::throwGenericSQLException(sMessage ,*this);
-    }
+    connectivity::mork::MDatabaseMetaDataHelper::getTables( m_pConnection, tableNamePattern, _rRows );
     pResultSet->setRows( _rRows );
 
     return xResultSet;
@@ -927,14 +914,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     Reference< XResultSet > xRef = pResult;
 
     std::vector< OUString > tables;
-    if ( !connectivity::mork::MDatabaseMetaDataHelper::getTableStrings( m_pConnection, tables) )
-    {
-        ::connectivity::SharedResources aResources;
-        // TODO:
-        // get better message here?
-        const OUString sMessage = aResources.getResourceString(STR_UNKNOWN_COLUMN_TYPE);
-        ::dbtools::throwGenericSQLException(sMessage ,*this);
-    }
+    connectivity::mork::MDatabaseMetaDataHelper::getTableStrings( m_pConnection, tables);
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);
