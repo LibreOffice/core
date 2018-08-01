@@ -611,7 +611,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 
     OUString sLabelID = lcl_identifierForLabel(nIndex);
 
-    OUString aLabel;
+    OUStringBuffer aLabel;
     bool bFirst = true;
 
     if (m_aLabels.empty())
@@ -624,17 +624,17 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
         {
             if (bFirst)
             {
-                aLabel += rItem.m_aString;
+                aLabel.append(rItem.m_aString);
                 bFirst = false;
             }
             else
             {
-                aLabel += " - " + rItem.m_aString;
+                aLabel.append(" - ").append(rItem.m_aString);
             }
         }
     }
 
-    std::vector<ValueAndFormat> aLabelVector { ValueAndFormat(aLabel) };
+    std::vector<ValueAndFormat> aLabelVector { ValueAndFormat(aLabel.makeStringAndClear()) };
 
     std::unique_ptr<PivotTableDataSequence> pSequence;
     pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,

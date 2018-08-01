@@ -707,7 +707,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
-        OUString aParaText;
+        OUStringBuffer aParaText;
         sal_Int32 nParaHeight = 0;
         std::vector<sal_Int32> aPosList;
         mrEE.GetPortions( nPara, aPosList );
@@ -744,9 +744,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
                         aNewData.maStyle = pFontList->GetStyleName( aFontMetric );
                         if( !aNewData.maStyle.isEmpty() )
-                            aParaText += "," + aNewData.maStyle;
+                            aParaText.append(",").append(aNewData.maStyle);
                     }
-                    aParaText += "\"";
+                    aParaText.append("\"");
                 }
 
                 // height
@@ -756,7 +756,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
-                    aParaText += "&" + OUString::number( aNewData.mnHeight );
+                    aParaText.append("&").append(OUString::number( aNewData.mnHeight ));
                 // update maximum paragraph height, convert to twips
                 nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 
@@ -773,13 +773,13 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 {
                     sal_uInt8 nTmpUnderl = (aNewData.mnUnderline == EXC_FONTUNDERL_NONE) ?
                         aFontData.mnUnderline : aNewData.mnUnderline;
-                    (nTmpUnderl == EXC_FONTUNDERL_SINGLE)? aParaText += "&U" : aParaText += "&E";
+                    (nTmpUnderl == EXC_FONTUNDERL_SINGLE)? aParaText.append("&U") : aParaText.append("&E");
                 }
 
                 // strikeout
                 aNewData.mbStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
                 if( aFontData.mbStrikeout != aNewData.mbStrikeout )
-                    aParaText += "&S";
+                    aParaText.append("&S");
 
                 // super/sub script
                 const SvxEscapementItem& rEscapeItem = aEditSet.Get( EE_CHAR_ESCAPEMENT );
@@ -789,9 +789,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     switch(aNewData.mnEscapem)
                     {
                         // close the previous super/sub script.
-                        case EXC_FONTESC_NONE:  (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? aParaText += "&X" : aParaText += "&Y"; break;
-                        case EXC_FONTESC_SUPER: aParaText += "&X";  break;
-                        case EXC_FONTESC_SUB:   aParaText += "&Y";  break;
+                        case EXC_FONTESC_NONE:  (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? aParaText.append("&X") : aParaText.append("&Y"); break;
+                        case EXC_FONTESC_SUPER: aParaText.append("&X");  break;
+                        case EXC_FONTESC_SUB:   aParaText.append("&Y");  break;
                         default: break;
                     }
                 }
@@ -807,30 +807,30 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
                         if( dynamic_cast<const SvxPageField*>( pFieldData) !=  nullptr )
-                            aParaText += "&P";
+                            aParaText.append("&P");
                         else if( dynamic_cast<const SvxPagesField*>( pFieldData) !=  nullptr )
-                            aParaText += "&N";
+                            aParaText.append("&N");
                         else if( dynamic_cast<const SvxDateField*>( pFieldData) !=  nullptr )
-                            aParaText += "&D";
+                            aParaText.append("&D");
                         else if( dynamic_cast<const SvxTimeField*>( pFieldData) != nullptr || dynamic_cast<const SvxExtTimeField*>( pFieldData) !=  nullptr )
-                            aParaText += "&T";
+                            aParaText.append("&T");
                         else if( dynamic_cast<const SvxTableField*>( pFieldData) !=  nullptr )
-                            aParaText += "&A";
+                            aParaText.append("&A");
                         else if( dynamic_cast<const SvxFileField*>( pFieldData) !=  nullptr )  // title -> file name
-                            aParaText += "&F";
+                            aParaText.append("&F");
                         else if( const SvxExtFileField* pFileField = dynamic_cast<const SvxExtFileField*>( pFieldData )  )
                         {
                             switch( pFileField->GetFormat() )
                             {
                                 case SvxFileFormat::NameAndExt:
                                 case SvxFileFormat::NameOnly:
-                                    aParaText += "&F";
+                                    aParaText.append("&F");
                                 break;
                                 case SvxFileFormat::PathOnly:
-                                    aParaText += "&Z";
+                                    aParaText.append("&Z");
                                 break;
                                 case SvxFileFormat::PathFull:
-                                    aParaText += "&Z&F";
+                                    aParaText.append("&Z&F");
                                 break;
                                 default:
                                     OSL_FAIL( "XclExpHFConverter::AppendPortion - unknown file field" );
@@ -848,16 +848,16 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                         sal_Unicode cLast = aParaText[ aParaText.getLength() - 1 ];
                         sal_Unicode cFirst = aPortionText[0];
                         if( ('0' <= cLast) && (cLast <= '9') && ('0' <= cFirst) && (cFirst <= '9') )
-                            aParaText += " ";
+                            aParaText.append(" ");
                     }
-                    aParaText += aPortionText;
+                    aParaText.append(aPortionText);
                 }
             }
 
             aSel.nStartPos = aSel.nEndPos;
         }
 
-        aText = ScGlobal::addToken( aText, aParaText, '\n' );
+        aText = ScGlobal::addToken( aText, aParaText.makeStringAndClear(), '\n' );
         if( nParaHeight == 0 )
             nParaHeight = aFontData.mnHeight * 20;  // points -> twips
         nHeight += nParaHeight;

@@ -1795,10 +1795,10 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             if ( nRepeatCount > 1 )
                             {
                                 OUString aCellStr = aVars.GetString();
-                                OUString aRepeated = aCellStr;
+                                OUStringBuffer aRepeated = aCellStr;
                                 for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                                    aRepeated += aCellStr;
-                                aVars.SetAutoText( aRepeated );
+                                    aRepeated.append(aCellStr);
+                                aVars.SetAutoText( aRepeated.makeStringAndClear() );
                             }
                         }
                     }
@@ -2965,11 +2965,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                     long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUString aRepeated = aCellStr;
+                        OUStringBuffer aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated += aCellStr;
+                            aRepeated.append(aCellStr);
 
-                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated.makeStringAndClear(),
                                                         nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -3335,11 +3335,11 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                     const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUString aRepeated = aCellStr;
+                        OUStringBuffer aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated += aCellStr;
+                            aRepeated.append(aCellStr);
 
-                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated.makeStringAndClear(),
                                                             nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -3579,11 +3579,11 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                     const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUString aRepeated = aCellStr;
+                        OUStringBuffer aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated += aCellStr;
+                            aRepeated.append(aCellStr);
 
-                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated,
+                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated.makeStringAndClear(),
                                                             nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();

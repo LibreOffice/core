@@ -2041,7 +2041,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
     if ( m_Areas->getCount() > 1 )
     {
         // Multi-Area Range
-        OUString sAddress;
+        OUStringBuffer sAddress;
         uno::Reference< XCollection > xCollection( m_Areas, uno::UNO_QUERY_THROW );
                 uno::Any aExternalCopy = External;
         for ( sal_Int32 index = 1; index <= xCollection->getCount(); ++index )
@@ -2049,15 +2049,15 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
             uno::Reference< excel::XRange > xRange( xCollection->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             if ( index > 1 )
             {
-                sAddress += ",";
-                                // force external to be false
-                                // only first address should have the
-                                // document and sheet specifications
-                                aExternalCopy <<= false;
+                sAddress.append(",");
+                // force external to be false
+                // only first address should have the
+                // document and sheet specifications
+                aExternalCopy <<= false;
             }
-            sAddress += xRange->Address( RowAbsolute, ColumnAbsolute, ReferenceStyle, aExternalCopy, RelativeTo );
+            sAddress.append(xRange->Address( RowAbsolute, ColumnAbsolute, ReferenceStyle, aExternalCopy, RelativeTo ));
         }
-        return sAddress;
+        return sAddress.makeStringAndClear();
 
     }
     ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );

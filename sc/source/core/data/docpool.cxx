@@ -408,13 +408,12 @@ static bool lcl_HFPresentation
 
     SfxItemIter aIter( rSet );
     pItem = aIter.FirstItem();
-    OUString aText;
 
     while( pItem )
     {
         sal_uInt16 nWhich = pItem->Which();
 
-        aText.clear();
+        OUString aText;
 
         switch( nWhich )
         {

@@ -284,8 +284,8 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
 
     // parser temporaries
     maCurrText.truncate();
-    OUString aReadFont;           // current font name
-    OUString aReadStyle;          // current font style
+    OUStringBuffer aReadFont;   // current font name
+    OUStringBuffer aReadStyle;  // current font style
     sal_uInt16 nReadHeight = 0; // current font height
     ResetFontData();
 
@@ -383,8 +383,8 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                     break;
 
                     case '\"':          // font name
-                        aReadFont.clear();
-                        aReadStyle.clear();
+                        aReadFont.setLength(0);
+                        aReadStyle.setLength(0);
                         eState = xlPSFont;
                     break;
                     default:
@@ -410,7 +410,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         eState = xlPSFontStyle;
                     break;
                     default:
-                        aReadFont += OUStringLiteral1(*pChar);
+                        aReadFont.append(*pChar);
                 }
             }
             break;
@@ -424,12 +424,12 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                     case '\"':
                         SetAttribs();
                         if( !aReadFont.isEmpty() )
-                            mxFontData->maName = aReadFont;
-                        mxFontData->maStyle = aReadStyle;
+                            mxFontData->maName = aReadFont.toString();
+                        mxFontData->maStyle = aReadStyle.toString();
                         eState = xlPSText;
                     break;
                     default:
-                        aReadStyle += OUStringLiteral1(*pChar);
+                        aReadStyle.append(*pChar);
                 }
             }
             break;

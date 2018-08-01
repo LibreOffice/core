@@ -1436,7 +1436,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                 case HtmlOptionId::FACE :
                 {
                     const OUString& rFace = rOption.GetString();
-                    OUString aFontName;
+                    OUStringBuffer aFontName;
                     sal_Int32 nPos = 0;
                     while( nPos != -1 )
                     {
@@ -1445,12 +1445,12 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                         OUString aFName = rFace.getToken( 0, ',', nPos );
                         aFName = comphelper::string::strip(aFName, ' ');
                         if( !aFontName.isEmpty() )
-                            aFontName += ";";
-                        aFontName += aFName;
+                            aFontName.append(";");
+                        aFontName.append(aFName);
                     }
                     if ( !aFontName.isEmpty() )
                         mxActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
-                            aFontName, EMPTY_OUSTRING, PITCH_DONTKNOW,
+                            aFontName.makeStringAndClear(), EMPTY_OUSTRING, PITCH_DONTKNOW,
                             RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
                 }
                 break;

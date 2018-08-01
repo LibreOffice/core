@@ -2004,7 +2004,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     bool bTestPrevSub = ( nLevelCount > 1 );
 
     OUString  aSubString;
-    OUString  aOutString;
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
@@ -2110,7 +2109,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         // collect formula positions
                         aRowVector.push_back( aRowEntry );
 
-                        aOutString = aSubString;
+                        OUString aOutString = aSubString;
                         if (aOutString.isEmpty())
                             aOutString = ScResId( STR_EMPTYDATA );
                         aOutString += " ";
