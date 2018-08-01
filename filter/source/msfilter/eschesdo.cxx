@@ -818,11 +818,9 @@ sal_uInt32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShap
 }
 
 
-bool ImplEESdrWriter::ImplInitPageValues()
+void ImplEESdrWriter::ImplInitPageValues()
 {
     mbIsTitlePossible = true;       // With more than one title PowerPoint will fail.
-
-    return true;
 }
 
 void ImplEESdrWriter::ImplWritePage(
@@ -873,8 +871,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         mXShapes.set( mXDrawPage, UNO_QUERY );
         if ( !mXShapes.is() )
             return false;
-        if ( !ImplInitPageValues() )    // ImplEESdrWriter
-            return false;
+        ImplInitPageValues();
         mpSdrPage = &rPage;
 
         mpSolverContainer.reset( new EscherSolverContainer );
@@ -897,8 +894,7 @@ bool ImplEESdrWriter::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     mXDrawPage.clear();
     mXShapes = rxShapes;
 
-    if( !ImplInitPageValues() )    // ImplEESdrWriter
-        return false;
+    ImplInitPageValues();
 
     mpSolverContainer.reset( new EscherSolverContainer );
     return true;
