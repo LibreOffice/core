@@ -172,8 +172,8 @@ namespace dbaccess
         bool isAfterLast(  ) const { return m_bAfterLast;}
         bool isFirst(  );
         bool isLast(  );
-        bool beforeFirst(  );
-        bool afterLast(  );
+        void beforeFirst(  );
+        void afterLast(  );
         bool first(  );
         bool last(  );
         sal_Int32 getRow(  );
