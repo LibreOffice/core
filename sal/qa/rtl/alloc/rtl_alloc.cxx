@@ -158,7 +158,7 @@ public:
         const char *sample = "Hello World";
         std::vector<OUString> aStrings;
 
-        rtl_alloc_preInit(rtlAllocPreInitStart);
+        rtl_alloc_preInit(true);
 
         OUString aFoo("foo");
 
@@ -183,7 +183,7 @@ public:
         }
 
         // should static-ize all the strings.
-        rtl_alloc_preInit(rtlAllocPreInitEnd);
+        rtl_alloc_preInit(false);
 
         for (size_t i = 0; i < aStrings.size(); ++i)
             CPPUNIT_ASSERT_MESSAGE( "static after.", (aStrings[i].pData->refCount & SAL_STRING_STATIC_FLAG) );
