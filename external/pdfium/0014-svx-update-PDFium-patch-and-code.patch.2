@@ -40,7 +40,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 29c8b01..a52e1a9 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -693,7 +693,7 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
+@@ -688,7 +688,7 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
    int ret_count = byte_str_len / kBytesPerCharacter;
  
    ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
@@ -49,27 +49,7 @@ index 29c8b01..a52e1a9 100644
    return ret_count;
  }
  
-@@ -736,10 +736,15 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
-       return false;
-   }
- 
--  const uint32_t RGB = bStroke ? pTxtObj->m_ColorState.GetStrokeRGB() : pTxtObj->m_ColorState.GetFillRGB();
--  *R = FXSYS_GetRValue(RGB);
--  *G = FXSYS_GetGValue(RGB);
--  *B = FXSYS_GetBValue(RGB);
-+  const CPDF_Color* pColor = bStroke ? pTxtObj->m_ColorState.GetStrokeColor() : pTxtObj->m_ColorState.GetFillColor();
-+  if (pColor == nullptr)
-+    return false;
-+
-+  int r, g, b;
-+  pColor->GetRGB(&r, &g, &b);
-+  *R = r;
-+  *G = g;
-+  *B = b;
-   *A = static_cast<unsigned int>(
-       (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
- 
-@@ -768,7 +773,7 @@ FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
+@@ -714,7 +714,7 @@ FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
    {
      const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
      if (pObjectList)
