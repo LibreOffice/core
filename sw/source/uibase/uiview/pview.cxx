@@ -1231,8 +1231,9 @@ SwPagePreview::~SwPagePreview()
     delete pVShell;
 
     m_pViewWin.disposeAndClear();
-    if (auto& pBar = SfxViewFrame::Current()->GetWindow().GetSystemWindow()->GetNotebookBar())
-        pBar->ControlListener(false);
+    if (auto& pCurrent = SfxViewFrame::Current())
+        if (auto& pBar = pCurrent->GetWindow().GetSystemWindow()->GetNotebookBar())
+            pBar->ControlListener(false);
     m_pScrollFill.disposeAndClear();
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
