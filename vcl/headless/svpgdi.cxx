@@ -1096,6 +1096,11 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     /** creates an image from the given rectangle, replacing all black pixels
      *  with nMaskColor and make all other full transparent */
     SourceHelper aSurface(rSalBitmap);
+    if (!aSurface.getSurface())
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawMask case");
+        return;
+    }
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
     for (sal_Int32 y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
@@ -1325,6 +1330,11 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
                                         nFormat,
                                         pBuffer->mnWidth, pBuffer->mnHeight,
                                         pBuffer->mnScanlineSize);
+    if (cairo_surface_status(target) != CAIRO_STATUS_SUCCESS)
+    {
+        cairo_surface_destroy(target);
+        return nullptr;
+    }
     return target;
 }
 
