@@ -1697,7 +1697,7 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             dispparams.cArgs = aFuncDesc->cParams;
     }
 
-    //check if there are not to many arguments supplied
+    //check if there are not too many arguments supplied
     if (::sal::static_int_cast< sal_uInt32, int >( nUnoArgs ) > dispparams.cArgs)
     {
         OUStringBuffer buf(256);
