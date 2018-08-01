@@ -103,6 +103,7 @@ public:
     sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
+    inline  SwCntntFrm* GetNextCntntFrm( bool ) const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;
     static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
     void RegisterToNode( SwCntntNode& );
@@ -115,6 +116,16 @@ inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
         return (SwCntntFrm*)GetNext();
     else
         return (SwCntntFrm*)ImplGetNextCntntFrm( true );
+}
+
+inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm( bool bPrune ) const
+{
+    if ( bPrune && !GetPrev() )
+        return NULL;
+    else if ( bPrune || !(GetNext() && GetNext()->IsCntntFrm()))
+        return (SwCntntFrm*)ImplGetNextCntntFrm( true );
+    else
+        return (SwCntntFrm*)GetNext();
 }
 
 inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const

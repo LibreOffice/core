@@ -1536,6 +1536,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = sal_False;
+    bool bPrune;
     SwCntntFrm *pCnt = pLay->ContainsCntnt();
     SWRECTFN( pLay )
 
@@ -1612,9 +1613,8 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
             pCnt->GetUpper()->Calc();
         }
         // <--
-        if( ! bAll && (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
-            break;
-        pCnt = pCnt->GetNextCntntFrm();
+        bPrune = !bAll && ( (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 );
+        pCnt = pCnt->GetNextCntntFrm( bPrune );
     }
     return bRet;
 }
