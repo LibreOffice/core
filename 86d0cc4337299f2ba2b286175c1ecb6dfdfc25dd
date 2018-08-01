@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_32a56e05",
+        "filename": "xmlsecurity/source/helper/xmlsignaturehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-01T12:56:40Z",
+      "side": 1,
+      "message": "What about removing completely bCache var and put \"continue\" here?",
+      "range": {
+        "startLine": 371,
+        "startChar": 20,
+        "endLine": 371,
+        "endChar": 35
+      },
+      "revId": "86d0cc4337299f2ba2b286175c1ecb6dfdfc25dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
