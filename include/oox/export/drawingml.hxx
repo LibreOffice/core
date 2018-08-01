@@ -252,8 +252,7 @@ public:
     void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
-    bool IsInGroupShape() const;
-    bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape, bool bOrChildShape = false ) const;
+    bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape ) const;
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();

@@ -122,6 +122,7 @@ public:
     void testGroupRotation();
     void testTdf104788();
     void testSmartartRotation2();
+    void testTdf91999_rotateShape();
     void testTdf114845_rotateShape();
     void testGroupsPosition();
     void testGroupsRotatedPosition();
@@ -196,6 +197,7 @@ public:
     CPPUNIT_TEST(testGroupRotation);
     CPPUNIT_TEST(testTdf104788);
     CPPUNIT_TEST(testSmartartRotation2);
+    CPPUNIT_TEST(testTdf91999_rotateShape);
     CPPUNIT_TEST(testTdf114845_rotateShape);
     CPPUNIT_TEST(testGroupsPosition);
     CPPUNIT_TEST(testGroupsRotatedPosition);
@@ -1309,7 +1311,20 @@ void SdOOXMLExportTest2::testSmartartRotation2()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:p/a:r/a:t", "Text");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "2276280");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "y", "3158280");
+}
+
+void SdOOXMLExportTest2::testTdf91999_rotateShape()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf91999_rotateShape.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:cNvPr", "name", "CustomShape 2");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm", "rot", "10800000");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "x", "2960640");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "y", "1449000");
 }
 
 void SdOOXMLExportTest2::testTdf114845_rotateShape()
