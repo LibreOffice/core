@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_ef76ffd8",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-01T10:57:18Z",
+      "side": 1,
+      "message": "This is one place where I would argue that we want to be stricter on ourselves than on external code.",
+      "parentUuid": "ffe62b97_2feaa774",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_6ff0af68",
         "filename": "sal/rtl/strtmpl.cxx",
         "patchSetId": 2
