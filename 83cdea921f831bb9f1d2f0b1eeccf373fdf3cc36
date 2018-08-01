@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_52e232d7",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T15:06:45Z",
+      "side": 1,
+      "message": "Not used below",
+      "range": {
+        "startLine": 155,
+        "startChar": 20,
+        "endLine": 155,
+        "endChar": 44
+      },
+      "revId": "83cdea921f831bb9f1d2f0b1eeccf373fdf3cc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_72dd3613",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T15:06:45Z",
+      "side": 1,
+      "message": "No need? not used below",
+      "range": {
+        "startLine": 249,
+        "startChar": 20,
+        "endLine": 249,
+        "endChar": 44
+      },
+      "revId": "83cdea921f831bb9f1d2f0b1eeccf373fdf3cc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_32e7aee7",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T15:06:45Z",
+      "side": 1,
+      "message": "Not used below",
+      "range": {
+        "startLine": 348,
+        "startChar": 16,
+        "endLine": 348,
+        "endChar": 40
+      },
+      "revId": "83cdea921f831bb9f1d2f0b1eeccf373fdf3cc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_12ecaac5",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T15:06:45Z",
+      "side": 1,
+      "message": "Not used below",
+      "range": {
+        "startLine": 395,
+        "startChar": 23,
+        "endLine": 395,
+        "endChar": 49
+      },
+      "revId": "83cdea921f831bb9f1d2f0b1eeccf373fdf3cc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_d2cd225e",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T15:06:45Z",
+      "side": 1,
+      "message": "Not used below, except for the unreachable block - could go if the block is removed?",
+      "range": {
+        "startLine": 609,
+        "startChar": 16,
+        "endLine": 609,
+        "endChar": 40
+      },
+      "revId": "83cdea921f831bb9f1d2f0b1eeccf373fdf3cc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
