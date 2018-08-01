@@ -44,7 +44,6 @@ using ::oox::core::XmlFilterBase;
 
 static const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
 static const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
-static const sal_Unicode API_TOKEN_ARRAY_ROWSEP    = '|';
 static const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
 // Code similar to oox/source/xls/formulabase.cxx
@@ -57,28 +56,23 @@ static OUString lclGenerateApiString( const OUString& rString )
     return "\"" + aRetString + "\"";
 }
 
-static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
+static OUString lclGenerateApiArray(const std::vector<Any>& rRow)
 {
-    OSL_ENSURE( !rMatrix.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
+    OSL_ENSURE( !rRow.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
     aBuffer.append( API_TOKEN_ARRAY_OPEN );
-    for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
+    for (auto aBeg = rRow.begin(), aIt = aBeg, aEnd = rRow.end(); aIt != aEnd; ++aIt)
     {
-        if( nRow > 0 )
-            aBuffer.append( API_TOKEN_ARRAY_ROWSEP );
-        for( Matrix< Any >::const_iterator aBeg = rMatrix.row_begin( nRow ), aIt = aBeg, aEnd = rMatrix.row_end( nRow ); aIt != aEnd; ++aIt )
-        {
-            double fValue = 0.0;
-            OUString aString;
-            if( aIt != aBeg )
-                aBuffer.append( API_TOKEN_ARRAY_COLSEP );
-            if( *aIt >>= fValue )
-                aBuffer.append( fValue );
-            else if( *aIt >>= aString )
-                aBuffer.append( lclGenerateApiString( aString ) );
-            else
-                aBuffer.append( "\"\"" );
-        }
+        double fValue = 0.0;
+        OUString aString;
+        if( aIt != aBeg )
+            aBuffer.append( API_TOKEN_ARRAY_COLSEP );
+        if( *aIt >>= fValue )
+            aBuffer.append( fValue );
+        else if( *aIt >>= aString )
+            aBuffer.append( lclGenerateApiString( aString ) );
+        else
+            aBuffer.append( "\"\"" );
     }
     aBuffer.append( API_TOKEN_ARRAY_CLOSE );
     return aBuffer.makeStringAndClear();
@@ -133,11 +127,11 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data
-            Matrix< Any > aMatrix( rDataSeq.mnPointCount, 1 );
+            std::vector<Any> aRow(rDataSeq.mnPointCount);
             for (auto const& elem : rDataSeq.maData)
-                *aMatrix.at(elem.first, 0) = elem.second;
+                aRow.at(elem.first) = elem.second;
 
-            aRangeRep = lclGenerateApiArray( aMatrix );
+            aRangeRep = lclGenerateApiArray(aRow);
         }
 
         if( !aRangeRep.isEmpty() ) try
