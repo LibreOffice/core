@@ -289,38 +289,14 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 #ifdef LIBO_INTERNAL_ONLY
 
 /** @cond INTERNAL */
-/** rtl_alloc_preInit_phase_t
- *
- * This is used to control the pre-init logic
- * in rtl_alloc_preInit. The reason for this is
- * to first initialize all caching and other memory
- * logic from WSD (the Online daemon) at startup.
- * All these pages will then be forked over when
- * spawning per-document instances. This is done
- * by calling rtl_alloc_preInit with rtlAllocPreInitStart.
- *
- * @since LibreOffice 6.1
- */
-typedef enum
-{
-    // Start phase I of pre-init.
-    rtlAllocPreInitStart,
-    // Finish phase I of pre-init (before forking).
-    rtlAllocPreInitEnd,
-    // Post pre-init and after forking; no longer used.
-    rtlAllocPostInit
-
-} rtl_alloc_preInit_phase_t;
-
-/** @cond INTERNAL */
 /** rtl_alloc_preInit
  *
  * This function, is called at the beginning and again
  * at the end of LibreOfficeKit pre-initialization to enable
  * various optimizations.
  *
- * Its function is to annotate a section @phase = rtlAllocPreInitStart
- * to end (@phase = rtlAllocPreInitEnd) via. two calls. Inside this
+ * Its function is to annotate a section @start = true
+ * to end (@start = false) via. two calls. Inside this
  * section string allocators are replaced with ones which cause the
  * strings to be staticized at the end of the section.
  *
@@ -341,7 +317,7 @@ typedef enum
  * @since LibreOffice 6.1
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
-    rtl_alloc_preInit_phase_t phase
+    sal_Bool start
 ) SAL_THROW_EXTERN_C();
 /** @endcond */
 
