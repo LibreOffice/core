@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f294a646",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T14:31:54Z",
+      "side": 1,
+      "message": "that sentence is broken",
+      "revId": "5eec649fe29ebf75a5eaf2c22120241052e0a2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_72a1b6a9",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T14:31:54Z",
+      "side": 1,
+      "message": "the \"failed allocation\" part is still relevant",
+      "revId": "5eec649fe29ebf75a5eaf2c22120241052e0a2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_52a6b2c3",
+        "filename": "include/rtl/ustring.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T14:31:54Z",
+      "side": 1,
+      "message": "the \"failed allocation\" part is still relevant",
+      "revId": "5eec649fe29ebf75a5eaf2c22120241052e0a2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
