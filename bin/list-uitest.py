@@ -47,9 +47,9 @@ def linkFormat(name):
 def main():
     uitest_ext = '.py'
     uitest_dirs = {
-            'Writer' : ['../uitest/writer_tests/', '../writerperfect/qa/uitest/', '../sw/qa/uitest/writer_tests/'],
+            'Writer' : ['../uitest/writer_tests/', '../writerperfect/qa/uitest/', '../sw/qa/uitest/'],
             'Calc' : ['../uitest/calc_tests', '../sc/qa/uitest/'],
-            'Impress' : ['../uitest/impress_tests/'],
+            'Impress' : ['../uitest/impress_tests/', '../sd/qa/uitest/'],
             'Math': ['../uitest/math_tests/'],
             'Draw': [''],
             'Manual_tests': ['../uitest/manual_tests/']}
