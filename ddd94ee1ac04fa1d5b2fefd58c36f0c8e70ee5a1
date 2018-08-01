@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_8f4c13c8",
+        "filename": "comphelper/qa/string/test_string.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "this test should be resurrected?",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_8fe1b39d",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "The commented-out one was introduced with b0ef5cf258f3a84054c052f0a09a208dbc17fdf3 \"sal: add some argument checking assertions for strings and buffers\" with commit-message comment \"Some of these actually trigger on unit tests so are commented out.\"  I would argue that, instead of commenting it out (or introducing it with the g_sal_disable_string_asserts hack added), the corresponding unit tests should be fixed.  The contract of lastIndexOfStr_WithLength leaves both negative nStrLen and nSubLen unspecified, it should be OK to assert for both.",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_2feaa774",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "hm, \"For nLen \u003c 0 or failed allocation this method returns NULL.\"\n(and \"assert(nLen \u003e\u003d 0);\" followed by \"if ( nLen \u003c 0 )\" doesn\u0027t make sense)",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_6ff0af68",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "see my previous comment (\"and for rtl_uString_new_WithLength, which doesn\u0027t explicitly mention negative nLen, I would argue that it is currently left unspecified what happens for negative nLen, and make that always assert (and fix any existing unit tests if need be; many of those string-related unit tests are actually poorly written, in that they test unspecified behavior)\")",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_2f9f4704",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "the checks for nIndex and nCount can be even tighter, according to the contract",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_4f9a8b14",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-01T10:33:41Z",
+      "side": 1,
+      "message": "why introduce a random empty line here?",
+      "revId": "ddd94ee1ac04fa1d5b2fefd58c36f0c8e70ee5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
