@@ -1347,7 +1347,7 @@ void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping )
+void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping, bool bFlippedBeforeRotation )
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
@@ -1355,17 +1355,16 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
-    bool bPositiveY = true;
-    bool bPositiveX = true;
+    bool bFlipHWrite = bFlipH && !bSuppressFlipping;
+    bool bFlipVWrite = bFlipV && !bSuppressFlipping;
+    bFlipH = bFlipH && !bFlippedBeforeRotation;
+    bFlipV = bFlipV && !bFlippedBeforeRotation;
 
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aPos.X -= aParentPos.X;
         aPos.Y -= aParentPos.Y;
-
-        bPositiveX = aParentPos.X >= 0;
-        bPositiveY = aParentPos.Y >= 0;
     }
 
     if ( aSize.Width < 0 )
@@ -1376,23 +1375,12 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     {
         SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
         nRotation = pShape ? pShape->GetRotateAngle() : 0;
-        if (nRotation != 0 && nRotation != 18000)
+        if ( nRotation != 0 && GetDocumentType() != DOCUMENT_DOCX )
         {
             int faccos=bFlipV ? -1 : 1;
             int facsin=bFlipH ? -1 : 1;
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
-        }
-        else if ( nRotation == 18000 && IsGroupShape( rXShape, /*bOrChildShape=*/true ) )
-        {
-            if (!bFlipV && bPositiveX)
-            {
-                aPos.X -= aSize.Width;
-            }
-            if (!bFlipH && bPositiveY)
-            {
-                aPos.Y -= aSize.Height;
-            }
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
@@ -1406,11 +1394,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if(bFlipH != bFlipV)
         nRotation = nRotation * -1 + 36000;
 
-    if(bSuppressFlipping)
-        bFlipH = bFlipV = false;
-
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), IsGroupShape( rXShape ));
+            bFlipHWrite, bFlipVWrite, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), IsGroupShape( rXShape ));
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
@@ -2082,21 +2067,10 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
     }
 }
 
-bool DrawingML::IsInGroupShape () const
+bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape ) const
 {
-    bool bRet = m_xParent.is();
-    if ( bRet )
-    {
-        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xParent, uno::UNO_QUERY_THROW);
-        bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
-    }
-    return bRet;
-}
-
-bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape, bool bOrChildShape ) const
-{
-    bool bRet = bOrChildShape && IsInGroupShape();
-    if ( !bRet && rXShape.is() )
+    bool bRet = false;
+    if ( rXShape.is() )
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
         bRet = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");

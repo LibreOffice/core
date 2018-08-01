@@ -197,7 +197,7 @@ public:
     void WriteBlipMode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 
     void WriteShapeTransformation(const css::uno::Reference< css::drawing::XShape >& rXShape,
-                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false );
+                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false, bool bFlippedBeforeRotation = false);
     void WriteTransformation(const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
@@ -226,8 +226,7 @@ public:
     void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
-    bool IsInGroupShape() const;
-    bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape, bool bOrChildShape = false ) const;
+    bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape ) const;
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();
