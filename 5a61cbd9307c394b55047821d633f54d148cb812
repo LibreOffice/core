@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_52947237",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-01T14:53:32Z",
+      "side": 0,
+      "message": "Unreachable code?",
+      "range": {
+        "startLine": 606,
+        "startChar": 33,
+        "endLine": 606,
+        "endChar": 58
+      },
+      "revId": "5a61cbd9307c394b55047821d633f54d148cb812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
