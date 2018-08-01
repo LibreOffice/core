@@ -91,6 +91,7 @@ public:
     bool MoveFootnoteCntFwd( bool, SwFootnoteBossFrame* ); // called by MoveFwd if content
 
     inline  SwContentFrame* GetNextContentFrame() const;
+    inline  SwContentFrame* GetNextContentFrame( bool bPrune ) const;
     inline  SwContentFrame* GetPrevContentFrame() const;
     static bool CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDontLeave, long nBottom, bool bSkipRowSpanCells );
 };
@@ -101,6 +102,16 @@ inline SwContentFrame* SwContentFrame::GetNextContentFrame() const
         return const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetNext()));
     else
         return const_cast<SwContentFrame*>(ImplGetNextContentFrame( true ));
+}
+
+inline SwContentFrame* SwContentFrame::GetNextContentFrame( bool bPrune ) const
+{
+    if ( bPrune && !GetPrev() )
+        return NULL;
+    else if ( bPrune || !(GetNext() && GetNext()->IsContentFrame()) )
+        return const_cast<SwContentFrame*>(ImplGetNextContentFrame( true ));
+    else
+        return const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetNext()));
 }
 
 inline SwContentFrame* SwContentFrame::GetPrevContentFrame() const

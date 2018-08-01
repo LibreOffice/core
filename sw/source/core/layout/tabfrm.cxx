@@ -1510,9 +1510,8 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
             }
             pCnt->GetUpper()->Calc(pRenderContext);
         }
-        if( ! bAll && aRectFnSet.YDiff(aRectFnSet.GetTop(pCnt->getFrameArea()), nBottom) > 0 )
-            break;
-        pCnt = pCnt->GetNextContentFrame();
+        bool bPrune = ! bAll && aRectFnSet.YDiff(aRectFnSet.GetTop(pCnt->getFrameArea()), nBottom) > 0;
+        pCnt = pCnt->GetNextContentFrame(bPrune);
     }
     return bRet;
 }
