@@ -117,6 +117,7 @@ public:
     void testChartTitlePropertiesGradientFillPPTX();
     void testChartTitlePropertiesBitmapFillPPTX();
     void testTdf116163();
+    void testTdf119029();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -196,6 +197,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
     CPPUNIT_TEST(testTdf116163);
+    CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1851,6 +1853,18 @@ void Chart2ExportTest::testTdf116163()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "-5400000");
+}
+
+void Chart2ExportTest::testTdf119029()
+{
+    load("/chart2/qa/extras/data/odp/", "tdf119029.odp");
+    // Only use "chart", without number, because the number depends on the previous tests
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "rot",
+                "-5400000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
