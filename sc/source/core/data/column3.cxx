@@ -3058,6 +3058,8 @@ public:
                 if (xCurGrp)
                 {
                     // Move to the cell after the last cell of the current group.
+                    if (xCurGrp->mnLength > std::distance(it, itEnd))
+                        throw css::lang::IllegalArgumentException();
                     std::advance(it, xCurGrp->mnLength);
                     nRow += xCurGrp->mnLength;
                 }
