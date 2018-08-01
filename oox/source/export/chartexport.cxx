@@ -105,6 +105,7 @@
 #include <unordered_set>
 
 #include <rtl/math.hxx>
+#include <o3tl/temporary.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -2336,9 +2337,8 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet, bool 
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
     pFS->startElement(FSNS(XML_a, XML_pPr), FSEND);
 
-    bool bOverrideCharHeight = false;
-    sal_Int32 nCharHeight;
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, bOverrideCharHeight, nCharHeight);
+    WriteRunProperties(xPropSet, false, XML_defRPr, true, o3tl::temporary(false),
+                       o3tl::temporary(sal_Int32()));
 
     pFS->endElement(FSNS(XML_a, XML_pPr));
     pFS->endElement(FSNS(XML_a, XML_p));
