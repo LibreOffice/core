@@ -2175,9 +2175,14 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             else if (!pDictionary->alreadyParsing())
             {
                 // Nested dictionary.
-                i = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
-                rDictionary[aName] = pDictionary;
-                aName.clear();
+                const size_t nexti
+                    = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
+                if (nexti >= i) // ensure we go forwards and not endlessly loop
+                {
+                    i = nexti;
+                    rDictionary[aName] = pDictionary;
+                    aName.clear();
+                }
             }
         }
 
