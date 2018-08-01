@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_f224a6c8",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-01T18:54:07Z",
+      "side": 1,
+      "message": "\"This doesn\u0027t impact\"?",
+      "range": {
+        "startLine": 1939,
+        "startChar": 7,
+        "endLine": 1939,
+        "endChar": 22
+      },
+      "revId": "3ea9c4f2ae670079d64d010507f421fd9dfdeaa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
