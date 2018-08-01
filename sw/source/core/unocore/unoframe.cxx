@@ -3181,12 +3181,14 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextCursor >  aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
+    if (!pFormat)
+        throw uno::RuntimeException();
     SwUnoInternalPaM aPam(*GetDoc());
-    if (!pFormat || !::sw::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
         throw uno::RuntimeException();
 
+    uno::Reference<text::XTextCursor>  aRef;
     SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
     if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
     {
