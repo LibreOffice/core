@@ -38,7 +38,7 @@ public:
     ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
-    bool FillItemSet(SfxItemSet* rOutAttrs) const;
+    void FillItemSet(SfxItemSet* rOutAttrs) const;
 
     void FillValueSets();
 

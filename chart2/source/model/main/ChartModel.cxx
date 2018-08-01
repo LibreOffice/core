@@ -631,12 +631,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
                         "the model itself could not be closed",
                         static_cast< ::cppu::OWeakObject* >(this) );
 
-        if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
-        {
-            m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership );
-            throw aVetoException;
-        }
-
+        m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException );
     }
     m_aLifeTimeManager.g_close_endTryClose_doClose();
 

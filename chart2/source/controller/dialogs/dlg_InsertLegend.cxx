@@ -38,10 +38,9 @@ void SchLegendDlg::init( const uno::Reference< frame::XModel >& xChartModel )
     m_xLegendPositionResources->writeToResources( xChartModel );
 }
 
-bool SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartModel ) const
+void SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartModel ) const
 {
     m_xLegendPositionResources->writeToModel( xChartModel );
-    return true;
 }
 
 } //namespace chart

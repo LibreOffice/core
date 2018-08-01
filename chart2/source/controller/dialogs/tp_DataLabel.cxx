@@ -40,7 +40,8 @@ VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pWindow, const SfxIte
 
 bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
-    return m_aDataLabelResources.FillItemSet(rOutAttrs);
+    m_aDataLabelResources.FillItemSet(rOutAttrs);
+    return true;
 }
 
 void DataLabelsTabPage::Reset(const SfxItemSet* rInAttrs)

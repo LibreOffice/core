@@ -45,7 +45,7 @@ VPolarAngleAxis::~VPolarAngleAxis()
 {
 }
 
-bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
+void VPolarAngleAxis::createTextShapes_ForAngleAxis(
                        const uno::Reference< drawing::XShapes >& xTarget
                      , EquidistantTickIter& rTickIter
                      , AxisLabelProperties const & rAxisLabelProperties
@@ -132,7 +132,6 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
         //if NO OVERLAP -> remove overlapping shapes
         //@todo
     }
-    return true;
 }
 
 void VPolarAngleAxis::createMaximumLabels()
@@ -176,12 +175,10 @@ void VPolarAngleAxis::createLabels()
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
         double const fLogicZ = 1.0;//as defined
-        while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
+        createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ
-                        ) )
-        {
-        }
+                        );
 
         //no staggering for polar angle axis
     }

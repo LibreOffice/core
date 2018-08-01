@@ -266,7 +266,7 @@ void DataLabelResources::EnableControls()
     m_pBxOrientation->Enable( bEnableRotation );
 }
 
-bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
+void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
 {
     if( m_pCBNumber->IsChecked() )
     {
@@ -312,8 +312,6 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         sal_Int32 nDegrees = m_pDC_Dial->GetRotation();
         rOutAttrs->Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
-
-    return true;
 }
 
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)

@@ -40,7 +40,7 @@ public:
     virtual void createShapes() override;
 
 private: //methods
-    bool createTextShapes_ForAngleAxis(
+    void createTextShapes_ForAngleAxis(
                        const css::uno::Reference< css::drawing::XShapes >& xTarget
                      , EquidistantTickIter& rTickIter
                      , AxisLabelProperties const & rAxisLabelProperties
