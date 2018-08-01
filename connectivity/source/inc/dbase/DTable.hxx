@@ -120,10 +120,10 @@ namespace connectivity
             bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
             bool CreateMemoFile(const INetURLObject& aFile);
             bool HasMemoFields() const { return m_aHeader.type > dBaseIV;}
-            bool ReadMemoHeader();
+            void ReadMemoHeader();
             bool ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable);
 
-            bool WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr);
+            void WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr);
             bool WriteBuffer();
             bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols, bool bForceAllFields);
             css::uno::Reference< css::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);

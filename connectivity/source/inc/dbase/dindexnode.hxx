@@ -140,7 +140,7 @@ namespace connectivity
             bool    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
             bool    Insert(sal_uInt16 nIndex, ONDXNode& rNode);
             bool    Append(ONDXNode& rNode);
-            bool    Delete(sal_uInt16);
+            void    Delete(sal_uInt16);
             void    Remove(sal_uInt16);
             void    Release(bool bSave = true);
             void    ReleaseFull();

@@ -115,9 +115,9 @@ private: // Members
     bool parseComment();
     bool parseCell();
     bool parseTable();
-    bool parseMeta( char c );
+    void parseMeta( char c );
     bool parseRow( int TableId, int TableScope );
-    bool parseGroup();
+    void parseGroup();
 
 private: // Data
 

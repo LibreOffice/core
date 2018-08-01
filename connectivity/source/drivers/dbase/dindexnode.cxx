@@ -375,7 +375,7 @@ void ONDXPage::ReleaseFull()
     }
 }
 
-bool ONDXPage::Delete(sal_uInt16 nNodePos)
+void ONDXPage::Delete(sal_uInt16 nNodePos)
 {
     if (IsLeaf())
     {
@@ -421,7 +421,6 @@ bool ONDXPage::Delete(sal_uInt16 nNodePos)
     else if (IsRoot())
         // make sure that the position of the root is kept
         rIndex.SetRootPos(nPagePos);
-    return true;
 }
 
 
