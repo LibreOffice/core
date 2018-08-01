@@ -63,6 +63,7 @@ class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
     PDFDocument& m_rDoc;
     double m_fObjectValue;
     double m_fGenerationValue;
+    bool m_bVisiting;
     std::map<OString, PDFElement*> m_aDictionary;
     /// If set, the object contains this number element (outside any dictionary/array).
     PDFNumberElement* m_pNumberElement;
@@ -122,6 +123,9 @@ public:
     SvMemoryStream* GetStreamBuffer() const;
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
     PDFDocument& GetDocument();
+
+    /// Visits the page tree recursively, looking for page objects.
+    void visitPages(std::vector<PDFObjectElement*>& rRet);
 };
 
 /// Array object: a list.
