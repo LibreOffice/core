@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include <scresid.hxx>
 #include <formula/grammar.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include "calcoptionsdlg.hxx"
 #include <vcl/edit.hxx>
 
@@ -300,18 +301,22 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     }
 
     mxLbFormulaSyntax->save_value();
+    mxLbFormulaSyntax->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::Grammar::isReadOnly() );
 
     ScRecalcOptions eOOXMLRecalc = aOpt.GetOOXMLRecalcOptions();
     mxLbOOXMLRecalcOptions->set_active(static_cast<sal_uInt16>(eOOXMLRecalc));
     mxLbOOXMLRecalcOptions->save_value();
+    mxLbOOXMLRecalcOptions->set_sensitive( !officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::isReadOnly() );
 
     ScRecalcOptions eODFRecalc = aOpt.GetODFRecalcOptions();
     mxLbODFRecalcOptions->set_active(static_cast<sal_uInt16>(eODFRecalc));
     mxLbODFRecalcOptions->save_value();
+    mxLbODFRecalcOptions->set_sensitive( !officecfg::Office::Calc::Formula::Load::ODFRecalcMode::isReadOnly() );
 
     // english function name.
     mxCbEnglishFuncName->set_active( aOpt.GetUseEnglishFuncName() );
     mxCbEnglishFuncName->save_state();
+    mxCbEnglishFuncName->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::EnglishFunctionName::isReadOnly() );
 
     // Separators
     OUString aSep = aOpt.GetFormulaSepArg();
@@ -331,6 +336,13 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     }
     else
         ResetSeparators();
+
+    mxEdSepFuncArg->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::SeparatorArg::isReadOnly() );
+    mxEdSepArrayCol->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayCol::isReadOnly() );
+    mxEdSepArrayRow->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayRow::isReadOnly() );
+    mxBtnSepReset->set_sensitive ( !officecfg::Office::Calc::Formula::Syntax::SeparatorArg::isReadOnly()  &&
+                            !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayCol::isReadOnly() &&
+                            !officecfg::Office::Calc::Formula::Syntax::SeparatorArrayRow::isReadOnly() );
 
     // detailed calc settings.
     ScFormulaOptions aDefaults;

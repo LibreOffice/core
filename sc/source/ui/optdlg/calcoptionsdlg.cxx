@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <officecfg/Office/Calc.hxx>
+
 #include <calcconfig.hxx>
 #include "calcoptionsdlg.hxx"
 
@@ -66,13 +68,16 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConf
 {
     mxConversion->set_active(static_cast<int>(rConfig.meStringConversion));
     mxConversion->connect_changed(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
+    mxConversion->set_sensitive( !officecfg::Office::Calc::Formula::Syntax::StringConversion::isReadOnly() );
 
     mxEmptyAsZero->set_active(rConfig.mbEmptyStringAsZero);
     mxEmptyAsZero->connect_toggled(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
     CoupleEmptyAsZeroToStringConversion();
+    mxEmptyAsZero->set_sensitive ( !officecfg::Office::Calc::Formula::Syntax::EmptyStringAsZero::isReadOnly() );
 
     mxSyntax->set_active(toSelectedItem(rConfig.meStringRefAddressSyntax));
     mxSyntax->connect_changed(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
+    mxSyntax->set_sensitive ( !officecfg::Office::Calc::Formula::Syntax::StringRefAddressSyntax::isReadOnly() );
 
     mxCurrentDocOnly->set_active(!mbWriteConfig);
     mxCurrentDocOnly->connect_toggled(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
