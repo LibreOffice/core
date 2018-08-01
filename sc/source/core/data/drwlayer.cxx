@@ -895,8 +895,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     else
     {
         // Prevent multiple broadcasts during the series of changes.
-        SdrDelayBroadcastObjectChange aDelayBroadcastObjectChange(*pObj);
-
+        pObj->getSdrModelFromSdrObject().setLock(true);
         bool bCanResize = bValid2 && !pObj->IsResizeProtect() && rData.mbResizeWithCell;
 
         //First time positioning, must be able to at least move it
@@ -1018,6 +1017,10 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // update 'unrotated' anchor
             ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1 );
         }
+
+        // End prevent multiple broadcasts during the series of changes.
+        pObj->getSdrModelFromSdrObject().setLock(false);
+        pObj->BroadcastObjectChange();
     }
 }
 

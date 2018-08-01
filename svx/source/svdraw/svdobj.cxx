@@ -360,8 +360,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     ,mnLayerID(0)
     ,mpProperties(nullptr)
     ,mpViewContact(nullptr)
-    ,mbDelayBroadcastObjectChange(false)
-    ,mbBroadcastObjectChangePending(false)
     ,mpSvxShape( nullptr )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
@@ -923,12 +921,6 @@ void SdrObject::BroadcastObjectChange() const
 {
     if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
-
-    if (mbDelayBroadcastObjectChange)
-    {
-        mbBroadcastObjectChangePending = true;
-        return;
-    }
 
     bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
     bool bObjectChange(IsInserted());
@@ -2998,26 +2990,6 @@ bool SdrObject::IsTextBox() const
 {
     return false;
 }
-
-SdrDelayBroadcastObjectChange::SdrDelayBroadcastObjectChange( SdrObject& rObj ) :
-    mrObj(rObj), mbOldDelayBroadcastObjectChange( rObj.mbDelayBroadcastObjectChange)
-{
-    mrObj.mbDelayBroadcastObjectChange = true;
-}
-
-SdrDelayBroadcastObjectChange::~SdrDelayBroadcastObjectChange()
-{
-    if (!mbOldDelayBroadcastObjectChange)
-    {
-        mrObj.mbDelayBroadcastObjectChange = false;
-        if (mrObj.mbBroadcastObjectChangePending)
-        {
-            mrObj.mbBroadcastObjectChangePending = false;
-            mrObj.BroadcastObjectChange();
-        }
-    }
-}
-
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nObjIdentifier)
 {
