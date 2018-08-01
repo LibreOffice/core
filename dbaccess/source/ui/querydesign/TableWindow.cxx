@@ -179,7 +179,7 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetSizePixel( rNewSize );
 }
 
-bool OTableWindow::FillListBox()
+void OTableWindow::FillListBox()
 {
     m_xListBox->Clear();
     if ( !m_pContainerListener.is() )
@@ -236,8 +236,6 @@ bool OTableWindow::FillListBox()
     {
         OSL_FAIL("Exception occurred!");
     }
-
-    return true;
 }
 
 void* OTableWindow::createUserData(const Reference< XPropertySet>& /*_xColumn*/,bool /*_bPrimaryKey*/)
@@ -303,13 +301,12 @@ bool OTableWindow::Init()
 
     // add the fields to the ListBox
     clearListBox();
-    bool bSuccess = FillListBox();
-    if ( bSuccess )
-        m_xListBox->SelectAll( false );
+    FillListBox();
+    m_xListBox->SelectAll( false );
 
     impl_updateImage();
 
-    return bSuccess;
+    return true;
 }
 
 void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
