@@ -64,7 +64,7 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index f4a1688..f34d3b5 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -26,6 +26,7 @@
+@@ -27,6 +27,7 @@
  #include "core/fpdfapi/parser/cpdf_string.h"
  #include "core/fpdfdoc/cpdf_annot.h"
  #include "core/fpdfdoc/cpdf_annotlist.h"
@@ -72,7 +72,7 @@ index f4a1688..f34d3b5 100644
  #include "fpdfsdk/cpdfsdk_helpers.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -656,6 +657,46 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+@@ -651,6 +652,46 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
    return true;
  }
  
@@ -116,14 +116,14 @@ index f4a1688..f34d3b5 100644
 +  return ret_count;
 +}
 +
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
- FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
-                      unsigned int* R,
+ FPDF_EXPORT int FPDF_CALLCONV
+ FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object)
+ {
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index f249e64..e14b2a5 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1125,6 +1125,19 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -1142,6 +1142,19 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
  FPDF_EXPORT int FPDF_CALLCONV
  FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
@@ -140,9 +140,9 @@ index f249e64..e14b2a5 100644
 +                             int char_count,
 +                             unsigned short* result);
 +
- // Get the stroke RGBA of a text. Range of values: 0 - 255.
+ // Get number of page objects inside the form object.
  //
- // path   - the handle to the path object.
+ // form_object - Handle to a form object. Returned by FPDFPage_GetObject.
 -- 
 2.16.3
 

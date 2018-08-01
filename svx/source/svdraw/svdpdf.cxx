@@ -867,9 +867,32 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
 
     Color aTextColor(COL_TRANSPARENT);
-    unsigned int nR, nG, nB, nA;
-    if (FPDFTextObj_GetColor(pPageObject, &nR, &nG, &nB, &nA))
-        aTextColor = Color(nR, nG, nB);
+    bool bFill = false;
+    bool bUse = true;
+    switch (FPDFText_GetTextRenderMode(pPageObject))
+    {
+        case FPDF_TEXTRENDERMODE_FILL:
+        case FPDF_TEXTRENDERMODE_FILL_CLIP:
+        case FPDF_TEXTRENDERMODE_FILL_STROKE:
+        case FPDF_TEXTRENDERMODE_FILL_STROKE_CLIP:
+            bFill = true;
+            break;
+        case FPDF_TEXTRENDERMODE_STROKE:
+        case FPDF_TEXTRENDERMODE_STROKE_CLIP:
+            break;
+        case FPDF_TEXTRENDERMODE_INVISIBLE:
+        case FPDF_TEXTRENDERMODE_CLIP:
+            bUse = false;
+            break;
+    }
+    if (bUse)
+    {
+        unsigned int nR, nG, nB, nA;
+        bool bRet = bFill ? FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA)
+                          : FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        if (bRet)
+            aTextColor = Color(nR, nG, nB);
+    }
 
     if (aTextColor != mpVD->GetTextColor())
     {

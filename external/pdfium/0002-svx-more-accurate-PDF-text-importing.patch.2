@@ -40,9 +40,9 @@ index 912df63..3244943 100644
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1116,6 +1116,15 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
-                           FPDF_FONT font,
-                           float font_size);
+@@ -1133,6 +1133,15 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+ // Returns one of the FPDF_TEXTRENDERMODE_* flags on success, -1 on error.
+ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
  
 +// Get the number of characters from a text object.
 +//

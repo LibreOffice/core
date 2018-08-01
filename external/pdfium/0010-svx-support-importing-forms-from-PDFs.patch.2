@@ -29,8 +29,8 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 9c353a4..bf68250 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -704,3 +704,31 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
- 
+@@ -650,3 +650,31 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+   pPageObj->SetDirty(true);
    return true;
  }
 +
@@ -65,9 +65,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index 4264ccd..ca76954 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1081,6 +1081,23 @@ FPDFTextObj_GetColor(FPDF_PAGEOBJECT text_object,
-                      unsigned int* B,
-                      unsigned int* A);
+@@ -1142,6 +1142,23 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
+ FPDF_EXPORT int FPDF_CALLCONV
+ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
 +// Get number of page objects inside the form object.
 +//

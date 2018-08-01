@@ -38,57 +38,6 @@ index 3244943..f8e2418 100644
    return pTxtObj->CountChars();
  }
  
-@@ -645,3 +645,23 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
-   pPageObj->SetDirty(true);
-   return true;
- }
-+
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFTextObj_GetStrokeColor(FPDF_PAGEOBJECT text_object,
-+                           unsigned int* R,
-+                           unsigned int* G,
-+                           unsigned int* B,
-+                           unsigned int* A)
-+{
-+  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
-+  if (!pTxtObj || !R || !G || !B || !A)
-+    return false;
-+
-+  const uint32_t strokeRGB = pTxtObj->m_ColorState.GetStrokeRGB();
-+  *R = FXSYS_GetRValue(strokeRGB);
-+  *G = FXSYS_GetGValue(strokeRGB);
-+  *B = FXSYS_GetBValue(strokeRGB);
-+  *A = static_cast<unsigned int>(
-+      (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
-+  return true;
-+}
-diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
-index 602849f..fa9902e 100644
---- a/pdfium/public/fpdf_edit.h
-+++ b/pdfium/public/fpdf_edit.h
-@@ -1125,6 +1125,22 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
- 
-+// Get the stroke RGBA of a text. Range of values: 0 - 255.
-+//
-+// path   - the handle to the path object.
-+// R      - the red component of the path stroke color.
-+// G      - the green component of the path stroke color.
-+// B      - the blue component of the path stroke color.
-+// A      - the stroke alpha of the path.
-+//
-+// Returns TRUE on success.
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFTextObj_GetStrokeColor(FPDF_PAGEOBJECT text_object,
-+                           unsigned int* R,
-+                           unsigned int* G,
-+                           unsigned int* B,
-+                           unsigned int* A);
-+
- #ifdef __cplusplus
- }  // extern "C"
- #endif  // __cplusplus
 diff --git a/pdfium/fpdfsdk/fpdf_edittext.cpp b/pdfium/fpdfsdk/fpdf_edittext.cpp
 index c38873faa..aa3287ef4 100644
 --- a/pdfium/fpdfsdk/fpdf_edittext.cpp
