@@ -381,6 +381,11 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
 
                 sal_Int64 nSize = 0;
                 xPropertySet->getPropertyValue("Size") >>= nSize;
+                if (nSize < 0 || nSize > SAL_MAX_INT32)
+                {
+                    SAL_WARN("xmlsecurity.helper", "bogus signature size: " << nSize);
+                    continue;
+                }
                 uno::Sequence<sal_Int8> aData;
                 xInputStream->readBytes(aData, nSize);
                 mpXSecController->setSignatureBytes(aData);
