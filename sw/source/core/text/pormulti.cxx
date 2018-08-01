@@ -2094,11 +2094,13 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
             BuildPortions( aTmp );
 
-            if ( rMulti.OnRight() )
+            const SwLinePortion *pRightPortion = rMulti.OnRight() ?
+                                                 rMulti.GetRoot().GetNext()->GetPortion() : nullptr;
+            if (pRightPortion)
             {
                 // The ruby text on the right is vertical.
                 // The width and the height are swapped.
-                SwTwips nHeight = rMulti.GetRoot().GetNext()->GetPortion()->Height();
+                SwTwips nHeight = pRightPortion->Height();
                 // Keep room for the ruby text.
                 rMulti.GetRoot().FindLastPortion()->AddPrtWidth( nHeight );
             }
