@@ -609,6 +609,11 @@ void SwCalc::Pop()
     m_aRekurStack.pop_back();
 }
 
+CharClass* SwCalc::GetCharClass()
+{
+    return m_pCharClass;
+}
+
 SwCalcOper SwCalc::GetToken()
 {
     if( m_nCommandPos >= m_sCommand.getLength() )

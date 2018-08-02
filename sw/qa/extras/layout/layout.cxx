@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 #include <test/mtfxmldump.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <comphelper/scopeguard.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -28,6 +30,7 @@ public:
     void testTdf118672();
     void testTdf117923();
     void testTdf109077();
+    void testUserFieldTypeLanguage();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -41,6 +44,7 @@ public:
     CPPUNIT_TEST(testTdf118672);
     CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST(testTdf109077);
+    CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -248,6 +252,26 @@ void SwLayoutWriter::testTdf109077()
     // This was 281: the top of the shape and its textbox should match, though
     // tolerate differences <= 1px (about 15 twips).
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
+}
+
+void SwLayoutWriter::testUserFieldTypeLanguage()
+{
+    // Set the system locale to German, the document will be English.
+    SvtSysLocaleOptions aOptions;
+    aOptions.SetLocaleConfigString("de-DE");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions] {
+        aOptions.SetLocaleConfigString(OUString());
+        aOptions.Commit();
+    });
+
+    SwDoc* pDoc = createDoc("user-field-type-language.fodt");
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell->UpdateFields();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was "123,456.00", via a buggy 1234.56 -> 1234,56 -> 123456 ->
+    // 123,456.00 transform chain.
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLD']", "rText", "1,234.56");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
