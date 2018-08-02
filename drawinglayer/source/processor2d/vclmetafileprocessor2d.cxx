@@ -1787,7 +1787,7 @@ namespace drawinglayer
             // #i121267# Not needed, does not give better quality compared with
             // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
             // below
-            bool bSupportSvtGraphicFill(false);
+            const bool bSupportSvtGraphicFill(false);
 
             if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
             {
@@ -1937,7 +1937,7 @@ namespace drawinglayer
                         // #i121267# Not needed, does not give better quality compared with
                         // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
                         // below
-                        bool bSupportSvtGraphicFill(false);
+                        const bool bSupportSvtGraphicFill(false);
 
                         if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
