@@ -383,7 +383,7 @@ SfxLibraryContainer::~SfxLibraryContainer()
 {
     if( mbOwnBasMgr )
     {
-        BasicManager::LegacyDeleteBasicManager( mpBasMgr );
+        delete mpBasMgr;
     }
 }
 
