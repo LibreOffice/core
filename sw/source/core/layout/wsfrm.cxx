@@ -4183,7 +4183,15 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             {
                 if (pFrame->getRootFrame() == &rLayout)
                 {
-                    frames.push_back(pFrame);
+                    if (pFrame->IsFollow())
+                    {
+                        frames.push_back(pFrame);
+                    }    // when hiding, the loop must remove the anchored flys
+                    else // *before* resetting SetMergedPara anywhere - else
+                    {    // the fly deletion code will access multiple of the
+                         // frames with inconsistent MergedPara and assert
+                        frames.insert(frames.begin(), pFrame);
+                    }
                 }
             }
             // this messes with pRegisteredIn so do it outside SwIterator
@@ -4195,30 +4203,111 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                         rNode.GetRedlineMergeFlag() == SwNode::Merge::NonFirst);
                     if (rNode.IsCreateFrameWhenHidingRedlines())
                     {
-                        pFrame->SetMergedPara(CheckParaRedlineMerge(*pFrame,
-                                rTextNode, sw::FrameMode::Existing));
-                        // ??? TODO flys etc.
+                        {
+                            auto pMerged(CheckParaRedlineMerge(*pFrame,
+                                    rTextNode, sw::FrameMode::Existing));
+                            pFrame->SetMergedPara(std::move(pMerged));
+                        }
+                        auto const pMerged(pFrame->GetMergedPara());
+                        if (pMerged
+                            // do this only *once*, for the *last* frame
+                            // otherwise AppendObj would create multiple frames for fly-frames!
+                            && !pFrame->GetFollow())
+                        {
+                            // add visible flys in non-first node to merged frame
+                            // (hidden flys remain and are deleted via DelFrames())
+                            SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
+                            SwPageFrame *const pPage(pFrame->FindPageFrame());
+                            std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
+                            std::vector<sw::Extent>::const_iterator iter(iterFirst);
+                            SwTextNode const* pNode(&rTextNode);
+                            for ( ; ; ++iter)
+                            {
+                                if (iter == pMerged->extents.end()
+                                    || iter->pNode != pNode)
+                                {
+                                    if (pNode == &rTextNode)
+                                    {   // remove existing hidden at-char anchored flys
+                                        RemoveHiddenObjsOfNode(
+                                            rTextNode, &iterFirst, &iter);
+                                    }
+                                    else
+                                    {
+                                        // pNode's frame has been deleted by CheckParaRedlineMerge()
+                                        AppendObjsOfNode(&rTable,
+                                            pNode->GetIndex(), pFrame, pPage,
+                                            rTextNode.GetDoc(),
+                                            &iterFirst, &iter);
+                                    }
+                                    if (iter == pMerged->extents.end())
+                                    {
+                                        break;
+                                    }
+                                    pNode = iter->pNode;
+                                    iterFirst = iter;
+                                }
+                            }
+                        }
                     }
                 }
                 else
                 {
                     if (auto const& pMergedPara = pFrame->GetMergedPara())
                     {
-                        // the new text frames don't exist yet, so at this point
-                        // we can only delete the footnote frames so they don't
-                        // point to the merged SwTextFrame any more...
-                        SwTextNode const* pNode(&rTextNode);
-                        for (auto const& rExtent : pMergedPara->extents)
+                        // SwFlyAtContentFrame::Modify() always appends to
+                        // the master frame, so do the same here.
+                        // (RemoveFootnotesForNode must be called at least once)
+                        if (!pFrame->IsFollow())
                         {
-                            if (rExtent.pNode != pNode)
+                            // the new text frames don't exist yet, so at this point
+                            // we can only delete the footnote frames so they don't
+                            // point to the merged SwTextFrame any more...
+                            SwTextNode const* pNode(&rTextNode);
+                            for (auto const& rExtent : pMergedPara->extents)
                             {
-                                sw::RemoveFootnotesForNode(*pFrame, *rExtent.pNode, nullptr);
-                                pNode = rExtent.pNode;
+                                if (rExtent.pNode != pNode)
+                                {
+                                    sw::RemoveFootnotesForNode(*pFrame, *rExtent.pNode, nullptr);
+                                    // similarly, remove the anchored flys
+                                    if (auto const pFlys = rExtent.pNode->GetAnchoredFlys())
+                                    {
+                                        for (SwFrameFormat * pFormat : *pFlys)
+                                        {
+                                            pFormat->DelFrames(/*&rLayout*/);
+                                        }
+                                    }
+                                    pNode = rExtent.pNode;
+                                }
                             }
+                            // add all flys in first node that are hidden
+                            std::vector<sw::Extent> hidden;
+                            sal_Int32 nLast(0);
+                            for (auto const& rExtent : pMergedPara->extents)
+                            {
+                                if (rExtent.pNode != &rTextNode)
+                                {
+                                    break;
+                                }
+                                if (rExtent.nStart != 0)
+                                {
+                                    assert(rExtent.nStart != nLast);
+
+                                    hidden.emplace_back(&rTextNode, nLast, rExtent.nStart);
+                                }
+                                nLast = rExtent.nEnd;
+                            }
+                            if (nLast != rTextNode.Len())
+                            {
+                                hidden.emplace_back(&rTextNode, nLast, rTextNode.Len());
+                            }
+                            SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
+                            auto iterBegin(hidden.cbegin());
+                            auto const iterEnd(hidden.cend());
+                            AppendObjsOfNode(&rTable, rTextNode.GetIndex(), pFrame,
+                                pFrame->FindPageFrame(), rTextNode.GetDoc(),
+                                &iterBegin, &iterEnd);
                         }
                         pFrame->SetMergedPara(nullptr);
-                        // ??? TODO flys etc.
-                        // ??? TODO recreate? or is invalidate enough?
                     }
                 }
             }

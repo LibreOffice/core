@@ -1038,33 +1038,65 @@ static bool IsShown(sal_uLong const nIndex,
     std::vector<sw::Extent>::const_iterator *const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
 {
+    assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
     SwPosition const& rAnchor(*rAnch.GetContentAnchor());
+    if (rAnchor.nNode.GetIndex() != nIndex)
+    {
+        return false;
+    }
     if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
     {
-        // TODO are frames sorted by anchor positions perhaps?
+        // note: frames are not sorted by anchor position.
         assert(pEnd);
         assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
-        for ( ; *pIter != *pEnd; ++*pIter)
+        for (auto iter = *pIter; iter != *pEnd; ++iter)
         {
-            assert((**pIter).pNode->GetIndex() == nIndex);
-            if ((**pIter).nStart <= rAnchor.nContent.GetIndex())
+            assert(iter->pNode->GetIndex() == nIndex);
+            if (rAnchor.nContent.GetIndex() < iter->nStart)
             {
-                // TODO off by one? need < for AS_CHAR but what for AT_CHAR?
-                if (rAnchor.nContent.GetIndex() < (**pIter).nEnd)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
+            }
+            // for AS_CHAR obviously must be <
+            // for AT_CHAR it is questionable whether < or <= should be used
+            // and there is the additional corner case of Len() to consider
+            // prefer < for now for symmetry (and inverted usage with
+            // "hidden") and handle special case explicitly
+            if (rAnchor.nContent.GetIndex() < iter->nEnd
+                || iter->nEnd == iter->pNode->Len())
+            {
+                return true;
             }
         }
         return false;
     }
     else
     {
-        return rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex;
+        return true;
+    }
+}
+
+void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
+    if (!pFlys)
+    {
+        return;
+    }
+    for (SwFrameFormat * pFrameFormat : *pFlys)
+    {
+        SwFormatAnchor const& rAnchor = pFrameFormat->GetAnchor();
+        if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
+            || (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
+                && RES_DRAWFRMFMT == pFrameFormat->Which()))
+        {
+            assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
+            if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd))
+            {
+                pFrameFormat->DelFrames();
+            }
+        }
     }
 }
 

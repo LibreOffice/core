@@ -45,6 +45,8 @@ class GraphicAttr;
 class SwPageDesc;
 class SwFrameFormats;
 class SwRegionRects;
+class SwTextNode;
+namespace sw { struct Extent; }
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
 #define BROWSE_HEIGHT (56700L * 10L) // 10 Meters
@@ -54,6 +56,15 @@ class SwRegionRects;
 
 void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                        SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc );
+
+void AppendObjsOfNode(SwFrameFormats const* pTable, sal_uLong nIndex,
+        SwFrame * pFrame, SwPageFrame * pPage, SwDoc * pDoc,
+        std::vector<sw::Extent>::const_iterator * pIter,
+        std::vector<sw::Extent>::const_iterator const* pEnd);
+
+void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
+        std::vector<sw::Extent>::const_iterator * pIter,
+        std::vector<sw::Extent>::const_iterator const* pEnd);
 
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background
