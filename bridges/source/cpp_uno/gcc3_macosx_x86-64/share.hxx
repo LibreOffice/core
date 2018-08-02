@@ -129,6 +129,7 @@ struct __cxa_eh_globals
 }
 
 extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
+extern "C" std::type_info *__cxa_current_exception_type() throw();
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -136,8 +137,7 @@ namespace CPPU_CURRENT_NAMESPACE
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
-void fillUnoException(
-    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+void fillUnoException(uno_Any *, uno_Mapping * pCpp2Uno);
 }
 
 #endif

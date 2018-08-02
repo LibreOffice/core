@@ -84,6 +84,12 @@ struct __cxa_eh_globals
 namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
 #endif
 
+#if !HAVE_CXXABI_H_CXA_CURRENT_EXCEPTION_TYPE
+namespace __cxxabiv1 {
+extern "C" std::type_info *__cxa_current_exception_type() throw();
+}
+#endif
+
 #if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
 namespace __cxxabiv1 {
 extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
@@ -111,8 +117,7 @@ namespace CPPU_CURRENT_NAMESPACE
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
-void fillUnoException(
-    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+void fillUnoException(uno_Any *, uno_Mapping * pCpp2Uno);
 
 }
 
