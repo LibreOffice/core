@@ -1737,8 +1737,11 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                     ++nIdx;
 
                 // Remove any entries *inside* the current run:
-                while ( nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd )
-                    rTypes.erase( rTypes.begin()+nIdx );
+                while (nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd)
+                {
+                    // coverity[use_iterator] - we're protected from a bad iterator by the above condition
+                    rTypes.erase(rTypes.begin() + nIdx);
+                }
 
                 // special case:
                 if(nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
