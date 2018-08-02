@@ -43,7 +43,6 @@ REM ----------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-Dim vCurrentDoc() As Variant
 	VersionNumber = Access2Base_Version
 	ErrorHandler = True
 	MinimalTraceLevel = 0
@@ -67,10 +66,9 @@ Dim vCurrentDoc() As Variant
 	Set StatusBar = Nothing
 	Set Dialogs = New Collection
 	Set TempVars = New Collection
-	vCurrentDoc() = Array()
-	ReDim vCurrentDoc(0 To 0)
-	Set vCurrentDoc(0) = Nothing
-	Set CurrentDoc() = vCurrentDoc()
+	CurrentDoc = Array()
+	ReDim CurrentDoc(0 To 0)
+	Set CurrentDoc(0) = Nothing
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -107,7 +105,7 @@ Dim vDbContainer As Variant, vDbContainers() As Variant, vDocContainer As Varian
 	iCurrentDoc = CurrentDocIndex( , False)			&apos;	False prevents error raising if not found
 	If iCurrentDoc &lt; 0 Then GoTo Exit_Sub			&apos;	If not found ignore
 	
-	vDocContainer = CurrentDocument(iCurrentDoc)
+	vDocContainer = CurrentDoc(iCurrentDoc)
 	With vDocContainer
 		If Not .Active Then GoTo Exit_Sub		&apos;	e.g. if successive calls to CloseConnection()
 		For i = 0 To UBound(.DbContainers)
