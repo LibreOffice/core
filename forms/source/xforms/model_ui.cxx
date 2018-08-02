@@ -743,7 +743,7 @@ static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
 
 static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 {
-    OUString sResult;
+    OUStringBuffer sResult;
 
     // create document fragment
     Reference<XDocument> xDocument( getDocumentBuilder()->newDocument() );
@@ -770,7 +770,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
             Reference< XAttr > xAttr( xCurrent, UNO_QUERY );
             if ( xAttr.is() )
             {
-                sResult += lcl_serializeForDisplay( xAttr );
+                sResult.append(lcl_serializeForDisplay( xAttr ));
                 ++nAttributeNodes;
             }
         }
@@ -787,7 +787,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
         "lcl_serializeForDisplay: mixed attribute and non-attribute nodes?" );
     if ( nAttributeNodes )
         // had only attribute nodes
-        return sResult;
+        return sResult.makeStringAndClear();
 
     // serialize fragment
     CSerializationAppXML aSerialization;
@@ -808,20 +808,19 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 
     // well, the serialization prepends XML header(s) that we need to
     // remove first.
-    OUStringBuffer aBuffer;
+    sResult.setLength(0);
     while( ! xTextInputStream->isEOF() )
     {
         OUString sLine = xTextInputStream->readLine();
         if( !sLine.isEmpty()
             && !sLine.startsWith( "<?xml" ) )
         {
-            aBuffer.append( sLine );
-            aBuffer.append( '\n' );
+            sResult.append( sLine );
+            sResult.append( '\n' );
         }
     }
-    sResult = aBuffer.makeStringAndClear();
 
-    return sResult;
+    return sResult.makeStringAndClear();
 }
 
 static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult )

@@ -361,10 +361,10 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
             sal_uInt64 nRead;
             sal_Char buffer[2048];
             sal_Unicode lineBuffer[1028];
-            OUString fileContent;
+            OUStringBuffer fileContent;
 
             while( osl::FileBase::E_None == cfgFile.read( &buffer,2048,nRead ) && nRead )
-                fileContent += OUString( buffer,sal_Int32( nRead ),RTL_TEXTENCODING_UTF8 );
+                fileContent.append(OUString( buffer,sal_Int32( nRead ),RTL_TEXTENCODING_UTF8 ));
 
             cfgFile.close();
 
