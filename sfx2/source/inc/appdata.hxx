@@ -35,6 +35,7 @@
 #include <vector>
 
 class SfxApplication;
+class SfxPickList;
 class SfxProgress;
 class SfxDdeDocTopic_Impl;
 class DdeService;
@@ -88,6 +89,7 @@ public:
     SfxErrorHandler *m_pSbxErrorHdl;
 #endif
     rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
+    std::unique_ptr<SfxPickList>        mxAppPickList;
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers

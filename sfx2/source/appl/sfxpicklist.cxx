@@ -78,7 +78,7 @@ class SfxPickListImpl : public SfxListener
     static void         AddDocumentToPickList( SfxObjectShell* pDocShell );
 
 public:
-    SfxPickListImpl();
+    SfxPickListImpl(SfxApplication& rApp);
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
@@ -161,25 +161,18 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
                                                                  pFilter ? pFilter->GetServiceName() : OUString() );
 }
 
-SfxPickList::SfxPickList()
-    : mxImpl(new SfxPickListImpl())
+SfxPickList::SfxPickList(SfxApplication& rApp)
+    : mxImpl(new SfxPickListImpl(rApp))
 {
 }
 
 SfxPickList::~SfxPickList()
 {
-    std::unique_ptr<SolarMutexGuard> xGuard(comphelper::SolarMutex::get() ? new SolarMutexGuard : nullptr);
-    mxImpl.reset();
 }
 
-void SfxPickList::ensure()
+SfxPickListImpl::SfxPickListImpl(SfxApplication& rApp)
 {
-    static SfxPickList aUniqueInstance;
-}
-
-SfxPickListImpl::SfxPickListImpl()
-{
-    StartListening( *SfxGetpApp() );
+    StartListening(rApp);
 }
 
 void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
