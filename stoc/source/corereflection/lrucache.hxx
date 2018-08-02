@@ -47,7 +47,7 @@ class LRU_Cache
     sal_Int32                   _nCachedElements;
     t_Key2Element               _aKey2Element;
 
-    CacheEntry *                _pBlock;
+    std::unique_ptr<CacheEntry[]> _pBlock;
     mutable CacheEntry *        _pHead;
     mutable CacheEntry *        _pTail;
     inline void toFront( CacheEntry * pEntry ) const;
@@ -58,10 +58,6 @@ public:
         @param nCachedElements number of elements to be cached; default param set to 128
     */
     explicit inline LRU_Cache();
-    /** Destructor: releases all cached elements and keys.
-        <br>
-    */
-    inline ~LRU_Cache();
 
     /** Retrieves a value from the cache. Returns default constructed value,
         if none was found.
@@ -95,21 +91,15 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash >::LRU_Cache()
 {
     if (_nCachedElements > 0)
     {
-        _pBlock = new CacheEntry[_nCachedElements];
-        _pHead  = _pBlock;
-        _pTail  = _pBlock + _nCachedElements -1;
+        _pBlock.reset(new CacheEntry[_nCachedElements]);
+        _pHead  = _pBlock.get();
+        _pTail  = _pBlock.get() + _nCachedElements -1;
         for ( sal_Int32 nPos = _nCachedElements; nPos--; )
         {
-            _pBlock[nPos].pPred = _pBlock + nPos -1;
-            _pBlock[nPos].pSucc = _pBlock + nPos +1;
+            _pBlock[nPos].pPred = _pBlock.get() + nPos -1;
+            _pBlock[nPos].pSucc = _pBlock.get() + nPos +1;
         }
     }
-}
-
-template< class t_Key, class t_Val, class t_KeyHash >
-inline LRU_Cache< t_Key, t_Val, t_KeyHash >::~LRU_Cache()
-{
-    delete [] _pBlock;
 }
 
 template< class t_Key, class t_Val, class t_KeyHash >
