@@ -16,6 +16,24 @@
       "revId": "b0d1b775de29b00e3696ce07e43efa4fdb20b01b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_00aa10d3",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-08-02T15:10:55Z",
+      "side": 1,
+      "message": "to reassure myself that the header arg to fillUnoException is always that of the current caught exception, i.e. the one that __cxa_current_exception_type() also works with, as opposed to some other arbitrary one",
+      "parentUuid": "ffe62b97_40a018f5",
+      "revId": "b0d1b775de29b00e3696ce07e43efa4fdb20b01b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
