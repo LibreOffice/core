@@ -16,6 +16,23 @@
       "revId": "b8195722f01fae51c1d0d28ba5e79c70dbd0106e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_3599d86d",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-02T07:15:33Z",
+      "side": 1,
+      "message": "return pDest + nCount",
+      "revId": "b8195722f01fae51c1d0d28ba5e79c70dbd0106e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
