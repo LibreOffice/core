@@ -16,6 +16,24 @@
       "revId": "bb8825807e7f0fdfcabfad78ac2068bdf6a3ba33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_95742437",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-08-02T07:14:01Z",
+      "side": 1,
+      "message": "Ahem - no? Block starts at 896 and ends at 1024, no return statements in-between -\u003e safe AFAIK.\nThought about encapsulating to a small class, but not worth it, it will change further when cleaning up modify/broadcasts of SdrObjects.\nBTW: setLock should be named something like \u0027EnableSdrObjectBroadcasts\u0027...maybe I do that in one of the next - if it survives...",
+      "parentUuid": "ffe62b97_95c66467",
+      "revId": "bb8825807e7f0fdfcabfad78ac2068bdf6a3ba33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
