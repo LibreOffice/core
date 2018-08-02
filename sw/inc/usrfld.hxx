@@ -26,12 +26,20 @@ class SfxPoolItem;
 class SwCalc;
 class SwDoc;
 
+/**
+ * The shared part of a user field.
+ *
+ * Tracks the value, but conversion between the float and string representation
+ * always happens with the system locale.
+ */
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
     bool    bValidValue : 1;
     bool    bDeleted : 1;
+    /// Float value type.
     double  nValue;
     OUString  aName;
+    /// String value type.
     OUString  aContent;
     sal_uInt16  nType;
 
@@ -87,6 +95,12 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
 }
 
+/**
+ * The non-shared part of a user field.
+ *
+ * Tracks the number format and the language, conversion between the float and
+ * string representation is independent from the system locale.
+ */
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;

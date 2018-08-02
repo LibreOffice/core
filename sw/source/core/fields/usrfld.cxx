@@ -35,6 +35,18 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/**
+ * Returns the language used for float <-> string conversions in
+ * SwUserFieldType.
+ */
+LanguageType GetFieldTypeLanguage()
+{
+    return LANGUAGE_SYSTEM;
+}
+}
+
 // Userfields
 
 SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
@@ -218,7 +230,21 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
         rCalc.SetCalcError( CALC_SYNTAX );
         return 0;
     }
+
+    // See if we need to temporarily switch rCalc's language: in case it
+    // differs from the field type locale.
+    CharClass* pCharClass = rCalc.GetCharClass();
+    LanguageTag aCalcLanguage = pCharClass->getLanguageTag();
+    LanguageTag aFieldTypeLanguage(GetFieldTypeLanguage());
+    bool bSwitchLanguage = aCalcLanguage != aFieldTypeLanguage;
+    if (bSwitchLanguage)
+        pCharClass->setLanguageTag(aFieldTypeLanguage);
+
     nValue = rCalc.Calculate( aContent ).GetDouble();
+
+    if (bSwitchLanguage)
+        pCharClass->setLanguageTag(aCalcLanguage);
+
     rCalc.Pop();
 
     if( !rCalc.IsCalcError() )
@@ -302,10 +328,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= fVal;
             nValue = fVal;
 
-            // The following line is in fact wrong, since the language is unknown (is part of the
-            // field) and, thus, aContent should also belong to the field. Each field can have a
-            // different language, but the same content with just different formatting.
-            aContent = DoubleToString(nValue, static_cast<sal_uInt32>(LANGUAGE_SYSTEM));
+            aContent = DoubleToString(nValue, static_cast<sal_uInt16>(GetFieldTypeLanguage()));
         }
         break;
     case FIELD_PROP_PAR2:
