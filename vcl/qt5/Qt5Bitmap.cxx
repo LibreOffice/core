@@ -154,15 +154,15 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
             buffer_data_pos += pBitmap->m_nScanline;
             for (sal_uInt32 w = 0; w < nWidth; ++w)
             {
-                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
+                *image_data = static_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
                 ++image_data;
-                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data & 0xF));
+                *image_data = static_cast<sal_uInt32>(colorTable.at(*buffer_data & 0xF));
                 ++image_data;
                 ++buffer_data;
             }
             if (isOdd)
             {
-                *image_data = reinterpret_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
+                *image_data = static_cast<sal_uInt32>(colorTable.at(*buffer_data >> 4));
                 ++image_data;
             }
         }
