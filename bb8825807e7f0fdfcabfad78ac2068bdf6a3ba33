@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_95c66467",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-02T06:07:28Z",
+      "side": 1,
+      "message": "it is a little strange that the setLock(true) is inside an if block, but the setLock(false) is outside the if statement?\n\nPerhaps the setLock(true) needs to be higher up in this method?",
+      "revId": "bb8825807e7f0fdfcabfad78ac2068bdf6a3ba33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
