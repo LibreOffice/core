@@ -226,12 +226,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
     while ( !aTableStack.empty() )
-    {
-        ScHTMLTableStackEntry* pS = aTableStack.top().get();
-        if ( pS->pLocalColOffset != pLocalColOffset.get() )
-            delete pS->pLocalColOffset;
         aTableStack.pop();
-    }
     pLocalColOffset.reset();
     if ( pTables )
     {
@@ -1032,7 +1027,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
         sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
         Colonize(mxActEntry.get());
         aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
-            mxActEntry, xLockedList, pLocalColOffset.get(), nFirstTableCell,
+            mxActEntry, xLockedList, std::move(pLocalColOffset), nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
@@ -1088,7 +1083,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             NextRow( pInfo );
         }
         aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
-            mxActEntry, xLockedList, pLocalColOffset.get(), nFirstTableCell,
+            mxActEntry, xLockedList, std::move(pLocalColOffset), nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
@@ -1238,7 +1233,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             {
                 sal_uInt16 nOldOffset = pE->nOffset + pE->nWidth;
                 sal_uInt16 nNewOffset = pE->nOffset + nTableWidth;
-                ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset, nOffsetTolerance );
+                ModifyOffset( pS->pLocalColOffset.get(), nOldOffset, nNewOffset, nOffsetTolerance );
                 sal_uInt16 nTmp = nNewOffset - pE->nOffset - pE->nWidth;
                 pE->nWidth = nNewOffset - pE->nOffset;
                 pS->nTableWidth = pS->nTableWidth + nTmp;
@@ -1257,7 +1252,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             nColOffsetStart = pS->nColOffsetStart;
             bFirstRow = pS->bFirstRow;
             xLockedList = pS->xLockedList;
-            pLocalColOffset.reset( pS->pLocalColOffset );
+            pLocalColOffset = std::move( pS->pLocalColOffset );
             // mxActEntry is kept around if a table is started in the same row
             // (anything's possible in HTML); will be deleted by CloseEntry
             mxActEntry = pE;
@@ -1274,7 +1269,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
         {
             std::unique_ptr<ScHTMLTableStackEntry> pS = std::move(aTableStack.top());
             aTableStack.pop();
-            pLocalColOffset.reset( pS->pLocalColOffset );
+            pLocalColOffset = std::move( pS->pLocalColOffset );
         }
     }
 }
