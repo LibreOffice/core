@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_752be0ea",
+        "filename": "sfx2/source/notebookbar/SfxNotebookBar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-08-02T08:18:32Z",
+      "side": 1,
+      "message": "What you are doing here is calling sfx function which in the end calls code above (Exec \u0026 State) :)\n\nLike: https://opengrok.libreoffice.org/xref/core/sd/source/ui/docshell/docshel3.cxx#317\n\nCan\u0027t we just do the needed work here? (without changing 2 times the notebookbar .ui)\n\nBut this will need to refresh all frames, like sfx2 slot does:\nhttps://opengrok.libreoffice.org/xref/core/sfx2/source/appl/appserv.cxx#790",
+      "revId": "3d1fc932cc594f0b8fb0ecf92bf10158b0104ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
