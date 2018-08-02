@@ -130,11 +130,11 @@ protected:
     static bool     ImplEncryptStream( SvStream& rStream );
     BasicLibInfo*   FindLibInfo( StarBASIC const * pBasic );
     static void     CheckModules( StarBASIC* pBasic, bool bReference );
-    virtual ~BasicManager() override;
 
 public:
                     BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
                     BasicManager( StarBASIC* pStdLib, OUString const * pLibPath = nullptr, bool bDocMgr = false );
+    virtual ~BasicManager() override;
 
     /** deletes the given BasicManager instance
 
