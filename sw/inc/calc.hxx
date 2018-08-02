@@ -197,6 +197,7 @@ public:
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();
+    CharClass* GetCharClass();
 
     void        SetCalcError( SwCalcError eErr )    { m_eError = eErr; }
     bool        IsCalcError() const                 { return SwCalcError::NONE != m_eError; }

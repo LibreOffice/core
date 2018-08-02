@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 #include <test/mtfxmldump.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -19,11 +21,13 @@ public:
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
+    void testUserFieldTypeLanguage();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
+    CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -106,6 +110,26 @@ void SwLayoutWriter::testTdf117028()
 
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
+}
+
+void SwLayoutWriter::testUserFieldTypeLanguage()
+{
+    // Set the system locale to German, the document will be English.
+    SvtSysLocaleOptions aOptions;
+    aOptions.SetLocaleConfigString("de-DE");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions] {
+        aOptions.SetLocaleConfigString(OUString());
+        aOptions.Commit();
+    });
+
+    SwDoc* pDoc = createDoc("user-field-type-language.fodt");
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell->UpdateFields();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was "123,456.00", via a buggy 1234.56 -> 1234,56 -> 123456 ->
+    // 123,456.00 transform chain.
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLD']", "rText", "1,234.56");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
