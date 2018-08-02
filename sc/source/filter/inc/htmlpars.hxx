@@ -99,7 +99,7 @@ struct ScHTMLTableStackEntry
 {
     ScRangeListRef      xLockedList;
     std::shared_ptr<ScEEParseEntry> xCellEntry;
-    ScHTMLColOffset*    pLocalColOffset;
+    std::unique_ptr<ScHTMLColOffset> pLocalColOffset;
     sal_uLong           nFirstTableCell;
     SCROW               nRowCnt;
     SCCOL               nColCntStart;
@@ -110,14 +110,14 @@ struct ScHTMLTableStackEntry
     sal_uInt16          nColOffsetStart;
     bool                bFirstRow;
                         ScHTMLTableStackEntry( const std::shared_ptr<ScEEParseEntry>& rE,
-                                const ScRangeListRef& rL, ScHTMLColOffset* pTO,
+                                const ScRangeListRef& rL, std::unique_ptr<ScHTMLColOffset> pTO,
                                 sal_uLong nFTC,
                                 SCROW nRow,
                                 SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
                                 sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
                                 bool bFR )
                             : xLockedList( rL ), xCellEntry(rE),
-                            pLocalColOffset( pTO ),
+                            pLocalColOffset( std::move(pTO) ),
                             nFirstTableCell( nFTC ),
                             nRowCnt( nRow ),
                             nColCntStart( nStart ), nMaxCol( nMax ),
