@@ -828,13 +828,6 @@ BasicManager::~BasicManager()
     Broadcast( SfxHint( SfxHintId::Dying) );
 }
 
-void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
-{
-    delete _rpManager;
-    _rpManager = nullptr;
-}
-
-
 bool BasicManager::HasExeCode( const OUString& sLib )
 {
     StarBASIC* pLib = GetLib(sLib);
