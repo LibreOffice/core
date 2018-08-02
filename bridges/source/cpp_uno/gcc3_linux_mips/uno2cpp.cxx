@@ -449,8 +449,7 @@ namespace
     catch (...)
     {
       // fill uno exception
-      fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions,
-          *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+      CPPU_CURRENT_NAMESPACE::fillUnoException(*ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
       // temporary params
       for ( ; nTempIndices--; )

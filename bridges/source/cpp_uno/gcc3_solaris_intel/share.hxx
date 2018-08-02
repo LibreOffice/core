@@ -72,13 +72,12 @@ struct __cxa_eh_globals
     unsigned int uncaughtExceptions;
 };
 extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
-
+extern "C" std::type_info *__cxa_current_exception_type() throw();
 
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
-void fillUnoException(
-    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+void fillUnoException(uno_Any *, uno_Mapping * pCpp2Uno);
 }
 
 #endif
