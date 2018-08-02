@@ -5839,6 +5839,9 @@ void ScCompiler::HandleIIOpCode(FormulaToken* token, FormulaToken*** pppToken, s
 // return true if opcode is handled
 bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** pppToken, sal_uInt8 nNumParams)
 {
+    if (nNumParams > 0 && *pppToken[0] == nullptr)
+        return false; // Bad expression (see the dummy creation in FormulaCompiler::CompileTokenArray())
+
     const OpCode nOpCode = token->GetOpCode();
 
     if (nOpCode == ocPush)
