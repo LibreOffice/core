@@ -147,6 +147,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     {
         m_xFollowFt->hide();
         m_xFollowLb->hide();
+        m_xEditStyleBtn->hide();
     }
 
     if ( pStyle->HasParentSupport() && pPool )
