@@ -19,6 +19,7 @@
 #ifndef INCLUDED_STOC_SOURCE_SECURITY_LRU_CACHE_H
 #define INCLUDED_STOC_SOURCE_SECURITY_LRU_CACHE_H
 
+#include <memory>
 #include <unordered_map>
 
 // __CACHE_DIAGNOSE works only for OUString keys
@@ -49,7 +50,7 @@ class lru_cache
     t_key2element m_key2element;
     ::std::size_t m_size;
 
-    Entry * m_block;
+    std::unique_ptr<Entry[]> m_block;
     mutable Entry * m_head;
     mutable Entry * m_tail;
     inline void toFront( Entry * entry ) const;
@@ -58,10 +59,6 @@ public:
     /** Default Ctor.  Does not cache.
     */
     inline lru_cache();
-
-    /** Destructor: releases all cached elements and keys.
-    */
-    inline ~lru_cache();
 
     /** Retrieves a pointer to value in cache.  Returns 0, if none was found.
 
@@ -89,19 +86,18 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
     ::std::size_t size )
 {
     m_key2element.clear();
-    delete [] m_block;
-    m_block = nullptr;
+    m_block.reset();
     m_size = size;
 
     if (0 < m_size)
     {
-        m_block = new Entry[ m_size ];
-        m_head = m_block;
-        m_tail = m_block + m_size -1;
+        m_block.reset( new Entry[ m_size ] );
+        m_head = m_block.get();
+        m_tail = m_block.get() + m_size -1;
         for ( ::std::size_t nPos = m_size; nPos--; )
         {
-            m_block[ nPos ].m_pred = m_block + nPos -1;
-            m_block[ nPos ].m_succ = m_block + nPos +1;
+            m_block[ nPos ].m_pred = m_block.get() + nPos -1;
+            m_block[ nPos ].m_succ = m_block.get() + nPos +1;
         }
     }
 }
@@ -113,12 +109,6 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache()
     , m_head( nullptr )
     , m_tail( nullptr )
 {
-}
-
-template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::~lru_cache()
-{
-    delete [] m_block;
 }
 
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
