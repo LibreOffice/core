@@ -633,6 +633,11 @@ void SwCalc::Pop()
     aRekurStack.pop_back();
 }
 
+CharClass* SwCalc::GetCharClass()
+{
+    return pCharClass;
+}
+
 SwCalcOper SwCalc::GetToken()
 {
 #if OSL_DEBUG_LEVEL > 1
