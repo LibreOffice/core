@@ -1032,7 +1032,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                 }
                 else
                 {
-                    pDef->Match( p );
+                    pDef->Match( std::unique_ptr<SbiProcDef>(p) );
                 }
             }
             else
@@ -1214,7 +1214,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
             }
         }
 
-        pDef->Match( pProc );
+        pDef->Match( std::unique_ptr<SbiProcDef>(pProc) );
         pProc = pDef;
     }
     else

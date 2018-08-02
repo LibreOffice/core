@@ -409,7 +409,7 @@ void SbiProcDef::SetType( SbxDataType t )
 // if the match is OK, pOld is replaced by this in the pool
 // pOld is deleted in any case!
 
-void SbiProcDef::Match( SbiProcDef* pOld )
+void SbiProcDef::Match( std::unique_ptr<SbiProcDef> pOld )
 {
     SbiSymDef *pn=nullptr;
     // parameter 0 is the function name
@@ -443,7 +443,6 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         std::swap(pIn->m_Data[nPos], tmp);
         tmp.release();
     }
-    delete pOld;
 }
 
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
