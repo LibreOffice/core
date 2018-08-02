@@ -1310,7 +1310,7 @@ namespace drawinglayer
                 // #i121267# Not needed, does not give better quality compared with
                 // the MetaActionType::POLYPOLYGON written by RenderPolygonHairlinePrimitive2D
                 // below
-                bool bSupportSvtGraphicStroke(false);
+                const bool bSupportSvtGraphicStroke(false);
 
                 if(bSupportSvtGraphicStroke)
                 {
