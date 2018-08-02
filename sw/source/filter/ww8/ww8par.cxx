@@ -5405,6 +5405,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
     m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
+    m_pPosAfterTOC.reset();
     mpCursor.reset();
     m_pPaM = nullptr;
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs

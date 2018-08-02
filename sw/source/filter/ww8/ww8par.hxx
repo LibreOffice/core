@@ -1358,7 +1358,7 @@ private:
     // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
     bool m_bLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
-    SwPaM* m_pPosAfterTOC;
+    std::unique_ptr<SwPaM> m_pPosAfterTOC;
     // used for some dropcap tweaking
     SwTextNode* m_pPreviousNode;
 
