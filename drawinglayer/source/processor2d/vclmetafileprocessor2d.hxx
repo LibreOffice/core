@@ -102,8 +102,8 @@ namespace drawinglayer
                 const attribute::FillGradientAttribute& rFiGrAtt,
                 bool bIsTransparenceGradient) const;
             void impStartSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill);
-            void impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
-            SvtGraphicStroke* impTryToCreateSvtGraphicStroke(
+            void impEndSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill);
+            std::unique_ptr<SvtGraphicStroke> impTryToCreateSvtGraphicStroke(
                 const basegfx::B2DPolygon& rB2DPolygon,
                 const basegfx::BColor* pColor,
                 const attribute::LineAttribute* pLineAttribute,
@@ -111,7 +111,7 @@ namespace drawinglayer
                 const attribute::LineStartEndAttribute* pStart,
                 const attribute::LineStartEndAttribute* pEnd);
             void impStartSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
-            void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
+            void impEndSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
 
             void processGraphicPrimitive2D(const primitive2d::GraphicPrimitive2D& rGraphicPrimitive);
             void processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive);

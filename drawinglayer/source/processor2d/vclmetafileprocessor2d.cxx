@@ -354,13 +354,12 @@ namespace drawinglayer
             }
         }
 
-        void VclMetafileProcessor2D::impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill)
+        void VclMetafileProcessor2D::impEndSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill)
         {
             if(pSvtGraphicFill && mnSvtGraphicFillCount)
             {
                 mnSvtGraphicFillCount--;
                 mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_END"));
-                delete pSvtGraphicFill;
             }
         }
 
@@ -376,7 +375,7 @@ namespace drawinglayer
             return aDiscreteUnit.getLength();
         }
 
-        SvtGraphicStroke* VclMetafileProcessor2D::impTryToCreateSvtGraphicStroke(
+        std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraphicStroke(
             const basegfx::B2DPolygon& rB2DPolygon,
             const basegfx::BColor* pColor,
             const attribute::LineAttribute* pLineAttribute,
@@ -384,7 +383,7 @@ namespace drawinglayer
             const attribute::LineStartEndAttribute* pStart,
             const attribute::LineStartEndAttribute* pEnd)
         {
-            SvtGraphicStroke* pRetval = nullptr;
+            std::unique_ptr<SvtGraphicStroke> pRetval;
 
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
@@ -515,7 +514,7 @@ namespace drawinglayer
                 aStartArrow.transform(maCurrentTransformation);
                 aEndArrow.transform(maCurrentTransformation);
 
-                pRetval = new SvtGraphicStroke(
+                pRetval.reset(new SvtGraphicStroke(
                         ::tools::Polygon(aLocalPolygon),
                         ::tools::PolyPolygon(aStartArrow),
                         ::tools::PolyPolygon(aEndArrow),
@@ -524,7 +523,7 @@ namespace drawinglayer
                         eCap,
                         eJoin,
                         fMiterLength,
-                        aDashArray);
+                        aDashArray));
             }
 
             return pRetval;
@@ -542,13 +541,12 @@ namespace drawinglayer
             }
         }
 
-        void VclMetafileProcessor2D::impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke)
+        void VclMetafileProcessor2D::impEndSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke)
         {
             if(pSvtGraphicStroke && mnSvtGraphicStrokeCount)
             {
                 mnSvtGraphicStrokeCount--;
                 mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"));
-                delete pSvtGraphicStroke;
             }
         }
 
@@ -1305,7 +1303,7 @@ namespace drawinglayer
                 // direct draw of hairline; use default processing
                 // support SvtGraphicStroke MetaCommentAction
                 const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
-                SvtGraphicStroke* pSvtGraphicStroke = nullptr;
+                std::unique_ptr<SvtGraphicStroke> pSvtGraphicStroke;
 
                 // #i121267# Not needed, does not give better quality compared with
                 // the MetaActionType::POLYPOLYGON written by RenderPolygonHairlinePrimitive2D
@@ -1319,14 +1317,14 @@ namespace drawinglayer
                         &aLineColor,
                         nullptr, nullptr, nullptr, nullptr);
 
-                    impStartSvtGraphicStroke(pSvtGraphicStroke);
+                    impStartSvtGraphicStroke(pSvtGraphicStroke.get());
                 }
 
                 RenderPolygonHairlinePrimitive2D(rHairlinePrimitive, false);
 
                 if(bSupportSvtGraphicStroke)
                 {
-                    impEndSvtGraphicStroke(pSvtGraphicStroke);
+                    impEndSvtGraphicStroke(pSvtGraphicStroke.get());
                 }
             }
         }
@@ -1354,13 +1352,13 @@ namespace drawinglayer
                 mpOutputDevice->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
 
                 // support SvtGraphicStroke MetaCommentAction
-                SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                std::unique_ptr<SvtGraphicStroke> pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
                     rBasePolygon, nullptr,
                     &rStrokePrimitive.getLineAttribute(),
                     &rStrokePrimitive.getStrokeAttribute(),
                     nullptr, nullptr);
 
-                impStartSvtGraphicStroke(pSvtGraphicStroke);
+                impStartSvtGraphicStroke(pSvtGraphicStroke.get());
                 const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
 
                 // create MetaPolyLineActions, but without LineStyle::Dash
@@ -1407,7 +1405,7 @@ namespace drawinglayer
                     process(rStrokePrimitive);
                 }
 
-                impEndSvtGraphicStroke(pSvtGraphicStroke);
+                impEndSvtGraphicStroke(pSvtGraphicStroke.get());
 
                 mpOutputDevice->Pop();
             }
@@ -1443,7 +1441,7 @@ namespace drawinglayer
             else
             {
                 // support SvtGraphicStroke MetaCommentAction
-                SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                std::unique_ptr<SvtGraphicStroke> pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
                     rBasePolygon, nullptr,
                     &rStrokeArrowPrimitive.getLineAttribute(),
                     &rStrokeArrowPrimitive.getStrokeAttribute(),
@@ -1451,7 +1449,7 @@ namespace drawinglayer
                     &rStrokeArrowPrimitive.getEnd());
 
                 // write LineGeometry start marker
-                impStartSvtGraphicStroke(pSvtGraphicStroke);
+                impStartSvtGraphicStroke(pSvtGraphicStroke.get());
 
                 // #i116162# When B&W is set as DrawMode, DrawModeFlags::WhiteFill is used
                 // to let all fills be just white; for lines DrawModeFlags::BlackLine is used
@@ -1478,7 +1476,7 @@ namespace drawinglayer
                 }
 
                 // write LineGeometry end marker
-                impEndSvtGraphicStroke(pSvtGraphicStroke);
+                impEndSvtGraphicStroke(pSvtGraphicStroke.get());
             }
         }
 
@@ -1489,7 +1487,7 @@ namespace drawinglayer
 
             fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
-            SvtGraphicFill* pSvtGraphicFill = nullptr;
+            std::unique_ptr<SvtGraphicFill> pSvtGraphicFill;
 
             if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
             {
@@ -1529,7 +1527,7 @@ namespace drawinglayer
                 aTransform.matrix[2] = aTransformPosition.getX();
                 aTransform.matrix[5] = aTransformPosition.getY();
 
-                pSvtGraphicFill = new SvtGraphicFill(
+                pSvtGraphicFill.reset( new SvtGraphicFill(
                     getFillPolyPolygon(aLocalPolyPolygon),
                     Color(),
                     0.0,
@@ -1543,13 +1541,13 @@ namespace drawinglayer
                     Color(),
                     Color(),
                     0,
-                    rFillGraphicAttribute.getGraphic());
+                    rFillGraphicAttribute.getGraphic()) );
             }
 
             // Do use decomposition; encapsulate with SvtGraphicFill
-            impStartSvtGraphicFill(pSvtGraphicFill);
+            impStartSvtGraphicFill(pSvtGraphicFill.get());
             process(rBitmapCandidate);
-            impEndSvtGraphicFill(pSvtGraphicFill);
+            impEndSvtGraphicFill(pSvtGraphicFill.get());
         }
 
         void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate)
@@ -1584,7 +1582,7 @@ namespace drawinglayer
                 process(primitive2d::Primitive2DContainer { xBackground });
             }
 
-            SvtGraphicFill* pSvtGraphicFill = nullptr;
+            std::unique_ptr<SvtGraphicFill> pSvtGraphicFill;
             aLocalPolyPolygon.transform(maCurrentTransformation);
 
             if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
@@ -1623,7 +1621,7 @@ namespace drawinglayer
                 aTransform.matrix[3] *= sin(rFillHatchAttribute.getAngle());
                 aTransform.matrix[4] *= cos(rFillHatchAttribute.getAngle());
 
-                pSvtGraphicFill = new SvtGraphicFill(
+                pSvtGraphicFill.reset( new SvtGraphicFill(
                     getFillPolyPolygon(aLocalPolyPolygon),
                     Color(),
                     0.0,
@@ -1637,11 +1635,11 @@ namespace drawinglayer
                     Color(),
                     Color(),
                     0,
-                    Graphic());
+                    Graphic()) );
             }
 
             // Do use decomposition; encapsulate with SvtGraphicFill
-            impStartSvtGraphicFill(pSvtGraphicFill);
+            impStartSvtGraphicFill(pSvtGraphicFill.get());
 
             // #i111954# do NOT use decomposition, but use direct VCL-command
             // process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -1657,7 +1655,7 @@ namespace drawinglayer
                     basegfx::fround(rFillHatchAttribute.getDistance()),
                     basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
 
-            impEndSvtGraphicFill(pSvtGraphicFill);
+            impEndSvtGraphicFill(pSvtGraphicFill.get());
         }
 
         void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate)
@@ -1723,7 +1721,7 @@ namespace drawinglayer
 
 
             // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-            SvtGraphicFill* pSvtGraphicFill = nullptr;
+            std::unique_ptr<SvtGraphicFill> pSvtGraphicFill;
 
             if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
             {
@@ -1746,7 +1744,7 @@ namespace drawinglayer
                         break;
                 }
 
-                pSvtGraphicFill = new SvtGraphicFill(
+                pSvtGraphicFill.reset( new SvtGraphicFill(
                     aToolsPolyPolygon,
                     Color(),
                     0.0,
@@ -1760,13 +1758,13 @@ namespace drawinglayer
                     aVCLGradient.GetStartColor(),
                     aVCLGradient.GetEndColor(),
                     aVCLGradient.GetSteps(),
-                    Graphic());
+                    Graphic()) );
             }
 
             // call VCL directly; encapsulate with SvtGraphicFill
-            impStartSvtGraphicFill(pSvtGraphicFill);
+            impStartSvtGraphicFill(pSvtGraphicFill.get());
             mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
-            impEndSvtGraphicFill(pSvtGraphicFill);
+            impEndSvtGraphicFill(pSvtGraphicFill.get());
         }
 
         void VclMetafileProcessor2D::processPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate)
