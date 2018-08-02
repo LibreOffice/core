@@ -62,19 +62,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
-class StringLength : public ::cppu::WeakImplHelper< XStringWidth >
-{
-    public:
-        StringLength() {}
-
-        // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString ) override
-        {
-            return aString.getLength();
-        }
-};
-
-
 namespace
 {
     class thePickListMutex
@@ -83,9 +70,6 @@ namespace
 
 class SfxPickListImpl : public SfxListener
 {
-private:
-    css::uno::Reference< css::util::XStringWidth > m_xStringLength;
-
     /**
      * Adds the given document to the pick list (recent documents) if it satisfies
        certain requirements, e.g. being writable. Check implementation for requirement
@@ -195,7 +179,6 @@ void SfxPickList::ensure()
 
 SfxPickListImpl::SfxPickListImpl()
 {
-    m_xStringLength = new StringLength;
     StartListening( *SfxGetpApp() );
 }
 
