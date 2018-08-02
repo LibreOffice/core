@@ -20,8 +20,6 @@
 
 #include <vtablefactory.hxx>
 
-#include "guardedarray.hxx"
-
 #include <vtables.hxx>
 
 #include <osl/thread.h>
@@ -34,6 +32,7 @@
 #include <sal/types.h>
 #include <typelib/typedescription.hxx>
 
+#include <memory>
 #include <new>
 #include <unordered_map>
 #include <vector>
@@ -204,7 +203,7 @@ VtableFactory::Vtables VtableFactory::getVtables(
         Vtables vtables;
         assert(blocks.size() <= SAL_MAX_INT32);
         vtables.count = static_cast< sal_Int32 >(blocks.size());
-        bridges::cpp_uno::shared::GuardedArray< Block > guardedBlocks(
+        std::unique_ptr< Block[] > guardedBlocks(
             new Block[vtables.count]);
         vtables.blocks = guardedBlocks.get();
         for (sal_Int32 j = 0; j < vtables.count; ++j) {

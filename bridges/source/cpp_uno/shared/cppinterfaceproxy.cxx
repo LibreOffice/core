@@ -19,8 +19,6 @@
 
 #include <cppinterfaceproxy.hxx>
 
-#include "guardedarray.hxx"
-
 #include <bridge.hxx>
 #include <vtablefactory.hxx>
 
@@ -31,6 +29,7 @@
 #include <typelib/typedescription.h>
 
 #include <cstddef>
+#include <memory>
 #include <new>
 
 
@@ -103,7 +102,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
         reinterpret_cast< typelib_TypeDescription ** >(&pTypeDescr));
     bridges::cpp_uno::shared::VtableFactory::Vtables aVtables(
         getVtableFactory()->getVtables(pTypeDescr));
-    bridges::cpp_uno::shared::GuardedArray< char > pMemory(
+    std::unique_ptr< char[] > pMemory(
         new char[
             sizeof (CppInterfaceProxy)
             + (aVtables.count - 1) * sizeof (void **)]);
