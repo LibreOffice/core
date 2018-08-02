@@ -2189,11 +2189,6 @@ AC_ARG_WITH(build-version,
 with_build_version=$withval,
 )
 
-AC_ARG_WITH(alloc,
-    AS_HELP_STRING([--with-alloc],
-        [Define which allocator to build with (choices are internal, system).]),
-,)
-
 AC_ARG_WITH(parallelism,
     AS_HELP_STRING([--with-parallelism],
         [Number of jobs to run simultaneously during build. Parallel builds can
