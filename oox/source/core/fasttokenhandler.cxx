@@ -26,26 +26,12 @@
 
 #include <services.hxx>
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace core {
 
 using namespace ::com::sun::star::uno;
-
-OUString FastTokenHandler_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.core.FastTokenHandler" );
-}
-
-Sequence< OUString > FastTokenHandler_getSupportedServiceNames()
-{
-    Sequence<OUString> aServiceNames { "com.sun.star.xml.sax.FastTokenHandler" };
-    return aServiceNames;
-}
-
-Reference< XInterface > FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ )
-{
-    return static_cast< ::cppu::OWeakObject* >( new FastTokenHandler );
-}
 
 FastTokenHandler::FastTokenHandler() :
     mrTokenMap( StaticTokenMap::get() )
@@ -59,7 +45,7 @@ FastTokenHandler::~FastTokenHandler()
 // XServiceInfo
 OUString SAL_CALL FastTokenHandler::getImplementationName()
 {
-    return FastTokenHandler_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.core.FastTokenHandler" );
 }
 
 sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
@@ -69,7 +55,8 @@ sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames()
 {
-    return FastTokenHandler_getSupportedServiceNames();
+    Sequence<OUString> aServiceNames { "com.sun.star.xml.sax.FastTokenHandler" };
+    return aServiceNames;
 }
 
 Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken )
@@ -89,5 +76,12 @@ sal_Int32 FastTokenHandler::getTokenDirect( const char *pToken, sal_Int32 nLengt
 
 } // namespace core
 } // namespace oox
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_core_FastTokenHandler_get_implementation(
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::core::FastTokenHandler());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

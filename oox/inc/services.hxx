@@ -24,13 +24,6 @@
 
 namespace oox {
     namespace core {
-        extern OUString FastTokenHandler_getImplementationName();
-        extern css::uno::Sequence< OUString > FastTokenHandler_getSupportedServiceNames();
-        /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > FastTokenHandler_createInstance(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    }
-    namespace core {
         extern OUString FilterDetect_getImplementationName();
         extern css::uno::Sequence< OUString > FilterDetect_getSupportedServiceNames();
         /// @throws css::uno::Exception
