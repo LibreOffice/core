@@ -128,6 +128,10 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     xmlscript/util/xmlscript \
 ))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,chart2_export, \
+    modules/swriter \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,chart2_export))
 
 # vim: set noet sw=4 ts=4:
