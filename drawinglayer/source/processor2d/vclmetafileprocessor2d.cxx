@@ -1781,50 +1781,11 @@ namespace drawinglayer
             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
             aLocalPolyPolygon.transform(maCurrentTransformation);
 
-            // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-            SvtGraphicFill* pSvtGraphicFill = nullptr;
-
-            // #i121267# Not needed, does not give better quality compared with
-            // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
-            // below
-            const bool bSupportSvtGraphicFill(false);
-
-            if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
-            {
-                // setup simple color fill stuff like in impgrfll
-                pSvtGraphicFill = new SvtGraphicFill(
-                    getFillPolyPolygon(aLocalPolyPolygon),
-                    Color(aPolygonColor),
-                    0.0,
-                    SvtGraphicFill::fillEvenOdd,
-                    SvtGraphicFill::fillSolid,
-                    SvtGraphicFill::Transform(),
-                    false,
-                    SvtGraphicFill::hatchSingle,
-                    Color(),
-                    SvtGraphicFill::GradientType::Linear,
-                    Color(),
-                    Color(),
-                    0,
-                    Graphic());
-            }
-
             // set line and fill color
             mpOutputDevice->SetFillColor(Color(aPolygonColor));
             mpOutputDevice->SetLineColor();
 
-            // call VCL directly; encapsulate with SvtGraphicFill
-            if(bSupportSvtGraphicFill)
-            {
-                    impStartSvtGraphicFill(pSvtGraphicFill);
-            }
-
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-
-            if(bSupportSvtGraphicFill)
-            {
-                impEndSvtGraphicFill(pSvtGraphicFill);
-            }
 
             mpOutputDevice->Pop();
         }
@@ -1931,53 +1892,14 @@ namespace drawinglayer
                         // now transform
                         aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                        // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                        SvtGraphicFill* pSvtGraphicFill = nullptr;
-
-                        // #i121267# Not needed, does not give better quality compared with
-                        // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
-                        // below
-                        const bool bSupportSvtGraphicFill(false);
-
-                        if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
-                        {
-                            // setup simple color with transparence fill stuff like in impgrfll
-                            pSvtGraphicFill = new SvtGraphicFill(
-                                getFillPolyPolygon(aLocalPolyPolygon),
-                                Color(aPolygonColor),
-                                rUniTransparenceCandidate.getTransparence(),
-                                SvtGraphicFill::fillEvenOdd,
-                                SvtGraphicFill::fillSolid,
-                                SvtGraphicFill::Transform(),
-                                false,
-                                SvtGraphicFill::hatchSingle,
-                                Color(),
-                                SvtGraphicFill::GradientType::Linear,
-                                Color(),
-                                Color(),
-                                0,
-                                Graphic());
-                        }
-
                         // set line and fill color
                         const sal_uInt16 nTransPercentVcl(static_cast<sal_uInt16>(basegfx::fround(rUniTransparenceCandidate.getTransparence() * 100.0)));
                         mpOutputDevice->SetFillColor(Color(aPolygonColor));
                         mpOutputDevice->SetLineColor();
 
-                        // call VCL directly; encapsulate with SvtGraphicFill
-                        if(bSupportSvtGraphicFill)
-                        {
-                            impStartSvtGraphicFill(pSvtGraphicFill);
-                        }
-
                         mpOutputDevice->DrawTransparent(
                             ::tools::PolyPolygon(aLocalPolyPolygon),
                             nTransPercentVcl);
-
-                        if(bSupportSvtGraphicFill)
-                        {
-                            impEndSvtGraphicFill(pSvtGraphicFill);
-                        }
                     }
                     else
                     {
