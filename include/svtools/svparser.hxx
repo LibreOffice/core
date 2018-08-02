@@ -97,7 +97,7 @@ protected:
     void ClearTxtConvContext();
 
 private:
-    TokenStackType* pTokenStack;
+    std::unique_ptr<TokenStackType[]> pTokenStack;
     TokenStackType *pTokenStackPos;
     sal_uInt8 nTokenStackSize, nTokenStackPos;
 
