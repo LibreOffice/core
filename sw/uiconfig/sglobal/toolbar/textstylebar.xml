@@ -76,6 +76,7 @@
  <toolbar:toolbaritem xlink:href=".uno:BulletListStyle" toolbar:text="Bullet"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberListStyle" toolbar:text="Number"/>
  <toolbar:toolbaritem xlink:href=".uno:RomanListStyle" toolbar:text="Roman"/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveBullets"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>

@@ -79,6 +79,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlphaLowListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:RomanListStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:RomanLowListStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveBullets"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
