@@ -130,20 +130,11 @@ protected:
     static bool     ImplEncryptStream( SvStream& rStream );
     BasicLibInfo*   FindLibInfo( StarBASIC const * pBasic );
     static void     CheckModules( StarBASIC* pBasic, bool bReference );
-    virtual ~BasicManager() override;
 
 public:
                     BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
                     BasicManager( StarBASIC* pStdLib, OUString const * pLibPath = nullptr, bool bDocMgr = false );
-
-    /** deletes the given BasicManager instance
-
-        This method is necessary since normally, BasicManager instances are owned by the BasicManagerRepository,
-        and expected to be deleted by the repository only. However, there exists quite some legacy code,
-        which needs to explicitly delete a BasicManager itself. This code must not use the (protected)
-        destructor, but LegacyDeleteBasicManager.
-    */
-    static void     LegacyDeleteBasicManager( BasicManager*& _rpManager );
+    virtual ~BasicManager() override;
 
     void            SetStorageName( const OUString& rName )   { maStorageName = rName; }
     const OUString& GetStorageName() const                  { return maStorageName; }

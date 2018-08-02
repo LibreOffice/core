@@ -336,14 +336,11 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
     auto xStorage = tools::make_ref<SotStorage>( false, aFile );
     if( xStorage->GetError() == ERRCODE_NONE )
     {
-        BasicManager* pBasicManager = new BasicManager( *(xStorage.get()), aFile );
+        std::unique_ptr<BasicManager> pBasicManager(new BasicManager( *(xStorage.get()), aFile ));
 
         // Set info
         LibraryContainerInfo aInfo( this, nullptr, static_cast< OldBasicPassword* >( this ) );
         pBasicManager->SetLibraryContainerInfo( aInfo );
-
-        // Now the libraries should be copied to this SfxScriptLibraryContainer
-        BasicManager::LegacyDeleteBasicManager( pBasicManager );
     }
 }
 
