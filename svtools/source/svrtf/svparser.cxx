@@ -93,8 +93,8 @@ SvParser<T>::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     eState = SvParserState::NotStarted;
     if( nTokenStackSize < 3 )
         nTokenStackSize = 3;
-    pTokenStack = new TokenStackType[ nTokenStackSize ];
-    pTokenStackPos = pTokenStack;
+    pTokenStack.reset(new TokenStackType[ nTokenStackSize ]);
+    pTokenStackPos = pTokenStack.get();
 }
 
 template<typename T>
@@ -107,7 +107,7 @@ SvParser<T>::~SvParser()
         rtl_destroyTextToUnicodeConverter( pImplData->hConv );
     }
 
-    delete [] pTokenStack;
+    pTokenStack.reset();
 }
 
 template<typename T> SvParserState SvParser<T>::GetStatus() const { return eState; }
@@ -466,8 +466,8 @@ T SvParser<T>::GetNextToken()
     }
 
     ++pTokenStackPos;
-    if( pTokenStackPos == pTokenStack + nTokenStackSize )
-        pTokenStackPos = pTokenStack;
+    if( pTokenStackPos == pTokenStack.get() + nTokenStackSize )
+        pTokenStackPos = pTokenStack.get();
 
     // pop from stack ??
     if( nTokenStackPos )
@@ -518,7 +518,7 @@ T SvParser<T>::SkipToken( short nCnt )       // "skip" n Tokens backward
 template<typename T>
 typename SvParser<T>::TokenStackType* SvParser<T>::GetStackPtr( short nCnt )
 {
-    sal_uInt8 nCurrentPos = sal_uInt8(pTokenStackPos - pTokenStack );
+    sal_uInt8 nCurrentPos = sal_uInt8(pTokenStackPos - pTokenStack.get());
     if( nCnt > 0 )
     {
         if( nCnt >= nTokenStackSize )
@@ -539,7 +539,7 @@ typename SvParser<T>::TokenStackType* SvParser<T>::GetStackPtr( short nCnt )
             nCurrentPos = sal::static_int_cast< sal_uInt8 >(
                 nCurrentPos + (nCnt + nTokenStackSize));
     }
-    return pTokenStack + nCurrentPos;
+    return pTokenStack.get() + nCurrentPos;
 }
 
 // to read asynchronous from SvStream
