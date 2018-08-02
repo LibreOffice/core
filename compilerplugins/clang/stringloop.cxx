@@ -39,6 +39,8 @@ private:
 
 void StringLoop::run()
 {
+    // Various places are not worth changing, the code becomes too awkward
+    // Just exclude stuff as I go
     StringRef fn(handler.getMainFileName());
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/bridges/"))
         return;
@@ -59,6 +61,120 @@ void StringLoop::run()
     if (loplugin::isSamePathname(fn, SRCDIR "/svl/source/numbers/zforscan.cxx"))
         return;
     if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/control/combobox.cxx"))
+        return;
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svtools/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idl/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/framework/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/avmedia/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/connectivity/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/editeng/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/chart2/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cui/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/dbaccess/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/oox/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/writerfilter/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/desktop/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/extensions/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/dtrans/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/i18npool/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/embeddedobj/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmlhelp/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/forms/"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/address.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/compiler.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/docshell/impex.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/miscdlgs/acredlin.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/pagedlg/areasdlg.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/view/gridwin2.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/html/htmlpars.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/doctxm.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/edit/edattr.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/layout/dbg_lay.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ascii/ascatr.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/htmlforw.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/unocore/unosect.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/unocore/unochart.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/unocore/unoobj.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/parcss1.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/svxcss1.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/swhtml.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/utlui/gloslst.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/utlui/content.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/edtwin.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ww8/ww8atr.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ww8/ww8scan.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ww8/ww8par5.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/fldui/fldfunc.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/misc/bookmark.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/dbui/mmlayoutpage.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/dbui/dbinsdlg.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/dbui/mmresultdialogs.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/ui/index/cnttab.cxx"))
+        return;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/ucb/source/ucp/file/bc.cxx"))
         return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -132,11 +248,16 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
         if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
             && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
             return true;
+        auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+        if (isInUnoIncludeFile(
+                compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation())))
+            return true;
+        if (ignoreLocation(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation())))
+            return true;
         report(DiagnosticsEngine::Warning,
                "appending to OUString in loop, rather use OUStringBuffer",
                operatorCallExpr->getLocStart())
             << operatorCallExpr->getSourceRange();
-        auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
         report(DiagnosticsEngine::Note, "field here", fieldDecl->getLocStart())
             << fieldDecl->getSourceRange();
     }
