@@ -34,6 +34,24 @@
       "revId": "bb8825807e7f0fdfcabfad78ac2068bdf6a3ba33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_f5a2509a",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-02T07:23:47Z",
+      "side": 1,
+      "message": "doh! my apologies, you are correct",
+      "parentUuid": "ffe62b97_95742437",
+      "revId": "bb8825807e7f0fdfcabfad78ac2068bdf6a3ba33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
