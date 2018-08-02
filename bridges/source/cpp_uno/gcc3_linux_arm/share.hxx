@@ -123,12 +123,17 @@ namespace __cxxabiv1 {
 }
 #endif
 
+#if !HAVE_CXXABI_H_CXA_CURRENT_EXCEPTION_TYPE
+namespace __cxxabiv1 {
+    extern "C" std::type_info *__cxa_current_exception_type() throw();
+}
+#endif
+
 namespace CPPU_CURRENT_NAMESPACE
 {
     void raiseException(
         uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
-    void fillUnoException(
-        __cxxabiv1::__cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+    void fillUnoException(uno_Any *, uno_Mapping * pCpp2Uno);
 }
 
 extern "C" void privateSnippetExecutor();

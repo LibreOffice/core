@@ -300,6 +300,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
     void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
     {
+        __cxa_exception * header = __cxa_get_globals()->caughtExceptions;
         if (! header)
         {
             RuntimeException aRE( "no exception header!" );
@@ -309,8 +310,10 @@ namespace CPPU_CURRENT_NAMESPACE
             return;
         }
 
+        std::type_info *exceptionType = __cxa_current_exception_type();
+
         typelib_TypeDescription * pExcTypeDescr = nullptr;
-        OUString unoName( toUNOname( header->exceptionType->name() ) );
+        OUString unoName( toUNOname( exceptionType->name() ) );
 #if OSL_DEBUG_LEVEL > 1
         OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );

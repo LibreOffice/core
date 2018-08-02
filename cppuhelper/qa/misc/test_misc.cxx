@@ -19,9 +19,11 @@ class Test : public ::CppUnit::TestFixture
 {
 public:
     void testCatchThrow();
+    void testgetCaughtException();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCatchThrow);
+    CPPUNIT_TEST(testgetCaughtException);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -49,6 +51,36 @@ void Test::testCatchThrow()
     {
         CPPUNIT_ASSERT(false);
     }
+}
+
+void Test::testgetCaughtException()
+{
+    css::uno::Any aSavedExceptionAny;
+    std::exception_ptr
+        aSavedException; /// exception caught during unzipping is saved to be thrown during reading
+    try
+    {
+        throw css::uno::RuntimeException("RuntimeException");
+    }
+    catch (...)
+    {
+        aSavedException = std::current_exception();
+    }
+    CPPUNIT_ASSERT(bool(aSavedException));
+    try
+    {
+        std::rethrow_exception(aSavedException);
+    }
+    catch (const css::uno::RuntimeException&)
+    {
+        // the expected case
+        aSavedExceptionAny = cppu::getCaughtException();
+    }
+    catch (...)
+    {
+        CPPUNIT_ASSERT(false);
+    }
+    CPPUNIT_ASSERT(aSavedExceptionAny.hasValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
