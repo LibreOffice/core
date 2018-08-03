@@ -42,8 +42,8 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
         long nWdt = rRect.Right() - rRect.Left();
         if (nWdt == 0) rRect.AdjustRight( 1 );
     }
-    rRect.SetLeft( rRef.X() + svx::Round( (rRect.Left()  - rRef.X()) * double(aXFact) ) );
-    rRect.SetRight( rRef.X() + svx::Round( (rRect.Right() - rRef.X()) * double(aXFact) ) );
+    rRect.SetLeft( rRef.X() + std::lround( (rRect.Left()  - rRef.X()) * double(aXFact) ) );
+    rRect.SetRight( rRef.X() + std::lround( (rRect.Right() - rRef.X()) * double(aXFact) ) );
 
     if (!aYFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
@@ -51,8 +51,8 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
         long nHgt = rRect.Bottom() - rRect.Top();
         if (nHgt == 0) rRect.AdjustBottom( 1 );
     }
-    rRect.SetTop( rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
-    rRect.SetBottom( rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(aYFact) ) );
+    rRect.SetTop( rRef.Y() + std::lround( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
+    rRect.SetBottom( rRef.Y() + std::lround( (rRect.Bottom() - rRef.Y()) * double(aYFact) ) );
 
     rRect.Justify();
 }
@@ -174,7 +174,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC1->AdjustY( -y0 );
             // resize, account for the distance from the center
-            pC1->setY(svx::Round(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X())) );
+            pC1->setY(std::lround(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X())) );
             pC1->AdjustY(cy );
         } else {
             // move into the direction of the center, as a basic position for the rotation
@@ -182,7 +182,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // resize, account for the distance from the center
             long nPntRad=cy-pC1->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
-            pC1->setX(svx::Round(static_cast<double>(pC1->X())*nFact) );
+            pC1->setX(std::lround(static_cast<double>(pC1->X())*nFact) );
             pC1->AdjustX(cx );
         }
         RotatePoint(*pC1,rCenter,sn,cs);
@@ -192,7 +192,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC2->AdjustY( -y0 );
             // resize, account for the distance from the center
-            pC2->setY(svx::Round(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X())) );
+            pC2->setY(std::lround(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X())) );
             pC2->AdjustY(cy );
         } else {
             // move into the direction of the center, as a basic position for the rotation
@@ -200,7 +200,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // resize, account for the distance from the center
             long nPntRad=rCenter.Y()-pC2->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
-            pC2->setX(svx::Round(static_cast<double>(pC2->X())*nFact) );
+            pC2->setX(std::lround(static_cast<double>(pC2->X())*nFact) );
             pC2->AdjustX(cx );
         }
         RotatePoint(*pC2,rCenter,sn,cs);
@@ -279,7 +279,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
         long dy=rPnt.Y()-y0;
         double a=static_cast<double>(y0-nTop)/nHgt;
         a*=dy;
-        rPnt.setY(y0+svx::Round(a) );
+        rPnt.setY(y0+std::lround(a) );
     } return 0.0;
 }
 
@@ -388,7 +388,7 @@ long GetAngle(const Point& rPnt)
         if (rPnt.Y()>0) a=-9000;
         else a=9000;
     } else {
-        a=svx::Round(atan2(static_cast<double>(-rPnt.Y()),static_cast<double>(rPnt.X()))/nPi180);
+        a=std::lround(atan2(static_cast<double>(-rPnt.Y()),static_cast<double>(rPnt.X()))/nPi180);
     }
     return a;
 }
@@ -425,7 +425,7 @@ long GetLen(const Point& rPnt)
         x*=x;
         y*=y;
         x+=y;
-        x=svx::Round(sqrt(static_cast<double>(x)));
+        x=std::lround(sqrt(static_cast<double>(x)));
         return x;
     } else {
         double nx=x;
@@ -437,7 +437,7 @@ long GetLen(const Point& rPnt)
         if (nx>0x7FFFFFFF) {
             return 0x7FFFFFFF; // we can't go any further, for fear of an overrun!
         } else {
-            return svx::Round(nx);
+            return std::lround(nx);
         }
     }
 }
