@@ -87,6 +87,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private File mTempFile = null;
     private File mTempSlideShowFile = null;
     private String newDocumentType = null;
+    public boolean firstStart = true;
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
     BottomSheetBehavior toolbarColorPickerBottomSheetBehavior;
@@ -458,7 +459,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                         if (isNewDocument) {
                             saveAs();
                         } else {
-                            saveDocument();
+                            mTileProvider.saveDocument();
                         }
                         isDocumentChanged=false;
                         onBackPressed();
@@ -932,6 +933,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         mFormattingController.handleActivityResult(requestCode, resultCode, data);
         hideBottomToolbar();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //save document to cache
+        mTileProvider.cacheDocument();
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
