@@ -272,25 +272,22 @@ void SwPageFrame::DestroyImpl()
         m_pSortedObjs.reset(); // reset to zero to prevent problems when detaching the Flys
     }
 
-    if ( !IsEmptyPage() ) //#59184# unnecessary for empty pages
+    // prevent access to destroyed pages
+    SwDoc *pDoc = GetFormat() ? GetFormat()->GetDoc() : nullptr;
+    if( pDoc && !pDoc->IsInDtor() )
     {
-        // prevent access to destroyed pages
-        SwDoc *pDoc = GetFormat() ? GetFormat()->GetDoc() : nullptr;
-        if( pDoc && !pDoc->IsInDtor() )
+        if ( pSh )
         {
-            if ( pSh )
-            {
-                SwViewShellImp *pImp = pSh->Imp();
-                pImp->SetFirstVisPageInvalid();
-                if ( pImp->IsAction() )
-                    pImp->GetLayAction().SetAgain();
-                // #i9719# - retouche area of page
-                // including border and shadow area.
-                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
-                SwRect aRetoucheRect;
-                SwPageFrame::GetBorderAndShadowBoundRect( getFrameArea(), pSh, pSh->GetOut(), aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
-                pSh->AddPaintRect( aRetoucheRect );
-            }
+            SwViewShellImp *pImp = pSh->Imp();
+            pImp->SetFirstVisPageInvalid();
+            if ( pImp->IsAction() )
+                pImp->GetLayAction().SetAgain();
+            // #i9719# - retouche area of page
+            // including border and shadow area.
+            const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
+            SwRect aRetoucheRect;
+            SwPageFrame::GetBorderAndShadowBoundRect( getFrameArea(), pSh, pSh->GetOut(), aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
+            pSh->AddPaintRect( aRetoucheRect );
         }
     }
 
