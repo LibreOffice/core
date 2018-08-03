@@ -209,6 +209,7 @@ public:
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
     void testOpenDocumentAsReadOnly();
+    void testKeepSettingsOfBlankRows();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -317,6 +318,7 @@ public:
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
+    CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4046,6 +4048,19 @@ void ScExportTest::testOpenDocumentAsReadOnly()
     CPPUNIT_ASSERT(xDocSh2->IsSecurityOptOpenReadOnly());
     xDocSh->DoClose();
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testKeepSettingsOfBlankRows()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf41425.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // saved blank row with not default setting in A2
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
