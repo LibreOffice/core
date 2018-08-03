@@ -70,7 +70,7 @@ namespace {
 
         void test_DNS();
 
-        void test_Direcory();
+        void test_Directory();
 
         void test_URI();
 
@@ -86,7 +86,7 @@ namespace {
         CPPUNIT_TEST(test_Others);
         CPPUNIT_TEST(test_RFC822);
         CPPUNIT_TEST(test_DNS);
-        CPPUNIT_TEST(test_Direcory);
+        CPPUNIT_TEST(test_Directory);
         CPPUNIT_TEST(test_URI);
         CPPUNIT_TEST(test_IP);
         CPPUNIT_TEST(test_RID);
@@ -203,7 +203,7 @@ namespace {
         }
     }
 
-    void Test::test_Direcory() {
+    void Test::test_Directory() {
         // Not implemented
     }
 
