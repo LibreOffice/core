@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "ffe62b97_bb695926",
+        "filename": "chart2/source/view/main/PlottingPositionHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "this is also a \"fix\"",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9b769506",
+        "filename": "chart2/source/view/main/PolarLabelPositionHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "and this one a fix too",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_7b73d116",
+        "filename": "chart2/source/view/main/ShapeFactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "and this one",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_5b624d40",
+        "filename": "filter/source/graphicfilter/idxf/dxf2mtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "and this is a fix too",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_db277d12",
         "filename": "include/tools/helpers.hxx",
         "patchSetId": 1
@@ -53,6 +121,24 @@
     },
     {
       "key": {
+        "uuid": "ffe62b97_3b678950",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "ah, wait you are using a different math notation here, not the one I am used too",
+      "parentUuid": "ffe62b97_3b19c9d6",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_bb24b90e",
         "filename": "oox/source/drawingml/shape.cxx",
         "patchSetId": 1
@@ -81,6 +167,23 @@
       "writtenOn": "2018-08-03T11:43:37Z",
       "side": 1,
       "message": "I think your search and replace went wrong",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_1b83a5ce",
+        "filename": "sw/source/core/graphic/grfatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:57:58Z",
+      "side": 1,
+      "message": "should mention this change in the commit, might back to bite you",
       "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
