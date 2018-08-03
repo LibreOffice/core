@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_db277d12",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:43:37Z",
+      "side": 1,
+      "message": "judging by the code the valid range is\n  (-180,180]",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_5b148da0",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:43:37Z",
+      "side": 1,
+      "message": "SAL_WARN_UNUSED_RESULT would be good here",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_3b19c9d6",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:43:37Z",
+      "side": 1,
+      "message": "[0,360)",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_bb24b90e",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:43:37Z",
+      "side": 1,
+      "message": "NormAngle36000 ?\nnote the extra zeros",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffe62b97_9b21f5fe",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-03T11:43:37Z",
+      "side": 1,
+      "message": "I think your search and replace went wrong",
+      "revId": "f80b2725a03d5059d7184033ce69351cbcb015d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
