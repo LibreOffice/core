@@ -44,7 +44,7 @@
 <xs:element name="true" type="Constant.type"/>
 <xs:element name="false" type="Constant.type"/>
 
-<!-- Infinty -->
+<!-- Infinity -->
 
 <xs:element name="infinity" type="Constant.type"/>
 
