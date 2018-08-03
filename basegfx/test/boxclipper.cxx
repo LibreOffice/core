@@ -169,49 +169,78 @@ public:
 
     B2DPolyPolygon normalizePoly( const B2DPolyPolygon& rPoly ) const
     {
-        B2DPolyPolygon aRes;
-        for( sal_uInt32 i=0; i<rPoly.count(); ++i )
+        if(0 == rPoly.count())
         {
-            B2DPolygon aTmp=rPoly.getB2DPolygon(i);
-            if( utils::getOrientation(aTmp) == B2VectorOrientation::Negative )
-                aTmp.flip();
+            return rPoly;
+        }
 
-            aTmp=utils::removeNeutralPoints(aTmp);
-            std::vector<B2DPoint> aTmp2(aTmp.count());
-            for(sal_uInt32 j=0; j<aTmp.count(); ++j)
-                aTmp2[j] = aTmp.getB2DPoint(j);
+        B2DPolyPolygon aRetval;
+        std::vector<B2DPolygon> aTemporaryResult;
 
-            std::vector<B2DPoint>::iterator pSmallest=aTmp2.end();
-            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
+        for (sal_uInt32 a(0); a < rPoly.count(); a++)
+        {
+            // get candidate, already get rid of double and neutral points
+            B2DPolygon aCandidate(rPoly.getB2DPolygon(a));
+            aCandidate.removeDoublePoints();
+            aCandidate = utils::removeNeutralPoints(aCandidate);
+
+            if(0 == aCandidate.count())
             {
-                if( pSmallest == aTmp2.end() || compare(*pCurr, *pSmallest) )
-                {
-                    pSmallest=pCurr;
-                }
+                continue;
             }
 
-            if( pSmallest != aTmp2.end() )
-                std::rotate(aTmp2.begin(),pSmallest,aTmp2.end());
+            // correct all orientations to positive
+            if(B2VectorOrientation::Negative == utils::getOrientation(aCandidate))
+            {
+                aCandidate.flip();
+            }
 
-            aTmp.clear();
-            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
-                aTmp.append(*pCurr);
+            if(aCandidate.count() > 1)
+            {
+                sal_uInt32 nSmallestPointIndex(0);
+                B2DPoint aSmallestPoint(aCandidate.getB2DPoint(0));
 
-            aRes.append(aTmp);
+                for(sal_uInt32 b(1); b < aCandidate.count(); b++)
+                {
+                    if(compare(aCandidate.getB2DPoint(b), aSmallestPoint))
+                    {
+                        aSmallestPoint = aCandidate.getB2DPoint(b);
+                        nSmallestPointIndex = b;
+                    }
+                }
+
+                // this will keep the closed-state of the original
+                aCandidate = utils::makeStartPoint(aCandidate, nSmallestPointIndex);
+            }
+
+            aTemporaryResult.push_back(aCandidate);
+        }
+
+        if(aTemporaryResult.empty())
+        {
+            return aRetval;
+        }
+
+        // sort all polygons with increasing 0th point
+        std::sort(
+            aTemporaryResult.begin(),
+            aTemporaryResult.end(),
+            [](const B2DPolygon& aPolygon1, const B2DPolygon& aPolygon2)
+            {
+                return compare(aPolygon1.getB2DPoint(0), aPolygon2.getB2DPoint(0));
+            });
+
+
+        for(const auto& rPartPoly : aTemporaryResult)
+        {
+            aRetval.append(rPartPoly);
         }
 
         // boxclipper & generic clipper disagree slightly on area-less
         // polygons (one or two points only)
-        aRes = utils::stripNeutralPolygons(aRes);
+        aRetval = utils::stripNeutralPolygons(aRetval);
 
-        // now, sort all polygons with increasing 0th point
-        std::sort(aRes.begin(),
-                  aRes.end(),
-                  [](const B2DPolygon& aPolygon1, const B2DPolygon& aPolygon2) {
-                      return compare(aPolygon1.getB2DPoint(0),
-                          aPolygon2.getB2DPoint(0)); } );
-
-        return aRes;
+        return aRetval;
     }
 
     void verifyPoly(const char* sName, const char* sSvg, const B2DPolyRange& toTest) const

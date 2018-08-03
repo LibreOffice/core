@@ -249,9 +249,7 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ones, subtract en bloc then
-                    maPendingPolygons = solveCrossovers(maPendingPolygons);
-                    maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
-                    maPendingPolygons = stripDispensablePolygons(maPendingPolygons);
+                    maPendingPolygons = utils::prepareForPolygonOperation(maPendingPolygons);
 
                     if( bIsCleared )
                     {
@@ -294,9 +292,7 @@ namespace utils
                 case UNION:
                     assert( !bIsCleared );
 
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
+                    aCollectedRanges = utils::prepareForPolygonOperation(maPendingRanges.solveCrossovers());
                     if( bIsEmpty )
                         maClipPoly = aCollectedRanges;
                     else
@@ -307,10 +303,7 @@ namespace utils
                 case INTERSECT:
                     assert( !bIsEmpty );
 
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    if( maPendingRanges.count() > 1 )
-                        aCollectedRanges = stripDispensablePolygons(aCollectedRanges, true);
+                    aCollectedRanges = utils::prepareForPolygonOperation(maPendingRanges.solveCrossovers());
 
                     if( bIsCleared )
                         maClipPoly = aCollectedRanges;
@@ -351,9 +344,7 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ranges, subtract en bloc then
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
+                    aCollectedRanges = utils::prepareForPolygonOperation(maPendingRanges.solveCrossovers());
 
                     if( bIsCleared )
                     {
