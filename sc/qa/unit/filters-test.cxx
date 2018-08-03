@@ -72,6 +72,7 @@ public:
     void testContentXLSX();
     void testContentXLSXStrict(); // strict OOXML
     void testContentLotus123();
+    void testContentofz9704();
     void testContentDIF();
     void testContentXLSB();
     void testContentXLS_XML();
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentXLSXStrict);
     CPPUNIT_TEST(testContentLotus123);
+    CPPUNIT_TEST(testContentofz9704);
     CPPUNIT_TEST(testContentDIF);
     CPPUNIT_TEST(testContentXLSB);
     CPPUNIT_TEST(testContentXLS_XML);
@@ -300,6 +302,16 @@ void ScFiltersTest::testContentLotus123()
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_LOTUS123);
     xDocSh->DoClose();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream);
+
+void ScFiltersTest::testContentofz9704()
+{
+    OUString aFileName;
+    createFileURL("ofz9704.", "123", aFileName);
+    SvFileStream aFileStream(aFileName, StreamMode::READ);
+    TestImportWKS(aFileStream);
 }
 
 void ScFiltersTest::testContentDIF()

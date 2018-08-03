@@ -5989,7 +5989,11 @@ void ScCompiler::PostProcessCode()
 
 void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
 {
-    const ScComplexRefData& rRange = *(*ppDoubleRefTok)->GetDoubleRef();
+    const ScComplexRefData* pRange = (*ppDoubleRefTok)->GetDoubleRef();
+    if (!pRange)
+        return;
+
+    const ScComplexRefData& rRange = *pRange;
 
     // Can't do optimization reliably in this case (when row references are absolute).
     // Example : =SIN(A$1:A$10) filled in a formula group starting at B5 and of length 100.
