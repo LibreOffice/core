@@ -230,7 +230,12 @@ class LOKitThread extends Thread {
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
             updateZoomConstraints();
-            refresh();
+            LOKitShell.getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    refresh();
+                }
+            });
             LOKitShell.hideProgressSpinner(mContext);
         } else {
             closeDocument();
