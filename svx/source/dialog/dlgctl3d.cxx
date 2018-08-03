@@ -37,6 +37,7 @@
 #include <helpids.h>
 #include <algorithm>
 #include <svx/dialmgr.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/settings.hxx>
 
 using namespace com::sun::star;
@@ -671,15 +672,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
                 double fNewPosVer = mfSaveActionStartVer - static_cast<double>(aDeltaPos.Y());
 
                 // cut horizontal
-                while(fNewPosHor < 0.0)
-                {
-                    fNewPosHor += 360.0;
-                }
-
-                while(fNewPosHor >= 360.0)
-                {
-                    fNewPosHor -= 360.0;
-                }
+                fNewPosHor = NormAngle360(fNewPosHor);
 
                 // cut vertical
                 if(fNewPosVer < -90.0)

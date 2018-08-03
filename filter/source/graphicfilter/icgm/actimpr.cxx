@@ -45,6 +45,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/gradient.hxx>
 
 #include "main.hxx"
@@ -496,12 +497,8 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
 
         if ( rOrientation != 0 )
         {
-            fStartAngle += rOrientation;
-            if ( fStartAngle >= 360 )
-                fStartAngle -= 360;
-            fEndAngle += rOrientation;
-            if ( fEndAngle >= 360 )
-                fEndAngle -= 360;
+            fStartAngle = NormAngle360(fStartAngle + rOrientation);
+            fEndAngle = NormAngle360(fEndAngle + rOrientation);
         }
         switch( nType )
         {

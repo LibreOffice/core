@@ -178,7 +178,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
         long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
         nAngle0 -= 27000;
-        nAngle0 = NormAngle360(nAngle0);
+        nAngle0 = NormAngle36000(nAngle0);
         bMirrorSide0 = nAngle0 < 18000;
 
         if (!pHdl && mpView->Is3DRotationCreationActive())
@@ -740,7 +740,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     **********************************************************/
                      long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
                      nAngle1 -= 27000;
-                     nAngle1 = NormAngle360(nAngle1);
+                     nAngle1 = NormAngle36000(nAngle1);
                      bool bMirrorSide1 = nAngle1 < 18000;
 
                      if (bMirrorSide0 != bMirrorSide1)

@@ -156,7 +156,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     if (bRota90Merk) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (!bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle360(aGeo.nRotationAngle);
+            long a=NormAngle36000(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;
@@ -196,11 +196,11 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     maRect.SetRight(maRect.Left()+dx );
     maRect.SetBottom(maRect.Top()+dy );
     if (aGeo.nRotationAngle==0) {
-        aGeo.nRotationAngle=NormAngle360(nAngle);
+        aGeo.nRotationAngle=NormAngle36000(nAngle);
         aGeo.nSin=sn;
         aGeo.nCos=cs;
     } else {
-        aGeo.nRotationAngle=NormAngle360(aGeo.nRotationAngle+nAngle);
+        aGeo.nRotationAngle=NormAngle36000(aGeo.nRotationAngle+nAngle);
         aGeo.RecalcSinCos();
     }
     SetRectsDirty();
@@ -258,7 +258,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     if (bRota90Merk) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (bRota90Merk && !bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle360(aGeo.nRotationAngle);
+            long a=NormAngle36000(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;

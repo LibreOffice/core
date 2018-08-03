@@ -135,7 +135,7 @@ sal_Int32 ConversionHelper::decodeRotation( const OUString& rValue )
         return 0;
     }
 
-    return NormAngle360(fRotation * -100);
+    return NormAngle36000(fRotation * -100);
 }
 
 sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,

@@ -192,7 +192,7 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
     vcl::Font aFont;
 
     nAngle=-nAngle;
-    while (nAngle>3600) nAngle-=3600;
+    while (nAngle>=3600) nAngle-=3600;
     while (nAngle<0) nAngle+=3600;
 
     nColor=GetEntityColor(rE);
