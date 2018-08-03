@@ -137,8 +137,8 @@ SdrCircObj::SdrCircObj(
 :   SdrRectObj(rSdrModel, rRect)
 {
     long nAngleDif=nNewEndWink-nNewStartWink;
-    nStartAngle=NormAngle360(nNewStartWink);
-    nEndAngle=NormAngle360(nNewEndWink);
+    nStartAngle=NormAngle36000(nNewStartWink);
+    nEndAngle=NormAngle36000(nNewEndWink);
     if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
@@ -536,7 +536,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
             aPt.setX(BigMulDiv(aPt.X(),nHgt,nWdt) );
         }
 
-        long nAngle=NormAngle360(GetAngle(aPt));
+        long nAngle=NormAngle36000(GetAngle(aPt));
 
         if (rDrag.GetView() && rDrag.GetView()->IsAngleSnapEnabled())
         {
@@ -547,7 +547,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
                 nAngle+=nSA/2;
                 nAngle/=nSA;
                 nAngle*=nSA;
-                nAngle=NormAngle360(nAngle);
+                nAngle=NormAngle36000(nAngle);
             }
         }
 
@@ -649,14 +649,14 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
         } else {
             if (nWdt!=0) aP.setX(aP.X()*nHgt/nWdt );
         }
-        nStart=NormAngle360(GetAngle(aP));
+        nStart=NormAngle36000(GetAngle(aP));
         if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
             if (nSA!=0) { // angle snapping
                 nStart+=nSA/2;
                 nStart/=nSA;
                 nStart*=nSA;
-                nStart=NormAngle360(nStart);
+                nStart=NormAngle36000(nStart);
             }
         }
         aP1 = GetAnglePnt(aR,nStart);
@@ -670,14 +670,14 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
         } else {
             aP.setX(BigMulDiv(aP.X(),nHgt,nWdt) );
         }
-        nEnd=NormAngle360(GetAngle(aP));
+        nEnd=NormAngle36000(GetAngle(aP));
         if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
             if (nSA!=0) { // angle snapping
                 nEnd+=nSA/2;
                 nEnd/=nSA;
                 nEnd*=nSA;
-                nEnd=NormAngle360(nEnd);
+                nEnd=NormAngle36000(nEnd);
             }
         }
         aP2 = GetAnglePnt(aR,nEnd);
@@ -862,8 +862,8 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                 }
             }
             long nAngleDif=nE0-nS0;
-            nStartAngle=NormAngle360(nS0);
-            nEndAngle  =NormAngle360(nE0);
+            nStartAngle=NormAngle36000(nS0);
+            nEndAngle  =NormAngle36000(nE0);
             if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
         }
     }
@@ -931,8 +931,8 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         nStartAngle=GetAngle(aTmpPt2);
         nEndAngle  =GetAngle(aTmpPt1);
         long nAngleDif=nEndAngle-nStartAngle;
-        nStartAngle=NormAngle360(nStartAngle);
-        nEndAngle  =NormAngle360(nEndAngle);
+        nStartAngle=NormAngle36000(nStartAngle);
+        nEndAngle  =NormAngle36000(nEndAngle);
         if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
     }
     SetXPolyDirty();

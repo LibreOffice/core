@@ -371,7 +371,7 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
     if ( nContent )
     {
         nAngle = ( static_cast<sal_Int16>( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 );
-        nAngle = NormAngle360( -nAngle );
+        nAngle = NormAngle36000( -nAngle );
     }
     return nAngle;
 }
@@ -4567,7 +4567,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 double fNumber;
                                 seqAdjustmentValues[ 0 ].Value >>= fNumber;
-                                nEndAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
+                                nEndAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
                             }
                             else
                             {
@@ -4583,7 +4583,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     fNumber = atan2( double( aStartPt.X() - cent.X() ),double( aStartPt.Y() - cent.Y() ) )+ F_PI; // 0..2PI
                                     fNumber /= F_PI180; // 0..360.0
                                 }
-                                nEndAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
+                                nEndAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 0 ].State = css::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
                             }
@@ -4592,7 +4592,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 double fNumber;
                                 seqAdjustmentValues[ 1 ].Value >>= fNumber;
-                                nStartAngle = NormAngle360( - static_cast<sal_Int32>(fNumber) * 100 );
+                                nStartAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
                             }
                             else
                             {

@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <rtl/math.hxx>
+#include <tools/helpers.hxx>
 
 namespace chart
 {
@@ -477,11 +478,7 @@ double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOn
     fRet = m_fAngleDegreeOffset
                   + fAxisAngleScaleDirection*(fScaledLogicAngleValue-MinAngleValue)*360.0
                     /fabs(MaxAngleValue-MinAngleValue);
-    while(fRet>360.0)
-        fRet-=360.0;
-    while(fRet<0)
-        fRet+=360.0;
-    return fRet;
+    return NormAngle360(fRet);
 }
 
 /**
