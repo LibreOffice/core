@@ -249,9 +249,8 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ones, subtract en bloc then
-                    maPendingPolygons = solveCrossovers(maPendingPolygons);
-                    maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
-                    maPendingPolygons = stripDispensablePolygons(maPendingPolygons);
+                    maPendingPolygons = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingPolygons));
 
                     if( bIsCleared )
                     {
@@ -293,10 +292,9 @@ namespace utils
             {
                 case UNION:
                     assert( !bIsCleared );
+                    aCollectedRanges = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingRanges.solveCrossovers()));
 
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
                     if( bIsEmpty )
                         maClipPoly = aCollectedRanges;
                     else
@@ -306,11 +304,68 @@ namespace utils
                     break;
                 case INTERSECT:
                     assert( !bIsEmpty );
-
+                    // This intersect of multiple ranges was highly dubious implemented
+                    // using the older stripDispensablePolygons(..., true) call. When e.g.
+                    // executing the test case "intersect" from basegfx/test/clipstate.cxx
+                    // (part of CppunitTest_basegfx), five ranges are given (see
+                    // construction of aIntersect in setUp()). The last four do
+                    // intersect with the first, but not with each other, thus
+                    // a 'real' intersect of all five would be empty - there is no area that
+                    // resides completely inside all of them.
+                    // This shows that the stacking and one-level execution of INTERSECT
+                    // here is a non-working concept with the used polygon topology. If
+                    // the four non-intersecting polygons are intended to form a single
+                    // PolyPolygon, it would have to be expressed exactly by using such a
+                    // construct - or in case of Ranges something like a 'PolyRange'.
+                    // The call to maPendingRanges.solveCrossovers solves the crossovers,
+                    // so there are four snippets that are inside a fifth surrounding these
+                    // when we stay at the given example.
+                    // What was executed here before is to keep all polygons that are inside
+                    // of another one. No holes here, can be emulated by keeping all part-polygons
+                    // that lie inside another one.
+                    // To do that, two loops over aCollectedRanges are needed and all which
+                    // lie inside another one would be part of the result.
+                    // A 'real' intersect would need to start with the 1st part-polygon, intersect
+                    // with the second and so forth where the order of partial polygons would be
+                    // irrelevant. In the example from the test the result would
+                    // obviously be empty - what is not expected by the test.
+                    // What seems to have been intended is to take the 1st part-polygon, merge the others
+                    // topologically to a single PolyPoylgon and intersect that two.
+                    // This is nearly impossible to do when using the result of
+                    // maPendingRanges.solveCrossovers, the order is not preserved and thus
+                    // unknown which was the '1st' part-polygon originally.
+                    // If this strange behaviour is intended it would be easiest to just use
+                    // maPendingRanges as Polygons, take the 1st, merge the rest and execute a
+                    // simple utils::solvePolygonOperationAnd with these.
+                    // To be on the safe side, I will keep the more expensive and complicated
+                    // solution with detecting 'isInside' for now - that keeps the UnitTest working.
                     aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    if( maPendingRanges.count() > 1 )
-                        aCollectedRanges = stripDispensablePolygons(aCollectedRanges, true);
+
+                    if(aCollectedRanges.count() > 1)
+                    {
+                        B2DPolyPolygon aResult;
+
+                        for(sal_uInt32 a(0); a < aCollectedRanges.count(); a++)
+                        {
+                            const B2DPolygon aCandidate(aCollectedRanges.getB2DPolygon(a));
+
+                            for(sal_uInt32 b(0); b < aCollectedRanges.count(); b++)
+                            {
+                                if(b != a)
+                                {
+                                    const B2DPolygon aContainer(aCollectedRanges.getB2DPolygon(b));
+
+                                    if(utils::isInside(aContainer, aCandidate, true))
+                                    {
+                                        aResult.append(aCandidate);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        aCollectedRanges = aResult;
+                    }
 
                     if( bIsCleared )
                         maClipPoly = aCollectedRanges;
@@ -351,9 +406,8 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ranges, subtract en bloc then
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
+                    aCollectedRanges = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingRanges.solveCrossovers()));
 
                     if( bIsCleared )
                     {

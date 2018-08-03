@@ -37,9 +37,34 @@ namespace basegfx
     class B2DPolyPolygon;
     class B2DRange;
 
+    // typedef for a vector of B2DPolyPolygons
+    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+
     namespace utils
     {
         // B2DPolyPolygon tools
+
+        // Pack each single Polygon of the given PolyPolygon to a PolyPolygon vector.
+        // Note that this is topologically very different stuff:
+        // - The single Polygons in a PolyPolygon define a topology with holes,
+        //   depending on the FillRule (currently only EvenOdd). The topology
+        //   of the PolyPolygon is defined by the contained single Polygons
+        // - The single PolyPolygons in a B2DPolyPolygonVector define each an independent
+        //   topology.
+        // This method can be useful if a PolyPolygon is used as single 'container'
+        // and it is known that each single Polygon has it's own topology.
+        BASEGFX_DLLPUBLIC B2DPolyPolygonVector packInB2DPolyPolygonVector(const B2DPolyPolygon& rCandidate);
+
+        // Bring the given PolyPolygon in a comparable form. This includes:
+        // - removeDoublePoints
+        // - removeNeutralPoints
+        // - all sub--polygons on B2VectorOrientation::Positive
+        // - StartPoints of all single Polygons to smallest point (sorted by x, then y)
+        // - sort all Polygons relative to each other (sorted by x, then y)
+        // This is useful when a PolyPolygon needs to be compared to a second one
+        // that differs by start point of a Polygon or order of polygons or orinetations
+        // or contains double/neutral points only, but these criterias are not relevant
+        BASEGFX_DLLPUBLIC B2DPolyPolygon createComparablePolyPolygon(const B2DPolyPolygon& rCandidate);
 
         // Check and evtl. correct orientations of all contained Polygons so that
         // the orientations of contained polygons will variate to express areas and

@@ -96,20 +96,39 @@ public:
 #endif
 
         B2DPolyPolygon aTmp1;
-        CPPUNIT_ASSERT_MESSAGE(sName,
-                               utils::importFromSvgD(
-                                   aTmp1, OUString::createFromAscii(sSvg), false, nullptr));
+        CPPUNIT_ASSERT_MESSAGE(
+            sName,
+            utils::importFromSvgD(
+                aTmp1,
+                OUString::createFromAscii(sSvg),
+                false,
+                nullptr));
 
-        const OUString aSvg=
-            utils::exportToSvgD(toTest.getClipPoly(), true, true, false);
-        B2DPolyPolygon aTmp2;
-        CPPUNIT_ASSERT_MESSAGE(sName,
-                               utils::importFromSvgD(
-                                   aTmp2, aSvg, false, nullptr));
+        aTmp1 = basegfx::utils::createComparablePolyPolygon(aTmp1);
+
+        B2DPolyPolygon aTmp2(
+            basegfx::utils::createComparablePolyPolygon(
+                toTest.getClipPoly()));
+
+        const OUString aSvg(
+            utils::exportToSvgD(
+                aTmp2,
+                true,
+                true,
+                false));
+
+        CPPUNIT_ASSERT_MESSAGE(
+            sName,
+            utils::importFromSvgD(
+                aTmp2,
+                aSvg,
+                false,
+                nullptr));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             sName,
-            aTmp1, aTmp2);
+            aTmp1,
+            aTmp2);
     }
 
     void verifySimpleRange()

@@ -68,10 +68,8 @@ public:
                   const char* pValidSvgD,
                   B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&)) const
     {
-        const B2DPolyPolygon aSelfIntersect(
-            utils::prepareForPolygonOperation(aSelfIntersecting));
-        const B2DPolyPolygon aRect(
-            utils::prepareForPolygonOperation(aShiftedRectangle));
+        const B2DPolyPolygon aSelfIntersect(utils::prepareForPolygonOperation(B2DPolyPolygon(aSelfIntersecting)));
+        const B2DPolyPolygon aRect(utils::prepareForPolygonOperation(B2DPolyPolygon(aShiftedRectangle)));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
@@ -85,20 +83,32 @@ public:
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        const B2DPolyPolygon aRes=
-            pFunc(aSelfIntersect, aRect);
+        B2DPolyPolygon aResolution(
+            pFunc(aSelfIntersect, aRect));
 
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::utils::exportToSvgD(aRes, true, true, false),
+                    basegfx::utils::exportToSvgD(aResolution, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        OUString aValid=OUString::createFromAscii(pValidSvgD);
+        B2DPolyPolygon aValid;
+        CPPUNIT_ASSERT_MESSAGE(
+            pName,
+            utils::importFromSvgD(
+                aValid,
+                OUString::createFromAscii(pValidSvgD),
+                false,
+                nullptr));
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(pName,
-                               aValid, basegfx::utils::exportToSvgD(aRes, true, true, false));
+        aValid = basegfx::utils::createComparablePolyPolygon(aValid);
+        aResolution = basegfx::utils::createComparablePolyPolygon(aResolution);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            pName,
+            basegfx::utils::exportToSvgD(aValid, true, true, false),
+            basegfx::utils::exportToSvgD(aResolution, true, true, false));
     }
 
     void validateOr()
@@ -109,7 +119,15 @@ public:
 
     void validateXor()
     {
-        const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
+        // due to solvePolygonOperationXor in b2dpolypolygoncutter.cxx now no longer
+        // solving cuts (not needed, better performance) the order has slightly changed,
+        // adapting to new order.
+
+        // old expected order (with removed self-intersections):
+        // const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
+
+        // new order (just merged):
+        const char* const pValid="m0 0h100v150h-75v-50h-25zm0 90h20v60h-20zm25-40h50v50h-50z";
         validate("validateXor", pValid, &utils::solvePolygonOperationXor);
     }
 
@@ -145,35 +163,54 @@ public:
 
     void checkCrossoverSolver()
     {
-        // partially intersecting polygons, with a common subsection
+        // Partially intersecting polygons, with a common subsection
+        // Note: Due to using utils::solveCrossovers in validateCrossover above,
+        // a reordering of the partial polygons has to be exected. In this
+        // case, the PolyPolygon gets reordered.
+        // It only got not reordered in older versions due to the old solver
+        // remembering locally using a bool that no change happened.
+        // Old expected was: 'm0 0v5h3 1 1 1v-2-3zm3 7v-2h1 1 1v-2h1v3z'
+        // ..or: same as input, slightly different SVG-formatting of svg:d
         validateCrossover(
             "partially intersecting",
             "m0 0 v 5  h 3 h 1 h 1 h 1 v -2 v -3 z"
               "m3 7 v -2 h 1 h 1 h 1 v -2 h 1 v 3 z",
-            "m0 0v5h3 1 1 1v-2-3zm3 7v-2h1 1 1v-2h1v3z");
+            "m0 0h6v3h1v3l-4 1v-2h-3zm3 5h1 1 1v-2 2h-1-1z");
 
         // first polygon is identical to subset of second polygon
+        // Note: same as for "partially intersecting" : reordering
+        // Old expected was: 'm0 0v5h3 1 1v-5zm3 10v-5zm1-5h1v-5h-5v5h3z'
         validateCrossover(
             "full subset",
             "m0 0 v 5  h 3 h 1 h 1 v -5 z"
               "m3 10 v -5 h 1 h 1 v -5 h -5 v 5 h 3 z",
-            "m0 0v5h3 1 1v-5zm3 10v-5zm1-5h1v-5h-5v5h3z");
+            "m0 0h5v5h-1-1v5-5h-3zm0 0h5v5h-1-1-3z");
 
         // first polygon is identical to subset of second polygon, but
         // oriented in the opposite direction
+        // Note: Looks as if the last 'h 2' from the input line should have
+        // been a 'h -2' to have the same form as above. Besides that, not the
+        // same points at the bottom are shared (purpose?)
+        // Note: same as for "partially intersecting" : reordering
+        // Old expected was: 'm0 0v5h1 1 1-1-1-1v-5h5v5-5zm4 5h1 2l-4 5v-5z'
         validateCrossover(
             "full subset, opposite direction",
             "m0 0 v 5 h 3 h 1 h 1 v -5 z"
               "m3 10 v -5 h -1 h -1 h -1 v -5 h 5 v 5 h 2 z",
-            "m0 0v5h1 1 1-1-1-1v-5h5v5-5zm4 5h1 2l-4 5v-5z");
+            "m0 0h5v5h2l-4 5v-5h-3zm0 0h5v5h-1-1-1-1-1z");
 
         // first polygon is identical to subset of second polygon, and
         // has a curve segment (triggers different code path)
+        // Note: same as above, new Crossover-solver creates new results.
+        // The old result created even three polygons, one two-edge loop
+        // with no area. New result is better and represents topologically
+        // the same geometry, so I adapt this.
+        // Old expected was: 'm0 0v5h3 1 1c2 0 2 0 0-5zm3 10v-5zm1-5h1c2 0 2 0 0-5h-5v5h3z'
         validateCrossover(
             "full subset, plus curves",
             "m0 0 v 5  h 3 h 1 h 1 c 2 0 2 0 0 -5 z"
               "m3 10 v -5 h 1 h 1 c 2 0 2 0 0 -5 h -5 v 5 h 3 z",
-            "m0 0v5h3 1 1c2 0 2 0 0-5zm3 10v-5zm1-5h1c2 0 2 0 0-5h-5v5h3z");
+            "m0 0h5c2 5 2 5 0 5h-1-1v5-5h-3zm0 0h5c2 5 2 5 0 5h-1-1-3z");
     }
 
     // Change the following lines only, if you add, remove or rename
