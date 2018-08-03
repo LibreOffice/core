@@ -209,6 +209,8 @@ public:
     void testHyperlinkTargetFrameODS();
     void testOpenDocumentAsReadOnly();
     void testTdf118990();
+    void testKeepSettingsOfBlankRows();
+
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -318,6 +320,7 @@ public:
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf118990);
+    CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4084,6 +4087,19 @@ void ScExportTest::testTdf118990()
                          "Wrong Windows share (using hostname) URL in A3");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testKeepSettingsOfBlankRows()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf41425.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // saved blank row with not default setting in A2
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
