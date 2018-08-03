@@ -28,657 +28,1110 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <vector>
+#include <list>
 #include <algorithm>
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
     namespace
     {
-
-        struct StripHelper
-        {
-            B2DRange                                maRange;
-            sal_Int32                               mnDepth;
-            B2VectorOrientation                     meOrinetation;
-        };
-
-        struct PN
-        {
-        public:
-            B2DPoint                maPoint;
-            sal_uInt32              mnI;
-            sal_uInt32              mnIP;
-            sal_uInt32              mnIN;
-        };
-
-        struct VN
-        {
-        public:
-            B2DVector               maPrev;
-            B2DVector               maNext;
-
-            // to have the correct curve segments in the crossover checks,
-            // it is necessary to keep the original next vectors, too. Else,
-            // it may happen to use a already switched next vector which
-            // would interpolate the wrong comparison point
-            B2DVector               maOriginalNext;
-        };
-
-        struct SN
-        {
-        public:
-            PN*                     mpPN;
-
-            bool operator<(const SN& rComp) const
-            {
-                if(fTools::equal(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX()))
-                {
-                    if(fTools::equal(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY()))
-                    {
-                        return (mpPN->mnI < rComp.mpPN->mnI);
-                    }
-                    else
-                    {
-                        return fTools::less(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY());
-                    }
-                }
-                else
-                {
-                    return fTools::less(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX());
-                }
-            }
-        };
-
-        typedef std::vector< PN > PNV;
-        typedef std::vector< VN > VNV;
-        typedef std::vector< SN > SNV;
-        typedef std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
-
-        class solver
+        // Helper class to hold a temporary point that might get added
+        // to an existing edge. The B2DPoint is needed to increase precision,
+        // usually two of these points in different edges get created. To
+        // guarantee despite double-precision values that the identical point
+        // will be in use, this is necessary.
+        // The cut-value is the relative value to the Edge this TemporaryPoint
+        // is associated with, in the range of [0.0 .. 1.0]. It can be used
+        // with the associated Edge to re-create the B2DPoint, but the local
+        // one wii be more precise. The cut-value is still needed for sorting
+        // of multiple cuts-per-edge and nested cuts with relative cut-values.
+        class TemporaryPoint
         {
         private:
-            const B2DPolyPolygon    maOriginal;
-            PNV                     maPNV;
-            VNV                     maVNV;
-            SNV                     maSNV;
-            std::vector< CorrectionPair >
-                                    maCorrectionTable;
+            B2DPoint                            maPoint;        // the new point
+            double                              mfCut;          // parametric cut description [0.0 .. 1.0]
 
-            bool                    mbIsCurve : 1;
-            bool                    mbChanged : 1;
-
-            void impAddPolygon(const sal_uInt32 aPos, const B2DPolygon& rGeometry)
+        public:
+            TemporaryPoint(
+                const B2DPoint& rNewPoint,
+                double fCut)
+            :   maPoint(rNewPoint),
+                mfCut(fCut)
             {
-                const sal_uInt32 nCount(rGeometry.count());
-                PN aNewPN;
-                VN aNewVN;
-                SN aNewSN;
+            }
 
-                for(sal_uInt32 a(0); a < nCount; a++)
+            // for std::sort
+            bool operator<(const TemporaryPoint& rComp) const
+            {
+                return (mfCut < rComp.mfCut);
+            }
+
+            const B2DPoint& getB2DPoint() const { return maPoint; }
+            double getCut() const { return mfCut; }
+        };
+
+        // The OriginalData associated with each added B2DPolyPolygon. This
+        // is used in the solver step (see consumeEdges()) to detect if a
+        // Point is inside/outside one of the original geometries. The switch
+        // for positive defines if the inside or outside of the original
+        // PolyPolygon is associated with being inside.
+        class OriginalData
+        {
+            const B2DPolyPolygon&   mrPolyPoly;
+            bool                    mbPositive;
+
+        public:
+            OriginalData(
+                const B2DPolyPolygon& rPolyPoly,
+                bool bPositive)
+            :   mrPolyPoly(rPolyPoly),
+                mbPositive(bPositive)
+            {
+            }
+
+            const B2DPolyPolygon& getB2DPolyPolygon() const
+            {
+                return mrPolyPoly;
+            }
+
+            bool isPositive() const
+            {
+                return mbPositive;
+            }
+        };
+
+        class Edge;
+
+        // A Node inside the graph describing a single point-position.
+        // That position is associated with all Edges starting or ending
+        // here, building the graph.
+        // In the main algorithm these Nodes are used with a std::set so
+        // that each Node representing a B2DPoint position exists exactly
+        // once. That way, all Edges will reliably be associated with the
+        // Node they are associated with.
+        class Node
+        {
+        private:
+            B2DPoint            maB2DPoint;
+            std::list< Edge* >  maEdges;
+
+        public:
+            Node(
+                const B2DPoint& rB2DPoint)
+            :   maB2DPoint(rB2DPoint),
+                maEdges()
+            {
+            }
+
+            // for std::set sorting
+            bool operator<(const Node& rComp) const
+            {
+                if(maB2DPoint.getX() == rComp.maB2DPoint.getX())
                 {
-                    const B2DPoint aPoint(rGeometry.getB2DPoint(a));
-                    aNewPN.maPoint = aPoint;
-                    aNewPN.mnI = aPos + a;
-                    aNewPN.mnIP = aPos + ((a != 0) ? a - 1 : nCount - 1);
-                    aNewPN.mnIN = aPos + ((a + 1 == nCount) ? 0 : a + 1);
-                    maPNV.push_back(aNewPN);
+                    return maB2DPoint.getY() < rComp.maB2DPoint.getY();
+                }
 
-                    if(mbIsCurve)
-                    {
-                        aNewVN.maPrev = rGeometry.getPrevControlPoint(a) - aPoint;
-                        aNewVN.maNext = rGeometry.getNextControlPoint(a) - aPoint;
-                        aNewVN.maOriginalNext = aNewVN.maNext;
-                        maVNV.push_back(aNewVN);
-                    }
+                return maB2DPoint.getX() < rComp.maB2DPoint.getX();
+            }
 
-                    aNewSN.mpPN = &maPNV[maPNV.size() - 1];
-                    maSNV.push_back(aNewSN);
+            void add(Edge* pNew) { maEdges.push_back(pNew); }
+            const B2DPoint& getB2DPoint() const { return maB2DPoint; }
+            bool hasEdges() const { return !maEdges.empty(); }
+            Edge* getEdge() { if(maEdges.empty()) return nullptr; return maEdges.front(); }
+            void remove(Edge* pEdge) { maEdges.remove(pEdge); }
+        };
+
+        // A Edge in the graph. It is connected to two Nodes representing
+        // start and end of the Edge. It can be a simple line or a Bezier-Segment
+        // when control vectors are given. Each edge is associated with it's
+        // original data to have access to the PolyPolygon it originally came
+        // from. It can collect temporary points during detecting cuts and touches.
+        // These are not created at once, but after the cuts and touch detection,
+        // so that the detection works on unchanged data.
+        class Edge
+        {
+        private:
+            Node*                           mpNodeA;
+            Node*                           mpNodeB;
+            B2DPoint                        maControlA;
+            B2DPoint                        maControlB;
+            const OriginalData&             mrOriginalData;
+            std::vector< TemporaryPoint >   maTemporaryPoints;
+            B2DRange                        maRange;
+            bool                            mbIsBezier;
+
+        public:
+            Edge(
+                Node& rNodeA,
+                Node& rNodeB,
+                const B2DPoint& rControlA,
+                const B2DPoint& rControlB,
+                const OriginalData& rOriginalData)
+            :   mpNodeA(&rNodeA),
+                mpNodeB(&rNodeB),
+                maControlA(rControlA),
+                maControlB(rControlB),
+                mrOriginalData(rOriginalData),
+                maTemporaryPoints(),
+                maRange(rNodeA.getB2DPoint(), rNodeB.getB2DPoint()),
+                mbIsBezier(rNodeA.getB2DPoint() != rControlA || rNodeB.getB2DPoint() != rControlB)
+            {
+                // directly create association with edges
+                mpNodeA->add(this);
+                mpNodeB->add(this);
+
+                if(mbIsBezier)
+                {
+                    maRange.expand(maControlA);
+                    maRange.expand(maControlB);
                 }
             }
 
-            static bool impLeftOfEdges(const B2DVector& rVecA, const B2DVector& rVecB, const B2DVector& rTest)
-            {
-                // tests if rTest is left of both directed line segments along the line -rVecA, rVecB. Test is
-                // with border.
-                if(rVecA.cross(rVecB) > 0.0)
-                {
-                    // b is left turn seen from a, test if Test is left of both and so inside (left is seeen as inside)
-                    const bool bBoolA(fTools::moreOrEqual(rVecA.cross(rTest), 0.0));
-                    const bool bBoolB(fTools::lessOrEqual(rVecB.cross(rTest), 0.0));
+            Node& getNodeA() { return *mpNodeA; }
+            Node& getNodeB() { return *mpNodeB; }
+            const B2DPoint& getControlA() const { return maControlA; }
+            const B2DPoint& getControlB() const { return maControlB; }
 
-                    return (bBoolA && bBoolB);
+            // This little helper makes us independent of start/end value,
+            // avoiding being bound to orientations. Just get the other edge
+            // when we have one already
+            Node& getOther(Node& rCaller)
+            {
+                if(&rCaller == mpNodeA)
+                    return *mpNodeB;
+                return *mpNodeA;
+            }
+
+            // similar as above - get the correct control vector independent
+            // of orientation
+            const B2DPoint& getControl(Node& rCaller) const
+            {
+                if(&rCaller == mpNodeA)
+                    return maControlA;
+                return maControlB;
+            }
+
+            const OriginalData& getOriginalData() const { return mrOriginalData; }
+
+            // consuming an edge means to remove it's nodes. When not accessible
+            // from any node, the edge is not accessible (see extract())
+            void consume()
+            {
+                mpNodeA->remove(this);
+                mpNodeB->remove(this);
+            }
+
+            bool isBezier() const { return mbIsBezier; }
+            std::vector< TemporaryPoint >& getTemporaryPoints() { return maTemporaryPoints; }
+            const B2DRange& getRange() const { return maRange; }
+
+            // Allows re-use of this instance for splitting the Edge when the collected
+            // TemporaryPoints get applied (see splitEdge())
+            void modifyNodeB(Node& rNodeB, const B2DPoint& rControlA, const B2DPoint& rControlB)
+            {
+                mpNodeB->remove(this);
+                mpNodeB = &rNodeB;
+                mpNodeB->add(this);
+
+                maControlA = rControlA;
+                maControlB = rControlB;
+
+                maTemporaryPoints.clear();
+                maRange.reset();
+                maRange.expand(mpNodeA->getB2DPoint());
+                maRange.expand(mpNodeB->getB2DPoint());
+                mbIsBezier = mpNodeA->getB2DPoint() != maControlA || mpNodeB->getB2DPoint() != maControlB;
+
+                if(mbIsBezier)
+                {
+                    maRange.expand(maControlA);
+                    maRange.expand(maControlB);
+                }
+            }
+
+            // Used for inside/outside check. After the edges are splitted and all cuts
+            // and touches are processed, the relative center of an Edge at 0.5 can be
+            // directly associated with the Edge itself when want to detect inside/outside
+            // since there can be no further crossovers
+            B2DPoint getCenter() const
+            {
+                if(mbIsBezier)
+                {
+                    const B2DCubicBezier aB2DCubicBezier(
+                        mpNodeA->getB2DPoint(),
+                        getControlA(),
+                        getControlB(),
+                        mpNodeB->getB2DPoint());
+
+                    return aB2DCubicBezier.interpolatePoint(0.5);
                 }
                 else
                 {
-                    // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
-                    const bool bBoolA(fTools::lessOrEqual(rVecA.cross(rTest), 0.0));
-                    const bool bBoolB(fTools::moreOrEqual(rVecB.cross(rTest), 0.0));
-
-                    return (!(bBoolA && bBoolB));
+                    return (0.5 * (mpNodeA->getB2DPoint() + mpNodeB->getB2DPoint()));
                 }
             }
+        };
 
-            void impSwitchNext(PN& rPNa, PN& rPNb)
+        // main class organizing the process. The public methods define
+        // the process:
+        //
+        // cutter()
+        //      Constructor, create the helkper class
+        //
+        // void add(const B2DPolyPolygon& rCand, bool bPositive)
+        //      Add one or multiple PolyPolygons to the graph
+        //
+        // void addPointsAtCuts()
+        //      If you want to reorganize the graph to remove
+        //      all cuts and touches, call this method. Do this if
+        //      you want to process calling consumeEdges()
+        //
+        // void consumeEdges()
+        //      Assumes cut and touch-free graph and consuumes edges
+        //      accordingly to being inside/outside the oroginal
+        //      geometry
+        //
+        // B2DPolyPolygon extract()
+        //      Re-build PolyPolygons from the graph. This will not
+        //      create the same PolyPolygon regrading the position of
+        //      points or orientations, also only creating a single
+        //      PolyPolygon as result.
+        //
+        // ~cutter()
+        //      Destructor, cleanup.
+        //
+        // The basic idea is to add all PolyPolygons using add, then
+        // addPointsAtCuts to make cut- and touch processed. Then - if
+        // intended - use consumeEdges to get edges removed based on the
+        // positive definition given with the OriginalData and at the end
+        // extract the geomery using extract.
+        // The Graph is stable after each step except extract, so you might
+        // call the methods in any (useful) order you wish. If e.g. you
+        // want to process n PolyPolygons, you might call addPointsAtCuts
+        // after each single add call, but this is not really needed, It
+        // might even be more effective to add all, then find all cuts and
+        // touches in a single run.
+        // Theoretically even after consumeEdges you might again add
+        // PolyPolygons and continue the process, but I see currently no
+        // useful application for that - but you never know :-)
+        // It is also useful to add and process a single Polygon. It will
+        // have no intersections with other polygons (there are no other),
+        // but self-intersections on multiple edges, in single bezier segments
+        // or any combination might be solved. This should also make clear
+        // why a PolyPolygon as a result of extract should always be expected.
+        class cutter
+        {
+        private:
+            std::list< OriginalData >   maOriginalDatas;
+            std::set< Node >            maNodes;
+            std::vector< Edge* >        maEdges;
+
+            // helper to find all touches of rCandidate on the edge defined
+            // by rStart/rEnd using enhanced numerical precision. Result is
+            // stored in rfCut and success indicated by boolena return value
+            static bool findTouchOnEdge(
+                const B2DPoint& rStart,
+                const B2DPoint& rEnd,
+                const B2DPoint& rCandidate,
+                double& rfCut)
             {
-                std::swap(rPNa.mnIN, rPNb.mnIN);
+                const B2DVector aEdgeVector(rEnd - rStart);
+                const bool bTestUsingX(fabs(aEdgeVector.getX()) > fabs(aEdgeVector.getY()));
 
-                if(mbIsCurve)
+                if(!rCandidate.equal(rStart) && !rCandidate.equal(rEnd))
                 {
-                    VN& rVNa = maVNV[rPNa.mnI];
-                    VN& rVNb = maVNV[rPNb.mnI];
+                    const B2DVector aTestVector(rCandidate - rStart);
 
-                    std::swap(rVNa.maNext, rVNb.maNext);
+                    if(areParallel(aEdgeVector, aTestVector))
+                    {
+                        rfCut = (bTestUsingX
+                            ? aTestVector.getX() / aEdgeVector.getX()
+                            : aTestVector.getY() / aEdgeVector.getY());
+                        const double fZero(0.0);
+                        const double fOne(1.0);
+
+                        if(fTools::more(rfCut, fZero) && fTools::less(rfCut, fOne))
+                        {
+                            return true;
+                        }
+                    }
                 }
 
-                if(!mbChanged)
-                {
-                    mbChanged = true;
-                }
+                return false;
             }
 
-            B2DCubicBezier createSegment(const PN& rPN, bool bPrev) const
+            // helper to find all cuts between two edges
+            static bool findCutOnEdge(
+                const B2DPoint& rStartA,
+                const B2DPoint& rEndA,
+                const B2DPoint& rStartB,
+                const B2DPoint& rEndB,
+                double& rfCutA,
+                double& rfCutB)
             {
-                const B2DPoint& rStart(rPN.maPoint);
-                const B2DPoint& rEnd(maPNV[bPrev ? rPN.mnIP : rPN.mnIN].maPoint);
-                const B2DVector& rCPA(bPrev ? maVNV[rPN.mnI].maPrev : maVNV[rPN.mnI].maNext);
-                // Use maOriginalNext, not maNext to create the original (yet unchanged)
-                // curve segment. Otherwise, this segment would NOT ne correct.
-                const B2DVector& rCPB(bPrev ? maVNV[maPNV[rPN.mnIP].mnI].maOriginalNext : maVNV[maPNV[rPN.mnIN].mnI].maPrev);
+                // first check for null-length edges
+                const bool bNullLengthA(rStartA.equal(rEndA));
+                const bool bNullLengthB(rStartB.equal(rEndB));
 
-                return B2DCubicBezier(rStart, rStart + rCPA, rEnd + rCPB, rEnd);
-            }
-
-            void impHandleCommon(PN& rPNa, PN& rPNb)
-            {
-                if(mbIsCurve)
+                if(bNullLengthA || bNullLengthB)
                 {
-                    const B2DCubicBezier aNextA(createSegment(rPNa, false));
-                    const B2DCubicBezier aPrevA(createSegment(rPNa, true));
-
-                    if(aNextA.equal(aPrevA))
+                    // at least one of the edges has zero-length
+                    if(bNullLengthA && bNullLengthB)
                     {
-                        // deadend on A (identical edge)
-                        return;
+                        // both have zero-length, nothing to do
                     }
-
-                    const B2DCubicBezier aNextB(createSegment(rPNb, false));
-                    const B2DCubicBezier aPrevB(createSegment(rPNb, true));
-
-                    if(aNextB.equal(aPrevB))
+                    else if(bNullLengthA)
                     {
-                        // deadend on B (identical edge)
-                        return;
+                        // PointA may lie on EdgeB
+                        return findTouchOnEdge(
+                            rStartB,
+                            rEndB,
+                            rStartA,
+                            rfCutB);
                     }
-
-                    if(aPrevA.equal(aPrevB))
+                    else // if(bNullLengthB)
                     {
-                        // common edge in same direction
-                        return;
-                    }
-                    else if(aPrevA.equal(aNextB))
-                    {
-                        // common edge in opposite direction
-                        if(aNextA.equal(aPrevB))
-                        {
-                            // common edge in opposite direction continues
-                            return;
-                        }
-                        else
-                        {
-                            // common edge in opposite direction leave
-                            impSwitchNext(rPNa, rPNb);
-                        }
-                    }
-                    else if(aNextA.equal(aNextB))
-                    {
-                        // common edge in same direction enter
-                        // search leave edge
-                        PN* pPNa2 = &maPNV[rPNa.mnIN];
-                        PN* pPNb2 = &maPNV[rPNb.mnIN];
-                        bool bOnEdge(true);
-
-                        do
-                        {
-                            const B2DCubicBezier aNextA2(createSegment(*pPNa2, false));
-                            const B2DCubicBezier aNextB2(createSegment(*pPNb2, false));
-
-                            if(aNextA2.equal(aNextB2))
-                            {
-                                pPNa2 = &maPNV[pPNa2->mnIN];
-                                pPNb2 = &maPNV[pPNb2->mnIN];
-                            }
-                            else
-                            {
-                                bOnEdge = false;
-                            }
-                        }
-                        while(bOnEdge && pPNa2 != &rPNa && pPNb2 != &rPNb);
-
-                        if(bOnEdge)
-                        {
-                            // loop over two identical polygon paths
-                            return;
-                        }
-                        else
-                        {
-                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
-                            // at enter/leave. Check for crossover.
-                            const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
-                            const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
-                            const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
-                            const bool bEnter(impLeftOfEdges(aPrevCA, aNextCA, aPrevCB));
-
-                            const B2DCubicBezier aNextA2(createSegment(*pPNa2, false));
-                            const B2DCubicBezier aPrevA2(createSegment(*pPNa2, true));
-                            const B2DCubicBezier aNextB2(createSegment(*pPNb2, false));
-                            const B2DVector aPrevCA2(aPrevA2.interpolatePoint(0.5) - aPrevA2.getStartPoint());
-                            const B2DVector aNextCA2(aNextA2.interpolatePoint(0.5) - aNextA2.getStartPoint());
-                            const B2DVector aNextCB2(aNextB2.interpolatePoint(0.5) - aNextB2.getStartPoint());
-                            const bool bLeave(impLeftOfEdges(aPrevCA2, aNextCA2, aNextCB2));
-
-                            if(bEnter != bLeave)
-                            {
-                                // crossover
-                                impSwitchNext(rPNa, rPNb);
-                            }
-                        }
-                    }
-                    else if(aNextA.equal(aPrevB))
-                    {
-                        // common edge in opposite direction enter
-                        impSwitchNext(rPNa, rPNb);
-                    }
-                    else
-                    {
-                        // no common edges, check for crossover
-                        const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
-                        const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
-                        const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
-                        const B2DVector aNextCB(aNextB.interpolatePoint(0.5) - aNextB.getStartPoint());
-
-                        const bool bEnter(impLeftOfEdges(aPrevCA, aNextCA, aPrevCB));
-                        const bool bLeave(impLeftOfEdges(aPrevCA, aNextCA, aNextCB));
-
-                        if(bEnter != bLeave)
-                        {
-                            // crossover
-                            impSwitchNext(rPNa, rPNb);
-                        }
+                        // PointB may lie on EdgeA
+                        return findTouchOnEdge(
+                            rStartA,
+                            rEndA,
+                            rStartB,
+                            rfCutA);
                     }
                 }
                 else
                 {
-                    const B2DPoint& rNextA(maPNV[rPNa.mnIN].maPoint);
-                    const B2DPoint& rPrevA(maPNV[rPNa.mnIP].maPoint);
-
-                    if(rNextA.equal(rPrevA))
+                    // no zero-length edges from here
+                    // exclude common start/end points, this can be no cuts by definition
+                    if(!(rStartB.equal(rStartA) || rStartB.equal(rEndA) || rEndB.equal(rStartA) || rEndB.equal(rEndA)))
                     {
-                        // deadend on A
-                        return;
-                    }
+                        const B2DVector aVecA(rEndA - rStartA);
+                        const B2DVector aVecB(rEndB - rStartB);
+                        rfCutA = aVecA.cross(aVecB);
 
-                    const B2DPoint& rNextB(maPNV[rPNb.mnIN].maPoint);
-                    const B2DPoint& rPrevB(maPNV[rPNb.mnIP].maPoint);
-
-                    if(rNextB.equal(rPrevB))
-                    {
-                        // deadend on B
-                        return;
-                    }
-
-                    if(rPrevA.equal(rPrevB))
-                    {
-                        // common edge in same direction
-                        return;
-                    }
-                    else if(rPrevA.equal(rNextB))
-                    {
-                        // common edge in opposite direction
-                        if(rNextA.equal(rPrevB))
+                        if(!fTools::equalZero(rfCutA))
                         {
-                            // common edge in opposite direction continues
-                            return;
-                        }
-                        else
-                        {
-                            // common edge in opposite direction leave
-                            impSwitchNext(rPNa, rPNb);
-                        }
-                    }
-                    else if(rNextA.equal(rNextB))
-                    {
-                        // common edge in same direction enter
-                        // search leave edge
-                        PN* pPNa2 = &maPNV[rPNa.mnIN];
-                        PN* pPNb2 = &maPNV[rPNb.mnIN];
-                        bool bOnEdge(true);
+                            const double fZero(0.0);
+                            const double fOne(1.0);
+                            rfCutA = (aVecB.getY() * (rStartB.getX() - rStartA.getX()) + aVecB.getX() * (rStartA.getY() - rStartB.getY())) / rfCutA;
 
-                        do
-                        {
-                            const B2DPoint& rNextA2(maPNV[pPNa2->mnIN].maPoint);
-                            const B2DPoint& rNextB2(maPNV[pPNb2->mnIN].maPoint);
-
-                            if(rNextA2.equal(rNextB2))
+                            if (fTools::betweenOrEqualEither(rfCutA, fZero, fOne))
                             {
-                                pPNa2 = &maPNV[pPNa2->mnIN];
-                                pPNb2 = &maPNV[pPNb2->mnIN];
-                            }
-                            else
-                            {
-                                bOnEdge = false;
-                            }
-                        }
-                        while(bOnEdge && pPNa2 != &rPNa && pPNb2 != &rPNb);
+                                // it's a candidate, but also need to test parameter value of cut on line 2
+                                // choose numerically the more precise version
+                                if(fabs(aVecB.getX()) > fabs(aVecB.getY()))
+                                {
+                                    rfCutB = (rStartA.getX() + (rfCutA * aVecA.getX()) - rStartB.getX()) / aVecB.getX();
+                                }
+                                else
+                                {
+                                    rfCutB = (rStartA.getY() + (rfCutA * aVecA.getY()) - rStartB.getY()) / aVecB.getY();
+                                }
 
-                        if(bOnEdge)
-                        {
-                            // loop over two identical polygon paths
-                            return;
-                        }
-                        else
-                        {
-                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
-                            // at enter/leave. Check for crossover.
-                            const B2DPoint& aPointE(rPNa.maPoint);
-                            const B2DVector aPrevAE(rPrevA - aPointE);
-                            const B2DVector aNextAE(rNextA - aPointE);
-                            const B2DVector aPrevBE(rPrevB - aPointE);
-
-                            const B2DPoint& aPointL(pPNa2->maPoint);
-                            const B2DVector aPrevAL(maPNV[pPNa2->mnIP].maPoint - aPointL);
-                            const B2DVector aNextAL(maPNV[pPNa2->mnIN].maPoint - aPointL);
-                            const B2DVector aNextBL(maPNV[pPNb2->mnIN].maPoint - aPointL);
-
-                            const bool bEnter(impLeftOfEdges(aPrevAE, aNextAE, aPrevBE));
-                            const bool bLeave(impLeftOfEdges(aPrevAL, aNextAL, aNextBL));
-
-                            if(bEnter != bLeave)
-                            {
-                                // crossover; switch start or end
-                                impSwitchNext(rPNa, rPNb);
+                                if (fTools::betweenOrEqualEither(rfCutB, fZero, fOne))
+                                {
+                                    // cut is in range, add point. Two edges can have only one cut, but
+                                    // add a cut point to each list. The lists may be the same for
+                                    // self intersections.
+                                    return true;
+                                }
                             }
                         }
                     }
-                    else if(rNextA.equal(rPrevB))
-                    {
-                        // common edge in opposite direction enter
-                        impSwitchNext(rPNa, rPNb);
-                    }
-                    else
-                    {
-                        // no common edges, check for crossover
-                        const B2DPoint& aPoint(rPNa.maPoint);
-                        const B2DVector aPrevA(rPrevA - aPoint);
-                        const B2DVector aNextA(rNextA - aPoint);
-                        const B2DVector aPrevB(rPrevB - aPoint);
-                        const B2DVector aNextB(rNextB - aPoint);
+                }
 
-                        const bool bEnter(impLeftOfEdges(aPrevA, aNextA, aPrevB));
-                        const bool bLeave(impLeftOfEdges(aPrevA, aNextA, aNextB));
+                return false;
+            }
 
-                        if(bEnter != bLeave)
+            // helper to split given edge in multiple edges using the
+            // TemporaryPoints collected at that edge
+            void splitEdge(Edge& rEdge)
+            {
+                if(!rEdge.getTemporaryPoints().empty())
+                {
+                    std::vector< TemporaryPoint > aTemporaryPoints(rEdge.getTemporaryPoints());
+                    std::sort(aTemporaryPoints.begin(), aTemporaryPoints.end());
+                    Edge* pCurrent(&rEdge);
+                    double fLeftStart(0.0);
+
+                    for(auto const& TempPoint : aTemporaryPoints)
+                    {
+                        if(!TempPoint.getB2DPoint().equal(pCurrent->getNodeA().getB2DPoint())
+                            && !TempPoint.getB2DPoint().equal(pCurrent->getNodeB().getB2DPoint()))
                         {
-                            // crossover
-                            impSwitchNext(rPNa, rPNb);
+                            // use B2DCubicBezier as tooling, works with curves and non-curves
+                            // and hides another else-if
+                            B2DCubicBezier aB2DCubicBezierA(
+                                pCurrent->getNodeA().getB2DPoint(),
+                                pCurrent->getControlA(),
+                                pCurrent->getControlB(),
+                                pCurrent->getNodeB().getB2DPoint());
+                            B2DCubicBezier aB2DCubicBezierB;
+
+                            // split point is relative due to consuming the edge from left to right
+                            // during multiple splits. Take that into account to calculate the real
+                            // relative split point relative to the current split in the range of
+                            // ]0.0 .. 1.0[ in this case excluding 0.0 and 1.0
+                            const double fRelativeSplitPoint((TempPoint.getCut() - fLeftStart) / (1.0 - fLeftStart));
+
+                            aB2DCubicBezierA.split(
+                                fRelativeSplitPoint,
+                                &aB2DCubicBezierA,
+                                &aB2DCubicBezierB);
+
+                            // use the real common split-point here to increase numerical stability.
+                            // That may differ from the calculated SplitPoint using fRelativeSplitPoint.
+                            // Prepare a Vector to also correct associated control points
+                            const B2DVector aDelta(TempPoint.getB2DPoint() - aB2DCubicBezierA.getEndPoint());
+
+                            // create or find Node
+                            Node* pSplit(&const_cast<Node&>(*maNodes.emplace(TempPoint.getB2DPoint()).first));
+                            Node& rOldNodeB(pCurrent->getNodeB());
+
+                            pCurrent->modifyNodeB(
+                                *pSplit,
+                                aB2DCubicBezierA.getControlPointA(),
+                                aB2DCubicBezierA.getControlPointB() + aDelta);
+
+                            Edge* pNewEdge(
+                                new Edge(
+                                    *pSplit,
+                                    rOldNodeB,
+                                    aB2DCubicBezierB.getControlPointA() + aDelta,
+                                    aB2DCubicBezierB.getControlPointB(),
+                                    pCurrent->getOriginalData()));
+
+                            maEdges.push_back(pNewEdge);
+
+                            fLeftStart = TempPoint.getCut();
+                            pCurrent = pNewEdge;
                         }
                     }
                 }
             }
 
-            void impSolve()
+            // Helper to find all cuts (and touches) between two cubical beziers.
+            // The results go to rCutsA/rCutsB. The CubicBezierA maybe already
+            // split and the given one is in the relative range [fMinA .. fMaxA],
+            // same for CubicBezierB.
+            // The basic idea is to do a recursive split finder. Each cubic bezier
+            // is defined to be inside it's range, so to detect if a cut is possible
+            // between the two given cubic beziers, check if their B2DRanges overlap.
+            // If yes, split both in half and recursively call this method four
+            // times with the smaller cubic beziers.
+            // Depth-limitation and precision control is done using the area of the
+            // B2DRange.
+            // High precision is accomplished by assuming both cubic beziers to be
+            // straight lines in the last step and to calculate the needed numerical
+            // value.
+            // This method with a decent weighting of the area criteria shows pretty
+            // good numerical results, asides that it is capable of finding all cuts
+            // between two cubical beziers (nine are possible).
+            // Due to working on helper class B2DCubicBezier one of the cubic beziers
+            // may actually be a straight line already. All implications are true for
+            // this case, too, so this avoids complicated if/elde splitting of cases.
+            static void findCuts(
+                const B2DCubicBezier& rB2DCubicBezierA,
+                const B2DCubicBezier& rB2DCubicBezierB,
+                std::vector< double >& rCutsA,
+                std::vector< double >& rCutsB,
+                double fMinA,
+                double fMaxA,
+                double fMinB,
+                double fMaxB,
+                double fMinArea)
             {
-                // sort by point to identify common nodes easier
-                std::sort(maSNV.begin(), maSNV.end());
+                // get associated ranges
+                const B2DRange aRangeA(rB2DCubicBezierA.getRange());
+                const B2DRange aRangeB(rB2DCubicBezierB.getRange());
 
-                // handle common nodes
-                const sal_uInt32 nNodeCount(maSNV.size());
-                sal_uInt32 a(0);
-
-                // snap unsharp-equal points
-                if(nNodeCount)
+                // chech if these overlap, else no cut is possible and we are done
+                if(aRangeA.overlaps(aRangeB))
                 {
-                    basegfx::B2DPoint* pLast(&maSNV[0].mpPN->maPoint);
+                    // calculate areas of ranges
+                    const double fAreaA(aRangeA.getWidth() * aRangeA.getHeight());
+                    const double fAreaB(aRangeB.getWidth() * aRangeB.getHeight());
 
-                    for(a = 1; a < nNodeCount; a++)
+                    if(fAreaA + fAreaB < fMinArea)
                     {
-                        basegfx::B2DPoint* pCurrent(&maSNV[a].mpPN->maPoint);
+                        // we have reached numerical precision and/or recursion
+                        // depth limit. Take both cubical beziers as straight lines
+                        // and calculate possible cut
+                        double fCutA(0.0);
+                        double fCutB(0.0);
 
-                        if(pLast->equal(*pCurrent) && (pLast->getX() != pCurrent->getX() || pLast->getY() != pCurrent->getY()))
+                        if(findCutOnEdge(
+                            rB2DCubicBezierA.getStartPoint(),
+                            rB2DCubicBezierA.getEndPoint(),
+                            rB2DCubicBezierB.getStartPoint(),
+                            rB2DCubicBezierB.getEndPoint(),
+                            fCutA,
+                            fCutB))
                         {
-                            const basegfx::B2DPoint aMiddle((*pLast + *pCurrent) * 0.5);
+                            rCutsA.push_back(fMinA + ((fMaxA - fMinA) * fCutA));
+                            rCutsB.push_back(fMinB + ((fMaxB - fMinB) * fCutB));
+                        }
+                    }
+                    else
+                    {
+                        // split both cubical beziers in half and call recursively
+                        B2DCubicBezier aB2DCubicBezierLA;
+                        B2DCubicBezier aB2DCubicBezierRA;
+                        rB2DCubicBezierA.split(0.5, &aB2DCubicBezierLA, &aB2DCubicBezierRA);
 
-                            if(pLast->getX() != aMiddle.getX() || pLast->getY() != aMiddle.getY())
+                        B2DCubicBezier aB2DCubicBezierLB;
+                        B2DCubicBezier aB2DCubicBezierRB;
+                        rB2DCubicBezierB.split(0.5, &aB2DCubicBezierLB, &aB2DCubicBezierRB);
+
+                        findCuts(
+                            aB2DCubicBezierLA,
+                            aB2DCubicBezierLB,
+                            rCutsA,
+                            rCutsB,
+                            fMinA,
+                            fMinA + ((fMaxA - fMinA) * 0.5),
+                            fMinB,
+                            fMinB + ((fMaxB - fMinB) * 0.5),
+                            fMinArea);
+
+                        findCuts(
+                            aB2DCubicBezierRA,
+                            aB2DCubicBezierLB,
+                            rCutsA,
+                            rCutsB,
+                            fMinA + ((fMaxA - fMinA) * 0.5),
+                            fMaxA,
+                            fMinB,
+                            fMinB + ((fMaxB - fMinB) * 0.5),
+                            fMinArea);
+
+                        findCuts(
+                            aB2DCubicBezierLA,
+                            aB2DCubicBezierRB,
+                            rCutsA,
+                            rCutsB,
+                            fMinA,
+                            fMinA + ((fMaxA - fMinA) * 0.5),
+                            fMinB + ((fMaxB - fMinB) * 0.5),
+                            fMaxB,
+                            fMinArea);
+
+                        findCuts(
+                            aB2DCubicBezierRA,
+                            aB2DCubicBezierRB,
+                            rCutsA,
+                            rCutsB,
+                            fMinA + ((fMaxA - fMinA) * 0.5),
+                            fMaxA,
+                            fMinB + ((fMaxB - fMinB) * 0.5),
+                            fMaxB,
+                            fMinArea);
+                    }
+                }
+            }
+
+            // helper method to find all cuts and touches on two given Edges
+            static void addPointsAtCuts(
+                Edge& rEdgeA,
+                Edge& rEdgeB)
+            {
+                if(&rEdgeA != &rEdgeB)
+                {
+                    if(rEdgeA.isBezier() || rEdgeB.isBezier())
+                    {
+                        // one of the edges is a cubical beziers, use recursive cubical beziers
+                        // cut finder
+                        const B2DCubicBezier aB2DCubicBezierA(
+                            rEdgeA.getNodeA().getB2DPoint(),
+                            rEdgeA.getControlA(),
+                            rEdgeA.getControlB(),
+                            rEdgeA.getNodeB().getB2DPoint());
+                        const B2DCubicBezier aB2DCubicBezierB(
+                            rEdgeB.getNodeA().getB2DPoint(),
+                            rEdgeB.getControlA(),
+                            rEdgeB.getControlB(),
+                            rEdgeB.getNodeB().getB2DPoint());
+                        const B2DRange aRangeA(aB2DCubicBezierA.getRange());
+                        const B2DRange aRangeB(aB2DCubicBezierB.getRange());
+
+                        if(aRangeA.overlaps(aRangeB))
+                        {
+                            std::vector< double > cutsA;
+                            std::vector< double > cutsB;
+                            const double fAreaA(aRangeA.getWidth() * aRangeA.getHeight());
+                            const double fAreaB(aRangeB.getWidth() * aRangeB.getHeight());
+                            const double fArea((fAreaA + fAreaB) * 0.0001);
+
+                            findCuts(
+                                aB2DCubicBezierA,
+                                aB2DCubicBezierB,
+                                cutsA,
+                                cutsB,
+                                0.0,
+                                1.0,
+                                0.0,
+                                1.0,
+                                fArea);
+
+                            if(!cutsA.empty() && !cutsB.empty() && cutsA.size() == cutsB.size())
                             {
-                                maCorrectionTable.emplace_back(*pLast, aMiddle);
-                                *pLast = aMiddle;
+                                for(size_t a(0); a < cutsA.size(); a++)
+                                {
+                                    const double fCutA(cutsA[a]);
+                                    const double fCutB(cutsB[a]);
+                                    B2DPoint aPointA(aB2DCubicBezierA.getStartPoint());
+                                    B2DPoint aPointB(aB2DCubicBezierB.getStartPoint());
+
+                                    if(0.0 == fCutA)
+                                    {
+                                        // already set as default
+                                    }
+                                    else if(1.0 == fCutA)
+                                    {
+                                        aPointA = aB2DCubicBezierA.getEndPoint();
+                                    }
+                                    else
+                                    {
+                                        aPointA = aB2DCubicBezierA.interpolatePoint(fCutA);
+                                    }
+
+                                    if(0.0 == fCutB)
+                                    {
+                                        // already set as default
+                                    }
+                                    else if(1.0 == fCutB)
+                                    {
+                                        aPointB = aB2DCubicBezierB.getEndPoint();
+                                    }
+                                    else
+                                    {
+                                        aPointB = aB2DCubicBezierB.interpolatePoint(fCutB);
+                                    }
+
+                                    const B2DPoint aPoint(aPointA != aPointB
+                                        ? (aPointA + aPointB) * 0.5
+                                        : aPointA);
+
+                                    rEdgeA.getTemporaryPoints().emplace_back(
+                                        aPoint,
+                                        cutsA[a]);
+                                    rEdgeB.getTemporaryPoints().emplace_back(
+                                        aPoint,
+                                        cutsB[a]);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // The two Edges are straigt lines, directly handle cut
+                        double fCutA(0.0);
+                        double fCutB(0.0);
+
+                        if(findCutOnEdge(
+                            rEdgeA.getNodeA().getB2DPoint(),
+                            rEdgeA.getNodeB().getB2DPoint(),
+                            rEdgeB.getNodeA().getB2DPoint(),
+                            rEdgeB.getNodeB().getB2DPoint(),
+                            fCutA,
+                            fCutB))
+                        {
+                            B2DPoint aPointA(rEdgeA.getNodeA().getB2DPoint());
+                            B2DPoint aPointB(rEdgeB.getNodeA().getB2DPoint());
+
+                            if(0.0 == fCutA)
+                            {
+                                // already set as default
+                            }
+                            else if(1.0 == fCutA)
+                            {
+                                aPointA = rEdgeA.getNodeB().getB2DPoint();
+                            }
+                            else
+                            {
+                                const B2DVector aVecA(rEdgeA.getNodeB().getB2DPoint() - rEdgeA.getNodeA().getB2DPoint());
+                                aPointA += fCutA * aVecA;
                             }
 
-                            if(pCurrent->getX() != aMiddle.getX() || pCurrent->getY() != aMiddle.getY())
+                            if(0.0 == fCutB)
                             {
-                                maCorrectionTable.emplace_back(*pCurrent, aMiddle);
-                                *pCurrent = aMiddle;
+                                // already set as default
+                            }
+                            else if(1.0 == fCutB)
+                            {
+                                aPointB = rEdgeB.getNodeB().getB2DPoint();
+                            }
+                            else
+                            {
+                                const B2DVector aVecB(rEdgeB.getNodeB().getB2DPoint() - rEdgeB.getNodeA().getB2DPoint());
+                                aPointB += fCutB * aVecB;
+                            }
+
+                            const B2DPoint aPoint(aPointA != aPointB
+                                ? (aPointA + aPointB) * 0.5
+                                : aPointA);
+
+                            rEdgeA.getTemporaryPoints().emplace_back(
+                                aPoint,
+                                fCutA);
+                            rEdgeB.getTemporaryPoints().emplace_back(
+                                aPoint,
+                                fCutB);
+                        }
+                    }
+                }
+            }
+
+            // helper to find self-intersections for an Edge. This is
+            // only possible if the Edge is a cubical bezier
+            static void addPointsAtCuts(
+                Edge& rEdge)
+            {
+                if(rEdge.isBezier())
+                {
+                    // the idea is to split the cubical bezier at it's extrema points.
+                    // Those sub-curves are then guaranteed cut-free due to a cut in a
+                    // cubical bezier requiring a extrema value to exist.
+                    const B2DCubicBezier aB2DCubicBezier(
+                        rEdge.getNodeA().getB2DPoint(),
+                        rEdge.getControlA(),
+                        rEdge.getControlB(),
+                        rEdge.getNodeB().getB2DPoint());
+                    std::vector< double > aAllResults;
+
+                    aAllResults.reserve(4);
+                    aB2DCubicBezier.getAllExtremumPositions(aAllResults);
+
+                    const sal_uInt32 nCount(aAllResults.size());
+
+                    if(0 != nCount)
+                    {
+                        // continue if we have extrema values, split curve in a
+                        // local Node/Edge geometry not mixed with the global one
+                        std::sort(aAllResults.begin(), aAllResults.end());
+                        std::vector< Node* > aNodes;
+                        std::vector< Edge* > aEdges;
+
+                        Node* pStartNode(new Node(rEdge.getNodeA().getB2DPoint()));
+                        Node* pEndNode(new Node(rEdge.getNodeB().getB2DPoint()));
+                        aNodes.push_back(pStartNode);
+                        aNodes.push_back(pEndNode);
+                        Edge* pCurrent(
+                            new Edge(
+                                *pStartNode,
+                                *pEndNode,
+                                rEdge.getControlA(),
+                                rEdge.getControlB(),
+                                rEdge.getOriginalData()));
+                        aEdges.push_back(pCurrent);
+                        double fLeftStart(0.0);
+
+                        for(auto const& rResult : aAllResults)
+                        {
+                            B2DCubicBezier aB2DCubicBezierA(
+                                pCurrent->getNodeA().getB2DPoint(),
+                                pCurrent->getControlA(),
+                                pCurrent->getControlB(),
+                                pCurrent->getNodeB().getB2DPoint());
+                            B2DCubicBezier aB2DCubicBezierB;
+                            const double fRelativeSplitPoint((rResult - fLeftStart) / (1.0 - fLeftStart));
+
+                            aB2DCubicBezierA.split(
+                                fRelativeSplitPoint,
+                                &aB2DCubicBezierA,
+                                &aB2DCubicBezierB);
+
+                            Node* pSplit(new Node(aB2DCubicBezierA.getEndPoint()));
+                            aNodes.push_back(pSplit);
+                            Node& rOldNodeB(pCurrent->getNodeB());
+
+                            pCurrent->modifyNodeB(
+                                *pSplit,
+                                aB2DCubicBezierA.getControlPointA(),
+                                aB2DCubicBezierA.getControlPointB());
+
+                            Edge* pNewEdge(
+                                new Edge(
+                                    *pSplit,
+                                    rOldNodeB,
+                                    aB2DCubicBezierB.getControlPointA(),
+                                    aB2DCubicBezierB.getControlPointB(),
+                                    pCurrent->getOriginalData()));
+
+                            aEdges.push_back(pNewEdge);
+
+                            fLeftStart = rResult;
+                            pCurrent = pNewEdge;
+                        }
+
+                        // with the split curves, use existing tooling to find
+                        // cuts
+                        for(size_t a(0); a < aEdges.size(); a++)
+                        {
+                            for(size_t b(a + 1); b < aEdges.size(); b++)
+                            {
+                                // normal intersection between two edges
+                                Edge& rEdgeA(*aEdges[a]);
+                                Edge& rEdgeB(*aEdges[b]);
+
+                                if(rEdgeA.getRange().overlaps(rEdgeB.getRange()))
+                                {
+                                    addPointsAtCuts(
+                                        rEdgeA,
+                                        rEdgeB);
+                                }
                             }
                         }
 
-                        pLast = pCurrent;
-                    }
-                }
+                        // use the collected TemporaryPoints of the temporary edges to
+                        // create the TemporaryPoints for the original Edge
+                        for(size_t c(0); c < aEdges.size(); c++)
+                        {
+                            Edge& rEdgeCandidate(*aEdges[c]);
 
-                for(a = 0; a < nNodeCount - 1; a++)
-                {
-                    // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
-                    PN& rPNb = *(maSNV[a].mpPN);
+                            if(!rEdgeCandidate.getTemporaryPoints().empty())
+                            {
+                                const double fLeft(c == 0 ? 0.0 : aAllResults[c - 1]);
+                                const double fRight(c >= aAllResults.size() ? 1.0 : aAllResults[c]);
+                                const double fScaleFactor(1.0 / (fRight - fLeft));
 
-                    for(sal_uInt32 b(a + 1); b < nNodeCount && rPNb.maPoint.equal(maSNV[b].mpPN->maPoint); b++)
-                    {
-                        impHandleCommon(rPNb, *maSNV[b].mpPN);
+                                for(const auto& rTemporaryPoint : rEdgeCandidate.getTemporaryPoints())
+                                {
+                                    const double fNewCut(fLeft + (rTemporaryPoint.getCut() * fScaleFactor));
+
+                                    rEdgeCandidate.getTemporaryPoints().emplace_back(
+                                        rTemporaryPoint.getB2DPoint(),
+                                        fNewCut);
+                                }
+                            }
+                        }
+
+                        // cleanup temporary Edges
+                        while(!aEdges.empty())
+                        {
+                            Edge* pCand(aEdges.back());
+                            aEdges.pop_back();
+                            delete pCand;
+                        }
+
+                        // cleanup temporary Nodes
+                        while(!aNodes.empty())
+                        {
+                            Node* pCand(aNodes.back());
+                            aNodes.pop_back();
+                            delete pCand;
+                        }
                     }
                 }
             }
 
         public:
-            explicit solver(const B2DPolygon& rOriginal)
-            :   maOriginal(B2DPolyPolygon(rOriginal)),
-                mbIsCurve(false),
-                mbChanged(false)
+            cutter()
+            :   maOriginalDatas(),
+                maNodes(),
+                maEdges()
             {
-                const sal_uInt32 nOriginalCount(rOriginal.count());
+            }
 
-                if(nOriginalCount)
+            ~cutter()
+            {
+                while(!maEdges.empty())
                 {
-                    B2DPolygon aGeometry(utils::addPointsAtCutsAndTouches(rOriginal));
-                    aGeometry.removeDoublePoints();
-                    aGeometry = utils::simplifyCurveSegments(aGeometry);
-                    mbIsCurve = aGeometry.areControlPointsUsed();
+                    Edge* pCand(maEdges.back());
+                    maEdges.pop_back();
+                    delete pCand;
+                }
+            }
 
-                    const sal_uInt32 nPointCount(aGeometry.count());
+            // Add a PolyPolgion to the process. This creates all needed Edges and
+            // Nodes and their associations to build the graph
+            void add(
+                const B2DPolyPolygon& rCand,
+                bool bPositive)
+            {
+                if(0 == rCand.count())
+                {
+                    return;
+                }
 
-                    // If it's not a bezier polygon, at least four points are needed to create
-                    // a self-intersection. If it's a bezier polygon, the minimum point number
-                    // is two, since with a single point You get a curve, but no self-intersection
-                    if(nPointCount > 3 || (nPointCount > 1 && mbIsCurve))
+                // save and hold a reference to the original data
+                maOriginalDatas.emplace_back(
+                    rCand,
+                    bPositive);
+                const OriginalData& rOriginalData(maOriginalDatas.back());
+
+                for(sal_uInt32 a(0); a < rOriginalData.getB2DPolyPolygon().count(); a++)
+                {
+                    const B2DPolygon& rPoly(rOriginalData.getB2DPolyPolygon().getB2DPolygon(a));
+                    const sal_uInt32 nCount(rPoly.count());
+
+                    if(0 != nCount)
                     {
-                        // reserve space in point, control and sort vector.
-                        maSNV.reserve(nPointCount);
-                        maPNV.reserve(nPointCount);
-                        maVNV.reserve(mbIsCurve ? nPointCount : 0);
+                        // create or find Node
+                        Node* pFirst(&const_cast<Node&>(*maNodes.emplace(rPoly.getB2DPoint(0)).first));
+                        Node* pLast(pFirst);
 
-                        // fill data
-                        impAddPolygon(0, aGeometry);
+                        for(sal_uInt32 b(1); b < rPoly.count(); b++)
+                        {
+                            // create or find Node
+                            Node* pNew(&const_cast<Node&>(*maNodes.emplace(rPoly.getB2DPoint(b)).first));
 
-                        // solve common nodes
-                        impSolve();
+                            maEdges.push_back(
+                                new Edge(
+                                    *pLast,
+                                    *pNew,
+                                    rPoly.getNextControlPoint(b - 1),
+                                    rPoly.getPrevControlPoint(b),
+                                    rOriginalData));
+
+                            pLast = pNew;
+                        }
+
+                        maEdges.push_back(
+                            new Edge(
+                                *pLast,
+                                *pFirst,
+                                rPoly.getNextControlPoint(nCount - 1),
+                                rPoly.getPrevControlPoint(0),
+                                rOriginalData));
                     }
                 }
             }
 
-            explicit solver(const B2DPolyPolygon& rOriginal)
-            :   maOriginal(rOriginal),
-                mbIsCurve(false),
-                mbChanged(false)
+            // process the created graph to detect all cuts and touches,
+            // split all Edges so that the graph will be completely cut-free
+            // and all touches are registered
+            void addPointsAtCuts()
             {
-                sal_uInt32 nOriginalCount(maOriginal.count());
-
-                if(nOriginalCount)
+                for(size_t a(0); a < maEdges.size(); a++)
                 {
-                    B2DPolyPolygon aGeometry(utils::addPointsAtCutsAndTouches(maOriginal));
-                    aGeometry.removeDoublePoints();
-                    aGeometry = utils::simplifyCurveSegments(aGeometry);
-                    mbIsCurve = aGeometry.areControlPointsUsed();
-                    nOriginalCount = aGeometry.count();
-
-                    if(nOriginalCount)
+                    for(size_t b(a); b < maEdges.size(); b++)
                     {
-                        sal_uInt32 nPointCount(0);
-                        sal_uInt32 a(0);
-
-                        // count points
-                        for(a = 0; a < nOriginalCount; a++)
+                        if(a == b)
                         {
-                            const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
-                            const sal_uInt32 nCandCount(aCandidate.count());
+                            // test self-intersection, only possible for
+                            // bezier segments
+                            Edge& rEdge(*maEdges[a]);
 
-                            // If it's not a bezier curve, at least three points would be needed to have a
-                            // topological relevant (not empty) polygon. Since it's not known here if trivial
-                            // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
-                            // more than one point.
-                            // For bezier curves, the minimum for defining an area is also one.
-                            if(nCandCount)
+                            addPointsAtCuts(rEdge);
+                        }
+                        else
+                        {
+                            // normal intersection between two edges
+                            Edge& rEdgeA(*maEdges[a]);
+                            Edge& rEdgeB(*maEdges[b]);
+
+                            if(rEdgeA.getRange().overlaps(rEdgeB.getRange()))
                             {
-                                nPointCount += nCandCount;
+                                addPointsAtCuts(
+                                    rEdgeA,
+                                    rEdgeB);
                             }
                         }
+                    }
+                }
 
-                        if(nPointCount)
+                // use the collected TemporaryPoints at Edges and split as needed
+                for(size_t a(0); a < maEdges.size(); a++)
+                {
+                    splitEdge(*maEdges[a]);
+                }
+            }
+
+            // check every edge at it's center point against the other
+            // existing geometries to detect if it is needed or not
+            void consumeEdges()
+            {
+                for(const auto& Edge : maEdges)
+                {
+                    const B2DPoint aCenter(Edge->getCenter());
+
+                    for(const auto& OriginalData : maOriginalDatas)
+                    {
+                        if(&OriginalData != &Edge->getOriginalData())
                         {
-                            // reserve space in point, control and sort vector.
-                            maSNV.reserve(nPointCount);
-                            maPNV.reserve(nPointCount);
-                            maVNV.reserve(mbIsCurve ? nPointCount : 0);
+                            const bool bInside(utils::isInside(OriginalData.getB2DPolyPolygon(), aCenter, true));
 
-                            // fill data
-                            sal_uInt32 nInsertIndex(0);
-
-                            for(a = 0; a < nOriginalCount; a++)
+                            if(bInside && OriginalData.isPositive())
                             {
-                                const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
-                                const sal_uInt32 nCandCount(aCandidate.count());
-
-                                // use same condition as above, the data vector is
-                                // pre-allocated
-                                if(nCandCount)
-                                {
-                                    impAddPolygon(nInsertIndex, aCandidate);
-                                    nInsertIndex += nCandCount;
-                                }
+                                // Edge can be deleted if inside one of the polygons
+                                Edge->consume();
+                                break;
                             }
-
-                            // solve common nodes
-                            impSolve();
+                            else if(!bInside && !OriginalData.isPositive())
+                            {
+                                // Edge can be deleted if outside one of the polygons
+                                Edge->consume();
+                                break;
+                            }
                         }
                     }
                 }
             }
 
-            B2DPolyPolygon getB2DPolyPolygon()
+            // Re-create the geometry from the Graph
+            B2DPolyPolygon extract()
             {
-                if(mbChanged)
+                B2DPolyPolygon aRetval;
+
+                while(true)
                 {
-                    B2DPolyPolygon aRetval;
-                    const sal_uInt32 nCount(maPNV.size());
-                    sal_uInt32 nCountdown(nCount);
+                    // choose a start node
+                    Node* pStartNode(nullptr);
 
-                    for(sal_uInt32 a(0); nCountdown && a < nCount; a++)
+                    for(std::set<Node>::iterator aNode(maNodes.begin()); nullptr == pStartNode && aNode != maNodes.end(); aNode++)
                     {
-                        PN& rPN = maPNV[a];
-
-                        if(rPN.mnI != SAL_MAX_UINT32)
+                        if(aNode->hasEdges())
                         {
-                            // unused node, start new part polygon
-                            B2DPolygon aNewPart;
-                            PN* pPNCurr = &rPN;
-
-                            do
-                            {
-                                const B2DPoint& rPoint = pPNCurr->maPoint;
-                                aNewPart.append(rPoint);
-
-                                if(mbIsCurve)
-                                {
-                                    const VN& rVNCurr = maVNV[pPNCurr->mnI];
-
-                                    if(!rVNCurr.maPrev.equalZero())
-                                    {
-                                        aNewPart.setPrevControlPoint(aNewPart.count() - 1, rPoint + rVNCurr.maPrev);
-                                    }
-
-                                    if(!rVNCurr.maNext.equalZero())
-                                    {
-                                        aNewPart.setNextControlPoint(aNewPart.count() - 1, rPoint + rVNCurr.maNext);
-                                    }
-                                }
-
-                                pPNCurr->mnI = SAL_MAX_UINT32;
-                                nCountdown--;
-                                pPNCurr = &(maPNV[pPNCurr->mnIN]);
-                            }
-                            while(pPNCurr != &rPN && pPNCurr->mnI != SAL_MAX_UINT32);
-
-                            // close and add
-                            aNewPart.setClosed(true);
-                            aRetval.append(aNewPart);
+                            pStartNode = &const_cast<Node&>(*aNode);
                         }
                     }
 
-                    return aRetval;
+                    // if no more start nodes, we are done
+                    if(nullptr == pStartNode)
+                    {
+                        return aRetval;
+                    }
+
+                    // extract a partial B2DPolygon starting at the detected
+                    // start node and following the associated Edges
+                    B2DPolygon aNew;
+                    Node* pCurrentNode(pStartNode);
+                    aNew.append(pCurrentNode->getB2DPoint());
+
+                    while(pCurrentNode->hasEdges())
+                    {
+                        Edge* pEdge(pCurrentNode->getEdge());
+                        aNew.setNextControlPoint(aNew.count() - 1, pEdge->getControl(*pCurrentNode));
+                        Node* pNextNode(&pEdge->getOther(*pCurrentNode));
+
+                        if(pStartNode == pNextNode)
+                        {
+                            aNew.setPrevControlPoint(0, pEdge->getControl(*pNextNode));
+                        }
+                        else
+                        {
+                            aNew.append(pNextNode->getB2DPoint());
+                            aNew.setPrevControlPoint(aNew.count() - 1, pEdge->getControl(*pNextNode));
+                        }
+
+                        pEdge->consume();
+                        pCurrentNode = pNextNode;
+                    }
+
+                    aNew.setClosed(true);
+                    aRetval.append(aNew);
                 }
-                else
-                {
-                    const sal_uInt32 nCorrectionSize(maCorrectionTable.size());
 
-                    // no change, return original
-                    if(!nCorrectionSize)
-                    {
-                        return maOriginal;
-                    }
-
-                    // apply coordinate corrections to ensure inside/outside correctness after solving
-                    const sal_uInt32 nPolygonCount(maOriginal.count());
-                    basegfx::B2DPolyPolygon aRetval(maOriginal);
-
-                    for(sal_uInt32 a(0); a < nPolygonCount; a++)
-                    {
-                        basegfx::B2DPolygon aTemp(aRetval.getB2DPolygon(a));
-                        const sal_uInt32 nPointCount(aTemp.count());
-                        bool bChanged(false);
-
-                        for(sal_uInt32 b(0); b < nPointCount; b++)
-                        {
-                            const basegfx::B2DPoint aCandidate(aTemp.getB2DPoint(b));
-
-                            for(sal_uInt32 c(0); c < nCorrectionSize; c++)
-                            {
-                                if(maCorrectionTable[c].first.getX() == aCandidate.getX() && maCorrectionTable[c].first.getY() == aCandidate.getY())
-                                {
-                                    aTemp.setB2DPoint(b, maCorrectionTable[c].second);
-                                    bChanged = true;
-                                }
-                            }
-                        }
-
-                        if(bChanged)
-                        {
-                            aRetval.setB2DPolygon(a, aTemp);
-                        }
-                    }
-
-                    return aRetval;
-                }
+                return aRetval;
             }
         };
-
     } // end of anonymous namespace
 } // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -687,21 +1140,19 @@ namespace basegfx
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
-            if(rCandidate.count() > 0)
+            if(0 != rCandidate.count())
             {
-                solver aSolver(rCandidate);
-                return aSolver.getB2DPolyPolygon();
+                cutter aCutter;
+
+                aCutter.add(rCandidate, true);
+                aCutter.addPointsAtCuts();
+
+                return aCutter.extract();
             }
             else
             {
                 return rCandidate;
             }
-        }
-
-        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
-        {
-            solver aSolver(rCandidate);
-            return aSolver.getB2DPolyPolygon();
         }
 
         B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
@@ -723,17 +1174,8 @@ namespace basegfx
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
-            B2DPolyPolygon aCandidate;
-
             // remove all self-intersections and intersections
-            if(rCandidate.count() == 1)
-            {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate.getB2DPolygon(0));
-            }
-            else
-            {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate);
-            }
+            B2DPolyPolygon aCandidate(basegfx::utils::solveCrossovers(rCandidate));
 
             // cleanup evtl. neutral polygons
             aCandidate = basegfx::utils::stripNeutralPolygons(aCandidate);
@@ -743,6 +1185,13 @@ namespace basegfx
 
             if(nCount > 1)
             {
+                struct StripHelper
+                {
+                    B2DRange                                maRange;
+                    sal_Int32                               mnDepth;
+                    B2VectorOrientation                     meOrinetation;
+                };
+
                 sal_uInt32 a, b;
                 std::vector< StripHelper > aHelpers;
                 aHelpers.resize(nCount);
@@ -807,121 +1256,15 @@ namespace basegfx
             return aCandidate;
         }
 
-        B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
-        {
-            const sal_uInt32 nCount(rCandidate.count());
-            B2DPolyPolygon aRetval;
-
-            if(nCount)
-            {
-                if(nCount == 1)
-                {
-                    if(!bKeepAboveZero && utils::getOrientation(rCandidate.getB2DPolygon(0)) == B2VectorOrientation::Positive)
-                    {
-                        aRetval = rCandidate;
-                    }
-                }
-                else
-                {
-                    sal_uInt32 a, b;
-                    std::vector< StripHelper > aHelpers;
-                    aHelpers.resize(nCount);
-
-                    for(a = 0; a < nCount; a++)
-                    {
-                        const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                        StripHelper* pNewHelper = &(aHelpers[a]);
-                        pNewHelper->maRange = utils::getRange(aCandidate);
-                        pNewHelper->meOrinetation = utils::getOrientation(aCandidate);
-                        pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 0);
-                    }
-
-                    for(a = 0; a < nCount - 1; a++)
-                    {
-                        const B2DPolygon aCandA(rCandidate.getB2DPolygon(a));
-                        StripHelper& rHelperA = aHelpers[a];
-
-                        for(b = a + 1; b < nCount; b++)
-                        {
-                            const B2DPolygon aCandB(rCandidate.getB2DPolygon(b));
-                            StripHelper& rHelperB = aHelpers[b];
-                            const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
-                            const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && utils::isInside(aCandA, aCandB, true));
-
-                            if(bAInB && bBInA)
-                            {
-                                // congruent
-                                if(rHelperA.meOrinetation == rHelperB.meOrinetation)
-                                {
-                                    // two polys or two holes. Lower one of them to get one of them out of the way.
-                                    // Since each will be contained in the other one, both will be increased, too.
-                                    // So, for lowering, increase only one of them
-                                    rHelperA.mnDepth++;
-                                }
-                                else
-                                {
-                                    // poly and hole. They neutralize, so get rid of both. Move securely below zero.
-                                    rHelperA.mnDepth = - static_cast<sal_Int32>(nCount);
-                                    rHelperB.mnDepth = - static_cast<sal_Int32>(nCount);
-                                }
-                            }
-                            else
-                            {
-                                if(bAInB)
-                                {
-                                    if(rHelperB.meOrinetation == B2VectorOrientation::Negative)
-                                    {
-                                        rHelperA.mnDepth--;
-                                    }
-                                    else
-                                    {
-                                        rHelperA.mnDepth++;
-                                    }
-                                }
-                                else if(bBInA)
-                                {
-                                    if(rHelperA.meOrinetation == B2VectorOrientation::Negative)
-                                    {
-                                        rHelperB.mnDepth--;
-                                    }
-                                    else
-                                    {
-                                        rHelperB.mnDepth++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    for(a = 0; a < nCount; a++)
-                    {
-                        const StripHelper& rHelper = aHelpers[a];
-                        bool bAcceptEntry(bKeepAboveZero ? 1 <= rHelper.mnDepth : rHelper.mnDepth == 0);
-
-                        if(bAcceptEntry)
-                        {
-                            aRetval.append(rCandidate.getB2DPolygon(a));
-                        }
-                    }
-                }
-            }
-
-            return aRetval;
-        }
-
-        B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate)
-        {
-            solver aSolver(rCandidate);
-            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
-
-            return correctOrientations(aRetval);
-        }
-
         B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate)
         {
-            solver aSolver(rCandidate);
-            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
+            cutter aCutter;
 
+            aCutter.add(rCandidate, true);
+            aCutter.addPointsAtCuts();
+
+            B2DPolyPolygon aRetval(aCutter.extract());
+            aRetval = stripNeutralPolygons(aRetval);
             return correctOrientations(aRetval);
         }
 
@@ -937,15 +1280,14 @@ namespace basegfx
             }
             else
             {
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // which have a depth other than 0.
-                B2DPolyPolygon aRetval(rCandidateA);
+                cutter aCutter;
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
+                aCutter.add(rCandidateA, true);
+                aCutter.add(rCandidateB, true);
+                aCutter.addPointsAtCuts();
+                aCutter.consumeEdges();
 
-                return stripDispensablePolygons(aRetval);
+                return aCutter.extract();
             }
         }
 
@@ -961,16 +1303,31 @@ namespace basegfx
             }
             else
             {
-                // XOR is pretty simple: By definition it is the simple concatenation of
-                // the single polygons since we imply XOR fill rule. Make it intersection-free
-                // and correct orientations
-                B2DPolyPolygon aRetval(rCandidateA);
+                static bool bCheckNewClip(true);
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
+                if(bCheckNewClip)
+                {
+                    // XOR is pretty simple: By definition it is the simple concatenation of
+                    // the single polygons since we imply XOR fill rule (even-odd).
+                    B2DPolyPolygon aRetval(rCandidateA);
 
-                return correctOrientations(aRetval);
+                    aRetval.append(rCandidateB);
+
+                    return aRetval;
+                }
+                else
+                {
+                    // XOR is pretty simple: By definition it is the simple concatenation of
+                    // the single polygons since we imply XOR fill rule. Make it intersection-free
+                    // and correct orientations
+                    B2DPolyPolygon aRetval(rCandidateA);
+
+                    aRetval.append(rCandidateB);
+                    aRetval = solveCrossovers(aRetval);
+                    aRetval = stripNeutralPolygons(aRetval);
+
+                    return correctOrientations(aRetval);
+                }
             }
         }
 
@@ -986,16 +1343,14 @@ namespace basegfx
             }
             else
             {
-                // concatenate polygons, solve crossovers and throw away all sub-polygons
-                // with a depth of < 1. This means to keep all polygons where at least two
-                // polygons do overlap.
-                B2DPolyPolygon aRetval(rCandidateA);
+                cutter aCutter;
 
-                aRetval.append(rCandidateB);
-                aRetval = solveCrossovers(aRetval);
-                aRetval = stripNeutralPolygons(aRetval);
+                aCutter.add(rCandidateA, false);
+                aCutter.add(rCandidateB, false);
+                aCutter.addPointsAtCuts();
+                aCutter.consumeEdges();
 
-                return stripDispensablePolygons(aRetval, true);
+                return aCutter.extract();
             }
         }
 
@@ -1011,99 +1366,30 @@ namespace basegfx
             }
             else
             {
-                // Make B topologically to holes and append to A
-                B2DPolyPolygon aRetval(rCandidateB);
+                cutter aCutter;
 
-                aRetval.flip();
-                aRetval.append(rCandidateA);
+                aCutter.add(rCandidateA, false);
+                aCutter.add(rCandidateB, true);
+                aCutter.addPointsAtCuts();
+                aCutter.consumeEdges();
 
-                // solve crossovers and throw away all sub-polygons which have a
-                // depth other than 0.
-                aRetval = basegfx::utils::solveCrossovers(aRetval);
-                aRetval = basegfx::utils::stripNeutralPolygons(aRetval);
-
-                return basegfx::utils::stripDispensablePolygons(aRetval);
+                return aCutter.extract();
             }
         }
 
         B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput)
         {
-            B2DPolyPolygonVector aInput(rInput);
+            cutter aCutter;
 
-            // first step: prepareForPolygonOperation and simple merge of non-overlapping
-            // PolyPolygons for speedup; this is possible for the wanted OR-operation
-            if(!aInput.empty())
+            for(const basegfx::B2DPolyPolygon& aCandidate : rInput)
             {
-                B2DPolyPolygonVector aResult;
-                aResult.reserve(aInput.size());
-
-                for(basegfx::B2DPolyPolygon & a : aInput)
-                {
-                    const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(a));
-
-                    if(!aResult.empty())
-                    {
-                        const B2DRange aCandidateRange(aCandidate.getB2DRange());
-                        bool bCouldMergeSimple(false);
-
-                        for(auto & b: aResult)
-                        {
-                            basegfx::B2DPolyPolygon aTarget(b);
-                            const B2DRange aTargetRange(aTarget.getB2DRange());
-
-                            if(!aCandidateRange.overlaps(aTargetRange))
-                            {
-                                aTarget.append(aCandidate);
-                                b = aTarget;
-                                bCouldMergeSimple = true;
-                                break;
-                            }
-                        }
-
-                        if(!bCouldMergeSimple)
-                        {
-                            aResult.push_back(aCandidate);
-                        }
-                    }
-                    else
-                    {
-                        aResult.push_back(aCandidate);
-                    }
-                }
-
-                aInput = aResult;
+                aCutter.add(aCandidate, true);
             }
 
-            // second step: melt pairwise to a single PolyPolygon
-            while(aInput.size() > 1)
-            {
-                B2DPolyPolygonVector aResult;
-                aResult.reserve((aInput.size() / 2) + 1);
+            aCutter.addPointsAtCuts();
+            aCutter.consumeEdges();
 
-                for(size_t a(0); a < aInput.size(); a += 2)
-                {
-                    if(a + 1 < aInput.size())
-                    {
-                        // a pair for processing
-                        aResult.push_back(solvePolygonOperationOr(aInput[a], aInput[a + 1]));
-                    }
-                    else
-                    {
-                        // last single PolyPolygon; copy to target to not lose it
-                        aResult.push_back(aInput[a]);
-                    }
-                }
-
-                aInput = aResult;
-            }
-
-            // third step: get result
-            if(aInput.size() == 1)
-            {
-                return aInput[0];
-            }
-
-            return B2DPolyPolygon();
+            return aCutter.extract();
         }
 
     } // end of namespace utils

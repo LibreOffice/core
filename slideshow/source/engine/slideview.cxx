@@ -143,10 +143,7 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 
     // normalize polygon, preparation for clipping
     // in updateCanvas()
-    aClip = basegfx::utils::correctOrientations(aClip);
-    aClip = basegfx::utils::solveCrossovers(aClip);
-    aClip = basegfx::utils::stripNeutralPolygons(aClip);
-    aClip = basegfx::utils::stripDispensablePolygons(aClip);
+    aClip = basegfx::utils::prepareForPolygonOperation(aClip);
 
     return aClip;
 }
