@@ -47,6 +47,7 @@ public:
     PdfExportTest();
     virtual void setUp() override;
     virtual void tearDown() override;
+    void topdf(const OUString& rFile);
     void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
@@ -59,6 +60,7 @@ public:
     void testTdf106206();
     /// Tests export of PDF images without reference XObjects.
     void testTdf106693();
+    void testForcePoint71();
     void testTdf106972();
     void testTdf106972Pdf17();
     void testTdf107013();
@@ -95,6 +97,7 @@ public:
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
     CPPUNIT_TEST(testTdf106693);
+    CPPUNIT_TEST(testForcePoint71);
     CPPUNIT_TEST(testTdf106972);
     CPPUNIT_TEST(testTdf106972Pdf17);
     CPPUNIT_TEST(testTdf107013);
@@ -170,7 +173,7 @@ void PdfExportTest::tearDown()
 
 char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
 
-void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
+void PdfExportTest::topdf(const OUString& rFile)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
@@ -181,6 +184,11 @@ void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocum
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
+void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
+{
+    topdf(rFile);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1448,6 +1456,12 @@ void PdfExportTest::testTdf113143()
 
     // This failed, both were 319, now nSmaller is 169.
     CPPUNIT_ASSERT_LESS(nLarger, nSmaller);
+}
+
+void PdfExportTest::testForcePoint71()
+{
+    // I just care it doesn't crash
+    topdf("forcepoint71.key");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
