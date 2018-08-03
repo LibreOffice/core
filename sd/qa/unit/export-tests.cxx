@@ -1108,7 +1108,14 @@ void SdExportTest::testTdf113822()
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
-    assertXPath(pXmlDoc, "//anim:set[1]", "to", "solid");
+
+    // IterateContainer was created as ParallelTimeContainer before, so
+    // the iterate type is not set too.
+    assertXPath(pXmlDoc, "//anim:iterate", "iterate-type", "by-letter");
+    // The target of the child animation nodes need to be in the iterate container.
+    assertXPath(pXmlDoc, "//anim:iterate", "targetElement", "id1");
+    assertXPath(pXmlDoc, "//anim:iterate/anim:set", "attributeName", "text-underline");
+    assertXPath(pXmlDoc, "//anim:iterate/anim:set", "to", "solid");
 
     xDocShRef->DoClose();
 }
