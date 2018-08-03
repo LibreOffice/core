@@ -1150,9 +1150,9 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 double fY =-dx * sin( a );
                 rReturnPosition =
                     Point(
-                        svx::Round( fX + aReferencePoint.X() ),
+                        FRound( fX + aReferencePoint.X() ),
                         basegfx::fTools::equalZero(fXScale) ? aReferencePoint.Y() :
-                        svx::Round( ( fY * fYScale ) / fXScale + aReferencePoint.Y() ) );
+                        FRound( ( fY * fYScale ) / fXScale + aReferencePoint.Y() ) );
             }
             else
             {
