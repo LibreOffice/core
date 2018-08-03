@@ -166,15 +166,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUSBReceiver, filter);
         // init UI and populate with contents from the provider
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.i(LOGTAG, "no permission to read external storage - asking for permission");
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSION_READ_EXTERNAL_STORAGE);
-        } else {
-            switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
-            setEditFABVisibility(View.VISIBLE);
-        }
+
 
         createUI();
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
@@ -946,6 +938,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     @Override
     protected void onStart() {
         super.onStart();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(LOGTAG, "no permission to read external storage - asking for permission");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_READ_EXTERNAL_STORAGE);
+        } else {
+            switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
+            setEditFABVisibility(View.VISIBLE);
+        }
         Log.d(LOGTAG, "onStart");
     }
 
