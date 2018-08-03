@@ -321,18 +321,18 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     if (bRet) {
         double cs=cos(nTmpAngle*nPi180);
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
-        nRad=std::abs(svx::Round(nR));
+        nRad=std::abs(FRound(nR));
     }
     if (dAngle<18000) {
         nCircStAngle=NormAngle360(nTangAngle-9000);
         nCircRelAngle=NormAngle360(2*dAngle);
-        aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle+9000)*nPi180)) );
-        aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle+9000)*nPi180))) );
+        aCircCenter.AdjustX(FRound(nRad*cos((nTangAngle+9000)*nPi180)) );
+        aCircCenter.AdjustY( -(FRound(nRad*sin((nTangAngle+9000)*nPi180))) );
     } else {
         nCircStAngle=NormAngle360(nTangAngle+9000);
         nCircRelAngle=-NormAngle360(36000-2*dAngle);
-        aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle-9000)*nPi180)) );
-        aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle-9000)*nPi180))) );
+        aCircCenter.AdjustX(FRound(nRad*cos((nTangAngle-9000)*nPi180)) );
+        aCircCenter.AdjustY( -(FRound(nRad*sin((nTangAngle-9000)*nPi180))) );
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
@@ -454,8 +454,8 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         double sn=sin(a);
         double cs=cos(a);
         double nGKathLen=nHypLen*sn;
-        y+=svx::Round(nGKathLen*sn);
-        x+=svx::Round(nGKathLen*cs);
+        y+=FRound(nGKathLen*sn);
+        x+=FRound(nGKathLen*cs);
     }
     aRectP2.AdjustX(x );
     aRectP2.AdjustY(y );
