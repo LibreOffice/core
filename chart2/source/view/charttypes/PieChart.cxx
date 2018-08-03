@@ -748,18 +748,6 @@ bool lcl_isInsidePage( const awt::Point& rPos, const awt::Size& rSize, const awt
     return true;
 }
 
-inline
-double lcl_radToDeg(double fAngleRad)
-{
-    return (fAngleRad / M_PI) * 180.0;
-}
-
-inline
-double lcl_degToRad(double fAngleDeg)
-{
-    return (fAngleDeg / 180) * M_PI;
-}
-
 }//end anonymous namespace
 
 PieChart::PieLabelInfo::PieLabelInfo()
@@ -1326,7 +1314,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // -45 <= fAlphaDeg < 315
     double fAlphaDeg = NormAngle360(fBisectingRayAngleDeg + 45) - 45;
-    double fAlphaRad = lcl_degToRad(fAlphaDeg);
+    double fAlphaRad = basegfx::deg2rad(fAlphaDeg);
 
     // compute nearest edge index
     // 0 left
@@ -1470,9 +1458,9 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     aVertexG[nOrthogonalAxisIndex] += aDirection[nOrthogonalAxisIndex] * fOrthogonalEdgeLength;
 
     SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      beta = " << lcl_radToDeg(fBetaRad) );
+              "      beta = " << basegfx::rad2deg(fBetaRad) );
     SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      theta = " << lcl_radToDeg(fThetaRad) );
+              "      theta = " << basegfx::rad2deg(fThetaRad) );
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "        fAlphaMod90 = " << fAlphaMod90 );
     SAL_INFO( "chart2.pie.label.bestfit.inside",
@@ -1498,7 +1486,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // check the angle between CP and CM
     double fAngleRad = aPositionalVector.angle(aVertexM);
-    double fAngleDeg = NormAngle360(lcl_radToDeg(fAngleRad));
+    double fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
     if( fAngleDeg > 180 )  // in case the wrong angle has been computed
         fAngleDeg = 360 - fAngleDeg;
     SAL_INFO( "chart2.pie.label.bestfit.inside",
@@ -1513,7 +1501,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     {
         // check the angle between CP and CN
         fAngleRad = aPositionalVector.angle(aNearestVertex);
-        fAngleDeg = NormAngle360(lcl_radToDeg(fAngleRad));
+        fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
         if( fAngleDeg > 180 )  // in case the wrong angle has been computed
             fAngleDeg = 360 - fAngleDeg;
         SAL_INFO( "chart2.pie.label.bestfit.inside",
@@ -1527,7 +1515,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     {
         // check the angle between CP and CG
         fAngleRad = aPositionalVector.angle(aVertexG);
-        fAngleDeg = NormAngle360(lcl_radToDeg(fAngleRad));
+        fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
         if( fAngleDeg > 180 )  // in case the wrong angle has been computed
             fAngleDeg = 360 - fAngleDeg;
         SAL_INFO( "chart2.pie.label.bestfit.inside",
