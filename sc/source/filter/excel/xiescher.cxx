@@ -3496,7 +3496,7 @@ bool XclImpDffConverter::SupportsOleObjects() const
 // virtual functions ----------------------------------------------------------
 
 void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
-        DffRecordHeader& rHeader, void* /*pClientData*/, DffObjData& rObjData )
+        DffRecordHeader& rHeader, SvxMSDffClientData& /*rClientData*/, DffObjData& rObjData )
 {
     // find the OBJ record data related to the processed shape
     XclImpDffConvData& rConvData = GetConvData();
@@ -3519,8 +3519,19 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
     }
 }
 
+struct XclImpDrawObjClientData : public SvxMSDffClientData
+{
+    const XclImpDrawObjBase* m_pDrawObj;
+
+    XclImpDrawObjClientData()
+        : m_pDrawObj(nullptr)
+    {
+    }
+    virtual void NotifyFreeObj(SdrObject*) override {}
+};
+
 SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffObjData,
-        void* pClientData, tools::Rectangle& /*rTextRect*/, SdrObject* pOldSdrObj )
+        SvxMSDffClientData& rClientData, tools::Rectangle& /*rTextRect*/, SdrObject* pOldSdrObj )
 {
     XclImpDffConvData& rConvData = GetConvData();
 
@@ -3541,10 +3552,11 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     /*  Pass pointer to top-level object back to caller. If the processed
         object is embedded in a group, the pointer is already set to the
         top-level parent object. */
-    XclImpDrawObjBase** ppTopLevelObj = static_cast< XclImpDrawObjBase** >( pClientData );
-    bool bIsTopLevel = !ppTopLevelObj || !*ppTopLevelObj;
-    if( ppTopLevelObj && bIsTopLevel )
-        *ppTopLevelObj = xDrawObj.get();
+    XclImpDrawObjClientData& rDrawObjClientData = static_cast<XclImpDrawObjClientData&>(rClientData);
+    const XclImpDrawObjBase* pTopLevelObj = rDrawObjClientData.m_pDrawObj;
+    const bool bIsTopLevel = !pTopLevelObj;
+    if (bIsTopLevel )
+        pTopLevelObj = xDrawObj.get();
 
     // connectors don't have to be area objects
     if( dynamic_cast< SdrEdgeObj* >( xSdrObj.get() ) )
@@ -3786,16 +3798,16 @@ bool XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
 {
     rShHeader.SeekToBegOfRecord( rDffStrm );
     tools::Rectangle aDummy;
-    const XclImpDrawObjBase* pDrawObj = nullptr;
+    XclImpDrawObjClientData aDrawObjClientData;
     /*  The call to ImportObj() creates and returns a new SdrObject for the
         processed shape. We take ownership of the returned object here. If the
         shape is a group object, all embedded objects are created recursively,
         and the returned group object contains them all. ImportObj() calls the
         virtual functions ProcessClientAnchor2() and ProcessObj() and writes
-        the pointer to the related draw object data (OBJ record) into pDrawObj. */
-    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy, /*nCalledByGroup*/0, /*pShapeId*/nullptr ) );
-    if( pDrawObj && xSdrObj )
-        InsertSdrObject( GetConvData().mrSdrPage, *pDrawObj, xSdrObj.release() );
+        the pointer to the related draw object data (OBJ record) into aDrawObjClientData. */
+    SdrObjectPtr xSdrObj( ImportObj( rDffStrm, aDrawObjClientData, aDummy, aDummy, /*nCalledByGroup*/0, /*pShapeId*/nullptr ) );
+    if (aDrawObjClientData.m_pDrawObj && xSdrObj )
+        InsertSdrObject( GetConvData().mrSdrPage, *aDrawObjClientData.m_pDrawObj, xSdrObj.release() );
     return rShHeader.SeekToEndOfRecord( rDffStrm );
 }
 

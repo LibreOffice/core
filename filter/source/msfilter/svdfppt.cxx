@@ -558,7 +558,7 @@ bool SdrEscherImport::GetColorFromPalette(sal_uInt16 /*nNum*/, Color& /*rColor*/
     return false;
 }
 
-bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, void* /*pClientData*/, sal_uInt32 /*nId*/) const
+bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, SvxMSDffClientData* /*pClientData*/, sal_uInt32 /*nId*/) const
 {
     return false;
 }
@@ -576,7 +576,7 @@ SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pO
     return pObj;
 }
 
-void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* /*pData*/, DffObjData& rObj )
+void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, SvxMSDffClientData& /*rData*/, DffObjData& rObj )
 {
     sal_Int32 l, t, r, b;
     if ( rHd.nRecLen == 16 )
@@ -711,10 +711,8 @@ sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
     return nEndRecPos;
 }
 
-void SdrEscherImport::NotifyFreeObj(void* pData, SdrObject* pObj)
+void ProcessData::NotifyFreeObj(SdrObject* pObj)
 {
-    ProcessData& rData = *static_cast<ProcessData*>(pData);
-    PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
     if (rPersistEntry.xSolverContainer)
     {
         for (auto & pPtr : rPersistEntry.xSolverContainer->aCList)
@@ -729,13 +727,18 @@ void SdrEscherImport::NotifyFreeObj(void* pData, SdrObject* pObj)
     }
 }
 
+void SdrEscherImport::NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
+{
+    rData.NotifyFreeObj(pObj);
+}
+
 /* ProcessObject is called from ImplSdPPTImport::ProcessObj to handle all application specific things,
    such as the import of text, animation effects, header footer and placeholder.
 
    The parameter pOriginalObj is the object as it was imported by our general escher import, it must either
    be deleted or it can be returned to be inserted into the sdr page.
 */
-SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, tools::Rectangle& rTextRect, SdrObject* pOriginalObj )
+SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
     if ( dynamic_cast<const SdrObjCustomShape* >(pOriginalObj) !=  nullptr )
         pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
@@ -743,7 +746,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     // we are initializing our return value with the object that was imported by our escher import
     SdrObject* pRet = pOriginalObj;
 
-    ProcessData& rData = *static_cast<ProcessData*>(pData);
+    ProcessData& rData = static_cast<ProcessData&>(rClientData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
 
     if ( ! (rObjData.nSpFlags & ShapeFlag::Group) )     // sj: #114758# ...
@@ -1218,7 +1221,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             maShapeRecords.Current()->SeekToBegOfRecord( rSt );
             DffPropertyReader aSecPropSet( *this );
-            aSecPropSet.ReadPropSet( rSt, pData );
+            aSecPropSet.ReadPropSet( rSt, &rClientData );
             sal_Int32 nTableProperties = aSecPropSet.GetPropertyValue( DFF_Prop_tableProperties, 0 );
             if ( nTableProperties & 3 )
             {
@@ -2595,7 +2598,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
     return true;
 }
 
-bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const
+bool SdrPowerPointImport::SeekToShape( SvStream& rSt, SvxMSDffClientData* pClientData, sal_uInt32 nId ) const
 {
     bool bRet = SvxMSDffManager::SeekToShape( rSt, pClientData, nId );
     if (!bRet && pClientData)
@@ -2832,7 +2835,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 // do not follow master colorscheme?
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aPageSize, aPageSize, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, aProcessData, aPageSize, aPageSize, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
                                                 rStCtrl.Seek( nPos );
                                             }
                                         }
@@ -2848,7 +2851,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( ShapeFlag(nSpFlags) & ShapeFlag::Background )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aPageSize, aPageSize, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, aProcessData, aPageSize, aPageSize, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
                                             }
                                         }
                                     }
@@ -2889,7 +2892,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 sal_Int32 nShapeId;
                                                 aProcessData.pTableRowProperties.reset();
-                                                SdrObject* pObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aEmpty, aEmpty, 0, &nShapeId );
+                                                SdrObject* pObj = ImportObj( rStCtrl, aProcessData, aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
