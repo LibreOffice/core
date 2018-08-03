@@ -750,7 +750,7 @@ enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_FIELD = 0x2 };
 class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
-    WW8PLCFspecial* pBook[2];           // Start and End Position
+    std::unique_ptr<WW8PLCFspecial> pBook[2];           // Start and End Position
     std::vector<OUString> aBookNames;   // Name
     std::vector<eBookStatus> aStatus;
     long nIMax;                         // Number of Booknotes
