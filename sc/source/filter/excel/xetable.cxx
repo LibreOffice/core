@@ -2463,6 +2463,9 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     if(nLastUsedScCol > nMaxScCol)
         nLastUsedScCol = nMaxScCol;
 
+    // check extra blank rows to avoid of losing their not default settings (workaround for tdf#41425)
+    nLastUsedScRow += 1000;
+
     if(nLastUsedScRow > nMaxScRow)
         nLastUsedScRow = nMaxScRow;
 

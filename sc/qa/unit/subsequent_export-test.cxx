@@ -217,6 +217,7 @@ public:
     void testPivotTableOutlineModeXLSX();
     void testPivotTableDuplicatedMemberFilterXLSX();
     void testPivotTableTabularModeXLSX();
+    void testKeepSettingsOfBlankRows();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -334,6 +335,7 @@ public:
     CPPUNIT_TEST(testPivotTableOutlineModeXLSX);
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
     CPPUNIT_TEST(testPivotTableTabularModeXLSX);
+    CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5209,6 +5211,19 @@ void ScExportTest::testPivotTableTabularModeXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", "0");
+}
+
+void ScExportTest::testKeepSettingsOfBlankRows()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf41425.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // saved blank row with not default setting in A2
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
