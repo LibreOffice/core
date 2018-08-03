@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe62b97_66ffb401",
+        "filename": "oox/source/drawingml/presetgeometrynames.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-03T14:29:19Z",
+      "side": 1,
+      "message": "Is this really needed? If you think this is ever invoked off the main thread, then locking would have to be done at the UNO interface level, not here to avoid too fine-grained locking, am I wrong?",
+      "revId": "bf3420110cdd21490bc8d49a471340e747585159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
