@@ -243,9 +243,9 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
 }
 
 #ifdef DBG_CUSTOMSHAPE
-void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData, sal_uInt32 nShapeId ) const
+void DffPropertyReader::ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData, sal_uInt32 nShapeId ) const
 #else
-void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
+void DffPropertyReader::ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData ) const
 #endif
 {
     sal_uLong nFilePos = rIn.Tell();
@@ -3183,7 +3183,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     }
 }
 
-bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_uInt32 nId ) const
+bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClientData */, sal_uInt32 nId ) const
 {
     bool bRet = false;
     if ( !maFidcls.empty() )
@@ -4022,7 +4022,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 }
 
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
-SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
+SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, SvxMSDffClientData& rClientData,
     tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = nullptr;
@@ -4030,17 +4030,17 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
     bool bOk = ReadDffRecordHeader(rSt, aObjHd);
     if (bOk && aObjHd.nRecType == DFF_msofbtSpgrContainer)
     {
-        pRet = ImportGroup( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
+        pRet = ImportGroup( aObjHd, rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
     }
     else if (bOk && aObjHd.nRecType == DFF_msofbtSpContainer)
     {
-        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
+        pRet = ImportShape( aObjHd, rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
     }
     aObjHd.SeekToBegOfRecord( rSt );    // restore FilePos
     return pRet;
 }
 
-SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
+SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
                                             tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
@@ -4059,7 +4059,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         mnFix16Angle = 0;
         if (!aRecHd.SeekToBegOfRecord(rSt))
             return pRet;
-        pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
+        pRet = ImportObj( rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
             sal_Int32 nGroupRotateAngle = 0;
@@ -4104,7 +4104,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
                         return pRet;
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
+                    SdrObject* pTmp = ImportGroup( aRecHd2, rSt, rClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
                         SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
@@ -4115,7 +4115,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                 insertShapeId(nShapeId, pTmp);
                         }
                         else
-                            FreeObj(pClientData, pTmp);
+                            FreeObj(rClientData, pTmp);
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
@@ -4123,7 +4123,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
                         return pRet;
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
+                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, rClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
                         SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
@@ -4134,7 +4134,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                 insertShapeId(nShapeId, pTmp);
                         }
                         else
-                            FreeObj(pClientData, pTmp);
+                            FreeObj(rClientData, pTmp);
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
@@ -4169,7 +4169,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     return pRet;
 }
 
-SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
+SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
                                             tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect,
                                             int nCalledByGroup, sal_Int32* pShapeId )
 {
@@ -4232,9 +4232,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         if (!maShapeRecords.Current()->SeekToBegOfRecord(rSt))
             return pRet;
 #ifdef DBG_AUTOSHAPE
-        ReadPropSet( rSt, pClientData, (sal_uInt32)aObjData.eShapeType );
+        ReadPropSet( rSt, &rClientData, (sal_uInt32)aObjData.eShapeType );
 #else
-        ReadPropSet( rSt, pClientData );
+        ReadPropSet( rSt, &rClientData );
 #endif
     }
     else
@@ -4277,7 +4277,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     aObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtClientAnchor, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bClientAnchor )
-        ProcessClientAnchor2( rSt, *maShapeRecords.Current(), pClientData, aObjData );
+        ProcessClientAnchor2( rSt, *maShapeRecords.Current(), rClientData, aObjData );
 
     if ( aObjData.bChildAnchor )
         aObjData.aBoundRect = aObjData.aChildAnchor;
@@ -4857,7 +4857,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
 
     pRet =
-        ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+        ProcessObj( rSt, aObjData, rClientData, aTextRect, pRet);
 
     if ( pRet )
     {
@@ -5046,40 +5046,44 @@ void SvxMSDffImportData::insert(SvxMSDffImportRec* pImpRec)
     m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
 }
 
-void SvxMSDffManager::NotifyFreeObj(void* pData, SdrObject* pObj)
+void SvxMSDffImportData::NotifyFreeObj(SdrObject* pObj)
+{
+    if (SvxMSDffImportRec* pRecord = find(pObj))
+    {
+        unmap(pObj);
+        pRecord->pObj = nullptr;
+    }
+}
+
+void SvxMSDffManager::NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
 {
     if (SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pObj))
     {
         SdrObjList* pSubList = pGroup->GetSubList();
         size_t nObjCount = pSubList->GetObjCount();
         for (size_t i = 0; i < nObjCount; ++i)
-            NotifyFreeObj(pData, pSubList->GetObj(i));
+            NotifyFreeObj(rData, pSubList->GetObj(i));
     }
 
-    SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
-    if (SvxMSDffImportRec* pRecord = rImportData.find(pObj))
-    {
-        rImportData.unmap(pObj);
-        pRecord->pObj = nullptr;
-    }
+    rData.NotifyFreeObj(pObj);
 }
 
-void SvxMSDffManager::FreeObj(void* pData, SdrObject* pObj)
+void SvxMSDffManager::FreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
 {
-    NotifyFreeObj(pData, pObj);
+    NotifyFreeObj(rData, pObj);
     SdrObject::Free(pObj);
 }
 
 SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
-                                       void* pData,
+                                       SvxMSDffClientData& rData,
                                        tools::Rectangle& rTextRect,
                                        SdrObject* pObj
                                        )
 {
     if( !rTextRect.IsEmpty() )
     {
-        SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
+        SvxMSDffImportData& rImportData = static_cast<SvxMSDffImportData&>(rData);
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
         bool bDeleteImpRec = true;
         SvxMSDffImportRec* pTextImpRec = pImpRec;
@@ -6317,7 +6321,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         if (!bSeeked || rStCtrl.GetError())
             rStCtrl.ResetError();
         else
-            rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+            rpShape = ImportObj( rStCtrl, rData, rData.aParentRect, rData.aParentRect, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
 
         // restore old FilePos of the stream(s)
         rStCtrl.Seek( nOldPosCtrl );
@@ -6630,7 +6634,7 @@ void SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
 }
 
 
-void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , void* /* pData */, DffObjData& /* rObj */ )
+void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , SvxMSDffClientData& /* rData */, DffObjData& /* rObj */ )
 {
     // will be overridden by SJ in Draw
 }
