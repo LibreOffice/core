@@ -229,8 +229,9 @@ static const struct {
     { "am_ET",  lcl_DATA_OTHERS },
     { "ti_ER",  lcl_DATA_OTHERS },
     { "tg_TJ",  lcl_DATA_OTHERS },
-    { "ky_KG",  lcl_DATA_OTHERS },
+    { "kab_DZ", lcl_DATA_OTHERS },
     { "kk_KZ",  lcl_DATA_OTHERS },
+    { "ky_KG",  lcl_DATA_OTHERS },
     { "fa_IR",  lcl_DATA_OTHERS },
     { "ha_GH",  lcl_DATA_OTHERS },
     { "ee_GH",  lcl_DATA_OTHERS },
@@ -350,7 +351,7 @@ private:
 // from instance.hxx: Helper base class for a late-initialized
 // (default-constructed) static variable, implementing the double-checked
 // locking pattern correctly.
-// usage:  lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
+// usage: lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 // retrieves the singleton lookup table instance
 struct lcl_LookupTableStatic : public ::rtl::Static< lcl_LookupTableHelper, lcl_LookupTableStatic >
 {};
