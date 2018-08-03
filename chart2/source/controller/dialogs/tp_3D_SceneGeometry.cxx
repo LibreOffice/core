@@ -27,6 +27,7 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 
 namespace chart
 {
@@ -35,15 +36,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
-void lcl_shiftAngleToValidRange( sal_Int64& rnAngleDegree )
-{
-    //valid range:  ]-180,180]
-    while( rnAngleDegree<=-180 )
-        rnAngleDegree+=360;
-    while( rnAngleDegree>180 )
-        rnAngleDegree-=360;
-}
 
 void lcl_SetMetricFieldLimits( MetricField& rField, sal_Int64 nLimit )
 {
@@ -87,13 +79,12 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
 
     lcl_SetMetricFieldLimits( *m_pMFZRotation, 90 );
 
-    m_nXRotation = ::basegfx::fround(fXAngle*pow(10.0,m_pMFXRotation->GetDecimalDigits()));
-    m_nYRotation = ::basegfx::fround(-1.0*fYAngle*pow(10.0,m_pMFYRotation->GetDecimalDigits()));
-    m_nZRotation = ::basegfx::fround(-1.0*fZAngle*pow(10.0,m_pMFZRotation->GetDecimalDigits()));
-
-    lcl_shiftAngleToValidRange( m_nXRotation );
-    lcl_shiftAngleToValidRange( m_nYRotation );
-    lcl_shiftAngleToValidRange( m_nZRotation );
+    m_nXRotation = NormAngle180(
+        ::basegfx::fround(fXAngle * pow(10.0, m_pMFXRotation->GetDecimalDigits())));
+    m_nYRotation = NormAngle180(
+        ::basegfx::fround(-1.0 * fYAngle * pow(10.0, m_pMFYRotation->GetDecimalDigits())));
+    m_nZRotation = NormAngle180(
+        ::basegfx::fround(-1.0 * fZAngle * pow(10.0, m_pMFZRotation->GetDecimalDigits())));
 
     m_pMFXRotation->SetValue(m_nXRotation);
     m_pMFYRotation->SetValue(m_nYRotation);

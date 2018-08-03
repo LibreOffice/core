@@ -314,8 +314,8 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     long dx=rP2.X()-rP1.X();
     long dy=rP2.Y()-rP1.Y();
     long dAngle=GetAngle(Point(dx,dy))-nTangAngle;
-    dAngle=NormAngle360(dAngle);
-    long nTmpAngle=NormAngle360(9000-dAngle);
+    dAngle=NormAngle36000(dAngle);
+    long nTmpAngle=NormAngle36000(9000-dAngle);
     bool bRet=nTmpAngle!=9000 && nTmpAngle!=27000;
     long nRad=0;
     if (bRet) {
@@ -324,13 +324,13 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
         nRad=std::abs(svx::Round(nR));
     }
     if (dAngle<18000) {
-        nCircStAngle=NormAngle360(nTangAngle-9000);
-        nCircRelAngle=NormAngle360(2*dAngle);
+        nCircStAngle=NormAngle36000(nTangAngle-9000);
+        nCircRelAngle=NormAngle36000(2*dAngle);
         aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle+9000)*nPi180)) );
         aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle+9000)*nPi180))) );
     } else {
-        nCircStAngle=NormAngle360(nTangAngle+9000);
-        nCircRelAngle=-NormAngle360(36000-2*dAngle);
+        nCircStAngle=NormAngle36000(nTangAngle+9000);
+        nCircRelAngle=-NormAngle36000(36000-2*dAngle);
         aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle-9000)*nPi180)) );
         aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle-9000)*nPi180))) );
     }
@@ -343,7 +343,7 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
             nCircRelAngle+=nSA/2;
             nCircRelAngle/=nSA;
             nCircRelAngle*=nSA;
-            nCircRelAngle=NormAngle360(nCircRelAngle);
+            nCircRelAngle=NormAngle36000(nCircRelAngle);
             if (bNeg) nCircRelAngle=-nCircRelAngle;
         }
     }
@@ -362,7 +362,7 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
         return aXP;
     } else {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16(NormAngle360(nCircStAngle+nCircRelAngle+5)/10),sal_uInt16((nCircStAngle+5)/10),false);
+                     sal_uInt16(NormAngle36000(nCircStAngle+nCircRelAngle+5)/10),sal_uInt16((nCircStAngle+5)/10),false);
         sal_uInt16 nCount=aXP.GetPointCount();
         for (sal_uInt16 nNum=nCount/2; nNum>0;) {
             nNum--; // reverse XPoly's order of points
@@ -2981,7 +2981,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeo.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeo.nRotationAngle = NormAngle36000(FRound(-fRotate / F_PI18000));
         aGeo.RecalcSinCos();
     }
 

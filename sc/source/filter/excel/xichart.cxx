@@ -81,6 +81,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 
 #include <document.hxx>
 #include <drwlayer.hxx>
@@ -2430,8 +2431,7 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     if( b3dWallChart )
     {
         // Y rotation (Excel [0..359], Chart2 [-179,180])
-        nRotationY = maData.mnRotation % 360;
-        if( nRotationY > 180 ) nRotationY -= 360;
+        nRotationY = NormAngle180(maData.mnRotation);
         // X rotation a.k.a. elevation (Excel [-90..90], Chart2 [-179,180])
         nRotationX = limit_cast< sal_Int32, sal_Int32 >( maData.mnElevation, -90, 90 );
         // perspective (Excel and Chart2 [0,100])

@@ -393,14 +393,14 @@ long GetAngle(const Point& rPnt)
     return a;
 }
 
-long NormAngle180(long a)
+long NormAngle18000(long a)
 {
     while (a<18000) a+=36000;
     while (a>=18000) a-=36000;
     return a;
 }
 
-long NormAngle360(long a)
+long NormAngle36000(long a)
 {
     while (a<0) a+=36000;
     while (a>=36000) a-=36000;
@@ -482,7 +482,7 @@ tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
 void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo)
 {
     rGeo.nRotationAngle=GetAngle(rPol[1]-rPol[0]);
-    rGeo.nRotationAngle=NormAngle360(rGeo.nRotationAngle);
+    rGeo.nRotationAngle=NormAngle36000(rGeo.nRotationAngle);
     // rotation successful
     rGeo.RecalcSinCos();
 
@@ -506,9 +506,9 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
         nShW+=18000;
         aPt0=rPol[3];
     }
-    nShW=NormAngle180(nShW);
+    nShW=NormAngle18000(nShW);
     if (nShW<-9000 || nShW>9000) {
-        nShW=NormAngle180(nShW+18000);
+        nShW=NormAngle18000(nShW+18000);
     }
     if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
     if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;

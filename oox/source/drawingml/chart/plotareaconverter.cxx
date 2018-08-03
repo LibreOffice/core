@@ -35,6 +35,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/helpers.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -234,8 +235,7 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     }
 
     // Y rotation (map OOXML [0..359] to Chart2 [-179,180])
-    nRotationY %= 360;
-    if( nRotationY > 180 ) nRotationY -= 360;
+    nRotationY = NormAngle180(nRotationY);
     /*  Perspective (map OOXML [0..200] to Chart2 [0,100]). Seems that MSO 2007 is
         buggy here, the XML plugin of MSO 2003 writes the correct perspective in
         the range from 0 to 100. We will emulate the wrong behaviour of MSO 2007. */

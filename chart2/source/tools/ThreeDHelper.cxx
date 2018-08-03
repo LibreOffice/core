@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 #include <sal/log.hxx>
 
 namespace chart
@@ -369,24 +370,6 @@ double lcl_shiftAngleToIntervalMinusPiToPi( double fAngleRad )
     return fAngleRad;
 }
 
-void lcl_shiftAngleToIntervalMinus180To180( sal_Int32& rnAngleDegree )
-{
-    //valid range:  ]-180,180]
-    while( rnAngleDegree<=-180 )
-        rnAngleDegree+=360;
-    while( rnAngleDegree>180 )
-        rnAngleDegree-=360;
-}
-
-void lcl_shiftAngleToIntervalZeroTo360( sal_Int32& rnAngleDegree )
-{
-    //valid range:  [0,360[
-    while( rnAngleDegree<0 )
-        rnAngleDegree+=360;
-    while( rnAngleDegree>=360 )
-        rnAngleDegree-=360;
-}
-
 void lcl_ensureIntervalMinus1To1( double& rSinOrCos )
 {
     if (rSinOrCos < -1.0)
@@ -414,8 +397,8 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
     //https://bz.apache.org/ooo/show_bug.cgi?id=72994
     //https://bz.apache.org/ooo/attachment.cgi?id=50608
 
-    lcl_shiftAngleToIntervalZeroTo360( nElevationDeg );
-    lcl_shiftAngleToIntervalZeroTo360( nRotationDeg );
+    nElevationDeg = NormAngle360(nElevationDeg);
+    nRotationDeg = NormAngle360(nRotationDeg);
 
     double& x = rfXAngleRad;
     double& y = rfYAngleRad;
@@ -1053,8 +1036,8 @@ void ThreeDHelper::getRotationFromDiagram( const uno::Reference< beans::XPropert
         // nZRotation = basegfx::fround(-1.0 * basegfx::rad2deg(fZAngle));
     }
 
-    lcl_shiftAngleToIntervalMinus180To180( rnHorizontalAngleDegree );
-    lcl_shiftAngleToIntervalMinus180To180( rnVerticalAngleDegree );
+    rnHorizontalAngleDegree = NormAngle180(rnHorizontalAngleDegree);
+    rnVerticalAngleDegree = NormAngle180(rnVerticalAngleDegree);
 }
 
 void ThreeDHelper::setRotationToDiagram( const uno::Reference< beans::XPropertySet >& xSceneProperties

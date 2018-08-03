@@ -76,6 +76,26 @@ inline long FRound( double fVal )
     return fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 );
 }
 
+//valid range:  ]-180,180]
+template <typename T> inline T NormAngle180(T angle)
+{
+    while (angle <= -180)
+        angle += 360;
+    while (angle > 180)
+        angle -= 360;
+    return angle;
+}
+
+//valid range:  [0,360[
+template <typename T> inline T NormAngle360(T angle)
+{
+    while (angle < 0)
+        angle += 360;
+    while (angle >= 360)
+        angle -= 360;
+    return angle;
+}
+
 /** Convert 100th-mm to twips
 
     A twip is 1/20 of a point, one inch is equal to 72 points, and
