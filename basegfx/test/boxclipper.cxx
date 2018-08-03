@@ -49,12 +49,6 @@ double getRandomOrdinal( const std::size_t n )
     return comphelper::rng::uniform_size_distribution(0, n-1);
 }
 
-inline bool compare(const B2DPoint& left, const B2DPoint& right)
-{
-    return left.getX()<right.getX()
-        || (rtl::math::approxEqual(left.getX(),right.getX()) && left.getY()<right.getY());
-}
-
 class boxclipper : public CppUnit::TestFixture
 {
 private:
@@ -167,53 +161,6 @@ public:
 #endif
     }
 
-    B2DPolyPolygon normalizePoly( const B2DPolyPolygon& rPoly ) const
-    {
-        B2DPolyPolygon aRes;
-        for( sal_uInt32 i=0; i<rPoly.count(); ++i )
-        {
-            B2DPolygon aTmp=rPoly.getB2DPolygon(i);
-            if( utils::getOrientation(aTmp) == B2VectorOrientation::Negative )
-                aTmp.flip();
-
-            aTmp=utils::removeNeutralPoints(aTmp);
-            std::vector<B2DPoint> aTmp2(aTmp.count());
-            for(sal_uInt32 j=0; j<aTmp.count(); ++j)
-                aTmp2[j] = aTmp.getB2DPoint(j);
-
-            std::vector<B2DPoint>::iterator pSmallest=aTmp2.end();
-            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
-            {
-                if( pSmallest == aTmp2.end() || compare(*pCurr, *pSmallest) )
-                {
-                    pSmallest=pCurr;
-                }
-            }
-
-            if( pSmallest != aTmp2.end() )
-                std::rotate(aTmp2.begin(),pSmallest,aTmp2.end());
-
-            aTmp.clear();
-            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
-                aTmp.append(*pCurr);
-
-            aRes.append(aTmp);
-        }
-
-        // boxclipper & generic clipper disagree slightly on area-less
-        // polygons (one or two points only)
-        aRes = utils::stripNeutralPolygons(aRes);
-
-        // now, sort all polygons with increasing 0th point
-        std::sort(aRes.begin(),
-                  aRes.end(),
-                  [](const B2DPolygon& aPolygon1, const B2DPolygon& aPolygon2) {
-                      return compare(aPolygon1.getB2DPoint(0),
-                          aPolygon2.getB2DPoint(0)); } );
-
-        return aRes;
-    }
-
     void verifyPoly(const char* sName, const char* sSvg, const B2DPolyRange& toTest) const
     {
         B2DPolyPolygon aTmp1;
@@ -230,7 +177,8 @@ public:
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             sName,
-            normalizePoly(aTmp1), normalizePoly(aTmp2));
+            basegfx::utils::createComparablePolyPolygon(aTmp1),
+            basegfx::utils::createComparablePolyPolygon(aTmp2));
     }
 
     void verifyPoly()
@@ -349,7 +297,10 @@ public:
         const B2DPolyPolygon boxClipResult=rRange.solveCrossovers();
         const OUString boxClipSvg(
             basegfx::utils::exportToSvgD(
-                normalizePoly(boxClipResult), true, true, false));
+                basegfx::utils::createComparablePolyPolygon(boxClipResult),
+                true,
+                true,
+                false));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
@@ -360,7 +311,10 @@ public:
         genericClip = utils::solveCrossovers(genericClip);
         const OUString genericClipSvg(
             basegfx::utils::exportToSvgD(
-                normalizePoly(genericClip), true, true, false));
+                basegfx::utils::createComparablePolyPolygon(genericClip),
+                true,
+                true,
+                false));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
                 pName, OUStringToOString(

@@ -249,9 +249,8 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ones, subtract en bloc then
-                    maPendingPolygons = solveCrossovers(maPendingPolygons);
-                    maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
-                    maPendingPolygons = stripDispensablePolygons(maPendingPolygons);
+                    maPendingPolygons = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingPolygons));
 
                     if( bIsCleared )
                     {
@@ -293,10 +292,9 @@ namespace utils
             {
                 case UNION:
                     assert( !bIsCleared );
+                    aCollectedRanges = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingRanges.solveCrossovers()));
 
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
                     if( bIsEmpty )
                         maClipPoly = aCollectedRanges;
                     else
@@ -306,11 +304,8 @@ namespace utils
                     break;
                 case INTERSECT:
                     assert( !bIsEmpty );
-
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    if( maPendingRanges.count() > 1 )
-                        aCollectedRanges = stripDispensablePolygons(aCollectedRanges, true);
+                    aCollectedRanges = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingRanges.solveCrossovers()));
 
                     if( bIsCleared )
                         maClipPoly = aCollectedRanges;
@@ -351,9 +346,8 @@ namespace utils
                     assert( !bIsEmpty );
 
                     // first union all pending ranges, subtract en bloc then
-                    aCollectedRanges = maPendingRanges.solveCrossovers();
-                    aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
+                    aCollectedRanges = utils::solvePolygonOperationOr(
+                        utils::packInB2DPolyPolygonVector(maPendingRanges.solveCrossovers()));
 
                     if( bIsCleared )
                     {

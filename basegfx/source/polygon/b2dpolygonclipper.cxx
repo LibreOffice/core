@@ -455,47 +455,20 @@ namespace basegfx
                     }
 
                     // area clipping
-                    B2DPolyPolygon aMergePolyPolygonA(rClip);
-
-                    // First solve all polygon-self and polygon-polygon intersections.
-                    // Also get rid of some not-needed polygons (neutral, no area -> when
-                    // no intersections, these are tubes).
-                    // Now it is possible to correct the orientations in the cut-free
-                    // polygons to values corresponding to painting the utils::PolyPolygon with
-                    // a XOR-WindingRule.
-                    aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
-                    aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);
-                    aMergePolyPolygonA = correctOrientations(aMergePolyPolygonA);
-
-                    if(!bInside)
+                    if(bInside)
                     {
-                        // if we want to get the outside of the clip polygon, make
-                        // it a 'Hole' in topological sense
-                        aMergePolyPolygonA.flip();
+                        // clip against rClip, use solvePolygonOperationAnd
+                        aRetval = solvePolygonOperationAnd(rCandidate, rClip);
+                    }
+                    else
+                    {
+                        // create diff with rClip solvePolygonOperationDiff
+                        aRetval = solvePolygonOperationDiff(rCandidate, rClip);
+
                     }
 
-                    B2DPolyPolygon aMergePolyPolygonB(rCandidate);
-
-                    // prepare 2nd source polygon in same way
-                    aMergePolyPolygonB = solveCrossovers(aMergePolyPolygonB);
-                    aMergePolyPolygonB = stripNeutralPolygons(aMergePolyPolygonB);
-                    aMergePolyPolygonB = correctOrientations(aMergePolyPolygonB);
-
-                    // to clip against each other, concatenate and solve all
-                    // polygon-polygon crossovers. polygon-self do not need to
-                    // be solved again, they were solved in the preparation.
-                    aRetval.append(aMergePolyPolygonA);
-                    aRetval.append(aMergePolyPolygonB);
-                    aRetval = solveCrossovers(aRetval);
-
-                    // now remove neutral polygons (closed, but no area). In a last
-                    // step throw away all polygons which have a depth of less than 1
-                    // which means there was no logical AND at their position. For the
-                    // not-inside solution, the clip was flipped to define it as 'Hole',
-                    // so the removal rule is different here; remove all with a depth
-                    // of less than 0 (aka holes).
+                    // now remove neutral polygons (closed, but no area).
                     aRetval = stripNeutralPolygons(aRetval);
-                    aRetval = stripDispensablePolygons(aRetval, bInside);
                 }
             }
 

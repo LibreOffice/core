@@ -1902,11 +1902,22 @@ namespace basegfx
                 for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
                     const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
+                    bool bOrientationSet(false);
+                    B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
                     const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
-                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
-                    const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(aOrientation == B2VectorOrientation::Neutral)
+                    if(!aPrevVec.equalZero())
+                    {
+                        const B2DVector aNextVec(aNextPoint - aCurrPoint);
+
+                        if(!aNextVec.equalZero())
+                        {
+                            aOrientation = getOrientation(aNextVec, aPrevVec);
+                            bOrientationSet = true;
+                        }
+                    }
+
+                    if(bOrientationSet && aOrientation == B2VectorOrientation::Neutral)
                     {
                         // current has neutral orientation
                         return true;
@@ -1935,11 +1946,22 @@ namespace basegfx
                 for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
                     const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
+                    bool bOrientationSet(false);
+                    B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
                     const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
-                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
-                    const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(aOrientation == B2VectorOrientation::Neutral)
+                    if(!aPrevVec.equalZero())
+                    {
+                        const B2DVector aNextVec(aNextPoint - aCurrPoint);
+
+                        if(!aNextVec.equalZero())
+                        {
+                            aOrientation = getOrientation(aNextVec, aPrevVec);
+                            bOrientationSet = true;
+                        }
+                    }
+
+                    if(bOrientationSet && aOrientation == B2VectorOrientation::Neutral)
                     {
                         // current has neutral orientation, leave it out and prepare next
                         aCurrPoint = aNextPoint;
@@ -2891,6 +2913,8 @@ namespace basegfx
                         aRetval.setNextControlPoint(a, rCandidate.getNextControlPoint(nSourceIndex));
                     }
                 }
+
+                aRetval.setClosed(rCandidate.isClosed());
 
                 return aRetval;
             }
