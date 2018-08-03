@@ -431,7 +431,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
-        long nTmpAngle=NormAngle360(rPol.nTextAngle-rRec.nTextAutoAngleView);
+        long nTmpAngle=NormAngle36000(rPol.nTextAngle-rRec.nTextAutoAngleView);
         if (nTmpAngle>=18000) {
             rPol.nTextAngle+=18000;
             rPol.bAutoUpsideDown=true;
@@ -439,10 +439,10 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     }
 
     if (rRec.bTextUpsideDown) rPol.nTextAngle+=18000;
-    rPol.nTextAngle=NormAngle360(rPol.nTextAngle);
+    rPol.nTextAngle=NormAngle36000(rPol.nTextAngle);
     rPol.nHlpAngle=rPol.nLineAngle+9000;
     if (rRec.bBelowRefEdge) rPol.nHlpAngle+=18000;
-    rPol.nHlpAngle=NormAngle360(rPol.nHlpAngle);
+    rPol.nHlpAngle=NormAngle36000(rPol.nHlpAngle);
     double nHlpSin=nLineCos;
     double nHlpCos=-nLineSin;
     if (rRec.bBelowRefEdge) {

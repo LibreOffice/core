@@ -2048,10 +2048,7 @@ sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex
 
 void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
 {
-    while ( nAngle<0)
-        nAngle +=36000;
-    while (nAngle>=36000)
-        nAngle -=36000;
+    nAngle = NormAngle36000(nAngle);
 
     int cs, sn;
     switch (nAngle)

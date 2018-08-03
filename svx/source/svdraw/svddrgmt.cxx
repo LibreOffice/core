@@ -1037,12 +1037,12 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 if (pH!=nullptr)
                 {
                     Point aRef(pH->GetPos());
-                    long nAngle=NormAngle360(GetAngle(aPnt-aRef));
+                    long nAngle=NormAngle36000(GetAngle(aPnt-aRef));
                     long nNewAngle=nAngle;
                     nNewAngle+=nSA/2;
                     nNewAngle/=nSA;
                     nNewAngle*=nSA;
-                    nNewAngle=NormAngle360(nNewAngle);
+                    nNewAngle=NormAngle36000(nNewAngle);
                     double a=(nNewAngle-nAngle)*nPi180;
                     double nSin=sin(a);
                     double nCos=cos(a);
@@ -2061,7 +2061,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
     rStr += " (";
-    sal_Int32 nTmpAngle(NormAngle360(nAngle));
+    sal_Int32 nTmpAngle(NormAngle36000(nAngle));
 
     if(bRight && nAngle)
     {
@@ -2114,7 +2114,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
     Point aPnt(rPnt_);
     if (DragStat().CheckMinMoved(aPnt))
     {
-        long nNewAngle=NormAngle360(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
+        long nNewAngle=NormAngle36000(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
         long nSA=0;
 
         if (getSdrDragView().IsAngleSnapEnabled())
@@ -2130,7 +2130,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
             nNewAngle*=nSA;
         }
 
-        nNewAngle=NormAngle180(nNewAngle);
+        nNewAngle=NormAngle18000(nNewAngle);
 
         if (nAngle!=nNewAngle)
         {
@@ -2207,7 +2207,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     if(bUpSideDown)
         nTmpAngle += 18000;
 
-    nTmpAngle = NormAngle180(nTmpAngle);
+    nTmpAngle = NormAngle18000(nTmpAngle);
 
     rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
@@ -2305,20 +2305,20 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
     if (bSlant)
     {
-        nNewAngle=NormAngle180(-(GetAngle(aDif)-nAngle0));
+        nNewAngle=NormAngle18000(-(GetAngle(aDif)-nAngle0));
 
         if (bVertical)
-            nNewAngle=NormAngle180(-nNewAngle);
+            nNewAngle=NormAngle18000(-nNewAngle);
     }
     else
     {
         if (bVertical)
-            nNewAngle=NormAngle180(GetAngle(aDif));
+            nNewAngle=NormAngle18000(GetAngle(aDif));
         else
-            nNewAngle=NormAngle180(-(GetAngle(aDif)-9000));
+            nNewAngle=NormAngle18000(-(GetAngle(aDif)-9000));
 
         if (nNewAngle<-9000 || nNewAngle>9000)
-            nNewAngle=NormAngle180(nNewAngle+18000);
+            nNewAngle=NormAngle18000(nNewAngle+18000);
 
         if (bResize)
         {
@@ -2350,7 +2350,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         nNewAngle*=nSA;
     }
 
-    nNewAngle=NormAngle360(nNewAngle);
+    nNewAngle=NormAngle36000(nNewAngle);
     bUpSideDown=nNewAngle>9000 && nNewAngle<27000;
 
     if (bSlant)
@@ -2480,7 +2480,7 @@ bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 {
     long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
     nAngle1-=nAngle;
-    nAngle1=NormAngle360(nAngle1);
+    nAngle1=NormAngle36000(nAngle1);
 
     return nAngle1<18000;
 }
@@ -2514,7 +2514,7 @@ bool SdrDragMirror::BeginSdrDrag()
         aDif=pH2->GetPos()-pH1->GetPos();
         bool b90=(aDif.X()==0) || aDif.Y()==0;
         bool b45=b90 || (std::abs(aDif.X()) == std::abs(aDif.Y()));
-        nAngle=NormAngle360(GetAngle(aDif));
+        nAngle=NormAngle36000(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed() && !b45)
             return false; // free choice of axis angle not allowed
@@ -3163,13 +3163,13 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                 if (bLwr) nPntWink+=18000;
             }
 
-            nPntWink=NormAngle360(nPntWink);
+            nPntWink=NormAngle36000(nPntWink);
         }
         else
         {
             if (nNewRad<0) nPntWink+=18000;
             if (bVertical) nPntWink=18000-nPntWink;
-            nPntWink=NormAngle180(nPntWink);
+            nPntWink=NormAngle18000(nPntWink);
             nPntWink = std::abs(nPntWink);
         }
 
@@ -3177,7 +3177,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
         if (bResize)
         {
-            long nMul=static_cast<long>(nUmfang*NormAngle360(nPntWink)/36000);
+            long nMul=static_cast<long>(nUmfang*NormAngle36000(nPntWink)/36000);
 
             if (bAtCenter)
                 nMul*=2;

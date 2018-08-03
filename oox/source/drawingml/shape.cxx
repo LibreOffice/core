@@ -461,7 +461,7 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
     int nIndex = 0;
     for (auto& aEntry : aGdList)
     {
-        double fAngle = NormAngle360( aEntry.maFormula.toDouble() / -600.0 );
+        double fAngle = NormAngle36000( aEntry.maFormula.toDouble() / -600.0 );
         fAngle = 360.0 - fAngle / 100.0;
 
         aAdjustment[nIndex].Value <<= fAngle;
@@ -1318,7 +1318,7 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( !bUseRotationTransform && mnRotation != 0 )
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
-            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle360( mnRotation / -600 ) ) ) );
+            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle36000( mnRotation / -600 ) ) ) );
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
         }

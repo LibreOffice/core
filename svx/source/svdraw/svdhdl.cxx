@@ -979,9 +979,8 @@ Pointer SdrHdl::GetPointer() const
                 default:
                     break;
             }
-            nHdlAngle+=nRotationAngle+2249; // a little bit more (for rounding)
-            while (nHdlAngle<0) nHdlAngle+=36000;
-            while (nHdlAngle>=36000) nHdlAngle-=36000;
+            // a little bit more (for rounding)
+            nHdlAngle = NormAngle36000(nHdlAngle + nRotationAngle + 2249);
             nHdlAngle/=4500;
             switch (static_cast<sal_uInt8>(nHdlAngle)) {
                 case 0: ePtr=PointerStyle::ESize;  break;

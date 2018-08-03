@@ -32,6 +32,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
+#include <tools/helpers.hxx>
 #include <tools/svlibrary.h>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
@@ -262,10 +263,7 @@ awt::Size AbstractShapeFactory::getSizeAfterRotation(
             aRet = aSize;
         else
         {
-            while(fRotationAngleDegree>=360.0)
-                fRotationAngleDegree-=360.0;
-            while(fRotationAngleDegree<0.0)
-                fRotationAngleDegree+=360.0;
+            fRotationAngleDegree = NormAngle360(fRotationAngleDegree);
             if(fRotationAngleDegree>270.0)
                 fRotationAngleDegree=360.0-fRotationAngleDegree;
             else if(fRotationAngleDegree>180.0)
