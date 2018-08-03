@@ -4668,13 +4668,12 @@ WW8PLCFx_FactoidBook::WW8PLCFx_FactoidBook(SvStream* pTableSt, const WW8Fib& rFi
 {
     if (!rFib.m_fcPlcfBkfFactoid || !rFib.m_lcbPlcfBkfFactoid || !rFib.m_fcPlcfBklFactoid || !rFib.m_lcbPlcfBklFactoid)
     {
-        m_pBook[0] = m_pBook[1] = nullptr;
         m_nIMax = 0;
     }
     else
     {
-        m_pBook[0] = new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfBkfFactoid, rFib.m_lcbPlcfBkfFactoid, 6);
-        m_pBook[1] = new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfBklFactoid, rFib.m_lcbPlcfBklFactoid, 4);
+        m_pBook[0].reset(new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfBkfFactoid, rFib.m_lcbPlcfBkfFactoid, 6));
+        m_pBook[1].reset(new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfBklFactoid, rFib.m_lcbPlcfBklFactoid, 4));
 
         m_nIMax = m_pBook[0]->GetIMax();
         if (m_pBook[1]->GetIMax() < m_nIMax)
@@ -4684,8 +4683,6 @@ WW8PLCFx_FactoidBook::WW8PLCFx_FactoidBook(SvStream* pTableSt, const WW8Fib& rFi
 
 WW8PLCFx_FactoidBook::~WW8PLCFx_FactoidBook()
 {
-    delete m_pBook[1];
-    delete m_pBook[0];
 }
 
 sal_uInt32 WW8PLCFx_FactoidBook::GetIdx() const

@@ -820,7 +820,7 @@ class WW8PLCFx_FactoidBook : public WW8PLCFx
 {
 private:
     /// Start and end positions.
-    WW8PLCFspecial* m_pBook[2];
+    std::unique_ptr<WW8PLCFspecial> m_pBook[2];
     /// Number of factoid marks
     sal_Int32 m_nIMax;
     bool m_bIsEnd;
