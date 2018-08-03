@@ -114,12 +114,10 @@ public:
         ScComplexRefData aRef;
         struct {
             sal_uInt16          nFileId;
-            sal_Unicode         cTabName[MAXSTRLEN+1];
             ScComplexRefData    aRef;
         } extref;
         struct {
             sal_uInt16  nFileId;
-            sal_Unicode cName[MAXSTRLEN+1];
         } extname;
         struct {
             sal_Int16   nSheet;
@@ -135,9 +133,9 @@ public:
         } sharedstring;
         ScMatrix*    pMat;
         FormulaError nError;
-        sal_Unicode  cStr[ 1+MAXSTRLEN+1 ];   // string (byteparam + up to MAXSTRLEN characters + 0)
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
+    OUString   maExternalName; // depending on the opcode, this is either the external, or the external name, or the external table name
 
     // coverity[uninit_member] - members deliberately not initialized
     ScRawToken() {}
@@ -163,7 +161,7 @@ public:
     void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
-    void SetExternal(const sal_Unicode* pStr);
+    void SetExternal(const OUString& rStr);
 
     /** If the token is a non-external reference, determine if the reference is
         valid. If the token is an external reference, return true. Else return
