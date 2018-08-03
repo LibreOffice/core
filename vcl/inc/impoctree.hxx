@@ -125,13 +125,13 @@ inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
 
     if ( !pActNode )
     {
-        pActNode = new NODE;
+        pActNode = new OctreeNode;
         pActNode->pNextInCache = nullptr;
     }
 
     pNode = pActNode;
     pActNode = pNode->pNextInCache;
-    memset( pNode, 0, sizeof( NODE ) );
+    memset( pNode, 0, sizeof( OctreeNode ) );
 
     return pNode;
 }

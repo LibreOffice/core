@@ -26,7 +26,7 @@
 #define OCTREE_BITS     5
 #define OCTREE_BITS_1   10
 
-typedef struct OctreeNode
+struct OctreeNode
 {
     sal_uLong       nCount;
     sal_uLong       nRed;
@@ -37,7 +37,7 @@ typedef struct OctreeNode
     OctreeNode*     pNextInCache;
     sal_uInt16      nPalIndex;
     bool            bLeaf;
-} NODE;
+};
 
 class ImpNodeCache;
 class BitmapReadAccess;
@@ -45,19 +45,19 @@ class BitmapReadAccess;
 class VCL_PLUGIN_PUBLIC Octree
 {
 private:
-    void                        CreatePalette( NODE* pNode );
-    void                        GetPalIndex( NODE* pNode );
+    void                        CreatePalette( OctreeNode* pNode );
+    void                        GetPalIndex( OctreeNode* pNode );
 
-    SAL_DLLPRIVATE void         ImplDeleteOctree( NODE** ppNode );
-    SAL_DLLPRIVATE void         ImplAdd( NODE** ppNode );
+    SAL_DLLPRIVATE void         ImplDeleteOctree( OctreeNode** ppNode );
+    SAL_DLLPRIVATE void         ImplAdd( OctreeNode** ppNode );
     SAL_DLLPRIVATE void         ImplReduce();
 
 
     BitmapPalette               aPal;
     sal_uLong                   nLeafCount;
     sal_uLong                   nLevel;
-    NODE*                       pTree;
-    NODE*                       pReduce[ OCTREE_BITS + 1 ];
+    OctreeNode*                 pTree;
+    OctreeNode*                 pReduce[ OCTREE_BITS + 1 ];
     BitmapColor const *         pColor;
     std::unique_ptr<ImpNodeCache> pNodeCache;
     const BitmapReadAccess*     pAcc;

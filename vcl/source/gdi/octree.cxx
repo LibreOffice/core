@@ -34,7 +34,7 @@ ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
 
     for( sal_uLong i = 0; i < nSize; i++ )
     {
-        OctreeNode* pNewNode = new NODE;
+        OctreeNode* pNewNode = new OctreeNode;
 
         pNewNode->pNextInCache = pActNode;
         pActNode = pNewNode;
@@ -62,7 +62,7 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 {
     sal_uLong nMax(nColors);
     pNodeCache.reset( new ImpNodeCache( nColors ) );
-    memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( NODE* ) );
+    memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( OctreeNode* ) );
 
     if( !!*pAcc )
     {
@@ -114,7 +114,7 @@ Octree::~Octree()
     pNodeCache.reset();
 }
 
-void Octree::ImplDeleteOctree( NODE** ppNode )
+void Octree::ImplDeleteOctree( OctreeNode** ppNode )
 {
     for (OctreeNode* i : (*ppNode)->pChild)
     {
@@ -126,7 +126,7 @@ void Octree::ImplDeleteOctree( NODE** ppNode )
     *ppNode = nullptr;
 }
 
-void Octree::ImplAdd( NODE** ppNode )
+void Octree::ImplAdd( OctreeNode** ppNode )
 {
     // possibly generate new nodes
     if( !*ppNode )
@@ -166,7 +166,7 @@ void Octree::ImplAdd( NODE** ppNode )
 void Octree::ImplReduce()
 {
     sal_uLong   i;
-    NODE*       pNode;
+    OctreeNode* pNode;
     sal_uLong   nRedSum = 0;
     sal_uLong   nGreenSum = 0;
     sal_uLong   nBlueSum = 0;
@@ -181,7 +181,7 @@ void Octree::ImplReduce()
     {
         if ( pNode->pChild[ i ] )
         {
-            NODE* pChild = pNode->pChild[ i ];
+            OctreeNode* pChild = pNode->pChild[ i ];
 
             nRedSum += pChild->nRed;
             nGreenSum += pChild->nGreen;
@@ -201,7 +201,7 @@ void Octree::ImplReduce()
     nLeafCount -= --nChildren;
 }
 
-void Octree::CreatePalette( NODE* pNode )
+void Octree::CreatePalette( OctreeNode* pNode )
 {
     if( pNode->bLeaf )
     {
@@ -216,7 +216,7 @@ void Octree::CreatePalette( NODE* pNode )
 
 }
 
-void Octree::GetPalIndex( NODE* pNode )
+void Octree::GetPalIndex( OctreeNode* pNode )
 {
     if ( pNode->bLeaf )
         nPalIndex = pNode->nPalIndex;
