@@ -19,6 +19,7 @@
 
 #include <sddll.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
@@ -94,8 +95,8 @@ static BitmapEx* getButtonImage( int index, bool large )
     {
         for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(new BitmapEx(aSmallPlaceHolders[i]));
-            gLargeButtonImages[i].set(new BitmapEx(aBigPlaceHolders[i]));
+            gSmallButtonImages[i].set(o3tl::make_unique<BitmapEx>(aSmallPlaceHolders[i]));
+            gLargeButtonImages[i].set(o3tl::make_unique<BitmapEx>(aBigPlaceHolders[i]));
         }
     }
 
