@@ -759,6 +759,11 @@ namespace basegfx
             const B2DPoint aS2R(interpolate(aS1C, aS1R, t));
             const B2DPoint aS3C(interpolate(aS2L, aS2R, t));
 
+            // No need to copy local values here, see below. Here, even if one of
+            // the pointers is equal to 'this', only maStartPoint is copied
+            // on itself, same for maEndPoint. The valuable data is already
+            // buffered in the temporary local values above.
+
             if(pBezierA)
             {
                 pBezierA->setStartPoint(maStartPoint);
@@ -779,20 +784,25 @@ namespace basegfx
         {
             const B2DPoint aSplit(interpolate(maStartPoint, maEndPoint, t));
 
+            // copy local values, one of the pointers above may be equal to 'this'
+            // and thus the assignments below may not work as expected
+            const B2DPoint aStart(maStartPoint);
+            const B2DPoint aEnd(maEndPoint);
+
             if(pBezierA)
             {
-                pBezierA->setStartPoint(maStartPoint);
+                pBezierA->setStartPoint(aStart);
                 pBezierA->setEndPoint(aSplit);
-                pBezierA->setControlPointA(maStartPoint);
+                pBezierA->setControlPointA(aStart);
                 pBezierA->setControlPointB(aSplit);
             }
 
             if(pBezierB)
             {
                 pBezierB->setStartPoint(aSplit);
-                pBezierB->setEndPoint(maEndPoint);
+                pBezierB->setEndPoint(aEnd);
                 pBezierB->setControlPointA(aSplit);
-                pBezierB->setControlPointB(maEndPoint);
+                pBezierB->setControlPointB(aEnd);
             }
         }
     }
