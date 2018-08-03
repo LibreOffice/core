@@ -236,7 +236,7 @@ private:
  *
  * \subsection caret_positions Caret Positions
  *
- * A caret position in OpenOffice Math is representated by an instance of SmCaretPos.
+ * A caret position in OpenOffice Math is represented by an instance of SmCaretPos.
  * That is a caret position is a node and an index related to this node. For most nodes the
  * index 0, means caret is in front of this node, the index 1 means caret is after this node.
  * For SmTextNode the index is the caret position after the specified number of characters,
@@ -300,7 +300,7 @@ private:
  * graph is build, and how new methods should be implemented see SmCaretPosGraphBuildingVisitor.
  *
  * The result of the SmCaretPosGraphBuildingVisitor is a graph over the caret positions in a
- * formula, representated by an instance of SmCaretPosGraph. Each entry (instances of SmCaretPosGraphEntry)
+ * formula, represented by an instance of SmCaretPosGraph. Each entry (instances of SmCaretPosGraphEntry)
  * has a pointer to the entry to the left and right of itself. This way we can easily find
  * the caret position to a right or left of a given caret position. Note each caret position
  * only appears once in this graph.

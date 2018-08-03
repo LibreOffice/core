@@ -147,7 +147,7 @@ namespace drawinglayer
 
             A renderer implementing support for this minimal set of primitives can completely
             render primitive-based visualisations. Of course, he also has to take states into account
-            which are representated by GroupPrimitive2D derivations, see groupprimitive2d.hxx
+            which are represented by GroupPrimitive2D derivations, see groupprimitive2d.hxx
 
             To support getting the geometric BoundRect, getB2DRange is used. The default
             implementation will use the get2DDecomposition result and merge a range from the
