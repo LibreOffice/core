@@ -341,7 +341,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             if(E3dDragConstraint::Z == meConstraint)
             {
-                fWAngle = NormAngle360(GetAngle(rPnt - DragStat().GetRef1()) -
+                fWAngle = NormAngle36000(GetAngle(rPnt - DragStat().GetRef1()) -
                     rCandidate.mnStartAngle) - rCandidate.mnLastAngle;
                 rCandidate.mnLastAngle = static_cast<long>(fWAngle) + rCandidate.mnLastAngle;
                 fWAngle /= 100.0;

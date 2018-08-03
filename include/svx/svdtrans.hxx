@@ -167,9 +167,9 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
  */
 SVX_DLLPUBLIC long GetAngle(const Point& rPnt);
 
-long NormAngle180(long a); /// Normalize angle to -180.00..179.99
+long NormAngle18000(long a); /// Normalize angle to -180.00..179.99
 
-SVX_DLLPUBLIC long NormAngle360(long a); /// Normalize angle to 0.00..359.99
+SVX_DLLPUBLIC long NormAngle36000(long a); /// Normalize angle to 0.00..359.99
 
 sal_uInt16 GetAngleSector(long nAngle); /// Determine sector within the cartesian coordinate system
 

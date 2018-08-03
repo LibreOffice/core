@@ -59,6 +59,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -877,10 +878,7 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    while(fUnitCircleWidthAngleDegree>360)
-        fUnitCircleWidthAngleDegree -= 360.0;
-    while(fUnitCircleWidthAngleDegree<0)
-        fUnitCircleWidthAngleDegree += 360.0;
+    fUnitCircleWidthAngleDegree = NormAngle360(fUnitCircleWidthAngleDegree);
 
     //create shape
     uno::Reference< drawing::XShape > xShape(

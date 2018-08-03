@@ -155,7 +155,7 @@ sal_Int16 SwRotationGrf::checkAndCorrectValue(sal_Int16 nValue)
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
         return 3600 + (nValue % 3600);
     }
-    else if (nValue > 3600)
+    else if (nValue >= 3600)
     {
         // bigger range, use modulo
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
