@@ -75,7 +75,8 @@ namespace oox { namespace ppt {
         void setNode(
             const ::oox::core::XmlFilterBase& rFilter,
             const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-            const SlidePersistPtr & pSlide );
+            const SlidePersistPtr & pSlide,
+            const css::uno::Reference< css::animations::XAnimationNode >& xParent);
 
         AnimTargetElementPtr const & getTarget()
             {
