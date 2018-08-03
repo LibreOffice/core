@@ -280,7 +280,7 @@ void PieChart::createTextLabelShape(
 
     ///when the placement is of `AVOID_OVERLAP` type a later rearrangement of
     ///the label position is allowed; the `createTextLabelShape` treats the
-    ///`AVOID_OVERLAP` as if it was of `CENTER` type;
+    ///`AVOID_OVERLAP` as if it was of `INSIDE` type;
 
     double nVal = rSeries.getYValue(nPointIndex);
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
@@ -296,8 +296,8 @@ void PieChart::createTextLabelShape(
         // The threshold is set to 2%, but can be improved by making it a function of
         // label width and radius too ?
         double fFrac = fabs( nVal / rParam.mfLogicYSum );
-        nLabelPlacement = ( fFrac <= 0.02 ) ? css::chart::DataLabelPlacement::OUTSIDE :
-            css::chart::DataLabelPlacement::CENTER;
+        nLabelPlacement = (fFrac <= 0.02) ? css::chart::DataLabelPlacement::OUTSIDE
+                                          : css::chart::DataLabelPlacement::INSIDE;
     }
 
     ///for `OUTSIDE` (`INSIDE`) label placements an offset of 150 (-150), in the
