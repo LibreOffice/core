@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
 
 #include <cstddef>
+#include <memory>
 
 #include "scdllapi.h"
 
@@ -112,7 +113,7 @@ public:
 protected:
     size_t                      nCount;
     size_t                      nLimit;
-    DataEntry*                  pData;
+    std::unique_ptr<DataEntry[]> pData;
     A                           nMaxAccess;
 };
 
@@ -122,9 +123,8 @@ void ScCompressedArray<A,D>::Reset( const D& rValue )
     // Create a temporary copy in case we got a reference passed that points to
     // a part of the array to be reallocated.
     D aTmpVal( rValue);
-    delete[] pData;
     nCount = nLimit = 1;
-    pData = new DataEntry[1];
+    pData.reset(new DataEntry[1]);
     pData[0].aValue = aTmpVal;
     pData[0].nEnd = nMaxAccess;
 }
