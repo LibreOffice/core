@@ -29,7 +29,6 @@
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
-#include <tools/mempool.hxx>
 #include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
@@ -110,8 +109,6 @@ protected:
     ScChangeActionLinkEntry*    pLink;
 
 public:
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
 
     ScChangeActionLinkEntry(
             ScChangeActionLinkEntry** ppPrevP,
@@ -684,9 +681,6 @@ protected:
     using ScChangeAction::GetRefString;
 
 public:
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
-
     ScChangeActionContent( const ScRange& rRange );
 
     ScChangeActionContent(
@@ -797,8 +791,6 @@ enum ScChangeTrackMsgType
 
 struct ScChangeTrackMsgInfo
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo )
-
     ScChangeTrackMsgType    eMsgType;
     sal_uLong                   nStartAction;
     sal_uLong                   nEndAction;

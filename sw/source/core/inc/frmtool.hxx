@@ -328,8 +328,6 @@ class SwBorderAttrs : public SwCacheObj
                        const SwFrame *pCmp ) const;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwBorderAttrs)
-
     SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs() override;
 

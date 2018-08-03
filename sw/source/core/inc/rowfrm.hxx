@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ROWFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ROWFRM_HXX
 
-#include <tools/mempool.hxx>
-
 #include "layfrm.hxx"
 
 class SwTableLine;
@@ -119,8 +117,6 @@ public:
     // height to fit the rest of space.
     bool IsInSplit() const { return m_bIsInSplit; }
     void SetInSplit(bool bNew = true) { m_bIsInSplit = bNew; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrame)
 };
 
 #endif

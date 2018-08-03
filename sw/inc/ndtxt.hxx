@@ -796,8 +796,6 @@ public:
     bool CompareRsid( const SwTextNode &rTextNode, sal_Int32 nStt1, sal_Int32 nStt2 ) const;
     bool CompareParRsid( const SwTextNode &rTextNode ) const;
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTextNode)
-
     // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
 

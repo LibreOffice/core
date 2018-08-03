@@ -27,8 +27,6 @@
 
 sw::UnoCursorHint::~UnoCursorHint() {}
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
-
 SwUnoCursor::SwUnoCursor( const SwPosition &rPos )
     : SwCursor( rPos, nullptr )
     , m_bRemainInSection(true)

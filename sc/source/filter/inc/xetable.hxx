@@ -23,7 +23,6 @@
 #include "xltable.hxx"
 
 #include <vector>
-#include <tools/mempool.hxx>
 #include "xladdress.hxx"
 #include "xerecord.hxx"
 #include "xestring.hxx"
@@ -361,8 +360,6 @@ private:
 /** Represents a NUMBER record that describes a cell with a double value. */
 class XclExpNumberCell : public XclExpSingleCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell )
-
 public:
     explicit            XclExpNumberCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
@@ -379,8 +376,6 @@ private:
 /** Represents a BOOLERR record that describes a cell with a Boolean value. */
 class XclExpBooleanCell : public XclExpSingleCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
-
 public:
     explicit            XclExpBooleanCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
@@ -405,8 +400,6 @@ class EditTextObject;
  */
 class XclExpLabelCell : public XclExpSingleCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell )
-
 public:
     /** Constructs the record from an unformatted Calc string cell. */
     explicit            XclExpLabelCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -440,8 +433,6 @@ class ScFormulaCell;
 /** Represents a FORMULA record that describes a cell with a formula. */
 class XclExpFormulaCell : public XclExpSingleCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
-
 public:
     explicit            XclExpFormulaCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
@@ -532,8 +523,6 @@ private:
 /** Represents a BLANK or MULBLANK record that describes empty but formatted cells. */
 class XclExpBlankCell : public XclExpMultiCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell )
-
 public:
     explicit            XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId );
 
@@ -557,8 +546,6 @@ private:
 /** Represents an RK or MULRK record that describes cells with a compressed double values. */
 class XclExpRkCell : public XclExpMultiCellBase
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell )
-
 public:
     explicit            XclExpRkCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,

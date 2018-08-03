@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWTABLE_HXX
 #define INCLUDED_SW_INC_SWTABLE_HXX
 
-#include <tools/mempool.hxx>
 #include <tools/ref.hxx>
 #include "tblenum.hxx"
 #include "swtypes.hxx"
@@ -470,8 +469,6 @@ public:
 
     // Loading of a document requires an actualization of cells with values
     void ActualiseValueBox();
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
     // Access on internal data - currently used for the NumFormatter.
     inline const Color* GetSaveUserColor()  const;

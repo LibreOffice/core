@@ -133,8 +133,6 @@ namespace {
  */
 class XclListColor
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclListColor )
-
 private:
     Color               maColor;        /// The color value of this palette entry.
     sal_uInt32          mnColorId;      /// Unique color ID for color reduction.
@@ -158,8 +156,6 @@ public:
     /** Merges this color with rColor, regarding weighting settings. */
     void                Merge( const XclListColor& rColor );
 };
-
-IMPL_FIXEDMEMPOOL_NEWDEL( XclListColor )
 
 XclListColor::XclListColor( const Color& rColor, sal_uInt32 nColorId ) :
     maColor( rColor ),

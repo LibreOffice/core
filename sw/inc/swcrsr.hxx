@@ -224,8 +224,6 @@ public:
     const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }
     SwCursor* GetPrev()             { return dynamic_cast<SwCursor *>(GetPrevInRing()); }
     const SwCursor* GetPrev() const { return dynamic_cast<SwCursor const *>(GetPrevInRing()); }
-
-    DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
 
 /**

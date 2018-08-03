@@ -669,7 +669,6 @@
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/mempool.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>

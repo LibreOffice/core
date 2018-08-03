@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
 
-#include <tools/mempool.hxx>
 #include "layfrm.hxx"
 
 class SwTableBox;
@@ -61,7 +60,6 @@ public:
     long GetLayoutRowSpan() const;
 
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
-    DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrame)
 };
 
 #endif

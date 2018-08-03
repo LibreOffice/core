@@ -22,7 +22,6 @@
 
 #include <string.h>
 
-#include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
 #include "refdata.hxx"
@@ -142,7 +141,6 @@ public:
 private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:
-                DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
     formula::StackVar    GetType()   const       { return eType; }
     OpCode      GetOpCode() const       { return eOp; }
     void        NewOpCode( OpCode e )   { eOp = e; }

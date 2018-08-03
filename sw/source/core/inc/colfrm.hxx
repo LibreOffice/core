@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
 
-#include <tools/mempool.hxx>
 #include "ftnboss.hxx"
 
 class SwColumnFrame: public SwFootnoteBossFrame
@@ -34,8 +33,6 @@ public:
 
     virtual void PaintBreak() const override;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwColumnFrame)
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX

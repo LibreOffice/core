@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <memory>
-#include <tools/mempool.hxx>
 #include <rangelst.hxx>
 #include <patattr.hxx>
 #include "xladdress.hxx"
@@ -524,8 +523,6 @@ private:
 /** Contains an (encoded) XF index for a range of rows in a single column. */
 class XclImpXFRange
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange )
-
 public:
     SCROW               mnScRow1;       /// The first row of an equal-formatted range.
     SCROW               mnScRow2;       /// The last row of an equal-formatted range.

@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XESTYLE_HXX
 
 #include <map>
-#include <tools/mempool.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
 #include <editeng/svxfont.hxx>

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
 
-#include <tools/mempool.hxx>
-
 #define NUM_DEFAULT_VALUES 39
 
 #include "swcache.hxx"
@@ -53,8 +51,6 @@ private:
     const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFontObj)
-
     SwFontObj( const void* pOwner, SwViewShell *pSh );
 
     virtual ~SwFontObj() override;
