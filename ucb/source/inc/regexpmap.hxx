@@ -68,28 +68,20 @@ struct Entry
 
 
 template< typename Val >
-struct RegexpMapImpl
-{
-    std::vector< Entry<Val> > m_aList[Regexp::KIND_DOMAIN + 1];
-    std::unique_ptr<Entry< Val >> m_pDefault;
-};
-
-
-template< typename Val >
 class RegexpMapIterImpl
 {
 public:
-    typedef RegexpMapImpl< Val > MapImpl;
+    typedef RegexpMap< Val > Map;
     typedef typename std::vector< Entry< Val > >::iterator ListIterator;
 
     // Solaris needs these for the ctor...
 
     inline RegexpMapIterImpl();
 
-    inline RegexpMapIterImpl(MapImpl * pTheMap, int nTheList,
+    inline RegexpMapIterImpl(Map * pTheMap, int nTheList,
                              ListIterator aTheIndex);
 
-    RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap, bool bBegin);
+    RegexpMapIterImpl(RegexpMap< Val > * pTheMap, bool bBegin);
 
     RegexpMapIterImpl(RegexpMapIterImpl const & rOther);
 
@@ -97,7 +89,7 @@ public:
 
     bool operator ==(RegexpMapIterImpl const & rOther) const;
 
-    RegexpMapImpl< Val > const * getMap() const { return m_pMap; }
+    RegexpMap< Val > const * getMap() const { return m_pMap; }
 
     int getList() const { return m_nList; }
 
@@ -110,7 +102,7 @@ public:
 private:
     mutable RegexpMapEntry< Val > m_aEntry;
     typename std::vector< Entry< Val > >::iterator m_aIndex;
-    RegexpMapImpl< Val > * m_pMap;
+    RegexpMap< Val > * m_pMap;
     int m_nList;
     mutable bool m_bEntrySet;
 };
@@ -124,7 +116,7 @@ inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
 {}
 
 template< typename Val >
-inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
+inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(Map * pTheMap,
                                                    int nTheList,
                                                    ListIterator aTheIndex):
     m_aEntry(rtl::OUString(), 0),
@@ -135,7 +127,7 @@ inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
 {}
 
 template< typename Val >
-RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
+RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMap< Val > * pTheMap,
                                             bool bBegin):
     m_aEntry(rtl::OUString(), 0),
     m_pMap(pTheMap),
@@ -351,18 +343,11 @@ RegexpMapEntry< Val > const * RegexpMapIter< Val >::operator ->() const
 template< typename Val >
 class RegexpMap
 {
+friend class RegexpMapIterImpl<Val>;
 public:
     typedef sal_uInt32 size_type;
     typedef RegexpMapIter< Val > iterator;
     typedef RegexpMapConstIter< Val > const_iterator;
-
-    RegexpMap();
-
-    RegexpMap(RegexpMap const & rOther);
-
-    ~RegexpMap();
-
-    RegexpMap & operator =(RegexpMap const & rOther);
 
     void add(OUString const & rKey, Val const & rValue);
 
@@ -383,29 +368,9 @@ public:
     Val const * map(OUString const & rString) const;
 
 private:
-    RegexpMapImpl< Val > m_aImpl;
+    std::vector< Entry<Val> > m_aList[Regexp::KIND_DOMAIN + 1];
+    std::unique_ptr<Entry< Val >> m_pDefault;
 };
-
-template< typename Val >
-RegexpMap< Val >::RegexpMap()
-{}
-
-template< typename Val >
-RegexpMap< Val >::RegexpMap(RegexpMap const & rOther):
-    m_aImpl(rOther.m_pImpl)
-{}
-
-template< typename Val >
-RegexpMap< Val >::~RegexpMap()
-{
-}
-
-template< typename Val >
-RegexpMap< Val > & RegexpMap< Val >::operator =(RegexpMap const & rOther)
-{
-    m_aImpl = rOther.m_aImpl;
-    return *this;
-}
 
 template< typename Val >
 void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
@@ -414,15 +379,15 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
 
     if (aRegexp.isDefault())
     {
-        if (m_aImpl.m_pDefault)
+        if (m_pDefault)
         {
             return;
         }
-        m_aImpl.m_pDefault.reset( new Entry< Val >(aRegexp, rValue) );
+        m_pDefault.reset( new Entry< Val >(aRegexp, rValue) );
     }
     else
     {
-        std::vector< Entry<Val> > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
+        std::vector< Entry<Val> > & rTheList = m_aList[aRegexp.getKind()];
 
         for (auto const& elem : rTheList)
         {
@@ -443,36 +408,37 @@ typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const &
 
     if (aRegexp.isDefault())
     {
-        if (m_aImpl.m_pDefault)
-            return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl,
+        if (m_pDefault)
+            return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this,
                                                                      true));
     }
     else
     {
-        std::vector< Entry<Val> > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
+        std::vector< Entry<Val> > & rTheList = m_aList[aRegexp.getKind()];
 
         typename std::vector< Entry<Val> >::iterator aEnd(rTheList.end());
         for (typename std::vector< Entry<Val> >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
             if (aIt->m_aRegexp == aRegexp)
                 return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(
-                                                    &m_aImpl,
+                                                    this,
                                                     aRegexp.getKind(), aIt));
     }
 
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl, false));
+    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, false));
 }
 
 template< typename Val >
 void RegexpMap< Val >::erase(iterator const & rPos)
 {
-    if (rPos.m_pImpl->getMap() == &m_aImpl)
+    assert(rPos.m_pImpl->getMap() == this);
+    if (rPos.m_pImpl->getMap() == this)
     {
         if (rPos.m_pImpl->getList() == -1)
         {
-            m_aImpl.m_pDefault.reset();
+            m_pDefault.reset();
         }
         else
-            m_aImpl.m_aList[rPos.m_pImpl->getList()].
+            m_aList[rPos.m_pImpl->getList()].
                          erase(rPos.m_pImpl->getIndex());
     }
 }
@@ -480,36 +446,36 @@ void RegexpMap< Val >::erase(iterator const & rPos)
 template< typename Val >
 typename RegexpMap< Val >::iterator RegexpMap< Val >::begin()
 {
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl, true));
+    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, true));
 }
 
 template< typename Val >
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
 {
-    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl,
+    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(this,
                                                                   true));
 }
 
 template< typename Val >
 typename RegexpMap< Val >::iterator RegexpMap< Val >::end()
 {
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl, false));
+    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, false));
 }
 
 template< typename Val >
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
 {
-    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(&m_aImpl,
+    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(this,
                                                                   false));
 }
 
 template< typename Val >
 typename RegexpMap< Val >::size_type RegexpMap< Val >::size() const
 {
-    return (m_aImpl.m_pDefault ? 1 : 0)
-               + m_aImpl.m_aList[Regexp::KIND_PREFIX].size()
-               + m_aImpl.m_aList[Regexp::KIND_AUTHORITY].size()
-               + m_aImpl.m_aList[Regexp::KIND_DOMAIN].size();
+    return (m_pDefault ? 1 : 0)
+               + m_aList[Regexp::KIND_PREFIX].size()
+               + m_aList[Regexp::KIND_AUTHORITY].size()
+               + m_aList[Regexp::KIND_DOMAIN].size();
 }
 
 template< typename Val >
@@ -517,15 +483,15 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
 {
     for (int n = Regexp::KIND_DOMAIN; n >= Regexp::KIND_PREFIX; --n)
     {
-        std::vector< Entry<Val> > const & rTheList = m_aImpl.m_aList[n];
+        std::vector< Entry<Val> > const & rTheList = m_aList[n];
 
         for (auto const & rItem : rTheList)
             if (rItem.m_aRegexp.matches(rString))
                 return &rItem.m_aValue;
     }
-    if (m_aImpl.m_pDefault
-        && m_aImpl.m_pDefault->m_aRegexp.matches(rString))
-        return &m_aImpl.m_pDefault->m_aValue;
+    if (m_pDefault
+        && m_pDefault->m_aRegexp.matches(rString))
+        return &m_pDefault->m_aValue;
     return 0;
 }
 
