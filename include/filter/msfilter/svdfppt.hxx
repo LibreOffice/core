@@ -478,13 +478,13 @@ public:
                         SdrEscherImport( PowerPointImportParam&, const OUString& rBaseURL );
     virtual             ~SdrEscherImport() override;
     virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const override;
-    virtual bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const override;
+    virtual bool        SeekToShape( SvStream& rSt, SvxMSDffClientData* pClientData, sal_uInt32 nId ) const override;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
-    virtual void        NotifyFreeObj(void* pData, SdrObject* pObj) override;
-    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) override;
+    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
+    virtual void        NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj) override;
+    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, SvxMSDffClientData& rData, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader const & rHeader, HeaderFooterEntry& rEntry );
 };
 
@@ -531,7 +531,7 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
                         ~HeaderFooterEntry();
 };
 
-struct ProcessData
+struct MSFILTER_DLLPUBLIC ProcessData : public SvxMSDffClientData
 {
     PptSlidePersistEntry&       rPersistEntry;
     SdPageCapsule               pPage;
@@ -541,6 +541,8 @@ struct ProcessData
     ProcessData( PptSlidePersistEntry& rP, SdPageCapsule pP ) :
         rPersistEntry               ( rP ),
         pPage                       ( pP ) {};
+
+    virtual void NotifyFreeObj(SdrObject* pObj) override;
 };
 
 
@@ -638,7 +640,7 @@ public:
 
     void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const override;
-    virtual bool            SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const override;
+    virtual bool            SeekToShape( SvStream& rSt, SvxMSDffClientData* pClientData, sal_uInt32 nId ) const override;
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const override;
     SdrObject*              CreateTable(
                                 SdrObject* pGroupObject,
