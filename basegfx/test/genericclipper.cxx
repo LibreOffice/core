@@ -68,10 +68,8 @@ public:
                   const char* pValidSvgD,
                   B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&)) const
     {
-        const B2DPolyPolygon aSelfIntersect(
-            utils::prepareForPolygonOperation(aSelfIntersecting));
-        const B2DPolyPolygon aRect(
-            utils::prepareForPolygonOperation(aShiftedRectangle));
+        const B2DPolyPolygon aSelfIntersect(utils::prepareForPolygonOperation(B2DPolyPolygon(aSelfIntersecting)));
+        const B2DPolyPolygon aRect(utils::prepareForPolygonOperation(B2DPolyPolygon(aShiftedRectangle)));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(

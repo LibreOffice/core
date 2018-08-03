@@ -476,6 +476,11 @@ namespace basegfx
                 B2DPolygon aRes;
                 for (auto const& aPoint : maPoints)
                     aRes.append(aPoint, 1);
+
+                // TTTT: Be aware that these solutions can contain quite some
+                // double and neutral points. These would evtl. be better
+                // removed before using it, see normalizePoly in basegfx/test/boxclipper.cxx
+
                 aRes.setClosed( true );
                 return aRes;
             }
