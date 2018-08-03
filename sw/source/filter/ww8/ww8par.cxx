@@ -558,14 +558,14 @@ void SwWW8ImplReader::SetToggleBiDiAttrFlags(sal_uInt16 nFlags)
 
 SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
-                                       void* pData,
+                                       SvxMSDffClientData& rData,
                                        tools::Rectangle& rTextRect,
                                        SdrObject* pObj
                                        )
 {
     if( !rTextRect.IsEmpty() )
     {
-        SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
+        SvxMSDffImportData& rImportData = static_cast<SvxMSDffImportData&>(rData);
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
 
         // fill Import Record with data
