@@ -68,36 +68,34 @@ struct Entry
 
 
 template< typename Val >
-class RegexpMapIterImpl
+class RegexpMapConstIter
 {
+    friend class RegexpMap< Val >; // to access m_pImpl, ctor
+    friend class RegexpMapIter< Val >; // to access m_pImpl, ctor
+
 public:
-    typedef RegexpMap< Val > Map;
     typedef typename std::vector< Entry< Val > >::iterator ListIterator;
 
-    // Solaris needs these for the ctor...
+    RegexpMapConstIter();
 
-    inline RegexpMapIterImpl();
+    RegexpMapConstIter(RegexpMap< Val > * pTheMap, bool bBegin);
 
-    inline RegexpMapIterImpl(Map * pTheMap, int nTheList,
+    RegexpMapConstIter(RegexpMap< Val > * pTheMap, int nTheList,
                              ListIterator aTheIndex);
 
-    RegexpMapIterImpl(RegexpMap< Val > * pTheMap, bool bBegin);
+    RegexpMapConstIter(RegexpMapConstIter const & rOther);
 
-    RegexpMapIterImpl(RegexpMapIterImpl const & rOther);
+    RegexpMapConstIter & operator =(RegexpMapConstIter const & rOther);
 
-    RegexpMapIterImpl & operator =(RegexpMapIterImpl const & rOther);
+    RegexpMapConstIter & operator ++();
 
-    bool operator ==(RegexpMapIterImpl const & rOther) const;
+    RegexpMapEntry< Val > const * operator ->() const;
 
-    RegexpMap< Val > const * getMap() const { return m_pMap; }
+    bool equals(RegexpMapConstIter const & rOther) const;
+        // for free operator ==(), operator !=()
 
-    int getList() const { return m_nList; }
-
-    typename std::vector< Entry< Val > >::iterator const & getIndex() const { return m_aIndex; }
-
-    void next();
-
-    RegexpMapEntry< Val > & get();
+protected:
+    RegexpMapEntry< Val > & get() const;
 
 private:
     mutable RegexpMapEntry< Val > m_aEntry;
@@ -108,7 +106,7 @@ private:
 };
 
 template< typename Val >
-inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
+RegexpMapConstIter< Val >::RegexpMapConstIter():
     m_aEntry(rtl::OUString(), 0),
     m_pMap(nullptr),
     m_nList(-1),
@@ -116,7 +114,27 @@ inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
 {}
 
 template< typename Val >
-inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(Map * pTheMap,
+RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
+                                            bool bBegin):
+    m_aEntry(rtl::OUString(), 0),
+    m_pMap(pTheMap),
+    m_bEntrySet(false)
+{
+    if (bBegin)
+    {
+        m_nList = -1;
+        if (!m_pMap->m_pDefault)
+            operator++();
+    }
+    else
+    {
+        m_nList = Regexp::KIND_DOMAIN;
+        m_aIndex = m_pMap->m_aList[Regexp::KIND_DOMAIN].end();
+    }
+}
+
+template< typename Val >
+inline RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                                    int nTheList,
                                                    ListIterator aTheIndex):
     m_aEntry(rtl::OUString(), 0),
@@ -127,27 +145,8 @@ inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(Map * pTheMap,
 {}
 
 template< typename Val >
-RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMap< Val > * pTheMap,
-                                            bool bBegin):
-    m_aEntry(rtl::OUString(), 0),
-    m_pMap(pTheMap),
-    m_bEntrySet(false)
-{
-    if (bBegin)
-    {
-        m_nList = -1;
-        if (!m_pMap->m_pDefault)
-            next();
-    }
-    else
-    {
-        m_nList = Regexp::KIND_DOMAIN;
-        m_aIndex = m_pMap->m_aList[Regexp::KIND_DOMAIN].end();
-    }
-}
-
-template< typename Val >
-RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapIterImpl const & rOther):
+RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMapConstIter const &
+                                                  rOther):
     m_aEntry(rOther.m_aEntry), m_pMap(rOther.m_pMap), m_nList(rOther.m_nList),
     m_bEntrySet(rOther.m_bEntrySet)
 {
@@ -156,8 +155,8 @@ RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapIterImpl const & rOther):
 }
 
 template< typename Val >
-RegexpMapIterImpl< Val > & RegexpMapIterImpl< Val >::operator =(
-    RegexpMapIterImpl const & rOther)
+RegexpMapConstIter< Val > &
+RegexpMapConstIter< Val >::operator =(RegexpMapConstIter const & rOther)
 {
     if (this != &rOther)
     {
@@ -174,22 +173,13 @@ RegexpMapIterImpl< Val > & RegexpMapIterImpl< Val >::operator =(
 }
 
 template< typename Val >
-bool RegexpMapIterImpl< Val >::operator ==(RegexpMapIterImpl const & rOther)
-    const
-{
-    return m_pMap == rOther.m_pMap
-           && m_nList == rOther.m_nList
-           && (m_nList == -1 || m_aIndex == rOther.m_aIndex);
-}
-
-template< typename Val >
-void RegexpMapIterImpl< Val >::next()
+RegexpMapConstIter< Val > & RegexpMapConstIter< Val >::operator ++()
 {
     switch (m_nList)
     {
         case Regexp::KIND_DOMAIN:
             if (m_aIndex == m_pMap->m_aList[m_nList].end())
-                return;
+                return *this;
             SAL_FALLTHROUGH;
         default:
             ++m_aIndex;
@@ -208,10 +198,11 @@ void RegexpMapIterImpl< Val >::next()
             break;
     }
     m_bEntrySet = false;
+    return *this;
 }
 
 template< typename Val >
-RegexpMapEntry< Val > & RegexpMapIterImpl< Val >::get()
+RegexpMapEntry< Val > & RegexpMapConstIter< Val >::get() const
 {
     if (!m_bEntrySet)
     {
@@ -225,84 +216,19 @@ RegexpMapEntry< Val > & RegexpMapIterImpl< Val >::get()
     return m_aEntry;
 }
 
-
-template< typename Val >
-class RegexpMapConstIter
-{
-    friend class RegexpMap< Val >; // to access m_pImpl, ctor
-    friend class RegexpMapIter< Val >; // to access m_pImpl, ctor
-
-public:
-    RegexpMapConstIter();
-
-    RegexpMapConstIter(RegexpMapConstIter const & rOther);
-
-    ~RegexpMapConstIter();
-
-    RegexpMapConstIter & operator =(RegexpMapConstIter const & rOther);
-
-    RegexpMapConstIter & operator ++();
-
-    RegexpMapEntry< Val > const * operator ->() const;
-
-    bool equals(RegexpMapConstIter const & rOther) const;
-        // for free operator ==(), operator !=()
-
-private:
-    RegexpMapIterImpl< Val > * m_pImpl;
-
-    RegexpMapConstIter(RegexpMapIterImpl< Val > * pTheImpl);
-};
-
-template< typename Val >
-RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMapIterImpl< Val > *
-                                                  pTheImpl):
-    m_pImpl(pTheImpl)
-{}
-
-template< typename Val >
-RegexpMapConstIter< Val >::RegexpMapConstIter():
-    m_pImpl(new RegexpMapIterImpl< Val >)
-{}
-
-template< typename Val >
-RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMapConstIter const &
-                                                  rOther):
-    m_pImpl(new RegexpMapIterImpl< Val >(*rOther.m_pImpl))
-{}
-
-template< typename Val >
-RegexpMapConstIter< Val >::~RegexpMapConstIter()
-{
-    delete m_pImpl;
-}
-
-template< typename Val >
-RegexpMapConstIter< Val > &
-RegexpMapConstIter< Val >::operator =(RegexpMapConstIter const & rOther)
-{
-    *m_pImpl = *rOther.m_pImpl;
-    return *this;
-}
-
-template< typename Val >
-RegexpMapConstIter< Val > & RegexpMapConstIter< Val >::operator ++()
-{
-    m_pImpl->next();
-    return *this;
-}
-
 template< typename Val >
 RegexpMapEntry< Val > const * RegexpMapConstIter< Val >::operator ->() const
 {
-    return &m_pImpl->get();
+    return &get();
 }
 
 template< typename Val >
 bool RegexpMapConstIter< Val >::equals(RegexpMapConstIter const & rOther)
     const
 {
-    return *m_pImpl == *rOther.m_pImpl;
+    return m_pMap == rOther.m_pMap
+           && m_nList == rOther.m_nList
+           && (m_nList == -1 || m_aIndex == rOther.m_aIndex);
 }
 
 
@@ -314,36 +240,36 @@ class RegexpMapIter: public RegexpMapConstIter< Val >
 public:
     RegexpMapIter() {}
 
+    RegexpMapIter(RegexpMap< Val > * pTheMap, bool bBegin):
+        RegexpMapConstIter<Val>(pTheMap, bBegin)
+    {}
+
+    RegexpMapIter(RegexpMap< Val > * pTheMap, int nTheList, typename RegexpMapConstIter< Val >::ListIterator aTheIndex):
+        RegexpMapConstIter<Val>(pTheMap, nTheList, aTheIndex)
+    {}
+
     RegexpMapEntry< Val > * operator ->();
 
     RegexpMapEntry< Val > const * operator ->() const;
-
-private:
-    RegexpMapIter(RegexpMapIterImpl< Val > * pTheImpl);
 };
-
-template< typename Val >
-RegexpMapIter< Val >::RegexpMapIter(RegexpMapIterImpl< Val > * pTheImpl):
-    RegexpMapConstIter< Val >(pTheImpl)
-{}
 
 template< typename Val >
 RegexpMapEntry< Val > * RegexpMapIter< Val >::operator ->()
 {
-    return &this->m_pImpl->get();
+    return &RegexpMapConstIter<Val>::get();
 }
 
 template< typename Val >
 RegexpMapEntry< Val > const * RegexpMapIter< Val >::operator ->() const
 {
-    return &this->m_pImpl->get();
+    return &RegexpMapConstIter<Val>::get();
 }
 
 
 template< typename Val >
 class RegexpMap
 {
-friend class RegexpMapIterImpl<Val>;
+friend class RegexpMapConstIter<Val>;
 public:
     typedef sal_uInt32 size_type;
     typedef RegexpMapIter< Val > iterator;
@@ -409,8 +335,7 @@ typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const &
     if (aRegexp.isDefault())
     {
         if (m_pDefault)
-            return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this,
-                                                                     true));
+            return RegexpMapIter< Val >(this, true);
     }
     else
     {
@@ -419,54 +344,49 @@ typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const &
         typename std::vector< Entry<Val> >::iterator aEnd(rTheList.end());
         for (typename std::vector< Entry<Val> >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
             if (aIt->m_aRegexp == aRegexp)
-                return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(
-                                                    this,
-                                                    aRegexp.getKind(), aIt));
+                return RegexpMapIter< Val >(this, aRegexp.getKind(), aIt);
     }
 
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, false));
+    return RegexpMapIter< Val >(this, false);
 }
 
 template< typename Val >
 void RegexpMap< Val >::erase(iterator const & rPos)
 {
-    assert(rPos.m_pImpl->getMap() == this);
-    if (rPos.m_pImpl->getMap() == this)
+    assert(rPos.m_pMap == this);
+    if (rPos.m_pMap == this)
     {
-        if (rPos.m_pImpl->getList() == -1)
+        if (rPos.m_nList == -1)
         {
             m_pDefault.reset();
         }
         else
-            m_aList[rPos.m_pImpl->getList()].
-                         erase(rPos.m_pImpl->getIndex());
+            m_aList[rPos.m_nList].erase(rPos.m_aIndex);
     }
 }
 
 template< typename Val >
 typename RegexpMap< Val >::iterator RegexpMap< Val >::begin()
 {
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, true));
+    return RegexpMapIter< Val >(this, true);
 }
 
 template< typename Val >
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
 {
-    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(this,
-                                                                  true));
+    return RegexpMapConstIter< Val >(this, true);
 }
 
 template< typename Val >
 typename RegexpMap< Val >::iterator RegexpMap< Val >::end()
 {
-    return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(this, false));
+    return RegexpMapIter< Val >(this, false);
 }
 
 template< typename Val >
 typename RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
 {
-    return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(this,
-                                                                  false));
+    return RegexpMapConstIter< Val >(this, false);
 }
 
 template< typename Val >
