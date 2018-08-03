@@ -251,6 +251,8 @@ core_constructor_list = [
     ("com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_xml_crypto_XMLSecurityContext_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_xml_crypto_XMLSignature_get_implementation", "#if HAVE_FEATURE_NSS"),
+# oox/util/oox.component
+    "com_sun_star_comp_oox_core_FastTokenHandler_get_implementation",
     ]
 
 # edit group for apps, where you can edit documents
