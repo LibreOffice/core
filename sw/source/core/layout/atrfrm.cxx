@@ -2446,8 +2446,6 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
 
-// Partially implemented inline in hxx
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrameFormat )
 
 SwFrameFormat::SwFrameFormat(
     SwAttrPool& rPool,
@@ -2838,12 +2836,6 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
         pFormat->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
-
-//  class SwFlyFrameFormat
-//  Partially implemented inline in hxx
-
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrameFormat )
-
 
 
 SwFlyFrameFormat::SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame )
@@ -3293,11 +3285,6 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
         mrFlyFrameFormat.MakeFrames();
     }
 }
-
-//  class SwDrawFrameFormat
-//  Partially implemented inline in hxx
-
-IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrameFormat )
 
 namespace sw
 {

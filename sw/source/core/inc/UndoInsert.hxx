@@ -25,7 +25,6 @@
 #include <undobj.hxx>
 #include <svx/svdtypes.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/mempool.hxx>
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <boost/optional.hpp>
@@ -87,8 +86,6 @@ public:
     virtual SwRewriter GetRewriter() const override;
 
     void SetWithRsid() { m_bWithRsid = true; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
 
 SwRewriter

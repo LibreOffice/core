@@ -43,12 +43,6 @@ long SwTextFrame::nMinPrtLine = 0;
 SwContourCache *pContourCache = nullptr;
 SwDropCapCache *pDropCapCache = nullptr;
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTextLine )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) // Paragraphs
-IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) // Lines
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTextPortion ) // Attribute change
-
 // Are ONLY used in init.cxx.
 // There we have extern void TextFinit()
 // and extern void TextInit_(...)

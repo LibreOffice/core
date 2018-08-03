@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_HFFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_HFFRM_HXX
 
-#include <tools/mempool.hxx>
 #include "layfrm.hxx"
 
 class SwHeadFootFrame : public SwLayoutFrame
@@ -45,8 +44,6 @@ class SwHeaderFrame: public SwHeadFootFrame
 {
 public:
     SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Header) {};
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrame)
 };
 
 /// Footer in the document layout, inside a page.
@@ -54,8 +51,6 @@ class SwFooterFrame: public SwHeadFootFrame
 {
 public:
     SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Footer) {};
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrame)
 };
 
 #endif

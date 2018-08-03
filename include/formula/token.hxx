@@ -35,7 +35,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svl/sharedstring.hxx>
-#include <tools/mempool.hxx>
 
 class ScJumpMatrix;
 class ScMatrix;
@@ -258,8 +257,6 @@ public:
     virtual ParamClass          GetInForceArray() const override;
     virtual void                SetInForceArray( ParamClass c ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 };
 
 
@@ -296,8 +293,6 @@ public:
     virtual double&             GetDoubleAsReference() override;
     virtual sal_Int16           GetDoubleType() const override;     ///< always returns 0 for "not typed"
     virtual bool                operator==( const FormulaToken& rToken ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
 
 class FORMULA_DLLPUBLIC FormulaTypedDoubleToken : public FormulaDoubleToken
@@ -317,8 +312,6 @@ public:
     virtual sal_Int16           GetDoubleType() const override;
     virtual void                SetDoubleType( sal_Int16 nType ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaTypedDoubleToken )
 };
 
 
@@ -333,8 +326,6 @@ public:
     virtual svl::SharedString GetString() const override;
     virtual void SetString( const svl::SharedString& rStr ) override;
     virtual bool operator==( const FormulaToken& rToken ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
 
 

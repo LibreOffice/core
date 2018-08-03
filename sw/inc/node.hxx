@@ -21,7 +21,6 @@
 #define INCLUDED_SW_INC_NODE_HXX
 
 #include <sal/types.h>
-#include <tools/mempool.hxx>
 
 #include "swdllapi.h"
 #include "ndarr.hxx"
@@ -318,8 +317,6 @@ protected:
                  const SwNodeType nNodeType = SwNodeType::Start,
                  SwStartNodeType = SwNormalStartNode );
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwStartNode)
-
     SwStartNodeType GetStartNodeType() const        { return m_eStartNodeType; }
 
     /// Call ChkCondcoll to all ContentNodes of section.
@@ -344,8 +341,6 @@ class SwEndNode : public SwNode
 
 protected:
     SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd );
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwEndNode)
 
 private:
     SwEndNode( const SwEndNode & rNode ) = delete;

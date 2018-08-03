@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_BODYFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_BODYFRM_HXX
 
-#include <tools/mempool.hxx>
 #include "layfrm.hxx"
 
 class SwBorderAttrs;
@@ -35,8 +34,6 @@ public:
     SwBodyFrame( SwFrameFormat*, SwFrame* );
 
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrame)
 };
 
 #endif

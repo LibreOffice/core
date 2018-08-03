@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_NDHINTS_HXX
 #define INCLUDED_SW_INC_NDHINTS_HXX
 
-#include <tools/mempool.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 #include "swtypes.hxx"
@@ -185,8 +184,6 @@ public:
 
     // calc current value of m_bHiddenByParaField, returns true iff changed
     bool CalcHiddenParaField() const; // changes mutable state
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
 #endif

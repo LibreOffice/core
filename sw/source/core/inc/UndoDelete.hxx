@@ -22,7 +22,6 @@
 
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/mempool.hxx>
 #include <memory>
 #include <boost/optional.hpp>
 
@@ -99,8 +98,6 @@ public:
 
     // SwUndoTableCpyTable needs this information:
     bool IsDelFullPara() const { return m_bDelFullPara; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX

@@ -22,7 +22,6 @@
 #include <functional>
 
 #include <string.h>
-#include <tools/mempool.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
@@ -206,13 +205,6 @@ namespace
 
 } // namespace
 
-// ScRawToken size is OpCode + StackVar + MAXSTRLEN+1 + ~20 ~= 1049
-IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken )
-
-// Need a whole bunch of ScSingleRefToken
-IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken )
-// Need quite a lot of ScDoubleRefToken
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken )
 
 // --- class ScRawToken -----------------------------------------------------
 

@@ -40,17 +40,6 @@ namespace formula
 {
     using namespace com::sun::star;
 
-// Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
-
-// Need a lot of FormulaDoubleToken
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
-// Need quite some FormulaTypedDoubleToken
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaTypedDoubleToken )
-// Need a lot of FormulaByteToken
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
-// Need several FormulaStringToken
-IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
-
 
 // --- helpers --------------------------------------------------------------
 

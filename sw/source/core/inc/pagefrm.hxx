@@ -21,7 +21,6 @@
 
 #include <viewsh.hxx>
 #include "ftnboss.hxx"
-#include <tools/mempool.hxx>
 
 #include <SidebarWindowsTypes.hxx>
 
@@ -108,8 +107,6 @@ protected:
     size_t GetContentHeight(const long nTop, const long nBottom) const;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrame)
-
     SwPageFrame( SwFrameFormat*, SwFrame*, SwPageDesc* );
 
     /// Make this public, so that the SwViewShell can access it when switching from browse mode

@@ -101,7 +101,6 @@ class SharedStringPool;
 class ScTokenStack
 {
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
     const formula::FormulaToken* pPointer[ MAXSTACK ];
 };
 
@@ -151,8 +150,6 @@ class ScInterpreter
     friend class ScChiSqDistFunction;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
-
     static SC_DLLPUBLIC void SetGlobalConfig(const ScCalcConfig& rConfig);
     static SC_DLLPUBLIC const ScCalcConfig& GetGlobalConfig();
 

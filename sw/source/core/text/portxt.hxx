@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORTXT_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORTXT_HXX
 
-#include <tools/mempool.hxx>
-
 #include "porlin.hxx"
 
 class SwTextGuess;
@@ -50,8 +48,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTextPortion)
 };
 
 class SwTextInputFieldPortion : public SwTextPortion
@@ -78,8 +74,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwHolePortion)
 };
 
 class SwFieldMarkPortion : public SwTextPortion

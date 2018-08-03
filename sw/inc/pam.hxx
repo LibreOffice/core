@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_PAM_HXX
 
 #include <sal/types.h>
-#include <tools/mempool.hxx>
 #include "ring.hxx"
 #include "index.hxx"
 #include "ndindex.hxx"
@@ -290,8 +289,6 @@ public:
     {
         return *Start() <= rPos && rPos <= *End();
     }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
     OUString GetText() const;
     void InvalidatePaM();

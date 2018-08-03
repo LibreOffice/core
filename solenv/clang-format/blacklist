@@ -7746,7 +7746,6 @@ include/tools/line.hxx
 include/tools/lineend.hxx
 include/tools/link.hxx
 include/tools/mapunit.hxx
-include/tools/mempool.hxx
 include/tools/multisel.hxx
 include/tools/pathutils.hxx
 include/tools/poly.hxx
@@ -16792,7 +16791,6 @@ tools/source/generic/svborder.cxx
 tools/source/inet/inetmime.cxx
 tools/source/inet/inetmsg.cxx
 tools/source/inet/inetstrm.cxx
-tools/source/memtools/mempool.cxx
 tools/source/memtools/multisel.cxx
 tools/source/misc/cpuid.cxx
 tools/source/misc/extendapplicationenvironment.cxx

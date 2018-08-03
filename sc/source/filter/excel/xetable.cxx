@@ -606,8 +606,6 @@ void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
     WriteContents( rStrm );
 }
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell )
-
 XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
@@ -650,8 +648,6 @@ void XclExpNumberCell::WriteContents( XclExpStream& rStrm )
     rStrm << mfValue;
 }
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
-
 XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
@@ -680,8 +676,6 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 {
     rStrm << sal_uInt16( mbValue ? 1 : 0 ) << EXC_BOOLERR_BOOL;
 }
-
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell )
 
 XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -805,8 +799,6 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
         default:    DBG_ERROR_BIFF();
     }
 }
-
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
 
 XclExpFormulaCell::XclExpFormulaCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
@@ -1302,8 +1294,6 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
     // The Save() function will skip all XF indexes equal to EXC_XF_NOTFOUND.
 }
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell )
-
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
     XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
@@ -1349,8 +1339,6 @@ void XclExpBlankCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             FSEND );
 }
-
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell )
 
 XclExpRkCell::XclExpRkCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,

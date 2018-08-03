@@ -163,8 +163,6 @@ public:
     const SwShellCursor* GetNext() const { return dynamic_cast<SwShellCursor const *>(GetNextInRing()); }
     SwShellCursor* GetPrev()             { return dynamic_cast<SwShellCursor *>(GetPrevInRing()); }
     const SwShellCursor* GetPrev() const { return dynamic_cast<SwShellCursor const *>(GetPrevInRing()); }
-
-    DECL_FIXEDMEMPOOL_NEWDEL( SwShellCursor )
 };
 
 class SwShellTableCursor : public virtual SwShellCursor, public virtual SwTableCursor

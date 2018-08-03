@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX
 
-#include <tools/mempool.hxx>
 #include "layfrm.hxx"
 #include "flowfrm.hxx"
 
@@ -217,8 +216,6 @@ public:
     sal_uInt16 GetBottomLineSize() const;
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrame)
 };
 
 inline const SwContentFrame *SwTabFrame::FindLastContent() const

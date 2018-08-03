@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFRM_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/mempool.hxx>
 #include "cntfrm.hxx"
 #include <ndtxt.hxx>
 #include "TextFrameIndex.hxx"
@@ -460,9 +459,6 @@ public:
     // If there are any hanging punctuation portions in the margin
     // the offset will be returned.
     SwTwips HangingMargin() const;
-
-    // RTTI
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTextFrame)
 
     // Locking
     bool IsLocked()      const { return mbLocked;     }
