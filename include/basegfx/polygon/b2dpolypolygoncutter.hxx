@@ -44,16 +44,6 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
-        /** Solve all crossovers (aka self-intersections) in a Polygon
-
-            Same as above, but for single polygons. Result will be
-            free of self-intersections. When result contains multiple
-            polygons, it may be necessary to rearrange their
-            orientations since holes may have been created (possibly use
-            correctOrientations).
-        */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
-
         /** Strip neutral polygons from PolyPolygon.
 
             Neutral polygons are ones who's orientation is neutral, so
@@ -64,29 +54,6 @@ namespace basegfx
             (that's where it's mostly used).
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate);
-
-        /** Remove unnecessary/non-displayed polygons.
-
-            Works only correct with self-intersection-free
-            polygons. For each polygon, the depth for the PolyPolygon
-            is calculated. The orientation is used to identify holes.
-            Start value for holes is -1, for polygons it's zero. Ech
-            time a polygon is contained in another one, it's depth is
-            increased when inside a polygon, decreased when inside a
-            hole. The result is a depth which e.g. is -1 for holes
-            outside everything, 1 for a polygon covered by another
-            polygon and zero for e.g. holes in a polygon or polygons
-            outside everything else.  In the 2nd step, all polygons
-            with depth other than zero are removed. If bKeepAboveZero
-            is used, all polygons < 1 are removed. The bKeepAboveZero
-            mode is useful for clipping, e.g. just append one polygon
-            to another and use this mode -> only parts where two
-            polygons overlapped will be kept.  In combination with
-            correct orientation of the input orientations and the
-            SolveCrossover calls this can be combined for logical
-            polygon operations or polygon clipping.
-        */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
 
         /** Emulate nonzero winding rule filling.
 
@@ -115,8 +82,6 @@ namespace basegfx
         // different since the simple concatenation will be seen as XOR. To work correctly, You
         // may need to OR those polygons.
 
-        /// prep for ops - solve self-intersections and intersections, remove neutral parts and check orientations.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate);
         /// prep for ops - solve self-intersections and intersections, remove neutral parts and check orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate);
 
