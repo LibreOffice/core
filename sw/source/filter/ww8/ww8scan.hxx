@@ -790,7 +790,7 @@ class WW8PLCFx_AtnBook : public WW8PLCFx
 {
 private:
     /// Start and end positions.
-    WW8PLCFspecial* m_pBook[2];
+    std::unique_ptr<WW8PLCFspecial> m_pBook[2];
     /// Number of annotation marks
     sal_Int32 nIMax;
     bool m_bIsEnd;
