@@ -349,8 +349,58 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         }
 
         case XML_hierChild:
-        case XML_hierRoot:
+        {
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
+                break;
+
+            const sal_Int32 nDir = maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromL;
+            //const sal_Int32 nIncX = nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0); uncomment when implement.
+            const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
+
+            sal_Int32 nCount = rShape->getChildren().size();
+            double fSpace = 0.3;
+
+            awt::Size aChildSize = rShape->getSize();
+
+            aChildSize.Width /= (nCount + (nCount-1)*fSpace);
+            aChildSize.Height /= (nCount + (nCount-1)*fSpace);
+
+            awt::Point aCurrPos(0, 0);
+
+            for (auto & aCurrShape : rShape->getChildren())
+            {
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+                aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+            }
             break;
+        }
+        case XML_hierRoot:
+        {
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
+                break;
+
+            //const sal_Int32 nHierAlign = maMap.count(XML_hierAlign) ? maMap.find(XML_hierAlign)->second : XML_tCtrCh; uncomment when implement.
+            sal_Int32 nCount = rShape->getChildren().size();
+            double fSpace = 0.3;
+
+            awt::Size aChildSize = rShape->getSize();
+
+            aChildSize.Width /= (nCount + (nCount-1)*fSpace);
+            aChildSize.Height /= (nCount + (nCount-1)*fSpace);
+
+            awt::Point aCurrPos(0, 0);
+
+            for (auto & aCurrShape : rShape->getChildren())
+            {
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+                aCurrPos.Y +=  (aChildSize.Height + fSpace*aChildSize.Height);
+            }
+            break;
+        }
 
         case XML_lin:
         {
