@@ -2883,7 +2883,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         }
         if (!aIntName.isEmpty())
         {
-            maRawToken.SetExternal( aIntName.getStr() );     // international name
+            maRawToken.SetExternal( aIntName );     // international name
             bFound = true;
         }
     }
@@ -3374,7 +3374,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     {
         return false;
     }
-    maRawToken.SetExternal( aName.getStr() );
+    maRawToken.SetExternal( aName );
     maRawToken.eOp = ocMacro;
     return true;
 #endif

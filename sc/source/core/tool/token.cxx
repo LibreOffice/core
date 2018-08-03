@@ -312,10 +312,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabN
     extref.nFileId = nFileId;
     extref.aRef.Ref1 =
     extref.aRef.Ref2 = rRef;
-
-    sal_Int32 n = rTabName.getLength();
-    memcpy(extref.cTabName, rTabName.getStr(), n*sizeof(sal_Unicode));
-    extref.cTabName[n] = 0;
+    maExternalName = rTabName;
 }
 
 void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
@@ -325,10 +322,7 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabN
 
     extref.nFileId = nFileId;
     extref.aRef = rRef;
-
-    sal_Int32 n = rTabName.getLength();
-    memcpy(extref.cTabName, rTabName.getStr(), n*sizeof(sal_Unicode));
-    extref.cTabName[n] = 0;
+    maExternalName = rTabName;
 }
 
 void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
@@ -337,22 +331,14 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
     eType = svExternalName;
 
     extname.nFileId = nFileId;
-
-    sal_Int32 n = rName.getLength();
-    memcpy(extname.cName, rName.getStr(), n*sizeof(sal_Unicode));
-    extname.cName[n] = 0;
+    maExternalName = rName;
 }
 
-void ScRawToken::SetExternal( const sal_Unicode* pStr )
+void ScRawToken::SetExternal( const OUString& rStr )
 {
     eOp   = ocExternal;
     eType = svExternal;
-    sal_Int32 nLen = GetStrLen( pStr ) + 1;
-    if( nLen > MAXSTRLEN )
-        nLen = MAXSTRLEN;
-    // Leave space for byte parameter!
-    memcpy( cStr+1, pStr, nLen * sizeof(sal_Unicode) );
-    cStr[ nLen+1 ] = 0;
+    maExternalName = rStr;
 }
 
 bool ScRawToken::IsValidReference() const
@@ -410,23 +396,23 @@ FormulaToken* ScRawToken::CreateToken() const
                 return new FormulaIndexToken( eOp, name.nIndex, name.nSheet);
         case svExternalSingleRef:
             {
-                svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
+                svl::SharedString aTabName(maExternalName);    // string not interned
                 return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
             }
         case svExternalDoubleRef:
             {
-                svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
+                svl::SharedString aTabName(maExternalName);    // string not interned
                 return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
             }
         case svExternalName:
             {
-                svl::SharedString aName( OUString( extname.cName));         // string not interned
+                svl::SharedString aName(maExternalName);         // string not interned
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
         case svJump :
             return new FormulaJumpToken( eOp, nJump );
         case svExternal :
-            return new FormulaExternalToken( eOp, sbyte.cByte, OUString( cStr+1 ) );
+            return new FormulaExternalToken( eOp, sbyte.cByte, maExternalName );
         case svFAP :
             return new FormulaFAPToken( eOp, sbyte.cByte, nullptr );
         case svMissing :
