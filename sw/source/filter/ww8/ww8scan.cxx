@@ -4273,14 +4273,13 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
     if( !rFib.m_fcPlcfbkf || !rFib.m_lcbPlcfbkf || !rFib.m_fcPlcfbkl ||
         !rFib.m_lcbPlcfbkl || !rFib.m_fcSttbfbkmk || !rFib.m_lcbSttbfbkmk )
     {
-        pBook[0] = pBook[1] = nullptr;
         nIMax = 0;
     }
     else
     {
-        pBook[0] = new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkf,rFib.m_lcbPlcfbkf,4);
+        pBook[0].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkf,rFib.m_lcbPlcfbkf,4) );
 
-        pBook[1] = new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkl,rFib.m_lcbPlcfbkl,0);
+        pBook[1].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkl,rFib.m_lcbPlcfbkl,0) );
 
         rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.m_chseTables, rFib.m_lid);
 
@@ -4299,8 +4298,6 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
 
 WW8PLCFx_Book::~WW8PLCFx_Book()
 {
-    delete pBook[1];
-    delete pBook[0];
 }
 
 sal_uInt32 WW8PLCFx_Book::GetIdx() const
