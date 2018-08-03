@@ -73,6 +73,13 @@ namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }
 } } }
 
+class MSFILTER_DLLPUBLIC SvxMSDffClientData
+{
+public:
+    virtual void NotifyFreeObj(SdrObject* pObj) = 0;
+    virtual ~SvxMSDffClientData() {}
+};
+
 class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 {
     const SvxMSDffManager&       rManager;
@@ -99,9 +106,9 @@ public:
     static sal_Int32 Fix16ToAngle( sal_Int32 nAngle );
 
 #ifdef DBG_CUSTOMSHAPE
-    void ReadPropSet( SvStream& rIn, void* pClientData, sal_uInt32 nShapeType = 0 ) const;
+    void ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData, sal_uInt32 nShapeType = 0 ) const;
 #else
-    void ReadPropSet( SvStream& rIn, void* pClientData ) const;
+    void ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData ) const;
 #endif
 
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
@@ -265,7 +272,7 @@ private:
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
-class MSFILTER_DLLPUBLIC SvxMSDffImportData
+class MSFILTER_DLLPUBLIC SvxMSDffImportData : public SvxMSDffClientData
 {
 private:
     /** list of all SvxMSDffImportRec instances of/for a group */
@@ -280,7 +287,7 @@ public:
     explicit SvxMSDffImportData(const tools::Rectangle& rParentRect);
     SvxMSDffImportData& operator=( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
     SvxMSDffImportData( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
-    ~SvxMSDffImportData();
+    virtual ~SvxMSDffImportData() override;
     bool empty() const { return m_Records.empty(); }
     void insert(SvxMSDffImportRec* pImpRec);
     void unmap(const SdrObject* pObj) { m_ObjToRecMap.erase(pObj); }
@@ -289,6 +296,7 @@ public:
     SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
     MSDffImportRecords::const_iterator end() const { return m_Records.end();  }
+    virtual void NotifyFreeObj(SdrObject* pObj) override;
 };
 
 struct DffObjData
@@ -499,18 +507,18 @@ protected:
                                           sal_uInt32& rBuffLen );
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
-                                       void* pData, DffObjData& );
+                                       SvxMSDffClientData& rData, DffObjData& );
     static void ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         std::unique_ptr<char[]>& rpBuff,
                                         sal_uInt32& rBuffLen );
     virtual SdrObject* ProcessObj( SvStream& rSt,
                                    DffObjData& rData,
-                                   void* pData,
+                                   SvxMSDffClientData& rClientData,
                                    tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
-    virtual void NotifyFreeObj(void* pData, SdrObject* pObj);
-    void FreeObj(void* pData, SdrObject* pObj);
+    virtual void NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj);
+    void FreeObj(SvxMSDffClientData& rData, SdrObject* pObj);
 
 
     /** Object finalization, used by the Excel filter to correctly
@@ -552,7 +560,7 @@ public:
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode,
                            sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
     virtual bool SeekToShape( SvStream& rSt,
-                                  void* pClientData,
+                                  SvxMSDffClientData* pClientData,
                                   sal_uInt32 nId ) const;
     static bool SeekToRec( SvStream& rSt,
                     sal_uInt16 nRecId,
@@ -661,21 +669,21 @@ public:
     bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
     SdrObject* ImportObj( SvStream& rSt,
-                          void* pData,
+                          SvxMSDffClientData& rData,
                           tools::Rectangle& rClientRect,
                           const tools::Rectangle& rGlobalChildRect,
                           int nCalledByGroup,
                           sal_Int32* pShapeId);
     SdrObject* ImportGroup( const DffRecordHeader& rHd,
                             SvStream& rSt,
-                            void* pData,
+                            SvxMSDffClientData& rData,
                             tools::Rectangle& rClientRect,
                             const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
                             sal_Int32* pShapeId );
     SdrObject* ImportShape( const DffRecordHeader& rHd,
                             SvStream& rSt,
-                            void* pData,
+                            SvxMSDffClientData& rData,
                             tools::Rectangle& rClientRect,
                             const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
