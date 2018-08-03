@@ -25,7 +25,6 @@
 
 #include <formula/opcode.hxx>
 #include "refdata.hxx"
-#include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include <formula/token.hxx>
 #include "calcmacros.hxx"
@@ -75,8 +74,6 @@ public:
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScSingleRefToken(*this); }
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
 
 class ScDoubleRefToken : public formula::FormulaToken
@@ -95,8 +92,6 @@ public:
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScDoubleRefToken(*this); }
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
 
 class ScMatrixToken : public formula::FormulaToken

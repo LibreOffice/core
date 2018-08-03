@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_TXTCACHE_HXX
 
 #include <sal/types.h>
-#include <tools/mempool.hxx>
 #include <swcache.hxx>
 #include <memory>
 
@@ -32,8 +31,6 @@ class SwTextLine : public SwCacheObj
     std::unique_ptr<SwParaPortion> pLine;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
-
     SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew = nullptr );
     virtual ~SwTextLine() override;
 

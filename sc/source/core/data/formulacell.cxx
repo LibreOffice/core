@@ -81,8 +81,6 @@
 
 using namespace formula;
 
-IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
-
 #define DEBUG_CALCULATION 0
 #if DEBUG_CALCULATION
 static bool bDebugCalculationActive = false;                // Set to true for global active init,

@@ -73,8 +73,6 @@ public:
                                     { return m_bSkipOverHiddenSections; }
     void SetSkipOverHiddenSections( bool bFlag )
                                     { m_bSkipOverHiddenSections = bFlag; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 };
 
 class SwUnoTableCursor : public virtual SwUnoCursor, public virtual SwTableCursor

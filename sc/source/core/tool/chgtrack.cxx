@@ -50,8 +50,6 @@
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
-
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
         :
         aBigRange( rRange ),
@@ -1282,9 +1280,6 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
     return true;
 }
 
-//  ScChangeActionContent
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
-
 ScChangeActionContent::ScChangeActionContent( const ScRange& rRange ) :
     ScChangeAction(SC_CAT_CONTENT, rRange),
     pNextContent(nullptr),
@@ -2051,9 +2046,6 @@ bool ScChangeActionReject::Reject(ScDocument* /*pDoc*/)
 {
     return false;
 }
-
-//  ScChangeTrack
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo )
 
 const SCROW ScChangeTrack::nContentRowsPerSlot = InitContentRowsPerSlot();
 const SCSIZE ScChangeTrack::nContentSlots =

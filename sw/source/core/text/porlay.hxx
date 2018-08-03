@@ -224,8 +224,6 @@ public:
                            SwTwips& _orObjDescent,
                            const SwLinePortion* _pDontConsiderPortion = nullptr,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
 
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
@@ -307,8 +305,6 @@ public:
     void SetErgoSumNum( const OUString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
 
 inline void SwParaPortion::ResetPreps()

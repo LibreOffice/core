@@ -22,7 +22,6 @@
 
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/mempool.hxx>
 #include <swtypes.hxx>
 #include "swcache.hxx"
 #include "TextFrameIndex.hxx"
@@ -81,8 +80,6 @@ class SwFntObj : public SwCacheObj
     static MapMode *pPixMap;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
-
     SwFntObj( const SwSubFont &rFont, const void* pOwner,
               SwViewShell const *pSh );
 

@@ -169,7 +169,6 @@ public:
     SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrameFormat)
     void RegisterToFormat( SwFormat& rFormat );
 
     // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
@@ -245,7 +244,6 @@ public:
     const Point & GetLastFlyFramePrtRectPos() const       { return m_aLastFlyFramePrtRectPos; }
     void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrameFormat)
     SwFlyDrawContact* GetOrCreateContact();
 };
 
@@ -400,8 +398,6 @@ public:
     void PosAttrSet() { mbPosAttrSet = true; }
 
     virtual OUString GetDescription() const override;
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrameFormat);
 };
 
 namespace sw {

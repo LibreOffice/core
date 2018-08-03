@@ -18,7 +18,6 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX
-#include <tools/mempool.hxx>
 
 #include "layfrm.hxx"
 #include "flowfrm.hxx"
@@ -156,8 +155,6 @@ public:
 
     void SetFootnoteLock( bool bNew ) { m_bFootnoteLock = bNew; }
     bool IsFootnoteLock() const { return m_bFootnoteLock; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrame)
 };
 
 inline const SwSectionFrame *SwSectionFrame::GetFollow() const
