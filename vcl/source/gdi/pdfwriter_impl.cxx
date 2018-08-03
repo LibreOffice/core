@@ -9009,7 +9009,11 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
         {
             // Copy the last part here, in the complex case.
             sal_uInt64 nDictEnd = rObject.GetDictionaryOffset() + rObject.GetDictionaryLength();
-            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nDictEnd - nCopyStart);
+            const sal_Int32 nLen = nDictEnd - nCopyStart;
+            if (nLen < 0)
+                SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
+            else
+                aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
@@ -9072,7 +9076,11 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
         {
             // Copy the last part here, in the complex case.
             sal_uInt64 nArrEnd = rObject.GetArrayOffset() + rObject.GetArrayLength();
-            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nArrEnd - nCopyStart);
+            const sal_Int32 nLen = nArrEnd - nCopyStart;
+            if (nLen < 0)
+                SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
+            else
+                aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
