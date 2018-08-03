@@ -157,7 +157,8 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             TimeNodePtr pNode(maTimeNodeList.front());
             OSL_ENSURE( pNode, "pNode" );
 
-            pNode->setNode( rFilterBase, xNode, pSlidePtr );
+            Reference<XAnimationNode> xDummy;
+            pNode->setNode(rFilterBase, xNode, pSlidePtr, xDummy);
         }
     }
 }
