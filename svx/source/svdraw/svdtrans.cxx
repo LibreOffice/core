@@ -396,7 +396,7 @@ long GetAngle(const Point& rPnt)
 
 long NormAngle180(long a)
 {
-    while (a<18000) a+=36000;
+    while (a<-18000) a+=36000;
     while (a>=18000) a-=36000;
     return a;
 }
