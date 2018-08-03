@@ -4209,6 +4209,20 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                             pFrame->SetMergedPara(std::move(pMerged));
                         }
                         auto const pMerged(pFrame->GetMergedPara());
+                        if (pMerged)
+                        {
+                            // invalidate SwInvalidateFlags::Size
+                            pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                            pFrame->InvalidatePage();
+                            if (auto const pObjs = pFrame->GetDrawObjs())
+                            {   // also invalidate position of existing flys
+                                // because they may need to be moved
+                                for (auto const pObject : *pObjs)
+                                {
+                                    pObject->InvalidateObjPos();
+                                }
+                            }
+                        }
                         if (pMerged
                             // do this only *once*, for the *last* frame
                             // otherwise AppendObj would create multiple frames for fly-frames!
@@ -4254,6 +4268,16 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 {
                     if (auto const& pMergedPara = pFrame->GetMergedPara())
                     {
+                        // invalidate SwInvalidateFlags::Size
+                        pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                        pFrame->InvalidatePage();
+                        if (auto const pObjs = pFrame->GetDrawObjs())
+                        {   // also invalidate position of existing flys
+                            for (auto const pObject : *pObjs)
+                            {
+                                pObject->InvalidateObjPos();
+                            }
+                        }
                         // SwFlyAtContentFrame::Modify() always appends to
                         // the master frame, so do the same here.
                         // (RemoveFootnotesForNode must be called at least once)
@@ -4428,7 +4452,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfInserts());
     UnHideRedlines(*this, rNodes, rNodes.GetEndOfContent());
 
-    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?
+//    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
