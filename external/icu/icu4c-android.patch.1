@@ -68,3 +68,19 @@ diff -ur icu.org/source/i18n/number_decimalquantity.cpp icu/source/i18n/number_d
      if (result != 0) {
          _setToLong(result);
          scale -= fracLength;
+--- icu/source/i18n/decimfmt.cpp.orig	2018-08-03 09:26:22.036924562 +0200
++++ icu/source/i18n/decimfmt.cpp	2018-08-03 09:25:14.169399374 +0200
+@@ -9,6 +9,13 @@
+ // Helpful in toString methods and elsewhere.
+ #define UNISTR_FROM_STRING_EXPLICIT
+ 
++#ifdef __ANDROID__
++#ifndef ARM
++#define ARM
++#endif
++#include <android/compatibility.hxx>
++#endif
++
+ #include <cmath>
+ #include <cstdlib>
+ #include <stdlib.h>
