@@ -125,7 +125,7 @@ namespace basegfx
 
     /** Convert value from degrees to radians
      */
-    inline double deg2rad( double v )
+    inline constexpr double deg2rad( double v )
     {
         // divide first, to get exact values for v being a multiple of
         // 90 degrees
@@ -134,7 +134,7 @@ namespace basegfx
 
     /** Convert value radians to degrees
      */
-    inline double rad2deg( double v )
+    inline constexpr double rad2deg( double v )
     {
         // divide first, to get exact values for v being a multiple of
         // pi/2

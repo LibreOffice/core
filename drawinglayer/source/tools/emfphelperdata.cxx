@@ -966,8 +966,8 @@ namespace emfplushelper
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
                         SAL_INFO("drawinglayer", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
-                        startAngle = 2 * M_PI*startAngle / 360;
-                        sweepAngle = 2 * M_PI*sweepAngle / 360;
+                        startAngle = basegfx::deg2rad(startAngle);
+                        sweepAngle = basegfx::deg2rad(sweepAngle);
                         ::basegfx::B2DPoint mappedCenter(Map(dx + dw / 2, dy + dh / 2));
                         ::basegfx::B2DSize mappedSize(MapSize(dw / 2, dh / 2));
                         float endAngle = startAngle + sweepAngle;
@@ -991,7 +991,7 @@ namespace emfplushelper
                         }
 
                         SAL_INFO("drawinglayer", "EMF+\t adjusted angles: start " <<
-                            (360.0*startAngle / M_PI) << ", end: " << (360.0*endAngle / M_PI) <<
+                            basegfx::rad2deg(startAngle) << ", end: " << basegfx::rad2deg(endAngle) <<
                             " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
                         ::basegfx::B2DPolygon polygon = basegfx::utils::createPolygonFromEllipseSegment(
