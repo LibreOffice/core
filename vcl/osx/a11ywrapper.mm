@@ -45,6 +45,8 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <sal/log.hxx>
+
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;

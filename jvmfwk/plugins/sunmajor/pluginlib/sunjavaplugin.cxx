@@ -48,6 +48,7 @@
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <setjmp.h>

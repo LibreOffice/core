@@ -34,6 +34,7 @@
 #include "file_url.hxx"
 #include "path_helper.hxx"
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {

@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <cppunittester/protectorfactory.hxx>
 #include <osl/module.h>

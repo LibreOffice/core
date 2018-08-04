@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <comphelper/random.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <vector>
 
 #include <cppcanvas/color.hxx>

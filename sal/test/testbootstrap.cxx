@@ -25,6 +25,7 @@
 #include <rtl/byteseq.hxx>
 
 #include <osl/process.h>
+#include <sal/log.hxx>
 
 int main( int argc, char *argv[] )
 {
