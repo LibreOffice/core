@@ -36,15 +36,15 @@
 
 // define ----------------------------------------------------------------
 
-#define AZ_OPTIMAL      0
-#define AZ_VON_OBEN     1
-#define AZ_VON_LINKS    2
-#define AZ_HORIZONTAL   3
-#define AZ_VERTIKAL     4
+#define EXT_OPTIMAL     0
+#define EXT_FROM_TOP    1
+#define EXT_FROM_LEFT   2
+#define EXT_HORIZONTAL  3
+#define EXT_VERTICAL    4
 
-#define AT_OBEN         0
-#define AT_MITTE        1
-#define AT_UNTEN        2
+#define POS_TOP         0
+#define POS_MIDDLE      1
+#define POS_BOTTOM      2
 
 #define BMP_CAPTTYPE_1  1
 #define BMP_CAPTTYPE_2  2
@@ -77,8 +77,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
     , nEscRel(0)
     , nLineLen(0)
     , bFitLineLen(false)
-    , nAnsatzRelPos(0)
-    , nAnsatzTypePos(0)
+    , nPosition(0)
+    , nExtension(0)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
 {
@@ -131,9 +131,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
 
     FillValueSet();
 
-    m_pLB_EXTENSION->SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzSelectHdl_Impl));
-    m_pLB_POSITION->SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzRelSelectHdl_Impl));
-    m_pCB_OPTIMAL->SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
+    m_pLB_EXTENSION->SetSelectHdl(LINK(this, SvxCaptionTabPage, ExtensionSelectHdl_Impl));
+    m_pLB_POSITION->SetSelectHdl(LINK(this, SvxCaptionTabPage, PositionSelectHdl_Impl));
+    m_pCB_OPTIMAL->SetClickHdl(LINK(this, SvxCaptionTabPage, LineOptHdl_Impl));
 }
 
 SvxCaptionTabPage::~SvxCaptionTabPage()
@@ -202,9 +202,9 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
         switch( m_pLB_POSITION->GetSelectedEntryPos() )
         {
-            case AT_OBEN:   nVal=0;break;
-            case AT_MITTE:  nVal=5000;break;
-            case AT_UNTEN:  nVal=10000;break;
+            case POS_TOP:     nVal=0;break;
+            case POS_MIDDLE:  nVal=5000;break;
+            case POS_BOTTOM:  nVal=10000;break;
         }
         _rOutAttrs->Put( SdrCaptionEscRelItem( nVal ) );
     }
@@ -300,8 +300,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
         }
     }
 
-    nAnsatzRelPos=AT_MITTE;
-    nAnsatzTypePos=AZ_OPTIMAL;
+    nPosition = POS_MIDDLE;
+    nExtension = EXT_OPTIMAL;
 
     m_pMF_SPACING->SetValue( nGap );
 
@@ -310,14 +310,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
         if( bEscRel )
         {
             if( nEscRel < 3333 )
-                nAnsatzRelPos = AT_OBEN;
+                nPosition = POS_TOP;
             if( nEscRel > 6666 )
-                nAnsatzRelPos = AT_UNTEN;
-            nAnsatzTypePos = AZ_HORIZONTAL;
+                nPosition = POS_BOTTOM;
+            nExtension = EXT_HORIZONTAL;
         }
         else
         {
-            nAnsatzTypePos = AZ_VON_OBEN;
+            nExtension = EXT_FROM_TOP;
             m_pMF_BY->SetValue( nEscAbs );
         }
     }
@@ -326,28 +326,28 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
         if( bEscRel )
         {
             if( nEscRel < 3333 )
-                nAnsatzRelPos = AT_OBEN;
+                nPosition = POS_TOP;
             if( nEscRel > 6666 )
-                nAnsatzRelPos = AT_UNTEN;
-            nAnsatzTypePos = AZ_VERTIKAL;
+                nPosition = POS_BOTTOM;
+            nExtension = EXT_VERTICAL;
         }
         else
         {
-            nAnsatzTypePos = AZ_VON_LINKS;
+            nExtension = EXT_FROM_LEFT;
             m_pMF_BY->SetValue( nEscAbs );
         }
     }
     else if( nEscDir == SdrCaptionEscDir::BestFit )
     {
-        nAnsatzTypePos = AZ_OPTIMAL;
+        nExtension = EXT_OPTIMAL;
     }
 
     m_pCB_OPTIMAL->Check( bFitLineLen );
     m_pMF_LENGTH->SetValue( nLineLen );
 
-    m_pLB_EXTENSION->SelectEntryPos( nAnsatzTypePos );
+    m_pLB_EXTENSION->SelectEntryPos( nExtension );
 
-    SetupAnsatz_Impl( nAnsatzTypePos );
+    SetupExtension_Impl( nExtension );
     m_pCT_CAPTTYPE->SelectItem( static_cast<int>(nCaptionType)+1 ); // Enum starts at 0!
     SetupType_Impl( nCaptionType );
 }
@@ -360,11 +360,11 @@ VclPtr<SfxTabPage> SvxCaptionTabPage::Create( TabPageParent pWindow,
 }
 
 
-void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
+void SvxCaptionTabPage::SetupExtension_Impl( sal_uInt16 nType )
 {
     switch( nType )
     {
-        case AZ_OPTIMAL:
+        case EXT_OPTIMAL:
         m_pMF_BY->Show();
         m_pFT_BYFT->Show();
         m_pFT_POSITIONFT->Hide();
@@ -372,7 +372,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         nEscDir = SdrCaptionEscDir::BestFit;
         break;
 
-        case AZ_VON_OBEN:
+        case EXT_FROM_TOP:
         m_pMF_BY->Show();
         m_pFT_BYFT->Show();
         m_pFT_POSITIONFT->Hide();
@@ -380,7 +380,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         nEscDir = SdrCaptionEscDir::Horizontal;
         break;
 
-        case AZ_VON_LINKS:
+        case EXT_FROM_LEFT:
         m_pMF_BY->Show();
         m_pFT_BYFT->Show();
         m_pFT_POSITIONFT->Hide();
@@ -388,11 +388,11 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         nEscDir = SdrCaptionEscDir::Vertical;
         break;
 
-        case AZ_HORIZONTAL:
+        case EXT_HORIZONTAL:
         m_pLB_POSITION->Clear();
         for (OUString & i : m_aStrHorzList)
             m_pLB_POSITION->InsertEntry(i);
-        m_pLB_POSITION->SelectEntryPos(nAnsatzRelPos);
+        m_pLB_POSITION->SelectEntryPos(nPosition);
 
         m_pMF_BY->Hide();
         m_pFT_BYFT->Hide();
@@ -401,11 +401,11 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         nEscDir = SdrCaptionEscDir::Horizontal;
         break;
 
-        case AZ_VERTIKAL:
+        case EXT_VERTICAL:
         m_pLB_POSITION->Clear();
         for (OUString & i : m_aStrVertList)
             m_pLB_POSITION->InsertEntry(i);
-        m_pLB_POSITION->SelectEntryPos(nAnsatzRelPos);
+        m_pLB_POSITION->SelectEntryPos(nPosition);
 
         m_pMF_BY->Hide();
         m_pFT_BYFT->Hide();
@@ -417,19 +417,19 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 }
 
 
-IMPL_LINK( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxCaptionTabPage, ExtensionSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_EXTENSION)
     {
-        SetupAnsatz_Impl( m_pLB_EXTENSION->GetSelectedEntryPos() );
+        SetupExtension_Impl( m_pLB_EXTENSION->GetSelectedEntryPos() );
     }
 }
 
-IMPL_LINK( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxCaptionTabPage, PositionSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_POSITION)
     {
-        nAnsatzRelPos = m_pLB_POSITION->GetSelectedEntryPos();
+        nPosition = m_pLB_POSITION->GetSelectedEntryPos();
     }
 }
 
