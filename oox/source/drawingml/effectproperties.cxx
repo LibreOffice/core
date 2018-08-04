@@ -58,7 +58,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
                 attribIt->second >>= nAttrDist;
 
             // Negative X or Y dist indicates left or up, respectively
-            double nAngle = ( static_cast<double>(nAttrDir) / PER_DEGREE ) * F_PI180;
+            double nAngle = basegfx::deg2rad(static_cast<double>(nAttrDir) / PER_DEGREE);
             sal_Int32 nDist = convertEmuToHmm( nAttrDist );
             sal_Int32 nXDist = cos(nAngle) * nDist;
             sal_Int32 nYDist = sin(nAngle) * nDist;

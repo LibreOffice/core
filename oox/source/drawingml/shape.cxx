@@ -671,7 +671,7 @@ Reference< XShape > const & Shape::createAndInsert(
     {
         // rotate diagram's shape around object's center before sizing
         aTransformation.translate(-0.5, -0.5);
-        aTransformation.rotate(F_PI180 * (mnDiagramRotation / 60000.0));
+        aTransformation.rotate(basegfx::deg2rad(mnDiagramRotation / 60000.0));
         aTransformation.translate(0.5, 0.5);
     }
 
@@ -720,7 +720,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
             // rotate around object's center
-            aTransformation.rotate( F_PI180 * ( static_cast<double>(mnRotation) / 60000.0 ) );
+            aTransformation.rotate(basegfx::deg2rad(static_cast<double>(mnRotation) / 60000.0));
         }
 
         // move object back from center

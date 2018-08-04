@@ -104,8 +104,8 @@ namespace drawinglayer
 
                 if(getTextRotation())
                 {
-                    aTextMatrix.rotate(-90.0 * F_PI180);
-                    fTestAngle -= (90.0 * F_PI180);
+                    aTextMatrix.rotate(-F_PI2);
+                    fTestAngle -= (F_PI2);
 
                     if(getTextAutoAngle() && fTestAngle < -F_PI)
                     {

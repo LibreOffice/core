@@ -344,7 +344,7 @@ namespace drawinglayer
                     // for high contrast, use hatch
                     const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetFontColor().getBColor());
                     const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
-                    const double fHatchRotation(45 * F_PI180);
+                    const double fHatchRotation(basegfx::deg2rad(45));
                     const double fDiscreteHatchDistance(3.0);
                     const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
                         drawinglayer::attribute::HatchStyle::Single,

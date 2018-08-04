@@ -104,7 +104,7 @@ namespace basegfx
 
                 // from that vector, take the needed rotation and add rotate for arrow to transformation
                 const B2DVector aTargetDirection(aHead - aTail);
-                const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + (90.0 * F_PI180));
+                const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + F_PI2);
 
                 // rotate around docking position
                 aArrowTransform.rotate(fRotation);
