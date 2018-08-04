@@ -154,11 +154,11 @@ BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, C
         {
             if(pArray[(a * 8) + b])
             {
-                aBitmap.SetPixel(a, b, aColorBack);
+                aBitmap.SetPixel(a, b, aColorPix);
             }
             else
             {
-                aBitmap.SetPixel(a, b, aColorPix);
+                aBitmap.SetPixel(a, b, aColorBack);
             }
         }
     }
