@@ -3298,7 +3298,7 @@ sal_Int32 lcl_CalculateDist(const double dX, const double dY)
 
 sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 {
-    return (static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI) + 21600000) % 21600000;
+    return (static_cast< sal_Int32 >(basegfx::rad2deg(atan2(dY,dX)) * 60000) + 21600000) % 21600000;
 }
 
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )

@@ -466,7 +466,7 @@ namespace drawinglayer
                         {
                             eJoin = SvtGraphicStroke::joinMiter;
                             // ATM 15 degrees is assumed
-                            fMiterLength /= rtl::math::sin(M_PI * (15.0 / 360.0));
+                            fMiterLength /= rtl::math::sin(basegfx::deg2rad(15.0));
                             break;
                         }
                         case basegfx::B2DLineJoin::Round :
