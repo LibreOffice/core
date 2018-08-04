@@ -134,9 +134,9 @@ namespace basegfx
             double fHalfLineWidth,
             B2DLineJoin eJoin,
             css::drawing::LineCap eCap,
-            double fMaxAllowedAngle = (12.5 * F_PI180),
+            double fMaxAllowedAngle = basegfx::deg2rad(12.5),
             double fMaxPartOfEdge = 0.4,
-            double fMiterMinimumAngle = (15.0 * F_PI180));
+            double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
     } // end of namespace utils
 } // end of namespace basegfx

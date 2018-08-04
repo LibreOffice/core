@@ -40,8 +40,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx)
                 long nGrey11, nGrey12, nGrey13;
                 long nGrey21, nGrey22, nGrey23;
                 long nGrey31, nGrey32, nGrey33;
-                double fAzim = mnAzimuthAngle100 * 0.01 * F_PI180;
-                double fElev = mnElevationAngle100 * 0.01 * F_PI180;
+                double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
+                double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
                 long* pHMap = new long[nWidth + 2];
                 long* pVMap = new long[nHeight + 2];
                 long nX, nY, nNx, nNy, nDotL;

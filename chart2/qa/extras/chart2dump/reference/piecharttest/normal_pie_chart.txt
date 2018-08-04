@@ -35,15 +35,15 @@
 16728590
 /// /D=0:CS=0:CT=0:Series=0:Point=2
 // aSlicePosition.X
-7678
+7679
 // aSlicePosition.Y
 1846
 // aSliceSize.Height
 3896
 // aSliceSize.Width
-3327
+3326
 // aSliceTransformation
-3327;0;7678;0;3896;1846;0;0;1
+3326;0;7679;0;3896;1846;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)

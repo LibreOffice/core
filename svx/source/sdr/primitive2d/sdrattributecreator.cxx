@@ -896,7 +896,8 @@ namespace drawinglayer
             const double fDistance(rSet.Get(SDRATTR_3DSCENE_DISTANCE).GetValue());
 
             // get shadow slant
-            const double fShadowSlant(F_PI180 * rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT).GetValue());
+            const double fShadowSlant(
+                basegfx::deg2rad(rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT).GetValue()));
 
             // get shade mode
             css::drawing::ShadeMode aShadeMode(css::drawing::ShadeMode_FLAT);

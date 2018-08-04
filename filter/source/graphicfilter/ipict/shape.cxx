@@ -164,10 +164,9 @@ namespace PictReaderShape {
     tools::Rectangle arc = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
     using namespace basegfx;
 
-    double const PI2 = M_PI/2.0;
     // pict angle are CW with 0 at twelve o'clock (with Y-axis inverted)...
-    double angl1 = angle1-PI2;
-    double angl2 = angle2-PI2;
+    double angl1 = angle1-M_PI_2;
+    double angl2 = angle2-M_PI_2;
     long const X[2] = { arc.Left(), arc.Right() };
     long const Y[2] = { arc.Top(), arc.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));

@@ -721,7 +721,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
     aPoly.setClosed(false);
 
     drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
-                 css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default*/);
+                 css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/);
 }
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)

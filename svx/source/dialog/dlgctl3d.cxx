@@ -633,8 +633,8 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
         {
             if(mbGeometrySelected)
             {
-                double fNewRotX = mfSaveActionStartVer - (static_cast<double>(aDeltaPos.Y()) * F_PI180);
-                double fNewRotY = mfSaveActionStartHor + (static_cast<double>(aDeltaPos.X()) * F_PI180);
+                double fNewRotX = mfSaveActionStartVer - basegfx::deg2rad(aDeltaPos.Y());
+                double fNewRotY = mfSaveActionStartHor + basegfx::deg2rad(aDeltaPos.X());
 
                 // cut horizontal
                 while(fNewRotY < 0.0)
@@ -731,15 +731,13 @@ void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
     {
         basegfx::B3DVector aDirection(GetLightDirection(maSelectedLight));
         aDirection.normalize();
-        rHor = atan2(-aDirection.getX(), -aDirection.getZ()) + F_PI; // 0..2PI
-        rVer = atan2(aDirection.getY(), aDirection.getXZLength()); // -PI2..PI2
-        rHor /= F_PI180; // 0..360.0
-        rVer /= F_PI180; // -90.0..90.0
+        rHor = basegfx::rad2deg(atan2(-aDirection.getX(), -aDirection.getZ()) + F_PI); // 0..360.0
+        rVer = basegfx::rad2deg(atan2(aDirection.getY(), aDirection.getXZLength())); // -90.0..90.0
     }
     if(IsGeometrySelected())
     {
-        rHor = mfRotateY / F_PI180; // 0..360.0
-        rVer = mfRotateX / F_PI180; // -90.0..90.0
+        rHor = basegfx::rad2deg(mfRotateY); // 0..360.0
+        rVer = basegfx::rad2deg(mfRotateX); // -90.0..90.0
     }
 }
 
@@ -748,8 +746,8 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
     if(IsSelectionValid())
     {
         // set selected light's direction
-        fHor = (fHor * F_PI180) - F_PI; // -PI..PI
-        fVer *= F_PI180; // -PI2..PI2
+        fHor = basegfx::deg2rad(fHor) - F_PI; // -PI..PI
+        fVer = basegfx::deg2rad(fVer); // -PI2..PI2
         basegfx::B3DVector aDirection(cos(fVer) * -sin(fHor), sin(fVer), cos(fVer) * -cos(fHor));
         aDirection.normalize();
 
@@ -782,8 +780,8 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
     {
         if(mfRotateX != fVer || mfRotateY != fHor)
         {
-            mfRotateX = fVer * F_PI180;
-            mfRotateY = fHor * F_PI180;
+            mfRotateX = basegfx::deg2rad(fVer);
+            mfRotateY = basegfx::deg2rad(fHor);
 
             if(mp3DObj)
             {

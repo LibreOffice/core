@@ -285,9 +285,9 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
                                 aGradient);
 
     LineInfo aLineInfo(LineStyle::Solid, 200);
-    double sind = sin(DELTA * M_PI / 180.0);
-    double cosd = cos(DELTA * M_PI / 180.0);
-    double factor = 1 + (DELTA / 1000.0);
+    const double sind = sin(basegfx::deg2rad(DELTA));
+    const double cosd = cos(basegfx::deg2rad(DELTA));
+    const double factor = 1 + (DELTA / 1000.0);
     int n = 0;
     Color aLineColor(0, 0, 0);
     Color aApproachColor(0, 0, 200);

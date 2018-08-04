@@ -137,7 +137,7 @@ Reference< drawing::XShape > createSingleLabel(
         return nullptr;
 
     // #i78696# use mathematically correct rotation now
-    const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+    const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
     uno::Any aATransformation = AbstractShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
     OUString aLabel = AbstractShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
@@ -183,7 +183,7 @@ void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aR
     // which is then moved to its final position by using the top-left
     // vertex of the text label bounding box (aPos) as the translation vector.
     ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.rotate( -fRotationAngleDegree*M_PI/180.0 );
+    aMatrix.rotate(-basegfx::deg2rad(fRotationAngleDegree));
     aMatrix.translate( aPos.X, aPos.Y);
     aPoly.transform( aMatrix );
 }
@@ -1713,7 +1713,7 @@ void VCartesianAxis::updatePositions()
                 }
 
                 // #i78696# use mathematically correct rotation now
-                const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
+                const double fRotationAnglePi(-basegfx::deg2rad(fRotationAngleDegree));
                 uno::Any aATransformation = AbstractShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                 //set new position

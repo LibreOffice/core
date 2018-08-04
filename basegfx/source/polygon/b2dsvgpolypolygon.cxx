@@ -489,7 +489,8 @@ namespace basegfx
                                 // |y1'| = |-sin phi  cos phi|  |(y1 - y2)/2|
                                 const B2DPoint p1(nLastX, nLastY);
                                 const B2DPoint p2(nX, nY);
-                                B2DHomMatrix aTransform(basegfx::utils::createRotateB2DHomMatrix(-fPhi*M_PI/180));
+                                B2DHomMatrix aTransform(basegfx::utils::createRotateB2DHomMatrix(
+                                    -deg2rad(fPhi)));
 
                                 const B2DPoint p1_prime( aTransform * B2DPoint(((p1-p2)/2.0)) );
 
@@ -581,7 +582,7 @@ namespace basegfx
                                 aTransform = basegfx::utils::createScaleB2DHomMatrix(fRX, fRY);
                                 aTransform.translate(aCenter_prime.getX(),
                                                      aCenter_prime.getY());
-                                aTransform.rotate(fPhi*M_PI/180);
+                                aTransform.rotate(deg2rad(fPhi));
                                 const B2DPoint aOffset((p1+p2)/2.0);
                                 aTransform.translate(aOffset.getX(),
                                                      aOffset.getY());

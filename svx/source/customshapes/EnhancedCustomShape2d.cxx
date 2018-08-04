@@ -1144,7 +1144,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 GetParameter( fRadius, aHandle.aPosition.First, false, false );
                 GetParameter( fAngle,  aHandle.aPosition.Second, false, false );
 
-                double a = ( 360.0 - fAngle ) * F_PI180;
+                double a = basegfx::deg2rad(360.0 - fAngle);
                 double dx = fRadius * fXScale;
                 double fX = dx * cos( a );
                 double fY =-dx * sin( a );
@@ -1280,7 +1280,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                     fYRef = fHeight / 2;
                 }
                 const double fDX = fPos1 - fXRef;
-                fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
+                fAngle = -basegfx::rad2deg(atan2(-fPos2 + fYRef, (fDX == 0.0) ? 0.000000001 : fDX));
                 double fX = ( fPos1 - fXRef );
                 double fY = ( fPos2 - fYRef );
                 double fRadius = sqrt( fX * fX + fY * fY );
@@ -1674,10 +1674,14 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 }
                                 double fCenterX = aRect.Center().X();
                                 double fCenterY = aRect.Center().Y();
-                                double fx1 = ( cos( fStartAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
-                                double fy1 = ( -sin( fStartAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
-                                double fx2 = ( cos( fEndAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
-                                double fy2 = ( -sin( fEndAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
+                                double fx1 = cos(basegfx::deg2rad(fStartAngle)) * 65536.0 * fXScale
+                                             + fCenterX;
+                                double fy1 = -sin(basegfx::deg2rad(fStartAngle)) * 65536.0 * fYScale
+                                             + fCenterY;
+                                double fx2 = cos(basegfx::deg2rad(fEndAngle)) * 65536.0 * fXScale
+                                             + fCenterX;
+                                double fy2 = -sin(basegfx::deg2rad(fEndAngle)) * 65536.0 * fYScale
+                                             + fCenterY;
                                 aNewB2DPolygon.append(CreateArc( aRect, Point( static_cast<sal_Int32>(fx1), static_cast<sal_Int32>(fy1) ), Point( static_cast<sal_Int32>(fx2), static_cast<sal_Int32>(fy2) ), false));
                             }
                             else
@@ -1814,8 +1818,8 @@ void EnhancedCustomShape2d::CreateSubPath(
 
                         // Convert angles to radians, but don't do any scaling / translation yet.
 
-                        fStartAngle *= F_PI180;
-                        fSwingAngle *= F_PI180;
+                        fStartAngle = basegfx::deg2rad(fStartAngle);
+                        fSwingAngle = basegfx::deg2rad(fSwingAngle);
 
                         SAL_INFO("svx", "ARCANGLETO scale: " << fWR << "x" << fHR << " angles: " << fStartAngle << "," << fSwingAngle);
 
