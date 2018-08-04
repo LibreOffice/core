@@ -64,13 +64,13 @@ private:
     sal_Int32           nLineLen;
     bool                bFitLineLen;
 
-    sal_uInt16          nAnsatzRelPos;
-    sal_uInt16          nAnsatzTypePos;
+    sal_uInt16          nPosition;
+    sal_uInt16          nExtension;
 
-    void            SetupAnsatz_Impl( sal_uInt16 nType );
+    void            SetupExtension_Impl( sal_uInt16 nType );
     void            SetupType_Impl( SdrCaptionType nType );
-    DECL_LINK( AnsatzSelectHdl_Impl, ListBox&, void );
-    DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox&, void );
+    DECL_LINK( ExtensionSelectHdl_Impl, ListBox&, void );
+    DECL_LINK( PositionSelectHdl_Impl, ListBox&, void );
     DECL_LINK( LineOptHdl_Impl, Button *, void );
     DECL_LINK( SelectCaptTypeHdl_Impl, ValueSet*, void );
 
