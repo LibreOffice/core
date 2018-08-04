@@ -2703,7 +2703,7 @@ Label_MaskStateMachine:
         --nSrcPos;
     }
     if ( bAutoCorrect )
-        aCorrectedSymbol = cSymbol;
+        aCorrectedSymbol = OUString(cSymbol, pSym - cSymbol);
     if (bAutoIntersection && nSpaces > 1)
         --nSpaces;  // replace '!!' with only one space
     return nSpaces;
@@ -2996,25 +2996,17 @@ bool ScCompiler::IsValue( const OUString& rSym )
 
 bool ScCompiler::IsString()
 {
-    const sal_Unicode* p = cSymbol;
+    if ( cSymbol[0] != '"' )
+        return false;
+    const sal_Unicode* p = cSymbol+1;
     while ( *p )
         p++;
     sal_Int32 nLen = sal::static_int_cast<sal_Int32>( p - cSymbol - 1 );
-    bool bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
-    if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN)
-    {
-        SetError(FormulaError::StringOverflow);
+    if (cSymbol[nLen] != '"')
         return false;
-    }
-    if ( bQuote )
-    {
-        cSymbol[nLen] = '\0';
-        const sal_Unicode* pStr = cSymbol+1;
-        svl::SharedString aSS = pDoc->GetSharedStringPool().intern(OUString(pStr));
-        maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
-        return true;
-    }
-    return false;
+    svl::SharedString aSS = pDoc->GetSharedStringPool().intern(OUString(cSymbol+1, nLen-1));
+    maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+    return true;
 }
 
 bool ScCompiler::IsPredetectedErrRefReference( const OUString& rName, const OUString* pErrRef )
