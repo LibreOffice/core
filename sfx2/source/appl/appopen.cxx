@@ -402,9 +402,8 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     OUString aFactName;
     if ( pFactoryItem )
         aFactName = pFactoryItem->GetValue();
-   else
+    else
         aFactName = SvtModuleOptions().GetDefaultModuleName();
-
 
     SfxRequest aReq( SID_OPENDOC, SfxCallMode::SYNCHRON, GetPool() );
     OUString aFact("private:factory/");
