@@ -1161,6 +1161,11 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal);
 
     cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
+    if (!target)
+    {
+        SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create cairo surface");
+        return nullptr;
+    }
     cairo_t* cr = cairo_create(target);
 
     SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
