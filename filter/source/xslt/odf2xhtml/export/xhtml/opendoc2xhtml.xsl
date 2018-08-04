@@ -108,7 +108,7 @@
     <xsl:param name="stylesFileURL" />
 
     <!-- OPTIONAL: DPI (dots per inch) the standard resolution of given pictures (necessary for the conversion of 'cm' into 'pixel')-->
-    <!-- Although many pictures have a 96 dpi resolution, a higher resoltion give better results for common browsers -->
+    <!-- Although many pictures have a 96 dpi resolution, a higher resolution give better results for common browsers -->
     <!-- Cp. measure_conversion.xsl:
          <xsl:param name="dpi" select="111" /> -->
 

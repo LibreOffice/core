@@ -21,7 +21,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <!-- DPI (dots per inch) the standard resolution of given pictures (necessary for the conversion of 'cm' into 'pixel')
-         Although many pictures have a 96 dpi resolution, a higher resoltion give better results for common browsers -->
+         Although many pictures have a 96 dpi resolution, a higher resolution give better results for common browsers -->
     <xsl:param name="dpi" select="111"/>
     <xsl:param name="centimeter-in-mm" select="10"/>
     <xsl:param name="inch-in-mm" select="25.4"/>
