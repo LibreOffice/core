@@ -1741,7 +1741,8 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                         if ( nShearAngle )
                             ShearPoint( aGlue, aRef, fTan );
 
-                        RotatePoint( aGlue, aRef, sin( fObjectRotation * F_PI180 ), cos( fObjectRotation * F_PI180 ) );
+                        RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(fObjectRotation)),
+                                    cos(basegfx::deg2rad(fObjectRotation)));
                         if ( bMirroredX )
                             aGlue.setX( maRect.GetWidth() - aGlue.X() );
                         if ( bMirroredY )
@@ -2938,7 +2939,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.nShearAngle = FRound(basegfx::rad2deg(atan(fShearX)) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
     }
@@ -2967,8 +2968,8 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = fObjectRotation * F_PI180;
-    double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
+    double fRotate = basegfx::deg2rad(fObjectRotation);
+    double fShearX = basegfx::deg2rad(aGeo.nShearAngle / 100.0);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(maRect);

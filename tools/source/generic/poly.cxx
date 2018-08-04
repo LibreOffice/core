@@ -1302,14 +1302,14 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                     if( fabs( fTurnPrev ) < ( 1.0 + SMALL_DVALUE ) && fabs( fTurnPrev ) > ( 1.0 - SMALL_DVALUE ) )
                         fGradPrev = 0.0;
                     else
-                        fGradPrev = acos( fTurnPrev ) / ( aVec1.IsNegative( aVec2 ) ? -F_PI180 : F_PI180 );
+                        fGradPrev = basegfx::rad2deg(acos(fTurnPrev)) * (aVec1.IsNegative(aVec2) ? -1 : 1);
 
-                    fGradB = acos( fTurnB ) / ( aVec2.IsNegative( aVec3 ) ? -F_PI180 : F_PI180 );
+                    fGradB = basegfx::rad2deg(acos(fTurnB)) * (aVec2.IsNegative(aVec3) ? -1 : 1);
 
                     if( fabs( fTurnNext ) < ( 1.0 + SMALL_DVALUE ) && fabs( fTurnNext ) > ( 1.0 - SMALL_DVALUE ) )
                         fGradNext = 0.0;
                     else
-                        fGradNext = acos( fTurnNext ) / ( aVec3.IsNegative( aVec4 ) ? -F_PI180 : F_PI180 );
+                        fGradNext = basegfx::rad2deg(acos(fTurnNext)) * (aVec3.IsNegative(aVec4) ? -1 : 1);
 
                     if( ( fGradPrev > 0.0 && fGradB < 0.0 && fGradNext > 0.0 ) ||
                         ( fGradPrev < 0.0 && fGradB > 0.0 && fGradNext < 0.0 ) )

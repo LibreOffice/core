@@ -265,7 +265,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
                     aHairlineWidth,
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
-                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     this );
             }
         }
@@ -368,7 +368,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     aLineWidths,
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
-                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     this );
             }
             // prepare to restore the fill color

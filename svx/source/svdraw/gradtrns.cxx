@@ -68,7 +68,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
+                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle() / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -91,7 +91,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
+                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle() / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -115,7 +115,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
+                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle() / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -150,7 +150,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = static_cast<double>(rG.aGradient.GetAngle()) * (F_PI180 / 10.0);
+                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle() / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -219,8 +219,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
 
                 aFullVec.normalize();
 
-                double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
-                fNewFullAngle /= F_PI180;
+                double fNewFullAngle(basegfx::rad2deg(atan2(aFullVec.getY(), aFullVec.getX())));
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
@@ -304,8 +303,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 }
 
                 aFullVec.normalize();
-                double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
-                fNewFullAngle /= F_PI180;
+                double fNewFullAngle(basegfx::rad2deg(atan2(aFullVec.getY(), aFullVec.getX())));
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
@@ -400,8 +398,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // angle is not definitely necessary for these modes, but it makes
                 // controlling more fun for the user
                 aFullVec.normalize();
-                double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
-                fNewFullAngle /= F_PI180;
+                double fNewFullAngle(basegfx::rad2deg(atan2(aFullVec.getY(), aFullVec.getX())));
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 
@@ -496,8 +493,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 // angle is not definitely necessary for these modes, but it makes
                 // controlling more fun for the user
                 aFullVec.normalize();
-                double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
-                fNewFullAngle /= F_PI180;
+                double fNewFullAngle(basegfx::rad2deg(atan2(aFullVec.getY(), aFullVec.getX())));
                 fNewFullAngle *= -10.0;
                 fNewFullAngle += 900.0;
 

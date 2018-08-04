@@ -1525,7 +1525,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     basegfx::B2DHomMatrix aTransformation;
     aTransformation.identity();
     aTransformation.scale(nWidth, nHeight);
-    aTransformation.rotate(F_PI180 * -1 * nAngle);
+    aTransformation.rotate(-basegfx::deg2rad(nAngle));
     drawing::HomogenMatrix3 aMatrix;
     aMatrix.Line1.Column1 = aTransformation.get(0, 0);
     aMatrix.Line1.Column2 = aTransformation.get(0, 1);

@@ -390,7 +390,7 @@ namespace vclcanvas
                         strokeAttributes.StrokeWidth*0.5,
                         b2DJoineFromJoin(strokeAttributes.JoinType),
                         unoCapeFromCap(strokeAttributes.StartCapType),
-                        12.5 * F_PI180 /* default fMaxAllowedAngle*/ ,
+                        basegfx::deg2rad(12.5) /* default fMaxAllowedAngle*/ ,
                         0.4 /* default fMaxPartOfEdge*/ ,
                         fMiterMinimumAngle
                         ));
