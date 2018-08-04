@@ -40,15 +40,15 @@ class SvxCaptionTabPage : public SfxTabPage
 private:
     static const sal_uInt16 pCaptionRanges[];
     VclPtr<ValueSet>       m_pCT_CAPTTYPE;
-    VclPtr<MetricField>    m_pMF_ABSTAND;
-    VclPtr<ListBox>        m_pLB_ANSATZ;
-    VclPtr<FixedText>      m_pFT_UM;
-    VclPtr<MetricField>    m_pMF_ANSATZ;
-    VclPtr<FixedText>      m_pFT_ANSATZ_REL;
-    VclPtr<ListBox>        m_pLB_ANSATZ_REL;
-    VclPtr<FixedText>      m_pFT_LAENGE;
-    VclPtr<MetricField>    m_pMF_LAENGE;
-    VclPtr<CheckBox>       m_pCB_LAENGE;
+    VclPtr<MetricField>    m_pMF_SPACING;
+    VclPtr<ListBox>        m_pLB_EXTENSION;
+    VclPtr<FixedText>      m_pFT_BYFT;
+    VclPtr<MetricField>    m_pMF_BY;
+    VclPtr<FixedText>      m_pFT_POSITIONFT;
+    VclPtr<ListBox>        m_pLB_POSITION;
+    VclPtr<FixedText>      m_pFT_LENGTHFT;
+    VclPtr<MetricField>    m_pMF_LENGTH;
+    VclPtr<CheckBox>       m_pCB_OPTIMAL;
 
     Image           m_aBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
 
