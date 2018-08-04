@@ -322,8 +322,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
                 const awt::Point aCurrPos(
-                    aCenter.Width + nRadius*sin(fAngle*F_PI180) - aChildSize.Width/2,
-                    aCenter.Height - nRadius*cos(fAngle*F_PI180) - aChildSize.Height/2);
+                    aCenter.Width + nRadius*sin(basegfx::deg2rad(fAngle)) - aChildSize.Width/2,
+                    aCenter.Height - nRadius*cos(basegfx::deg2rad(fAngle)) - aChildSize.Height/2);
 
                 aCurrShape->setPosition(aCurrPos);
                 aCurrShape->setSize(aChildSize);

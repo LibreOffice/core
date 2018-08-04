@@ -82,8 +82,8 @@ void GetRotateAngle( const SdrCustomShapeGeometryItem& rItem, double& rAngleX, d
         rAngleX = 0.0;
         rAngleY = 0.0;
     }
-    rAngleX *= F_PI180;
-    rAngleY *= F_PI180;
+    rAngleX = basegfx::deg2rad(rAngleX);
+    rAngleY = basegfx::deg2rad(rAngleY);
 }
 
 void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
@@ -95,7 +95,7 @@ void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, doub
         rSkewAmount = 50;
         rSkewAngle = -135;
     }
-    rSkewAngle *= F_PI180;
+    rSkewAngle = basegfx::deg2rad(rSkewAngle);
 }
 
 void GetExtrusionDepth( const SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
@@ -613,7 +613,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             double fXRotate, fYRotate;
             GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-            double fZRotate(rSdrObjCustomShape.GetObjectRotation() * F_PI180);
+            double fZRotate(basegfx::deg2rad(rSdrObjCustomShape.GetObjectRotation()));
             if ( fZRotate != 0.0 )
                 aNewTransform.rotate( 0.0, 0.0, fZRotate );
             if ( bIsMirroredX )
@@ -789,7 +789,7 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect(
 
     double fXRotate, fYRotate;
     GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-    double fZRotate(rSdrObjCustomShape.GetObjectRotation() * F_PI180);
+    double fZRotate(basegfx::deg2rad(rSdrObjCustomShape.GetObjectRotation()));
 
     // rotating bound volume
     basegfx::B3DHomMatrix aMatrix;

@@ -398,7 +398,7 @@ void LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
             // the call to XShape.getSize() may recalc the chart view
             awt::Size aShapeSize = rxShape->getSize();
             // rotated shapes need special handling...
-            double fSin = fabs( sin( fRotationAngle * F_PI180 ) );
+            double fSin = fabs( sin( basegfx::deg2rad(fRotationAngle) ) );
             // add part of height to X direction, if title is rotated down
             if( fRotationAngle > 180.0 )
                 aShapePos.X += static_cast< sal_Int32 >( fSin * aShapeSize.Height + 0.5 );

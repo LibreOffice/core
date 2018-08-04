@@ -649,7 +649,7 @@ void ActivityImpl::updateShapeAttributes(
         if( !::basegfx::fTools::equalZero( mfRotationAngle ))
         {
             maShapeAttrLayer.get()->setRotationAngle( mfRotationAngle );
-            double const fRotate = (mfRotationAngle * M_PI / 180.0);
+            double const fRotate = basegfx::deg2rad(mfRotationAngle);
             basegfx::B2DHomMatrix aTransform;
             // position:
             aTransform.rotate( fRotate );

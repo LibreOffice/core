@@ -595,7 +595,7 @@ namespace svgio
                 // convert to radians
                 if(deg == aType)
                 {
-                    fAngle *= F_PI / 180.0;
+                    fAngle = basegfx::deg2rad(fAngle);
                 }
                 else if(grad == aType)
                 {

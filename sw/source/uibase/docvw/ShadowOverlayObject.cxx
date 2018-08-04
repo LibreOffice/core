@@ -84,7 +84,7 @@ void ShadowPrimitive::create2DDecomposition(
                 0.0,
                 0.5,
                 0.5,
-                1800.0 * F_PI1800,
+                F_PI,
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
                 2);
@@ -103,7 +103,7 @@ void ShadowPrimitive::create2DDecomposition(
                 0.0,
                 0.5,
                 0.5,
-                1800.0 * F_PI1800,
+                F_PI,
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
                 4);
@@ -122,7 +122,7 @@ void ShadowPrimitive::create2DDecomposition(
                 0.0,
                 0.5,
                 0.5,
-                1800.0 * F_PI1800,
+                F_PI,
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0),
                 4);
