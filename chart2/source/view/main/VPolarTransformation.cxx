@@ -51,7 +51,7 @@ Sequence< double > SAL_CALL VPolarTransformation::transform(
         std::swap(fScaledLogicAngle,fScaledLogicRadius);
 
     double fAngleDegree = m_aPositionHelper.transformToAngleDegree( fScaledLogicAngle, false );
-    double fAnglePi     = fAngleDegree*F_PI/180.0;
+    double fAnglePi     = basegfx::deg2rad(fAngleDegree);
     double fRadius      = m_aPositionHelper.transformToRadius( fScaledLogicRadius, false);
 
     double fX=fRadius*cos(fAnglePi);

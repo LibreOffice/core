@@ -79,7 +79,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
             aB2DLineWidth,
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,
-            15.0 * F_PI180 /*default fMiterMinimumAngle, not used*/,
+            basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
             this))
         {
             return;
@@ -129,7 +129,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
             static_cast< double >(rLineInfo.GetWidth()),
             rLineInfo.GetLineJoin(),
             rLineInfo.GetLineCap(),
-            15.0 * F_PI180 /* default fMiterMinimumAngle, value not available in LineInfo */);
+            basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
         return;
     }
 
@@ -222,7 +222,9 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            (void)DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default, not used*/, bTryAA);
+            (void)DrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0,
+                                     basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+                                     basegfx::deg2rad(15.0) /*default, not used*/, bTryAA);
         }
     }
     else

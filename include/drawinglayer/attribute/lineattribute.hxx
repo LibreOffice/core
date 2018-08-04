@@ -58,7 +58,7 @@ namespace drawinglayer
                 double fWidth = 0.0,
                 basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLineJoin::Round,
                 css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT,
-                double fMiterMinimumAngle = 15.0 * F_PI180);
+                double fMiterMinimumAngle = basegfx::deg2rad(15.0));
             LineAttribute();
             LineAttribute(const LineAttribute&);
             LineAttribute& operator=(const LineAttribute&);

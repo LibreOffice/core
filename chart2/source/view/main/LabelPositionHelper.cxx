@@ -116,7 +116,7 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize, bool bRotateAroundCenter )
 {
     //correct label positions for labels on a left side of something with a right centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -128,7 +128,7 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = -aSize.Width *rtl::math::sin( beta )
             -aSize.Height *rtl::math::cos( beta )/2.0;
         if( bRotateAroundCenter )
@@ -159,7 +159,7 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize, bool bRotateAroundCenter )
 {
     //correct label positions for labels on a right side of something with a left centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree== 0.0 )
     {
     }
@@ -181,7 +181,7 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = aSize.Width *rtl::math::sin( beta )
                     +aSize.Height*rtl::math::cos( beta )/2.0;
         if( bRotateAroundCenter )
@@ -201,7 +201,7 @@ void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize, bool bRotateAroundCenter )
 {
     //correct label positions for labels on top of something with a bottom centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree== 0.0 )
     {
     }
@@ -214,7 +214,7 @@ void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi - F_PI/2.0;
+        double beta = fAnglePi - F_PI2;
         rfXCorrection = aSize.Height*rtl::math::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection -= aSize.Width*rtl::math::sin( beta )/2.0;
@@ -243,7 +243,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize, bool bRotateAroundCenter )
 {
     //correct label positions for labels below something with a top centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -256,7 +256,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = -aSize.Height*rtl::math::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection += aSize.Width *rtl::math::sin( beta )/2.0;
@@ -265,7 +265,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = aSize.Height*rtl::math::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection -= aSize.Width *rtl::math::sin( beta )/2.0;
@@ -286,7 +286,7 @@ void lcl_correctRotation_Left_Top( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
     //correct position for labels at the left top corner of something with a bottom right alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -296,14 +296,14 @@ void lcl_correctRotation_Left_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = -aSize.Width*rtl::math::sin( beta );
         rfYCorrection = -aSize.Height*rtl::math::sin( beta )
                         -aSize.Width*rtl::math::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = -aSize.Height*rtl::math::cos( beta )
                         -aSize.Width*rtl::math::sin( beta );
         rfYCorrection = -aSize.Height*rtl::math::sin( beta );
@@ -318,7 +318,7 @@ void lcl_correctRotation_Left_Bottom( double& rfXCorrection, double& rfYCorrecti
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
     //correct position for labels at the left bottom corner of something with a top right alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -328,14 +328,14 @@ void lcl_correctRotation_Left_Bottom( double& rfXCorrection, double& rfYCorrecti
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = -aSize.Width*rtl::math::sin( beta )
                         -aSize.Height*rtl::math::cos( beta );
         rfYCorrection = aSize.Height*rtl::math::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = -aSize.Width*rtl::math::sin( beta );
         rfYCorrection = aSize.Width*rtl::math::cos( beta )
                         +aSize.Height*rtl::math::sin( beta );
@@ -350,7 +350,7 @@ void lcl_correctRotation_Right_Top( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
     //correct position for labels at the right top corner of something with a bottom left alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -360,14 +360,14 @@ void lcl_correctRotation_Right_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = aSize.Width*rtl::math::sin( beta )
                         +aSize.Height*rtl::math::cos( beta );
         rfYCorrection = -aSize.Height*rtl::math::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = aSize.Width*rtl::math::sin( beta );
         rfYCorrection = -aSize.Width*rtl::math::cos( beta )
                         -aSize.Height*rtl::math::sin( beta );
@@ -382,7 +382,7 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
     //correct position for labels at the right bottom corner of something with a top left alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fAnglePositiveDegree);
     if( fAnglePositiveDegree==0.0 )
     {
     }
@@ -392,14 +392,14 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI/2.0;
+        double beta = fAnglePi-F_PI2;
         rfXCorrection = aSize.Width*rtl::math::sin( beta );
         rfYCorrection = aSize.Height*rtl::math::sin( beta )
                         +aSize.Width*rtl::math::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
+        double beta = 3*F_PI2 - fAnglePi;
         rfXCorrection = aSize.Height*rtl::math::cos( beta )
                         +aSize.Width*rtl::math::sin( beta );
         rfYCorrection = aSize.Height*rtl::math::sin( beta );

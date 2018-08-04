@@ -282,7 +282,7 @@ namespace basegfx
             {
                 // there is - 180 degree rotated
                 rScale *= -1;
-                rRotate = 180*F_PI180;
+                rRotate = M_PI;
             }
         }
         else

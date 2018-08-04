@@ -173,7 +173,8 @@ namespace sdr
                     {
                         basegfx::B2DVector aTranslation(0.5, 0.5);
                         aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                        aTextBoxMatrix.rotate((360.0 - GetCustomShapeObj().GetExtraTextRotation(true)) * F_PI180);
+                        aTextBoxMatrix.rotate(basegfx::deg2rad(
+                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true)));
                         aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                     }
                     // give text object a size
@@ -199,7 +200,7 @@ namespace sdr
                                 ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
                                 ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
                             aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                            aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
+                            aTextBoxMatrix.rotate(basegfx::deg2rad(360.0 - fExtraTextRotation));
                             aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                         }
 
