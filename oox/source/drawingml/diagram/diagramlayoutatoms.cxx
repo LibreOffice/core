@@ -322,8 +322,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 const double fAngle = static_cast<double>(idx)*nSpanAngle/nShapes + nStartAngle;
                 const awt::Point aCurrPos(
-                    aCenter.Width + nRadius*sin(fAngle*F_PI180) - aChildSize.Width/2,
-                    aCenter.Height - nRadius*cos(fAngle*F_PI180) - aChildSize.Height/2);
+                    aCenter.Width + nRadius*sin(basegfx::deg2rad(fAngle)) - aChildSize.Width/2,
+                    aCenter.Height - nRadius*cos(basegfx::deg2rad(fAngle)) - aChildSize.Height/2);
 
                 aCurrShape->setPosition(aCurrPos);
                 aCurrShape->setSize(aChildSize);
@@ -541,13 +541,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 case XML_upr:
                 {
                     if (rShape->getRotation())
-                        pTextBody->getTextProperties().moRotation = -F_PI180*90*rShape->getRotation();
+                        pTextBody->getTextProperties().moRotation = -F_PI2*rShape->getRotation();
                 }
                 break;
                 case XML_grav:
                 {
-                    if (rShape->getRotation()==90*F_PI180 || rShape->getRotation()==180*F_PI180)
-                        pTextBody->getTextProperties().moRotation = 180*F_PI180;
+                    if (rShape->getRotation()==F_PI2 || rShape->getRotation()==F_PI)
+                        pTextBody->getTextProperties().moRotation = F_PI;
                 }
                 break;
                 case XML_none:

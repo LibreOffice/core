@@ -87,7 +87,7 @@ namespace slideshow
                                       pAttr->getShearYAngle() :
                                       0.0 );
                 const double nRotation( pAttr->isRotationAngleValid() ?
-                                        pAttr->getRotationAngle()*M_PI/180.0 :
+                                        basegfx::deg2rad(pAttr->getRotationAngle()) :
                                         0.0 );
 
                 // scale, shear and rotation pivot point is the shape
@@ -492,7 +492,7 @@ namespace slideshow
                                       pAttr->getShearYAngle() :
                                       0.0 );
                 const double nRotation( pAttr->isRotationAngleValid() ?
-                                        pAttr->getRotationAngle()*M_PI/180.0 :
+                                        basegfx::deg2rad(pAttr->getRotationAngle()) :
                                         0.0 );
 
                 // scale, shear and rotation pivot point is the

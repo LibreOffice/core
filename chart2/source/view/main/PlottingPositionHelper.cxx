@@ -613,7 +613,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformScaledLogicToScene( do
 drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius
                                                                             , double fLogicZ ) const
 {
-    double fAnglePi = fUnitAngleDegree*F_PI/180.0;
+    double fAnglePi = basegfx::deg2rad(fUnitAngleDegree);
 
     double fX=fUnitRadius*rtl::math::cos(fAnglePi);
     double fY=fUnitRadius*rtl::math::sin(fAnglePi);

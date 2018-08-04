@@ -1783,12 +1783,12 @@ void ScInterpreter::ScFalse()
 
 void ScInterpreter::ScDeg()
 {
-    PushDouble((GetDouble() / F_PI) * 180.0);
+    PushDouble(basegfx::rad2deg(GetDouble()));
 }
 
 void ScInterpreter::ScRad()
 {
-    PushDouble(GetDouble() * (F_PI / 180));
+    PushDouble(basegfx::deg2rad(GetDouble()));
 }
 
 void ScInterpreter::ScSin()

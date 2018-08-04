@@ -1292,7 +1292,7 @@ bool SwNoTextFrame::IsTransparent() const
         // we can be more specific - rotations of multiples of
         // 90 degrees will leave no gaps. Go from [0.0 .. F_2PI]
         // to [0 .. 360] and check modulo 90
-        const long nRot(static_cast<long>(getLocalFrameRotation() / F_PI180));
+        const long nRot(static_cast<long>(basegfx::rad2deg(getLocalFrameRotation())));
         const bool bMultipleOf90(0 == (nRot % 90));
 
         if(!bMultipleOf90)

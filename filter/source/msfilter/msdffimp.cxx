@@ -4580,8 +4580,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     fNumber = ( aStartPt.Y() >= cent.Y() ) ? 90.0: 270.0;
                                 else
                                 {
-                                    fNumber = atan2( double( aStartPt.X() - cent.X() ),double( aStartPt.Y() - cent.Y() ) )+ F_PI; // 0..2PI
-                                    fNumber /= F_PI180; // 0..360.0
+                                    fNumber
+                                        = basegfx::rad2deg(atan2(double(aStartPt.X() - cent.X()),
+                                                                 double(aStartPt.Y() - cent.Y()))
+                                                           + F_PI); // 0..360.0
                                 }
                                 nEndAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;

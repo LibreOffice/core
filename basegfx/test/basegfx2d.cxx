@@ -234,7 +234,7 @@ public:
     void rotate()
     {
         B2DHomMatrix mat;
-        mat.rotate(90*F_PI180);
+        mat.rotate(F_PI2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate pi/2 yields exact matrix", 0.0, mat.get(0,0), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -247,7 +247,7 @@ public:
             "rotate pi/2 yields exact matrix", 0.0, mat.get(1,1), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate pi/2 yields exact matrix", 0.0, mat.get(1,2), 1E-12);
-        mat.rotate(90*F_PI180);
+        mat.rotate(F_PI2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate pi yields exact matrix", -1.0, mat.get(0,0), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -260,7 +260,7 @@ public:
             "rotate pi yields exact matrix", -1.0, mat.get(1,1), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate pi yields exact matrix", 0.0, mat.get(1,2), 1E-12);
-        mat.rotate(90*F_PI180);
+        mat.rotate(F_PI2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate 3/2 pi yields exact matrix", 0.0, mat.get(0,0), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -273,7 +273,7 @@ public:
             "rotate 3/2 pi yields exact matrix", 0.0, mat.get(1,1), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate 3/2 pi yields exact matrix", 0.0, mat.get(1,2), 1E-12);
-        mat.rotate(90*F_PI180);
+        mat.rotate(F_PI2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "rotate 2 pi yields exact matrix", 1.0, mat.get(0,0), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -407,8 +407,8 @@ public:
         // are just the two rightmost values and uncritical
         static double fSX(10.0);
         static double fSY(12.0);
-        static double fR(45.0 * F_PI180);
-        static double fS(15.0 * F_PI180);
+        static double fR(F_PI4);
+        static double fS(deg2rad(15.0));
 
         // check all possible scaling combinations
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A1", impDecomposeComposeTest(fSX, fSY, 0.0, 0.0));
@@ -468,7 +468,7 @@ public:
         B2DHomMatrix aTest=utils::createScaleShearXRotateTranslateB2DHomMatrix(
             6425,3938,
             0,
-            180*F_PI180,
+            F_PI,
             10482,4921);
         // decompose that matrix
         B2DTuple aDScale;
@@ -479,7 +479,7 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", 6425.0, aDScale.getX(), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", 3938.0, aDScale.getY(), 1E-12);
         CPPUNIT_ASSERT_MESSAGE("decompose: error test J1", aDTrans.getX() == 10482 && aDTrans.getY() == 4921);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", 180*F_PI180, fDRot, 1E-12 );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", F_PI, fDRot, 1E-12 );
     }
 
     // Change the following lines only, if you add, remove or rename
