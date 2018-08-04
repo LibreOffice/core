@@ -994,7 +994,7 @@ sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
     return rF.CopyLastSprms(rLen);
 }
 
-void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms)
+void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms, const bool bExpandEmpty)
 {
     WW8_WrFkp* pF = m_Fkps.back().get();
 
@@ -1023,7 +1023,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         pF->MergeToNew( nVarLen, pNewSprms );
     // has the prev EndFC an empty sprm and the current is empty too, then
     // expand only the old EndFc to the new EndFc
-    else if( !nVarLen && pF->IsEmptySprm() )
+    else if( !nVarLen && (bExpandEmpty || pF->IsEmptySprm()) )
     {
         pF->SetNewEnd( nEndFc );
         return ;
