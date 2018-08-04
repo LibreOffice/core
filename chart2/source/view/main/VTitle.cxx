@@ -62,7 +62,7 @@ void VTitle::init(
 
 double VTitle::getRotationAnglePi() const
 {
-    return m_fRotationAngleDegree*F_PI/180.0;
+    return basegfx::deg2rad(m_fRotationAngleDegree);
 }
 
 awt::Size VTitle::getUnrotatedSize() const //size before rotation

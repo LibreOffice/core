@@ -898,10 +898,11 @@ uno::Reference< drawing::XShape >
 
             const double fAngleSubdivisionRadian = F_PI/10.0;
 
-            drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
-                fUnitCircleInnerRadius, fUnitCircleOuterRadius
-                , fUnitCircleStartAngleDegree*F_PI/180.0, fUnitCircleWidthAngleDegree*F_PI/180.0
-                , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
+            drawing::PolyPolygonBezierCoords aCoords
+                = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,
+                                      basegfx::deg2rad(fUnitCircleStartAngleDegree),
+                                      basegfx::deg2rad(fUnitCircleWidthAngleDegree),
+                                      aTransformationFromUnitCircle, fAngleSubdivisionRadian);
 
             xProp->setPropertyValue( "PolyPolygonBezier", uno::Any( aCoords ) );
         }
@@ -949,10 +950,11 @@ uno::Reference< drawing::XShape >
 
             const double fAngleSubdivisionRadian = F_PI/32.0;
 
-            drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
-                fUnitCircleInnerRadius, fUnitCircleOuterRadius
-                , fUnitCircleStartAngleDegree*F_PI/180.0, fUnitCircleWidthAngleDegree*F_PI/180.0
-                , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
+            drawing::PolyPolygonBezierCoords aCoords
+                = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,
+                                      basegfx::deg2rad(fUnitCircleStartAngleDegree),
+                                      basegfx::deg2rad(fUnitCircleWidthAngleDegree),
+                                      aTransformationFromUnitCircle, fAngleSubdivisionRadian);
 
             //depth
             xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
@@ -2502,7 +2504,7 @@ uno::Reference< drawing::XShape >
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         ::basegfx::B2DHomMatrix aM;
-        aM.rotate( -nRotation*F_PI/180.0 );//#i78696#->#i80521#
+        aM.rotate( -basegfx::deg2rad(nRotation) );//#i78696#->#i80521#
         aM.translate( nXPos, nYPos );
         xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }

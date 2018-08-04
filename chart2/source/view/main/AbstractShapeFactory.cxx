@@ -271,7 +271,7 @@ awt::Size AbstractShapeFactory::getSizeAfterRotation(
             else if(fRotationAngleDegree>90.0)
                 fRotationAngleDegree=180.0-fRotationAngleDegree;
 
-            const double fAnglePi = fRotationAngleDegree*F_PI/180.0;
+            const double fAnglePi = basegfx::deg2rad(fRotationAngleDegree);
 
             aRet.Height = static_cast<sal_Int32>(
                 aSize.Width*rtl::math::sin( fAnglePi )

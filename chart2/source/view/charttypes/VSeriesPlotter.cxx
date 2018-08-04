@@ -724,7 +724,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
-            const double fDegreesPi( fRotationDegrees * ( F_PI / -180.0 ) );
+            const double fDegreesPi( -basegfx::deg2rad(fRotationDegrees) );
             uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
             if( xProp.is() )
                 xProp->setPropertyValue( "Transformation", AbstractShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );

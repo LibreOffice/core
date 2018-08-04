@@ -73,8 +73,8 @@ namespace drawinglayer
                 double fRadius,
                 basegfx::B2DLineJoin aLineJoin,
                 css::drawing::LineCap aLineCap,
-                double fDegreeStepWidth = 10.0 * F_PI180,
-                double fMiterMinimumAngle = 15.0 * F_PI180);
+                double fDegreeStepWidth = basegfx::deg2rad(10.0),
+                double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
             /// data read access
             double getRadius() const { return mfRadius; }

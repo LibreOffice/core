@@ -121,7 +121,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, eLabelAlignment );
 
             // #i78696# use mathematically correct rotation now
-            const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+            const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
 
             uno::Any aATransformation = AbstractShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             OUString aStackedLabel = AbstractShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );

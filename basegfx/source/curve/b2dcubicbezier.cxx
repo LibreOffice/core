@@ -532,7 +532,8 @@ namespace basegfx
         if(isBezier())
         {
             // use support method #i37443# and allow unsharpen the criteria
-            ImpSubDivAngleStart(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget, fAngleBound * F_PI180);
+            ImpSubDivAngleStart(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget,
+                                deg2rad(fAngleBound));
         }
         else
         {

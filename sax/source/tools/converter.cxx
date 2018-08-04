@@ -669,7 +669,7 @@ bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString)
     }
     else if (-1 != rString.indexOf("rad"))
     {
-        nValue = (fValue * 180.0 / M_PI) * 10.0;
+        nValue = basegfx::rad2deg(fValue) * 10.0;
     }
     else // no explicit unit
     {

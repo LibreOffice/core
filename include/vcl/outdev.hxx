@@ -779,7 +779,7 @@ public:
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::Round,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = 15.0 * F_PI180);
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
     /** Render the given polygon as a line stroke
 
@@ -802,7 +802,7 @@ public:
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = 15.0 * F_PI180,
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
                                     bool bBypassAACheck = false);
 
 private:

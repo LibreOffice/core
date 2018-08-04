@@ -251,7 +251,7 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
         }
         else
         {
-            double fAngle = atan2( static_cast<double>(-nDistY), nDistX ) / F_PI180;
+            double fAngle = basegfx::rad2deg(atan2(static_cast<double>(-nDistY), nDistX));
 
             if( fAngle < 0.0 )
                 fAngle += 360.;
