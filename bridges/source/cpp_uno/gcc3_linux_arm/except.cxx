@@ -298,7 +298,7 @@ namespace CPPU_CURRENT_NAMESPACE
     }
 #endif
 
-    void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
+    void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
     {
         __cxa_exception * header = __cxa_get_globals()->caughtExceptions;
         if (! header)
