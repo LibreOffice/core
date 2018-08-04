@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_81e89a16",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-04T12:47:31Z",
+      "side": 1,
+      "message": "This is totally wrong. moRotation is in 60000ths of degrees, like shape\u0027s rotation iiuc, and both are integers; here you multiply an angle in 60000ths deg by pi/2 (90 deg in radians) - so what do you get?",
+      "range": {
+        "startLine": 554,
+        "startChar": 68,
+        "endLine": 554,
+        "endChar": 101
+      },
+      "revId": "cf7b97d1328ec2f2c8254abb9ce67d63d9c54c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_61ed9624",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-04T12:47:31Z",
+      "side": 1,
+      "message": "This comparison can *never* be true, since you compare integers with non-integer double constants (pi/2 and pi).",
+      "range": {
+        "startLine": 559,
+        "startChar": 24,
+        "endLine": 559,
+        "endChar": 95
+      },
+      "revId": "cf7b97d1328ec2f2c8254abb9ce67d63d9c54c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_41f29208",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-04T12:47:31Z",
+      "side": 1,
+      "message": "This assigns 3 to the moRotation, since it\u0027s integer (optional sal_Int32), and you assign pi to it - and what will it be, when measured in 60000ths of degree?",
+      "range": {
+        "startLine": 560,
+        "startChar": 68,
+        "endLine": 560,
+        "endChar": 79
+      },
+      "revId": "cf7b97d1328ec2f2c8254abb9ce67d63d9c54c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
