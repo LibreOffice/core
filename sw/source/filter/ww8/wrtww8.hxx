@@ -1287,7 +1287,7 @@ private:
 public:
     WW8_WrPlcPn( WW8Export& rWrt, ePLCFT ePl, WW8_FC nStartFc );
     ~WW8_WrPlcPn();
-    void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const sal_uInt8* pSprms = nullptr);
+    void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const sal_uInt8* pSprms = nullptr, const bool bExpandEmpty=false);
     void WriteFkps();
     void WritePlc();
     sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen);
