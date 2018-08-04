@@ -40,7 +40,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-// test szenarios
+// test scenarios
 
 namespace sax_test {
 
