@@ -43,7 +43,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -609,8 +608,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         else if ( nSID == SID_OPENTEMPLATE )
         {
             aPath = SvtPathOptions().GetTemplatePath();
-            sal_Int32 nTokenCount = comphelper::string::getTokenCount(aPath, ';');
-            aPath = aPath.getToken( nTokenCount ? ( nTokenCount - 1 ) : 0 , ';' );
+            if (!aPath.isEmpty())                             // if not empty then get last token
+                aPath = aPath.copy(aPath.lastIndexOf(';')+1); // lastIndexOf+copy works whether separator (';') is there or not
         }
 
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
