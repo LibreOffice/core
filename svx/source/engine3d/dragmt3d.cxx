@@ -368,8 +368,8 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             }
 
             // to radians
-            fWAngle *= F_PI180;
-            fHAngle *= F_PI180;
+            fWAngle = basegfx::deg2rad(fWAngle);
+            fHAngle = basegfx::deg2rad(fHAngle);
 
             // Determine transformation
             basegfx::B3DHomMatrix aRotMat;

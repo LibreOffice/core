@@ -109,7 +109,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         fDY*=-1.0;//drawing layer has inverse y values
         if( fDX != 0.0 )
         {
-            fAngleDegree = atan(fDY/fDX)*180.0/F_PI;
+            fAngleDegree = basegfx::rad2deg(atan(fDY/fDX));
             if(fDX<0.0)
                 fAngleDegree+=180.0;
         }

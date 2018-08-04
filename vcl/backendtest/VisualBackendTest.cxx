@@ -417,8 +417,8 @@ public:
                 basegfx::B2DPolygon polygon;
                 for (double a=0.0; a<360.0; a+=0.5)
                 {
-                    double x = std::sin(a*M_PI / 180.0) * (b+1) * 20;
-                    double y = std::cos(a*M_PI / 180.0) * (b+1) * 20;
+                    double x = std::sin(basegfx::deg2rad(a)) * (b+1) * 20;
+                    double y = std::cos(basegfx::deg2rad(a)) * (b+1) * 20;
                     polygon.append(basegfx::B2DPoint(x + 200 + 500 * fTime, y + 200 + 500 * fTime));
                 }
                 polygon.setClosed(true);

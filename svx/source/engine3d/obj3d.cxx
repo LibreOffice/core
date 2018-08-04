@@ -474,7 +474,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     // Before turning the glue points are defined relative to the page. They
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
-    double fAngleInRad = nAngle/100.0 * F_PI180;
+    double fAngleInRad = basegfx::deg2rad(nAngle/100.0);
 
     basegfx::B3DHomMatrix aRotateZ;
     aRotateZ.rotate(0.0, 0.0, fAngleInRad);

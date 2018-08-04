@@ -66,7 +66,7 @@ void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
 
 void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
 {
-    double fAngle = nAngle * F_PI180 / 100.0;
+    double fAngle = basegfx::deg2rad(nAngle) / 100.0;
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
     double fWidth = GetTextWidth( rText ) / 2.0;
@@ -200,7 +200,7 @@ void DialControlBmp::DrawBackground()
     for( int nAngle = 0; nAngle < 360; nAngle += 15 )
     {
         SetLineColor( (nAngle % 45) ? aLightColor : aFullColor );
-        double fAngle = nAngle * F_PI180;
+        double fAngle = basegfx::deg2rad(nAngle);
         long nX = static_cast< long >( -mnCenterX * cos( fAngle ) );
         long nY = static_cast< long >( mnCenterY * sin( fAngle ) );
         DrawLine( aStartPos, Point( mnCenterX - nX, mnCenterY - nY ) );
@@ -485,7 +485,7 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
     if( fH != 0.0 )
     {
         double fAngle = acos( nX / fH );
-        sal_Int32 nAngle = static_cast< sal_Int32 >( fAngle / F_PI180 * 100.0 );
+        sal_Int32 nAngle = static_cast<sal_Int32>(basegfx::rad2deg(fAngle) * 100.0);
         if( nY < 0 )
             nAngle = 36000 - nAngle;
         if( bInitial )  // round to entire 15 degrees
@@ -720,7 +720,7 @@ void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
     if( fH != 0.0 )
     {
         double fAngle = acos( nX / fH );
-        sal_Int32 nAngle = static_cast< sal_Int32 >( fAngle / F_PI180 * 100.0 );
+        sal_Int32 nAngle = static_cast<sal_Int32>(basegfx::rad2deg(fAngle) * 100.0);
         if( nY < 0 )
             nAngle = 36000 - nAngle;
         if( bInitial )  // round to entire 15 degrees

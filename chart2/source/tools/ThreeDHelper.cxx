@@ -404,8 +404,8 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
     double& y = rfYAngleRad;
     double& z = rfZAngleRad;
 
-    double E = F_PI*nElevationDeg/180; //elevation in Rad
-    double R = F_PI*nRotationDeg/180; //rotation in Rad
+    double E = basegfx::deg2rad(nElevationDeg); //elevation in Rad
+    double R = basegfx::deg2rad(nRotationDeg); //rotation in Rad
 
     if( (nRotationDeg == 0 || nRotationDeg == 180 )
         && ( nElevationDeg == 90 || nElevationDeg == 270 ) )
@@ -415,20 +415,20 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         //element 23
         double f23 = cos(R)*sin(E);
         if(f23>0)
-            x = F_PI/2;
+            x = F_PI2;
         else
-            x = -F_PI/2;
+            x = -F_PI2;
         y = R;
     }
     else if( ( nRotationDeg == 90 || nRotationDeg == 270 )
         && ( nElevationDeg == 90 || nElevationDeg == 270 ) )
     {
         //cR==0 && cE==0
-        z = F_PI/2;
+        z = F_PI2;
         if( sin(R)>0 )
-            x = F_PI/2.0;
+            x = F_PI2;
         else
-            x = -F_PI/2.0;
+            x = -F_PI2;
 
         if( (sin(R)*sin(E))>0 )
             y = 0.0;
@@ -450,9 +450,9 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         z = 0.0;
 
         if( (sin(R)/cos(E))>0 )
-            y = F_PI/2;
+            y = F_PI2;
         else
-            y = -F_PI/2;
+            y = -F_PI2;
 
         if( (cos(E))>0 )
             x = 0;
@@ -477,9 +477,9 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         z = atan(sin(R)/(cos(R)*sin(E)));
         //use element 13 for sign for x
         if( (sin(R)*sin(z))>0.0 )
-            x = F_PI/2;
+            x = F_PI2;
         else
-            x = -F_PI/2;
+            x = -F_PI2;
         //use element 21 for y
         if( (sin(R)*sin(E)*sin(z))>0.0)
             y = 0.0;
@@ -501,8 +501,8 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         //sE!=0 cE!=0 cR==0
         //z = +- F_PI/2;
         //x = +- F_PI/2;
-        z = F_PI/2;
-        x = F_PI/2;
+        z = F_PI2;
+        x = F_PI2;
         double sR = sin(R);
         if( sR<0.0 )
             x *= -1.0; //different signs for x and z
@@ -610,9 +610,9 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 //element 23
                 double f23 = cos(z)*sin(x) / cos(R);
                 if( f23 > 0 )
-                    E = F_PI/2.0;
+                    E = F_PI2;
                 else
-                    E = -F_PI/2.0;
+                    E = -F_PI2;
             }
             else if( lcl_isCosZero(z) )
             {
@@ -622,16 +622,16 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 double f13 = sin(x)*sin(z);
                 //element 13+11
                 if( f13 > 0 )
-                    R = F_PI/2.0;
+                    R = F_PI2;
                 else
-                    R = -F_PI/2.0;
+                    R = -F_PI2;
 
                 //element 21
                 double f21 = cos(y)*sin(z) / sin(R);
                 if( f21 > 0 )
-                    E = F_PI/2.0;
+                    E = F_PI2;
                 else
-                    E = -F_PI/2.0;
+                    E = -F_PI2;
             }
             else
             {
@@ -646,9 +646,9 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 //element 23
                 double f23 = cos(z)*sin(x);
                 if( f23/cos(R) > 0 )
-                    E = F_PI/2.0;
+                    E = F_PI2;
                 else
-                    E = -F_PI/2.0;
+                    E = -F_PI2;
             }
         }
         else if( lcl_isSinZero(x) )
@@ -688,16 +688,16 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
             double f13 = sin(x)*sin(z);
             //element 13+11
             if( f13 > 0 )
-                R = F_PI/2.0;
+                R = F_PI2;
             else
-                R = -F_PI/2.0;
+                R = -F_PI2;
 
             //element 21+22
             double f21 = cos(y)*sin(z);
             if( f21/sin(R) > 0 )
-                E = F_PI/2.0;
+                E = F_PI2;
             else
-                E = -F_PI/2.0;
+                E = -F_PI2;
         }
         else
         {
@@ -722,9 +722,9 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
 
         double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
         if( f13 >= 0 )
-            R = F_PI/2.0;
+            R = F_PI2;
         else
-            R = -F_PI/2.0;
+            R = -F_PI2;
 
         double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
         if( f22 >= 0 )
@@ -790,20 +790,20 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
             R=0;//13 -> R=0 or F_PI
             if( f11<0.0 )
                 R=F_PI;
-            E=F_PI/2;//22 -> E=+-F_PI/2
+            E=F_PI2;//22 -> E=+-F_PI/2
             //use element 11 and 23 for sign
             double f23 = cos(z)*sin(x);
             if( (f11*f23*sin(E))<0.0 )
-                E=-F_PI/2.0;
+                E=-F_PI2;
         }
         else if( lcl_isCosZero(z) )
         {
             //cosY!=0 sinY!=0 cosX=0 cosZ=0
             //element 11 & 13:
             if( (sin(x)*sin(z))>0.0 )
-                R=F_PI/2.0;
+                R=F_PI2;
             else
-                R=-F_PI/2.0;
+                R=-F_PI2;
             //element 22:
             E=acos( sin(x)*sin(y)*sin(z));
             //use element 21 for sign:
@@ -920,7 +920,7 @@ void ThreeDHelper::getRotationAngleFromDiagram(
     rfYAngleRad = lcl_shiftAngleToIntervalMinusPiToPi(aRotation.getY());
     rfZAngleRad = lcl_shiftAngleToIntervalMinusPiToPi(aRotation.getZ());
 
-    if(rfZAngleRad<(-F_PI/2) || rfZAngleRad>(F_PI/2))
+    if(rfZAngleRad<-F_PI2 || rfZAngleRad>F_PI2)
     {
         rfZAngleRad-=F_PI;
         rfXAngleRad-=F_PI;
