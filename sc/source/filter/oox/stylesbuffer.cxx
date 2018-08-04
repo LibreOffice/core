@@ -1936,7 +1936,7 @@ void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
     // tdf#70565 Set proper default value to "0" of xfId attribute
     // When xfId is not exist during .xlsx import
     // it must have values set to "0".
-    // Is is not impacts spreadsheets created with MS Excel,
+    // This doesn't impact spreadsheets created with MS Excel,
     // as xfId attribute is always created during export to .xlsx
     // Not setting "0" value is causing wrong .xlsx import by LibreOffice,
     // for spreadsheets created by external applications (ex. SAP BI).
