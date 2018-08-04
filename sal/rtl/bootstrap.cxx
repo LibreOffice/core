@@ -36,6 +36,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 
 #include <vector>
 #include <algorithm>

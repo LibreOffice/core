@@ -31,6 +31,7 @@
 #include <rtl/byteseq.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
 #include <memory>

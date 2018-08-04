@@ -28,6 +28,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 static const wchar_t UNC_PREFIX[] = L"\\\\";

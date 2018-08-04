@@ -26,6 +26,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <sstream>
 
 #include <tools/contnr.hxx>
 #include <tools/fract.hxx>

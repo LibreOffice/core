@@ -29,6 +29,7 @@
 #include <osl/thread.h>
 #include <rtl/process.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace osl;

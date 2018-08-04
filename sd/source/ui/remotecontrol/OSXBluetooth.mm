@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <osl/conditn.hxx>
+#include <sal/log.hxx>
 
 #include <premac.h>
 #import <IOBluetooth/objc/IOBluetoothRFCOMMChannel.h>

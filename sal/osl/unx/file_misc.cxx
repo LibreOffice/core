@@ -25,6 +25,7 @@
 #include <osl/signal.h>
 #include <rtl/alloc.h>
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
 
 #include "system.hxx"
 #include "file_impl.hxx"

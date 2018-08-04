@@ -56,6 +56,7 @@
 #include <osl/signal.h>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>

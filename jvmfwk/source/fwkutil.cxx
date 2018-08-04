@@ -36,6 +36,7 @@
 #include <osl/process.h>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/bootstrap.hxx>

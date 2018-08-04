@@ -22,6 +22,7 @@
 #include <osl/file.hxx>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include "file_url.hxx"

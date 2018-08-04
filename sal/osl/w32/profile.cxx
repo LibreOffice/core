@@ -30,6 +30,7 @@
 #include <osl/file.h>
 #include <rtl/alloc.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <algorithm>
 #include <vector>
