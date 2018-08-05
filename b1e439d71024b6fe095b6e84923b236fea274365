@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_6199161e",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-05T11:55:24Z",
+      "side": 1,
+      "message": "what about if pCharStr points to a zero length string?",
+      "revId": "b1e439d71024b6fe095b6e84923b236fea274365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
