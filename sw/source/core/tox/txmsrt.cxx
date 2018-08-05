@@ -673,7 +673,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
     sal_uInt16 nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
     {
-        nRet = static_cast<sal_uInt16>(sText.toInt32());
+        nRet = sText.toUInt32();
         nRet++;
     }
     //illegal values are also set to 'ARTICLE' as non-numeric values are

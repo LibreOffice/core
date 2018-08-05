@@ -434,7 +434,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
         OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
-        SfxStyleSearchBits nMask = pItem->GetFilterList()[m_xFilterLb->get_id(nFilterIdx).toInt32()].nFlags | SfxStyleSearchBits::UserDefined;
+        SfxStyleSearchBits nMask = pItem->GetFilterList()[m_xFilterLb->get_id(nFilterIdx).toUInt32()].nFlags | SfxStyleSearchBits::UserDefined;
         pStyle->SetMask( nMask );
     }
     if (m_xAutoCB->get_visible() && m_xAutoCB->get_state_changed_from_saved())

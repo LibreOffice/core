@@ -33,11 +33,11 @@ void Comment::setDateTime (const OUString& _datetime)
 {
     OUString datetime = _datetime;
     aDateTime.Year = datetime.getToken(0,'-').toInt32();
-    aDateTime.Month = datetime.getToken(1,'-').toInt32();
-    aDateTime.Day = datetime.getToken(2,'-').toInt32();
+    aDateTime.Month = datetime.getToken(1,'-').toUInt32();
+    aDateTime.Day = datetime.getToken(2,'-').toUInt32();
     datetime = datetime.getToken(1,'T');
-    aDateTime.Hours = datetime.getToken(0,':').toInt32();
-    aDateTime.Minutes = datetime.getToken(1,':').toInt32();
+    aDateTime.Hours = datetime.getToken(0,':').toUInt32();
+    aDateTime.Minutes = datetime.getToken(1,':').toUInt32();
     double seconds = datetime.getToken(2,':').toDouble();
     aDateTime.Seconds = floor(seconds);
     seconds -= aDateTime.Seconds;
