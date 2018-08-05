@@ -1311,9 +1311,6 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
         nLen = IMPL_RTL_STRNAME( getLength )( pCharStr );
     }
     else
-        nLen = 0;
-
-    if ( !nLen )
     {
         IMPL_RTL_STRINGNAME( new )( ppThis );
         return;
