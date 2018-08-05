@@ -332,10 +332,8 @@ void SwHTMLWriter::OutFootEndNotes()
 
         if( m_bLFPossible )
             OutNewLine();
-        OStringBuffer sOut;
-        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
-            .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).append("=\"");
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+
+        Strm().WriteCharPtr( "<" OOO_STRING_SVTOOLS_HTML_division " " OOO_STRING_SVTOOLS_HTML_O_id "=\"" );
         HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
         Strm().WriteCharPtr( "\">" );
 
@@ -509,11 +507,9 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
     }
 
     rHTMLWrt.OutNewLine();
-    OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"").append(pName)
-        .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
-    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_meta " " OOO_STRING_SVTOOLS_HTML_O_name \
+                "=\"" + OString(pName) + "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
+    rWrt.Strm().WriteCharPtr( sOut.getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear(), rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     rWrt.Strm().WriteCharPtr( "\">" );
 }

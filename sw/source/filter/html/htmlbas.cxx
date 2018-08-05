@@ -275,13 +275,10 @@ void SwHTMLWriter::OutBasic()
             {
                 bFirst = false;
                 OutNewLine();
-                OStringBuffer sOut;
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta)
-                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_httpequiv)
-                    .append("=\"")
-                    .append(OOO_STRING_SVTOOLS_HTML_META_content_script_type)
-                    .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content)
-                    .append("=\"text/x-");
+                OString sOut = "<" OOO_STRING_SVTOOLS_HTML_meta " " \
+                        OOO_STRING_SVTOOLS_HTML_O_httpequiv "=\"" \
+                        OOO_STRING_SVTOOLS_HTML_META_content_script_type "\" "
+                        OOO_STRING_SVTOOLS_HTML_O_content "=\"text/x-";
                 Strm().WriteCharPtr( sOut.getStr() );
                 // Entities aren't welcome here
                 Strm().WriteCharPtr( OUStringToOString(sLang, m_eDestEnc).getStr() )

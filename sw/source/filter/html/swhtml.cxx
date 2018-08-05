@@ -2015,9 +2015,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             }
             else
             {
-                OUStringBuffer aComment;
-                aComment.append('<').append(aToken).append('>');
-                InsertComment( aComment.makeStringAndClear() );
+                OUString aComment = "<" + aToken + ">";
+                InsertComment( aComment );
             }
         }
         break;

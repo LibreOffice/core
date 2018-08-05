@@ -1063,9 +1063,9 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center );
         else
         {
-            OStringBuffer sOut(OOO_STRING_SVTOOLS_HTML_division);
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
-                .append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
+            OString sOut = OOO_STRING_SVTOOLS_HTML_division " "
+                        OOO_STRING_SVTOOLS_HTML_O_align "=\"" \
+                        OOO_STRING_SVTOOLS_HTML_AL_right "\"";
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + sOut.getStr() );
         }
         rHTMLWrt.IncIndentLevel();  // indent content of <CENTER>

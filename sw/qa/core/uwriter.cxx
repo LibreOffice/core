@@ -508,11 +508,7 @@ void SwDocTest::testModelToViewHelperHideInvisibleHideRedlined()
 
     ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideInvisible | ExpandMode::HideDeletions);
     OUString sViewText = aModelToViewHelper.getViewText();
-    OUStringBuffer aBuffer;
-    aBuffer.append("AAAACCCCC ");
-    aBuffer.append(CH_TXTATR_BREAKWORD);
-    aBuffer.append(" DDDDD");
-    CPPUNIT_ASSERT_EQUAL(aBuffer.makeStringAndClear(), sViewText);
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC " + OUStringLiteral1(CH_TXTATR_BREAKWORD) + " DDDDD"), sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnote()

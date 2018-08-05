@@ -1658,11 +1658,10 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
-    OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"")
-        .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block).append("\"");
-    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_spacer " " \
+                OOO_STRING_SVTOOLS_HTML_O_type "=\"" \
+                OOO_STRING_SVTOOLS_HTML_SPTYPE_block "\"";
+    rWrt.Strm().WriteCharPtr( sOut.getStr() );
 
     // ALIGN, WIDTH, HEIGHT
     OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFrameFormat, aEmptyOUStr, HTML_FRMOPTS_SPACER );
@@ -1695,10 +1694,9 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    OStringBuffer sOut;
-    sOut.append('<').append(rHTMLWrt.GetNamespace() + aTag);
+    OString sOut = "<" + rHTMLWrt.GetNamespace() + aTag;
 
-    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rWrt.Strm().WriteCharPtr( sOut.getStr() );
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrameFlags |= HtmlFrmOpts::SNoBorder;

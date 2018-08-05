@@ -405,12 +405,10 @@ ErrCode SwHTMLWriter::WriteStream()
                     pSNd->GetSection().GetSectionName(), m_eDestEnc,
                     &m_aNonConvertableCharacters );
 
-                OStringBuffer sOut;
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
-                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id)
-                    .append("=\"").append(aName).append('\"').append('>')
-                    .append(aStartTags);
-                aStartTags = sOut.makeStringAndClear();
+                OString sOut = "<" OOO_STRING_SVTOOLS_HTML_division " " \
+                            OOO_STRING_SVTOOLS_HTML_O_id "=\"" + aName +
+                            "\">" + aStartTags;
+                aStartTags = sOut;
             }
             // FindSectionNode() on a SectionNode return the same!
             pSNd = pSNd->StartOfSectionNode()->FindSectionNode();
@@ -917,9 +915,8 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
 
     if( pColorItem )
     {
-        OStringBuffer sOut;
-        sOut.append(" " + OString(pTag) + "=");
-        rHWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        OString sOut = " " + OString(pTag) + "=";
+        rHWrt.Strm().WriteCharPtr( sOut.getStr() );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor )
             aColor = COL_BLACK;
@@ -1270,9 +1267,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     /// only checking, if transparency is not set.
     if( rBackColor != COL_TRANSPARENT )
     {
-        OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
         HTMLOutFuncs::Out_Color( Strm(), rBackColor);
     }
 
@@ -1349,6 +1344,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
         else
             sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
         sOut.append("=\"");
+
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
                                   m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
@@ -1384,10 +1380,8 @@ void SwHTMLWriter::OutDirection( SvxFrameDirection nDir )
     OString sConverted = convertDirection(nDir);
     if (!sConverted.isEmpty())
     {
-        OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
-            .append("=\"").append(sConverted).append('\"');
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        OString sOut = " " OOO_STRING_SVTOOLS_HTML_O_dir "=\"" + sConverted + "\"";
+        Strm().WriteCharPtr( sOut.getStr() );
     }
 }
 

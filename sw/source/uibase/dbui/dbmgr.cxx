@@ -677,9 +677,8 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
                 else
                 {
                     // column not found -> show error
-                    OUStringBuffer sInsert;
-                    sInsert.append('?').append(sColumn).append('?');
-                    pSh->Insert(sInsert.makeStringAndClear());
+                    OUString sInsert = "?" + sColumn + "?";
+                    pSh->Insert(sInsert);
                 }
                 sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
             }
