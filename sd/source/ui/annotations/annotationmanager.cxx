@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <comphelper/lok.hxx>
-#include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 
 #include <vcl/commandinfoprovider.hxx>
@@ -571,9 +570,8 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
             sQuote = "...";
         aStr += sQuote + "\"\n";
 
-        sal_Int32 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
-        for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
-            pOutliner->Insert( aStr.getToken( nPara, '\n' ), EE_PARA_APPEND, -1 );
+        for( sal_Int32 nIdx = 0; nIdx >= 0; )
+            pOutliner->Insert( aStr.getToken( 0, '\n', nIdx ), EE_PARA_APPEND, -1 );
 
         if( pOutliner->GetParagraphCount() > 1 )
         {
