@@ -114,14 +114,14 @@ public:
         Do not call this method.  It is an internally used method that can
         not be made private.
     */
-    static void DisposeInstance (ViewShellBase& rBase);
+    static void DisposeInstance (const ViewShellBase& rBase);
 
     /** Destroy the FrameworkHelper object for the given ViewShellBase.
 
         Do not call this method.  It is an internally used method that can
         not be made private.
     */
-    static void ReleaseInstance (ViewShellBase& rBase);
+    static void ReleaseInstance (const ViewShellBase& rBase);
 
     /** Return an identifier for the given view URL.  This identifier can be
         used in a switch statement.  See GetViewURL() for a mapping in the
@@ -299,7 +299,7 @@ public:
 
 private:
     typedef ::std::map<
-        ViewShellBase*,
+        const ViewShellBase*,
         ::std::shared_ptr<FrameworkHelper> > InstanceMap;
     /** The instance map holds (at least) one FrameworkHelper instance for
         every ViewShellBase object.
