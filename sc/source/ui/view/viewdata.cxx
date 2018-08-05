@@ -2864,7 +2864,7 @@ void ScViewData::ReadUserData(const OUString& rData)
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
     // sheet may have become invalid (for instance last version):
-    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(1, ';').toInt32());
+    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(1, ';').toUInt32());
     if (pDoc->HasTable( nNewTab ))
         SetTabNo(nNewTab);
 
