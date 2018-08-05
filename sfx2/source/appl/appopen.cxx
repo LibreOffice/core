@@ -777,25 +777,25 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( pFileFlagsItem )
     {
         const OUString aFileFlags = pFileFlagsItem->GetValue().toAsciiUpperCase();
-        if ( -1 != aFileFlags.indexOf( 0x0054 ) )               // T = 54h
+        if ( aFileFlags.indexOf('T') >= 0 )
         {
             rReq.RemoveItem( SID_TEMPLATE );
             rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, true ) );
         }
 
-        if ( -1 != aFileFlags.indexOf( 0x0048 ) )               // H = 48h
+        if ( aFileFlags.indexOf('H') >= 0 )
         {
             rReq.RemoveItem( SID_HIDDEN );
             rReq.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
         }
 
-        if ( -1 != aFileFlags.indexOf( 0x0052 ) )               // R = 52h
+        if ( aFileFlags.indexOf('R') >= 0 )
         {
             rReq.RemoveItem( SID_DOC_READONLY );
             rReq.AppendItem( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
 
-        if ( -1 != aFileFlags.indexOf( 0x0042 ) )               // B = 42h
+        if ( aFileFlags.indexOf('B') >= 0 )
         {
             rReq.RemoveItem( SID_PREVIEW );
             rReq.AppendItem( SfxBoolItem( SID_PREVIEW, true ) );
