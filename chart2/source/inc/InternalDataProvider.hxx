@@ -24,18 +24,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "CachedDataSequence.hxx"
-
 #include <map>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 
 namespace chart
 {

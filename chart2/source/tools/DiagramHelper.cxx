@@ -47,7 +47,9 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart2/StackingDirection.hpp>
 
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

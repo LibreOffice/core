@@ -34,6 +34,7 @@
 #include <cppuhelper/component_context.hxx>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

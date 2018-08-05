@@ -19,7 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_INTERNALDATA_HXX
 #define INCLUDED_CHART2_SOURCE_INC_INTERNALDATA_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <vector>
 #include <valarray>
