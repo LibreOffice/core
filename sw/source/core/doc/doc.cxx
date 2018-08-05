@@ -124,6 +124,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -1340,9 +1341,8 @@ void RemoveOrDeleteContents(SwTextNode* pTextNd, IDocumentContentOperations& xOp
         xOperations.DelFullPara(aPam);
     }
 }
-// Returns if the data was actually modified
-bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
-                       IDocumentContentOperations& xOperations)
+// Returns the node pointer which needs to hide, or nullptr if this field does not hide a node
+SwTextNode* HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes)
 {
     SwTextNode* pTextNd;
     if (rFormatField.GetTextField()
@@ -1350,10 +1350,9 @@ bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
         && pTextNd->GetpSwpHints() && pTextNd->IsHiddenByParaField()
         && &pTextNd->GetNodes() == &rNodes)
     {
-        RemoveOrDeleteContents(pTextNd, xOperations);
-        return true;
+        return pTextNd;
     }
-    return false;
+    return nullptr;
 }
 }
 
@@ -1385,6 +1384,7 @@ bool SwDoc::FieldHidesPara(const SwField& rField) const
 }
 
 /// Remove the invisible content from the document e.g. hidden areas, hidden paragraphs
+// Returns if the data was actually modified
 bool SwDoc::RemoveInvisibleContent()
 {
     bool bRet = false;
@@ -1392,21 +1392,23 @@ bool SwDoc::RemoveInvisibleContent()
 
     {
         // Removing some nodes for one SwFieldIds::Database type might remove the type from
-        // document's field types, invalidating iterators. So, we need to create own list of
-        // matching types prior to processing them.
-        std::vector<const SwFieldType*> aHidingFieldTypes;
+        // document's field types, or try to remove already removed nodes, invalidating iterators.
+        // So, we need to create own list of nodes prior to removing them.
+        std::set<SwTextNode*> aHiddenNodes;
         for (const auto* pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (FieldCanHidePara(pType->Which()))
-                aHidingFieldTypes.push_back(pType);
+            {
+                SwIterator<SwFormatField, SwFieldType> aIter(*pType);
+                for (auto* pField = aIter.First(); pField; pField = aIter.Next())
+                    if (SwTextNode* pHiddenNode = HandleHidingField(*pField, GetNodes()))
+                        aHiddenNodes.insert(pHiddenNode);
+            }
         }
-        for (const auto* pType : aHidingFieldTypes)
+        for (SwTextNode* pHiddenNode : aHiddenNodes)
         {
-            SwIterator<SwFormatField, SwFieldType> aIter(*pType);
-            for (SwFormatField* pFormatField = aIter.First(); pFormatField;
-                 pFormatField = aIter.Next())
-                bRet |= HandleHidingField(*pFormatField, GetNodes(),
-                                          getIDocumentContentOperations());
+            bRet = true;
+            RemoveOrDeleteContents(pHiddenNode, getIDocumentContentOperations());
         }
     }
 
