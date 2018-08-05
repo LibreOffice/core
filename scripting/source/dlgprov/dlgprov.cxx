@@ -236,7 +236,7 @@ namespace dlgprov
     Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic()
     {
         if ( !m_BasicInfo.get() )
-            // shouln't get here
+            // shouldn't get here
             throw RuntimeException("No information to create dialog" );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
