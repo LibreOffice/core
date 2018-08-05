@@ -142,7 +142,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,mtpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,htmlfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
-	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
+	$(if $(filter-out ANDROID HAIKU IOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	$(if $(filter WNT,$(OS)), \
@@ -236,7 +236,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 endif
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
-	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
+	$(if $(and $(ENABLE_JAVA),$(filter-out HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
 	$(if $(ENABLE_MACOSX_SANDBOX),, \
 		regmerge \
 		regview \
@@ -1017,7 +1017,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
-	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
+	$(if $(and $(filter-out MACOSX HAIKU WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
 		$(if $(ENABLE_HEADLESS),, \
 			desktop_soffice_sh \
 		) \
