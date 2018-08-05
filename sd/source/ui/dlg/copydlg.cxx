@@ -79,30 +79,15 @@ CopyDlg::~CopyDlg()
 
 void CopyDlg::dispose()
 {
-    OUString& rStr = GetExtraData();
-
-    rStr = OUString::number(m_pNumFldCopies->GetValue());
-    rStr += OUString(TOKEN);
-
-    rStr += OUString::number(m_pMtrFldMoveX->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldMoveY->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldAngle->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldWidth->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number(m_pMtrFldHeight->GetValue());
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number( sal_uInt32(m_pLbStartColor->GetSelectEntryColor()) );
-    rStr += OUString( TOKEN );
-
-    rStr += OUString::number( sal_uInt32(m_pLbEndColor->GetSelectEntryColor()) );
+    GetExtraData() =
+        OUString::number(m_pNumFldCopies->GetValue()) + OUString(TOKEN) +
+        OUString::number(m_pMtrFldMoveX->GetValue()) + OUString(TOKEN) +
+        OUString::number(m_pMtrFldMoveY->GetValue()) + OUString(TOKEN) +
+        OUString::number(m_pMtrFldAngle->GetValue()) + OUString(TOKEN) +
+        OUString::number(m_pMtrFldWidth->GetValue()) + OUString(TOKEN) +
+        OUString::number(m_pMtrFldHeight->GetValue()) + OUString(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_pLbStartColor->GetSelectEntryColor())) + OUString(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_pLbEndColor->GetSelectEntryColor()));
 
     m_pNumFldCopies.clear();
     m_pBtnSetViewData.clear();
