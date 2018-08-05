@@ -22,7 +22,7 @@
 
 struct LotusContext;
 
-typedef void ( *OPCODE_FKT )(LotusContext &rContext, SvStream &rStream, sal_uInt16 nLaenge);
+typedef void ( *OPCODE_FKT )(LotusContext &rContext, SvStream &rStream, sal_uInt16 nLength);
 
 #define FKT_LIMIT   101
 
