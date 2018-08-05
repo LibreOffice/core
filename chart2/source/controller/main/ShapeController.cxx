@@ -26,6 +26,7 @@
 #include <dlg_ShapeParagraph.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 

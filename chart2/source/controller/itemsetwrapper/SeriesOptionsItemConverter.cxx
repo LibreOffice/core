@@ -28,6 +28,7 @@
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>

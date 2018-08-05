@@ -22,6 +22,7 @@
 #include <WrappedPropertySet.hxx>
 #include <DiagramHelper.hxx>
 
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

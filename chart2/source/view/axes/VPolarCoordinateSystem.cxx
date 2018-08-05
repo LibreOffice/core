@@ -22,6 +22,8 @@
 #include "VPolarAxis.hxx"
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
+#include <ChartModel.hxx>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 
 namespace chart
 {

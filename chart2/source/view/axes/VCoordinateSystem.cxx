@@ -35,6 +35,7 @@
 #include <DataSeriesHelper.hxx>
 #include <defines.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>

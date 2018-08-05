@@ -63,6 +63,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/chart2/XTimeBased.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <sal/log.hxx>
