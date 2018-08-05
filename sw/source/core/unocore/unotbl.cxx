@@ -4191,12 +4191,12 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    SwUnoTableCursor* pCursor = dynamic_cast<SwUnoTableCursor*>(pUnoCursor.get());
+    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
     {
         // HACK: remove pending actions for selecting old style tables
-        UnoActionRemoveContext aRemoveContext(*pCursor);
+        UnoActionRemoveContext aRemoveContext(rCursor);
     }
-    pCursor->MakeBoxSels();
+    rCursor.MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
         pFrameFormat->GetDoc()->DeleteCol(*pUnoCursor);
