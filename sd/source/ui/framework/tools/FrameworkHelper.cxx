@@ -84,7 +84,7 @@ public:
             callback is destroyed.
     */
     CallbackCaller (
-        ::sd::ViewShellBase& rBase,
+        const ::sd::ViewShellBase& rBase,
         const OUString& rsEventType,
         const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
@@ -343,7 +343,7 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
     return pHelper;
 }
 
-void FrameworkHelper::DisposeInstance (ViewShellBase& rBase)
+void FrameworkHelper::DisposeInstance (const ViewShellBase& rBase)
 {
     InstanceMap::iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper != maInstanceMap.end())
@@ -352,7 +352,7 @@ void FrameworkHelper::DisposeInstance (ViewShellBase& rBase)
     }
 }
 
-void FrameworkHelper::ReleaseInstance (ViewShellBase& rBase)
+void FrameworkHelper::ReleaseInstance (const ViewShellBase& rBase)
 {
     InstanceMap::iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper != maInstanceMap.end())
@@ -830,7 +830,7 @@ namespace {
 //===== CallbackCaller ========================================================
 
 CallbackCaller::CallbackCaller (
-    ::sd::ViewShellBase& rBase,
+    const ::sd::ViewShellBase& rBase,
     const OUString& rsEventType,
     const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
     const ::sd::framework::FrameworkHelper::Callback& rCallback)
