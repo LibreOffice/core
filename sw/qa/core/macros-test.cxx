@@ -115,11 +115,9 @@ private:
 
 void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUString aSep("/");
-    OUStringBuffer aBuffer( m_directories.getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
+    const OUString aSep("/");
+    rFilePath = OUString(m_directories.getSrcRootURL() + m_aBaseString + aSep + aFileExtension
+                         + aSep + aFileBase + aFileExtension);
 }
 
 #if 0
@@ -165,9 +163,8 @@ void SwMacrosTest::testVba()
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, "doc", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        OUStringBuffer sMsg( "Failed to load " );
-        sMsg.append ( aFileName );
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
+        const OUString sMsg = "Failed to load " + aFileName;
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
         OUString sUrl = testInfo[i].sMacroUrl;
         Any aRet;
