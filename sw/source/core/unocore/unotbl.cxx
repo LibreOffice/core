@@ -3358,10 +3358,10 @@ SwXCellRange::getCellRangeByPosition(
                     pUnoCursor->SetMark();
                     pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCursor->Move( fnMoveForward, GoInNode );
-                    SwUnoTableCursor* pCursor = dynamic_cast<SwUnoTableCursor*>(pUnoCursor.get());
+                    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
                     // HACK: remove pending actions for selecting old style tables
-                    UnoActionRemoveContext aRemoveContext(*pCursor);
-                    pCursor->MakeBoxSels();
+                    UnoActionRemoveContext aRemoveContext(rCursor);
+                    rCursor.MakeBoxSels();
                     // pUnoCursor will be provided and will not be deleted
                     aRet = SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, aNewDesc).get();
                 }
