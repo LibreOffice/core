@@ -1759,7 +1759,7 @@ void SfxViewShell::SetController( SfxBaseController* pController )
     pImpl->xClipboardListener = new SfxClipboardChangeListener( this, GetClipboardNotifier() );
 }
 
-Reference < XController > SfxViewShell::GetController()
+Reference < XController > SfxViewShell::GetController() const
 {
     return pImpl->m_pController.get();
 }
