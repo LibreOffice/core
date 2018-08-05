@@ -1948,8 +1948,9 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                                 osl_getTempDirURL(&aGalleryDir.pData);
                             else
                                 aGalleryDir = SvtPathOptions().GetGalleryPath();
-                            sal_Int32 nTokenCount = comphelper::string::getTokenCount(aGalleryDir, ';');
-                            INetURLObject aGalleryUserSound( aGalleryDir.getToken( nTokenCount - 1, ';' ) );
+                            // Use last token delimited by ';'. copy(lastIndexOf+1) works whether
+                            // string is empty or not and whether ';' is there or not.
+                            INetURLObject aGalleryUserSound( aGalleryDir.copy(aGalleryDir.lastIndexOf(';')+1) );
 
                             aGalleryUserSound.Append( aRetval );
                             const auto nRemainingSize = rStCtrl.remainingSize();
