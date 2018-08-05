@@ -57,6 +57,7 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>

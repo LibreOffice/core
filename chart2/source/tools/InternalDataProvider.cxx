@@ -32,6 +32,7 @@
 #include <CommonFunctors.hxx>
 #include <UncachedDataSequence.hxx>
 #include <DataSourceHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>

@@ -43,6 +43,7 @@
 #include <CharacterProperties.hxx>
 #include <FillProperties.hxx>
 
+#include <float.h>
 #include <map>
 #include <algorithm>
 #include <rtl/math.hxx>

@@ -37,7 +37,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <cppuhelper/supportsservice.hxx>

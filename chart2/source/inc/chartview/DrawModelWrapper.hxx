@@ -20,12 +20,17 @@
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_DRAWMODELWRAPPER_HXX
 
 #include <svx/svdmodel.hxx>
-#include <svx/svdobj.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <chartview/chartviewdllapi.hxx>
+
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+
+class SdrObjList;
+class SdrObject;
 
 namespace chart
 {

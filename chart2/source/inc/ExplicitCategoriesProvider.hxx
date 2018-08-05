@@ -19,12 +19,18 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include "charttoolsdllapi.hxx"
-#include <ChartModel.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
 
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 namespace chart
 {

@@ -20,7 +20,9 @@
 #include "Tickmarks_Dates.hxx"
 #include "DateScaling.hxx"
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 #include <DateHelper.hxx>
+#include <com/sun/star/chart/TimeUnit.hpp>
 
 namespace chart
 {

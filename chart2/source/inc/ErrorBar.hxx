@@ -32,7 +32,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

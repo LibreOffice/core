@@ -23,6 +23,7 @@
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>
 #include <DataSourceHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>

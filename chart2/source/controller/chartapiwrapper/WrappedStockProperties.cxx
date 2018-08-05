@@ -22,6 +22,7 @@
 #include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ControllerLockGuard.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
