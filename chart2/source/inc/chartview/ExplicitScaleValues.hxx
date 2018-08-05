@@ -21,12 +21,13 @@
 
 #include <chartview/chartviewdllapi.hxx>
 #include <com/sun/star/chart/TimeInterval.hpp>
-#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <tools/date.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XScaling; } } } }
+
 namespace chart
 {
 

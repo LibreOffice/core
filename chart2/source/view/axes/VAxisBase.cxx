@@ -22,6 +22,8 @@
 #include <CommonConverters.hxx>
 #include "Tickmarks.hxx"
 
+#include <osl/diagnose.h>
+
 #include <memory>
 
 namespace chart

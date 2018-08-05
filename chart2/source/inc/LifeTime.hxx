@@ -21,12 +21,13 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/util/XCloseListener.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
+#include <cppuhelper/interfacecontainer.h>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+namespace com { namespace sun { namespace star { namespace util { class CloseVetoException; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XCloseListener; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XCloseable; } } } }
 
 namespace apphelper
 {

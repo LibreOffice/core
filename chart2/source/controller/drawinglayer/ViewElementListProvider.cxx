@@ -23,6 +23,8 @@
 #include <chartview/DataPointSymbolSupplier.hxx>
 #include <DrawViewWrapper.hxx>
 
+#include <com/sun/star/drawing/Direction3D.hpp>
+
 #include <svx/xtable.hxx>
 #include <svx/XPropertyTable.hxx>
 #include <svx/unofill.hxx>

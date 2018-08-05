@@ -25,6 +25,7 @@
 #include <servicenames_coosystems.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Scaling.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ReferenceSizeProvider.hxx>
@@ -46,6 +47,7 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
