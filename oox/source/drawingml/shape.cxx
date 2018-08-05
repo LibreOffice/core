@@ -521,6 +521,7 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
                 eAdjust = pParagraph->getProperties().getParaAdjust().get();
             xSet->setPropertyValue( "ParaAdjust", uno::makeAny( eAdjust ) );
             SvxShape* pShape = SvxShape::getImplementation( xShape );
+            assert(pShape);
             SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust( eAdjust );
             pShape->GetSdrObject()->SetMergedItem( SdrTextHorzAdjustItem( eHorzAdjust ) );
         }
