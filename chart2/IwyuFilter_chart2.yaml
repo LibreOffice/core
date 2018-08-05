@@ -54,33 +54,17 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/chart2/XColorScheme.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    chart2/source/inc/chartview/DataPointSymbolSupplier.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - com/sun/star/drawing/Direction3D.hpp
-    - com/sun/star/drawing/XShapes.hpp
     chart2/source/inc/chartview/ExplicitScaleValues.hxx:
     # base class has to be a complete type
-    - com/sun/star/chart/TimeUnit.hpp
-    - com/sun/star/chart2/AxisType.hpp
     - com/sun/star/chart2/XScaling.hpp
-    chart2/source/inc/chartview/DrawModelWrapper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/XDrawPage.hpp
-    - com/sun/star/frame/XModel.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - svx/svdobj.hxx
     chart2/source/inc/DataSource.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/data/XDataSink.hpp
     - com/sun/star/chart2/data/XDataSource.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    chart2/source/inc/DisposeHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
-    chart2/source/inc/EventListenerHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XEventListener.hpp
+    chart2/source/inc/DiagramHelper.hxx:
+    # # typedef in base class needs a complete type
+    - com/sun/star/chart2/XChartTypeTemplate.hpp
     chart2/source/inc/ErrorBar.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -88,32 +72,21 @@ blacklist:
     - com/sun/star/chart2/data/XDataSink.hpp
     - com/sun/star/chart2/data/XDataSource.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/uno/Any.hxx
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
-    chart2/source/inc/FormattedStringHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/chart2/XFormattedString2.hpp
-    - com/sun/star/uno/XComponentContext.hpp
-    chart2/source/inc/FillProperties.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/Property.hpp
     chart2/source/inc/InternalData.hxx:
-    # base class has to be a complete type
+    # complete type is needed in the inline dtor
     - com/sun/star/uno/Sequence.hxx
-    chart2/source/inc/LifeTime.hxx:
+    chart2/source/inc/InternalDataProvider.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XComponent.hpp
-    - com/sun/star/util/CloseVetoException.hpp
-    - com/sun/star/util/XCloseListener.hpp
-    - com/sun/star/util/XCloseable.hpp
-    - cppuhelper/interfacecontainer.hxx
-    chart2/source/inc/LinePropertiesHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/Property.hpp
-    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/XRangeXMLConversion.hpp
+    - com/sun/star/chart2/XAnyDescriptionAccess.hpp
+    - com/sun/star/chart2/XInternalDataProvider.hpp
+    - com/sun/star/chart/XDateCategories.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
     chart2/source/inc/MediaDescriptorHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/PropertyValue.hpp

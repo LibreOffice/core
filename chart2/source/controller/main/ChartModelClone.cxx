@@ -18,6 +18,7 @@
  */
 
 #include "ChartModelClone.hxx"
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <DataSourceHelper.hxx>

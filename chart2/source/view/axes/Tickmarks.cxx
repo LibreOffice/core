@@ -22,6 +22,7 @@
 #include "Tickmarks_Dates.hxx"
 #include <ViewDefines.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::rtl::math;

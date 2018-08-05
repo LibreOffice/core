@@ -21,22 +21,22 @@
 
 #include "StackMode.hxx"
 #include "charttoolsdllapi.hxx"
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/InterpretedData.hpp>
-#include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-
-#include <ChartModel.hxx>
 
 #include <utility>
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
 
 namespace chart
 {

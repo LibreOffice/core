@@ -20,6 +20,8 @@
 #include <LifeTime.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <tools/diagnose_ex.h>
