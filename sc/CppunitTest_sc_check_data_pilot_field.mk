@@ -8,64 +8,36 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 #*************************************************************************
+
 $(eval $(call gb_CppunitTest_CppunitTest,sc_check_data_pilot_field))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_check_data_pilot_field, \
-        sc/qa/extras/check_data_pilot_field \
+	sc/qa/extras/check_data_pilot_field \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_check_data_pilot_field, \
-        basegfx \
-        comphelper \
-        cppu \
-        cppuhelper \
-        drawinglayer \
-        editeng \
-        for \
-        forui \
-        i18nlangtag \
-        msfilter \
-        oox \
-        sal \
-        salhelper \
-        sax \
-        sb \
-        sc \
-        scqahelper \
-        sfx \
-        sot \
-        subsequenttest \
-        svl \
-        svt \
-        svx \
-        svxcore \
-        test \
-        tk \
-        tl \
-        ucbhelper \
-        unotest \
-        utl \
-        vbahelper \
-        vcl \
-        xo \
+	cppu \
+	sal \
+	subsequenttest \
+	test \
+	unotest \
+	utl \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_check_data_pilot_field,\
-        -I$(SRCDIR)/sc/source/ui/inc \
-        -I$(SRCDIR)/sc/inc \
-        $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sc_check_data_pilot_field,\
-        offapi \
-        udkapi \
+	offapi \
+	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_check_data_pilot_field))
 $(eval $(call gb_CppunitTest_use_vcl,sc_check_data_pilot_field))
 
 $(eval $(call gb_CppunitTest_use_components,sc_check_data_pilot_field,\
-    $(sc_unoapi_common_components) \
+	$(sc_unoapi_common_components) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_check_data_pilot_field))
