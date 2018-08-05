@@ -193,30 +193,15 @@ void CopyDlg::Reset()
     }
     else
     {
-        sal_Int32 nTmp;
-        nTmp = static_cast<long>(aStr.getToken( 0, TOKEN ).toInt32());
-        m_pNumFldCopies->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 1, TOKEN ).toInt32());
-        m_pMtrFldMoveX->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 2, TOKEN ).toInt32());
-        m_pMtrFldMoveY->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 3, TOKEN ).toInt32());
-        m_pMtrFldAngle->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 4, TOKEN ).toInt32());
-        m_pMtrFldWidth->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 5, TOKEN ).toInt32());
-        m_pMtrFldHeight->SetValue( nTmp );
-
-        nTmp = static_cast<long>(aStr.getToken( 6, TOKEN ).toInt32());
-        m_pLbStartColor->SelectEntry( Color( nTmp ) );
-
-        nTmp = static_cast<long>(aStr.getToken( 7, TOKEN ).toInt32());
-        m_pLbEndColor->SelectEntry( Color( nTmp ) );
+        sal_Int32 nIdx {0};
+        m_pNumFldCopies->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pMtrFldMoveX->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pMtrFldMoveY->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pMtrFldAngle->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pMtrFldWidth->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pMtrFldHeight->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
+        m_pLbStartColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_pLbEndColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
     }
 
 }
