@@ -54,8 +54,6 @@ public:
     void purge();
 
     size_t getCount() const;
-
-    size_t getCountIgnoreCase() const;
 };
 
 }

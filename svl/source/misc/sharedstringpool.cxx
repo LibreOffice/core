@@ -50,7 +50,6 @@ struct SharedStringPool::Impl
 {
     mutable osl::Mutex maMutex;
     StrHashType maStrPool;
-    StrHashType maStrPoolUpper;
     StrStoreType maStrStore;
     const CharClass* mpCharClass;
 
@@ -70,31 +69,29 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     InsertResultType aRes = findOrInsert(mpImpl->maStrPool, rStr);
 
-    rtl_uString* pOrig = aRes.first->pData;
+    rtl_uString* pOriginal = aRes.first->pData;
 
     if (!mpImpl->mpCharClass)
         // We don't track case insensitive strings.
-        return SharedString(pOrig, nullptr);
+        return SharedString(pOriginal, nullptr);
 
     if (!aRes.second)
     {
         // No new string has been inserted. Return the existing string in the pool.
-        StrStoreType::const_iterator it = mpImpl->maStrStore.find(pOrig);
+        StrStoreType::const_iterator it = mpImpl->maStrStore.find(pOriginal);
         assert(it != mpImpl->maStrStore.end());
 
         rtl_uString* pUpper = it->second.pData;
-        return SharedString(pOrig, pUpper);
+        return SharedString(pOriginal, pUpper);
     }
 
     // This is a new string insertion. Establish mapping to upper-case variant.
 
     OUString aUpper = mpImpl->mpCharClass->uppercase(rStr);
-    aRes = findOrInsert(mpImpl->maStrPoolUpper, aUpper);
-    assert(aRes.first != mpImpl->maStrPoolUpper.end());
+    auto result = mpImpl->maStrStore.emplace(pOriginal, std::move(aUpper));
+    assert(result.second);
 
-    mpImpl->maStrStore.emplace(pOrig, *aRes.first);
-
-    return SharedString(pOrig, aRes.first->pData);
+    return SharedString(pOriginal, result.first->second.pData);
 }
 
 void SharedStringPool::purge()
@@ -118,32 +115,12 @@ void SharedStringPool::purge()
     }
 
     mpImpl->maStrPool.swap(aNewStrPool);
-
-    aNewStrPool.clear(); // for re-use.
-
-    // Purge the upper string pool as well.
-    it = mpImpl->maStrPoolUpper.begin();
-    itEnd = mpImpl->maStrPoolUpper.end();
-    for (; it != itEnd; ++it)
-    {
-        const rtl_uString* p = it->pData;
-        if (getRefCount(p) > 1)
-            aNewStrPool.insert(*it);
-    }
-
-    mpImpl->maStrPoolUpper.swap(aNewStrPool);
 }
 
 size_t SharedStringPool::getCount() const
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
     return mpImpl->maStrPool.size();
-}
-
-size_t SharedStringPool::getCountIgnoreCase() const
-{
-    osl::MutexGuard aGuard(&mpImpl->maMutex);
-    return mpImpl->maStrPoolUpper.size();
 }
 
 }
