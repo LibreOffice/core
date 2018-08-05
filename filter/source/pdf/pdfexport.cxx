@@ -392,7 +392,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
         if( xRenderable.is() )
         {
-            VCLXDevice*                 pXDevice = new VCLXDevice;
+            rtl::Reference<VCLXDevice>  xDevice(new VCLXDevice);
             OUString                    aPageRange;
             Any                         aSelection;
             vcl::PDFWriter::PDFWriterContext aContext;
@@ -786,7 +786,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
-            pXDevice->SetOutputDevice( pOut );
+            xDevice->SetOutputDevice(pOut);
 
             if( mbAddStream )
             {
@@ -816,7 +816,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 Sequence< PropertyValue > aRenderOptions( 7 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
-                aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+                aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice.get());
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
                 aRenderOptions[ 1 ].Value <<= false;
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
