@@ -1342,7 +1342,6 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, Button*, pIB, void)
 }
 bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
 {
-    bool            bDeleted = false;
     sal_uLong       nReturn = 0;
     const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
     const sal_uLong nReturnAdded    = 0x2;  // temp: format added
@@ -1391,7 +1390,6 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                                             nCatLbSelPos,
                                             nFmtLbSelPos,
                                             a2EntryList);
-                bDeleted = true;
                 a2EntryList.clear();
                 m_pEdFormat->GrabFocus();
                 m_pEdFormat->SetSelection( Selection( 0, SELECTION_MAX ) );
@@ -1449,36 +1447,34 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                                     nCatLbSelPos,
                                     nFmtLbSelPos,
                                     aEntryList );
-        bDeleted = true;
 
         m_pEdComment->SetText(m_pLbCategory->GetEntry(1));
-        if ( bDeleted )
+
+        if( nFmtLbSelPos>=0 && static_cast<size_t>(nFmtLbSelPos)<aEntryList.size() )
         {
-            if( nFmtLbSelPos>=0 && static_cast<size_t>(nFmtLbSelPos)<aEntryList.size() )
-            {
-                aFormat = aEntryList[nFmtLbSelPos];
-            }
-
-            FillFormatListBox_Impl( aEntryList );
-
-            if ( nFmtLbSelPos != SELPOS_NONE )
-            {
-                if(bOneAreaFlag)                  //@@ ???
-                        SetCategory(0);
-                    else
-                        SetCategory(nCatLbSelPos );
-
-                m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
-                m_pEdFormat->SetText( aFormat );
-                ChangePreviewText( static_cast<sal_uInt16>(nFmtLbSelPos) );
-            }
-            else
-            {
-                // set to "all/standard"
-                SetCategory(0);
-                SelFormatHdl_Impl(m_pLbCategory);
-            }
+            aFormat = aEntryList[nFmtLbSelPos];
         }
+
+        FillFormatListBox_Impl( aEntryList );
+
+        if ( nFmtLbSelPos != SELPOS_NONE )
+        {
+            if(bOneAreaFlag)                  //@@ ???
+                    SetCategory(0);
+                else
+                    SetCategory(nCatLbSelPos );
+
+            m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
+            m_pEdFormat->SetText( aFormat );
+            ChangePreviewText( static_cast<sal_uInt16>(nFmtLbSelPos) );
+        }
+        else
+        {
+            // set to "all/standard"
+            SetCategory(0);
+            SelFormatHdl_Impl(m_pLbCategory);
+        }
+
         EditHdl_Impl(m_pEdFormat);
 
         aEntryList.clear();
