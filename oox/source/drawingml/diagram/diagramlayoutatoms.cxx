@@ -638,17 +638,14 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 case XML_upr:
                 {
-                    if (rShape->getRotation()==45*F_PI180 || rShape->getRotation()==135*F_PI180
-                                                          || rShape->getRotation()==225*F_PI180 || rShape->getRotation()==315*F_PI180)
-                        pTextBody->getTextProperties().moRotation = -F_PI180*90*rShape->getRotation();
-                    else
+                    if (rShape->getRotation())
                         pTextBody->getTextProperties().moRotation = -rShape->getRotation();
                 }
                 break;
                 case XML_grav:
                 {
-                    if (rShape->getRotation()==90*F_PI180 || rShape->getRotation()==180*F_PI180)
-                        pTextBody->getTextProperties().moRotation = 180*F_PI180;
+                    if (rShape->getRotation())
+                        pTextBody->getTextProperties().moRotation = 10800000;
                 }
                 break;
                 case XML_none:
