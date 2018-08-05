@@ -181,6 +181,7 @@ public:
 public:
     void SetLinks (Link<Button*,void> const&, Link<SvxColorListBox&,void> const&, Link<Control&,void> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
+    long GetScrollOffset() const { return vEntries[1]->GetTop() - vEntries[0]->GetTop(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
     void ClickHdl (EditableColorConfig*, CheckBox const *);
@@ -942,22 +943,32 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
     // and make it visible
-    long aCtrlPosY = rCtrl.GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
-    if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) &&
-        (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
-    ) {
-        long nThumbPos = m_pVScroll->GetThumbPos();
-        if (nWinHeight < aCtrlPosY + nEntryHeight)
+
+    // calc visible area
+    long const nScrollOffset = m_pScrollWindow->GetScrollOffset();
+    long nThumbPos = m_pVScroll->GetThumbPos();
+    long topWinView = (nThumbPos * nScrollOffset);
+    long bottomWinView = topWinView + nWinHeight;
+
+    long aCtrlPosY = rCtrl.GetPosPixel().Y();
+    long const selectedItemPos = aCtrlPosY + nEntryHeight;
+    bool scrollDown = selectedItemPos >= bottomWinView;
+    bool scrollUp = selectedItemPos <= topWinView;
+    bool isNeedToScroll = scrollDown || scrollUp || aCtrlPosY < 0;
+
+    if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) && isNeedToScroll)
+    {
+        if (scrollDown)
         {
-            //scroll down
-            nThumbPos += 2;
+            auto offset = (selectedItemPos - bottomWinView) / nScrollOffset;
+            nThumbPos += offset + 2;
         }
         else
         {
-            //scroll up
-            nThumbPos -= 2;
+            auto offset = (topWinView - selectedItemPos) / nScrollOffset;
+            nThumbPos -= offset + 2;
             if(nThumbPos < 0)
                 nThumbPos = 0;
         }
