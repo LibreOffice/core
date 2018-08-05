@@ -18,7 +18,6 @@
  */
 
 #include <copydlg.hxx>
-#include <comphelper/string.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/module.hxx>
@@ -128,9 +127,9 @@ void CopyDlg::Reset()
     m_pMtrFldHeight->SetMax(  nPageHeight );
 
     const SfxPoolItem* pPoolItem = nullptr;
-    OUString aStr( GetExtraData() );
+    const OUString aStr( GetExtraData() );
 
-    if (comphelper::string::getTokenCount(aStr, TOKEN) < 8)
+    if (aStr.isEmpty())
     {
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
             m_pNumFldCopies->SetValue( static_cast<const SfxUInt16Item*>( pPoolItem )->GetValue() );
