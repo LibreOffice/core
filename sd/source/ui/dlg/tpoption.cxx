@@ -587,10 +587,15 @@ OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 
 bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {
-    if( comphelper::string::getTokenCount(aScale, TOKEN) != 2 )
+    if (aScale.isEmpty())
         return false;
 
-    OUString aTmp(aScale.getToken(0, TOKEN));
+    sal_Int32 nIdx {0};
+
+    OUString aTmp(aScale.getToken(0, TOKEN, nIdx));
+    if (nIdx<0)
+        return false; // we expect another token!
+
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
@@ -598,7 +603,10 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     if( rX == 0 )
         return false;
 
-    aTmp = aScale.getToken(1, TOKEN);
+    aTmp = aScale.getToken(0, TOKEN, nIdx);
+    if (nIdx>=0)
+        return false; // we require just 2 tokens!
+
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
