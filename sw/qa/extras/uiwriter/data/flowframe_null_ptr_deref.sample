@@ -196,7 +196,7 @@
 
     <h1>Business Directory</h1>
 
-<h4>A problem has been detected with your submisson</h4>
+<h4>A problem has been detected with your submission</h4>
 <p>In the <b>Business Name</b> box you did not enter a valid name.</p>
 <p>Please correct the problem below and resubmit.</p>
     <form action="addbiz.php" method="POST">
