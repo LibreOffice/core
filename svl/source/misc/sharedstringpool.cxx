@@ -36,10 +36,7 @@ InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr )
     {
         // Not yet in the pool.
         std::pair<StrHashType::iterator, bool> r = rPool.insert(rStr);
-        if (!r.second)
-            // Insertion failed.
-            return InsertResultType(rPool.end(), false);
-
+        assert(r.second);
         it = r.first;
         bInserted = true;
     }
@@ -72,9 +69,6 @@ SharedString SharedStringPool::intern( const OUString& rStr )
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
     InsertResultType aRes = findOrInsert(mpImpl->maStrPool, rStr);
-    if (aRes.first == mpImpl->maStrPool.end())
-        // Insertion failed.
-        return SharedString();
 
     rtl_uString* pOrig = aRes.first->pData;
 
@@ -86,8 +80,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
     {
         // No new string has been inserted. Return the existing string in the pool.
         StrStoreType::const_iterator it = mpImpl->maStrStore.find(pOrig);
-        if (it == mpImpl->maStrStore.end())
-            return SharedString();
+        assert(it != mpImpl->maStrStore.end());
 
         rtl_uString* pUpper = it->second.pData;
         return SharedString(pOrig, pUpper);
@@ -97,9 +90,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     OUString aUpper = mpImpl->mpCharClass->uppercase(rStr);
     aRes = findOrInsert(mpImpl->maStrPoolUpper, aUpper);
-    if (aRes.first == mpImpl->maStrPoolUpper.end())
-        // Failed to insert or fetch upper-case variant. Should never happen.
-        return SharedString();
+    assert(aRes.first != mpImpl->maStrPoolUpper.end());
 
     mpImpl->maStrStore.emplace(pOrig, *aRes.first);
 
