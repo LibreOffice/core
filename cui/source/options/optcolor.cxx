@@ -181,6 +181,7 @@ public:
 public:
     void SetLinks (Link<Button*,void> const&, Link<SvxColorListBox&,void> const&, Link<Control&,void> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
+    long GetScrollOffset() const { return vEntries[1]->GetTop() - vEntries[0]->GetTop(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
     void ClickHdl (EditableColorConfig*, CheckBox const *);
@@ -599,9 +600,7 @@ void ColorConfigWindow_Impl::AdjustHeaderBar()
 
 void ColorConfigWindow_Impl::AdjustScrollBar()
 {
-    unsigned const nScrollOffset =
-        vEntries[1]->GetTop() - vEntries[0]->GetTop();
-    unsigned const nVisibleEntries = GetSizePixel().Height() / nScrollOffset;
+    unsigned const nVisibleEntries = GetSizePixel().Height() / GetScrollOffset();
     m_pVScroll->SetPageSize(nVisibleEntries - 1);
     m_pVScroll->SetVisibleSize(nVisibleEntries);
 }
@@ -655,8 +654,7 @@ void ColorConfigWindow_Impl::Update (
 void ColorConfigWindow_Impl::ScrollHdl(const ScrollBar& rVScroll)
 {
     SetUpdateMode(true);
-    const long nRowHeight = (vEntries[1]->GetTop() - vEntries[0]->GetTop());
-    Point aPos(0, 0 - rVScroll.GetThumbPos() * nRowHeight);
+    Point aPos(0, 0 - rVScroll.GetThumbPos() * GetScrollOffset());
     m_pGrid->SetPosPixel(aPos);
     SetUpdateMode(true);
 }
@@ -942,22 +940,32 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
     // and make it visible
-    long aCtrlPosY = rCtrl.GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
-    if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) &&
-        (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
-    ) {
-        long nThumbPos = m_pVScroll->GetThumbPos();
-        if (nWinHeight < aCtrlPosY + nEntryHeight)
+
+    // calc visible area
+    long const nScrollOffset = m_pScrollWindow->GetScrollOffset();
+    long nThumbPos = m_pVScroll->GetThumbPos();
+    long const nWinTop = (nThumbPos * nScrollOffset);
+    long const nWinBottom = nWinTop + nWinHeight;
+
+    long const nCtrlPosY = rCtrl.GetPosPixel().Y();
+    long const nSelectedItemPos = nCtrlPosY + nEntryHeight;
+    bool const shouldScrollDown = nSelectedItemPos >= nWinBottom;
+    bool const shouldScrollUp = nSelectedItemPos <= nWinTop;
+    bool const isNeedToScroll = shouldScrollDown || shouldScrollUp || nCtrlPosY < 0;
+
+    if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) && isNeedToScroll)
+    {
+        if (shouldScrollDown)
         {
-            //scroll down
-            nThumbPos += 2;
+            long nOffset = (nSelectedItemPos - nWinBottom) / nScrollOffset;
+            nThumbPos += nOffset + 2;
         }
         else
         {
-            //scroll up
-            nThumbPos -= 2;
+            long nOffset = (nWinTop - nSelectedItemPos) / nScrollOffset;
+            nThumbPos -= nOffset + 2;
             if(nThumbPos < 0)
                 nThumbPos = 0;
         }
