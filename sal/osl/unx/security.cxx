@@ -41,6 +41,11 @@
 #include <crypt.h>
 #endif
 
+#if defined HAIKU
+#include <fs_info.h>
+#include <FindDirectory.h>
+#endif
+
 #include "secimpl.hxx"
 
 #ifdef ANDROID
@@ -246,6 +251,18 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
     if (pSecImpl == nullptr)
         return false;
 
+#ifdef HAIKU
+    dev_t volume = dev_for_path("/boot");
+    sal_Char homeDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
+    status_t result = find_directory(B_USER_DIRECTORY, volume, false, homeDir,
+                                     sizeof(homeDir));
+    if (result == B_OK && strlen(homeDir) < nMax) {
+        strcpy(pszDirectory, homeDir);
+        return true;
+    }
+    return false;
+#endif
+
 #ifdef ANDROID
 {
     sal_Bool bRet = sal_False;
@@ -347,7 +364,23 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     return bRet;
 }
 
-#if !defined(MACOSX) && !defined(IOS)
+#if defined HAIKU
+
+static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+{
+    (void) Security;
+    dev_t volume = dev_for_path("/boot");
+    sal_Char configDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
+    status_t result = find_directory(B_USER_SETTINGS_DIRECTORY, volume, false,
+                                     configDir, sizeof(configDir));
+    if (result == B_OK && strlen(configDir) < nMax) {
+        strcpy(pszDirectory, configDir);
+        return true;
+    }
+    return false;
+}
+
+#elif !defined(MACOSX) && !defined(IOS)
 
 #define DOT_CONFIG "/.config"
 
