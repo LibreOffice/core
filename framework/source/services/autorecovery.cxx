@@ -391,7 +391,7 @@ private:
     Timer m_aTimer;
 
     /** @short  make our dispatch asynchronous ... if required to do so! */
-    vcl::EventPoster m_aAsyncDispatcher;
+    std::unique_ptr<vcl::EventPoster> m_xAsyncDispatcher;
 
     /** @see    DispatchParams
      */
@@ -1209,7 +1209,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_nAutoSaveTimeIntervall  (0                                                  )
     , m_eJob                    (AutoRecovery::E_NO_JOB                             )
     , m_aTimer                  ( "Auto save timer" )
-    , m_aAsyncDispatcher        ( LINK( this, AutoRecovery, implts_asyncDispatch )  )
+    , m_xAsyncDispatcher        (new vcl::EventPoster( LINK( this, AutoRecovery, implts_asyncDispatch )  ))
     , m_eTimerType              (E_DONT_START_TIMER                                 )
     , m_nIdPool                 (0                                                  )
     , m_lListener               (cppu::WeakComponentImplHelperBase::rBHelper.rMutex)
@@ -1241,6 +1241,8 @@ AutoRecovery::~AutoRecovery()
 void AutoRecovery::disposing()
 {
     implts_stopTimer();
+    SolarMutexGuard g;
+    m_xAsyncDispatcher.reset();
 }
 
 Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType )
@@ -1335,7 +1337,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     } /* SAFE */
 
     if (bAsync)
-        m_aAsyncDispatcher.Post();
+        m_xAsyncDispatcher->Post();
     else
         implts_dispatch(aParams);
 }
