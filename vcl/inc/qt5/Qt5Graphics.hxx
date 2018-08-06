@@ -27,17 +27,22 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
+#include <Qt5Graphics_Controls.hxx>
+
+class PhysicalFontCollection;
+class QImage;
+class QPushButton;
 class Qt5Font;
 class Qt5FontFace;
 class Qt5Frame;
 class Qt5Painter;
-class PhysicalFontCollection;
-class QImage;
 
 class Qt5Graphics : public SalGraphics
 {
     friend class Qt5Bitmap;
     friend class Qt5Painter;
+
+    Qt5Graphics_Controls m_aControl;
 
     Qt5Frame* m_pFrame;
     QImage* m_pQImage;
@@ -50,6 +55,9 @@ class Qt5Graphics : public SalGraphics
     PhysicalFontCollection* m_pFontCollection;
     rtl::Reference<Qt5Font> m_pTextStyle[MAX_FALLBACK];
     Color m_aTextColor;
+    std::unique_ptr<QPushButton> m_focusedButton;
+    std::unique_ptr<QImage> m_image;
+    QRect m_lastPopupRect;
 
     Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);
 
@@ -205,5 +213,28 @@ public:
                                         tools::Rectangle& rNativeBoundingRegion,
                                         tools::Rectangle& rNativeContentRegion) override;
 };
+
+inline bool Qt5Graphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
+{
+    return m_aControl.IsNativeControlSupported(nType, nPart);
+}
+
+inline bool Qt5Graphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
+                                              const tools::Rectangle& rControlRegion,
+                                              const Point& aPos, bool& rIsInside)
+{
+    return m_aControl.hitTestNativeControl(nType, nPart, rControlRegion, aPos, rIsInside);
+}
+
+inline bool Qt5Graphics::getNativeControlRegion(ControlType nType, ControlPart nPart,
+                                                const tools::Rectangle& rControlRegion,
+                                                ControlState nState, const ImplControlValue& aValue,
+                                                const OUString& aCaption,
+                                                tools::Rectangle& rNativeBoundingRegion,
+                                                tools::Rectangle& rNativeContentRegion)
+{
+    return m_aControl.getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, aCaption,
+                                             rNativeBoundingRegion, rNativeContentRegion);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
