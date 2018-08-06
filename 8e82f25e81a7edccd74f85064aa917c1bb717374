@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c73472e1",
+        "filename": "uitest/loginterpreter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-08-06T20:58:43Z",
+      "side": 1,
+      "message": "I\u0027m not that happy with hard coding additional information here.",
+      "revId": "8e82f25e81a7edccd74f85064aa917c1bb717374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
