@@ -1680,7 +1680,14 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 pNewRedl = nullptr;
             }
             else
-                mpRedlineTable->Insert( pNewRedl );
+            {
+                bool const ret = mpRedlineTable->Insert( pNewRedl );
+                assert(ret || !pNewRedl);
+                if (ret && !pNewRedl)
+                {
+                    bMerged = true; // treat InsertWithValidRanges as "merge"
+                }
+            }
         }
 
         if( bCompress )
