@@ -23,6 +23,8 @@
 #include <QtWidgets/QApplication>
 #include <QtCore/QThread>
 
+#include <vcl/svapp.hxx>
+
 Qt5Timer::Qt5Timer()
 {
     m_aTimer.setSingleShot(true);
@@ -34,7 +36,11 @@ Qt5Timer::Qt5Timer()
 
 Qt5Timer::~Qt5Timer() {}
 
-void Qt5Timer::timeoutActivated() { CallCallback(); }
+void Qt5Timer::timeoutActivated()
+{
+    SolarMutexGuard aGuard;
+    CallCallback();
+}
 
 void Qt5Timer::startTimer() { m_aTimer.start(); }
 
