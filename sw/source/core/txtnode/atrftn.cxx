@@ -444,8 +444,12 @@ void SwTextFootnote::DelFrames( const SwFrame* pSib )
             SwPageFrame* pPage = pFnd->FindPageFrame();
             if( pPage )
             {
-                pPage->RemoveFootnote( pFnd, this );
-                bFrameFnd = true;
+                // note: we have found the correct frame only if the footnote
+                // was actually removed; in case this is called from
+                // SwTextFrame::DestroyImpl(), then that frame isn't connected
+                // to SwPageFrame any more, and RemoveFootnote on any follow
+                // must not prevent the fall-back to the !bFrameFnd code.
+                bFrameFnd = pPage->RemoveFootnote(pFnd, this);
             }
         }
     }
