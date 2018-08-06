@@ -1044,7 +1044,10 @@ static bool IsShown(sal_uLong const nIndex,
     {
         return false;
     }
-    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA
+        // sw_redlinehide: we want to hide AT_CHAR, but currently can't
+        // because Delete and Accept Redline don't delete them!
+              && rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR)
     {
         // note: frames are not sorted by anchor position.
         assert(pEnd);
