@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <test/mtfxmldump.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
@@ -25,6 +26,7 @@ public:
     void testTdf116848();
     void testTdf117245();
     void testTdf109077();
+    void testTdf109137();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -36,6 +38,7 @@ public:
     CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST(testTdf109077);
+    CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -206,6 +209,23 @@ void SwLayoutWriter::testTdf109077()
     // This was 281: the top of the shape and its textbox should match, though
     // tolerate differences <= 1px (about 15 twips).
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
+}
+
+void SwLayoutWriter::testTdf109137()
+{
+    createDoc("tdf109137.docx");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    }));
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    loadURL(aTempFile.GetURL(), "tdf109137.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 0, the blue rectangle moved from the 1st to the 2nd page.
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
+                /*nNumberOfNodes=*/1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
