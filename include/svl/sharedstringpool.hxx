@@ -34,7 +34,7 @@ class SVL_DLLPUBLIC SharedStringPool
     SharedStringPool& operator=( const SharedStringPool& ) = delete;
 
 public:
-    SharedStringPool( const CharClass* pCharClass );
+    SharedStringPool( const CharClass& rCharClass );
     ~SharedStringPool();
 
     /**

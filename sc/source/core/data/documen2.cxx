@@ -134,7 +134,7 @@ private:
 };
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
-        mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
+        mpCellStringPool(new svl::SharedStringPool(*ScGlobal::pCharClass)),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         mpFormulaGroupCxt(nullptr),
         mbFormulaGroupCxtBlockDiscard(false),

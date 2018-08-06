@@ -52,13 +52,13 @@ struct SharedStringPool::Impl
     StrHashType maStrPool;
     StrHashType maStrPoolUpper;
     StrStoreType maStrStore;
-    const CharClass* mpCharClass;
+    const CharClass& mrCharClass;
 
-    explicit Impl( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
+    explicit Impl( const CharClass& rCharClass ) : mrCharClass(rCharClass) {}
 };
 
-SharedStringPool::SharedStringPool( const CharClass* pCharClass ) :
-    mpImpl(new Impl(pCharClass)) {}
+SharedStringPool::SharedStringPool( const CharClass& rCharClass ) :
+    mpImpl(new Impl(rCharClass)) {}
 
 SharedStringPool::~SharedStringPool()
 {
@@ -72,10 +72,6 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     rtl_uString* pOrig = aRes.first->pData;
 
-    if (!mpImpl->mpCharClass)
-        // We don't track case insensitive strings.
-        return SharedString(pOrig, nullptr);
-
     if (!aRes.second)
     {
         // No new string has been inserted. Return the existing string in the pool.
@@ -88,7 +84,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     // This is a new string insertion. Establish mapping to upper-case variant.
 
-    OUString aUpper = mpImpl->mpCharClass->uppercase(rStr);
+    OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
     aRes = findOrInsert(mpImpl->maStrPoolUpper, aUpper);
     assert(aRes.first != mpImpl->maStrPoolUpper.end());
 

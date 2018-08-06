@@ -1023,7 +1023,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
 
             LanguageTag aLangTag(LANGUAGE_SYSTEM);
             CharClass aCC(_xContext, aLangTag);
-            svl::SharedStringPool aStringPool(&aCC);
+            svl::SharedStringPool aStringPool(aCC);
 
             ScopedVclPtrInstance<FormulaDialog> aDlg(
                 pParent, xServiceFactory, pFormulaManager,
