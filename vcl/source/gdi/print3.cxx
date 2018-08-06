@@ -151,6 +151,7 @@ public:
     bool                                                        mbLastPage;
     bool                                                        mbReversePageOrder;
     bool                                                        mbPapersizeFromSetup;
+    bool                                                        mbPapersizeFromUser;
     bool                                                        mbPrinterModified;
     css::view::PrintableState                                   meJobState;
 
@@ -162,6 +163,8 @@ public:
 
     // set by user through printer properties subdialog of printer settings dialog
     Size                                                        maDefaultPageSize;
+    // set by user through print dialog
+    Size                                                        maUserPageSize;
     // set by user through printer properties subdialog of printer settings dialog
     sal_Int32                                                   mnDefaultPaperBin;
     // Set by user through printer properties subdialog of print dialog.
@@ -186,6 +189,7 @@ public:
         mbLastPage( false ),
         mbReversePageOrder( false ),
         mbPapersizeFromSetup( false ),
+        mbPapersizeFromUser( false ),
         mbPrinterModified( false ),
         meJobState( css::view::PrintableState_JOB_STARTED ),
         mpProgress( nullptr ),
@@ -196,6 +200,8 @@ public:
 
     const Size& getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
+        if ( mbPapersizeFromUser )
+            return maUserPageSize;
         if( mbPapersizeFromSetup )
             return maDefaultPageSize;
         if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
@@ -785,6 +791,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
+    mpImplData->mbPapersizeFromUser = false;
     mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
 }
@@ -1364,11 +1371,22 @@ void PrinterController::setPapersizeFromSetup( bool i_bPapersizeFromSetup )
 {
     mpImplData->mbPapersizeFromSetup = i_bPapersizeFromSetup;
     mpImplData->mxPrinter->SetPrinterSettingsPreferred( i_bPapersizeFromSetup );
+    if ( i_bPapersizeFromSetup )
+        mpImplData->mbPapersizeFromUser = !i_bPapersizeFromSetup;
 }
 
 bool PrinterController::getPapersizeFromSetup() const
 {
     return mpImplData->mbPapersizeFromSetup;
+}
+
+void PrinterController::setPaperSizeFromUser( Size i_aUserSize )
+{
+    mpImplData->mbPapersizeFromUser = true;
+    mpImplData->mbPapersizeFromSetup = false;
+    mpImplData->mxPrinter->SetPrinterSettingsPreferred( false );
+
+    mpImplData->maUserPageSize = i_aUserSize;
 }
 
 void PrinterController::setPrinterModified( bool i_bPrinterModified )
