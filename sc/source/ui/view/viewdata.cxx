@@ -2852,9 +2852,10 @@ void ScViewData::ReadUserData(const OUString& rData)
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
+    sal_Int32 nMainIdx {0};
     sal_Int32 nIdx {0};
 
-    OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Mode
+    OUString aZoomStr = rData.getToken(0, ';', nMainIdx);       // Zoom/PageZoom/Mode
     sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0, '/', nIdx).toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
         aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normal" zoom (always)
@@ -2866,12 +2867,13 @@ void ScViewData::ReadUserData(const OUString& rData)
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
     // sheet may have become invalid (for instance last version):
-    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(1, ';').toUInt32());
+    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(0, ';', nMainIdx).toUInt32());
     if (pDoc->HasTable( nNewTab ))
         SetTabNo(nNewTab);
 
     // if available, get tab bar width:
-    OUString aTabOpt = rData.getToken(2, ';');
+    const sal_Int32 nMainIdxRef {nMainIdx};
+    OUString aTabOpt = rData.getToken(0, ';', nMainIdx);
 
     OUString aRest;
     if (aTabOpt.startsWith(TAG_TABBARWIDTH, &aRest))
@@ -2879,12 +2881,17 @@ void ScViewData::ReadUserData(const OUString& rData)
         pView->SetTabBarWidth(aRest.toInt32());
         nTabStart = 3;
     }
+    else
+    {
+        // Tab bar width not specified, token to be processed again
+        nMainIdx = nMainIdxRef;
+    }
 
     // per sheet
     SCTAB nPos = 0;
     while ( nCount > nPos+nTabStart )
     {
-        aTabOpt = rData.getToken(static_cast<sal_Int32>(nPos+nTabStart), ';');
+        aTabOpt = rData.getToken(0, ';', nMainIdx);
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
             maTabData[nPos].reset( new ScViewDataTable );
