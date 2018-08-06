@@ -147,10 +147,10 @@ IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
         {
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE, m_xDialog.get());
             SfxApplication *pSfxApp = SfxGetpApp();
-            SfxItemSet* pSet = new SfxAllItemSet(pSfxApp->GetPool());
+            std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet(pSfxApp->GetPool()));
             pSet->Put(SfxBoolItem(SID_TEMPLATE, true));
             pSet->Put(SfxBoolItem(SID_PREVIEW, true));
-            ErrCode lErr = pSfxApp->LoadTemplate(m_xDocShell, aFileName, pSet);
+            ErrCode lErr = pSfxApp->LoadTemplate(m_xDocShell, aFileName, std::move(pSet));
             if (lErr)
                 ErrorHandler::HandleError(lErr);
             if (!m_xDocShell.Is())

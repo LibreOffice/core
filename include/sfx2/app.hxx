@@ -151,7 +151,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    ErrCode                     LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs );
+    ErrCode                     LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, std::unique_ptr<SfxItemSet> pArgs );
     vcl::Window*                GetTopWindow() const;
 
     // members

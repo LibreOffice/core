@@ -281,7 +281,7 @@ ErrCode CheckPasswd_Impl
 }
 
 
-ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, SfxItemSet* pSet )
+ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, std::unique_ptr<SfxItemSet> pSet )
 {
     std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
@@ -291,7 +291,6 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
 
     if ( aMedium.GetError() )
     {
-        delete pSet;
         return aMedium.GetErrorCode();
     }
 
@@ -299,20 +298,17 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     ErrCode nErr = GetFilterMatcher().GuessFilter( aMedium, pFilter, SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
     if ( ERRCODE_NONE != nErr)
     {
-        delete pSet;
         return ERRCODE_SFX_NOTATEMPLATE;
     }
 
     if( !pFilter || !pFilter->IsAllowedAsTemplate() )
     {
-        delete pSet;
         return ERRCODE_SFX_NOTATEMPLATE;
     }
 
     if ( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER )
     {
         DBG_ASSERT( !xDoc.Is(), "Sorry, not implemented!" );
-        delete pSet;
         SfxStringItem aName( SID_FILE_NAME, rFileName );
         SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
         SfxStringItem aFlags( SID_OPTIONS, OUString("T") );
@@ -343,7 +339,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
             xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
         //pMedium takes ownership of pSet
-        SfxMedium *pMedium = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
+        SfxMedium *pMedium = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCode nErrCode = xDoc->GetErrorCode();
