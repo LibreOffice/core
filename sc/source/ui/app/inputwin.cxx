@@ -77,14 +77,14 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
 
-#define THESIZE             1000000 // Should be more than enough!
-#define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
-#define MULTILINE_BUTTON_WIDTH 20 // Width of the button which opens the multiline dropdown
-#define LEFT_OFFSET         5
-#define INPUTWIN_MULTILINES 6
-const long BUTTON_OFFSET = 2; ///< space between input line and the button to expand / collapse
-const long ADDITIONAL_BORDER = 1; ///< height of the line at the bottom
-const long ADDITIONAL_SPACE = 4; ///< additional vertical space when the multiline edit has more lines
+#define THESIZE                1000000 // Should be more than enough!
+#define INPUTLINE_INSET_MARGIN 2       // Space between border and interior widgets of input line
+#define MIN_FONT_SIZE          16      // Minimum font size of input line in pixels
+#define LEFT_OFFSET            5       // Left offset of input line
+#define BUTTON_OFFSET          2       // Space between input line and button to expand/collapse
+#define MULTILINE_BUTTON_WIDTH 20      // Width of the button which opens multiline dropdown
+#define INPUTWIN_MULTILINES    6       // Initial number of lines within multiline dropdown
+#define TOOLBOX_WINDOW_HEIGHT  22      // Height of toolbox window in pixels - TODO: The same on all systems?
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -433,10 +433,8 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     ToolBox::Paint(rRenderContext, rRect);
 
     // draw a line at the bottom to distinguish that from the grid
-    // (we have space for that thanks to ADDITIONAL_BORDER)
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-
     Size aSize = GetSizePixel();
     rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
                             Point(aSize.Width() - 1, aSize.Height() - 1));
@@ -445,21 +443,23 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
-
     aTextWindow.Resize();
     Size aSize = GetSizePixel();
-    aSize.setHeight( CalcWindowSizePixel().Height() + ADDITIONAL_BORDER );
+    aSize.setHeight(CalcWindowSizePixel().Height() + 1);
     ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
     if (pGroupBar)
     {
         // To ensure smooth display and prevent the items in the toolbar being
-        // repositioned ( vertically ) we lock the vertical positioning of the toolbox
+        // repositioned (vertically) we lock the vertical positioning of the toolbox
         // items when we are displaying > 1 line.
         // So, we need to adjust the height of the toolbox accordingly. If we don't
-        // then the largest item ( e.g. the GroupBar window ) will actually be
+        // then the largest item (e.g. the GroupBar window) will actually be
         // positioned such that the toolbar will cut off the bottom of that item
         if (pGroupBar->GetNumLines() > 1)
-            aSize.AdjustHeight(pGroupBar->GetVertOffset() + ADDITIONAL_SPACE );
+        {
+            Size aGroupBarSize = pGroupBar->GetSizePixel();
+            aSize.setHeight(aGroupBarSize.Height() + 2 * (pGroupBar->GetVertOffset() + 1));
+        }
     }
     SetSizePixel(aSize);
     Invalidate();
@@ -676,7 +676,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     if (bInResize)
     {
         // detect direction
-        long nResizeThreshold = (long(TBX_WINDOW_HEIGHT) * 0.7);
+        long nResizeThreshold = (long(TOOLBOX_WINDOW_HEIGHT) * 0.7);
         bool bResetPointerPos = false;
 
         // Detect attempt to expand toolbar too much
@@ -721,14 +721,16 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
             // calculate an upper limit
             // I'd prefer to leave at least a single column header and a
             // row but I don't know how to get that value in pixels.
-            // Use TBX_WINDOW_HEIGHT for the moment
+            // Use TOOLBOX_WINDOW_HEIGHT for the moment
             ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TBX_WINDOW_HEIGHT;
+            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP)
+                   + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TOOLBOX_WINDOW_HEIGHT;
         }
     }
 
     ToolBox::MouseButtonDown( rMEvt );
 }
+
 void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ReleaseMouse();
@@ -743,26 +745,18 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_HIDE | WB_TABSTOP)),
-      maTextWnd(VclPtr<ScTextWnd>::Create(this, pViewSh)),
-      maButton(VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE)),
-      maScrollbar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG)),
+      maTextWndGroup(VclPtr<ScTextWndGroup>::Create(this, pViewSh)),
+      maButton(VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_FLATBUTTON | WB_SMALLSTYLE | WB_NOPOINTERFOCUS)),
       mnVertOffset(0)
 {
-    maTextWnd->Show();
-    maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-    maTextWnd->SetHelpId(HID_INSWIN_INPUT);
-
-    Size aSize(MULTILINE_BUTTON_WIDTH, maTextWnd->GetPixelHeightForLines(1));
-
+    maTextWndGroup->Show();
+    Size aSize(MULTILINE_BUTTON_WIDTH, maTextWndGroup->GetPixelHeightForLines(1));
     maButton->SetClickHdl(LINK(this, ScInputBarGroup, ClickHdl));
     maButton->SetSizePixel(aSize);
     maButton->Enable();
     maButton->SetSymbol(SymbolType::SPIN_DOWN);
     maButton->SetQuickHelpText(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
     maButton->Show();
-
-    maScrollbar->SetSizePixel(aSize);
-    maScrollbar->SetScrollHdl(LINK(this, ScInputBarGroup, Impl_ScrollHdl));
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -772,138 +766,112 @@ ScInputBarGroup::~ScInputBarGroup()
 
 void ScInputBarGroup::dispose()
 {
-    maTextWnd.disposeAndClear();
+    maTextWndGroup.disposeAndClear();
     maButton.disposeAndClear();
-    maScrollbar.disposeAndClear();
     ScTextWndBase::dispose();
 }
 
 void ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    maTextWnd->InsertAccessibleTextData( rTextData );
+    maTextWndGroup->InsertAccessibleTextData( rTextData );
 }
 
 void ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    maTextWnd->RemoveAccessibleTextData( rTextData );
+    maTextWndGroup->RemoveAccessibleTextData( rTextData );
 }
 
 const OUString& ScInputBarGroup::GetTextString() const
 {
-    return maTextWnd->GetTextString();
+    return maTextWndGroup->GetTextString();
 }
 
 void ScInputBarGroup::SetTextString( const OUString& rString )
 {
-    maTextWnd->SetTextString(rString);
+    maTextWndGroup->SetTextString(rString);
 }
 
 void ScInputBarGroup::Resize()
 {
-    vcl::Window*w = GetParent();
+    vcl::Window* pWindow = GetParent();
     ScInputWindow *pParent;
-    pParent = dynamic_cast<ScInputWindow*>(w);
-
+    pParent = dynamic_cast<ScInputWindow*>(pWindow);
     if (pParent == nullptr)
     {
         OSL_FAIL("The parent window pointer pParent is null");
         return;
     }
 
-    long nWidth = pParent->GetSizePixel().Width();
-    long nLeft  = GetPosPixel().X();
-
-    Size aSize  = GetSizePixel();
-    aSize.setWidth( std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0)) );
-
-    maScrollbar->SetPosPixel(Point( aSize.Width() - maButton->GetSizePixel().Width(), maButton->GetSizePixel().Height() ) );
-
-    Size aTmpSize( aSize );
-    aTmpSize.setWidth( aTmpSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET );
-    maTextWnd->SetSizePixel(aTmpSize);
-
-    maTextWnd->Resize();
-
-    aSize.setHeight( maTextWnd->GetSizePixel().Height() );
-
+    Size aSize = GetSizePixel();
+    aSize.setWidth(pParent->GetSizePixel().Width() - GetPosPixel().X() - LEFT_OFFSET);
+    aSize.setHeight(maTextWndGroup->GetPixelHeightForLines(maTextWndGroup->GetNumLines()));
     SetSizePixel(aSize);
 
-    if (maTextWnd->GetNumLines() > 1)
+    aSize.setWidth(aSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET);
+    maTextWndGroup->SetSizePixel(aSize);
+    maTextWndGroup->Resize();
+
+    if (maTextWndGroup->GetNumLines() > 1)
     {
         maButton->SetSymbol( SymbolType::SPIN_UP  );
-        maButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
-        Size scrollSize = maButton->GetSizePixel();
-        scrollSize.setHeight( maTextWnd->GetSizePixel().Height() - maButton->GetSizePixel().Height() );
-        maScrollbar->SetSizePixel( scrollSize );
-
-        Size aOutSz = maTextWnd->GetOutputSize();
-
-        maScrollbar->SetVisibleSize( aOutSz.Height() );
-        maScrollbar->SetPageSize( aOutSz.Height() );
-        maScrollbar->SetLineSize( maTextWnd->GetTextHeight() );
-        maScrollbar->SetRange( Range( 0, maTextWnd->GetEditEngTxtHeight() ) );
-
-        maScrollbar->Resize();
-        maScrollbar->Show();
+        maButton->SetQuickHelpText(ScResId( SCSTR_QHELP_COLLAPSE_FORMULA));
     }
     else
     {
         maButton->SetSymbol( SymbolType::SPIN_DOWN  );
-        maButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
-        maScrollbar->Hide();
+        maButton->SetQuickHelpText(ScResId( SCSTR_QHELP_EXPAND_FORMULA));
     }
-
-    maButton->SetPosPixel(Point(aSize.Width() - maButton->GetSizePixel().Width(), 0));
+    maButton->SetPosPixel(Point(aSize.Width(), 0));
 
     Invalidate();
 }
 
 void ScInputBarGroup::StopEditEngine( bool bAll )
 {
-    maTextWnd->StopEditEngine( bAll );
+    maTextWndGroup->StopEditEngine( bAll );
 }
 
 void ScInputBarGroup::StartEditEngine()
 {
-    maTextWnd->StartEditEngine();
+    maTextWndGroup->StartEditEngine();
 }
 
 void ScInputBarGroup::MakeDialogEditView()
 {
-    maTextWnd->MakeDialogEditView();
+    maTextWndGroup->MakeDialogEditView();
 }
 
 EditView* ScInputBarGroup::GetEditView()
 {
-    return maTextWnd->GetEditView();
+    return maTextWndGroup->GetEditView();
 }
 
 bool ScInputBarGroup::HasEditView() const
 {
-    return maTextWnd->HasEditView();
+    return maTextWndGroup->HasEditView();
 }
 
 bool ScInputBarGroup::IsInputActive()
 {
-    return maTextWnd->IsInputActive();
+    return maTextWndGroup->IsInputActive();
 }
 
 void ScInputBarGroup::SetFormulaMode(bool bSet)
 {
-    maTextWnd->SetFormulaMode(bSet);
+    maTextWndGroup->SetFormulaMode(bSet);
 }
 
 void ScInputBarGroup::IncrementVerticalSize()
 {
-    maTextWnd->SetNumLines( maTextWnd->GetNumLines() + 1 );
+    maTextWndGroup->SetNumLines( maTextWndGroup->GetNumLines() + 1 );
     TriggerToolboxLayout();
 }
 
 void ScInputBarGroup::DecrementVerticalSize()
 {
-    if ( maTextWnd->GetNumLines() > 1 )
+    if ( maTextWndGroup->GetNumLines() > 1 )
     {
-        maTextWnd->SetNumLines( maTextWnd->GetNumLines() - 1 );
+        maTextWndGroup->SetNumLines( maTextWndGroup->GetNumLines() - 1 );
         TriggerToolboxLayout();
     }
 }
@@ -919,20 +887,20 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl, Button*, void)
         OSL_FAIL("The parent window pointer pParent is null");
         return;
     }
-    if (maTextWnd->GetNumLines() > 1)
+    if (maTextWndGroup->GetNumLines() > 1)
     {
-        maTextWnd->SetNumLines(1);
+        maTextWndGroup->SetNumLines(1);
     }
     else
     {
-        maTextWnd->SetNumLines(maTextWnd->GetLastNumExpandedLines());
+        maTextWndGroup->SetNumLines(maTextWndGroup->GetLastNumExpandedLines());
     }
     TriggerToolboxLayout();
 
     // Restore focus to input line(s) if necessary
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
     if ( pHdl && pHdl->IsTopMode() )
-        maTextWnd->GrabFocus();
+        maTextWndGroup->GrabFocus();
 }
 
 void ScInputBarGroup::TriggerToolboxLayout()
@@ -960,7 +928,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xLayoutManager.is() )
         {
-            if ( maTextWnd->GetNumLines() > 1)
+            if ( maTextWndGroup->GetNumLines() > 1)
                 rParent.SetToolbarLayoutMode( ToolBoxLayoutMode::LockVert );
             else
                 rParent.SetToolbarLayoutMode( ToolBoxLayoutMode::Normal );
@@ -986,14 +954,175 @@ void ScInputBarGroup::TriggerToolboxLayout()
     }
 }
 
-IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, void)
-{
-    maTextWnd->DoScroll();
-}
-
 void ScInputBarGroup::TextGrabFocus()
 {
+    maTextWndGroup->TextGrabFocus();
+}
+
+ScTextWndGroup::ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
+    : ScTextWndBase(pParent, WinBits(WB_TABSTOP)),
+      maTextWnd(VclPtr<ScTextWnd>::Create(this, pViewSh)),
+      maScrollBar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG))
+{
+    mnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
+    mnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
+    maTextWnd->SetPosPixel(Point(mnBorderWidth, mnBorderHeight));
+    Size aSize = GetSizePixel();
+    maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * mnBorderWidth, aSize.Height() - 2 * mnBorderHeight));
+    maTextWnd->Show();
+    maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    maTextWnd->SetHelpId(HID_INSWIN_INPUT);
+    maScrollBar->SetScrollHdl(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBackgroundColor = rStyleSettings.GetWindowColor();
+    SetBackground(aBackgroundColor);
+}
+
+ScTextWndGroup::~ScTextWndGroup()
+{
+    disposeOnce();
+}
+
+void ScTextWndGroup::dispose()
+{
+    maTextWnd.disposeAndClear();
+    maScrollBar.disposeAndClear();
+    ScTextWndBase::dispose();
+}
+
+void ScTextWndGroup::InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData)
+{
+    maTextWnd->InsertAccessibleTextData(rTextData);
+}
+
+EditView* ScTextWndGroup::GetEditView()
+{
+    return maTextWnd->GetEditView();
+}
+
+long ScTextWndGroup::GetLastNumExpandedLines()
+{
+    return maTextWnd->GetLastNumExpandedLines();
+}
+
+long ScTextWndGroup::GetNumLines()
+{
+    return maTextWnd->GetNumLines();
+}
+
+long ScTextWndGroup::GetPixelHeightForLines(long nLines)
+{
+    return maTextWnd->GetPixelHeightForLines(nLines) + 2 * mnBorderHeight;
+}
+
+ScrollBar& ScTextWndGroup::GetScrollBar()
+{
+    return *maScrollBar.get();
+}
+
+const OUString& ScTextWndGroup::GetTextString() const
+{
+    return maTextWnd->GetTextString();
+}
+
+bool ScTextWndGroup::HasEditView() const
+{
+    return maTextWnd->HasEditView();
+}
+
+bool ScTextWndGroup::IsInputActive()
+{
+    return maTextWnd->IsInputActive();
+}
+
+void ScTextWndGroup::MakeDialogEditView()
+{
+    maTextWnd->MakeDialogEditView();
+}
+
+void ScTextWndGroup::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+{
+    ScTextWndBase::Paint(rRenderContext, rRect);
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    Size aSize = GetSizePixel();
+    rRenderContext.DrawLine(Point(0, 0),
+                            Point(aSize.Width() - 1, 0));
+    rRenderContext.DrawLine(Point(aSize.Width() - 1, 0),
+                            Point(aSize.Width() - 1, aSize.Height() - 1));
+    rRenderContext.DrawLine(Point(aSize.Width() - 1, aSize.Height() - 1),
+                            Point(0, aSize.Height() - 1));
+    rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
+                            Point(0, 0));
+}
+
+void ScTextWndGroup::RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData)
+{
+    maTextWnd->RemoveAccessibleTextData(rTextData);
+}
+
+void ScTextWndGroup::Resize()
+{
+    Size aSize = GetSizePixel();
+    aSize.setHeight(GetPixelHeightForLines(GetNumLines()));
+    SetSizePixel(aSize);
+    if (maTextWnd->GetNumLines() > 1)
+    {
+        Size aScrollBarSize = maScrollBar->GetSizePixel();
+        aScrollBarSize.setHeight(aSize.Height() - 2);
+        maScrollBar->SetPosPixel(Point(aSize.Width() - aScrollBarSize.Width() - 1, 1));
+        maScrollBar->SetSizePixel(aScrollBarSize);
+        Size aOutputSize = maTextWnd->GetOutputSize();
+        maScrollBar->SetVisibleSize(aOutputSize.Height());
+        maScrollBar->SetPageSize(aOutputSize.Height());
+        maScrollBar->SetLineSize(maTextWnd->GetTextHeight());
+        maScrollBar->Resize();
+        maScrollBar->Show();
+        maTextWnd->SetSizePixel(Size(aSize.Width() - aScrollBarSize.Width() - mnBorderWidth - 1,
+                                     aSize.Height() - 2 * mnBorderHeight));
+    }
+    else
+    {
+        maScrollBar->Hide();
+        maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * mnBorderWidth, aSize.Height() - 2 * mnBorderHeight));
+    }
+    maTextWnd->Resize();
+    Invalidate();
+}
+
+void ScTextWndGroup::SetNumLines(long nLines)
+{
+    maTextWnd->SetNumLines(nLines);
+}
+
+void ScTextWndGroup::SetFormulaMode(bool bSet)
+{
+    maTextWnd->SetFormulaMode(bSet);
+}
+
+void ScTextWndGroup::SetTextString(const OUString& rString)
+{
+    maTextWnd->SetTextString(rString);
+}
+
+void ScTextWndGroup::StartEditEngine()
+{
+    maTextWnd->StartEditEngine();
+}
+
+void ScTextWndGroup::StopEditEngine(bool bAll)
+{
+    maTextWnd->StopEditEngine( bAll );
+}
+
+void ScTextWndGroup::TextGrabFocus()
+{
     maTextWnd->TextGrabFocus();
+}
+
+IMPL_LINK_NOARG(ScTextWndGroup, Impl_ScrollHdl, ScrollBar*, void)
+{
+    maTextWnd->DoScroll();
 }
 
 void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
@@ -1024,8 +1153,7 @@ bool ScTextWnd::HasEditView() const
 
 long ScTextWnd::GetPixelHeightForLines(long nLines)
 {
-    // add padding ( for the borders of the window )
-    return ( nLines * LogicToPixel( Size( 0, GetTextHeight() ) ).Height() ) + mnBorderHeight;
+    return LogicToPixel(Size(0, nLines * GetTextHeight())).Height() + 1;
 }
 
 void ScTextWnd::SetNumLines(long nLines)
@@ -1256,8 +1384,8 @@ void ScTextWnd::InitEditEngine()
     }
 }
 
-ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
-    :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
+ScTextWnd::ScTextWnd(ScTextWndGroup* pParent, ScTabViewShell* pViewSh)
+    :   ScTextWndBase(pParent, WinBits(WB_HIDE)),
         DragSourceHelper(this),
         mpEditEngine  (nullptr),
         mpEditView    (nullptr),
@@ -1274,10 +1402,13 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
 
     bIsRTL = AllSettings::GetLayoutRTL();
 
-    //  always use application font, so a font with cjk chars can be installed
+    // always use application font, so a font with cjk chars can be installed
     vcl::Font aAppFont = GetFont();
     aTextFont = aAppFont;
-    aTextFont.SetFontSize(PixelToLogic(aAppFont.GetFontSize(), MapMode(MapUnit::MapTwip)));  // AppFont is in pixels
+    Size aFontSize = aAppFont.GetFontSize();
+    if (aFontSize.Height() < MIN_FONT_SIZE)
+        aFontSize.setHeight(MIN_FONT_SIZE);
+    aTextFont.SetFontSize(PixelToLogic(aFontSize, MapMode(MapUnit::MapTwip)));
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -1289,10 +1420,10 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     aTextFont.SetColor(aTxtColor);
     aTextFont.SetWeight(WEIGHT_NORMAL);
 
-    Size aSize(1,TBX_WINDOW_HEIGHT);
-    Size aMinEditSize( Edit::GetMinimumEditSize() );
-    if( aMinEditSize.Height() > aSize.Height() )
-        aSize.setHeight( aMinEditSize.Height() );
+    Size aSize(1, GetPixelHeightForLines(1));
+    Size aMinEditSize(Edit::GetMinimumEditSize());
+    if(aMinEditSize.Height() > aSize.Height())
+        aSize.setHeight(aMinEditSize.Height());
 
     SetSizePixel(aSize);
     SetBackground(aBgColor);
@@ -1300,10 +1431,6 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     SetMapMode(MapMode(MapUnit::MapTwip));
     SetPointer(PointerStyle::Text);
     SetFont(aTextFont);
-
-    Size aBorder;
-    aBorder = CalcWindowSize(aBorder);
-    mnBorderHeight = aBorder.Height();
 }
 
 ScTextWnd::~ScTextWnd()
