@@ -3081,20 +3081,20 @@ void SfxMedium::CompleteReOpen()
     pImpl->bUseInteractionHandler = bUseInteractionHandler;
 }
 
-SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, std::unique_ptr<SfxItemSet> pInSet) :
     pImpl(new SfxMedium_Impl)
 {
-    pImpl->m_pSet.reset( pInSet );
+    pImpl->m_pSet = std::move( pInSet );
     pImpl->m_pFilter = std::move(pFilter);
     pImpl->m_aLogicName = rName;
     pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
-SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, std::unique_ptr<SfxItemSet> pInSet) :
     pImpl(new SfxMedium_Impl)
 {
-    pImpl->m_pSet.reset( pInSet );
+    pImpl->m_pSet = std::move(pInSet);
     SfxItemSet * s = GetItemSet();
     if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));

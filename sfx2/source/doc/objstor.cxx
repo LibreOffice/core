@@ -2512,7 +2512,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // copy the original itemset, but remove the "version" item, because pMediumTmp
     // is a new medium "from scratch", so no version should be stored into it
-    SfxItemSet* pSet = new SfxAllItemSet(*pRetrMedium->GetItemSet());
+    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet(*pRetrMedium->GetItemSet()));
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
@@ -2531,7 +2531,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     // create a medium as a copy; this medium is only for writing, because it
     // uses the same name as the original one writing is done through a copy,
     // that will be transferred to the target (of course after calling HandsOff)
-    SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pFilter, pSet );
+    SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pFilter, std::move(pSet) );
     pMediumTmp->SetInCheckIn( pRetrMedium->IsInCheckIn( ) );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
@@ -2771,7 +2771,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
 bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet const & rItemSet)
 {
     // copy all items stored in the itemset of the current medium
-    SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );
+    std::unique_ptr<SfxAllItemSet> pMergedParams(new SfxAllItemSet( *pMedium->GetItemSet() ));
 
     // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
     pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
@@ -2803,16 +2803,17 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // create a medium for the target URL
-    SfxMedium *pNewFile = new SfxMedium( rFileName, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
+    auto pMergedParamsTmp = pMergedParams.get();
+    SfxMedium *pNewFile = new SfxMedium( rFileName, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, std::move(pMergedParams) );
 
-    const SfxBoolItem* pNoFileSync = pMergedParams->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
+    const SfxBoolItem* pNoFileSync = pMergedParamsTmp->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())
         pNewFile->DisableFileSync(true);
 
     bool bUseThumbnailSave = IsUseThumbnailSave();
     comphelper::ScopeGuard aThumbnailGuard(
         [this, bUseThumbnailSave] { this->SetUseThumbnailSave(bUseThumbnailSave); });
-    const SfxBoolItem* pNoThumbnail = pMergedParams->GetItem<SfxBoolItem>(SID_NO_THUMBNAIL, false);
+    const SfxBoolItem* pNoThumbnail = pMergedParamsTmp->GetItem<SfxBoolItem>(SID_NO_THUMBNAIL, false);
     if (pNoThumbnail)
         // Thumbnail generation should be avoided just for this save.
         SetUseThumbnailSave(!pNoThumbnail->GetValue());
@@ -2834,7 +2835,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     }
 
     // check if a "SaveTo" is wanted, no "SaveAs"
-    const SfxBoolItem* pSaveToItem = pMergedParams->GetItem<SfxBoolItem>(SID_SAVETO, false);
+    const SfxBoolItem* pSaveToItem = pMergedParamsTmp->GetItem<SfxBoolItem>(SID_SAVETO, false);
     bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
     // distinguish between "Save" and "SaveAs"

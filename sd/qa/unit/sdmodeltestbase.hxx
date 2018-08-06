@@ -123,7 +123,7 @@ public:
 
 protected:
     /// Load the document.
-    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, SfxAllItemSet *pParams = nullptr )
+    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, std::unique_ptr<SfxAllItemSet> pParams = nullptr )
     {
         FileFormat *pFmt = getFormat(nFormat);
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != nullptr );
@@ -142,7 +142,7 @@ protected:
         std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
-        SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, pParams);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, std::move(pParams));
         if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
         {
             if (xDocShRef.is())

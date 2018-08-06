@@ -187,11 +187,11 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         aOptions = *pNewOptions;
 
     //  always create ItemSet, so that DocShell can set the options
-    SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
     if (!aOptions.isEmpty())
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, StreamMode::STD_READ, pFilter, pSet);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, StreamMode::STD_READ, pFilter, std::move(pSet));
 
     if ( bInEdit )                              // only if using the edit dialog,
         pMed->UseInteractionHandler(true);    // enable the filter options dialog
@@ -496,7 +496,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
         const OUString& rOptions, weld::Window* pInteractionParent )
 {
     // Always create SfxItemSet so ScDocShell can set options.
-    SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
     if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 
@@ -508,7 +508,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
         pSet->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, makeAny(xIHdl)));
     }
 
-    SfxMedium *pRet = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
+    SfxMedium *pRet = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
     if (pInteractionParent)
         pRet->UseInteractionHandler(true); // to enable the filter options dialog
     return pRet;

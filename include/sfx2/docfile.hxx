@@ -43,6 +43,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
+#include <svl/itemset.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>
@@ -55,7 +56,6 @@ class INetURLObject;
 class SfxObjectShell;
 class SfxFrame;
 class Timer;
-class SfxItemSet;
 class DateTime;
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
@@ -78,7 +78,7 @@ public:
                         SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
                                    std::shared_ptr<const SfxFilter> pFilter = nullptr,
-                                   SfxItemSet *pSet = nullptr );
+                                   std::unique_ptr<SfxItemSet> pSet = nullptr );
                         /**
                          * @param pSet Takes ownership
                          */
@@ -86,7 +86,7 @@ public:
                                    const OUString &rReferer,
                                    StreamMode nOpenMode,
                                    std::shared_ptr<const SfxFilter> pFilter = nullptr,
-                                   SfxItemSet *pSet = nullptr );
+                                   std::unique_ptr<SfxItemSet> pSet = nullptr );
 
                         /**
                          * @param pSet does NOT take ownership

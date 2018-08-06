@@ -141,10 +141,10 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument*)
 ::sd::DrawDocShell* TemplatePageObjectProvider::LoadDocument (const OUString& sFileName)
 {
     SfxApplication* pSfxApp = SfxGetpApp();
-    SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
+    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet (pSfxApp->GetPool()));
     pSet->Put (SfxBoolItem (SID_TEMPLATE, true));
     pSet->Put (SfxBoolItem (SID_PREVIEW, true));
-    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, pSet))
+    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, std::move(pSet)))
     {
         mxDocumentShell = nullptr;
     }

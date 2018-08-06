@@ -749,12 +749,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
                     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
-                    SfxItemSet* pSet = new SfxAllItemSet( pApp->GetPool() );
+                    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet( pApp->GetPool() ));
                     if (!aOptions.isEmpty())
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
                     if ( nVersion != 0 )
                         pSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
-                    pMed = new SfxMedium( aFileName, StreamMode::STD_READ, pFilter, pSet );
+                    pMed = new SfxMedium( aFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
                 }
                 else
                 {

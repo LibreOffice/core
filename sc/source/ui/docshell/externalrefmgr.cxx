@@ -2501,7 +2501,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         setRelativeFileName(nFileId, aStr);
     }
 
-    SfxItemSet* pSet = new SfxAllItemSet(SfxGetpApp()->GetPool());
+    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
     if (!aOptions.isEmpty())
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
 
@@ -2523,7 +2523,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         }
     }
 
-    unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ, pFilter, pSet));
+    unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ, pFilter, std::move(pSet)));
     if (pMedium->GetError() != ERRCODE_NONE)
         return nullptr;
 
