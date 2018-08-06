@@ -1190,18 +1190,24 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         if(!isConnected)
         {
             pFormat->MakeFrames();
-            pFirstRequeued = nullptr;
+            pFormat->CallSwClientNotify(sw::GetObjectConnectedHint(isConnected, pRoot));
         }
-        else
+        // do this *before* push_back! the circular_buffer can be "full"!
+        vFormatsToConnect.pop_front();
+        if (!isConnected)
         {
             if(pFirstRequeued == pFormat)
                 // If nothing happens anymore we can stop.
                 break;
             if(!pFirstRequeued)
                 pFirstRequeued = pFormat;
+            assert(!vFormatsToConnect.full());
             vFormatsToConnect.push_back(pFormat);
         }
-        vFormatsToConnect.pop_front();
+        else
+        {
+            pFirstRequeued = nullptr;
+        }
     }
 }
 
