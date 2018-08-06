@@ -25,6 +25,7 @@
 #include "Qt5Tools.hxx"
 
 #include <headless/svpgdi.hxx>
+#include <vcl/svapp.hxx>
 
 class Qt5Graphics;
 class Qt5Instance;
@@ -140,6 +141,14 @@ public:
 
     virtual void SetScreenNumber(unsigned int) override;
     virtual void SetApplicationID(const OUString&) override;
+
+    inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
 };
+
+inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const
+{
+    SolarMutexGuard aGuard;
+    return SalFrame::CallCallback(nEvent, pEvent);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
