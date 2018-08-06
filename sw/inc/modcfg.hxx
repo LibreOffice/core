@@ -118,16 +118,16 @@ class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    std::unique_ptr<InsCaptionOptArr> pCapOptions;
-    std::unique_ptr<InsCaptionOpt>    pOLEMiscOpt;
+    std::unique_ptr<InsCaptionOptArr> m_pCapOptions;
+    std::unique_ptr<InsCaptionOpt>    m_pOLEMiscOpt;
 
-    SvGlobalName        aGlobalNames[5];
+    SvGlobalName        m_aGlobalNames[5];
 
-    bool            bInsWithCaption;       //Insert/Caption/Automatic
-    bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
+    bool            m_bInsWithCaption;       //Insert/Caption/Automatic
+    bool            m_bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
-    SwInsertTableOptions    aInsTableOpts;
-    bool            bIsWeb;
+    SwInsertTableOptions    m_aInsTableOpts;
+    bool            m_bIsWeb;
 
     const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -259,18 +259,18 @@ public:
                                                               aRevisionConfig.SetModified();}
 
     bool        IsInsWithCaption(bool bHTML) const
-                        { return !bHTML && aInsertConfig.bInsWithCaption; }
+                        { return !bHTML && aInsertConfig.m_bInsWithCaption; }
     void        SetInsWithCaption( bool bHTML, bool b )
                     {   if(!bHTML)
-                            aInsertConfig.bInsWithCaption = b;
+                            aInsertConfig.m_bInsWithCaption = b;
                         aInsertConfig.SetModified();}
 
-    bool    IsCaptionOrderNumberingFirst() const { return aInsertConfig.bCaptionOrderNumberingFirst; }
+    bool    IsCaptionOrderNumberingFirst() const { return aInsertConfig.m_bCaptionOrderNumberingFirst; }
     void        SetCaptionOrderNumberingFirst( bool bSet )
                 {
-                    if(aInsertConfig.bCaptionOrderNumberingFirst != bSet)
+                    if(aInsertConfig.m_bCaptionOrderNumberingFirst != bSet)
                     {
-                        aInsertConfig.bCaptionOrderNumberingFirst = bSet;
+                        aInsertConfig.m_bCaptionOrderNumberingFirst = bSet;
                         aInsertConfig.SetModified();
                     }
                 }
@@ -294,9 +294,9 @@ public:
                         bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const
-                    { return bHTML ? aWebInsertConfig.aInsTableOpts : aInsertConfig.aInsTableOpts;}
+                    { return bHTML ? aWebInsertConfig.m_aInsTableOpts : aInsertConfig.m_aInsTableOpts;}
     void        SetInsTableFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
-                    bHTML ? (aWebInsertConfig.aInsTableOpts = rOpts) : (aInsertConfig.aInsTableOpts = rOpts);
+                    bHTML ? (aWebInsertConfig.m_aInsTableOpts = rOpts) : (aInsertConfig.m_aInsTableOpts = rOpts);
                     bHTML ? aWebInsertConfig.SetModified() : aInsertConfig.SetModified();}
 
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
