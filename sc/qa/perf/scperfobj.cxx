@@ -65,7 +65,6 @@ public:
     CPPUNIT_TEST_SUITE(ScPerfObj);
     CPPUNIT_TEST(testSheetFindAll);
     CPPUNIT_TEST(testFixedSum);
-    CPPUNIT_TEST(testFormulaGroupSWInterpreter);
     CPPUNIT_TEST(testSheetNamedRanges);
     CPPUNIT_TEST(testSheets);
     CPPUNIT_TEST(testSum);
@@ -103,7 +102,6 @@ private:
     void testSubTotalWithoutFormulas();
     void testLoadingFileWithSingleBigSheet();
     void testFixedSum();
-    void testFormulaGroupSWInterpreter();
     void testMatConcatSmall();
     void testMatConcatLarge();
 };
@@ -695,36 +693,6 @@ void ScPerfObj::testFixedSum()
         uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(1, i);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(50206.0, xCell->getValue(), 1e-12);
     }
-}
-
-void ScPerfObj::testFormulaGroupSWInterpreter()
-{
-    // 1. Create spreadsheet
-    SpreadsheetDoc aSpreadsheet;
-
-    // 2. Disable OpenCL
-    ScModelObj* pModel = aSpreadsheet.GetModel();
-    pModel->enableOpenCL(false);
-    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
-    pModel->enableAutomaticCalculation(false);
-
-    // 3. Setup data and formulas
-    ScDocument& rDoc = aSpreadsheet.GetDocument();
-
-    for (unsigned int r = 0; r <= 10000; ++r)
-        rDoc.SetValue( ScAddress(0,r,0), r+1 );
-
-    rDoc.SetString(ScAddress(1,0,0), "=A1");
-    rDoc.SetString(ScAddress(2,0,0), "=PRODUCT(A1,SUM(B1:B$10000))");
-
-    aSpreadsheet.copyRange("B1:C1", "B2:C10000");
-
-    // 4. Calculate
-    callgrindStart();
-    pModel->calculateAll();
-    callgrindDump("sc:formula_group_sw_interpreter");
-
-    // 5. Automatically close the document (Ctrl-W) on spreadsheet destruction
 }
 
 void ScPerfObj::testMatConcatSmall()

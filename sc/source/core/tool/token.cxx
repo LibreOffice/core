@@ -1376,19 +1376,6 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             return;
         }
 
-        // test for OpenCL interpreter first - the assumption is that S/W
-        // interpreter blacklist is more strict than the OpenCL one
-        if (ScCalcConfig::isSwInterpreterEnabled() &&
-            (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
-            ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
-        {
-            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
-                << "(" << int(eOp) << ") disables S/W interpreter for formula group");
-            meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
-            mbOpenCLEnabled = false;
-            return;
-        }
-
         // We support vectorization for the following opcodes.
         switch (eOp)
         {
@@ -1627,18 +1614,6 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             mbOpenCLEnabled = false;
             return;
         }
-        // only when openCL interpreter is not enabled - the assumption is that
-        // the S/W interpreter blacklist is more strict
-        else if (ScCalcConfig::isSwInterpreterEnabled() &&
-                 (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
-                 ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
-        {
-            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
-                << "(" << int(eOp) << ") disables S/W interpreter for formula group");
-            meVectorState = FormulaVectorDisabledNotInSoftwareSubset;
-            mbOpenCLEnabled = false;
-            return;
-        }
     }
     else
     {
@@ -1825,7 +1800,7 @@ void ScTokenArray::GenHash()
 
 void ScTokenArray::ResetVectorState()
 {
-    mbOpenCLEnabled = ScCalcConfig::isOpenCLEnabled() || ScCalcConfig::isSwInterpreterEnabled();
+    mbOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
     meVectorState = mbOpenCLEnabled ? FormulaVectorEnabled : FormulaVectorDisabled;
     mbThreadingEnabled = ScCalcConfig::isThreadingEnabled();
 }
