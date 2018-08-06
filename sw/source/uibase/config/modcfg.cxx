@@ -75,11 +75,11 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
         {
             bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
-                bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
+                bFound = *pOleId == aInsertConfig.m_aGlobalNames[nId  ];
             if(!bFound)
-                return aInsertConfig.pOLEMiscOpt.get();
+                return aInsertConfig.m_pOLEMiscOpt.get();
         }
-        return aInsertConfig.pCapOptions->Find(eType, pOleId);
+        return aInsertConfig.m_pCapOptions->Find(eType, pOleId);
     }
 }
 
@@ -97,17 +97,17 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
         {
             bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
-                bFound = pOpt->GetOleId() == aInsertConfig.aGlobalNames[nId  ];
+                bFound = pOpt->GetOleId() == aInsertConfig.m_aGlobalNames[nId  ];
             if(!bFound)
             {
-                if(aInsertConfig.pOLEMiscOpt)
-                    *aInsertConfig.pOLEMiscOpt = *pOpt;
+                if(aInsertConfig.m_pOLEMiscOpt)
+                    *aInsertConfig.m_pOLEMiscOpt = *pOpt;
                 else
-                    aInsertConfig.pOLEMiscOpt.reset(new InsCaptionOpt(*pOpt));
+                    aInsertConfig.m_pOLEMiscOpt.reset(new InsCaptionOpt(*pOpt));
             }
         }
 
-        InsCaptionOptArr& rArr = *aInsertConfig.pCapOptions;
+        InsCaptionOptArr& rArr = *aInsertConfig.m_pCapOptions;
         InsCaptionOpt *pObj = rArr.Find(pOpt->GetObjType(), &pOpt->GetOleId());
 
         if (pObj)
@@ -577,34 +577,34 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
         for(i = 0; i < nWebCount; i++)
             pWebNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
-    return bIsWeb ? aWebNames : aNames;
+    return m_bIsWeb ? aWebNames : aNames;
 }
 
 SwInsertConfig::SwInsertConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    pCapOptions(nullptr),
-    pOLEMiscOpt(nullptr),
-    bInsWithCaption( false ),
-    bCaptionOrderNumberingFirst( false ),
-    aInsTableOpts(SwInsertTableFlags::NONE,0),
-    bIsWeb(bWeb)
+    m_pCapOptions(nullptr),
+    m_pOLEMiscOpt(nullptr),
+    m_bInsWithCaption( false ),
+    m_bCaptionOrderNumberingFirst( false ),
+    m_aInsTableOpts(SwInsertTableFlags::NONE,0),
+    m_bIsWeb(bWeb)
 {
-    aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
-    aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
-    aGlobalNames[GLOB_NAME_DRAW   ] = SvGlobalName(SO3_SDRAW_CLASSID);
-    aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
-    aGlobalNames[GLOB_NAME_CHART  ] = SvGlobalName(SO3_SCH_CLASSID);
-    if(!bIsWeb)
-        pCapOptions.reset(new InsCaptionOptArr);
+    m_aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
+    m_aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
+    m_aGlobalNames[GLOB_NAME_DRAW   ] = SvGlobalName(SO3_SDRAW_CLASSID);
+    m_aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
+    m_aGlobalNames[GLOB_NAME_CHART  ] = SvGlobalName(SO3_SCH_CLASSID);
+    if(!m_bIsWeb)
+        m_pCapOptions.reset(new InsCaptionOptArr);
 
     Load();
 }
 
 SwInsertConfig::~SwInsertConfig()
 {
-    pCapOptions.reset();
-    pOLEMiscOpt.reset();
+    m_pCapOptions.reset();
+    m_pOLEMiscOpt.reset();
 }
 
 static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
@@ -642,36 +642,36 @@ void SwInsertConfig::ImplCommit()
         const InsCaptionOpt* pOLEChartOpt = nullptr;
         const InsCaptionOpt* pOLEFormulaOpt = nullptr;
         const InsCaptionOpt* pOLEDrawOpt = nullptr;
-        if(pCapOptions)
+        if(m_pCapOptions)
         {
-            pWriterTableOpt = pCapOptions->Find(TABLE_CAP);
-            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP);
-            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP);
-            pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
-            pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
-            pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
-            pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
-            pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
+            pWriterTableOpt = m_pCapOptions->Find(TABLE_CAP);
+            pWriterFrameOpt = m_pCapOptions->Find(FRAME_CAP);
+            pWriterGraphicOpt = m_pCapOptions->Find(GRAPHIC_CAP);
+            pOLECalcOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CALC]);
+            pOLEImpressOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_IMPRESS]);
+            pOLEDrawOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_DRAW   ]);
+            pOLEFormulaOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_MATH   ]);
+            pOLEChartOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CHART  ]);
         }
         switch(nProp)
         {
             case INS_PROP_TABLE_HEADER:
-                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline);
+                pValues[nProp] <<= bool(m_aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline);
             break;//"Table/Header",
             case INS_PROP_TABLE_REPEATHEADER:
-                pValues[nProp] <<= aInsTableOpts.mnRowsToRepeat > 0;
+                pValues[nProp] <<= m_aInsTableOpts.mnRowsToRepeat > 0;
             break;//"Table/RepeatHeader",
             case INS_PROP_TABLE_BORDER:
-                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder);
+                pValues[nProp] <<= bool(m_aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder);
             break;//"Table/Border",
             case INS_PROP_TABLE_SPLIT:
-                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout);
+                pValues[nProp] <<= bool(m_aInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout);
             break;//"Table/Split",
             case INS_PROP_CAP_AUTOMATIC:
-                pValues[nProp] <<= bInsWithCaption;
+                pValues[nProp] <<= m_bInsWithCaption;
             break;//"Caption/Automatic",
             case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST:
-                pValues[nProp] <<= bCaptionOrderNumberingFirst;
+                pValues[nProp] <<= m_bCaptionOrderNumberingFirst;
             break;//"Caption/CaptionOrderNumberingFirst"
 
             case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
@@ -786,8 +786,8 @@ void SwInsertConfig::ImplCommit()
             case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
             case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
             case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
-                    if(pOLEMiscOpt)
-                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
+                    if(m_pOLEMiscOpt)
+                        lcl_WriteOpt(*m_pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
             break;
 
         }
@@ -876,18 +876,18 @@ void SwInsertConfig::Load()
     InsCaptionOpt* pOLEChartOpt = nullptr;
     InsCaptionOpt* pOLEFormulaOpt = nullptr;
     InsCaptionOpt* pOLEDrawOpt = nullptr;
-    if (pCapOptions)
+    if (m_pCapOptions)
     {
-        pWriterTableOpt = pCapOptions->Find(TABLE_CAP);
-        pWriterFrameOpt = pCapOptions->Find(FRAME_CAP);
-        pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP);
-        pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
-        pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
-        pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
-        pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
-        pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
+        pWriterTableOpt = m_pCapOptions->Find(TABLE_CAP);
+        pWriterFrameOpt = m_pCapOptions->Find(FRAME_CAP);
+        pWriterGraphicOpt = m_pCapOptions->Find(GRAPHIC_CAP);
+        pOLECalcOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CALC]);
+        pOLEImpressOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_IMPRESS]);
+        pOLEDrawOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_DRAW   ]);
+        pOLEFormulaOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_MATH   ]);
+        pOLEChartOpt = m_pCapOptions->Find(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CHART  ]);
     }
-    else if (!bIsWeb)
+    else if (!m_bIsWeb)
         return;
 
     SwInsertTableFlags nInsTableFlags = SwInsertTableFlags::NONE;
@@ -906,7 +906,7 @@ void SwInsertConfig::Load()
                 break;//"Table/Header",
                 case INS_PROP_TABLE_REPEATHEADER:
                 {
-                    aInsTableOpts.mnRowsToRepeat = bBool? 1 : 0;
+                    m_aInsTableOpts.mnRowsToRepeat = bBool? 1 : 0;
 
                 }
                 break;//"Table/RepeatHeader",
@@ -923,9 +923,9 @@ void SwInsertConfig::Load()
                 }
                 break;//"Table/Split",
                 case INS_PROP_CAP_AUTOMATIC:
-                    bInsWithCaption = bBool;
+                    m_bInsWithCaption = bBool;
                 break;
-                case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: bCaptionOrderNumberingFirst = bBool; break;
+                case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: m_bCaptionOrderNumberingFirst = bBool; break;
                 case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
                 case INS_PROP_CAP_OBJECT_TABLE_CATEGORY:
                 case INS_PROP_CAP_OBJECT_TABLE_NUMBERING:
@@ -938,7 +938,7 @@ void SwInsertConfig::Load()
                     if(!pWriterTableOpt)
                     {
                         pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
-                        pCapOptions->Insert(pWriterTableOpt);
+                        m_pCapOptions->Insert(pWriterTableOpt);
                     }
                     lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_TABLE_ENABLE);
                 break;
@@ -954,7 +954,7 @@ void SwInsertConfig::Load()
                     if(!pWriterFrameOpt)
                     {
                         pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
-                        pCapOptions->Insert(pWriterFrameOpt);
+                        m_pCapOptions->Insert(pWriterFrameOpt);
                     }
                     lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FRAME_ENABLE);
                 break;
@@ -971,7 +971,7 @@ void SwInsertConfig::Load()
                     if(!pWriterGraphicOpt)
                     {
                         pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
-                        pCapOptions->Insert(pWriterGraphicOpt);
+                        m_pCapOptions->Insert(pWriterGraphicOpt);
                     }
                     lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE);
                 break;
@@ -987,8 +987,8 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES:
                     if(!pOLECalcOpt)
                     {
-                        pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
-                        pCapOptions->Insert(pOLECalcOpt);
+                        pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CALC]);
+                        m_pCapOptions->Insert(pOLECalcOpt);
                     }
                     lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CALC_ENABLE);
                 break;
@@ -1004,8 +1004,8 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES:
                     if(!pOLEImpressOpt)
                     {
-                        pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
-                        pCapOptions->Insert(pOLEImpressOpt);
+                        pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &m_aGlobalNames[GLOB_NAME_IMPRESS]);
+                        m_pCapOptions->Insert(pOLEImpressOpt);
                     }
                     lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_IMPRESS_ENABLE);
                 break;
@@ -1021,8 +1021,8 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES:
                     if(!pOLEChartOpt)
                     {
-                        pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
-                        pCapOptions->Insert(pOLEChartOpt);
+                        pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &m_aGlobalNames[GLOB_NAME_CHART]);
+                        m_pCapOptions->Insert(pOLEChartOpt);
                     }
                     lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CHART_ENABLE);
                 break;
@@ -1038,8 +1038,8 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES:
                     if(!pOLEFormulaOpt)
                     {
-                        pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
-                        pCapOptions->Insert(pOLEFormulaOpt);
+                        pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &m_aGlobalNames[GLOB_NAME_MATH]);
+                        m_pCapOptions->Insert(pOLEFormulaOpt);
                     }
                     lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FORMULA_ENABLE);
                 break;
@@ -1055,8 +1055,8 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES:
                     if(!pOLEDrawOpt)
                     {
-                        pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
-                        pCapOptions->Insert(pOLEDrawOpt);
+                        pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &m_aGlobalNames[GLOB_NAME_DRAW]);
+                        m_pCapOptions->Insert(pOLEDrawOpt);
                     }
                     lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_DRAW_ENABLE);
                 break;
@@ -1070,21 +1070,21 @@ void SwInsertConfig::Load()
                 case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
                 case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
                 case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
-                    if(!pOLEMiscOpt)
+                    if(!m_pOLEMiscOpt)
                     {
-                        pOLEMiscOpt.reset(new InsCaptionOpt(OLE_CAP));
+                        m_pOLEMiscOpt.reset(new InsCaptionOpt(OLE_CAP));
                     }
-                    lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
+                    lcl_ReadOpt(*m_pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
                 break;
             }
         }
         else if (nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
         {
-            bCaptionOrderNumberingFirst = false;
+            m_bCaptionOrderNumberingFirst = false;
         }
 
     }
-    aInsTableOpts.mnInsMode = nInsTableFlags;
+    m_aInsTableOpts.mnInsMode = nInsTableFlags;
 }
 
 const Sequence<OUString>& SwTableConfig::GetPropertyNames()
