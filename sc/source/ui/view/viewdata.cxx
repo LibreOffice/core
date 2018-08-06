@@ -2852,14 +2852,16 @@ void ScViewData::ReadUserData(const OUString& rData)
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
+    sal_Int32 nIdx {0};
+
     OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Mode
-    sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0,'/').toInt32());
+    sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0, '/', nIdx).toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
         aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normal" zoom (always)
-    sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(1,'/').toInt32());
+    sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0, '/', nIdx).toInt32());
     if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
         aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak zoom, if set
-    sal_Unicode cMode = aZoomStr.getToken(2,'/')[0];            // 0 or "0"/"1"
+    sal_Unicode cMode = aZoomStr.getToken(0, '/', nIdx)[0];     // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
@@ -2896,32 +2898,33 @@ void ScViewData::ReadUserData(const OUString& rData)
 
         if (cTabSep)
         {
-            maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0,cTabSep).toInt32()));
-            maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.getToken(1,cTabSep).toInt32());
-            maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(2,cTabSep).toInt32());
-            maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(3,cTabSep).toInt32());
+            nIdx = 0;
+            maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
+            maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
 
             if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(4,cTabSep).toInt32()));
+                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
                 UpdateFixX(nPos);
             }
             else
-                maTabData[nPos]->nHSplitPos = aTabOpt.getToken(4,cTabSep).toInt32();
+                maTabData[nPos]->nHSplitPos = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
 
             if ( maTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.getToken(5,cTabSep).toInt32());
+                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
                 UpdateFixY(nPos);
             }
             else
-                maTabData[nPos]->nVSplitPos = aTabOpt.getToken(5,cTabSep).toInt32();
+                maTabData[nPos]->nVSplitPos = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
 
-            maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(aTabOpt.getToken(6,cTabSep).toInt32());
-            maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(7,cTabSep).toInt32()));
-            maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(8,cTabSep).toInt32()));
-            maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(9,cTabSep).toInt32());
-            maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.getToken(10,cTabSep).toInt32());
+            maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
+            maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
+            maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
 
             maTabData[nPos]->eWhichActive = maTabData[nPos]->SanitizeWhichActive();
         }
