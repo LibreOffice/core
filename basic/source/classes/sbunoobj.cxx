@@ -1884,9 +1884,8 @@ OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 // Debugging help method to display the methods of an SbUnoObjects
 OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
 {
-    OUStringBuffer aRet;
-    aRet.append("Methods of object ");
-    aRet.append(getDbgObjectName(rUnoObj));
+    OUString aRet = "Methods of object "
+                  + getDbgObjectName(rUnoObj);
 
     // XIntrospectionAccess, so that the types of the parameter could be outputted
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
@@ -1898,8 +1897,8 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
     }
     if( !xAccess.is() )
     {
-        aRet.append( "\nUnknown, no introspection available\n" );
-        return aRet.makeStringAndClear();
+        aRet += "\nUnknown, no introspection available\n";
+        return aRet;
     }
     Sequence< Reference< XIdlMethod > > methods = xAccess->getMethods
         ( MethodConcept::ALL - MethodConcept::DANGEROUS );
@@ -1909,8 +1908,8 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
     sal_uInt16 nMethodCount = pMethods->Count();
     if( !nMethodCount )
     {
-        aRet.append( "\nNo methods found\n" );
-        return aRet.makeStringAndClear();
+        aRet += "\nNo methods found\n";
+        return aRet;
     }
     sal_uInt16 nPropsPerLine = 1 + nMethodCount / 30;
     for( sal_uInt16 i = 0; i < nMethodCount; i++ )
@@ -1919,7 +1918,7 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
         if( pVar )
         {
             if( (i % nPropsPerLine) == 0 )
-                aRet.append( "\n" );
+                aRet += "\n";
 
             // address the method
             const Reference< XIdlMethod >& rxMethod = pUnoMethods[i];
@@ -1933,10 +1932,7 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
                     eType = SbxDataType( SbxOBJECT | SbxARRAY );
             }
             // output the name and the type
-            aRet.append( Dbg_SbxDataType2String( eType ) );
-            aRet.append( " " );
-            aRet.append ( pVar->GetName() );
-            aRet.append( " ( " );
+            aRet = aRet + Dbg_SbxDataType2String( eType ) + " " + pVar->GetName() + " ( " ;
 
             // the get-method mustn't have a parameter
             Sequence< Reference< XIdlClass > > aParamsSeq = rxMethod->getParameterTypes();
@@ -1947,23 +1943,23 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
             {
                 for( sal_uInt32 j = 0; j < nParamCount; j++ )
                 {
-                    aRet.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
+                    aRet += Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) );
                     if( j < nParamCount - 1 )
-                        aRet.append( ", " );
+                        aRet += ", ";
                 }
             }
             else
-                aRet.append( "void" );
+                aRet += "void";
 
-            aRet.append( " ) " );
+            aRet += " ) ";
 
             if( i == nMethodCount - 1 )
-                aRet.append( "\n" );
+                aRet += "\n";
             else
-                aRet.append( "; " );
+                aRet += "; ";
         }
     }
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 
@@ -4758,9 +4754,8 @@ Any SbUnoStructRefObject::getUnoAny()
 
 OUString SbUnoStructRefObject::Impl_DumpProperties()
 {
-    OUStringBuffer aRet;
-    aRet.append("Properties of object ");
-    aRet.append( getDbgObjectName() );
+    OUString aRet = "Properties of object "
+                  + getDbgObjectName();
 
     sal_uInt16 nPropCount = pProps->Count();
     sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
@@ -4806,10 +4801,10 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             {
                 aPropStr.append( "; " );
             }
-            aRet.append( aPropStr.makeStringAndClear() );
+            aRet += aPropStr.makeStringAndClear();
         }
     }
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -4834,11 +4829,10 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // Id == -1: Display implemented interfaces according the ClassProvider
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
-                        OUStringBuffer aRet;
-                        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
-                        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+                        OUString aRet = OUStringLiteral(ID_DBG_SUPPORTEDINTERFACES)
+                                      + " not available.\n(TypeClass is not TypeClass_INTERFACE)\n";
 
-                        pVar->PutString( aRet.makeStringAndClear() );
+                        pVar->PutString( aRet );
                     }
                     // Id == -2: output properties
                     else if( nId == -2 )        // Property ID_DBG_PROPERTIES
@@ -4853,11 +4847,10 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // by now all properties must be established
                         implCreateAll();
-                        OUStringBuffer aRet;
-                        aRet.append("Methods of object ");
-                        aRet.append( getDbgObjectName() );
-                        aRet.append( "\nNo methods found\n" );
-                        pVar->PutString( aRet.makeStringAndClear() );
+                        OUString aRet = "Methods of object "
+                                      + getDbgObjectName()
+                                      + "\nNo methods found\n";
+                        pVar->PutString( aRet );
                     }
                     return;
                 }
