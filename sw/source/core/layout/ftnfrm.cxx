@@ -1641,12 +1641,15 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFootnote( const SwContentFrame *pRef, 
     return nullptr;
 }
 
-void SwFootnoteBossFrame::RemoveFootnote( const SwContentFrame *pRef, const SwTextFootnote *pAttr,
+bool SwFootnoteBossFrame::RemoveFootnote(
+        const SwContentFrame *const pRef, const SwTextFootnote *const pAttr,
                               bool bPrep )
 {
+    bool ret(false);
     SwFootnoteFrame *pFootnote = FindFootnote( pRef, pAttr );
     if( pFootnote )
     {
+        ret = true;
         do
         {
             SwFootnoteFrame *pFoll = pFootnote->GetFollow();
@@ -1663,6 +1666,7 @@ void SwFootnoteBossFrame::RemoveFootnote( const SwContentFrame *pRef, const SwTe
         }
     }
     FindPageFrame()->UpdateFootnoteNum();
+    return ret;
 }
 
 void SwFootnoteBossFrame::ChangeFootnoteRef( const SwContentFrame *pOld, const SwTextFootnote *pAttr,
