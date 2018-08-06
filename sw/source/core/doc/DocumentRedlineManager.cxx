@@ -1713,7 +1713,12 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pTextNd = SwNodes::GoPrevious( &aIdx );
                     }
                 }
-                mpRedlineTable->Insert( pNewRedl );
+                bool const ret = mpRedlineTable->Insert( pNewRedl );
+                assert(ret || !pNewRedl);
+                if (ret && !pNewRedl)
+                {
+                    bMerged = true; // treat InsertWithValidRanges as "merge"
+                }
             }
         }
 
