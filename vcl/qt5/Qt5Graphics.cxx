@@ -25,6 +25,7 @@
 
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
 Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
@@ -108,5 +109,20 @@ SystemFontData Qt5Graphics::GetSysFontData(int /*nFallbacklevel*/) const
 }
 
 #endif
+
+bool Qt5Graphics::drawNativeControl(ControlType nType, ControlPart nPart,
+                                    const tools::Rectangle& rControlRegion, ControlState nState,
+                                    const ImplControlValue& aValue, const OUString& aCaption)
+{
+    bool bHandled
+        = m_aControl.drawNativeControl(nType, nPart, rControlRegion, nState, aValue, aCaption);
+    if (bHandled)
+    {
+        Qt5Painter aPainter(*this);
+        aPainter.drawImage(QPoint(rControlRegion.getX(), rControlRegion.getY()),
+                           m_aControl.getImage());
+    }
+    return bHandled;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
