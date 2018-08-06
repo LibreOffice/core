@@ -777,15 +777,15 @@ void PrintDialog::setPaperSizes()
 {
     mpPaperSizeBox->Clear();
 
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    mePaper = aPrt->GetPaper();
+
     if ( isPrintToFile() )
     {
         mpPaperSizeBox->Enable( false );
     }
     else
     {
-        VclPtr<Printer> aPrt( maPController->getPrinter() );
-        mePaper = aPrt->GetPaper();
-
         for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
         {
             PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
@@ -1835,10 +1835,13 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         PaperInfo aInfo = aPrt->GetPaperInfo( rBox.GetSelectedEntryPos() );
         aInfo.doSloppyFit();
         mePaper = aInfo.getPaper();
-        aPrt->SetPaper( mePaper );
+
         if ( mePaper == PAPER_USER )
             aPrt->SetPaperSizeUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
+        else
+            aPrt->SetPaper( mePaper );
 
+        maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
         preparePreview();
     }
 }
