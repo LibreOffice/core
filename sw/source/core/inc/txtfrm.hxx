@@ -75,6 +75,10 @@ public:
 
 namespace sw {
 
+/**
+ * Describes a part of a single text node, which will be part of a text frame,
+ * even when redlines are hidden at a layout level.
+ */
 struct Extent
 {
     SwTextNode * /*const logically, but need assignment for std::vector*/ pNode;
@@ -906,6 +910,10 @@ public:
 
 namespace sw {
 
+/**
+ * Describes parts of multiple text nodes, which will form a text frame, even
+ * when redlines are hidden at a layout level.
+ */
 struct MergedPara
 {
     sw::WriterMultiListener listener;
