@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <test/mtfxmldump.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -31,6 +32,7 @@ public:
     void testTdf117923();
     void testTdf109077();
     void testUserFieldTypeLanguage();
+    void testTdf109137();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -45,6 +47,7 @@ public:
     CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST(testUserFieldTypeLanguage);
+    CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -272,6 +275,23 @@ void SwLayoutWriter::testUserFieldTypeLanguage()
     // This was "123,456.00", via a buggy 1234.56 -> 1234,56 -> 123456 ->
     // 123,456.00 transform chain.
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLD']", "rText", "1,234.56");
+}
+
+void SwLayoutWriter::testTdf109137()
+{
+    createDoc("tdf109137.docx");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    }));
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    loadURL(aTempFile.GetURL(), "tdf109137.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 0, the blue rectangle moved from the 1st to the 2nd page.
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
+                /*nNumberOfNodes=*/1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);

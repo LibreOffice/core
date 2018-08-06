@@ -86,6 +86,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
 
     xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
 
+    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+
     uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
     xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
 
