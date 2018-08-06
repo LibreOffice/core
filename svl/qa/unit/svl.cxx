@@ -311,7 +311,7 @@ void Test::testSharedString()
 void Test::testSharedStringPool()
 {
     SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
 
     svl::SharedString p1, p2;
     p1 = aPool.intern("Andy");
@@ -344,7 +344,7 @@ void Test::testSharedStringPool()
 void Test::testSharedStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.intern("ANDY");
