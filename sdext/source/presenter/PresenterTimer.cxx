@@ -115,10 +115,7 @@ private:
 
     TimerScheduler(
         uno::Reference<uno::XComponentContext> const& xContext);
-    virtual ~TimerScheduler() override;
-    class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
-    friend class Deleter;
-
+public:
     virtual void SAL_CALL run() override;
     virtual void SAL_CALL onTerminated() override { mpLateDestroy.reset(); }
 };
@@ -194,7 +191,7 @@ std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
     {
         if (!xContext.is())
             return nullptr;
-        mpInstance.reset(new TimerScheduler(xContext), TimerScheduler::Deleter());
+        mpInstance.reset(new TimerScheduler(xContext));
         mpInstance->create();
     }
     return mpInstance;
@@ -213,10 +210,6 @@ TimerScheduler::TimerScheduler(
             new TerminateListener);
     // assuming the desktop can take ownership
     xDesktop->addTerminateListener(xListener);
-}
-
-TimerScheduler::~TimerScheduler()
-{
 }
 
 SharedTimerTask TimerScheduler::CreateTimerTask (
