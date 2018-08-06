@@ -47,7 +47,6 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     static bool isOpenCLEnabled();
     static bool isThreadingEnabled();
-    static bool isSwInterpreterEnabled();
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
@@ -57,7 +56,6 @@ struct SC_DLLPUBLIC ScCalcConfig
     typedef std::shared_ptr<std::set<OpCode>> OpCodeSet;
 
     OpCodeSet mpOpenCLSubsetOpCodes;
-    OpCodeSet mpSwInterpreterSubsetOpCodes;
 
     ScCalcConfig();
 

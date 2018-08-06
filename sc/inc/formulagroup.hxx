@@ -146,16 +146,6 @@ public:
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
 };
 
-/// Inherit from this for alternate formula group calculation approaches.
-class SC_DLLPUBLIC FormulaGroupInterpreterSoftware : public FormulaGroupInterpreter
-{
-public:
-    FormulaGroupInterpreterSoftware();
-
-    virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) override;
-    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) override;
-};
-
 }
 
 #endif

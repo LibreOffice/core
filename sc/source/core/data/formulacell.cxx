@@ -4526,17 +4526,14 @@ bool ScFormulaCell::InterpretFormulaGroup()
     bool bDependencyComputed = false;
     bool bDependencyCheckFailed = false;
 
-    // Preference order:
-    // First try OpenCL, but only if actual OpenCL is available (i.e. no SwInterpreter).
-    // Then try threading and as the last one try SwInterpreter.
-    if( ScCalcConfig::isOpenCLEnabled())
-        if( InterpretFormulaGroupOpenCL(aScope, bDependencyComputed, bDependencyCheckFailed))
-            return true;
+    // Preference order: First try OpenCL, then threading.
+    if( InterpretFormulaGroupOpenCL(aScope, bDependencyComputed, bDependencyCheckFailed))
+        return true;
 
     if( InterpretFormulaGroupThreading(aScope, bDependencyComputed, bDependencyCheckFailed))
         return true;
 
-    return InterpretFormulaGroupOpenCL(aScope, bDependencyComputed, bDependencyCheckFailed);
+    return false;
 }
 
 bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope)
@@ -4726,9 +4723,9 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
     if (!bCanVectorize)
         return false;
 
-    if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
+    if (!ScCalcConfig::isOpenCLEnabled())
     {
-        aScope.addMessage("opencl not enabled and sw interpreter not enabled");
+        aScope.addMessage("opencl not enabled");
         return false;
     }
 

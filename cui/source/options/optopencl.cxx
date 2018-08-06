@@ -47,13 +47,9 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SfxTabPage(pParent, "OptOpenCLPage", "cui/ui/optopenclpage.ui", &rSet),
     maConfig(OpenCLConfig::get())
 {
-    get(mpUseSwInterpreter, "useswinterpreter");
     get(mpUseOpenCL, "useopencl");
     get(mpOclUsed,"openclused");
     get(mpOclNotUsed,"openclnotused");
-
-    mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
-    mpUseSwInterpreter->Enable(!officecfg::Office::Common::Misc::UseSwInterpreter::isReadOnly());
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->Enable(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
@@ -70,7 +66,6 @@ SvxOpenCLTabPage::~SvxOpenCLTabPage()
 
 void SvxOpenCLTabPage::dispose()
 {
-    mpUseSwInterpreter.clear();
     mpUseOpenCL.clear();
     mpOclUsed.clear();
     mpOclNotUsed.clear();
@@ -87,12 +82,6 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 {
  bool bModified = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-
-    if (mpUseSwInterpreter->IsValueChangedFromSaved())
-    {
-        officecfg::Office::Common::Misc::UseSwInterpreter::set(mpUseSwInterpreter->IsChecked(), batch);
-        bModified = true;
-    }
 
     if (mpUseOpenCL->IsValueChangedFromSaved())
         maConfig.mbUseOpenCL = mpUseOpenCL->IsChecked();
@@ -126,9 +115,6 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 void SvxOpenCLTabPage::Reset( const SfxItemSet* )
 {
     maConfig = OpenCLConfig::get();
-
-    mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
-    mpUseSwInterpreter->SaveValue();
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->SaveValue();

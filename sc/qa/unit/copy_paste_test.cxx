@@ -209,7 +209,6 @@ void ScCopyPasteTest::testTdf84411()
     pModel->enableOpenCL(false);
     CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
     pModel->enableAutomaticCalculation(true);
-    CPPUNIT_ASSERT( ScCalcConfig::isSwInterpreterEnabled() );
 
 
     // 4. Copy and Paste

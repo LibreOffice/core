@@ -341,12 +341,9 @@ OUString AboutDialog::GetVersionString()
     OUString aCalcMode = "Calc: "; // Calc calculation mode
 
 #if HAVE_FEATURE_OPENCL
-    bool bSWInterp = officecfg::Office::Common::Misc::UseSwInterpreter::get();
     bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
     if (bOpenCL)
         aCalcMode += "CL";
-    else if (bSWInterp)
-        aCalcMode += "group";
 #else
     const bool bOpenCL = false;
 #endif
