@@ -75,7 +75,7 @@ void EnableTest::testWin64()
     aSource1.append("\n");
     aSource1.append("#End if\n");
 
-    MacroSnippet myMacro(aSource1.toString());
+    MacroSnippet myMacro( aSource1 );
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("#if Win64 Declare PtrSafe causes compile error", !myMacro.HasError() );
 }
