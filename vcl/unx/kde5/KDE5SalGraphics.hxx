@@ -24,10 +24,10 @@
 #include <rtl/string.hxx>
 #include <headless/svpgdi.hxx>
 
+#include <Qt5Graphics_Controls.hxx>
+
 #include <QtGui/QImage>
 #include <QtWidgets/QPushButton>
-
-class KDE5SalFrame;
 
 /**
  * Handles native graphics requests and performs the needed drawing operations.
@@ -48,13 +48,29 @@ public:
                                         ControlState, const ImplControlValue&, const OUString&,
                                         tools::Rectangle&, tools::Rectangle&) override;
 
-    std::unique_ptr<QImage> m_image;
-    QRect lastPopupRect;
-
 private:
-    void initStyles();
-
-    std::unique_ptr<QPushButton> m_focusedButton;
+    Qt5Graphics_Controls m_aControl;
 };
+
+inline bool KDE5SalGraphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
+{
+    return m_aControl.IsNativeControlSupported(nType, nPart);
+}
+
+inline bool KDE5SalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
+                                                  const tools::Rectangle& rControlRegion,
+                                                  const Point& aPos, bool& rIsInside)
+{
+    return m_aControl.hitTestNativeControl(nType, nPart, rControlRegion, aPos, rIsInside);
+}
+
+inline bool KDE5SalGraphics::getNativeControlRegion(
+    ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
+    ControlState nState, const ImplControlValue& aValue, const OUString& aCaption,
+    tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
+{
+    return m_aControl.getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, aCaption,
+                                             rNativeBoundingRegion, rNativeContentRegion);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
