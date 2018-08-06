@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c458f057",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-08-06T18:51:08Z",
+      "side": 1,
+      "message": "I don\u0027t think this one line of code needs a function. Since this function is called only from one place, you can use the function body there directly.",
+      "range": {
+        "startLine": 184,
+        "startChar": 9,
+        "endLine": 184,
+        "endChar": 24
+      },
+      "revId": "751044acba269dc7436b6a2cfa7a3473fcbddcb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a455ec1f",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-08-06T18:51:08Z",
+      "side": 1,
+      "message": "This topWinView and bottomWinView is a bit ambigous to me. It sound like we have a top and a bottom window, while these variables means the top and bottom position of the same window. I don\u0027t know what this view suffix means.\n\nI suggest to use the similar pattern what used for nWinHeight. The n prefix means number, see our code convention page:\nhttps://wiki.openoffice.org/wiki/Writer/Code_Conventions#local_variables\nAlso change the order of top and window words, like nWinTop and nWinBottom.",
+      "range": {
+        "startLine": 952,
+        "startChar": 9,
+        "endLine": 952,
+        "endChar": 19
+      },
+      "revId": "751044acba269dc7436b6a2cfa7a3473fcbddcb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_8430a809",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-08-06T18:51:08Z",
+      "side": 1,
+      "message": "Why do you use auto here? As I see this is long type, so you can\u0027t save too much character with using the auto keyword. I understand that people are using auto for template types for example, so the code a bit shorter and readable, but in this case I don\u0027t see a reason for that.",
+      "range": {
+        "startLine": 965,
+        "startChar": 12,
+        "endLine": 965,
+        "endChar": 16
+      },
+      "revId": "751044acba269dc7436b6a2cfa7a3473fcbddcb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_6435a4f7",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-08-06T18:51:08Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 970,
+        "startChar": 12,
+        "endLine": 970,
+        "endChar": 16
+      },
+      "revId": "751044acba269dc7436b6a2cfa7a3473fcbddcb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
