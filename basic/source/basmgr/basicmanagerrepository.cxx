@@ -63,7 +63,7 @@ namespace basic
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
 
-    typedef std::map< Reference< XInterface >, BasicManager*, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
+    typedef std::map< Reference< XInterface >, std::unique_ptr<BasicManager>, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
@@ -100,7 +100,7 @@ namespace basic
             @precond
                 our mutex is locked
         */
-        BasicManager*&
+        std::unique_ptr<BasicManager>&
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** tests if there is a location set at which the BasicManager for the given model
@@ -124,7 +124,7 @@ namespace basic
                 the model whose BasicManager will be created. Must not be <NULL/>.
         */
         bool impl_createManagerForModel(
-                    BasicManager*& _out_rpBasicManager,
+                    std::unique_ptr<BasicManager>& _out_rpBasicManager,
                     const Reference< XModel >& _rxDocumentModel );
 
         /** creates the application-wide BasicManager
@@ -229,11 +229,11 @@ namespace basic
             thus a recursive call of this function will find and return it
             without creating another instance.
          */
-        BasicManager*& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
+        std::unique_ptr<BasicManager>& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
         if (pBasicManager != nullptr)
-            return pBasicManager;
+            return pBasicManager.get();
         if (impl_createManagerForModel(pBasicManager, _rxDocumentModel))
-            return pBasicManager;
+            return pBasicManager.get();
         return nullptr;
     }
 
@@ -364,12 +364,12 @@ namespace basic
         return pAppBasic;
     }
 
-    BasicManager*& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    std::unique_ptr<BasicManager>& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        BasicManager*& location = m_aStore[ xNormalized ];
+        std::unique_ptr<BasicManager>& location = m_aStore[ xNormalized ];
         return location;
     }
 
@@ -406,7 +406,7 @@ namespace basic
         }
     }
 
-    bool ImplRepository::impl_createManagerForModel( BasicManager*& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
+    bool ImplRepository::impl_createManagerForModel( std::unique_ptr<BasicManager>& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
@@ -432,9 +432,9 @@ namespace basic
 
             // Storage and BaseURL are only needed by binary documents!
             tools::SvRef<SotStorage> xDummyStor = new SotStorage( OUString() );
-            _out_rpBasicManager = new BasicManager( *xDummyStor, OUString() /* TODO/LATER: xStorage */,
+            _out_rpBasicManager.reset(new BasicManager( *xDummyStor, OUString() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
-                                                                &aAppBasicDir, true );
+                                                                &aAppBasicDir, true ));
             if ( !_out_rpBasicManager->GetErrors().empty() )
             {
                 // handle errors
@@ -445,8 +445,7 @@ namespace basic
                     if ( ErrorHandler::HandleError( rError.GetErrorId() ) == DialogMask::ButtonsCancel )
                     {
                         // user wants to break loading of BASIC-manager
-                        delete _out_rpBasicManager;
-                        _out_rpBasicManager = nullptr;
+                        _out_rpBasicManager.reset();
                         xStorage.clear();
                         break;
                     }
@@ -460,7 +459,7 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SbxFlagBits::ExtSearch );
-            _out_rpBasicManager = new BasicManager( pBasic, nullptr, true );
+            _out_rpBasicManager.reset(new BasicManager( pBasic, nullptr, true ));
         }
 
         // knit the containers with the BasicManager
@@ -543,14 +542,13 @@ namespace basic
     {
         OSL_PRECOND( _pos != m_aStore.end(), "ImplRepository::impl_removeFromRepository: invalid position!" );
 
-        BasicManager* pManager = _pos->second;
+        std::unique_ptr<BasicManager> pManager = std::move(_pos->second);
 
         // *first* remove from map (else Notify won't work properly)
         m_aStore.erase( _pos );
 
         // *then* delete the BasicManager
         EndListening( *pManager );
-        delete pManager;
     }
 
 
@@ -590,7 +588,7 @@ namespace basic
                 ++loop
             )
         {
-            if ( loop->second == pManager )
+            if ( loop->second.get() == pManager )
             {
                 // a BasicManager which is still in our repository is being deleted.
                 // That's bad, since by definition, we *own* all instances in our
