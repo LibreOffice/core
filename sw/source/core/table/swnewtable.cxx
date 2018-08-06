@@ -1201,7 +1201,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
 }
 
 typedef std::pair< sal_uInt16, sal_uInt16 > SwLineOffset;
-typedef std::list< SwLineOffset > SwLineOffsetArray;
+typedef std::vector< SwLineOffset > SwLineOffsetArray;
 
 /*
 * When a couple of table boxes has to be split,
@@ -1260,8 +1260,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
         }
         OSL_ENSURE( aLnOfs.second < nCnt, "Clean-up failed" );
         aLnOfs.second = nCnt - aLnOfs.second; // the number of rows to insert
-        rArr.insert( rArr.end(),
-            SwLineOffset( aLnOfs.first - nSum, aLnOfs.second ) );
+        rArr.emplace_back( aLnOfs.first - nSum, aLnOfs.second );
         // the correction has to be incremented because in the following
         // loops the line ends were manipulated
         nSum = nSum + aLnOfs.second;
