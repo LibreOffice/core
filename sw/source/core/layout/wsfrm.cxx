@@ -40,6 +40,7 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <fmtsrnd.hxx>
+#include <fmtcntnt.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
 #include <flyfrms.hxx>
@@ -4166,7 +4167,8 @@ void SwRootFrame::InvalidateAllObjPos()
 }
 
 static void UnHideRedlines(SwRootFrame & rLayout,
-        SwNodes & rNodes, SwNode const& rEndOfSectionNode)
+        SwNodes & rNodes, SwNode const& rEndOfSectionNode,
+        std::set<sal_uLong> *const pSkipped)
 {
     assert(rEndOfSectionNode.IsEndNode());
     assert(rNodes[rEndOfSectionNode.StartOfSectionNode()->GetIndex() + 1]->IsCreateFrameWhenHidingRedlines()); // first node is never hidden
@@ -4252,6 +4254,20 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                             pNode->GetIndex(), pFrame, pPage,
                                             rTextNode.GetDoc(),
                                             &iterFirst, &iter);
+                                        if (pSkipped)
+                                        {
+                                            // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
+                                            if (auto const pFlys = pNode->GetAnchoredFlys())
+                                            {
+                                                for (auto const pFly : *pFlys)
+                                                {
+                                                    if (pFly->Which() != RES_DRAWFRMFMT)
+                                                    {
+                                                        pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     if (iter == pMerged->extents.end())
                                     {
@@ -4303,33 +4319,8 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                     pNode = rExtent.pNode;
                                 }
                             }
-                            // add all flys in first node that are hidden
-                            std::vector<sw::Extent> hidden;
-                            sal_Int32 nLast(0);
-                            for (auto const& rExtent : pMergedPara->extents)
-                            {
-                                if (rExtent.pNode != &rTextNode)
-                                {
-                                    break;
-                                }
-                                if (rExtent.nStart != 0)
-                                {
-                                    assert(rExtent.nStart != nLast);
-
-                                    hidden.emplace_back(&rTextNode, nLast, rExtent.nStart);
-                                }
-                                nLast = rExtent.nEnd;
-                            }
-                            if (nLast != rTextNode.Len())
-                            {
-                                hidden.emplace_back(&rTextNode, nLast, rTextNode.Len());
-                            }
-                            SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
-                            auto iterBegin(hidden.cbegin());
-                            auto const iterEnd(hidden.cend());
-                            AppendObjsOfNode(&rTable, rTextNode.GetIndex(), pFrame,
-                                pFrame->FindPageFrame(), rTextNode.GetDoc(),
-                                &iterBegin, &iterEnd);
+                            // rely on AppendAllObjs call at the end to add
+                            // all flys in first node that are hidden
                         }
                         pFrame->SetMergedPara(nullptr);
                     }
@@ -4356,6 +4347,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             }
             else
             {
+                assert(!rNode.IsContentNode() || !rNode.GetContentNode()->getLayoutFrame(&rLayout));
                 sal_uLong j = i + 1;
                 for ( ; j < rEndOfSectionNode.GetIndex(); ++j)
                 {
@@ -4368,7 +4360,10 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 // InsertCnt_ also checks for hidden sections
                 SwNodeIndex const start(rNodes, i);
                 SwNodeIndex const end(rNodes, j);
+                assert(!bDontCreateObjects);
+                bDontCreateObjects = true; // suppress here, to be called once
                 ::MakeFrames(rLayout.GetFormat()->GetDoc(), start, end);
+                bDontCreateObjects = false;
                 i = j - 1; // will be incremented again
             }
         }
@@ -4376,7 +4371,8 @@ static void UnHideRedlines(SwRootFrame & rLayout,
 }
 
 static void UnHideRedlinesExtras(SwRootFrame & rLayout,
-        SwNodes & rNodes, SwNode const& rEndOfExtraSectionNode)
+        SwNodes & rNodes, SwNode const& rEndOfExtraSectionNode,
+        std::set<sal_uLong> *const pSkipped)
 {
     assert(rEndOfExtraSectionNode.IsEndNode());
     for (sal_uLong i = rEndOfExtraSectionNode.StartOfSectionNode()->GetIndex()
@@ -4386,8 +4382,8 @@ static void UnHideRedlinesExtras(SwRootFrame & rLayout,
         assert(rStartNode.IsStartNode());
         assert(rStartNode.GetRedlineMergeFlag() == SwNode::Merge::None);
         SwNode const& rEndNode(*rStartNode.EndOfSectionNode());
+        bool bSkip(pSkipped && pSkipped->find(i) != pSkipped->end());
         i = rEndNode.GetIndex();
-        bool bSkip(false);
         for (sal_uLong j = rStartNode.GetIndex() + 1; j < i; ++j)
         {
             // note: SwStartNode has no way to access the frames, so check
@@ -4411,7 +4407,7 @@ static void UnHideRedlinesExtras(SwRootFrame & rLayout,
         }
         if (!bSkip)
         {
-            UnHideRedlines(rLayout, rNodes, rEndNode);
+            UnHideRedlines(rLayout, rNodes, rEndNode, pSkipped);
         }
     }
 }
@@ -4445,12 +4441,25 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     // Flys before footnotes: because footnotes may contain flys but not
     // vice-versa; alas flys may contain flys, so we skip some of them
     // if they have already been created from scratch via their anchor flys.
-    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfAutotext());
+    std::set<sal_uLong> skippedFlys;
+    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfAutotext(),
+        // when un-hiding, delay all fly frame creation to AppendAllObjs below
+                         IsHideRedlines() ? &skippedFlys : nullptr);
     // Footnotes are created automatically (after invalidation etc.) by
     // ConnectFootnote(), but need to be deleted manually. Footnotes do not
     // occur in flys or headers/footers.
-    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfInserts());
-    UnHideRedlines(*this, rNodes, rNodes.GetEndOfContent());
+    UnHideRedlinesExtras(*this, rNodes, rNodes.GetEndOfInserts(), nullptr);
+    UnHideRedlines(*this, rNodes, rNodes.GetEndOfContent(), nullptr);
+
+    if (!IsHideRedlines())
+    {   // create all previously hidden flys at once:
+        // * Flys on first node of pre-existing merged frames that are hidden
+        //   (in delete redline), to be added to the existing frame
+        // * Flys on non-first (hidden/merged) nodes of pre-existing merged
+        //   frames, to be added to the new frame of their node
+        // * Flys anchored in other flys that are hidden
+        AppendAllObjs(rDoc.GetSpzFrameFormats(), this);
+    }
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }

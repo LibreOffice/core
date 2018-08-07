@@ -66,6 +66,8 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
         std::vector<sw::Extent>::const_iterator * pIter,
         std::vector<sw::Extent>::const_iterator const* pEnd);
 
+void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib);
+
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background
 // transparency, saved in the color of the brush item.
