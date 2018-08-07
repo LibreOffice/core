@@ -37,7 +37,6 @@ enum class SvxPrevLineSpace
 
 class SVX_DLLPUBLIC SvxParaPrevWindow final : public vcl::Window
 {
-    Size                aSize;
     OUString            aText;
     tools::Rectangle    Lines[9];
 

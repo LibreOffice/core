@@ -114,8 +114,6 @@ private:
     bool m_unsignedLongDependency;
     bool m_hyperDependency;
     bool m_unsignedHyperDependency;
-    bool m_floatDependency;
-    bool m_doubleDependency;
     bool m_charDependency;
     bool m_stringDependency;
     bool m_typeDependency;

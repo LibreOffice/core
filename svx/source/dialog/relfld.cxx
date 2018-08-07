@@ -23,7 +23,6 @@
 SvxRelativeField::SvxRelativeField(
         vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
     : MetricField( pParent, nBits)
-    , bRelative(false)
 {
     SetUnit(eUnit);
     SetDecimalDigits( 2 );
@@ -48,7 +47,6 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
 
     if ( bNewRelative )
     {
-        bRelative = true;
         SetDecimalDigits( 0 );
         SetMin( 0 );
         SetMax( 0 );
@@ -56,7 +54,6 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
     }
     else
     {
-        bRelative = false;
         SetDecimalDigits( 2 );
         SetMin( 0 );
         SetMax( 9999 );

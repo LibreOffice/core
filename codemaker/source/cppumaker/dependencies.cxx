@@ -43,8 +43,7 @@ Dependencies::Dependencies(
     m_byteDependency(false), m_shortDependency(false),
     m_unsignedShortDependency(false), m_longDependency(false),
     m_unsignedLongDependency(false), m_hyperDependency(false),
-    m_unsignedHyperDependency(false), m_floatDependency(false),
-    m_doubleDependency(false), m_charDependency(false),
+    m_unsignedHyperDependency(false), m_charDependency(false),
     m_stringDependency(false), m_typeDependency(false), m_anyDependency(false),
     m_sequenceDependency(false)
 {
@@ -168,10 +167,8 @@ Dependencies::Dependencies(
                     m_unsignedHyperDependency = true;
                     break;
                 case unoidl::ConstantValue::TYPE_FLOAT:
-                    m_floatDependency = true;
                     break;
                 case unoidl::ConstantValue::TYPE_DOUBLE:
-                    m_doubleDependency = true;
                     break;
                 }
             }
@@ -251,10 +248,8 @@ void Dependencies::insert(OUString const & name, Kind kind) {
         m_unsignedHyperDependency = true;
         break;
     case UnoType::Sort::Float:
-        m_floatDependency = true;
         break;
     case UnoType::Sort::Double:
-        m_doubleDependency = true;
         break;
     case UnoType::Sort::Char:
         m_charDependency = true;
