@@ -277,9 +277,12 @@ void EditUndoConnectParas::Undo()
 void EditUndoConnectParas::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Np Active View!" );
+    bool bModeOld = GetEditEngine()->IsInUndo();
+    GetEditEngine()->SetUndoMode(true);
     EditPaM aPaM = GetEditEngine()->ConnectContents( nNode, bBackward );
 
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->SetUndoMode(bModeOld);
 }
 
 EditUndoSplitPara::EditUndoSplitPara(
