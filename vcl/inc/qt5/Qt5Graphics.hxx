@@ -27,7 +27,7 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
-#include <Qt5Graphics_Controls.hxx>
+#include "Qt5Graphics_Controls.hxx"
 
 class PhysicalFontCollection;
 class QImage;
