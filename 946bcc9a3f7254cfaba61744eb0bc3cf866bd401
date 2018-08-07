@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_07737a82",
+        "filename": "i18nutil/source/utility/paper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T08:47:57Z",
+      "side": 1,
+      "message": "Ho hum, where do those data come from again? MS Office? MS Windows printer driver(s)? They are so close to one another (+- 2mm) that it almost looks like the same format ... so perhaps we need just 1 entry then",
+      "revId": "946bcc9a3f7254cfaba61744eb0bc3cf866bd401",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
