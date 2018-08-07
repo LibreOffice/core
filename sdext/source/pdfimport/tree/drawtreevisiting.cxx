@@ -718,7 +718,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                 {
                     pCur->updateGeometryWith( pNext );
                     // append text to current element
-                        pCur->Text.append( pNext->Text.getStr(), pNext->Text.getLength() );
+                        pCur->Text.append( pNext->Text );
 
                         str = pCur->Text.getStr();
                     for(int i=0; i< str.getLength(); i++)

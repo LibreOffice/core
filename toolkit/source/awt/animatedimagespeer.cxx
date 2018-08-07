@@ -117,9 +117,9 @@ namespace toolkit
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsupported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
             OUStringBuffer composer;
-            composer.append( i_imageURL.copy( 0, separatorPos ) );
+            composer.appendCopy( i_imageURL, 0, separatorPos );
             composer.append( "/sifr" );
-            composer.append( i_imageURL.copy( separatorPos ) );
+            composer.appendCopy( i_imageURL, separatorPos );
             return composer.makeStringAndClear();
         }
 

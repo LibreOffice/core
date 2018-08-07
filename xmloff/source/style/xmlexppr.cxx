@@ -937,7 +937,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
                             // In any case, the attribute name has to be adapted.
-                            sNameBuffer.append( sPrefix + ":" + pAttribName->copy( nColonPos+1 ) );
+                            sNameBuffer.append(sPrefix).append(":").appendCopy(*pAttribName, nColonPos+1 );
                             sAttribName = sNameBuffer.makeStringAndClear();
                         }
 

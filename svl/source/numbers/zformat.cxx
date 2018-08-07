@@ -1706,7 +1706,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                         0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
                     sBuffSymbol.stripStart('[');
-                    sBuffSymbol.append( aBufStr.copy( --nPos, aNatNum.getLength()+1 ));
+                    sBuffSymbol.appendCopy( aBufStr, --nPos, aNatNum.getLength()+1 );
                     nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = static_cast<short>(BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
@@ -1716,7 +1716,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                         1 <= nDBNum && nDBNum <= 9 )
                 {
                     sBuffSymbol.stripStart('[');
-                    sBuffSymbol.append( aBufStr.copy( --nPos, aDBNum.getLength()+1 ));
+                    sBuffSymbol.appendCopy( aBufStr, --nPos, aDBNum.getLength()+1 );
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - 1) );
@@ -1944,7 +1944,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
         }
         else
         {
-            aTmp.append(rStr.copy( nStartPos, nPos - nStartPos ));
+            aTmp.appendCopy(rStr, nStartPos, nPos - nStartPos );
             nStartPos = nPos + 2;
             sal_Int32 nDash;
             nEnd = nStartPos - 1;
@@ -1975,13 +1975,13 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
             {
                 nPos = nDash;
             }
-            aTmp.append(rStr.copy( nStartPos, nPos - nStartPos ));
+            aTmp.appendCopy(rStr, nStartPos, nPos - nStartPos );
             nStartPos = nClose + 1;
         }
     }
     if ( nLen > nStartPos )
     {
-        aTmp.append(rStr.copy( nStartPos, nLen - nStartPos ));
+        aTmp.appendCopy(rStr, nStartPos, nLen - nStartPos );
     }
     return aTmp.makeStringAndClear();
 }

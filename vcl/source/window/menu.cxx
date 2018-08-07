@@ -1683,9 +1683,9 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext 
         if (nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos])
         {
             OUStringBuffer aBuf( i_rLong.getLength() );
-            aBuf.append( aNonMnem.copy( 0, nPos) );
+            aBuf.appendCopy( aNonMnem, 0, nPos );
             aBuf.append( '~' );
-            aBuf.append( aNonMnem.copy(nPos) );
+            aBuf.appendCopy( aNonMnem, nPos );
             aNonMnem = aBuf.makeStringAndClear();
         }
     }

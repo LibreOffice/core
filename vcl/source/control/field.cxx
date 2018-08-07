@@ -112,23 +112,23 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         // If in "a b/c" format.
         if(nFracNumPos != -1 )
         {
-            aStr1.append(aStr.getStr(), nFracNumPos);
-            aStrNum.append(aStr.getStr()+nFracNumPos+1, nFracDivPos-nFracNumPos-1);
-            aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+            aStr1.appendCopy(aStr, 0, nFracNumPos);
+            aStrNum.appendCopy(aStr, nFracNumPos+1, nFracDivPos-nFracNumPos-1);
+            aStrDenom.appendCopy(aStr, nFracDivPos+1);
         }
         // "a/b" format, or not a fraction at all
         else
         {
-            aStrNum.append(aStr.getStr(), nFracDivPos);
-            aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+            aStrNum.appendCopy(aStr, 0, nFracDivPos);
+            aStrDenom.appendCopy(aStr, nFracDivPos+1);
         }
 
     }
     // parse decimal strings
     else if ( nDecPos >= 0)
     {
-        aStr1.append(aStr.getStr(), nDecPos);
-        aStr2.append(aStr.getStr()+nDecPos+1);
+        aStr1.appendCopy(aStr, 0, nDecPos);
+        aStr2.appendCopy(aStr, nDecPos+1);
     }
     else
         aStr1 = aStr;

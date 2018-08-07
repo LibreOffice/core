@@ -880,13 +880,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         if ( cLast == '\\' )
                         {   // escaped
-                            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                            aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
                             aSymbol.append(OUString(&current, 1));
                         }
                         else
                         {
                             eState = ssStop;
-                            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+                            aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                         }
                         postSymbolIndex = nextCharIndex;
                     }
@@ -905,13 +905,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( cLast == '\\' )
                     {   // escaped
-                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                        aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
                         aSymbol.append(OUString(&current, 1));
                     }
                     else if (current == nextChar &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )
                     {   // "" => literal " escaped
-                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex);
+                        aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex);
                         nextCharIndex = index;
                         if (index < rText.getLength()) { ++nCodePoints; }
                         nextChar = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
@@ -919,7 +919,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     else
                     {
                         eState = ssStop;
-                        aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+                        aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                     }
                     postSymbolIndex = nextCharIndex;
                 }
@@ -1028,7 +1028,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     {
         if (postSymbolIndex < nextCharIndex)
         {   //! open quote
-            aSymbol.append(rText.getStr() + postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
+            aSymbol.appendCopy(rText, postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
             r.TokenType |= KParseType::MISSING_QUOTE;
         }
         r.DequotedNameOrString = aSymbol.toString();

@@ -2805,11 +2805,12 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                 nTmp++;
                             if (nTmp < nSttWdPos)
                                 break; // word delimiter found
-                            buf.append(rTxt.copy(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                            buf.appendCopy(rTxt, nFndPos, nSttWdPos - nFndPos).append(pFnd->GetLong());
                             nFndPos = nSttWdPos + sTmp.getLength();
                         }
                     } while (nSttWdPos != -1);
-                    if (nEndPos - nFndPos > extra_repl) buf.append(rTxt.copy(nFndPos, nEndPos - nFndPos));
+                    if (nEndPos - nFndPos > extra_repl)
+                        buf.appendCopy(rTxt, nFndPos, nEndPos - nFndPos);
                     aLong = buf.makeStringAndClear();
                 }
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);

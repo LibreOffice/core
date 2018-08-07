@@ -553,7 +553,7 @@ void normalize(
     } else {
         OUStringBuffer buf(path);
         buf.append('/');
-        buf.append(relative.copy(0, i));
+        buf.appendCopy(relative, 0, i);
         *normalizedPath = buf.makeStringAndClear();
         *name = relative.copy(i + 1);
     }

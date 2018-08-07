@@ -1343,10 +1343,10 @@ static OUString searchAndReplace( const OUString& i_rOrig, const char* i_pRepl, 
     if( nPos != -1 )
     {
         OUStringBuffer aBuf( i_rOrig.getLength() );
-        aBuf.append( i_rOrig.getStr(), nPos );
+        aBuf.appendCopy( i_rOrig, nPos );
         aBuf.append( i_rRepl );
         if( nPos + i_nReplLen < i_rOrig.getLength() )
-            aBuf.append( i_rOrig.getStr() + nPos + i_nReplLen );
+            aBuf.appendCopy( i_rOrig, nPos + i_nReplLen );
         return aBuf.makeStringAndClear();
     }
     return i_rOrig;

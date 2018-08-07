@@ -422,7 +422,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
             if ( a100th.getLength() > 2 )
             {
                 rBuffer.append( '.');
-                rBuffer.append( a100th.copy( 2 ) );     // strip 0.
+                rBuffer.appendCopy( a100th, 2 );     // strip 0.
             }
         }
     }

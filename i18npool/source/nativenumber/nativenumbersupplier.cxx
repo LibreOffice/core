@@ -1072,7 +1072,7 @@ OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGere
         makeHebrewNumber(value, output, true, useGeresh);
 
         if (i < len)
-            output.append(aNumberString.copy(i));
+            output.appendCopy(aNumberString,i);
 
         return output.makeStringAndClear();
     }
@@ -1191,7 +1191,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         makeCyrillicNumber(value, output, true);
 
         if (i < len)
-            output.append(aNumberString.copy(i));
+            output.appendCopy(aNumberString,i);
 
         return output.makeStringAndClear();
     }

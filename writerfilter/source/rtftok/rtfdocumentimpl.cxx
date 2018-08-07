@@ -2204,7 +2204,7 @@ RTFError RTFDocumentImpl::popState()
                                                   - aState.aLevelNumbers.size()));
                         }
                         else
-                            aBuf.append(aOrig.copy(i, 1));
+                            aBuf.appendCopy(aOrig, i, 1);
                     }
 
                     pValue->setString(aBuf.makeStringAndClear());

@@ -306,7 +306,7 @@ namespace frm
                     // To fix this, we would probably have to revert here to always return "1" or "0" as normalized
                     // filter, and change our client code to properly translate this (which could be some effort).
                     if ( nMarkerPos == 0 )
-                        aText.append( sText.copy( sExpressionMarker.getLength() ) );
+                        aText.appendCopy( sText, sExpressionMarker.getLength() );
                     else
                     {
                         // fallback
