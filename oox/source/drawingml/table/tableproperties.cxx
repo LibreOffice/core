@@ -234,7 +234,7 @@ TableStyle* CreateTableStyle(const OUString& styleId)
     return pTableStyle;
 }
 
-const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, TableStyle*& rTableStyleToDelete )
+const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, std::unique_ptr<TableStyle>& rTableStyleToDelete )
 {
     ::oox::core::XmlFilterBase& rBase( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ) );
 
@@ -257,8 +257,8 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
         //if the pptx just has table style id, but no table style content, we will create the table style ourselves
         if (!pTableStyle)
         {
-            rTableStyleToDelete = CreateTableStyle(aStyleId);
-            pTableStyle = rTableStyleToDelete;
+            rTableStyleToDelete.reset(CreateTableStyle(aStyleId));
+            pTableStyle = rTableStyleToDelete.get();
         }
     }
 
@@ -277,8 +277,8 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
 
-    TableStyle* pTableStyleToDelete = nullptr;
-    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, pTableStyleToDelete ) );
+    std::unique_ptr<TableStyle> xTableStyleToDelete;
+    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, xTableStyleToDelete ) );
     sal_Int32 nRow = 0;
     for (auto & tableRow : mvTableRows)
     {
@@ -301,7 +301,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
         ++nRow;
     }
 
-    delete pTableStyleToDelete;
+    xTableStyleToDelete.reset();
 }
 
 } } }
