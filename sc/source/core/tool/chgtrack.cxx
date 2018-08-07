@@ -42,6 +42,7 @@
 #include <svl/isethint.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
 #include <sfx2/sfxsids.hrc>

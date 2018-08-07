@@ -71,6 +71,7 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <ooo/vba/XSinkCaller.hpp>
 
 #include <scmod.hxx>
 #include <global.hxx>

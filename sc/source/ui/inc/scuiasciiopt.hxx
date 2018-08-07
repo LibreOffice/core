@@ -22,6 +22,7 @@
 
 #include <vcl/dialog.hxx>
 #include <svx/langbox.hxx>
+#include <tools/stream.hxx>
 
 #include "asciiopt.hxx"
 

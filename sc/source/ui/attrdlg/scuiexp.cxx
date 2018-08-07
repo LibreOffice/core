@@ -51,6 +51,7 @@
 #include <tabbgcolordlg.hxx>
 #include <textimportoptions.hxx>
 #include <sal/types.h>
+#include <sfx2/sfxdlg.hxx>
 
 namespace scui
 {

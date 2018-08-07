@@ -30,15 +30,15 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+
+namespace com { namespace sun { namespace star { namespace container { class XNamed; } } } }
 
 class ScDocShell;
 class ScNamedRangesObj;

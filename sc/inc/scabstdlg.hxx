@@ -21,18 +21,15 @@
 #define INCLUDED_SC_INC_SCABSTDLG_HXX
 
 #include <tools/solar.h>
-#include <sfx2/sfxdlg.hxx>
-#include <vcl/syswin.hxx>
-#include <vcl/field.hxx>
-#include "sc.hrc"
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <sfx2/tabdlg.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/abstdlg.hxx>
 #include "global.hxx"
 #include "pivot.hxx"
 #include <i18nlangtag/lang.h>
 #include <asciiopt.hxx>
 
-#include <tabvwsh.hxx>
-
-class ScAsciiOptions;
 class ScAutoFormat;
 class ScAutoFormatData;
 class ScDocument;
@@ -41,10 +38,9 @@ class ScViewData;
 class ScQueryItem;
 class ScImportOptions;
 class SfxStyleSheetBase;
+class SfxAbstractTabDialog;
 class ScDPObject;
-struct ScPivotFuncData;
 struct ScDPNumGroupInfo;
-class ScSortWarningDlg;
 class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;

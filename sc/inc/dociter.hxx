@@ -37,7 +37,6 @@ class ScPatternAttr;
 class ScAttrArray;
 class ScAttrIterator;
 class ScFlatBoolRowSegments;
-struct ScInterpreterContext;
 class ScMatrix;
 struct ScDBQueryParamBase;
 struct ScQueryParam;
