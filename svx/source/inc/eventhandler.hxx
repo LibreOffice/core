@@ -26,68 +26,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
-namespace sdr
-{
-    namespace event
-    {
-        class BaseEvent;
-        class TimerEventHandler;
-    } // end of namespace event
-} // end of namespace sdr
-
-namespace sdr
-{
-    namespace event
-    {
-        class BaseEvent
-        {
-            // the EventHandler this event is registered at
-            TimerEventHandler& mrEventHandler;
-
-        public:
-            BaseEvent(TimerEventHandler& rEventHandler);
-
-            virtual ~BaseEvent();
-
-            // the called method if the event is triggered
-            virtual void ExecuteEvent() = 0;
-        };
-    } // end of namespace event
-} // end of namespace sdr
-
-namespace sdr
-{
-    namespace event
-    {
-        class TimerEventHandler : public Idle
-        {
-            ::std::vector< BaseEvent* >  maVector;
-
-            // to allow BaseEvents to use the add/remove functionality
-            friend class BaseEvent;
-
-            // methods to add/remove events. These are private since
-            // they are used from BaseEvent only.
-            void AddEvent(BaseEvent& rBaseEvent);
-            void RemoveEvent(BaseEvent& rBaseEvent);
-
-            // access to a event, 0L when no more events
-            BaseEvent* GetEvent();
-
-        public:
-            TimerEventHandler();
-            ~TimerEventHandler() override;
-
-            bool IsEmpty() const;
-
-            // The timer when it is triggered; from class Timer
-            virtual void Invoke() override;
-
-            // reset the timer
-            void Restart();
-        };
-    } // end of namespace event
-} // end of namespace sdr
 
 #endif // INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
 

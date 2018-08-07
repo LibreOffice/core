@@ -30,10 +30,6 @@ namespace tools { class Rectangle; }
 class SdrPageView;
 class OutputDevice;
 
-namespace sdr { namespace event {
-    class TimerEventHandler;
-}}
-
 namespace basegfx {
     class B2DRange;
     class B2DHomMatrix;
@@ -66,9 +62,6 @@ private:
     // the primitiveAnimator which is used if this View and/or the contained primitives
     // support animatedSwitchPrimitives
     sdr::animation::primitiveAnimator               maPrimitiveAnimator;
-
-    // the EventHandler for e.g. asynchronious loading of graphics
-    std::unique_ptr<sdr::event::TimerEventHandler>  mpEventHandler;
 
     // The redirector. If set it is used to pipe all supported calls
     // to the redirector
@@ -128,13 +121,6 @@ public:
 
     // method to get the primitiveAnimator
     sdr::animation::primitiveAnimator& getPrimitiveAnimator() {  return maPrimitiveAnimator; }
-
-    // method to get the EventHandler. It will
-    // return a existing one or create a new one using CreateEventHandler().
-    sdr::event::TimerEventHandler& GetEventHandler() const;
-
-    // test if there is an EventHandler without creating one on demand
-    bool HasEventHandler() const;
 
     // check if text animation is allowed. Default is sal_true.
     virtual bool IsTextAnimationAllowed() const;
