@@ -60,7 +60,7 @@ public:
     */
     void AddActiveMainView (const OUString& rsMainViewURL);
     bool IsResourceActive (const OUString& rsMainViewURL);
-    virtual void SaveResourceState();
+    void SaveResourceState();
 
     virtual void SAL_CALL disposing() override;
 
