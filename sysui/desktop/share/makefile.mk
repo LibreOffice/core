@@ -122,8 +122,8 @@ MIMEICONLIST = \
     extension
 
 ICONDEPN = \
-    ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST:s/qstart//:s/javafilter//)}.png \
-    ../icons/hicolor/{16x16 32x32 48x48}/mimetypes/{$(MIMEICONLIST)}.png \
+    ../icons/hicolor/{16x16 32x32 48x48 128x128}/apps/{$(LAUNCHERLIST:s/qstart//:s/javafilter//)}.png \
+    ../icons/hicolor/{16x16 32x32 48x48 128x128}/mimetypes/{$(MIMEICONLIST)}.png \
     ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//:s/javafilter//)}.png \
     ../icons/locolor/{16x16 32x32}/mimetypes/{$(MIMEICONLIST)}.png
 
@@ -137,12 +137,12 @@ ALLTAR : $(LAUNCHERFLAGFILE) $(SPECFILES) $(COMMONMISC)$/{$(PRODUCTLIST)}$/build
 .ENDIF          # "$(GUI)"=="UNIX"
 
 #
-# Copy/patch the .desktop files to the output tree and 
-# merge-in the translations. 
+# Copy/patch the .desktop files to the output tree and
+# merge-in the translations.
 #
 
 $(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf $(ULFDIR)/launcher_genericname.ulf
-$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) 
+$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @@-$(MKDIRHIER) $(@:db).$(INPATH).$(@:f)
     @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
@@ -169,7 +169,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/apacheopenoffice.xml : $(ULFDIR)$/documents.ulf
 #
 
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/openoffice.mime brand.pl translate.pl ../productversion.mk $(ULFDIR)$/documents.ulf
-$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/{$(MIMELIST)}.keys  
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/{$(MIMELIST)}.keys
     @@-$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file for $(@:d:d:f) ..
     @echo ---------------------------------
@@ -185,7 +185,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.mime : ../mimetypes/$$(@:f)
     @cat $< | tr -d "\015" > $@.$(INPATH)
     @mv -f $@.$(INPATH) $@
 
-$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications : ../productversion.mk 
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications : ../productversion.mk
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications : ../mimetypes/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file for $(@:d:d:f) ..
@@ -205,7 +205,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : ../mimetypes/{$(MIMELIST)}.deskto
     @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/documents.ulf
     @mv -f $(@:db).$(INPATH)/* $(@:d)
     @rmdir $(@:db).$(INPATH)
-    @echo  "{$(MIMELIST)}.desktop" > $@   
+    @echo  "{$(MIMELIST)}.desktop" > $@
 
 #
 # Generate customized install scripts
