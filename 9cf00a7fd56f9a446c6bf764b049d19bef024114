@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a7696e8c",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-07T08:57:46Z",
+      "side": 1,
+      "message": "OUString::copy allows beginIndex to be equal to the length of str, and I see no reason not to allow that also here",
+      "revId": "9cf00a7fd56f9a446c6bf764b049d19bef024114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_470e22e6",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-07T08:57:46Z",
+      "side": 1,
+      "message": "add assert for beginIndex?",
+      "revId": "9cf00a7fd56f9a446c6bf764b049d19bef024114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_87042ac8",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-07T08:57:46Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "9cf00a7fd56f9a446c6bf764b049d19bef024114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_670926dc",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-07T08:57:46Z",
+      "side": 1,
+      "message": "\u003c\u003d (str.length() - beginIndex)",
+      "revId": "9cf00a7fd56f9a446c6bf764b049d19bef024114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_27131e10",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-07T08:57:46Z",
+      "side": 1,
+      "message": "add asserts for beginIndex and count?",
+      "revId": "9cf00a7fd56f9a446c6bf764b049d19bef024114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
