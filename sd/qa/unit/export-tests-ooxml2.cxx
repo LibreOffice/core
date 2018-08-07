@@ -1717,6 +1717,39 @@ static inline double getAdjustmentValue( uno::Reference<beans::XPropertySet>& xS
     return -1.0;
 }
 
+static inline bool getScaleXValue(uno::Reference<beans::XPropertySet>& xSet)
+{
+    bool bScaleX = false;
+
+    auto aGeomPropSeq = xSet->getPropertyValue("CustomShapeGeometry")
+        .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropVec
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+            aGeomPropSeq);
+
+    const OUString sName = "TextPath";
+    auto aIterator = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
+
+    if (aIterator != aGeomPropVec.end())
+    {
+        uno::Sequence<beans::PropertyValue> aTextPathProperties;
+        aIterator->Value >>= aTextPathProperties;
+        const OUString sScaleX = "ScaleX";
+        auto aIterator2 = std::find_if(
+            aTextPathProperties.begin(), aTextPathProperties.end(),
+            [sScaleX](const beans::PropertyValue& rValue) { return rValue.Name == sScaleX; });
+
+        if (aIterator2 != aTextPathProperties.end())
+        {
+            aIterator2->Value >>= bScaleX;
+        }
+    }
+
+    return bScaleX;
+}
+
 void SdOOXMLExportTest2::testTdf116350TextEffects()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "sd/qa/unit/data/pptx/tdf116350-texteffects.pptx" ), PPTX );
@@ -1726,15 +1759,24 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     double fAdjust = getAdjustmentValue( xShape0 );
     CPPUNIT_ASSERT_EQUAL( 180.0, fAdjust );
 
+    bool bScaleX = getScaleXValue( xShape0 );
+    CPPUNIT_ASSERT_EQUAL( true, bScaleX );
+
     // Default angle for ArchDown
     uno::Reference<beans::XPropertySet> xShape14( getShapeFromPage( 14, 0, xDocShRef ) );
     fAdjust = getAdjustmentValue( xShape14 );
     CPPUNIT_ASSERT_EQUAL( 0.0, fAdjust );
 
+    bScaleX = getScaleXValue( xShape14 );
+    CPPUNIT_ASSERT_EQUAL( true, bScaleX );
+
     // Angle directly set
     uno::Reference<beans::XPropertySet> xShape1( getShapeFromPage( 1, 0, xDocShRef ) );
     fAdjust = getAdjustmentValue( xShape1 );
     CPPUNIT_ASSERT_EQUAL( 213.25, fAdjust );
+
+    bScaleX = getScaleXValue( xShape1 );
+    CPPUNIT_ASSERT_EQUAL( true, bScaleX );
 
     // Export
     utl::TempFile tempFile;
