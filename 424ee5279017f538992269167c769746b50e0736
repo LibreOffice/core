@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_475bc286",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-07T12:07:25Z",
+      "side": 1,
+      "message": "The std::unique_ptr template\u0027s deleter (second) argument has to be a complete type, but seems IWYU doesn\u0027t understand this. The blacklist makes sense, but could you please change the comment to something like \"std::unique_ptr deleter type has to be complete\"?",
+      "revId": "424ee5279017f538992269167c769746b50e0736",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
