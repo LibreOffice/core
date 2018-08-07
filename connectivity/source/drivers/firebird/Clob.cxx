@@ -99,7 +99,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
             if( nCharsToCopy > nLength )
                 nCharsToCopy = nLength;
             // append relevant part of first segment
-            sSegmentBuffer.append( sSegment.copy(0, nCharsToCopy ) );
+            sSegmentBuffer.appendCopy( sSegment, 0, nCharsToCopy );
             nActLen += sSegmentBuffer.getLength();
         }
     }
@@ -115,7 +115,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
                             RTL_TEXTENCODING_UTF8 );
         sal_Int32 nStrLen = sSegment.getLength();
         if( nActLen + nStrLen > nLength )
-            sSegmentBuffer.append(sSegment.copy(0, nLength - nActLen) );
+            sSegmentBuffer.appendCopy(sSegment, 0, nLength - nActLen);
         else
             sSegmentBuffer.append(sSegment);
         nActLen += nStrLen;

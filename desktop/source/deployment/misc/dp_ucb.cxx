@@ -215,18 +215,18 @@ bool readLine( OUString * res, OUString const & startingWith,
             {
                 pos = file.indexOf( LF, pos );
                 if (pos < 0) { // EOF
-                    buf.append( file.copy( start ) );
+                    buf.appendCopy( file, start );
                 }
                 else
                 {
                     if (pos > 0 && file[ pos - 1 ] == CR)
                     {
                         // consume extra CR
-                        buf.append( file.copy( start, pos - start - 1 ) );
+                        buf.appendCopy( file, start, pos - start - 1 );
                         ++pos;
                     }
                     else
-                        buf.append( file.copy( start, pos - start ) );
+                        buf.appendCopy( file, start, pos - start );
                     ++pos; // consume LF
                     // check next line:
                     if (pos < file.getLength() &&
@@ -270,16 +270,16 @@ bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
         bool bEOF = false;
         pos = file.indexOf( LF, pos );
         if (pos < 0) { // EOF
-            buf.append( file.copy( start ) );
+            buf.appendCopy( file, start );
             bEOF = true;
         }
         else
         {
             if (pos > 0 && file[ pos - 1 ] == CR)
                 // consume extra CR
-                buf.append( file.copy( start, pos - start - 1 ) );
+                buf.appendCopy( file, start, pos - start - 1 );
             else
-                buf.append( file.copy( start, pos - start ) );
+                buf.appendCopy( file, start, pos - start );
             pos++;
         }
         OUString aLine = buf.makeStringAndClear();

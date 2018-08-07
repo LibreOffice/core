@@ -2154,7 +2154,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
                 {
                     if (!aDocName.isEmpty())
                     {
-                        rString.append("'[").append(aDocName).append("]").append(aTabName.copy(1));
+                        rString.append("'[").append(aDocName).append("]").appendCopy(aTabName, 1);
                     }
                     else
                     {

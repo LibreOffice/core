@@ -985,9 +985,9 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             if (nStartPosition > 0)
                             {
                                 OUStringBuffer aBuf;
-                                aBuf.append(aNew.copy(0, nStartPosition));
+                                aBuf.appendCopy(aNew, 0, nStartPosition);
                                 aBuf.append(u'\x25BA');
-                                aBuf.append(aNew.copy(nStartPosition));
+                                aBuf.appendCopy(aNew, nStartPosition);
                                 nArgs = ppFDesc->getParameterCount();
                                 sal_Int16 nVarArgsSet = 0;
                                 if ( nArgs >= PAIRED_VAR_ARGS )

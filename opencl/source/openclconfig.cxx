@@ -76,7 +76,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
     while ((p = token.indexOf('%', i)) >= 0)
     {
         if (p > i)
-            result.append(token.copy(i, p - i));
+            result.appendCopy(token, i, p - i);
         if (p < token.getLength() - 2)
         {
             result.append(OUStringLiteral1(token.copy(p+1, 2).toInt32(16)));
@@ -87,7 +87,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
             i = token.getLength();
         }
     }
-    result.append(token.copy(i));
+    result.appendCopy(token,i);
 
     return result.makeStringAndClear();
 }

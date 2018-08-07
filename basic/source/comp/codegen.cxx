@@ -212,7 +212,7 @@ void SbiCodeGen::Save()
                         {
                             aIfaceProcName.append(aPropPrefix);
                         }
-                        aIfaceProcName.append(aPureProcName.copy( rIfaceName.getLength() + 1 ));
+                        aIfaceProcName.appendCopy(aPureProcName, rIfaceName.getLength() + 1 );
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;

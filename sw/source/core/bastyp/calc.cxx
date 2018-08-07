@@ -758,8 +758,8 @@ SwCalcOper SwCalc::GetToken()
                                 // ignore the ]
                                 if ('\\' == m_sCommand[nFndPos-1])
                                 {
-                                    m_aVarName.append(m_sCommand.copy( nSttPos,
-                                                    nFndPos - nSttPos - 1 ));
+                                    m_aVarName.appendCopy(m_sCommand, nSttPos,
+                                                    nFndPos - nSttPos - 1 );
                                     nSttPos = ++nFndPos;
                                 }
                                 else
@@ -770,8 +770,8 @@ SwCalcOper SwCalc::GetToken()
                         if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                m_aVarName.append(m_sCommand.copy( nSttPos,
-                                                    nFndPos - nSttPos ));
+                                m_aVarName.appendCopy(m_sCommand, nSttPos,
+                                                    nFndPos - nSttPos );
                             aRes.EndPos = nFndPos + 1;
                             m_eCurrOper = CALC_NAME;
                         }

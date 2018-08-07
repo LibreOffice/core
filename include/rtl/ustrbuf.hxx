@@ -531,6 +531,47 @@ public:
         return append( str.getStr(), str.getLength() );
     }
 
+#ifdef LIBO_INTERNAL_ONLY
+    /**
+        Appends a substring of an OUString, starting at position beginIndex.
+
+        The characters of the <code>OUString</code> argument are appended, in
+        order, to the contents of this string buffer.
+
+        @param   str   a string.
+        @param   beginIndex the beginning index, inclusive. Must be >= 0 and <= the length of str.
+        @return  this string buffer.
+
+        @since LibreOffice 6.2
+     */
+    OUStringBuffer & appendCopy(const OUString &str, sal_Int32 beginIndex)
+    {
+        assert(beginIndex >=0 && beginIndex <= str.getLength());
+        return append( str.getStr() + beginIndex, str.getLength() - beginIndex );
+    }
+
+    /**
+        Appends a substring of an OUString, starting at position beginIndex,
+        running for count characters.
+
+        The characters of the <code>OUString</code> argument are appended, in
+        order, to the contents of this string buffer.
+
+        @param   str    a string.
+        @param   beginIndex the beginning index, inclusive. Must be >= 0 and <= the length of str.
+        @param   count must be >= 0 and <= (str.length() - beginIndex).
+        @return  this string buffer.
+
+        @since LibreOffice 6.2
+     */
+    OUStringBuffer & appendCopy(const OUString &str, sal_Int32 beginIndex, sal_Int32 count)
+    {
+        assert(beginIndex >=0 && beginIndex <= str.getLength());
+        assert(count >=0 && count <= (str.getLength() - beginIndex));
+        return append( str.getStr() + beginIndex, count );
+    }
+#endif // LIBO_INTERNAL_ONLY
+
     /**
         Appends the content of a stringbuffer to this string buffer.
 
