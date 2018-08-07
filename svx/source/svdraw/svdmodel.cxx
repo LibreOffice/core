@@ -100,7 +100,8 @@ struct SdrModelImpl
 
 void SdrModel::ImpCtor(
     SfxItemPool* pPool,
-    ::comphelper::IEmbeddedHelper* _pEmbeddedHelper)
+    ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
+    bool bDisablePropertyFiles)
 {
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
@@ -198,12 +199,13 @@ void SdrModel::ImpCtor(
     pTextChain.reset(new TextChain);
     /* End Text Chaining related code */
 
-    ImpCreateTables();
+    ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
 }
 
 SdrModel::SdrModel(
     SfxItemPool* pPool,
-    ::comphelper::IEmbeddedHelper* pPers)
+    ::comphelper::IEmbeddedHelper* pPers,
+    bool bDisablePropertyFiles)
 :
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
@@ -212,7 +214,7 @@ SdrModel::SdrModel(
     maMaPag(),
     maPages()
 {
-    ImpCtor(pPool,pPers);
+    ImpCtor(pPool,pPers,bDisablePropertyFiles);
 }
 
 SdrModel::~SdrModel()
@@ -606,10 +608,10 @@ bool SdrModel::IsUndoEnabled() const
     }
 }
 
-void SdrModel::ImpCreateTables()
+void SdrModel::ImpCreateTables(bool bDisablePropertyFiles)
 {
     // use standard path for initial construction
-    const OUString aTablePath(!utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : "");
+    const OUString aTablePath(!bDisablePropertyFiles ? SvtPathOptions().GetPalettePath() : "");
 
     for( auto i : o3tl::enumrange<XPropertyListType>() )
     {

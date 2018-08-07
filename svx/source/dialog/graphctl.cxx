@@ -120,7 +120,7 @@ void GraphCtrl::InitSdrModel()
     pModel.reset();
 
     // Creating a Model
-    pModel.reset(new SdrModel());
+    pModel.reset(new SdrModel(nullptr, nullptr, true));
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
     pModel->SetScaleFraction( Fraction( 1, 1 ) );

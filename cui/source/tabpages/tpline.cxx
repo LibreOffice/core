@@ -335,7 +335,7 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
         std::unique_ptr<SdrModel> pModel(
-            new SdrModel());
+            new SdrModel(nullptr, nullptr, true));
         pModel->GetItemPool().FreezeIdRanges();
         // Page
         SdrPage* pPage = new SdrPage( *pModel, false );
@@ -1112,7 +1112,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
 
         std::unique_ptr<SdrModel> pModel(
-            new SdrModel());
+            new SdrModel(nullptr, nullptr, true));
         pModel->GetItemPool().FreezeIdRanges();
         SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));

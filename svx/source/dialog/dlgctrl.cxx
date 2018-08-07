@@ -1786,7 +1786,7 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 
 SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     : Control(pParent, WB_BORDER)
-    , mpModel(new SdrModel())
+    , mpModel(new SdrModel(nullptr, nullptr, true))
     , mpBufferDevice(VclPtr<VirtualDevice>::Create(*this))
 {
     //  Draw the control's border as a flat thin black line.
@@ -2189,7 +2189,7 @@ void PreviewBase::InitSettings()
 }
 
 PreviewBase::PreviewBase()
-    : mpModel(new SdrModel())
+    : mpModel(new SdrModel(nullptr, nullptr, true))
 {
     // init model
     mpModel->GetItemPool().FreezeIdRanges();
