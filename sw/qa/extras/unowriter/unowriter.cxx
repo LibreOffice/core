@@ -320,6 +320,31 @@ DECLARE_UNOAPI_TEST(testXURI)
                                  lang::IllegalArgumentException);
 }
 
+DECLARE_UNOAPI_TEST(testSetPagePrintSettings)
+{
+    // Create an empty new document with a single char
+    loadURL("private:factory/swriter", nullptr);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    xBodyText->insertString(xBodyText->getStart(), "x", false);
+
+    uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
+
+    // set some stuff, try to get it back
+    uno::Sequence<beans::PropertyValue> aProps(2);
+    aProps[0].Name = "PageColumns";
+    aProps[0].Value <<= sal_Int16(2);
+    aProps[1].Name = "IsLandscape";
+    aProps[1].Value <<= true;
+
+    xPagePrintable->setPagePrintSettings(aProps);
+    const comphelper::SequenceAsHashMap aMap(xPagePrintable->getPagePrintSettings());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aMap.getValue("PageColumns").get<short>());
+    CPPUNIT_ASSERT_EQUAL(true, aMap.getValue("IsLandscape").get<bool>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
