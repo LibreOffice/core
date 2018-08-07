@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a773ae4d",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-07T10:03:09Z",
+      "side": 1,
+      "message": "maybe add an assert-not-full before the push_back?",
+      "revId": "736a50b697206892556bcb1184261f3fd4673731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
