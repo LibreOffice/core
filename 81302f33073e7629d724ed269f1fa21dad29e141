@@ -16,6 +16,24 @@
       "revId": "81302f33073e7629d724ed269f1fa21dad29e141",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_2a5e43e6",
+        "filename": "sc/source/filter/excel/xichart.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-07T17:18:09Z",
+      "side": 1,
+      "message": "Thank you! Addressed in https://gerrit.libreoffice.org/58700",
+      "parentUuid": "dfeb2761_0a97ff92",
+      "revId": "81302f33073e7629d724ed269f1fa21dad29e141",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
