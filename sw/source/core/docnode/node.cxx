@@ -971,6 +971,13 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         GetTableNode()->GetTable().GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
+    else if (GetStartNodeType() == SwTableBoxStartNode)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
+        if (SwTableBox* pBox = GetTableBox())
+            pBox->GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
 
     // xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
 }
