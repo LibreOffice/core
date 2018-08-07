@@ -1194,7 +1194,7 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
     }
 }
 
-static void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
+void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
     //layout.
