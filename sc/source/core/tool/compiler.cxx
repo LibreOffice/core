@@ -5971,10 +5971,14 @@ void ScCompiler::PostProcessCode()
 {
     for( const PendingImplicitIntersectionOptimization& item : mPendingImplicitIntersectionOptimizations )
     {
+        if( *item.parameterLocation != item.parameter ) // the parameter has been changed somehow
+            continue;
+        if( item.parameterLocation >= pCode ) // the location is not inside the code (pCode points after the end)
+            continue;
         // E.g. "SUMPRODUCT(I5:I6+1)" shouldn't do implicit intersection.
         if( item.operation->IsInForceArray())
             continue;
-        ReplaceDoubleRefII( item.parameter );
+        ReplaceDoubleRefII( item.parameterLocation );
     }
     mPendingImplicitIntersectionOptimizations.clear();
 }

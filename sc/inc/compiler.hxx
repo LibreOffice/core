@@ -305,10 +305,11 @@ private:
     // be important. Store candidate parameters and the operation they are the argument for.
     struct PendingImplicitIntersectionOptimization
     {
-        PendingImplicitIntersectionOptimization(formula::FormulaToken** p, const formula::FormulaToken* o)
-            : parameter( p ), operation( o ) {}
-        formula::FormulaToken** parameter;
-        const formula::FormulaToken* operation;
+        PendingImplicitIntersectionOptimization(formula::FormulaToken** p, formula::FormulaToken* o)
+            : parameterLocation( p ), parameter( *p ), operation( o ) {}
+        formula::FormulaToken** parameterLocation;
+        formula::FormulaTokenRef parameter;
+        formula::FormulaTokenRef operation;
     };
     std::vector< PendingImplicitIntersectionOptimization > mPendingImplicitIntersectionOptimizations;
     std::set<formula::FormulaTokenRef> mUnhandledPossibleImplicitIntersections;
