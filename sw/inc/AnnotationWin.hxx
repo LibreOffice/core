@@ -59,7 +59,6 @@ class SwAnnotationWin : public vcl::Window
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
-                         WinBits nBits,
                          SwPostItMgr& aMgr,
                          SwSidebarItem& rSidebarItem,
                          SwFormatField* aField );

@@ -62,11 +62,10 @@
 namespace sw { namespace annotation {
 
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
-                                  WinBits nBits,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
-    : Window(&rEditWin, nBits)
+    : Window(&rEditWin)
     , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())

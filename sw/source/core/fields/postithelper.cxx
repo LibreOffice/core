@@ -150,7 +150,7 @@ VclPtr<sw::annotation::SwAnnotationWin> SwAnnotationItem::GetSidebarWindow(
                                                             SwEditWin& rEditWin,
                                                             SwPostItMgr& aMgr)
 {
-    return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin, WB_DIALOGCONTROL,
+    return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin,
                                                 aMgr,
                                                 *this,
                                                 &mrFormatField );
