@@ -126,19 +126,6 @@ namespace sdr
                     DoProcessDisplay(rDisplayInfo);
                 }
             }
-
-            // after paint take care of the evtl. scheduled asynchronious commands.
-            // Do this by resetting the timer contained there. Thus, after the paint
-            // that timer will be triggered and the events will be executed.
-            if(HasEventHandler())
-            {
-                sdr::event::TimerEventHandler& rEventHandler = GetEventHandler();
-
-                if(!rEventHandler.IsEmpty())
-                {
-                    rEventHandler.Restart();
-                }
-            }
         }
 
         // Process the whole displaying. Only use given DisplayInfo, do not access other
