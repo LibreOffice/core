@@ -790,7 +790,7 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
     mCurMatrix = Matrix(a, b, c, d, e, f);
 
-    const int nCount = FPDFFormObj_CountSubObjects(pPageObject);
+    const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
         FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);

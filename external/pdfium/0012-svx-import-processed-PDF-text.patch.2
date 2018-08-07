@@ -117,13 +117,13 @@ index f4a1688..f34d3b5 100644
 +}
 +
  FPDF_EXPORT int FPDF_CALLCONV
- FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object)
- {
+ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT page_object) {
+   auto* pPageObj = CPDFPageObjectFromFPDFPageObject(page_object);
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index f249e64..e14b2a5 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1142,6 +1142,19 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
+@@ -1151,6 +1151,19 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
  FPDF_EXPORT int FPDF_CALLCONV
  FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
@@ -140,7 +140,7 @@ index f249e64..e14b2a5 100644
 +                             int char_count,
 +                             unsigned short* result);
 +
- // Get number of page objects inside the form object.
+ // Get the page object from a form object.
  //
  // form_object - Handle to a form object. Returned by FPDFPage_GetObject.
 -- 
