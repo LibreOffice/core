@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a7eccef3",
+        "filename": "vcl/source/gdi/print3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T09:30:09Z",
+      "side": 1,
+      "message": "mpImplData-\u003embPapersizeFromUser \u003d  !i_bPapersizeFromSetup",
+      "revId": "44d8454ded323b917a8dab400f7ae6857eb3088d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
