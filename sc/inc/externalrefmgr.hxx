@@ -20,40 +20,30 @@
 #ifndef INCLUDED_SC_INC_EXTERNALREFMGR_HXX
 #define INCLUDED_SC_INC_EXTERNALREFMGR_HXX
 
-#include "global.hxx"
 #include "address.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/event.hxx>
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/lstner.hxx>
 #include "types.hxx"
 #include "rangelst.hxx"
-#include <formula/token.hxx>
 #include <osl/mutex.hxx>
+#include <formula/types.hxx>
 
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <list>
 #include <set>
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
 class ScTokenArray;
-namespace vcl { class Window; }
+namespace weld { class Window; }
+
 class ScFormulaCell;
-
-class ScExternalRefCache;
-
-namespace svl {
-
-class SharedStringPool;
-
-}
 
 namespace sc {
 

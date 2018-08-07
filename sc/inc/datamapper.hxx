@@ -19,7 +19,6 @@
 #include "orcusxml.hxx"
 
 class ScDocument;
-class ScDBData;
 
 namespace sc {
 

@@ -21,22 +21,18 @@
 #define INCLUDED_SC_INC_SCMOD_HXX
 
 #include "scdllapi.h"
-#include "scdll.hxx"
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
+#include <sfx2/module.hxx>
 #include "global.hxx"
 #include "shellids.hxx"
 #include <unotools/options.hxx>
-#include <ooo/vba/XSinkCaller.hpp>
+#include <com/sun/star/uno/Reference.h>
 
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
-
-#include <algorithm>
 #include <vector>
 #include <map>
 #include <memory>
-#include <stack>
 
 class KeyEvent;
 class EditView;
@@ -46,6 +42,9 @@ class SvtCTLOptions;
 class SvtUserOptions;
 
 namespace svtools { class ColorConfig; }
+namespace ooo { namespace vba { class XSinkCaller; } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScRange;
 class ScDocument;

@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <svl/style.hxx>
 #include <vcl/svapp.hxx>
 

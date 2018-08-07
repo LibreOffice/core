@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <global.hxx>
 #include <attrib.hxx>

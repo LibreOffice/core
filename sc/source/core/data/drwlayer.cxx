@@ -48,6 +48,7 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>

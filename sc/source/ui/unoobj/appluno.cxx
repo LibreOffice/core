@@ -35,6 +35,7 @@
 #include <printopt.hxx>
 #include <userlist.hxx>
 #include <sc.hrc>
+#include <scdll.hxx>
 #include <unonames.hxx>
 #include <funcdesc.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

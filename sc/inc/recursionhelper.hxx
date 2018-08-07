@@ -27,7 +27,6 @@
 #include <stack>
 
 class ScFormulaCell;
-struct ScFormulaCellGroup;
 
 struct ScFormulaRecursionEntry
 {

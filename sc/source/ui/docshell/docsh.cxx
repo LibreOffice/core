@@ -20,6 +20,7 @@
 #include <docsh.hxx>
 
 #include <scitems.hxx>
+#include <sc.hrc>
 #include <vcl/errinf.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/fileformat.h>
@@ -36,6 +37,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>

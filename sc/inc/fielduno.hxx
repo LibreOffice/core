@@ -24,7 +24,6 @@
 #include "mutexhlp.hxx"
 
 #include <svl/lstner.hxx>
-#include <svl/itemprop.hxx>
 #include <editeng/editdata.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,17 +36,18 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
 #include <memory>
 
+namespace comphelper { class OInterfaceContainerHelper2; }
+
 class ScEditSource;
 class SvxFieldItem;
 class SvxFieldData;
-class ScEditFieldObj;
 class ScDocShell;
 class ScHeaderFooterTextData;
+class SfxItemPropertySet;
 
 class ScCellFieldsObj : public cppu::WeakImplHelper<
                             css::container::XEnumerationAccess,
