@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c7d91223",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T10:53:24Z",
+      "side": 1,
+      "message": "Please make a separate func out of this loop, something like (already existing) lcl_SeqHasProperty, for ex lcl_GetBoolProperty ...",
+      "revId": "4af242ac729635dea9e54a9b890677f8dea308c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a7d60ef1",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T10:53:24Z",
+      "side": 1,
+      "message": "... cause ~same code is already used here",
+      "revId": "4af242ac729635dea9e54a9b890677f8dea308c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_27eb1eb1",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T10:53:24Z",
+      "side": 1,
+      "message": "I\u0027d make some small func out of this (HasOrientationChanged?)",
+      "revId": "4af242ac729635dea9e54a9b890677f8dea308c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_47e622eb",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-07T10:53:24Z",
+      "side": 1,
+      "message": "IsLandscape",
+      "range": {
+        "startLine": 896,
+        "startChar": 34,
+        "endLine": 896,
+        "endChar": 48
+      },
+      "revId": "4af242ac729635dea9e54a9b890677f8dea308c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
