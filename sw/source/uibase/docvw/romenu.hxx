@@ -59,7 +59,6 @@ class SwReadOnlyPopup
 
     SwView &m_rView;
     SvxBrushItem m_aBrushItem;
-    const Point &m_rDocPos;
                 Graphic m_aGraphic;
     OUString    m_sURL,
                 m_sTargetFrameName;

@@ -2,7 +2,7 @@ basctl/source/basicide/basicbox.hxx:69
     basctl::DocListenerBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:180
+basctl/source/inc/bastype2.hxx:185
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
@@ -66,14 +66,14 @@ chart2/source/inc/MediaDescriptorHelper.hxx:75
     apphelper::MediaDescriptorHelper ReadOnly _Bool
 chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
-codemaker/source/cppumaker/dependencies.hxx:105
+codemaker/source/cppumaker/dependencies.hxx:108
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
-codemaker/source/cppumaker/dependencies.hxx:111
-    codemaker::cppumaker::Dependencies m_unsignedLongDependency _Bool
-codemaker/source/cppumaker/dependencies.hxx:114
+codemaker/source/cppumaker/dependencies.hxx:117
     codemaker::cppumaker::Dependencies m_floatDependency _Bool
-codemaker/source/cppumaker/dependencies.hxx:115
+codemaker/source/cppumaker/dependencies.hxx:118
     codemaker::cppumaker::Dependencies m_doubleDependency _Bool
+comphelper/qa/container/comphelper_ifcontainer.cxx:45
+    ContainerListener m_pStats struct ContainerStats *const
 configmgr/source/components.cxx:164
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/mork/MorkParser.hxx:133
@@ -142,8 +142,6 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:47
-    ContainerListener m_pStats struct ContainerStats *
 cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
@@ -200,9 +198,9 @@ emfio/inc/mtftools.hxx:128
     emfio::LOGFONTW lfClipPrecision sal_uInt8
 emfio/inc/mtftools.hxx:129
     emfio::LOGFONTW lfQuality sal_uInt8
-emfio/source/reader/emfreader.cxx:310
-    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
 emfio/source/reader/emfreader.cxx:311
+    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
+emfio/source/reader/emfreader.cxx:312
     (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
 extensions/source/scanner/scanner.hxx:45
     ScannerManager mpData void *
@@ -210,7 +208,7 @@ framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-framework/source/services/frame.cxx:420
+framework/source/services/frame.cxx:421
     (anonymous namespace)::Frame m_pWindowCommandDispatch class framework::WindowCommandDispatch *
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
@@ -246,18 +244,16 @@ include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/svdobj.hxx:944
-    SdrObject bNotMasterCachable _Bool
+include/svx/relfld.hxx:31
+    SvxRelativeField bRelative _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
-include/vcl/salnativewidgets.hxx:415
+include/vcl/salnativewidgets.hxx:446
     ToolbarValue mbIsTopDockingArea _Bool
-include/vcl/salnativewidgets.hxx:463
+include/vcl/salnativewidgets.hxx:507
     PushButtonValue mbBevelButton _Bool
-include/vcl/salnativewidgets.hxx:464
+include/vcl/salnativewidgets.hxx:508
     PushButtonValue mbSingleLine _Bool
-include/xmloff/AutoStyleEntry.hxx:22
-    xmloff::AutoStyleEntry m_nFamily sal_Int32
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
@@ -288,12 +284,6 @@ sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
     rtl_arena_stat_type m_mem_alloc sal_Size
-sal/rtl/alloc_cache.hxx:35
-    rtl_cache_stat_type m_mem_total sal_Size
-sal/rtl/alloc_cache.hxx:36
-    rtl_cache_stat_type m_mem_alloc sal_Size
-sal/rtl/alloc_cache.hxx:151
-    rtl_cache_st m_cpu_stats struct rtl_cache_stat_type
 sal/rtl/math.cxx:1005
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:96
@@ -312,11 +302,11 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/compiler.hxx:261
+sc/inc/compiler.hxx:260
     ScCompiler::AddInMap pODFF const char *
-sc/inc/compiler.hxx:262
+sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pEnglish const char *
-sc/inc/compiler.hxx:264
+sc/inc/compiler.hxx:263
     ScCompiler::AddInMap pUpper const char *
 sc/inc/document.hxx:2527
     ScMutationDisable mpDocument class ScDocument *
@@ -326,7 +316,7 @@ sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
-sc/source/core/data/column4.cxx:1314
+sc/source/core/data/column4.cxx:1315
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
@@ -354,7 +344,7 @@ sc/source/filter/excel/xltoolbar.hxx:76
     CTBS reserved3 sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:79
     CTBS ictbView sal_uInt16
-sc/source/filter/excel/xltools.cxx:103
+sc/source/filter/excel/xltools.cxx:104
      smD union sal_math_Double
 sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
@@ -368,11 +358,11 @@ sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
 sc/source/filter/inc/root.hxx:96
     LOTUS_ROOT aActRange class ScRange
-sc/source/filter/inc/tokstack.hxx:144
+sc/source/filter/inc/tokstack.hxx:145
     TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
 sc/source/filter/oox/biffhelper.cxx:41
     oox::xls::(anonymous namespace)::DecodedDouble maStruct union sal_math_Double
-sc/source/filter/xml/xmldpimp.hxx:254
+sc/source/filter/xml/xmldpimp.hxx:253
     ScXMLDataPilotFieldContext mbHasHiddenMember _Bool
 sc/source/filter/xml/xmldrani.hxx:75
     ScXMLDatabaseRangeContext bIsSelection _Bool
@@ -406,7 +396,7 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-slideshow/source/engine/slideshowimpl.cxx:1042
+slideshow/source/engine/slideshowimpl.cxx:1043
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
@@ -414,17 +404,17 @@ starmath/inc/view.hxx:158
     SmCmdBoxWindow aController class SmEditController
 store/source/storbase.hxx:248
     store::PageData m_aMarked store::PageData::L
-svl/source/crypto/cryptosign.cxx:144
+svl/source/crypto/cryptosign.cxx:145
     (anonymous namespace)::(anonymous) version SECItem
-svl/source/crypto/cryptosign.cxx:146
-    (anonymous namespace)::(anonymous) reqPolicy SECItem
 svl/source/crypto/cryptosign.cxx:147
-    (anonymous namespace)::(anonymous) nonce SECItem
+    (anonymous namespace)::(anonymous) reqPolicy SECItem
 svl/source/crypto/cryptosign.cxx:148
-    (anonymous namespace)::(anonymous) certReq SECItem
+    (anonymous namespace)::(anonymous) nonce SECItem
 svl/source/crypto/cryptosign.cxx:149
+    (anonymous namespace)::(anonymous) certReq SECItem
+svl/source/crypto/cryptosign.cxx:150
     (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-svl/source/crypto/cryptosign.cxx:193
+svl/source/crypto/cryptosign.cxx:194
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
@@ -450,13 +440,13 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/svdraw/svdpdf.hxx:192
+svx/source/svdraw/svdpdf.hxx:197
     ImpSdrPdfImport mdPageWidthPts double
-svx/source/table/tablertfimporter.cxx:53
+svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
 sw/inc/shellio.hxx:146
     SwReader aFileName class rtl::OUString
-sw/source/core/doc/tblafmt.cxx:185
+sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
 sw/source/core/inc/swfont.hxx:973
     SvStatistics nGetTextSize sal_uInt16
@@ -481,11 +471,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
-sw/source/uibase/docvw/romenu.hxx:69
-    SwReadOnlyPopup m_pImageMap class ImageMap *
-sw/source/uibase/docvw/romenu.hxx:70
-    SwReadOnlyPopup m_pTargetURL class INetImage *
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -506,6 +492,10 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
+vcl/inc/qt5/Qt5Frame.hxx:59
+    Qt5Frame m_pSalMenu class Qt5Menu *
+vcl/inc/qt5/Qt5Graphics.hxx:50
+    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -536,9 +526,9 @@ vcl/inc/sft.hxx:461
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/unx/gtk/gtkframe.hxx:215
     GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
-vcl/opengl/salbmp.cxx:435
+vcl/opengl/salbmp.cxx:440
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:1008
+vcl/source/filter/graphicfilter.cxx:1009
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
@@ -550,9 +540,9 @@ vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
-vcl/unx/gtk/gloactiongroup.cxx:28
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass AtkObjectClass
+vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
@@ -560,7 +550,9 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-writerfilter/source/dmapper/DomainMapperTableManager.hxx:57
-    writerfilter::dmapper::DomainMapperTableManager m_pTableStyleTextProperies writerfilter::dmapper::PropertyMapPtr
+vcl/unx/kde4/KDEXLib.hxx:49
+    KDEXLib::SocketData pending YieldFunc
+vcl/unx/kde4/KDEXLib.hxx:50
+    KDEXLib::SocketData queued YieldFunc
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

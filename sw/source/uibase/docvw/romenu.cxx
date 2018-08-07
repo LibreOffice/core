@@ -106,16 +106,15 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_nReadonlyCopy(m_xMenu->GetItemId("copy"))
     , m_rView(rV)
     , m_aBrushItem(RES_BACKGROUND)
-    , m_rDocPos(rDPos)
 {
     m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
     OUString sDescription;
-    rSh.IsURLGrfAtPos( m_rDocPos, &m_sURL, &m_sTargetFrameName, &sDescription );
+    rSh.IsURLGrfAtPos( rDPos, &m_sURL, &m_sTargetFrameName, &sDescription );
     if ( m_sURL.isEmpty() )
     {
         SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
-        if( rSh.GetContentAtPos( m_rDocPos, aContentAtPos))
+        if( rSh.GetContentAtPos( rDPos, aContentAtPos))
         {
             const SwFormatINetFormat &rIItem = *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
             m_sURL = rIItem.GetValue();
@@ -125,7 +124,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
 
     bool bLink = false;
     const Graphic *pGrf;
-    if ( nullptr == (pGrf = rSh.GetGrfAtPos( m_rDocPos, m_sGrfName, bLink )) )
+    if ( nullptr == (pGrf = rSh.GetGrfAtPos( rDPos, m_sGrfName, bLink )) )
     {
         m_xMenu->EnableItem(m_nReadonlySaveGraphic, false);
     }
