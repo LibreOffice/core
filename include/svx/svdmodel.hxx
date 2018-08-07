@@ -270,11 +270,12 @@ private:
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit = false );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();
-    SVX_DLLPRIVATE void ImpCreateTables();
+    SVX_DLLPRIVATE void ImpCreateTables(bool bDisablePropertyFiles);
 
     SVX_DLLPRIVATE void ImpCtor(
         SfxItemPool* pPool,
-        ::comphelper::IEmbeddedHelper* pPers);
+        ::comphelper::IEmbeddedHelper* pPers,
+        bool bDisablePropertyFiles);
 
     // this is a weak reference to a possible living api wrapper for this model
     css::uno::Reference< css::uno::XInterface > mxUnoModel;
@@ -293,9 +294,13 @@ public:
     // if you want to use symbol objects inherited from SdrAttrObj.
     // If, however, you use objects inheriting from SdrObject you are free
     // to chose a pool of your liking.
+    //
+    // tdf#118731 a bDisablePropertyFiles of true will disable ability to load
+    // XPropertyFiles describing defaults. Useful for UI preview widgets
     explicit SdrModel(
         SfxItemPool* pPool = nullptr,
-        ::comphelper::IEmbeddedHelper* pPers = nullptr);
+        ::comphelper::IEmbeddedHelper* pPers = nullptr,
+        bool bDisablePropertyFiles = false);
     virtual ~SdrModel() override;
     void ClearModel(bool bCalledFromDestructor);
 

@@ -41,7 +41,7 @@ SvxXMeasurePreview::SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle)
     Point aPt1 = Point(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
     Point aPt2 = Point(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
 
-    pModel.reset(new SdrModel());
+    pModel.reset(new SdrModel(nullptr, nullptr, true));
     pMeasureObj = new SdrMeasureObj(
         *pModel,
         aPt1,
