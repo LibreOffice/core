@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0a97ff92",
+        "filename": "sc/source/filter/excel/xichart.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-08-07T15:57:44Z",
+      "side": 1,
+      "message": "This mnRotation is XclChChart3d::mnRotation which is a sal_uInt16. If the input is \u003e 180, as an unsigned type, will this now loop endlessly in NormAngle180\u003csal_uInt16\u003e ?",
+      "revId": "81302f33073e7629d724ed269f1fa21dad29e141",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
