@@ -40,9 +40,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/MSWrite \
 	UnpackedTarball/libwps/src/lib/Multiplan \
 	UnpackedTarball/libwps/src/lib/Quattro \
+	UnpackedTarball/libwps/src/lib/Quattro9 \
+	UnpackedTarball/libwps/src/lib/Quattro9Graph \
+	UnpackedTarball/libwps/src/lib/Quattro9Spreadsheet \
 	UnpackedTarball/libwps/src/lib/QuattroDos \
 	UnpackedTarball/libwps/src/lib/QuattroDosChart \
 	UnpackedTarball/libwps/src/lib/QuattroDosSpreadsheet \
+	UnpackedTarball/libwps/src/lib/QuattroFormula \
 	UnpackedTarball/libwps/src/lib/QuattroGraph \
 	UnpackedTarball/libwps/src/lib/QuattroSpreadsheet \
 	UnpackedTarball/libwps/src/lib/WKS4 \
@@ -66,11 +70,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/WPSContentListener \
 	UnpackedTarball/libwps/src/lib/WPSDebug \
 	UnpackedTarball/libwps/src/lib/WPSDocument \
+	UnpackedTarball/libwps/src/lib/WPSEntry \
 	UnpackedTarball/libwps/src/lib/WPSFont \
 	UnpackedTarball/libwps/src/lib/WPSGraphicShape \
 	UnpackedTarball/libwps/src/lib/WPSGraphicStyle \
 	UnpackedTarball/libwps/src/lib/WPSHeader \
 	UnpackedTarball/libwps/src/lib/WPSList \
+	UnpackedTarball/libwps/src/lib/WPSListener \
 	UnpackedTarball/libwps/src/lib/WPSOLE1Parser \
 	UnpackedTarball/libwps/src/lib/WPSOLEObject \
 	UnpackedTarball/libwps/src/lib/WPSOLEParser \

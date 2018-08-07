@@ -35,10 +35,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
 endif
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
-	external/libwps/0001-avoid-name-clash-with-MultiplanParser-from-libmwaw.patch.1 \
-))
-
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
     external/libwps/0001-Fix-nan-is-not-a-member-of-std.patch.1 \
