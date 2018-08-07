@@ -12,50 +12,21 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_arealinksobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_arealinksobj, \
-    sc/qa/extras/scarealinksobj \
+	sc/qa/extras/scarealinksobj \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sc_arealinksobj,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_arealinksobj, \
-    basegfx \
-    comphelper \
-    cppu \
-    cppuhelper \
-    drawinglayer \
-    editeng \
-    for \
-    forui \
-    i18nlangtag \
-    msfilter \
-    oox \
-    sal \
-    salhelper \
-    sax \
-    sb \
-    sc \
-    sfx \
-    sot \
-    subsequenttest \
-    svl \
-    svt \
-    svx \
-    svxcore \
+	cppu \
+	sal \
+	subsequenttest \
 	test \
-    tk \
-    tl \
-    ucbhelper \
 	unotest \
-    utl \
-    vbahelper \
-    vcl \
-    xo \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_arealinksobj,\
-    -I$(SRCDIR)/sc/source/ui/inc \
-    -I$(SRCDIR)/sc/inc \
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sc_arealinksobj))
@@ -64,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_ure,sc_arealinksobj))
 $(eval $(call gb_CppunitTest_use_vcl,sc_arealinksobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_arealinksobj,\
-    $(sc_unoapi_common_components) \
+	$(sc_unoapi_common_components) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_arealinksobj))
