@@ -10,3 +10,13 @@ diff -ru nss.org/nss/coreconf/WIN32.mk nss/nss/coreconf/WIN32.mk
      ifeq ($(_MSC_VER_GE_12),1)
  	OS_CFLAGS += -FS
      endif
+--- a/nss/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc	2018-08-08 11:08:42.922939267 +0200
++++ b/nss/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc	2018-08-08 11:08:47.778929835 +0200
+@@ -6,6 +6,7 @@
+ #include "config.h"
+ 
+ #include <algorithm>
++#include <iterator>
+ #include <cstdlib>
+ #include <iostream>
+ #include <memory>
