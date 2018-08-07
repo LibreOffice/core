@@ -443,7 +443,7 @@ OUString removeAny(OUString const& rIn,
             {
                 if (i > 0)
                 {
-                    buf.append(rIn.copy(0, i));
+                    buf.appendCopy(rIn, 0, i);
                 }
                 isFound = true;
             }

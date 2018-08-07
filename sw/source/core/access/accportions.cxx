@@ -117,7 +117,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nModelPosition
-    m_aBuffer.append( m_pTextNode->GetText().copy(m_nModelPosition, nLength) );
+    m_aBuffer.appendCopy( m_pTextNode->GetText(), m_nModelPosition, nLength );
     m_nModelPosition += nLength;
 }
 

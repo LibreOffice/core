@@ -117,7 +117,7 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
     if ( nDecPos != -1 )
     {
         aStr1 = aStr.copy( 0, nDecPos );
-        aStr2.append(aStr.copy(nDecPos+1));
+        aStr2.appendCopy(aStr, nDecPos+1);
     }
     else
         aStr1 = aStr;

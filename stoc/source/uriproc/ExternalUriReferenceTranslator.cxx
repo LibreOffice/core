@@ -91,7 +91,7 @@ OUString Translator::translateToInternal(
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file:");
     OUStringBuffer buf;
-    buf.append(externalUriReference.getStr(), i);
+    buf.appendCopy(externalUriReference, 0, i);
     // Some environments (e.g., Java) produce illegal file URLs without an
     // authority part; treat them as having an empty authority part:
     if (!externalUriReference.match("//", i))
@@ -139,7 +139,7 @@ OUString Translator::translateToExternal(
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file://");
     OUStringBuffer buf;
-    buf.append(internalUriReference.getStr(), i);
+    buf.appendCopy(internalUriReference, 0, i);
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {
         sal_Int32 j = i;

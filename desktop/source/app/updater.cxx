@@ -571,7 +571,7 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     {
         OUString aTempFileURL = aTempFile.GetURL();
         OString aTempFileURLOString = OUStringToOString(aTempFileURL, RTL_TEXTENCODING_UTF8);
-        response_body.append(aTempFileURLOString.getStr(), aTempFileURLOString.getLength());
+        response_body.append(aTempFileURLOString);
 
         aTempFile.EnableKillingFile(false);
 

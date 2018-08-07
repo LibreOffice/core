@@ -1647,7 +1647,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
         DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
         //!! beware of sub string length  of -1
         if (nEnd > nIndex)
-            aStr.append( GetString().copy(nIndex, nEnd - nIndex) );
+            aStr.appendCopy( GetString(), nIndex, nEnd - nIndex );
 
         if ( pNextFeature )
         {

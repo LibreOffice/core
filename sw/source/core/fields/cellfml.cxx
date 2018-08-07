@@ -635,12 +635,12 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
         if (nStt<0 || nEnd<0 )
         {
             // set the rest and finish
-            aStr.append(m_sFormula.copy(nFormula));
+            aStr.appendCopy(m_sFormula, nFormula);
             break;
         }
 
         // write beginning
-        aStr.append(m_sFormula.copy(nFormula, nStt - nFormula));
+        aStr.appendCopy(m_sFormula, nFormula, nStt - nFormula);
 
         if (fnFormula)
         {

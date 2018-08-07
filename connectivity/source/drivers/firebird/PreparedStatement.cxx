@@ -333,9 +333,9 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
         OUStringBuffer sBuffer(15);
         if(nDotIndex > 0)
         {
-            sBuffer.append(sNumber.copy(0, nDotIndex));
+            sBuffer.appendCopy(sNumber, 0, nDotIndex);
         }
-        sBuffer.append(sNumber.copy(nDotIndex + 1));
+        sBuffer.appendCopy(sNumber, nDotIndex + 1);
         return sBuffer.makeStringAndClear().toInt64();
     }
 }

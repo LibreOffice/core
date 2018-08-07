@@ -754,7 +754,7 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
         if ( aNS.getLength() > 2 )
         {
             rBuffer.append( '.');
-            rBuffer.append( aNS.copy( 2 ) );     // strip "0."
+            rBuffer.appendCopy( aNS, 2 );     // strip "0."
         }
     }
     rBuffer.append( 'S');

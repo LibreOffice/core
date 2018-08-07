@@ -79,7 +79,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
-            mergedText.append(pNode->GetText().copy(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
+            mergedText.appendCopy(pNode->GetText(), nLastEnd, pStart->nContent.GetIndex() - nLastEnd);
         }
         if (&pEnd->nNode.GetNode() != pNode)
         {
@@ -105,7 +105,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
     if (nLastEnd != pNode->Len())
     {
         extents.emplace_back(pNode, nLastEnd, pNode->Len());
-        mergedText.append(pNode->GetText().copy(nLastEnd, pNode->Len() - nLastEnd));
+        mergedText.appendCopy(pNode->GetText(), nLastEnd, pNode->Len() - nLastEnd);
     }
     if (extents.empty()) // there was no text anywhere
     {

@@ -1036,7 +1036,7 @@ OUString ORegKey::getFullPath(OUString const & path) const {
     OUStringBuffer b(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
-            b.append(path.copy(1));
+            b.appendCopy(path,1);
         } else {
             b.append(path);
         }

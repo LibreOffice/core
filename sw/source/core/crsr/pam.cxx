@@ -1000,7 +1000,7 @@ OUString SwPaM::GetText() const
                     ? End()->nContent.GetIndex()
                     : aTmpStr.getLength();
 
-                aResult.append(aTmpStr.getStr() + nStart, nEnd-nStart);
+                aResult.appendCopy(aTmpStr, nStart, nEnd-nStart);
             }
             else
             {

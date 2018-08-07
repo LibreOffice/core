@@ -1740,7 +1740,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     if ( !rRelativeChildUri.startsWith("/") )
         aBuf.append( rRelativeChildUri );
     else
-        aBuf.append( rRelativeChildUri.copy( 1 ) );
+        aBuf.appendCopy( rRelativeChildUri, 1 );
 
     uno::Reference< ucb::XContentIdentifier > xChildId
         = new ::ucbhelper::ContentIdentifier( aBuf.makeStringAndClear() );

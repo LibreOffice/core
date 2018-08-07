@@ -921,7 +921,7 @@ OUString lclEncodeDosUrl(
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);
             else
-                aBuf.append(aOldUrl.copy(0,nPos)).append(EXC_URL_SUBDIR);
+                aBuf.appendCopy(aOldUrl,0,nPos).append(EXC_URL_SUBDIR);
 
             aOldUrl = aOldUrl.copy(nPos + 1);
         }

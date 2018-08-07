@@ -284,7 +284,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
 
     OUStringBuffer newPath;
     newPath.append(encodeNameOrParamFragment(name));
-    newPath.append(m_base.m_path.copy(i));
+    newPath.appendCopy(m_base.m_path, i);
     m_base.m_path = newPath.makeStringAndClear();
 }
 
@@ -315,7 +315,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     }
 
     OUStringBuffer newPath;
-    newPath.append(m_base.m_path.copy(0, i));
+    newPath.appendCopy(m_base.m_path, 0, i);
     if (!bExistent) {
         newPath.append( m_base.m_path.indexOf('?') < 0 ? '?' : '&' );
         newPath.append(encodeNameOrParamFragment(key));
@@ -325,7 +325,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     if (bExistent) {
         /*oldValue = */
         parsePart(m_base.m_path, false, &i); // skip key
-        newPath.append(m_base.m_path.copy(i));
+        newPath.appendCopy(m_base.m_path, i);
     }
 
     m_base.m_path = newPath.makeStringAndClear();
