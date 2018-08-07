@@ -200,7 +200,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
             if (!PendingObjectsInPaM(aDelPam))
             {
-                ClearFootnotesInRange(aDelPam.GetMark()->nNode, aDelPam.GetPoint()->nNode);
+                ClearFootnotesMarksInRange(aDelPam.GetMark()->nNode, aDelPam.GetPoint()->nNode);
                 m_xDoc->getIDocumentContentOperations().DelFullPara(aDelPam);
             }
 

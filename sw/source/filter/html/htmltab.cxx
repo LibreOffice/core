@@ -50,6 +50,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 #include <shellio.hxx>
 #include <poolfmt.hxx>
@@ -4898,7 +4899,7 @@ namespace
     };
 }
 
-void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNodeIndex& rPtNdIdx)
+void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const SwNodeIndex& rPtNdIdx)
 {
     //similarly for footnotes
     if (m_pFootEndNoteImpl)
@@ -4912,9 +4913,14 @@ void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNo
     }
 
     //follow DelFlyInRange pattern here
-    const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
+    assert(rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex());
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
+
+    //ofz#9733 drop bookmarks in this range
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    pMarkAccess->deleteMarks(rMkNdIdx, SwNodeIndex(rPtNdIdx, 1), nullptr, nullptr, nullptr);
+
     SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )
     {
@@ -4924,9 +4930,7 @@ void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNo
         if (pAPos &&
             ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
              (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
-            ( bDelFwrd
-                ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
-                : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
+            ( rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx ))
         {
             if( rPtNdIdx != pAPos->nNode )
             {
@@ -4935,7 +4939,7 @@ void SwHTMLParser::ClearFootnotesInRange(const SwNodeIndex& rMkNdIdx, const SwNo
                 // But only fly formats own their content, not draw formats.
                 if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
                 {
-                    ClearFootnotesInRange(*rContent.GetContentIdx(),
+                    ClearFootnotesMarksInRange(*rContent.GetContentIdx(),
                                           SwNodeIndex(*rContent.GetContentIdx()->GetNode().EndOfSectionNode()));
                 }
             }
@@ -4952,7 +4956,7 @@ void SwHTMLParser::DeleteSection(SwStartNode* pSttNd)
 
     //similarly for footnotes
     SwNodeIndex aSttIdx(*pSttNd), aEndIdx(*pSttNd->EndOfSectionNode());
-    ClearFootnotesInRange(aSttIdx, aEndIdx);
+    ClearFootnotesMarksInRange(aSttIdx, aEndIdx);
 
     m_xDoc->getIDocumentContentOperations().DeleteSection(pSttNd);
 
