@@ -1309,7 +1309,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
 {
     if( nCnt < 2 )
         return 0;
-    std::list< SwLineOffset > aBoxes;
+    std::vector< SwLineOffset > aBoxes;
     SwLineOffset aLnOfs( USHRT_MAX, USHRT_MAX );
     sal_uInt16 nFirst = USHRT_MAX; // becomes the index of the first line
     sal_uInt16 nLast = 0; // becomes the index of the last line of the splitting
@@ -1325,7 +1325,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
         {
             aLnOfs.first = nStart;
             aLnOfs.second = nEnd;
-            aBoxes.insert( aBoxes.end(), aLnOfs );
+            aBoxes.push_back( aLnOfs );
             if( nStart < nFirst )
                 nFirst = nStart;
             if( nEnd > nLast )
@@ -1348,7 +1348,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
     }
-    std::list< SwLineOffset >::iterator pSplit = aBoxes.begin();
+    auto pSplit = aBoxes.begin();
     while( pSplit != aBoxes.end() )
     {
         SwTwips nBase = pSplit->first <= nFirst ? 0 :
