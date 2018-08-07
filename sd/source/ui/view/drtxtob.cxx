@@ -268,8 +268,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr;
 
-                    if (pOLV &&
-                        ( pOLV->GetOutliner()->GetMode() == OutlinerMode::OutlineObject || bOutlineViewSh ) )
+                    if (pOLV)
                     {
                         // Outliner at outline-mode
                         ::Outliner* pOutl = pOLV->GetOutliner();
