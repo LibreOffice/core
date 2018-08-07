@@ -9,11 +9,15 @@
  */
 
 #include <ChartTools.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svx/svditer.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>

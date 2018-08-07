@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "scdll.hxx"
+#include <sal/types.h>
 
 class SvStream;
 

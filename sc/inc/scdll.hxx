@@ -20,12 +20,6 @@
 #ifndef INCLUDED_SC_INC_SCDLL_HXX
 #define INCLUDED_SC_INC_SCDLL_HXX
 
-class SfxMedium;
-class SfxFilter;
-
-#include <sfx2/module.hxx>
-#include <sfx2/docfac.hxx>
-
 #include "scdllapi.h"
 
 /**

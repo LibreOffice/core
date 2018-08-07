@@ -23,6 +23,7 @@
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdoole2.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <dbdocfun.hxx>

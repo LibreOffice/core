@@ -10,6 +10,7 @@
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svx/charthelper.hxx>
+#include <svx/svdoole2.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <miscuno.hxx>

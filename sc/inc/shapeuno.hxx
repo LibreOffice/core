@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -43,7 +42,6 @@ namespace com { namespace sun { namespace star {
 
 class SdrObject;
 struct SvEventDescription;
-class ShapeUnoEventAccessImpl;
 class  ScMacroInfo;
 
 //  object which aggregates all svx shape objects,

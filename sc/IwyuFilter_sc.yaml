@@ -116,6 +116,9 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XDispatchProviderInterceptor.hpp
     - com/sun/star/view/XSelectionChangeListener.hpp
+    sc/inc/document.hxx:
+    # Why was this reverted?
+    - o3tl/deleter.hxx
     sc/inc/docuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -153,6 +156,16 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    sc/inc/fielduno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XTextField.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
     sc/inc/fillinfo.hxx:
     # base class has to be a complete type
     - o3tl/typed_flags_set.hxx
@@ -193,14 +206,34 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/sheet/XFormulaParser.hpp
     sc/inc/formularesult.hxx:
-    # Needed for enum
-    - global.hxx
     # Needed for macros
     - calcmacros.hxx
+    sc/inc/funcuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XFunctionAccess.hpp
     sc/inc/global.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Reference.hxx
     - tools/ref.hxx
+    sc/inc/linkuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XAreaLink.hpp
+    - com/sun/star/sheet/XAreaLinks.hpp
+    - com/sun/star/sheet/XDDELink.hpp
+    - com/sun/star/sheet/XDDELinkResults.hpp
+    - com/sun/star/sheet/XDDELinks.hpp
+    - com/sun/star/sheet/XExternalDocLink.hpp
+    - com/sun/star/sheet/XExternalDocLinks.hpp
+    - com/sun/star/sheet/XExternalSheetCache.hpp
+    - com/sun/star/util/XRefreshable.hpp
     sc/inc/macromgr.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XContainerListener.hpp
@@ -212,6 +245,26 @@ blacklist:
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - cppuhelper/supportsservice.hxx
+    sc/inc/nameuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/document/XActionLockable.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/sheet/XCellRangeReferrer.hpp
+    - com/sun/star/sheet/XFormulaTokens.hpp
+    - com/sun/star/sheet/XLabelRange.hpp
+    - com/sun/star/sheet/XLabelRanges.hpp
+    - com/sun/star/sheet/XNamedRange.hpp
+    - com/sun/star/sheet/XNamedRanges.hpp
+    sc/inc/notesuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XSheetAnnotation.hpp
+    - com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp
+    - com/sun/star/text/XSimpleText.hpp
     sc/inc/PivotTableDataSequence.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -250,6 +303,15 @@ blacklist:
     sc/inc/scmatrix.hxx:
     # base class has to be a complete type
     - svl/sharedstringpool.hxx
+    sc/inc/shapeuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/document/XEventsSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XText.hpp
     sc/inc/spellcheckcontext.hxx:
     # base class has to be a complete type
     - editeng/misspellrange.hxx
