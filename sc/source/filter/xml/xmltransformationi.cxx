@@ -581,6 +581,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 ScXMLDateTimeContext::ScXMLDateTimeContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
+    , maType(sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING)
 {
     if (rAttrList.is())
     {
