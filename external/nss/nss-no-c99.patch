@@ -1475,31 +1475,6 @@
          64,
      }
  };
---- a/nss/nss/lib/freebl/ecl/curve25519_64.c	2017-04-06 16:14:46.000000000 +0200
-+++ b/nss/nss/lib/freebl/ecl/curve25519_64.c	2018-05-22 19:18:07.482457400 +0200
-@@ -38,17 +38,17 @@
-     const int64_t *in = (const int64_t *)iin;
-     int64_t *out = (int64_t *)ioutput;
- 
-+    // An arithmetic shift right of 63 places turns a positive number to 0 and a
-+    // negative number to all 1's. This gives us a bitmask that lets us avoid
-+    // side-channel prone branches.
-+    int64_t t;
-+
-     out[0] = in[0] - out[0];
-     out[1] = in[1] - out[1];
-     out[2] = in[2] - out[2];
-     out[3] = in[3] - out[3];
-     out[4] = in[4] - out[4];
- 
--    // An arithmetic shift right of 63 places turns a positive number to 0 and a
--    // negative number to all 1's. This gives us a bitmask that lets us avoid
--    // side-channel prone branches.
--    int64_t t;
--
- #define NEGCHAIN(a, b)        \
-     t = out[a] >> 63;         \
-     out[a] += twotothe51 & t; \
 --- a/nss/nss/lib/softoken/pkcs11c.c	2017-04-06 16:14:46.000000000 +0200
 +++ b/nss/nss/lib/softoken/pkcs11c.c	2018-05-22 19:43:15.154079800 +0200
 @@ -5105,10 +5105,11 @@
@@ -1517,22 +1492,3 @@
                  if (!pubValue) {
                      crv = CKR_ARGUMENTS_BAD;
                      goto ecgn_done;
---- a/nss/nss/lib/ssl/ssl3con.c	2017-04-06 16:14:46.000000000 +0200
-+++ b/nss/nss/lib/ssl/ssl3con.c	2018-05-22 20:19:16.542798900 +0200
-@@ -2261,6 +2261,7 @@
- {
-     const ssl3MACDef *mac_def;
-     SECStatus rv;
-+    PK11Context *mac_context;
- 
-     PRINT_BUF(95, (NULL, "frag hash1: header", header, headerLen));
-     PRINT_BUF(95, (NULL, "frag hash1: input", input, inputLength));
-@@ -2271,7 +2272,7 @@
-         return SECSuccess;
-     }
- 
--    PK11Context *mac_context =
-+    mac_context =
-         (useServerMacKey ? spec->server.write_mac_context
-                          : spec->client.write_mac_context);
-     rv = PK11_DigestBegin(mac_context);
