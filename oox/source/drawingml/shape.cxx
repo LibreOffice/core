@@ -547,13 +547,22 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
     lcl_resetPropertyValue( aGeomPropVec, sEquations );
     lcl_resetPropertyValue( aGeomPropVec, sPath );
 
+    // Some shapes don't need scaling
+    bool bScale = true;
+    if ( rPresetType == "textRingInside"
+        || rPresetType == "textRingOutside"
+        || rPresetType == "textCirclePour" )
+    {
+        bScale = false;
+    }
+
     // Apply geometry properties
     uno::Sequence<beans::PropertyValue> aPropertyValues(
         comphelper::InitPropertySequence(
             { { sTextPath, uno::makeAny( true ) },
                 { "TextPathMode",
                 uno::Any( drawing::EnhancedCustomShapeTextPathMode_PATH ) },
-                { "ScaleX", uno::Any( false ) } } ) );
+                { "ScaleX", uno::Any( bScale ) } } ) );
 
     lcl_setPropertyValue( aGeomPropVec, sTextPath,
         comphelper::makePropertyValue( sTextPath, aPropertyValues ) );
