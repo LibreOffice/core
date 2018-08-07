@@ -97,6 +97,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{libo_user_dirs}/**/           rw,  #allow creating directories that we own
   owner @{libo_user_dirs}/**~lock.*     rw,  #lock file support
   owner @{libo_user_dirs}/**.@{libreoffice_ext} rwk,  #Open files rw with the right exts
+  owner @{libo_user_dirs}/{,**/}lu??????????{,?}.tmp rwk, #Temporary file used when saving
 
   # Settings
   /etc/libreoffice/                     r,
