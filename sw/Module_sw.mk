@@ -94,6 +94,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_accessible_relation_set \
     CppunitTest_sw_apitests \
+    CppunitTest_sw_unowriter \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
