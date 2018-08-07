@@ -29,24 +29,10 @@ diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
 index 9c353a4..bf68250 100644
 --- a/pdfium/fpdfsdk/fpdf_editpage.cpp
 +++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -650,3 +650,31 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
-   pPageObj->SetDirty(true);
-   return true;
+@@ -671,3 +671,17 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT page_object) {
+ 
+   return pObjectList->size();
  }
-+
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object)
-+{
-+  CPDF_FormObject* pFrmObj = CPDFFormObjectFromFPDFPageObject(form_object);
-+  if (pFrmObj)
-+  {
-+    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
-+    if (pObjectList)
-+        return pObjectList->size();
-+  }
-+
-+  return 0;
-+}
 +
 +FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
 +FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
@@ -65,18 +51,10 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index 4264ccd..ca76954 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1142,6 +1142,23 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
+@@ -1151,6 +1151,15 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
  FPDF_EXPORT int FPDF_CALLCONV
  FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
  
-+// Get number of page objects inside the form object.
-+//
-+// form_object - Handle to a form object. Returned by FPDFPage_GetObject.
-+// Return value:
-+// The number of the page objects.
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object);
-+
 +// Get the page object from a form object.
 +//
 +// form_object - Handle to a form object. Returned by FPDFPage_GetObject.

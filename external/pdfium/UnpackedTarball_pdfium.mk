@@ -17,6 +17,8 @@ pdfium_patches += build.patch.1
 pdfium_patches += 0001-Add-FPDFTextObj_GetFontSize-API.patch.patch.1
 # Backport of <https://pdfium-review.googlesource.com/36750>.
 pdfium_patches += 0001-Add-FPDFText_GetTextRenderMode-API.patch.1
+# Backport of <https://pdfium-review.googlesource.com/37316>.
+pdfium_patches += 0001-Add-FPDFFormObj_CountObjects-API.patch.1
 pdfium_patches += 0002-svx-more-accurate-PDF-text-importing.patch.2
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
