@@ -34,6 +34,13 @@
 #include <viewopt.hxx>
 #include "TextFrameIndex.hxx"
 
+#if defined _MSC_VER
+// For MSVC (without /vmg) SwTextNode must consistently be defined for
+// WrongListIterator::m_pGetWrongList of pointer-to-SwTextNode-member type to consitently have the
+// same size in all translation units that include this file:
+#include <ndtxt.hxx>
+#endif
+
 class SwWrongList;
 
 enum WrongAreaLineType
