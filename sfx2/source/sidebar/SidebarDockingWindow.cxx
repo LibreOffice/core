@@ -74,7 +74,10 @@ void SidebarDockingWindow::DoDispose()
 void SidebarDockingWindow::GetFocus()
 {
     if (mpSidebarController.is())
+    {
+        mpSidebarController->RequestOpenDeck();
         mpSidebarController->GetFocusManager().GrabFocus();
+    }
     else
         SfxDockingWindow::GetFocus();
 }
