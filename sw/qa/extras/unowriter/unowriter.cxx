@@ -23,11 +23,13 @@ public:
     void testDefaultCharStyle();
     void testGraphicDesciptorURL();
     void testGraphicDesciptorURLBitmap();
+    void testSetPagePrintSettings();
 
     CPPUNIT_TEST_SUITE(SwUnoWriter);
     CPPUNIT_TEST(testDefaultCharStyle);
     CPPUNIT_TEST(testGraphicDesciptorURL);
     CPPUNIT_TEST(testGraphicDesciptorURLBitmap);
+    CPPUNIT_TEST(testSetPagePrintSettings);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -113,6 +115,31 @@ void SwUnoWriter::testGraphicDesciptorURLBitmap()
     // work anymore.
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     CPPUNIT_ASSERT(xGraphic.is());
+}
+
+void SwUnoWriter::testSetPagePrintSettings()
+{
+    // Create an empty new document with a single char
+    loadURL("private:factory/swriter", nullptr);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    xBodyText->insertString(xBodyText->getStart(), "x", false);
+
+    uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
+
+    // set some stuff, try to get it back
+    uno::Sequence<beans::PropertyValue> aProps(2);
+    aProps[0].Name = "PageColumns";
+    aProps[0].Value = css::uno::Any(sal_Int16(2));
+    aProps[1].Name = "IsLandscape";
+    aProps[1].Value = css::uno::Any(true);
+
+    xPagePrintable->setPagePrintSettings(aProps);
+    aProps = xPagePrintable->getPagePrintSettings();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aProps[0].Value.get<short>());
+    CPPUNIT_ASSERT_EQUAL(true, aProps[1].Value.get<bool>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUnoWriter);
