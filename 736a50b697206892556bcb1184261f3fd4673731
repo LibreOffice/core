@@ -16,6 +16,24 @@
       "revId": "736a50b697206892556bcb1184261f3fd4673731",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_47986269",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-08-07T10:05:19Z",
+      "side": 1,
+      "message": "hmm right now it\u0027s obvious that it can\u0027t happen any more... i havent checked if the thing even has a \"isFull\" function...",
+      "parentUuid": "dfeb2761_a773ae4d",
+      "revId": "736a50b697206892556bcb1184261f3fd4673731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
