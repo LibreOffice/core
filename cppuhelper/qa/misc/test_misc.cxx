@@ -62,7 +62,7 @@ void Test::testgetCaughtException()
     {
         throw css::uno::RuntimeException("RuntimeException");
     }
-    catch (...)
+    catch (const css::uno::RuntimeException&)
     {
         aSavedException = std::current_exception();
     }
