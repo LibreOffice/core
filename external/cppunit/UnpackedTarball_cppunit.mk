@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,cppunit))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,cppunit,$(CPPUNIT_TARBALL),,cppunit))
 
+# gcc9.patch.0 addressed upstream with <https://gerrit.libreoffice.org/58690> "Avoid GCC 9
+#  -Wdeprecated-copy":
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows.patch \
 	external/cppunit/unix.patch \
