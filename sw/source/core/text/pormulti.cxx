@@ -929,7 +929,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
     sal_uInt8 nNextLevel = nCurrLevel;
     bool bFieldBidi = false;
 
-    if (rPos < TextFrameIndex(GetText().getLength()) && CH_TXTATR_BREAKWORD == GetChar(rPos))
+    if (rPos >= 0 && rPos < TextFrameIndex(GetText().getLength()) && CH_TXTATR_BREAKWORD == GetChar(rPos))
     {
         bFieldBidi = true;
     }
