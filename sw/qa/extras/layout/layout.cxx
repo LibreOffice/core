@@ -33,6 +33,7 @@ public:
     void testTdf109077();
     void testUserFieldTypeLanguage();
     void testTdf109137();
+    void testForcepoint72();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -48,6 +49,7 @@ public:
     CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST(testTdf109137);
+    CPPUNIT_TEST(testForcepoint72);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -293,6 +295,9 @@ void SwLayoutWriter::testTdf109137()
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
                 /*nNumberOfNodes=*/1);
 }
+
+//just care it doesn't crash
+void SwLayoutWriter::testForcepoint72() { createDoc("forcepoint72-1.rtf"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
 CPPUNIT_PLUGIN_IMPLEMENT();

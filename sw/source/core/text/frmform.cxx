@@ -1460,11 +1460,9 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         const SwLineLayout* pLine=nullptr;
         if (pMaster)
         {
-            if( !pMaster->HasPara() )
-                pMaster->GetFormatted();
             if (!pMaster->HasPara())
             {   // master could be locked because it's being formatted upstack
-                SAL_WARN("sw", "SwTextFrame::Format_: failed to format master!");
+                SAL_WARN("sw", "SwTextFrame::Format_: master not formatted!");
             }
             else
             {
@@ -1472,6 +1470,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                 SwTextIter aMasterLine( pMaster, &aInf );
                 aMasterLine.Bottom();
                 pLine = aMasterLine.GetCurr();
+                assert(aMasterLine.GetEnd() == GetOfst());
             }
         }
         SwLinePortion* pRest = pLine ?
@@ -1837,6 +1836,30 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
 
         // We do not want to be interrupted during formatting
         TextFrameLockGuard aLock(this);
+
+        // this is to ensure that the similar code in SwTextFrame::Format_
+        // finds the master formatted in case it's needed
+        if (IsFollow() && IsFieldFollow())
+        {
+            SwTextFrame *pMaster = FindMaster();
+            assert(pMaster);
+            if (!pMaster->HasPara())
+            {
+                pMaster->GetFormatted();
+            }
+            if (!pMaster->HasPara())
+            {   // master could be locked because it's being formatted upstack
+                SAL_WARN("sw", "SwTextFrame::Format: failed to format master!");
+            }
+            else
+            {
+                SwTextSizeInfo aInf( pMaster );
+                SwTextIter aMasterLine( pMaster, &aInf );
+                aMasterLine.Bottom();
+                SetOfst(aMasterLine.GetEnd());
+            }
+        }
+
         SwTextLineAccess aAccess( this );
         const bool bNew = !aAccess.IsAvailable();
         const bool bSetOfst =
