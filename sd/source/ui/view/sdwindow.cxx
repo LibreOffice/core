@@ -423,7 +423,7 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
         // Calculate the new origin.
         if ( nFact == 0 )
         {
-            // Don't change anything if the scale factor is degenrate.
+            // Don't change anything if the scale factor is degenerate.
             nRetZoom = GetZoom();
         }
         else
@@ -496,7 +496,7 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
         // Calculate the new origin.
         if ( nFact == 0 )
         {
-            // Don't change anything if the scale factor is degenrate.
+            // Don't change anything if the scale factor is degenerate.
             nNewZoom = GetZoom();
         }
         else
