@@ -20,16 +20,28 @@ class tdf79569(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
+        toolkit_ex = self.xContext.ServiceManager.createInstanceWithContext(
+            "com.sun.star.awt.Toolkit", self.xContext) # supports css.awt.XToolkitExperimental
         self.xUITest.executeCommand(".uno:GoDown")
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:GoDown")
+        toolkit_ex.processEventsToIdle()
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+END"}))
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:GoRight")
+        toolkit_ex.processEventsToIdle()
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+END"}))
+        toolkit_ex.processEventsToIdle()
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "SHIFT+RIGHT"}))
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:MergeCells")
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:Undo")
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:Redo")
+        toolkit_ex.processEventsToIdle()
         self.xUITest.executeCommand(".uno:Undo")
+        toolkit_ex.processEventsToIdle()
 
         self.assertEqual(document.TextTables.getCount(), 1)
 
