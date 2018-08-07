@@ -2747,6 +2747,16 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     {
         UnoActionContext aActionContext(pDoc);
         Graphic aGraphic;
+
+        // Read graphic URL from the descriptor, if it has any.
+        const ::uno::Any* pGraphicURL;
+        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_URL, 0, pGraphicURL))
+        {
+            OUString sGraphicURL;
+            if (((*pGraphicURL) >>= sGraphicURL) && !sGraphicURL.isEmpty())
+                aGraphic = vcl::graphic::loadFromURL(sGraphicURL);
+        }
+
         const ::uno::Any* pGraphicAny;
         const bool bHasGraphic = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0, pGraphicAny);
         if (bHasGraphic)
