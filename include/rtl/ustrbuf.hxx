@@ -532,6 +532,42 @@ public:
     }
 
     /**
+        Appends the contents of a string to this string buffer, starting as position beginIndex.
+
+        The characters of the <code>OUString</code> argument are appended, in
+        order, to the contents of this string buffer.
+
+        @param   str   a string.
+        @param   beginIndex the beginning index, inclusive. Must be >= 0 and less than the length of str.
+        @return  this string buffer.
+
+        @since LibreOffice 6.2
+     */
+    OUStringBuffer & appendCopy(const OUString &str, sal_Int32 beginIndex)
+    {
+        return append( str.getStr() + beginIndex, str.getLength() - beginIndex );
+    }
+
+    /**
+        Appends a substring of a string to this string buffer, starting as position beginIndex,
+        running for count characters.
+
+        The characters of the <code>OUString</code> argument are appended, in
+        order, to the contents of this string buffer.
+
+        @param   str    a string.
+        @param   beginIndex the beginning index, inclusive. Must be >= 0 and less than the length of str.
+        @param   count must be >= 0 and < (str.length() - nPos).
+        @return  this string buffer.
+
+        @since LibreOffice 6.2
+     */
+    OUStringBuffer & appendCopy(const OUString &str, sal_Int32 beginIndex, sal_Int32 count)
+    {
+        return append( str.getStr() + beginIndex, count );
+    }
+
+    /**
         Appends the content of a stringbuffer to this string buffer.
 
         The characters of the <code>OUStringBuffer</code> argument are appended, in

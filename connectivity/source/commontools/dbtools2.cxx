@@ -132,7 +132,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         }
         else
         {
-            aSql.append(sTypeName.copy(0,++nParenPos));
+            aSql.appendCopy(sTypeName, 0, ++nParenPos);
         }
 
         if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
@@ -149,7 +149,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         else
         {
             nParenPos = sTypeName.indexOf(')',nParenPos);
-            aSql.append(sTypeName.copy(nParenPos));
+            aSql.appendCopy(sTypeName, nParenPos);
         }
     }
     else

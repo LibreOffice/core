@@ -274,7 +274,7 @@ OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
         for ( size_t nL = 0; nL < nLines; ++nL )
         {
             TextLine& rLine = pTEParaPortion->GetLines()[nL];
-            aText.append( pTEParaPortion->GetNode()->GetText().copy( rLine.GetStart(), rLine.GetEnd() - rLine.GetStart() ) );
+            aText.appendCopy( pTEParaPortion->GetNode()->GetText(), rLine.GetStart(), rLine.GetEnd() - rLine.GetStart() );
             if ( pSep && ( ( (nP+1) < nParas ) || ( (nL+1) < nLines ) ) )
                 aText.append(pSep);
         }
@@ -415,7 +415,7 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
         if ( nNode == nEndPara ) // may also be == nStart!
             nEndPos = aSel.GetEnd().GetIndex();
 
-        aText.append(pNode->GetText().copy( nStartPos, nEndPos-nStartPos ));
+        aText.appendCopy(pNode->GetText(), nStartPos, nEndPos-nStartPos);
         if ( nNode < nEndPara )
             aText.append(pSep);
     }

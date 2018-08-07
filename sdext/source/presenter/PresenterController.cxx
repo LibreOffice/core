@@ -382,13 +382,13 @@ void PresenterController::UpdatePaneTitles()
             if (nStartIndex < 0)
             {
                 // Add the remaining part of the string.
-                sResult.append(sTemplate.copy(nIndex));
+                sResult.appendCopy(sTemplate, nIndex);
                 break;
             }
             else
             {
                 // Add the part preceding the next %.
-                sResult.append(sTemplate.copy(nIndex, nStartIndex-nIndex));
+                sResult.appendCopy(sTemplate, nIndex, nStartIndex-nIndex);
 
                 // Get the placeholder
                 ++nStartIndex;

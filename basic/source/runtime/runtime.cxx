@@ -2051,7 +2051,7 @@ void SbiRuntime::StepRSET()
         }
         else
         {
-            aNewStr.append(aRefValString.copy(0, nVarStrLen));
+            aNewStr.appendCopy(aRefValString, 0, nVarStrLen);
         }
         refVar->PutString(aNewStr.makeStringAndClear());
 

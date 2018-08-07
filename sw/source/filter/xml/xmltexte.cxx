@@ -366,7 +366,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                         if( aBuffer.isEmpty() )
                         {
                             aBuffer.append( '\'' );
-                            aBuffer.append( sRange.copy( 0, i ) );
+                            aBuffer.appendCopy( sRange, 0, i );
                         }
                         if( '\'' == c || '\\' == c )
                             aBuffer.append( '\\' );
