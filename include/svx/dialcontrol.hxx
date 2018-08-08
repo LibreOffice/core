@@ -209,7 +209,6 @@ protected:
         sal_Int32           mnOldAngle;
         long                mnCenterX;
         long                mnCenterY;
-        bool                mbNoRot;
 
         explicit            DialControl_Impl(OutputDevice& rReference);
         void                Init( const Size& rWinSize, const vcl::Font& rWinFont );

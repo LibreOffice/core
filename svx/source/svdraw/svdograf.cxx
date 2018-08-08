@@ -346,7 +346,6 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
 
     // #i25616#
     mbLineIsOutsideGeometry = true;
-    mbInsidePaint = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -373,7 +372,6 @@ SdrGrafObj::SdrGrafObj(
 
     // #i25616#
     mbLineIsOutsideGeometry = true;
-    mbInsidePaint = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -399,7 +397,6 @@ SdrGrafObj::SdrGrafObj(
 
     // #i25616#
     mbLineIsOutsideGeometry = true;
-    mbInsidePaint = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -907,32 +904,6 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
 
     ImpSetAttrToGrafInfo();
     return *this;
-}
-
-basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
-{
-    if(mbInsidePaint)
-    {
-        basegfx::B2DPolyPolygon aRetval;
-
-        // take grown rectangle
-        const sal_Int32 nHalfLineWidth(ImpGetLineWdt() / 2);
-        const tools::Rectangle aGrownRect(
-            maRect.Left() - nHalfLineWidth,
-            maRect.Top() - nHalfLineWidth,
-            maRect.Right() + nHalfLineWidth,
-            maRect.Bottom() + nHalfLineWidth);
-
-        XPolygon aXPoly(ImpCalcXPoly(aGrownRect, GetEckenradius()));
-        aRetval.append(aXPoly.getB2DPolygon());
-
-        return aRetval;
-    }
-    else
-    {
-        // call parent
-        return SdrRectObj::TakeXorPoly();
-    }
 }
 
 sal_uInt32 SdrGrafObj::GetHdlCount() const
