@@ -242,13 +242,6 @@ const Graphic* SwOLENode::GetGraphic()
     return nullptr;
 }
 
-SwContentNode *SwOLENode::SplitContentNode( const SwPosition & )
-{
-    // Multiply OLE objects?
-    OSL_FAIL( "OleNode: can't split." );
-    return this;
-}
-
 /**
  * Loading a OLE object that has been moved to the Undo Area
  */
