@@ -102,9 +102,6 @@ private:
     // Flag for allowing text animation. Default is true.
     bool mbGrafAnimationAllowed:1;
 
-    // #i25616#
-    bool mbInsidePaint:1;
-
     bool mbIsSignatureLine;
     OUString maSignatureLineId;
     OUString maSignatureLineSuggestedSignerName;
@@ -179,9 +176,6 @@ public:
 
     virtual OUString        TakeObjNameSingul() const override;
     virtual OUString        TakeObjNamePlural() const override;
-
-    // #i25616#
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
     virtual SdrGrafObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);

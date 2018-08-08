@@ -517,8 +517,7 @@ SvxDialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
     mnInitialAngle( 0 ),
     mnOldAngle( 0 ),
     mnCenterX( 0 ),
-    mnCenterY( 0 ),
-    mbNoRot( false )
+    mnCenterY( 0 )
 {
 }
 
@@ -690,26 +689,19 @@ void SvxDialControl::Init( const Size& rWinSize )
 void SvxDialControl::InvalidateControl()
 {
     mpImpl->mxBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mxBmpEnabled : *mpImpl->mxBmpDisabled );
-    if( !mpImpl->mbNoRot )
-        mpImpl->mxBmpBuffered->DrawElements( OUString(), mpImpl->mnAngle );
+    mpImpl->mxBmpBuffered->DrawElements( OUString(), mpImpl->mnAngle );
     Invalidate();
 }
 
 void SvxDialControl::SetRotation( sal_Int32 nAngle )
 {
-    bool bOldSel = mpImpl->mbNoRot;
-    mpImpl->mbNoRot = false;
-
     while( nAngle < 0 )
         nAngle += 36000;
 
-    if( !bOldSel || (mpImpl->mnAngle != nAngle) )
-    {
-        mpImpl->mnAngle = nAngle;
-        InvalidateControl();
-        if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
-    }
+    mpImpl->mnAngle = nAngle;
+    InvalidateControl();
+    if( mpImpl->mpLinkField )
+        mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
 }
 
 void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
