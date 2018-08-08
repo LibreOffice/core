@@ -66,6 +66,8 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
         std::vector<sw::Extent>::const_iterator * pIter,
         std::vector<sw::Extent>::const_iterator const* pEnd);
 
+bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor);
+
 void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib);
 
 // draw background with brush or graphics
