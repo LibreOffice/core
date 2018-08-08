@@ -129,9 +129,14 @@ void MediaObjectBar::Execute( SfxRequest const & rReq )
                     static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                         static_cast< const ::avmedia::MediaItem& >( *pItem ) );
 
-                    //fdo #32598: after changing playback opts, set document's modified flag
-                    SdDrawDocument& rDoc = mpView->GetDoc();
-                    rDoc.SetChanged();
+
+                    //if only changing state then don't set modified flag (e.g. playing a video)
+                    if( !(static_cast< const ::avmedia::MediaItem& >( *pItem ).getMaskSet() & AVMediaSetMask::STATE))
+                    {
+                        //fdo #32598: after changing playback opts, set document's modified flag
+                        SdDrawDocument& rDoc = mpView->GetDoc();
+                        rDoc.SetChanged();
+                    }
                 }
             }
         }
