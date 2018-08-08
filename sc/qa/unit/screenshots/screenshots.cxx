@@ -18,6 +18,7 @@
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svl/srchitem.hxx>
