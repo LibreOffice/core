@@ -16,6 +16,23 @@
       "revId": "946bcc9a3f7254cfaba61744eb0bc3cf866bd401",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f53a8032",
+        "filename": "vcl/inc/print.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-08T20:21:46Z",
+      "side": 1,
+      "message": "Please make those strings unique e.g. \"16k ( $width x $height )\"",
+      "revId": "946bcc9a3f7254cfaba61744eb0bc3cf866bd401",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
