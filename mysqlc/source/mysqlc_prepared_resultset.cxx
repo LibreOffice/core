@@ -239,6 +239,9 @@ double SAL_CALL OPreparedResultSet::getDouble(sal_Int32 column)
     }
     m_bWasNull = false;
 
+    if (m_aFields[column - 1].type == MYSQL_TYPE_FLOAT)
+        return *reinterpret_cast<float*>(m_aData[column - 1].buffer);
+
     return *reinterpret_cast<double*>(m_aData[column - 1].buffer);
 }
 
