@@ -1512,7 +1512,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             else
             {
-                pDestNd->SplitContentNode( rPos );
+                pDestNd->SplitContentNode(rPos, nullptr);
             }
 
             if( rPos.nNode == aEndIdx )
@@ -1577,7 +1577,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 }
                 else
                 {
-                    pDestNd->SplitContentNode( rPos );
+                    pDestNd->SplitContentNode(rPos, nullptr);
                 }
 
                 if ( bCorrEnd )
