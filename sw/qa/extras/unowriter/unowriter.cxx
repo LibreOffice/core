@@ -21,9 +21,11 @@ class SwUnoWriter : public SwModelTestBase
 {
 public:
     void testGraphicDesciptorURL();
+    void testGraphicDesciptorURLBitmap();
 
     CPPUNIT_TEST_SUITE(SwUnoWriter);
     CPPUNIT_TEST(testGraphicDesciptorURL);
+    CPPUNIT_TEST(testGraphicDesciptorURLBitmap);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -50,6 +52,37 @@ void SwUnoWriter::testGraphicDesciptorURL()
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // This failed, the graphic object had no graphic.
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+}
+
+void SwUnoWriter::testGraphicDesciptorURLBitmap()
+{
+    loadURL("private:factory/swriter", nullptr);
+
+    // Load a bitmap into the bitmap table.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xBitmaps(
+        xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
+    OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
+    xBitmaps->insertByName("test", uno::makeAny(aGraphicURL));
+
+    // Create a graphic.
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("GraphicURL", xBitmaps->getByName("test"));
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+
+    // Insert it.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xBodyText->insertTextContent(xCursor, xTextContent, false);
+
+    // This failed: setting GraphicURL to the result of getByName() did not
+    // work anymore.
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     CPPUNIT_ASSERT(xGraphic.is());
 }
