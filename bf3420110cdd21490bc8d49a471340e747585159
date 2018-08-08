@@ -16,6 +16,24 @@
       "revId": "bf3420110cdd21490bc8d49a471340e747585159",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9527b4b7",
+        "filename": "oox/source/drawingml/presetgeometrynames.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-08-08T09:29:26Z",
+      "side": 1,
+      "message": "This mutex is used only one time when the hash map is not initialized.",
+      "parentUuid": "ffe62b97_66ffb401",
+      "revId": "bf3420110cdd21490bc8d49a471340e747585159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
