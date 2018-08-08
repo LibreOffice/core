@@ -232,22 +232,6 @@ bool OpenGLContext::init( vcl::Window* pParent )
     return ImplInit();
 }
 
-bool OpenGLContext::init(SystemChildWindow* pChildWindow)
-{
-    if(mbInitialized)
-        return true;
-
-    if( !pChildWindow )
-        return false;
-
-    OpenGLZone aZone;
-
-    mpWindow = pChildWindow->GetParent();
-    m_pChildWindow = pChildWindow;
-    initWindow();
-    return ImplInit();
-}
-
 bool OpenGLContext::ImplInit()
 {
     VCL_GL_INFO("OpenGLContext not implemented for this platform");
@@ -826,16 +810,6 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
     mpCurrentProgram->Use();
 
     return mpCurrentProgram;
-}
-
-void OpenGLContext::UseNoProgram()
-{
-    if( mpCurrentProgram == nullptr )
-        return;
-
-    mpCurrentProgram = nullptr;
-    glUseProgram( 0 );
-    CHECK_GL_ERROR();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

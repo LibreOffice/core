@@ -222,9 +222,6 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
-
-    void clear();
-
 };
 
 #endif

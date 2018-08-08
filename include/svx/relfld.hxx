@@ -29,8 +29,6 @@ class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 {
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
-
-    void            SetRelative( bool bRelative );
 };
 
 class SVX_DLLPUBLIC RelativeField

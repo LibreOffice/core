@@ -42,18 +42,6 @@ ScCompressedArray<A,D>::~ScCompressedArray()
 }
 
 template< typename A, typename D >
-void ScCompressedArray<A,D>::Resize( size_t nNewLimit)
-{
-    if ((nCount <= nNewLimit && nNewLimit < nLimit) || nLimit < nNewLimit)
-    {
-        nLimit = nNewLimit;
-        std::unique_ptr<DataEntry[]> pNewData(new DataEntry[nLimit]);
-        memcpy( pNewData.get(), pData.get(), nCount*sizeof(DataEntry));
-        pData = std::move(pNewData);
-    }
-}
-
-template< typename A, typename D >
 size_t ScCompressedArray<A,D>::Search( A nAccess ) const
 {
     if (nAccess == 0)

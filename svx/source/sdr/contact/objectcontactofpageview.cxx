@@ -407,13 +407,6 @@ namespace sdr
             return rOpt.GetIsAllowAnimatedGraphics();
         }
 
-        // check if asynchronious graphis loading is allowed. Default is sal_False.
-        bool ObjectContactOfPageView::IsAsynchronGraphicsLoadingAllowed() const
-        {
-            SdrView& rView = GetPageWindow().GetPageView().GetView();
-            return rView.IsSwapAsynchron();
-        }
-
         // print?
         bool ObjectContactOfPageView::isOutputToPrinter() const
         {

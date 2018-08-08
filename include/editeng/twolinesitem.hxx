@@ -56,13 +56,10 @@ public:
     virtual sal_uInt16          GetVersion( sal_uInt16 nFFVer ) const override;
 
     bool GetValue() const                       { return bOn; }
-    void SetValue( bool bFlag )                 { bOn = bFlag; }
 
     sal_Unicode GetStartBracket() const         { return cStartBracket; }
-    void SetStartBracket( sal_Unicode c )       { cStartBracket = c; }
 
     sal_Unicode GetEndBracket() const           { return cEndBracket; }
-    void SetEndBracket( sal_Unicode c )         { cEndBracket = c; }
 };
 
 #endif

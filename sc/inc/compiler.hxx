@@ -171,8 +171,6 @@ public:
     bool IsValidReference() const;
 
     formula::FormulaToken* CreateToken() const;   // create typified token
-
-    static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler

@@ -216,16 +216,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken )
 
 // --- class ScRawToken -----------------------------------------------------
 
-sal_Int32 ScRawToken::GetStrLen( const sal_Unicode* pStr )
-{
-    if ( !pStr )
-        return 0;
-    const sal_Unicode* p = pStr;
-    while ( *p )
-        p++;
-    return sal::static_int_cast<sal_Int32>( p - pStr );
-}
-
 void ScRawToken::SetOpCode( OpCode e )
 {
     eOp   = e;

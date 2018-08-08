@@ -40,30 +40,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxRelativeField(VclPtr<vcl::Window> & 
                                             eUnit);
 }
 
-void SvxRelativeField::SetRelative( bool bNewRelative )
-{
-    Selection aSelection = GetSelection();
-    OUString aStr = GetText();
-
-    if ( bNewRelative )
-    {
-        SetDecimalDigits( 0 );
-        SetMin( 0 );
-        SetMax( 0 );
-        SetUnit( FUNIT_PERCENT );
-    }
-    else
-    {
-        SetDecimalDigits( 2 );
-        SetMin( 0 );
-        SetMax( 9999 );
-        SetUnit( FUNIT_CM );
-    }
-
-    SetText( aStr );
-    SetSelection( aSelection );
-}
-
 RelativeField::RelativeField(weld::MetricSpinButton* pControl)
     : m_xSpinButton(pControl)
     , nRelMin(0)

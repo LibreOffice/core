@@ -68,154 +68,28 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& aReferer, const OUString& aFilterName )
-{
-    Graphic aGraphic;
-
-    SfxMedium aMed( aFileName, aReferer, StreamMode::STD_READ );
-    aMed.Download();
-
-    SvStream* pInStrm = aMed.GetInStream();
-    if ( pInStrm )
-    {
-        pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-
-        const sal_uInt16 nFilter = !aFilterName.isEmpty() && rGF.GetImportFormatCount()
-            ? rGF.GetImportFormatNumber( aFilterName )
-            : GRFILTER_FORMAT_DONTKNOW;
-
-        css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
-
-        // TODO: Room for improvement:
-        // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
-        // But this link is required by some filters to access the native graphic (PDF export/MS export),
-        // there we should create a new service to provide this data if needed
-        aFilterData[ 0 ].Name = "CreateNativeLink";
-        aFilterData[ 0 ].Value <<= true;
-
-        // Need to own the solar mutex while creating a SalBitmap.
-        SolarMutexGuard aGuard;
-
-        // #i123042# for e.g SVG the path is needed, so hand it over here. I have no real idea
-        // what consequences this may have; maybe this is not handed over by purpose here. Not
-        // handing it over means that any GraphicFormat that internally needs a path as base
-        // to interpret included links may fail.
-        // Alternatively the path may be set at the result after this call when it is known
-        // that it is a SVG graphic, but only because no one yet tried to interpret it.
-        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, nullptr, GraphicFilterImportFlags::NONE, &aFilterData );
-    }
-    aGraphic.setOriginURL(aFileName);
-    return aGraphic;
-}
-
-class SdrGraphicUpdater;
 class SdrGraphicLink : public sfx2::SvBaseLink
 {
     SdrGrafObj&         rGrafObj;
-    SdrGraphicUpdater*  pGraphicUpdater;
 
 public:
     explicit            SdrGraphicLink(SdrGrafObj& rObj);
-    virtual             ~SdrGraphicLink() override;
 
     virtual void        Closed() override;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
-    void                DataChanged( const Graphic& rGraphic );
 
     void                Connect() { GetRealObject(); }
-    void                UpdateAsynchron();
-    void                RemoveGraphicUpdater();
 
     const OUString& getReferer() const { return rGrafObj.aReferer; }
 };
 
-class SdrGraphicUpdater : public ::osl::Thread
-{
-public:
-    SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
-
-    void Terminate();
-
-    bool GraphicLinkChanged( const OUString& rFileName ){ return maFileName != rFileName;    };
-
-protected:
-
-    /** is called from the inherited create method and acts as the
-        main function of this thread.
-    */
-    virtual void SAL_CALL run() override;
-
-    /** Called after the thread is terminated via the terminate
-        method.  Used to kill the thread by calling delete on this.
-    */
-    virtual void SAL_CALL onTerminated() override;
-
-private:
-
-    const OUString  maFileName;
-    const OUString  maFilterName;
-    SdrGraphicLink& mrGraphicLink;
-
-    volatile bool   mbIsTerminated;
-};
-
-SdrGraphicUpdater::SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& rGraphicLink )
-: maFileName( rFileName )
-, maFilterName( rFilterName )
-, mrGraphicLink( rGraphicLink )
-, mbIsTerminated( false )
-{
-    create();
-}
-
-void SdrGraphicUpdater::Terminate()
-{
-    mbIsTerminated = true;
-}
-
-void SAL_CALL SdrGraphicUpdater::onTerminated()
-{
-    delete this;
-}
-
-void SAL_CALL SdrGraphicUpdater::run()
-{
-    osl_setThreadName("SdrGraphicUpdater");
-
-    Graphic aGraphic( ImpLoadLinkedGraphic( maFileName, mrGraphicLink.getReferer(), maFilterName ) );
-    SolarMutexGuard aSolarGuard;
-    if ( !mbIsTerminated )
-    {
-        mrGraphicLink.DataChanged( aGraphic );
-        mrGraphicLink.RemoveGraphicUpdater();
-    }
-}
-
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 : ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB )
 , rGrafObj( rObj )
-, pGraphicUpdater( nullptr )
 {
     SetSynchron( false );
-}
-
-SdrGraphicLink::~SdrGraphicLink()
-{
-    if ( pGraphicUpdater )
-        pGraphicUpdater->Terminate();
-}
-
-void SdrGraphicLink::DataChanged( const Graphic& rGraphic )
-{
-    rGrafObj.ImpSetLinkedGraphic( rGraphic );
-}
-
-void SdrGraphicLink::RemoveGraphicUpdater()
-{
-    pGraphicUpdater = nullptr;
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
@@ -249,23 +123,6 @@ void SdrGraphicLink::Closed()
     rGrafObj.pGraphicLink=nullptr;
     rGrafObj.ReleaseGraphicLink();
     SvBaseLink::Closed();
-}
-
-void SdrGraphicLink::UpdateAsynchron()
-{
-    if( GetObj() )
-    {
-        if ( pGraphicUpdater )
-        {
-            if ( pGraphicUpdater->GraphicLinkChanged( rGrafObj.GetFileName() ) )
-            {
-                pGraphicUpdater->Terminate();
-                pGraphicUpdater = new SdrGraphicUpdater( rGrafObj.GetFileName(), rGrafObj.GetFilterName(), *this );
-            }
-        }
-        else
-            pGraphicUpdater = new SdrGraphicUpdater( rGrafObj.GetFileName(), rGrafObj.GetFilterName(), *this );
-    }
 }
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrGrafObj::CreateObjectSpecificProperties()
@@ -683,23 +540,6 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 sal_uInt16 SdrGrafObj::GetObjIdentifier() const
 {
     return sal_uInt16( OBJ_GRAF );
-}
-
-/* The graphic of the GraphicLink will be loaded. If it is called with
-   bAsynchron = true then the graphic will be set later via DataChanged
-*/
-bool SdrGrafObj::ImpUpdateGraphicLink( bool bAsynchron ) const
-{
-    bool bRet = false;
-    if( pGraphicLink )
-    {
-        if ( bAsynchron )
-            pGraphicLink->UpdateAsynchron();
-        else
-            pGraphicLink->DataChanged( ImpLoadLinkedGraphic( aFileName, aReferer, aFilterName ) );
-        bRet = true;
-    }
-    return bRet;
 }
 
 void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )

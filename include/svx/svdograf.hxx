@@ -114,7 +114,6 @@ private:
 
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
-    bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, const GraphicObject*, SvStream* );
                             DECL_LINK( ReplacementSwapHdl, const GraphicObject*, SvStream* );
@@ -167,7 +166,6 @@ public:
     bool IsLinkedGraphic() const;
 
     const OUString& GetFileName() const { return aFileName;}
-    const OUString& GetFilterName() const { return aFilterName;}
 
     void                    StartAnimation();
 

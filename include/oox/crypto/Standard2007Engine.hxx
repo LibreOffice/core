@@ -36,8 +36,6 @@ class OOX_DLLPUBLIC Standard2007Engine : public CryptoEngine
 public:
     Standard2007Engine() = default;
 
-    msfilter::StandardEncryptionInfo& getInfo() { return mInfo;}
-
     bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
 
     virtual bool generateEncryptionKey(OUString const & rPassword) override;
