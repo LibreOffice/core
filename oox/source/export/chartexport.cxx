@@ -3284,6 +3284,57 @@ void ChartExport::exportDataPoints(
             }
         }
     }
+
+    // Export Data Point Property in Charts even if the VaryColors is false
+    if( !bVaryColorsByPoint )
+    {
+        ::std::set< sal_Int32 > aAttrPointSet;
+        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
+                    ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        for( nElement = 0; nElement < nSeriesLength; ++nElement )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet;
+            if( aAttrPointSet.find( nElement ) != aEndIt )
+            {
+                try
+                {
+                    xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
+                            xSeries, nElement, getModel() );
+                }
+                catch( const uno::Exception & )
+                {
+                    DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
+                }
+            }
+
+            if( xPropSet.is() )
+            {
+                FSHelperPtr pFS = GetFS();
+                pFS->startElement( FSNS( XML_c, XML_dPt ),
+                    FSEND );
+                pFS->singleElement( FSNS( XML_c, XML_idx ),
+                    XML_val, I32S(nElement),
+                    FSEND );
+
+                switch( eChartType )
+                {
+                    case chart::TYPEID_BUBBLE:
+                    case chart::TYPEID_HORBAR:
+                    case chart::TYPEID_BAR:
+                    {
+                        pFS->singleElement(FSNS(XML_c, XML_invertIfNegative),
+                                    XML_val, "0",
+                                    FSEND);
+                    }
+                    break;
+                }
+                exportShapeProps( xPropSet );
+
+                pFS->endElement( FSNS( XML_c, XML_dPt ) );
+            }
+        }
+    }
 }
 
 void ChartExport::exportAxesId(bool bPrimaryAxes)
