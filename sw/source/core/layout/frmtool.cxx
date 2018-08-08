@@ -1193,6 +1193,46 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
     }
 }
 
+bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor)
+{
+    assert(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA ||
+           rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR ||
+           rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
+    bool ret(true);
+    if (auto const pMergedPara = rFrame.GetMergedPara())
+    {
+        ret = false;
+        auto const pAnchor(rAnchor.GetContentAnchor());
+        auto iterFirst(pMergedPara->extents.cbegin());
+        auto iter(iterFirst);
+        SwTextNode const* pNode(pMergedPara->pFirstNode);
+        for ( ; ; ++iter)
+        {
+            if (iter == pMergedPara->extents.end()
+                || iter->pNode != pNode)
+            {
+                assert(pNode->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
+                if (pNode == &pAnchor->nNode.GetNode())
+                {
+                    ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter);
+                    break;
+                }
+                if (iter == pMergedPara->extents.end())
+                {
+                    break;
+                }
+                pNode = iter->pNode;
+                if (pAnchor->nNode.GetIndex() < pNode->GetIndex())
+                {
+                    break;
+                }
+                iterFirst = iter;
+            }
+        }
+    }
+    return ret;
+}
+
 void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the

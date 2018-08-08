@@ -56,6 +56,7 @@
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
 #include <notxtfrm.hxx>
+#include <txtfrm.hxx>
 #include <crsrsh.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -3027,7 +3028,24 @@ void SwFlyFrameFormat::MakeFrames()
                 }
             }
 
-            if( pFrame->GetDrawObjs() )
+            if (bAdd)
+            {
+                switch (aAnchorAttr.GetAnchorId())
+                {
+                    case RndStdIds::FLY_AS_CHAR:
+                    case RndStdIds::FLY_AT_PARA:
+                    case RndStdIds::FLY_AT_CHAR:
+                    {
+                        assert(pFrame->IsTextFrame());
+                        bAdd = IsAnchoredObjShown(*static_cast<SwTextFrame*>(pFrame), aAnchorAttr);
+                    }
+                    break;
+                    default:
+                    break;
+                }
+            }
+
+            if (bAdd && pFrame->GetDrawObjs())
             {
                 // #i28701# - new type <SwSortedObjs>
                 SwSortedObjs &rObjs = *pFrame->GetDrawObjs();
