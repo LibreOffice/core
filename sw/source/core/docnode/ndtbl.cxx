@@ -492,10 +492,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             SwTableBoxFormat *pBoxF;
             if( pTAFormat )
             {
-                sal_uInt8 nId = static_cast<sal_uInt8>(!n ? 0 : (( n+1 == nRows )
-                                        ? 12 : (4 * (1 + ((n-1) & 1 )))));
-                nId = nId + static_cast<sal_uInt8>( !i ? 0 :
-                            ( i+1 == nCols ? 3 : (1 + ((i-1) & 1))));
+                sal_uInt8 nId = SwTableAutoFormat::CountPos(i, nCols, n, nRows);
                 pBoxF = ::lcl_CreateAFormatBoxFormat( *this, aBoxFormatArr, *pTAFormat,
                                                 nCols, nId );
 
