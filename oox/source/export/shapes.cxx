@@ -744,6 +744,9 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bFlipH = false;
     bool bFlipV = false;
 
+    // Avoid interference of preset type to the next shape
+    m_presetWarp = "";
+
     if( GETA( CustomShapeGeometry ) ) {
         SAL_INFO("oox.shape", "got custom shape geometry");
         if( mAny >>= aGeometrySeq ) {
@@ -1007,7 +1010,9 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     }
     if( rXPropSet.is() )
     {
-        WriteFill( rXPropSet );
+        // Preset shape with text has no fill
+        if( sShapeType.isEmpty() || !sShapeType.startsWith( "fontwork" ) )
+            WriteFill( rXPropSet );
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
         WriteShape3DEffects( rXPropSet );
