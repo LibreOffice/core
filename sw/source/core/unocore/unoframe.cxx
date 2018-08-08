@@ -2754,8 +2754,15 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         if (m_pProps->GetProperty(FN_UNO_GRAPHIC_URL, 0, pGraphicURL))
         {
             OUString sGraphicURL;
+            uno::Reference<awt::XBitmap> xBitmap;
             if (((*pGraphicURL) >>= sGraphicURL) && !sGraphicURL.isEmpty())
                 aGraphic = vcl::graphic::loadFromURL(sGraphicURL);
+            else if ((*pGraphicURL) >>= xBitmap)
+            {
+                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                if (xGraphic.is())
+                    aGraphic = xGraphic;
+            }
         }
 
         const ::uno::Any* pGraphicAny;
