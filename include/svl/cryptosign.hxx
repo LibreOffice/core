@@ -86,9 +86,6 @@ private:
     OUString m_aSignPassword;
 };
 
-/// Decides if SVL_CRYPTO_MSCRYPTO uses the new CNG API or not.
-SVL_DLLPUBLIC bool isMSCng();
-
 }
 }
 
