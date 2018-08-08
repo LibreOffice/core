@@ -17,6 +17,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
@@ -2252,6 +2253,26 @@ RTFError RTFDocumentImpl::popState()
                 RTFSdrImport::ShapeOrPict eType
                     = (aState.eDestination == Destination::SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE
                                                                              : RTFSdrImport::PICT;
+                if (eType == RTFSdrImport::PICT)
+                {
+                    if (m_aStates.size() > 1)
+                    {
+                        const auto aPreviousPropNo
+                            = m_aStates[m_aStates.size() - 2].aShape.aProperties.size();
+                        const auto& aProperties = aState.aShape.aProperties;
+                        // check if \picprop does not have incorrect shape type
+                        auto pIter = std::find_if(
+                            std::next(std::begin(aProperties), aPreviousPropNo),
+                            std::end(aProperties), [](const std::pair<OUString, OUString>& a) {
+                                return ((a.first == "shapeType")
+                                        && (a.second.toInt32() != ESCHER_ShpInst_PictureFrame));
+                            });
+                        if (pIter != std::end(aProperties))
+                        {
+                            m_pSdrImport->setFakePict();
+                        }
+                    }
+                }
                 if (!m_aStates.top().pCurrentBuffer || eType != RTFSdrImport::SHAPE)
                     m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
                 else

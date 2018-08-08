@@ -304,10 +304,6 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
     else
     {
         nType = iter->second.toInt32();
-        if (PICT == shapeOrPict && ESCHER_ShpInst_PictureFrame != nType)
-        {
-            m_bFakePict = true;
-        }
     }
 
     switch (nType)

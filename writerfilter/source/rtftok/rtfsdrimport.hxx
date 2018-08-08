@@ -86,6 +86,7 @@ public:
     void popParent();
     css::uno::Reference<css::drawing::XShape> const& getCurrentShape() { return m_xShape; }
     bool isFakePict() { return m_bFakePict; }
+    void setFakePict(bool aFake = true) { m_bFakePict = aFake; }
 
 private:
     void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape,
