@@ -439,23 +439,24 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
     case DataType::DECIMAL:
     case DataType::NUMERIC:
     {
-        double nValue(0);
+        double nValue(0.0);
+        rtl::OUString sValue;
         if ( value >>= nValue )
         {
             setDouble( parameterIndex, nValue );
             break;
         }
-        else
+        else if ( value >>= sValue )
         {
-            rtl::OUString sValue;
-            if( value >>= sValue )
-            {
-                m_binds[nIndex].buffer_type = MYSQL_TYPE_NEWDECIMAL;
-                mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, sValue.getStr(), MYSQL_TYPE_LONGLONG, sValue.getLength());
-                m_bindMetas[nIndex].is_null = 0;
-            }
-
+            rtl::OString sAscii = rtl::OUStringToOString(sValue, getOwnConnection()->getConnectionEncoding());
+            std::stringstream sStream{sAscii.getStr()};
+            sStream >> nValue;
+            m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
+            mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &nValue, MYSQL_TYPE_DOUBLE, sValue.getLength());
+            m_bindMetas[nIndex].is_null = 0;
+            break;
         }
+
 #if defined __GNUC__ && __GNUC__ >= 7
         [[fallthrough]];
 #else
