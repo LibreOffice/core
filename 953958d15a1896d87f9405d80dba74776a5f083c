@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_7532f0a9",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-08T12:48:29Z",
+      "side": 1,
+      "message": "There are members of type uno::Sequence in the InteralData class, so given that an implicit inline destructor, the complete type is needed in the header.\n\nPerhaps write \"complete type is needed in the inline dtor\" instead of \"not sure why\".",
+      "revId": "953958d15a1896d87f9405d80dba74776a5f083c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
