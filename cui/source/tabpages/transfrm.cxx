@@ -437,6 +437,11 @@ void SvxSlantTabPage::Construct()
     DBG_ASSERT(pView, "no valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(*m_xMtrRadius, eDlgUnit, true);
+    for (int i = 0; i < 2; ++i)
+    {
+        SetFieldUnit(*m_aControlX[i], eDlgUnit, true);
+        SetFieldUnit(*m_aControlY[i], eDlgUnit, true);
+    }
 
     { // #i75273#
         ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
