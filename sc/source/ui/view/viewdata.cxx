@@ -2838,17 +2838,13 @@ void ScViewData::ReadUserData(const OUString& rData)
     if (rData.isEmpty())    // empty string on "reload"
         return;             // then exit without assertion
 
-    sal_Int32 nCount = comphelper::string::getTokenCount(rData, ';');
-    if ( nCount <= 2 )
+    if ( comphelper::string::getTokenCount(rData, ';') <= 2 )
     {
         // when reload, in page preview, the preview UserData may have been left intact.
         // we don't want the zoom from the page preview here.
         OSL_FAIL("ReadUserData: This is not my data");
         return;
     }
-
-    // not per sheet:
-    SCTAB nTabStart = 2;
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
@@ -2879,7 +2875,6 @@ void ScViewData::ReadUserData(const OUString& rData)
     if (aTabOpt.startsWith(TAG_TABBARWIDTH, &aRest))
     {
         pView->SetTabBarWidth(aRest.toInt32());
-        nTabStart = 3;
     }
     else
     {
@@ -2889,7 +2884,7 @@ void ScViewData::ReadUserData(const OUString& rData)
 
     // per sheet
     SCTAB nPos = 0;
-    while ( nCount > nPos+nTabStart )
+    while ( nMainIdx>0 )
     {
         aTabOpt = rData.getToken(0, ';', nMainIdx);
         EnsureTabDataSize(nPos + 1);
