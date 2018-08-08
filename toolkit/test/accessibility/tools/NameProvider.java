@@ -250,6 +250,7 @@ public class NameProvider
         maRoleMap.put (Integer.valueOf(AccessibleRole.SLIDER), "SLIDER");
         maRoleMap.put (Integer.valueOf(AccessibleRole.SPIN_BOX), "SPIN_BOX");
         maRoleMap.put (Integer.valueOf(AccessibleRole.SPLIT_PANE), "SPLIT_PANE");
+        maRoleMap.put (Integer.valueOf(AccessibleRole.STATIC), "STATIC");
         maRoleMap.put (Integer.valueOf(AccessibleRole.STATUS_BAR), "STATUS_BAR");
         maRoleMap.put (Integer.valueOf(AccessibleRole.TABLE), "TABLE");
         maRoleMap.put (Integer.valueOf(AccessibleRole.TABLE_CELL), "TABLE_CELL");

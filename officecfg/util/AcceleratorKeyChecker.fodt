@@ -221,6 +221,10 @@ Sub initializeRoleMap
 	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.TREE_TABLE, &quot;TREE_TABLE&quot;)
 	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.COMMENT, &quot;COMMENT&quot;)
 	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.COMMENT_END, &quot;COMMENT_END&quot;)
+	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.DOCUMENT_PRESENTATION, &quot;DOCUMENT_PRESENTATION&quot;)
+	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.DOCUMENT_SPREADSHEET, &quot;DOCUMENT_SPREADSHEET&quot;)
+	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.DOCUMENT_TEXT, &quot;DOCUMENT_TEXT&quot;)
+	ROLEMAP.put (com.sun.star.accessibility.AccessibleRole.STATIC, &quot;STATIC&quot;)
 End Sub
 
       </ooo:source-code>

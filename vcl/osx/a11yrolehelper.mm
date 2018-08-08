@@ -125,6 +125,7 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::DOCUMENT_PRESENTATION, NSAccessibilityGroupRole );
         MAP( AccessibleRole::DOCUMENT_SPREADSHEET, NSAccessibilityGroupRole );
         MAP( AccessibleRole::DOCUMENT_TEXT, NSAccessibilityGroupRole );
+        MAP( AccessibleRole::STATIC, NSAccessibilityStaticTextRole );
 
 #undef MAP
         default:
@@ -256,6 +257,8 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::DOCUMENT_PRESENTATION, @"" );
         MAP( AccessibleRole::DOCUMENT_SPREADSHEET, @"" );
         MAP( AccessibleRole::DOCUMENT_TEXT, @"" );
+
+        MAP( AccessibleRole::STATIC, @"" );
 
 #undef MAP
         default:
