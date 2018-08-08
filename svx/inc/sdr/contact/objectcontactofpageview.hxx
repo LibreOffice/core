@@ -89,9 +89,6 @@ namespace sdr
             // check if graphic animation is allowed.
             virtual bool IsGraphicAnimationAllowed() const override;
 
-            // check if asynchronious graphis loading is allowed. Default is sal_False.
-            virtual bool IsAsynchronGraphicsLoadingAllowed() const override;
-
             // print? Default is false
             virtual bool isOutputToPrinter() const override;
 

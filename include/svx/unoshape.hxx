@@ -198,8 +198,6 @@ public:
     SvxShape( SdrObject* pObj );
     /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet );
-    /// @throws css::uno::RuntimeException
-    SvxShape();
     virtual ~SvxShape() throw () override;
 
     // Internals

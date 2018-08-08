@@ -76,7 +76,6 @@ public:
     void requestLegacyContext();
 
     bool init(vcl::Window* pParent);
-    bool init(SystemChildWindow* pChildWindow);
 
     void reset();
 

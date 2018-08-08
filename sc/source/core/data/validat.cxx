@@ -1047,9 +1047,4 @@ ScValidationDataList::const_iterator ScValidationDataList::end() const
     return maData.end();
 }
 
-void ScValidationDataList::clear()
-{
-    maData.clear();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

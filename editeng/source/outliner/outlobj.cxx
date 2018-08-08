@@ -178,11 +178,6 @@ const EditTextObject& OutlinerParaObject::GetTextObject() const
     return *mpImpl->mpEditTextObject;
 }
 
-bool OutlinerParaObject::IsEditDoc() const
-{
-    return mpImpl->mbIsEditDoc;
-}
-
 const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
     if(0 <= nIndex && static_cast<size_t>(nIndex) < mpImpl->maParagraphDataVector.size())

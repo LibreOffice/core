@@ -1754,18 +1754,14 @@ void SvxColorItem::SetValue( const Color& rNewCol )
 // class SvxCharSetColorItem ---------------------------------------------
 
 SvxCharSetColorItem::SvxCharSetColorItem( const sal_uInt16 nId ) :
-    SvxColorItem( nId ),
-
-    eFrom( RTL_TEXTENCODING_DONTKNOW )
+    SvxColorItem( nId )
 {
 }
 
 
 SvxCharSetColorItem::SvxCharSetColorItem( const Color& rCol,
                                           const sal_uInt16 nId ) :
-    SvxColorItem( rCol, nId ),
-
-    eFrom( RTL_TEXTENCODING_DONTKNOW )
+    SvxColorItem( rCol, nId )
 {
 }
 

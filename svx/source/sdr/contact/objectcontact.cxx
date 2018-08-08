@@ -146,12 +146,6 @@ bool ObjectContact::IsGraphicAnimationAllowed() const
     return true;
 }
 
-// check if asynchronous graphics loading is allowed. Default is false.
-bool ObjectContact::IsAsynchronGraphicsLoadingAllowed() const
-{
-    return false;
-}
-
 void ObjectContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew)
 {
     if(mpViewObjectContactRedirector != pNew)

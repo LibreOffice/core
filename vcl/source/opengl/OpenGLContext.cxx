@@ -232,22 +232,6 @@ bool OpenGLContext::init( vcl::Window* pParent )
     return ImplInit();
 }
 
-bool OpenGLContext::init(SystemChildWindow* pChildWindow)
-{
-    if(mbInitialized)
-        return true;
-
-    if( !pChildWindow )
-        return false;
-
-    OpenGLZone aZone;
-
-    mpWindow = pChildWindow->GetParent();
-    m_pChildWindow = pChildWindow;
-    initWindow();
-    return ImplInit();
-}
-
 bool OpenGLContext::ImplInit()
 {
     VCL_GL_INFO("OpenGLContext not implemented for this platform");

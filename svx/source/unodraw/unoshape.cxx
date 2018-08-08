@@ -196,19 +196,6 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries,
 }
 
 
-SvxShape::SvxShape()
-:   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
-,   mbIsMultiPropertyCall(false)
-,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
-,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
-,   mpSdrObjectWeakReference(nullptr)
-,   mnLockCount(0)
-{
-    impl_construct();
-}
-
-
 SvxShape::~SvxShape() throw()
 {
     ::SolarMutexGuard aGuard;
