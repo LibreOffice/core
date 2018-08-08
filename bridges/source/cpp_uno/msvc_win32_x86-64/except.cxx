@@ -251,7 +251,6 @@ void
 
 #include <com/sun/star/uno/Any.hxx>
 #include <unordered_map>
-#include "mscx.hxx"
 #include <except.hxx>
 
 #pragma pack(push, 8)
@@ -782,6 +781,61 @@ void mscx_raiseException(
     RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 4, arFilterArgs);
 }
 
+namespace
+{
+// This function does the same check as __CxxDetectRethrow from msvcrt (see its
+// crt/src/vcruntime/mgdframe.cpp). But it does not alter the global state, i.e. it does not
+// increment __ProcessingThrow, and so does not break following exception handling. We rely on the
+// definition of EHExceptionRecord, PER_IS_MSVC_EH and PER_PTHROW, that are current as of msvcrt
+// 2017 (14.14.26428).
+bool __DetectRethrow(void* ppExcept)
+{
+    struct EHExceptionRecord
+    {
+        DWORD ExceptionCode;
+        DWORD ExceptionFlags;
+        struct _EXCEPTION_RECORD* ExceptionRecord;
+        PVOID ExceptionAddress;
+        DWORD NumberParameters;
+        struct alignas(8) EHParameters
+        {
+            DWORD magicNumber;
+            PVOID pExceptionObject;
+            PVOID pThrowInfo;
+            PVOID pThrowImageBase;
+        } params;
+    };
+
+    constexpr auto PER_IS_MSVC_EH = [](EHExceptionRecord* p) {
+        constexpr DWORD EH_EXCEPTION_NUMBER = ('msc' | 0xE0000000); // The NT Exception # that msvcrt uses
+        constexpr DWORD EH_MAGIC_NUMBER1 = 0x19930520;              // latest magic # in thrown object
+        constexpr DWORD EH_MAGIC_NUMBER2 = 0x19930521;              // latest magic # in func info for exception specs
+        constexpr DWORD EH_MAGIC_NUMBER3 = 0x19930522;              // latest magic #
+        constexpr DWORD EH_EXCEPTION_PARAMETERS = 4;                // Number of parameters in exception record for AMD64
+
+        return p->ExceptionCode == EH_EXCEPTION_NUMBER
+               && p->NumberParameters == EH_EXCEPTION_PARAMETERS
+               && (p->params.magicNumber == EH_MAGIC_NUMBER1
+                   || p->params.magicNumber == EH_MAGIC_NUMBER2
+                   || p->params.magicNumber == EH_MAGIC_NUMBER3);
+    };
+
+    constexpr auto PER_PTHROW = [](EHExceptionRecord* p) {
+        return p->params.pThrowInfo;
+    };
+
+    EHExceptionRecord* pExcept;
+    if (!ppExcept)
+        return false;
+    pExcept = *(EHExceptionRecord**)ppExcept;
+    if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == nullptr)
+    {
+        return true;
+    }
+    return false;
+}
+}
+
 int mscx_filterCppException(
     EXCEPTION_POINTERS * pPointers,
     uno_Any * pUnoExc,
@@ -796,7 +850,7 @@ int mscx_filterCppException(
     if (pRecord == nullptr || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
-    bool rethrow = __CxxDetectRethrow( &pRecord );
+    const bool rethrow = __DetectRethrow(&pRecord);
     assert(pRecord == pPointers->ExceptionRecord);
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
