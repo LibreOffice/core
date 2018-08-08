@@ -478,7 +478,13 @@ int msci_filterCppException(
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
-    bool rethrow = __CxxDetectRethrow( &pRecord );
+    int rethrow;
+    {
+        char* storage = static_cast<char*>(_alloca(__CxxQueryExceptionSize()));
+        __CxxRegisterExceptionObject(&pRecord, storage);
+        rethrow = __CxxDetectRethrow(&pRecord);
+        __CxxUnregisterExceptionObject(storage, rethrow);
+    }
     assert(pRecord == pPointers->ExceptionRecord);
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
