@@ -453,7 +453,19 @@
           <menu:menuitem menu:id=".uno:MirrorHorz"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
+      <menu:menu menu:id=".uno:AdvancedMode">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
+          <menu:menuitem menu:id=".uno:Mirror"/>
+          <menu:menuitem menu:id=".uno:ConvertInto3DLathe"/>
+          <menu:menuitem menu:id=".uno:CrookRotate"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:CrookSlant"/>
+          <menu:menuitem menu:id=".uno:Shear"/>
+          <menu:menuitem menu:id=".uno:InteractiveTransparence"/>
+          <menu:menuitem menu:id=".uno:InteractiveGradient"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ArrangeMenu">
         <menu:menupopup>
