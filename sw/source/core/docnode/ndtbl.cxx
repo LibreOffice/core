@@ -1072,10 +1072,16 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 if (pTextNd->GetText()[nChPos] == cCh)
                 {
                     aCntPos.nContent = nChPos;
-                    SwContentNode* pNewNd = pTextNd->SplitContentNode( aCntPos );
-
-                    if( !pContentStore->Empty() )
-                        pContentStore->Restore( *pNewNd, nChPos, nChPos + 1 );
+                    std::function<void (SwTextNode *)> restoreFunc(
+                        [&](SwTextNode *const pNewNode)
+                        {
+                            if (!pContentStore->Empty())
+                            {
+                                pContentStore->Restore(*pNewNode, nChPos, nChPos + 1);
+                            }
+                        });
+                    SwContentNode *const pNewNd =
+                        pTextNd->SplitContentNode(aCntPos, &restoreFunc);
 
                     // Delete separator and correct search string
                     pTextNd->EraseText( aCntPos.nContent, 1 );

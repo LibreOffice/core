@@ -364,7 +364,8 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
     }
 }
 
-SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
+SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
+        std::function<void (SwTextNode *)> const*const pContentIndexRestore)
 {
     bool parentIsOutline = IsOutline();
 
@@ -475,6 +476,11 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
+        if (pContentIndexRestore)
+        {   // call before making frames and before RegisterToNode
+            (*pContentIndexRestore)(pNode);
+        }
+
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
@@ -572,6 +578,11 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             pNode->SetSmartTags( pList2->SplitList( nSplitPos ) );
             SetSmartTags( pList2, false );
+        }
+
+        if (pContentIndexRestore)
+        {   // call before making frames
+            (*pContentIndexRestore)(pNode);
         }
 
         if ( HasWriterListeners() )

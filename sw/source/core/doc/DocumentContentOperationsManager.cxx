@@ -1991,7 +1991,15 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(aSavePam.GetPoint()->nNode == rPos.nNode.GetIndex());
         assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
 
-        pTNd = pTNd->SplitContentNode( rPos )->GetTextNode();
+        std::function<void (SwTextNode *)> restoreFunc(
+            [&](SwTextNode *const)
+            {
+                if (!pContentStore->Empty())
+                {
+                    pContentStore->Restore(&m_rDoc, pOrigNode->GetIndex()-1, 0, true);
+                }
+            });
+        pTNd = pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
 
         //A new node was inserted before the orig pTNd and the content up to
         //rPos moved into it. The old node is returned with the remainder
@@ -2010,9 +2018,6 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
         aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
         rPos = *aSavePam.GetMark() = *aSavePam.GetPoint();
-
-        if( !pContentStore->Empty() )
-            pContentStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
 
         // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )
@@ -2931,15 +2936,18 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
 
     const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
     pContentStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
-    // FIXME: only SwTextNode has a valid implementation of SplitContentNode!
-    OSL_ENSURE(pNode->IsTextNode(), "splitting non-text node?");
-    pNode = pNode->SplitContentNode( rPos );
+    assert(pNode->IsTextNode());
+    std::function<void (SwTextNode *)> restoreFunc(
+        [&](SwTextNode *const)
+        {
+            if (!pContentStore->Empty())
+            {   // move all bookmarks, TOXMarks, FlyAtCnt
+                pContentStore->Restore(&m_rDoc, rPos.nNode.GetIndex()-1, 0, true);
+            }
+        });
+    pNode = pNode->GetTextNode()->SplitContentNode(rPos, &restoreFunc);
     if (pNode)
     {
-        // move all bookmarks, TOXMarks, FlyAtCnt
-        if( !pContentStore->Empty() )
-            pContentStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
-
         // To-Do - add 'SwExtraRedlineTable' also ?
         if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
         {

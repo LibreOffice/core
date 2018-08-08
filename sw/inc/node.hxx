@@ -391,8 +391,6 @@ public:
        pSib is another SwFrame of the same layout (e.g. the SwRootFrame itself, a sibling, the parent) */
     virtual SwContentFrame *MakeFrame( SwFrame* pSib ) = 0;
 
-    virtual SwContentNode *SplitContentNode(const SwPosition & ) = 0;
-
     virtual SwContentNode *JoinNext();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */

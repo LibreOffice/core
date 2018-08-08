@@ -34,6 +34,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <functional>
 
 class SfxHint;
 class SwNumRule;
@@ -348,7 +349,8 @@ public:
 
     /// Virtual methods from ContentNode.
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
-    virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
+    SwTextNode * SplitContentNode(const SwPosition &,
+            std::function<void (SwTextNode *)> const* pContentIndexRestore);
     virtual SwContentNode *JoinNext() override;
     void JoinPrev();
 
