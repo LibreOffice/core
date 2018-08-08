@@ -31,9 +31,6 @@ namespace sdr
     {
         class ViewObjectContactOfGraphic final : public ViewObjectContactOfSdrObj
         {
-            const SdrGrafObj& getSdrGrafObj() const;
-            SdrGrafObj& getSdrGrafObj();
-
             // This method is responsible for creating the graphical visualisation data
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 

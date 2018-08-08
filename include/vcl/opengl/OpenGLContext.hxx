@@ -76,7 +76,6 @@ public:
     void requestLegacyContext();
 
     bool init(vcl::Window* pParent);
-    bool init(SystemChildWindow* pChildWindow);
 
     void reset();
 
@@ -95,7 +94,6 @@ public:
     // retrieve a program from the cache or compile/link it
     OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
-    void                UseNoProgram();
 
     RenderState& state()
     {

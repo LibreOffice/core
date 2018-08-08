@@ -32,7 +32,6 @@
 
 class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
 {
-    rtl_TextEncoding eFrom;
 public:
     explicit SvxCharSetColorItem( const sal_uInt16 nId  );
     SvxCharSetColorItem( const Color& aColor, const sal_uInt16 nId  );
@@ -44,8 +43,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    rtl_TextEncoding     GetCharSet() const { return eFrom; }
 };
 
 #endif

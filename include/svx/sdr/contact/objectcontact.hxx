@@ -128,9 +128,6 @@ public:
     // check if graphic animation is allowed. Default is sal_true.
     virtual bool IsGraphicAnimationAllowed() const;
 
-    // check if asynchronious graphis loading is allowed. Default is sal_False.
-    virtual bool IsAsynchronGraphicsLoadingAllowed() const;
-
     // access to ViewObjectContactRedirector
     ViewObjectContactRedirector* GetViewObjectContactRedirector() const {  return mpViewObjectContactRedirector; }
     void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);

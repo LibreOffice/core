@@ -70,7 +70,6 @@ public:
                                 ScCompressedArray( A nMaxAccess,
                                         const D& rValue );
     virtual                     ~ScCompressedArray();
-    void                        Resize( size_t nNewSize );
     void                        Reset( const D& rValue );
     void                        SetValue( A nPos, const D& rValue );
     void                        SetValue( A nStart, A nEnd, const D& rValue );

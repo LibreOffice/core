@@ -291,7 +291,6 @@ public:
     bool empty() const { return m_Records.empty(); }
     void insert(SvxMSDffImportRec* pImpRec);
     void unmap(const SdrObject* pObj) { m_ObjToRecMap.erase(pObj); }
-    SvxMSDffImportRec* front() { return m_Records.begin()->get(); }
     size_t size() const { return m_Records.size(); }
     SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }

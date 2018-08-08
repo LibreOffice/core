@@ -96,8 +96,6 @@ private:
 
     static Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
-    bool calculateDecryptionKey(const OUString& rPassword);
-
 public:
     AgileEngine();
 
