@@ -248,6 +248,7 @@ constants AccessibleRole
     const short INTERNAL_FRAME = 29;
 
     /** An object used to present an icon or short string in an interface.
+        <p>See also TEXT and STATIC.</p>
     */
     const short LABEL = 30;
 
@@ -500,9 +501,9 @@ constants AccessibleRole
     /** Text role.
 
         <p>An object that presents text to the user. The text is usually
-        editable by the user as opposed to a label.</p>
+        editable by the user as opposed to a label or static text.</p>
 
-        <p>See also LABEL.</p>
+        <p>See also LABEL and STATIC.</p>
     */
     const short TEXT = 60;
 
@@ -728,6 +729,17 @@ constants AccessibleRole
         @since LibreOffice 4.3
     */
     const short DOCUMENT_TEXT = 85;
+
+    /** Static text role.
+
+        <p>An object that presents a brief amount of information to the user.
+           The text is not editable by the user as opposed to a text, and not
+           meant to have a relation with another object as opposed to a
+           label.</p>
+
+        <p>See also LABEL and TEXT.</p>
+    */
+    const short STATIC = 86;
 
 };
 

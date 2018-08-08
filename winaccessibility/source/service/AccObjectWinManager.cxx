@@ -825,6 +825,7 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case /*AccessibleRole::*/CHECK_BOX:
         case /*AccessibleRole::*/ICON:
         case /*AccessibleRole::*/LABEL:
+        case /*AccessibleRole::*/STATIC:
         case /*AccessibleRole::*/MENU_ITEM:
         case /*AccessibleRole::*/CHECK_MENU_ITEM:
         case /*AccessibleRole::*/RADIO_MENU_ITEM:

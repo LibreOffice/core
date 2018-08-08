@@ -144,7 +144,8 @@ const short ROLE_TABLE[][2] =
         {COMMENT_END,               IA2_ROLE_TEXT_FRAME },
         {DOCUMENT_PRESENTATION,     ROLE_SYSTEM_DOCUMENT },
         {DOCUMENT_SPREADSHEET,      ROLE_SYSTEM_DOCUMENT },
-        {DOCUMENT_TEXT,             ROLE_SYSTEM_DOCUMENT }
+        {DOCUMENT_TEXT,             ROLE_SYSTEM_DOCUMENT },
+        {STATIC,                    IA2_ROLE_TEXT_FRAME }
     };
 
 
@@ -880,6 +881,7 @@ void AccObject::UpdateState()
         switch(m_accRole)
         {
         case LABEL:
+        case STATIC:
             m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
             break;
         case TEXT:
@@ -918,7 +920,8 @@ void AccObject::UpdateState()
 
         if(!(Role == FILLER || Role == END_NOTE || Role == FOOTER || Role == FOOTNOTE || Role == GROUP_BOX || Role == RULER
                 || Role == HEADER || Role == ICON || Role == INTERNAL_FRAME || Role == LABEL || Role == LAYERED_PANE
-                || Role == SCROLL_BAR || Role == SCROLL_PANE || Role == SPLIT_PANE || Role == STATUS_BAR || Role == TOOL_TIP))
+                || Role == SCROLL_BAR || Role == SCROLL_PANE || Role == SPLIT_PANE || Role == STATIC || Role == STATUS_BAR
+                || Role == TOOL_TIP))
         {
             if( SEPARATOR == Role  )
             {
