@@ -57,6 +57,8 @@
 #include "swhtml.hxx"
 #include "swcss1.hxx"
 #include <numrule.hxx>
+#include <tblafmt.hxx>
+#include <SwStyleNameMapper.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
@@ -1076,6 +1078,16 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
         m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
 }
 
+SwDoc* SwHTMLParser::GetDoc() const
+{
+    return m_xDoc.get();
+}
+
+bool SwHTMLParser::IsReqIF() const
+{
+    return m_bReqIF;
+}
+
 HTMLTable::~HTMLTable()
 {
     delete m_pResizeDrawObjects;
@@ -1485,6 +1497,25 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
             pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
             pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
+        }
+
+        if (m_pParser->IsReqIF())
+        {
+            // ReqIF case, cells would have no formatting. Apply the default
+            // table autoformat on them, so imported and UI-created tables look
+            // the same.
+            SwTableAutoFormatTable& rTable = m_pParser->GetDoc()->GetTableStyles();
+            SwTableAutoFormat* pTableFormat = rTable.FindAutoFormat(
+                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, OUString()));
+            if (pTableFormat)
+            {
+                sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);
+                pTableFormat->UpdateToSet(nPos,
+                                          const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
+                                              pFrameFormat->GetAttrSet())),
+                                          SwTableAutoFormat::UPDATE_BOX,
+                                          pFrameFormat->GetDoc()->GetNumberFormatter());
+            }
         }
     }
     else

@@ -483,6 +483,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SfxViewFrame* m_pTempViewFrame;
 
     bool m_bXHTML = false;
+    bool m_bReqIF = false;
 
     /**
      * Non-owning pointers to already inserted OLE nodes, matching opened
@@ -904,6 +905,10 @@ public:
 
     virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
+
+    SwDoc* GetDoc() const;
+
+    bool IsReqIF() const;
 
     /// Strips query and fragment from a URL path if base URL is a file:// one.
     static OUString StripQueryFromPath(const OUString& rBase, const OUString& rPath);

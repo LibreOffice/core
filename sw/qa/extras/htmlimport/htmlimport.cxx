@@ -251,6 +251,21 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
+DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
+{
+    // Load a table with xhtmlns=reqif-xhtml filter param.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xTables->getCount());
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    auto aBorder = getProperty<table::BorderLine2>(xCell, "TopBorder");
+    // This was 0, tables had no borders, even if the default autoformat has
+    // borders and the markup allows no custom borders.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), aBorder.LineWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

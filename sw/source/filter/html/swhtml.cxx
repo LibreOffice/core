@@ -5581,8 +5581,11 @@ void SwHTMLParser::SetupFilterOptions()
     const OUString aXhtmlNsKey("xhtmlns=");
     if (aFilterOptions.startsWith(aXhtmlNsKey))
     {
-        SetNamespace(aFilterOptions.copy(aXhtmlNsKey.getLength()));
+        OUString aNamespace = aFilterOptions.copy(aXhtmlNsKey.getLength());
+        SetNamespace(aNamespace);
         m_bXHTML = true;
+        if (aNamespace == "reqif-xhtml")
+            m_bReqIF = true;
     }
 }
 

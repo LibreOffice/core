@@ -1135,6 +1135,16 @@ const std::vector<sal_Int32>& SwTableAutoFormat::GetTableTemplateMap()
     return *pTableTemplateMap;
 }
 
+sal_uInt8 SwTableAutoFormat::CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uInt32 nRow,
+                                      sal_uInt32 nRows)
+{
+    sal_uInt8 nRet = static_cast<sal_uInt8>(
+        !nRow ? 0 : ((nRow + 1 == nRows) ? 12 : (4 * (1 + ((nRow - 1) & 1)))));
+    nRet = nRet
+           + static_cast<sal_uInt8>(!nCol ? 0 : (nCol + 1 == nCols ? 3 : (1 + ((nCol - 1) & 1))));
+    return nRet;
+}
+
 struct SwTableAutoFormatTable::Impl
 {
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
