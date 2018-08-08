@@ -344,7 +344,6 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
     if( m_bEnableDefault ) {
         HCERTSTORE hSystemKeyStore ;
         DWORD      dwKeySpec;
-        HCRYPTPROV hCryptProv;
         NCRYPT_KEY_HANDLE hCryptKey;
 
 #ifdef SAL_LOG_INFO
@@ -357,13 +356,8 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
             while (pCertContext)
             {
                 // for checking whether the certificate is a personal certificate or not.
-                DWORD dwFlags = CRYPT_ACQUIRE_COMPARE_KEY_FLAG;
-                HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hCryptProv;
-                if (svl::crypto::isMSCng())
-                {
-                    dwFlags |= CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
-                    phCryptProvOrNCryptKey = &hCryptKey;
-                }
+                DWORD dwFlags = CRYPT_ACQUIRE_COMPARE_KEY_FLAG | CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
+                HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hCryptKey;
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
                         dwFlags,
                         nullptr,
@@ -977,15 +971,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
     {
         BOOL    fCallerFreeProv ;
         DWORD   dwKeySpec ;
-        HCRYPTPROV  hProv ;
         NCRYPT_KEY_HANDLE hKey = 0;
-        DWORD dwFlags = 0;
-        HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hProv;
-        if (svl::crypto::isMSCng())
-        {
-            dwFlags |= CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
-            phCryptProvOrNCryptKey = &hKey;
-        }
+        DWORD dwFlags = CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG;
+        HCRYPTPROV_OR_NCRYPT_KEY_HANDLE* phCryptProvOrNCryptKey = &hKey;
         if( CryptAcquireCertificatePrivateKey( pCertContext ,
                    dwFlags,
                    nullptr ,
@@ -995,9 +983,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
         ) {
             characters |=  css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
 
-            if( hProv != NULL && fCallerFreeProv )
-                CryptReleaseContext( hProv, 0 ) ;
-            else if (hKey && fCallerFreeProv)
+            if (hKey && fCallerFreeProv)
                 NCryptFreeObject(hKey);
         } else {
             characters &= ~ css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
@@ -1056,8 +1042,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hMySystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
-            if (svl::crypto::isMSCng())
-                m_hMySystemStore = nullptr;
+            m_hMySystemStore = nullptr;
         }
 
         //Add system root store into the keys manager.
@@ -1068,8 +1053,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hRootSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
-            if (svl::crypto::isMSCng())
-                m_hRootSystemStore = nullptr;
+            m_hRootSystemStore = nullptr;
         }
 
         //Add system trusted store into the keys manager.
@@ -1080,8 +1064,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hTrustSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
-            if (svl::crypto::isMSCng())
-                m_hTrustSystemStore = nullptr;
+            m_hTrustSystemStore = nullptr;
         }
 
         //Add system CA store into the keys manager.
@@ -1092,8 +1075,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
                 m_hCaSystemStore = nullptr;
                 throw uno::RuntimeException() ;
             }
-            if (svl::crypto::isMSCng())
-                m_hCaSystemStore = nullptr;
+            m_hCaSystemStore = nullptr;
         }
     }
 
