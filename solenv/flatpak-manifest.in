@@ -44,21 +44,6 @@
             ]
         },
         {
-            "name": "dbus-glib",
-            "cleanup": [ "*.la", "/bin", "/etc", "/include", "/libexec", "/share/gtk-doc", "/share/man" ],
-            "config-opts": [
-                "--disable-static",
-                "--disable-gtk-doc"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.108.tar.gz",
-                    "sha256": "9f340c7e2352e9cdf113893ca77ca9075d9f8d5e81476bf2bf361099383c602c"
-                }
-            ]
-        },
-        {
             "name": "gvfs",
             "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
             "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
