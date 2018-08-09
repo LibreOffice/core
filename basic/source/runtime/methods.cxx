@@ -2370,8 +2370,7 @@ void SbRtl_IsObject(StarBASIC *, SbxArray & rPar, bool)
         bool bObject = pVar->IsObject();
         SbxBase* pObj = (bObject ? pVar->GetObject() : nullptr);
 
-        SbUnoClass* pUnoClass;
-        if( pObj &&  ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) ) != nullptr  )
+        if( auto pUnoClass = dynamic_cast<SbUnoClass*>( pObj) )
         {
             bObject = pUnoClass->getUnoClass().is();
         }

@@ -462,10 +462,8 @@ SelectionHelper::~SelectionHelper()
 
 bool SelectionHelper::getFrameDragSingles()
 {
-    bool bFrameDragSingles = true;//true == green == surrounding handles
-    if( m_pSelectedObj && dynamic_cast<const E3dObject*>( m_pSelectedObj) !=  nullptr )
-        bFrameDragSingles = false;
-    return bFrameDragSingles;
+    //true == green == surrounding handles
+    return dynamic_cast<const E3dObject*>( m_pSelectedObj) == nullptr;
 }
 
 SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )

@@ -482,7 +482,7 @@ void SfxItemPool::Delete()
             // from SfxItemPool
             // This causes chaos in Itempool!
             const SfxPoolItem* pStaticDefaultItem = (*pImpl->mpStaticDefaults)[n];
-            if (pStaticDefaultItem && dynamic_cast<const SfxSetItem*>(pStaticDefaultItem) !=  nullptr)
+            if (dynamic_cast<const SfxSetItem*>(pStaticDefaultItem))
             {
                 // SfxSetItem found, remove PoolItems (and defaults) with same ID
                 auto& rArrayPtr = pImpl->maPoolItems[n];

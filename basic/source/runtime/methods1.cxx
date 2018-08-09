@@ -123,7 +123,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
-    if( !pObj && pObjVar && dynamic_cast<const SbxVariable*>( pObjVar) != nullptr )
+    if( !pObj && dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );
@@ -864,7 +864,7 @@ void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
     {
         pObj = dynamic_cast<SbxObject*>( pObjVar );
     }
-    if( !pObj && pObjVar && dynamic_cast<const SbxVariable*>( pObjVar) != nullptr )
+    if( !pObj && dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );

@@ -154,7 +154,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
                     SfxCallMode::SYNCHRON,
                     { &aName, &aNewView, &aSilent });
 
-            if( pRet && dynamic_cast< const SfxViewFrameItem *>( pRet ) !=  nullptr &&
+            if( dynamic_cast< const SfxViewFrameItem *>( pRet ) &&
                 static_cast<SfxViewFrameItem const *>(pRet)->GetFrame() &&
                 nullptr != ( pShell = static_cast<SfxViewFrameItem const *>(pRet)
                     ->GetFrame()->GetObjectShell() ) )
