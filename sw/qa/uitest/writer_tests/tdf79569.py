@@ -60,6 +60,7 @@ class tdf79569(UITestCase):
         print("DEBUG.18", file=stderr);
         toolkit_ex.processEventsToIdle()
         print("DEBUG.19", file=stderr);
+        sleep(3)
         self.xUITest.executeCommand(".uno:Undo")
         print("DEBUG.20", file=stderr);
         toolkit_ex.processEventsToIdle()
