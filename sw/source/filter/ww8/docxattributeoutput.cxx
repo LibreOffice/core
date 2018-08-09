@@ -2970,7 +2970,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
                 break;
         }
     }
-    else if( rStyleProps == nullptr )
+    else if ( !rStyleProps || !rStyleProps->LineWidth )
         // no line, and no line set by the style either:
         // there is no need to write the property
         return;
@@ -8525,8 +8525,22 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // Open the paragraph's borders tag
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
 
-        std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aEmptyMap );
+        std::map<SvxBoxItemLine, css::table::BorderLine2> aStyleBorders;
+        const SvxBoxItem* pInherited = nullptr;
+        if ( GetExport().m_pStyAttr )
+            pInherited = GetExport().m_pStyAttr->GetItem<SvxBoxItem>(RES_BOX);
+        else if ( GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
+            pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_BOX);
+
+        if ( pInherited )
+        {
+            aStyleBorders[ SvxBoxItemLine::TOP ] = SvxBoxItem::SvxLineToLine(pInherited->GetTop(), /*bConvert=*/false);
+            aStyleBorders[ SvxBoxItemLine::BOTTOM ] = SvxBoxItem::SvxLineToLine(pInherited->GetBottom(), false);
+            aStyleBorders[ SvxBoxItemLine::LEFT ] = SvxBoxItem::SvxLineToLine(pInherited->GetLeft(), false);
+            aStyleBorders[ SvxBoxItemLine::RIGHT ] = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
+        }
+
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aStyleBorders );
 
         // Close the paragraph's borders tag
         m_pSerializer->endElementNS( XML_w, XML_pBdr );

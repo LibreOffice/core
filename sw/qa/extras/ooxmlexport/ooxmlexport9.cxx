@@ -759,6 +759,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103976, "tdf103976.docx")
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // This was 0, table style inheritance went wrong and w:afterLines had priority over w:after.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(60)), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+
+    // tdf#116549: heading 2 style should not have a bottom border.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Heading 2"), uno::UNO_QUERY);
+    table::BorderLine2 aBottomBorder = getProperty<table::BorderLine2>(xStyle, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aBottomBorder.LineWidth);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106001, "tdf106001.docx")
