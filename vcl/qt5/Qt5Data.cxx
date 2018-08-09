@@ -309,4 +309,13 @@ void Qt5Data::ErrorTrapPush() {}
 
 bool Qt5Data::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
 
+bool Qt5Data::noNativeControls()
+{
+    static const bool bNoNative
+        = ((nullptr != getenv("SAL_VCL_QT5_NO_NATIVE")) && (nullptr != ImplGetSVData())
+           && (nullptr != ImplGetSVData()->maAppData.mpToolkitName)
+           && ImplGetSVData()->maAppData.mpToolkitName->match("qt5"));
+    return bNoNative;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
