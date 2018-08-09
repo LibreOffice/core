@@ -2446,14 +2446,13 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             // the view shell should be SwView for documents PDF export.
             // for the page preview no selection should be possible
             // (the export dialog does not allow for this option)
-            if (rpView  &&  dynamic_cast< const SwView *>( rpView ) !=  nullptr)
+            if (auto pSwView = dynamic_cast<SwView *>( rpView ))
             {
                 if (!m_pRenderData)
                 {
                     OSL_FAIL("GetRenderDoc: no renderdata");
                     return nullptr;
                 }
-                SwView *const pSwView(static_cast<SwView *>(rpView));
                 SfxObjectShellLock xDocSh(m_pRenderData->GetTempDocShell());
                 if (!xDocSh.Is())
                 {

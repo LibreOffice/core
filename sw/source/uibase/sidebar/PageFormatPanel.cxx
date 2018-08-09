@@ -178,7 +178,7 @@ void PageFormatPanel::NotifyItemUpdate(
         case SID_ATTR_PAGE:
         {
             if ( eState >= SfxItemState::DEFAULT &&
-                pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr )
+                 dynamic_cast< const SvxPageItem *>( pState ) )
             {
                 mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
                 if ( mpPageItem->IsLandscape() )
@@ -191,7 +191,7 @@ void PageFormatPanel::NotifyItemUpdate(
         case SID_ATTR_PAGE_LRSPACE:
         {
             if ( eState >= SfxItemState::DEFAULT &&
-             pState && dynamic_cast< const SvxLongLRSpaceItem *>( pState ) !=  nullptr )
+                 dynamic_cast< const SvxLongLRSpaceItem *>( pState ) )
             {
                 mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
                 UpdateMarginBox();
@@ -201,7 +201,7 @@ void PageFormatPanel::NotifyItemUpdate(
         case SID_ATTR_PAGE_ULSPACE:
         {
             if ( eState >= SfxItemState::DEFAULT &&
-                pState && dynamic_cast< const SvxLongULSpaceItem *>( pState ) !=  nullptr )
+                dynamic_cast< const SvxLongULSpaceItem *>( pState ) )
             {
                 mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
                 UpdateMarginBox();

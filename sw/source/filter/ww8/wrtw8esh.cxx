@@ -1083,11 +1083,10 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 {
     const SvxFieldItem &rField = static_cast<const SvxFieldItem &>(rHt);
     const SvxFieldData *pField = rField.GetField();
-    if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+    if (auto pURL = dynamic_cast< const SvxURLField *>( pField ))
     {
         sal_uInt8 nOldTextTyp = m_rExport.m_nTextTyp;
         m_rExport.m_nTextTyp = mnTyp;
-        const SvxURLField *pURL = static_cast<const SvxURLField *>(pField);
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
         const OUString &rStr = pURL->GetRepresentation();

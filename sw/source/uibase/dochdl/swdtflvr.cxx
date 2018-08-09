@@ -1304,7 +1304,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         // drop as if from external
         const SwFrameFormat* pSwFrameFormat = rSh.GetFormatFromObj(*pPt);
 
-        if(pSwFrameFormat && dynamic_cast< const SwDrawFrameFormat* >(pSwFrameFormat) !=  nullptr)
+        if(dynamic_cast< const SwDrawFrameFormat* >(pSwFrameFormat))
         {
             bPrivateDrop = false;
             bNeedToSelectBeforePaste = true;

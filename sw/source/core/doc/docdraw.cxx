@@ -504,37 +504,31 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     const SvxFieldItem& rField = pInfo->GetField();
     const SvxFieldData* pField = rField.GetField();
 
-    if (pField && dynamic_cast<const SvxDateField*>( pField) !=  nullptr)
+    if (auto pDateField = dynamic_cast<const SvxDateField*>( pField))
     {
         // Date field
         pInfo->SetRepresentation(
-            static_cast<const SvxDateField*>( pField)->GetFormatted(
+            pDateField->GetFormatted(
                     *GetNumberFormatter(), LANGUAGE_SYSTEM) );
     }
-    else if (pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr)
+    else if (auto pURLField = dynamic_cast<const SvxURLField*>( pField))
     {
         // URL field
-        switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
+        switch ( pURLField->GetFormat() )
         {
             case SvxURLFormat::AppDefault: //!!! Can be set in App???
             case SvxURLFormat::Repr:
-            {
-                pInfo->SetRepresentation(
-                    static_cast<const SvxURLField*>(pField)->GetRepresentation());
-            }
-            break;
+                pInfo->SetRepresentation(pURLField->GetRepresentation());
+                break;
 
             case SvxURLFormat::Url:
-            {
-                pInfo->SetRepresentation(
-                    static_cast<const SvxURLField*>(pField)->GetURL());
-            }
-            break;
+                pInfo->SetRepresentation(pURLField->GetURL());
+                break;
         }
 
         sal_uInt16 nChrFormat;
 
-        if (IsVisitedURL(static_cast<const SvxURLField*>(pField)->GetURL()))
+        if (IsVisitedURL(pURLField->GetURL()))
             nChrFormat = RES_POOLCHR_INET_VISIT;
         else
             nChrFormat = RES_POOLCHR_INET_NORMAL;
@@ -547,17 +541,16 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         pInfo->SetTextColor(aColor);
     }
-    else if (pField && dynamic_cast<const SdrMeasureField*>( pField) !=  nullptr)
+    else if (dynamic_cast<const SdrMeasureField*>( pField))
     {
         // Measure field
         pInfo->ClearFieldColor();
     }
-    else if ( pField && dynamic_cast<const SvxExtTimeField*>( pField) !=  nullptr)
+    else if ( auto pTimeField = dynamic_cast<const SvxExtTimeField*>( pField) )
     {
         // Time field
         pInfo->SetRepresentation(
-            static_cast<const SvxExtTimeField*>( pField)->GetFormatted(
-                    *GetNumberFormatter(), LANGUAGE_SYSTEM) );
+            pTimeField->GetFormatted(*GetNumberFormatter(), LANGUAGE_SYSTEM) );
     }
     else
     {

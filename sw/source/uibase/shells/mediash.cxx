@@ -121,7 +121,7 @@ void SwMediaShell::ExecMedia(SfxRequest const &rReq)
                         {
                             SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
-                            if( pObj && dynamic_cast< const SdrMediaObj *>( pObj ) !=  nullptr )
+                            if( dynamic_cast< const SdrMediaObj *>( pObj ) )
                             {
                                 static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                                     static_cast< const ::avmedia::MediaItem& >( *pItem ) );
@@ -164,7 +164,7 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
                 {
                     SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
-                    if( pObj && dynamic_cast< const SdrMediaObj *>( pObj ) !=  nullptr )
+                    if( dynamic_cast< const SdrMediaObj *>( pObj ) )
                     {
                         ::avmedia::MediaItem aItem( SID_AVMEDIA_TOOLBOX );
 

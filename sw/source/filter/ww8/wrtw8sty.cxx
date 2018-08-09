@@ -2306,7 +2306,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     // is it a writer or sdr - textbox?
                     const SdrObject* pObj = static_cast<SdrObject const *>(aContent[ i ]);
                     sal_Int32 nCnt = 1;
-                    if (pObj && dynamic_cast< const SdrTextObj *>( pObj ) ==  nullptr )
+                    if (dynamic_cast< const SdrTextObj *>( pObj ))
                     {
                         // find the "highest" SdrObject of this
                         const SwFrameFormat& rFormat = *::FindFrameFormat( pObj );
