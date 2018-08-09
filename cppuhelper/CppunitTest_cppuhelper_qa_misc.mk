@@ -15,7 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppuhelper_qa_misc,\
 ))
 
 $(eval $(call gb_CppunitTest_use_api,cppuhelper_qa_misc,\
-	offapi \
 	udkapi \
 ))
 
