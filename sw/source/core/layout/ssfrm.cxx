@@ -443,8 +443,15 @@ SwContentFrame::~SwContentFrame()
 void SwTextFrame::RegisterToNode(SwTextNode & rNode)
 {
     assert(&rNode != GetDep());
+    assert(!m_pMergedPara
+        || (m_pMergedPara->pFirstNode->GetIndex() < rNode.GetIndex())
+        || (rNode.GetIndex() + 1 == m_pMergedPara->pFirstNode->GetIndex()));
+    SwTextNode & rFirstNode(
+        (m_pMergedPara && m_pMergedPara->pFirstNode->GetIndex() < rNode.GetIndex())
+            ? *m_pMergedPara->pFirstNode
+            : rNode);
     // sw_redlinehide: use New here, because the only caller also calls lcl_ChangeFootnoteRef
-    m_pMergedPara = sw::CheckParaRedlineMerge(*this, rNode, sw::FrameMode::New);
+    m_pMergedPara = sw::CheckParaRedlineMerge(*this, rFirstNode, sw::FrameMode::New);
     if (!m_pMergedPara)
     {
         rNode.Add(this);
