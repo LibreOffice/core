@@ -69,17 +69,9 @@ std::unique_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify cons
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
                 return std::unique_ptr<SfxHint>( new SvxEditSourceHint( SfxHintId::EditSourceSelectionChanged ) );
 
-            case EE_NOTIFY_BLOCKNOTIFICATION_START:
-                return std::unique_ptr<SfxHint>( new TextHint( SfxHintId::TextBlockNotificationStart, 0 ) );
+            case EE_NOTIFY_PROCESSNOTIFICATIONS:
+                return std::unique_ptr<SfxHint>( new TextHint( SfxHintId::TextProcessNotifications ));
 
-            case EE_NOTIFY_BLOCKNOTIFICATION_END:
-                return std::unique_ptr<SfxHint>( new TextHint( SfxHintId::TextBlockNotificationEnd, 0 ) );
-
-            case EE_NOTIFY_INPUT_START:
-                return std::unique_ptr<SfxHint>( new TextHint( SfxHintId::TextInputStart, 0 ) );
-
-            case EE_NOTIFY_INPUT_END:
-                return std::unique_ptr<SfxHint>( new TextHint( SfxHintId::TextInputEnd, 0 ) );
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA:
                 return std::unique_ptr<SfxHint>( new SvxEditSourceHintEndPara );
             default:
