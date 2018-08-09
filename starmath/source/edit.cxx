@@ -373,7 +373,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     {
         bool bCallBase = true;
         SfxViewShell* pViewShell = GetView();
-        if ( pViewShell && dynamic_cast<const SmViewShell *>(pViewShell) != nullptr )
+        if ( dynamic_cast<const SmViewShell *>(pViewShell) )
         {
             // Terminate possible InPlace mode
             bCallBase = !pViewShell->Escape();
@@ -445,7 +445,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 // SFX has maybe called a slot of the view and thus (because of a hack in SFX)
                 // set the focus to the view
                 SfxViewShell* pVShell = GetView();
-                if ( pVShell && dynamic_cast<const SmViewShell *>(pVShell) != nullptr &&
+                if ( dynamic_cast<const SmViewShell *>(pVShell) &&
                      static_cast<SmViewShell*>(pVShell)->GetGraphicWindow().HasFocus() )
                 {
                     GrabFocus();

@@ -146,7 +146,7 @@ void SvxLineEndDefTabPage::Construct()
         if( aInfoRec.bCanConvToPath )
             pNewObj = pPolyObj->ConvertToPolyObj( true, false );
 
-        bCreateArrowPossible = pNewObj && nullptr != dynamic_cast<const SdrPathObj*>( pNewObj);
+        bCreateArrowPossible = nullptr != dynamic_cast<const SdrPathObj*>( pNewObj);
         SdrObject::Free( pNewObj );
     }
 

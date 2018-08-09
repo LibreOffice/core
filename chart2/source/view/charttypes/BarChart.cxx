@@ -440,8 +440,7 @@ E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
     if (pSvxShape)
     {
         SdrObject* pObject = pSvxShape->GetSdrObject();
-        if (pObject && dynamic_cast<const E3dScene*>(pObject) != nullptr)
-            pScene = static_cast<E3dScene*>(pObject);
+        pScene = dynamic_cast<E3dScene*>(pObject);
     }
     return pScene;
 }
