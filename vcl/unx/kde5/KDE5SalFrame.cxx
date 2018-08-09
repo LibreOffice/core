@@ -52,13 +52,6 @@ KDE5SalFrame::KDE5SalFrame(KDE5SalFrame* pParent, SalFrameStyleFlags nState, boo
 {
 }
 
-/** Helper function to convert colors.
-*/
-static Color toColor(const QColor& rColor)
-{
-    return Color(rColor.red(), rColor.green(), rColor.blue());
-}
-
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
@@ -141,19 +134,10 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
 */
 void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
 {
+    Qt5Frame::UpdateSettings(rSettings);
+
     StyleSettings style(rSettings.GetStyleSettings());
     bool bSetTitleFont = false;
-
-    // General settings
-    QPalette pal = QApplication::palette();
-
-    style.SetToolbarIconSize(ToolbarIconSize::Large);
-
-    style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
-    style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
-
-    style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
-    style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
     // WM settings
     /*KConfig *pConfig = KGlobal::config().data();
@@ -190,63 +174,6 @@ void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
         }
     }*/
 
-    Color aFore = toColor(pal.color(QPalette::Active, QPalette::WindowText));
-    Color aBack = toColor(pal.color(QPalette::Active, QPalette::Window));
-    Color aText = toColor(pal.color(QPalette::Active, QPalette::Text));
-    Color aBase = toColor(pal.color(QPalette::Active, QPalette::Base));
-    Color aButn = toColor(pal.color(QPalette::Active, QPalette::ButtonText));
-    Color aMid = toColor(pal.color(QPalette::Active, QPalette::Mid));
-    Color aHigh = toColor(pal.color(QPalette::Active, QPalette::Highlight));
-    Color aHighText = toColor(pal.color(QPalette::Active, QPalette::HighlightedText));
-
-    style.SetSkipDisabledInMenus(true);
-
-    // Foreground
-    style.SetRadioCheckTextColor(aFore);
-    style.SetLabelTextColor(aFore);
-    style.SetDialogTextColor(aFore);
-    style.SetGroupTextColor(aFore);
-
-    // Text
-    style.SetFieldTextColor(aText);
-    style.SetFieldRolloverTextColor(aText);
-    style.SetWindowTextColor(aText);
-    style.SetToolTextColor(aText);
-
-    // Base
-    style.SetFieldColor(aBase);
-    style.SetWindowColor(aBase);
-    style.SetActiveTabColor(aBase);
-
-    // Buttons
-    style.SetButtonTextColor(aButn);
-    style.SetButtonRolloverTextColor(aButn);
-    style.SetButtonPressedRolloverTextColor(aButn);
-
-    // Tabs
-    style.SetTabTextColor(aButn);
-    style.SetTabRolloverTextColor(aButn);
-    style.SetTabHighlightTextColor(aButn);
-
-    // Disable color
-    style.SetDisableColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
-
-    // Background
-    style.BatchSetBackgrounds(aBack);
-    style.SetInactiveTabColor(aBack);
-
-    // Workspace
-    style.SetWorkspaceColor(aMid);
-
-    // Selection
-    style.SetHighlightColor(aHigh);
-    style.SetHighlightTextColor(aHighText);
-
-    // Tooltip
-    style.SetHelpColor(toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipBase)));
-    style.SetHelpTextColor(
-        toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipText)));
-
     // Font
     vcl::Font aFont = toFont(QApplication::font(), rSettings.GetUILanguageTag().getLocale());
 
@@ -265,50 +192,8 @@ void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
 
     // Menu
     std::unique_ptr<QMenuBar> pMenuBar = std::unique_ptr<QMenuBar>(new QMenuBar());
-    QPalette qMenuCG = pMenuBar->palette();
-
-    // Menu text and background color, theme specific
-    Color aMenuFore = toColor(qMenuCG.color(QPalette::WindowText));
-    Color aMenuBack = toColor(qMenuCG.color(QPalette::Window));
-
-    style.SetMenuTextColor(aMenuFore);
-    style.SetMenuBarTextColor(style.GetPersonaMenuBarTextColor().get_value_or(aMenuFore));
-    style.SetMenuColor(aMenuBack);
-    style.SetMenuBarColor(aMenuBack);
-    style.SetMenuHighlightColor(toColor(qMenuCG.color(QPalette::Highlight)));
-    style.SetMenuHighlightTextColor(toColor(qMenuCG.color(QPalette::HighlightedText)));
-
-    // set special menubar highlight text color
-    if (QApplication::style()->inherits("HighContrastStyle"))
-        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor
-            = toColor(qMenuCG.color(QPalette::HighlightedText));
-    else
-        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
-
-    // set menubar rollover color
-    if (pMenuBar->style()->styleHint(QStyle::SH_MenuBar_MouseTracking))
-    {
-        style.SetMenuBarRolloverColor(toColor(qMenuCG.color(QPalette::Highlight)));
-        style.SetMenuBarRolloverTextColor(ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor);
-    }
-    else
-    {
-        style.SetMenuBarRolloverColor(aMenuBack);
-        style.SetMenuBarRolloverTextColor(aMenuFore);
-    }
-    style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
-
-    // Font
     aFont = toFont(pMenuBar->font(), rSettings.GetUILanguageTag().getLocale());
     style.SetMenuFont(aFont);
-
-    // Scroll bar size
-    style.SetScrollBarSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent));
-    style.SetMinThumbSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin));
-
-    // These colors are used for the ruler text and marks
-    style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
-    style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
     rSettings.SetStyleSettings(style);
 }
