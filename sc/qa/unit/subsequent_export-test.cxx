@@ -3343,9 +3343,10 @@ void ScExportTest::testAbsNamedRangeHTML()
     xDocSh2->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh2->GetDocument();
-    ScRangeData* pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("HTML_1"));
+    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("HTML_1"));
     ScSingleRefData* pRef = pRangeData->GetCode()->FirstToken()->GetSingleRef();
-    CPPUNIT_ASSERT_MESSAGE("Sheet1.HTML_1 is an absolute reference",!pRef->IsTabRel());
+    // see tdf#119141 for the reason why this isn't Sheet1.HTML_1
+    CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference",!pRef->IsTabRel());
 }
 
 void ScExportTest::testSheetLocalRangeNameXLS()
