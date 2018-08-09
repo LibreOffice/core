@@ -392,6 +392,7 @@ void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
         _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Clear();
     }
 }
+
 void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
                                             const SwDoc& _rDoc,
                                             SwAnchoredObject& _rAnchoredObj )
@@ -409,6 +410,20 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
 
     _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
+
+void SwLayouter::RemoveObjForTmpConsiderWrapInfluence(
+                                            const SwDoc& _rDoc,
+                                            SwAnchoredObject& _rAnchoredObj )
+{
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
+        return;
+
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl )
+        return;
+
+    _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Remove( _rAnchoredObj );
+}
+
 
 void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrame& rTextFrame )
 {
