@@ -464,7 +464,7 @@ public:
     }
     virtual void set_active(const OString& rIdent, bool bActive) override
     {
-        m_xMenu->CheckItem(m_xMenu->GetItemId(rIdent), bActive);
+        m_xMenu->CheckItem(rIdent, bActive);
     }
     virtual void show(const OString& rIdent, bool bShow) override
     {
@@ -1059,7 +1059,7 @@ public:
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->CheckItem(pMenu->GetItemId(rIdent), bActive);
+        pMenu->CheckItem(rIdent, bActive);
     }
 
     virtual void set_item_label(const OString& rIdent, const OUString& rText) override
