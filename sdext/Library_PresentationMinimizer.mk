@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_libraries,PresentationMinimizer,\
     cppuhelper \
     sal \
     tl \
+    vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,PresentationMinimizer,\

@@ -19,7 +19,7 @@
 
 
 #include "optimizerdialog.hxx"
-#include "pppoptimizer.hxx"
+#include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -30,6 +30,8 @@
 #include <osl/time.h>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -555,11 +557,6 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             if ( bSuccessfullyExecuted )
             {
-                Reference < XDispatch > xDispatch(
-                    new PPPOptimizer(
-                        mrOptimizerDialog.GetComponentContext(),
-                        mrOptimizerDialog.GetFrame()));
-
                 URL aURL;
                 aURL.Protocol = "vnd.com.sun.star.comp.PPPOptimizer:";
                 aURL.Path = "optimize";
@@ -572,7 +569,30 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 lArguments[ 2 ].Name = "InformationDialog";
                 lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
-                xDispatch->dispatch( aURL, lArguments );
+                try
+                {
+                    ImpOptimizer aOptimizer(
+                        mrOptimizerDialog.GetComponentContext(),
+                        mrOptimizerDialog.GetFrame()->getController()->getModel());
+                    aOptimizer.Optimize(lArguments);
+                }
+                catch (Exception& e)
+                {
+                    mrOptimizerDialog.setControlProperty("btnNavBack", "Enabled", Any(true));
+                    mrOptimizerDialog.setControlProperty("btnNavNext", "Enabled", Any(false));
+                    mrOptimizerDialog.setControlProperty("btnNavFinish", "Enabled", Any(true));
+                    mrOptimizerDialog.setControlProperty("btnNavCancel", "Enabled", Any(true));
+
+                    OUStringBuffer aBuf;
+                    aBuf.append(e.Message);
+                    /*ScopedVclPtrInstance<MessageDialog> aBox(nullptr, aBuf.makeStringAndClear());
+                    aBox->Execute();*/
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Warning, VclButtonsType::Ok,
+                        aBuf.makeStringAndClear()));
+                    xBox->run();
+                    break;
+                }
 
                 mrOptimizerDialog.endExecute( bSuccessfullyExecuted );
             }
