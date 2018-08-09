@@ -1609,7 +1609,7 @@ namespace osl_FileStatus
             nError1 = xDir->getNextItem(m_aItem_2);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("get second item failed!", osl::FileBase::E_None, nError1);
             xDir->close();
-            // FIXME mindy: failed on my RH9,so removed temporaly
+            // FIXME mindy: failed on my RH9, so removed temporary
             // nError1 = DirectoryItem::get(aVolURL2, m_aVolumeItem);
             // CPPUNIT_ASSERT_MESSAGE("get volume item failed!", osl::FileBase::E_None == nError1);
         }

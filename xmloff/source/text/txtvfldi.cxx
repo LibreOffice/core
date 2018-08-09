@@ -644,7 +644,7 @@ void XMLTableFormulaImportContext::PrepareField(
 // Should be adapted to XMLVarField-/XMLSetVarFieldImportContext scheme!
 
 
-// declaration containter import (<variable/user-field/sequence-decls>)
+// declaration container import (<variable/user-field/sequence-decls>)
 
 
 XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
