@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tpl_styles,$(SRCDIR)/extras/source/templates/styles))
+$(eval $(call gb_Package_Package,extras_tpl_styles,$(call gb_CustomTarget_get_workdir,extras/source/templates/styles)))
 
 $(eval $(call gb_Package_add_files,extras_tpl_styles,$(LIBO_SHARE_FOLDER)/template/common/styles,\
 	Default.ott \
