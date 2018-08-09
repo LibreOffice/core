@@ -23,7 +23,8 @@
     constructor="com_sun_star_comp_oox_core_FastTokenHandler_get_implementation">
     <service name="com.sun.star.xml.sax.FastTokenHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.FormatDetector">
+  <implementation name="com.sun.star.comp.oox.FormatDetector"
+    constructor="com_sun_star_comp_oox_FormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
   <implementation name="com.sun.star.comp.oox.docprop.DocumentPropertiesImporter">

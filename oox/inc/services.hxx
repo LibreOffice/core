@@ -23,13 +23,6 @@
 #include <sal/config.h>
 
 namespace oox {
-    namespace core {
-        extern OUString FilterDetect_getImplementationName();
-        extern css::uno::Sequence< OUString > FilterDetect_getSupportedServiceNames();
-        /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > FilterDetect_createInstance(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    }
     namespace docprop {
         extern OUString DocumentPropertiesImport_getImplementationName();
         extern css::uno::Sequence< OUString > DocumentPropertiesImport_getSupportedServiceNames();
