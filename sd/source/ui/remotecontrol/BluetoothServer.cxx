@@ -959,7 +959,7 @@ setupBluez5Profile1(DBusConnection* pConnection, std::vector<Communicator*>* pCo
     aVTable.message_function = ProfileMessageFunction;
 
     // dbus_connection_try_register_object_path could be used but only exists for
-    // dbus-glib >= 1.2 -- we really shouldn't be trying this twice in any case.
+    // dbus >= 1.2 -- we really shouldn't be trying this twice in any case.
     // (dbus_connection_try_register_object_path also returns an error with more
     // information which could be useful for debugging purposes.)
     bErr = !dbus_connection_register_object_path(pConnection, "/org/libreoffice/bluez/profile1", &aVTable, pCommunicators);
