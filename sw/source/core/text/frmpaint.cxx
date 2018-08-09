@@ -294,8 +294,12 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     sal_Int16 eHor = static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos());
-    if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+    if (eHor != text::HoriOrientation::NONE
+        && (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
+            || getRootFrame()->IsHideRedlines()))
+    {
         eHor = text::HoriOrientation::NONE;
+    }
     bool bRedLine = eHor != text::HoriOrientation::NONE;
     if ( !bLineNum && !bRedLine )
         return;
@@ -481,7 +485,8 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             }
 
             const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
-            if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+            if (IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
+                && !getRootFrame()->IsHideRedlines())
             {
                 const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
                 if( SwRedlineTable::npos != nRedlPos )
