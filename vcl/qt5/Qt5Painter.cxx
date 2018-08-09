@@ -47,7 +47,6 @@ Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTr
     {
         QColor aColor = toQColor(rGraphics.m_aFillColor);
         aColor.setAlpha(nTransparency);
-        setBrush(Qt::SolidPattern);
         setBrush(aColor);
     }
     setCompositionMode(rGraphics.m_eCompositionMode);
