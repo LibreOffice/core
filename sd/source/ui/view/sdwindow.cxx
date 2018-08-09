@@ -353,9 +353,8 @@ long Window::SetZoomFactor(long nZoom)
     UpdateMapOrigin();
 
     // Update the view's snapping to the new zoom factor.
-    if ( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
-        static_cast<DrawViewShell*>(mpViewShell)->GetView()->
-                                        RecalcLogicSnapMagnetic(*this);
+    if ( auto pDrawViewShell = dynamic_cast< DrawViewShell *>( mpViewShell ) )
+        pDrawViewShell->GetView()->RecalcLogicSnapMagnetic(*this);
 
     // Return the zoom factor just in case it has been changed above to lie
     // inside the valid range.
@@ -592,7 +591,7 @@ void Window::UpdateMapMode()
     // removed old stuff here which still forced zoom to be
     // %BRUSH_SIZE which is outdated now
 
-    if (mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+    if (dynamic_cast< DrawViewShell *>( mpViewShell ))
     {
         // page should not "stick" to the window border
         if (aPix.Width() == 0)
@@ -959,7 +958,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     Window::CreateAccessible()
 {
     // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
-    if (mpViewShell && dynamic_cast< PresentationViewShell *>( mpViewShell ) !=  nullptr)
+    if (dynamic_cast< PresentationViewShell *>( mpViewShell ))
     {
         return vcl::Window::CreateAccessible ();
     }

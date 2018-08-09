@@ -66,7 +66,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
                              mpWindow->GetFrameWeld(), RID_SVXERRCTX, SvxResLocale());
 
-    if (mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+    if (dynamic_cast< DrawViewShell *>( mpViewShell ))
     {
         SdrTextObj* pTextObj = nullptr;
 
@@ -108,7 +108,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
             DBG_ASSERT(eState != EESpellState::NoSpeller, "No SpellChecker");
         }
     }
-    else if (mpViewShell && dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr)
+    else if (dynamic_cast< OutlineViewShell *>( mpViewShell ))
     {
         Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);

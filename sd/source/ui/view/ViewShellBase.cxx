@@ -397,8 +397,7 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame const * pViewFrame)
         // Get the view shell for the frame and cast it to
         // sd::ViewShellBase.
         SfxViewShell* pSfxViewShell = pViewFrame->GetViewShell();
-        if (pSfxViewShell!=nullptr && dynamic_cast< ::sd::ViewShellBase *>( pSfxViewShell ) !=  nullptr)
-            pBase = static_cast<ViewShellBase*>(pSfxViewShell);
+        pBase = dynamic_cast< ::sd::ViewShellBase *>( pSfxViewShell );
     }
 
     return pBase;

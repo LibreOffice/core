@@ -337,9 +337,9 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         if (bMarkChanges)
                             mpView->MarkObj(aVEvt.pRootObj, pPV);
 
-                        if (aVEvt.pObj && dynamic_cast< const SdrTextObj *>( aVEvt.pObj ) !=  nullptr)
+                        if (auto pSdrTextObj = dynamic_cast<SdrTextObj *>( aVEvt.pObj ))
                         {
-                            mxTextObj.reset( static_cast<SdrTextObj*>(aVEvt.pObj) );
+                            mxTextObj.reset( pSdrTextObj );
                         }
 
                         SetInEditMode(rMEvt, true);
@@ -1196,10 +1196,10 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
         const SvxFieldData* pField = pFieldItem->GetField();
 
-        if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+        if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
         {
             // URL-Field
-            aHelpText = INetURLObject::decode( static_cast<const SvxURLField*>(pField)->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
+            aHelpText = INetURLObject::decode( pURLField->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
         }
         if (!aHelpText.isEmpty())
         {
@@ -1255,9 +1255,9 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
                 mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                 mpView->MarkObj(aVEvt.pRootObj, pPV);
 
-                if (aVEvt.pObj && dynamic_cast< SdrTextObj *>( aVEvt.pObj ) !=  nullptr)
+                if (auto pSdrTextObj = dynamic_cast< SdrTextObj *>( aVEvt.pObj ))
                 {
-                    mxTextObj.reset( static_cast< SdrTextObj* >( aVEvt.pObj ) );
+                    mxTextObj.reset( pSdrTextObj );
                 }
             }
         }

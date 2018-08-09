@@ -725,9 +725,8 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 
 void DrawDocShell::GotoBookmark(const OUString& rBookmark)
 {
-    if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+    if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
     {
-        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
         bool bIsMasterPage = false;

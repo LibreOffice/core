@@ -337,7 +337,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     // valid graphic object?
-    if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr &&
+    if( dynamic_cast< const SdrGrafObj *>( pObj ) &&
         !static_cast<const SdrGrafObj*>(pObj)->IsEPS() &&
         !mpDrawView->IsTextEdit() )
     {

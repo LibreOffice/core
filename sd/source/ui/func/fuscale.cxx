@@ -75,7 +75,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         nValue = static_cast<sal_Int16>(mpWindow->GetZoom());
 
         // zoom on page size?
-        if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr &&
+        if( dynamic_cast< DrawViewShell *>( mpViewShell ) &&
             static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
         {
             pZoomItem.reset(new SvxZoomItem( SvxZoomType::WHOLEPAGE, nValue ));

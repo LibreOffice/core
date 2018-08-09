@@ -205,7 +205,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         ::Outliner*   pOL = nullptr;
 
         // determine depending on ViewShell Outliner and OutlinerView
-        if(mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+        if(dynamic_cast< const DrawViewShell *>( mpViewShell ))
         {
             pOV = mpView->GetTextEditOutlinerView();
             if (pOV)
@@ -213,7 +213,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
                 pOL = mpView->GetTextEditOutliner();
             }
         }
-        else if(mpViewShell && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
+        else if(dynamic_cast< const OutlineViewShell *>( mpViewShell ))
         {
             pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
             pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(

@@ -155,7 +155,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 {
                     SdrObject* pObj = aIter.Next();
 
-                    if(pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
+                    if(auto pSdrTextObj = dynamic_cast<SdrTextObj *>( pObj ))
                     {
                         SdrInventor nInv(pObj->GetObjInventor());
                         sal_uInt16  nKnd(pObj->GetObjIdentifier());
@@ -164,7 +164,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                             (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
                             && bDidVisitOldObject)
                         {
-                            pCandidate = static_cast<SdrTextObj*>(pObj);
+                            pCandidate = pSdrTextObj;
                         }
 
                         if(pObj == pOldObj)

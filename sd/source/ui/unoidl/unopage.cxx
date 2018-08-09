@@ -2282,11 +2282,8 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
         ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
-        if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr)
+        if( auto pDrawViewSh = dynamic_cast<::sd::DrawViewShell* >(pViewSh) )
         {
-            ::sd::DrawViewShell* pDrawViewSh = static_cast<
-                  ::sd::DrawViewShell*>(pViewSh);
-
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EditMode::Page )
             {
@@ -2978,11 +2975,8 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
         ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
-        if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr )
+        if( auto pDrawViewSh = dynamic_cast< ::sd::DrawViewShell* >(pViewSh) )
         {
-            ::sd::DrawViewShell* pDrawViewSh =
-                  static_cast< ::sd::DrawViewShell*>(pViewSh);
-
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EditMode::MasterPage )
             {
