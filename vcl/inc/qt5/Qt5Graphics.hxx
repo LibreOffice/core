@@ -27,6 +27,7 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
+#include "Qt5Data.hxx"
 #include "Qt5Graphics_Controls.hxx"
 
 class PhysicalFontCollection;
@@ -216,6 +217,8 @@ public:
 
 inline bool Qt5Graphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
 {
+    if (Qt5Data::noNativeControls())
+        return false;
     return m_aControl.IsNativeControlSupported(nType, nPart);
 }
 
