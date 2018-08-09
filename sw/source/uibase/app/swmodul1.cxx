@@ -148,7 +148,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(GetUsrPref(
                                          nDest == SvViewOpt::DestWeb
                                          || (nDest != SvViewOpt::DestText
-                                             && pCurrView && dynamic_cast< const SwWebView *>( pCurrView ) !=  nullptr) ));
+                                             && dynamic_cast< const SwWebView *>( pCurrView )) ));
 
     // with Uno, only sdbcx::View, but not the Module should be changed
     bool bViewOnly = SvViewOpt::DestViewOnly == nDest;

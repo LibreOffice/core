@@ -1512,7 +1512,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // In this case we want to iterate over the group members.
             aPos = GetCharRect().Center();
             const SdrObject* pStartObj = pPV ? pPV->GetCurrentGroup() : nullptr;
-            if ( pStartObj && dynamic_cast<const SdrObjGroup*>( pStartObj) !=  nullptr )
+            if ( dynamic_cast<const SdrObjGroup*>( pStartObj) )
                 pList = pStartObj->GetSubList();
         }
 

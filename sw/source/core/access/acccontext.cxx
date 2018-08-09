@@ -101,29 +101,17 @@ vcl::Window *SwAccessibleContext::GetWindow()
 // get SwViewShell from accessibility map, and cast to cursor shell
 SwCursorShell* SwAccessibleContext::GetCursorShell()
 {
-    SwCursorShell* pCursorShell;
     SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && dynamic_cast<const SwCursorShell*>( pViewShell) !=  nullptr )
-        pCursorShell = static_cast<SwCursorShell*>( pViewShell );
-    else
-        pCursorShell = nullptr;
-
-    return pCursorShell;
+    return dynamic_cast<SwCursorShell*>( pViewShell);
 }
 
 const SwCursorShell* SwAccessibleContext::GetCursorShell() const
 {
     // just like non-const GetCursorShell
-    const SwCursorShell* pCursorShell;
     const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && dynamic_cast<const SwCursorShell*>( pViewShell) !=  nullptr )
-        pCursorShell = static_cast<const SwCursorShell*>( pViewShell );
-    else
-        pCursorShell = nullptr;
-
-    return pCursorShell;
+    return dynamic_cast<const SwCursorShell*>( pViewShell);
 }
 
 enum class Action { NONE, SCROLLED, SCROLLED_WITHIN,

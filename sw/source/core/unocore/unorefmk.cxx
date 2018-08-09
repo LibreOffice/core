@@ -1260,7 +1260,7 @@ SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         TextRangeList_t const*const pPortions)
     : SwXMetaField_Base(pDoc, pMeta, xParentText, pPortions)
 {
-    OSL_ENSURE(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
+    OSL_ENSURE(dynamic_cast< ::sw::MetaField* >(pMeta),
         "SwXMetaField created for wrong hint!");
 }
 

@@ -216,9 +216,9 @@ void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
-                if(pItem && dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr)
+                if(auto pStringItem = dynamic_cast< const SfxStringItem *>( pItem ))
                 {
-                    pEditRegionDlg->SelectSection(static_cast<const SfxStringItem*>(pItem)->GetValue());
+                    pEditRegionDlg->SelectSection(pStringItem->GetValue());
                 }
                 pEditRegionDlg->Execute();
             }
