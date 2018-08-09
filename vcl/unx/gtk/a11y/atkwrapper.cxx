@@ -317,8 +317,8 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::IMAGE_MAP] = getRoleForName("image map");
         roleMap[accessibility::AccessibleRole::TREE_ITEM] = getRoleForName("tree item");
         roleMap[accessibility::AccessibleRole::HYPER_LINK] = getRoleForName("link");
-        roleMap[accessibility::AccessibleRole::END_NOTE] = getRoleForName("comment");
-        roleMap[accessibility::AccessibleRole::FOOTNOTE] = getRoleForName("comment");
+        roleMap[accessibility::AccessibleRole::END_NOTE] = getRoleForName("footnote");
+        roleMap[accessibility::AccessibleRole::FOOTNOTE] = getRoleForName("footnote");
         roleMap[accessibility::AccessibleRole::NOTE] = getRoleForName("comment");
 
         initialized = true;
