@@ -467,6 +467,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // accessors to member <mbTmpConsiderWrapInfluence>
         void SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence );
         bool IsTmpConsiderWrapInfluence() const { return mbTmpConsiderWrapInfluence;}
+        void ClearTmpConsiderWrapInfluence();
 
         /** method to determine, if the anchored object is overlapping with a
             previous column
