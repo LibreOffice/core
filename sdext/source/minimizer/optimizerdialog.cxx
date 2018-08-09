@@ -19,12 +19,14 @@
 
 
 #include "optimizerdialog.hxx"
-#include "pppoptimizer.hxx"
+#include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
+#include "errordialog.hxx"
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
@@ -472,7 +474,6 @@ void ItemListener::disposing( const css::lang::EventObject& /* Source */ )
 {
 }
 
-
 void ActionListener::actionPerformed( const ActionEvent& rEvent )
 {
     switch( TKGet( rEvent.ActionCommand ) )
@@ -555,11 +556,6 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             if ( bSuccessfullyExecuted )
             {
-                Reference < XDispatch > xDispatch(
-                    new PPPOptimizer(
-                        mrOptimizerDialog.GetComponentContext(),
-                        mrOptimizerDialog.GetFrame()));
-
                 URL aURL;
                 aURL.Protocol = "vnd.com.sun.star.comp.PPPOptimizer:";
                 aURL.Path = "optimize";
@@ -572,7 +568,26 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 lArguments[ 2 ].Name = "InformationDialog";
                 lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
-                xDispatch->dispatch( aURL, lArguments );
+                try
+                {
+                    ImpOptimizer aOptimizer(
+                        mrOptimizerDialog.GetComponentContext(),
+                        mrOptimizerDialog.GetFrame()->getController()->getModel());
+                    aOptimizer.Optimize(lArguments);
+                }
+                catch (css::io::IOException&)
+                {
+                    mrOptimizerDialog.maStats.SetStatusValue(TK_Progress, Any(static_cast<sal_Int32>(0)));
+                    mrOptimizerDialog.setControlProperty("btnNavBack", "Enabled", Any(true));
+                    mrOptimizerDialog.setControlProperty("btnNavNext", "Enabled", Any(false));
+                    mrOptimizerDialog.setControlProperty("btnNavFinish", "Enabled", Any(true));
+                    mrOptimizerDialog.setControlProperty("btnNavCancel", "Enabled", Any(true));
+                    ErrorDialog aInformationDialog(
+                        mrOptimizerDialog.UnoDialog::mxContext, mrOptimizerDialog.GetFrame(),
+                        mrOptimizerDialog.getString(STR_ERROR_IO));
+                    aInformationDialog.execute();
+                    break;
+                }
 
                 mrOptimizerDialog.endExecute( bSuccessfullyExecuted );
             }
