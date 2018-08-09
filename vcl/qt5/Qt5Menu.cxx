@@ -8,6 +8,7 @@
  */
 
 #include <Qt5Frame.hxx>
+#include <Qt5MainWindow.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
 
@@ -68,8 +69,7 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
     mpFrame->SetMenu(this);
 
-    QWidget* pWidget = mpFrame->GetQWidget();
-    QMainWindow* pMainWindow = dynamic_cast<QMainWindow*>(pWidget);
+    Qt5MainWindow* pMainWindow = mpFrame->GetTopLevelWindow();
     if (pMainWindow)
         mpQMenuBar = pMainWindow->menuBar();
 
