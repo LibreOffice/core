@@ -48,6 +48,7 @@ private:
 
     bool mbHasScrollBar;
     bool mbFrozen;
+    bool mbNewEntry;
     VclPtr<ScrollBar> mpScrollBar;
 
     ScDocument* mpDoc;
@@ -65,6 +66,8 @@ public:
     void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
+
+    void SetRange(const ScRangeList& rRange);
 
     virtual Size GetOptimalSize() const override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
