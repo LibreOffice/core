@@ -298,7 +298,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
     {
         // the accessible roles below were added to ATK in later versions,
         // with role_for_name we will know if they exist in runtime.
-        roleMap[accessibility::AccessibleRole::EDIT_BAR] = getRoleForName("editbar");
+        roleMap[accessibility::AccessibleRole::EDIT_BAR] = getRoleForName("edit bar");
         roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = getRoleForName("embedded");
         roleMap[accessibility::AccessibleRole::CHART] = getRoleForName("chart");
         roleMap[accessibility::AccessibleRole::CAPTION] = getRoleForName("caption");
