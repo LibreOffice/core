@@ -102,7 +102,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && dynamic_cast< SdrGrafObj *>( pObj ) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
+        if( dynamic_cast< SdrGrafObj *>( pObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
             bEnable = true;
     }
 
@@ -118,7 +118,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && dynamic_cast< SdrGrafObj *>( pObj ) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
+        if( dynamic_cast< SdrGrafObj *>( pObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
         {
             GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
 

@@ -271,10 +271,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
 
         // fake a mode change to repaint the page tab bar
-        if( mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
+        if( auto pDrawViewSh = dynamic_cast<DrawViewShell *>( mpViewShell ) )
         {
-            DrawViewShell* pDrawViewSh =
-                static_cast<DrawViewShell*>(mpViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
             bool bLayer = pDrawViewSh->IsLayerModeActive();
             pDrawViewSh->ChangeEditMode( eMode, !bLayer );

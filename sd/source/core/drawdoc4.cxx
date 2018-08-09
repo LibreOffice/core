@@ -971,7 +971,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, Sdr
         // restart when add to dictionary takes place, too.
         || nCommand == SpellCallbackCommand::ADDTODICTIONARY)
     {
-        if(pObj && pOutl && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
+        if(pOutl && dynamic_cast< const SdrTextObj *>( pObj ))
         {
             bool bModified(IsChanged());
             static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());

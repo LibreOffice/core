@@ -110,15 +110,15 @@ void FuMorph::DoExecute( SfxRequest& )
             while(aIter1.IsMore())
             {
                 SdrObject* pObj = aIter1.Next();
-                if(pObj && dynamic_cast< SdrPathObj *>( pObj ) !=  nullptr)
-                    aPolyPoly1.append(static_cast<SdrPathObj*>(pObj)->GetPathPoly());
+                if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
+                    aPolyPoly1.append(pPathObj->GetPathPoly());
             }
 
             while(aIter2.IsMore())
             {
                 SdrObject* pObj = aIter2.Next();
-                if(pObj && dynamic_cast< SdrPathObj *>( pObj ) !=  nullptr)
-                    aPolyPoly2.append(static_cast<SdrPathObj*>(pObj)->GetPathPoly());
+                if(auto pPathObj = dynamic_cast< SdrPathObj *>( pObj ))
+                    aPolyPoly2.append(pPathObj->GetPathPoly());
             }
 
             // perform morphing

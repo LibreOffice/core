@@ -307,7 +307,7 @@ void SdOutliner::EndSpelling()
 
     // When in <member>PrepareSpelling()</member> a new outline view has
     // been created then delete it here.
-    bool bViewIsDrawViewShell(pViewShell && nullptr != dynamic_cast< const sd::DrawViewShell *>( pViewShell.get() ));
+    bool bViewIsDrawViewShell(dynamic_cast< const sd::DrawViewShell *>( pViewShell.get() ));
     if (bViewIsDrawViewShell)
     {
         SetStatusEventHdl(Link<EditStatus&,void>());
@@ -335,8 +335,8 @@ void SdOutliner::EndSpelling()
     // changes were done at SpellCheck
     if(IsModified())
     {
-        if(mpView && dynamic_cast< const sd::OutlineView *>( mpView ) !=  nullptr)
-            static_cast<sd::OutlineView*>(mpView)->PrepareClose();
+        if(auto pOutlineView = dynamic_cast<sd::OutlineView *>( mpView ))
+            pOutlineView->PrepareClose();
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
             mpDrawDocument->SetChanged();
     }
@@ -1650,7 +1650,7 @@ void SdOutliner::EndConversion()
 bool SdOutliner::ConvertNextDocument()
 {
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
-    if (pViewShell && nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ) )
+    if (dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ) )
         return false;
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );

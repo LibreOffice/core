@@ -168,7 +168,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                 }
             }
         }
-        if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+        if( dynamic_cast< DrawViewShell *>( mpViewShell ) )
         {
             sal_Int8    nAction = DND_ACTION_COPY;
             SdrObject* pPickObj;

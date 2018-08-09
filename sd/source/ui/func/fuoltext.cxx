@@ -164,11 +164,11 @@ bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
         {
             const SvxFieldData* pField = pFieldItem->GetField();
 
-            if( pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
+            if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
             {
                 bReturn = true;
                 mpWindow->ReleaseMouse();
-                SfxStringItem aStrItem( SID_FILE_NAME, static_cast<const SvxURLField*>(pField)->GetURL() );
+                SfxStringItem aStrItem( SID_FILE_NAME, pURLField->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();

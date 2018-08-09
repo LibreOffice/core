@@ -317,7 +317,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
             pPV = nullptr;
     }
 
-    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) !=  nullptr )
+    if( mnAction == DND_ACTION_LINK && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->CloneSdrObject(pPickObj->getSdrModelFromSdrObject()) );
         pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );

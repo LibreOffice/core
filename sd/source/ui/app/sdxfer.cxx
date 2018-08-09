@@ -220,10 +220,8 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 {
                     const SvxFieldData* pData = pField->GetField();
 
-                    if( pData && dynamic_cast< const SvxURLField *>( pData ) !=  nullptr )
+                    if( auto pURL = dynamic_cast< const SvxURLField *>( pData ) )
                     {
-                        const SvxURLField* pURL = static_cast<const SvxURLField*>(pData);
-
                         // #i63399# This special code identifies TextFrames which have just an URL
                         // as content and directly add this to the clipboard, probably to avoid adding
                         // an unnecessary DrawObject to the target where paste may take place. This is
