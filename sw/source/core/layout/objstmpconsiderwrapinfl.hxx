@@ -33,6 +33,7 @@ class SwObjsMarkedAsTmpConsiderWrapInfluence
         ~SwObjsMarkedAsTmpConsiderWrapInfluence();
 
         void Insert( SwAnchoredObject& _rAnchoredObj );
+        void Remove( SwAnchoredObject& _rAnchoredObj );
         void Clear();
 };
 
