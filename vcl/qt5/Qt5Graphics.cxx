@@ -121,6 +121,7 @@ bool Qt5Graphics::drawNativeControl(ControlType nType, ControlPart nPart,
         Qt5Painter aPainter(*this);
         aPainter.drawImage(QPoint(rControlRegion.getX(), rControlRegion.getY()),
                            m_aControl.getImage());
+        aPainter.update(toQRect(rControlRegion));
     }
     return bHandled;
 }

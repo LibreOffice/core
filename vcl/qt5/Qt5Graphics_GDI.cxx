@@ -324,9 +324,6 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DPolygon& rPolyLine, double fTra
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
         return true;
 
-    if (basegfx::B2DLineJoin::NONE == eLineJoin)
-        return false;
-
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
     if (nPointCount <= 0)
@@ -344,15 +341,13 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DPolygon& rPolyLine, double fTra
 
     switch (eLineJoin)
     {
-        case basegfx::B2DLineJoin::NONE:
-            std::abort();
-            return false;
         case basegfx::B2DLineJoin::Bevel:
             aPen.setJoinStyle(Qt::BevelJoin);
             break;
         case basegfx::B2DLineJoin::Round:
             aPen.setJoinStyle(Qt::RoundJoin);
             break;
+        case basegfx::B2DLineJoin::NONE:
         case basegfx::B2DLineJoin::Miter:
             aPen.setMiterLimit(1.0 / sin(fMiterMinimumAngle / 2.0));
             aPen.setJoinStyle(Qt::MiterJoin);
@@ -604,8 +599,10 @@ bool Qt5Graphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
 {
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
         return true;
-
-    Qt5Painter aPainter(*this, true, nTransparency);
+    assert(nTransparency <= 100);
+    if (nTransparency > 100)
+        nTransparency = 100;
+    Qt5Painter aPainter(*this, true, (100 - nTransparency) * (255.0 / 100));
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
     if (SALCOLOR_NONE != m_aLineColor)
