@@ -326,23 +326,9 @@ enum EENotifyType
     /// The selection and/or the cursor position has changed
     EE_NOTIFY_TEXTVIEWSELECTIONCHANGED,
 
-    /** Denotes the beginning of a collected amount of EditEngine
-        notification events. This event itself is not queued, but sent
-        immediately
-     */
-    EE_NOTIFY_BLOCKNOTIFICATION_START,
+    /// The EditEngine is in a valid state again. Process pending notifications.
+    EE_NOTIFY_PROCESSNOTIFICATIONS,
 
-    /** Denotes the end of a collected amount of EditEngine
-        notification events. After this event, the queue is empty, and
-        a high-level operation such as "insert paragraph" is finished
-     */
-    EE_NOTIFY_BLOCKNOTIFICATION_END,
-
-    /// Denotes the beginning of a high-level action triggered by a key press
-    EE_NOTIFY_INPUT_START,
-
-    /// Denotes the end of a high-level action triggered by a key press
-    EE_NOTIFY_INPUT_END,
     EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA
 };
 
