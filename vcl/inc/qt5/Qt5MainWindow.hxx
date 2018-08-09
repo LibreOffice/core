@@ -20,9 +20,22 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QMainWindow>
 
 #include "Qt5Frame.hxx"
 
-QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f);
+class Qt5MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+    Qt5Frame* m_pFrame;
+
+    virtual void closeEvent(QCloseEvent* pEvent) override;
+
+public:
+    Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR,
+                  Qt::WindowFlags f = Qt::WindowFlags());
+    virtual ~Qt5MainWindow() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
