@@ -66,6 +66,8 @@ public:
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 
+    void SetRanges(const ScRangeList& rRanges);
+
     virtual Size GetOptimalSize() const override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void Resize() override;
