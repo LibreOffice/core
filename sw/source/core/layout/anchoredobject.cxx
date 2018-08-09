@@ -749,7 +749,14 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
     }
 }
 
-
+void SwAnchoredObject::ClearTmpConsiderWrapInfluence()
+{
+    mbTmpConsiderWrapInfluence = false;
+    mbClearedEnvironment = false;
+    SetClearedEnvironment( false );
+    SwLayouter::RemoveObjForTmpConsiderWrapInfluence( *(GetFrameFormat().GetDoc()),
+                                                      *this );
+}
 void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs()
 {
     const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
