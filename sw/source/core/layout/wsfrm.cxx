@@ -31,6 +31,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
 #include <ftninfo.hxx>
@@ -4459,6 +4460,15 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         //   frames, to be added to the new frame of their node
         // * Flys anchored in other flys that are hidden
         AppendAllObjs(rDoc.GetSpzFrameFormats(), this);
+    }
+
+    for (auto const pRedline : rDoc.getIDocumentRedlineAccess().GetRedlineTable())
+    {   // DELETE are handled by the code above; for other types, need to
+        // trigger repaint of text frames to add/remove the redline color font
+        if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
+        {
+            pRedline->InvalidateRange();
+        }
     }
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
