@@ -365,7 +365,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
 }
 
 SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
-        std::function<void (SwTextNode *)> const*const pContentIndexRestore)
+        std::function<void (SwTextNode *, sw::mark::RestoreMode)> const*const pContentIndexRestore)
 {
     bool parentIsOutline = IsOutline();
 
@@ -478,7 +478,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         if (pContentIndexRestore)
         {   // call before making frames and before RegisterToNode
-            (*pContentIndexRestore)(pNode);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
         }
 
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
@@ -525,6 +525,10 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         }
         pNode->MakeFramesForAdjacentContentNode(*this);
         lcl_ChangeFootnoteRef( *this );
+        if (pContentIndexRestore)
+        {   // call after making frames; listeners will take care of adding to the right frame
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
     }
     else
     {
@@ -582,7 +586,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         if (pContentIndexRestore)
         {   // call before making frames
-            (*pContentIndexRestore)(pNode);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
         }
 
         if ( HasWriterListeners() )
@@ -590,6 +594,10 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             MakeFramesForAdjacentContentNode(*pNode);
         }
         lcl_ChangeFootnoteRef( *pNode );
+        if (pContentIndexRestore)
+        {   // call after making frames; listeners will take care of adding to the right frame
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
     }
 
     {

@@ -151,26 +151,38 @@ namespace
             SaveUnoCursors(pDoc, nNode, nContent);
             SaveShellCursors(pDoc, nNode, nContent);
         }
-        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) override
+        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode eMode = RestoreMode::All) override
         {
             SwContentNode* pCNd = pDoc->GetNodes()[ nNode ]->GetContentNode();
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
-            RestoreBkmks(pDoc, aUpdater);
-            RestoreRedlines(pDoc, aUpdater);
-            RestoreFlys(pDoc, aUpdater, bAuto);
-            RestoreUnoCursors(aUpdater);
-            RestoreShellCursors(aUpdater);
+            if (eMode & RestoreMode::NonFlys)
+            {
+                RestoreBkmks(pDoc, aUpdater);
+                RestoreRedlines(pDoc, aUpdater);
+                RestoreUnoCursors(aUpdater);
+                RestoreShellCursors(aUpdater);
+            }
+            if (eMode & RestoreMode::Flys)
+            {
+                RestoreFlys(pDoc, aUpdater, bAuto);
+            }
         }
-        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) override
+        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode eMode = RestoreMode::All) override
         {
             SwContentNode* pCNd = rNd.GetContentNode();
             SwDoc* pDoc = rNd.GetDoc();
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
-            RestoreBkmks(pDoc, aUpdater);
-            RestoreRedlines(pDoc, aUpdater);
-            RestoreFlys(pDoc, aUpdater, false);
-            RestoreUnoCursors(aUpdater);
-            RestoreShellCursors(aUpdater);
+            if (eMode & RestoreMode::NonFlys)
+            {
+                RestoreBkmks(pDoc, aUpdater);
+                RestoreRedlines(pDoc, aUpdater);
+                RestoreUnoCursors(aUpdater);
+                RestoreShellCursors(aUpdater);
+            }
+            if (eMode & RestoreMode::Flys)
+            {
+                RestoreFlys(pDoc, aUpdater, false);
+            }
         }
 
         private:

@@ -562,12 +562,12 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
 
             pTextNd->EraseText( aCntPos, 1 );
 
-            std::function<void (SwTextNode *)> restoreFunc(
-                [&](SwTextNode *const pNewNode)
+            std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
+                [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode)
                 {
                     if (!pContentStore->Empty())
                     {
-                        pContentStore->Restore(*pNewNode, pSave->m_nContent, pSave->m_nContent + 1);
+                        pContentStore->Restore(*pNewNode, pSave->m_nContent, pSave->m_nContent + 1, eMode);
                     }
                 });
             pTextNd->SplitContentNode(

@@ -62,6 +62,8 @@ class SwGrammarMarkUp;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
 
+namespace sw { namespace mark { enum class RestoreMode; } }
+
 namespace com { namespace sun { namespace star {
     namespace uno {
         template < class > class Sequence;
@@ -350,7 +352,7 @@ public:
     /// Virtual methods from ContentNode.
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
     SwTextNode * SplitContentNode(const SwPosition &,
-            std::function<void (SwTextNode *)> const* pContentIndexRestore);
+            std::function<void (SwTextNode *, sw::mark::RestoreMode)> const* pContentIndexRestore);
     virtual SwContentNode *JoinNext() override;
     void JoinPrev();
 
