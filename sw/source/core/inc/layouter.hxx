@@ -128,6 +128,10 @@ public:
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
+    static void RemoveObjForTmpConsiderWrapInfluence(
+                                        const SwDoc& _rDoc,
+                                        SwAnchoredObject& _rAnchoredObj );
+
     // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrame& p_rFlowFrame,
