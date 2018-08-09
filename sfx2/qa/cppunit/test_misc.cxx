@@ -140,8 +140,8 @@ void MiscTest::testNoThumbnail()
     osl::FileStatus aStatus(osl_FileStatus_Mask_Attributes);
     CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None, aItem.getFileStatus(aStatus));
 
-    // This failed, osl_File_Attribute_GrpRead was not set even if umask
-    // requested so.
+    // The following checks used to fail in the past, osl_File_Attribute_GrpRead was not set even if
+    // umask requested so:
     CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_GrpRead);
     CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_OthRead);
     umask(nMask);
