@@ -13,7 +13,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
 	CustomTarget_autotextuser \
 	CustomTarget_glade \
+	CustomTarget_tplofficorr \
+	CustomTarget_tploffimisc \
+	CustomTarget_tplpersonal \
 	CustomTarget_tplpresnt \
+	CustomTarget_tpl_styles \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
@@ -33,9 +37,9 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_palettes \
 	Package_tplofficorr \
 	Package_tploffimisc \
+	Package_tplpersonal \
 	Package_tplpresnt \
 	Package_tpl_styles \
-	Package_tplpersonal \
 	Package_tplwizagenda \
 	Package_tplwizbitmap \
 	Package_tplwizdesktop \

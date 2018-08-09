@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tploffimisc,$(SRCDIR)/extras/source/templates/offimisc))
+$(eval $(call gb_Package_Package,extras_tploffimisc,$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)))
 
 $(eval $(call gb_Package_add_files,extras_tploffimisc,$(LIBO_SHARE_FOLDER)/template/common/offimisc,\
 	Businesscard-with-logo.ott \

@@ -36,3 +36,25 @@ How-to add a new Impress template
 		+ add files names contained in Foo.otp (except mimetype) in extras_PRESENTATIONS_XMLFILES
 		+ if Foo.otp contains files with other extension than .xml, .svm, .svg, .png and .jpg
 			+ add a CPY call at the end of file
+
+How-to add a new Writer template
+	+ clean-up template file as much as possible, and choose a template category <Category>
+	+ unzip Foo.ott in extras/source/templates/<Category>/Foo (no space allowed in any file names)
+	+ add Foo.ott in Package_<tplCategory>.mk
+	+ in CustomTarget_<tplCategory>.mk:
+		+ add Foo / in extras_TEMPLATES_<CATEGORY>
+		+ add files names contained in Foo.otp (except mimetype) in extras_<CATEGORY>_XMLFILES
+		+ if Foo.ott contains files with other extension than .xml, rdf, .svm, .svg, .png and .jpg
+			+ add a CPY call at the end of file
+
+How-to add a new template category
+	+ create a directory extras/source/templates/foo/
+	+ unzip your foo0.ott template files in extras/source/templates/foo/foo0
+	+ add Package_tplfoo and CustomTarget_tplfoo in Module_extras.mk
+	+ use other category Package_tplcategory.mk to create Package_tplfoo.mk
+	+ use other category CustomTarget_tplcategory.mk to create CustomTarget_tplfoo.mk
+		+ replace all category by foo and CATEGORY by FOO
+		+ add all files contained in foo0.ott (except mimetype) in extras_FOO_XMLFILES
+		+ if foo0.ott contains files with other extension than .xml, .rdf, .svm, .svg, .png and .jpg
+			+ add a CPY call at the end of the file
+		+ optionaly, replace extension ott (4 places)
