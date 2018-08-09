@@ -102,6 +102,10 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     }
     if (!bHaveRedlines)
     {
+        if (pNode->GetRedlineMergeFlag() != SwNode::Merge::None)
+        {
+            pNode->SetRedlineMergeFlag(SwNode::Merge::None);
+        }
         return nullptr;
     }
     if (nLastEnd != pNode->Len())
