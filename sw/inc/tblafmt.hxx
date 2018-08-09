@@ -339,6 +339,7 @@ public:
      * cell in a given table.
      */
     static sal_uInt8 CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uInt32 nRow, sal_uInt32 nRows);
+    static void SetDefaultBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId, bool bForceNoHtml = false );
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable

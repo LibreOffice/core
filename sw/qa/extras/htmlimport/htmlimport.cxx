@@ -264,6 +264,9 @@ DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     // This was 0, tables had no borders, even if the default autoformat has
     // borders and the markup allows no custom borders.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), aBorder.LineWidth);
+
+    // This was 0x000080 (~blue), table format didn't match the default UI one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

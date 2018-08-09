@@ -1502,20 +1502,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         if (m_pParser->IsReqIF())
         {
             // ReqIF case, cells would have no formatting. Apply the default
-            // table autoformat on them, so imported and UI-created tables look
+            // box attributes on them, so imported and UI-created tables look
             // the same.
-            SwTableAutoFormatTable& rTable = m_pParser->GetDoc()->GetTableStyles();
-            SwTableAutoFormat* pTableFormat = rTable.FindAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, OUString()));
-            if (pTableFormat)
-            {
-                sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);
-                pTableFormat->UpdateToSet(nPos,
-                                          const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
-                                              pFrameFormat->GetAttrSet())),
-                                          SwTableAutoFormat::UPDATE_BOX,
-                                          pFrameFormat->GetDoc()->GetNumberFormatter());
-            }
+            sal_uInt8 nPos = (nCol < m_nCols - 1 ? 0 : 1) + (nRow ? 2 : 0 );
+            SwTableAutoFormat::SetDefaultBoxAttr(*pFrameFormat, nPos, /*bForceNoHtml=*/true);
         }
     }
     else

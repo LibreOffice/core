@@ -106,7 +106,7 @@ using namespace ::com::sun::star;
 
 const sal_Unicode T2T_PARA = 0x0a;
 
-static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
+void SwTableAutoFormat::SetDefaultBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId, bool bForceNoHtml )
 {
     bool bTop = false, bBottom = false, bLeft = false, bRight = false;
     switch ( nId )
@@ -117,7 +117,7 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
     case 3: bBottom = bLeft = bRight = true;        break;
     }
 
-    const bool bHTML = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
+    const bool bHTML = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !bForceNoHtml;
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
     SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
     if ( bHTML )
@@ -171,7 +171,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
                                     SwTableAutoFormat::UPDATE_BOX,
                                     pDoc->GetNumberFormatter() );
         else
-            ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
+            SwTableAutoFormat::SetDefaultBoxAttr( *pNewTableBoxFormat, nId );
 
         (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
     }
@@ -187,7 +187,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
-        ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
+        SwTableAutoFormat::SetDefaultBoxAttr( *pBoxFormat, nId );
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
     return rBoxFormatArr[nId];
