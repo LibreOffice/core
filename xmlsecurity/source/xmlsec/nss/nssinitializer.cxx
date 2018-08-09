@@ -253,6 +253,20 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     // there might be no profile
     if ( !sCertDir.isEmpty() )
     {
+        if (sCertDir.indexOf(':') == -1) //might be env var with explicit prefix
+        {
+            OUString sCertDirURL;
+            osl::FileBase::getFileURLFromSystemPath(
+                OStringToOUString(sCertDir, osl_getThreadTextEncoding()),
+                sCertDirURL);
+            osl::DirectoryItem item;
+            if (osl::FileBase::E_NOENT != osl::DirectoryItem::get(sCertDirURL + "/cert8.db", item) &&
+                osl::FileBase::E_NOENT == osl::DirectoryItem::get(sCertDirURL + "/cert9.db", item))
+            {
+                SAL_INFO("xmlsecurity.xmlsec", "nsscrypto_initialize: trying to avoid profile migration");
+                sCertDir = "dbm:" + sCertDir;
+            }
+        }
         if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
         {
             SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS with profile failed.");
