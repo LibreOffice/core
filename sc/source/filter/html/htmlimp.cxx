@@ -107,7 +107,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, con
     ScTokenArray aTokArray;
     aTokArray.AddDoubleReference( aRefData );
     ScRangeData* pRangeData = new ScRangeData( pDoc, rName, aTokArray );
-    pDoc->GetRangeName( rRange.aStart.Tab() )->insert( pRangeData );
+    pDoc->GetRangeName()->insert( pRangeData );
 }
 
 void ScHTMLImport::WriteToDocument(
