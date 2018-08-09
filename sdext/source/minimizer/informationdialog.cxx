@@ -50,7 +50,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 
-OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
+OUString InsertFixedText( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -83,7 +83,7 @@ OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString&
 }
 
 OUString InsertImage(
-    InformationDialog& rInformationDialog,
+    UnoDialog& rInformationDialog,
     const OUString& rControlName,
     const OUString& rURL,
     sal_Int32 nPosX,
@@ -118,7 +118,7 @@ OUString InsertImage(
     return rControlName;
 }
 
-OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
+OUString InsertCheckBox( UnoDialog& rInformationDialog, const OUString& rControlName,
     const Reference< XItemListener >& rItemListener, const OUString& rLabel,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
@@ -153,8 +153,8 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
     return rControlName;
 }
 
-OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
+OUString InsertButton( UnoDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, const OUString& rText )
 {
     OUString pNames[] = {
         OUString("Enabled"),
@@ -170,7 +170,7 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
     Any pValues[] = {
         Any( true ),
         Any( nHeight ),
-        Any( rInformationDialog.getString( nResID ) ),
+        Any( rText ),
         Any( nXPos ),
         Any( nYPos ),
         Any( static_cast< sal_Int16 >( PushButtonType_OK ) ),
@@ -297,7 +297,7 @@ void InformationDialog::InitDialog()
     InsertFixedText( *this, "fixedtext", aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, true, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+    InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, getString( STR_OK ) );
 
     bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
@@ -350,7 +350,7 @@ void OKActionListener::actionPerformed( const ActionEvent& rEvent )
 {
     if ( rEvent.ActionCommand == "button" )
     {
-        mrInformationDialog.endExecute( true );
+        mrDialog.endExecute( true );
     }
 }
 void OKActionListener::disposing( const css::lang::EventObject& /* Source */ )
