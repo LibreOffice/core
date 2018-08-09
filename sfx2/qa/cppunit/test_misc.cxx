@@ -119,6 +119,9 @@ void MiscTest::testNoThumbnail()
     CPPUNIT_ASSERT(xComponent.is());
 
     // Save it with the NoThumbnail option and assert that it has no thumbnail.
+#ifndef _WIN32
+    mode_t nMask = umask(022);
+#endif
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
     utl::TempFile aTempFile;
@@ -132,7 +135,6 @@ void MiscTest::testNoThumbnail()
 
 #ifndef _WIN32
     // Check permissions of the URL after store.
-    mode_t nMask = umask(022);
     osl::DirectoryItem aItem;
     CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None,
                          osl::DirectoryItem::get(aTempFile.GetURL(), aItem));
