@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tplpersonal,$(SRCDIR)/extras/source/templates/personal))
+$(eval $(call gb_Package_Package,extras_tplpersonal,$(call gb_CustomTarget_get_workdir,extras/source/templates/personal)))
 
 $(eval $(call gb_Package_add_files,extras_tplpersonal,$(LIBO_SHARE_FOLDER)/template/common/personal,\
 	CV.ott \
