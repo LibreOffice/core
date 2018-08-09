@@ -36,6 +36,19 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase.hxx>
 
+OUString InsertFixedText( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
+                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex );
+
+OUString InsertImage( UnoDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
+    sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight, bool bScale );
+
+OUString InsertCheckBox( UnoDialog& rInformationDialog, const OUString& rControlName,
+    const css::uno::Reference< css::awt::XItemListener >& rItemListener, const OUString& rLabel,
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex );
+
+OUString InsertButton( UnoDialog& rInformationDialog, const OUString& rControlName,
+    css::uno::Reference< css::awt::XActionListener > const & xActionListener, sal_Int32 nXPos, sal_Int32 nYPos,
+    sal_Int32 nWidth, sal_Int16 nTabIndex, const OUString& rText );
 
 class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
@@ -64,13 +77,13 @@ private:
 class OKActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
 {
 public:
-    explicit OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){}
+    explicit OKActionListener( UnoDialog& rDialog ) : mrDialog( rDialog ){}
 
     virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 private:
 
-    InformationDialog& mrInformationDialog;
+    UnoDialog& mrDialog;
 };
 
 #endif

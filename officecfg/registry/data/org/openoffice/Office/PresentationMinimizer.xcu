@@ -196,6 +196,9 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_FILESIZESEPARATOR">
             <value xml:lang="en-US">.</value>
         </prop>
+        <prop oor:name="STR_ERROR_IO">
+            <value xml:lang="en-US">Writing output file failed!</value>
+        </prop>
     </node>
     <node oor:name="LastUsedSettings">
         <prop oor:name="Name">
