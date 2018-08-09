@@ -483,6 +483,9 @@ static Color toColor(const QColor& rColor)
 
 void Qt5Frame::UpdateSettings(AllSettings& rSettings)
 {
+    if (Qt5Data::noNativeControls())
+        return;
+
     StyleSettings style(rSettings.GetStyleSettings());
 
     // General settings
