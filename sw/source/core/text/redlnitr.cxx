@@ -287,7 +287,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             }
         }
     }
-    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
+        && pRootFrame && !pRootFrame->IsHideRedlines();
     if (pExtInp || m_pMergedPara || bShow)
     {
         SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
