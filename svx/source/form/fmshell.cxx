@@ -1272,7 +1272,7 @@ namespace
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();
-            SdrUnoObj* pUnoObject = pObject ? dynamic_cast<SdrUnoObj*>( pObject  ) : nullptr;
+            SdrUnoObj* pUnoObject = dynamic_cast<SdrUnoObj*>( pObject  );
             if ( !pUnoObject )
                 continue;
 

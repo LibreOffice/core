@@ -340,7 +340,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         else if( mnPageNumber != -1 )
         {
             const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( pField && dynamic_cast<const SvxPageField*>( pField) !=  nullptr )
+            if( dynamic_cast<const SvxPageField*>( pField) )
             {
                 OUString aPageNumValue;
                 bool bUpper = false;
@@ -833,7 +833,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             if( !bVectorType )
             {
                 SdrObject* pObj = aShapes.front();
-                if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && !static_cast<SdrGrafObj*>(pObj)->HasText() )
+                if( dynamic_cast<const SdrGrafObj*>( pObj) && !static_cast<SdrGrafObj*>(pObj)->HasText() )
                 {
                     aGraphic = static_cast<SdrGrafObj*>(pObj)->GetTransformedGraphic();
                     if ( aGraphic.GetType() == GraphicType::Bitmap )
@@ -859,7 +859,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             else if( rSettings.mbScrollText )
             {
                 SdrObject* pObj = aShapes.front();
-                if( pObj && dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr
+                if( dynamic_cast<const SdrTextObj*>( pObj)
                     && static_cast<SdrTextObj*>(pObj)->HasText() )
                 {
                     tools::Rectangle aScrollRectangle;

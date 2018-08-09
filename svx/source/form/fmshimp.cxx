@@ -1086,7 +1086,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
         return false;
 
     SdrPage* pPage = m_pShell->GetCurPage();
-    FmFormPage* pFormPage = pPage ? dynamic_cast< FmFormPage* >( pPage ) : nullptr;
+    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( pPage );
     OSL_ENSURE( pFormPage, "FmXFormShell::executeControlConversionSlot: no current (form) page!" );
     if ( !pFormPage )
         return false;

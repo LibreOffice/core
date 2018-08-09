@@ -594,8 +594,8 @@ namespace svxform
     )
     {
         FmEntryData* pData = FindData(xOld, GetRootList());
-        assert(pData && dynamic_cast<const FmControlData*>( pData) !=  nullptr); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
-        if (!pData || dynamic_cast<const FmControlData*>( pData) ==  nullptr)
+        assert(dynamic_cast<const FmControlData*>( pData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
+        if (!dynamic_cast<const FmControlData*>( pData))
             return;
         static_cast<FmControlData*>(pData)->ModelReplaced(xNew);
 

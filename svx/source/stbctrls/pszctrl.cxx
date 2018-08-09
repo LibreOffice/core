@@ -275,8 +275,8 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         if ( eState == SfxItemState::DEFAULT )
         {
             pImpl->bHasMenu = true;
-            if ( pState && dynamic_cast< const SfxUInt32Item* >(pState) !=  nullptr )
-                pImpl->nFunctionSet = static_cast<const SfxUInt32Item*>(pState)->GetValue();
+            if ( auto pUInt32Item = dynamic_cast< const SfxUInt32Item* >(pState) )
+                pImpl->nFunctionSet = pUInt32Item->GetValue();
         }
         else
             pImpl->bHasMenu = false;
