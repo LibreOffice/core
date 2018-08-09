@@ -22,6 +22,30 @@
       "revId": "2a82c236e402868bf7cc8e47922791d9a0cdfbe1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3087d6da",
+        "filename": "sal/qa/osl/file/osl_File.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-08-09T20:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfeb2761_30afd695",
+      "range": {
+        "startLine": 1612,
+        "startChar": 57,
+        "endLine": 1612,
+        "endChar": 66
+      },
+      "revId": "2a82c236e402868bf7cc8e47922791d9a0cdfbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
