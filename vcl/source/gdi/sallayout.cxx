@@ -1871,7 +1871,15 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // get the next codepoint index that needs fallback
     int nActiveCharPos = nCharPos[0];
     // get the end index of the active run
-    int nLastRunEndChar = (vRtl[nActiveCharPos - mnMinCharPos])?
+    // nActiveCharPos can be less than mnMinCharPos if the ScriptItemize() call
+    // in UniscribeLayout::LayoutText() finds a mult-character script item
+    // that starts in the leading context and overlaps into the start of the
+    // run.  UniscribeLayout::LayoutText() drops the glyphs for the context
+    // characters, but does not (yet?) adjust the starting character position
+    // of the item.   Since the text layout direction can't change in the
+    // middle of the offending script item, we can safely use the direction at
+    // the start of the run
+    int nLastRunEndChar = (vRtl[nActiveCharPos >= mnMinCharPos ? (nActiveCharPos - mnMinCharPos) : 0])?
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
     int nRunVisibleEndChar = nCharPos[0];
     // merge the fallback levels
