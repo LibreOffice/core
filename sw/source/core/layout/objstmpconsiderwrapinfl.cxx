@@ -31,23 +31,18 @@ SwObjsMarkedAsTmpConsiderWrapInfluence::~SwObjsMarkedAsTmpConsiderWrapInfluence(
 
 void SwObjsMarkedAsTmpConsiderWrapInfluence::Insert( SwAnchoredObject& _rAnchoredObj )
 {
+    auto it = std::find(maObjsTmpConsiderWrapInfl.begin(), maObjsTmpConsiderWrapInfl.end(), &_rAnchoredObj);
+    if (it != maObjsTmpConsiderWrapInfl.end())
+        return;
+    maObjsTmpConsiderWrapInfl.push_back( &_rAnchoredObj );
+}
 
-    bool bAlreadyInserted( false );
-    std::vector< SwAnchoredObject* >::const_iterator aIter = maObjsTmpConsiderWrapInfl.begin();
-    for ( ; aIter != maObjsTmpConsiderWrapInfl.end(); ++aIter )
-    {
-        const SwAnchoredObject* pAnchoredObj = *aIter;
-        if ( pAnchoredObj == &_rAnchoredObj )
-        {
-            bAlreadyInserted = true;
-            break;
-        }
-    }
-
-    if ( !bAlreadyInserted )
-    {
-        maObjsTmpConsiderWrapInfl.push_back( &_rAnchoredObj );
-    }
+void SwObjsMarkedAsTmpConsiderWrapInfluence::Remove( SwAnchoredObject& _rAnchoredObj )
+{
+    auto it = std::find(maObjsTmpConsiderWrapInfl.begin(), maObjsTmpConsiderWrapInfl.end(), &_rAnchoredObj);
+    if (it == maObjsTmpConsiderWrapInfl.end())
+        return;
+    maObjsTmpConsiderWrapInfl.erase(it);
 }
 
 void SwObjsMarkedAsTmpConsiderWrapInfluence::Clear()
