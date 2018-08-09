@@ -1024,14 +1024,6 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         }
     }
 
-    pImpEditEngine->EnterBlockNotifications();
-
-    if ( GetNotifyHdl().IsSet() )
-    {
-        EENotify aNotify( EE_NOTIFY_INPUT_START );
-        pImpEditEngine->CallNotify( aNotify );
-    }
-
     if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( nCode )
@@ -1430,14 +1422,6 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         pImpEditEngine->CallStatusHdl();
     }
 
-    if ( GetNotifyHdl().IsSet() )
-    {
-        EENotify aNotify( EE_NOTIFY_INPUT_END );
-        pImpEditEngine->CallNotify( aNotify );
-    }
-
-    pImpEditEngine->LeaveBlockNotifications();
-
     return bDone;
 }
 
@@ -1534,10 +1518,8 @@ std::unique_ptr<EditTextObject> EditEngine::GetEmptyTextObject() const
 
 void EditEngine::SetText( const EditTextObject& rTextObject )
 {
-    pImpEditEngine->EnterBlockNotifications();
     pImpEditEngine->SetText( rTextObject );
     pImpEditEngine->FormatAndUpdate();
-    pImpEditEngine->LeaveBlockNotifications();
 }
 
 void EditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
@@ -2500,7 +2482,7 @@ void EditEngine::ParagraphInserted( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->CallNotify( aNotify );
+        pImpEditEngine->QueueNotify( aNotify );
     }
 }
 
@@ -2511,7 +2493,7 @@ void EditEngine::ParagraphDeleted( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->CallNotify( aNotify );
+        pImpEditEngine->QueueNotify( aNotify );
     }
 }
 void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 /*nRightParagraph*/ )
@@ -2533,7 +2515,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_TextHeightChanged );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->CallNotify( aNotify );
+        pImpEditEngine->QueueNotify( aNotify );
     }
 }
 

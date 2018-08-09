@@ -47,10 +47,7 @@ enum class SfxHintId {
     TextFormatPara,
     TextFormatted,
     TextModified,
-    TextBlockNotificationStart,
-    TextBlockNotificationEnd,
-    TextInputStart,
-    TextInputEnd,
+    TextProcessNotifications,
     TextViewScrolled,
     TextViewSelectionChanged,
     TextViewCaretChanged,
@@ -142,10 +139,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::TextFormatPara: return stream << "TextFormatPara";
     case SfxHintId::TextFormatted: return stream << "TextFormatted";
     case SfxHintId::TextModified: return stream << "TextModified";
-    case SfxHintId::TextBlockNotificationStart: return stream << "TextBlockNotificationStart";
-    case SfxHintId::TextBlockNotificationEnd: return stream << "TextBlockNotificationEnd";
-    case SfxHintId::TextInputStart: return stream << "TextInputStart";
-    case SfxHintId::TextInputEnd: return stream << "TextInputEnd";
+    case SfxHintId::TextProcessNotifications: return stream << "TextProcessNotifications";
     case SfxHintId::TextViewScrolled: return stream << "TextViewScrolled";
     case SfxHintId::TextViewSelectionChanged: return stream << "TextViewSelectionChanged";
     case SfxHintId::TextViewCaretChanged: return stream << "TextViewCaretChanged";

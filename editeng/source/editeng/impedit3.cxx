@@ -358,8 +358,6 @@ void ImpEditEngine::FormatDoc()
     if (!GetUpdateMode() || IsFormatting())
         return;
 
-    EnterBlockNotifications();
-
     bIsFormatting = true;
 
     // Then I can also start the spell-timer ...
@@ -474,8 +472,6 @@ void ImpEditEngine::FormatDoc()
         GetRefDevice()->Pop();
 
     CallStatusHdl();    // If Modified...
-
-    LeaveBlockNotifications();
 }
 
 bool ImpEditEngine::ImpCheckRefMapMode()
@@ -4241,6 +4237,8 @@ void ImpEditEngine::FormatAndUpdate( EditView* pCurView, bool bCalledFromUndo )
         FormatDoc();
         UpdateViews( pCurView );
     }
+
+    SendNotifications();
 }
 
 void ImpEditEngine::SetFlatMode( bool bFlat )
