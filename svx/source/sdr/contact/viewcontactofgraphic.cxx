@@ -367,7 +367,7 @@ namespace sdr
             else if(visualisationUsesDraft())
             {
                 // #i102380# The graphic is swapped out. To not force a swap-in here, there is a mechanism
-                // which shows a swapped-out-visualisation (which gets created here now) and an asynchronious
+                // which shows a swapped-out-visualisation (which gets created here now) and an asynchronous
                 // visual update mechanism for swapped-out graphics when they were loaded (see AsynchGraphicLoadingEvent
                 // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
