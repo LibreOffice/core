@@ -86,11 +86,16 @@ void VclQtMixinBase::mixinResizeEvent(QResizeEvent*, QSize aSize)
     {
         int width = aSize.width();
         int height = aSize.height();
-        cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-        cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                    &m_pFrame->m_aDamageHandler, nullptr);
-        m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
-        m_pFrame->m_pSurface.reset(pSurface);
+
+        if (m_pFrame->m_pSvpGraphics)
+        {
+            cairo_surface_t* pSurface
+                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+            cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
+                                        &m_pFrame->m_aDamageHandler, nullptr);
+            m_pFrame->m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
+            m_pFrame->m_pSurface.reset(pSurface);
+        }
     }
     else
     {
@@ -199,18 +204,9 @@ void VclQtMixinBase::mixinShowEvent(QShowEvent*)
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void VclQtMixinBase::mixinCloseEvent(QCloseEvent* pEvent)
+void VclQtMixinBase::mixinCloseEvent(QCloseEvent* /*pEvent*/)
 {
-    bool bRet = false;
-    bRet = m_pFrame->CallCallback(SalEvent::Close, nullptr);
-
-    if (bRet)
-        pEvent->accept();
-    // SalEvent::Close returning false may mean that user has vetoed
-    // closing the frame ("you have unsaved changes" dialog for example)
-    // We shouldn't process the event in such case
-    else
-        pEvent->ignore();
+    m_pFrame->CallCallback(SalEvent::Close, nullptr);
 }
 
 static sal_uInt16 GetKeyCode(int keyval)
@@ -470,17 +466,11 @@ public:
     virtual ~Qt5Widget() override{};
 
     friend QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f);
-    friend QWidget* createQMainWindow(Qt5Frame& rFrame, Qt::WindowFlags f);
 };
 
 QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
     return new Qt5Widget<QWidget>(rFrame, f);
-}
-
-QWidget* createQMainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
-{
-    return new Qt5Widget<QMainWindow>(rFrame, f);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
