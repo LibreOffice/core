@@ -149,6 +149,11 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     RecalcAll();
 }
 
+void ScCondFormatList::SetRange(const ScRangeList& rRange)
+{
+    maRanges = rRange;
+}
+
 VCL_BUILDER_FACTORY_CONSTRUCTOR(ScCondFormatList, 0)
 
 Size ScCondFormatList::GetOptimalSize() const
@@ -178,9 +183,10 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
     ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
     pFormat->SetRange(maRanges);
 
-    for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    for(auto & rEntry: maEntries)
     {
-        ScFormatEntry* pEntry = (*itr)->GetEntry();
+        rEntry->SetPos(maRanges.GetTopLeftCorner());
+        ScFormatEntry* pEntry = rEntry->GetEntry();
         if(pEntry)
             pFormat->AddEntry(pEntry);
     }
@@ -671,6 +677,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
     ScRangeList aRange;
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
+    mpCondFormList->SetRange(aRange);
     ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
 
     if((nFlags & ScRefFlags::VALID) && !aRange.empty() && pFormat)
