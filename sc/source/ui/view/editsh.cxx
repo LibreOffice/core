@@ -793,8 +793,8 @@ const SvxURLField* ScEditShell::GetURLField()
         if (pFieldItem)
         {
             const SvxFieldData* pField = pFieldItem->GetField();
-            if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
-                return static_cast<const SvxURLField*>(pField);
+            if ( auto pURLField = dynamic_cast<const SvxURLField*>( pField) )
+                return pURLField;
         }
     }
 

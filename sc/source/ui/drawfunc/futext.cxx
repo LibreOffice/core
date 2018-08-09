@@ -432,9 +432,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 if(rMarkList.GetMark(0))
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    if(pObj && dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+                    if(auto pText = dynamic_cast<SdrTextObj*>( pObj))
                     {
-                        SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
                         SfxItemSet aSet(pDrDoc->GetItemPool());
 
                         pText->SetVerticalWriting(true);

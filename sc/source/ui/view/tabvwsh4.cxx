@@ -1673,9 +1673,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //  old DesignMode state from form layer must be restored, too
 
     TriState nForceDesignMode = TRISTATE_INDET;
-    if ( pOldSh && dynamic_cast<const ScPreviewShell*>( pOldSh) !=  nullptr )
+    if ( auto pPreviewShell = dynamic_cast<ScPreviewShell*>( pOldSh) )
     {
-        ScPreviewShell* pPreviewShell = static_cast<ScPreviewShell*>(pOldSh);
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();
         ScPreview* p = pPreviewShell->GetPreview();
         if (p)

@@ -271,7 +271,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         if (pFieldItem)
                         {
                             const SvxFieldData* pField = pFieldItem->GetField();
-                            if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
+                            if ( dynamic_cast<const SvxURLField*>( pField) )
                             {
                                 //  select old field
 
@@ -418,7 +418,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if ( pFieldItem )
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
-                bEnable = pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr;
+                bEnable = dynamic_cast<const SvxURLField*>( pField) !=  nullptr;
             }
         }
         if( !bEnable )

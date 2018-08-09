@@ -791,7 +791,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs &&
                         pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     {
-                        OSL_ENSURE(pItem && dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr, "wrong item");
+                        OSL_ENSURE(dynamic_cast<const SfxBoolItem*>( pItem), "wrong item");
                         bMoveContents = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     }
 

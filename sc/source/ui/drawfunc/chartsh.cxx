@@ -76,7 +76,7 @@ void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && dynamic_cast<const SdrOle2Obj*>( pObj) !=  nullptr )
+        if( dynamic_cast<const SdrOle2Obj*>( pObj) )
             bEnable = true;
     }
 
@@ -93,7 +93,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
     {
         SdrObject* pObject = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObject && dynamic_cast<const SdrOle2Obj*>( pObject) !=  nullptr )
+        if( dynamic_cast<const SdrOle2Obj*>( pObject) )
         {
             vcl::Window* pWin = GetViewData()->GetActiveWin();
             Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape(), UNO_QUERY_THROW );
