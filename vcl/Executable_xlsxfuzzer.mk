@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_set_include,xlsxfuzzer,\
 $(eval $(call gb_Executable_use_libraries,xlsxfuzzer,\
     $(fuzzer_calc_libraries) \
     $(fuzzer_core_libraries) \
+    pdffilter \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,xlsxfuzzer,\
