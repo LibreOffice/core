@@ -265,7 +265,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_H_ALIGNCELL:
         {
             SvxCellHorJustify meHorAlignState = SvxCellHorJustify::Standard;
-            if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SvxHorJustifyItem*>( pState) !=  nullptr )
+            if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SvxHorJustifyItem*>( pState) )
             {
                 const SvxHorJustifyItem* pItem = static_cast<const SvxHorJustifyItem*>(pState);
                 meHorAlignState = pItem->GetValue();
@@ -287,7 +287,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_INDENT:
-        if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SfxUInt16Item*>( pState) !=  nullptr )
+        if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SfxUInt16Item*>( pState) )
         {
                 const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
                 sal_uInt16 nVal = pItem->GetValue();
@@ -300,7 +300,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case FID_MERGE_TOGGLE:
-        if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr )
+        if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SfxBoolItem*>( pState) )
         {
             mpCBXMergeCell->Enable();
             const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
@@ -323,7 +323,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         else
         {
             mpCBXWrapText->Enable();
-            if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr )
+            if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SfxBoolItem*>( pState) )
             {
                 mpCBXWrapText->EnableTriState(false);
                 const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);

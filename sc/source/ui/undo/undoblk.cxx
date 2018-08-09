@@ -114,7 +114,7 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
     {
         ScUndoWrapper* pWrapper = static_cast<ScUndoWrapper*>(pNextAction);
         SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
-        if ( pWrappedAction && dynamic_cast<const ScUndoPaste*>( pWrappedAction) !=  nullptr )
+        if ( dynamic_cast<const ScUndoPaste*>( pWrappedAction) )
         {
             //  Store paste action if this is part of paste with inserting cells.
             //  A list action isn't used because Repeat wouldn't work (insert wrong cells).

@@ -155,13 +155,12 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 {
     Construct( &pViewFrame->GetWindow() );
 
-    if ( pOldSh && dynamic_cast<const ScTabViewShell*>( pOldSh) !=  nullptr )
+    if ( auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pOldSh) )
     {
         //  store view settings, show table from TabView
         //! store live ScViewData instead, and update on ScTablesHint?
         //! or completely forget aSourceData on ScTablesHint?
 
-        ScTabViewShell* pTabViewShell = static_cast<ScTabViewShell*>(pOldSh);
         const ScViewData& rData = pTabViewShell->GetViewData();
         pPreview->SetSelectedTabs(rData.GetMarkData());
         InitStartTable( rData.GetTabNo() );

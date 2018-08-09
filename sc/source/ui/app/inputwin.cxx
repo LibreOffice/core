@@ -1633,10 +1633,10 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 SvtScriptType nOldScript = SvtScriptType::NONE;
                 SvtScriptType nNewScript = SvtScriptType::NONE;
                 SfxObjectShell* pObjSh = SfxObjectShell::Current();
-                if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
+                if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
                 {
                     //  any document can be used (used only for its break iterator)
-                    ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
+                    ScDocument& rDoc = pDocShell->GetDocument();
                     nOldScript = rDoc.GetStringScriptType( aString );
                     nNewScript = rDoc.GetStringScriptType( rNewString );
                 }
@@ -1874,9 +1874,9 @@ void ScPosWnd::FillRangeNames()
     Clear();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
+    if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
     {
-        ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
 
         InsertEntry(ScResId( STR_MANAGE_NAMES ));
         SetSeparatorPos(0);

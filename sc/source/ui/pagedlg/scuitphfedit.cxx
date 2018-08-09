@@ -370,7 +370,7 @@ void ScHFEditPage::SetSelectDefinedList()
                         if(pFieldItem)
                         {
                             const SvxFieldData* pField = pFieldItem->GetField();
-                            if(pField && dynamic_cast<const SvxTableField*>( pField) !=  nullptr)
+                            if(dynamic_cast<const SvxTableField*>( pField))
                             {
                                 eSelectEntry = eSheetEntry;
                                 bFound = true;
@@ -508,7 +508,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
                     if(pFieldItem)
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
-                        if(pField && dynamic_cast<const SvxPageField*>( pField) !=  nullptr)
+                        if(dynamic_cast<const SvxPageField*>( pField))
                             bReturn = true;
                     }
                 }
@@ -530,7 +530,7 @@ bool ScHFEditPage::IsDateEntry(const EditTextObject* pTextObj)
         if(pFieldItem)
         {
             const SvxFieldData* pField = pFieldItem->GetField();
-            if(pField && dynamic_cast<const SvxDateField*>( pField) !=  nullptr)
+            if(dynamic_cast<const SvxDateField*>( pField))
                 bReturn = true;
         }
     }
@@ -546,9 +546,9 @@ bool ScHFEditPage::IsExtFileNameEntry(const EditTextObject* pTextObj)
     {
         const SvxFieldItem* pFieldItem = pTextObj->GetField();
         if(pFieldItem)
-    {
+        {
             const SvxFieldData* pField = pFieldItem->GetField();
-            if(pField && dynamic_cast<const SvxExtFileField*>( pField) !=  nullptr)
+            if(dynamic_cast<const SvxExtFileField*>( pField))
                 bReturn = true;
         }
     }
