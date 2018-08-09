@@ -121,7 +121,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     nCurTextHeight      = 0;
     nCurTextHeightNTP   = 0;
-    nBlockNotifications = 0;
     nBigTextObjectStart = 20;
 
     nStretchX           = 100;
@@ -173,6 +172,18 @@ void ImpEditEngine::Dispose()
     pVirtDev.disposeAndClear();
     mpOwnDev.disposeAndClear();
     pSharedVCL.reset();
+}
+
+void ImpEditEngine::SendNotifications()
+{
+    while(!aNotifyCache.empty())
+    {
+        GetNotifyHdl().Call( aNotifyCache[0] );
+        aNotifyCache.erase(aNotifyCache.begin());
+    }
+
+    EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
+    GetNotifyHdl().Call(aNotify);
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -625,9 +636,7 @@ bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
 
 EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rStr)
 {
-    EnterBlockNotifications();
     EditPaM aPaM = ImpInsertText( aSel, rStr );
-    LeaveBlockNotifications();
     return aPaM;
 }
 
@@ -3405,7 +3414,6 @@ void ImpEditEngine::UpdateSelections()
             }
         }
     }
-
     aDeletedNodes.clear();
 }
 
@@ -4393,45 +4401,7 @@ bool ImpEditEngine::DoVisualCursorTraveling()
 
 void ImpEditEngine::CallNotify( EENotify& rNotify )
 {
-    if ( !nBlockNotifications )
-        GetNotifyHdl().Call( rNotify );
-    else
-        aNotifyCache.push_back(rNotify);
-}
-
-void ImpEditEngine::EnterBlockNotifications()
-{
-    if( !nBlockNotifications )
-    {
-        // #109864# Send out START notification immediately, to allow
-        // external, non-queued events to be captured as well from
-        // client side
-        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
-        GetNotifyHdl().Call( aNotify );
-    }
-
-    nBlockNotifications++;
-}
-
-void ImpEditEngine::LeaveBlockNotifications()
-{
-    OSL_ENSURE( nBlockNotifications, "LeaveBlockNotifications - Why?" );
-
-    nBlockNotifications--;
-    if ( !nBlockNotifications )
-    {
-        // Call blocked notify events...
-        while(!aNotifyCache.empty())
-        {
-            EENotify aNotify(aNotifyCache[0]);
-            // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
-            aNotifyCache.erase(aNotifyCache.begin());
-            GetNotifyHdl().Call( aNotify );
-        }
-
-        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
-        GetNotifyHdl().Call( aNotify );
-    }
+    aNotifyCache.push_back(rNotify);
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, DocModified, LinkParamNone*, void)

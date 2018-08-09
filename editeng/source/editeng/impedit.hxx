@@ -464,7 +464,6 @@ private:
 
     Color               maBackgroundColor;
 
-    sal_uInt32          nBlockNotifications;
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
@@ -791,14 +790,7 @@ public:
 
     void                EnableUndo( bool bEnable );
     bool                IsUndoEnabled()         { return bUndoEnabled; }
-    void                SetUndoMode( bool b )
-    {
-        bIsInUndo = b;
-        if (bIsInUndo)
-            EnterBlockNotifications();
-        else
-            LeaveBlockNotifications();
-    }
+    void                SetUndoMode( bool b )   { bIsInUndo = b; }
     bool                IsInUndo()              { return bIsInUndo; }
 
     void                SetCallParaInsertedOrDeleted( bool b ) { bCallParaInsertedOrDeleted = b; }
@@ -924,8 +916,7 @@ public:
     void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
 
     void                CallNotify( EENotify& rNotify );
-    void                EnterBlockNotifications();
-    void                LeaveBlockNotifications();
+    void                SendNotifications();
 
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
