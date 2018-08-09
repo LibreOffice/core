@@ -43,7 +43,7 @@ rtl/oustring  ; rtl_OUString2
 rtl/ostring   ; rtl_OString2
 
 osl/file      ; osl_File
-# LLA: temporaly removed, there are lot of problems with our environment
+# LLA: temporarily removed, there are lot of problems with our environment
 osl/socket    ; osl_StreamSocket
 osl/socket    ; osl_DatagramSocket
 osl/socket    ; osl_SocketAddr

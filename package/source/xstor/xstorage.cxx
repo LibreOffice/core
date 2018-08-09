@@ -5126,7 +5126,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
         SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy element direcly!",
+        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy element directly!",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }

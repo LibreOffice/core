@@ -63,7 +63,7 @@ namespace basegfx
 
         /** Tooling methods for faster completely combined matrix creation
             when scale, shearX, rotation and translation needs to be done in
-            exactly that order. It's faster since it direcly calculates
+            exactly that order. It's faster since it directly calculates
             each matrix value based on a symbolic calculation of the three
             matrix multiplications.
             Inline versions for parameters as tuples added, too.
