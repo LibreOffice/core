@@ -180,17 +180,16 @@ typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
 /* Path of the application, with trailing slash. */
 static rtl_uString *get_app_path(const char *pAppExec)
 {
-    char pRealPath[PATH_MAX];
+    char* pRealPath;
     rtl_uString *pResult;
     sal_Int32 len;
-    char* dummy;
 
     char *pOrigPath = strdup(pAppExec);
     char *pPath = dirname(pOrigPath);
 
-    dummy = realpath(pPath, pRealPath);
-    (void)dummy;
+    pRealPath = realpath(pPath, NULL);
     pResult = charp_to_ustr(pRealPath);
+    free(pRealPath);
     free(pOrigPath);
 
     len = rtl_uString_getLength(pResult);
