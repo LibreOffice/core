@@ -163,7 +163,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         }
     }
 
-    if ( pState && ( dynamic_cast<const SvxDashListItem*>( pState) !=  nullptr ) )
+    if ( auto pDashListItem = dynamic_cast<const SvxDashListItem*>( pState) )
     {
         // The list of line styles has changed
         SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
@@ -173,7 +173,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         pBox->Clear();
         pBox->InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
         pBox->InsertEntry( SvxResId(RID_SVXSTR_SOLID) );
-        pBox->Fill( static_cast<const SvxDashListItem*>(pState)->GetDashList() );
+        pBox->Fill( pDashListItem->GetDashList() );
         pBox->SelectEntry( aString );
     }
 }

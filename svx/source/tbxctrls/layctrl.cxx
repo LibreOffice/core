@@ -699,9 +699,9 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
 
 void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( pState && dynamic_cast<const SfxUInt16Item* >(pState) !=  nullptr )
+    if ( auto pUInt16Item = dynamic_cast<const SfxUInt16Item* >(pState) )
     {
-        sal_Int16 nValue = static_cast< const SfxUInt16Item* >( pState )->GetValue();
+        sal_Int16 nValue = pUInt16Item->GetValue();
         bEnabled = ( nValue != 0 );
     }
     else

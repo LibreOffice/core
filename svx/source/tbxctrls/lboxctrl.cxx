@@ -197,11 +197,10 @@ void SvxUndoRedoControl::StateChanged(
             ToolBox& rBox = GetToolBox();
             rBox.SetQuickHelpText( GetId(), aDefaultTooltip );
         }
-        else if ( pState && dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
+        else if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
         {
-            const SfxStringItem& rItem = *static_cast<const SfxStringItem *>(pState);
             ToolBox& rBox = GetToolBox();
-            const OUString& aQuickHelpText = rItem.GetValue();
+            const OUString& aQuickHelpText = pStringItem->GetValue();
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
         }
         GetToolBox().EnableItem( GetId(),
@@ -211,13 +210,9 @@ void SvxUndoRedoControl::StateChanged(
     {
         aUndoRedoList.clear();
 
-        if ( pState && dynamic_cast<const SfxStringListItem*>( pState) !=  nullptr )
+        if ( auto pStringListItem = dynamic_cast<const SfxStringListItem*>( pState) )
         {
-            const SfxStringListItem &rItem = *static_cast<const SfxStringListItem *>(pState);
-
-            const std::vector<OUString> &aLst = rItem.GetList();
-            for(const auto & i : aLst)
-                aUndoRedoList.push_back( i );
+            aUndoRedoList = pStringListItem->GetList();
         }
     }
 }

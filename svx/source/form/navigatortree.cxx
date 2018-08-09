@@ -683,7 +683,7 @@ namespace svxform
     bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry const * pEntry )
     {
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
-        return pEntryData && dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr;
+        return dynamic_cast<const FmControlData*>( pEntryData) != nullptr;
     }
 
 

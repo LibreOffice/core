@@ -3602,7 +3602,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // SDrObject destructor
         pFullDragClone.reset(pSdrObject->getFullDragClone());
 
-        if(pFullDragClone && dynamic_cast< SdrGrafObj* >(pFullDragClone.get()))
+        if(dynamic_cast< SdrGrafObj* >(pFullDragClone.get()))
         {
             bExternal = true;
             pExternalSdrObject = pSdrObject;

@@ -271,7 +271,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a)
                             {
                                 SdrObject* pObj = GetMarkedObjectByIndex(a);
-                                if(pObj && dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
+                                if(dynamic_cast< const E3dObject* >(pObj))
                                     b3DObjSelected = true;
                             }
                             // If yes, allow shear even when !IsShearAllowed,
@@ -624,9 +624,8 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
 {
     bool bRet(false);
 
-    if(mpMarkedObj && dynamic_cast<const SdrPathObj*>( mpMarkedObj) !=  nullptr)
+    if(auto pMarkedPath = dynamic_cast<SdrPathObj*>( mpMarkedObj))
     {
-        SdrPathObj* pMarkedPath = static_cast<SdrPathObj*>(mpMarkedObj);
         BrkAction();
         mpInsPointUndo = dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj) );
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
@@ -853,8 +852,8 @@ void SdrDragView::SetDragStripes(bool bOn)
 
 bool SdrDragView::IsOrthoDesired() const
 {
-    if(mpCurrentSdrDragMethod && (dynamic_cast< const SdrDragObjOwn* >( mpCurrentSdrDragMethod.get() ) !=  nullptr
-                                                || dynamic_cast< const SdrDragResize* >(mpCurrentSdrDragMethod.get()) !=  nullptr))
+    if( dynamic_cast< const SdrDragObjOwn* >( mpCurrentSdrDragMethod.get() )
+       || dynamic_cast< const SdrDragResize* >(mpCurrentSdrDragMethod.get() ))
     {
         return bOrthoDesiredOnMarked;
     }

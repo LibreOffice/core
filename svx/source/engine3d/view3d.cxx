@@ -245,10 +245,10 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-        if(pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
+        if(auto pCompoundObject = dynamic_cast<E3dCompoundObject*>(pObj))
         {
             // related scene
-            pScene = static_cast<E3dCompoundObject*>(pObj)->getRootE3dSceneFromE3dObject();
+            pScene = pCompoundObject->getRootE3dSceneFromE3dObject();
 
             if(nullptr != pScene && !IsObjMarked(pScene))
             {
@@ -256,9 +256,9 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             }
         }
         // Reset all selection flags
-        if(pObj && dynamic_cast< const E3dObject*>(pObj) !=  nullptr)
+        if(auto p3dObject = dynamic_cast< const E3dObject*>(pObj))
         {
-            pScene = static_cast<E3dObject*>(pObj)->getRootE3dSceneFromE3dObject();
+            pScene = p3dObject->getRootE3dSceneFromE3dObject();
 
             if(nullptr != pScene)
             {
@@ -274,10 +274,10 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
+            if(auto pCompoundObject = dynamic_cast<E3dCompoundObject*>(pObj))
             {
                 // related scene
-                pScene = static_cast<E3dCompoundObject*>(pObj)->getRootE3dSceneFromE3dObject();
+                pScene = pCompoundObject->getRootE3dSceneFromE3dObject();
 
                 if(nullptr != pScene)
                 {
@@ -289,10 +289,9 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && dynamic_cast< const E3dObject*>(pObj) !=  nullptr)
+            if(auto p3DObj = dynamic_cast<E3dObject*>(pObj))
             {
                 // Select object
-                E3dObject* p3DObj = static_cast<E3dObject*>(pObj);
                 p3DObj->SetSelected(true);
                 pScene = p3DObj->getRootE3dSceneFromE3dObject();
             }
@@ -312,10 +311,10 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
+            if(auto pCompoundObject = dynamic_cast<E3dCompoundObject*>(pObj))
             {
                 // related scene
-                pScene = static_cast<E3dCompoundObject*>(pObj)->getRootE3dSceneFromE3dObject();
+                pScene = pCompoundObject->getRootE3dSceneFromE3dObject();
 
                 if(nullptr != pScene)
                 {
@@ -345,7 +344,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     {
         const SdrObject* pObj = GetMarkedObjectByIndex(nObjs);
 
-        if(!bSpecialHandling && pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
+        if(!bSpecialHandling && dynamic_cast< const E3dCompoundObject*>(pObj))
         {
             // if the object is selected, but it's scene not,
             // we need special handling
@@ -357,10 +356,10 @@ SdrModel* E3dView::GetMarkedObjModel() const
             }
         }
 
-        if(pObj && dynamic_cast< const E3dObject*>(pObj) !=  nullptr)
+        if(auto p3dObject = dynamic_cast< const E3dObject*>(pObj))
         {
             // reset all selection flags at 3D objects
-            pScene = static_cast<const E3dObject*>(pObj)->getRootE3dSceneFromE3dObject();
+            pScene = p3dObject->getRootE3dSceneFromE3dObject();
 
             if(nullptr != pScene)
             {
@@ -384,10 +383,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
 
-        if(pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
+        if(auto p3DObj = dynamic_cast<E3dCompoundObject*>(pObj))
         {
             // mark object, but not scenes
-            E3dCompoundObject* p3DObj = static_cast<E3dCompoundObject*>(pObj);
             p3DObj->SetSelected(true);
             aSelectedSnapRect.Union(p3DObj->GetSnapRect());
         }
@@ -404,9 +402,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
     {
         SdrObject *pObj = aOldML.GetMark(nObjs)->GetMarkedSdrObj();
 
-        if(pObj && dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
+        if(auto p3dObject = dynamic_cast< E3dObject* >(pObj))
         {
-            pScene = static_cast<E3dObject*>(pObj)->getRootE3dSceneFromE3dObject();
+            pScene = p3dObject->getRootE3dSceneFromE3dObject();
 
             if(nullptr != pScene && !IsObjMarked(pScene) && GetSdrPageView())
             {
@@ -1527,9 +1525,9 @@ bool E3dView::IsBreak3DObjPossible() const
         {
             SdrObject* pObj = GetMarkedObjectByIndex(i);
 
-            if (pObj && dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
+            if (auto p3dObject = dynamic_cast< E3dObject* >(pObj))
             {
-                if(!(static_cast<E3dObject*>(pObj)->IsBreakObjPossible()))
+                if(!p3dObject->IsBreakObjPossible())
                     return false;
             }
             else
@@ -1603,9 +1601,9 @@ void E3dView::CheckPossibilities()
         for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCoumpound; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && dynamic_cast< const E3dCompoundObject* >(pObj) !=  nullptr)
+            if(dynamic_cast< const E3dCompoundObject* >(pObj))
                 bCoumpound = true;
-            if(pObj && dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
+            if(dynamic_cast< const E3dObject* >(pObj))
                 b3DObject = true;
         }
 

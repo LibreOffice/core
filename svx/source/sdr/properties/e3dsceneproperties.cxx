@@ -75,7 +75,7 @@ namespace sdr
             {
                 SdrObject* pObj = pSub->GetObj(a);
 
-                if(pObj && dynamic_cast<const E3dCompoundObject* >(pObj) !=  nullptr)
+                if(dynamic_cast<const E3dCompoundObject* >(pObj))
                 {
                     const SfxItemSet& rSet = pObj->GetMergedItemSet();
                     SfxWhichIter aIter(rSet);
@@ -131,7 +131,7 @@ namespace sdr
                     {
                         SdrObject* pObj = pSub->GetObj(a);
 
-                        if(pObj && dynamic_cast<const E3dCompoundObject* >(pObj) !=  nullptr)
+                        if(dynamic_cast<const E3dCompoundObject* >(pObj))
                         {
                             // set merged ItemSet at contained 3d object.
                             pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
