@@ -539,7 +539,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink( "https://help.libreoffice.org/help.html?"  );
+    OUString aHelpLink("https://help.collaboraoffice.com/help.html?");
 
     OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
