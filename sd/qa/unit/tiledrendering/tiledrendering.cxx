@@ -222,6 +222,7 @@ void SdTiledRenderingTest::tearDown()
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
 
+    comphelper::LibreOfficeKit::setActive(false);
     test::BootstrapFixture::tearDown();
 }
 
@@ -368,7 +369,6 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     ::tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostKeyEvent()
@@ -398,7 +398,6 @@ void SdTiledRenderingTest::testPostKeyEvent()
     rEditView.SetSelection(aWordSelection);
     // Did we enter the expected character?
     CPPUNIT_ASSERT_EQUAL(OUString("xx"), rEditView.GetSelected());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostMouseEvent()
@@ -433,7 +432,6 @@ void SdTiledRenderingTest::testPostMouseEvent()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetTextSelection()
@@ -463,7 +461,6 @@ void SdTiledRenderingTest::testSetTextSelection()
     pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testGetTextSelection()
@@ -488,7 +485,6 @@ void SdTiledRenderingTest::testGetTextSelection()
 
     // Make sure returned RTF is not empty.
     CPPUNIT_ASSERT(!apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/rtf").isEmpty());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
@@ -525,8 +521,6 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testUndoShells()
@@ -549,7 +543,6 @@ void SdTiledRenderingTest::testUndoShells()
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1, SdUndoGroup did not track what view shell created it.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResetSelection()
@@ -575,7 +568,6 @@ void SdTiledRenderingTest::testResetSelection()
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 static void lcl_search(const OUString& rKey, bool bFindAll = false)
@@ -621,7 +613,6 @@ void SdTiledRenderingTest::testSearch()
     // This should trigger the not-found callback.
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAll()
@@ -641,7 +632,6 @@ void SdTiledRenderingTest::testSearchAll()
     lcl_search("second", /*bFindAll=*/true);
     // This was 0: no SET_PART was emitted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAllSelections()
@@ -656,7 +646,6 @@ void SdTiledRenderingTest::testSearchAllSelections()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAllNotifications()
@@ -671,7 +660,6 @@ void SdTiledRenderingTest::testSearchAllNotifications()
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
     // But we do get the selection of the first hit.
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAllFollowedBySearch()
@@ -687,7 +675,6 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
     CPPUNIT_ASSERT_EQUAL(OString("match"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDontSearchInMasterPages()
@@ -701,8 +688,6 @@ void SdTiledRenderingTest::testDontSearchInMasterPages()
     // the master page)
     lcl_search("date");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 namespace
@@ -817,8 +802,6 @@ void SdTiledRenderingTest::testInsertDeletePage()
 
     // the document has 1 slide
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDoc->GetSdPageCount(PageKind::Standard));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testInsertTable()
@@ -846,8 +829,6 @@ void SdTiledRenderingTest::testInsertTable()
 
     CPPUNIT_ASSERT(aPos.X() != 0);
     CPPUNIT_ASSERT(aPos.Y() != 0);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPartHash()
@@ -863,7 +844,6 @@ void SdTiledRenderingTest::testPartHash()
 
     // check part that it does not exists
     CPPUNIT_ASSERT(pDoc->getPartHash(100).isEmpty());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResizeTable()
@@ -911,7 +891,6 @@ void SdTiledRenderingTest::testResizeTable()
     sal_Int32 nActualRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
     // Expected was 4000, actual was 4572, i.e. the second row after undo was larger than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nActualRow2);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResizeTableColumn()
@@ -965,7 +944,6 @@ void SdTiledRenderingTest::testResizeTableColumn()
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 /// A view callback tracks callbacks invoked on one specific view.
@@ -1098,8 +1076,6 @@ void SdTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView2.m_bGraphicSelectionInvalidated);
     mxComponent->dispose();
     mxComponent.clear();
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testViewCursorParts()
@@ -1140,7 +1116,6 @@ void SdTiledRenderingTest::testViewCursorParts()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCursorViews()
@@ -1190,7 +1165,6 @@ void SdTiledRenderingTest::testCursorViews()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testViewLock()
@@ -1221,7 +1195,6 @@ void SdTiledRenderingTest::testViewLock()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testUndoLimiting()
@@ -1265,7 +1238,6 @@ void SdTiledRenderingTest::testUndoLimiting()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCreateViewGraphicSelection()
@@ -1305,7 +1277,6 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCreateViewTextCursor()
@@ -1362,7 +1333,6 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf102223()
@@ -1404,8 +1374,6 @@ void SdTiledRenderingTest::testTdf102223()
     rEditView2.SetSelection(ESelection(0, 0, 0, 1)); // start para, start char, end para, end char.
     const SvxFontHeightItem& rItem2 = rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
     CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem2.GetHeight()));
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostKeyEventInvalidation()
@@ -1451,7 +1419,6 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 /**
@@ -1518,8 +1485,6 @@ void SdTiledRenderingTest::testTdf103083()
 
     const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rParagraphItemSet2.Count());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 /**
@@ -1576,8 +1541,6 @@ void SdTiledRenderingTest::testTdf104405()
     // the following name has a compiler-dependent part
     CPPUNIT_ASSERT_EQUAL(OUString("2"), getXPath(pXmlDoc, aPrefix, "value"));
     xmlFreeDoc(pXmlDoc);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf81754()
@@ -1612,7 +1575,6 @@ void SdTiledRenderingTest::testTdf81754()
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf105502()
@@ -1669,7 +1631,6 @@ void SdTiledRenderingTest::testTdf105502()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aLastCell.mnRow);
 
     xmlFreeDoc(pXmlDoc);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCommentCallbacks()
@@ -1785,7 +1746,6 @@ void SdTiledRenderingTest::testCommentCallbacks()
     mxComponent.clear();
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testMultiViewInsertDeletePage()
@@ -1832,8 +1792,6 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
 
     mxComponent->dispose();
     mxComponent.clear();
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDisableUndoRepair()
@@ -1889,8 +1847,6 @@ void SdTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDocumentRepair()
@@ -1942,8 +1898,6 @@ void SdTiledRenderingTest::testDocumentRepair()
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
         CPPUNIT_ASSERT_EQUAL(true, pItem2->GetValue());
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testLanguageStatus()
@@ -1962,8 +1916,6 @@ void SdTiledRenderingTest::testLanguageStatus()
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem1.get()));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem2.get()));
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testLanguageAllText()
@@ -1991,8 +1943,6 @@ void SdTiledRenderingTest::testLanguageAllText()
     // Without the accompanying fix in place, this test would have failed with 'Expected: en;
     // Actual: hu', as the shape text language was not set.
     CPPUNIT_ASSERT_EQUAL(OUString("en"), aLocale.Language);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDefaultView()
@@ -2014,7 +1964,6 @@ void SdTiledRenderingTest::testDefaultView()
         CPPUNIT_ASSERT_EQUAL(true, pImpressView->GetValue());
         CPPUNIT_ASSERT_EQUAL(false, pNotesView->GetValue());
     }
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testIMESupport()
@@ -2054,8 +2003,6 @@ void SdTiledRenderingTest::testIMESupport()
     rEditView.SetSelection(aWordSelection);
     // content contains only the last IME composition, not all
     CPPUNIT_ASSERT_EQUAL(OUString("x").concat(aInputs[aInputs.size() - 1]), rEditView.GetSelected());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf115783()
@@ -2123,8 +2070,6 @@ void SdTiledRenderingTest::testTdf115783()
     int nHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
     // Make sure that the single font size for the cell is the expected one.
     CPPUNIT_ASSERT_EQUAL(12, nHeight);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPasteTextOnSlide()
@@ -2188,8 +2133,6 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     Point aPos = pTextObj->GetLastBoundRect().TopLeft();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf115873()
@@ -2226,7 +2169,6 @@ void SdTiledRenderingTest::testTdf115873()
     // This failed, single-click did not result in a shape selection (only
     // double-click did).
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf115873Group()
@@ -2243,7 +2185,6 @@ void SdTiledRenderingTest::testTdf115873Group()
     // This failed, Fill() and IsEqualToDoc() were out of sync for group
     // shapes.
     CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCutSelectionChange()
@@ -2283,7 +2224,6 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testRegenerateDiagram()
@@ -2335,8 +2275,6 @@ void SdTiledRenderingTest::testRegenerateDiagram()
 
     // diagram content (child shape count) should be the same as in the beginning
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
