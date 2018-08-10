@@ -23,7 +23,6 @@
 #include <vcl/weld.hxx>
 
 class SfxItemSet;
-class List;
 class SdCustomShowList;
 
 /**

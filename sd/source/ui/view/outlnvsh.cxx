@@ -83,6 +83,8 @@
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <DrawController.hxx>
+#include <DrawDocShell.hxx>
+#include <OutlineView.hxx>
 #include <framework/FrameworkHelper.hxx>
 
 #include <memory>

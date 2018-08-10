@@ -29,6 +29,8 @@
 
 #include <drawdoc.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <DrawDocShell.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>

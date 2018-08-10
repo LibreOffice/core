@@ -21,11 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_PANEDOCKINGWINDOW_HXX
 
 #include <sfx2/titledockwin.hxx>
-#include <sfx2/viewfrm.hxx>
-
-#include <memory>
-
-class SplitWindow;
 
 namespace sd {
 

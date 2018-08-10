@@ -23,6 +23,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <PreviewRenderer.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/thumbnailview.hxx>

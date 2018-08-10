@@ -121,3 +121,10 @@ blacklist:
     sd/source/ui/inc/fupage.hxx:
     # base class has to be a complete type
     - vcl/weld.hxx
+    sd/source/ui/inc/OutlineView.hxx:
+    #std::unique_ptr deleter type has to be complete
+    - o3tl/deleter.hxx
+    sd/source/ui/inc/slideshow.hxx:
+    # typedef needs a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/presentation/XPresentation2.hpp

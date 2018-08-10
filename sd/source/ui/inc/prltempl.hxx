@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/tabarea.hxx>
+#include <svx/xtable.hxx>
 
 #include <prlayout.hxx>
 

@@ -34,3 +34,6 @@ blacklist:
     include/osl/thread.hxx:
     # ODK API test would fail with fw decl here
     - osl/time.h
+    include/sfx2/toolbarids.hxx:
+    # needed for enum definition
+    - sal/types.h

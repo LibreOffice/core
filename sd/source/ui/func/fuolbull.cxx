@@ -30,6 +30,7 @@
 #include <svx/svxids.hrc>
 #include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
+#include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>

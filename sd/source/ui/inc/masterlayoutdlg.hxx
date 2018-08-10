@@ -21,9 +21,10 @@
 
 #include <vcl/weld.hxx>
 
-#include <sdpage.hxx>
+#include <pres.hxx>
 
 class SdDrawDocument;
+class SdPage;
 
 namespace sd
 {

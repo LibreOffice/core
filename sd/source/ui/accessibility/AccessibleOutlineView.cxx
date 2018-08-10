@@ -40,6 +40,8 @@
 #include <Window.hxx>
 #include <ViewShell.hxx>
 #include <OutlineViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <OutlineView.hxx>
 #include <View.hxx>
 #include <AccessibleOutlineView.hxx>
 #include <AccessibleOutlineEditSource.hxx>

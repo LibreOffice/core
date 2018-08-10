@@ -22,10 +22,7 @@
 
 #include <unotools/configitem.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svx/optgrid.hxx>
-#include <svx/dlgutil.hxx>
 #include <sddllapi.h>
 #include <memory>
 

@@ -56,6 +56,7 @@
 #include <strmname.h>
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <GraphicDocShell.hxx>

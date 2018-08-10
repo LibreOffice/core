@@ -34,6 +34,7 @@
 #include <strings.hrc>
 #include <DrawController.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <EventMultiplexer.hxx>
 
 #include <sal/log.hxx>
 #include <svtools/controldims.hxx>

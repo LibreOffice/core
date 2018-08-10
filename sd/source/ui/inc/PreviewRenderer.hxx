@@ -20,13 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PREVIEWRENDERER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PREVIEWRENDERER_HXX
 
-#include "drawview.hxx"
 #include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
-#include <svl/listener.hxx>
 #include <memory>
 
-class OutputDevice;
+#include <svl/lstner.hxx>
+
 class SdPage;
 class VirtualDevice;
 

@@ -56,6 +56,7 @@
 #include <Window.hxx>
 #include <sdresid.hxx>
 #include <DrawViewShell.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>

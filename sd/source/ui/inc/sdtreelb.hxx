@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
 
-#include <svtools/transfer.hxx>
-
 #include <pres.hxx>
 #include <sddllapi.h>
 #include <svtools/treelistbox.hxx>

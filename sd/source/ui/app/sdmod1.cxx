@@ -53,6 +53,7 @@
 #include <assclass.hxx>
 #include <sdenumdef.hxx>
 #include <sdresid.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <FrameView.hxx>

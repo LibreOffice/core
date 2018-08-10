@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINERITERATORIMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_OUTLINERITERATORIMPL_HXX
 
-#include <svx/svdobj.hxx>
 #include <OutlinerIterator.hxx>
 #include <memory>
 
@@ -33,8 +32,6 @@ namespace sd {
 class ViewShell;
 
 namespace outliner {
-
-class IteratorImplBase;
 
 /** Base class for the polymorphic implementation class of the
     <type>Iterator</type> class.  The iterators based on this class are
