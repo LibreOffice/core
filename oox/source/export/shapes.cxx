@@ -1011,7 +1011,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     if( rXPropSet.is() )
     {
         // Preset shape with text has no fill
-        if( sShapeType.isEmpty() || !sShapeType.startsWith( "fontwork" ) )
+        if( m_presetWarp.isEmpty() || !m_presetWarp.startsWith( "text" ) || m_presetWarp == "textNoShape" )
             WriteFill( rXPropSet );
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
