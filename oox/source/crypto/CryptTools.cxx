@@ -123,18 +123,24 @@ struct CryptoImpl
 
 #elif USE_TLS_NSS
 
+#define MAX_WRAPPED_KEY_LEN 128
+
 struct CryptoImpl
 {
+    PK11SlotInfo* mSlot;
     PK11Context* mContext;
     SECItem*     mSecParam;
     PK11SymKey*  mSymKey;
-    PK11SlotInfo* mpSlot;
+    PK11Context* mWrapKeyContext;
+    PK11SymKey*  mWrapKey;
 
     CryptoImpl()
-        : mContext(nullptr)
+        : mSlot(nullptr)
+        , mContext(nullptr)
         , mSecParam(nullptr)
         , mSymKey(nullptr)
-        , mpSlot(nullptr)
+        , mWrapKeyContext(nullptr)
+        , mWrapKey(nullptr)
     {
         // Initialize NSS, database functions are not needed
         NSS_NoDB_Init(nullptr);
@@ -144,12 +150,79 @@ struct CryptoImpl
     {
         if (mContext)
             PK11_DestroyContext(mContext, PR_TRUE);
-        if (mSymKey)
-            PK11_FreeSymKey(mSymKey);
         if (mSecParam)
             SECITEM_FreeItem(mSecParam, PR_TRUE);
-        if (mpSlot)
-            PK11_FreeSlot(mpSlot);
+        if (mSymKey)
+            PK11_FreeSymKey(mSymKey);
+        if (mWrapKeyContext)
+            PK11_DestroyContext(mWrapKeyContext, PR_TRUE);
+        if (mWrapKey)
+            PK11_FreeSymKey(mWrapKey);
+        if (mSlot)
+            PK11_FreeSlot(mSlot);
+    }
+
+    PK11SymKey* ImportSymKey(CK_MECHANISM_TYPE mechanism, CK_ATTRIBUTE_TYPE operation, SECItem* key)
+    {
+        mSymKey = PK11_ImportSymKey(mSlot, mechanism, PK11_OriginUnwrap, operation, key, nullptr);
+        if (!mSymKey) //rhbz#1614419 maybe failed due to FIPS, use rhbz#1461450 style workaround
+        {
+            /*
+             * Without FIPS it would be possible to just use
+             *  mSymKey = PK11_ImportSymKey( mSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr );
+             * with FIPS NSS Level 2 certification has to be "workarounded" (so it becomes Level 1) by using
+             * following method:
+             * 1. Generate wrap key
+             * 2. Encrypt authkey with wrap key
+             * 3. Unwrap encrypted authkey using wrap key
+             */
+
+            /*
+             * Generate wrapping key
+             */
+            CK_MECHANISM_TYPE wrap_mechanism = PK11_GetBestWrapMechanism(mSlot);
+            int wrap_key_len = PK11_GetBestKeyLength(mSlot, wrap_mechanism);
+            mWrapKey = PK11_KeyGen(mSlot, wrap_mechanism, nullptr, wrap_key_len, nullptr);
+            if (!mWrapKey)
+                throw css::uno::RuntimeException("PK11_KeyGen SymKey failure", css::uno::Reference<css::uno::XInterface>());
+
+            /*
+             * Encrypt authkey with wrapping key
+             */
+
+            /*
+             * Initialization of IV is not needed because PK11_GetBestWrapMechanism should return ECB mode
+             */
+            SECItem tmp_sec_item;
+            memset(&tmp_sec_item, 0, sizeof(tmp_sec_item));
+            mWrapKeyContext = PK11_CreateContextBySymKey(wrap_mechanism, CKA_ENCRYPT, mWrapKey, &tmp_sec_item);
+            if (!mWrapKeyContext)
+                throw css::uno::RuntimeException("PK11_CreateContextBySymKey failure", css::uno::Reference<css::uno::XInterface>());
+
+            unsigned char wrapped_key_data[MAX_WRAPPED_KEY_LEN];
+            int wrapped_key_len = sizeof(wrapped_key_data);
+
+            if (PK11_CipherOp(mWrapKeyContext, wrapped_key_data, &wrapped_key_len,
+                sizeof(wrapped_key_data), key->data, key->len) != SECSuccess)
+            {
+                throw css::uno::RuntimeException("PK11_CipherOp failure", css::uno::Reference<css::uno::XInterface>());
+            }
+
+            if (PK11_Finalize(mWrapKeyContext) != SECSuccess)
+                throw css::uno::RuntimeException("PK11_Finalize failure", css::uno::Reference<css::uno::XInterface>());
+
+            /*
+             * Finally unwrap sym key
+             */
+            SECItem wrapped_key;
+            memset(&tmp_sec_item, 0, sizeof(tmp_sec_item));
+            wrapped_key.data = wrapped_key_data;
+            wrapped_key.len = wrapped_key_len;
+
+            mSymKey = PK11_UnwrapSymKey(mWrapKey, wrap_mechanism, &tmp_sec_item, &wrapped_key,
+                mechanism, operation, key->len);
+        }
+        return mSymKey;
     }
 
     void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type, CK_ATTRIBUTE_TYPE operation)
@@ -183,9 +256,9 @@ struct CryptoImpl
                 break;
         }
 
-        mpSlot = PK11_GetBestSlot(mechanism, nullptr);
+        mSlot = PK11_GetBestSlot(mechanism, nullptr);
 
-        if (!mpSlot)
+        if (!mSlot)
             throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
 
         SECItem keyItem;
@@ -193,7 +266,7 @@ struct CryptoImpl
         keyItem.data = key.data();
         keyItem.len  = key.size();
 
-        mSymKey = PK11_ImportSymKey(mpSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr);
+        mSymKey = ImportSymKey(mechanism, CKA_ENCRYPT, &keyItem);
         if (!mSymKey)
             throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
 
@@ -218,16 +291,16 @@ struct CryptoImpl
                 break;
         }
 
-        mpSlot = PK11_GetBestSlot(aMechanism, nullptr);
+        mSlot = PK11_GetBestSlot(aMechanism, nullptr);
 
-        if (!mpSlot)
+        if (!mSlot)
             throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
 
         SECItem aKeyItem;
         aKeyItem.data = rKey.data();
         aKeyItem.len  = rKey.size();
 
-        mSymKey = PK11_ImportSymKey(mpSlot, aMechanism, PK11_OriginUnwrap, CKA_SIGN, &aKeyItem, nullptr);
+        mSymKey = ImportSymKey(aMechanism, CKA_SIGN, &aKeyItem);
         if (!mSymKey)
             throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
 
