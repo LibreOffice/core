@@ -382,8 +382,6 @@ public:
        pSib is another SwFrame of the same layout (e.g. the SwRootFrame itself, a sibling, the parent) */
     virtual SwContentFrame *MakeFrame( SwFrame* pSib ) = 0;
 
-    virtual SwContentNode *SplitContentNode(const SwPosition & ) = 0;
-
     virtual SwContentNode *JoinNext();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
@@ -409,20 +407,18 @@ public:
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
-    void MakeFrames( SwContentNode& rNode );
+    void MakeFramesForAdjacentContentNode(SwContentNode& rNode);
 
     /** Method deletes all views of document for the node. The content-
         frames are removed from the respective layout.
-
-        Add an input param to identify if acc table should be disposed
     */
-    void DelFrames( bool bIsAccTableDispose = true );
+    void DelFrames(SwRootFrame const* pLayout);
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
     virtual sal_Int32 Len() const;
 
-    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
+    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const = 0;
 
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const override;
@@ -504,15 +500,15 @@ public:
     SwTabFrame *MakeFrame( SwFrame* );
 
     /// Creates the frms for the table node (i.e. the TabFrames).
-    void MakeFrames( SwNodeIndex* pIdxBehind );
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind);
 
     /** Method deletes all views of document for the node.
        The content frames are removed from the respective layout. */
-    void DelFrames();
+    void DelFrames(SwRootFrame const* pLayout = nullptr);
 
     /** Method creates all views of the document for the previous node.
        The content frames that are created are put into the respective layout. */
-    void MakeFrames( const SwNodeIndex & rIdx );
+    void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
     void SetNewTable( std::unique_ptr<SwTable> , bool bNewFrames=true );
@@ -552,15 +548,15 @@ public:
        On default the frames are created until the end of the range.
        When another NodeIndex pEnd is passed a MakeFrames is called up to it.
        Used by TableToText. */
-    void MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr );
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr);
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */
-    void DelFrames();
+    void DelFrames(SwRootFrame const* pLayout = nullptr);
 
     /** Method creates all views of document for the previous node.
        The content frames created are put into the respective layout. */
-    void MakeFrames( const SwNodeIndex & rIdx );
+    void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
     SwSectionNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 

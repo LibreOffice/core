@@ -75,7 +75,7 @@ public:
 
     // footnote interface
     void AppendFootnote( SwContentFrame *, SwTextFootnote * );
-    void RemoveFootnote( const SwContentFrame *, const SwTextFootnote *, bool bPrep = true );
+    bool RemoveFootnote(const SwContentFrame *, const SwTextFootnote *, bool bPrep = true);
     static       SwFootnoteFrame     *FindFootnote( const SwContentFrame *, const SwTextFootnote * );
                  SwFootnoteContFrame *FindFootnoteCont();
     inline const SwFootnoteContFrame *FindFootnoteCont() const;

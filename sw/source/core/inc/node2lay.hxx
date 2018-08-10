@@ -25,7 +25,7 @@
 /**
  * This class connects the Nodes with the Layouts.
  * It provides an intelligent iterator over Frames belonging to the Node or
- * Node Area. Depending on the purpose of iterating (e.g. to insert other
+ * Node Range. Depending on the purpose of iterating (e.g. to insert other
  * Frames before or after the Frames) Master/Follows are recognized and only
  * the relevant ones are returned. Repeated table headers are also taken
  * into account.
@@ -35,9 +35,9 @@
  * This class is an interface between the method and a SwClientIter: it
  * chooses the right SwModify depending on the task, creates a SwClientIter
  * and filters its iterations depending on the task.
- * The task is determined by the choice of ctor.
+ * The task is determined by the choice of class.
  *
- * 1. Collecting the UpperFrames (so that later on it becomes RestoreUpperFrames)
+ * 1. Collecting the UpperFrames (so that later RestoreUpperFrames can be called)
  *    is called by MakeFrames, if there's no PrevNext (before/after we can insert
  *    the Frames).
  * 2. Inserting the Frames before/after which the new Frames of a Node need to
@@ -55,18 +55,25 @@ class SwNode2Layout
 {
     std::unique_ptr<SwNode2LayImpl> pImpl;
 public:
-    /// Use this ctor for collecting the UpperFrames
-    SwNode2Layout( const SwNode& rNd );
-
     /// Use this ctor for inserting before/after rNd
     /// @param nIdx is the index of the to-be-inserted Node
     SwNode2Layout( const SwNode& rNd, sal_uLong nIdx );
     ~SwNode2Layout();
     SwFrame* NextFrame();
     SwLayoutFrame* UpperFrame( SwFrame* &rpFrame, const SwNode& rNode );
-    void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
     SwFrame *GetFrame( const Point* pDocPos ) const;
+};
+
+class SwNode2LayoutSaveUpperFrames
+{
+    std::unique_ptr<SwNode2LayImpl> pImpl;
+public:
+    /// Use this ctor for collecting the UpperFrames
+    SwNode2LayoutSaveUpperFrames( const SwNode& rNd );
+    ~SwNode2LayoutSaveUpperFrames();
+
+    void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 };
 
 #endif

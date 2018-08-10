@@ -250,8 +250,18 @@ private:
 
     SAL_DLLPRIVATE bool isInHiddenTextFrame(SwShellCursor* pShellCursor);
 
-typedef bool (SwCursor:: *FNCursor)();
+    SAL_DLLPRIVATE bool GoStartWordImpl();
+    SAL_DLLPRIVATE bool GoEndWordImpl();
+    SAL_DLLPRIVATE bool GoNextWordImpl();
+    SAL_DLLPRIVATE bool GoPrevWordImpl();
+    SAL_DLLPRIVATE bool GoNextSentenceImpl();
+    SAL_DLLPRIVATE bool GoEndSentenceImpl();
+    SAL_DLLPRIVATE bool GoStartSentenceImpl();
+
+    typedef bool (SwCursor::*FNCursor)();
+    typedef bool (SwCursorShell::*FNCursorShell)();
     SAL_DLLPRIVATE bool CallCursorFN( FNCursor );
+    SAL_DLLPRIVATE bool CallCursorShellFN( FNCursorShell );
 
     SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
@@ -492,7 +502,7 @@ public:
     bool ShouldWait() const;
 
     // Check if selection is within one paragraph.
-    inline bool IsSelOnePara() const;
+    bool IsSelOnePara() const;
 
     /*
      * Returns SRectangle, at which the cursor is located.
@@ -556,9 +566,6 @@ public:
     // get the selected text at the current cursor. it will be filled with
     // fields etc.
     OUString GetSelText() const;
-    // return only the text starting from the current cursor position (to the
-    // end of the node)
-    OUString GetText() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
     inline const SwTableNode* IsCursorInTable() const;
@@ -861,12 +868,6 @@ inline bool SwCursorShell::IsSelection() const
 inline bool SwCursorShell::IsMultiSelection() const
 {
     return m_pCurrentCursor->GetNext() != m_pCurrentCursor;
-}
-
-inline bool SwCursorShell::IsSelOnePara() const
-{
-    return !m_pCurrentCursor->IsMultiSelection() &&
-           m_pCurrentCursor->GetPoint()->nNode == m_pCurrentCursor->GetMark()->nNode;
 }
 
 inline const SwTableNode* SwCursorShell::IsCursorInTable() const

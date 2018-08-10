@@ -253,8 +253,9 @@ public:
     /// Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd(sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd) const;
 
+    enum class Invalidation { Add, Remove };
     /// Initiate the layout.
-    void InvalidateRange();
+    void InvalidateRange(Invalidation);
 
     bool IsOwnRedline( const SwRangeRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }
@@ -338,6 +339,13 @@ public:
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
 };
+
+
+namespace sw {
+
+std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p);
+
+} // namespace sw
 
 #endif
 

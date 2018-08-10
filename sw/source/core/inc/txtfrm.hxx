@@ -96,9 +96,28 @@ struct MergedPara;
 std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
 TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
 
-std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode);
+enum class FrameMode { New, Existing };
+std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode, FrameMode eMode);
 
 bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
+
+TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+        bool isRealDelete,
+        SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
+
+void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
+        SwTextNode const& rFirstNode, SwTextNode & rSecondNode, bool);
+
+void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
+enum class Recreate { No, ThisNode, Predecessor };
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate eRecreateMerged);
+
+void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
+void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
+
+void AddRemoveFlysAnchoredToFrameStartingAtNode(
+        SwTextFrame & rFrame, SwTextNode & rTextNode,
+        std::set<sal_uLong> *pSkipped);
 
 } // namespace sw
 
@@ -391,10 +410,8 @@ public:
     bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
-    void SetMergedPara(std::unique_ptr<sw::MergedPara> p) { m_pMergedPara = std::move(p); }
-#if 0
+    void SetMergedPara(std::unique_ptr<sw::MergedPara> p);
     sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
-#endif
     sw::MergedPara const* GetMergedPara() const { return m_pMergedPara.get(); }
 
     /// Returns the text portion we want to edit (for inline see underneath)
@@ -723,7 +740,10 @@ public:
 
     static void repaintTextFrames( const SwTextNode& rNode );
 
-    void RegisterToNode( SwTextNode& );
+    void RegisterToNode(SwTextNode &, bool isForceNodeAsFirst = false);
+
+    bool IsSymbolAt(TextFrameIndex) const;
+    OUString GetCurWord(SwPosition const&) const;
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
@@ -918,17 +938,21 @@ struct MergedPara
     /// const_casts it and modifies it (also, Update will modify it)
     OUString mergedText;
     /// most paragraph properties are taken from the first non-empty node
-    SwTextNode const*const pParaPropsNode;
+    SwTextNode const* pParaPropsNode;
     /// except break attributes, those are taken from the first node
     SwTextNode *const pFirstNode;
+    /// mainly for sanity checks
+    SwTextNode const* pLastNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
             OUString const& rText,
-            SwTextNode const*const pProps, SwTextNode *const pFirst)
+            SwTextNode const*const pProps, SwTextNode *const pFirst,
+            SwTextNode const*const pLast)
         : listener(rFrame), extents(std::move(rExtents)), mergedText(rText)
-        , pParaPropsNode(pProps), pFirstNode(pFirst)
+        , pParaPropsNode(pProps), pFirstNode(pFirst), pLastNode(pLast)
     {
         assert(pParaPropsNode);
         assert(pFirstNode);
+        assert(pLastNode);
     }
 };
 

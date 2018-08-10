@@ -374,11 +374,11 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                 if( pCNd )
                 {
                     if( pFrameNd->IsTableNode() )
-                        static_cast<SwTableNode*>(pFrameNd)->MakeFrames( aIdx );
+                        static_cast<SwTableNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
                     else if( pFrameNd->IsSectionNode() )
-                        static_cast<SwSectionNode*>(pFrameNd)->MakeFrames( aIdx );
+                        static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
                     else
-                        static_cast<SwContentNode*>(pFrameNd)->MakeFrames( *pCNd );
+                        static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
                     pFrameNd = pCNd;
                 }
                 ++aIdx;
@@ -493,7 +493,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     if( bNewFrames )
                         // delete all frames
-                        pTableNd->DelFrames();
+                        pTableNd->DelFrames(nullptr);
                     if( &rNodes == this ) // move into self?
                     {
                         // move all Start/End/ContentNodes
@@ -592,7 +592,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     if( bNewFrames )
                     {
                         SwNodeIndex aTmp( aIdx );
-                        pTableNd->MakeFrames( &aTmp );
+                        pTableNd->MakeOwnFrames(&aTmp);
                     }
                     aIdx -= nInsPos;
                     nInsPos = 0;
@@ -771,7 +771,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     if( pSectNd && !--nSectNdCnt )
                     {
                         SwNodeIndex aTmp( *pSectNd );
-                        pSectNd->MakeFrames( &aTmp );
+                        pSectNd->MakeOwnFrames(&aTmp);
                         bNewFrames = bSaveNewFrames;
                     }
                     aSttNdStack.erase( aSttNdStack.begin() + nLevel ); // remove from stack
@@ -794,7 +794,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             //Add special function to text node.
             {
                 if( bNewFrames && pCurrentNode->GetContentNode() )
-                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames();
+                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames(nullptr);
                 pCurrentNode->m_pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
                 --aRg.aEnd;
@@ -804,7 +804,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case SwNodeType::Ole:
             {
                 if( bNewFrames && pCurrentNode->GetContentNode() )
-                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames();
+                    static_cast<SwContentNode*>(pCurrentNode)->DelFrames(nullptr);
 
                 pCurrentNode->m_pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
@@ -1394,7 +1394,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
             if( pNd->IsContentNode() )
             {
                 static_cast<SwContentNode*>(pNd)->InvalidateNumRule();
-                static_cast<SwContentNode*>(pNd)->DelFrames();
+                static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
             }
         }
         RemoveNode( nSttIdx, nCnt, true );
@@ -1512,7 +1512,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             else
             {
-                pDestNd->SplitContentNode( rPos );
+                pDestNd->SplitContentNode(rPos, nullptr);
             }
 
             if( rPos.nNode == aEndIdx )
@@ -1577,7 +1577,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 }
                 else
                 {
-                    pDestNd->SplitContentNode( rPos );
+                    pDestNd->SplitContentNode(rPos, nullptr);
                 }
 
                 if ( bCorrEnd )
@@ -1796,7 +1796,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 if( bNewFrames && pTableNd )
                 {
                     nStt = aInsPos;
-                    pTableNd->MakeFrames( &nStt );
+                    pTableNd->MakeOwnFrames(&nStt);
                 }
             }
             break;
@@ -1822,7 +1822,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
 
                 if( bNewFrames && pSectNd &&
                     !pSectNd->GetSection().IsHidden() )
-                    pSectNd->MakeFrames( &nStt );
+                    pSectNd->MakeOwnFrames(&nStt);
             }
             break;
 
@@ -1858,11 +1858,8 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         case SwNodeType::Grf:
         case SwNodeType::Ole:
             {
-                SwContentNode* pNew = static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
-                                            pDoc, aInsPos );
-                // frames are always created as default, so delete if needed
-                if( !bNewFrames )
-                    pNew->DelFrames();
+                 static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
+                                            pDoc, aInsPos, bNewFrames);
             }
             break;
 
