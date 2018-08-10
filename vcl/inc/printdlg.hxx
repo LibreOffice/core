@@ -226,6 +226,8 @@ namespace vcl
         css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
+        void storeToSettings();
+        void readFromSettings();
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
