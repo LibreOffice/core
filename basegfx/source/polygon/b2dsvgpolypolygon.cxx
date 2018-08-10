@@ -26,7 +26,24 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
+#include <rtl/character.hxx>
 #include <stringconversiontools.hxx>
+
+namespace
+{
+
+void putCommandChar(OUStringBuffer& rBuffer,sal_Unicode& rLastSVGCommand, sal_Unicode aChar, bool bToLower)
+{
+    const sal_Unicode aCommand = bToLower ? rtl::toAsciiLowerCase(aChar) : aChar;
+
+    if (rLastSVGCommand != aCommand)
+    {
+        rBuffer.append(aCommand);
+        rLastSVGCommand = aCommand;
+    }
+}
+
+}
 
 namespace basegfx
 {
@@ -723,10 +740,10 @@ namespace basegfx
                     }
 
                     // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
-                    aResult.append(basegfx::internal::getCommand('M', 'm', bUseRelativeCoordinatesForFirstPoint));
+                    putCommandChar(aResult, aLastSVGCommand, 'M', bUseRelativeCoordinatesForFirstPoint);
                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
-                    aLastSVGCommand =  basegfx::internal::getCommand('L', 'l', bUseRelativeCoordinatesForFirstPoint);
+                    aLastSVGCommand =  bUseRelativeCoordinatesForFirstPoint ? 'l' : 'L';
                     aCurrentSVGPosition = aEdgeStart;
 
                     for(sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
@@ -780,32 +797,20 @@ namespace basegfx
                                 // approximately equal, export as quadratic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('T', 't', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'T', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('Q', 'q', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'Q', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -814,28 +819,17 @@ namespace basegfx
                                 // export as cubic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('S', 's', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'S', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('C', 'c', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'C', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
@@ -843,7 +837,6 @@ namespace basegfx
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -868,13 +861,7 @@ namespace basegfx
                                 else if(bXEqual)
                                 {
                                     // export as vertical line
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('V', 'v', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'V', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
@@ -882,13 +869,7 @@ namespace basegfx
                                 else if(bYEqual)
                                 {
                                     // export as horizontal line
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('H', 'h', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'H', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
@@ -896,13 +877,7 @@ namespace basegfx
                                 else
                                 {
                                     // export as line
-                                    const sal_Unicode aCommand(basegfx::internal::getCommand('L', 'l', bUseRelativeCoordinates));
-
-                                    if(aLastSVGCommand != aCommand)
-                                    {
-                                        aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
-                                    }
+                                    putCommandChar(aResult, aLastSVGCommand, 'L', bUseRelativeCoordinates);
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
@@ -918,7 +893,7 @@ namespace basegfx
                     // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
                     if(aPolygon.isClosed())
                     {
-                        aResult.append(basegfx::internal::getCommand('Z', 'z', bUseRelativeCoordinates));
+                        putCommandChar(aResult, aLastSVGCommand, 'Z', bUseRelativeCoordinates);
                     }
 
                     if(!bHandleRelativeNextPointCompatible)
