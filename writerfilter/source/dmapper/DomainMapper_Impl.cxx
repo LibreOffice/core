@@ -1314,6 +1314,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                 }
             }
             std::vector<beans::PropertyValue> aProperties;
+            bool bNumberedParagraph = false;
             if (pPropertyMap.get())
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
             if( !bIsDropCap )
@@ -1358,6 +1359,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     if (itNumberingRules != aProperties.end())
                     {
                         // This textnode has numbering. Look up the numbering style name of the current and previous paragraph.
+                        bNumberedParagraph = true;
                         OUString aCurrentNumberingRuleName;
                         uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
                         if (xCurrentNumberingRules.is())
@@ -1440,9 +1442,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                     CheckParaMarkerRedline( xParaEnd );
                 }
-
                 // set top margin of the previous auto paragraph in cells, keeping zero bottom margin only at the first one
-                if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
+                if (!bNumberedParagraph && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
                 {
                     bool bParaChangedTopMargin = false;
                     auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
