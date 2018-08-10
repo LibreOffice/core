@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_b02ac68d",
+        "filename": "bin/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T07:01:40Z",
+      "side": 1,
+      "message": "\"execing\" seems ok considering https://en.wiktionary.org/wiki/execing",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "5aecaeca507f9672047e00bf10b618e6e9d6cfee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
