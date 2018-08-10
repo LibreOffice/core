@@ -159,26 +159,6 @@ namespace basegfx
             return true;
         }
 
-        void putNumberCharWithSpace(OUStringBuffer& rStr,
-                                    double          fValue,
-                                    double          fOldValue,
-                                    bool            bUseRelativeCoordinates )
-        {
-            if( bUseRelativeCoordinates )
-                fValue -= fOldValue;
-
-            const sal_Int32 aLen( rStr.getLength() );
-            if(aLen)
-            {
-                if( isOnNumberChar(rStr[aLen - 1], false) &&
-                    fValue >= 0.0 )
-                {
-                    rStr.append( ' ' );
-                }
-            }
-
-            rStr.append(fValue);
-        }
     } // namespace internal
 }
 

@@ -58,11 +58,6 @@ namespace basegfx
                                  const OUString& rStr,
                                  const sal_Int32 nLen);
 
-        void putNumberCharWithSpace(OUStringBuffer& rStr,
-                                    double          fValue,
-                                    double          fOldValue,
-                                    bool            bUseRelativeCoordinates);
-
     } // namespace internal
 } // namespace basegfx
 

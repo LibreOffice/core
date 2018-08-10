@@ -43,6 +43,24 @@ void putCommandChar(OUStringBuffer& rBuffer,sal_Unicode& rLastSVGCommand, sal_Un
     }
 }
 
+void putNumberChar(OUStringBuffer& rStr,double fValue, double fOldValue, bool bUseRelativeCoordinates)
+{
+    if (bUseRelativeCoordinates)
+        fValue -= fOldValue;
+
+    const sal_Int32 aLen(rStr.getLength());
+    if (aLen)
+    {
+        if (basegfx::internal::isOnNumberChar(rStr[aLen - 1], false) &&
+            fValue >= 0.0 )
+        {
+            rStr.append(' ');
+        }
+    }
+
+    rStr.append(fValue);
+}
+
 }
 
 namespace basegfx
@@ -741,8 +759,8 @@ namespace basegfx
 
                     // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
                     putCommandChar(aResult, aLastSVGCommand, 'M', bUseRelativeCoordinatesForFirstPoint);
-                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
-                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
+                    putNumberChar(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
+                    putNumberChar(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
                     aLastSVGCommand =  bUseRelativeCoordinatesForFirstPoint ? 'l' : 'L';
                     aCurrentSVGPosition = aEdgeStart;
 
@@ -799,18 +817,18 @@ namespace basegfx
                                 {
                                     putCommandChar(aResult, aLastSVGCommand, 'T', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
                                     putCommandChar(aResult, aLastSVGCommand, 'Q', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -821,22 +839,22 @@ namespace basegfx
                                 {
                                     putCommandChar(aResult, aLastSVGCommand, 'S', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
                                     putCommandChar(aResult, aLastSVGCommand, 'C', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -863,7 +881,7 @@ namespace basegfx
                                     // export as vertical line
                                     putCommandChar(aResult, aLastSVGCommand, 'V', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else if(bYEqual)
@@ -871,7 +889,7 @@ namespace basegfx
                                     // export as horizontal line
                                     putCommandChar(aResult, aLastSVGCommand, 'H', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
@@ -879,8 +897,8 @@ namespace basegfx
                                     // export as line
                                     putCommandChar(aResult, aLastSVGCommand, 'L', bUseRelativeCoordinates);
 
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
