@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_3b457718",
+        "filename": "sd/qa/unit/export-tests-ooxml2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-10T10:15:07Z",
+      "side": 0,
+      "message": "Why did remove this assert from SdOOXMLExportTest2::testSmartartRotation2() here? Was that intentional?",
+      "revId": "e1d7b0973d8318bd7f153350e2e8a38bec3b3e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
