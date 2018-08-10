@@ -2494,7 +2494,10 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             if ( pContent->IsInFly() )
             {
                 const SwAnchoredObject* pObj = pContent->FindFlyFrame();
-                aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj) );
+                if (!aSortObjs.Contains(*pObj))
+                {   // is this even possible, assuming valid cursor pos.?
+                    aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj) );
+                }
             }
 
             // Consider only frames which have the same IsInDocBody value like pStartFrame
