@@ -314,7 +314,7 @@ namespace sw
             ~WriterMultiListener();
             void StartListening(SwModify* pDepend);
             void EndListening(SwModify* pDepend);
-            bool IsListeningTo(const SwModify* const pDepend);
+            bool IsListeningTo(const SwModify* const pDepend) const;
             void EndListeningAll();
     };
     class ClientIteratorBase : public sw::Ring< ::sw::ClientIteratorBase >

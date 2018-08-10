@@ -337,7 +337,7 @@ void sw::WriterMultiListener::StartListening(SwModify* pDepend)
 }
 
 
-bool sw::WriterMultiListener::IsListeningTo(const SwModify* const pBroadcaster)
+bool sw::WriterMultiListener::IsListeningTo(const SwModify* const pBroadcaster) const
 {
     return std::any_of(m_vDepends.begin(), m_vDepends.end(),
         [&pBroadcaster](const ListenerEntry& aListener)
