@@ -23,6 +23,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
 #include <deque>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -66,19 +67,26 @@ namespace sw { namespace mark
             std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 
+    enum class RestoreMode { Flys = 1, NonFlys = 2, All = 3 };
+
     /// Takes care of storing relevant attributes of an SwTextNode before split, then restore them on the new node.
     class ContentIdxStore
     {
     public:
+
             virtual void Clear() =0;
             virtual bool Empty() =0;
             virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
-            virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) =0;
-            virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) =0;
+            virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode = RestoreMode::All) =0;
+            virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode = RestoreMode::All) =0;
             virtual ~ContentIdxStore() {};
             static std::shared_ptr<ContentIdxStore> Create();
     };
 }}
+
+namespace o3tl {
+    template<> struct typed_flags<sw::mark::RestoreMode> : is_typed_flags<sw::mark::RestoreMode, 3> {};
+}
 
 void DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,

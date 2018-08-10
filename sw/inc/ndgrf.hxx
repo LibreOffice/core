@@ -80,7 +80,6 @@ public:
     const Graphic&          GetGrf(bool bWait = false) const;
     const GraphicObject&    GetGrfObj(bool bWait = false) const;
     const GraphicObject* GetReplacementGrfObj() const;
-    virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
     void SetGraphic(const Graphic& rGraphic);
@@ -110,7 +109,7 @@ public:
     void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
-    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
+    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */

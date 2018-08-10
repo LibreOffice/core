@@ -1023,7 +1023,7 @@ SwContentNode::~SwContentNode()
     // Thus, we need to delete all Frames in the dependency list.
     if (!IsTextNode()) // see ~SwTextNode
     {
-        DelFrames(false);
+        DelFrames(nullptr);
     }
 
     m_aCondCollListener.EndListeningAll();
@@ -1273,7 +1273,7 @@ bool SwContentNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
  * Creates all Views for the Doc for this Node.
  * The created ContentFrames are attached to the corresponding Layout.
  */
-void SwContentNode::MakeFrames( SwContentNode& rNode )
+void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
 {
     OSL_ENSURE( &rNode != this,
             "No ContentNode or CopyNode and new Node identical." );
@@ -1290,6 +1290,11 @@ void SwContentNode::MakeFrames( SwContentNode& rNode )
 
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, rNode )) )
     {
+        if (pUpper->getRootFrame()->IsHideRedlines()
+            && !rNode.IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwFrame *pNew = rNode.MakeFrame( pUpper );
         pNew->Paste( pUpper, pFrame );
         // #i27138#
@@ -1314,10 +1319,8 @@ void SwContentNode::MakeFrames( SwContentNode& rNode )
 /**
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
- *
- * An input param to identify if the acc table should be disposed.
  */
-void SwContentNode::DelFrames(bool /*removeme*/)
+void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
 {
     if( !HasWriterListeners() )
         return;
@@ -1325,13 +1328,46 @@ void SwContentNode::DelFrames(bool /*removeme*/)
     SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
+        if (pLayout && pLayout != pFrame->getRootFrame())
+        {
+            continue; // skip it
+        }
+        if (pFrame->IsTextFrame())
+        {
+            if (sw::MergedPara * pMerged =
+                    static_cast<SwTextFrame *>(pFrame)->GetMergedPara())
+            {
+                if (this != pMerged->pFirstNode)
+                {
+                    // pointer should have been updated to a different node
+                    assert(this != pMerged->pParaPropsNode);
+                    // SwNodes::RemoveNode iterates *backwards* - so
+                    // ensure there are no more extents pointing to this
+                    // node as SwFrame::InvalidatePage() will access them.
+                    // Note: cannot send via SwClientNotify from dtor
+                    // because that would access deleted wrong-lists
+                    sw::UpdateMergedParaForDelete(*pMerged, true,
+                            *static_cast<SwTextNode*>(this), 0, Len());
+                    if (this == pMerged->pLastNode)
+                    {
+                        pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
+                        // at first glance nothing guarantees this...
+                        // but the redline must end on a text-node...
+                        // so everything before this node that isn't a text
+                        // node should have been deleted already so that
+                        // there's a text node before.
+                        assert(pMerged->pLastNode->IsTextNode());
+                    }
+                    // avoid re-parenting mess (ModifyChangedHint)
+                    pMerged->listener.EndListening(this);
+                    continue; // don't delete
+                }
+            }
         // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrame->IsTextFrame() )
-        {
             SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )

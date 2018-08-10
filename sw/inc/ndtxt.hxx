@@ -34,6 +34,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <functional>
 
 class SfxHint;
 class SwNumRule;
@@ -60,6 +61,9 @@ class SwWrongList;
 class SwGrammarMarkUp;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
+enum class ExpandMode;
+
+namespace sw { namespace mark { enum class RestoreMode; } }
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -347,7 +351,8 @@ public:
 
     /// Virtual methods from ContentNode.
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
-    virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
+    SwTextNode * SplitContentNode(const SwPosition &,
+            std::function<void (SwTextNode *, sw::mark::RestoreMode)> const* pContentIndexRestore);
     virtual SwContentNode *JoinNext() override;
     void JoinPrev();
 
@@ -399,7 +404,6 @@ public:
         const sal_Int32 nIndex,
         const bool bIncludeInputFieldAtStart = false ) const;
 
-    OUString GetCurWord(sal_Int32) const;
     bool Spell(SwSpellArgs*);
     bool Convert( SwConversionArgs & );
 
@@ -665,7 +669,7 @@ public:
 
     /// in ndcopy.cxx
     bool IsSymbolAt(sal_Int32 nBegin) const; // In itratr.cxx.
-    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
+    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
 
     /// Interactive hyphenation: we find TextFrame and call its CalcHyph.
     bool Hyphenate( SwInterHyphInfo &rHyphInf );
@@ -682,7 +686,7 @@ public:
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
-                            const bool bWithFootnote = true ) const;
+                            const ExpandMode eAdditionalMode = ExpandMode(0)) const;
     bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            bool bWithNum = false, bool bWithFootnote = true,

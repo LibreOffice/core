@@ -18,6 +18,8 @@
 */
 #include <DocumentRedlineManager.hxx>
 #include <frmfmt.hxx>
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -80,6 +82,8 @@ using namespace com::sun::star;
             for(SwRangeRedline* j : rTable)
             {
                 // check for empty redlines
+                // note: these can destroy sorting in SwTextNode::Update()
+                // if there's another one wihout mark on the same pos.
                 OSL_ENSURE( ( *(j->GetPoint()) != *(j->GetMark()) ) ||
                             ( j->GetContentIdx() != nullptr ),
                             ERROR_PREFIX "empty redline" );
@@ -112,6 +116,94 @@ using namespace com::sun::star;
 
 #endif
 
+namespace sw {
+
+void UpdateFramesForAddDeleteRedline(SwPaM const& rPam)
+{
+    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+    for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        if (pFrame->getRootFrame()->IsHideRedlines())
+        {
+            frames.push_back(pFrame);
+        }
+    }
+    for (SwTextFrame * pFrame : frames)
+    {
+        SwTextNode & rFirstNode(pFrame->GetMergedPara()
+            ? *pFrame->GetMergedPara()->pFirstNode
+            : *pStartNode);
+        assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
+        // clear old one first to avoid DelFrames confusing updates & asserts...
+        pFrame->SetMergedPara(nullptr);
+        pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+            *pFrame, rFirstNode, sw::FrameMode::Existing));
+        // the first node of the new redline is not necessarily the first
+        // node of the merged frame, there could be another redline nearby
+        sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pStartNode, nullptr);
+    }
+}
+
+void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
+{
+    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    std::vector<SwTextFrame*> frames;
+    std::set<SwRootFrame*> layouts;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+    for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        if (pFrame->getRootFrame()->IsHideRedlines())
+        {
+            frames.push_back(pFrame);
+            layouts.insert(pFrame->getRootFrame());
+        }
+    }
+    if (frames.empty())
+    {
+        return;
+    }
+    if (rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
+    {
+        // first, call CheckParaRedlineMerge on the first paragraph,
+        // to init flag on new merge range (if any) + 1st node post the merge
+        for (SwTextFrame * pFrame : frames)
+        {
+            if (auto const pMergedPara = pFrame->GetMergedPara())
+            {
+                assert(pMergedPara->pFirstNode->GetIndex() <= pStartNode->GetIndex());
+                // clear old one first to avoid DelFrames confusing updates & asserts...
+                SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
+                pFrame->SetMergedPara(nullptr);
+                pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                    *pFrame, rFirstNode, sw::FrameMode::Existing));
+            }
+        }
+        // now start node until end of merge + 1 has proper flags; MakeFrames
+        // should pick up from the next node in need of frames by checking flags
+        SwNodeIndex const start(*pStartNode, +1);
+        SwNodeIndex const end(rPam.End()->nNode, +1); // end is exclusive
+        // note: this will also create frames for all currently hidden flys
+        // both on first and non-first nodes because it calls AppendAllObjs
+        ::MakeFrames(&rDoc, start, end);
+        // re-use this to move flys that are now on the wrong frame, with end
+        // of redline as "second" node; the nodes between start and end should
+        // be complete with MakeFrames already
+        sw::MoveMergedFlysAndFootnotes(frames, *pStartNode,
+                *rPam.End()->nNode.GetNode().GetTextNode(), false);
+    }
+    else
+    {   // recreate flys in the one node the hard way...
+        for (auto const& pLayout : layouts)
+        {
+            AppendAllObjs(rDoc.GetSpzFrameFormats(), pLayout);
+        }
+    }
+}
+
+} // namespace sw
+
 namespace
 {
     inline bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
@@ -139,7 +231,7 @@ namespace
             eCmp = ComparePosition( *pSttRng, *pEndRng, *pRStt, *pREnd );
         }
 
-        pRedl->InvalidateRange();
+        pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
 
         switch( pRedl->GetType() )
         {
@@ -293,6 +385,7 @@ namespace
     {
         bool bRet = true;
         SwRangeRedline* pRedl = rArr[ rPos ];
+        SwDoc& rDoc = *pRedl->GetDoc();
         SwPosition *pRStt = nullptr, *pREnd = nullptr;
         SwComparePosition eCmp = SwComparePosition::Outside;
         if( pSttRng && pEndRng )
@@ -302,13 +395,12 @@ namespace
             eCmp = ComparePosition( *pSttRng, *pEndRng, *pRStt, *pREnd );
         }
 
-        pRedl->InvalidateRange();
+        pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
 
         switch( pRedl->GetType() )
         {
         case nsRedlineType_t::REDLINE_INSERT:
             {
-                SwDoc& rDoc = *pRedl->GetDoc();
                 const SwPosition *pDelStt = nullptr, *pDelEnd = nullptr;
                 bool bDelRedl = false;
                 switch( eCmp )
@@ -389,6 +481,8 @@ namespace
             {
                 SwRangeRedline* pNew = nullptr;
                 bool bCheck = false, bReplace = false;
+                SwPaM const updatePaM(pSttRng ? *pSttRng : *pRedl->Start(),
+                                      pEndRng ? *pEndRng : *pRedl->End());
 
                 switch( eCmp )
                 {
@@ -472,6 +566,8 @@ namespace
                     rArr.Remove( pRedl );
                     rArr.Insert( pRedl );
                 }
+
+                sw::UpdateFramesForRemoveDeleteRedline(rDoc, updatePaM);
             }
             break;
 
@@ -665,6 +761,23 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
             m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
+            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+            {
+                // sw_redlinehide: the problem here is that MoveFromSection
+                // creates the frames wrongly (non-merged), because its own
+                // SwRangeRedline has wrong positions until after the nodes
+                // are all moved, so fix things up by force by re-creating
+                // all merged frames from scratch.
+                std::set<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
+                for (SwRootFrame *const pLayout : layouts)
+                {
+                    if (pLayout->IsHideRedlines())
+                    {
+                        pLayout->SetHideRedlines(false);
+                        pLayout->SetHideRedlines(true);
+                    }
+                }
+            }
         }
         meRedlineFlags = eMode;
         m_rDoc.getIDocumentState().SetModified();
@@ -765,7 +878,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineFlags))
     {
-        pNewRedl->InvalidateRange();
+        pNewRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
 
         if( m_rDoc.IsAutoFormatRedline() )
         {
@@ -1713,7 +1826,12 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pTextNd = SwNodes::GoPrevious( &aIdx );
                     }
                 }
-                mpRedlineTable->Insert( pNewRedl );
+                bool const ret = mpRedlineTable->Insert( pNewRedl );
+                assert(ret || !pNewRedl);
+                if (ret && !pNewRedl)
+                {
+                    bMerged = true; // treat InsertWithValidRanges as "merge"
+                }
             }
         }
 
@@ -1909,7 +2027,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
                 break;
 
             case 3:
-                pRedline->InvalidateRange();
+                pRedline->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 mpRedlineTable->DeleteAndDestroy( n-- );
                 pRedline = nullptr;
                 break;
@@ -1969,14 +2087,15 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         {
         case SwComparePosition::Equal:
         case SwComparePosition::Outside:
-            pRedl->InvalidateRange();
+            pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
             mpRedlineTable->DeleteAndDestroy( n-- );
             bChg = true;
             break;
 
         case SwComparePosition::OverlapBefore:
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetStart( *pEnd, pRStt );
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                 // re-insert
                 mpRedlineTable->Remove( n );
                 mpRedlineTable->Insert( pRedl );
@@ -1984,8 +2103,9 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
 
         case SwComparePosition::OverlapBehind:
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetEnd( *pStt, pREnd );
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                 if( !pRedl->HasValidRange() )
                 {
                     // re-insert
@@ -1998,10 +2118,11 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         case SwComparePosition::Inside:
             {
                 // this one needs to be splitted
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 if( *pRStt == *pStt )
                 {
                     pRedl->SetStart( *pEnd, pRStt );
+                    pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     // re-insert
                     mpRedlineTable->Remove( n );
                     mpRedlineTable->Insert( pRedl );
@@ -2014,10 +2135,12 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     {
                         pCpy = new SwRangeRedline( *pRedl );
                         pCpy->SetStart( *pEnd );
+                        pCpy->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     }
                     else
                         pCpy = nullptr;
                     pRedl->SetEnd( *pStt, pREnd );
+                    pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     if( !pRedl->HasValidRange() )
                     {
                         // re-insert
@@ -2721,7 +2844,7 @@ void DocumentRedlineManager::UpdateRedlineAttr()
     for(SwRangeRedline* pRedl : rTable)
     {
         if( pRedl->IsVisible() )
-            pRedl->InvalidateRange();
+            pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
     }
 
     // #TODO - add 'SwExtraRedlineTable' also ?

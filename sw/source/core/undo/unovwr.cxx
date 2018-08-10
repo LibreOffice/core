@@ -43,6 +43,13 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(SwUndoId::OVERWRITE, pDoc),
       bGroup( false )
 {
+    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    assert(pTextNd);
+    sal_Int32 const nTextNdLen = pTextNd->GetText().getLength();
+
+    nSttNode = rPos.nNode.GetIndex();
+    nSttContent = rPos.nContent.GetIndex();
+
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
@@ -52,16 +59,13 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         {
             pRedlSaveData.reset();
         }
+        if (nSttContent < nTextNdLen)
+        {
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, USHRT_MAX);
+        }
     }
 
-    nSttNode = rPos.nNode.GetIndex();
-    nSttContent = rPos.nContent.GetIndex();
-
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
-
     bInsChar = true;
-    sal_Int32 nTextNdLen = pTextNd->GetText().getLength();
     if( nSttContent < nTextNdLen )     // no pure insert?
     {
         aDelStr += OUStringLiteral1( pTextNd->GetText()[nSttContent] );
@@ -120,6 +124,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         rCC.isLetterNumeric( aInsStr, aInsStr.getLength()-1 ) )
         return false;
 
+    if (!bInsChar && rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
     {
         SwRedlineSaveDatas aTmpSav;
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
@@ -178,7 +183,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     pCurrentPam->DeleteMark();
     pCurrentPam->GetPoint()->nNode = nSttNode;
     SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
+    assert(pTextNd);
     SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
     rIdx.Assign( pTextNd, nSttContent );
 
@@ -260,14 +265,14 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     pCurrentPam->DeleteMark();
     pCurrentPam->GetPoint()->nNode = nSttNode;
     SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "Overwrite not in TextNode?" );
+    assert(pTextNd);
     SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
 
     if( pRedlSaveData )
     {
         rIdx.Assign( pTextNd, nSttContent );
         pCurrentPam->SetMark();
-        pCurrentPam->GetMark()->nContent += aInsStr.getLength();
+        pCurrentPam->GetMark()->nContent += aDelStr.getLength();
         pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, USHRT_MAX );
         pCurrentPam->DeleteMark();
     }
