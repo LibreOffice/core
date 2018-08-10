@@ -1234,7 +1234,7 @@ typedef void (SAL_CALL *oslDirectoryCreationCallbackFunc)(void* pData, rtl_uStri
 /** Create a directory path.
 
     The osl_createDirectoryPath function creates a specified directory path.
-    All nonexisting sub directories will be created.
+    All nonexistent sub directories will be created.
 
     @attention PLEASE NOTE You cannot rely on getting the error code
     osl_File_E_EXIST for existing directories. Programming against this error

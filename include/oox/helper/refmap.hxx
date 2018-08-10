@@ -32,7 +32,7 @@ namespace oox {
 
     An instance of the class RefMap< Type > stores elements of the type
     std::shared_ptr< Type >. The new accessor functions has() and get()
-    work correctly for nonexisting keys, there is no need to check the passed
+    work correctly for nonexistent keys, there is no need to check the passed
     key before.
  */
 template< typename KeyType, typename ObjType, typename CompType = std::less< KeyType > >

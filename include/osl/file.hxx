@@ -1865,7 +1865,7 @@ public:
     /** Create a directory path.
 
         The osl_createDirectoryPath function creates a specified directory path.
-        All nonexisting sub directories will be created.
+        All nonexistent sub directories will be created.
 
         @attention You cannot rely on getting the error code E_EXIST for existing
         directories. Programming against this error code is in general a strong

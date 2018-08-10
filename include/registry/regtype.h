@@ -101,7 +101,7 @@ enum class SAL_DLLPUBLIC_RTTI RegError
 
     /// the key or key handle points to an invalid key or closed key.
     KEY_NOT_OPEN,
-    /// the specified keyname points to a nonexisting key.
+    /// the specified keyname points to a nonexistent key.
     KEY_NOT_EXISTS,
     /// the key with the specified keyname cannot be created.
     CREATE_KEY_FAILED,
