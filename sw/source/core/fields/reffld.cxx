@@ -396,7 +396,7 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode() const
 {
     const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     return pReferencedTextNode
-           ? pReferencedTextNode->GetExpandText( 0, -1, true, true, false, false )
+           ? pReferencedTextNode->GetExpandText(0, -1, true, true, false)
            : OUString();
 }
 
@@ -538,7 +538,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             if( nStart != nEnd ) // a section?
             {
-                m_sText = pTextNd->GetExpandText( nStart, nEnd - nStart, false, false, false, false );
+                m_sText = pTextNd->GetExpandText(nStart, nEnd - nStart, false, false, false);
 
                 // remove all special characters (replace them with blanks)
                 if( !m_sText.isEmpty() )
