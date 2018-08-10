@@ -91,9 +91,12 @@ void KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
     _dialog->setFileMode(multiSelect ? QFileDialog::ExistingFiles : QFileDialog::ExistingFile);
 }
 
-void KDE5FilePicker::setDefaultName(const QString& name) { _dialog->selectUrl(QUrl(name)); }
+void KDE5FilePicker::setDefaultName(const QString& name) { _dialog->selectFile(name); }
 
-void KDE5FilePicker::setDisplayDirectory(const QString& dir) { _dialog->selectUrl(QUrl(dir)); }
+void KDE5FilePicker::setDisplayDirectory(const QString& dir)
+{
+    _dialog->setDirectoryUrl(QUrl(dir));
+}
 
 QString KDE5FilePicker::getDisplayDirectory() const { return _dialog->directoryUrl().url(); }
 
