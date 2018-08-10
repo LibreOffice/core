@@ -26,6 +26,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -46,6 +48,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 #include <docstat.hxx>
 #include <docsh.hxx>
 
@@ -182,8 +185,16 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     // save show redline mode ...
     const OUString sShowChanges("ShowChanges");
     RedlineFlags nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-    xInfoSet->setPropertyValue( sShowChanges,
-        makeAny( IDocumentRedlineAccess::IsShowChanges( nRedlineFlags ) ) );
+    bool isShowChanges;
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {   // TODO: ideally this would be stored per-view...
+        isShowChanges = !m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+    }
+    else
+    {
+        isShowChanges = IDocumentRedlineAccess::IsShowChanges(nRedlineFlags);
+    }
+    xInfoSet->setPropertyValue(sShowChanges, makeAny(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
@@ -368,7 +379,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     }
 
     if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && m_pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
-        !(m_bOrganizerMode || m_bBlock || bErr) )
+        !(m_bOrganizerMode || m_bBlock || bErr ||
+            // sw_redlinehide: disable layout cache for now
+            m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines()))
     {
         try
         {
@@ -403,8 +416,15 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
-    if ( *o3tl::doAccess<bool>(aAny) )
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {
         nRedlineFlags |= RedlineFlags::ShowDelete;
+    }
+    else
+    {
+        if (*o3tl::doAccess<bool>(aAny))
+            nRedlineFlags |= RedlineFlags::ShowDelete;
+    }
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     if (xStatusIndicator.is())

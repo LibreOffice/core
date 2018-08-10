@@ -35,6 +35,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>
@@ -59,6 +60,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
@@ -851,7 +853,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
            aFilterArgs, rName, true );
 
     if( !(IsOrganizerMode() || IsBlockMode() || m_bInsertMode ||
-          m_aOption.IsFormatsOnly() ) )
+          m_aOption.IsFormatsOnly() ||
+            // sw_redlinehide: disable layout cache for now
+          (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext) &&
+            !*o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges)))))
     {
         try
         {
@@ -899,7 +904,14 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // tdf#83260 ensure that the first call of CompressRedlines after loading
     // the document is a no-op by calling it now
     rDoc.getIDocumentRedlineAccess().CompressRedlines();
-    rDoc.getIDocumentRedlineAccess().SetRedlineFlags(  nRedlineFlags );
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {   // can't set it on the layout or view shell because it doesn't exist yet
+        rDoc.GetDocumentRedlineManager().SetHideRedlines(!(nRedlineFlags & RedlineFlags::ShowDelete));
+    }
+    else
+    {
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags(nRedlineFlags);
+    }
 
     lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 

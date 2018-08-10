@@ -44,6 +44,7 @@
 #include <fmtcnct.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <redline.hxx>
+#include <txtfrm.hxx>
 #include <unocrsr.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
@@ -1763,6 +1764,12 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
     lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
+
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
+    }
 }
 
 bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
@@ -1992,7 +1999,15 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(aSavePam.GetPoint()->nNode == rPos.nNode.GetIndex());
         assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
 
-        pTNd = pTNd->SplitContentNode( rPos )->GetTextNode();
+        std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
+            [&](SwTextNode *const, sw::mark::RestoreMode const eMode)
+            {
+                if (!pContentStore->Empty())
+                {
+                    pContentStore->Restore(&m_rDoc, pOrigNode->GetIndex()-1, 0, true, eMode);
+                }
+            });
+        pTNd = pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
 
         //A new node was inserted before the orig pTNd and the content up to
         //rPos moved into it. The old node is returned with the remainder
@@ -2011,9 +2026,6 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
         aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
         rPos = *aSavePam.GetMark() = *aSavePam.GetPoint();
-
-        if( !pContentStore->Empty() )
-            pContentStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
 
         // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )
@@ -2345,8 +2357,12 @@ bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     return bRet;
 }
 
+// Overwrite only uses the point of the PaM, the mark is ignored; characters
+// are replaced from point until the end of the node; at the end of the node,
+// characters are inserted.
 bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUString &rStr )
 {
+    assert(rStr.getLength());
     SwPosition& rPt = *const_cast<SwPosition*>(rRg.GetPoint());
     if( m_rDoc.GetAutoCorrExceptWord() )                  // Add to AutoCorrect
     {
@@ -2370,6 +2386,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
     SwIndex& rIdx = rPt.nContent;
+    sal_Int32 const nActualStart(rIdx.GetIndex());
     sal_Int32 nStart = 0;
 
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
@@ -2431,14 +2448,14 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     if (!m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
-        SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
+        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.nContent.GetIndex());
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, USHRT_MAX );
     }
     else if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // FIXME: this redline is WRONG: there is no DELETE, and the skipped
         // characters are also included in aPam
-        SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
+        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.nContent.GetIndex());
         m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
     }
 
@@ -2941,27 +2958,37 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
 
     const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
     pContentStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
-    // FIXME: only SwTextNode has a valid implementation of SplitContentNode!
-    OSL_ENSURE(pNode->IsTextNode(), "splitting non-text node?");
-    pNode = pNode->SplitContentNode( rPos );
-    if (pNode)
-    {
-        // move all bookmarks, TOXMarks, FlyAtCnt
-        if( !pContentStore->Empty() )
-            pContentStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
-
-        // To-Do - add 'SwExtraRedlineTable' also ?
-        if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
+    assert(pNode->IsTextNode());
+    std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
+        [&](SwTextNode *const, sw::mark::RestoreMode const eMode)
         {
-            SwPaM aPam( rPos );
-            aPam.SetMark();
-            aPam.Move( fnMoveBackward );
-            if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
-                m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
-            else
-                m_rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
-        }
-    }
+            if (!pContentStore->Empty())
+            {   // move all bookmarks, TOXMarks, FlyAtCnt
+                pContentStore->Restore(&m_rDoc, rPos.nNode.GetIndex()-1, 0, true, eMode);
+            }
+            if (eMode & sw::mark::RestoreMode::NonFlys)
+            {
+                // To-Do - add 'SwExtraRedlineTable' also ?
+                if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
+                    (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() &&
+                     !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty()))
+                {
+                    SwPaM aPam( rPos );
+                    aPam.SetMark();
+                    aPam.Move( fnMoveBackward );
+                    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+                    {
+                        m_rDoc.getIDocumentRedlineAccess().AppendRedline(
+                            new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aPam), true);
+                    }
+                    else
+                    {
+                        m_rDoc.getIDocumentRedlineAccess().SplitRedline(aPam);
+                    }
+                }
+            }
+        });
+    pNode->GetTextNode()->SplitContentNode(rPos, &restoreFunc);
 
     m_rDoc.getIDocumentState().SetModified();
     return true;
@@ -3551,96 +3578,135 @@ DocumentContentOperationsManager::~DocumentContentOperationsManager()
 
 bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
-    OSL_ENSURE( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
+    assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
+    RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
+
+    if (*rPam.GetPoint() == *rPam.GetMark())
     {
-        SwUndoRedlineDelete* pUndo = nullptr;
-        RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-        m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
+        return false; // do not add empty redlines
+    }
 
-        auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
-        std::vector<std::unique_ptr<SwUndo>> MarkUndos;
-        for (auto iter = rDMA.getAnnotationMarksBegin();
-                  iter != rDMA.getAnnotationMarksEnd(); )
+    std::vector<SwRangeRedline*> redlines;
+    {
+        auto pRedline(o3tl::make_unique<SwRangeRedline>(nsRedlineType_t::REDLINE_DELETE, rPam));
+        if (pRedline->HasValidRange())
         {
-            // tdf#111524 remove annotation marks that have their field
-            // characters deleted
-            SwPosition const& rEndPos((**iter).GetMarkEnd());
-            if (*rPam.Start() < rEndPos && rEndPos <= *rPam.End())
-            {
-                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-                {
-                    MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
-                }
-                // iter is into annotation mark vector so must be dereferenced!
-                rDMA.deleteMark(&**iter);
-                // this invalidates iter, have to start over...
-                iter = rDMA.getAnnotationMarksBegin();
-            }
-            else
-            {   // marks are sorted by start
-                if (*rPam.End() < (**iter).GetMarkStart())
-                {
-                    break;
-                }
-                ++iter;
-            }
+            redlines.push_back(pRedline.release());
         }
+        else // sigh ... why is such a selection even possible...
+        {    // split it up so we get one SwUndoRedlineDelete per inserted RL
+            redlines = GetAllValidRanges(std::move(pRedline));
+        }
+    }
 
-        // tdf#119019 accept tracked paragraph formatting to do not hide new deletions
-        if ( *rPam.GetPoint() != *rPam.GetMark() )
-            m_rDoc.getIDocumentRedlineAccess().AcceptRedlineParagraphFormatting( rPam );
+    if (redlines.empty())
+    {
+        return false;
+    }
 
-        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
+    std::vector<std::unique_ptr<SwUndo>> MarkUndos;
+    for (auto iter = rDMA.getAnnotationMarksBegin();
+              iter != rDMA.getAnnotationMarksEnd(); )
+    {
+        // tdf#111524 remove annotation marks that have their field
+        // characters deleted
+        SwPosition const& rEndPos((**iter).GetMarkEnd());
+        if (*rPam.Start() < rEndPos && rEndPos <= *rPam.End())
         {
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+            {
+                MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
+            }
+            // iter is into annotation mark vector so must be dereferenced!
+            rDMA.deleteMark(&**iter);
+            // this invalidates iter, have to start over...
+            iter = rDMA.getAnnotationMarksBegin();
+        }
+        else
+        {   // marks are sorted by start
+            if (*rPam.End() < (**iter).GetMarkStart())
+            {
+                break;
+            }
+            ++iter;
+        }
+    }
 
-            /* please don't translate -- for cultural reasons this comment is protected
-               until the redline implementation is finally fixed some day */
-            //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
-                RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
-            pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
-            const SwRewriter aRewriter = pUndo->GetRewriter();
-            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
+    // tdf#119019 accept tracked paragraph formatting to do not hide new deletions
+    if (*rPam.GetPoint() != *rPam.GetMark())
+        m_rDoc.getIDocumentRedlineAccess().AcceptRedlineParagraphFormatting(rPam);
+
+    std::vector<std::unique_ptr<SwUndoRedlineDelete>> undos;
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {
+        /* please don't translate -- for cultural reasons this comment is protected
+           until the redline implementation is finally fixed some day */
+        //JP 06.01.98: MUSS noch optimiert werden!!!
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
+            RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+        for (SwRangeRedline * pRedline : redlines)
+        {
+            assert(pRedline->HasValidRange());
+            undos.emplace_back(o3tl::make_unique<SwUndoRedlineDelete>(
+                        *pRedline, SwUndoId::DELETE));
+        }
+        const SwRewriter aRewriter = undos.front()->GetRewriter();
+        // can only group a single undo action
+        if (MarkUndos.empty() && undos.size() == 1
+            && m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
+        {
+            SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
+            SwUndoRedlineDelete *const pUndoRedlineDel(dynamic_cast<SwUndoRedlineDelete*>(pLastUndo));
+            bool const bMerged = pUndoRedlineDel
+                && pUndoRedlineDel->CanGrouping(*undos.front());
+            if (!bMerged)
+            {
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(undos.front().release());
+            }
+            undos.clear(); // prevent unmatched EndUndo
+        }
+        else
+        {
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
             for (auto& it : MarkUndos)
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
             }
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
-        }
-
-        if ( *rPam.GetPoint() != *rPam.GetMark() )
-            m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
-        m_rDoc.getIDocumentState().SetModified();
-
-        if ( pUndo )
-        {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
-            // ??? why the hell is the AppendUndo not below the
-            // CanGrouping, so this hideous cleanup wouldn't be necessary?
-            // bah, this is redlining, probably changing this would break it...
-            if ( m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo() )
+            for (auto & it : undos)
             {
-                SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
-                SwUndoRedlineDelete * const pUndoRedlineDel( dynamic_cast< SwUndoRedlineDelete* >( pLastUndo ) );
-                if ( pUndoRedlineDel )
-                {
-                    bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
-                    if ( bMerged )
-                    {
-                        ::sw::UndoGuard const undoGuard( m_rDoc.GetIDocumentUndoRedo() );
-                        SwUndo const* const pDeleted = m_rDoc.GetUndoManager().RemoveLastUndo();
-                        OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
-                            "undo removed is not undo inserted?" );
-                        delete pDeleted;
-                    }
-                }
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
             }
-            //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         }
-        return true;
     }
+
+    for (SwRangeRedline *const pRedline : redlines)
+    {
+        // note: 1. the pRedline can still be merged & deleted
+        //       2. the impl. can even DeleteAndJoin the range => no plain PaM
+        std::shared_ptr<SwUnoCursor> const pCursor(m_rDoc.CreateUnoCursor(*pRedline->GetMark()));
+        pCursor->SetMark();
+        *pCursor->GetPoint() = *pRedline->GetPoint();
+        m_rDoc.getIDocumentRedlineAccess().AppendRedline(pRedline, true);
+        // sw_redlinehide: 2 reasons why this is needed:
+        // 1. it's the first redline in node => RedlineDelText was sent but ignored
+        // 2. redline spans multiple nodes => must merge text frames
+        sw::UpdateFramesForAddDeleteRedline(*pCursor);
+    }
+    m_rDoc.getIDocumentState().SetModified();
+
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {
+        if (!undos.empty())
+        {
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
+        }
+        //JP 06.01.98: MUSS noch optimiert werden!!!
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
+    }
+    return true;
 }
 
 bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
@@ -3663,6 +3729,12 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
     if( bJoinText )
     {
         ::sw_JoinText( rPam, bJoinPrev );
+    }
+
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
     }
 
     return true;
@@ -3857,8 +3929,6 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
     } while( false );
 
-    if( !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
-        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
     m_rDoc.getIDocumentState().SetModified();
 
     return true;
@@ -4305,7 +4375,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                             pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
-                        pDestTextNd = pSttTextNd->MakeCopy( pDoc, aInsPos )->GetTextNode();
+                        pDestTextNd = pSttTextNd->MakeCopy(pDoc, aInsPos, true)->GetTextNode();
                         bCopyOk = true;
                     }
                     aDestIdx.Assign( pDestTextNd, 0 );

@@ -1039,37 +1039,72 @@ static bool IsShown(sal_uLong const nIndex,
     std::vector<sw::Extent>::const_iterator *const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
 {
+    assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
     SwPosition const& rAnchor(*rAnch.GetContentAnchor());
-    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    if (rAnchor.nNode.GetIndex() != nIndex)
     {
-        // TODO are frames sorted by anchor positions perhaps?
+        return false;
+    }
+    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA
+        // sw_redlinehide: we want to hide AT_CHAR, but currently can't
+        // because Delete and Accept Redline don't delete them!
+              && rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR)
+    {
+        // note: frames are not sorted by anchor position.
         assert(pEnd);
         assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
-        for ( ; *pIter != *pEnd; ++*pIter)
+        for (auto iter = *pIter; iter != *pEnd; ++iter)
         {
-            assert((**pIter).pNode->GetIndex() == nIndex);
-            if ((**pIter).nStart <= rAnchor.nContent.GetIndex())
+            assert(iter->pNode->GetIndex() == nIndex);
+            if (rAnchor.nContent.GetIndex() < iter->nStart)
             {
-                // TODO off by one? need < for AS_CHAR but what for AT_CHAR?
-                if (rAnchor.nContent.GetIndex() < (**pIter).nEnd)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
+            }
+            // for AS_CHAR obviously must be <
+            // for AT_CHAR it is questionable whether < or <= should be used
+            // and there is the additional corner case of Len() to consider
+            // prefer < for now for symmetry (and inverted usage with
+            // "hidden") and handle special case explicitly
+            if (rAnchor.nContent.GetIndex() < iter->nEnd
+                || iter->nEnd == iter->pNode->Len())
+            {
+                return true;
             }
         }
         return false;
     }
     else
     {
-        return rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex;
+        return true;
     }
 }
 
-static void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
+void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
+    if (!pFlys)
+    {
+        return;
+    }
+    for (SwFrameFormat * pFrameFormat : *pFlys)
+    {
+        SwFormatAnchor const& rAnchor = pFrameFormat->GetAnchor();
+        if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
+            || (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
+                && RES_DRAWFRMFMT == pFrameFormat->Which()))
+        {
+            assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
+            if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd))
+            {
+                pFrameFormat->DelFrames();
+            }
+        }
+    }
+}
+
+void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
     std::vector<sw::Extent>::const_iterator *const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
@@ -1159,7 +1194,47 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
     }
 }
 
-static void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
+bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor)
+{
+    assert(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA ||
+           rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR ||
+           rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
+    bool ret(true);
+    if (auto const pMergedPara = rFrame.GetMergedPara())
+    {
+        ret = false;
+        auto const pAnchor(rAnchor.GetContentAnchor());
+        auto iterFirst(pMergedPara->extents.cbegin());
+        auto iter(iterFirst);
+        SwTextNode const* pNode(pMergedPara->pFirstNode);
+        for ( ; ; ++iter)
+        {
+            if (iter == pMergedPara->extents.end()
+                || iter->pNode != pNode)
+            {
+                assert(pNode->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
+                if (pNode == &pAnchor->nNode.GetNode())
+                {
+                    ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter);
+                    break;
+                }
+                if (iter == pMergedPara->extents.end())
+                {
+                    break;
+                }
+                pNode = iter->pNode;
+                if (pAnchor->nNode.GetIndex() < pNode->GetIndex())
+                {
+                    break;
+                }
+                iterFirst = iter;
+            }
+        }
+    }
+    return ret;
+}
+
+void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
     //layout.
@@ -1313,12 +1388,23 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     //the SwActualSection class has a member, which points to an upper(section).
     //When the "inner" section finishes, the upper will used instead.
 
-    while( true )
+    // Do not consider the end node. The caller (Section/MakeFrames()) has to
+    // ensure that the end of this range is positioned before EndIndex!
+    for ( ; nEndIndex == 0 || nIndex < nEndIndex; ++nIndex)
     {
         SwNode *pNd = pDoc->GetNodes()[nIndex];
         if ( pNd->IsContentNode() )
         {
             SwContentNode* pNode = static_cast<SwContentNode*>(pNd);
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                if (pNd->IsTextNode()
+                    && pNd->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
+                {   // must have a frame already
+                    assert(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pLayout))->GetMergedPara());
+                }
+                continue; // skip it
+            }
             pFrame = pNode->MakeFrame(pLay);
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
@@ -1360,6 +1446,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if ( pNd->IsTableNode() )
         {   //Should we have encountered a table?
             SwTableNode *pTableNode = static_cast<SwTableNode*>(pNd);
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
 
             // #108116# loading may produce table structures that GCLines
             // needs to clean up. To keep table formulas correct, change
@@ -1412,6 +1503,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsSectionNode() )
         {
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             SwSectionNode *pNode = static_cast<SwSectionNode*>(pNd);
             if( pNode->GetSection().CalcHiddenFlag() )
                 // is hidden, skip the area
@@ -1499,9 +1595,13 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            OSL_ENSURE( pActualSection, "Section end without section?" );
-            OSL_ENSURE( pActualSection->GetSectionNode() == pNd->StartOfSectionNode(),
-                            "Section end with wrong Start Node?" );
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
+            assert(pActualSection && "Section end without section start?");
+            assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
 
             //Close the section, where appropriate activate the surrounding
             //section again.
@@ -1571,6 +1671,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if( pNd->IsStartNode() &&
                  SwFlyStartNode == static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
         {
+            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            {
+                assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
             {
                 SwFlyFrame* pFly = pLay->FindFlyFrame();
@@ -1579,14 +1684,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
         }
         else
-            // Neither Content nor table nor section,
-            // so we have to be ready.
-            break;
-
-        ++nIndex;
-        // Do not consider the end node. The caller (section/MakeFrames()) has to ensure that the end
-        // of this area is positioned before EndIndex!
-        if ( nEndIndex && nIndex >= nEndIndex )
+            // Neither Content nor table nor section, so we are done.
             break;
     }
 
@@ -1677,13 +1775,13 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 SwFrame *pMove = pFrame;
                 SwFrame *pPrev = pFrame->GetPrev();
                 SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pMove );
-                OSL_ENSURE( pTmp, "Missing FlowFrame" );
+                assert(pTmp);
 
                 if ( bApres )
                 {
                     // The rest of this page should be empty. Thus, the following one has to move to
                     // the next page (it might also be located in the following column).
-                    OSL_ENSURE( !pTmp->HasFollow(), "Follows forbidden" );
+                    assert(!pTmp->HasFollow() && "prev. node's frame is not last");
                     pPrev = pFrame;
                     // If the surrounding SectionFrame has a "next" one,
                     // so this one needs to be moved as well.
@@ -1734,7 +1832,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 }
                 else
                 {
-                    OSL_ENSURE( !pTmp->IsFollow(), "Follows really forbidden" );
+                    assert(!pTmp->IsFollow() && "next node's frame is not master");
                     // move the _content_ of a section frame
                     if( pMove->IsSctFrame() )
                     {

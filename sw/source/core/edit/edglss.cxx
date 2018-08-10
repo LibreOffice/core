@@ -28,6 +28,7 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <frmfmt.hxx>
+#include <rootfrm.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -304,6 +305,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
             aAsciiOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
             xWrt->SetAsciiOptions( aAsciiOpt );
             xWrt->m_bUCS2_WithStartChar = false;
+            xWrt->m_bHideDeleteRedlines = GetLayout()->IsHideRedlines();
 
             if ( ! aWriter.Write(xWrt).IsError() )
             {

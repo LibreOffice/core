@@ -456,7 +456,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->DeleteMark();
 
     // now collect all Uppers
-    SwNode2Layout aNode2Layout( aFrameIdx.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout(aFrameIdx.GetNode());
 
     // create TableNode structure
     SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, m_vBoxSaves );
@@ -528,7 +528,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         for( n = pTableNd->GetIndex() + 1; n < nTmpEnd; ++n )
         {
             if( ( pNd = (*this)[ n ] )->IsContentNode() )
-                static_cast<SwContentNode*>(pNd)->DelFrames();
+                static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
             pNd->m_pStartOfSection = pTableNd;
         }
     }
@@ -556,10 +556,17 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
             SwIndex aCntPos( pTextNd, pSave->m_nContent - 1 );
 
             pTextNd->EraseText( aCntPos, 1 );
-            SwContentNode* pNewNd = pTextNd->SplitContentNode(
-                                        SwPosition( aSttIdx, aCntPos ));
-            if( !pContentStore->Empty() )
-                pContentStore->Restore( *pNewNd, pSave->m_nContent, pSave->m_nContent + 1 );
+
+            std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
+                [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode)
+                {
+                    if (!pContentStore->Empty())
+                    {
+                        pContentStore->Restore(*pNewNode, pSave->m_nContent, pSave->m_nContent + 1, eMode);
+                    }
+                });
+            pTextNd->SplitContentNode(
+                        SwPosition(aSttIdx, aCntPos), &restoreFunc);
         }
         else
         {
@@ -3048,7 +3055,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // create frames for the new table
     SwNodeIndex aTmpIdx( *pNew );
-    pNew->MakeFrames( &aTmpIdx );
+    pNew->MakeOwnFrames(&aTmpIdx);
 
     // position cursor somewhere in content
     SwContentNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );

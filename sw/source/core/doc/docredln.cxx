@@ -122,8 +122,10 @@ static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
     while( pEndStart && (!pEndStart->IsStartNode() || pEndStart->IsSectionNode() ||
         pEndStart->IsTableNode() ) )
         pEndStart = pEndStart->StartOfSectionNode();
+    assert(pSttTab == pEndTab);
     if( pSttTab != pEndTab )
         nError = 1;
+    assert(pSttTab || pSttStart == pEndStart);
     if( !pSttTab && pSttStart != pEndStart )
         nError |= 2;
     if( nError )
@@ -452,10 +454,12 @@ bool SwRedlineTable::Insert(SwRangeRedlinePtr& p, size_type& rP)
     return InsertWithValidRanges( p, &rP );
 }
 
-bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
+namespace sw {
+
+std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p)
 {
+    std::vector<SwRangeRedline*> ret;
     // Create valid "sub-ranges" from the Selection
-    bool bAnyIns = false;
     SwPosition* pStt = p->Start(),
               * pEnd = pStt == p->GetPoint() ? p->GetMark() : p->GetPoint();
     SwPosition aNewStt( *pStt );
@@ -472,7 +476,6 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
     }
 
     SwRangeRedline* pNew = nullptr;
-    size_type nInsPos;
 
     if( aNewStt < *pEnd )
         do {
@@ -540,14 +543,10 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
 #endif
 
             if( *pNew->GetPoint() != *pNew->GetMark() &&
-                pNew->HasValidRange() &&
-                Insert( pNew, nInsPos ) )
+                pNew->HasValidRange())
             {
-                pNew->CallDisplayFunc(nInsPos);
-                bAnyIns = true;
+                ret.push_back(pNew);
                 pNew = nullptr;
-                if( pInsPos && *pInsPos < nInsPos )
-                    *pInsPos = nInsPos;
             }
 
             if( aNewStt >= *pEnd ||
@@ -559,7 +558,31 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
         } while( aNewStt < *pEnd );
 
     delete pNew;
-    delete p;
+    p.reset();
+    return ret;
+}
+
+} // namespace sw
+
+bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
+{
+    bool bAnyIns = false;
+    std::vector<SwRangeRedline*> const redlines(
+            GetAllValidRanges(std::unique_ptr<SwRangeRedline>(p)));
+    for (SwRangeRedline * pRedline : redlines)
+    {
+        assert(pRedline->HasValidRange());
+        size_type nInsPos;
+        if (Insert(pRedline, nInsPos))
+        {
+            pRedline->CallDisplayFunc(nInsPos);
+            bAnyIns = true;
+            if (pInsPos && *pInsPos < nInsPos)
+            {
+                *pInsPos = nInsPos;
+            }
+        }
+    }
     p = nullptr;
     return bAnyIns;
 }
@@ -607,26 +630,21 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
-    DeleteAndDestroy(0, size());
+    while (!maVector.empty())
+    {
+        auto const pRedline = maVector.back();
+        maVector.erase(maVector.back());
+        LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+        delete pRedline;
+    }
 }
 
-void SwRedlineTable::DeleteAndDestroy( size_type nP, size_type nL )
+void SwRedlineTable::DeleteAndDestroy(size_type const nP)
 {
-    SwDoc* pDoc = nullptr;
-    if( !nP && nL && nL == size() )
-        pDoc = maVector.front()->GetDoc();
-
-    for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
-    {
-        LOKRedlineNotification(RedlineNotification::Remove, *it);
-        delete *it;
-    }
-    maVector.erase( maVector.begin() + nP, maVector.begin() + nP + nL );
-
-    SwViewShell* pSh;
-    if( pDoc && !pDoc->IsInDtor() &&
-        nullptr != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
-        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
+    auto const pRedline = maVector[nP];
+    maVector.erase(maVector.begin() + nP);
+    LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+    delete pRedline;
 }
 
 SwRedlineTable::size_type SwRedlineTable::FindNextOfSeqNo( size_type nSttPos ) const
@@ -1164,7 +1182,7 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
 
         case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
         case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
-            InvalidateRange();
+            InvalidateRange(Invalidation::Add);
             break;
         default:
             break;
@@ -1201,7 +1219,7 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
     case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
     case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
         if( 1 <= nLoop )
-            InvalidateRange();
+            InvalidateRange(Invalidation::Remove);
         break;
     default:
         break;
@@ -1243,7 +1261,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
     case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
     case nsRedlineType_t::REDLINE_TABLE:            // Table structure has been modified
         if( 1 <= nLoop )
-            InvalidateRange();
+            InvalidateRange(Invalidation::Remove);
         break;
     default:
         break;
@@ -1251,7 +1269,8 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
-void SwRangeRedline::InvalidateRange()       // trigger the Layout
+// trigger the Layout
+void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 {
     sal_uLong nSttNd = GetMark()->nNode.GetIndex(),
             nEndNd = GetPoint()->nNode.GetIndex();
@@ -1284,9 +1303,17 @@ void SwRangeRedline::InvalidateRange()       // trigger the Layout
             if (GetType() == nsRedlineType_t::REDLINE_DELETE)
             {
                 sal_Int32 const nStart(n == nSttNd ? nSttCnt : 0);
-                sw::RedlineDelText const hint(nStart,
-                    (n == nEndNd ? nEndCnt : pNd->GetText().getLength()) - nStart);
-                pNd->CallSwClientNotify(hint);
+                sal_Int32 const nLen((n == nEndNd ? nEndCnt : pNd->GetText().getLength()) - nStart);
+                if (eWhy == Invalidation::Add)
+                {
+                    sw::RedlineDelText const hint(nStart, nLen);
+                    pNd->CallSwClientNotify(hint);
+                }
+                else
+                {
+                    sw::RedlineUnDelText const hint(nStart, nLen);
+                    pNd->CallSwClientNotify(hint);
+                }
             }
         }
     }
@@ -1398,7 +1425,7 @@ void SwRangeRedline::MoveToSection()
         DeleteMark();
     }
     else
-        InvalidateRange();
+        InvalidateRange(Invalidation::Remove);
 }
 
 void SwRangeRedline::CopyToSection()
@@ -1678,7 +1705,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             *pItem = *End();
     }
     else
-        InvalidateRange();
+        InvalidateRange(Invalidation::Add);
 }
 
 // for Undo
@@ -1876,7 +1903,7 @@ void SwExtraRedlineTable::Insert( SwExtraRedline* p )
     //p->CallDisplayFunc();
 }
 
-void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
+void SwExtraRedlineTable::DeleteAndDestroy(sal_uInt16 const nPos)
 {
     /*
     SwDoc* pDoc = 0;
@@ -1884,10 +1911,8 @@ void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
         pDoc = front()->GetDoc();
     */
 
-    for( std::vector<SwExtraRedline*>::iterator it = m_aExtraRedlines.begin() + nPos; it != m_aExtraRedlines.begin() + nPos + nLen; ++it )
-        delete *it;
-
-    m_aExtraRedlines.erase( m_aExtraRedlines.begin() + nPos, m_aExtraRedlines.begin() + nPos + nLen );
+    delete m_aExtraRedlines[nPos];
+    m_aExtraRedlines.erase(m_aExtraRedlines.begin() + nPos);
 
     /*
     SwViewShell* pSh;
@@ -1899,7 +1924,12 @@ void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
 
 void SwExtraRedlineTable::DeleteAndDestroyAll()
 {
-    DeleteAndDestroy(0, m_aExtraRedlines.size());
+    while (!m_aExtraRedlines.empty())
+    {
+        auto const pRedline = m_aExtraRedlines.back();
+        m_aExtraRedlines.pop_back();
+        delete pRedline;
+    }
 }
 
 SwExtraRedline::~SwExtraRedline()

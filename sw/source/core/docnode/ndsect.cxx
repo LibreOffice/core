@@ -879,7 +879,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                     pTNd->SetAttr( rSet );
             }
             // Do not forget to create the Frame!
-            pCpyTNd->MakeFrames( *pTNd );
+            pCpyTNd->MakeFramesForAdjacentContentNode(*pTNd);
         }
         else
             new SwTextNode( aInsPos, GetDoc()->GetDfltTextFormatColl() );
@@ -893,13 +893,13 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // but by simply rewiring them
     bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHidden() &&
                    GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    SwNode2Layout *pNode2Layout = nullptr;
+    SwNode2LayoutSaveUpperFrames *pNode2Layout = nullptr;
     if( bInsFrame )
     {
         SwNodeIndex aTmp( *pSectNd );
         if( !pSectNd->GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() ) )
             // Collect all Uppers
-            pNode2Layout = new SwNode2Layout( *pSectNd );
+            pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pSectNd);
     }
 
     // Set the right StartNode for all in this Area
@@ -936,7 +936,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             }
         }
         else if( pNd->IsContentNode() )
-            static_cast<SwContentNode*>(pNd)->DelFrames();
+            static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
     }
 
     sw_DeleteFootnote( pSectNd, nStart, nEnde );
@@ -950,7 +950,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             delete pNode2Layout;
         }
         else
-            pSectNd->MakeFrames( &aInsPos );
+            pSectNd->MakeOwnFrames(&aInsPos);
     }
 
     return pSectNd;
@@ -1021,7 +1021,7 @@ SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
 
 // Creates all Document Views for the preceding Node.
 // The created ContentFrames are attached to the corresponding Layout
-void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
+void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     // Take my succsessive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
@@ -1039,7 +1039,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
                     return;
             }
             pCNd = aIdx.GetNode().GetContentNode();
-            pCNd->MakeFrames( static_cast<SwContentNode&>(rIdx.GetNode()) );
+            pCNd->MakeFramesForAdjacentContentNode(static_cast<SwContentNode&>(rIdx.GetNode()));
         }
         else
         {
@@ -1048,6 +1048,11 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
             while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
             {
                 OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
+                if (pFrame->getRootFrame()->IsHideRedlines()
+                    && !rIdx.GetNode().IsCreateFrameWhenHidingRedlines())
+                {
+                    continue;
+                }
                 SwFrame *pNew = rIdx.GetNode().GetContentNode()->MakeFrame( pFrame );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
@@ -1131,7 +1136,7 @@ void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
 
 // Create a new SectionFrame for every occurrence in the Layout and insert before
 // the corresponding ContentFrame
-void SwSectionNode::MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
+void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 {
     OSL_ENSURE( pIdxBehind, "no Index" );
     SwNodes& rNds = GetNodes();
@@ -1151,7 +1156,7 @@ void SwSectionNode::MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
     }
 }
 
-void SwSectionNode::DelFrames()
+void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/)
 {
     sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )

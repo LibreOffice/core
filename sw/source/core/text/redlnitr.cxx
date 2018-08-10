@@ -36,6 +36,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>
+#include <ftnfrm.hxx>
 #include <vcl/svapp.hxx>
 #include "redlnitr.hxx"
 #include <extinput.hxx>
@@ -47,7 +48,8 @@ using namespace ::com::sun::star;
 namespace sw {
 
 std::unique_ptr<sw::MergedPara>
-CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
+CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
+       FrameMode const eMode)
 {
     IDocumentRedlineAccess const& rIDRA = rTextNode.getIDocumentRedlineAccess();
     if (!rFrame.getRootFrame()->IsHideRedlines())
@@ -56,6 +58,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
     }
     bool bHaveRedlines(false);
     std::vector<SwTextNode *> nodes{ &rTextNode };
+    std::vector<SwTableNode *> tables;
+    std::vector<SwSectionNode *> sections;
     std::vector<sw::Extent> extents;
     OUStringBuffer mergedText;
     SwTextNode const* pParaPropsNode(nullptr);
@@ -74,8 +78,13 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
 
         SwPosition const*const pStart(pRed->Start());
         SwPosition const*const pEnd(pRed->End());
-        assert(*pStart != *pEnd); // empty delete allowed if shown ???
+        if (*pStart == *pEnd)
+        {   // only allowed while moving
+            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
+            continue;
+        }
         bHaveRedlines = true;
+        assert(pNode != &rTextNode || &pStart->nNode.GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
@@ -87,9 +96,34 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
             {
                 pNode->SetRedlineMergeFlag(SwNode::Merge::First);
             } // else: was already set before
+            int nLevel(0);
             for (sal_uLong j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
             {
-                pNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+                SwNode *const pTmp(pNode->GetNodes()[j]);
+                if (nLevel == 0)
+                {
+                    if (pTmp->IsTextNode())
+                    {
+                        nodes.push_back(pTmp->GetTextNode());
+                    }
+                    else if (pTmp->IsTableNode())
+                    {
+                        tables.push_back(pTmp->GetTableNode());
+                    }
+                    else if (pTmp->IsSectionNode())
+                    {
+                        sections.push_back(pTmp->GetSectionNode());
+                    }
+                }
+                if (pTmp->IsStartNode())
+                {
+                    ++nLevel;
+                }
+                else if (pTmp->IsEndNode())
+                {
+                    --nLevel;
+                }
+                pTmp->SetRedlineMergeFlag(SwNode::Merge::Hidden);
             }
             pNode = pEnd->nNode.GetNode().GetTextNode();
             assert(pNode);
@@ -97,6 +131,52 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
             pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
         }
         nLastEnd = pEnd->nContent.GetIndex();
+    }
+    if (pNode == &rTextNode)
+    {
+        if (rTextNode.GetRedlineMergeFlag() != SwNode::Merge::None)
+        {
+            rTextNode.SetRedlineMergeFlag(SwNode::Merge::None);
+        }
+    }
+    // Reset flag of the following text node since we know it's not merged;
+    // also any table/sections in between.
+    // * the following SwTextNode is in same nodes section as pNode (nLevel=0)
+    // * the start nodes that don't have a SwTextNode before them
+    //   on their level, and their corresponding end nodes
+    // * the first SwTextNode inside each start node of the previous point
+    // Other (non-first) SwTextNodes in nested sections shouldn't be reset!
+    int nLevel(0);
+    for (sal_uLong j = pNode->GetIndex() + 1; j < pNode->GetNodes().Count(); ++j)
+    {
+        SwNode *const pTmp(pNode->GetNodes()[j]);
+        if (!pTmp->IsCreateFrameWhenHidingRedlines())
+        {   // clear stale flag caused by editing with redlines shown
+            pTmp->SetRedlineMergeFlag(SwNode::Merge::None);
+        }
+        if (pTmp->IsStartNode())
+        {
+            ++nLevel;
+        }
+        else if (pTmp->IsEndNode())
+        {
+            if (nLevel == 0)
+            {
+                break; // there is no following text node; avoid leaving section
+            }
+            --nLevel;
+        }
+        else if (pTmp->IsTextNode())
+        {
+            if (nLevel == 0)
+            {
+                break; // done
+            }
+            else
+            {   // skip everything other than 1st text node in section!
+                j = pTmp->EndOfSectionIndex() - 1; // will be incremented again
+            }
+        }
     }
     if (!bHaveRedlines)
     {
@@ -117,8 +197,51 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
         assert(!mergedText.isEmpty());
         pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
     }
+    if (eMode == FrameMode::Existing)
+    {
+        // remove existing footnote frames for first node;
+        // for non-first notes, DelFrames will remove all
+        // (could possibly call lcl_ChangeFootnoteRef, not sure if worth it)
+        // note: must be done *before* changing listeners!
+        sal_Int32 nLast(0);
+        std::vector<std::pair<sal_Int32, sal_Int32>> hidden;
+        for (auto const& rExtent : extents)
+        {
+            if (rExtent.pNode != &rTextNode)
+            {
+                break;
+            }
+            if (rExtent.nStart != 0)
+            {
+                assert(rExtent.nStart != nLast);
+                hidden.emplace_back(nLast, rExtent.nStart);
+            }
+            nLast = rExtent.nEnd;
+        }
+        if (nLast != rTextNode.Len())
+        {
+            hidden.emplace_back(nLast, rTextNode.Len());
+        }
+        sw::RemoveFootnotesForNode(rFrame, rTextNode, &hidden);
+        // unfortunately DelFrames() must be done before StartListening too,
+        // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
+        for (auto iter = ++nodes.begin(); iter != nodes.end(); ++iter)
+        {
+            (**iter).DelFrames(rFrame.getRootFrame());
+        }
+        // also delete tables & sections here; not necessary, but convenient
+        for (auto const pTableNode : tables)
+        {
+            pTableNode->DelFrames(rFrame.getRootFrame());
+        }
+        for (auto const pSectionNode : sections)
+        {
+            pSectionNode->DelFrames(rFrame.getRootFrame());
+        }
+    }
     auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),
-                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode));
+                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode,
+                nodes.back()));
     for (SwTextNode * pTmp : nodes)
     {
         pRet->listener.StartListening(pTmp);
@@ -135,8 +258,18 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
 {
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
-    delete m_pFont;
-    m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+    // It is possible that Init is called more than once, e.g., in a
+    // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
+    // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
+    // is an alias of m_pFont so it must not be deleted!
+    if (m_pFont)
+    {
+        *m_pFont = aFontAccess.Get()->GetFont();
+    }
+    else
+    {
+        m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+    }
 
     // set font to vertical if frame layout is vertical
     // if it's a re-init, the vert flag never changes
@@ -242,7 +375,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             }
         }
     }
-    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
+        && pRootFrame && !pRootFrame->IsHideRedlines();
     if (pExtInp || m_pMergedPara || bShow)
     {
         SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
