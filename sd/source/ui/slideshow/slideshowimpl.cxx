@@ -2035,7 +2035,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
             }
 
             if (nWidth == mdUserPaintStrokeWidth)
-                pWidthMenu->CheckItem(pWidthMenu->GetItemId(OString::number(nWidth)));
+                pWidthMenu->CheckItem(OString::number(nWidth));
         }
     }
 
