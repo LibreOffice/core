@@ -94,6 +94,12 @@ gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
 gb_COMPILEROPTFLAGS := -O0
 endif
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_CFLAGS_COMMON += -ffunction-sections -fdata-sections
+gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
+gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
+endif
+
 ifeq ($(shell expr '$(GCC_VERSION)' '>=' 600),1)
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \
