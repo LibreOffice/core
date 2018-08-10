@@ -25,8 +25,6 @@
 #include <stack>
 #include <vector>
 
-#include <com/sun/star/container/NoSuchElementException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
