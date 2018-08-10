@@ -1160,14 +1160,8 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
         }
     }
 
-    rChanges.clear();
-    ChangeList::iterator pCopy = aNewChanges.begin();
-    while( pCopy != aNewChanges.end() )
-        rChanges.push_back( *pCopy++ );
-    rSpanPos.clear();
-    std::list<sal_uInt16>::iterator pSpCopy = aNewSpanPos.begin();
-    while( pSpCopy != aNewSpanPos.end() )
-        rSpanPos.push_back( *pSpCopy++ );
+    rChanges.swap(aNewChanges);
+    rSpanPos.swap(aNewSpanPos);
 }
 
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
