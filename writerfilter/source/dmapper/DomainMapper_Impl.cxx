@@ -1260,6 +1260,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                 }
             }
             std::vector<beans::PropertyValue> aProperties;
+            bool bNumberedParagraph = false;
             if (pPropertyMap.get())
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
             if( !bIsDropCap )
@@ -1304,6 +1305,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     if (itNumberingRules != aProperties.end())
                     {
                         // This textnode has numbering. Look up the numbering style name of the current and previous paragraph.
+                        bNumberedParagraph = true;
                         OUString aCurrentNumberingRuleName;
                         uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
                         if (xCurrentNumberingRules.is())
@@ -1386,8 +1388,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                     CheckParaMarkerRedline( xParaEnd );
                 }
-
-                // set top margin of the previous auto paragraph in cells, keeping zero bottom margin only at the first one
+                // set top margin of the previous auto paragraph in cells, keeping zero top margin only at the first one
                 if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
                 {
                     bool bParaChangedTopMargin = false;
@@ -1409,7 +1410,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                     if ((bPrevParaAutoBefore && !bParaChangedTopMargin) || (bParaChangedTopMargin && m_bParaAutoBefore))
                     {
-                        sal_Int32 nSize = m_bFirstParagraphInCell ? 0 : 280;
+                        sal_Int32 nSize = (m_bFirstParagraphInCell || bNumberedParagraph) ? 0 : 280;
                         // Previous before spacing is set to auto, set previous before space to 280, except in the first paragraph.
                         m_xPreviousParagraph->setPropertyValue("ParaTopMargin",
                                  uno::makeAny( ConversionHelper::convertTwipToMM100(nSize)));
