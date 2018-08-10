@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Verified+1: Rene Engelhard <rene@debian.org>
+Code-Review+1: Olivier Tilloy <olivier.tilloy@canonical.com>
+Code-Review+2: Rene Engelhard <rene@debian.org>
+Submitted-by: Rene Engelhard <rene@debian.org>
+Submitted-at: Fri, 10 Aug 2018 09:09:43 +0200
+Reviewed-on: https://gerrit.libreoffice.org/55770
+Project: core
+Branch: refs/heads/master
