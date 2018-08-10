@@ -311,14 +311,12 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2207:
             pC = " nabla ";
             break;
-        case 0x2208:
-            pC = " in ";
+        case 0x2208: // in
+        case 0x2209: // notin
+            rRet.append(" func ").append(OUStringLiteral1(nChar)).append(" ");
             break;
-        case 0x2209:
-            pC = " notin ";
-            break;
-        case 0x220d:
-            pC = " owns ";
+        case 0x220d: // owns
+            rRet.append(" func ").append(OUStringLiteral1(0x220b)).append(" ");
             break;
         case 0x220f:
             pC = " prod ";
@@ -421,33 +419,17 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             pC = " nsucc ";
             break;
 
-        case 0x2282:
-            pC = " subset ";
-            break;
-        case 0x2283:
-            pC = " supset ";
-            break;
-        case 0x2284:
-            pC = " nsubset ";
-            break;
-        case 0x2285:
-            pC = " nsupset ";
-            break;
-        case 0x2286:
-            pC = " subseteq ";
-            break;
-        case 0x2287:
-            pC = " supseteq ";
-            break;
-        case 0x2288:
-            pC = " nsubseteq ";
-            break;
-        case 0x2289:
-            pC = " nsupseteq ";
-            break;
-        case 0x22b2:
-        case 0x22b3:
-            rRet.append(" ").append(OUStringLiteral1(nChar)).append(" ");
+        case 0x2282: // subset
+        case 0x2283: // supset
+        case 0x2284: // nsubset
+        case 0x2285: // nsupset
+        case 0x2286: // subseteq
+        case 0x2287: // supseteq
+        case 0x2288: // nsubseteq
+        case 0x2289: // nsupseteq
+        case 0x22b2: // NORMAL SUBGROUP OF
+        case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
+            rRet.append(" func ").append(OUStringLiteral1(nChar)).append(" ");
             break;
         case 0x22a5:
             pC = " ortho ";
