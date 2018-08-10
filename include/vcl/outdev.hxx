@@ -1321,7 +1321,7 @@ public:
     SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
-    SAL_DLLPRIVATE std::unique_ptr<SalLayout>
+    std::unique_ptr<SalLayout>
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
