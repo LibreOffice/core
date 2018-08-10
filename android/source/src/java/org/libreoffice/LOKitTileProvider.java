@@ -10,6 +10,7 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -301,7 +302,7 @@ class LOKitTileProvider implements TileProvider {
 
 
     @Override
-    public void saveDocumentAs(String filePath, String format) {
+    public void saveDocumentAs(final String filePath, String format) {
         final String newFilePath = "file://" + filePath;
         Log.d("saveFilePathURL", newFilePath);
         LOKitShell.showProgressSpinner(mContext);
@@ -311,7 +312,16 @@ class LOKitTileProvider implements TileProvider {
             if (format.equals("svg")) {
                 // error in creating temp slideshow svg file
                 Log.d(LOGTAG, "Error in creating temp slideshow svg file");
-            } else {
+            } else if(format.equals("pdf")){
+                Log.d(LOGTAG, "Error in creating pdf file");
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // There was some error
+                        mContext.showCustomStatusMessage("Unable to export to pdf");
+                    }
+                });
+            }else {
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -329,6 +339,14 @@ class LOKitTileProvider implements TileProvider {
                         mContext.startPresentation(newFilePath);
                     }
                 });
+            }else if(format.equals("pdf")){
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // There was no error
+                        mContext.showCustomStatusMessage("Exported to PDF at "+filePath);
+                    }
+                });
             } else {
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
@@ -342,6 +360,23 @@ class LOKitTileProvider implements TileProvider {
         LOKitShell.hideProgressSpinner(mContext);
     }
 
+    public void exportToPDF(boolean print){
+        String dir = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Documents";
+        File docDir = new File(dir);
+        if(!docDir.exists()){
+            docDir.mkdir();
+        }
+        String mInputFileName = (new File(mInputFile)).getName();
+        String file = mInputFileName.substring(0,(mInputFileName.length()-3))+"pdf";
+        if(print){
+            String cacheFile = mContext.getExternalCacheDir().getAbsolutePath()
+                    + "/" + file;
+            mDocument.saveAs("file://"+cacheFile,"pdf","");
+            //TODO PRINT
+        }else{
+            saveDocumentAs(dir+"/"+file,"pdf");
+        }
+    }
     public boolean isDocumentCached(){
         File input = new File(mInputFile);
         final String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/lo_cached_" + input.getName();

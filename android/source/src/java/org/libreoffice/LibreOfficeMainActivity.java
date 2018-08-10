@@ -927,6 +927,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         else
             Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_error) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();    }
 
+    public void showCustomStatusMessage(String message){
+        Snackbar.make(mDrawerLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
     public void preparePresentation() {
         if (getExternalCacheDir() != null) {
             String tempPath = getExternalCacheDir().getPath() + "/" + mInputFile.getName() + ".svg";

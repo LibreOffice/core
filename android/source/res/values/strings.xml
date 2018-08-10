@@ -209,5 +209,5 @@
     <string name="UNO_commands_string_type_hint">Type</string>
     <string name="UNO_commands_string_value_hint">Value</string>
     <string name="UNO_commands_string_parent_value_hint">Parent Value</string>
-
+    <string name="action_exportToPDF">Export To PDF</string>
 </resources>
