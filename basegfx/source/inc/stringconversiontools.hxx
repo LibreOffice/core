@@ -63,12 +63,6 @@ namespace basegfx
                                     double          fOldValue,
                                     bool            bUseRelativeCoordinates);
 
-        inline sal_Unicode getCommand(sal_Char cUpperCaseCommand,
-                                      sal_Char cLowerCaseCommand,
-                                      bool     bUseRelativeCoordinates)
-        {
-            return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
-        }
     } // namespace internal
 } // namespace basegfx
 
