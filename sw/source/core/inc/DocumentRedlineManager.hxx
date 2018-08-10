@@ -120,6 +120,8 @@ public:
 
     void checkRedlining(RedlineFlags& _rReadlineMode);
 
+    bool IsHideRedlines() const { return m_bHideRedlines; }
+    void SetHideRedlines(bool const bHideRedlines) { m_bHideRedlines = bHideRedlines; }
 
     virtual ~DocumentRedlineManager() override;
 
@@ -139,6 +141,10 @@ private:
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
     css::uno::Sequence <sal_Int8 > maRedlinePasswd;
+
+    /// this flag is necessary for file import because the ViewShell/layout is
+    /// created "too late" and the ShowRedlineChanges item is not below "Views"
+    bool m_bHideRedlines = false;
 };
 
 }
