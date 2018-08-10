@@ -3332,7 +3332,8 @@ void SwDBManager::RevokeLastRegistrations()
         {
             if ((m_pDoc && it->first == m_pDoc->GetDocShell()) || it->first == nullptr)
             {
-                RevokeDataSource(it->second);
+                // tdf#118728
+                //RevokeDataSource(it->second);
                 it = m_aUncommitedRegistrations.erase(it);
             }
             else
