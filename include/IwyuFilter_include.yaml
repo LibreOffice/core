@@ -40,3 +40,9 @@ blacklist:
     include/rtl/math.hxx:
     # TODO MSVC does not compile basegfx/numeric/ftools.hxx when this is replaced
     - math.h
+    include/registry/regtype.h:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/registry/types.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

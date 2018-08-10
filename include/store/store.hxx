@@ -22,7 +22,6 @@
 
 #include <store/store.h>
 #include <sal/types.h>
-#include <stddef.h>
 #include <rtl/ustring.hxx>
 #include <store/types.h>
 
