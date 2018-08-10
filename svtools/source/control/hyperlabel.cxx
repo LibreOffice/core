@@ -77,56 +77,33 @@ namespace svt
 
     void HyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetControlBackground( _rGBColor );
-        if (_rGBColor == COL_TRANSPARENT)
-            SetTextColor( rStyleSettings.GetFieldTextColor( ) );
-        else
-            SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
     }
-
 
     void HyperLabel::MouseMove( const MouseEvent& rMEvt )
     {
         vcl::Font aFont = GetControlFont( );
-        const Color aColor = GetTextColor();
 
-        if (rMEvt.IsLeaveWindow())
-        {
-            DeactivateHyperMode(aFont, aColor);
-        }
-        else
+        bool bHyperMode = false;
+        if (!rMEvt.IsLeaveWindow() && IsEnabled() && m_pImpl->bInteractive)
         {
             Point aPoint = GetPointerPosPixel();
             if (aPoint.X() < m_pImpl->m_aMinSize.Width())
-            {
-                if ( IsEnabled() && (m_pImpl->bInteractive) )
-                {
-                    ActivateHyperMode( aFont, aColor);
-                    return;
-                }
-            }
-            DeactivateHyperMode(aFont, aColor);
+                bHyperMode = true;
         }
-    }
 
-    void HyperLabel::ActivateHyperMode(vcl::Font aFont, const Color aColor)
-    {
-        aFont.SetUnderline(LINESTYLE_SINGLE);
-        m_pImpl->m_bHyperMode = true;
-        SetPointer( PointerStyle::RefHand );
-        SetControlFont( aFont);
-        SetTextColor( aColor);
-
-    }
-
-    void HyperLabel::DeactivateHyperMode(vcl::Font aFont, const Color aColor)
-    {
-        m_pImpl->m_bHyperMode = false;
-        aFont.SetUnderline(LINESTYLE_NONE);
-        SetPointer( PointerStyle::Arrow );
-        SetControlFont( aFont);
-        SetTextColor( aColor);
+        m_pImpl->m_bHyperMode = bHyperMode;
+        if (bHyperMode)
+        {
+            aFont.SetUnderline(LINESTYLE_SINGLE);
+            SetPointer(PointerStyle::RefHand);
+        }
+        else
+        {
+            aFont.SetUnderline(LINESTYLE_NONE);
+            SetPointer(PointerStyle::Arrow);
+        }
+        SetControlFont(aFont);
     }
 
     void HyperLabel::MouseButtonDown( const MouseEvent& )
@@ -193,27 +170,31 @@ namespace svt
         SetText(_rText);
     }
 
+    void HyperLabel::ApplySettings(vcl::RenderContext& rRenderContext)
+    {
+        FixedText::ApplySettings(rRenderContext);
+
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        if (GetControlBackground() == COL_TRANSPARENT)
+            rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+        else
+            rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+    }
 
     void HyperLabel::DataChanged( const DataChangedEvent& rDCEvt )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         FixedText::DataChanged( rDCEvt );
+
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
-            const Color& rGBColor = GetControlBackground();
-            if (rGBColor == COL_TRANSPARENT)
-                SetTextColor( rStyleSettings.GetFieldTextColor( ) );
-            else
-            {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            if (GetControlBackground() != COL_TRANSPARENT)
                 SetControlBackground(rStyleSettings.GetHighlightColor());
-                SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
-            }
             Invalidate();
         }
     }
-
 
 }   // namespace svt
 

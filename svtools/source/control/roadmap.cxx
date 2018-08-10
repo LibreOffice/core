@@ -41,7 +41,8 @@ class IDLabel :  public FixedText
 {
 public:
     IDLabel( vcl::Window* _pParent, WinBits _nWinStyle );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 };
 
 class RoadmapItem : public RoadmapTypes
@@ -664,7 +665,6 @@ RoadmapItem::RoadmapItem(ORoadmap& _rParent, const Size& _rItemPlayground)
     : m_aItemPlayground(_rItemPlayground)
 {
     mpID = VclPtr<IDLabel>::Create( &_rParent, WB_WORDBREAK );
-    mpID->SetTextColor( mpID->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
     mpID->Show();
     mpDescription = VclPtr<HyperLabel>::Create( &_rParent, WB_NOTABSTOP | WB_WORDBREAK );
     mpDescription->Show();
@@ -760,15 +760,9 @@ bool RoadmapItem::IsEnabled() const
 void RoadmapItem::ToggleBackgroundColor(const Color& _rGBColor)
 {
     if (_rGBColor == COL_TRANSPARENT)
-    {
-        mpID->SetTextColor( mpID->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
-        mpID->SetControlBackground( COL_TRANSPARENT );
-    }
+        mpID->SetControlBackground();
     else
-    {
         mpID->SetControlBackground( mpID->GetSettings().GetStyleSettings().GetHighlightColor() );
-        mpID->SetTextColor( mpID->GetSettings().GetStyleSettings().GetHighlightTextColor( ) );
-    }
     mpDescription->ToggleBackgroundColor(_rGBColor);
 }
 
@@ -811,22 +805,28 @@ IDLabel::IDLabel(vcl::Window* _pParent, WinBits _nWinStyle)
 {
 }
 
+void IDLabel::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    FixedText::ApplySettings(rRenderContext);
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    if (GetControlBackground() == COL_TRANSPARENT)
+        rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+    else
+        rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+}
+
 void IDLabel::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     FixedText::DataChanged( rDCEvt );
+
     if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
         ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
     {
-        const Color& rGBColor = GetControlBackground();
-        if (rGBColor == COL_TRANSPARENT)
-            SetTextColor( rStyleSettings.GetFieldTextColor( ) );
-        else
-        {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        if (GetControlBackground() != COL_TRANSPARENT)
             SetControlBackground(rStyleSettings.GetHighlightColor());
-            SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
-        }
         Invalidate();
     }
 }
