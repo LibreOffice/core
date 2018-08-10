@@ -131,25 +131,18 @@ public:
                 const SfxItemSet* rReplSet = nullptr );
 
     // UI versions
-    bool IsStartWord( sal_Int16 nWordType ) const;
-    bool IsEndWord( sal_Int16 nWordType  ) const;
-    bool IsInWord( sal_Int16 nWordType ) const;
-    bool IsStartEndSentence( bool bEnd ) const;
-    bool GoStartWord();
-    bool GoEndWord();
-    bool GoNextWord();
-    bool GoPrevWord();
+    bool IsStartEndSentence(bool bEnd, SwRootFrame const* pLayout) const;
     bool SelectWord( SwViewShell const * pViewShell, const Point* pPt );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
-    bool IsStartWordWT( sal_Int16 nWordType ) const;
-    bool IsEndWordWT( sal_Int16 nWordType ) const;
-    bool IsInWordWT( sal_Int16 nWordType ) const;
-    bool GoStartWordWT( sal_Int16 nWordType );
-    bool GoEndWordWT( sal_Int16 nWordType );
-    bool GoNextWordWT( sal_Int16 nWordType );
-    bool GoPrevWordWT( sal_Int16 nWordType );
+    bool IsStartWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool IsEndWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool IsInWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool GoStartWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoEndWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoNextWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
     bool SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt );
 
     enum SentenceMoveType
@@ -159,22 +152,20 @@ public:
         START_SENT,
         END_SENT
     };
-    bool GoSentence(SentenceMoveType eMoveType);
-    bool GoNextSentence(){return GoSentence(NEXT_SENT);}
-    bool GoEndSentence(){return GoSentence(END_SENT);}
-    bool GoStartSentence(){return GoSentence(START_SENT);}
-    bool ExpandToSentenceBorders();
+    bool GoSentence(SentenceMoveType eMoveType, SwRootFrame const*pLayout = nullptr);
+    bool ExpandToSentenceBorders(SwRootFrame const* pLayout);
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor );
-    bool UpDown( bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX );
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
+        SwRootFrame const* pLayout);
+    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin( bool bLeftMargin, bool bAPI );
     bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 
-    bool Left( sal_uInt16 nCnt )   { return LeftRight( true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
-    bool Right( sal_uInt16 nCnt )  { return LeftRight( false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
+    bool Left( sal_uInt16 nCnt )   { return LeftRight( true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr ); }
+    bool Right( sal_uInt16 nCnt )  { return LeftRight( false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr ); }
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );
@@ -274,7 +265,8 @@ public:
     virtual ~SwTableCursor() override;
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor ) override;
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
+        SwRootFrame const*) override;
     virtual bool GotoTable( const OUString& rName ) override;
 
     void InsertBox( const SwTableBox& rTableBox );

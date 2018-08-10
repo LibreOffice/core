@@ -87,7 +87,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
-        SwNode2Layout aNode2Layout( *pTableNd );
+        SwNode2LayoutSaveUpperFrames aNode2Layout(*pTableNd);
 
         pTableNd->DelFrames();
         const SwTable& rTable = pTableNd->GetTable();
@@ -166,7 +166,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
-        SwNode2Layout aNode2Layout( *pTableNd );
+        SwNode2LayoutSaveUpperFrames aNode2Layout(*pTableNd);
 
         pTableNd->DelFrames();
         const SwTable& rTable = pTableNd->GetTable();
