@@ -199,7 +199,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
         return true;
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(canon->getLocation())))
         return true;
-    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(canon->getLocStart()));
+    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canon)));
     // Some backwards compat magic.
     // TODO Can probably be removed, but need to do some checking
     if (loplugin::isSamePathname(fn, SRCDIR "/include/sax/fshelper.hxx"))
@@ -471,7 +471,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
                 continue;
         }
         report( DiagnosticsEngine::Warning,
-                "unused param %0 in %1", param->getLocStart())
+                "unused param %0 in %1", compat::getBeginLoc(param))
                 << param->getSourceRange()
                 << param->getName()
                 << fqn;
@@ -480,7 +480,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
             unsigned idx = param->getFunctionScopeIndex();
             const ParmVarDecl* pOther = canon->getParamDecl(idx);
             report( DiagnosticsEngine::Note, "declaration is here",
-                    pOther->getLocStart())
+                    compat::getBeginLoc(pOther))
                     << pOther->getSourceRange();
         }
     }

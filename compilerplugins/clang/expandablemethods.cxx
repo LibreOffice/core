@@ -268,7 +268,7 @@ void ExpandableMethods::functionTouchedFromExpr( const FunctionDecl* calleeFunct
         return;
     }
 
-    calledFromSet.emplace(toString(expr->getLocStart()), niceName(canonicalFunctionDecl));
+    calledFromSet.emplace(toString(compat::getBeginLoc(expr)), niceName(canonicalFunctionDecl));
 
     if (const UnaryOperator* unaryOp = dyn_cast_or_null<UnaryOperator>(getParentStmt(expr))) {
         if (unaryOp->getOpcode() == UO_AddrOf) {

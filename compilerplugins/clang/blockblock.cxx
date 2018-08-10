@@ -47,9 +47,9 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
     auto inner = *compound->body_begin();
     if (!isa<CompoundStmt>(inner))
         return true;
-    if (compiler.getSourceManager().isMacroBodyExpansion(compound->getLocStart()))
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(compound)))
         return true;
-    if (compiler.getSourceManager().isMacroBodyExpansion(inner->getLocStart()))
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(inner)))
         return true;
     if (containsPreprocessingConditionalInclusion(compound->getSourceRange())) {
         return true;
@@ -57,12 +57,12 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
     report(
         DiagnosticsEngine::Warning,
         "block directly inside block",
-         compound->getLocStart())
+         compat::getBeginLoc(compound))
         << compound->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "inner block here",
-         inner->getLocStart())
+         compat::getBeginLoc(inner))
         << inner->getSourceRange();
     return true;
 }

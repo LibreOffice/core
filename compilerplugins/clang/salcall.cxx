@@ -382,7 +382,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         // qualified names this will point after the qualifiers, but needlessly including those in
         // the search should be harmless---modulo issues with using "SAL_CALL" as the name of a
         // function-like macro parameter as discussed below):
-        endLoc = functionDecl->getNameInfo().getLocStart();
+        endLoc = compat::getBeginLoc(functionDecl->getNameInfo());
         while (SM.isMacroArgExpansion(endLoc, &endLoc))
         {
         }
@@ -463,7 +463,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
         // qualified names this will point after the qualifiers, but needlessly including those in
         // the search should be harmless):
-        endLoc = functionDecl->getNameInfo().getLocStart();
+        endLoc = compat::getBeginLoc(functionDecl->getNameInfo());
         while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc, &endLoc))
         {
         }

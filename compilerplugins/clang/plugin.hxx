@@ -25,6 +25,7 @@
 
 #include <clang/Rewrite/Core/Rewriter.h>
 
+#include "compat.hxx"
 #include "pluginhandler.hxx"
 
 using namespace clang;
@@ -195,7 +196,7 @@ bool Plugin::ignoreLocation( const Stmt* stmt ) const
 {
     // Invalid location can happen at least for ImplicitCastExpr of
     // ImplicitParam 'self' in Objective C method declarations:
-    return stmt->getLocStart().isValid() && ignoreLocation( stmt->getLocStart());
+    return compat::getBeginLoc(stmt).isValid() && ignoreLocation( compat::getBeginLoc(stmt));
 }
 
 template< typename T >

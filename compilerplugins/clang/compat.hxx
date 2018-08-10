@@ -14,6 +14,7 @@
 #include <utility>
 
 #include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
@@ -49,6 +50,70 @@ inline clang::FunctionDecl::param_const_range parameters(
     return decl.params();
 }
 #endif
+
+inline clang::SourceLocation getBeginLoc(clang::Decl const * decl) {
+#if CLANG_VERSION >= 80000
+    return decl->getBeginLoc();
+#else
+    return decl->getLocStart();
+#endif
+}
+
+inline clang::SourceLocation getEndLoc(clang::Decl const * decl) {
+#if CLANG_VERSION >= 80000
+    return decl->getEndLoc();
+#else
+    return decl->getLocEnd();
+#endif
+}
+
+inline clang::SourceLocation getBeginLoc(clang::DeclarationNameInfo const & info) {
+#if CLANG_VERSION >= 80000
+    return info.getBeginLoc();
+#else
+    return info.getLocStart();
+#endif
+}
+
+inline clang::SourceLocation getEndLoc(clang::DeclarationNameInfo const & info) {
+#if CLANG_VERSION >= 80000
+    return info.getEndLoc();
+#else
+    return info.getLocEnd();
+#endif
+}
+
+inline clang::SourceLocation getBeginLoc(clang::Stmt const * stmt) {
+#if CLANG_VERSION >= 80000
+    return stmt->getBeginLoc();
+#else
+    return stmt->getLocStart();
+#endif
+}
+
+inline clang::SourceLocation getEndLoc(clang::Stmt const * stmt) {
+#if CLANG_VERSION >= 80000
+    return stmt->getEndLoc();
+#else
+    return stmt->getLocEnd();
+#endif
+}
+
+inline clang::SourceLocation getBeginLoc(clang::CXXBaseSpecifier const * spec) {
+#if CLANG_VERSION >= 80000
+    return spec->getBeginLoc();
+#else
+    return spec->getLocStart();
+#endif
+}
+
+inline clang::SourceLocation getEndLoc(clang::CXXBaseSpecifier const * spec) {
+#if CLANG_VERSION >= 80000
+    return spec->getEndLoc();
+#else
+    return spec->getLocEnd();
+#endif
+}
 
 inline std::pair<clang::SourceLocation, clang::SourceLocation> getImmediateExpansionRange(
     clang::SourceManager const & SM, clang::SourceLocation Loc)

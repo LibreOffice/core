@@ -234,7 +234,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_ToVoid ) {
         return true;
     }
-    if (isSharedCAndCppCode(expr->getLocStart())) {
+    if (isSharedCAndCppCode(compat::getBeginLoc(expr))) {
         return true;
     }
     char const * perf = nullptr;
@@ -407,8 +407,8 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         firstBegin = compiler.getSourceManager().getSpellingLoc(firstBegin);
         secondBegin = compiler.getSourceManager().getSpellingLoc(secondBegin);
     }
-    auto third = sub->getLocStart();
-    auto fourth = sub->getLocEnd();
+    auto third = compat::getBeginLoc(sub);
+    auto fourth = compat::getEndLoc(sub);
     bool macro = false;
     // Ensure that
     //

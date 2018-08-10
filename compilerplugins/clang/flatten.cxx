@@ -204,7 +204,7 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
             report(
                 DiagnosticsEngine::Warning,
                 "large if statement at end of function, rather invert the condition and exit early, and flatten the function",
-                ifStmt->getLocStart())
+                compat::getBeginLoc(ifStmt))
               << ifStmt->getSourceRange();
         }
         return true;
@@ -238,12 +238,12 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
             report(
                 DiagnosticsEngine::Warning,
                 "unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case",
-                elseThrowExpr->getLocStart())
+                compat::getBeginLoc(elseThrowExpr))
                 << elseThrowExpr->getSourceRange();
             report(
                 DiagnosticsEngine::Note,
                 "if condition here",
-                ifStmt->getLocStart())
+                compat::getBeginLoc(ifStmt))
                 << ifStmt->getSourceRange();
         }
     }
@@ -260,7 +260,7 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
             report(
                 DiagnosticsEngine::Warning,
                 "unconditional throw in then branch, just flatten the else",
-                thenThrowExpr->getLocStart())
+                compat::getBeginLoc(thenThrowExpr))
                 << thenThrowExpr->getSourceRange();
         }
     }

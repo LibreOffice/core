@@ -327,7 +327,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIngoreAsciiCase("foo"):
 
         auto file = getFileNameOfSpellingLoc(
-            compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
         {
@@ -345,7 +345,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIgnoreAsciiCaseAsciiL("foo", 3) ->
         // u.equalsIngoreAsciiCase("foo"):
         auto file = getFileNameOfSpellingLoc(
-            compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
         {
@@ -713,7 +713,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 // b.append("foo", 3) -> b.append("foo"):
                 auto file = getFileNameOfSpellingLoc(
                     compiler.getSourceManager().getSpellingLoc(
-                        expr->getLocStart()));
+                        compat::getBeginLoc(expr)));
                 if (loplugin::isSamePathname(
                         file,
                         SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx"))
@@ -800,7 +800,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     }
                     // OSL_THIS_FUNC may be defined as "" or as something other
                     // than a string literal in include/osl/diagnose.h:
-                    auto loc = arg->getLocStart();
+                    auto loc = compat::getBeginLoc(arg);
                     if (compiler.getSourceManager().isMacroBodyExpansion(loc)
                         && (Lexer::getImmediateMacroName(
                                 loc, compiler.getSourceManager(),
@@ -1081,7 +1081,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                     auto file = getFileNameOfSpellingLoc(
                                             compiler.getSourceManager()
                                             .getSpellingLoc(
-                                                expr->getLocStart()));
+                                                compat::getBeginLoc(expr)));
                                     if (loplugin::isSamePathname(
                                             file,
                                             (SRCDIR
@@ -1094,7 +1094,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                         return true;
                                     }
                                 }
-                                auto loc = expr->getArg(0)->getLocStart();
+                                auto loc = compat::getBeginLoc(expr->getArg(0));
                                 while (compiler.getSourceManager()
                                        .isMacroArgExpansion(loc))
                                 {
@@ -1855,7 +1855,7 @@ void StringConstant::handleOUStringCtor(
     }
     //TODO: cont, emb, trm
     if (rewriter != nullptr) {
-        auto loc1 = e3->getLocStart();
+        auto loc1 = compat::getBeginLoc(e3);
         auto range = e3->getParenOrBraceRange();
         if (loc1.isFileID() && range.getBegin().isFileID()
             && range.getEnd().isFileID())

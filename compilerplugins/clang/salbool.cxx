@@ -200,7 +200,7 @@ void SalBool::run() {
     if (compiler.getLangOpts().CPlusPlus) {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         for (auto decl: varDecls_) {
-            SourceLocation loc { decl->getLocStart() };
+            SourceLocation loc { compat::getBeginLoc(decl) };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
             if (tsi != nullptr) {
                 SourceLocation l {
@@ -321,7 +321,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
         return true;
     }
     if (isSalBool(expr->getType())) {
-        SourceLocation loc { expr->getLocStart() };
+        SourceLocation loc { compat::getBeginLoc(expr) };
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
@@ -334,7 +334,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                 if (!isSharedCAndCppCode(callLoc)) {
                     SourceLocation argLoc;
                     if (compat::isMacroArgExpansion(
-                            compiler, expr->getLocStart(), &argLoc)
+                            compiler, compat::getBeginLoc(expr), &argLoc)
                         //TODO: check it's the complete (first) arg to the macro
                         && (Lexer::getImmediateMacroName(
                                 argLoc, compiler.getSourceManager(),
@@ -373,7 +373,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
         report(
             DiagnosticsEngine::Warning,
             "CStyleCastExpr, suspicious cast from %0 to %1",
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
@@ -386,12 +386,12 @@ bool SalBool::VisitCXXStaticCastExpr(CXXStaticCastExpr * expr) {
     }
     if (isSalBool(expr->getType())
         && !isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(expr->getLocStart())))
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))))
     {
         report(
             DiagnosticsEngine::Warning,
             "CXXStaticCastExpr, suspicious cast from %0 to %1",
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
@@ -406,7 +406,7 @@ bool SalBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
         report(
             DiagnosticsEngine::Warning,
             "CXXFunctionalCastExpr, suspicious cast from %0 to %1",
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
@@ -420,7 +420,7 @@ bool SalBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     if (!isSalBool(expr->getType())) {
         return true;
     }
-    auto l = expr->getLocStart();
+    auto l = compat::getBeginLoc(expr);
     while (compiler.getSourceManager().isMacroArgExpansion(l)) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
@@ -455,7 +455,7 @@ bool SalBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     }
     report(
         DiagnosticsEngine::Warning, "conversion from %0 to sal_Bool",
-        expr->getLocStart())
+        compat::getBeginLoc(expr))
         << t << expr->getSourceRange();
     return true;
 }
@@ -528,7 +528,7 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
             {
                 OverrideKind k = getOverrideKind(f);
                 if (k != OverrideKind::YES) {
-                    SourceLocation loc { decl->getLocStart() };
+                    SourceLocation loc { compat::getBeginLoc(decl) };
                     TypeSourceInfo * tsi = decl->getTypeSourceInfo();
                     if (tsi != nullptr) {
                         SourceLocation l {
@@ -611,7 +611,7 @@ bool SalBool::VisitVarDecl(VarDecl const * decl) {
     if (!decl->isExternC()
         && (isSalBool(decl->getType()) || isSalBoolArray(decl->getType()))
         && !isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(decl->getLocStart())))
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl))))
     {
         varDecls_.insert(decl);
     }
@@ -628,7 +628,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
     }
     if ((isSalBool(decl->getType()) || isSalBoolArray(decl->getType()))
         && !isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(decl->getLocStart())))
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl))))
     {
         TagDecl const * td = dyn_cast<TagDecl>(decl->getDeclContext());
         assert(td != nullptr);
@@ -637,7 +637,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
                   compiler.getSourceManager().getSpellingLoc(
                       decl->getLocation()))))
         {
-            SourceLocation loc { decl->getLocStart() };
+            SourceLocation loc { compat::getBeginLoc(decl) };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
             if (tsi != nullptr) {
                 SourceLocation l {
@@ -698,7 +698,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
                  || (isInUnoIncludeFile(f)
                      && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()))))
         {
-            SourceLocation loc { decl->getLocStart() };
+            SourceLocation loc { compat::getBeginLoc(decl) };
             SourceLocation l { compiler.getSourceManager().getExpansionLoc(
                 loc) };
             SourceLocation end { compiler.getSourceManager().getExpansionLoc(
@@ -749,11 +749,11 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(decl->getType()) && !rewrite(decl->getLocStart())) {
+    if (isSalBool(decl->getType()) && !rewrite(compat::getBeginLoc(decl))) {
         report(
             DiagnosticsEngine::Warning,
             "ValueDecl, use \"bool\" instead of \"sal_Bool\"",
-            decl->getLocStart())
+            compat::getBeginLoc(decl))
             << decl->getSourceRange();
     }
     return true;
