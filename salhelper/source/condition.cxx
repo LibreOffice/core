@@ -20,7 +20,7 @@
 
 #include <salhelper/condition.hxx>
 #include <osl/time.h>
-
+#include <osl/mutex.hxx>
 
 using namespace salhelper;
 

@@ -23,8 +23,9 @@
 
 
 #include "osl/conditn.hxx"
-#include "osl/mutex.hxx"
 #include "salhelper/salhelperdllapi.h"
+
+namespace osl { class Mutex; }
 
 namespace salhelper
 {
