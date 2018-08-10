@@ -22,7 +22,6 @@
 
 #include "DrawSubController.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/lang/EventObject.hpp>
 
 namespace sd {
 

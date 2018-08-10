@@ -31,6 +31,7 @@
 #include <app.hrc>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
+#include <DrawDocShell.hxx>
 #include <PresentationViewShell.hxx>
 #include <View.hxx>
 #include <FrameView.hxx>

@@ -32,6 +32,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdmod.hxx>
+#include <Window.hxx>
 
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>

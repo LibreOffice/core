@@ -22,11 +22,11 @@
 
 #include "DrawSubController.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 
 namespace sd {
 

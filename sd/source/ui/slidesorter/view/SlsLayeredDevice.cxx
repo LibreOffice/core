@@ -18,6 +18,7 @@
  */
 
 #include "SlsLayeredDevice.hxx"
+#include <Window.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>

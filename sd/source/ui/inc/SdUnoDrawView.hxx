@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SDUNODRAWVIEW_HXX
 
 #include "DrawSubController.hxx"
-#include "DrawViewShell.hxx"
 #include <cppuhelper/basemutex.hxx>
 
 class SdXImpressDocument;
@@ -33,6 +32,7 @@ class XLayer;
 namespace sd {
 
 class DrawViewShell;
+class View;
 
 /** This class implements the DrawViewShell specific part of the controller.
 */

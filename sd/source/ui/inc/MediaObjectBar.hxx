@@ -20,9 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_MEDIAOBJECTBAR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_MEDIAOBJECTBAR_HXX
 
-#include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 #include <glob.hxx>
+
+class SfxInterface;
+class SfxItemSet;
+class SfxModule;
+class SfxRequest;
 
 namespace sd {
 

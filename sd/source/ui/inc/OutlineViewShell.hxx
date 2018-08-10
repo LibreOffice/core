@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEWSHELL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEWSHELL_HXX
 
-#include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
-#include "OutlineView.hxx"
 
 class SdPage;
 class TransferableDataHelper;
 class TransferableClipboardListener;
+
+namespace sd { class OutlineView; }
 
 namespace sd {
 

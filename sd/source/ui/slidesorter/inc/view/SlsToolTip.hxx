@@ -22,6 +22,7 @@
 
 #include <SlideSorter.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
+#include <vcl/timer.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

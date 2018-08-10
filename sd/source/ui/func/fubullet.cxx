@@ -23,6 +23,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>

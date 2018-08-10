@@ -21,6 +21,7 @@
 
 #include <masterlayoutdlg.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 
 using namespace ::sd;
 

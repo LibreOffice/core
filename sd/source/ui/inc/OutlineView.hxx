@@ -28,11 +28,8 @@
 
 class SdPage;
 class SdrPage;
-class Paragraph;
 class SdrTextObj;
-class Outliner;
 class SfxProgress;
-struct PaintFirstLineInfo;
 struct PasteOrDropInfos;
 class EditView;
 

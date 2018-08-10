@@ -19,26 +19,23 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
 
-#include "EventMultiplexer.hxx"
-
 #include "SlideSorterViewShell.hxx"
-#include <TransitionPreset.hxx>
 
-#include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <vector>
 #include <map>
 
 class SdDrawDocument;
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
 namespace sd
 {

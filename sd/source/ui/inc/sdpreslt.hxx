@@ -24,7 +24,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
 
 class SfxItemSet;
