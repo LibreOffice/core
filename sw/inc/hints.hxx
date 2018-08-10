@@ -31,6 +31,7 @@ class SwNodes;
 class SwPageFrame;
 class SwFrame;
 class SwHistory;
+class SwTextNode;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
@@ -95,6 +96,19 @@ public:
 
 namespace sw {
 
+/// text is moved into pDestNode
+class MoveText : public SfxHint
+{
+public:
+    SwTextNode * pDestNode;
+    sal_Int32 nDestStart;
+    sal_Int32 nSourceStart;
+    sal_Int32 nLen;
+
+    MoveText(SwTextNode *pD, sal_Int32 nD, sal_Int32 nS, sal_Int32 nL);
+};
+
+/// new delete redline is created
 class RedlineDelText : public SfxHint
 {
 public:
@@ -102,6 +116,16 @@ public:
     sal_Int32 nLen;
 
     RedlineDelText(sal_Int32 nS, sal_Int32 nL);
+};
+
+/// delete redline is removed
+class RedlineUnDelText : public SfxHint
+{
+public:
+    sal_Int32 nStart;
+    sal_Int32 nLen;
+
+    RedlineUnDelText(sal_Int32 nS, sal_Int32 nL);
 };
 
 }
