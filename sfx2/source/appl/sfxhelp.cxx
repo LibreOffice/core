@@ -541,9 +541,9 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     OUString aHelpLink("https://help.collaboraoffice.com/help.html?");
 
-    aHelpLink += rURL.copy( aInternal.getLength() );
-    aHelpLink = aHelpLink.replaceAll("%2F","/");
-
+    OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
+    aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
+    aHelpLink += aTarget;
 
     if (comphelper::LibreOfficeKit::isActive())
     {
