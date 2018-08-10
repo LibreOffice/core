@@ -43,23 +43,23 @@
 #define FOOTER_LEFT \
     Text [ en-US ] = "Footer (left)" ; \
 
- //------------------------------------------------------------------------
- // Bearbeiten vom Seitendialog aus aufgerufen
- //------------------------------------------------------------------------
+//------------------------------------------------------------------------
+// Bearbeiten vom Seitendialog aus aufgerufen
+//------------------------------------------------------------------------
 TabDialog RID_SCDLG_HFED_HEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Text [ en-US ] = "Headers" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -81,16 +81,16 @@ TabDialog RID_SCDLG_HFED_FOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Text [ en-US ] = "Footers" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -108,23 +108,23 @@ TabDialog RID_SCDLG_HFED_FOOTER
         };
     };
 };
- //------------------------------------------------------------------------
- // Bearbeiten/Kopf-Fusszeile:
- //------------------------------------------------------------------------
+//------------------------------------------------------------------------
+// Bearbeiten/Kopf-Fusszeile:
+//------------------------------------------------------------------------
 TabDialog RID_SCDLG_HFEDIT_ALL
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -158,16 +158,16 @@ TabDialog RID_SCDLG_HFEDIT_SHDR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -195,16 +195,16 @@ TabDialog RID_SCDLG_HFEDIT_SFTR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -232,16 +232,16 @@ TabDialog RID_SCDLG_HFEDIT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -263,16 +263,16 @@ TabDialog RID_SCDLG_HFEDIT_HEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -294,16 +294,16 @@ TabDialog RID_SCDLG_HFEDIT_FOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -325,16 +325,16 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTHEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -350,16 +350,16 @@ TabDialog RID_SCDLG_HFEDIT_LEFTHEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -375,16 +375,16 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTFOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -400,16 +400,16 @@ TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Size = MAP_APPFONT ( 270, 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+    //  Closeable = TRUE ;
     HFEDIT_DLGTITLE
     TabControl 1
     {
         OutputSize = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 260, 135 ) ;
         PageList =
         {
             PageItem
@@ -421,74 +421,74 @@ TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
         };
     };
 };
- //------------------------------------------------------------------------
- //  ScTpHFEdit
- //------------------------------------------------------------------------
+//------------------------------------------------------------------------
+// ScTpHFEdit
+//------------------------------------------------------------------------
 TabPage RID_HFBASE
 {
     Hide = TRUE ;
     HelpId = HID_SCPAGE_HFEDIT ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Pos = MAP_APPFONT ( 0, 0 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     FixedText FT_LEFT
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 75, 10 ) ;
         Text [ en-US ] = "~Left area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_LEFT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
 */
     FixedText FT_CENTER
     {
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 90, 6 ) ;
+        Size = MAP_APPFONT ( 75, 10 ) ;
         Text [ en-US ] = "~Center area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_CENTER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 90, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
 */
     FixedText FT_RIGHT
     {
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 174, 6 ) ;
+        Size = MAP_APPFONT ( 75, 10 ) ;
         Text [ en-US ] = "R~ight area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_RIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 174, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
 */
     FixedText FT_HF_DEFINED
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 102 ) ;
+        Size = MAP_APPFONT ( 76, 10 ) ;
         Text [ en-US ] = "Hea~der" ;
     };
 
     /* #i84123# list box needs own help id, which is set in the derived tab pages
     ListBox LB_DEFINED
     {
-        HelpID = "sc:ListBox:RID_HFBASE:LB_DEFINED";
+        HelpID = "sc:ListBox:RID_HFBASE:LB_DEFINED" ;
         Border = TRUE ;
-                Pos = MAP_APPFONT ( 90 , 100 ) ;
-                Size = MAP_APPFONT ( 130 , 80 ) ;
+        Pos = MAP_APPFONT ( 90, 100 ) ;
+        Size = MAP_APPFONT ( 130, 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
@@ -496,46 +496,42 @@ TabPage RID_HFBASE
 
     FixedText FT_HF_CUSTOM
     {
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 124 ) ;
+        Size = MAP_APPFONT ( 76, 10 ) ;
         Text [ en-US ] = "Custom header" ;
     };
 
     ImageButton BTN_TEXT
     {
         HelpId = HID_SC_HF_TEXT ;
-        Pos = MAP_APPFONT ( 90 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 90, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Text Attributes" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "text.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "text.png" ; };
         };
     };
     Image IMG_TEXT_H
     {
-        ImageBitmap = Bitmap { File = "text_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "text_h.png" ; };
     };
     ImageButton BTN_FILE
     {
         HelpId = HID_SC_HF_FILE ;
-        Pos = MAP_APPFONT ( 113 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 113, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Title" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "file.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "file.png" ; };
         };
     };
     Image IMG_FILE_H
     {
-        ImageBitmap = Bitmap { File = "file_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "file_h.png" ; };
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -546,21 +542,21 @@ TabPage RID_HFBASE
             {
                 Identifier = FILE_COMMAND_TITEL ;
                 HelpID = HID_FCOMMAND_TITEL ;
-                Text [ en-US ] = "Title";
+                Text [ en-US ] = "Title" ;
             };
             MenuItem
             {
-                Identifier = FILE_COMMAND_FILENAME;
+                Identifier = FILE_COMMAND_FILENAME ;
                 HelpID = HID_FCOMMAND_FILENAME;
                 RadioCheck = TRUE ;
-                Text [ en-US ] = "File Name";
+                Text [ en-US ] = "File Name" ;
             };
             MenuItem
             {
-                Identifier = FILE_COMMAND_PATH;
+                Identifier = FILE_COMMAND_PATH ;
                 HelpID = HID_FCOMMAND_PATH;
                 RadioCheck = TRUE ;
-                Text [ en-US ] = "Path/File Name";
+                Text [ en-US ] = "Path/File Name" ;
             };
         };
     };
@@ -568,109 +564,99 @@ TabPage RID_HFBASE
     ImageButton BTN_TABLE
     {
         HelpId = HID_SC_HF_TABLE ;
-        Pos = MAP_APPFONT ( 130 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 130, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Sheet Name" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "table.bmp" ; };
-            MaskColor = STD_MASKCOLOR;
+            ImageBitmap = Bitmap { File = "table.png" ; };
         };
     };
     Image IMG_TABLE_H
     {
-        ImageBitmap = Bitmap { File = "table_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "table_h.png" ; };
     };
     ImageButton BTN_PAGE
     {
         HelpId = HID_SC_HF_PAGE ;
-        Pos = MAP_APPFONT ( 150 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 150, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Page" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "page.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "page.png" ; };
         };
     };
     Image IMG_PAGE_H
     {
-        ImageBitmap = Bitmap { File = "page_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "page_h.png" ; };
     };
     ImageButton BTN_PAGES
     {
         HelpId = HID_SC_HF_PAGES ;
-        Pos = MAP_APPFONT ( 167 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 167, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Pages" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "pages.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "pages.png" ; };
         };
     };
     Image IMG_PAGES_H
     {
-        ImageBitmap = Bitmap { File = "pages_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "pages_h.png" ; };
     };
     ImageButton BTN_DATE
     {
         HelpId = HID_SC_HF_DATE ;
-        Pos = MAP_APPFONT ( 187 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 187, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Date" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "date.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "date.png" ; };
         };
     };
     Image IMG_DATE_H
     {
-        ImageBitmap = Bitmap { File = "date_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "date_h.png" ; };
     };
     ImageButton BTN_TIME
     {
         HelpId = HID_SC_HF_TIME ;
-        Pos = MAP_APPFONT ( 204 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
+        Pos = MAP_APPFONT ( 204, 122 ) ;
+        Size = MAP_APPFONT ( 15, 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Time" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "time.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            ImageBitmap = Bitmap { File = "time.png" ; };
         };
     };
     Image IMG_TIME_H
     {
-        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "time_h.png" ; };
     };
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 240 , 24 ) ;
+        Pos = MAP_APPFONT ( 12, 155 ) ;
+        Size = MAP_APPFONT ( 240, 24 ) ;
         WordBreak = TRUE ;
         Text [ en-US ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
     };
     FixedLine FL_INFO
     {
-        Pos = MAP_APPFONT ( 6 , 144 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 144 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Note" ;
     };
 };
- // Kombinationen: Header/Footer links/rechts
- // die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
+// Kombinationen: Header/Footer links/rechts
+// die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
 TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
 {
     Hide = TRUE ;
@@ -679,32 +665,32 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
     {
         HelpId = HID_SC_HF_HLL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
     {
         HelpId = HID_SC_HF_HLC ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 90, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
     {
         HelpId = HID_SC_HF_HLR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 174, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_DEFINED
     {
         HelpId = HID_SC_HF_HL_DEFINED ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 100 ) ;
-        Size = MAP_APPFONT ( 130 , 80 ) ;
+        Pos = MAP_APPFONT ( 90, 100 ) ;
+        Size = MAP_APPFONT ( 130, 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
@@ -717,32 +703,32 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
     {
         HelpId = HID_SC_HF_HRL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
     {
         HelpId = HID_SC_HF_HRC ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 90, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
     {
         HelpId = HID_SC_HF_HRR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 174, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_DEFINED
     {
         HelpId = HID_SC_HF_HR_DEFINED ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 100 ) ;
-        Size = MAP_APPFONT ( 130 , 80 ) ;
+        Pos = MAP_APPFONT ( 90, 100 ) ;
+        Size = MAP_APPFONT ( 130, 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
@@ -755,32 +741,32 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
     {
         HelpId = HID_SC_HF_FLL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
     {
         HelpId = HID_SC_HF_FLC ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 90, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
     {
         HelpId = HID_SC_HF_FLR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 174, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_DEFINED
     {
         HelpId = HID_SC_HF_FL_DEFINED ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 100 ) ;
-        Size = MAP_APPFONT ( 130 , 80 ) ;
+        Pos = MAP_APPFONT ( 90, 100 ) ;
+        Size = MAP_APPFONT ( 130, 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
@@ -793,34 +779,33 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
     {
         HelpId = HID_SC_HF_FRL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 6, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
     {
         HelpId = HID_SC_HF_FRC ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 90, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
     {
         HelpId = HID_SC_HF_FRR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 72 ) ;
+        Pos = MAP_APPFONT ( 174, 18 ) ;
+        Size = MAP_APPFONT ( 80, 72 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_DEFINED
     {
         HelpId = HID_SC_HF_FR_DEFINED ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 100 ) ;
-        Size = MAP_APPFONT ( 130 , 80 ) ;
+        Pos = MAP_APPFONT ( 90, 100 ) ;
+        Size = MAP_APPFONT ( 130, 80 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
 };
-
