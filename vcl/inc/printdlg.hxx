@@ -228,6 +228,8 @@ namespace vcl
 
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setupPaperSidesBox();
+        void storeToSettings();
+        void readFromSettings();
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
