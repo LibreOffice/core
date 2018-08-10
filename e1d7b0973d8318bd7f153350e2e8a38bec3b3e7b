@@ -16,6 +16,24 @@
       "revId": "e1d7b0973d8318bd7f153350e2e8a38bec3b3e7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_db768b3f",
+        "filename": "sd/qa/unit/export-tests-ooxml2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-10T12:34:48Z",
+      "side": 0,
+      "message": "It changed slightly from the previous number (likely because of rounding now that division and cos functions are being used), and so I\u0027m a little afraid that it won\u0027t be a stable number.\n\nSince I was the originator of the test, I felt free to remove it.",
+      "parentUuid": "dfeb2761_3b457718",
+      "revId": "e1d7b0973d8318bd7f153350e2e8a38bec3b3e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
