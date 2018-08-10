@@ -416,7 +416,9 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     {
         mpImplData->mpVirDev->DrawText(
                     aTextPos,
-                    pItem->maText );
+                    pItem->maText,
+                    0, -1, nullptr, nullptr,
+                    pLayoutCache );
     }
     else
     {
