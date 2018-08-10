@@ -1847,17 +1847,17 @@ void DesktopLOKTest::testPaintPartTile()
     // Load an impress doc of 2 slides.
     comphelper::LibreOfficeKit::setActive();
 
-    ViewCallback aView1;
-    ViewCallback aView2;
+//    ViewCallback aView1;
+//    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+//    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
     int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
 
     // Create a second view.
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
+//    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
 
     // Go to the second slide in the second view.
     pDocument->m_pDocumentClass->setPart(pDocument, 1);
@@ -1876,7 +1876,7 @@ void DesktopLOKTest::testPaintPartTile()
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
-    aView1.m_bTilesInvalidated = false;
+//    aView1.m_bTilesInvalidated = false;
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
