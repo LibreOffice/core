@@ -136,7 +136,7 @@ bool UnusedMethodsRemove::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl 
         report(
             DiagnosticsEngine::Warning,
             "Could not remove unused method (" + niceName(functionDecl) + ")",
-            functionDecl->getLocStart())
+            compat::getBeginLoc(functionDecl))
           << functionDecl->getSourceRange();
     }
     return true;

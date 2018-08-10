@@ -210,7 +210,7 @@ try_again:
         declRefExpr->dump();
         report( DiagnosticsEngine::Warning,
                 "unhandled clang AST node type",
-                parent->getLocStart());
+                compat::getBeginLoc(parent));
     }
 
     if (bWrite) {

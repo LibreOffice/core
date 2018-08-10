@@ -102,10 +102,12 @@ bool SimplifyDynamicCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const* static
         return true;
     if (dynamicCastSubExprVec[idx] != subExprDecl->getDecl())
         return true;
-    report(DiagnosticsEngine::Warning, "simplify, use var in if", staticCastExpr->getLocStart())
+    report(DiagnosticsEngine::Warning, "simplify, use var in if",
+           compat::getBeginLoc(staticCastExpr))
         << staticCastExpr->getSourceRange();
     auto ifStmt = ifVec[idx];
-    report(DiagnosticsEngine::Note, "if here", ifStmt->getLocStart()) << ifStmt->getSourceRange();
+    report(DiagnosticsEngine::Note, "if here", compat::getBeginLoc(ifStmt))
+        << ifStmt->getSourceRange();
     return true;
 }
 

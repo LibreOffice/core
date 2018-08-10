@@ -357,7 +357,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             DiagnosticsEngine::Warning,
             ("Temporary object of SvRefBase subclass %0 being directly stack"
              " managed, should be managed via tools::SvRef"),
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsSalhelperReferenceObjectSubclass(t.getTypePtr())) {
         report(
@@ -365,7 +365,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             ("Temporary object of salhelper::SimpleReferenceObject subclass %0"
              " being directly stack managed, should be managed via"
              " rtl::Reference"),
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsXInterfaceSubclass(t)) {
         report(
@@ -373,7 +373,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             ("Temporary object of css::uno::XInterface subclass %0 being"
              " directly stack managed, should be managed via"
              " css::uno::Reference"),
-            expr->getLocStart())
+            compat::getBeginLoc(expr))
             << t.getUnqualifiedType() << expr->getSourceRange();
     }
     return true;

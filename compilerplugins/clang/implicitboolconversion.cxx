@@ -686,7 +686,7 @@ bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
     {
         report(
             DiagnosticsEngine::Warning, "mix of %0 and %1 in operator &=",
-            expr->getRHS()->getLocStart())
+            compat::getBeginLoc(expr->getRHS()))
             << expr->getLHS()->getType()
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
@@ -712,7 +712,7 @@ bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
     {
         report(
             DiagnosticsEngine::Warning, "mix of %0 and %1 in operator |=",
-            expr->getRHS()->getLocStart())
+            compat::getBeginLoc(expr->getRHS()))
             << expr->getLHS()->getType()
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
@@ -738,7 +738,7 @@ bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
     {
         report(
             DiagnosticsEngine::Warning, "mix of %0 and %1 in operator ^=",
-            expr->getRHS()->getLocStart())
+            compat::getBeginLoc(expr->getRHS()))
             << expr->getLHS()->getType()
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
@@ -870,7 +870,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
                 DiagnosticsEngine::Warning,
                 ("explicit conversion (%0) from %1 to %2 implicitly cast back"
                  " to %3"),
-                expr->getLocStart())
+                compat::getBeginLoc(expr))
                 << sub->getCastKindName() << subsub->getType() << sub->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -888,7 +888,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
             report(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of call argument from %1 to %2",
-                expr->getLocStart())
+                compat::getBeginLoc(expr))
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -912,7 +912,7 @@ bool ImplicitBoolConversion::VisitMaterializeTemporaryExpr(
                 DiagnosticsEngine::Warning,
                 ("explicit conversion (%0) from %1 to %2 implicitly converted"
                  " back to %3"),
-                expr->getLocStart())
+                compat::getBeginLoc(expr))
                 << sub->getCastKindName() << subsub->getType() << sub->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -1017,7 +1017,7 @@ void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
     if (compiler.getLangOpts().CPlusPlus) {
         report(
             DiagnosticsEngine::Warning,
-            "implicit conversion (%0) from %1 to %2", expr->getLocStart())
+            "implicit conversion (%0) from %1 to %2", compat::getBeginLoc(expr))
             << expr->getCastKindName() << expr->getSubExprAsWritten()->getType()
             << expr->getType() << expr->getSourceRange();
     }

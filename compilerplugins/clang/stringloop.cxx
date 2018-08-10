@@ -256,9 +256,9 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
             return true;
         report(DiagnosticsEngine::Warning,
                "appending to OUString in loop, rather use OUStringBuffer",
-               operatorCallExpr->getLocStart())
+               compat::getBeginLoc(operatorCallExpr))
             << operatorCallExpr->getSourceRange();
-        report(DiagnosticsEngine::Note, "field here", fieldDecl->getLocStart())
+        report(DiagnosticsEngine::Note, "field here", compat::getBeginLoc(fieldDecl))
             << fieldDecl->getSourceRange();
     }
     else if (auto declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(0)))
@@ -275,9 +275,9 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
                 return true;
             report(DiagnosticsEngine::Warning,
                    "appending to OUString in loop, rather use OUStringBuffer",
-                   operatorCallExpr->getLocStart())
+                   compat::getBeginLoc(operatorCallExpr))
                 << operatorCallExpr->getSourceRange();
-            report(DiagnosticsEngine::Note, "var here", varDecl->getLocStart())
+            report(DiagnosticsEngine::Note, "var here", compat::getBeginLoc(varDecl))
                 << varDecl->getSourceRange();
         }
     }

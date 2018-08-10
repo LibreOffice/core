@@ -35,18 +35,18 @@ public:
         {
             return true;
         }
-        auto l1 = unwindToQObject(decl->getLocStart());
-        if (l1.isValid() && l1 == unwindToQObject(decl->getLocEnd())) {
+        auto l1 = unwindToQObject(compat::getBeginLoc(decl));
+        if (l1.isValid() && l1 == unwindToQObject(compat::getEndLoc(decl))) {
             return true;
         }
         SourceLocation inlineLoc;
         unsigned n;
         auto end = Lexer::getLocForEndOfToken(
-            compiler.getSourceManager().getExpansionLoc(decl->getLocEnd()), 0,
+            compiler.getSourceManager().getExpansionLoc(compat::getEndLoc(decl)), 0,
             compiler.getSourceManager(), compiler.getLangOpts());
         assert(end.isValid());
         for (auto loc = compiler.getSourceManager().getExpansionLoc(
-                 decl->getLocStart());
+                 compat::getBeginLoc(decl));
              loc != end; loc = loc.getLocWithOffset(std::max<unsigned>(n, 1)))
         {
             n = Lexer::MeasureTokenLength(
@@ -102,7 +102,7 @@ public:
         report(
             DiagnosticsEngine::Warning,
             "function definition redundantly declared 'inline'",
-            inlineLoc.isValid() ? inlineLoc : decl->getLocStart())
+            inlineLoc.isValid() ? inlineLoc : compat::getBeginLoc(decl))
             << decl->getSourceRange();
         return true;
     }

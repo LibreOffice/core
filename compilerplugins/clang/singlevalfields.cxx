@@ -387,7 +387,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         report(
              DiagnosticsEngine::Warning,
              "oh dear, what can the matter be?",
-              memberExpr->getLocStart())
+              compat::getBeginLoc(memberExpr))
               << memberExpr->getSourceRange();
         parent->dump();
     }

@@ -119,7 +119,7 @@ bool UnusedFieldsRemove::VisitFieldDecl( const FieldDecl* fieldDecl )
         report(
             DiagnosticsEngine::Warning,
             "Could not remove unused field (" + niceName(fieldDecl) + ")",
-            fieldDecl->getLocStart())
+            compat::getBeginLoc(fieldDecl))
           << fieldDecl->getSourceRange();
     }
     return true;

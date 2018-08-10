@@ -111,12 +111,12 @@ public:
                 continue;
             report(DiagnosticsEngine::Warning,
                    "only returning one or zero is an indication you want to return bool",
-                   functionDecl->getLocStart())
+                   compat::getBeginLoc(functionDecl))
                 << functionDecl->getSourceRange();
             if (canonicalDecl->getLocation() != functionDecl->getLocation())
             {
                 report(DiagnosticsEngine::Note, "canonical function declaration here",
-                       canonicalDecl->getLocStart())
+                       compat::getBeginLoc(canonicalDecl))
                     << canonicalDecl->getSourceRange();
             }
         }

@@ -295,7 +295,7 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
         return;
     // to ignore things like the CPPUNIT macros
     StringRef aFileName = getFileNameOfSpellingLoc(
-        compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
     if (loplugin::hasPathnamePrefix(aFileName, WORKDIR "/"))
         return;
     // passes and stores pointers to member fields
@@ -351,12 +351,12 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
     report(
         DiagnosticsEngine::Warning,
         message,
-        deleteExpr->getLocStart())
+        compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "member is here",
-        fieldDecl->getLocStart())
+        compat::getBeginLoc(fieldDecl))
         << fieldDecl->getSourceRange();
 }
 
@@ -426,7 +426,7 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
 {
     if (ignoreLocation(compoundStmt))
         return true;
-    if (isInUnoIncludeFile(compoundStmt->getLocStart()))
+    if (isInUnoIncludeFile(compat::getBeginLoc(compoundStmt)))
         return true;
     if (compoundStmt->size() == 0) {
         return true;
@@ -457,18 +457,18 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
         return true;
     // determine if the var is declared inside the same block as the delete.
     // @TODO there should surely be a better way to do this
-    if (varDecl->getLocStart() < compoundStmt->getLocStart())
+    if (compat::getBeginLoc(varDecl) < compat::getBeginLoc(compoundStmt))
         return true;
 
     report(
         DiagnosticsEngine::Warning,
         "deleting a local variable at the end of a block, is a sure sign it should be using std::unique_ptr for that var",
-        deleteExpr->getLocStart())
+        compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "var is here",
-        varDecl->getLocStart())
+        compat::getBeginLoc(varDecl))
         << varDecl->getSourceRange();
     return true;
 }
@@ -492,7 +492,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         return true;
     if (ignoreLocation(mpCurrentFunctionDecl))
         return true;
-    if (isInUnoIncludeFile(mpCurrentFunctionDecl->getCanonicalDecl()->getLocStart()))
+    if (isInUnoIncludeFile(compat::getBeginLoc(mpCurrentFunctionDecl->getCanonicalDecl())))
         return true;
     if (mpCurrentFunctionDecl->getIdentifier())
     {
@@ -527,7 +527,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
     report(
         DiagnosticsEngine::Warning,
         "calling delete on a pointer param, should be either whitelisted here or simplified",
-        deleteExpr->getLocStart())
+        compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
     return true;
 }

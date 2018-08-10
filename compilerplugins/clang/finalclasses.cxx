@@ -127,7 +127,7 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (ignoreClass(s))
         return true;
 
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(decl->getLocStart());
+    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
     std::string filename = compiler.getSourceManager().getFilename(spellingLocation);
     auto sourceLocation = filename.substr(strlen(SRCDIR)) + ":"
         + std::to_string(compiler.getSourceManager().getSpellingLineNumber(spellingLocation));
