@@ -2413,15 +2413,6 @@ void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults,
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
-void ScTable::SetFormulaResults(
-    SCCOL nCol, SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen )
-{
-    if (!ValidCol(nCol))
-        return;
-
-    aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
-}
-
 void ScTable::CalculateInColumnInThread( ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     if (!ValidCol(nCol))

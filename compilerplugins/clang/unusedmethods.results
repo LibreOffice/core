@@ -542,8 +542,6 @@ include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
 include/sfx2/sidebar/Context.hxx:55
     _Bool sfx2::sidebar::Context::operator==(const class sfx2::sidebar::Context &) const
-include/svl/cryptosign.hxx:90
-    _Bool isMSCng()
 include/svl/itempool.hxx:167
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
 include/svl/itempool.hxx:196
@@ -564,8 +562,6 @@ include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
 include/svx/svdlayer.hxx:72
     _Bool SdrLayer::operator==(const class SdrLayer &) const
-include/svx/svdograf.hxx:169
-    const class rtl::OUString & SdrGrafObj::GetFilterName() const
 include/svx/svdpage.hxx:105
     class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
 include/svx/svdpntv.hxx:462
@@ -676,8 +672,6 @@ include/vcl/inputctx.hxx:63
     _Bool InputContext::operator!=(const class InputContext &) const
 include/vcl/ITiledRenderable.hxx:288
     class Pointer vcl::ITiledRenderable::getPointer()
-include/vcl/opengl/OpenGLContext.hxx:97
-    void OpenGLContext::UseNoProgram()
 include/vcl/opengl/OpenGLHelper.hxx:61
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:91
@@ -816,6 +810,8 @@ sc/inc/datamapper.hxx:85
     void sc::ExternalDataSource::setURL(const class rtl::OUString &)
 sc/inc/datamapper.hxx:86
     void sc::ExternalDataSource::setProvider(const class rtl::OUString &)
+sc/inc/document.hxx:2100
+    void ScDocument::SetFormulaResults(const class ScAddress &,const class boost::intrusive_ptr<const class formula::FormulaToken> *,unsigned long)
 sc/inc/dpfilteredcache.hxx:143
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:462
@@ -828,6 +824,8 @@ sc/inc/scdll.hxx:36
      ScDLL::ScDLL()
 sc/inc/scmatrix.hxx:622
     class ScFullMatrix & ScFullMatrix::operator+=(const class ScFullMatrix &)
+sc/inc/scmatrix.hxx:654
+     ScVectorRefMatrix::ScVectorRefMatrix(const class formula::DoubleVectorRefToken *,unsigned long,unsigned long)
 sc/inc/scmatrix.hxx:843
     class ScVectorRefMatrix & ScVectorRefMatrix::operator+=(const class ScVectorRefMatrix &)
 sc/inc/stlalgorithm.hxx:61
@@ -836,6 +834,8 @@ sc/inc/stlalgorithm.hxx:62
     _Bool sc::AlignedAllocator::operator!=(const AlignedAllocator<T, Alignment> &) const
 sc/inc/table.hxx:321
     _Bool ScTable::IsColRowTabValid(const short,const int,const short) const
+sc/inc/token.hxx:126
+     ScMatrixRangeToken::ScMatrixRangeToken(const class boost::intrusive_ptr<class ScMatrix> &,const struct ScComplexRefData &)
 sc/inc/userlist.hxx:86
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > > ScUserList::begin() const
 sc/qa/unit/helper/qahelper.hxx:164
