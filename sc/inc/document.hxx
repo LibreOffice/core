@@ -2097,7 +2097,6 @@ public:
      * @param nLen length of numeric results.
      */
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
-    void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
     const ScDocumentThreadSpecific& CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );

@@ -418,16 +418,6 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-void ScDocument::SetFormulaResults(
-    const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen )
-{
-    ScTable* pTab = FetchTable(rTopPos.Tab());
-    if (!pTab)
-        return;
-
-    pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
-}
-
 const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     ScTable* pTab = FetchTable(rTopPos.Tab());

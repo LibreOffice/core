@@ -123,7 +123,6 @@ class ScMatrixRangeToken : public formula::FormulaToken
     ScMatrixRef mpMatrix;
     ScComplexRefData maRef;
 public:
-    ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef );
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& );
 

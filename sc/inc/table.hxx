@@ -1005,7 +1005,6 @@ public:
     void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
-    void SetFormulaResults( SCCOL nCol, SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
     void CalculateInColumnInThread( ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen);

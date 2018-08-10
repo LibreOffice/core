@@ -681,9 +681,6 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && pMatrix == r.GetMatrix();
 }
 
-ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef ) :
-    FormulaToken(formula::svMatrix), mpMatrix(p), maRef(rRef) {}
-
 ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
     FormulaToken(formula::svMatrix), mpMatrix(rMat.mpMat)
 {
