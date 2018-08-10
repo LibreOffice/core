@@ -3110,8 +3110,9 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
 
     // Over all the paragraphs ...
 
+    OSL_ENSURE( 0 <= nPara && nPara < GetParaPortions().Count(), "CalcParaWidth: Out of range" );
     ParaPortion* pPortion = GetParaPortions()[nPara];
-    if ( pPortion->IsVisible() )
+    if ( pPortion && pPortion->IsVisible() )
     {
         const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
         sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
