@@ -39,7 +39,7 @@ class SvpSalGraphics;
 
 class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
 {
-    friend class VclQtMixinBase;
+    friend class Qt5Widget;
 
     QWidget* m_pQWidget;
     Qt5MainWindow* m_pTopLevel;

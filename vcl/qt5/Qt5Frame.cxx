@@ -101,11 +101,11 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     if (!pParent && (aWinFlags == Qt::Window))
     {
         m_pTopLevel = new Qt5MainWindow(*this, nullptr, aWinFlags);
-        m_pQWidget = createQt5Widget(*this, aWinFlags);
+        m_pQWidget = new Qt5Widget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
     }
     else
-        m_pQWidget = createQt5Widget(*this, aWinFlags);
+        m_pQWidget = new Qt5Widget(*this, aWinFlags);
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
