@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_3b2c5746",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-10T10:54:07Z",
+      "side": 1,
+      "message": "Pls fix the indentation here (none)",
+      "revId": "411aeeeb601700cd2bca096abef24ecd5bb4a9fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1b21934e",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-08-10T10:54:07Z",
+      "side": 1,
+      "message": "4 spaces respectively",
+      "revId": "411aeeeb601700cd2bca096abef24ecd5bb4a9fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
