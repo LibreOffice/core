@@ -27,7 +27,7 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
 
 Qt5Menu::~Qt5Menu() { maItems.clear(); }
 
-bool Qt5Menu::VisibleMenuBar() { return false; }
+bool Qt5Menu::VisibleMenuBar() { return true; }
 
 void Qt5Menu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
 {
