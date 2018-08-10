@@ -1192,7 +1192,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
         return;
 
     SfxViewFrame* pTop = xImp->pFrame ? xImp->pFrame->GetTopViewFrame() : nullptr;
-    bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this && !comphelper::LibreOfficeKit::isActive();
+    bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
 
     if ( !bUIActive && pTop && GetBindings() == &pTop->GetBindings() )
         // keep own tools internally for collecting
@@ -1255,7 +1255,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     }
 
     Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pWorkWin );
-    if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )
+    if (bUIActive || bIsActive)
         pWorkWin->UpdateObjectBars_Impl();
 
     if ( pBindings )
