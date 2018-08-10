@@ -69,6 +69,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
+#include <comphelper/lok.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
@@ -245,7 +246,11 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
     else if (pViewSh)
-        pViewSh->UpdateInputHandler(true); // Absolutely necessary update
+    {
+        // Don't stop editing in LOK a remote user might be editing.
+        const bool bStopEditing = !comphelper::LibreOfficeKit::isActive();
+        pViewSh->UpdateInputHandler(true, bStopEditing); // Absolutely necessary update
+    }
 
     SetToolbarLayoutMode( ToolBoxLayoutMode::Locked );
 
