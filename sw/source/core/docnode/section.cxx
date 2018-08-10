@@ -726,7 +726,7 @@ void SwSectionFormat::MakeFrames()
         nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
         SwNodeIndex aIdx( *pIdx );
-        pSectNd->MakeFrames( &aIdx );
+        pSectNd->MakeOwnFrames( &aIdx );
     }
 }
 

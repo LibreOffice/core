@@ -24,6 +24,8 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 #include "wrtasc.hxx"
 #include <txatbase.hxx>
 #include <fchrfmt.hxx>
@@ -166,6 +168,74 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
     return bRet;
 }
 
+class SwASC_RedlineIter
+{
+private:
+    SwTextNode const& m_rNode;
+    IDocumentRedlineAccess const& m_rIDRA;
+    SwRedlineTable::size_type m_nextRedline;
+
+public:
+    SwASC_RedlineIter(SwASCWriter const& rWriter, SwTextNode const& rNode)
+        : m_rNode(rNode)
+        , m_rIDRA(rNode.GetDoc()->getIDocumentRedlineAccess())
+        , m_nextRedline(rWriter.m_bHideDeleteRedlines
+            ? m_rIDRA.GetRedlinePos(m_rNode, nsRedlineType_t::REDLINE_DELETE)
+            : SwRedlineTable::npos)
+    {
+    }
+
+    bool CheckNodeDeleted()
+    {
+        if (m_nextRedline == SwRedlineTable::npos)
+        {
+            return false;
+        }
+        SwRangeRedline const*const pRedline(m_rIDRA.GetRedlineTable()[m_nextRedline]);
+        return pRedline->Start()->nNode.GetIndex() < m_rNode.GetIndex()
+            && m_rNode.GetIndex() < pRedline->End()->nNode.GetIndex();
+    }
+
+    std::pair<sal_Int32, sal_Int32> GetNextRedlineSkip()
+    {
+        sal_Int32 nRedlineStart(COMPLETE_STRING);
+        sal_Int32 nRedlineEnd(COMPLETE_STRING);
+        for ( ; m_nextRedline < m_rIDRA.GetRedlineTable().size(); ++m_nextRedline)
+        {
+            SwRangeRedline const*const pRedline(m_rIDRA.GetRedlineTable()[m_nextRedline]);
+            if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
+            {
+                continue;
+            }
+            SwPosition const*const pStart(pRedline->Start());
+            SwPosition const*const pEnd(pRedline->End());
+            if (m_rNode.GetIndex() < pStart->nNode.GetIndex())
+            {
+                m_nextRedline = SwRedlineTable::npos;
+                break; // done
+            }
+            if (nRedlineStart == COMPLETE_STRING)
+            {
+                nRedlineStart = pStart->nNode.GetIndex() == m_rNode.GetIndex()
+                        ? pStart->nContent.GetIndex()
+                        : 0;
+            }
+            else
+            {
+                if (pStart->nContent.GetIndex() != nRedlineEnd)
+                {
+                    assert(nRedlineEnd < pStart->nContent.GetIndex());
+                    break; // no increment, revisit it next call
+                }
+            }
+            nRedlineEnd = pEnd->nNode.GetIndex() == m_rNode.GetIndex()
+                    ? pEnd->nContent.GetIndex()
+                    : COMPLETE_STRING;
+        }
+        return std::make_pair(nRedlineStart, nRedlineEnd);
+    }
+};
+
 // Output of the node
 
 static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
@@ -182,6 +252,12 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode;
 
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
+    SwASC_RedlineIter redlineIter(static_cast<SwASCWriter&>(rWrt), rNd);
+
+    if (redlineIter.CheckNodeDeleted())
+    {
+        return rWrt;
+    }
 
     const SwNumRule* pNumRule = rNd.GetNumRule();
     if (pNumRule && !nStrPos && rWrt.m_bExportPargraphNumbering && !bIsOneParagraph)
@@ -219,12 +295,49 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     const bool bExportSoftHyphens = RTL_TEXTENCODING_UCS2 == rWrt.GetAsciiOptions().GetCharSet() ||
                                     RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
 
+    std::pair<sal_Int32, sal_Int32> curRedline(redlineIter.GetNextRedlineSkip());
     for (;;) {
         const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
-        if( !aAttrIter.OutAttr( nStrPos ))
+        bool isOutAttr(false);
+        if (nStrPos < curRedline.first || curRedline.second <= nStrPos)
         {
-            OUString aOutStr( aStr.copy( nStrPos, nNextAttr - nStrPos ) );
+            isOutAttr = aAttrIter.OutAttr(nStrPos);
+        }
+
+        if (!isOutAttr)
+        {
+            OUStringBuffer buf;
+            while (true)
+            {
+                if (nNextAttr <= curRedline.first)
+                {
+                    buf.append(aStr.copy(nStrPos, nNextAttr - nStrPos));
+                    break;
+                }
+                else if (nStrPos < curRedline.second)
+                {
+                    if (nStrPos < curRedline.first)
+                    {
+                        buf.append(aStr.copy(nStrPos, curRedline.first - nStrPos));
+                    }
+                    if (curRedline.second <= nNextAttr)
+                    {
+                        nStrPos = curRedline.second;
+                        curRedline = redlineIter.GetNextRedlineSkip();
+                    }
+                    else
+                    {
+                        nStrPos = nNextAttr;
+                        break;
+                    }
+                }
+                else
+                {
+                    curRedline = redlineIter.GetNextRedlineSkip();
+                }
+            }
+            OUString aOutStr(buf.makeStringAndClear());
             if ( !bExportSoftHyphens )
                 aOutStr = aOutStr.replaceAll(OUStringLiteral1(CHAR_SOFTHYPHEN), "");
 

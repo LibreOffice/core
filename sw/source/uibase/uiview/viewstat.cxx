@@ -22,6 +22,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
@@ -56,6 +57,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
+#include <rootfrm.hxx>
 #include <docary.hxx>
 
 #include <cmdid.h>
@@ -280,7 +282,14 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
+                uno::Reference<uno::XComponentContext> const xContext(
+                        comphelper::getProcessComponentContext());
+                if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+                {
+                    rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
+                }
+                else
+                    rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
             }
             break;
             case SID_AVMEDIA_PLAYER :

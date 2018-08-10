@@ -188,6 +188,13 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
     return m_pFont->IsSymbol( m_pViewShell );
 }
 
+bool SwTextFrame::IsSymbolAt(TextFrameIndex const nPos) const
+{
+    SwTextInfo info(const_cast<SwTextFrame*>(this));
+    SwTextIter iter(const_cast<SwTextFrame*>(this), &info);
+    return iter.IsSymbol(nPos);
+}
+
 bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
     SwTextNode const*const pFirstTextNode(m_pMergedPara ? m_pMergedPara->pFirstNode : m_pTextNode);
@@ -308,20 +315,23 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
     {
         // Skipping to a different node - first seek until the end of this node
         // to get rid of all hint items
-        sal_Int32 nPos(m_nPosition);
-        do
+        if (m_pTextNode->GetpSwpHints())
         {
-            nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
-            if (nPos <= m_pTextNode->Len())
+            sal_Int32 nPos(m_nPosition);
+            do
             {
-                SeekFwd(nPos);
+                nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
+                if (nPos <= m_pTextNode->Len())
+                {
+                    SeekFwd(nPos);
+                }
+                else
+                {
+                    SeekFwd(m_pTextNode->Len());
+                }
             }
-            else
-            {
-                SeekFwd(m_pTextNode->Len());
-            }
+            while (nPos < m_pTextNode->Len());
         }
-        while (nPos < m_pTextNode->Len());
         assert(m_nChgCnt == 0); // should have reset it all? there cannot be ExtOn() inside of a Delete redline, surely?
         // Unapply current para items:
         // the SwAttrHandler doesn't appear to be capable of *unapplying*
@@ -337,13 +347,16 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         assert(m_pRedline);
     }
 
-    if (!nNewPos || newPos.second < m_nPosition)
+    // sw_redlinehide: Seek(0) must move before the first character, which
+    // has a special case where the first node starts with delete redline.
+    if ((!nNewPos && (!m_pMergedPara || newPos.first != m_pTextNode))
+        || newPos.second < m_nPosition)
     {
         if (m_pMergedPara)
         {
-            if (m_pTextNode != m_pMergedPara->pFirstNode)
+            if (m_pTextNode != newPos.first)
             {
-                m_pTextNode = m_pMergedPara->pFirstNode;
+                m_pTextNode = newPos.first;
                 // sw_redlinehide: hope it's okay to use the current text node
                 // here; the AttrHandler shouldn't care about non-char items
                 InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
@@ -407,7 +420,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
     m_pFont->SetActual( m_pScriptInfo->WhichFont(nNewPos) );
 
     if( m_pRedline )
-        m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, newPos.first->GetIndex(), newPos.second, m_nPosition);
+        m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, m_pTextNode->GetIndex(), newPos.second, m_nPosition);
     m_nPosition = newPos.second;
 
     if( m_nPropFont )
@@ -436,7 +449,8 @@ static void InsertCharAttrs(SfxPoolItem const** pAttrs, SfxItemSet const& rItems
 // if return false: portion ends at start of redline, indexes unchanged
 // if return true: portion end not known (past end of redline), indexes point to first hint past end of redline
 static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
-        size_t & rStartIndex, size_t & rEndIndex)
+        size_t & rStartIndex, size_t & rEndIndex,
+        bool const isTheAnswerYes)
 {
     size_t nStartIndex(rStartIndex);
     size_t nEndIndex(rEndIndex);
@@ -466,12 +480,14 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
         for ( ; nEndIndex < pStartHints->Count(); ++nEndIndex)
         {
             SwTextAttr *const pAttr(pStartHints->GetSortedByEnd(nEndIndex));
+            if (!pAttr->End())
+            {
+                continue;
+            }
             if (nRedlineEnd < *pAttr->End())
             {
                 break;
             }
-            if (!pAttr->End())
-                continue;
             if (pRLStart->nContent.GetIndex() <= pAttr->GetStart())
             {
                 continue;
@@ -491,7 +507,7 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
                     {
-                        return false; // always break
+                        if (!isTheAnswerYes) return false; // always break
                     }
                     break;
                 // these are guaranteed not to overlap
@@ -581,7 +597,7 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
                     {
-                        return false;
+                        if (!isTheAnswerYes) return false;
                     }
                     break;
                 case RES_TXTATR_AUTOFMT:
@@ -602,7 +618,7 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                             }
                             if (!isFound)
                             {
-                                return false;
+                                if (!isTheAnswerYes) return false;
                             }
                         }
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
@@ -638,7 +654,7 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
     // if we didn't find a matching start for any end, then it really ends inside
     if (!activeCharFmts.empty())
     {
-        return false;
+        if (!isTheAnswerYes) return false;
     }
     for (size_t i = 0; i < SAL_N_ELEMENTS(activeCharAttrsStart); ++i)
     {
@@ -646,7 +662,7 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
 //        assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->IsItemPoolable(*activeCharAttrsStart[i]));
         if (activeCharAttrsStart[i] != activeCharAttrsEnd[i])
         {
-            return false;
+            if (!isTheAnswerYes) return false;
         }
     }
     rStartIndex = nStartIndex;
@@ -730,8 +746,9 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             if (redline.second.first)
             {
                 assert(m_pMergedPara);
-                if (CanSkipOverRedline(*redline.second.first, nStartIndex, nEndIndex))
-                {
+                if (CanSkipOverRedline(*redline.second.first,
+                        nStartIndex, nEndIndex, m_nPosition == redline.first))
+                {   // if current position is start of the redline, must skip!
                     nActRedline += redline.second.second;
                     if (&redline.second.first->End()->nNode.GetNode() != pTextNode)
                     {

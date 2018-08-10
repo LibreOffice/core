@@ -112,7 +112,7 @@ typedef std::vector<SwTextAttr*> SwpHts;
 #endif
 
 SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
-                                 SwTextFormatColl *pColl )
+                                 SwTextFormatColl *pColl, bool const bNewFrames)
 {
     OSL_ENSURE( pColl, "Collection pointer is 0." );
 
@@ -126,7 +126,8 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
     // if there is no layout or it is in a hidden section, MakeFrames is not needed
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
+    if (!bNewFrames ||
+        !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
         ( nullptr != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -141,7 +142,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
         switch (pNd->GetNodeType())
         {
         case SwNodeType::Table:
-            static_cast<SwTableNode*>(pNd)->MakeFrames( aIdx );
+            static_cast<SwTableNode*>(pNd)->MakeFramesForAdjacentContentNode(aIdx);
             return pNode;
 
         case SwNodeType::Section:
@@ -155,13 +156,13 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                 aTmp = *pNd;
                 break;
             }
-            static_cast<SwSectionNode*>(pNd)->MakeFrames( aIdx );
+            static_cast<SwSectionNode*>(pNd)->MakeFramesForAdjacentContentNode(aIdx);
             return pNode;
 
         case SwNodeType::Text:
         case SwNodeType::Grf:
         case SwNodeType::Ole:
-            static_cast<SwContentNode*>(pNd)->MakeFrames( *pNode );
+            static_cast<SwContentNode*>(pNd)->MakeFramesForAdjacentContentNode(*pNode);
             return pNode;
 
         case SwNodeType::End:
@@ -263,8 +264,7 @@ SwTextNode::~SwTextNode()
     RemoveFromList();
 
     InitSwParaStatistics( false );
-
-    DelFrames(false); // must be called here while it's still a SwTextNode
+    DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
 }
 
@@ -365,8 +365,68 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
     }
 }
 
-SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
+namespace sw {
+
+// check if there are flys on the existing frames (now on "pNode")
+// that need to be moved to the new frames of "this"
+void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
+        SwTextNode const& rFirstNode, SwTextNode & rSecondNode,
+        bool isSplitNode)
 {
+    if (!isSplitNode)
+    {
+        lcl_ChangeFootnoteRef(rSecondNode);
+    }
+    for (sal_uLong nIndex = rSecondNode.GetIndex() + 1; ; ++nIndex)
+    {
+        SwNode *const pTmp(rSecondNode.GetNodes()[nIndex]);
+        if (pTmp->IsCreateFrameWhenHidingRedlines() || pTmp->IsEndNode())
+        {
+            break;
+        }
+        else if (pTmp->IsStartNode())
+        {
+            nIndex = pTmp->EndOfSectionIndex();
+        }
+        else if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst
+              && pTmp->IsTextNode())
+        {
+            lcl_ChangeFootnoteRef(*pTmp->GetTextNode());
+        }
+    }
+    for (SwTextFrame *const pFrame : rFrames)
+    {
+        if (SwSortedObjs *const pObjs = pFrame->GetDrawObjs())
+        {
+            std::vector<SwAnchoredObject*> objs;
+            objs.reserve(pObjs->size());
+            for (SwAnchoredObject *const pObj : *pObjs)
+            {
+                objs.push_back(pObj);
+            }
+            for (SwAnchoredObject *const pObj : objs)
+            {
+                SwFrameFormat & rFormat(pObj->GetFrameFormat());
+                SwFormatAnchor const& rAnchor(rFormat.GetAnchor());
+                if (rFirstNode.GetIndex() < rAnchor.GetContentAnchor()->nNode.GetIndex())
+                {
+                    // move it to the new frame of "this"
+                    rFormat.NotifyClients(&rAnchor, &rAnchor);
+                    // note pObjs will be deleted if it becomes empty
+                    assert(!pFrame->GetDrawObjs() || !pObjs->Contains(*pObj));
+                }
+            }
+        }
+    }
+}
+
+} // namespace
+
+SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
+        std::function<void (SwTextNode *, sw::mark::RestoreMode)> const*const pContentIndexRestore)
+{
+    bool isHide(false);
+    SwNode::Merge const eOldMergeFlag(GetRedlineMergeFlag());
     bool parentIsOutline = IsOutline();
 
     // create a node "in front" of me
@@ -476,8 +536,26 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
+        if (pContentIndexRestore)
+        {   // call before making frames and before RegisterToNode
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
+        }
+        if (eOldMergeFlag != SwNode::Merge::None)
+        {   // clear before making frames and before RegisterToNode
+            SetRedlineMergeFlag(SwNode::Merge::None);
+        }   // now RegisterToNode will set merge flags in both nodes properly!
+
+        std::vector<SwTextFrame*> frames;
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                isHide = true;
+            }
+            frames.push_back(pFrame);
+        }
+        for (SwTextFrame * pFrame : frames)
         {
             pFrame->RegisterToNode( *pNode );
             if (!pFrame->IsFollow() && pFrame->GetOfst())
@@ -518,8 +596,17 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             MoveTextAttr_To_AttrSet();
         }
-        pNode->MakeFrames( *this );
+        // in case there are frames, the RegisterToNode has set the merge flag
+        pNode->MakeFramesForAdjacentContentNode(*this);
         lcl_ChangeFootnoteRef( *this );
+        if (pContentIndexRestore)
+        {   // call after making frames; listeners will take care of adding to the right frame
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
+        if (eOldMergeFlag != SwNode::Merge::None)
+        {
+            MoveMergedFlysAndFootnotes(frames, *pNode, *this, true);
+        }
     }
     else
     {
@@ -575,12 +662,134 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             SetSmartTags( pList2, false );
         }
 
-        if ( HasWriterListeners() )
-        {
-            MakeFrames( *pNode );
+        if (pContentIndexRestore)
+        {   // call before making frames and before RegisterToNode
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
         }
-        lcl_ChangeFootnoteRef( *pNode );
+
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            frames.push_back(pFrame);
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                isHide = true;
+            }
+        }
+        bool bNonMerged(false);
+        bool bRecreateThis(false);
+        for (SwTextFrame * pFrame : frames)
+        {
+            // sw_redlinehide: for this to work properly with hidden nodes,
+            // the frame needs to listen on them too.
+            // also: have to check the frame; this->GetRedlineMergeFlag()
+            // is None in case there's a delete redline inside the paragraph,
+            // but that could still result in a merged frame after split...
+            if (pFrame->GetMergedPara())
+            {
+                // Can't special case this == First here - that could (if
+                // both nodes are still merged by redline) lead to
+                // duplicate frames on "this".
+                // Update the extents with new node; also inits merge flag,
+                // so the MakeFramesForAdjacentContentNode below respects it
+                pFrame->RegisterToNode(*pNode);
+                if (pFrame->GetText().isEmpty())
+                {
+                    // turns out it's empty - in this case, it was not
+                    // invalidated because Cut didn't sent it any hints,
+                    // so we have to invalidate it here!
+                    pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                }
+                if (!pFrame->GetMergedPara() ||
+                    !pFrame->GetMergedPara()->listener.IsListeningTo(this))
+                {
+                    // it's no longer listening - need to recreate frame
+                    // (note this is idempotent, can be done once per frame)
+                    SetRedlineMergeFlag(SwNode::Merge::None);
+                    bRecreateThis = true;
+                }
+            }
+            else
+            {
+                bNonMerged = true;
+            }
+        }
+        assert(!(bNonMerged && bRecreateThis)); // 2 layouts not handled yet - maybe best to simply use the other branch then?
+        if (!frames.empty() && bNonMerged)
+        {
+            // the existing frame on "this" should have been updated by Cut
+            MakeFramesForAdjacentContentNode(*pNode);
+            lcl_ChangeFootnoteRef(*pNode);
+        }
+        else if (bRecreateThis)
+        {
+            assert(pNode->HasWriterListeners()); // was just moved there
+            pNode->MakeFramesForAdjacentContentNode(*this);
+            lcl_ChangeFootnoteRef(*this);
+        }
+
+        if (pContentIndexRestore)
+        {   // call after making frames; listeners will take care of adding to the right frame
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
+
+        if (bRecreateThis)
+        {
+            MoveMergedFlysAndFootnotes(frames, *pNode, *this, true);
+        }
     }
+
+#ifndef NDEBUG
+    if (isHide) // otherwise flags won't be set anyway
+    {
+        // First
+        // -> First,NonFirst
+        // -> First,Hidden
+        // -> None,First
+        // Hidden
+        // -> Hidden,Hidden (if still inside merge rl)
+        // -> NonFirst,First (if redline was split)
+        // NonFirst
+        // -> NonFirst,First (if split after end of "incoming" redline &
+        //                    before start of "outgoing" redline)
+        // -> NonFirst,None (if split after end of "incoming" redline)
+        // -> NonFirst,Hidden (if split after start of "outgoing" redline)
+        // -> Hidden, NonFirst (if split before end of "incoming" redline)
+        // None
+        // -> None,None
+        // -> First,NonFirst (if splitting inside a delete redline)
+        SwNode::Merge const eFirst(pNode->GetRedlineMergeFlag());
+        SwNode::Merge const eSecond(GetRedlineMergeFlag());
+        switch (eOldMergeFlag)
+        {
+            case Merge::First:
+                assert((eFirst == Merge::First && eSecond == Merge::NonFirst)
+                    || (eFirst == Merge::First && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::None && eSecond == Merge::First));
+            break;
+            case Merge::Hidden:
+                assert((eFirst == Merge::Hidden && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::First)
+                        // next ones can happen temp. in UndoDelete :(
+                    || (eFirst == Merge::Hidden && eSecond == Merge::NonFirst)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::None));
+            break;
+            case Merge::NonFirst:
+                assert((eFirst == Merge::NonFirst && eSecond == Merge::First)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::None)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::Hidden && eSecond == Merge::NonFirst));
+            break;
+            case Merge::None:
+                assert((eFirst == Merge::None && eSecond == Merge::None)
+                    || (eFirst == Merge::First && eSecond == Merge::NonFirst));
+            break;
+        }
+    }
+#else
+    (void) isHide;
+#endif
 
     {
         // Send Hint for PageDesc. This should be done in the Layout when
@@ -624,6 +833,114 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
     }
 
 }
+
+namespace sw {
+
+/// if first node is deleted & second survives, then the first node's frame
+/// will be deleted too; prevent this by moving the frame to the second node
+/// if necessary.
+void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode)
+{
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rDeletedPrev);
+    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        frames.push_back(pFrame);
+    }
+    {
+        auto frames2(frames);
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIt(rNode);
+        for (SwTextFrame* pFrame = aIt.First(); pFrame; pFrame = aIt.Next())
+        {
+            auto const it(std::find(frames2.begin(), frames2.end(), pFrame));
+            assert(it != frames2.end());
+            frames2.erase(it);
+        }
+        assert(frames2.empty());
+    }
+    for (SwTextFrame *const pFrame : frames)
+    {
+        pFrame->RegisterToNode(rNode, true);
+    }
+}
+
+// typical Join:
+// None,Node->None
+// None,First->First
+// First,NonFirst->First
+// NonFirst,First->NonFirst
+// NonFirst,None->NonFirst
+
+/// if first node is First, its frames may need to be moved, never deleted.
+/// if first node is NonFirst, second node's own frames (First/None) must be deleted
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerged)
+{
+    if (eRecreateMerged != sw::Recreate::No)
+    {
+        SwTextNode * pMergeNode(&rNode);
+        if (eRecreateMerged == sw::Recreate::Predecessor)
+        {
+            for (sal_uLong i = rNode.GetIndex() - 1; ; --i)
+            {
+                SwNode *const pNode(rNode.GetNodes()[i]);
+                assert(!pNode->IsStartNode());
+                if (pNode->IsEndNode())
+                {
+                    i = pNode->StartOfSectionIndex();
+                }
+                else if (pNode->IsTextNode())
+                {
+                    pMergeNode = pNode->GetTextNode(); // use predecessor to merge
+                    break;
+                }
+            }
+        }
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pMergeNode);
+        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+            }
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
+            SwTextNode & rFirstNode(pFrame->GetMergedPara()
+                ? *pFrame->GetMergedPara()->pFirstNode
+                : *pMergeNode);
+            assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+            pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+            assert(pFrame->GetMergedPara());
+            assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
+            assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+        }
+    }
+    else if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
+    {
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (auto const pMergedPara = pFrame->GetMergedPara())
+            {
+                if (pMergedPara->pFirstNode == pMergedPara->pLastNode)
+                {
+                    assert(pMergedPara->pFirstNode == &rNode);
+                    rNode.SetRedlineMergeFlag(SwNode::Merge::None);
+                }
+                break; // checking once is enough
+            }
+            else if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                rNode.SetRedlineMergeFlag(SwNode::Merge::None);
+                break; // checking once is enough
+            }
+        }
+    }
+}
+
+} // namespace
 
 SwContentNode *SwTextNode::JoinNext()
 {
@@ -706,11 +1023,15 @@ SwContentNode *SwTextNode::JoinNext()
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
+        SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
+        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First
+                                            ? sw::Recreate::ThisNode
+                                            : sw::Recreate::No);
     }
     else {
         OSL_FAIL( "No TextNode." );
@@ -800,11 +1121,20 @@ void SwTextNode::JoinPrev()
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
+        SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
+        if (eOldMergeFlag == SwNode::Merge::First)
+        {
+            sw::MoveDeletedPrevFrames(*pTextNode, *this);
+        }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
+        sw::CheckResetRedlineMergeFlag(*this,
+                eOldMergeFlag == SwNode::Merge::NonFirst
+                    ? sw::Recreate::Predecessor
+                    : sw::Recreate::No);
     }
     else {
         OSL_FAIL( "No TextNode." );
@@ -2193,6 +2523,15 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
     }
 
+    // notify frames - before moving hints, because footnotes
+    // want to find their anchor text frame in the follow chain
+    SwInsText aInsHint( nDestStart, nLen );
+    pDest->ModifyNotification( nullptr, &aInsHint );
+    sw::MoveText const moveHint(pDest, nDestStart, nTextStartIdx, nLen);
+    CallSwClientNotify(moveHint);
+    SwDelText aDelHint( nTextStartIdx, nLen );
+    ModifyNotification( nullptr, &aDelHint );
+
     // 2. move attributes
     // Iterate over attribute array until the start of the attribute
     // is behind the moved range
@@ -2328,12 +2667,6 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     CHECK_SWPHINTS(this);
 
     TryDeleteSwpHints();
-
-    // notify layout frames
-    SwInsText aInsHint( nDestStart, nLen );
-    pDest->ModifyNotification( nullptr, &aInsHint );
-    SwDelText aDelHint( nTextStartIdx, nLen );
-    ModifyNotification( nullptr, &aDelHint );
 }
 
 void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
@@ -2726,7 +3059,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
     }
 
     if( HasWriterListeners() )
-        MakeFrames( *pNew );
+        MakeFramesForAdjacentContentNode(*pNew);
     return pNew;
 }
 
@@ -3059,12 +3392,10 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel,
-                                   const bool bWithFootnote ) const
+                                   const ExpandMode eAdditionalMode) const
 
 {
-    ExpandMode eMode = ExpandMode::ExpandFields;
-    if (bWithFootnote)
-        eMode |= ExpandMode::ExpandFootnote;
+    ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
 
     ModelToViewHelper aConversionMap(*this, eMode);
     const OUString aExpandText = aConversionMap.getViewText();
