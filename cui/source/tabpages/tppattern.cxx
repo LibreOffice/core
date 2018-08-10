@@ -184,12 +184,18 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        sal_Int32 nPos = SearchPatternList( rSet.Get(XATTR_FILLBITMAP).GetName() );
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        XFillBitmapItem aItem( rSet.Get( XATTR_FILLBITMAP ) );
+
+        sal_Int32 nPos( 0 );
+        if ( aItem.isPattern() )
         {
-            sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( nPos ) );
-            m_pPatternLB->SelectItem( nId );
+            nPos = SearchPatternList( aItem.GetName() );
+            if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+                nPos = 0;
         }
+
+        sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( nPos ) );
+        m_pPatternLB->SelectItem( nId );
     }
 }
 
@@ -220,6 +226,7 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 
         _rOutAttrs->Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
     }
+    _rOutAttrs->Put(XFillBmpTileItem(true));
     return true;
 }
 
@@ -232,9 +239,12 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
 
     // get bitmap and display it
     const XFillBitmapItem aBmpItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx()));
-    m_rXFSet.Put( aBmpItem );
-    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlPreview->Invalidate();
+    if(aBmpItem.isPattern())
+    {
+        m_rXFSet.Put( aBmpItem );
+        m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+        m_pCtlPreview->Invalidate();
+    }
 
     ChangePatternHdl_Impl( m_pPatternLB );
 

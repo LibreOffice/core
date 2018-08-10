@@ -178,12 +178,23 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     XFillBitmapItem aItem( rSet.Get(XATTR_FILLBITMAP) );
 
-    sal_Int32 nPos = SearchBitmapList( aItem.GetName() );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    sal_Int32 nPos( 0 );
+    if ( !aItem.isPattern() )
     {
-        sal_uInt16 nId = m_pBitmapLB->GetItemId( static_cast<size_t>( nPos ) );
-        m_pBitmapLB->SelectItem( nId );
+        nPos = SearchBitmapList( aItem.GetName() );
+        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+            nPos = 0;
     }
+    else
+    {
+        m_pBitmapWidth->SetValue( 100 );
+        m_pBitmapHeight->SetValue( 100 );
+        const_cast<SfxItemSet&>(rSet).Put( XFillBmpSizeXItem( GetCoreValue( *m_pBitmapWidth, mePoolUnit ) ) );
+        const_cast<SfxItemSet&>(rSet).Put( XFillBmpSizeYItem( GetCoreValue( *m_pBitmapHeight, mePoolUnit ) ) );
+    }
+
+    sal_uInt16 nId = m_pBitmapLB->GetItemId( static_cast<size_t>( nPos ) );
+    m_pBitmapLB->SelectItem( nId );
 }
 
 
@@ -525,8 +536,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
         ModifyBitmapStyleHdl( *m_pBitmapStyleLB );
         ModifyBitmapPositionHdl( *m_pPositionLB );
 
-        m_rXFSet.ClearItem();
-
+        m_rXFSet.ClearItem(XATTR_FILLBITMAP);
         m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         m_rXFSet.Put(XFillBitmapItem(OUString(), *pGraphicObject));
 
