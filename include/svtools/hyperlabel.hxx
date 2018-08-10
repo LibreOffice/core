@@ -42,9 +42,6 @@ namespace svt
         virtual void        GetFocus() override;
         virtual void        LoseFocus() override;
 
-        void                DeactivateHyperMode(vcl::Font aFont, const Color aColor);
-        void                ActivateHyperMode(vcl::Font aFont, const Color aColor);
-
         void                implInit();
 
         using FixedText::CalcMinimumSize;
@@ -55,6 +52,7 @@ namespace svt
         virtual void dispose() override;
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+        virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
         void                SetID( sal_Int16 ID );
         sal_Int16           GetID() const;
