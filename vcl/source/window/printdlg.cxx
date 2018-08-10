@@ -666,6 +666,9 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     // hide layout frame if unwanted
     mpPageLayoutFrame->Show( mbShowLayoutFrame );
 
+    // restore settings from last run
+    readFromSettings();
+
     // setup click hdl
     mpOKButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
     mpCancelButton->SetClickHdl(LINK(this, PrintDialog, ClickHdl));
@@ -771,6 +774,106 @@ void PrintDialog::setupPaperSidesBox()
         mpPaperSidesBox->SelectEntryPos( static_cast<sal_Int32>(eDuplex) - 1 );
         mpPaperSidesBox->Enable( true );
     }
+}
+
+void PrintDialog::storeToSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+
+    pItem->setValue( "PrintDialog",
+                     "LastPrinter",
+                      isPrintToFile() ? Printer::GetDefaultPrinterName()
+                                      : mpPrinters->GetSelectedEntry() );
+
+    pItem->setValue( "PrintDialog",
+                     "LastPage",
+                     mpTabCtrl->GetPageText( mpTabCtrl->GetCurPageId() ) );
+
+    pItem->setValue( "PrintDialog",
+                     "WindowState",
+                     OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 ) );
+
+    pItem->setValue( "PrintDialog",
+                     "CopyCount",
+                     mpCopyCountField->GetText() );
+
+    pItem->setValue( "PrintDialog",
+                     "Collate",
+                     mpCollateBox->IsChecked() ? OUString("true") :
+                                                 OUString("false") );
+
+    pItem->setValue( "PrintDialog",
+                     "CollateSingleJobs",
+                     mbSingleJobs ? OUString("true") :
+                                    OUString("false") );
+
+    pItem->setValue( "PrintDialog",
+                     "HasPreview",
+                     hasPreview() ? OUString("true") :
+                                    OUString("false") );
+
+    pItem->Commit();
+}
+
+void PrintDialog::readFromSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    OUString aValue;
+
+    // read last selected tab page; if it exists, activate it
+    aValue = pItem->getValue( "PrintDialog",
+                              "LastPage" );
+    sal_uInt16 nCount = mpTabCtrl->GetPageCount();
+    for( sal_uInt16 i = 0; i < nCount; i++ )
+    {
+        sal_uInt16 nPageId = mpTabCtrl->GetPageId( i );
+
+        if( aValue == mpTabCtrl->GetPageText( nPageId ) )
+        {
+            mpTabCtrl->SelectTabPage( nPageId );
+            break;
+        }
+    }
+
+    // persistent window state
+    aValue = pItem->getValue( "PrintDialog",
+                              "WindowState" );
+    if( !aValue.isEmpty() )
+        SetWindowState( OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ) );
+
+    // collate
+    aValue = pItem->getValue( "PrintDialog",
+                              "CollateBox" );
+    if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
+    {
+        mnCollateUIMode = 1;
+        mpCollateBox->Check( false );
+        mpCollateBox->Enable( false );
+    }
+    else
+    {
+        mnCollateUIMode = 0;
+        aValue = pItem->getValue( "PrintDialog",
+                                  "Collate" );
+        mpCollateBox->Check( aValue.equalsIgnoreAsciiCase("true") );
+    }
+
+    // collate single jobs
+    aValue = pItem->getValue( "PrintDialog",
+                              "CollateSingleJobs" );
+    if ( aValue.equalsIgnoreAsciiCase("true") )
+        mbSingleJobs = true;
+    else
+        mbSingleJobs = false;
+
+    // preview box
+    aValue = pItem->getValue( "PrintDialog",
+                              "HasPreview" );
+    if ( aValue.equalsIgnoreAsciiCase("true") )
+        mpPreviewBox->Check( true );
+    else
+        mpPreviewBox->Check( false );
+
 }
 
 void PrintDialog::setPaperSizes()
@@ -1681,7 +1784,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpOKButton || pButton == mpCancelButton )
     {
-        //storeToSettings();
+        storeToSettings();
         EndDialog( pButton == mpOKButton ? RET_OK : RET_CANCEL );
     }
     else if( pButton == mpHelpButton )
