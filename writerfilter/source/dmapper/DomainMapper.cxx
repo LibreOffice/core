@@ -1457,11 +1457,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             // 3.) previous adjust and bidi different from previous: swap adjusts
             // 4.) previous adjust and no previous bidi: RTL swaps adjust
 
+            const sal_Int16 nWritingMode = nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB;
             sal_Int16 nParentBidi = -1;
             m_pImpl->GetPropertyFromStyleSheet(PROP_WRITING_MODE) >>= nParentBidi;
             // Paragraph justification reverses its meaning in an RTL context.
             // 1. Only make adjustments if the BiDi changes.
-            if ( nParentBidi != nIntValue && !IsRTFImport() )
+            if ( nParentBidi != nWritingMode && !IsRTFImport() )
             {
                 style::ParagraphAdjust eAdjust = style::ParagraphAdjust(-1);
                 // 2. no adjust property exists yet
@@ -1480,7 +1481,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_RIGHT ));
                 }
             }
-            sal_Int16 nWritingMode = nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB;
             rContext->Insert(PROP_WRITING_MODE, uno::makeAny( nWritingMode ));
         }
 
