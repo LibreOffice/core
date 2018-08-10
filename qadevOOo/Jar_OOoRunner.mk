@@ -640,7 +640,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_XDocumentIndex \
     qadevOOo/tests/java/ifc/text/_XDocumentIndexesSupplier \
     qadevOOo/tests/java/ifc/text/_XEndnotesSupplier \
-    qadevOOo/tests/java/ifc/text/_XFootnote \
     qadevOOo/tests/java/ifc/text/_XFootnotesSettingsSupplier \
     qadevOOo/tests/java/ifc/text/_XFootnotesSupplier \
     qadevOOo/tests/java/ifc/text/_XLineNumberingProperties \
