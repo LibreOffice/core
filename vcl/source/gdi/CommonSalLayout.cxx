@@ -260,6 +260,10 @@ bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationS
 
 bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
+    // No need to touch m_GlyphItems at all for an empty string.
+    if (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 0)
+        return true;
+
     hb_font_t *pHbFont = mpFont->GetHbFont();
     hb_face_t* pHbFace = hb_font_get_face(pHbFont);
 
