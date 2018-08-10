@@ -77,6 +77,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
+#include <comphelper/lok.hxx>
 
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
@@ -250,7 +251,11 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
     else if (pViewSh)
-        pViewSh->UpdateInputHandler(true); // Absolutely necessary update
+    {
+        // Don't stop editing in LOK a remote user might be editing.
+        const bool bStopEditing = !comphelper::LibreOfficeKit::isActive();
+        pViewSh->UpdateInputHandler(true, bStopEditing); // Absolutely necessary update
+    }
 
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
 }

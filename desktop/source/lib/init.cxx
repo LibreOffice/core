@@ -2692,8 +2692,12 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     }
 
     // Disable callbacks while we are painting.
-    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
-        pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(true);
+    if (nOrigViewId >= 0)
+    {
+        auto findIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
+        if (findIt != pDocument->mpCallbackFlushHandlers.end())
+            findIt->second->setPartTilePainting(true);
+    }
 
     try
     {
@@ -2743,8 +2747,12 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Nothing to do but restore the PartTilePainting flag.
     }
 
-    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
-        pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(false);
+    if (nOrigViewId >= 0)
+    {
+        auto findIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
+        if (findIt != pDocument->mpCallbackFlushHandlers.end())
+            findIt->second->setPartTilePainting(false);
+    }
 }
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)

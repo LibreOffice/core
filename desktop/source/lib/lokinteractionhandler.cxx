@@ -118,7 +118,7 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
     boost::property_tree::write_json(aStream, aTree);
 
     std::size_t nView = SfxViewShell::Current() ? SfxLokHelper::getView() : 0;
-    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.size() > nView && m_pLOKDocument->mpCallbackFlushHandlers[nView])
+    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
         m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aStream.str().c_str());
     else if (m_pLOKit->mpCallback)
         m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKit->mpCallbackData);
