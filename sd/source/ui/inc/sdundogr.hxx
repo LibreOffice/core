@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SDUNDOGR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SDUNDOGR_HXX
 
-#include <tools/contnr.hxx>
 #include <sdundo.hxx>
 #include <sddllapi.h>
 

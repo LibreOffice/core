@@ -23,7 +23,6 @@
 #include <sfx2/childwin.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/image.hxx>
 
 class AbstractSpellDialog;
 

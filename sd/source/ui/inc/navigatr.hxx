@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
 
-#include <vcl/window.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -29,6 +28,8 @@
 #include <pres.hxx>
 
 // forward
+namespace vcl { class Window; }
+
 namespace sd {
 class DrawDocShell;
 class NavigatorChildWindow;

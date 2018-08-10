@@ -62,6 +62,7 @@
 #include <prlayout.hxx>
 #include <svx/xfillit.hxx>
 #include <sdresid.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <helpids.h>
 #include <sdabstdlg.hxx>

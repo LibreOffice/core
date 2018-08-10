@@ -20,30 +20,26 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
-#include <resltn.hxx>
 #include <pres.hxx>
 #include "assclass.hxx"
 
 #include <memory>
 #include <vector>
 
-class FixedText;
-class RadioButton;
 class ListBox;
-class ComboBox;
 class Edit;
-class MultiLineEdit;
 class ValueSet;
 class SdHtmlAttrPreview;
 class SdPublishingDesign;
 class ButtonSet;
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 // *********************************************************************
 // Html-Export Autopilot

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
 
-#include <sal/types.h>
 #include <sfx2/toolbarids.hxx>
 
 namespace vcl { class Window; }

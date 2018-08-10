@@ -28,7 +28,6 @@
 
 class KeyEvent;
 class MouseEvent;
-class SdrHdlList;
 
 namespace sd {
 

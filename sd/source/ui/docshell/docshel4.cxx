@@ -75,6 +75,7 @@
 #include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <Window.hxx>
+#include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <sdxmlwrp.hxx>
 #include <sdpptwrp.hxx>

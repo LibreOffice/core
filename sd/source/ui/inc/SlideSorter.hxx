@@ -20,23 +20,20 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SLIDESORTER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SLIDESORTER_HXX
 
-#include "fupoor.hxx"
-#include "Window.hxx"
-#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
 #include <sddllapi.h>
 #include <memory>
 
-class ScrollBar;
-class ScrollBarBox;
 namespace vcl { class Window; }
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace sd {
 class ViewShell;
 class ViewShellBase;
 class Window;
+class FuPoor;
 }
 
 namespace sd { namespace slidesorter { namespace model {

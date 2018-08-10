@@ -54,6 +54,7 @@
 #include <app.hrc>
 
 #include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShellBase.hxx>

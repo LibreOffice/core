@@ -36,6 +36,7 @@
 #include <Outliner.hxx>
 #include <OutlineViewShell.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <DrawDocShell.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -56,6 +57,7 @@
 #include <vcl/weld.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <xmloff/autolayout.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <memory>
 #include <vector>

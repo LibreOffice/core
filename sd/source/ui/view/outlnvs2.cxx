@@ -58,7 +58,9 @@
 #include <ViewShellBase.hxx>
 #include <sdabstdlg.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
+#include <OutlineView.hxx>
 #include <slideshow.hxx>
 #include <memory>
 

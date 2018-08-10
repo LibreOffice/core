@@ -23,7 +23,6 @@
 #include "ViewShell.hxx"
 #include <glob.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/viewfac.hxx>
 #include <sddllapi.h>
 #include <memory>
 #include <vector>

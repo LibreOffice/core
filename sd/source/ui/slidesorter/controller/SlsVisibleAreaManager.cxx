@@ -27,6 +27,7 @@
 #include <controller/SlsAnimationFunction.hxx>
 #include <controller/SlsScrollBarManager.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
+#include <Window.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

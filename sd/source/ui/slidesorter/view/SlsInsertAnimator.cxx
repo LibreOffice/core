@@ -24,6 +24,7 @@
 #include <view/SlsLayouter.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
+#include <Window.hxx>
 
 #include <memory>
 #include <set>

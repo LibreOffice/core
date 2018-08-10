@@ -33,6 +33,7 @@
 #include <controller/SlsTransferableData.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
+#include <Window.hxx>
 #include <app.hrc>
 #include <sdtreelb.hxx>
 #include <sdmod.hxx>

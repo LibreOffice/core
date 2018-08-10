@@ -46,3 +46,6 @@ blacklist:
     include/registry/types.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/sfx2/toolbarids.hxx:
+    # needed for enum definition
+    - sal/types.h

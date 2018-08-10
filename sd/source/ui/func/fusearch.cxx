@@ -32,6 +32,7 @@
 #include <sdmod.hxx>
 #include <View.hxx>
 #include <Outliner.hxx>
+#include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShellBase.hxx>

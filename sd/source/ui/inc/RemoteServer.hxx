@@ -10,23 +10,17 @@
 #define INCLUDED_SD_SOURCE_UI_INC_REMOTESERVER_HXX
 
 // SERVER
-#include <stdio.h>
-#include <stdlib.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
-#include <sys/types.h>
 #include <memory>
 #include <vector>
 
-#include <osl/mutex.hxx>
-#include <osl/socket.hxx>
-#include <rtl/ref.hxx>
+#include <osl/socket_decl.hxx>
 #include <salhelper/thread.hxx>
 
-#include <com/sun/star/presentation/XSlideShowController.hpp>
-
 #include <sddllapi.h>
+
+namespace osl { class Mutex; }
+namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 /**
 * The port for use for the main communication between LibO and remote control app.
@@ -38,7 +32,6 @@
 namespace sd
 {
     class Communicator;
-    class BufferedStreamSocket;
 
     struct ClientInfo
     {
