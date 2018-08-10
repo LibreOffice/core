@@ -35,13 +35,15 @@ icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag )
 
 
 // static
-icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant )
+icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant, const OUString & rKeywords )
 {
     /* FIXME: how should this work with any BCP47? */
     return icu::Locale(
             OUStringToOString( rLanguageTag.getLanguage(), RTL_TEXTENCODING_ASCII_US).getStr(),
             OUStringToOString( rLanguageTag.getCountry(), RTL_TEXTENCODING_ASCII_US).getStr(),
-            OUStringToOString( rVariant, RTL_TEXTENCODING_ASCII_US).getStr());
+            OUStringToOString( rVariant, RTL_TEXTENCODING_ASCII_US).getStr(),
+            OUStringToOString( rKeywords, RTL_TEXTENCODING_ASCII_US).getStr()
+           );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
