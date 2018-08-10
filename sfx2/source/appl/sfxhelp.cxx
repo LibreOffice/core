@@ -658,9 +658,9 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     OUString aHelpLink( "https://help.libreoffice.org/help.html?"  );
 
-    aHelpLink += rURL.copy( aInternal.getLength() );
-    aHelpLink = aHelpLink.replaceAll("%2F","/");
-
+    OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
+    aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
+    aHelpLink += aTarget;
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -695,8 +695,9 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     OUString const aInternal( "vnd.sun.star.help://"  );
 
     OUString aHelpLink( aBaseInstallPath + "/index.html?" );
-    aHelpLink += rURL.copy( aInternal.getLength() );
-    aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
+    OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
+    aTarget = aTarget.replaceAll("%2F","/").replaceAll("?","&");
+    aHelpLink += aTarget;
 
     // get a html tempfile
     OUString const aExtension(".html");
