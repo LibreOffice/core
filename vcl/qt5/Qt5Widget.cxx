@@ -38,54 +38,28 @@
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 
-class VclQtMixinBase
+void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
-public:
-    VclQtMixinBase(Qt5Frame* pFrame) { m_pFrame = pFrame; }
-
-    void mixinFocusInEvent(QFocusEvent*);
-    void mixinFocusOutEvent(QFocusEvent*);
-    void mixinKeyPressEvent(QKeyEvent*);
-    void mixinKeyReleaseEvent(QKeyEvent*);
-    void mixinMouseMoveEvent(QMouseEvent*);
-    void mixinMousePressEvent(QMouseEvent*);
-    void mixinMouseReleaseEvent(QMouseEvent*);
-    void mixinMoveEvent(QMoveEvent*);
-    void mixinPaintEvent(QPaintEvent*, QWidget* widget);
-    void mixinResizeEvent(QResizeEvent*, QSize aSize);
-    void mixinShowEvent(QShowEvent*);
-    void mixinWheelEvent(QWheelEvent*);
-    void mixinCloseEvent(QCloseEvent*);
-
-private:
-    bool mixinHandleKeyEvent(QKeyEvent*, bool);
-    void mixinHandleMouseButtonEvent(QMouseEvent*, bool);
-
-    Qt5Frame* m_pFrame;
-};
-
-void VclQtMixinBase::mixinPaintEvent(QPaintEvent* pEvent, QWidget* widget)
-{
-    QPainter p(widget);
+    QPainter p(this);
     if (m_pFrame->m_bUseCairo)
     {
         cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
         cairo_surface_flush(pSurface);
 
-        QImage aImage(cairo_image_surface_get_data(pSurface), widget->size().width(),
-                      widget->size().height(), Qt5_DefaultFormat32);
+        QImage aImage(cairo_image_surface_get_data(pSurface), size().width(), size().height(),
+                      Qt5_DefaultFormat32);
         p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
     }
     else
         p.drawImage(pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect());
 }
 
-void VclQtMixinBase::mixinResizeEvent(QResizeEvent*, QSize aSize)
+void Qt5Widget::resizeEvent(QResizeEvent* /*event*/)
 {
     if (m_pFrame->m_bUseCairo)
     {
-        int width = aSize.width();
-        int height = aSize.height();
+        int width = size().width();
+        int height = size().height();
 
         if (m_pFrame->m_pSvpGraphics)
         {
@@ -99,18 +73,18 @@ void VclQtMixinBase::mixinResizeEvent(QResizeEvent*, QSize aSize)
     }
     else
     {
-        QImage* pImage = new QImage(aSize, Qt5_DefaultFormat32);
+        QImage* pImage = new QImage(size(), Qt5_DefaultFormat32);
         m_pFrame->m_pQt5Graphics->ChangeQImage(pImage);
         m_pFrame->m_pQImage.reset(pImage);
     }
 
-    m_pFrame->maGeometry.nWidth = aSize.width();
-    m_pFrame->maGeometry.nHeight = aSize.height();
+    m_pFrame->maGeometry.nWidth = size().width();
+    m_pFrame->maGeometry.nHeight = size().height();
 
     m_pFrame->CallCallback(SalEvent::Resize, nullptr);
 }
 
-void VclQtMixinBase::mixinHandleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
+void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
 {
     SalMouseEvent aEvent;
     switch (pEvent->button())
@@ -141,17 +115,11 @@ void VclQtMixinBase::mixinHandleMouseButtonEvent(QMouseEvent* pEvent, bool bRele
     m_pFrame->CallCallback(nEventType, &aEvent);
 }
 
-void VclQtMixinBase::mixinMousePressEvent(QMouseEvent* pEvent)
-{
-    mixinHandleMouseButtonEvent(pEvent, false);
-}
+void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, false); }
 
-void VclQtMixinBase::mixinMouseReleaseEvent(QMouseEvent* pEvent)
-{
-    mixinHandleMouseButtonEvent(pEvent, true);
-}
+void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, true); }
 
-void VclQtMixinBase::mixinMouseMoveEvent(QMouseEvent* pEvent)
+void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
     aEvent.mnTime = pEvent->timestamp();
@@ -164,7 +132,7 @@ void VclQtMixinBase::mixinMouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
-void VclQtMixinBase::mixinWheelEvent(QWheelEvent* pEvent)
+void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
 
@@ -192,19 +160,16 @@ void VclQtMixinBase::mixinWheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void VclQtMixinBase::mixinMoveEvent(QMoveEvent*)
-{
-    m_pFrame->CallCallback(SalEvent::Move, nullptr);
-}
+void Qt5Widget::moveEvent(QMoveEvent*) { m_pFrame->CallCallback(SalEvent::Move, nullptr); }
 
-void VclQtMixinBase::mixinShowEvent(QShowEvent*)
+void Qt5Widget::showEvent(QShowEvent*)
 {
     QSize aSize(m_pFrame->GetQWidget()->size());
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void VclQtMixinBase::mixinCloseEvent(QCloseEvent* /*pEvent*/)
+void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
 {
     m_pFrame->CallCallback(SalEvent::Close, nullptr);
 }
@@ -349,7 +314,7 @@ static sal_uInt16 GetKeyCode(int keyval)
     return nCode;
 }
 
-bool VclQtMixinBase::mixinHandleKeyEvent(QKeyEvent* pEvent, bool bDown)
+bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
 {
     SalKeyEvent aEvent;
 
@@ -366,111 +331,34 @@ bool VclQtMixinBase::mixinHandleKeyEvent(QKeyEvent* pEvent, bool bDown)
     return bStopProcessingKey;
 }
 
-void VclQtMixinBase::mixinKeyPressEvent(QKeyEvent* pEvent)
+void Qt5Widget::keyPressEvent(QKeyEvent* pEvent)
 {
-    if (mixinHandleKeyEvent(pEvent, true))
+    if (handleKeyEvent(pEvent, true))
         pEvent->accept();
 }
 
-void VclQtMixinBase::mixinKeyReleaseEvent(QKeyEvent* pEvent)
+void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (mixinHandleKeyEvent(pEvent, false))
+    if (handleKeyEvent(pEvent, false))
         pEvent->accept();
 }
 
-void VclQtMixinBase::mixinFocusInEvent(QFocusEvent*)
-{
-    m_pFrame->CallCallback(SalEvent::GetFocus, nullptr);
-}
+void Qt5Widget::focusInEvent(QFocusEvent*) { m_pFrame->CallCallback(SalEvent::GetFocus, nullptr); }
 
-void VclQtMixinBase::mixinFocusOutEvent(QFocusEvent*)
+void Qt5Widget::focusOutEvent(QFocusEvent*)
 {
     m_pFrame->CallCallback(SalEvent::LoseFocus, nullptr);
 }
 
-template <class ParentClassT> class Qt5Widget : public ParentClassT
+Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
+    : QWidget(Q_NULLPTR, f)
+    , m_pFrame(&rFrame)
 {
-    //Q_OBJECT
-
-    VclQtMixinBase maMixin;
-
-    virtual void focusInEvent(QFocusEvent* event) override
-    {
-        return maMixin.mixinFocusInEvent(event);
-    }
-
-    virtual void focusOutEvent(QFocusEvent* event) override
-    {
-        return maMixin.mixinFocusOutEvent(event);
-    }
-
-    virtual void keyPressEvent(QKeyEvent* event) override
-    {
-        return maMixin.mixinKeyPressEvent(event);
-    }
-
-    virtual void keyReleaseEvent(QKeyEvent* event) override
-    {
-        return maMixin.mixinKeyReleaseEvent(event);
-    }
-
-    virtual void mouseMoveEvent(QMouseEvent* event) override
-    {
-        return maMixin.mixinMouseMoveEvent(event);
-    }
-
-    virtual void mousePressEvent(QMouseEvent* event) override
-    {
-        return maMixin.mixinMousePressEvent(event);
-    }
-
-    virtual void mouseReleaseEvent(QMouseEvent* event) override
-    {
-        return maMixin.mixinMouseReleaseEvent(event);
-    }
-
-    virtual void moveEvent(QMoveEvent* event) override { return maMixin.mixinMoveEvent(event); }
-
-    virtual void paintEvent(QPaintEvent* event) override
-    {
-        return maMixin.mixinPaintEvent(event, this);
-    }
-
-    virtual void resizeEvent(QResizeEvent* event) override
-    {
-        return maMixin.mixinResizeEvent(event, ParentClassT::size());
-    }
-
-    virtual void showEvent(QShowEvent* event) override { return maMixin.mixinShowEvent(event); }
-
-    virtual void wheelEvent(QWheelEvent* event) override { return maMixin.mixinWheelEvent(event); }
-
-    virtual void closeEvent(QCloseEvent* event) override { return maMixin.mixinCloseEvent(event); }
-
-private:
-    Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
-        : ParentClassT(Q_NULLPTR, f)
-        , maMixin(&rFrame)
-    {
-        Init();
-    }
-
-    void Init()
-    {
-        ParentClassT::create();
-        ParentClassT::setMouseTracking(true);
-        ParentClassT::setFocusPolicy(Qt::StrongFocus);
-    }
-
-public:
-    virtual ~Qt5Widget() override{};
-
-    friend QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f);
-};
-
-QWidget* createQt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
-{
-    return new Qt5Widget<QWidget>(rFrame, f);
+    create();
+    setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
 }
+
+Qt5Widget::~Qt5Widget(){};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
