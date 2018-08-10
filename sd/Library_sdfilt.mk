@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,sdfilt,\
     ucbhelper \
     utl \
     vcl \
+    basegfx \
 ))
 
 $(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))

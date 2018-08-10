@@ -74,9 +74,46 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sdpage.hxx>
+#include <cfloat>
+#include <rtl/character.hxx>
 
 using namespace css;
 using namespace css::animations;
+
+namespace {
+
+bool checkBeginWithNumber(const OUString& rStr)
+{
+    sal_Unicode aChar = (rStr.getLength() > 1) ? rStr[0] : '\0';
+    return aChar == '.' || aChar == '-' || rtl::isAsciiDigit(aChar);
+}
+
+}
+
+#define CPPUNIT_ASSERT_MOTIONPATH(expect, actual) \
+      assertMotionPath(expect, actual, CPPUNIT_SOURCELINE())
+
+void assertMotionPath(const OUString &rStr1, const OUString &rStr2, const CppUnit::SourceLine &rSourceLine)
+{
+    sal_Int32 nIdx1 = 0;
+    sal_Int32 nIdx2 = 0;
+
+    OString sMessage = OUStringToOString("Motion path values mismatch.\nExpect: " + rStr1 +
+            "\nActual: " + rStr2, RTL_TEXTENCODING_UTF8);
+
+    while(nIdx1 != -1 && nIdx2 != -1)
+    {
+        OUString aToken1 = rStr1.getToken(0, ' ', nIdx1);
+        OUString aToken2 = rStr2.getToken(0, ' ', nIdx2);
+
+        if (checkBeginWithNumber(aToken1) && checkBeginWithNumber(aToken2))
+            assertDoubleEquals(aToken1.toDouble(), aToken2.toDouble(), DBL_EPSILON, rSourceLine, sMessage.getStr());
+        else
+            assertEquals(aToken1, aToken2, rSourceLine, sMessage.getStr());
+    }
+    assertEquals(sal_Int32(-1), nIdx1, rSourceLine, sMessage.getStr());
+    assertEquals(sal_Int32(-1), nIdx2, rSourceLine, sMessage.getStr());
+}
 
 class SdOOXMLExportTest2 : public SdModelTestBaseXML
 {
@@ -153,6 +190,7 @@ public:
     void testTdf118768();
     void testTdf118836();
     void testTdf116350TextEffects();
+    void testTdf118825();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -226,6 +264,7 @@ public:
     CPPUNIT_TEST(testTdf118768);
     CPPUNIT_TEST(testTdf118836);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testTdf118825);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1016,10 +1055,11 @@ void SdOOXMLExportTest2::testTdf111518()
     xShell->DoClose();
 
     xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocRels,
+    OUString sExpect = "M -3.54167E-6 -4.81481E-6 L 0.39037 -0.00069 E";
+    OUString sActual = getXPath(pXmlDocRels,
             "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animMotion",
-            "path",
-            "M -3.54167E-6 -4.81481E-6 L 0.39037 -0.00069");
+            "path");
+    CPPUNIT_ASSERT_MOTIONPATH(sExpect, sActual);
 }
 
 void SdOOXMLExportTest2::testTdf100387()
@@ -1843,6 +1883,29 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     assertXPath(pXmlDocContent, "//p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textArchUp");
     assertXPath(pXmlDocContent, "//p:sp[14]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textCircle");
 
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf118825()
+{
+    const OUString sPath1 = "M 0.0449285714285714 0.00368253968253968 C 0.0575714285714285 -0.00095238095238096 0.0704264795523803 -0.00370117418637049 0.0831071428571428 -0.00819047619047622 C 0.0953550597998766 -0.0125265741339082 0.107821870086751 -0.010397536991717 0.120321428571429 -0.0115555555555556 C 0.133179018681433 -0.0127467438724762 0.151318627483861 -0.0158700272533852 0.1585 0.00539682539682542 C 0.16478291361998 0.0240029898688431 0.15828642886492 0.0483806254341085 0.161392857142857 0.0698412698412698 C 0.165179286017685 0.0959996731216037 0.17453898927982 0.119735912694626 0.187142857142857 0.132634920634921 C 0.199788991845377 0.145577185161529 0.215607110490848 0.142889773028431 0.230107142857143 0.142857142857143 C 0.243821417584191 0.142826280916829 0.257716514999779 0.142685979556724 0.271142857142857 0.137777777777778 C 0.286895094567923 0.132019309914514 0.302318190711873 0.122962218306185 0.317928571428571 0.11568253968254 C 0.333496771884547 0.108422531222479 0.348787823719556 0.0990570571890929 0.363714285714286 0.0885079365079364 C 0.374930683062651 0.080580865157908 0.385357142857143 0.0693333333333332 0.396178571428571 0.0596825396825396 L 0.404785714285714 0.0410158730158729 L 0.401892857142857 0.0342222222222221 E";
+
+    const OUString sPath2 = "M 0.025 0.0571428571428571 L 0.0821428571428571 0.184126984126984 L -0.175 0.234920634920635 L -0.246428571428571 -0.0190476190476191 L -0.0821428571428573 -0.133333333333333 E";
+
+    const OUString sPath3 = "M -0.0107142857142857 0.00634920634920635 C -0.110714285714286 0.501587301587301 -0.153571428571429 -0.00634920634920635 -0.246428571428572 0.184126984126984 C -0.339285714285715 0.374603174603175 -0.296428571428572 0.514285714285714 -0.267857142857143 0.603174603174603 C -0.239285714285715 0.692063492063493 0.0607142857142858 0.590476190476191 0.0607142857142858 0.590476190476191 E";
+
+    const OUString sPath4 = "M 0.0535714285714286 -0.0444444444444444 L 0.132142857142857 -0.0444444444444444 L 0.132142857142857 -0.146031746031746 L 0.0964285714285715 -0.146031746031746 E";
+
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf118825-motionpath.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+
+    CPPUNIT_ASSERT_MOTIONPATH(sPath1, getXPath(pXmlDocContent, "(//p:animMotion)[1]", "path"));
+    CPPUNIT_ASSERT_MOTIONPATH(sPath2, getXPath(pXmlDocContent, "(//p:animMotion)[2]", "path"));
+    CPPUNIT_ASSERT_MOTIONPATH(sPath3, getXPath(pXmlDocContent, "(//p:animMotion)[3]", "path"));
+    CPPUNIT_ASSERT_MOTIONPATH(sPath4, getXPath(pXmlDocContent, "(//p:animMotion)[4]", "path"));
     xDocShRef->DoClose();
 }
 
