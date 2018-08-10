@@ -32,31 +32,28 @@
 namespace
 {
 
-void putCommandChar(OUStringBuffer& rBuffer,sal_Unicode& rLastSVGCommand, sal_Unicode aChar, bool bToLower)
+void putCommandChar(OUStringBuffer& rBuffer,sal_Unicode& rLastSVGCommand, sal_Unicode aChar, bool bToLower,bool bVerbose)
 {
     const sal_Unicode aCommand = bToLower ? rtl::toAsciiLowerCase(aChar) : aChar;
 
-    if (rLastSVGCommand != aCommand)
+    if (rBuffer.getLength())
+        rBuffer.append(' ');
+
+    if (bVerbose || rLastSVGCommand != aCommand)
     {
         rBuffer.append(aCommand);
         rLastSVGCommand = aCommand;
     }
 }
 
-void putNumberChar(OUStringBuffer& rStr,double fValue, double fOldValue, bool bUseRelativeCoordinates)
+void putNumberChar(OUStringBuffer& rStr,double fValue, double fOldValue, bool bUseRelativeCoordinates,bool bVerbose)
 {
     if (bUseRelativeCoordinates)
         fValue -= fOldValue;
 
     const sal_Int32 aLen(rStr.getLength());
-    if (aLen)
-    {
-        if (basegfx::internal::isOnNumberChar(rStr[aLen - 1], false) &&
-            fValue >= 0.0 )
-        {
-            rStr.append(' ');
-        }
-    }
+    if (bVerbose || (aLen && basegfx::internal::isOnNumberChar(rStr[aLen - 1], false) && fValue >= 0.0))
+        rStr.append(' ');
 
     rStr.append(fValue);
 }
@@ -727,7 +724,8 @@ namespace basegfx
             const B2DPolyPolygon& rPolyPolygon,
             bool bUseRelativeCoordinates,
             bool bDetectQuadraticBeziers,
-            bool bHandleRelativeNextPointCompatible)
+            bool bHandleRelativeNextPointCompatible,
+            bool bOOXMLMotionPath)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
             OUStringBuffer aResult;
@@ -758,9 +756,9 @@ namespace basegfx
                     }
 
                     // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
-                    putCommandChar(aResult, aLastSVGCommand, 'M', bUseRelativeCoordinatesForFirstPoint);
-                    putNumberChar(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
-                    putNumberChar(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
+                    putCommandChar(aResult, aLastSVGCommand, 'M', bUseRelativeCoordinatesForFirstPoint, bOOXMLMotionPath);
+                    putNumberChar(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint, bOOXMLMotionPath);
+                    putNumberChar(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint, bOOXMLMotionPath);
                     aLastSVGCommand =  bUseRelativeCoordinatesForFirstPoint ? 'l' : 'L';
                     aCurrentSVGPosition = aEdgeStart;
 
@@ -793,7 +791,7 @@ namespace basegfx
                             // That's what is done from our import, so avoid exporting it as first statement
                             // is necessary.
                             const bool bSymmetricAtEdgeStart(
-                                nIndex != 0
+                                !bOOXMLMotionPath && nIndex != 0
                                 && aPolygon.getContinuityInPoint(nIndex) == B2VectorContinuity::C2);
 
                             if(bDetectQuadraticBeziers)
@@ -815,20 +813,20 @@ namespace basegfx
                                 // approximately equal, export as quadratic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    putCommandChar(aResult, aLastSVGCommand, 'T', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'T', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    putCommandChar(aResult, aLastSVGCommand, 'Q', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'Q', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -837,24 +835,24 @@ namespace basegfx
                                 // export as cubic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    putCommandChar(aResult, aLastSVGCommand, 'S', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'S', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    putCommandChar(aResult, aLastSVGCommand, 'C', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'C', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -876,29 +874,29 @@ namespace basegfx
                                 {
                                     // point is a double point; do not export at all
                                 }
-                                else if(bXEqual)
+                                else if(bXEqual && !bOOXMLMotionPath)
                                 {
                                     // export as vertical line
-                                    putCommandChar(aResult, aLastSVGCommand, 'V', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'V', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
-                                else if(bYEqual)
+                                else if(bYEqual && !bOOXMLMotionPath)
                                 {
                                     // export as horizontal line
-                                    putCommandChar(aResult, aLastSVGCommand, 'H', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'H', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
                                     // export as line
-                                    putCommandChar(aResult, aLastSVGCommand, 'L', bUseRelativeCoordinates);
+                                    putCommandChar(aResult, aLastSVGCommand, 'L', bUseRelativeCoordinates, bOOXMLMotionPath);
 
-                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    putNumberChar(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates, bOOXMLMotionPath);
+                                    putNumberChar(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates, bOOXMLMotionPath);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -911,7 +909,11 @@ namespace basegfx
                     // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
                     if(aPolygon.isClosed())
                     {
-                        putCommandChar(aResult, aLastSVGCommand, 'Z', bUseRelativeCoordinates);
+                        putCommandChar(aResult, aLastSVGCommand, 'Z', bUseRelativeCoordinates, bOOXMLMotionPath);
+                    }
+                    else if (bOOXMLMotionPath)
+                    {
+                        putCommandChar(aResult, aLastSVGCommand, 'E', bUseRelativeCoordinates, bOOXMLMotionPath);
                     }
 
                     if(!bHandleRelativeNextPointCompatible)
