@@ -424,6 +424,10 @@ bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, 
     }
     if (!nId)
         return false;
+
+    // We're intersted in the error returned by glDeleteProgram().
+    glGetError();
+
     glDeleteProgram(nId);
     return glGetError() == GL_NO_ERROR;
 }
