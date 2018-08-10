@@ -55,7 +55,7 @@ else
 		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(DISABLE_GUI),, \
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
-		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) \
+		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_PythonTest_COMMAND) \
 			$(if $(PYTHON_TEST_NAME),$(PYTHON_TEST_NAME),$(MODULES)) \
 		$(if $(gb_CppunitTest__interactive),, \

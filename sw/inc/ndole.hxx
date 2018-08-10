@@ -111,10 +111,8 @@ public:
           SwOLEObj& GetOLEObj()       { return maOLEObj; }
     virtual ~SwOLENode() override;
 
-    virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
-
     /// Is in ndcopy.cxx.
-    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
+    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
 
     virtual Size GetTwipSize() const override;
 

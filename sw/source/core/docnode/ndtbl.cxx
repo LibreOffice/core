@@ -539,7 +539,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
     // Insert Frames
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
-    pTableNd->MakeFrames( &aNdIdx );
+    pTableNd->MakeOwnFrames( &aNdIdx );
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
@@ -687,7 +687,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // We always use Upper to insert the Table
-    SwNode2Layout aNode2Layout( aRg.aStart.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout( aRg.aStart.GetNode() );
 
     GetIDocumentUndoRedo().DoUndo( nullptr != pUndo );
 
@@ -887,7 +887,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableFormat)
 {
     // delete old layout frames, new ones need to be created...
-    rNode.DelFrames();
+    rNode.DelFrames(nullptr);
 
     if (!rNode.IsTextNode())
     {
@@ -1070,10 +1070,16 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 if (pTextNd->GetText()[nChPos] == cCh)
                 {
                     aCntPos.nContent = nChPos;
-                    SwContentNode* pNewNd = pTextNd->SplitContentNode( aCntPos );
-
-                    if( !pContentStore->Empty() )
-                        pContentStore->Restore( *pNewNd, nChPos, nChPos + 1 );
+                    std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
+                        [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode)
+                        {
+                            if (!pContentStore->Empty())
+                            {
+                                pContentStore->Restore(*pNewNode, nChPos, nChPos + 1, eMode);
+                            }
+                        });
+                    SwContentNode *const pNewNd =
+                        pTextNd->SplitContentNode(aCntPos, &restoreFunc);
 
                     // Delete separator and correct search string
                     pTextNd->EraseText( aCntPos.nContent, 1 );
@@ -1214,7 +1220,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     }
 
     // We always use Upper to insert the Table
-    SwNode2Layout aNode2Layout( aRg.aStart.GetNode() );
+    SwNode2LayoutSaveUpperFrames aNode2Layout( aRg.aStart.GetNode() );
 
     GetIDocumentUndoRedo().DoUndo(bUndo);
 
@@ -1589,12 +1595,12 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         return false;
 
     // If the Table was alone in a Section, create the Frames via the Table's Upper
-    SwNode2Layout* pNode2Layout = nullptr;
+    SwNode2LayoutSaveUpperFrames * pNode2Layout = nullptr;
     SwNodeIndex aFrameIdx( rRange.aStart );
     SwNode* pFrameNd = FindPrvNxtFrameNode( aFrameIdx, &rRange.aEnd.GetNode() );
     if( !pFrameNd )
         // Collect all Uppers
-        pNode2Layout = new SwNode2Layout( *pTableNd );
+        pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pTableNd);
 
     // Delete the Frames
     pTableNd->DelFrames();
@@ -1649,18 +1655,18 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
             if( nullptr != ( pCNd = aDelRg.aStart.GetNode().GetContentNode()))
             {
                 if( pFrameNd->IsContentNode() )
-                    static_cast<SwContentNode*>(pFrameNd)->MakeFrames( *pCNd );
+                    static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
                 else if( pFrameNd->IsTableNode() )
-                    static_cast<SwTableNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                    static_cast<SwTableNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aDelRg.aStart);
                 else if( pFrameNd->IsSectionNode() )
-                    static_cast<SwSectionNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                    static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aDelRg.aStart);
                 pFrameNd = pCNd;
             }
             else if( nullptr != ( pSNd = aDelRg.aStart.GetNode().GetSectionNode()))
             {
                 if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
                 {
-                    pSNd->MakeFrames( &aFrameIdx, &aDelRg.aEnd );
+                    pSNd->MakeOwnFrames(&aFrameIdx, &aDelRg.aEnd);
                     break;
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();
@@ -2359,7 +2365,7 @@ SwTabFrame *SwTableNode::MakeFrame( SwFrame* pSib )
  * Creates all Views from the Document for the preceding Node. The resulting ContentFrames
  * are added to the corresponding Layout.
  */
-void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
+void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     if( !GetTable().GetFrameFormat()->HasWriterListeners()) // Do we actually have Frame?
         return;
@@ -2375,6 +2381,11 @@ void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
 
     while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
     {
+        if (pFrame->getRootFrame()->IsHideRedlines()
+            && !pNode->IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwFrame *pNew = pNode->MakeFrame( pFrame );
         // Will the Node receive Frames before or after?
         if ( bBefore )
@@ -2389,7 +2400,7 @@ void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
 /**
  * Create a TableFrame for every Shell and insert before the corresponding ContentFrame.
  */
-void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
+void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
 {
     OSL_ENSURE( pIdxBehind, "No Index" );
     *pIdxBehind = *this;
@@ -2402,6 +2413,11 @@ void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, *this )) )
     {
+        if (pUpper->getRootFrame()->IsHideRedlines()
+            && !IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwTabFrame* pNew = MakeFrame( pUpper );
         pNew->Paste( pUpper, pFrame );
         // #i27138#
@@ -2423,7 +2439,7 @@ void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
     }
 }
 
-void SwTableNode::DelFrames()
+void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
 {
     /* For a start, cut out and delete the TabFrames (which will also delete the Columns and Rows)
        The TabFrames are attached to the FrameFormat of the SwTable.
@@ -2435,7 +2451,7 @@ void SwTableNode::DelFrames()
     {
         bool bAgain = false;
         {
-            if ( !pFrame->IsFollow() )
+            if (!pFrame->IsFollow() && (!pLayout || pLayout == pFrame->getRootFrame()))
             {
                 while ( pFrame->HasFollow() )
                     pFrame->JoinAndDelFollows();
@@ -2472,7 +2488,7 @@ void SwTableNode::SetNewTable( std::unique_ptr<SwTable> pNewTable, bool bNewFram
     {
         SwNodeIndex aIdx( *EndOfSectionNode());
         GetNodes().GoNext( &aIdx );
-        MakeFrames( &aIdx );
+        MakeOwnFrames(&aIdx);
     }
 }
 
@@ -3204,7 +3220,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         // And insert Frames
         SwNodeIndex aNdIdx( *pNew->EndOfSectionNode() );
         GetNodes().GoNext( &aNdIdx ); // To the next ContentNode
-        pNew->MakeFrames( &aNdIdx );
+        pNew->MakeOwnFrames( &aNdIdx );
 
         // Insert a paragraph between the Table
         GetNodes().MakeTextNode( SwNodeIndex( *pNew ),
