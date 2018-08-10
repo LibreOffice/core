@@ -80,7 +80,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
     // from the same macro should be the same).
     if( kind == LogCallKind::Sal )
         {
-        SourceLocation expansionLocation = compiler.getSourceManager().getExpansionLoc( call->getLocStart());
+        SourceLocation expansionLocation = compiler.getSourceManager().getExpansionLoc( compat::getBeginLoc(call));
         if( expansionLocation == lastSalDetailLogStreamMacro )
             return true;
         lastSalDetailLogStreamMacro = expansionLocation;
@@ -91,7 +91,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
             checkArea( area->getBytes(), area->getExprLoc());
         else
             report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?)",
-                area->getLocStart());
+                compat::getBeginLoc(area));
         return true;
         }
     if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace()
@@ -101,7 +101,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
         Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
         { // If the area argument is a null pointer, that is allowed only for SAL_DEBUG.
         const SourceManager& source = compiler.getSourceManager();
-        for( SourceLocation loc = call->getLocStart();
+        for( SourceLocation loc = compat::getBeginLoc(call);
              loc.isMacroID();
              loc = compat::getImmediateExpansionRange(source, loc ).first )
             {
@@ -110,11 +110,11 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                 return true; // ok
             }
         report( DiagnosticsEngine::Warning, "missing log area",
-            call->getArg( 1 )->IgnoreParenImpCasts()->getLocStart());
+            compat::getBeginLoc(call->getArg( 1 )->IgnoreParenImpCasts()));
         return true;
         }
     report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?)",
-        call->getLocStart());
+        compat::getBeginLoc(call));
     return true;
     }
 

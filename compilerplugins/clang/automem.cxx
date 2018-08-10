@@ -51,7 +51,7 @@ bool AutoMem::VisitCXXDeleteExpr(const CXXDeleteExpr* expr)
 {
     if (ignoreLocation( expr ))
         return true;
-    StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/salhelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/osl/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/salhelper/")
@@ -79,7 +79,7 @@ bool AutoMem::VisitCXXDeleteExpr(const CXXDeleteExpr* expr)
     report(
         DiagnosticsEngine::Warning,
         "calling delete on object field, rather use std::unique_ptr or std::scoped_ptr",
-        expr->getLocStart())
+        compat::getBeginLoc(expr))
         << expr->getSourceRange();
     return true;
 }

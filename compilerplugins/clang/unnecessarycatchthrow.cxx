@@ -75,7 +75,7 @@ bool UnnecessaryCatchThrow::VisitCXXTryStmt(CXXTryStmt const * tryStmt)
     }
 
     report( DiagnosticsEngine::Warning, "unnecessary catch and throw",
-            catchStmt->getLocStart())
+            compat::getBeginLoc(catchStmt))
             << catchStmt->getSourceRange();
     return true;
 }

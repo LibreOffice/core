@@ -73,7 +73,7 @@ bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOpe
 {
     if (ignoreLocation(binaryOperator))
         return true;
-    if (binaryOperator->getLocStart().isMacroID())
+    if (compat::getBeginLoc(binaryOperator).isMacroID())
         return true;
 
     auto op = binaryOperator->getOpcode();
@@ -92,7 +92,7 @@ bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOpe
         return true;
     report(
         DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
-        binaryOperator->getLocStart())
+        compat::getBeginLoc(binaryOperator))
         << (lhsValue ? lhsValue->toString(10) : "unknown")
         << (rhsValue ? rhsValue->toString(10) : "unknown")
         << binaryOperator->getSourceRange();
@@ -103,7 +103,7 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
 {
     if (ignoreLocation(cxxOperatorCallExpr))
         return true;
-    if (cxxOperatorCallExpr->getLocStart().isMacroID())
+    if (compat::getBeginLoc(cxxOperatorCallExpr).isMacroID())
         return true;
 
     auto op = cxxOperatorCallExpr->getOperator();
@@ -124,7 +124,7 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
         return true;
     report(
         DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
-        cxxOperatorCallExpr->getLocStart())
+        compat::getBeginLoc(cxxOperatorCallExpr))
         << (lhsValue ? lhsValue->toString(10) : "unknown")
         << (rhsValue ? rhsValue->toString(10) : "unknown")
         << cxxOperatorCallExpr->getSourceRange();

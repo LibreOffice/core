@@ -440,7 +440,7 @@ private:
             return nullptr;
         }
         if (compiler.getSourceManager().isMacroBodyExpansion(
-                expr->getLocStart()))
+                compat::getBeginLoc(expr)))
         {
             return nullptr;
         }
@@ -487,7 +487,7 @@ private:
         if (usage.firstConsumption != nullptr) {
             return;
         }
-        auto const loc = dre->getLocStart();
+        auto const loc = compat::getBeginLoc(dre);
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
             && (compat::getImmediateMacroNameForDiagnostics(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())

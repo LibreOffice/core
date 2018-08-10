@@ -121,7 +121,7 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
     report(
         DiagnosticsEngine::Warning,
         "Should be calling OutputDevice method through RenderContext.",
-        pCXXMemberCallExpr->getLocStart())
+        compat::getBeginLoc(pCXXMemberCallExpr))
             << pCXXMemberCallExpr->getSourceRange();
     return true;
 }

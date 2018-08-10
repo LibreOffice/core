@@ -170,7 +170,7 @@ bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     if ( n < (int)callExpr->getNumArgs() && callExpr->getArg(n)->isDefaultArgument()) {
         MyCallInfo callInfo;
         niceName(functionDecl, callInfo);
-        callInfo.sourceLocationOfCall = locationToString(callExpr->getLocStart());
+        callInfo.sourceLocationOfCall = locationToString(compat::getBeginLoc(callExpr));
         callSet.insert(callInfo);
     }
     return true;
@@ -199,7 +199,7 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
     if ( n < (int)constructExpr->getNumArgs() && constructExpr->getArg(n)->isDefaultArgument()) {
         MyCallInfo callInfo;
         niceName(constructorDecl, callInfo);
-        callInfo.sourceLocationOfCall = locationToString(constructExpr->getLocStart());
+        callInfo.sourceLocationOfCall = locationToString(compat::getBeginLoc(constructExpr));
         callSet.insert(callInfo);
     }
     return true;

@@ -148,7 +148,7 @@ bool MergeClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     }
     if (decl->isThisDeclarationADefinition())
     {
-        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(decl->getLocStart());
+        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
         std::string filename = compiler.getSourceManager().getFilename(spellingLocation);
         filename = filename.substr(strlen(SRCDIR));
         std::string s = decl->getQualifiedNameAsString();

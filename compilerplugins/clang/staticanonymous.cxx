@@ -51,7 +51,7 @@ bool StaticAnonymous::VisitFunctionDecl( FunctionDecl* func )
                {
                     report( DiagnosticsEngine::Warning,
                         "redundant 'static' keyword in unnamed namespace",
-                        func->getLocStart());
+                        compat::getBeginLoc(func));
                }
          }
     }

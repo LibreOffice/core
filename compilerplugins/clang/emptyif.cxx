@@ -69,14 +69,15 @@ bool EmptyIf::VisitIfStmt(IfStmt const* ifStmt)
 
     if (ifStmt->getElse() && empty(ifStmt->getElse()) && !ContainsComment(ifStmt->getElse()))
     {
-        report(DiagnosticsEngine::Warning, "empty else body", ifStmt->getElse()->getLocStart())
+        report(DiagnosticsEngine::Warning, "empty else body",
+               compat::getBeginLoc(ifStmt->getElse()))
             << ifStmt->getElse()->getSourceRange();
         return true;
     }
 
     if (!ifStmt->getElse() && empty(ifStmt->getThen()) && !ContainsComment(ifStmt->getThen()))
     {
-        report(DiagnosticsEngine::Warning, "empty if body", ifStmt->getLocStart())
+        report(DiagnosticsEngine::Warning, "empty if body", compat::getBeginLoc(ifStmt))
             << ifStmt->getSourceRange();
     }
 

@@ -322,7 +322,7 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
         return true;
     }
     // Ignore macros like FD_ZERO
-    if (compiler.getSourceManager().isMacroBodyExpansion(varDecl->getLocStart())) {
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(varDecl))) {
         return true;
     }
     if (varDecl->hasGlobalStorage()) {

@@ -76,7 +76,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
     SourceLocation leftLoc;
     auto const leftExpr = expr->getArg(0)->IgnoreParenImpCasts();
     if (isStringLiteral(leftExpr)) {
-        leftLoc = leftExpr->getLocStart();
+        leftLoc = compat::getBeginLoc(leftExpr);
     } else {
         CallExpr const * left = dyn_cast<CallExpr>(leftExpr);
         if (left == nullptr) {
@@ -94,11 +94,11 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         {
             return true;
         }
-        leftLoc = left->getArg(1)->getLocStart();
+        leftLoc = compat::getBeginLoc(left->getArg(1));
     }
     StringRef name {
         getFileNameOfSpellingLoc(
-            compiler.getSourceManager().getSpellingLoc(expr->getLocStart())) };
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };
     if (loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
         || loplugin::isSamePathname(
@@ -112,7 +112,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         "replace '%0' between string literals with juxtaposition",
         op == nullptr ? expr->getExprLoc() : op->getOperatorLoc())
         << (oo == OverloadedOperatorKind::OO_Plus ? "+" : "<<")
-        << SourceRange(leftLoc, expr->getArg(1)->getLocEnd());
+        << SourceRange(leftLoc, compat::getEndLoc(expr->getArg(1)));
     return true;
 }
 
@@ -124,7 +124,7 @@ bool StringConcat::isStringLiteral(Expr const * expr) {
     // OSL_THIS_FUNC may be defined as "" in include/osl/diagnose.h, so don't
     // warn about expressions like 'SAL_INFO(..., OSL_THIS_FUNC << ":")' or
     // 'OUString(OSL_THIS_FUNC) + ":"':
-    auto loc = expr->getLocStart();
+    auto loc = compat::getBeginLoc(expr);
     while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
         loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
     }

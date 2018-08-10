@@ -552,10 +552,11 @@ bool ReturnConstant::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
 
     // ignore LINK macro stuff
     std::string aImmediateMacro = "";
-    if (compiler.getSourceManager().isMacroBodyExpansion(functionDecl->getLocStart()))
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(functionDecl)))
     {
-        StringRef name{ Lexer::getImmediateMacroName(
-            functionDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
+        StringRef name{ Lexer::getImmediateMacroName(compat::getBeginLoc(functionDecl),
+                                                     compiler.getSourceManager(),
+                                                     compiler.getLangOpts()) };
         aImmediateMacro = name;
         if (name.startswith("IMPL_LINK_"))
         {
@@ -571,11 +572,11 @@ bool ReturnConstant::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
     {
         report(DiagnosticsEngine::Warning,
                "Method only returns a single constant value %0, does it make sense?",
-               functionDecl->getLocStart())
+               compat::getBeginLoc(functionDecl))
             << *rContext.values.begin() << functionDecl->getSourceRange();
         if (functionDecl != functionDecl->getCanonicalDecl())
             report(DiagnosticsEngine::Note, "decl here",
-                   functionDecl->getCanonicalDecl()->getLocStart())
+                   compat::getBeginLoc(functionDecl->getCanonicalDecl()))
                 << functionDecl->getCanonicalDecl()->getSourceRange();
     }
     m_functionStack.pop_back();

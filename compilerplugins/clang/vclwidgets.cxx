@@ -189,7 +189,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         report(
             DiagnosticsEngine::Warning,
             BASE_REF_COUNTED_CLASS " subclass with VclPtr field must call disposeOnce() from its destructor",
-            pCXXDestructorDecl->getLocStart())
+            compat::getBeginLoc(pCXXDestructorDecl))
           << pCXXDestructorDecl->getSourceRange();
         return true;
     }
@@ -207,7 +207,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
             //  assert(true), ...;
             //
             auto skip = false;
-            for (auto loc = (*i)->getLocStart();
+            for (auto loc = compat::getBeginLoc(*i);
                  compiler.getSourceManager().isMacroBodyExpansion(loc);
                  loc = compiler.getSourceManager().getImmediateMacroCallerLoc(
                      loc))
@@ -238,7 +238,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     }
     if (!bOk) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
-                              pCXXDestructorDecl->getLocStart());
+                              compat::getBeginLoc(pCXXDestructorDecl));
         StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
         if (   !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/window/window.cxx"))
             && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
@@ -247,7 +247,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
             report(
                 DiagnosticsEngine::Warning,
                 BASE_REF_COUNTED_CLASS " subclass should have nothing in its destructor but a call to disposeOnce()",
-                pCXXDestructorDecl->getLocStart())
+                compat::getBeginLoc(pCXXDestructorDecl))
               << pCXXDestructorDecl->getSourceRange();
         }
     }
@@ -263,7 +263,7 @@ bool VCLWidgets::VisitBinaryOperator(const BinaryOperator * binaryOperator)
         return true;
     }
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
-                          binaryOperator->getLocStart());
+                          compat::getBeginLoc(binaryOperator));
     checkAssignmentForVclPtrToRawConversion(spellingLocation, binaryOperator->getLHS()->getType().getTypePtr(), binaryOperator->getRHS());
     return true;
 }
@@ -356,7 +356,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         return true;
     }
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
-                          pVarDecl->getLocStart());
+                          compat::getBeginLoc(pVarDecl));
     if (pVarDecl->getInit()) {
         checkAssignmentForVclPtrToRawConversion(spellingLocation, pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
     }
@@ -413,7 +413,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
     StringRef aFileName = getFileNameOfSpellingLoc(
-        compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/rtl/ref.hxx"))
@@ -598,7 +598,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
                 report(
                     DiagnosticsEngine::Warning,
                     BASE_REF_COUNTED_CLASS " subclass dispose() function MUST call dispose() of its superclass as the last thing it does",
-                    functionDecl->getLocStart())
+                    compat::getBeginLoc(functionDecl))
                   << functionDecl->getSourceRange();
            }
         }
@@ -652,7 +652,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
                 report(
                     DiagnosticsEngine::Warning,
                     aMessage,
-                    functionDecl->getLocStart())
+                    compat::getBeginLoc(functionDecl))
                   << functionDecl->getSourceRange();
            }
        }
@@ -669,14 +669,14 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
     const CXXRecordDecl *pPointee = pCXXDeleteExpr->getArgument()->getType()->getPointeeCXXRecordDecl();
     if (pPointee && isDerivedFromVclReferenceBase(pPointee)) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
-                              pCXXDeleteExpr->getLocStart());
+                              compat::getBeginLoc(pCXXDeleteExpr));
         StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
         if ( !(loplugin::isSamePathname(filename, SRCDIR "/include/vcl/vclreferencebase.hxx")))
         {
             report(
                 DiagnosticsEngine::Warning,
                 "calling delete on instance of " BASE_REF_COUNTED_CLASS " subclass, must rather call disposeAndClear()",
-                pCXXDeleteExpr->getLocStart())
+                compat::getBeginLoc(pCXXDeleteExpr))
               << pCXXDeleteExpr->getSourceRange();
         }
     }
@@ -690,7 +690,7 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
     report(
         DiagnosticsEngine::Warning,
         "calling delete on instance of VclPtr, must rather call disposeAndClear()",
-        pCXXDeleteExpr->getLocStart())
+        compat::getBeginLoc(pCXXDeleteExpr))
      << pCXXDeleteExpr->getSourceRange();
     return true;
 }
@@ -847,7 +847,7 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     const CXXRecordDecl* recordDecl = pConstructorDecl->getParent();
     if (isDerivedFromVclReferenceBase(recordDecl)) {
         StringRef aFileName = getFileNameOfSpellingLoc(
-            compiler.getSourceManager().getSpellingLoc(constructExpr->getLocStart()));
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
         if (!loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx")) {
             report(
                 DiagnosticsEngine::Warning,

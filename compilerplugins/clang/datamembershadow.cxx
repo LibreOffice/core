@@ -45,7 +45,7 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     }
     StringRef aFileName = getFileNameOfSpellingLoc(
-        compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
 
     // FIXME complex stuff to fix later
 
@@ -97,13 +97,13 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
             sPath += baseCXXRecordDecl->getNameAsString();
             report(DiagnosticsEngine::Warning,
                     "data member %0 is shadowing member in superclass, through inheritance path %1",
-                    fieldDecl->getLocStart())
+                    compat::getBeginLoc(fieldDecl))
                 << fieldDecl->getName()
                 << sPath
                 << fieldDecl->getSourceRange();
             report(DiagnosticsEngine::Note,
                     "superclass member here",
-                    baseFieldDecl->getLocStart())
+                    compat::getBeginLoc(baseFieldDecl))
                 << baseFieldDecl->getSourceRange();
         }
         return false;

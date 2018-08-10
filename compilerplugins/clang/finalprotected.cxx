@@ -50,7 +50,7 @@ bool FinalProtected::VisitCXXMethodDecl(CXXMethodDecl const * cxxMethodDecl)
     cxxMethodDecl = cxxMethodDecl->getCanonicalDecl();
     report(DiagnosticsEngine::Warning,
             "final class should not have protected members - convert them to private",
-            cxxMethodDecl->getLocStart())
+            compat::getBeginLoc(cxxMethodDecl))
         << cxxMethodDecl->getSourceRange();
     return true;
 }
@@ -69,7 +69,7 @@ bool FinalProtected::VisitFieldDecl(FieldDecl const * fieldDecl)
     fieldDecl = fieldDecl->getCanonicalDecl();
     report(DiagnosticsEngine::Warning,
             "final class should not have protected members - convert them to private",
-            fieldDecl->getLocStart())
+            compat::getBeginLoc(fieldDecl))
         << fieldDecl->getSourceRange();
     return true;
 }
