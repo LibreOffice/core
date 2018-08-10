@@ -185,7 +185,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 if( nMove )
                 {
                     SwCursor aCursor( *pPos, nullptr);
-                    if( aCursor.UpDown( false, nMove, nullptr, 0 ) )
+                    if (aCursor.UpDown(false, nMove, nullptr, 0, *GetLayout()))
                     {
                         pInsertPos.reset( new SwPosition( *aCursor.GetPoint() ) );
                         aInsertList.push_back( pInsertPos );
