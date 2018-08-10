@@ -1192,8 +1192,8 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
             long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout.get() ) + nFudge;
 
-            // Invalidate cache.
-            pItem->mxLayoutCache.reset();
+            // Store the calculated layout.
+            pItem->mxLayoutCache = std::move(pSalLayout);
 
             if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
                 ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
