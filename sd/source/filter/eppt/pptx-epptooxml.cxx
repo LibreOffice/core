@@ -82,6 +82,7 @@
 
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include "pptexanimations.hxx"
 #include "../ppt/pptanimations.hxx"
@@ -1173,7 +1174,12 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
         OUString aPath;
         Reference<XAnimateMotion> xMotion(rXNode, UNO_QUERY);
         if (xMotion.is())
+        {
             xMotion->getPath() >>= aPath;
+            ::basegfx::B2DPolyPolygon aPolyPoly;
+            ::basegfx::utils::importFromSvgD(aPolyPoly, aPath, true, nullptr);
+            aPath = ::basegfx::utils::exportToSvgD(aPolyPoly, false, false, true, true);
+        }
 
         pFS->startElementNS(XML_p, nXmlNodeType,
                             XML_origin, "layout",
