@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_70355ef7",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T06:59:54Z",
+      "side": 1,
+      "message": "\"Reference\"",
+      "range": {
+        "startLine": 1923,
+        "startChar": 20,
+        "endLine": 1923,
+        "endChar": 28
+      },
+      "revId": "b847fd430c75e56123138594541a1bf28796c2f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_503a5ae7",
+        "filename": "include/oox/helper/refmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T06:59:54Z",
+      "side": 1,
+      "message": "\"nonexisting\" seems to exist too (see https://en.wiktionary.org/wiki/nonexisting)",
+      "range": {
+        "startLine": 35,
+        "startChar": 23,
+        "endLine": 35,
+        "endChar": 34
+      },
+      "revId": "b847fd430c75e56123138594541a1bf28796c2f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_303fd6d7",
+        "filename": "include/osl/file.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T06:59:54Z",
+      "side": 1,
+      "message": "Id",
+      "range": {
+        "startLine": 1237,
+        "startChar": 8,
+        "endLine": 1237,
+        "endChar": 19
+      },
+      "revId": "b847fd430c75e56123138594541a1bf28796c2f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1024d2c5",
+        "filename": "include/osl/file.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T06:59:54Z",
+      "side": 1,
+      "message": "Id",
+      "range": {
+        "startLine": 1868,
+        "startChar": 12,
+        "endLine": 1868,
+        "endChar": 23
+      },
+      "revId": "b847fd430c75e56123138594541a1bf28796c2f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f0204eb3",
+        "filename": "include/registry/regtype.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-10T06:59:54Z",
+      "side": 1,
+      "message": "id",
+      "range": {
+        "startLine": 104,
+        "startChar": 42,
+        "endLine": 104,
+        "endChar": 53
+      },
+      "revId": "b847fd430c75e56123138594541a1bf28796c2f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
