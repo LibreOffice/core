@@ -367,10 +367,16 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             /** ICU collators are loaded using a locale only.
                 ICU uses Variant as collation algorithm name (like de__PHONEBOOK
                 locale), note the empty territory (Country) designator in this special
-                case here. The icu::Locale constructor changes the algorithm name to
+                case here.
+                But sometimes the mapping fails, eg for phonebook in Deutch Germany, we'll have "de_DE_PHONEBOOK"
+                this one won't be remapping to collection keyword specifiers "de@collation=phonebook"
+                See http://userguide.icu-project.org/locale#TOC-Variant-code, Level 2 canonicalization, 8.
+                So let variant empty and use the fourth arg of icuLocale "keywords"
+                See LanguageTagIcu::getIcuLocale from i18nlangtag/source/languagetag/languagetagicu.cxx
+                The icu::Locale constructor changes the algorithm name to
                 uppercase itself, so we don't have to bother with that.
             */
-            icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
+            icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), "", "collation=" + rAlgorithm));
             // load ICU collator
             collator.reset( static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) ) );
             if (! U_SUCCESS(status)) throw RuntimeException();
