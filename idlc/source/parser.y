@@ -2115,7 +2115,7 @@ at_least_one_scoped_name :
         } else
         {
             std::list< OString >* pScopedNames = new std::list< OString >;
-            // coverity[copy_paste_error] - this is not a cut and paste
+            // coverity[copy_paste_error : FALSE] - this is not a cut and paste
             pScopedNames->push_back(*$1);
             $$ = pScopedNames;
         }

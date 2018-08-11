@@ -2343,7 +2343,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
             CustomAnimationEffectPtr pEffect = (*aIter++);
 
             EffectSequence::iterator aUpEffectPos( pSequence->find( pEffect ) );
-            // coverity[copy_paste_error] - this is correct, checking if it exists
+            // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
             if( aUpEffectPos != rEffectSequence.end() )
             {
                 EffectSequence::iterator aInsertPos( rEffectSequence.erase( aUpEffectPos ) );
@@ -2374,7 +2374,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
             CustomAnimationEffectPtr pEffect = (*aIter++);
 
             EffectSequence::iterator aDownEffectPos( pSequence->find( pEffect ) );
-            // coverity[copy_paste_error] - this is correct, checking if it exists
+            // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
             if( aDownEffectPos != rEffectSequence.end() )
             {
                 EffectSequence::iterator aInsertPos( rEffectSequence.erase( aDownEffectPos ) );
