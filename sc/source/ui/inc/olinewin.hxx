@@ -47,7 +47,7 @@ private:
     size_t                      mnMTLevel;          /// Mouse tracking: Level of active button.
     size_t                      mnMTEntry;          /// Mouse tracking: Entry index of active button.
     bool                        mbMTActive;         /// Mouse tracking active?
-    bool                        mbMTPressed;        /// Mouse tracking: Button currently drawed pressed?
+    bool                        mbMTPressed;        /// Mouse tracking: Button currently drawn pressed?
 
     tools::Rectangle                   maFocusRect;        /// Focus rectangle on screen.
     size_t                      mnFocusLevel;       /// Level of focused button.

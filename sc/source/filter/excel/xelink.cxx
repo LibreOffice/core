@@ -1925,7 +1925,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
 
     if (aMatrixListSize != nTabCount)
     {
-        // matrix size mis-match !
+        // matrix size mismatch!
         return;
     }
 
