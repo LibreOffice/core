@@ -63,7 +63,7 @@ private:
         double fMorphingFactor
     );
 
-    static bool ImpMorphPolygons(
+    static void ImpMorphPolygons(
         const ::basegfx::B2DPolyPolygon& rPolyPoly1,
         const ::basegfx::B2DPolyPolygon& rPolyPoly2,
         const sal_uInt16 nSteps,

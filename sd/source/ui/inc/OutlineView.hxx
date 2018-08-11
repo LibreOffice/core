@@ -111,7 +111,7 @@ public:
 
     sal_uLong         GetPaperWidth() { return mnPaperWidth;}
 
-    bool          PrepareClose();
+    void              PrepareClose();
 
     virtual void    GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const override;
     virtual bool    SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) override;
