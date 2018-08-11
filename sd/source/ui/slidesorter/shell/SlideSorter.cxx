@@ -358,7 +358,7 @@ void SlideSorter::ArrangeGUIElements (
     }
 }
 
-bool SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
+void SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 {
    // Stop all animations for they have been started for the old window.
     mpSlideSorterController->GetAnimator()->RemoveAllAnimations();
@@ -383,8 +383,6 @@ bool SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
         mpContentWindow->Hide();
         mpContentWindow->Show();
     }
-
-    return true;
 }
 
 void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)

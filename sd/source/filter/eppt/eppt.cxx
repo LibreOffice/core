@@ -160,11 +160,9 @@ void PPTWriter::exportPPTPost( )
 
     ImplWriteVBA();
 
-    if ( !ImplWriteAtomEnding() )
-        return;
+    ImplWriteAtomEnding();
 
-    if ( !ImplCreateDocumentSummaryInformation() )
-        return;
+    ImplCreateDocumentSummaryInformation();
 
     mbStatus = true;
 };
@@ -507,7 +505,7 @@ bool PPTWriter::ImplCreateCurrentUserStream()
     return true;
 };
 
-bool PPTWriter::ImplCreateDocumentSummaryInformation()
+void PPTWriter::ImplCreateDocumentSummaryInformation()
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mXModel, uno::UNO_QUERY_THROW);
@@ -553,8 +551,6 @@ bool PPTWriter::ImplCreateDocumentSummaryInformation()
                     nullptr, &aGuidSeq, &aHyperSeq );
         }
     }
-
-    return true;
 }
 
 void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId )
@@ -1332,7 +1328,7 @@ void PPTWriter::ImplWriteOLE( )
 
 // write PersistantTable and UserEditAtom
 
-bool PPTWriter::ImplWriteAtomEnding()
+void PPTWriter::ImplWriteAtomEnding()
 {
 
 #define EPP_LastViewTypeSlideView   1
@@ -1436,8 +1432,6 @@ bool PPTWriter::ImplWriteAtomEnding()
            .WriteUInt32( nPersistEntrys )           // max persists written, Seed value for persist object id management
            .WriteInt16( EPP_LastViewTypeSlideView ) // last view type
            .WriteInt16( 0x12 );                     // padword
-
-    return true;
 }
 
 // - exported function -

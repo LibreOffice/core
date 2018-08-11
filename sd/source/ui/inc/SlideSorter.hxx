@@ -169,7 +169,7 @@ public:
         const Point& rOffset,
         const Size& rSize);
 
-    bool RelocateToWindow (vcl::Window* pWindow);
+    void RelocateToWindow (vcl::Window* pWindow);
 
     /** Set the current function at the view shell or, when it is not
         present, set it at the content window.  This method supports the use

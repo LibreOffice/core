@@ -785,8 +785,7 @@ void HtmlExport::ExportHtml()
             if( !CreateContentPage() )
                 break;
 
-        if( !CreateBitmaps() )
-            break;
+        CreateBitmaps();
 
         mpDocSh->SetWaitCursor( false );
         ResetProgress();
@@ -2661,7 +2660,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 }
 
 // export navigation graphics from button set
-bool HtmlExport::CreateBitmaps()
+void HtmlExport::CreateBitmaps()
 {
     if(mnButtonThema != -1 && mpButtonSet.get() )
     {
@@ -2678,7 +2677,6 @@ bool HtmlExport::CreateBitmaps()
             mpButtonSet->exportButton( mnButtonThema, aFull, GetButtonName(nButton) );
         }
     }
-    return true;
 }
 
 // creates the <body> tag, including the specified color attributes

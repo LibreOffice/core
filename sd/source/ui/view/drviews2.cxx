@@ -464,7 +464,7 @@ public:
     {
     }
 
-    bool insert(std::vector<svx::ClassificationResult> const & rResults)
+    void insert(std::vector<svx::ClassificationResult> const & rResults)
     {
         // Set to MASTER mode
         EditMode eOldMode = m_rDrawViewShell.GetEditMode();
@@ -538,8 +538,6 @@ public:
 
             pObject->SetLogicRect(::tools::Rectangle(aPosition, aTextSize));
         }
-
-        return true;
     }
 };
 

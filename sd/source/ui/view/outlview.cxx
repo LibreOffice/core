@@ -966,7 +966,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
 }
 
 /** updates draw model with all changes from outliner model */
-bool OutlineView::PrepareClose()
+void OutlineView::PrepareClose()
 {
     ::sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     if (pDocUndoMgr != nullptr)
@@ -978,7 +978,6 @@ bool OutlineView::PrepareClose()
     UpdateDocument();
     EndUndo();
     mrDoc.SetSelected(GetActualPage(), true);
-    return true;
 }
 
 /**

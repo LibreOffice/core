@@ -167,7 +167,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
 
     private:
 
-        bool                ImplCreateDocumentSummaryInformation();
+        void                ImplCreateDocumentSummaryInformation();
         bool                ImplCreateCurrentUserStream();
         static void         ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet );
@@ -180,7 +180,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         void                ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > const & rXBackgroundPropSet );
         void                ImplWriteVBA();
         void                ImplWriteOLE();
-        bool                ImplWriteAtomEnding();
+        void                ImplWriteAtomEnding();
 
         void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
         bool                ImplGetText();
