@@ -86,7 +86,7 @@ public:
         respective flag in the property mask is set. */
     template< typename StreamType, typename DataType >
     void                writeIntProperty( DataType ornValue )
-                            { if( startNextProperty() ) maOutStrm.writeAligned< StreamType >( ornValue ); }
+                            { startNextProperty(); maOutStrm.writeAligned< StreamType >( ornValue ); }
     /** Write a boolean property value to the stream, the
         respective flag in the property mask is set. */
     void                writeBoolProperty( bool orbValue );
@@ -106,7 +106,7 @@ public:
 
 private:
     bool                ensureValid();
-    bool                startNextProperty( bool bSkip = false );
+    void                startNextProperty( bool bSkip = false );
 
 private:
     /** Base class for complex properties such as string, point, size, GUID, picture. */
