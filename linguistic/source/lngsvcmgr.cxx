@@ -417,11 +417,6 @@ LngSvcMgr::LngSvcMgr()
 {
     bDisposing = false;
 
-    pAvailSpellSvcs     = nullptr;
-    pAvailGrammarSvcs   = nullptr;
-    pAvailHyphSvcs      = nullptr;
-    pAvailThesSvcs      = nullptr;
-
     // request notify events when properties (i.e. something in the subtree) changes
     uno::Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
@@ -464,10 +459,10 @@ void LngSvcMgr::modified(const lang::EventObject&)
         //assume that if an extension has been added/removed that
         //it might be a dictionary extension, so drop our cache
 
-        clearSvcInfoArray(pAvailSpellSvcs);
-        clearSvcInfoArray(pAvailGrammarSvcs);
-        clearSvcInfoArray(pAvailHyphSvcs);
-        clearSvcInfoArray(pAvailThesSvcs);
+        pAvailSpellSvcs.reset();
+        pAvailGrammarSvcs.reset();
+        pAvailHyphSvcs.reset();
+        pAvailThesSvcs.reset();
     }
 
     {
@@ -521,12 +516,6 @@ void LngSvcMgr::disposing(const lang::EventObject&)
     stopListening();
 }
 
-void LngSvcMgr::clearSvcInfoArray(SvcInfoArray* &rpInfo)
-{
-    delete rpInfo;
-    rpInfo = nullptr;
-}
-
 LngSvcMgr::~LngSvcMgr()
 {
     stopListening();
@@ -535,10 +524,10 @@ LngSvcMgr::~LngSvcMgr()
     // will be freed in the destructor of the respective Reference's
     // xSpellDsp, xGrammarDsp, xHyphDsp, xThesDsp
 
-    clearSvcInfoArray(pAvailSpellSvcs);
-    clearSvcInfoArray(pAvailGrammarSvcs);
-    clearSvcInfoArray(pAvailHyphSvcs);
-    clearSvcInfoArray(pAvailThesSvcs);
+    pAvailSpellSvcs.reset();
+    pAvailGrammarSvcs.reset();
+    pAvailHyphSvcs.reset();
+    pAvailThesSvcs.reset();
 }
 
 namespace
@@ -801,7 +790,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             osl::MutexGuard aGuard(GetLinguMutex());
 
             // delete old cached data, needs to be acquired new on demand
-            clearSvcInfoArray(pAvailSpellSvcs);
+            pAvailSpellSvcs.reset();
 
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
             {
@@ -824,7 +813,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             osl::MutexGuard aGuard(GetLinguMutex());
 
             // delete old cached data, needs to be acquired new on demand
-            clearSvcInfoArray(pAvailGrammarSvcs);
+            pAvailGrammarSvcs.reset();
 
             if (lcl_SeqHasString( aGrammarCheckerListEntries, aKeyText ))
             {
@@ -850,7 +839,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             osl::MutexGuard aGuard(GetLinguMutex());
 
             // delete old cached data, needs to be acquired new on demand
-            clearSvcInfoArray(pAvailHyphSvcs);
+            pAvailHyphSvcs.reset();
 
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
             {
@@ -873,7 +862,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             osl::MutexGuard aGuard(GetLinguMutex());
 
             // delete old cached data, needs to be acquired new on demand
-            clearSvcInfoArray(pAvailThesSvcs);
+            pAvailThesSvcs.reset();
 
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
             {
@@ -980,7 +969,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 {
     if (!pAvailSpellSvcs)
     {
-        pAvailSpellSvcs = new SvcInfoArray;
+        pAvailSpellSvcs.reset(new SvcInfoArray);
 
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -1042,7 +1031,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
 {
     if (!pAvailGrammarSvcs)
     {
-        pAvailGrammarSvcs = new SvcInfoArray;
+        pAvailGrammarSvcs.reset(new SvcInfoArray);
 
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -1105,7 +1094,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
 {
     if (!pAvailHyphSvcs)
     {
-        pAvailHyphSvcs = new SvcInfoArray;
+        pAvailHyphSvcs.reset(new SvcInfoArray);
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
         uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
@@ -1165,7 +1154,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 {
     if (!pAvailThesSvcs)
     {
-        pAvailThesSvcs = new SvcInfoArray;
+        pAvailThesSvcs.reset(new SvcInfoArray);
 
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -1472,22 +1461,22 @@ uno::Sequence< OUString > SAL_CALL
     if (rServiceName == SN_SPELLCHECKER)
     {
         GetAvailableSpellSvcs_Impl();
-        pInfoArray = pAvailSpellSvcs;
+        pInfoArray = pAvailSpellSvcs.get();
     }
     else if (rServiceName == SN_GRAMMARCHECKER)
     {
         GetAvailableGrammarSvcs_Impl();
-        pInfoArray = pAvailGrammarSvcs;
+        pInfoArray = pAvailGrammarSvcs.get();
     }
     else if (rServiceName == SN_HYPHENATOR)
     {
         GetAvailableHyphSvcs_Impl();
-        pInfoArray = pAvailHyphSvcs;
+        pInfoArray = pAvailHyphSvcs.get();
     }
     else if (rServiceName == SN_THESAURUS)
     {
         GetAvailableThesSvcs_Impl();
-        pInfoArray = pAvailThesSvcs;
+        pInfoArray = pAvailThesSvcs.get();
     }
 
     if (pInfoArray)
