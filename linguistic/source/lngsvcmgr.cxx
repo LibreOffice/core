@@ -208,14 +208,14 @@ public:
         processDictionaryListEvent(
                 const linguistic2::DictionaryListEvent& rDicListEvent ) override;
 
-    inline  bool    AddLngSvcMgrListener(
+    inline  void    AddLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );
-    inline  bool    RemoveLngSvcMgrListener(
+    inline  void    RemoveLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );
     void    DisposeAndClear( const lang::EventObject &rEvtObj );
-    bool    AddLngSvcEvtBroadcaster(
+    void    AddLngSvcEvtBroadcaster(
                         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
-    bool    RemoveLngSvcEvtBroadcaster(
+    void    RemoveLngSvcEvtBroadcaster(
                         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 
     void    AddLngSvcEvt( sal_Int16 nLngSvcEvt );
@@ -349,19 +349,17 @@ void LngSvcMgrListenerHelper::LaunchEvent( sal_Int16 nLngSvcEvtFlags )
 }
 
 
-inline bool LngSvcMgrListenerHelper::AddLngSvcMgrListener(
+inline void LngSvcMgrListenerHelper::AddLngSvcMgrListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
     aLngSvcMgrListeners.addInterface( rxListener );
-    return true;
 }
 
 
-inline bool LngSvcMgrListenerHelper::RemoveLngSvcMgrListener(
+inline void LngSvcMgrListenerHelper::RemoveLngSvcMgrListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
     aLngSvcMgrListeners.removeInterface( rxListener );
-    return true;
 }
 
 
@@ -389,7 +387,7 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
 }
 
 
-bool LngSvcMgrListenerHelper::AddLngSvcEvtBroadcaster(
+void LngSvcMgrListenerHelper::AddLngSvcEvtBroadcaster(
         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
 {
     if (rxBroadcaster.is())
@@ -398,11 +396,10 @@ bool LngSvcMgrListenerHelper::AddLngSvcEvtBroadcaster(
         rxBroadcaster->addLinguServiceEventListener(
                 static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
-    return false;
 }
 
 
-bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
+void LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
 {
     if (rxBroadcaster.is())
@@ -411,7 +408,6 @@ bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
         rxBroadcaster->removeLinguServiceEventListener(
                 static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
-    return false;
 }
 
 
@@ -1436,14 +1432,13 @@ sal_Bool SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    bool bRes = false;
-    if (!bDisposing  &&  xListener.is())
-    {
-        if (!mxListenerHelper.is())
-            GetListenerHelper_Impl();
-        bRes = mxListenerHelper->AddLngSvcMgrListener( xListener );
-    }
-    return bRes;
+    if (bDisposing || !xListener.is())
+        return false;
+
+    if (!mxListenerHelper.is())
+        GetListenerHelper_Impl();
+    mxListenerHelper->AddLngSvcMgrListener( xListener );
+    return true;
 }
 
 
@@ -1453,15 +1448,14 @@ sal_Bool SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    bool bRes = false;
-    if (!bDisposing  &&  xListener.is())
-    {
-        DBG_ASSERT( mxListenerHelper.is(), "listener removed without being added" );
-        if (!mxListenerHelper.is())
-            GetListenerHelper_Impl();
-        bRes = mxListenerHelper->RemoveLngSvcMgrListener( xListener );
-    }
-    return bRes;
+    if (bDisposing || !xListener.is())
+        return false;
+
+    DBG_ASSERT( mxListenerHelper.is(), "listener removed without being added" );
+    if (!mxListenerHelper.is())
+        GetListenerHelper_Impl();
+    mxListenerHelper->RemoveLngSvcMgrListener( xListener );
+    return true;
 }
 
 
@@ -1918,14 +1912,12 @@ void SAL_CALL
 bool LngSvcMgr::AddLngSvcEvtBroadcaster(
             const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
 {
-    bool bRes = false;
-    if (rxBroadcaster.is())
-    {
-        if (!mxListenerHelper.is())
-            GetListenerHelper_Impl();
-        bRes = mxListenerHelper->AddLngSvcEvtBroadcaster( rxBroadcaster );
-    }
-    return bRes;
+    if (!rxBroadcaster.is())
+        return false;
+    if (!mxListenerHelper.is())
+        GetListenerHelper_Impl();
+    mxListenerHelper->AddLngSvcEvtBroadcaster( rxBroadcaster );
+    return true;
 }
 
 

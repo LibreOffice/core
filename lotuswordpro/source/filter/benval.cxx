@@ -78,7 +78,6 @@ void
 CBenValue::ReadValueData(void * pReadBuffer, size_t Offset,
   size_t Amt, size_t* pAmtRead)
 {
-    BenError Err;
     size_t SegOffset = 0;
     *pAmtRead = 0;
     CBenValueSegment * pCurrSeg = nullptr;
@@ -114,13 +113,9 @@ CBenValue::ReadValueData(void * pReadBuffer, size_t Offset,
             }
             else
             {
-                if ((Err = pContainer->SeekToPosition(pCurrSeg->GetPosition() +
-                        OffsetIntoSeg)) != BenErr_OK)
-                    return;
-
-                if ((Err = pContainer->Read(pBuffer, AmtThisSeg,
-                                            &AmtReadThisSeg)) != BenErr_OK)
-                    return;
+                pContainer->SeekToPosition(pCurrSeg->GetPosition() +
+                        OffsetIntoSeg);
+                pContainer->Read(pBuffer, AmtThisSeg, &AmtReadThisSeg);
             }
 
             *pAmtRead += AmtReadThisSeg;
