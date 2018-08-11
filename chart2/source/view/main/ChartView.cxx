@@ -26,7 +26,7 @@
 #include <VDiagram.hxx>
 #include "VTitle.hxx"
 #include "VButton.hxx"
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <VCoordinateSystem.hxx>
 #include <VSeriesPlotter.hxx>
 #include <CommonConverters.hxx>
@@ -1521,7 +1521,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     }
 
     uno::Reference< drawing::XShapes > xTextTargetShapes =
-        AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(rParam.mxDiagramWithAxesShapes);
+        ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(rParam.mxDiagramWithAxesShapes);
 
     // - create axis and grids for all coordinate systems
 
@@ -1549,7 +1549,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
 
-        aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
+        aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -1566,7 +1566,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
         bool bLessSpaceConsumedThanExpected = false;
         {
-            aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
+            aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
             if( aConsumedOuterRect.getMinX() > aAvailableOuterRect.getMinX()
                 || aConsumedOuterRect.getMaxX() < aAvailableOuterRect.getMaxX()
                 || aConsumedOuterRect.getMinY() > aAvailableOuterRect.getMinY()
@@ -1629,7 +1629,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     {
         m_bPointsWereSkipped = false;
 
-        aConsumedOuterRect = ::basegfx::B2IRectangle( AbstractShapeFactory::getRectangleOfShape(xBoundingShape) );
+        aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -1640,9 +1640,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         }
 
         //clear and recreate
-        AbstractShapeFactory::removeSubShapes( xSeriesTargetInFrontOfAxis ); //xSeriesTargetBehindAxis is a sub shape of xSeriesTargetInFrontOfAxis and will be removed here
+        ShapeFactory::removeSubShapes( xSeriesTargetInFrontOfAxis ); //xSeriesTargetBehindAxis is a sub shape of xSeriesTargetInFrontOfAxis and will be removed here
         xSeriesTargetBehindAxis.clear();
-        AbstractShapeFactory::removeSubShapes( xTextTargetShapes );
+        ShapeFactory::removeSubShapes( xTextTargetShapes );
 
         //set new transformation
         for( nC=0; nC < rVCooSysList.size(); nC++)
@@ -2409,7 +2409,7 @@ void formatPage(
         tAnySequence aValues;
         PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
 
-        AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
         pShapeFactory->createRectangle(
             xTarget, rPageSize, awt::Point(0, 0), aNames, aValues);
     }
@@ -2502,7 +2502,7 @@ void ChartView::createShapes()
 
     awt::Size aPageSize = mrChartModel.getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
 
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
     if(!mxRootShape.is())
         mxRootShape = pShapeFactory->getOrCreateChartRootShape( m_xDrawPage );
 
@@ -2514,7 +2514,6 @@ void ChartView::createShapes()
         OSL_FAIL("could not set page size correctly");
     }
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
-    pShapeFactory->clearPage(mxRootShape);
 
     createShapes2D(aPageSize);
 
@@ -2968,7 +2967,7 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased, Timer *, void)
 
 void ChartView::createShapes2D( const awt::Size& rPageSize )
 {
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
     SolarMutexGuard aSolarGuard;
 
@@ -2990,11 +2989,11 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     aParam.mxMarkHandles = pShapeFactory->createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
-    AbstractShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
+    ShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
 
     aParam.mxPlotAreaWithAxes = pShapeFactory->createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0, 0));
-    AbstractShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
+    ShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
 
     aParam.mxDiagramWithAxesShapes = pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes);
 

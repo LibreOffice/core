@@ -272,7 +272,7 @@ void VCartesianGrid::createShapes()
             aHandleLineProperties.LineStyle    <<= drawing::LineStyle_NONE;
             Reference< drawing::XShape > xHandleShape =
                 m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
-            ::chart::AbstractShapeFactory::setShapeName( xHandleShape, "HandlesOnly" );
+            ::chart::ShapeFactory::setShapeName( xHandleShape, "HandlesOnly" );
         }
         else //if(2!=m_nDimension)
         {

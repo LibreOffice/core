@@ -33,8 +33,8 @@ namespace chart { struct ExplicitScaleData; }
 namespace chart
 {
 
-class AbstractShapeFactory;
 class PlottingPositionHelper;
+class ShapeFactory;
 
 /** This class provides methods for setting axis scales and for performing
  *  scene to screen transformations. It is used as the base class for all
@@ -72,7 +72,7 @@ protected: //member
     css::uno::Reference< css::drawing::XShapes >                m_xLogicTarget;
     css::uno::Reference< css::drawing::XShapes >                m_xFinalTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
-    AbstractShapeFactory* m_pShapeFactory;
+    ShapeFactory* m_pShapeFactory;
     OUString   m_aCID;
 
     const sal_Int32 m_nDimension;

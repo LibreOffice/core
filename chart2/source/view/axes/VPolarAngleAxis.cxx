@@ -21,7 +21,7 @@
 
 #include "VPolarAngleAxis.hxx"
 #include "VPolarGrid.hxx"
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <tools/color.hxx>
@@ -52,7 +52,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
                      , double fLogicRadius
                      , double fLogicZ )
 {
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
     FixedNumberFormatter aFixedNumberFormatter(
         m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
@@ -123,8 +123,8 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             // #i78696# use mathematically correct rotation now
             const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
 
-            uno::Any aATransformation = AbstractShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
-            OUString aStackedLabel = AbstractShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
+            uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
+            OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
             pTickInfo->xTextShape = pShapeFactory->createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
         }
@@ -198,7 +198,7 @@ void VPolarAngleAxis::createShapes()
     uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis
-    ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
+    ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
 
     //create labels
     createLabels();

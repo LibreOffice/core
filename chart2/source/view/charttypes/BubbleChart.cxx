@@ -19,7 +19,7 @@
 
 #include "BubbleChart.hxx"
 #include <PlottingPositionHelper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
@@ -304,7 +304,7 @@ void BubbleChart::createShapes()
                             }
                         }
 
-                        ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
+                        ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
 
                         //create data point label
                         if( pSeries->getDataPointLabelIfLabel(nIndex) )

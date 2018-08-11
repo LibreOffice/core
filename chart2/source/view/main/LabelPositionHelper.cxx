@@ -21,7 +21,7 @@
 #include <PlottingPositionHelper.hxx>
 #include <CommonConverters.hxx>
 #include <PropertyMapper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::chart2;
 LabelPositionHelper::LabelPositionHelper(
                       sal_Int32 nDimensionCount
                     , const uno::Reference< drawing::XShapes >& xLogicTarget
-                    , AbstractShapeFactory* pShapeFactory )
+                    , ShapeFactory* pShapeFactory )
                     : m_nDimensionCount(nDimensionCount)
                     , m_xLogicTarget(xLogicTarget)
                     , m_pShapeFactory(pShapeFactory)
