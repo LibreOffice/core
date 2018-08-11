@@ -146,9 +146,9 @@ bool GalleryTheme::ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, Ga
     return bRet;
 }
 
-SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
+std::unique_ptr<SgaObject> GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
 {
-    SgaObject* pSgaObj = nullptr;
+    std::unique_ptr<SgaObject> pSgaObj;
 
     if( pEntry )
     {
@@ -168,11 +168,11 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
 
                 switch( pEntry->eObjKind )
                 {
-                    case SgaObjKind::Bitmap:    pSgaObj = new SgaObjectBmp(); break;
-                    case SgaObjKind::Animation:   pSgaObj = new SgaObjectAnim(); break;
-                    case SgaObjKind::Inet:   pSgaObj = new SgaObjectINet(); break;
-                    case SgaObjKind::SvDraw: pSgaObj = new SgaObjectSvDraw(); break;
-                    case SgaObjKind::Sound:  pSgaObj = new SgaObjectSound(); break;
+                    case SgaObjKind::Bitmap:    pSgaObj.reset(new SgaObjectBmp()); break;
+                    case SgaObjKind::Animation:   pSgaObj.reset(new SgaObjectAnim()); break;
+                    case SgaObjKind::Inet:   pSgaObj.reset(new SgaObjectINet()); break;
+                    case SgaObjKind::SvDraw: pSgaObj.reset(new SgaObjectSvDraw()); break;
+                    case SgaObjKind::Sound:  pSgaObj.reset(new SgaObjectSound()); break;
 
                     default:
                     break;
@@ -409,7 +409,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
     return true;
 }
 
-SgaObject* GalleryTheme::AcquireObject(sal_uInt32 nPos)
+std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
 {
     return ImplReadSgaObject(ImplGetGalleryObject(nPos));
 }
@@ -446,11 +446,6 @@ void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx&
     {
         OSL_ENSURE(false, "OOps, no GalleryObject at this index (!)");
     }
-}
-
-void GalleryTheme::ReleaseObject( SgaObject* pObject )
-{
-    delete pObject;
 }
 
 void GalleryTheme::RemoveObject(sal_uInt32 nPos)
@@ -752,13 +747,12 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 
 bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
 {
-    SgaObject*  pObj = AcquireObject( nPos );
+    std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
     bool        bRet = false;
 
     if( pObj )
     {
         rBmp = pObj->GetThumbBmp();
-        ReleaseObject( pObj );
         bRet = true;
     }
 
@@ -816,7 +810,7 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
 
             case SgaObjKind::Sound:
             {
-                SgaObject* pObj = AcquireObject( nPos );
+                std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
 
                 if( pObj )
                 {
@@ -824,7 +818,6 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
                     //Bitmap aBmp( pObj->GetThumbBmp() );
                     //aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
                     //rGraphic = aBmp;
-                    ReleaseObject( pObj );
                     bRet = true;
                 }
             }

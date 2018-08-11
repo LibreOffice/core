@@ -31,6 +31,7 @@
 #include <svtools/transfer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/galmisc.hxx>
+#include <memory>
 #include <vector>
 
 class SotStorage;
@@ -90,7 +91,7 @@ private:
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
-    SgaObject*                  ImplReadSgaObject( GalleryObject const * pEntry );
+    std::unique_ptr<SgaObject>  ImplReadSgaObject( GalleryObject const * pEntry );
     SAL_DLLPRIVATE bool         ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
@@ -122,8 +123,7 @@ public:
 
     SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
 
-    SgaObject*                  AcquireObject(sal_uInt32 nPos);
-    static void                 ReleaseObject(SgaObject* pObj);
+    std::unique_ptr<SgaObject>  AcquireObject(sal_uInt32 nPos);
 
     bool                        InsertObject(const SgaObject& rObj, sal_uInt32 nPos = SAL_MAX_UINT32);
     void                        RemoveObject(sal_uInt32 nPos);
