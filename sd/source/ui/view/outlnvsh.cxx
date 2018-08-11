@@ -1114,7 +1114,9 @@ bool OutlineViewShell::PrepareClose( bool bUI )
     if( !ViewShell::PrepareClose(bUI) )
         return false;
 
-    return pOlView == nullptr || pOlView->PrepareClose();
+    if (pOlView)
+        pOlView->PrepareClose();
+    return true;
 }
 
 /**

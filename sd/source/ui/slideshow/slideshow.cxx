@@ -183,10 +183,11 @@ bool SlideShow::StartPreview( ViewShellBase const & rBase,
     const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
-    if( xSlideShow.is() )
-        return xSlideShow->startPreview( xDrawPage, xAnimationNode );
+    if( !xSlideShow.is() )
+        return false;
 
-    return false;
+    xSlideShow->startPreview( xDrawPage, xAnimationNode );
+    return true;
 }
 
 void SlideShow::Stop( ViewShellBase const & rBase )
@@ -879,7 +880,7 @@ void SAL_CALL SlideShow::disposing()
     mpDoc = nullptr;
 }
 
-bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
+void SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
 {
     Sequence< PropertyValue > aArguments(4);
 
@@ -896,8 +897,6 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
     aArguments[3].Value <<= Reference< XWindow >();
 
     startWithArguments( aArguments );
-
-    return true;
 }
 
 OutputDevice* SlideShow::getShowWindow()

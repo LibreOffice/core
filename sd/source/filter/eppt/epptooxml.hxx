@@ -97,7 +97,7 @@ private:
     virtual bool ImplCreateDocument() override;
     virtual bool ImplCreateMainNotes() override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    bool WriteNotesMaster();
+    void WriteNotesMaster();
 
     static void WriteAnimateTo( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rValue, const OUString& rAttributeName );
     static void WriteAnimateValues( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimate >& rXAnimate );

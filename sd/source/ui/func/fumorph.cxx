@@ -161,15 +161,14 @@ void FuMorph::DoExecute( SfxRequest& )
                     aPolyPoly2.setB2DPolygon(a, aSub2);
                 }
 
-                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList))
-                {
-                    OUString aString(mpView->GetDescriptionOfMarkedObjects());
-                    aString += " " + SdResId(STR_UNDO_MORPHING);
+                ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList);
 
-                    mpView->BegUndo(aString);
-                    ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
-                    mpView->EndUndo();
-                }
+                OUString aString(mpView->GetDescriptionOfMarkedObjects());
+                aString += " " + SdResId(STR_UNDO_MORPHING);
+
+                mpView->BegUndo(aString);
+                ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
+                mpView->EndUndo();
 
                 for(basegfx::B2DPolyPolygon * p : aPolyPolyList) {
                     delete p;
@@ -480,7 +479,7 @@ void FuMorph::ImpInsertPolygons(
 /**
  * create morphed PolyPolygons
  */
-bool FuMorph::ImpMorphPolygons(
+void FuMorph::ImpMorphPolygons(
     const ::basegfx::B2DPolyPolygon& rPolyPoly1,
     const ::basegfx::B2DPolyPolygon& rPolyPoly2,
     const sal_uInt16 nSteps,
@@ -511,7 +510,6 @@ bool FuMorph::ImpMorphPolygons(
             rPolyPolyList3D.push_back( pNewPolyPoly2D );
         }
     }
-    return true;
 }
 
 } // end of namespace sd

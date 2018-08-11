@@ -288,10 +288,10 @@ bool SlideSorterViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     if ( ! mpSlideSorter)
         return false;
 
-    const bool bSuccess (mpSlideSorter->RelocateToWindow(pParentWindow));
+    mpSlideSorter->RelocateToWindow(pParentWindow);
     ReadFrameViewData(mpFrameView);
 
-    return bSuccess;
+    return true;
 }
 
 SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager() const

@@ -2858,7 +2858,7 @@ bool PowerPointExport::ImplCreateDocument()
     return true;
 }
 
-bool PowerPointExport::WriteNotesMaster()
+void PowerPointExport::WriteNotesMaster()
 {
     SAL_INFO("sd.eppt", "write Notes master\n---------------");
 
@@ -2921,14 +2921,12 @@ bool PowerPointExport::WriteNotesMaster()
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
-
-    return true;
 }
 
 bool PowerPointExport::ImplCreateMainNotes()
 {
     if (mbCreateNotes)
-        return WriteNotesMaster();
+        WriteNotesMaster();
 
     return true;
 }

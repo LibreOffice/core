@@ -1335,7 +1335,7 @@ private:
 
     /** Determine and set the paper orientation.
     */
-    bool SetupPaperOrientation (
+    void SetupPaperOrientation (
         const PageKind ePageKind,
         PrintInfo& rInfo)
     {
@@ -1376,8 +1376,6 @@ private:
                 maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
             }
         }
-
-        return true;
     }
 
     /** Top most method for preparing printer pages.  In this and the other
@@ -1867,8 +1865,7 @@ private:
         SdPage* pRefPage = pDocument->GetSdPage(0, ePageKind);
         rInfo.maPageSize = pRefPage->GetSize();
 
-        if ( ! SetupPaperOrientation(ePageKind, rInfo))
-            return;
+        SetupPaperOrientation(ePageKind, rInfo);
 
         MapMode aMap (rInfo.maMap);
         rInfo.maMap = aMap;

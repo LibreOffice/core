@@ -151,7 +151,7 @@ class HtmlExport final
     bool    CreateHtmlForPresPages();
     bool    CreateContentPage();
     void    CreateFileNames();
-    bool    CreateBitmaps();
+    void    CreateBitmaps();
     bool    CreateOutlinePages();
     bool    CreateFrames();
     bool    CreateNotesPages();

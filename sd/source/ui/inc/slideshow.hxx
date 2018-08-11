@@ -106,7 +106,7 @@ public:
 
     // helper api
 
-    bool startPreview(
+    void startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
 
