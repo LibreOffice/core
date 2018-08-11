@@ -59,7 +59,7 @@ SdrOutlinerCache::~SdrOutlinerCache()
 {
 }
 
-void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
+void SdrOutlinerCache::disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner )
 {
     if( pOutliner )
     {
@@ -67,26 +67,25 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 
         if( OutlinerMode::OutlineObject == nOutlMode )
         {
-            maModeOutline.emplace_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
             // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
+            maModeOutline.emplace_back(std::move(pOutliner));
         }
         else if( OutlinerMode::TextObject == nOutlMode )
         {
-            maModeText.emplace_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
             // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
+            maModeText.emplace_back(std::move(pOutliner));
         }
         else
         {
-            maActiveOutliners.erase(pOutliner);
-            delete pOutliner;
+            maActiveOutliners.erase(pOutliner.get());
         }
     }
 }
