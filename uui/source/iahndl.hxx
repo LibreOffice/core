@@ -235,7 +235,7 @@ private:
                 const OUString& i_rServiceName
             ) const;
 
-    bool
+    void
     handleAuthFallbackRequest(
             OUString & instructions,
             OUString & url,
