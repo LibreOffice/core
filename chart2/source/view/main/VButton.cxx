@@ -9,7 +9,7 @@
 
 #include "VButton.hxx"
 
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -92,7 +92,7 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
 
 void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 {
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
     std::unique_ptr<tNameSequence> pPropNames(new tNameSequence);
     std::unique_ptr<tAnySequence> pPropValues(new tAnySequence);

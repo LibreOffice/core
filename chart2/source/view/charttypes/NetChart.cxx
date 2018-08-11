@@ -19,7 +19,7 @@
 
 #include "NetChart.hxx"
 #include <PlottingPositionHelper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
@@ -127,7 +127,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     drawing::PolyPolygonShape3D aPoly;
     {
         bool bIsClipped = false;
-        if( !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+        if( !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
         {
             // do NOT connect last and first point, if one is NAN, and NAN handling is NAN_AS_GAP
             double fFirstY = pSeries->getYValue( 0 );
@@ -150,7 +150,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
             Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
 
-    if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
+    if(!ShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
     //transformation 3) -> 4)
@@ -165,7 +165,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
-        ::chart::AbstractShapeFactory::setShapeName(xShape, "MarkHandles");
+        ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
     }
     return true;
 }
@@ -182,7 +182,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
-    if( !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+    if( !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
     {
         if( pPreviousSeriesPoly )
             addPolygon( aPoly, *pPreviousSeriesPoly );
@@ -212,17 +212,17 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
     {
         appendPoly( aPoly, *pPreviousSeriesPoly );
     }
-    AbstractShapeFactory::closePolygon(aPoly);
+    ShapeFactory::closePolygon(aPoly);
 
     //apply clipping
     {
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
-        AbstractShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
+        ShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
         aPoly = aClippedPoly;
     }
 
-    if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
+    if(!ShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
     //transformation 3) -> 4)
@@ -236,7 +236,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking
-    ::chart::AbstractShapeFactory::setShapeName(xShape, "MarkHandles");
+    ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
     return true;
 }
 

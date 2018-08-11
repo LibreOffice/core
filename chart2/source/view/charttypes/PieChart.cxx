@@ -21,7 +21,7 @@
 #include <VLineProperties.hxx>
 #include "PieChart.hxx"
 #include <PlottingPositionHelper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
@@ -687,7 +687,7 @@ void PieChart::createShapes()
 
                 if(!bDoExplode)
                 {
-                    AbstractShapeFactory::setShapeName( xPointShape
+                    ShapeFactory::setShapeName( xPointShape
                                 , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
                 }
                 else try
@@ -714,7 +714,7 @@ void PieChart::createShapes()
                             nOffsetPercent, aMinimumPosition, aMaximumPosition )
                         ) );
 
-                    AbstractShapeFactory::setShapeName( xPointShape
+                    ShapeFactory::setShapeName( xPointShape
                                 , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
                 }
                 catch( const uno::Exception& e )
