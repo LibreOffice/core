@@ -93,12 +93,11 @@ bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< 
         {
             for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
             {
-                SgaObject*  pObj = pTheme->AcquireObject( i );
+                std::unique_ptr<SgaObject>  pObj = pTheme->AcquireObject( i );
                 if ( pObj )
                 {
                     OUString aTitle( pObj->GetTitle() );
                     rList.push_back( aTitle );
-                    GalleryTheme::ReleaseObject( pObj );
                 }
             }
             pGal->ReleaseTheme( pTheme, aListener );
