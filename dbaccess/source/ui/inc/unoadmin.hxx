@@ -37,7 +37,7 @@ class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
 {
 protected:
-    SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
+    std::unique_ptr<SfxItemSet> m_pDatasourceItems; // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
     std::vector<SfxPoolItem*>*
                             m_pItemPoolDefaults;    // pool defaults

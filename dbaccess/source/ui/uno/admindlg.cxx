@@ -93,7 +93,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
 
 svt::OGenericUnoDialog::Dialog ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
 {
-    VclPtrInstance<ODbAdminDialog> pDialog(_pParent, m_pDatasourceItems, m_aContext);
+    VclPtrInstance<ODbAdminDialog> pDialog(_pParent, m_pDatasourceItems.get(), m_aContext);
 
     // the initial selection
     if ( m_aInitialSelection.hasValue() )
