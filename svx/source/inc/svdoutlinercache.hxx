@@ -42,7 +42,7 @@ public:
     ~SdrOutlinerCache();
 
     std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
-    void disposeOutliner( SdrOutliner* pOutliner );
+    void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
     std::vector< SdrOutliner* > GetActiveOutliners() const;
 };
 

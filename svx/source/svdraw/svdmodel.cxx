@@ -1885,16 +1885,10 @@ std::vector<SdrOutliner*> SdrModel::GetActiveOutliners() const
     return aRet;
 }
 
-void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
+void SdrModel::disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner )
 {
     if( mpOutlinerCache )
-    {
-        mpOutlinerCache->disposeOutliner( pOutliner );
-    }
-    else
-    {
-        delete pOutliner;
-    }
+        mpOutlinerCache->disposeOutliner( std::move(pOutliner) );
 }
 
 SvxNumType SdrModel::GetPageNumType() const
