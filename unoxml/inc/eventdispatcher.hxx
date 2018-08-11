@@ -69,7 +69,7 @@ public:
         const OUString& aType,
         const css::uno::Reference< css::xml::dom::events::XEvent >& xEvent);
 
-    bool dispatchEvent(
+    void dispatchEvent(
         DOM::CDocument & rDocument,
         ::osl::Mutex & rMutex,
         xmlNodePtr const pNode,
