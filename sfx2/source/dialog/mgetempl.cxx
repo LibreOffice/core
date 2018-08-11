@@ -571,7 +571,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if (m_xNameRw->get_value_changed_from_saved())
     {
-        // By pressing <Enter> LoseFocus() is not trigged through StarView
+        // By pressing <Enter> LoseFocus() is not triggered through StarView
         if (m_xNameRw->has_focus())
             LoseFocusHdl( *m_xNameRw );
 

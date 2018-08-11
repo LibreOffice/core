@@ -1449,7 +1449,7 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
         return false;
 
     // #i34471#
-    // If this is trigged by SwUndoTableToText::Repeat() nobody ever deleted
+    // If this is triggered by SwUndoTableToText::Repeat() nobody ever deleted
     // the table cursor.
     SwEditShell* pESh = GetEditShell();
     if( pESh && pESh->IsTableMode() )
