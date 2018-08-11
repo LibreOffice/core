@@ -351,6 +351,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Cross-fading...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:MeasureAttributes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -714,6 +717,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Duplicat~e...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ManageLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -821,6 +827,9 @@
       <node oor:name=".uno:Combine" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comb~ine</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ConnectorToolbox" oor:op="replace">
@@ -1089,6 +1098,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Spl~it</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:PageStatus" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1125,10 +1137,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">C~onnect</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Break" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Break</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:AdvancedMode" oor:op="replace">
