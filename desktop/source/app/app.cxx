@@ -1055,7 +1055,7 @@ void restartOnMac(bool passArguments) {
 
     std::unique_ptr<weld::MessageDialog> xRestartBox(Application::CreateMessageDialog(nullptr,
                                                      VclMessageType::Warning, VclButtonsType::Ok, aMessage));
-    xRestartBox->Execute();
+    xRestartBox->run();
 #else
     OUString execUrl;
     OSL_VERIFY(osl_getExecutableFile(&execUrl.pData) == osl_Process_E_None);
