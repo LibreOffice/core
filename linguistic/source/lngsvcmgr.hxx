@@ -91,10 +91,10 @@ class LngSvcMgr :
     rtl::Reference<LngSvcMgrListenerHelper>             mxListenerHelper;
 
     typedef std::vector< std::unique_ptr<SvcInfo> >    SvcInfoArray;
-    SvcInfoArray *                                      pAvailSpellSvcs;
-    SvcInfoArray *                                      pAvailGrammarSvcs;
-    SvcInfoArray *                                      pAvailHyphSvcs;
-    SvcInfoArray *                                      pAvailThesSvcs;
+    std::unique_ptr<SvcInfoArray>                      pAvailSpellSvcs;
+    std::unique_ptr<SvcInfoArray>                      pAvailGrammarSvcs;
+    std::unique_ptr<SvcInfoArray>                      pAvailHyphSvcs;
+    std::unique_ptr<SvcInfoArray>                      pAvailThesSvcs;
 
     bool bDisposing;
 
@@ -118,8 +118,6 @@ class LngSvcMgr :
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
     bool    SaveCfgSvcs( const OUString &rServiceName );
-
-    static void clearSvcInfoArray(SvcInfoArray *&rpInfo);
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
