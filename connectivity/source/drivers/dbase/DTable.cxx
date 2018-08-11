@@ -306,7 +306,7 @@ void ODbaseTable::fillColumns()
         m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
         m_pFileStream->ReadUChar(aDBFColumn.db_flng);
         m_pFileStream->ReadUChar(aDBFColumn.db_dez);
-        m_pFileStream->ReadBytes(aDBFColumn.db_frei2, 14);
+        m_pFileStream->ReadBytes(aDBFColumn.db_free2, 14);
         assert(m_pFileStream->GetError() || m_pFileStream->Tell() == nOldPos + sizeof(aDBFColumn));
         if (m_pFileStream->GetError())
         {
@@ -319,7 +319,7 @@ void ODbaseTable::fillColumns()
         aDBFColumn.db_fnm[sizeof(aDBFColumn.db_fnm)-1] = 0; //ensure null termination for broken input
         const OUString aColumnName(reinterpret_cast<char *>(aDBFColumn.db_fnm), strlen(reinterpret_cast<char *>(aDBFColumn.db_fnm)), m_eEncoding);
 
-        bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
+        bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_free2[0] & 0x01 ) == 0x01;
 
         m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
         sal_Int32 nPrecision = aDBFColumn.db_flng;
@@ -372,7 +372,7 @@ void ODbaseTable::fillColumns()
             aTypeName = "INTEGER";
             break;
         case 'M':
-            if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
+            if ( bFoxPro && ( aDBFColumn.db_free2[0] & 0x04 ) == 0x04 )
             {
                 eType = DataType::LONGVARBINARY;
                 aTypeName = "LONGVARBINARY";

@@ -86,7 +86,7 @@ namespace connectivity
                                 sal_uInt32   db_adr;                         /* Field address               */
                                 sal_uInt8    db_flng;                        /* Field length                */
                                 sal_uInt8    db_dez;                         /* Decimal places for N        */
-                                sal_uInt8    db_frei2[14];                   /* Reserved                    */
+                                sal_uInt8    db_free2[14];                   /* Reserved                    */
                             };
             struct DBFMemoHeader
             {
