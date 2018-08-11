@@ -81,8 +81,7 @@ CBenTOCReader::ReadLabelAndTOC()
     if (cTOCSize > nLength - TOCOffset)
         return BenErr_ReadPastEndOfTOC;
 
-    if ((Err = cpContainer->SeekToPosition(TOCOffset)) != BenErr_OK)
-        return Err;
+    cpContainer->SeekToPosition(TOCOffset);
 
     cpTOC.reset( new BenByte[cTOCSize] );
     if ((Err = cpContainer->ReadKnownSize(cpTOC.get(), cTOCSize)) != BenErr_OK)
@@ -100,8 +99,7 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
     // If seek fails, then probably because stream is smaller than
     // BEN_LABEL_SIZE and thus can't be Bento container
     BenError Err;
-    if ((Err = cpContainer->SeekFromEnd(-BEN_LABEL_SIZE)) != BenErr_OK)
-        return BenErr_NotBentoContainer;
+    cpContainer->SeekFromEnd(-BEN_LABEL_SIZE);
 
     BenByte Label[BEN_LABEL_SIZE];
     if ((Err = cpContainer->ReadKnownSize(Label, BEN_LABEL_SIZE)) != BenErr_OK)
@@ -172,9 +170,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
                 UsedBufferSize = CurrOffset;
             else UsedBufferSize = LABEL_READ_BUFFER_SIZE;
 
-            if ((Err = cpContainer->SeekToPosition(CurrOffset - UsedBufferSize))
-              != BenErr_OK)
-                return Err;
+            cpContainer->SeekToPosition(CurrOffset - UsedBufferSize);
 
             if ((Err = cpContainer->ReadKnownSize(Buffer, UsedBufferSize)) !=
               BenErr_OK)
@@ -186,9 +182,8 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
         if (memcmp(Buffer + (CurrOffset - BEN_MAGIC_BYTES_SIZE -
           BufferStartOffset), gsBenMagicBytes, BEN_MAGIC_BYTES_SIZE) == 0)
         {
-            if ((Err = cpContainer->SeekToPosition(CurrOffset -
-              BEN_MAGIC_BYTES_SIZE)) != BenErr_OK)
-                return Err;
+            cpContainer->SeekToPosition(CurrOffset -
+              BEN_MAGIC_BYTES_SIZE);
 
             return cpContainer->ReadKnownSize(pLabel, BEN_LABEL_SIZE);
         }
@@ -265,8 +260,7 @@ CBenTOCReader::ReadTOC()
                         return Err;
                     LookAhead = GetCode();
 
-                    if ((Err = cpContainer->SeekToPosition(Pos)) != BenErr_OK)
-                        return Err;
+                    cpContainer->SeekToPosition(Pos);
 
                     const auto nRemainingSize = cpContainer->remainingSize();
                     if (Length > nRemainingSize)
