@@ -512,7 +512,7 @@ private:
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
     static void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
-    static bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
+    static void InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
     static void Encode(OUString& rString);
 
     css::uno::Reference< css::sdbc::XConnection > getConnection();

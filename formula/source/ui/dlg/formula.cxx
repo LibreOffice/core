@@ -82,7 +82,7 @@ public:
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
     bool            CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula = false );
-    bool            CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct = false );
+    void            CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct = false );
     void            UpdateValues( bool bForceRecalcStruct = false );
     void            DeleteArgs();
     sal_Int32       GetFunctionPos(sal_Int32 nPos);
@@ -608,7 +608,7 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
     CalcStruct( m_pMEdit->GetText(), bForceRecalcStruct);
 }
 
-bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct )
+void FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct )
 {
     sal_Int32 nLength = rStrExp.getLength();
 
@@ -635,7 +635,6 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
         if (rStrExp[nLength-1] == '(')
             UpdateTokenArray(rStrExp);
     }
-    return true;
 }
 
 
