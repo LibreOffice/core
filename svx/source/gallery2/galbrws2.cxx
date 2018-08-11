@@ -1110,7 +1110,7 @@ void GalleryBrowser2::Execute(const OString &rIdent)
         }
         else if (rIdent == "title")
         {
-            SgaObject* pObj = mpCurTheme->AcquireObject( mnCurActionPos );
+            std::unique_ptr<SgaObject> pObj = mpCurTheme->AcquireObject( mnCurActionPos );
 
             if( pObj )
             {
@@ -1131,8 +1131,6 @@ void GalleryBrowser2::Execute(const OString &rIdent)
                         mpCurTheme->InsertObject( *pObj );
                     }
                 }
-
-                GalleryTheme::ReleaseObject( pObj );
             }
         }
         else if (rIdent == "copy")

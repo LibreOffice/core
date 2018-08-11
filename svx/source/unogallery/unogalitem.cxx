@@ -272,12 +272,11 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                 if( pGalTheme )
                 {
-                    SgaObject* pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
+                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
 
                     if( pObj )
                     {
                         *pValue <<= pObj->GetTitle();
-                        ::GalleryTheme::ReleaseObject( pObj );
                     }
                 }
             }
@@ -289,7 +288,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                 if( pGalTheme )
                 {
-                    SgaObject* pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
+                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
 
                     if( pObj )
                     {
@@ -301,7 +300,6 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                             aThumbnail = pObj->GetThumbMtf();
 
                         *pValue <<= aThumbnail.GetXGraphic();
-                        ::GalleryTheme::ReleaseObject( pObj );
                     }
                 }
             }

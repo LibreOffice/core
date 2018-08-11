@@ -323,7 +323,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 
     if (bNeedToCreate)
     {
-        SgaObject* pObj = mpTheme->AcquireObject(nId - 1);
+        std::unique_ptr<SgaObject> pObj = mpTheme->AcquireObject(nId - 1);
 
         if(pObj)
         {
@@ -331,7 +331,6 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
             aItemTextTitle = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Title);
 
             mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
-            GalleryTheme::ReleaseObject(pObj);
         }
     }
 
@@ -441,12 +440,11 @@ OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 /*nColumnId*/) cons
     OUString sRet;
     if( mpTheme && ( _nRow < static_cast< long >( mpTheme->GetObjectCount() ) ) )
     {
-        SgaObject* pObj = mpTheme->AcquireObject( _nRow );
+        std::unique_ptr<SgaObject> pObj = mpTheme->AcquireObject( _nRow );
 
         if( pObj )
         {
             sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj, GalleryItemFlags::Title );
-            GalleryTheme::ReleaseObject( pObj );
         }
     }
 
@@ -505,7 +503,7 @@ void GalleryListView::PaintField(vcl::RenderContext& rDev, const tools::Rectangl
 
         if(bNeedToCreate)
         {
-            SgaObject* pObj = mpTheme->AcquireObject(mnCurRow);
+            std::unique_ptr<SgaObject> pObj = mpTheme->AcquireObject(mnCurRow);
 
             if(pObj)
             {
@@ -514,7 +512,6 @@ void GalleryListView::PaintField(vcl::RenderContext& rDev, const tools::Rectangl
                 aItemTextPath = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Path);
 
                 mpTheme->SetPreviewBitmapExAndStrings(mnCurRow, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
-                GalleryTheme::ReleaseObject(pObj);
             }
         }
 
