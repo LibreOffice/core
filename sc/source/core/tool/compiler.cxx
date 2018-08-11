@@ -3002,7 +3002,7 @@ bool ScCompiler::IsString()
     while ( *p )
         p++;
     sal_Int32 nLen = sal::static_int_cast<sal_Int32>( p - cSymbol - 1 );
-    if (cSymbol[nLen] != '"')
+    if (!nLen || cSymbol[nLen] != '"')
         return false;
     svl::SharedString aSS = pDoc->GetSharedStringPool().intern(OUString(cSymbol+1, nLen-1));
     maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
