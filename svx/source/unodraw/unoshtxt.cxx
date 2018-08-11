@@ -85,7 +85,7 @@ private:
     SdrView*                        mpView;
     VclPtr<const vcl::Window>       mpWindow;
     SdrModel*                       mpModel;            // TTTT probably not needed -> use SdrModel from SdrObject (?)
-    SdrOutliner*                    mpOutliner;
+    std::unique_ptr<SdrOutliner>    mpOutliner;
     std::unique_ptr<SvxOutlinerForwarder> mpTextForwarder;
     std::unique_ptr<SvxDrawOutlinerViewForwarder> mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
@@ -406,13 +406,12 @@ void SvxTextEditSourceImpl::dispose()
     {
         if( mpModel )
         {
-            mpModel->disposeOutliner( mpOutliner );
+            mpModel->disposeOutliner( std::move(mpOutliner) );
         }
         else
         {
-            delete mpOutliner;
+            mpOutliner.reset();
         }
-        mpOutliner = nullptr;
     }
 
     if( mpModel )
@@ -500,7 +499,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OutlinerMode::OutlineObject;
 
-            mpOutliner = mpModel->createOutliner( nOutlMode ).release();
+            mpOutliner = mpModel->createOutliner( nOutlMode );
 
             // Do the setup after outliner creation, would be useless otherwise
             if( HasView() )
