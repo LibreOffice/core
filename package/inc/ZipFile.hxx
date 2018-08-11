@@ -82,7 +82,7 @@ class ZipFile
 
     void getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC );
 
-    bool readLOC( ZipEntry &rEntry );
+    void readLOC( ZipEntry &rEntry );
     sal_Int32 readCEN();
     sal_Int32 findEND();
     void recover();

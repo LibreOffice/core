@@ -138,8 +138,8 @@ void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue )
 
 void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )
 {
-    if( startNextProperty() )
-        maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
+    startNextProperty();
+    maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
 }
 
 void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
@@ -198,12 +198,11 @@ bool AxBinaryPropertyWriter::ensureValid()
     return mbValid;
 }
 
-bool AxBinaryPropertyWriter::startNextProperty( bool bSkip )
+void AxBinaryPropertyWriter::startNextProperty( bool bSkip )
 {
     // if we are skipping then we clear the flag
     setFlag( mnPropFlags, mnNextProp, !bSkip );
     mnNextProp <<= 1;
-    return true;
 }
 
 } // namespace exp

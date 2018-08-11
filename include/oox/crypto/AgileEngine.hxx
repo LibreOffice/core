@@ -108,7 +108,7 @@ public:
 
     // Decryption
 
-    bool decryptEncryptionKey(OUString const & rPassword);
+    void decryptEncryptionKey(OUString const & rPassword);
     bool decryptAndCheckVerifierHash(OUString const & rPassword);
 
     bool generateEncryptionKey(OUString const & rPassword) override;

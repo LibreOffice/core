@@ -755,7 +755,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
     return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, true, aMediaType );
 }
 
-bool ZipFile::readLOC( ZipEntry &rEntry )
+void ZipFile::readLOC( ZipEntry &rEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -821,8 +821,6 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException("The stream seems to be broken!" );
-
-    return true;
 }
 
 sal_Int32 ZipFile::findEND()
