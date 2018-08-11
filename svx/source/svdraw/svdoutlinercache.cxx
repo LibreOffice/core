@@ -59,7 +59,7 @@ SdrOutlinerCache::~SdrOutlinerCache()
 {
 }
 
-void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
+void SdrOutlinerCache::disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner )
 {
     if( pOutliner )
     {
@@ -67,7 +67,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 
         if( OutlinerMode::OutlineObject == nOutlMode )
         {
-            maModeOutline.emplace_back(pOutliner);
+            maModeOutline.emplace_back(std::move(pOutliner));
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
@@ -76,7 +76,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         }
         else if( OutlinerMode::TextObject == nOutlMode )
         {
-            maModeText.emplace_back(pOutliner);
+            maModeText.emplace_back(std::move(pOutliner));
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
@@ -85,8 +85,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         }
         else
         {
-            maActiveOutliners.erase(pOutliner);
-            delete pOutliner;
+            maActiveOutliners.erase(pOutliner.get());
         }
     }
 }
