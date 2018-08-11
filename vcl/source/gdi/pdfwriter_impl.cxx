@@ -6288,7 +6288,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
         aTextLineColor = COL_WHITE;
     if( aOverlineColor == COL_BLACK )
         aOverlineColor = COL_WHITE;
-    // coverity[copy_paste_error] - aReliefColor depending on aTextColor is correct
+    // coverity[copy_paste_error : FALSE] - aReliefColor depending on aTextColor is correct
     if( aTextColor == COL_WHITE )
         aReliefColor = COL_BLACK;
 

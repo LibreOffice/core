@@ -572,7 +572,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
                             // this loop always breaks eventually as there is at least one pixel
                             while( true )
                             {
-                                // coverity[copy_paste_error] - this is correct nX, not nY
+                                // coverity[copy_paste_error : FALSE] - this is correct nX, not nY
                                 if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                                 {
                                     pPoints2[ nPolyPos ] = Point( nX, nY );

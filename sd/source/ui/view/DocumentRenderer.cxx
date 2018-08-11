@@ -1601,10 +1601,12 @@ private:
             Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
             maPrintSize.Width  = aPaperSize.Height();
             maPrintSize.Height = aPaperSize.Width();
-            const long nRotatedWidth = aOutRect.GetHeight();
-            const long nRotatedHeight = aOutRect.GetWidth();
-            aOutRect = ::tools::Rectangle( Point( aPageOfs.Y(), aPageOfs.X() ),
-                                  Size( nRotatedWidth, nRotatedHeight ) );
+            const auto nRotatedWidth = aOutRect.GetHeight();
+            const auto nRotatedHeight = aOutRect.GetWidth();
+            const auto nRotatedX = aPageOfs.Y();
+            const auto nRotatedY = aPageOfs.X();
+            aOutRect = ::tools::Rectangle(Point( nRotatedX, nRotatedY),
+                                  Size(nRotatedWidth, nRotatedHeight));
         }
 
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
