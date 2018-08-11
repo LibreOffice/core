@@ -79,7 +79,7 @@ private:
     void writeEXT( const ZipEntry &rEntry );
 
     // ScheduledThread handling helpers
-    void consumeScheduledThreadEntry(ZipOutputEntry* pCandidate);
+    void consumeScheduledThreadEntry(std::unique_ptr<ZipOutputEntry> pCandidate);
     void consumeFinishedScheduledThreadEntries();
 
 public:

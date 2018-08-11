@@ -91,7 +91,7 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     m_pCurrentEntry = nullptr;
 }
 
-void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
+void ZipOutputStream::consumeScheduledThreadEntry(std::unique_ptr<ZipOutputEntry> pCandidate)
 {
     //Any exceptions thrown in the threads were caught and stored for now
     const std::exception_ptr& rCaughtException(pCandidate->getParallelDeflateException());
@@ -99,7 +99,6 @@ void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
     {
         m_aDeflateException = rCaughtException; // store it for later throwing
         // the exception handler in DeflateThread should have cleaned temp file
-        delete pCandidate;
         return;
     }
 
@@ -123,22 +122,21 @@ void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
 
     pCandidate->getZipPackageStream()->successfullyWritten(pCandidate->getZipEntry());
     pCandidate->deleteBufferFile();
-    delete pCandidate;
 }
 
 void ZipOutputStream::consumeFinishedScheduledThreadEntries()
 {
     std::vector< ZipOutputEntry* > aNonFinishedEntries;
 
-    for(auto aIter = m_aEntries.begin(); aIter != m_aEntries.end(); ++aIter)
+    for(ZipOutputEntry* pEntry : m_aEntries)
     {
-        if((*aIter)->isFinished())
+        if(pEntry->isFinished())
         {
-            consumeScheduledThreadEntry(*aIter);
+            consumeScheduledThreadEntry(std::unique_ptr<ZipOutputEntry>(pEntry));
         }
         else
         {
-            aNonFinishedEntries.push_back(*aIter);
+            aNonFinishedEntries.push_back(pEntry);
         }
     }
 
@@ -171,7 +169,7 @@ void ZipOutputStream::finish()
     {
         ZipOutputEntry* pCandidate = m_aEntries.back();
         m_aEntries.pop_back();
-        consumeScheduledThreadEntry(pCandidate);
+        consumeScheduledThreadEntry(std::unique_ptr<ZipOutputEntry>(pCandidate));
     }
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
