@@ -958,7 +958,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
 }
 
 
-bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
+void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
     const OUString& rFileName )
 {
     OUString aFileName(rFileName);
@@ -1014,8 +1014,6 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
     // Body
     pChild->SetDocumentLB( new SvLockBytes(pStream.release(), true) );
     rParent.AttachChild( std::move(pChild) );
-
-    return true;
 }
 
 

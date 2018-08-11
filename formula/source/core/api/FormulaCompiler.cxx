@@ -1233,12 +1233,6 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
 }
 
 
-sal_Int32 FormulaCompiler::OpCodeMap::getOpCodeUnknown()
-{
-    static const sal_Int32 kOpCodeUnknown = -1;
-    return kOpCodeUnknown;
-}
-
 bool FormulaCompiler::GetToken()
 {
     static const short nRecursionMax = 42;

@@ -166,7 +166,7 @@ private:
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
-    FileViewResult OpenURL( OUString const & sURL );
+    void OpenURL( OUString const & sURL );
 
     void AddFileExtension();
 
