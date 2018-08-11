@@ -124,7 +124,7 @@ namespace dbaui
 
     svt::OGenericUnoDialog::Dialog OAdvancedSettingsDialog::createDialog(vcl::Window* _pParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
     }
 
 }   // namespace dbaui

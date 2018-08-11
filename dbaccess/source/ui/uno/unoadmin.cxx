@@ -38,7 +38,6 @@ namespace dbaui
 
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
-    ,m_pDatasourceItems(nullptr)
     ,m_pItemPool(nullptr)
     ,m_pItemPoolDefaults(nullptr)
 {

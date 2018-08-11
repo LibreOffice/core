@@ -286,7 +286,7 @@ void ODbAdminDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
+void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure ....
     _rpSet = nullptr;
@@ -431,19 +431,13 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool->FreezeIdRanges();
 
     // and, finally, the set
-    _rpSet = new SfxItemSet(*_rpPool);
-
-    return _rpSet;
+    _rpSet.reset(new SfxItemSet(*_rpPool));
 }
 
-void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
+void ODbAdminDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
 {
     // _first_ delete the set (referring the pool)
-    if (_rpSet)
-    {
-        delete _rpSet;
-        _rpSet = nullptr;
-    }
+    _rpSet.reset();
 
     // delete the pool
     if (_rpPool)
