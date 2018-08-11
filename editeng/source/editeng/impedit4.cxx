@@ -1060,7 +1060,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                XEditAttribute* pX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
+                std::unique_ptr<XEditAttribute> pX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {
@@ -1075,9 +1075,9 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
                 }
                 DBG_ASSERT( pX->GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
                 if ( !pX->GetLen() && !bEmptyPara )
-                    pTxtObj->mpImpl->DestroyAttrib(pX);
+                    pTxtObj->mpImpl->DestroyAttrib(std::move(pX));
                 else
-                    pC->GetCharAttribs().push_back(std::unique_ptr<XEditAttribute>(pX));
+                    pC->GetCharAttribs().push_back(std::move(pX));
             }
             nAttr++;
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
