@@ -19,138 +19,184 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_SHAPEFACTORY_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_SHAPEFACTORY_HXX
 
-#include "AbstractShapeFactory.hxx"
+#include "PropertyMapper.hxx"
+#include <basegfx/range/b2irectangle.hxx>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+
+#include <rtl/ustring.hxx>
+
+namespace chart { struct VLineProperties; }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct Direction3D; } } } }
+
 
 namespace chart
 {
+class Stripe;
 
-class ShapeFactory : public AbstractShapeFactory
+// Be careful here not to clash with the SYMBOL_FOO #defines in
+// <vcl/vclenum.hxx>
+enum SymbolEnum { Symbol_Square=0
+                 , Symbol_Diamond
+                 , Symbol_DownArrow
+                 , Symbol_UpArrow
+                 , Symbol_RightArrow
+                 , Symbol_LeftArrow
+                 , Symbol_Bowtie
+                 , Symbol_Sandglass
+                 , Symbol_Circle
+                 , Symbol_Star
+                 , Symbol_X
+                 , Symbol_Plus
+                 , Symbol_Asterisk
+                 , Symbol_HorizontalBar
+                 , Symbol_VerticalBar
+                 , Symbol_COUNT
+};
+
+
+class ShapeFactory
 {
-    friend class AbstractShapeFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
 
     ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
         {m_xShapeFactory = xFactory;}
 
 public:
+    enum StackPosition { Top, Bottom };
+
+    static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
+
     ShapeFactory() = delete;
-    virtual css::uno::Reference< css::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         createGroup2D(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
-          , const OUString& aName = OUString() ) override;
+          , const OUString& aName = OUString() );
 
-    virtual css::uno::Reference< css::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         createGroup3D(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
-          , const OUString& aName = OUString() ) override;
+          , const OUString& aName = OUString() );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
             createCube(   const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree
                         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap
-                        , bool bRounded = false) override;
+                        , bool bRounded = false);
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createCylinder(   const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
-                        , sal_Int32 nRotateZAngleHundredthDegree ) override;
+                        , sal_Int32 nRotateZAngleHundredthDegree );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createPyramid(    const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight
                         , bool bRotateZ
                         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
-                        , const tPropertyNameMap& rPropertyNameMap) override;
+                        , const tPropertyNameMap& rPropertyNameMap);
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createCone(       const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
-                        , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree ) override;
+                        , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createPieSegment2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const css::drawing::Direction3D& rOffset
-                    , const css::drawing::HomogenMatrix& rUnitCircleToScene ) override;
+                    , const css::drawing::HomogenMatrix& rUnitCircleToScene );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createPieSegment( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const css::drawing::Direction3D& rOffset
                     , const css::drawing::HomogenMatrix& rUnitCircleToScene
-                    , double fDepth ) override;
+                    , double fDepth );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createStripe( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , bool bDoubleSided
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
-                    , bool bFlatNormals=true ) override;
+                    , bool bFlatNormals=true );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createArea3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
-                    , double fDepth) override;
+                    , double fDepth);
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon) override;
+                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createSymbol2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
                     , sal_Int32 nBorderColor
-                    , sal_Int32 nFillColor ) override;
+                    , sal_Int32 nFillColor );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
-                    , const css::uno::Reference< css::graphic::XGraphic >& xGraphic ) override;
+                    , const css::uno::Reference< css::graphic::XGraphic >& xGraphic );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createLine2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PointSequenceSequence& rPoints
-                    , const VLineProperties* pLineProperties = nullptr ) override;
+                    , const VLineProperties* pLineProperties = nullptr );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createLine ( const css::uno::Reference< css::drawing::XShapes >& xTarget,
-                const css::awt::Size& rSize, const css::awt::Point& rPosition ) override;
+                const css::awt::Size& rSize, const css::awt::Point& rPosition );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createLine3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPoints
-                    , const VLineProperties& rLineProperties ) override;
+                    , const VLineProperties& rLineProperties );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createCircle2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
-                    , const css::drawing::Direction3D& rSize ) override;
+                    , const css::drawing::Direction3D& rSize );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createCircle( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::awt::Size& rSize
-                    , const css::awt::Point& rPosition ) override;
+                    , const css::awt::Point& rPosition );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
                     , const css::uno::Any& rATransformation
-                     ) override;
+                     );
 
     /** This method creates a text shape made up by a set of paragraphs.
      *  For each paragraph the related text style is passed to the method.
@@ -179,55 +225,92 @@ public:
      *      a transformation to be applied to the text shape as final step.
      *
      */
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::uno::Sequence< OUString >& rTextParagraphs
                     , const css::uno::Sequence< tNameSequence >& rParaPropNames
                     , const css::uno::Sequence< tAnySequence >& rParaPropValues
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
-                    , const css::uno::Any& rATransformation ) override;
+                    , const css::uno::Any& rATransformation );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createText(const css::uno::Reference< css::drawing::XShapes >& xTarget
             , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
-            , const css::uno::Any& rATransformation) override;
+            , const css::uno::Any& rATransformation);
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,
                 css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
-                double nRotation, const OUString& aName ) override;
+                double nRotation, const OUString& aName );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createInvisibleRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
-          , const css::awt::Size& rSize ) override;
+          , const css::awt::Size& rSize );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget,
             const css::awt::Size& rSize,
             const css::awt::Point& rPosition,
             const tNameSequence& rPropNames,
             const tAnySequence& rPropValues,
-            StackPosition ePos = Top ) override;
+            StackPosition ePos = Top );
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createRectangle(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget ) override;
+            const css::uno::Reference< css::drawing::XShapes >& xTarget );
 
-    virtual css::uno::Reference< css::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
          getOrCreateChartRootShape( const css::uno::Reference<
-            css::drawing::XDrawPage>& xPage ) override;
+            css::drawing::XDrawPage>& xPage );
 
-    virtual void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize ) override;
+    void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize );
 
-    virtual void clearPage(css::uno::Reference< css::drawing::XShapes > ) override {}
+    void clearPage(css::uno::Reference< css::drawing::XShapes > ) {}
+
+    static css::uno::Reference< css::drawing::XShapes >
+         getChartRootShape( const css::uno::Reference< css::drawing::XDrawPage>& xPage );
+
+    static void makeShapeInvisible( const css::uno::Reference< css::drawing::XShape >& xShape );
+
+    static void setShapeName( const css::uno::Reference< css::drawing::XShape >& xShape
+            , const OUString& rName );
+
+    static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
+
+    static css::uno::Any makeTransformation( const css::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
+
+    static OUString getStackedString( const OUString& rString, bool bStacked );
+
+    static bool hasPolygonAnyLines( css::drawing::PolyPolygonShape3D& rPoly );
+    static bool isPolygonEmptyOrSinglePoint( css::drawing::PolyPolygonShape3D& rPoly );
+    static void closePolygon( css::drawing::PolyPolygonShape3D& rPoly );
+
+    static css::awt::Size calculateNewSizeRespectingAspectRatio(
+            const css::awt::Size& rTargetSize
+            , const css::awt::Size& rSourceSizeWithCorrectAspectRatio );
+
+    static css::awt::Point calculateTopLeftPositionToCenterObject(
+            const css::awt::Point& rTargetAreaPosition
+            , const css::awt::Size& rTargetAreaSize
+            , const css::awt::Size& rObjectSize );
+
+    static ::basegfx::B2IRectangle getRectangleOfShape(
+            const css::uno::Reference< css::drawing::XShape >& xShape );
+
+    static css::awt::Size getSizeAfterRotation(
+            const css::uno::Reference< css::drawing::XShape >& xShape, double fRotationAngleDegree );
+
+    static void removeSubShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes );
+
+    static sal_Int32 getSymbolCount() { return Symbol_COUNT; }
 
 private:
     css::uno::Reference< css::drawing::XShape >

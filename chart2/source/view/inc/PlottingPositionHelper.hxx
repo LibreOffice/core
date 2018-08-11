@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace drawing { struct Poly
 namespace chart
 {
 
-class AbstractShapeFactory;
+class ShapeFactory;
 
 class PlottingPositionHelper
 {
@@ -83,7 +83,7 @@ public:
     static css::awt::Point transformSceneToScreenPosition(
                   const css::drawing::Position3D& rScenePosition3D
                 , const css::uno::Reference< css::drawing::XShapes >& xSceneTarget
-                , AbstractShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
+                , ShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
 
     inline double getLogicMinX() const;
     inline double getLogicMinY() const;

@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/PolarLabelPositionHelper \
     chart2/source/view/main/PropertyMapper \
     chart2/source/view/main/ShapeFactory \
-    chart2/source/view/main/AbstractShapeFactory \
     chart2/source/view/main/Stripe \
     chart2/source/view/main/VDataSeries \
     chart2/source/view/main/VLegend \

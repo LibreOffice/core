@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace drawing { class XShap
 namespace chart
 {
 
-class AbstractShapeFactory;
+class ShapeFactory;
 
 /** The VDiagram is responsible to generate the visible parts of the Diagram
 that is wall, floor, axes and data series.
@@ -88,7 +88,7 @@ private: //members
 
     css::uno::Reference< css::drawing::XShapes >                    m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>           m_xShapeFactory;
-    AbstractShapeFactory* m_pShapeFactory;
+    ShapeFactory* m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate
     css::uno::Reference< css::drawing::XShape >   m_xOuterGroupShape;

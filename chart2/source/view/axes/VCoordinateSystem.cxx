@@ -23,7 +23,7 @@
 #include "VPolarCoordinateSystem.hxx"
 #include <ScaleAutomatism.hxx>
 #include <VSeriesPlotter.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <servicenames_coosystems.hxx>
 #include <AxisIndexDefines.hxx>
 #include <ObjectIdentifier.hxx>
@@ -107,7 +107,7 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     //create group shape for grids first thus axes are always painted above grids
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     if(nDimensionCount==2)
     {
         //create and add to target

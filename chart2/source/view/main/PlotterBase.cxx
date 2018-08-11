@@ -19,7 +19,7 @@
 
 #include <PlotterBase.hxx>
 #include <PlottingPositionHelper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -50,7 +50,7 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
     m_xLogicTarget  = xLogicTarget;
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xShapeFactory;
-    m_pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+    m_pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     m_aCID = rCID;
 }
 

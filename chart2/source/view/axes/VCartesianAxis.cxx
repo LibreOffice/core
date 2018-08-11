@@ -19,7 +19,7 @@
 
 #include "VCartesianAxis.hxx"
 #include <PlottingPositionHelper.hxx>
-#include <AbstractShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
 #include <PropertyMapper.hxx>
@@ -93,7 +93,7 @@ void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape > const 
 
     sal_Int32 nMaxLabelsHeight = nFullHeight - rAxisLabelProperties.m_aMaximumSpaceForLabels.Height - rAxisLabelProperties.m_aMaximumSpaceForLabels.Y;
     const sal_Int32 nAvgCharWidth = xShape2DText->getSize().Width / rLabel.getLength();
-    const sal_Int32 nTextSize = AbstractShapeFactory::getSizeAfterRotation( xShape2DText,
+    const sal_Int32 nTextSize = ShapeFactory::getSizeAfterRotation( xShape2DText,
                                             rAxisLabelProperties.fRotationAngleDegree ).Height;
 
     if( !nAvgCharWidth )
@@ -138,10 +138,10 @@ Reference< drawing::XShape > createSingleLabel(
 
     // #i78696# use mathematically correct rotation now
     const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
-    uno::Any aATransformation = AbstractShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
-    OUString aLabel = AbstractShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
+    uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
+    OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
-    Reference< drawing::XShape > xShape2DText = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)
+    Reference< drawing::XShape > xShape2DText = ShapeFactory::getOrCreateShapeFactory(xShapeFactory)
                     ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
     if( rAxisProperties.m_bLimitSpaceForLabels )
@@ -160,7 +160,7 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
     if(!xShape.is())
         return false;
 
-    ::basegfx::B2IRectangle aShapeRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),AbstractShapeFactory::getSizeAfterRotation( xShape, fRotationAngleDegree ));
+    ::basegfx::B2IRectangle aShapeRect = BaseGFXHelper::makeRectangle(xShape->getPosition(), ShapeFactory::getSizeAfterRotation( xShape, fRotationAngleDegree ));
 
     basegfx::B2IVector aPosition(
         static_cast<sal_Int32>( rTickScreenPosition.getX() )
@@ -331,7 +331,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
         xShape2DText = pTickInfo->xTextShape;
         if( xShape2DText.is() )
         {
-            awt::Size aSize = AbstractShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
+            awt::Size aSize = ShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
             if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
                 nDistance = std::max(nDistance,aSize.Width);
             else
@@ -1714,7 +1714,7 @@ void VCartesianAxis::updatePositions()
 
                 // #i78696# use mathematically correct rotation now
                 const double fRotationAnglePi(-basegfx::deg2rad(fRotationAngleDegree));
-                uno::Any aATransformation = AbstractShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
+                uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                 //set new position
                 uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );
@@ -1848,7 +1848,7 @@ void VCartesianAxis::createShapes()
                     m_xGroupShape_Shapes, aPoints
                     , &m_aAxisProperties.m_aLineProperties );
             //because of this name this line will be used for marking the axis
-            ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
+            ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );
         }
         //create an additional line at NULL
         if( !AxisHelper::isAxisPositioningEnabled() )
