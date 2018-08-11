@@ -331,7 +331,7 @@ bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
     return (hash.size() <= hashValue.size() && std::equal(hash.begin(), hash.end(), hashValue.begin()));
 }
 
-bool AgileEngine::decryptEncryptionKey(OUString const & rPassword)
+void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
 {
     sal_Int32 nKeySize = mInfo.keyBits / 8;
 
@@ -342,8 +342,6 @@ bool AgileEngine::decryptEncryptionKey(OUString const & rPassword)
     calculateHashFinal(rPassword, aPasswordHash);
 
     calculateBlock(constBlock3, aPasswordHash, mInfo.encryptedKeyValue, mKey);
-
-    return true;
 }
 
 // TODO: Rename
