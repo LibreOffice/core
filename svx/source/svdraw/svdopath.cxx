@@ -1286,19 +1286,19 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
             } // switch
         }
     }
-    sal_uInt16 nActPoint=rXPoly.GetPointCount();
-    if (aPathPolygon.Count()>1 && rStat.IsMouseDown() && nActPoint<2) {
+    sal_uInt16 nCurrentPoint=rXPoly.GetPointCount();
+    if (aPathPolygon.Count()>1 && rStat.IsMouseDown() && nCurrentPoint<2) {
         rXPoly[0]=rStat.GetPos0();
         rXPoly[1]=rStat.GetNow();
-        nActPoint=2;
+        nCurrentPoint=2;
     }
-    if (nActPoint==0) {
+    if (nCurrentPoint==0) {
         rXPoly[0]=rStat.GetPos0();
-    } else nActPoint--;
+    } else nCurrentPoint--;
     bool bFreeHand=IsFreeHand(pU->eCurrentKind);
     rStat.SetNoSnap(bFreeHand);
     rStat.SetOrtho8Possible(pU->eCurrentKind!=OBJ_CARC && pU->eCurrentKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eCurrentKind!=OBJ_LINE));
-    rXPoly[nActPoint]=rStat.GetNow();
+    rXPoly[nCurrentPoint]=rStat.GetNow();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE && rXPoly.GetPointCount()>=1) {
         Point aPt(rStat.GetStart());
         if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
@@ -1309,15 +1309,15 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     }
     OutputDevice* pOut=pView==nullptr ? nullptr : pView->GetFirstOutputDevice();
     if (bFreeHand) {
-        if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
-        if (rStat.IsMouseDown() && nActPoint>0) {
+        if (pU->nBezierStartPoint>nCurrentPoint) pU->nBezierStartPoint=nCurrentPoint;
+        if (rStat.IsMouseDown() && nCurrentPoint>0) {
             // don't allow two consecutive points to occupy too similar positions
             long nMinDist=1;
             if (pView!=nullptr) nMinDist=pView->GetFreeHandMinDistPix();
             if (pOut!=nullptr) nMinDist=pOut->PixelToLogic(Size(nMinDist,0)).Width();
             if (nMinDist<1) nMinDist=1;
 
-            Point aPt0(rXPoly[nActPoint-1]);
+            Point aPt0(rXPoly[nCurrentPoint-1]);
             Point aPt1(rStat.GetNow());
             long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
             long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
@@ -1326,39 +1326,39 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
             // TODO: the following is copied from EndCreate (with a few smaller modifications)
             // and should be combined into a method with the code there.
 
-            if (nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
-                rXPoly.PointsToBezier(nActPoint-3);
-                rXPoly.SetFlags(nActPoint-1,PolyFlags::Control);
-                rXPoly.SetFlags(nActPoint-2,PolyFlags::Control);
+            if (nCurrentPoint-pU->nBezierStartPoint>=3 && ((nCurrentPoint-pU->nBezierStartPoint)%3)==0) {
+                rXPoly.PointsToBezier(nCurrentPoint-3);
+                rXPoly.SetFlags(nCurrentPoint-1,PolyFlags::Control);
+                rXPoly.SetFlags(nCurrentPoint-2,PolyFlags::Control);
 
-                if (nActPoint>=6 && rXPoly.IsControl(nActPoint-4)) {
-                    rXPoly.CalcTangent(nActPoint-3,nActPoint-4,nActPoint-2);
-                    rXPoly.SetFlags(nActPoint-3,PolyFlags::Smooth);
+                if (nCurrentPoint>=6 && rXPoly.IsControl(nCurrentPoint-4)) {
+                    rXPoly.CalcTangent(nCurrentPoint-3,nCurrentPoint-4,nCurrentPoint-2);
+                    rXPoly.SetFlags(nCurrentPoint-3,PolyFlags::Smooth);
                 }
             }
-            rXPoly[nActPoint+1]=rStat.GetNow();
+            rXPoly[nCurrentPoint+1]=rStat.GetNow();
             rStat.NextPoint();
         } else {
-            pU->nBezierStartPoint=nActPoint;
+            pU->nBezierStartPoint=nCurrentPoint;
         }
     }
 
     pU->ResetFormFlags();
     if (IsBezier(pU->eCurrentKind)) {
-        if (nActPoint>=2) {
-            pU->CalcBezier(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],rStat.IsMouseDown());
+        if (nCurrentPoint>=2) {
+            pU->CalcBezier(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],rStat.IsMouseDown());
         } else if (pU->bBezHasCtrl0) {
-            pU->CalcBezier(rXPoly[nActPoint-1],rXPoly[nActPoint],pU->aBezControl0-rXPoly[nActPoint-1],rStat.IsMouseDown());
+            pU->CalcBezier(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],pU->aBezControl0-rXPoly[nCurrentPoint-1],rStat.IsMouseDown());
         }
     }
-    if (pU->eCurrentKind==OBJ_CARC && nActPoint>=2) {
-        pU->CalcCircle(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
+    if (pU->eCurrentKind==OBJ_CARC && nCurrentPoint>=2) {
+        pU->CalcCircle(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
-    if (pU->eCurrentKind==OBJ_LINE && nActPoint>=2) {
-        pU->CalcLine(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
+    if (pU->eCurrentKind==OBJ_LINE && nCurrentPoint>=2) {
+        pU->CalcLine(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
-    if (pU->eCurrentKind==OBJ_RECT && nActPoint>=2) {
-        pU->CalcRect(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
+    if (pU->eCurrentKind==OBJ_RECT && nCurrentPoint>=2) {
+        pU->CalcRect(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
 
     return true;
@@ -1371,8 +1371,8 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SdrView* pView=rStat.GetView();
     bool bIncomp=pView!=nullptr && pView->IsUseIncompatiblePathCreateInterface();
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
-    sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
-    rXPoly[nActPoint]=rStat.GetNow();
+    sal_uInt16 nCurrentPoint=rXPoly.GetPointCount()-1;
+    rXPoly[nCurrentPoint]=rStat.GetNow();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
         if (rStat.GetPointCount()>=2) eCmd=SdrCreateCmd::ForceEnd;
         bRet = eCmd==SdrCreateCmd::ForceEnd;
@@ -1394,44 +1394,44 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
     if (eCmd==SdrCreateCmd::NextPoint || eCmd==SdrCreateCmd::NextObject) {
         // don't allow two consecutive points to occupy the same position
-        if (nActPoint==0 || rStat.GetNow()!=rXPoly[nActPoint-1]) {
+        if (nCurrentPoint==0 || rStat.GetNow()!=rXPoly[nCurrentPoint-1]) {
             if (bIncomp) {
-                if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
-                if (IsBezier(pU->eCurrentKind) && nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
-                    rXPoly.PointsToBezier(nActPoint-3);
-                    rXPoly.SetFlags(nActPoint-1,PolyFlags::Control);
-                    rXPoly.SetFlags(nActPoint-2,PolyFlags::Control);
+                if (pU->nBezierStartPoint>nCurrentPoint) pU->nBezierStartPoint=nCurrentPoint;
+                if (IsBezier(pU->eCurrentKind) && nCurrentPoint-pU->nBezierStartPoint>=3 && ((nCurrentPoint-pU->nBezierStartPoint)%3)==0) {
+                    rXPoly.PointsToBezier(nCurrentPoint-3);
+                    rXPoly.SetFlags(nCurrentPoint-1,PolyFlags::Control);
+                    rXPoly.SetFlags(nCurrentPoint-2,PolyFlags::Control);
 
-                    if (nActPoint>=6 && rXPoly.IsControl(nActPoint-4)) {
-                        rXPoly.CalcTangent(nActPoint-3,nActPoint-4,nActPoint-2);
-                        rXPoly.SetFlags(nActPoint-3,PolyFlags::Smooth);
+                    if (nCurrentPoint>=6 && rXPoly.IsControl(nCurrentPoint-4)) {
+                        rXPoly.CalcTangent(nCurrentPoint-3,nCurrentPoint-4,nCurrentPoint-2);
+                        rXPoly.SetFlags(nCurrentPoint-3,PolyFlags::Smooth);
                     }
                 }
             } else {
-                if (nActPoint==1 && IsBezier(pU->eCurrentKind) && !pU->bBezHasCtrl0) {
+                if (nCurrentPoint==1 && IsBezier(pU->eCurrentKind) && !pU->bBezHasCtrl0) {
                     pU->aBezControl0=rStat.GetNow();
                     pU->bBezHasCtrl0=true;
-                    nActPoint--;
+                    nCurrentPoint--;
                 }
                 if (pU->IsFormFlag()) {
                     sal_uInt16 nPointCount0=rXPoly.GetPointCount();
-                    rXPoly.Remove(nActPoint-1,2); // remove last two points and replace by form
+                    rXPoly.Remove(nCurrentPoint-1,2); // remove last two points and replace by form
                     rXPoly.Insert(XPOLY_APPEND,pU->GetFormPoly());
                     sal_uInt16 nPointCount1=rXPoly.GetPointCount();
                     for (sal_uInt16 i=nPointCount0+1; i<nPointCount1-1; i++) { // to make BckAction work
                         if (!rXPoly.IsControl(i)) rStat.NextPoint();
                     }
-                    nActPoint=rXPoly.GetPointCount()-1;
+                    nCurrentPoint=rXPoly.GetPointCount()-1;
                 }
             }
-            nActPoint++;
-            rXPoly[nActPoint]=rStat.GetNow();
+            nCurrentPoint++;
+            rXPoly[nCurrentPoint]=rStat.GetNow();
         }
         if (eCmd==SdrCreateCmd::NextObject) {
             if (rXPoly.GetPointCount()>=2) {
                 pU->bBezHasCtrl0=false;
                 // only a singular polygon may be opened, so close this
-                rXPoly[nActPoint]=rXPoly[0];
+                rXPoly[nCurrentPoint]=rXPoly[0];
                 XPolygon aXP;
                 aXP[0]=rStat.GetNow();
                 aPathPolygon.Insert(std::move(aXP));
@@ -1481,23 +1481,23 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat const & rStat)
     ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     if (aPathPolygon.Count()>0) {
         XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
-        sal_uInt16 nActPoint=rXPoly.GetPointCount();
-        if (nActPoint>0) {
-            nActPoint--;
+        sal_uInt16 nCurrentPoint=rXPoly.GetPointCount();
+        if (nCurrentPoint>0) {
+            nCurrentPoint--;
             // make the last part of a bezier curve a line
-            rXPoly.Remove(nActPoint,1);
-            if (nActPoint>=3 && rXPoly.IsControl(nActPoint-1)) {
+            rXPoly.Remove(nCurrentPoint,1);
+            if (nCurrentPoint>=3 && rXPoly.IsControl(nCurrentPoint-1)) {
                 // there should never be a bezier segment at the end, so this is just in case...
-                rXPoly.Remove(nActPoint-1,1);
-                if (rXPoly.IsControl(nActPoint-2)) rXPoly.Remove(nActPoint-2,1);
+                rXPoly.Remove(nCurrentPoint-1,1);
+                if (rXPoly.IsControl(nCurrentPoint-2)) rXPoly.Remove(nCurrentPoint-2,1);
             }
         }
-        nActPoint=rXPoly.GetPointCount();
-        if (nActPoint>=4) { // no bezier segment at the end
-            nActPoint--;
-            if (rXPoly.IsControl(nActPoint-1)) {
-                rXPoly.Remove(nActPoint-1,1);
-                if (rXPoly.IsControl(nActPoint-2)) rXPoly.Remove(nActPoint-2,1);
+        nCurrentPoint=rXPoly.GetPointCount();
+        if (nCurrentPoint>=4) { // no bezier segment at the end
+            nCurrentPoint--;
+            if (rXPoly.IsControl(nCurrentPoint-1)) {
+                rXPoly.Remove(nCurrentPoint-1,1);
+                if (rXPoly.IsControl(nCurrentPoint-2)) rXPoly.Remove(nCurrentPoint-2,1);
             }
         }
         if (rXPoly.GetPointCount()<2) {
@@ -1505,10 +1505,10 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat const & rStat)
         }
         if (aPathPolygon.Count()>0) {
             XPolygon& rLocalXPoly=aPathPolygon[aPathPolygon.Count()-1];
-            sal_uInt16 nLocalActPoint=rLocalXPoly.GetPointCount();
-            if (nLocalActPoint>0) {
-                nLocalActPoint--;
-                rLocalXPoly[nLocalActPoint]=rStat.GetNow();
+            sal_uInt16 nLocalCurrentPoint=rLocalXPoly.GetPointCount();
+            if (nLocalCurrentPoint>0) {
+                nLocalCurrentPoint--;
+                rLocalXPoly[nLocalCurrentPoint]=rStat.GetNow();
             }
         }
     }
