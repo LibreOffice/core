@@ -93,7 +93,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo()
 
 svt::OGenericUnoDialog::Dialog OUserSettingsDialog::createDialog(vcl::Window* _pParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection, m_xActiveConnection));
 }
 
 }   // namespace dbaui

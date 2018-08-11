@@ -93,7 +93,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo()
 
 svt::OGenericUnoDialog::Dialog ODBTypeWizDialog::createDialog(vcl::Window* _pParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialog>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
 }
 
 }   // namespace dbaui
