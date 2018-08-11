@@ -182,7 +182,7 @@ public:
 
         /** The value used in createSequenceOfAvailableMappings() and thus in
             XFormulaOpCodeMapper::getMappings() for an unknown symbol. */
-        static sal_Int32 getOpCodeUnknown();
+        static sal_Int32 getOpCodeUnknown() { return -1; }
 
     private:
 

@@ -561,7 +561,7 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
 }
 
 
-FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
+void RemoteFilesDialog::OpenURL( OUString const & sURL )
 {
     if( m_pFileView )
     {
@@ -604,14 +604,12 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
 
             EnableControls();
-            return eFailure;
+            return;
         }
 
         SetPointer( PointerStyle::Arrow );
         EnableChildPointerOverwrite( false );
     }
-
-    return eFailure;
 }
 
 void RemoteFilesDialog::AddFileExtension()
