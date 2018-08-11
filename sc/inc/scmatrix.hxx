@@ -396,7 +396,7 @@ public:
     virtual void DivOp(bool bFlag, double fVal, ScMatrix& rMat) = 0;
     virtual void PowOp(bool bFlag, double fVal, ScMatrix& rMat) = 0;
 
-    virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) = 0;
+    virtual std::vector<ScMatrix::IterateResult> Collect(const std::vector<std::unique_ptr<sc::op::Op>>& aOp) = 0;
 
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
@@ -614,7 +614,7 @@ public:
     virtual void DivOp(bool bFlag, double fVal, ScMatrix& rMat) override;
     virtual void PowOp(bool bFlag, double fVal, ScMatrix& rMat) override;
 
-    virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
+    virtual std::vector<ScMatrix::IterateResult> Collect(const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
 
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
