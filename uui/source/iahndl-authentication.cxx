@@ -724,7 +724,7 @@ UUIInteractionHelper::handlePasswordRequest(
     return false;
 }
 
-bool
+void
 UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
         OUString & url,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
@@ -741,8 +741,6 @@ UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
         xAuthFallback->setCode(dlg.GetCode());
         xAuthFallback->select( );
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
