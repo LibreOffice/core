@@ -61,12 +61,12 @@ using std::endl;
 using namespace com::sun::star;
 
 
-XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
+std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     // Create thw new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rItem );
 
-    XEditAttribute* pNew = new XEditAttribute( rNew, nStart, nEnd );
+    std::unique_ptr<XEditAttribute> pNew(new XEditAttribute( rNew, nStart, nEnd ));
     return pNew;
 }
 
@@ -131,9 +131,9 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     for (const auto & aAttrib : rCopyFrom.maCharAttribs)
     {
         const XEditAttribute& rAttr = *aAttrib.get();
-        XEditAttribute* pMyAttr = MakeXEditAttribute(
+        std::unique_ptr<XEditAttribute> pMyAttr = MakeXEditAttribute(
             rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
-        maCharAttribs.push_back(std::unique_ptr<XEditAttribute>(pMyAttr));
+        maCharAttribs.push_back(std::move(pMyAttr));
     }
 
     if ( rCopyFrom.GetWrongList() )
@@ -645,15 +645,14 @@ void EditTextObjectImpl::SetScriptType( SvtScriptType nType )
     nScriptType = nType;
 }
 
-XEditAttribute* EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
+std::unique_ptr<XEditAttribute> EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     return MakeXEditAttribute( *pPool, rItem, nStart, nEnd );
 }
 
-void EditTextObjectImpl::DestroyAttrib( XEditAttribute* pAttr )
+void EditTextObjectImpl::DestroyAttrib( std::unique_ptr<XEditAttribute> pAttr )
 {
     pPool->Remove( *pAttr->GetItem() );
-    delete pAttr;
 }
 
 

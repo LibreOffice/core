@@ -219,8 +219,8 @@ public:
     void                    SetScriptType( SvtScriptType nType );
 
     ContentInfo*            CreateAndInsertContent();
-    XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
-    void                    DestroyAttrib( XEditAttribute* pAttr );
+    std::unique_ptr<XEditAttribute> CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
+    void                    DestroyAttrib( std::unique_ptr<XEditAttribute> pAttr );
 
     ContentInfosType&       GetContents() { return aContents;}
     const ContentInfosType& GetContents() const { return aContents;}
