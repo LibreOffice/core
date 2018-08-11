@@ -2744,12 +2744,12 @@ void ScInterpreter::ScFTest()
     aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
     aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
 
-    auto aVal1 = pMat1->Collect(false, aOp);
+    auto aVal1 = pMat1->Collect(aOp);
     fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
     fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
     fCount1 = aVal1[2].mnCount;
 
-    auto aVal2 = pMat2->Collect(false, aOp);
+    auto aVal2 = pMat2->Collect(aOp);
     fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
     fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
     fCount2 = aVal2[2].mnCount;

@@ -324,7 +324,7 @@ public:
             const ScFullMatrix::EmptyOpFunction& aEmptyFunc) const;
 
     template<typename T>
-    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
+    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(const std::vector<std::unique_ptr<T>>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
@@ -1178,10 +1178,9 @@ class WalkElementBlocksMultipleValues
     const std::vector<std::unique_ptr<Op>>& maOp;
     std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
-    bool mbTextAsZero:1;
 public:
-    WalkElementBlocksMultipleValues(bool bTextAsZero, const std::vector<std::unique_ptr<Op>>& aOp) :
-        maOp(aOp), mbFirst(true), mbTextAsZero(bTextAsZero)
+    WalkElementBlocksMultipleValues(const std::vector<std::unique_ptr<Op>>& aOp) :
+        maOp(aOp), mbFirst(true)
     {
         for (const auto& rpOp : maOp)
         {
@@ -1251,9 +1250,6 @@ public:
             }
             break;
             case mdds::mtm::element_string:
-                if (mbTextAsZero)
-                    maRes.back().mnCount += node.size;
-            break;
             case mdds::mtm::element_empty:
             default:
                 ;
@@ -2402,9 +2398,9 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 }
 
 template<typename T>
-std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp)
+std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const std::vector<std::unique_ptr<T>>& aOp)
 {
-    WalkElementBlocksMultipleValues<T> aFunc(bTextAsZero, aOp);
+    WalkElementBlocksMultipleValues<T> aFunc(aOp);
     maMat.walk(aFunc);
     return aFunc.getResult();
 }
@@ -3453,9 +3449,9 @@ void ScFullMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
-std::vector<ScMatrix::IterateResult> ScFullMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
+std::vector<ScMatrix::IterateResult> ScFullMatrix::Collect(const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
 {
-    return pImpl->ApplyCollectOperation(bTextAsZero, aOp);
+    return pImpl->ApplyCollectOperation(aOp);
 }
 
 ScFullMatrix& ScFullMatrix::operator+= ( const ScFullMatrix& r )
