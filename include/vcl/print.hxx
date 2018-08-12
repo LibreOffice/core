@@ -554,7 +554,10 @@ public:
     SAL_DLLPRIVATE    bool              getReversePrint() const;
     SAL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
     SAL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
+    SAL_DLLPRIVATE    Size&             getPaperSizeSetup() const;
     SAL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
+    SAL_DLLPRIVATE    Size&             getPaperSizeFromUser() const;
+    SAL_DLLPRIVATE    bool              isPaperSizeFromUser() const;
     VCL_PLUGIN_PUBLIC void              setPrinterModified( bool i_bPapersizeFromSetup );
     VCL_PLUGIN_PUBLIC bool              getPrinterModified() const;
     SAL_DLLPRIVATE    void              pushPropertiesToPrinter();
