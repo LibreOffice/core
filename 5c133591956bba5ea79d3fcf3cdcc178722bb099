@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_6af20609",
+        "filename": "include/test/text/xfootnote.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "Please use the new header template provide as in https://opengrok.libreoffice.org/xref/core/TEMPLATE.SOURCECODE.HEADER.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_4af742f7",
+        "filename": "include/test/text/xfootnote.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "Same goes for the footer.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_2adcfe72",
+        "filename": "simian-2.5.10.jar",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "What is this file? Be careful what you are add to your commit.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_0ad93a82",
+        "filename": "sw/simian-2.5.10.jar",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "What is this file? Be careful what you are add to your commit.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_eae5f639",
+        "filename": "sw/source/ui/chrdlg/simian-2.5.10.jar",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "What is this file? Be careful what you are add to your commit.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_cae23230",
+        "filename": "test/Library_subsequenttest.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-12T17:36:13Z",
+      "side": 1,
+      "message": "This would fail during the CI build, because the test/source/text/xfootnote.cxx is not include in this commit.",
+      "revId": "5c133591956bba5ea79d3fcf3cdcc178722bb099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
