@@ -47,7 +47,6 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -2550,30 +2549,32 @@ HtmlSelectModel::HtmlSelectModel()
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
+    if (rInStrm.size()<=0)
+        return true;
+
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 
-    OUString data = sStringContents;
-
     // replace crlf with lf
-    data = data.replaceAll( "\x0D\x0A" , "\x0A" );
+    OUString data = sStringContents.replaceAll( "\x0D\x0A" , "\x0A" );
+
     std::vector< OUString > listValues;
     std::vector< sal_Int16 > selectedIndices;
 
     // Ultra hacky parser for the info
-    sal_Int32 nTokenCount = comphelper::string::getTokenCount(data, '\n');
-
-    for ( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
+    sal_Int32 nLineIdx {0};
+    // first line will tell us if multiselect is enabled
+    if (data.getToken( 0, '\n', nLineIdx )=="<SELECT MULTIPLE")
+        mnMultiSelect = AX_SELECTION_MULTI;
+    // skip first and last lines, no data there
+    if (nLineIdx>0)
     {
-        OUString sLine( data.getToken( nToken, '\n' ) );
-        if ( !nToken ) // first line will tell us if multiselect is enabled
+        for (;;)
         {
-            if ( sLine == "<SELECT MULTIPLE" )
-                mnMultiSelect = AX_SELECTION_MULTI;
-        }
-        // skip first and last lines, no data there
-        else if ( nToken < nTokenCount - 1)
-        {
-            if ( comphelper::string::getTokenCount(sLine, '>') )
+            OUString sLine( data.getToken( 0, '\n', nLineIdx ) );
+            if (nLineIdx<0)
+                break;  // skip last line
+
+            if ( !sLine.isEmpty() )
             {
                 OUString displayValue  = sLine.getToken( 1, '>' );
                 if ( displayValue.getLength() )
