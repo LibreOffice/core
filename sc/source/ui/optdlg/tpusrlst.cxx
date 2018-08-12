@@ -296,14 +296,14 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 
 void ScTpUserLists::MakeListStr( OUString& rListStr )
 {
+    if (rListStr.isEmpty())
+        return;
+
     OUStringBuffer aStr;
 
-    sal_Int32 nToken = comphelper::string::getTokenCount(rListStr, LF);
-
-    for(sal_Int32 i=0; i<nToken; i++)
+    for(sal_Int32 nIdx=0; nIdx>=0;)
     {
-        OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
-        aStr.append(aString);
+        aStr.append(comphelper::string::strip(rListStr.getToken(0, LF, nIdx), ' '));
         aStr.append(cDelimiter);
     }
 
