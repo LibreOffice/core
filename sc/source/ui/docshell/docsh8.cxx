@@ -24,7 +24,6 @@
 #include <svl/converter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <svx/txenctab.hxx>
@@ -470,20 +469,18 @@ void lcl_GetColumnTypes(
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
         OUString aFieldName;
-        OUString aString;
 
         // Fieldname[,Type[,Width[,Prec]]]
         // Type etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
-            aString = rDoc.GetString(nCol, nFirstRow, nTab);
-            aString = aString.toAsciiUpperCase();
-            sal_Int32 nToken = comphelper::string::getTokenCount(aString, ',');
-            if ( nToken > 1 )
+            OUString aString {rDoc.GetString(nCol, nFirstRow, nTab).toAsciiUpperCase()};
+            sal_Int32 nIdx {0};
+            aFieldName = aString.getToken( 0, ',', nIdx);
+            if ( nIdx>0 )
             {
-                aFieldName = aString.getToken( 0, ',' );
                 aString = aString.replaceAll(" ", "");
-                switch ( aString.getToken( 1, ',' )[0] )
+                switch ( aString.getToken( 0, ',', nIdx )[0] )
                 {
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;
@@ -514,12 +511,12 @@ void lcl_GetColumnTypes(
                         bTypeDefined = true;
                         break;
                 }
-                if ( bTypeDefined && !nFieldLen && nToken > 2 )
+                if ( bTypeDefined && !nFieldLen && nIdx>0 )
                 {
-                    nFieldLen = aString.getToken( 2, ',' ).toInt32();
-                    if ( !bPrecDefined && nToken > 3 )
+                    nFieldLen = aString.getToken( 0, ',', nIdx ).toInt32();
+                    if ( !bPrecDefined && nIdx>0 )
                     {
-                        OUString aTmp( aString.getToken( 3, ',' ) );
+                        OUString aTmp( aString.getToken( 0, ',', nIdx ) );
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.toInt32();
@@ -530,8 +527,6 @@ void lcl_GetColumnTypes(
                     }
                 }
             }
-            else
-                aFieldName = aString;
 
             // Check field name and generate valid field name if necessary.
             // First character has to be alphabetical, subsequent characters
