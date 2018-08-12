@@ -42,6 +42,11 @@
             android:visible="true"
             />
 
+        <item android:id="@+id/action_print"
+            android:title="@string/action_print"
+            android:orderInCategory="100"
+            android:visible="true" />
+
         <item android:id="@+id/action_UNO_commands"
             android:title="@string/action_UNO_commands"
             android:orderInCategory="100" />
