@@ -4140,7 +4140,14 @@ bool OReportController::impl_setPropertyAtControls_throw(const char* pUndoResId,
     {
         const uno::Reference< beans::XPropertySet > xControlModel(*aIter,uno::UNO_QUERY);
         if ( xControlModel.is() )
-            xControlModel->setPropertyValue(_sProperty,_aValue);
+            try
+            {
+                xControlModel->setPropertyValue(_sProperty,_aValue);
+            }
+            catch(const UnknownPropertyException& e)
+            {
+                SAL_WARN("reportdesign", "UnknowPropertyException:" << e);
+            }
     }
 
     return !aSelection.empty();
