@@ -8,9 +8,14 @@
  */
 package org.libreoffice;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Environment;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -372,11 +377,27 @@ class LOKitTileProvider implements TileProvider {
             String cacheFile = mContext.getExternalCacheDir().getAbsolutePath()
                     + "/" + file;
             mDocument.saveAs("file://"+cacheFile,"pdf","");
-            //TODO PRINT
+            printDocument(cacheFile);
         }else{
             saveDocumentAs(dir+"/"+file,"pdf");
         }
     }
+
+    private void printDocument(String cacheFile) {
+        if (Build.VERSION.SDK_INT >= 19) {
+            try {
+                PrintManager printManager = (PrintManager) mContext.getSystemService(Context.PRINT_SERVICE);
+                PrintDocumentAdapter printAdapter = new PDFDocumentAdapter(mContext, cacheFile);
+                printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            mContext.showCustomStatusMessage("Your device does not support printing");
+        }
+    }
+
     public boolean isDocumentCached(){
         File input = new File(mInputFile);
         final String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/lo_cached_" + input.getName();
