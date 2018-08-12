@@ -33,7 +33,6 @@
 
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -52,10 +51,10 @@ void ScGlobal::InitAddIns()
     if (aMultiPath.isEmpty())
         return;
 
-    sal_Int32 nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
-    for (sal_Int32 j = 0; j < nTokens; ++j)
+    sal_Int32 nIdx {0};
+    do
     {
-        OUString aPath = aMultiPath.getToken(j, ';');
+        OUString aPath = aMultiPath.getToken(0, ';', nIdx);
         if (aPath.isEmpty())
             continue;
 
@@ -114,6 +113,7 @@ void ScGlobal::InitAddIns()
             OSL_FAIL( "unexpected exception caught!" );
         }
     }
+    while (nIdx>0);
 }
 
 OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
