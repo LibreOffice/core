@@ -875,13 +875,15 @@ void ScRefHandler::SwitchToDocument()
 
 bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
-    //  default: allow only same document (overridden in function dialog)
-    OUString aCmpName;
-    if ( pDocSh )
-        aCmpName = pDocSh->GetTitle();
-
     //  if aDocName isn't initialized, allow
-    return ( m_aDocName.isEmpty() || m_aDocName == aCmpName );
+    if ( m_aDocName.isEmpty() )
+        return true;
+
+    if ( !pDocSh )
+        return false;
+
+    //  default: allow only same document (overridden in function dialog)
+    return m_aDocName==pDocSh->GetTitle();
 }
 
 bool ScRefHandler::IsRefInputMode() const
