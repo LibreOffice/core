@@ -483,12 +483,10 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         m_sOldDialogText = m_pWindow->GetText();
         if (vcl::Window *pLabel = m_pRefEdit->GetLabelWidgetForShrinkMode())
         {
-            OUString sLabel = pLabel->GetText();
+            const OUString sLabel = pLabel->GetText();
             if (!sLabel.isEmpty())
             {
-                OUString sNewDialogText = m_sOldDialogText;
-                sNewDialogText += ": ";
-                sNewDialogText += comphelper::string::stripEnd(sLabel, ':');
+                const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
                 m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
             }
         }
