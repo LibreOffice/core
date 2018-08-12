@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <editeng/boxitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <o3tl/temporary.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -685,8 +686,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                     // unintentionally interpreted as a number, and to show the
                     // user that it is a string (#35060#).
                     //! also for numberformat "Text"? -> then remove when editing
-                    double fDummy;
-                    if ( pFormatter->IsNumberFormat(aString, nNumFmt, fDummy) )
+                    if ( pFormatter->IsNumberFormat(aString, nNumFmt, o3tl::temporary(double())) )
                         aString = "'" + aString;
                 }
             }
