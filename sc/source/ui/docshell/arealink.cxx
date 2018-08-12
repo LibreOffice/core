@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -286,20 +285,22 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         }
     }
 
-    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
-    sal_Int32 nStringIx = 0;
-    for (sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken)
+    if (!aTempArea.isEmpty())
     {
-        OUString aToken( aTempArea.getToken( 0, ';', nStringIx ) );
-        ScRange aTokenRange;
-        if( FindExtRange( aTokenRange, &rSrcDoc, aToken ) )
+        sal_Int32 nIdx {0};
+        do
         {
-            aSourceRanges.push_back( aTokenRange);
-            // columns: find maximum
-            nWidth = std::max( nWidth, static_cast<SCCOL>(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
-            // rows: add row range + 1 empty row
-            nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
+            ScRange aTokenRange;
+            if( FindExtRange( aTokenRange, &rSrcDoc, aTempArea.getToken( 0, ';', nIdx ) ) )
+            {
+                aSourceRanges.push_back( aTokenRange);
+                // columns: find maximum
+                nWidth = std::max( nWidth, static_cast<SCCOL>(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
+                // rows: add row range + 1 empty row
+                nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
+            }
         }
+        while (nIdx>0);
     }
     // remove the last empty row
     if( nHeight > 0 )
