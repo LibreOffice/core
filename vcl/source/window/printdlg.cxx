@@ -1038,11 +1038,36 @@ bool PrintDialog::hasOrientationChanged() const
         || (nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape);
 }
 
-// Always use this function to set paper orientation in
-// order to update document orientation as well
+// make sure paper size matches paper orientation
+void PrintDialog::checkPaperSize( Size& rPaperSize )
+{
+    Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+    if ( (eOrientation == Orientation::Portrait && rPaperSize.Width() > rPaperSize.Height()) ||
+         (eOrientation == Orientation::Landscape && rPaperSize.Width() < rPaperSize.Height()) )
+    {
+        rPaperSize = Size( rPaperSize.Height(), rPaperSize.Width() );
+    }
+}
+
+// Always use this function to set paper orientation to make sure everything behaves well
 void PrintDialog::setPaperOrientation( Orientation eOrientation )
 {
-    maPController->getPrinter()->SetOrientation( eOrientation );
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    aPrt->SetOrientation( eOrientation );
+
+    // check if it's necessary to swap width and height of paper
+    if ( maPController->isPaperSizeFromUser() )
+    {
+        Size& aPaperSize = maPController->getPaperSizeFromUser();
+        checkPaperSize( aPaperSize );
+    }
+    else if ( maPController->getPapersizeFromSetup() )
+    {
+        Size& aPaperSize = maPController->getPaperSizeSetup();
+        checkPaperSize( aPaperSize );
+    }
+
+    // used to sync printer paper orientation with document orientation
     maPController->setValue( "IsLandscape",
                              makeAny( static_cast<sal_Int32>(eOrientation) ) );
 }
@@ -2009,7 +2034,10 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         else
             aPrt->SetPaper( mePaper );
 
-        maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
+        Size aPaperSize = Size( aInfo.getWidth(), aInfo.getHeight() );
+        checkPaperSize( aPaperSize );
+        maPController->setPaperSizeFromUser( aPaperSize );
+
         preparePreview();
     }
 }
