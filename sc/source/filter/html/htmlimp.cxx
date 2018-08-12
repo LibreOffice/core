@@ -201,12 +201,14 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUStr
 {
     OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 
+    if (rOrigName.isEmpty())
+        return OUString();
+
     OUString aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     ScRangeList aRangeList;
-    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
     sal_Int32 nStringIx = 0;
-    for( sal_Int32 nToken = 0; nToken < nTokenCnt; nToken++ )
+    do
     {
         OUString aToken( rOrigName.getToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
@@ -233,6 +235,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUStr
         else
             aNewName = ScGlobal::addToken(aNewName, aToken, ';');
     }
+    while (nStringIx>0);
     return aNewName;
 }
 
