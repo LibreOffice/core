@@ -3942,13 +3942,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
         else if ( (GetCharTableFlags( c1, 0 ) & ScCharFlags::CharValue)
                && (GetCharTableFlags( c2, c2p ) & ScCharFlags::CharValue) )
         {
-            if ( comphelper::string::getTokenCount(aCorrectedSymbol, cx) > 1 )
+            if ( aCorrectedSymbol.indexOf(cx) >= 0 ) // At least two tokens separated by cx
             {   // x => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cx), OUStringLiteral1(c));
                 bCorrected = true;
             }
-            if ( comphelper::string::getTokenCount(aCorrectedSymbol, cX) > 1 )
+            if ( aCorrectedSymbol.indexOf(cX) >= 0 ) // At least two tokens separated by cX
             {   // X => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cX), OUStringLiteral1(c));
