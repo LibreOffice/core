@@ -277,12 +277,16 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
 void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringList, sal_Unicode cFmlaSep )
 {
     rFmlaStr.clear();
-    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
-    for( sal_Int32 nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    if (!rStringList.isEmpty())
     {
-        OUString aToken( rStringList.getToken( 0, '\n', nStringIx ) );
-        ScGlobal::AddQuotes( aToken, '"' );
-        rFmlaStr = ScGlobal::addToken(rFmlaStr, aToken, cFmlaSep);
+        sal_Int32 nIdx {0};
+        do
+        {
+            OUString aToken {rStringList.getToken( 0, '\n', nIdx )};
+            ScGlobal::AddQuotes( aToken, '"' );
+            rFmlaStr = ScGlobal::addToken(rFmlaStr, aToken, cFmlaSep);
+        }
+        while (nIdx>0);
     }
     if( rFmlaStr.isEmpty() )
         rFmlaStr = "\"\"";
