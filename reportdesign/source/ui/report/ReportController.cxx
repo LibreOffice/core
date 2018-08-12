@@ -1459,7 +1459,14 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 awt::FontDescriptor aFont;
                 if ( aArgs[0].Value >>= aFont )
                 {
-                    impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARFONTNAME,uno::makeAny(aFont.Name),aArgs);
+                    try
+                    {
+                        impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARFONTNAME,uno::makeAny(aFont.Name),aArgs);
+                    }
+                    catch(const UnknownPropertyException& e)
+                    {
+                        SAL_WARN("reportdesign", "UnknowPropertyException:" << e);
+                    }
                 }
             }
             break;
