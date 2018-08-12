@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0a701a72",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-12T20:25:52Z",
+      "side": 1,
+      "message": "can this be made a unique_ptr? saves the manual delete...",
+      "revId": "734afb5905a55811a1888b6394dac23acc926979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
