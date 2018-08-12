@@ -1382,6 +1382,11 @@ bool PrinterController::getPapersizeFromSetup() const
     return mpImplData->mbPapersizeFromSetup;
 }
 
+Size& PrinterController::getPaperSizeSetup() const
+{
+    return mpImplData->maDefaultPageSize;
+}
+
 void PrinterController::setPaperSizeFromUser( Size i_aUserSize )
 {
     mpImplData->mbPapersizeFromUser = true;
@@ -1389,6 +1394,16 @@ void PrinterController::setPaperSizeFromUser( Size i_aUserSize )
     mpImplData->mxPrinter->SetPrinterSettingsPreferred( false );
 
     mpImplData->maUserPageSize = i_aUserSize;
+}
+
+Size& PrinterController::getPaperSizeFromUser() const
+{
+    return mpImplData->maUserPageSize;
+}
+
+bool PrinterController::isPaperSizeFromUser() const
+{
+    return mpImplData->mbPapersizeFromUser;
 }
 
 void PrinterController::setPrinterModified( bool i_bPrinterModified )
