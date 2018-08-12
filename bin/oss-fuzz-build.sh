@@ -47,3 +47,5 @@ cp $SRC/*_seed_corpus.zip $OUT
 cp $SRC/*.dict $OUT
 #options files
 cp $SRC/libreoffice/vcl/workben/*.options $OUT
+
+make clean
