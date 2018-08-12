@@ -1278,7 +1278,7 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 
         //Draw Rectangles (squares)
         rRenderContext.SetLineColor();
-        sal_uInt16 nLastPixel = maPixelData[0];
+        sal_uInt16 nLastPixel(SAL_MAX_UINT16);
 
         for (i = 0; i < nLines; i++)
         {
