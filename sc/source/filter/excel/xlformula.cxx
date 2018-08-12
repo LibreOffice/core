@@ -903,15 +903,16 @@ void XclTokenArrayHelper::ConvertStringToList(
     if( GetString( aString, rScTokArr ) )
     {
         rScTokArr.Clear();
-        sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aString, cStringSep);
+        if (aString.isEmpty())
+            return;
         sal_Int32 nStringIx = 0;
-        for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
+        for (;;)
         {
             OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
-            aToken = comphelper::string::stripStart(aToken, ' '); // trim leading spaces
-            if( nToken > 0 )
-                rScTokArr.AddOpCode( ocSep );
-            rScTokArr.AddString(rSPool.intern(aToken));
+            rScTokArr.AddString(rSPool.intern(comphelper::string::stripStart(aToken, ' ')));
+            if (nStringIx<0)
+                break;
+            rScTokArr.AddOpCode( ocSep );
         }
     }
 }
