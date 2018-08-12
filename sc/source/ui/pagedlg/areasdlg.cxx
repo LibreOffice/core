@@ -19,7 +19,6 @@
 
 #include <rangelst.hxx>
 
-#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
@@ -356,16 +355,18 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
         ScAddress aAddr;
         ScRange aRange;
-        sal_Int32 nSepCount = comphelper::string::getTokenCount(aStrPrintArea, sep);
-        for ( sal_Int32 i = 0; i < nSepCount && bPrintAreaOk; ++i )
+        for ( sal_Int32 nIdx = 0; nIdx >= 0; )
         {
-            OUString aOne = aStrPrintArea.getToken(i, sep);
+            const OUString aOne = aStrPrintArea.getToken(0, sep, nIdx);
             ScRefFlags nResult = aRange.Parse( aOne, pDoc, eConv );
             if ((nResult & nValidRange) != nValidRange)
             {
                 ScRefFlags nAddrResult = aAddr.Parse( aOne, pDoc, eConv );
                 if ((nAddrResult & nValidAddr) != nValidAddr)
+                {
                     bPrintAreaOk = false;
+                    break;
+                }
             }
         }
     }
