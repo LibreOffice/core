@@ -25,7 +25,6 @@
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
-#include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>
@@ -1739,18 +1738,19 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
                     mxString1.reset( new XclExpString( XclStrFlags::EightBitLength ) );
-                    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
-                    sal_Int32 nStringIx = 0;
-                    for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
+                    if (!aString.isEmpty())
                     {
-                        OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
-                        if( nToken > 0 )
+                        sal_Int32 nStringIx = 0;
+                        for(;;)
                         {
+                            const OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
+                            mxString1->Append( aToken );
+                            sFormulaBuf.append( aToken );
+                            if (nStringIx<0)
+                                break;
                             mxString1->Append(OUString(u'\0'));
                             sFormulaBuf.append( ',' );
                         }
-                        mxString1->Append( aToken );
-                        sFormulaBuf.append( aToken );
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
 
@@ -1992,18 +1992,21 @@ XclExpWebQuery::XclExpWebQuery(
     mbEntireDoc( false )
 {
     // comma separated list of HTML table names or indexes
-    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
     OUString aNewTables;
     OUString aAppendTable;
-    sal_Int32 nStringIx = 0;
     bool bExitLoop = false;
-    for( sal_Int32 nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
+    if (!rSource.isEmpty())
     {
-        OUString aToken( rSource.getToken( 0, ';', nStringIx ) );
-        mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
-        bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
-        if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            aNewTables = ScGlobal::addToken( aNewTables, aAppendTable, ',' );
+        sal_Int32 nStringIx = 0;
+        do
+        {
+            OUString aToken( rSource.getToken( 0, ';', nStringIx ) );
+            mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
+            bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
+            if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
+                aNewTables = ScGlobal::addToken( aNewTables, aAppendTable, ',' );
+        }
+        while (nStringIx>0 && !bExitLoop);
     }
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found
