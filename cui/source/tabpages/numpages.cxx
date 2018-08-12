@@ -2246,7 +2246,7 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
     aTmpSize.setHeight( aTmpSize.Height() * ( rFmt.GetBulletRelSize()) );
     aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
-    // in case of a height of zero it is drawed in original height
+    // in case of a height of zero it is drawn in original height
     if(!aTmpSize.Height())
         aTmpSize.setHeight( 1 );
     aFont.SetFontSize(aTmpSize);

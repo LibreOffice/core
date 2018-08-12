@@ -216,7 +216,7 @@ Dim vOptionButtons() As Variant, sGroupName As String
 Dim lXY() As Long, iIndex() As Integer		&apos;	Two indexes X-Y coordinates
 Dim oView As Object, oDatabaseForm As Object, vControls As Variant
 
-Const cstPixels = 10							&apos;	Tolerance on coordinates when drawed approximately
+Const cstPixels = 10							&apos;	Tolerance on coordinates when drawn approximately
 
 	bFound = False
 	Select Case psParentType
