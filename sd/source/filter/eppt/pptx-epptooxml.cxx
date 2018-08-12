@@ -60,6 +60,7 @@
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
+#include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -76,6 +77,7 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -1027,14 +1029,7 @@ void PowerPointExport::WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue,
 
     SAL_INFO("sd.eppt", "to attribute name: " << USS(rAttributeName));
 
-    sal_uInt32 nColor;
-    if (rValue >>= nColor)
-    {
-        // RGB color
-        WriteAnimationProperty(pFS, rValue, XML_to);
-    }
-    else
-        WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName), XML_to);
+    WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName), XML_to);
 }
 
 void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttributeName)
@@ -1351,7 +1346,10 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
                         XML_additive, pAdditive,
                         FSEND);
     WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
-    WriteAnimationTarget(pFS, rXAnimate->getTarget());
+
+    Reference<XIterateContainer> xIterate(rXNode->getParent(), UNO_QUERY);
+    WriteAnimationTarget(pFS, xIterate.is() ?
+            xIterate->getTarget() : rXAnimate->getTarget());
 
     Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
 
@@ -1687,6 +1685,32 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
             WriteAnimationCondition(pFS, aAny, false, bMainSeqChild, XML_endCondLst);
     }
 
+    if (rXNode->getType() == AnimationNodeType::ITERATE)
+    {
+        Reference<XIterateContainer> xIterate(rXNode, UNO_QUERY);
+        if (xIterate.is())
+        {
+            const char *sType = nullptr;
+            switch(xIterate->getIterateType())
+            {
+                case TextAnimationType::BY_PARAGRAPH:
+                    sType = "el";
+                break;
+                case TextAnimationType::BY_LETTER:
+                    sType = "lt";
+                break;
+                case TextAnimationType::BY_WORD:
+                default:
+                    sType = "wd";
+                break;
+
+            }
+            pFS->startElementNS(XML_p, XML_iterate, XML_type, sType, FSEND);
+            pFS->singleElementNS(XML_p, XML_tmAbs, XML_val, I32S(xIterate->getIterateInterval() * 1000), FSEND);
+            pFS->endElementNS(XML_p, XML_iterate);
+        }
+    }
+
     Reference< XEnumerationAccess > xEnumerationAccess(rXNode, UNO_QUERY);
     if (xEnumerationAccess.is())
     {
@@ -1794,6 +1818,7 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS, const Referenc
 
     switch (rXNode->getType())
     {
+    case AnimationNodeType::ITERATE:
     case AnimationNodeType::PAR:
         xmlNodeType = XML_par;
         break;

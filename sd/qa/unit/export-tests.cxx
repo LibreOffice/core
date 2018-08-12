@@ -1105,6 +1105,9 @@ void SdExportTest::testTdf113822()
     utl::TempFile tempFile;
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113822underline.pptx"), PPTX);
 
+    // Was unable to export iterate container (tdf#99213).
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    // Was unable to import iterate container (tdf#113822).
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
     xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
