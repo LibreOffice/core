@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -149,11 +148,14 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
 
     UpdateSourceRanges();
 
-    sal_Int32 nRangeCount = comphelper::string::getTokenCount(rSource, ';');
-    for ( sal_Int32 i=0; i<nRangeCount; i++ )
+    if (!rSource.isEmpty())
     {
-        OUString aRange = rSource.getToken(i,';');
-        m_xLbRanges->select_text(aRange);
+        sal_Int32 nIdx {0};
+        do
+        {
+            m_xLbRanges->select_text(rSource.getToken(0, ';', nIdx));
+        }
+        while (nIdx>0);
     }
 
     bool bDoRefresh = (nRefresh != 0);
