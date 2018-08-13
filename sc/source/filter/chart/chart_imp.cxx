@@ -22,12 +22,11 @@ ScXMLChartExportWrapper::ScXMLChartExportWrapper( css::uno::Reference< css::fram
 
 }
 
-bool ScXMLChartExportWrapper::Export()
+void ScXMLChartExportWrapper::Export()
 {
     if ( !mxStorage.is() )
         mxStorage = mrMedium.GetOutputStorage();
 
     uno::Reference< document::XStorageBasedDocument>(mxModel, uno::UNO_QUERY_THROW)->storeToStorage(mxStorage, uno::Sequence< beans::PropertyValue >() );
-    return true;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
