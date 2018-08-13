@@ -44,6 +44,11 @@ public:
     void ExecuteExportAsGraphic(SfxRequest& rReq);
     void GetExportAsGraphicState(SfxItemSet &rSet);
 
+// after adding all required uno commands of chart to calccommands.xcu and updating their sdi files for it like information of its execute
+// and state methods etc. , made a execute and statechanged function here to get information of status change
+// from here, its required to notify the chart somehow to make chart commands working
+// tried to add status listener or linking them but it didn't worked properly with chart module
+
 };
 
 #endif

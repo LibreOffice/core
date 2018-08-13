@@ -1080,7 +1080,9 @@ void SAL_CALL ChartController::dispatch(
     const uno::Sequence< beans::PropertyValue >& rArgs )
 {
     OUString aCommand = rURL.Path;
-
+//for chart commands are handled here, so we need to call this dispatch function or to make a new function which can get
+//notified from other modules or simply to run executeDispatch_ command somehow
+//problem i faced is to add status listener for the uno command made that is notifying it to chart
     if(aCommand == "LOKSetTextSelection")
     {
         if (rArgs.getLength() == 3)
