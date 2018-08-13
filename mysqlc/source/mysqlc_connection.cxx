@@ -79,7 +79,7 @@ OConnection::OConnection(MysqlCDriver& _rDriver)
 
     // use TCP as connection
     mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
-    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, reinterpret_cast<int*>(&protocol));
+    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
 }
 
 OConnection::~OConnection()
@@ -277,7 +277,7 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    if(!mysql_autocommit(&m_mysql, autoCommit))
+    if(!mysql_autocommit(&m_mysql, static_cast<my_bool>(autoCommit)))
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql), *this, getConnectionEncoding());
 }
 
