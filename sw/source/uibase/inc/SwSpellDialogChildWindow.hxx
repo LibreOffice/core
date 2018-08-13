@@ -32,7 +32,7 @@ class SwSpellDialogChildWindow
     std::unique_ptr<SpellState> m_pSpellState;
 
     SwWrtShell*     GetWrtShell_Impl();
-    bool            MakeTextSelection_Impl(SwWrtShell& rSh, ShellMode eSelMode);
+    void            MakeTextSelection_Impl(SwWrtShell& rSh, ShellMode eSelMode);
     bool            FindNextDrawTextError_Impl(SwWrtShell& rSh);
     bool            SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPortions& rPortions);
     void            LockFocusNotification(bool bLock);
