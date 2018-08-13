@@ -34,7 +34,6 @@
 #include <editattr.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>

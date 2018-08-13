@@ -111,10 +111,6 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (tc.Class("SfxEnumItem").GlobalNamespace() || tc.Class("SfxAllEnumItem").GlobalNamespace())
         return true;
 
-    // the new field is only used for reading and writing to storage
-    if (tc.Class("SvxCharSetColorItem").GlobalNamespace())
-        return true;
-
     for (auto it = decl->method_begin(); it != decl->method_end(); ++it) {
         if ( endsWith((*it)->getQualifiedNameAsString(), "::operator==") )
             return true;
