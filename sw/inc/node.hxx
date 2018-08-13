@@ -421,7 +421,7 @@ public:
     /** Method deletes all views of document for the node. The content-
         frames are removed from the respective layout.
     */
-    void DelFrames(SwRootFrame const* pLayout);
+    void DelFrames(SwRootFrame const* pLayout, bool fromDtor = false);
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */

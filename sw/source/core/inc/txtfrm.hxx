@@ -394,9 +394,7 @@ public:
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
     void SetMergedPara(std::unique_ptr<sw::MergedPara> p);
-#if 0
     sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
-#endif
     sw::MergedPara const* GetMergedPara() const { return m_pMergedPara.get(); }
 
     /// Returns the text portion we want to edit (for inline see underneath)

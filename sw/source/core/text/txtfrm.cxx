@@ -727,6 +727,7 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
 {
     assert(nIndex <= rNode.Len());
     assert(nIndex + nLen <= rNode.Len());
+    assert(rMerged.pFirstNode->GetIndex() <= rNode.GetIndex() && rNode.GetIndex() <= rMerged.pLastNode->GetIndex());
     OUStringBuffer text(rMerged.mergedText);
     sal_Int32 nTFIndex(0);
     bool bInserted(false);
@@ -761,7 +762,7 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
         }
         nTFIndex += it->nEnd - it->nStart;
     }
-    assert((bFoundNode || rMerged.extents.empty()) && "text node not found - why is it sending hints to us");
+//    assert((bFoundNode || rMerged.extents.empty()) && "text node not found - why is it sending hints to us");
     if (!bInserted)
     {   // must be in a gap
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
@@ -777,6 +778,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 const nLen)
 {
     assert(nIndex <= rNode.Len());
+    assert(rMerged.pFirstNode->GetIndex() <= rNode.GetIndex() && rNode.GetIndex() <= rMerged.pLastNode->GetIndex());
     OUStringBuffer text(rMerged.mergedText);
     sal_Int32 nTFIndex(0);
     sal_Int32 nToDelete(nLen);
@@ -868,13 +870,13 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
             ++it;
         }
     }
-    assert(nFoundNode != 0 && "text node not found - why is it sending hints to us");
+//    assert(nFoundNode != 0 && "text node not found - why is it sending hints to us");
     assert(nIndex - nDeleted <= rNode.Len());
     // if there's a remaining deletion, it must be in gap at the end of the node
 // can't do: might be last one in node was erased   assert(nLen == 0 || rMerged.empty() || (it-1)->nEnd <= nIndex);
     // note: if first node gets deleted then that must call DelFrames as
     // pFirstNode is never updated
-    if (nErased == nFoundNode)
+    if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased
         if (rMerged.pParaPropsNode == &rNode)
         {
@@ -882,7 +884,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                 ? rMerged.pFirstNode
                 : rMerged.extents.front().pNode;
         }
-        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
+// NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
     rMerged.mergedText = text.makeStringAndClear();
     return TextFrameIndex(nDeleted);

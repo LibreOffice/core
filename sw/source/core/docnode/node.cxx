@@ -1317,7 +1317,7 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
  */
-void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
+void SwContentNode::DelFrames(SwRootFrame const*const pLayout, bool const fromDtor)
 {
     if( !HasWriterListeners() )
         return;
@@ -1331,15 +1331,32 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
         }
         if (pFrame->IsTextFrame())
         {
-            if (sw::MergedPara const* pMerged =
-                    static_cast<SwTextFrame const*>(pFrame)->GetMergedPara())
+            if (sw::MergedPara * pMerged =
+                    static_cast<SwTextFrame *>(pFrame)->GetMergedPara())
             {
                 if (this != pMerged->pFirstNode)
                 {
+                    if (fromDtor)
+                    {
+                        // pointer should have been updated to a different node
+                        assert(this != pMerged->pParaPropsNode);
+                        // manual update required i'm afraid...
+                        if (this == pMerged->pLastNode)
+                        {
+                            pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
+                            // at first glance nothing guarantees this...
+                            // but the redline must end on a text-node...
+                            // so everything before this node that isn't a text
+                            // node should have been deleted already so that
+                            // there's a text node before.
+                            assert(pMerged->pLastNode->IsTextNode());
+                        }
+                        // avoid re-parenting mess (ModifyChangedHint)
+                        pMerged->listener.EndListening(this);
+                    }
                     continue; // don't delete
                 }
             }
-
         // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
