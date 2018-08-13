@@ -2383,6 +2383,11 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 
     while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
     {
+        if (pFrame->getRootFrame()->IsHideRedlines()
+            && !pNode->IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwFrame *pNew = pNode->MakeFrame( pFrame );
         // Will the Node receive Frames before or after?
         if ( bBefore )
@@ -2410,6 +2415,11 @@ void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, *this )) )
     {
+        if (pUpper->getRootFrame()->IsHideRedlines()
+            && !IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwTabFrame* pNew = MakeFrame( pUpper );
         pNew->Paste( pUpper, pFrame );
         // #i27138#

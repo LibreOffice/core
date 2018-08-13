@@ -1047,6 +1047,11 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
             while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
             {
                 OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
+                if (pFrame->getRootFrame()->IsHideRedlines()
+                    && !rIdx.GetNode().IsCreateFrameWhenHidingRedlines())
+                {
+                    continue;
+                }
                 SwFrame *pNew = rIdx.GetNode().GetContentNode()->MakeFrame( pFrame );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();

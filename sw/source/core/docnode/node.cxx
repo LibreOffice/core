@@ -1287,6 +1287,11 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
 
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, rNode )) )
     {
+        if (pUpper->getRootFrame()->IsHideRedlines()
+            && !rNode.IsCreateFrameWhenHidingRedlines())
+        {
+            continue;
+        }
         SwFrame *pNew = rNode.MakeFrame( pUpper );
         pNew->Paste( pUpper, pFrame );
         // #i27138#
