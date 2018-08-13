@@ -750,8 +750,9 @@ namespace emfio
 
                     case EMR_SETWINDOWEXTEX :
                     {
-                        mpInputStream->ReadUInt32( nW ).ReadUInt32( nH );
-                        SetWinExt( Size( nW, nH ), true);
+                        sal_Int32 w = 0, h = 0;
+                        mpInputStream->ReadInt32( w ).ReadInt32( h );
+                        SetWinExt( Size( w, h ), true);
                     }
                     break;
 
