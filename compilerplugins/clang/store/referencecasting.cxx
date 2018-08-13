@@ -33,7 +33,7 @@ I have logged a bug here:
 
 */
 ReferenceCasting::ReferenceCasting( CompilerInstance& compiler )
-    : Plugin( compiler )
+    : FilteringPlugin( compiler )
 {
 }
 

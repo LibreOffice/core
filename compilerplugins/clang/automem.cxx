@@ -23,10 +23,10 @@
 namespace {
 
 class AutoMem:
-    public RecursiveASTVisitor<AutoMem>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<AutoMem>
 {
 public:
-    explicit AutoMem(loplugin::InstantiationData const & data): Plugin(data), mbInsideDestructor(false) {}
+    explicit AutoMem(loplugin::InstantiationData const & data): FilteringPlugin(data), mbInsideDestructor(false) {}
 
     virtual void run() override
     {

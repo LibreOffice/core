@@ -22,8 +22,7 @@ namespace loplugin
 {
 
 class ConvertValueOf
-    : public RecursiveASTVisitor< ConvertValueOf >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< ConvertValueOf >
     {
     public:
         explicit ConvertValueOf( CompilerInstance& compiler, Rewriter& rewriter );
@@ -34,7 +33,7 @@ class ConvertValueOf
     };
 
 ConvertValueOf::ConvertValueOf( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+    : FilteringRewritePlugin( compiler, rewriter )
     {
     }
 

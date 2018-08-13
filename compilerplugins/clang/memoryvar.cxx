@@ -22,10 +22,10 @@ namespace
 {
 
 class MemoryVar:
-    public RecursiveASTVisitor<MemoryVar>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<MemoryVar>
 {
 public:
-    explicit MemoryVar(loplugin::InstantiationData const & data): Plugin(data), mbChecking(false) {}
+    explicit MemoryVar(loplugin::InstantiationData const & data): FilteringPlugin(data), mbChecking(false) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

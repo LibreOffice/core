@@ -26,10 +26,10 @@ bool isFriendDecl(Decl const * decl) {
 }
 
 class ReVisibility:
-    public RecursiveASTVisitor<ReVisibility>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ReVisibility>
 {
 public:
-    explicit ReVisibility(InstantiationData const & data): Plugin(data) {}
+    explicit ReVisibility(InstantiationData const & data): FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

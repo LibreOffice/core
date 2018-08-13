@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class PostfixIncrementFix
-    : public RecursiveASTVisitor< PostfixIncrementFix >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< PostfixIncrementFix >
     {
     public:
         explicit PostfixIncrementFix( const InstantiationData& data );

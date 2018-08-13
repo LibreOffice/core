@@ -39,7 +39,7 @@ struct WalkCounter
 
 // Ctor, nothing special, pass the argument(s).
 CascadingCondOp::CascadingCondOp( const InstantiationData& data )
-    : Plugin( data )
+    : FilteringPlugin( data )
 {
 }
 

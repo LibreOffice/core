@@ -12,10 +12,10 @@
 namespace {
 
 class PrivateBase:
-    public RecursiveASTVisitor<PrivateBase>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<PrivateBase>
 {
 public:
-    explicit PrivateBase(loplugin::InstantiationData const & data): Plugin(data)
+    explicit PrivateBase(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     void run() override;

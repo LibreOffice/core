@@ -221,11 +221,11 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
 }
 
 class ImplicitBoolConversion:
-    public RecursiveASTVisitor<ImplicitBoolConversion>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ImplicitBoolConversion>
 {
 public:
     explicit ImplicitBoolConversion(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

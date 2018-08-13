@@ -17,10 +17,10 @@
 namespace {
 
 class ExternAndNotDefined:
-    public RecursiveASTVisitor<ExternAndNotDefined>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ExternAndNotDefined>
 {
 public:
-    explicit ExternAndNotDefined(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit ExternAndNotDefined(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

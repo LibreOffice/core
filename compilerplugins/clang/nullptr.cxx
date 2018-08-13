@@ -52,11 +52,11 @@ bool isNullPointerCast(CastExpr const * expr) {
 }
 
 class Nullptr:
-    public RecursiveASTVisitor<Nullptr>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<Nullptr>
 {
 public:
     explicit Nullptr(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

@@ -23,10 +23,10 @@
 namespace {
 
 class PtrVector:
-    public RecursiveASTVisitor<PtrVector>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<PtrVector>
 {
 public:
-    explicit PtrVector(loplugin::InstantiationData const & data): Plugin(data)
+    explicit PtrVector(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     virtual void run() override

@@ -25,8 +25,7 @@ namespace loplugin
 {
 
 class UnusedCode
-    : public RecursiveASTVisitor< UnusedCode >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< UnusedCode >
     {
     public:
         explicit UnusedCode( CompilerInstance& compiler, Rewriter& rewriter );
@@ -35,7 +34,7 @@ class UnusedCode
     };
 
 UnusedCode::UnusedCode( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+    : FilteringRewritePlugin( compiler, rewriter )
     {
     }
 

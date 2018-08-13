@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class UnusedVariableCheck
-    : public RecursiveASTVisitor< UnusedVariableCheck >
-    , public Plugin
+    : public FilteringPlugin< UnusedVariableCheck >
     {
     public:
         explicit UnusedVariableCheck( const InstantiationData& data );

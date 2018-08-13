@@ -23,7 +23,7 @@ namespace loplugin
 
 // Ctor, pass arguments.
 Tutorial3::Tutorial3( const InstantiationData& data )
-    : RewritePlugin( data )
+    : FilteringRewritePlugin( data )
     {
     }
 

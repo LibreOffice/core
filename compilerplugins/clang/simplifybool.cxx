@@ -76,11 +76,11 @@ Value getValue(Expr const * expr) {
 }
 
 class SimplifyBool:
-    public RecursiveASTVisitor<SimplifyBool>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<SimplifyBool>
 {
 public:
     explicit SimplifyBool(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override;
 

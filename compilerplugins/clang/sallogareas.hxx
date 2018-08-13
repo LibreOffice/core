@@ -20,8 +20,7 @@ namespace loplugin
 {
 
 class SalLogAreas
-    : public RecursiveASTVisitor< SalLogAreas >
-    , public Plugin
+    : public FilteringPlugin< SalLogAreas >
     {
     public:
         explicit SalLogAreas( const InstantiationData& data );

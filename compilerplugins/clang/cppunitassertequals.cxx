@@ -21,11 +21,11 @@
 namespace {
 
 class CppunitAssertEquals:
-    public RecursiveASTVisitor<CppunitAssertEquals>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<CppunitAssertEquals>
 {
 public:
     explicit CppunitAssertEquals(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

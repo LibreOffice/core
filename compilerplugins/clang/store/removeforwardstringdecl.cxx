@@ -21,7 +21,7 @@ namespace loplugin
 {
 
 RemoveForwardStringDecl::RemoveForwardStringDecl( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+    : FilteringRewritePlugin( compiler, rewriter )
     {
     }
 

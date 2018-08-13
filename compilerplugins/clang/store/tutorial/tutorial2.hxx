@@ -19,8 +19,7 @@ namespace loplugin
 
 // The same like for Tutorial1.
 class Tutorial2
-    : public RecursiveASTVisitor< Tutorial2 >
-    , public Plugin
+    : public FilteringPlugin< Tutorial2 >
     {
     public:
         Tutorial2( const InstantiationData& data );

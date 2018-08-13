@@ -23,10 +23,10 @@ bool isStdException(QualType type) {
 }
 
 class StdException:
-    public RecursiveASTVisitor<StdException>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<StdException>
 {
 public:
-    explicit StdException(InstantiationData const & data): RewritePlugin(data)
+    explicit StdException(InstantiationData const & data): FilteringRewritePlugin(data)
     {}
 
     virtual void run() override

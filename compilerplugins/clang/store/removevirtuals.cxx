@@ -26,7 +26,7 @@
 namespace {
 
 class RemoveVirtuals:
-    public RecursiveASTVisitor<RemoveVirtuals>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<RemoveVirtuals>
 {
 public:
     explicit RemoveVirtuals(InstantiationData const & data);
@@ -50,7 +50,7 @@ size_t getFilesize(const char* filename)
     return st.st_size;
 }
 
-RemoveVirtuals::RemoveVirtuals(InstantiationData const & data): RewritePlugin(data)
+RemoveVirtuals::RemoveVirtuals(InstantiationData const & data): FilteringRewritePlugin(data)
 {
     static const char sInputFile[] = SRCDIR "/result.txt";
     mmapFilesize = getFilesize(sInputFile);

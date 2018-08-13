@@ -29,7 +29,7 @@
 namespace {
 
 class UnusedMethodsRemove:
-    public RecursiveASTVisitor<UnusedMethodsRemove>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<UnusedMethodsRemove>
 {
 public:
     explicit UnusedMethodsRemove(loplugin::InstantiationData const & data);
@@ -53,7 +53,7 @@ size_t getFilesize(const char* filename)
     return st.st_size;
 }
 
-UnusedMethodsRemove::UnusedMethodsRemove(loplugin::InstantiationData const & data): RewritePlugin(data)
+UnusedMethodsRemove::UnusedMethodsRemove(loplugin::InstantiationData const & data): FilteringRewritePlugin(data)
 {
     static const char sInputFile[] = SRCDIR "/result.txt";
     mmapFilesize = getFilesize(sInputFile);

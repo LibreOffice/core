@@ -21,7 +21,7 @@ namespace loplugin
 {
 
 LclStaticFix::LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+    : FilteringRewritePlugin( compiler, rewriter )
     {
     }
 

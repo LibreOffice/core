@@ -12,12 +12,11 @@
 namespace {
 
 class DerivedClass:
-    public RecursiveASTVisitor<DerivedClass>,
-    public loplugin::Plugin
+    public loplugin::FilteringPlugin<DerivedClass>
 {
 public:
     explicit DerivedClass(InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

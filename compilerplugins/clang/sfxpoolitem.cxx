@@ -22,10 +22,10 @@ forgotten and hard to notice.
 namespace {
 
 class SfxPoolItem:
-    public RecursiveASTVisitor<SfxPoolItem>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<SfxPoolItem>
 {
 public:
-    explicit SfxPoolItem(loplugin::InstantiationData const & data): Plugin(data)
+    explicit SfxPoolItem(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

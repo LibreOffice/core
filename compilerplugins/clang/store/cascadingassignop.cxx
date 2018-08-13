@@ -40,7 +40,7 @@ struct WalkCounter
 
 // Ctor, nothing special, pass the argument(s).
 CascadingAssignOp::CascadingAssignOp( const InstantiationData& data )
-    : Plugin( data )
+    : FilteringPlugin( data )
 {
 }
 

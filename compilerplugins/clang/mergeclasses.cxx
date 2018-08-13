@@ -47,11 +47,11 @@ static std::set<std::pair<std::string,std::string> > childToParentClassSet; // c
 static std::map<std::string,std::string> definitionMap;  // className -> filename
 
 class MergeClasses:
-    public RecursiveASTVisitor<MergeClasses>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<MergeClasses>
 {
 public:
     explicit MergeClasses(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

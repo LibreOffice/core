@@ -32,10 +32,10 @@ CXXRecordDecl const * getClass(CXXMethodDecl const * decl) {
 }
 
 class DeletedSpecial:
-    public RecursiveASTVisitor<DeletedSpecial>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DeletedSpecial>
 {
 public:
-    explicit DeletedSpecial(InstantiationData const & data): Plugin(data) {}
+    explicit DeletedSpecial(InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override;
 
