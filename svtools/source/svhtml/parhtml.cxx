@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
@@ -2027,7 +2028,10 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 if (comphelper::string::getTokenCount(aContent, ';') == 2)
                 {
                     Date aDate(aContent.getToken(0, ';').toInt32());
-                    tools::Time aTime(aContent.getToken(1, ';').toInt64());
+                    auto nTime = aContent.getToken(1, ';').toInt64();
+                    if (nTime < 0)
+                        nTime = o3tl::saturating_toggle_sign(nTime);
+                    tools::Time aTime(nTime);
                     DateTime aDateTime(aDate, aTime);
                     uDT = aDateTime.GetUNODateTime();
                     valid = true;
