@@ -84,7 +84,7 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
 {
     m_nFieldCount = mysql_stmt_field_count(pStmt);
     m_pResult = mysql_stmt_result_metadata(m_pStmt);
-    m_aFields = mysql_fetch_fields(m_pResult);
+    m_aFields.reset(mysql_fetch_fields(m_pResult));
 }
 
 OPreparedResultSet::~OPreparedResultSet() {}
@@ -505,11 +505,8 @@ void SAL_CALL OPreparedResultSet::close()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    if (m_aData)
-    {
-        delete[] m_aData;
-        delete[] m_aMetaData;
-    }
+    m_aData.reset();
+    m_aMetaData.reset();
 
     if (m_pResult)
         mysql_free_result(m_pResult);
@@ -636,9 +633,9 @@ sal_Bool SAL_CALL OPreparedResultSet::next()
     if (m_aData == nullptr)
     {
         bFirstRun = true;
-        m_aData = new MYSQL_BIND[m_nFieldCount];
-        memset(m_aData, 0, m_nFieldCount * sizeof(MYSQL_BIND));
-        m_aMetaData = new BindMetaData[m_nFieldCount];
+        m_aData.reset(new MYSQL_BIND[m_nFieldCount]);
+        memset(m_aData.get(), 0, m_nFieldCount * sizeof(MYSQL_BIND));
+        m_aMetaData.reset(new BindMetaData[m_nFieldCount]);
     }
     for (sal_Int32 i = 0; i < m_nFieldCount; ++i)
     {
@@ -657,7 +654,7 @@ sal_Bool SAL_CALL OPreparedResultSet::next()
         mysqlc_sdbc_driver::allocateSqlVar(&m_aData[i].buffer, m_aData[i].buffer_type,
                                            m_aFields[i].length);
     }
-    mysql_stmt_bind_result(m_pStmt, m_aData);
+    mysql_stmt_bind_result(m_pStmt, m_aData.get());
     if (bFirstRun)
         mysql_stmt_store_result(m_pStmt);
     int failure = mysql_stmt_fetch(m_pStmt);
