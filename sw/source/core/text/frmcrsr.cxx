@@ -277,8 +277,11 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 nNextOfst = aLine.GetEnd();
                 // See comment in AdjustFrame
                 // Include the line's last char?
-                bRet = bRightMargin ? aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY )
-                                : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
+                if (bRightMargin)
+                    aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY );
+                else
+                    aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
+                bRet = true;
             }
 
             if ( pFrame->IsRightToLeft() )
@@ -423,23 +426,20 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         SwTextCursor aLine( pFrame, &aInf );
         SwCursorMoveState aTmpState( MV_SETONLYTEXT );
         aTmpState.m_bRealHeight = true;
-        if( aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY ) )
+        aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY );
+        if( aTmpState.m_aRealHeight.X() >= 0 )
         {
-            if( aTmpState.m_aRealHeight.X() >= 0 )
-            {
-                rOrig.Pos().AdjustY(aTmpState.m_aRealHeight.X() );
-                rOrig.Height( aTmpState.m_aRealHeight.Y() );
-            }
-
-            if ( pFrame->IsRightToLeft() )
-                pFrame->SwitchLTRtoRTL( rOrig );
-
-            if ( aRectFnSet.IsVert() )
-                pFrame->SwitchHorizontalToVertical( rOrig );
-
-            return true;
+            rOrig.Pos().AdjustY(aTmpState.m_aRealHeight.X() );
+            rOrig.Height( aTmpState.m_aRealHeight.Y() );
         }
-        return false;
+
+        if ( pFrame->IsRightToLeft() )
+            pFrame->SwitchLTRtoRTL( rOrig );
+
+        if ( aRectFnSet.IsVert() )
+            pFrame->SwitchHorizontalToVertical( rOrig );
+
+        return true;
     }
 }
 
