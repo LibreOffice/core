@@ -70,6 +70,7 @@
 
 #include <frmatr.hxx>
 #include <itabenum.hxx>
+#include <unocrsr.hxx>
 
 #include <iostream>
 #include <memory>
@@ -197,8 +198,12 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         sChar += OUStringLiteral1(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
         --m_pPaM->GetMark()->nContent;
+        std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_pLastAnchorPos) : nullptr);
+        m_pLastAnchorPos.reset();
         m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
         m_pPaM->DeleteMark();
+        if (xLastAnchorCursor)
+            m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
         SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
         pFN = pText->InsertItem(aFootnote, nPos, nPos);
     }
