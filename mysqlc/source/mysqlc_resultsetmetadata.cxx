@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
-    return sal_Int32((pField->flags & NOT_NULL_FLAG) != 0);
+    return (pField->flags & NOT_NULL_FLAG) ? 0 : 1;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 /*column*/)
