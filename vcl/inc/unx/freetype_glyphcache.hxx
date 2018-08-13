@@ -100,7 +100,7 @@ public:
     FreetypeFont* CreateFont( const FontSelectPattern& );
 
 private:
-    typedef std::unordered_map<sal_IntPtr,FreetypeFontInfo*> FontList;
+    typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontList;
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;

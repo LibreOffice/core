@@ -308,7 +308,7 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
 
     FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
         rNormalizedName, nFaceNum, nFontId);
-    maFontList[ nFontId ] = pFontInfo;
+    maFontList[ nFontId ].reset(pFontInfo);
     if( mnMaxFontId < nFontId )
         mnMaxFontId = nFontId;
 }
@@ -317,18 +317,13 @@ void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
     for (auto const& font : maFontList)
     {
-        FreetypeFontInfo* pFreetypeFontInfo = font.second;
+        FreetypeFontInfo* pFreetypeFontInfo = font.second.get();
         pFreetypeFontInfo->AnnounceFont( pToAdd );
     }
 }
 
 void FreetypeManager::ClearFontList( )
 {
-    for (auto const& font : maFontList)
-    {
-        FreetypeFontInfo* pFreetypeFontInfo = font.second;
-        delete pFreetypeFontInfo;
-    }
     maFontList.clear();
 }
 
@@ -344,7 +339,7 @@ FreetypeFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 
     sal_IntPtr nFontId = pFontFace->GetFontId();
     FontList::iterator it = maFontList.find(nFontId);
-    FreetypeFontInfo* pFontInfo = it != maFontList.end() ? it->second : nullptr;
+    FreetypeFontInfo* pFontInfo = it != maFontList.end() ? it->second.get() : nullptr;
 
     if (!pFontInfo)
         return nullptr;
