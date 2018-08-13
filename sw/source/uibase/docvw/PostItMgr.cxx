@@ -690,7 +690,7 @@ void SwPostItMgr::LayoutPostIts()
             // only layout if there are notes on this page
             if (pPage->mvSidebarItems.size()>0)
             {
-                std::list<SwAnnotationWin*> aVisiblePostItList;
+                std::vector<SwAnnotationWin*> aVisiblePostItList;
                 unsigned long           lNeededHeight = 0;
                 long                    mlPageBorder = 0;
                 long                    mlPageEnd = 0;
@@ -876,8 +876,6 @@ void SwPostItMgr::LayoutPostIts()
                     // Layout for this post it finished now
                     visiblePostIt->GetSidebarItem().bPendingLayout = false;
                 }
-
-                aVisiblePostItList.clear();
             }
             else
             {
@@ -1118,7 +1116,7 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
     }
 }
 
-bool SwPostItMgr::LayoutByPage(std::list<SwAnnotationWin*> &aVisiblePostItList, const tools::Rectangle& rBorder, long lNeededHeight)
+bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList, const tools::Rectangle& rBorder, long lNeededHeight)
 {
     /*** General layout idea:***/
     //  - if we have space left, we always move the current one up,
