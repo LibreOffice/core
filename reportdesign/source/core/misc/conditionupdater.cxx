@@ -52,8 +52,7 @@ namespace rptui
 
     void ConditionUpdater::notifyPropertyChange( const PropertyChangeEvent& _rEvent )
     {
-        if ( !impl_lateInit_nothrow() )
-            return;
+        impl_lateInit_nothrow();
 
         Reference< XReportControlModel > xRptControlModel( _rEvent.Source, UNO_QUERY );
         if ( xRptControlModel.is() && _rEvent.PropertyName == "DataField" )
@@ -66,13 +65,12 @@ namespace rptui
     }
 
 
-    bool ConditionUpdater::impl_lateInit_nothrow()
+    void ConditionUpdater::impl_lateInit_nothrow()
     {
         if ( !m_aConditionalExpressions.empty() )
-            return true;
+            return;
 
         ConditionalExpressionFactory::getKnownConditionalExpressions( m_aConditionalExpressions );
-        return true;
     }
 
 
