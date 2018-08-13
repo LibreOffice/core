@@ -88,7 +88,7 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
     }
 }
 
-/// Use this intead of mysql_real_escape_string, because that one also escapes
+/// Use this instead of mysql_real_escape_string, because that one also escapes
 /// single quote ('), which should not be escaped
 rtl::OString escapeSql( const rtl::OString& from )
 {
