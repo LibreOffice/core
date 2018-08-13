@@ -198,7 +198,8 @@ MenuData aColumnData[] = {
     { 3, "Text Transformation", &ScDataProviderDlg::textTransformation },
     { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation },
     { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
-    { 6, "Number Transformations", &ScDataProviderDlg::numberTransformation }
+    { 6, "Number Transformations", &ScDataProviderDlg::numberTransformation },
+    { 7, "Replace Null Transformations", &ScDataProviderDlg::replaceNullTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -757,6 +758,72 @@ std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformatio
     return nullptr;
 }
 
+class ScReplaceNullTransformation : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<Edit> maReplaceString;
+    VclPtr<PushButton> maDelete;
+    sal_uInt32 maIndex;
+    std::function<void(sal_uInt32&)> maDeleteTransformation;
+
+public:
+
+    ScReplaceNullTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ~ScReplaceNullTransformation() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+    DECL_LINK(DeleteHdl, Button*, void);
+};
+
+ScReplaceNullTransformation::ScReplaceNullTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/replacenulltransformationentry.ui"),
+    maIndex(aIndex),
+    maDeleteTransformation(aDeleteTransformation)
+{
+    get(maColumnNums, "ed_columns");
+    get(maReplaceString, "ed_str");
+    get(maDelete, "ed_delete");
+    maDelete->SetClickHdl(LINK(this,ScReplaceNullTransformation, DeleteHdl));
+}
+
+ScReplaceNullTransformation::~ScReplaceNullTransformation()
+{
+    disposeOnce();
+}
+
+void ScReplaceNullTransformation::dispose()
+{
+    maColumnNums.clear();
+    maReplaceString.clear();
+    maDelete.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    OUString aReplaceWithString = maReplaceString->GetText();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aColumns.insert(nCol - 1);
+    }
+
+    return std::make_shared<sc::ReplaceNullTransformation>(aColumns,aReplaceWithString);
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
@@ -934,6 +1001,13 @@ void ScDataProviderDlg::numberTransformation()
     mpList->addEntry(pNumberTransformationEntry);
 }
 
+void ScDataProviderDlg::replaceNullTransformation()
+{
+    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    VclPtr<ScReplaceNullTransformation> pReplaceNullTransformationEntry = VclPtr<ScReplaceNullTransformation>::Create(mpList, mpIndex++, adeleteTransformation);
+    mpList->addEntry(pReplaceNullTransformationEntry);
+}
+
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
 {
     sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
@@ -995,6 +1069,11 @@ IMPL_LINK_NOARG(ScSortTransformationControl, DeleteHdl, Button*, void)
 }
 
 IMPL_LINK_NOARG(ScColumnTextTransformation, DeleteHdl, Button*, void)
+{
+   maDeleteTransformation(maIndex);
+}
+
+IMPL_LINK_NOARG(ScReplaceNullTransformation, DeleteHdl, Button*, void)
 {
    maDeleteTransformation(maIndex);
 }
