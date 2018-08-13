@@ -100,17 +100,17 @@ private:
     static const SCSIZE cnScenarios = 1000;   // No. of scenarios to calculate for PI calculations
 
     bool initData();
-    bool prefillBaseData();
+    void prefillBaseData();
     bool prefillTrendData();
     bool prefillPerIdx();
-    bool initCalc();
+    void initCalc();
     void refill();
     SCSIZE CalcPeriodLen();
     void CalcAlphaBetaGamma();
     void CalcBetaGamma();
     void CalcGamma();
     void calcAccuracyIndicators();
-    bool GetForecast( double fTarget, double& rForecast );
+    void GetForecast( double fTarget, double& rForecast );
     double RandDev();
     double convertXtoMonths( double x );
 
@@ -121,11 +121,11 @@ public:
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                               ScETSType eETSType );
     FormulaError GetError() { return mnErrorValue; };
-    bool GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat );
-    bool GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat );
-    bool GetSamplesInPeriod( double& rVal );
-    bool GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
-    bool GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
+    void GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat );
+    void GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat );
+    void GetSamplesInPeriod( double& rVal );
+    void GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
+    void GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
 };
 
 ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
@@ -396,8 +396,8 @@ bool ScETSForecastCalculation::initData( )
     {
         if ( prefillPerIdx() )
         {
-            if ( prefillBaseData() )
-                return true;
+            prefillBaseData();
+            return true;
         }
     }
     return false;
@@ -474,16 +474,15 @@ bool ScETSForecastCalculation::prefillPerIdx()
     return true;
 }
 
-bool ScETSForecastCalculation::prefillBaseData()
+void ScETSForecastCalculation::prefillBaseData()
 {
     if ( bEDS )
         mpBase[ 0 ] = maRange[ 0 ].Y;
     else
         mpBase[ 0 ] = maRange[ 0 ].Y / mpPerIdx[ 0 ];
-    return true;
 }
 
-bool ScETSForecastCalculation::initCalc()
+void ScETSForecastCalculation::initCalc()
 {
     if ( !mbInitialised )
     {
@@ -492,7 +491,6 @@ bool ScETSForecastCalculation::initCalc()
         mbInitialised = true;
         calcAccuracyIndicators();
     }
-    return true;
 }
 
 void ScETSForecastCalculation::calcAccuracyIndicators()
@@ -837,10 +835,9 @@ double ScETSForecastCalculation::convertXtoMonths( double x )
     return ( 12.0 * nYear + nMonth + ( aDate.GetDay() - mnMonthDay ) / fMonthLength );
 }
 
-bool ScETSForecastCalculation::GetForecast( double fTarget, double& rForecast )
+void ScETSForecastCalculation::GetForecast( double fTarget, double& rForecast )
 {
-    if ( !initCalc() )
-        return false;
+    initCalc();
 
     if ( fTarget <= maRange[ mnCount - 1 ].X )
     {
@@ -884,10 +881,9 @@ bool ScETSForecastCalculation::GetForecast( double fTarget, double& rForecast )
             rForecast = rForecast + fInterpolateFactor * ( fFc_1 - rForecast );
         }
     }
-    return true;
 }
 
-bool ScETSForecastCalculation::GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat )
+void ScETSForecastCalculation::GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat )
 {
     SCSIZE nC, nR;
     rTMat->GetDimensions( nC, nR );
@@ -902,19 +898,15 @@ bool ScETSForecastCalculation::GetForecastRange( const ScMatrixRef& rTMat, const
             else
                 fTarget = rTMat->GetDouble( j, i );
             double fForecast;
-            if ( GetForecast( fTarget, fForecast ) )
-                rFcMat->PutDouble( fForecast, j, i );
-            else
-                return false;
+            GetForecast( fTarget, fForecast );
+            rFcMat->PutDouble( fForecast, j, i );
         }
     }
-    return true;
 }
 
-bool ScETSForecastCalculation::GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat )
+void ScETSForecastCalculation::GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat )
 {
-    if ( !initCalc() )
-        return false;
+    initCalc();
 
     SCSIZE nC, nR;
     rTypeMat->GetDimensions( nC, nR );
@@ -954,13 +946,11 @@ bool ScETSForecastCalculation::GetStatisticValue( const ScMatrixRef& rTypeMat, c
             }
         }
     }
-    return true;
 }
 
-bool ScETSForecastCalculation::GetSamplesInPeriod( double& rVal )
+void ScETSForecastCalculation::GetSamplesInPeriod( double& rVal )
 {
     rVal = mnSmplInPrd;
-    return true;
 }
 
 double ScETSForecastCalculation::RandDev()
@@ -970,10 +960,9 @@ double ScETSForecastCalculation::RandDev()
              ::comphelper::rng::uniform_real_distribution( 0.5, 1.0 ) ) );
 }
 
-bool ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
+void ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
 {
-    if ( !initCalc() )
-        return false;
+    initCalc();
 
     SCSIZE nC, nR;
     rTMat->GetDimensions( nC, nR );
@@ -1097,14 +1086,12 @@ bool ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTM
             rPIMat->PutDouble( fPI, j, i );
         }
     }
-    return true;
 }
 
 
-bool ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
+void ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
 {
-    if ( !initCalc() )
-        return false;
+    initCalc();
 
     SCSIZE nC, nR;
     rTMat->GetDimensions( nC, nR );
@@ -1160,7 +1147,6 @@ bool ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTM
             rPIMat->PutDouble( fPI, j, i );
         }
     }
-    return true;
 }
 
 
@@ -1320,10 +1306,8 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 SCSIZE nC, nR;
                 pTMat->GetDimensions( nC, nR );
                 ScMatrixRef pFcMat = GetNewMat( nC, nR );
-                if ( aETSCalc.GetForecastRange( pTMat, pFcMat ) )
-                    PushMatrix( pFcMat );
-                else
-                    PushError( aETSCalc.GetError() );
+                aETSCalc.GetForecastRange( pTMat, pFcMat );
+                PushMatrix( pFcMat );
             }
             break;
         case etsPIAdd :
@@ -1334,17 +1318,13 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 ScMatrixRef pPIMat = GetNewMat( nC, nR );
                 if ( nSmplInPrd == 0 )
                 {
-                    if ( aETSCalc.GetEDSPredictionIntervals( pTMat, pPIMat, fPILevel ) )
-                        PushMatrix( pPIMat );
-                    else
-                        PushError( aETSCalc.GetError() );
+                    aETSCalc.GetEDSPredictionIntervals( pTMat, pPIMat, fPILevel );
+                    PushMatrix( pPIMat );
                 }
                 else
                 {
-                    if ( aETSCalc.GetETSPredictionIntervals( pTMat, pPIMat, fPILevel ) )
-                        PushMatrix( pPIMat );
-                    else
-                        PushError( aETSCalc.GetError() );
+                    aETSCalc.GetETSPredictionIntervals( pTMat, pPIMat, fPILevel );
+                    PushMatrix( pPIMat );
                 }
             }
             break;
@@ -1354,19 +1334,15 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 SCSIZE nC, nR;
                 pTypeMat->GetDimensions( nC, nR );
                 ScMatrixRef pStatMat = GetNewMat( nC, nR );
-                if ( aETSCalc.GetStatisticValue( pTypeMat, pStatMat ) )
-                    PushMatrix( pStatMat );
-                else
-                    PushError( aETSCalc.GetError() );
+                aETSCalc.GetStatisticValue( pTypeMat, pStatMat );
+                PushMatrix( pStatMat );
             }
             break;
         case etsSeason :
             {
                 double rVal;
-                if ( aETSCalc.GetSamplesInPeriod( rVal ) )
-                    PushDouble( rVal );
-                else
-                    PushError( aETSCalc.GetError() );
+                aETSCalc.GetSamplesInPeriod( rVal );
+                PushDouble( rVal );
             }
             break;
     }
