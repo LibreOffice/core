@@ -320,11 +320,9 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
 bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    bool bResult = false;
-
     if(CanInsert())
     {
-        bResult = SwEditShell::UpdateTableOf(rTOX, pSet);
+        SwEditShell::UpdateTableOf(rTOX, pSet);
 
         if (pSet == nullptr)
         {
@@ -336,7 +334,7 @@ bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         }
     }
 
-    return bResult;
+    return false;
 }
 
 // handler for click on the field given as parameter.
