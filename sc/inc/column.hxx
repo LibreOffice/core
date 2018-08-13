@@ -265,7 +265,7 @@ public:
         SCROW nRow1, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScColumn& rDestCol );
 
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
-    bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
+    void InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     void InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
 
     void DeleteBeforeCopyFromClip(
