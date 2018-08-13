@@ -20,12 +20,14 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testTdf117923();
+    void testTdf118058();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf117923);
+    CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -121,6 +123,13 @@ void SwLayoutWriter::testTdf117923()
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
     // The numbering height was 960.
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+}
+
+void SwLayoutWriter::testTdf118058()
+{
+    SwDoc* pDoc = createDoc("tdf118058.fodt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
