@@ -157,7 +157,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         }
     }
     auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),
-                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode));
+                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode,
+                nodes.back()));
     for (SwTextNode * pTmp : nodes)
     {
         pRet->listener.StartListening(pTmp);
