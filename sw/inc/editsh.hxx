@@ -110,8 +110,10 @@ namespace sw {
     class UndoRedoContext;
 }
 
-#define GETSELTXT_PARABRK_TO_BLANK      0
-#define GETSELTXT_PARABRK_TO_ONLYCR     2
+enum class ParaBreakType {
+    ToBlank = 0,
+    ToOnlyCR = 2
+};
 
  /// For querying the INet-attributes for Navigator.
 struct SwGetINetAttr
@@ -623,7 +625,7 @@ public:
      @returns FALSE, if selected range is too large to be copied
      into string buffer or if other errors occur. */
     bool GetSelectedText( OUString &rBuf,
-                        int nHndlParaBreak = GETSELTXT_PARABRK_TO_BLANK );
+                        ParaBreakType nHndlParaBreak = ParaBreakType::ToBlank );
 
     /** @return graphic, if CurrentCursor->Point() points to a SwGrfNode
      (and mark is not set or points to the same graphic). */

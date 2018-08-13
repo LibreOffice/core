@@ -469,7 +469,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
         if( bStarMath )
         {
             OUString aMathData;
-            GetSelectedText( aMathData, GETSELTXT_PARABRK_TO_ONLYCR );
+            GetSelectedText( aMathData, ParaBreakType::ToOnlyCR );
 
             if( !aMathData.isEmpty() && svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
             {

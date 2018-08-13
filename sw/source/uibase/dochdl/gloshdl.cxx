@@ -309,7 +309,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
     OUString* pOnlyText = nullptr;
     if( bNoAttr )
     {
-        if( !pWrtShell->GetSelectedText( sOnlyText, GETSELTXT_PARABRK_TO_ONLYCR ))
+        if( !pWrtShell->GetSelectedText( sOnlyText, ParaBreakType::ToOnlyCR ))
             return false;
         pOnlyText = &sOnlyText;
     }
