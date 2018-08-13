@@ -168,7 +168,7 @@ sal_Bool SAL_CALL OPreparedResultSet::getBoolean(sal_Int32 column)
         return false;
     }
     m_bWasNull = false;
-    return *reinterpret_cast<bool*>(m_aData[column - 1].buffer);
+    return *static_cast<bool*>(m_aData[column - 1].buffer);
 }
 
 sal_Int8 SAL_CALL OPreparedResultSet::getByte(sal_Int32 column)
@@ -183,7 +183,7 @@ sal_Int8 SAL_CALL OPreparedResultSet::getByte(sal_Int32 column)
         return 0;
     }
     m_bWasNull = false;
-    return *reinterpret_cast<sal_Int8*>(m_aData[column - 1].buffer);
+    return *static_cast<sal_Int8*>(m_aData[column - 1].buffer);
 }
 
 uno::Sequence<sal_Int8> SAL_CALL OPreparedResultSet::getBytes(sal_Int32 column)
@@ -198,7 +198,7 @@ uno::Sequence<sal_Int8> SAL_CALL OPreparedResultSet::getBytes(sal_Int32 column)
     }
     m_bWasNull = false;
 
-    return uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(m_aData[column - 1].buffer),
+    return uno::Sequence<sal_Int8>(static_cast<sal_Int8 const*>(m_aData[column - 1].buffer),
                                    *m_aData[column - 1].length);
 }
 
@@ -215,7 +215,7 @@ Date SAL_CALL OPreparedResultSet::getDate(sal_Int32 column)
     }
     m_bWasNull = false;
 
-    const MYSQL_TIME* pTime = reinterpret_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
+    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     assert(pTime != nullptr);
 
@@ -235,14 +235,14 @@ double SAL_CALL OPreparedResultSet::getDouble(sal_Int32 column)
     if (*m_aData[column - 1].is_null)
     {
         m_bWasNull = true;
-        return double{};
+        return 0;
     }
     m_bWasNull = false;
 
     if (m_aFields[column - 1].type == MYSQL_TYPE_FLOAT)
-        return *reinterpret_cast<float*>(m_aData[column - 1].buffer);
+        return *static_cast<float*>(m_aData[column - 1].buffer);
 
-    return *reinterpret_cast<double*>(m_aData[column - 1].buffer);
+    return *static_cast<double*>(m_aData[column - 1].buffer);
 }
 
 float SAL_CALL OPreparedResultSet::getFloat(sal_Int32 column)
@@ -254,11 +254,11 @@ float SAL_CALL OPreparedResultSet::getFloat(sal_Int32 column)
     if (*m_aData[column - 1].is_null)
     {
         m_bWasNull = true;
-        return float{};
+        return 0;
     }
     m_bWasNull = false;
 
-    return *reinterpret_cast<float*>(m_aData[column - 1].buffer);
+    return *static_cast<float*>(m_aData[column - 1].buffer);
 }
 
 sal_Int32 SAL_CALL OPreparedResultSet::getInt(sal_Int32 column)
@@ -268,11 +268,11 @@ sal_Int32 SAL_CALL OPreparedResultSet::getInt(sal_Int32 column)
     if (*m_aData[column - 1].is_null)
     {
         m_bWasNull = true;
-        return sal_Int32{};
+        return 0;
     }
     m_bWasNull = false;
 
-    return *reinterpret_cast<sal_Int32*>(m_aData[column - 1].buffer);
+    return *static_cast<sal_Int32*>(m_aData[column - 1].buffer);
 }
 
 sal_Int32 SAL_CALL OPreparedResultSet::getRow()
@@ -290,9 +290,9 @@ sal_Int64 SAL_CALL OPreparedResultSet::getLong(sal_Int32 column)
     checkColumnIndex(column);
 
     if (*m_aData[column - 1].is_null)
-        return sal_Int64{};
+        return 0;
 
-    return *reinterpret_cast<sal_Int64*>(m_aData[column - 1].buffer);
+    return *static_cast<sal_Int64*>(m_aData[column - 1].buffer);
 }
 
 uno::Reference<XResultSetMetaData> SAL_CALL OPreparedResultSet::getMetaData()
@@ -368,11 +368,11 @@ sal_Int16 SAL_CALL OPreparedResultSet::getShort(sal_Int32 column)
     if (*m_aData[column - 1].is_null)
     {
         m_bWasNull = true;
-        return sal_Int16{};
+        return 0;
     }
     m_bWasNull = false;
 
-    return *reinterpret_cast<sal_Int16*>(m_aData[column - 1].buffer);
+    return *static_cast<sal_Int16*>(m_aData[column - 1].buffer);
 }
 
 rtl::OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
@@ -389,12 +389,12 @@ rtl::OUString SAL_CALL OPreparedResultSet::getString(sal_Int32 column)
 
     if (m_aFields[column - 1].type == MYSQL_TYPE_BIT)
     {
-        if (*reinterpret_cast<sal_Int8*>(m_aData[column - 1].buffer) != 0)
+        if (*static_cast<sal_Int8*>(m_aData[column - 1].buffer) != 0)
             return OUString{ "YES" };
         return OUString{ "NO" };
     }
 
-    const char* sStr = reinterpret_cast<const char*>(m_aData[column - 1].buffer);
+    const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
     OUString sReturn = rtl::OUString(sStr, *m_aData[column - 1].length, m_encoding);
     return sReturn;
@@ -413,7 +413,7 @@ Time SAL_CALL OPreparedResultSet::getTime(sal_Int32 column)
     }
     m_bWasNull = false;
 
-    const MYSQL_TIME* pTime = reinterpret_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
+    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     assert(pTime != nullptr);
 
@@ -437,7 +437,7 @@ DateTime SAL_CALL OPreparedResultSet::getTimestamp(sal_Int32 column)
     }
     m_bWasNull = false;
 
-    const MYSQL_TIME* pTime = reinterpret_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
+    const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     assert(pTime != nullptr);
 
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL OPreparedResultSet::absolute(sal_Int32 row)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nFields = static_cast<sal_Int32>(m_nFieldCount);
+    sal_Int32 nFields = m_nFieldCount;
     sal_Int32 nToGo = row < 0 ? nFields - row : row - 1;
 
     if (nToGo >= nFields)
@@ -563,7 +563,7 @@ sal_Bool SAL_CALL OPreparedResultSet::relative(sal_Int32 row)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nFields = static_cast<sal_Int32>(m_nFieldCount);
+    sal_Int32 nFields = m_nFieldCount;
     if (row == 0)
         return true;
 
