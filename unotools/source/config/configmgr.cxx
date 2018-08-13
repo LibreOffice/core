@@ -199,10 +199,12 @@ void utl::ConfigManager::doStoreConfigItems() {
 
 static bool bIsFuzzing = false;
 
+#if !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
 bool utl::ConfigManager::IsFuzzing()
 {
     return bIsFuzzing;
 }
+#endif
 
 void utl::ConfigManager::EnableFuzzing()
 {
