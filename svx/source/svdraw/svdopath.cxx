@@ -1690,6 +1690,9 @@ static Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon
 {
     basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
 
+    if (aRange.isEmpty())
+        return Rectangle();
+
     return Rectangle(
         FRound(aRange.getMinX()), FRound(aRange.getMinY()),
         FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
