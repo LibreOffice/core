@@ -282,11 +282,10 @@ public:
         Size                        m_aCellSize;
         SvtGraphicFill::Transform   m_aTransform;
         ResourceDict                m_aResources;
-        SvMemoryStream*             m_pTilingStream;
+        std::unique_ptr<SvMemoryStream> m_pTilingStream;
 
         TilingEmit()
-                : m_nObject( 0 ),
-                  m_pTilingStream( nullptr )
+                : m_nObject( 0 )
         {}
     };
 

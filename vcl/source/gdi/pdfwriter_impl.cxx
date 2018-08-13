@@ -2769,7 +2769,7 @@ bool PDFWriterImpl::emitTilings()
         if( tiling.m_aCellSize.Height() == 0 )
             tiling.m_aCellSize.setHeight( nH );
 
-        bool bDeflate = compressStream( tiling.m_pTilingStream );
+        bool bDeflate = compressStream( tiling.m_pTilingStream.get() );
         tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_END );
         sal_uInt64 const nTilingStreamSize = tiling.m_pTilingStream->Tell();
         tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
@@ -2828,8 +2828,7 @@ bool PDFWriterImpl::emitTilings()
         if ( !writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) ) return false;
         checkAndEnableStreamEncryption( tiling.m_nObject );
         bool written = writeBuffer( tiling.m_pTilingStream->GetData(), nTilingStreamSize );
-        delete tiling.m_pTilingStream;
-        tiling.m_pTilingStream = nullptr;
+        tiling.m_pTilingStream.reset();
         if( !written )
             return false;
         disableStreamEncryption();
@@ -10161,7 +10160,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
                 m_aTilings.emplace_back( );
                 m_aTilings.back().m_nObject         = createObject();
                 m_aTilings.back().m_aRectangle      = tools::Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
-                m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
+                m_aTilings.back().m_pTilingStream.reset(new SvMemoryStream());
                 m_aTilings.back().m_pTilingStream->WriteBytes(
                     aTilingStream.getStr(), aTilingStream.getLength() );
                 // phase the tiling so wallpaper begins on upper left
