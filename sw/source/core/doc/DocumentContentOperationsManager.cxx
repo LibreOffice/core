@@ -2944,22 +2944,29 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
             {   // move all bookmarks, TOXMarks, FlyAtCnt
                 pContentStore->Restore(&m_rDoc, rPos.nNode.GetIndex()-1, 0, true, eMode);
             }
+            if (eMode & sw::mark::RestoreMode::NonFlys)
+            {
+                // To-Do - add 'SwExtraRedlineTable' also ?
+                if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
+                    (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() &&
+                     !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty()))
+                {
+                    SwPaM aPam( rPos );
+                    aPam.SetMark();
+                    aPam.Move( fnMoveBackward );
+                    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+                    {
+                        m_rDoc.getIDocumentRedlineAccess().AppendRedline(
+                            new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aPam), true);
+                    }
+                    else
+                    {
+                        m_rDoc.getIDocumentRedlineAccess().SplitRedline(aPam);
+                    }
+                }
+            }
         });
-    pNode = pNode->GetTextNode()->SplitContentNode(rPos, &restoreFunc);
-    if (pNode)
-    {
-        // To-Do - add 'SwExtraRedlineTable' also ?
-        if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
-        {
-            SwPaM aPam( rPos );
-            aPam.SetMark();
-            aPam.Move( fnMoveBackward );
-            if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
-                m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
-            else
-                m_rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
-        }
-    }
+    pNode->GetTextNode()->SplitContentNode(rPos, &restoreFunc);
 
     m_rDoc.getIDocumentState().SetModified();
     return true;
