@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_edef50e7",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-13T15:50:06Z",
+      "side": 1,
+      "message": "Please next time you modify an existing test and you have a reason for it, spell it out in the commit message. I see that you actually assert more here (since originally the two asserts were the same), but it can speed up reviewing if you explicitly state that. Thanks! :-)",
+      "revId": "d8d6e72b06344c8e4037fa5617a3316e270c4821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
