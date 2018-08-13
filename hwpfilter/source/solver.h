@@ -23,11 +23,10 @@
 class mgcLinearSystemD
 {
 public:
-  static double** NewMatrix (int N);
-  static void DeleteMatrix (int N, double** A);
+  static std::unique_ptr<std::unique_ptr<double[]>[]> NewMatrix (int N);
   static double* NewVector (int N);
 
-  static bool Solve (int N, double** A, double* b);
+  static bool Solve (int N, std::unique_ptr<std::unique_ptr<double[]>[]>& A, double* b);
   // Input:
   //     A[N][N] coefficient matrix, entries are A[row][col]
   //     b[N] vector, entries are b[row]
