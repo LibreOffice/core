@@ -1665,8 +1665,13 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipPath combine mode: " << combineMode);
                         SAL_INFO("drawinglayer", "EMF+\tpath in slot: " << (flags & 0xff));
 
-                        EMFPPath& path = *static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
-                        ::basegfx::B2DPolyPolygon& clipPoly(path.GetPolygon(*this));
+                        EMFPPath *path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
+                        if (!path)
+                        {
+                            break;
+                        }
+
+                        ::basegfx::B2DPolyPolygon& clipPoly(path->GetPolygon(*this));
                         // clipPoly.transform(rState.mapModeTransform);
 
                         HandleNewClipRegion( combineClip(mrPropertyHolders.Current().getClipPolyPolygon(), combineMode, clipPoly), mrTargetHolders, mrPropertyHolders);
@@ -1678,6 +1683,10 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipRegion");
                         SAL_INFO("drawinglayer", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
+                        if (!region)
+                        {
+                            break;
+                        }
 
                         HandleNewClipRegion(combineClip(mrPropertyHolders.Current().getClipPolyPolygon(), combineMode, region->regionPolyPolygon), mrTargetHolders, mrPropertyHolders);
                         break;
