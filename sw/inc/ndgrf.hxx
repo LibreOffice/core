@@ -120,8 +120,6 @@ public:
 private:
     /// Loading of graphic immediately before displaying.
     bool SwapIn( bool bWaitForData = false );
-    /// Remove graphic in order to free memory.
-    bool SwapOut();
 
 public:
     bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
