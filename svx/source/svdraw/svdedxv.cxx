@@ -1190,15 +1190,15 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
-                                TextEditOverlayObject* pNewTextEditOverlayObject = new TextEditOverlayObject(
+                                std::unique_ptr<TextEditOverlayObject> pNewTextEditOverlayObject(new TextEditOverlayObject(
                                     aHilightColor,
                                     *pTextEditOutlinerView,
-                                    bVisualizeSurroundingFrame);
+                                    bVisualizeSurroundingFrame));
 
                                 xManager->add(*pNewTextEditOverlayObject);
                                 xManager->add(const_cast<sdr::overlay::OverlaySelection&>(*pNewTextEditOverlayObject->getOverlaySelection()));
 
-                                maTEOverlayGroup.append(pNewTextEditOverlayObject);
+                                maTEOverlayGroup.append(std::move(pNewTextEditOverlayObject));
                             }
                         }
                     }

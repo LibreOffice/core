@@ -77,10 +77,10 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             Size aHalfLogicSize(xTargetOverlay->getOutputDevice().PixelToLogic(Size(4 * fScalingFactor, 4 * fScalingFactor)));
 
             // object
-            sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                aB2DPolyPolygon);
+            std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                aB2DPolyPolygon));
             xTargetOverlay->add(*pNew);
-            maObjects.append(pNew);
+            maObjects.append(std::move(pNew));
 
             // glue points
             for(sal_uInt16 i(0); i < 4; i++)
@@ -101,10 +101,10 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                 basegfx::B2DPolyPolygon aTempPolyPoly;
                 aTempPolyPoly.append(aTempPoly);
 
-                pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                    aTempPolyPoly);
-                xTargetOverlay->add(*pNew);
-                maObjects.append(pNew);
+                std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew2(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    aTempPolyPoly));
+                xTargetOverlay->add(*pNew2);
+                maObjects.append(std::move(pNew2));
             }
         }
     }
@@ -145,18 +145,18 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
             {
                 const sdr::contact::ViewContact& rVC = pObject->GetViewContact();
                 const drawinglayer::primitive2d::Primitive2DContainer aSequence = rVC.getViewIndependentPrimitive2DContainer();
-                sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
 
                 xOverlayManager->add(*pNew);
-                maObjects.append(pNew);
+                maObjects.append(std::move(pNew));
             }
 
             if(rPolyPoly.count())
             {
-                sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                    rPolyPoly);
+                std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    rPolyPoly));
                 xOverlayManager->add(*pNew);
-                maObjects.append(pNew);
+                maObjects.append(std::move(pNew));
             }
         }
     }
