@@ -277,9 +277,9 @@ public:
     {
         CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
-    bool GetCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
+    void GetCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    bool GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
+    void GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
     TextFrameIndex GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 bool bChgNode, SwCursorMoveState* = nullptr ) const;

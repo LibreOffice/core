@@ -90,10 +90,8 @@ SwTwips SwTextFrameInfo::GetLineStart( const SwTextCursor &rLine )
         return rLine.GetLineStart();
 
     SwRect aRect;
-    if( const_cast<SwTextCursor&>(rLine).GetCharRect( &aRect, nTextStart ) )
-        return aRect.Left();
-
-    return rLine.GetLineStart();
+    const_cast<SwTextCursor&>(rLine).GetCharRect( &aRect, nTextStart );
+    return aRect.Left();
 }
 
 // Where does the text start (without whitespace)? (relative in the Frame)
@@ -115,28 +113,20 @@ SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) co
 
     SwTwips nStt, nNext;
     SwRect aRect;
-    if( aLine.GetCharRect( &aRect, nChar ) )
-    {
-        if ( aRectFnSet.IsVert() )
-            pFrame->SwitchHorizontalToVertical( aRect );
+    aLine.GetCharRect( &aRect, nChar );
+    if ( aRectFnSet.IsVert() )
+        pFrame->SwitchHorizontalToVertical( aRect );
 
-        nStt = aRectFnSet.GetLeft(aRect);
-    }
-    else
-        nStt = aLine.GetLineStart();
+    nStt = aRectFnSet.GetLeft(aRect);
 
     if( !bCenter )
         return nStt - aRectFnSet.GetLeft(pFrame->getFrameArea());
 
-    if (aLine.GetCharRect( &aRect, nChar + TextFrameIndex(1) ))
-    {
-        if ( aRectFnSet.IsVert() )
-            pFrame->SwitchHorizontalToVertical( aRect );
+    aLine.GetCharRect( &aRect, nChar + TextFrameIndex(1) );
+    if ( aRectFnSet.IsVert() )
+        pFrame->SwitchHorizontalToVertical( aRect );
 
-        nNext = aRectFnSet.GetLeft(aRect);
-    }
-    else
-        nNext = aLine.GetLineStart();
+    nNext = aRectFnSet.GetLeft(aRect);
 
     return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getFrameArea());
 }
@@ -302,9 +292,8 @@ sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
         return 0;
 
     SwRect aRect;
-    return aLine.GetCharRect( &aRect, rFndPos )
-            ? static_cast<sal_Int32>(aRect.Left() - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left())
-            : 0;
+    aLine.GetCharRect( &aRect, rFndPos );
+    return static_cast<sal_Int32>(aRect.Left() - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

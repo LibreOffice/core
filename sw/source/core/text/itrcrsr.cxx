@@ -391,7 +391,7 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 }
 
 // 1170: Ancient bug: Shift-End forgets the last character ...
-bool SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
+void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
                                   SwCursorMoveState* pCMS, const long nMax )
 {
     // 1170: Ambiguity of document positions
@@ -404,13 +404,16 @@ bool SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     if( nOfst != GetStart() || !m_pCurr->GetLen() )
     {
         // 8810: Master line RightMargin, after that LeftMargin
-        const bool bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
+        GetCharRect( pOrig, nOfst, pCMS, nMax );
         bRightMargin = nOfst >= GetEnd() && nOfst < TextFrameIndex(GetInfo().GetText().getLength());
-        return bRet;
+        return;
     }
 
     if( !GetPrev() || !GetPrev()->GetLen() || !PrevLine() )
-        return GetCharRect( pOrig, nOfst, pCMS, nMax );
+    {
+        GetCharRect( pOrig, nOfst, pCMS, nMax );
+        return;
+    }
 
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
@@ -455,8 +458,6 @@ bool SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
         OSL_ENSURE( nPorHeight, "GetCharRect: Missing Portion-Height" );
         pCMS->m_aRealHeight.setY( nPorHeight );
     }
-
-    return true;
 }
 
 // internal function, called by SwTextCursor::GetCharRect() to calculate
@@ -1168,7 +1169,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     }
 }
 
-bool SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
+void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
                                SwCursorMoveState* pCMS, const long nMax )
 {
     CharCursorToLine(nOfst);
@@ -1251,8 +1252,6 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
         if( nOut > 0 )
             pOrig->Pos().AdjustX( -(nOut + 10) );
     }
-
-    return true;
 }
 
 // Return: Offset in String
