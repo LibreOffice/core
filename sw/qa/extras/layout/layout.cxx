@@ -27,6 +27,7 @@ public:
     void testTdf117245();
     void testTdf109077();
     void testTdf109137();
+    void testTdf118058();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -39,6 +40,7 @@ public:
     CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST(testTdf109137);
+    CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -226,6 +228,13 @@ void SwLayoutWriter::testTdf109137()
     // This was 0, the blue rectangle moved from the 1st to the 2nd page.
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
                 /*nNumberOfNodes=*/1);
+}
+
+void SwLayoutWriter::testTdf118058()
+{
+    SwDoc* pDoc = createDoc("tdf118058.fodt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
