@@ -144,7 +144,7 @@ namespace pcr
 
         OSL_ENSURE(m_xControlModel.is(), "OControlFontDialog::createDialog: no introspectee set!");
         if (m_xControlModel.is())
-            ControlCharacterDialog::translatePropertiesToItems(m_xControlModel, m_pFontItems);
+            ControlCharacterDialog::translatePropertiesToItems(m_xControlModel, m_pFontItems.get());
         // TODO: we need a mechanism to prevent that somebody creates us, sets an introspectee, executes us,
         // sets a new introspectee and re-executes us. In this case, the dialog returned here (upon the first
         // execute) will be re-used upon the second execute, and thus it won't be initialized correctly.
