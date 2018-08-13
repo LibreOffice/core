@@ -752,8 +752,12 @@ namespace
         }
         ~ParserCleanup()
         {
-            //xmlFreeParserCtxt accepts a null arg
-            xmlFreeParserCtxt(m_rEntity.mpParser);
+            if (m_rEntity.mpParser)
+            {
+                if (m_rEntity.mpParser->myDoc)
+                    xmlFreeDoc(m_rEntity.mpParser->myDoc);
+                xmlFreeParserCtxt(m_rEntity.mpParser);
+            }
             m_rParser.popEntity();
         }
     };
