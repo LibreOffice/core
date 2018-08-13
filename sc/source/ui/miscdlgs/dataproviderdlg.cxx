@@ -200,7 +200,8 @@ MenuData aColumnData[] = {
     { 4, "Sort Columns", &ScDataProviderDlg::sortTransformation },
     { 5, "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
     { 6, "Number Transformations", &ScDataProviderDlg::numberTransformation },
-    { 7, "Replace Null Transformations", &ScDataProviderDlg::replaceNullTransformation }
+    { 7, "Replace Null Transformations", &ScDataProviderDlg::replaceNullTransformation },
+    { 8, "Date & Time Transformations", &ScDataProviderDlg::dateTimeTransformation }
 };
 
 class ScDataTransformationBaseControl : public VclContainer,
@@ -834,6 +835,113 @@ std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransfor
     return std::make_shared<sc::ReplaceNullTransformation>(aColumns,aReplaceWithString);
 }
 
+class ScDateTimeTransformation : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maColumnNums;
+    VclPtr<ListBox> maType;
+    VclPtr<PushButton> maDelete;
+    sal_uInt32 maIndex;
+    std::function<void(sal_uInt32&)> maDeleteTransformation;
+
+public:
+
+    ScDateTimeTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ~ScDateTimeTransformation() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+    DECL_LINK(DeleteHdl, Button*, void);
+};
+
+ScDateTimeTransformation::ScDateTimeTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
+    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/datetimetransformationentry.ui"),
+    maIndex(aIndex),
+    maDeleteTransformation(aDeleteTransformation)
+{
+    get(maColumnNums, "ed_columns");
+    get(maType, "ed_lst");
+    get(maDelete, "ed_delete");
+    maDelete->SetClickHdl(LINK(this,ScDateTimeTransformation, DeleteHdl));
+}
+
+ScDateTimeTransformation::~ScDateTimeTransformation()
+{
+    disposeOnce();
+}
+
+void ScDateTimeTransformation::dispose()
+{
+    maColumnNums.clear();
+    maType.clear();
+    maDelete.clear();
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformation()
+{
+    OUString aColumnString = maColumnNums->GetText();
+    sal_Int32 nPos = maType->GetSelectedEntryPos();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aColumns.insert(nCol - 1);
+}
+    switch (nPos)
+    {
+        case 0:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING);
+        case 1:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::YEAR);
+        case 2:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR);
+        case 3:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR);
+        case 4:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MONTH);
+        case 5:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
+        case 6:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH);
+        case 7:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH);
+        case 8:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY);
+        case 9:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK);
+        case 10:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR);
+        case 11:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::QUARTER);
+        case 12:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER);
+        case 13:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER);
+        case 14:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::HOUR);
+        case 15:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MINUTE);
+        case 16:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::SECOND);
+        case 17:
+            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::TIME);
+        default:
+            assert(false);
+    }
+
+    return nullptr;
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc,
@@ -1019,6 +1127,13 @@ void ScDataProviderDlg::replaceNullTransformation()
     mpList->addEntry(pReplaceNullTransformationEntry);
 }
 
+void ScDataProviderDlg::dateTimeTransformation()
+{
+    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    VclPtr<ScDateTimeTransformation> pDateTimeTransformationEntry = VclPtr<ScDateTimeTransformation>::Create(mpList, mpIndex++, adeleteTransformation);
+    mpList->addEntry(pDateTimeTransformationEntry);
+}
+
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
 {
     sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
@@ -1089,4 +1204,8 @@ IMPL_LINK_NOARG(ScReplaceNullTransformation, DeleteHdl, Button*, void)
    maDeleteTransformation(maIndex);
 }
 
+IMPL_LINK_NOARG(ScDateTimeTransformation, DeleteHdl, Button*, void)
+{
+   maDeleteTransformation(maIndex);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
