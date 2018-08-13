@@ -689,6 +689,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
                 // We have some room left, so the Footnote can grow
                 if ( pFootnoteFrame->GetFollow() && nDiff > 0 )
                 {
+                    SwFrameDeleteGuard aDeleteGuard(pCont);
                     SwTwips nHeight = aRectFnSet.GetHeight(pCont->getFrameArea());
                     pBoss->RearrangeFootnotes( nDeadLine, false, pFootnote );
                     ValidateBodyFrame();
