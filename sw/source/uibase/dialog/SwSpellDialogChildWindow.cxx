@@ -198,15 +198,11 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
             // if no text selection exists the cursor has to be set into the text
             if(!bDrawText && !bNormalText)
             {
-                if(!MakeTextSelection_Impl(*pWrtShell, eSelMode))
-                    return aRet;
-                else
-                {
-                    // the selection type has to be checked again - both text types are possible
-                    if(pWrtShell->GetSelectionType() & SelectionType::DrawObjectEditMode)
-                        bDrawText = true;
-                    bNormalText = !bDrawText;
-                }
+                MakeTextSelection_Impl(*pWrtShell, eSelMode);
+                // the selection type has to be checked again - both text types are possible
+                if(pWrtShell->GetSelectionType() & SelectionType::DrawObjectEditMode)
+                    bDrawText = true;
+                bNormalText = !bDrawText;
             }
             if(bNormalText)
             {
@@ -652,7 +648,7 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
 
 // set the cursor into the body text - necessary if any object is selected
 // on start of the spelling dialog
-bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellMode eSelMode)
+void SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellMode eSelMode)
 {
     SwView& rView = rShell.GetView();
     switch(eSelMode)
@@ -714,7 +710,6 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
         break;
         default:; // prevent warning
     }
-    return true;
 }
 
 // select the next draw text object that has a spelling error
