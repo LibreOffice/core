@@ -451,7 +451,7 @@ public:
     /// Insert content table. Renew if required.
     void                InsertTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = nullptr);
-    bool                UpdateTableOf(const SwTOXBase& rTOX,
+    void                UpdateTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = nullptr);
     const SwTOXBase*    GetCurTOX() const;
     const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
