@@ -1334,6 +1334,83 @@ void Window::Update()
 
 void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
 {
+    // Special drawing when called through LOKit
+    // TODO: Move to it's own method
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev);
+
+        Size aSize(GetOutputSizePixel());
+        pDevice->SetOutputSizePixel(aSize);
+
+        vcl::Font aCopyFont = GetFont();
+        pDevice->SetFont(aCopyFont);
+
+        pDevice->SetTextColor(GetTextColor());
+        if (IsLineColor())
+            pDevice->SetLineColor(GetLineColor());
+        else
+            pDevice->SetLineColor();
+
+        if (IsFillColor())
+            pDevice->SetFillColor(GetFillColor());
+        else
+            pDevice->SetFillColor();
+
+        if (IsTextLineColor())
+            pDevice->SetTextLineColor(GetTextLineColor());
+        else
+            pDevice->SetTextLineColor();
+
+        if (IsOverlineColor())
+            pDevice->SetOverlineColor(GetOverlineColor());
+        else
+            pDevice->SetOverlineColor();
+
+        if (IsTextFillColor())
+            pDevice->SetTextFillColor(GetTextFillColor());
+        else
+            pDevice->SetTextFillColor();
+
+        pDevice->SetTextAlign(GetTextAlign());
+        pDevice->SetRasterOp(GetRasterOp());
+
+        tools::Rectangle aPaintRect;
+        aPaintRect = tools::Rectangle(Point(), GetOutputSizePixel());
+
+        vcl::Region aClipRegion(GetClipRegion());
+        pDevice->SetClipRegion();
+        aClipRegion.Intersect(aPaintRect);
+        pDevice->SetClipRegion(aClipRegion);
+
+        if (!IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & ParentClipMode::NoClip))
+            Erase(*pDevice);
+
+        Paint(*pDevice, tools::Rectangle(Point(), GetOutputSizePixel()));
+
+        i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), aSize, *pDevice);
+
+        // get rid of virtual device now so they don't pile up during recursive calls
+        pDevice.disposeAndClear();
+
+
+        for( vcl::Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext )
+        {
+            if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
+            {
+                long nDeltaX = pChild->mnOutOffX - mnOutOffX;
+                long nDeltaY = pChild->mnOutOffY - mnOutOffY;
+
+                Point aPos( i_rPos );
+                aPos += Point(nDeltaX, nDeltaY);
+
+                pChild->ImplPaintToDevice( i_pTargetOutDev, aPos );
+            }
+        }
+        return;
+    }
+
+
     bool bRVisible = mpWindowImpl->mbReallyVisible;
     mpWindowImpl->mbReallyVisible = mpWindowImpl->mbVisible;
     bool bDevOutput = mbDevOutput;
