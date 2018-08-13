@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_6d98e069",
+        "filename": "xmlsecurity/source/xmlsec/nss/nssinitializer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-08-13T17:11:34Z",
+      "side": 1,
+      "message": "unfortunately this condition was inverted, fixed in #2",
+      "revId": "b4a49f2f8bce4b5e44f37b47c86ef26356524e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
