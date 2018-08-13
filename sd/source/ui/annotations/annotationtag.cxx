@@ -210,22 +210,22 @@ void AnnotationHdl::CreateB2dIAObject()
                         rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if(rPaintWindow.OutputToWindow() && xManager.is() )
                         {
-                            sdr::overlay::OverlayObject* pOverlayObject = nullptr;
+                            std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
                             // animate focused handles
                             if(bFocused)
                             {
                                 const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
-                                pOverlayObject = new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
+                                pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 ));
                             }
                             else
                             {
-                                pOverlayObject = new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
+                                pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
                             }
 
                             xManager->add(*pOverlayObject);
-                            maOverlayGroup.append(pOverlayObject);
+                            maOverlayGroup.append(std::move(pOverlayObject));
                         }
                     }
                 }

@@ -174,9 +174,9 @@ void TableEdgeHdl::CreateB2dIAObject()
                             if(aVisible.count())
                             {
                                 // create overlay object for visible parts
-                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
+                                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aVisible, true));
                                 xManager->add(*pOverlayObject);
-                                maOverlayGroup.append(pOverlayObject);
+                                maOverlayGroup.append(std::move(pOverlayObject));
                             }
 
                             if(aInvisible.count())
@@ -184,9 +184,9 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 // also create overlay object for invisible parts to allow
                                 // a standard HitTest using the primitives from that overlay object
                                 // (see OverlayTableEdge implementation)
-                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
+                                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aInvisible, false));
                                 xManager->add(*pOverlayObject);
-                                maOverlayGroup.append(pOverlayObject);
+                                maOverlayGroup.append(std::move(pOverlayObject));
                             }
                         }
                     }
@@ -288,12 +288,12 @@ void TableBorderHdl::CreateB2dIAObject()
                     float fScaleFactor = rOutDev.GetDPIScaleFactor();
                     double fWidth = fScaleFactor * 6.0;
 
-                    sdr::overlay::OverlayObject* pOverlayObject =
+                    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
                         new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
                                                            aHilightColor, fTransparence,
-                                                           fWidth, 0.0, 0.0, bAnimate);
+                                                           fWidth, 0.0, 0.0, bAnimate));
                     xManager->add(*pOverlayObject);
-                    maOverlayGroup.append(pOverlayObject);
+                    maOverlayGroup.append(std::move(pOverlayObject));
                 }
             }
         }

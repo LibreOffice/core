@@ -248,10 +248,10 @@ void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
     if(aResult.count())
     {
-        sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-            aResult);
+        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aResult));
         rOverlayManager.add(*pNew);
-        addToOverlayObjectList(pNew);
+        addToOverlayObjectList(std::move(pNew));
     }
 }
 

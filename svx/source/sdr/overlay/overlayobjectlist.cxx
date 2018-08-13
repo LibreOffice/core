@@ -41,27 +41,25 @@ namespace sdr
 
         void OverlayObjectList::clear()
         {
-            for(OverlayObject* pCandidate : maVector)
+            for(auto & pCandidate : maVector)
             {
                 if(pCandidate->getOverlayManager())
                     pCandidate->getOverlayManager()->remove(*pCandidate);
-
-                delete pCandidate;
             }
             maVector.clear();
         }
 
-        void OverlayObjectList::append(OverlayObject* pOverlayObject)
+        void OverlayObjectList::append(std::unique_ptr<OverlayObject> pOverlayObject)
         {
             assert(pOverlayObject && "tried to add invalid OverlayObject to OverlayObjectList");
-            maVector.push_back(pOverlayObject);
+            maVector.push_back(std::move(pOverlayObject));
         }
 
         bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
             if(!maVector.empty())
             {
-                OverlayObject* pFirst = maVector.front();
+                OverlayObject* pFirst = maVector.front().get();
                 OverlayManager* pManager = pFirst->getOverlayManager();
 
                 if(pManager)
@@ -89,7 +87,7 @@ namespace sdr
                         fLogicTolerance,
                         false);
 
-                    for(OverlayObject* pCandidate : maVector)
+                    for(auto & pCandidate : maVector)
                     {
                         if(pCandidate->isHittable())
                         {
@@ -117,7 +115,7 @@ namespace sdr
             sal_uInt32 nDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL;
             if(!maVector.empty())
             {
-                OverlayObject* pCandidate = maVector.front();
+                OverlayObject* pCandidate = maVector.front().get();
                 OverlayManager* pManager = pCandidate->getOverlayManager();
 
                 if(pManager)
@@ -137,7 +135,7 @@ namespace sdr
         {
             basegfx::B2DRange aRetval;
 
-            for(OverlayObject* pCandidate : maVector)
+            for(auto & pCandidate : maVector)
             {
                 aRetval.expand(pCandidate->getBaseRange());
             }
