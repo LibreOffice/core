@@ -96,7 +96,7 @@ class ScXMLChartExportWrapper
 {
 public:
     ScXMLChartExportWrapper( css::uno::Reference< css::frame::XModel > const & xModel, SfxMedium& rMed );
-    bool Export();
+    void Export();
 
 private:
     css::uno::Reference< css::frame::XModel > mxModel;

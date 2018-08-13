@@ -579,8 +579,6 @@ bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const css::uno::Reference< css
 
 bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
 {
-    bool bRet = false;
-
     try
     {
 
@@ -591,13 +589,14 @@ bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
         uno::Reference< frame::XModel > xChartDoc ( xCurrentComponent, uno::UNO_QUERY_THROW );
 
         ScXMLChartExportWrapper aExport( xChartDoc, rMedium );
-        bRet = aExport.Export();
+        aExport.Export();
+        return true;
     }
     catch(...)
     {
         SAL_WARN("sc", "exception thrown while saving chart. Bug!!!");
+        return false;
     }
-    return bRet;
 }
 
 bool ScDocShell::Load( SfxMedium& rMedium )
