@@ -1181,14 +1181,14 @@ void SwTableConfig::Load()
 SwMiscConfig::SwMiscConfig() :
     ConfigItem("Office.Writer",
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    bDefaultFontsInCurrDocOnly(false),
-    bShowIndexPreview(false),
-    bGrfToGalleryAsLnk(true),
-    bNumAlignSize(true),
-    bSinglePrintJob(false),
-    bIsNameFromColumn(true),
-    bAskForMailMergeInPrint(true),
-    nMailingFormats(MailTextFormats::NONE)
+    m_bDefaultFontsInCurrDocOnly(false),
+    m_bShowIndexPreview(false),
+    m_bGrfToGalleryAsLnk(true),
+    m_bNumAlignSize(true),
+    m_bSinglePrintJob(false),
+    m_bIsNameFromColumn(true),
+    m_bAskForMailMergeInPrint(true),
+    m_nMailingFormats(MailTextFormats::NONE)
 {
     Load();
 }
@@ -1240,19 +1240,19 @@ void SwMiscConfig::ImplCommit()
         {
             case 0 :
                 pValues[nProp] <<=
-                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, false);
+                    SwModuleOptions::ConvertWordDelimiter(m_sWordDelimiter, false);
             break;
-            case 1 : pValues[nProp] <<= bDefaultFontsInCurrDocOnly; break;
-            case 2 : pValues[nProp] <<= bShowIndexPreview; break;
-            case 3 : pValues[nProp] <<= bGrfToGalleryAsLnk; break;
-            case 4 : pValues[nProp] <<= bNumAlignSize; break;
-            case 5 : pValues[nProp] <<= bSinglePrintJob; break;
-            case 6 : pValues[nProp] <<= static_cast<sal_Int32>(nMailingFormats); break;
-            case 7 : pValues[nProp] <<= sNameFromColumn;  break;
-            case 8 : pValues[nProp] <<= sMailingPath;     break;
-            case 9 : pValues[nProp] <<= sMailName;        break;
-            case 10: pValues[nProp] <<= bIsNameFromColumn; break;
-            case 11: pValues[nProp] <<= bAskForMailMergeInPrint; break;
+            case 1 : pValues[nProp] <<= m_bDefaultFontsInCurrDocOnly; break;
+            case 2 : pValues[nProp] <<= m_bShowIndexPreview; break;
+            case 3 : pValues[nProp] <<= m_bGrfToGalleryAsLnk; break;
+            case 4 : pValues[nProp] <<= m_bNumAlignSize; break;
+            case 5 : pValues[nProp] <<= m_bSinglePrintJob; break;
+            case 6 : pValues[nProp] <<= static_cast<sal_Int32>(m_nMailingFormats); break;
+            case 7 : pValues[nProp] <<= m_sNameFromColumn;  break;
+            case 8 : pValues[nProp] <<= m_sMailingPath;     break;
+            case 9 : pValues[nProp] <<= m_sMailName;        break;
+            case 10: pValues[nProp] <<= m_bIsNameFromColumn; break;
+            case 11: pValues[nProp] <<= m_bAskForMailMergeInPrint; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -1272,19 +1272,19 @@ void SwMiscConfig::Load()
             switch (nProp)
             {
                 case 0 : pValues[nProp] >>= sTmp;
-                    sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
+                    m_sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
                 break;
-                case 1 : bDefaultFontsInCurrDocOnly = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 2 : bShowIndexPreview = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 3 : bGrfToGalleryAsLnk = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 4 : bNumAlignSize = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 5 : bSinglePrintJob = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 6 : nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int32>(pValues[nProp])); break;
-                case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
-                case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
-                case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
-                case 10: bIsNameFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
+                case 1 : m_bDefaultFontsInCurrDocOnly = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 2 : m_bShowIndexPreview = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 3 : m_bGrfToGalleryAsLnk = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 4 : m_bNumAlignSize = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 5 : m_bSinglePrintJob = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 6 : m_nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int32>(pValues[nProp])); break;
+                case 7 : pValues[nProp] >>= sTmp; m_sNameFromColumn = sTmp; break;
+                case 8 : pValues[nProp] >>= sTmp; m_sMailingPath = sTmp;  break;
+                case 9 : pValues[nProp] >>= sTmp; m_sMailName = sTmp;     break;
+                case 10: m_bIsNameFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 11: pValues[nProp] >>= m_bAskForMailMergeInPrint; break;
             }
         }
     }
