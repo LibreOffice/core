@@ -167,12 +167,12 @@ class MenuBarManager final :
             vcl::KeyCode                                                      aKeyCode;
         };
 
-        void             RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts );
+        void             RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
         static void      UpdateSpecialWindowMenu( Menu* pMenu, const css::uno::Reference< css::uno::XComponentContext >& xContext );
         static void      FillMenuImages( css::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
         static void      impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const css::uno::Sequence< OUString >& rCommands,
-                                                                  std::vector< MenuItemHandler* >& aMenuShortCuts );
+                                                                  std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
@@ -195,7 +195,7 @@ class MenuBarManager final :
         VclPtr<Menu>                                                 m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
-        ::std::vector< MenuItemHandler* >                            m_aMenuItemHandlerVector;
+        ::std::vector< std::unique_ptr<MenuItemHandler> >            m_aMenuItemHandlerVector;
         css::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;
         css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
