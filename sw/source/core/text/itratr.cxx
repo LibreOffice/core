@@ -311,13 +311,16 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         assert(m_pRedline);
     }
 
-    if (!nNewPos || newPos.second < m_nPosition)
+    // sw_redlinehide: Seek(0) must move before the first character, which
+    // has a special case where the first node starts with delete redline.
+    if ((!nNewPos && (!m_pMergedPara || newPos.first != m_pTextNode))
+        || newPos.second < m_nPosition)
     {
         if (m_pMergedPara)
         {
-            if (m_pTextNode != m_pMergedPara->pFirstNode)
+            if (m_pTextNode != newPos.first)
             {
-                m_pTextNode = m_pMergedPara->pFirstNode;
+                m_pTextNode = newPos.first;
                 // sw_redlinehide: hope it's okay to use the current text node
                 // here; the AttrHandler shouldn't care about non-char items
                 InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
@@ -381,7 +384,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
     m_pFont->SetActual( m_pScriptInfo->WhichFont(nNewPos) );
 
     if( m_pRedline )
-        m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, newPos.first->GetIndex(), newPos.second, m_nPosition);
+        m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, m_pTextNode->GetIndex(), newPos.second, m_nPosition);
     m_nPosition = newPos.second;
 
     if( m_nPropFont )
