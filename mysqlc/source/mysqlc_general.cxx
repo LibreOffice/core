@@ -19,6 +19,7 @@
 #include "mysqlc_general.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
 
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 
 using com::sun::star::sdbc::SQLException;
