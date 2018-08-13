@@ -227,6 +227,7 @@ void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
 TextEncodingBox::TextEncodingBox(weld::ComboBoxText* pControl)
     : m_xControl(pControl)
 {
+    m_xControl->make_sorted();
 }
 
 TextEncodingBox::~TextEncodingBox()
@@ -236,6 +237,7 @@ TextEncodingBox::~TextEncodingBox()
 void TextEncodingBox::FillFromTextEncodingTable(
         bool bExcludeImportSubsets )
 {
+    m_xControl->freeze();
     const sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
     for (sal_uInt32 j = 0; j < nCount; ++j)
     {
@@ -256,8 +258,8 @@ void TextEncodingBox::FillFromTextEncodingTable(
         if ( bInsert )
             InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
     }
+    m_xControl->thaw();
 }
-
 
 void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry )
