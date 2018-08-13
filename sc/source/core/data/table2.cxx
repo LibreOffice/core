@@ -676,7 +676,8 @@ bool ScTable::InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL
     if (!ValidCol(nCol))
         return false;
 
-    return aCol[nCol].InitBlockPosition(rBlockPos);
+    aCol[nCol].InitBlockPosition(rBlockPos);
+    return true;
 }
 
 void ScTable::CopyFromClip(
