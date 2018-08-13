@@ -70,7 +70,7 @@ public:
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
 
-    typedef std::unordered_map<OUString, PhysicalFontFamily*> PhysicalFontFamilies;
+    typedef std::unordered_map<OUString, std::unique_ptr<PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
