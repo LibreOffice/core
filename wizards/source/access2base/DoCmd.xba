@@ -1139,6 +1139,8 @@ Dim sFilter As String, oForm As Object, oFormsCollection As Object
 	Else
 		sFilter = &quot;(&quot; &amp; pvFilterName &amp; &quot;) And (&quot; &amp; pvWhereCondition &amp; &quot;)&quot;
 	End If
+	Set oFormsCollection = oOpenForm.DrawPage.Forms
+	If oFormsCollection.getCount() &gt; 0 Then Set oForm = oFormsCollection.getByIndex(0) Else Set oForm = Nothing
 	If Not IsNull(oForm) Then
 		If sFilter &lt;&gt; &quot;&quot; Then
 			oForm.Filter = oDatabase._ReplaceSquareBrackets(sFilter)
