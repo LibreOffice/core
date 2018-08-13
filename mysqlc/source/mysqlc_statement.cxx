@@ -136,7 +136,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
 
     MYSQL* pMySql = m_xConnection->getMysqlConnection();
 
-    // NOTE: differs from mysql c API, wehere mysql_real_escape_string_quote()
+    // NOTE: differs from MySQL C API, where mysql_real_escape_string_quote()
     // should be used.
     // toExec = mysqlc_sdbc_driver::escapeSql(toExec);
     int failure = mysql_real_query(pMySql, toExec.getStr(), toExec.getLength());
