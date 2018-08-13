@@ -424,7 +424,7 @@ private:
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 
-    typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;
+    typedef std::map< sal_Int32 , std::unique_ptr<PlottingPositionHelper> > tSecondaryPosHelperMap;
     mutable tSecondaryPosHelperMap   m_aSecondaryPosHelperMap;
     css::awt::Size      m_aPageReferenceSize;
 };

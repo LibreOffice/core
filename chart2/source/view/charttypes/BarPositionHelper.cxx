@@ -22,6 +22,7 @@
 #include <ViewDefines.hxx>
 #include <CommonConverters.hxx>
 #include <DateHelper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 
 namespace chart
@@ -46,10 +47,9 @@ BarPositionHelper::~BarPositionHelper()
 {
 }
 
-PlottingPositionHelper* BarPositionHelper::clone() const
+std::unique_ptr<PlottingPositionHelper> BarPositionHelper::clone() const
 {
-    BarPositionHelper* pRet = new BarPositionHelper(*this);
-    return pRet;
+    return o3tl::make_unique<BarPositionHelper>(*this);
 }
 
 void BarPositionHelper::updateSeriesCount( double fSeriesCount )
