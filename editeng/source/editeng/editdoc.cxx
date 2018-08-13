@@ -38,7 +38,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/autokernitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>

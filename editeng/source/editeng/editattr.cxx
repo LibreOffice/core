@@ -37,7 +37,6 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/langitem.hxx>

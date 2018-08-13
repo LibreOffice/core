@@ -336,7 +336,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>

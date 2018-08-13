@@ -28,7 +28,6 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/acorrcfg.hxx>
 

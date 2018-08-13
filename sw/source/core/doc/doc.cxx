@@ -55,7 +55,6 @@
 #include <unotools/syslocale.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdmodel.hxx>

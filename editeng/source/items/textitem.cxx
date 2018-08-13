@@ -76,7 +76,6 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -1749,39 +1748,6 @@ bool SvxColorItem::GetPresentation
 void SvxColorItem::SetValue( const Color& rNewCol )
 {
     mColor = rNewCol;
-}
-
-// class SvxCharSetColorItem ---------------------------------------------
-
-SvxCharSetColorItem::SvxCharSetColorItem( const sal_uInt16 nId ) :
-    SvxColorItem( nId )
-{
-}
-
-
-SvxCharSetColorItem::SvxCharSetColorItem( const Color& rCol,
-                                          const sal_uInt16 nId ) :
-    SvxColorItem( rCol, nId )
-{
-}
-
-
-SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
-{
-    return new SvxCharSetColorItem( *this );
-}
-
-
-bool SvxCharSetColorItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& /*rIntl*/
-)   const
-{
-    rText.clear();
-    return false;
 }
 
 // class SvxKerningItem --------------------------------------------------

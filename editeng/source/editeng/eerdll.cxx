@@ -49,7 +49,6 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -149,7 +148,7 @@ DefItems::DefItems()
     // Features
     rDefItems[51] = new SfxVoidItem( EE_FEATURE_TAB );
     rDefItems[52] = new SfxVoidItem( EE_FEATURE_LINEBR );
-    rDefItems[53] = new SvxCharSetColorItem( COL_RED, EE_FEATURE_NOTCONV );
+    rDefItems[53] = new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV );
     rDefItems[54] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
     assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");
