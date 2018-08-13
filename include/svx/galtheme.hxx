@@ -53,8 +53,6 @@ struct GalleryObject
 };
 
 
-typedef ::std::vector< GalleryObject* > GalleryObjectList;
-
 class GalleryThemeEntry;
 class SgaObject;
 class FmFormModel;
@@ -78,7 +76,7 @@ class SVX_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 
 private:
 
-    GalleryObjectList           aObjectList;
+    ::std::vector< std::unique_ptr<GalleryObject> > aObjectList;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
     tools::SvRef<SotStorage>    aSvDrawStorageRef;
@@ -95,13 +93,13 @@ private:
     SAL_DLLPRIVATE bool         ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
-                                { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : nullptr; }
+                                { return aObjectList[ nPos ].get(); }
     const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
 
     SAL_DLLPRIVATE sal_uInt32   ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
                                 {
                                     for (sal_uInt32 i = 0, n = aObjectList.size(); i < n; ++i)
-                                        if ( pObj == aObjectList[ i ] )
+                                        if ( pObj == aObjectList[ i ].get() )
                                             return i;
                                     return SAL_MAX_UINT32;
                                 }
