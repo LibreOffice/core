@@ -80,12 +80,12 @@ class SC_DLLPUBLIC ScDetectiveFunc
     bool        HasError( const ScRange& rRange, ScAddress& rErrPos );
 
                 /// called from DrawEntry/DrawAlienEntry and InsertObject
-    bool        InsertArrow( SCCOL nCol, SCROW nRow,
+    void        InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
                                 bool bFromOtherTab, bool bRed,
                                 ScDetectiveData& rData );
-    bool        InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
+    void        InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, bool bRed,
                                 ScDetectiveData& rData );
 
