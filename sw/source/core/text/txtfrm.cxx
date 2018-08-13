@@ -910,10 +910,16 @@ MapViewToModel(MergedPara const& rMerged, TextFrameIndex const i_nIndex)
 
 TextFrameIndex MapModelToView(MergedPara const& rMerged, SwTextNode const*const pNode, sal_Int32 const nIndex)
 {
+    assert(rMerged.pFirstNode->GetIndex() <= pNode->GetIndex()
+        && pNode->GetIndex() <= rMerged.pLastNode->GetIndex());
     sal_Int32 nRet(0);
     bool bFoundNode(false);
     for (auto const& e : rMerged.extents)
     {
+        if (pNode->GetIndex() < e.pNode->GetIndex())
+        {
+            return TextFrameIndex(nRet);
+        }
         if (e.pNode == pNode)
         {
             if (e.nStart <= nIndex && nIndex <= e.nEnd)
@@ -944,7 +950,6 @@ TextFrameIndex MapModelToView(MergedPara const& rMerged, SwTextNode const*const 
         assert(nIndex <= pNode->Len());
         return TextFrameIndex(0);
     }
-    assert(!"text node not found");
     return TextFrameIndex(COMPLETE_STRING);
 }
 

@@ -926,14 +926,18 @@ struct MergedPara
     SwTextNode const* pParaPropsNode;
     /// except break attributes, those are taken from the first node
     SwTextNode *const pFirstNode;
+    /// mainly for sanity checks
+    SwTextNode const* pLastNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
             OUString const& rText,
-            SwTextNode const*const pProps, SwTextNode *const pFirst)
+            SwTextNode const*const pProps, SwTextNode *const pFirst,
+            SwTextNode const*const pLast)
         : listener(rFrame), extents(std::move(rExtents)), mergedText(rText)
-        , pParaPropsNode(pProps), pFirstNode(pFirst)
+        , pParaPropsNode(pProps), pFirstNode(pFirst), pLastNode(pLast)
     {
         assert(pParaPropsNode);
         assert(pFirstNode);
+        assert(pLastNode);
     }
 };
 
