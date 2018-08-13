@@ -207,6 +207,8 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if (bufferName == NULL
         || hasPathnamePrefix(bufferName, SRCDIR "/external/")
+        || hasPathnamePrefix(bufferName, SRCDIR "/usr/")
+            // to exclude OS-supplied code
         || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
             // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
             // sdext/source/pdfimport/wrapper/keyword_list by gperf, which

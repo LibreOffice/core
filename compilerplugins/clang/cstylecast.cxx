@@ -165,10 +165,10 @@ bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
 }
 
 class CStyleCast:
-    public RecursiveASTVisitor<CStyleCast>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<CStyleCast>
 {
 public:
-    explicit CStyleCast(loplugin::InstantiationData const & data): RewritePlugin(data)
+    explicit CStyleCast(loplugin::InstantiationData const & data): FilteringRewritePlugin(data)
     {}
 
     virtual void run() override {

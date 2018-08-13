@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class LclStaticFix
-    : public RecursiveASTVisitor< LclStaticFix >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< LclStaticFix >
     {
     public:
         explicit LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter );

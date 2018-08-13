@@ -33,8 +33,7 @@ namespace loplugin
 {
 
 class SvStreamOutputOperators
-    : public RecursiveASTVisitor< SvStreamOutputOperators >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< SvStreamOutputOperators >
 {
     public:
         explicit SvStreamOutputOperators( InstantiationData const & data );

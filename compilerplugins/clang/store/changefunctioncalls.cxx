@@ -33,8 +33,7 @@ namespace loplugin
 {
 
 class ChangeFunctionCalls
-    : public RecursiveASTVisitor< ChangeFunctionCalls >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< ChangeFunctionCalls >
     {
     public:
         explicit ChangeFunctionCalls( CompilerInstance& compiler, Rewriter& rewriter );

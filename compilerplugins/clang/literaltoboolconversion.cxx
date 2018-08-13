@@ -18,12 +18,11 @@
 namespace {
 
 class LiteralToBoolConversion:
-    public RecursiveASTVisitor<LiteralToBoolConversion>,
-    public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<LiteralToBoolConversion>
 {
 public:
     explicit LiteralToBoolConversion(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

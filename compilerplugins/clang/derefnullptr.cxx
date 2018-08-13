@@ -12,11 +12,11 @@
 namespace {
 
 class DerefNullPtr:
-    public RecursiveASTVisitor<DerefNullPtr>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DerefNullPtr>
 {
 public:
     explicit DerefNullPtr(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

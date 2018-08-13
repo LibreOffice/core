@@ -26,7 +26,7 @@
 namespace {
 
 class RemoveVirtuals:
-    public RecursiveASTVisitor<RemoveVirtuals>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<RemoveVirtuals>
 {
 public:
     explicit RemoveVirtuals(InstantiationData const & data);

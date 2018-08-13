@@ -75,11 +75,11 @@ static std::set<MyFuncInfo> calledFromOutsideSet;
 
 
 class UnusedMethods:
-    public RecursiveASTVisitor<UnusedMethods>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnusedMethods>
 {
 public:
     explicit UnusedMethods(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

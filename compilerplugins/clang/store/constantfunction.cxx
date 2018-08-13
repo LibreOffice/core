@@ -19,7 +19,7 @@
 namespace {
 
 class ConstantFunction:
-    public RecursiveASTVisitor<ConstantFunction>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ConstantFunction>
 {
     StringRef getFilename(const FunctionDecl* functionDecl);
 public:

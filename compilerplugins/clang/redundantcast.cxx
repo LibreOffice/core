@@ -78,11 +78,11 @@ AlgebraicType algebraicType(clang::Type const & type) {
 }
 
 class RedundantCast:
-    public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<RedundantCast>
 {
 public:
     explicit RedundantCast(loplugin::InstantiationData const & data):
-        RewritePlugin(data)
+        FilteringRewritePlugin(data)
     {}
 
     virtual void run() override {

@@ -136,11 +136,11 @@ public:
 };
 
 class UnusedFields:
-    public RecursiveASTVisitor<UnusedFields>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnusedFields>
 {
 public:
     explicit UnusedFields(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override;
 

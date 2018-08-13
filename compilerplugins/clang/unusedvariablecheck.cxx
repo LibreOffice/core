@@ -34,7 +34,7 @@ that cannot be edited there is a manual list below.
 */
 
 UnusedVariableCheck::UnusedVariableCheck( const InstantiationData& data )
-    : Plugin( data )
+    : FilteringPlugin( data )
     {
     }
 

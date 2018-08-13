@@ -24,9 +24,8 @@ namespace loplugin
 {
 
 class RtlConstAsciiMacro
-    : public RecursiveASTVisitor< RtlConstAsciiMacro >
+    : public loplugin::FilteringRewritePlugin< RtlConstAsciiMacro >
     , public PPCallbacks
-    , public RewritePlugin
     {
     public:
         explicit RtlConstAsciiMacro( const InstantiationData& data );

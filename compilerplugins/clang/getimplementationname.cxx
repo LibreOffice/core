@@ -74,12 +74,11 @@ std::string replace_all(std::string subject, const std::string& search, const st
 }
 
 class GetImplementationName:
-    public clang::RecursiveASTVisitor<GetImplementationName>,
-    public loplugin::Plugin
+    public loplugin::FilteringPlugin<GetImplementationName>
 {
 public:
     explicit GetImplementationName(loplugin::InstantiationData const & data)
-        : Plugin(data)
+        : FilteringPlugin(data)
         , m_Outdir(initOutdir())
         , m_OutdirCreated(false)
         , m_Srcdir(initSrcdir())

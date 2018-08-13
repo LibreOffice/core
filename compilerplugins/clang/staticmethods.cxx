@@ -18,12 +18,12 @@
 namespace {
 
 class StaticMethods:
-    public RecursiveASTVisitor<StaticMethods>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<StaticMethods>
 {
 private:
     bool bVisitedThis;
 public:
-    explicit StaticMethods(loplugin::InstantiationData const & data): Plugin(data), bVisitedThis(false) {}
+    explicit StaticMethods(loplugin::InstantiationData const & data): FilteringPlugin(data), bVisitedThis(false) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

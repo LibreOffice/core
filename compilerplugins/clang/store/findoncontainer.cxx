@@ -22,7 +22,7 @@
 namespace {
 
 class FindOnContainer:
-    public RecursiveASTVisitor<FindOnContainer>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<FindOnContainer>
 {
 public:
     explicit FindOnContainer(InstantiationData const & data): Plugin(data) {}

@@ -18,11 +18,11 @@
 namespace {
 
 class InlineVisible:
-    public RecursiveASTVisitor<InlineVisible>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<InlineVisible>
 {
 public:
     explicit InlineVisible(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

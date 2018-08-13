@@ -29,7 +29,7 @@ if appropriate.
 */
 
 SalLogAreas::SalLogAreas( const InstantiationData& data )
-    : Plugin(data), inFunction(nullptr)
+    : FilteringPlugin(data), inFunction(nullptr)
     {
     }
 
