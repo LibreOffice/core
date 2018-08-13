@@ -182,22 +182,22 @@ IMAPOBJ_SETEVENT:
         {
             tools::Rectangle aRect( aCoords[0], aCoords[1],
                              aCoords[2], aCoords[3] );
-            IMapRectangleObject aMapRObj( aRect, aHRef, aAlt, OUString(), aTarget, aName,
-                                          !bNoHRef );
+            std::unique_ptr<IMapRectangleObject> pMapRObj( new IMapRectangleObject(aRect, aHRef, aAlt, OUString(), aTarget, aName,
+                                          !bNoHRef ));
             if( !aMacroTbl.empty() )
-                aMapRObj.SetMacroTable( aMacroTbl );
-            pImageMap->InsertIMapObject( aMapRObj );
+                pMapRObj->SetMacroTable( aMacroTbl );
+            pImageMap->InsertIMapObject( std::move(pMapRObj) );
         }
         break;
     case IMAP_OBJ_CIRCLE:
         if( aCoords.size() >=3 )
         {
             Point aPoint( aCoords[0], aCoords[1] );
-            IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, OUString(),
-                                       aTarget, aName, !bNoHRef );
+            std::unique_ptr<IMapCircleObject> pMapCObj(new IMapCircleObject(aPoint, aCoords[2],aHRef, aAlt, OUString(),
+                                       aTarget, aName, !bNoHRef ));
             if( !aMacroTbl.empty() )
-                aMapCObj.SetMacroTable( aMacroTbl );
-            pImageMap->InsertIMapObject( aMapCObj );
+                pMapCObj->SetMacroTable( aMacroTbl );
+            pImageMap->InsertIMapObject( std::move(pMapCObj) );
         }
         break;
     case IMAP_OBJ_POLYGON:
@@ -207,11 +207,11 @@ IMAPOBJ_SETEVENT:
             tools::Polygon aPoly( nCount );
             for( sal_uInt16 i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
-            IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, OUString(), aTarget, aName,
-                                        !bNoHRef );
+            std::unique_ptr<IMapPolygonObject> pMapPObj(new IMapPolygonObject( aPoly, aHRef, aAlt, OUString(), aTarget, aName,
+                                        !bNoHRef ));
             if( !aMacroTbl.empty() )
-                aMapPObj.SetMacroTable( aMacroTbl );
-            pImageMap->InsertIMapObject( aMapPObj );
+                pMapPObj->SetMacroTable( aMacroTbl );
+            pImageMap->InsertIMapObject( std::move(pMapPObj) );
         }
         break;
     default:
