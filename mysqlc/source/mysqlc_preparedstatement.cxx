@@ -139,7 +139,7 @@ void SAL_CALL OPreparedStatement::close()
 
     if(mysql_stmt_close(m_pStmt))
     {
-        SAL_WARN("connectivity", "failed to close mysql prepared statement");
+        SAL_WARN("mysqlc", "failed to close mysql prepared statement");
     }
     m_pStmt = nullptr; // it's deallocated already
     clearWarnings();

@@ -136,7 +136,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     checkColumnIndex(column);
 
     MYSQL_FIELD* pField = getField(column);
-    return pField->flags & AUTO_INCREMENT_FLAG;
+    return (pField->flags & AUTO_INCREMENT_FLAG) != 0;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 {
     checkColumnIndex(column);
     MYSQL_FIELD* pField = getField(column);
-    return !(pField->flags & NOT_NULL_FLAG);
+    return (pField->flags & NOT_NULL_FLAG) ? 0 : 1;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 /*column*/)

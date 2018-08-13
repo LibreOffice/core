@@ -79,7 +79,7 @@ OConnection::OConnection(MysqlCDriver& _rDriver)
 
     // use TCP as connection
     mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
-    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, reinterpret_cast<int*>(&protocol));
+    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
 }
 
 OConnection::~OConnection()
