@@ -173,18 +173,18 @@ class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    OUString    sWordDelimiter;             // Statistics/WordNumber/Delimiter
-    bool        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
-    bool        bShowIndexPreview;          // Index/ShowPreview
-    bool        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
-    bool        bNumAlignSize;              // Numbering/Graphic/KeepRatio
-    bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
-    bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
-    bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
-    MailTextFormats nMailingFormats;            // FormLetter/MailingOutput/Formats
-    OUString    sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
-    OUString    sMailingPath;               // FormLetter/FileOutput/Path
-    OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
+    OUString    m_sWordDelimiter;             // Statistics/WordNumber/Delimiter
+    bool        m_bDefaultFontsInCurrDocOnly; // DefaultFont/Document
+    bool        m_bShowIndexPreview;          // Index/ShowPreview
+    bool        m_bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
+    bool        m_bNumAlignSize;              // Numbering/Graphic/KeepRatio
+    bool        m_bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
+    bool        m_bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
+    bool        m_bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
+    MailTextFormats m_nMailingFormats;            // FormLetter/MailingOutput/Formats
+    OUString    m_sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
+    OUString    m_sMailingPath;               // FormLetter/FileOutput/Path
+    OUString    m_sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -302,49 +302,49 @@ public:
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
     bool        SetCapOption(bool bHTML, const InsCaptionOpt* pOpt);
 
-    bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
-    void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
+    bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.m_bGrfToGalleryAsLnk; }
+    void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.m_bGrfToGalleryAsLnk = b;
                                                   aMiscConfig.SetModified();}
 
-    MailTextFormats GetMailingFormats() const               { return aMiscConfig.nMailingFormats;}
-    void           SetMailingFormats( MailTextFormats nSet ) { aMiscConfig.nMailingFormats = nSet;
+    MailTextFormats GetMailingFormats() const               { return aMiscConfig.m_nMailingFormats;}
+    void           SetMailingFormats( MailTextFormats nSet ) { aMiscConfig.m_nMailingFormats = nSet;
                                                             aMiscConfig.SetModified();}
 
-    void        SetSinglePrintJob( bool b )     { aMiscConfig.bSinglePrintJob = b;
+    void        SetSinglePrintJob( bool b )     { aMiscConfig.m_bSinglePrintJob = b;
                                                   aMiscConfig.SetModified();}
 
-    bool        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
+    bool        IsNameFromColumn() const        { return aMiscConfig.m_bIsNameFromColumn; }
     void        SetIsNameFromColumn( bool bSet )
                         {
                             aMiscConfig.SetModified();
-                            aMiscConfig.bIsNameFromColumn = bSet;
+                            aMiscConfig.m_bIsNameFromColumn = bSet;
                         }
 
-    bool        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
+    bool        IsAskForMailMerge() const       { return aMiscConfig.m_bAskForMailMergeInPrint;}
 
-    const OUString& GetNameFromColumn() const       { return aMiscConfig.sNameFromColumn; }
-    void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.sNameFromColumn = rSet;
+    const OUString& GetNameFromColumn() const       { return aMiscConfig.m_sNameFromColumn; }
+    void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.m_sNameFromColumn = rSet;
                                                                   aMiscConfig.SetModified();}
 
-    const OUString& GetMailingPath() const          { return aMiscConfig.sMailingPath; }
-    void        SetMailingPath(const OUString& sPath) { aMiscConfig.sMailingPath = sPath;
+    const OUString& GetMailingPath() const          { return aMiscConfig.m_sMailingPath; }
+    void        SetMailingPath(const OUString& sPath) { aMiscConfig.m_sMailingPath = sPath;
                                                       aMiscConfig.SetModified();}
 
-    const OUString& GetWordDelimiter() const        { return aMiscConfig.sWordDelimiter; }
-    void        SetWordDelimiter(const OUString& sDelim)  { aMiscConfig.sWordDelimiter = sDelim;
+    const OUString& GetWordDelimiter() const        { return aMiscConfig.m_sWordDelimiter; }
+    void        SetWordDelimiter(const OUString& sDelim)  { aMiscConfig.m_sWordDelimiter = sDelim;
                                                           aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
     static OUString ConvertWordDelimiter(const OUString& rDelim, bool bFromUI);
 
-    bool    IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
+    bool    IsShowIndexPreview() const {return  aMiscConfig.m_bShowIndexPreview;}
     void        SetShowIndexPreview(bool bSet)
-                    {aMiscConfig.bShowIndexPreview = bSet;
+                    {aMiscConfig.m_bShowIndexPreview = bSet;
                     aMiscConfig.SetModified();}
 
     void        SetDefaultFontInCurrDocOnly(bool bSet)
                     {
-                        aMiscConfig.bDefaultFontsInCurrDocOnly = bSet;
+                        aMiscConfig.m_bDefaultFontsInCurrDocOnly = bSet;
                         aMiscConfig.SetModified();
                     }
 
