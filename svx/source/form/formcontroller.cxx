@@ -4204,7 +4204,8 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext, nullptr);
+    m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext,
+                                                                 VCLUnoHelper::GetInterface(getDialogParentWindow()));
     return m_xInteractionHandler.is();
 }
 
