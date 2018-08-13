@@ -493,11 +493,6 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
     return bRet;
 }
 
-bool SwGrfNode::SwapOut()
-{
-    return true;
-}
-
 bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
 {
     bool bRet = false;
@@ -555,7 +550,7 @@ bool SwGrfNode::SavePersistentData()
     // Important note: see also fix for #i40014#
 
     // swap out into temp file
-    return SwapOut();
+    return true;
 }
 
 bool SwGrfNode::RestorePersistentData()
