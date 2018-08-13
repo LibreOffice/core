@@ -1766,8 +1766,11 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                 if (parents.size() >= 2 &&
                     parents[0]->IsBodyFrame() && parents[1]->IsColumnFrame())
                 {   // this only inserts section frame - remove column
-                    assert(parents[2]->IsSctFrame());
-                    std::advance(iter, +2);
+                    assert(parents[2]->IsSctFrame() || IsSctFrame());
+                    if (parents[2]->IsSctFrame())
+                        std::advance(iter, +2);
+                    else
+                        pTmp = pTmp->GetUpper();
                 }
                 else if (IsBodyFrame() && parents.size() >= 1
                          && parents[0]->IsColumnFrame())
