@@ -22,33 +22,17 @@
 #include "solver.h"
 
 
-double** mgcLinearSystemD::NewMatrix (int N)
+std::unique_ptr<std::unique_ptr<double[]>[]> mgcLinearSystemD::NewMatrix (int N)
 {
-  double** A = new double*[N];
-  if ( !A )
-    return nullptr;
+  std::unique_ptr<std::unique_ptr<double[]>[]> A(new std::unique_ptr<double[]>);
 
   for (int row = 0; row < N; row++)
   {
-    A[row] = new double[N];
-    if ( !A[row] )
-    {
-      for (int i = 0; i < row; i++)
-    delete[] A[i];
-      delete[] A;
-      return nullptr;
-    }
+    A[row].reset(new double[N]);
     for (int col = 0; col < N; col++)
       A[row][col] = 0;
   }
   return A;
-}
-
-void mgcLinearSystemD::DeleteMatrix (int N, double** A)
-{
-  for (int row = 0; row < N; row++)
-    delete[] A[row];
-  delete[] A;
 }
 
 double* mgcLinearSystemD::NewVector (int N)
@@ -62,7 +46,7 @@ double* mgcLinearSystemD::NewVector (int N)
   return B;
 }
 
-bool mgcLinearSystemD::Solve (int n, double** a, double* b)
+bool mgcLinearSystemD::Solve (int n, std::unique_ptr<std::unique_ptr<double[]>[]>& a, double* b)
 {
   std::unique_ptr<int[]> indxc( new int[n] );
   if ( !indxc )
@@ -113,9 +97,7 @@ bool mgcLinearSystemD::Solve (int n, double** a, double* b)
 
     if ( irow != icol )
     {
-      double* rowptr = a[irow];
-      a[irow] = a[icol];
-      a[icol] = rowptr;
+      std::swap(a[irow], a[icol]);
 
       save = b[irow];
       b[irow] = b[icol];
