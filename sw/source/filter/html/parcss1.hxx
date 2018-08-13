@@ -219,9 +219,8 @@ protected:
      * or DeclarationParsed() need to be called afterwards
      *
      * @param rIn the style element as string
-     * @return true if ???
      */
-    bool ParseStyleSheet( const OUString& rIn );
+    void ParseStyleSheet( const OUString& rIn );
 
     /** parse the content of a HTML style option
      *
