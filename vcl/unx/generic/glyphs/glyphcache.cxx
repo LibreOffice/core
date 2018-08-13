@@ -50,12 +50,12 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::InvalidateAllGlyphs()
 {
-    for (auto const& font : maFontList)
+    for (auto& font : maFontList)
     {
-        FreetypeFont* pFreetypeFont = font.second;
+        FreetypeFont* pFreetypeFont = font.second.get();
         // free all pFreetypeFont related data
         pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
-        delete pFreetypeFont;
+        font.second.reset();
     }
 
     maFontList.clear();
@@ -66,7 +66,7 @@ void GlyphCache::ClearFontOptions()
 {
     for (auto const& font : maFontList)
     {
-        FreetypeFont* pFreetypeFont = font.second;
+        FreetypeFont* pFreetypeFont = font.second.get();
         // free demand-loaded FontConfig related data
         pFreetypeFont->ClearFontOptions();
     }
@@ -183,7 +183,7 @@ FreetypeFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     FontList::iterator it = maFontList.find(rFontSelData);
     if( it != maFontList.end() )
     {
-        FreetypeFont* pFound = it->second;
+        FreetypeFont* pFound = it->second.get();
         assert(pFound);
         pFound->AddRef();
         return pFound;
@@ -196,7 +196,7 @@ FreetypeFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 
     if( pNew )
     {
-        maFontList[ rFontSelData ] = pNew;
+        maFontList[ rFontSelData ].reset(pNew);
         mnBytesUsed += pNew->GetByteCount();
 
         // enable garbage collection for new font
@@ -234,7 +234,7 @@ void GlyphCache::GarbageCollect()
     {
         FontList::iterator it = maFontList.begin();
         if( it != maFontList.end() )
-            mpCurrentGCFont = it->second;
+            mpCurrentGCFont = it->second.get();
     }
 
     // unless there is no other font to collect
