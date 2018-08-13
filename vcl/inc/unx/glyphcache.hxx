@@ -85,7 +85,7 @@ private:
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,FreetypeFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef std::unordered_map<FontSelectPattern,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
 
     FontList                maFontList;
     sal_uLong               mnMaxSize;      // max overall cache size in bytes
