@@ -8,7 +8,7 @@
  *
  */
 
-#include "Qt5MainWindow.hxx"
+#include <Qt5MainWindow.hxx>
 #include <Qt5MainWindow.moc>
 
 #include <QtGui/QCloseEvent>
