@@ -46,8 +46,8 @@ public:
     PlottingPositionHelper( const PlottingPositionHelper& rSource );
     virtual ~PlottingPositionHelper();
 
-    virtual PlottingPositionHelper* clone() const;
-    PlottingPositionHelper* createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
+    virtual std::unique_ptr<PlottingPositionHelper> clone() const;
+    std::unique_ptr<PlottingPositionHelper> createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix);
 
@@ -143,7 +143,7 @@ public:
     PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource );
     virtual ~PolarPlottingPositionHelper() override;
 
-    virtual PlottingPositionHelper* clone() const override;
+    virtual std::unique_ptr<PlottingPositionHelper> clone() const override;
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix) override;
     virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;

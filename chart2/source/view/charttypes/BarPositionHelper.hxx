@@ -33,7 +33,7 @@ public:
     BarPositionHelper( const BarPositionHelper& rSource );
     virtual ~BarPositionHelper() override;
 
-    virtual PlottingPositionHelper* clone() const override;
+    virtual std::unique_ptr<PlottingPositionHelper> clone() const override;
 
     void updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
 

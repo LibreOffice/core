@@ -175,11 +175,6 @@ VSeriesPlotter::~VSeriesPlotter()
     }
     m_aZSlots.clear();
 
-    for (auto const& elem : m_aSecondaryPosHelperMap)
-    {
-        PlottingPositionHelper* pPosHelper = elem.second;
-        delete pPosHelper;
-    }
     m_aSecondaryPosHelperMap.clear();
 
     m_aSecondaryValueScales.clear();
@@ -2077,15 +2072,15 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
         tSecondaryPosHelperMap::const_iterator aPosIt = m_aSecondaryPosHelperMap.find( nAxisIndex );
         if( aPosIt != m_aSecondaryPosHelperMap.end() )
         {
-            pRet = aPosIt->second;
+            pRet = aPosIt->second.get();
         }
         else if (m_pPosHelper)
         {
             tSecondaryValueScales::const_iterator aScaleIt = m_aSecondaryValueScales.find( nAxisIndex );
             if( aScaleIt != m_aSecondaryValueScales.end() )
             {
-                pRet = m_pPosHelper->createSecondaryPosHelper( aScaleIt->second );
-                m_aSecondaryPosHelperMap[nAxisIndex] = pRet;
+                m_aSecondaryPosHelperMap[nAxisIndex] = m_pPosHelper->createSecondaryPosHelper( aScaleIt->second );
+                pRet = m_aSecondaryPosHelperMap[nAxisIndex].get();
             }
         }
     }
