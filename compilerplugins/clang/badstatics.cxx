@@ -15,13 +15,12 @@
 namespace {
 
 class BadStatics
-    : public clang::RecursiveASTVisitor<BadStatics>
-    , public loplugin::Plugin
+    : public loplugin::FilteringPlugin<BadStatics>
 {
 
 public:
     explicit BadStatics(loplugin::InstantiationData const& rData):
-        Plugin(rData) {}
+        FilteringPlugin(rData) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) { // no non-trivial dtors in C

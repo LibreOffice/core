@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class ReferenceCasting
-    : public RecursiveASTVisitor< ReferenceCasting >
-    , public Plugin
+    : public FilteringPlugin< ReferenceCasting >
     {
     public:
         explicit ReferenceCasting( CompilerInstance& compiler );

@@ -64,9 +64,9 @@ bool isSpecialMemberFunction(FunctionDecl const * decl) {
     return false;
 }
 
-class UnrefFun: public RecursiveASTVisitor<UnrefFun>, public loplugin::Plugin {
+class UnrefFun: public loplugin::FilteringPlugin<UnrefFun> {
 public:
-    explicit UnrefFun(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit UnrefFun(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

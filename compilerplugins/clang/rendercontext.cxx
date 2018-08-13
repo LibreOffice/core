@@ -20,11 +20,11 @@ namespace
 {
 
 class RenderContext:
-    public RecursiveASTVisitor<RenderContext>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<RenderContext>
 {
 public:
     explicit RenderContext(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

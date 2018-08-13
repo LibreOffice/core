@@ -23,7 +23,7 @@ namespace loplugin
 {
 
 Tutorial2::Tutorial2( const InstantiationData& data )
-    : Plugin( data )
+    : FilteringPlugin( data )
     {
     }
 

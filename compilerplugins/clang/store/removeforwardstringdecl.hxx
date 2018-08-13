@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class RemoveForwardStringDecl
-    : public RecursiveASTVisitor< RemoveForwardStringDecl >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< RemoveForwardStringDecl >
     {
     public:
         explicit RemoveForwardStringDecl( CompilerInstance& compiler, Rewriter& rewriter );

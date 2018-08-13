@@ -43,11 +43,11 @@ bool isDerivedFromWindow(const CXXRecordDecl* decl) {
     return false;
 }
 
-class PaintMethodConversion: public RecursiveASTVisitor<PaintMethodConversion>, public loplugin::RewritePlugin
+class PaintMethodConversion: public loplugin::FilteringRewritePlugin<PaintMethodConversion>
 {
 public:
     explicit PaintMethodConversion(InstantiationData const& data):
-        RewritePlugin(data)
+        FilteringRewritePlugin(data)
     {}
 
     virtual void run() override

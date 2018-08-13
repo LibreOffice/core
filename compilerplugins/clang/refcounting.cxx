@@ -38,10 +38,10 @@ not delete on last 'release'.
 namespace {
 
 class RefCounting:
-    public RecursiveASTVisitor<RefCounting>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<RefCounting>
 {
 public:
-    explicit RefCounting(loplugin::InstantiationData const & data): Plugin(data)
+    explicit RefCounting(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

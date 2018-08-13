@@ -28,11 +28,11 @@ Stmt const * lookThroughExprWithCleanups(Stmt const * stmt) {
 }
 
 class CommaOperator:
-    public RecursiveASTVisitor<CommaOperator>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<CommaOperator>
 {
 public:
     explicit CommaOperator(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

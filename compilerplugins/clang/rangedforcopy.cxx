@@ -22,11 +22,11 @@ namespace
 {
 
 class RangedForCopy:
-    public RecursiveASTVisitor<RangedForCopy>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<RangedForCopy>
 {
 public:
     explicit RangedForCopy(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

@@ -20,11 +20,11 @@
 namespace {
 
 class Override:
-    public RecursiveASTVisitor<Override>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<Override>
 {
 public:
     explicit Override(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override;
 

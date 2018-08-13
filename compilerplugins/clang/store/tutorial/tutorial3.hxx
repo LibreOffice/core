@@ -19,8 +19,7 @@ namespace loplugin
 
 // Similar like for Tutorial2, but this time the base class is RewritePlugin.
 class Tutorial3
-    : public RecursiveASTVisitor< Tutorial3 >
-    , public RewritePlugin
+    : public loplugin::FilteringRewritePlugin< Tutorial3 >
     {
     public:
         // One more argument for ctor.

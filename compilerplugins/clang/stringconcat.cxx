@@ -42,11 +42,11 @@ Expr const * stripCtor(Expr const * expr) {
 }
 
 class StringConcat:
-    public RecursiveASTVisitor<StringConcat>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<StringConcat>
 {
 public:
     explicit StringConcat(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

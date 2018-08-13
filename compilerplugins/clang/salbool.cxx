@@ -143,11 +143,11 @@ bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
 }
 
 class SalBool:
-    public RecursiveASTVisitor<SalBool>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<SalBool>
 {
 public:
     explicit SalBool(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override;
 

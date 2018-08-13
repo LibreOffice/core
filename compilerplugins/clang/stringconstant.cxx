@@ -102,11 +102,11 @@ char const * adviseNonArray(bool nonArray) {
 }
 
 class StringConstant:
-    public RecursiveASTVisitor<StringConstant>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<StringConstant>
 {
 public:
     explicit StringConstant(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     void run() override;
 

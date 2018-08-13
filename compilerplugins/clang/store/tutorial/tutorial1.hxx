@@ -20,9 +20,7 @@ namespace loplugin
 // The class implementing the plugin action.
 class Tutorial1
     // Inherits from the Clang class that will allow examing the Clang AST tree (i.e. syntax tree).
-    : public RecursiveASTVisitor< Tutorial1 >
-    // And the base class for LO Clang plugins.
-    , public Plugin
+    : public FilteringPlugin< Tutorial1 >
     {
     public:
         // Ctor, nothing special.

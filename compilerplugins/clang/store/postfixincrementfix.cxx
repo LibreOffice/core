@@ -21,7 +21,7 @@ namespace loplugin
 {
 
 PostfixIncrementFix::PostfixIncrementFix( const InstantiationData& data )
-    : RewritePlugin( data )
+    : FilteringRewritePlugin( data )
     {
     }
 

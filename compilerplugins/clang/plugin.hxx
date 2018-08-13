@@ -102,6 +102,19 @@ private:
     const char* name;
 };
 
+template<typename Derived>
+class FilteringPlugin : public RecursiveASTVisitor<Derived>, public Plugin
+{
+public:
+    explicit FilteringPlugin( const InstantiationData& data ) : Plugin(data) {}
+
+    bool TraverseNamespaceDecl(NamespaceDecl * decl) {
+        if (ignoreLocation(decl->getLocStart()))
+            return true;
+        return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
+    }
+};
+
 /**
     Base class for rewriter plugins.
 
@@ -226,6 +239,19 @@ RewritePlugin::RewriteOption operator|( RewritePlugin::RewriteOption option1, Re
 {
     return static_cast< RewritePlugin::RewriteOption >( int( option1 ) | int( option2 ));
 }
+
+template<typename Derived>
+class FilteringRewritePlugin : public RecursiveASTVisitor<Derived>, public RewritePlugin
+{
+public:
+    explicit FilteringRewritePlugin( const InstantiationData& data ) : RewritePlugin(data) {}
+
+    bool TraverseNamespaceDecl(NamespaceDecl * decl) {
+        if (ignoreLocation(decl->getLocStart()))
+            return true;
+        return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
+    }
+};
 
 void normalizeDotDotInFilePath(std::string&);
 

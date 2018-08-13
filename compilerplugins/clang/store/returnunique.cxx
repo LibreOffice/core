@@ -18,10 +18,10 @@
 namespace {
 
 class ReturnUnique:
-    public RecursiveASTVisitor<ReturnUnique>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ReturnUnique>
 {
 public:
-    explicit ReturnUnique(InstantiationData const & data): Plugin(data) {}
+    explicit ReturnUnique(InstantiationData const & data): FilteringPlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

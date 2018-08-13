@@ -28,10 +28,10 @@
 namespace {
 
 class PassStuffByRef:
-    public RecursiveASTVisitor<PassStuffByRef>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<PassStuffByRef>
 {
 public:
-    explicit PassStuffByRef(loplugin::InstantiationData const & data): Plugin(data), mbInsideFunctionDecl(false), mbFoundReturnValueDisqualifier(false) {}
+    explicit PassStuffByRef(loplugin::InstantiationData const & data): FilteringPlugin(data), mbInsideFunctionDecl(false), mbFoundReturnValueDisqualifier(false) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

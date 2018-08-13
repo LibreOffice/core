@@ -76,10 +76,10 @@ public:
 };
 
 class OnceVar:
-    public RecursiveASTVisitor<OnceVar>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<OnceVar>
 {
 public:
-    explicit OnceVar(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit OnceVar(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override {
         // ignore some files with problematic macros
