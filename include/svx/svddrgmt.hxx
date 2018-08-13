@@ -130,7 +130,7 @@ protected:
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact);
 
     // access for derivated classes to maOverlayObjectList (passes ownership)
-    void addToOverlayObjectList(sdr::overlay::OverlayObject* pNew) { maOverlayObjectList.append(pNew); }
+    void addToOverlayObjectList(std::unique_ptr<sdr::overlay::OverlayObject> pNew) { maOverlayObjectList.append(std::move(pNew)); }
 
     // access for derivated classes to mrSdrDragView
     SdrDragView& getSdrDragView() { return mrSdrDragView; }

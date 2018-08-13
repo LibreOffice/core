@@ -769,9 +769,9 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         if(!aResult.empty())
         {
-            sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult);
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult));
             rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(pNewOverlayObject);
+            addToOverlayObjectList(std::move(pNewOverlayObject));
         }
 
         if(!aResultTransparent.empty())
@@ -779,9 +779,9 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aResultTransparent, 0.5));
             aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
-            sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent);
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent));
             rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(pNewOverlayObject);
+            addToOverlayObjectList(std::move(pNewOverlayObject));
         }
     }
 
@@ -793,11 +793,11 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         const basegfx::B2DPoint aTopLeft(aActionRectangle.Left(), aActionRectangle.Top());
         const basegfx::B2DPoint aBottomRight(aActionRectangle.Right(), aActionRectangle.Bottom());
-        sdr::overlay::OverlayRollingRectangleStriped* pNew = new sdr::overlay::OverlayRollingRectangleStriped(
-            aTopLeft, aBottomRight, true, false);
+        std::unique_ptr<sdr::overlay::OverlayRollingRectangleStriped> pNew(new sdr::overlay::OverlayRollingRectangleStriped(
+            aTopLeft, aBottomRight, true, false));
 
         rOverlayManager.add(*pNew);
-        addToOverlayObjectList(pNew);
+        addToOverlayObjectList(std::move(pNew));
     }
 }
 
