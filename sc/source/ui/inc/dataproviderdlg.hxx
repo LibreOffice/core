@@ -66,6 +66,7 @@ public:
     void aggregateFunction();
     void numberTransformation();
     void deletefromList(sal_uInt32 nIndex);
+    void replaceNullTransformation();
 
     void import(ScDocument* pDoc, bool bInternal = false);
 };
