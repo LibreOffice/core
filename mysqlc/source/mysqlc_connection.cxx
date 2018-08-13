@@ -277,7 +277,7 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    if(!mysql_autocommit(&m_mysql, static_cast<my_bool>(autoCommit)))
+    if(!mysql_autocommit(&m_mysql, autoCommit))
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql), *this, getConnectionEncoding());
 }
 

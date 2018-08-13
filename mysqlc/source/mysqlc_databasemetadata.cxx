@@ -909,7 +909,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
         for (sal_uInt32 i = 1; i <= columns; i++) {
             rtl::OUString columnStringValue = xRow->getString(i);
             if (i == 1) {   // TABLE_SCHEM
-                informationSchema = !columnStringValue.equalsIgnoreAsciiCase("information_schema");
+                informationSchema = columnStringValue.equalsIgnoreAsciiCase("information_schema");
             }
             aRow.push_back(makeAny(columnStringValue));
         }
