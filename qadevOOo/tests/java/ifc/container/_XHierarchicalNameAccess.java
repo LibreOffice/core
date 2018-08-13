@@ -42,10 +42,10 @@ public class _XHierarchicalNameAccess extends MultiMethodTest{
     public XHierarchicalNameAccess oObj = null;
 
     /**
-    * Calls the method with existing and nonexisting
+    * Calls the method with existing and nonexistent
     * element names. <p>
     * Has <b>OK</b> status if for existing name <code>true</code>
-    * is returned and for nonexisting - <code>false</code>.
+    * is returned and for nonexistent - <code>false</code>.
     */
     public void _hasByHierarchicalName(){
         String name = (String) tEnv.getObjRelation("ElementName") ;

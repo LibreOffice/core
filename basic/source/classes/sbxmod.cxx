@@ -1920,7 +1920,7 @@ SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
     nLine2       = 0;
     refStatics   = new SbxArray;
     mCaller      = nullptr;
-    // HACK due to 'Referenz could not be saved'
+    // HACK due to 'Reference could not be saved'
     SetFlag( SbxFlagBits::NoModify );
 }
 
@@ -1982,7 +1982,7 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         nStart = nTempStart;
     }
 
-    // HACK ue to 'Referenz could not be saved'
+    // HACK due to 'Reference could not be saved'
     SetFlag( SbxFlagBits::NoModify );
 
     return true;

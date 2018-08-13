@@ -293,7 +293,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
                 m_xMultiplexer->setPeer( m_xPeerWindow );
             }
 
-            // create new referenz to xgraphics for painting on a peer
+            // create new reference to xgraphics for painting on a peer
             // and add a paint listener
             Reference< XDevice > xDevice( m_xPeerWindow, UNO_QUERY );
 
