@@ -227,7 +227,7 @@ public class Test06 implements StorageTest {
             try
             {
                 xTempStorage.copyElementTo( "Nonexistent element", xTargetStorage, "Target" );
-                m_aTestHelper.Error( "An exception must be thrown in case of copying of nonexisting element!" );
+                m_aTestHelper.Error( "An exception must be thrown in case of copying of nonexistent element!" );
                 return false;
             }
             catch( com.sun.star.container.NoSuchElementException ne )
@@ -242,7 +242,7 @@ public class Test06 implements StorageTest {
             try
             {
                 xTempStorage.moveElementTo( "Nonexistent element", xTargetStorage, "Target" );
-                m_aTestHelper.Error( "An exception must be thrown in case of moving of nonexisting element!" );
+                m_aTestHelper.Error( "An exception must be thrown in case of moving of nonexistent element!" );
                 return false;
             }
             catch( com.sun.star.container.NoSuchElementException ne )
