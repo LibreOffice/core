@@ -12,6 +12,8 @@ export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/saniti
 #things to link successfully during the build
 export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
 
+df -h $OUT $WORK
+
 cd $WORK
 $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC
 
@@ -40,6 +42,8 @@ UNO_SERVICES=\${ORIGIN}/$a.services.rdb
 EOF
 done
 popd
+
+df -h $OUT $WORK
 
 #starting corpuses
 cp $SRC/*_seed_corpus.zip $OUT
