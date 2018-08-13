@@ -160,6 +160,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sorttransformationentry \
 	sc/uiconfig/scalc/ui/aggregatefunctionentry \
 	sc/uiconfig/scalc/ui/numbertransformationentry \
+	sc/uiconfig/scalc/ui/replacenulltransformationentry \
 	sc/uiconfig/scalc/ui/movecopysheet \
 	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \
