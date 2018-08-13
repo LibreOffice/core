@@ -1301,7 +1301,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     return bRet;
 }
 
-bool SwTabFrame::Join()
+void SwTabFrame::Join()
 {
     OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
@@ -1337,8 +1337,6 @@ bool SwTabFrame::Join()
 
         Grow( nHeight );
     }
-
-    return true;
 }
 
 void SwInvalidatePositions( SwFrame *pFrame, long nBottom )

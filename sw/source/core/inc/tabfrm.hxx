@@ -91,7 +91,7 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
      * Join() gets the Follow's content and destroys it.
      */
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
-    bool Join();
+    void Join();
 
     void UpdateAttr_(
         const SfxPoolItem*,
