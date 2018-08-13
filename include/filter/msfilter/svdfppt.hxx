@@ -189,7 +189,7 @@ struct MSFILTER_DLLPUBLIC PptDocumentAtom
     sal_uInt32      nHandoutMasterPersist;              // 0=non-existent
     sal_uInt16      n1stPageNumber;                     // page number of the first slide
     PptPageFormat   eSlidesPageFormat;                  // page format of the slides
-    bool            bEmbeddedTrueType           : 1;    // TrueType direcly within the File?
+    bool            bEmbeddedTrueType           : 1;    // TrueType directly within the File?
     bool            bTitlePlaceholdersOmitted   : 1;
     bool            bRightToLeft                : 1;
     bool            bShowComments               : 1;

@@ -101,7 +101,7 @@ const short UM_EVENT_OBJECT_PAGECHANGED = 38;
 //to add TEXT_SELECTION_CHANGED event
 const short UM_EVENT_TEXT_SELECTION_CHANGED = 39;
 
-//for section change and column chang event
+//for section change and column change event
 const short UM_EVENT_SECTION_CHANGED = 40;
 const short UM_EVENT_COLUMN_CHANGED = 41;
 

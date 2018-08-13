@@ -72,7 +72,7 @@ rtl::OUString cppu::getUnoIniUri() {
 #else
     rtl::OUString uri(get_this_libpath());
 #ifdef MACOSX
-    // We keep both the LO and URE dylibs direcly in "Frameworks"
+    // We keep both the LO and URE dylibs directly in "Frameworks"
     // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
     // (LIBO_ETC_FOLDER). Except for unorc, of which there are two,
     // the "LO" one (which is in "Resources") and the "URE" one (which
