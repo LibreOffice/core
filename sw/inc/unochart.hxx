@@ -176,7 +176,7 @@ public:
 
     // will send modified events for all data-sequences of the table
     void        InvalidateTable( const SwTable *pTable );
-    bool        DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
+    void        DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
     void        DisposeAllDataSequences( const SwTable *pTable );
 
     // functionality needed to get notified about new added rows/cols
