@@ -758,6 +758,10 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
     }
 }
 
+void ImageMap::InsertIMapObject( std::unique_ptr<IMapObject> pNewObject )
+{
+    maList.emplace_back( std::move(pNewObject) );
+}
 
 /******************************************************************************
 |*

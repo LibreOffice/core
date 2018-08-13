@@ -77,6 +77,7 @@ public:
 
     // a new IMap object is inserted at the end of the Map
     void                InsertIMapObject( const IMapObject& rIMapObject );
+    void                InsertIMapObject( std::unique_ptr<IMapObject> rIMapObject );
 
     // access to the single ImapObjects; the objects may
     // not be destroyed from outside
