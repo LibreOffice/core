@@ -5840,9 +5840,9 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
         tools::Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
-        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight);
+        std::unique_ptr<ScOverlayDashedBorder> pDashedBorder(new ScOverlayDashedBorder(aRange, aHighlight));
         xOverlayManager->add(*pDashedBorder);
-        mpOOSelectionBorder->append(pDashedBorder);
+        mpOOSelectionBorder->append(std::move(pDashedBorder));
     }
 
     if ( aOldMode != aDrawMode )
@@ -6052,15 +6052,15 @@ void ScGridWindow::UpdateCursorOverlay()
                     aRanges.push_back(aRB);
                 }
 
-                sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                     sdr::overlay::OverlayType::Solid,
                     aCursorColor,
                     aRanges,
-                    false);
+                    false));
 
                 xOverlayManager->add(*pOverlay);
                 mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
-                mpOOCursors->append(pOverlay);
+                mpOOCursors->append(std::move(pOverlay));
             }
         }
     }
@@ -6129,15 +6129,15 @@ void ScGridWindow::UpdateSelectionOverlay()
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Transparent,
                 aHighlight,
                 aRanges,
-                true);
+                true));
 
             xOverlayManager->add(*pOverlay);
             mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
-            mpOOSelection->append(pOverlay);
+            mpOOSelection->append(std::move(pOverlay));
         }
     }
     else
@@ -6223,15 +6223,15 @@ void ScGridWindow::UpdateAutoFillOverlay()
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
 
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Solid,
                 aHandleColor,
                 aRanges,
-                false);
+                false));
 
             xOverlayManager->add(*pOverlay);
             mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
-            mpOOAutoFill->append(pOverlay);
+            mpOOAutoFill->append(std::move(pOverlay));
         }
 
         if ( aOldMode != aDrawMode )
@@ -6350,15 +6350,15 @@ void ScGridWindow::UpdateDragRectOverlay()
                 aRanges.push_back(aRB);
             }
 
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 aRanges,
-                false);
+                false));
 
             xOverlayManager->add(*pOverlay);
             mpOODragRect.reset(new sdr::overlay::OverlayObjectList);
-            mpOODragRect->append(pOverlay);
+            mpOODragRect->append(std::move(pOverlay));
         }
     }
 
@@ -6396,15 +6396,15 @@ void ScGridWindow::UpdateHeaderOverlay()
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
 
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 aRanges,
-                false);
+                false));
 
             xOverlayManager->add(*pOverlay);
             mpOOHeader.reset(new sdr::overlay::OverlayObjectList);
-            mpOOHeader->append(pOverlay);
+            mpOOHeader->append(std::move(pOverlay));
         }
     }
 
@@ -6463,15 +6463,15 @@ void ScGridWindow::UpdateShrinkOverlay()
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
 
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 aRanges,
-                false);
+                false));
 
             xOverlayManager->add(*pOverlay);
             mpOOShrink.reset(new sdr::overlay::OverlayObjectList);
-            mpOOShrink->append(pOverlay);
+            mpOOShrink->append(std::move(pOverlay));
         }
     }
 

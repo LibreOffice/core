@@ -245,11 +245,10 @@ void ImageButtonHdl::CreateB2dIAObject()
                     rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                     if(rPaintWindow.OutputToWindow() && xManager.is() )
                     {
-                        sdr::overlay::OverlayObject* pOverlayObject = nullptr;
-
-                        pOverlayObject = new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
+                        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
+                            new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
                         xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(pOverlayObject);
+                        maOverlayGroup.append(std::move(pOverlayObject));
                     }
                 }
             }

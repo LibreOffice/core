@@ -784,7 +784,7 @@ void ScTabView::TestHintWindow()
                 ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
 
                 mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
-                mxInputHintOO->append(pOverlay);
+                mxInputHintOO->append(std::unique_ptr<sdr::overlay::OverlayObject>(pOverlay));
 
                 Size aHintWndSize = pOverlay->GetSizePixel();
                 long nCellSizeX = 0;
@@ -815,11 +815,11 @@ void ScTabView::TestHintWindow()
                         //missing portions will be displayed in the other split windows to form an apparent
                         //single tip, albeit "under" the split lines
                         Point aOtherPos(pWindow->ScreenToOutputPixel(pWin->OutputToScreenPixel(aHintPos)));
-                        ScOverlayHint* pOtherOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
+                        std::unique_ptr<ScOverlayHint> pOtherOverlay(new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont()));
                         Point aFooPos(pWindow->PixelToLogic(aOtherPos, pWindow->GetDrawMapMode()));
                         pOtherOverlay->SetPos(aFooPos, pWindow->GetDrawMapMode());
-                        mxInputHintOO->append(pOtherOverlay);
                         xOverlayManager->add(*pOtherOverlay);
+                        mxInputHintOO->append(std::move(pOtherOverlay));
                     }
                 }
             }

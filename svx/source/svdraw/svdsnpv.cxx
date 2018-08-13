@@ -62,10 +62,10 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
 
         if (xTargetOverlay.is())
         {
-            sdr::overlay::OverlayCrosshairStriped* aNew = new sdr::overlay::OverlayCrosshairStriped(
-                maPosition);
+            std::unique_ptr<sdr::overlay::OverlayCrosshairStriped> aNew(new sdr::overlay::OverlayCrosshairStriped(
+                maPosition));
             xTargetOverlay->add(*aNew);
-            maObjects.append(aNew);
+            maObjects.append(std::move(aNew));
         }
     }
 }
@@ -136,10 +136,10 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
 
         if (xTargetOverlay.is())
         {
-            sdr::overlay::OverlayHelplineStriped* aNew = new sdr::overlay::OverlayHelplineStriped(
-                maPosition, meHelpLineKind);
+            std::unique_ptr<sdr::overlay::OverlayHelplineStriped> aNew(new sdr::overlay::OverlayHelplineStriped(
+                maPosition, meHelpLineKind));
             xTargetOverlay->add(*aNew);
-            maObjects.append(aNew);
+            maObjects.append(std::move(aNew));
         }
     }
 }
