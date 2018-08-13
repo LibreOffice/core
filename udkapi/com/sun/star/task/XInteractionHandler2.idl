@@ -38,7 +38,7 @@ published interface XInteractionHandler2 : com::sun::star::task::XInteractionHan
 {
     /** Handle an interaction request.
 
-        @param Request the inteaction request to handle.
+        @param Request the interaction request to handle.
 
         @return `TRUE`, if the handler handled the request, `FALSE` otherwise.
      */
