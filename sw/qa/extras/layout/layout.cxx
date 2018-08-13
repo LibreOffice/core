@@ -34,6 +34,7 @@ public:
     void testUserFieldTypeLanguage();
     void testTdf109137();
     void testForcepoint72();
+    void testTdf118058();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST(testForcepoint72);
+    CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -298,6 +300,13 @@ void SwLayoutWriter::testTdf109137()
 
 //just care it doesn't crash
 void SwLayoutWriter::testForcepoint72() { createDoc("forcepoint72-1.rtf"); }
+
+void SwLayoutWriter::testTdf118058()
+{
+    SwDoc* pDoc = createDoc("tdf118058.fodt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
 CPPUNIT_PLUGIN_IMPLEMENT();

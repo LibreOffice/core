@@ -621,7 +621,21 @@ namespace
             return true;
 
         // The frame is in a table, see if the table is in a section.
-        return !pFrame->FindTabFrame()->IsInSct();
+        bool bRet = !pFrame->FindTabFrame()->IsInSct();
+
+        if (bRet)
+        {
+            // Don't try to split if the frame itself is a section frame with
+            // multiple columns.
+            if (pFrame->IsSctFrame())
+            {
+                const SwFrame* pLower = pFrame->GetLower();
+                if (pLower && pLower->IsColumnFrame())
+                    bRet = false;
+            }
+        }
+
+        return bRet;
     }
 }
 
