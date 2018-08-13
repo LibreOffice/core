@@ -832,7 +832,7 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
     pItemSet = pSheetItemSet.get();
     pPropInfo = pSheetPropInfo.get();
 
-    bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
+    CSS1Parser::ParseStyleSheet( rIn );
 
     for (std::unique_ptr<CSS1Selector> & rpSelector : m_Selectors)
     {
@@ -847,7 +847,7 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
     pItemSet = nullptr;
     pPropInfo = nullptr;
 
-    return bSuccess;
+    return true;
 }
 
 void SvxCSS1Parser::ParseStyleOption( const OUString& rIn,

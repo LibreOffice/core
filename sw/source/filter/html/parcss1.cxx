@@ -1121,7 +1121,7 @@ CSS1Parser::~CSS1Parser()
 {
 }
 
-bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
+void CSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
     OUString aTmp( rIn );
 
@@ -1144,13 +1144,11 @@ bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
         aTmp = aTmp.copy( 0, aTmp.getLength() - 3 );
 
     if( aTmp.isEmpty() )
-        return true;
+        return;
 
     InitRead( aTmp );
 
     ParseStyleSheet();
-
-    return true;
 }
 
 void CSS1Parser::ParseStyleOption( const OUString& rIn )
