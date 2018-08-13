@@ -10,7 +10,7 @@ fi
 export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-blacklist.txt"
 #similarly force the -fsanitize etc args in as well as pthread to get
 #things to link successfully during the build
-export LDFLAGS="$CFLAGS -lpthread"
+export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
 
 cd $WORK
 $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC
