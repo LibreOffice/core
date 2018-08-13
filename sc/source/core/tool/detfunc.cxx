@@ -438,7 +438,7 @@ bool ScDetectiveFunc::IsNonAlienArrow( const SdrObject* pObject )
 
 //  InsertXXX: called from DrawEntry/DrawAlienEntry and InsertObject
 
-bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
+void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
                                 bool bFromOtherTab, bool bRed,
@@ -517,10 +517,9 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pData->meType = ScDrawObjData::DetectiveArrow;
 
     Modified();
-    return true;
 }
 
-bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
+void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, bool bRed,
                                 ScDetectiveData& rData )
 {
@@ -583,7 +582,6 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pData->maEnd.SetInvalid();
 
     Modified();
-    return true;
 }
 
 //  DrawEntry:      formula from this spreadsheet,
@@ -604,10 +602,11 @@ bool ScDetectiveFunc::DrawEntry( SCCOL nCol, SCROW nRow,
     bool bError = HasError( rRef, aErrorPos );
     bool bAlien = ( rRef.aEnd.Tab() < nTab || rRef.aStart.Tab() > nTab );
 
-    return InsertArrow( nCol, nRow,
-                        rRef.aStart.Col(), rRef.aStart.Row(),
-                        rRef.aEnd.Col(), rRef.aEnd.Row(),
-                        bAlien, bError, rData );
+    InsertArrow( nCol, nRow,
+                 rRef.aStart.Col(), rRef.aStart.Row(),
+                 rRef.aEnd.Col(), rRef.aEnd.Row(),
+                 bAlien, bError, rData );
+    return true;
 }
 
 bool ScDetectiveFunc::DrawAlienEntry( const ScRange& rRef,
@@ -619,9 +618,10 @@ bool ScDetectiveFunc::DrawAlienEntry( const ScRange& rRef,
     ScAddress aErrorPos;
     bool bError = HasError( rRef, aErrorPos );
 
-    return InsertToOtherTab( rRef.aStart.Col(), rRef.aStart.Row(),
-                                rRef.aEnd.Col(), rRef.aEnd.Row(),
-                                bError, rData );
+    InsertToOtherTab( rRef.aStart.Col(), rRef.aStart.Row(),
+                      rRef.aEnd.Col(), rRef.aEnd.Row(),
+                      bError, rData );
+    return true;
 }
 
 void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData )
