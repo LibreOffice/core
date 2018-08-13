@@ -24,6 +24,8 @@
 
 #include <apitools.hxx>
 
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -45,6 +47,7 @@ namespace dbaui
 
     // BasicInteractionHandler
     typedef ::cppu::WeakImplHelper<   css::lang::XServiceInfo
+                                  ,   css::lang::XInitialization
                                   ,   css::task::XInteractionHandler2
                                   >   BasicInteractionHandler_Base;
     /** implements an <type scope="com.sun.star.task">XInteractionHandler</type> for
@@ -61,6 +64,7 @@ namespace dbaui
     class BasicInteractionHandler
                 :public BasicInteractionHandler_Base
     {
+        css::uno::Reference< css::awt::XWindow > m_xParentWindow;
         const css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;
@@ -70,6 +74,9 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const bool i_bFallbackToGeneric
         );
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArgs ) override;
 
         // XInteractionHandler2
         virtual sal_Bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
