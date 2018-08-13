@@ -119,7 +119,7 @@ void PeriodicSpline (int N, const double* x, const double* a, double*& b, double
   for (i = 0; i < N; i++)
     h[i] = x[i+1]-x[i];
 
-  double** mat = mgcLinearSystemD::NewMatrix(N+1);  // guaranteed to be zeroed memory
+  std::unique_ptr<std::unique_ptr<double[]>[]> mat = mgcLinearSystemD::NewMatrix(N+1);  // guaranteed to be zeroed memory
   c = mgcLinearSystemD::NewVector(N+1);   // guaranteed to be zeroed memory
 
   // c[0] - c[N] = 0
@@ -155,8 +155,6 @@ void PeriodicSpline (int N, const double* x, const double* a, double*& b, double
     b[i] = (a[i+1]-a[i])/h[i] - oneThird*(c[i+1]+2.0f*c[i])*h[i];
     d[i] = oneThird*(c[i+1]-c[i])/h[i];
   }
-
-  mgcLinearSystemD::DeleteMatrix(N+1,mat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
