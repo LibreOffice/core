@@ -787,13 +787,12 @@ void ScColumn::DeleteArea(
     }
 }
 
-bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
+void ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
     rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
-    return true;
 }
 
 void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
