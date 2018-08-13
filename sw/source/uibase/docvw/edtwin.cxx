@@ -6200,7 +6200,7 @@ OUString SwEditWin::GetSurroundingText() const
     OUString sReturn;
     SwWrtShell& rSh = m_rView.GetWrtShell();
     if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
-        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
+        rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
     else if( !rSh.HasSelection() )
     {
         SwPosition *pPos = rSh.GetCursor()->GetPoint();
@@ -6211,7 +6211,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GoStartSentence();
         rSh.SetMark();
         rSh.GoEndSentence();
-        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
+        rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
         pPos->nContent = nPos;
         rSh.ClearMark();
@@ -6227,7 +6227,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     if( rSh.HasSelection() )
     {
         OUString sReturn;
-        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
+        rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
         return Selection( 0, sReturn.getLength() );
     }
     else
