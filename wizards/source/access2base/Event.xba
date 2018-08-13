@@ -248,6 +248,7 @@ Dim oObject As Object, i As Integer
 Dim sShortcut As String, sAddShortcut As String, sArray() As String
 Dim sImplementation As String, oSelection As Object
 Dim iCurrentDoc As Integer, oDoc As Object
+Dim vPersistent As Variant
 Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
@@ -353,24 +354,18 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 		sImplementation = Utils._ImplementationName(oObject)
 	Loop
 	&apos;	Add Forms! prefix
-&apos;	Select Case oDoc.DbConnect
-&apos;		Case DBCONNECTBASE
-			If Utils._hasUNOProperty(oObject, &quot;Args&quot;) Then		&apos;	Current object is a SwXTextDocument
-				For i = 0 To UBound(oObject.Args)
-					If oObject.Args(i).Name = &quot;DocumentTitle&quot; Then
-						sAddShortcut = Utils._Surround(oObject.Args(i).Value)
-						Exit For
-					End If
-				Next i
-			End If
+	Select Case oDoc.DbConnect
+		Case DBCONNECTBASE
+			vPersistent = Split(oObject.StringValue, &quot;/&quot;)
+			sAddShortcut = Utils._Surround(_GetHierarchicalName(vPersistent(UBound(vPersistent) - 1)))
 			sShortcut = &quot;Forms!&quot; &amp; sAddShortcut &amp; &quot;!&quot; &amp; sShortcut
-&apos;		Case DBCONNECTFORM
-&apos;			sShortcut = &quot;Forms!0!&quot; &amp; sShortcut
-&apos;	End Select
+		Case DBCONNECTFORM
+			sShortcut = &quot;Forms!0!&quot; &amp; sShortcut
+	End Select
 
 	sArray = Split(sShortcut, &quot;!&quot;)
 	&apos;	If presence of &quot;Forms!myform!myform.Form&quot;, eliminate 2nd element
-	&apos;	Eliminate anyway blanco subcomponents (e.g; Forms!!myForm)
+	&apos;	Eliminate anyway blanco subcomponents (e.g. Forms!!myForm)
 	If UBound(sArray) &gt;= 2 Then
 		If UCase(sArray(1)) &amp; &quot;.FORM&quot; = UCase(sArray(2)) Then sArray(1) = &quot;&quot;
 		sArray = Utils._TrimArray(sArray)

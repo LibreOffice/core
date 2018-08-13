@@ -726,6 +726,7 @@ Dim bIsPseudo As Boolean, bPseudoExists As Boolean, vObject As Variant
 	If Not bIsPseudo Then Goto Exit_Function
 	
 Dim oDoc As Object, oForms As Variant
+Const cstSeparator = &quot;\;&quot;
 	
 	bPseudoExists = False
 	With vObject
@@ -733,12 +734,7 @@ Dim oDoc As Object, oForms As Variant
 			Case OBJFORM
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of form name
 					Set oDoc = _A2B_.CurrentDocument()
-					If oDoc.DbConnect = DBCONNECTFORM Then
-						bPseudoExists = True
-					Else
-						Set oForms = oDoc.Document.getFormDocuments()
-						bPseudoExists = ( oForms.HasByName(._Name) )
-					End If
+					If oDoc.DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = _InList(._Name, Application._GetAllHierarchicalNames())
 				End If
 			Case OBJDATABASE
 				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = Not IsNull(.Connection)

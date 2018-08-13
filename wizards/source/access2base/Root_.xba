@@ -105,9 +105,9 @@ Dim vDbContainer As Variant, vDbContainers() As Variant, vDocContainer As Varian
 	iCurrentDoc = CurrentDocIndex( , False)			&apos;	False prevents error raising if not found
 	If iCurrentDoc &lt; 0 Then GoTo Exit_Sub			&apos;	If not found ignore
 	
-	vDocContainer = CurrentDoc(iCurrentDoc)
+	vDocContainer = CurrentDocument(iCurrentDoc)
 	With vDocContainer
-		If Not .Active Then GoTo Exit_Sub		&apos;	e.g. if successive calls to CloseConnection()
+		If Not .Active Then GoTo Exit_Sub		&apos;	e.g. if multiple calls to CloseConnection()
 		For i = 0 To UBound(.DbContainers)
 			If Not IsNull(.DbContainers(i).Database) Then
 				.DbContainers(i).Database.Dispose()

@@ -448,7 +448,7 @@ Dim oDoc As Object
 			Case OBJCOLLECTION
 				Select Case vCurrentObject._CollType
 					Case COLLFORMS
-						vCurrentObject = Application.Forms(sComponents(iCurrentIndex))
+						vCurrentObject = Application.AllForms(sComponents(iCurrentIndex))
 					Case COLLALLDIALOGS
 						sDialog = UCase(sComponents(iCurrentIndex))
 						vCurrentObject = Application.AllDialogs(sDialog)

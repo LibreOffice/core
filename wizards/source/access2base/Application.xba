@@ -184,6 +184,12 @@ Type DbContainer
 End Type
 
 REM -----------------------------------------------------------------------------------------------------------------------
+REM --- Next variable is initialized to empty at each macro execution start												---
+REM --- Items in both lists correspond one by one																		---
+Public vFormNamesList	As Variant				&apos;	(0) Buffer of hierarchical form names =&gt; &quot;\;&quot; separated values
+												&apos;	(1) Buffer of persistent form names =&gt; &quot;\;&quot; separated values
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function AllDialogs(ByVal Optional pvIndex As Variant) As Variant
 &apos;	Return either a Collection or a Dialog object
 &apos;	The dialogs are selected only if library is loaded
@@ -322,57 +328,61 @@ Public Function AllForms(ByVal Optional pvIndex As Variant) As Variant
 &apos;	Easiest use for standalone forms: AllForms(0)
 &apos;	If no argument, return a Collection type
 
-	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;AllForms&quot;
+Dim iIndex As Integer, vReturn As Variant
+Dim iCurrentDoc As Integer, vCurrentDoc As Variant, oForms As Variant, oCounter As Variant, oFormsCollection As Object
+Dim ofForm As Object
+Dim vAllForms As Variant, i As Integer, vName As Variant, oDatabase As Object, bFound As Boolean
+Const cstSeparator = &quot;\;&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(cstThisSub)
-Dim iIndex As Integer, vAllForms As Variant
-	Set vAllForms = Nothing
+	Set vReturn = Nothing
 	
 	If Not IsMissing(pvIndex) Then
 		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 		Select Case VarType(pvIndex)
 			Case vbString
 				iIndex = -1
-			Case vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal
+			Case Else
 				iIndex = pvIndex
 		End Select
 	End If
 
-Dim iCurrentDoc As Integer, vCurrentDoc As Variant, oForms As Variant, oCounter As Variant, oFormsCollection As Object
 	iCurrentDoc = _A2B_.CurrentDocIndex()
 	If iCurrentDoc &gt;= 0 Then
 		vCurrentDoc = _A2B_.CurrentDocument(iCurrentDoc)
 	Else
 		Goto Exit_Function
 	End If
-	If vCurrentDoc.DbConnect = DBCONNECTBASE Then Set oForms = vCurrentDoc.Document.getFormDocuments()
+
+&apos; Load complete list of hierarchical and persistent names when Base document
+	If vCurrentDoc.DbConnect = DBCONNECTBASE Then vAllForms = _GetAllHierarchicalNames()
+
 &apos; Process when NO ARGUMENT
 	If IsMissing(pvIndex) Then					&apos;	No argument
 		Set oCounter = New Collect
 		oCounter._CollType = COLLALLFORMS
 		oCounter._ParentType = OBJAPPLICATION
 		oCounter._ParentName = &quot;&quot;
-		If vCurrentDoc.DbConnect = DBCONNECTFORM Then oCounter._Count = UBound(vCurrentDoc.DbContainers) + 1 Else oCounter._Count = oForms.getCount()
-		Set vAllForms = oCounter
+		If vCurrentDoc.DbConnect = DBCONNECTFORM Then oCounter._Count = UBound(vCurrentDoc.DbContainers) + 1 Else oCounter._Count = UBound(vAllForms) + 1
+		Set vReturn = oCounter
 		Goto Exit_Function
 	End If
 	
 &apos; Process when ARGUMENT = STRING or INDEX =&gt; Initialize form object
-Dim ofForm As Object
 	Set ofForm = New Form
-Dim sAllForms As Variant, i As Integer, vName As Variant, oDatabase As Object, bFound As Boolean
 	Select Case vCurrentDoc.DbConnect
 		Case DBCONNECTBASE
-			sAllForms() = oForms.getElementNames()
 			ofForm._DocEntry = 0
 			ofForm._DbEntry = 0
 			If iIndex= -1 Then														&apos;	String argument
-				vName = Utils._InList(Utils._Trim(pvIndex), sAllForms, True)		&apos;	hasByName not used because case sensitive
+				vName = Utils._InList(Utils._Trim(pvIndex), vAllForms, True)
 				If vName = False Then Goto Trace_Not_Found
 				ofForm._Initialize(vName)
 			Else	
-				If iIndex + 1 &gt; oForms.getCount() Or iIndex &lt; 0 Then Goto Trace_Error_Index	&apos;	Numeric argument OK but value nonsense
-				ofForm._Initialize(sAllForms(iIndex))
+				If iIndex &gt; UBound(vAllForms) Or iIndex &lt; 0 Then Goto Trace_Error_Index	&apos;	Numeric argument OK but value nonsense
+				ofForm._Initialize(vAllForms(iIndex))
 			End If
 		Case DBCONNECTFORM
 			With vCurrentDoc
@@ -399,10 +409,10 @@ Dim sAllForms As Variant, i As Integer, vName As Variant, oDatabase As Object, b
 			ofForm._Initialize(vName)
 	End Select
 	
-	Set vAllForms = ofForm
+	Set vReturn = ofForm
 			
 Exit_Function:
-	Set AllForms = vAllForms
+	Set AllForms = vReturn
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Trace_Not_Found:
@@ -410,11 +420,11 @@ Trace_Not_Found:
 	Goto Exit_Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
-	Set vAllForms = Nothing
+	Set vReturn = Nothing
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
-	Set vAllForms = Nothing
+	Set vReturn = Nothing
 	GoTo Exit_Function
 End Function		&apos;	AllForms	V0.9.0
 
@@ -1031,11 +1041,10 @@ Dim iCount As Integer
 	Select Case VarType(pvIndex)
 		Case vbString
 			Set ofForm = Application.AllForms(Utils._Trim(pvIndex))
-		Case vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal
+		Case Else
 			iCount = Application._CountOpenForms()
 			If iCount &lt;= pvIndex Then Goto Trace_Error_Index
 			Set ofForm = Application._CountOpenForms(pvIndex)
-		Case Else
 	End Select
 
 	If IsNull(ofForm) Then Goto Trace_Error
@@ -1525,6 +1534,53 @@ REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _CollectNames(ByRef poCollection As Object, ByVal psPrefix As String) As Variant
+&apos;	Return a &quot;\;&quot; speparated list of  hierarchical (prefixed with Prefix) and persistent names contained in Collection
+&apos;	If one of those names refers to a folder, function is called recursively
+&apos;	Result = 2 items array:		(0) list of hierarchical names
+&apos;								(1) list of persistent names
+&apos;	
+Dim oObject As Object, vNamesList() As Variant, vPersistentList As Variant, i As Integer, vCollect As Variant
+Dim sName As String, sType As String, sPrefix As String
+Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
+Const cstSeparator = &quot;\;&quot;
+
+	_CollectNames = Array()
+	vCollect = Array()
+	ReDim vCollect(0 To 1)
+	vPersistentList = Array()
+
+	With poCollection
+		If .getCount = 0 Then Exit Function
+		vNamesList = .getElementNames()
+		ReDim vPersistentList(0 To UBound(vNamesList))
+
+		For i = 0 To UBound(vNamesList)
+			sName = vNamesList(i)
+			Set oObject = .getByName(sName)
+			sType = oObject.getContentType()
+			Select Case sType
+				Case cstFormType
+					vNamesList(i) = psPrefix &amp; vNamesList(i)
+					vPersistentList(i) = oObject.PersistentName
+				Case &quot;&quot;				&apos;	Folder
+					vCollect = _CollectNames(oObject, psPrefix &amp; sName &amp; &quot;/&quot;)
+					vNamesList(i) = vCollect(0)
+					vPersistentList(i) = vCollect(1)
+				Case Else
+			End Select
+		Next i
+
+	End With
+
+	Set oObject = Nothing
+	vCollect(0) = Join(vNamesList, cstSeparator)
+	vCollect(1) = Join(vPersistentList, cstSeparator)
+	_CollectNames = vCollect
+
+End Function			&apos;	_CollectNames	V6.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _CountOpenForms(ByVal Optional piCountMax As Integer) As Variant
 &apos;	Return # of active forms if no argument
 &apos;	Return name of piCountMax-th open form if argument present
@@ -1535,7 +1591,7 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 	If iAllCount &gt; 0 Then
 		For i = 0 To iAllCount - 1
 			Set ofForm = Application.AllForms(i)
-			If ofForm.IsLoaded Then iCount = iCount + 1
+			If ofForm._IsLoaded Then iCount = iCount + 1
 			If Not IsMissing(piCountMax) Then
 				If iCount = piCountMax + 1 Then
 					_CountOpenForms = ofForm	&apos;	OO3.2 aborts when Set verb present ?!?
@@ -1566,6 +1622,59 @@ Trace_Error:
 	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0, 1)
 	Goto Exit_Function
 End Function		&apos;	_CurrentDb	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _GetAllHierarchicalNames() As Variant
+&apos;	Return the full hierarchical names list of a database document
+&apos;	Get it from the vFormNamesList buffer if the latter is not empty
+
+Dim vNamesList As Variant, iCurrentDoc As Integer, vCurrentDoc As Variant
+Dim oForms As Object
+Const cstSeparator = &quot;\;&quot;
+
+	_GetAllHierarchicalNames = Array()
+
+&apos; Load complete list of names when Base document
+	iCurrentDoc = _A2B_.CurrentDocIndex()
+	If iCurrentDoc &gt;= 0 Then vCurrentDoc = _A2B_.CurrentDocument(iCurrentDoc) Else Exit Function
+	If vCurrentDoc.DbConnect = DBCONNECTBASE Then
+		If IsEmpty(vFormNamesList) Then
+			Set oForms = vCurrentDoc.Document.getFormDocuments()
+			vFormNamesList = _CollectNames(oForms, &quot;&quot;)
+		End If
+		vNamesList = Split(vFormNamesList(0), cstSeparator)
+	Else
+		Exit Function
+	End If
+
+	_GetAllHierarchicalNames = vNamesList
+	Set oForms = Nothing
+
+End Function	&apos;	_GetAllHierarchicalNames	V 6.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _GetHierarchicalName(ByVal psPersistent As String) As String
+&apos;	Return the full hierarchical name from the persistent name of a form/report
+
+Dim vPersistentList As Variant, vNamesList As Variant, i As Integer
+Const cstSeparator = &quot;\;&quot;
+
+	_GetHierarchicalName = &quot;&quot;
+
+&apos; Load complete list of names when Base document
+	vNamesList = _GetAllHierarchicalNames()
+	If UBound(vNamesList) &lt; 0 Then Exit Function
+	vPersistentList = Split(vFormNamesList(1), cstSeparator)
+
+&apos;	Search in list
+	For i = 0 To UBound(vPersistentList)
+		If vPersistentList(i) = psPersistent Then
+			_GetHierarchicalName = vNamesList(i)
+			Exit For
+		End If
+	Next i
+
+End Function	&apos;	_GetHierarchicalName	V 6.2.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _NewBar() As Object
