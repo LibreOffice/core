@@ -42,7 +42,7 @@ namespace rptui
 
     private:
         /// does late initializations, return whether or not successful
-        bool impl_lateInit_nothrow();
+        void impl_lateInit_nothrow();
 
         void impl_adjustFormatConditions_nothrow(
             const css::uno::Reference< css::report::XReportControlModel >& _rxRptControlModel,
