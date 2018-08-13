@@ -18,6 +18,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <vcl/button.hxx>
 
 namespace {
 
@@ -117,6 +118,27 @@ void ManagedMenuButton::Activate()
 
 }
 
+// this below class should be made like managed menubutton with inheriting newmenubtn class
+//below its done by inheriting managed menubutton class just to have a working model
+
+class NotebookbarMenuButton : public ManagedMenuButton
+{
+public:
+    NotebookbarMenuButton(vcl::Window* pParent, WinBits nStyle);
+    ~NotebookbarMenuButton() override;
+};
+
+NotebookbarMenuButton::NotebookbarMenuButton(vcl::Window* pParent, WinBits nStyle)
+    : ManagedMenuButton(pParent, nStyle)
+{
+}
+
+NotebookbarMenuButton::~NotebookbarMenuButton()
+{
+    disposeOnce();
+}
+
 VCL_BUILDER_FACTORY_ARGS(ManagedMenuButton, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON)
+VCL_BUILDER_FACTORY_ARGS(NotebookbarMenuButton, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON|WB_SMALLSTYLE)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

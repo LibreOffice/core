@@ -875,6 +875,9 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
         if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
         {
             // calculate symbol size
+            // this line set size of dropdown symbol and uses its textheight to setsymbolsize
+            // problem is textheight is set for outdev using settings and I am unable to find a function which directly changes text size
+
             long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
 
             nSeparatorX = aInRect.Right() - 2*nSymbolSize;
@@ -944,6 +947,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     HideFocus();
 
     DrawButtonFlags nButtonStyle = ImplGetButtonState();
+    // this set output size of button frame so button can be made smaller as required for new button but text size remains the same
+    // like to reproduce set some size instead of GetOutputSizePixel() in below line, button size gets changes but textsize remains same
     Size aOutSz(GetOutputSizePixel());
     tools::Rectangle aRect(Point(), aOutSz);
     tools::Rectangle aInRect = aRect;
@@ -3852,6 +3857,28 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
         CheckBox::KeyInput( rKEvt );
 }
 
+// using the functions of pushbutton class which can alter rendercontext a new class is made for notebookbar push button
+// this class is then used by a new menubtn which sets the popupmenu for button
+/*
+class NotebookbarPushButton : private PushButton
+{
+public:
+    NotebookbarPushButton(vcl::Window* pParent, WinBits nStyle);
+    ~NotebookbarPushButton() override;
+
+    virtual functions
+};
+NotebookbarPushButton::NotebookbarPushButton(vcl::Window* pParent, WinBits nStyle)
+    : PushButton(pParent, nStyle)
+{
+}
+
+NotebookbarPushButton::~NotebookbarPushButton()
+{
+    disposeOnce();
+}
+
+*/
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSmallButton(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     rRet = VclPtr<PushButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON|WB_SMALLSTYLE);

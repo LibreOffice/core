@@ -237,5 +237,6 @@ void MenuToggleButton::SetActive( bool bSel )
     mbIsActive = bSel;
 }
 
+//class of newmenubutton similar to menubutton except which inherits the notebookbarpushbutton with changed settings
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
