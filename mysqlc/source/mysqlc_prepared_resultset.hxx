@@ -70,9 +70,9 @@ class OPreparedResultSet final : public OBase_Mutex,
 
     // Use c style arrays, because we have to work with pointers
     // on these.
-    MYSQL_BIND* m_aData = nullptr;
-    MYSQL_FIELD* m_aFields = nullptr;
-    BindMetaData* m_aMetaData = nullptr;
+    std::unique_ptr<MYSQL_BIND[]> m_aData;
+    std::unique_ptr<MYSQL_FIELD[]> m_aFields;
+    std::unique_ptr<BindMetaData[]> m_aMetaData;
 
     bool m_bWasNull = false;
 
