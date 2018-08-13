@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0a525a68",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-13T09:49:57Z",
+      "side": 0,
+      "message": "Why removing clear call?",
+      "range": {
+        "startLine": 880,
+        "startChar": 16,
+        "endLine": 880,
+        "endChar": 42
+      },
+      "revId": "67649406d7b72f8d6ea4bbe76e775e0052ddefc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
