@@ -1535,7 +1535,7 @@ REM ----------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _CollectNames(ByRef poCollection As Object, ByVal psPrefix As String) As Variant
-&apos;	Return a &quot;\;&quot; speparated list of  hierarchical (prefixed with Prefix) and persistent names contained in Collection
+&apos;	Return a &quot;\;&quot; separated list of hierarchical (prefixed with Prefix) and persistent names contained in Collection
 &apos;	If one of those names refers to a folder, function is called recursively
 &apos;	Result = 2 items array:		(0) list of hierarchical names
 &apos;								(1) list of persistent names
