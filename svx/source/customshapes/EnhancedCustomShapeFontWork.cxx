@@ -251,6 +251,10 @@ void CalculateHorizontalScalingFactor(
 
     if (nFontSize > 1)
         rFWData.fVerticalTextScaling = static_cast<double>(nFontSize) / rFontHeight.GetHeight();
+    // Add some padding
+    if (rFWData.bScaleX)
+        fScalingFactor *= 1.1;
+
     rFWData.fHorizontalTextScaling = fScalingFactor;
 }
 
@@ -530,11 +534,16 @@ bool GetFontWorkOutline(
         }
         else if (rFWData.bScaleX)
         {
+            const SdrTextVertAdjust nVertJustify = rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_VERTADJUST ).GetValue();
+            double fFactor = nVertJustify == SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ? -0.5 : ( nVertJustify == SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP ? 0.5 : 0 );
+
             std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
             std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
             while ( aParagraphIter != aParagraphIEnd )
             {
                 sal_Int32 nHorzDiff = 0;
+                sal_Int32 nVertDiff = static_cast<double>( rFWData.nSingleLineHeight ) * fFactor * ( aTextAreaIter->vParagraphs.size() - 1 );
+
                 if ( eHorzAdjust == SDRTEXTHORZADJUST_CENTER )
                     nHorzDiff = ( rFWData.fHorizontalTextScaling * aTextAreaIter->aBoundRect.GetWidth() - aParagraphIter->aBoundRect.GetWidth() ) / 2;
                 else if ( eHorzAdjust == SDRTEXTHORZADJUST_RIGHT )
@@ -550,7 +559,7 @@ bool GetFontWorkOutline(
                         std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
                         while( aOutlineIter != aOutlineIEnd )
                         {
-                            aOutlineIter->Move( nHorzDiff, 0 );
+                            aOutlineIter->Move( nHorzDiff, nVertDiff );
                             ++aOutlineIter;
                         }
                         ++aCharacterIter;
