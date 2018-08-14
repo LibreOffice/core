@@ -2313,7 +2313,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<sheet::XCellRangeData> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     return xAllRange->getDataArray();
 }
 
@@ -2323,7 +2323,7 @@ void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< uno
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<sheet::XCellRangeData> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     return xAllRange->setDataArray(rArray);
 }
 
@@ -2333,7 +2333,7 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData()
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getData();
@@ -2345,7 +2345,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setData(rData);
@@ -2359,7 +2359,7 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getRowDescriptions();
@@ -2371,7 +2371,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setRowDescriptions(rRowDesc);
@@ -2383,7 +2383,7 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getColumnDescriptions();
@@ -2395,7 +2395,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
-        uno::UNO_QUERY);
+        uno::UNO_QUERY_THROW);
     static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->setColumnDescriptions(rColumnDesc);
@@ -3657,7 +3657,7 @@ SwXCellRange::getData()
         uno::Reference<chart::XChartDataArray> const xDataRange(
                 getCellRangeByPosition((m_pImpl->m_bFirstColumnAsLabel) ? 1 : 0,
                                        (m_pImpl->m_bFirstRowAsLabel) ? 1 : 0,
-            nColCount-1, nRowCount-1), uno::UNO_QUERY);
+            nColCount-1, nRowCount-1), uno::UNO_QUERY_THROW);
         return xDataRange->getData();
     }
     uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
@@ -3690,7 +3690,7 @@ SwXCellRange::setData(const uno::Sequence< uno::Sequence<double> >& rData)
         uno::Reference<chart::XChartDataArray> const xDataRange(
                 getCellRangeByPosition((m_pImpl->m_bFirstColumnAsLabel) ? 1 : 0,
                                        (m_pImpl->m_bFirstRowAsLabel) ? 1 : 0,
-            nColCount-1, nRowCount-1), uno::UNO_QUERY);
+            nColCount-1, nRowCount-1), uno::UNO_QUERY_THROW);
         return xDataRange->setData(rData);
     }
     lcl_EnsureCoreConnected(m_pImpl->GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
@@ -3769,6 +3769,8 @@ void SwXCellRange::Impl::SetLabelDescriptions(SwXCellRange & rThis,
     if(!nRight && !nBottom)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(&rThis));
     auto xLabelRange(rThis.getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
+    if (!xLabelRange.is())
+        throw uno::RuntimeException("Missing Cell Range", static_cast<cppu::OWeakObject*>(&rThis));
     auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
         throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(&rThis));
