@@ -637,7 +637,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
     return bDone;
 }
 
-bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -723,8 +723,6 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDocShell.SetDocumentModified();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-
-    return true;        //! always ???
 }
 
 bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,

@@ -253,9 +253,9 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
-    bool bOk = aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
+    aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
-    if ( bOk && bPaint )
+    if ( bPaint )
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
 }
 
