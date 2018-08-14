@@ -2326,6 +2326,13 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
     }
 
+    // notify frames - before moving hints, because footnotes
+    // want to find their anchor text frame in the follow chain
+    SwInsText aInsHint( nDestStart, nLen );
+    pDest->ModifyNotification( nullptr, &aInsHint );
+    SwDelText aDelHint( nTextStartIdx, nLen );
+    ModifyNotification( nullptr, &aDelHint );
+
     // 2. move attributes
     // Iterate over attribute array until the start of the attribute
     // is behind the moved range
@@ -2461,12 +2468,6 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     CHECK_SWPHINTS(this);
 
     TryDeleteSwpHints();
-
-    // notify layout frames
-    SwInsText aInsHint( nDestStart, nLen );
-    pDest->ModifyNotification( nullptr, &aInsHint );
-    SwDelText aDelHint( nTextStartIdx, nLen );
-    ModifyNotification( nullptr, &aDelHint );
 }
 
 void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
