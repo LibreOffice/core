@@ -107,6 +107,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /etc/libreoffice/**                   r,
 
   /etc/cups/ppd/*.ppd                   r,
+  /etc/xml/catalog                      r, #exporting to .xhtml, for libxml2
   /proc/*/status                        r,
 
   owner @{HOME}/.config/libreoffice{,dev}/** rwk,
