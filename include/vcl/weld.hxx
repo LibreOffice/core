@@ -569,6 +569,7 @@ protected:
 
     DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
     DECL_LINK(spin_button_output, weld::SpinButton&, void);
+    DECL_LINK(spin_button_input, int* result, bool);
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
@@ -583,6 +584,7 @@ public:
     {
         update_width_chars();
         m_xSpinButton->connect_output(LINK(this, MetricSpinButton, spin_button_output));
+        m_xSpinButton->connect_input(LINK(this, MetricSpinButton, spin_button_input));
         m_xSpinButton->connect_value_changed(
             LINK(this, MetricSpinButton, spin_button_value_changed));
     }
