@@ -6252,10 +6252,10 @@ void ScDocument::SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew )
         maTabs[nTab]->SetRepeatRowRange( std::move(pNew) );
 }
 
-ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const
+std::unique_ptr<ScPrintRangeSaver> ScDocument::CreatePrintRangeSaver() const
 {
     const SCTAB nCount = static_cast<SCTAB>(maTabs.size());
-    ScPrintRangeSaver* pNew = new ScPrintRangeSaver( nCount );
+    std::unique_ptr<ScPrintRangeSaver> pNew(new ScPrintRangeSaver( nCount ));
     for (SCTAB i=0; i<nCount; i++)
         if (maTabs[i])
             maTabs[i]->FillPrintSaver( pNew->GetTabData(i) );

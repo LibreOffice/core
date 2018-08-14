@@ -1296,11 +1296,11 @@ OUString ScUndoTabProtect::GetComment() const
 }
 
 ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
-                                    ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew ) :
+                                    std::unique_ptr<ScPrintRangeSaver> pOld, std::unique_ptr<ScPrintRangeSaver> pNew ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
-    pOldRanges( pOld ),
-    pNewRanges( pNew )
+    pOldRanges( std::move(pOld) ),
+    pNewRanges( std::move(pNew) )
 {
 }
 
