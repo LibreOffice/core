@@ -241,6 +241,8 @@ public:
     void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
 
     static FieldUnit        StringToMetric(const OUString &rMetricString);
+    static bool             TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit);
+
 protected:
     sal_Int64               mnBaseValue;
     FieldUnit               meUnit;
