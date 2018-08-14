@@ -102,7 +102,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame*
     }
 }
 
-bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
+void ScDBDocFunc::DoImportUno( const ScAddress& rPos,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
 {
     svx::ODataAccessDescriptor aDesc( aArgs );      // includes selection and result set
@@ -113,8 +113,6 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     OUString sTarget = pDBData->GetName();
 
     UpdateImport( sTarget, aDesc );
-
-    return true;
 }
 
 bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,

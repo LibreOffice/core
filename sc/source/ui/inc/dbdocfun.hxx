@@ -62,7 +62,7 @@ public:
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
                    const svx::ODataAccessDescriptor* pDescriptor);      // used for selection an existing ResultSet
 
-    bool DoImportUno( const ScAddress& rPos,
+    void DoImportUno( const ScAddress& rPos,
                       const css::uno::Sequence<css::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame );
