@@ -4193,7 +4193,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 if (rLayout.IsHideRedlines())
                 {
                     assert(!pFrame->GetMergedPara() ||
-                        rNode.GetRedlineMergeFlag() == SwNode::Merge::NonFirst);
+                        !rNode.IsCreateFrameWhenHidingRedlines());
                     if (rNode.IsCreateFrameWhenHidingRedlines())
                     {
                         {
