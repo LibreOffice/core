@@ -1026,6 +1026,8 @@ uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSecti
         uno::Reference< container::XEnumerationAccess > xEnumAccess( rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
         xRangeProperties.set( xEnum->nextElement(), uno::UNO_QUERY_THROW );
+        if ( rDM_Impl.GetIsDummyParaAddedForTableInSection() && xEnum->hasMoreElements() )
+            xRangeProperties.set( xEnum->nextElement(), uno::UNO_QUERY_THROW );
     }
     else if ( xStartingRange.is() )
         xRangeProperties.set( xStartingRange, uno::UNO_QUERY_THROW );
