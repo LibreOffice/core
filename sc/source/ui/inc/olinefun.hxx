@@ -44,7 +44,7 @@ public:
     bool        ShowMarkedOutlines( const ScRange& rRange, bool bRecord );
     bool        HideMarkedOutlines( const ScRange& rRange, bool bRecord );
 
-    bool        ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+    void        ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint );
     bool        HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint );
