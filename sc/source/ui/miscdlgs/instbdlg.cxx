@@ -305,7 +305,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
 {
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
-        SfxMedium* pMed = pDocInserter->CreateMedium();
+        std::unique_ptr<SfxMedium> pMed = pDocInserter->CreateMedium();
         if ( pMed )
         {
             //  ERRCTX_SFX_OPENDOC -> "Error loading document"
@@ -321,7 +321,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
 
             {
                 weld::WaitObject aWait(m_xDialog.get());
-                pDocShTables->DoLoad(pMed);
+                pDocShTables->DoLoad(pMed.release());
             }
 
             ErrCode nErr = pDocShTables->GetErrorCode();

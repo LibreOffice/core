@@ -179,7 +179,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
     if ( _pFileDlg->GetError() != ERRCODE_NONE )
         return;
 
-    SfxMedium* pMed = m_xDocInserter->CreateMedium();
+    std::unique_ptr<SfxMedium> pMed = m_xDocInserter->CreateMedium();
     if ( pMed )
     {
         weld::WaitObject aWait(m_xDialog.get());
@@ -207,7 +207,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
 
         m_pSourceShell = new ScDocShell;
         aSourceRef = m_pSourceShell;
-        m_pSourceShell->DoLoad( pMed );
+        m_pSourceShell->DoLoad( pMed.get() );
 
         ErrCode nErr = m_pSourceShell->GetErrorCode();
         if (nErr)
@@ -225,6 +225,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
 
             m_xCbUrl->SetText(EMPTY_OUSTRING);
         }
+        pMed.release(); // DoLoad takes ownership
     }
 
     UpdateSourceRanges();
