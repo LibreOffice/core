@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,python3,\
 		fixscripts \
 		fixinstallnames \
 		executables \
+		removeunnecessarystuff \
 	) \
 ))
 
@@ -148,6 +149,10 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../LibreOfficePython $$file ; done
 	touch $@
+
+$(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
+	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
 
 endif
 
