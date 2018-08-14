@@ -681,7 +681,7 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
 
                 for(size_t nIndex = 0; nIndex<nSize; nIndex++ )
                 {
-                    pSortBase = pTOXBaseSect->GetTOXSortTabBases()[nIndex];
+                    pSortBase = pTOXBaseSect->GetTOXSortTabBases()[nIndex].get();
                     if( pSortBase->pTOXNd == pTextNd )
                         break;
                 }

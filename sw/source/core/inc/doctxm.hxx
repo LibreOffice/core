@@ -31,11 +31,9 @@ class  SwTextFormatColl;
 struct SwPosition;
 struct SwTOXSortTabBase;
 
-typedef std::vector<SwTOXSortTabBase*> SwTOXSortTabBases;
-
 class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
-    SwTOXSortTabBases aSortArr;
+    std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
 
     void UpdateMarks( const SwTOXInternational& rIntl,
                       const SwTextNode* pOwnChapterNode );
@@ -48,7 +46,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void UpdateAuthorities( const SwTOXInternational& rIntl );
 
     // insert sorted into array for creation
-    void InsertSorted(SwTOXSortTabBase* pBase);
+    void InsertSorted(std::unique_ptr<SwTOXSortTabBase> pBase);
 
     // insert alpha delimiter at creation
     void InsertAlphaDelimitter( const SwTOXInternational& rIntl );
@@ -78,7 +76,7 @@ public:
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
 
-    const SwTOXSortTabBases& GetTOXSortTabBases() const { return aSortArr; }
+    const std::vector<std::unique_ptr<SwTOXSortTabBase>>& GetTOXSortTabBases() const { return aSortArr; }
 
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
 };
