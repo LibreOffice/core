@@ -112,9 +112,7 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
             {
                 TInstalledDriver aInstalledDriver;
                 lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
-                if ( !aInstalledDriver.sDriverFactory.isEmpty() &&
-                     ( aMiscOptions.IsExperimentalMode() ||
-                       aInstalledDriver.sDriverFactory != "com.sun.star.comp.sdbc.firebird.Driver" ))
+                if ( !aInstalledDriver.sDriverFactory.isEmpty() )
                     m_aDrivers.emplace(*pPatternIter,aInstalledDriver);
             }
         } // if ( m_aInstalled.isValid() )
