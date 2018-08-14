@@ -57,7 +57,6 @@
 #include <lwpobjstrm.hxx>
 #include <lwptools.hxx>
 
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <memory>
@@ -372,11 +371,9 @@ OUString LwpObjectStream::QuickReadStringPtr()
     QuickReaduInt16(); //len
 
     OUString str;
-    if (diskSize >= sizeof diskSize) {
-        LwpTools::QuickReadUnicode(this, str, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
-    } else {
-        SAL_WARN("lwp", "Too small size " << diskSize);
-    }
+    if (diskSize < sizeof diskSize)
+        throw std::range_error("Too small size");
+    LwpTools::QuickReadUnicode(this, str, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
     return str;
 }
 
