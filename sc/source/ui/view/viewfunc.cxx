@@ -2549,7 +2549,11 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
     bool bUndo (rDoc.IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
+    {
         bChanged = rFunc.Unprotect( nTab, rPassword, false );
+        if (bChanged)
+            SetTabProtectionSymbol(nTab, false);
+    }
     else
     {
         //  modifying several tabs is handled here
