@@ -35,6 +35,8 @@
 @{libreoffice_ext} += [uU][oO][fFtTsSpP]
 #(x)htm(l)
 @{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}
+#.epub
+@{libreoffice_ext} += [eE][pP][uU][bB]
 
 #Images
 @{libreoffice_ext} += [jJ][pP][gG]
