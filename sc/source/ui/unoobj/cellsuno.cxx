@@ -7184,7 +7184,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
 
 // XPrintAreas
 
-void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
+void ScTableSheetObj::PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOldRanges )
 {
     //  page break and undo
     ScDocShell* pDocSh = GetDocShell();
@@ -7201,11 +7201,8 @@ void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
                 new ScUndoPrintRange(
                     pDocSh,
                     nTab,
-                    pOldRanges,
+                    std::move(pOldRanges),
                     rDoc.CreatePrintRangeSaver())); // create new ranges
-
-            // #i120105# ownership of old ranges has changed, mark as consumed
-            pOldRanges = nullptr;
         }
 
         ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab).UpdatePages();
@@ -7218,9 +7215,6 @@ void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
 
         pDocSh->SetDocumentModified();
     }
-
-    // #i120105# pOldRanges not used, need to cleanup
-    delete pOldRanges;
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
@@ -7259,7 +7253,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        ScPrintRangeSaver* pOldRanges = nullptr;
+        std::unique_ptr<ScPrintRangeSaver> pOldRanges;
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
@@ -7280,7 +7274,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
         }
 
         if ( rDoc.IsUndoEnabled() )
-            PrintAreaUndo_Impl( pOldRanges );   // Undo, Page Breaks, Modified etc.
+            PrintAreaUndo_Impl( std::move(pOldRanges) );   // Undo, Page Breaks, Modified etc.
     }
 }
 
@@ -7306,7 +7300,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
         if ( bPrintTitleColumns )
         {
@@ -7318,7 +7312,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns
         else
             rDoc.SetRepeatColRange( nTab, nullptr );          // disable
 
-        PrintAreaUndo_Impl( pOldRanges );   // undo, page break, modified etc.
+        PrintAreaUndo_Impl( std::move(pOldRanges) );   // undo, page break, modified etc.
 
         //! save last set area during switch off and recreate during switch on ???
     }
@@ -7352,13 +7346,13 @@ void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& a
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
         std::unique_ptr<ScRange> pNew(new ScRange);
         ScUnoConversion::FillScRange( *pNew, aTitleColumns );
         rDoc.SetRepeatColRange( nTab, std::move(pNew) );     // also always enable
 
-        PrintAreaUndo_Impl( pOldRanges );           // undo, page breaks, modified etc.
+        PrintAreaUndo_Impl( std::move(pOldRanges) );           // undo, page breaks, modified etc.
     }
 }
 
@@ -7384,7 +7378,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
         if ( bPrintTitleRows )
         {
@@ -7397,7 +7391,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
         else
             rDoc.SetRepeatRowRange( nTab, nullptr );          // disable
 
-        PrintAreaUndo_Impl( pOldRanges );   // undo, page breaks, modified etc.
+        PrintAreaUndo_Impl( std::move(pOldRanges) );   // undo, page breaks, modified etc.
 
         //! save last set area during switch off and recreate during switch on ???
     }
@@ -7431,13 +7425,13 @@ void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTit
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
         std::unique_ptr<ScRange> pNew(new ScRange);
         ScUnoConversion::FillScRange( *pNew, aTitleRows );
         rDoc.SetRepeatRowRange( nTab, std::move(pNew) );     // also always enable
 
-        PrintAreaUndo_Impl( pOldRanges );           // Undo, page breaks, modified etc.
+        PrintAreaUndo_Impl( std::move(pOldRanges) );           // Undo, page breaks, modified etc.
     }
 }
 

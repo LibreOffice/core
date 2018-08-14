@@ -377,7 +377,8 @@ class ScUndoPrintRange : public ScSimpleUndo
 {
 public:
                     ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
-                                        ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
+                                      std::unique_ptr<ScPrintRangeSaver> pOld,
+                                      std::unique_ptr<ScPrintRangeSaver> pNew );
     virtual         ~ScUndoPrintRange() override;
 
     virtual void    Undo() override;

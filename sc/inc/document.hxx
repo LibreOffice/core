@@ -1945,7 +1945,7 @@ public:
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
     SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
     SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
-    ScPrintRangeSaver*           CreatePrintRangeSaver() const;
+    std::unique_ptr<ScPrintRangeSaver> CreatePrintRangeSaver() const;
     void                         RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 
     SC_DLLPUBLIC tools::Rectangle       GetMMRect( SCCOL nStartCol, SCROW nStartRow,
