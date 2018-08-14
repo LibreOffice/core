@@ -292,7 +292,7 @@ namespace sw
         class RedlineStack
         {
         private:
-            std::vector<SwFltStackEntry *> maStack;
+            std::vector<std::unique_ptr<SwFltStackEntry>> maStack;
             SwDoc &mrDoc;
 
             RedlineStack(RedlineStack const&) = delete;
@@ -315,7 +315,7 @@ namespace sw
             SwDoc &mrDoc;
         public:
             explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
-            void operator()(SwFltStackEntry *pEntry);
+            void operator()(std::unique_ptr<SwFltStackEntry> & pEntry);
         private:
             SetInDocAndDelete& operator=(const SetInDocAndDelete&) = delete;
         };
@@ -326,7 +326,7 @@ namespace sw
             const SwPosition &mrPos;
         public:
             explicit SetEndIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
-                void operator()(SwFltStackEntry *pEntry) const
+                void operator()(std::unique_ptr<SwFltStackEntry> & pEntry) const
             {
                 if (pEntry->bOpen)
                     pEntry->SetEndPos(mrPos);
@@ -338,7 +338,7 @@ namespace sw
         class CompareRedlines
         {
         public:
-            bool operator()(const SwFltStackEntry *pOneE, const SwFltStackEntry *pTwoE)
+            bool operator()(const std::unique_ptr<SwFltStackEntry> & pOneE, const std::unique_ptr<SwFltStackEntry> & pTwoE)
                 const;
         };
 
