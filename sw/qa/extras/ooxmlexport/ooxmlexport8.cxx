@@ -760,6 +760,11 @@ DECLARE_OOXMLEXPORT_TEST(testN779642, "n779642.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::BOTTOM, nValue);
     xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", text::RelOrientation::PAGE_PRINT_AREA, nValue);
+
+    // tdf#106572 - perhaps not the best test to hijack since this file
+    // produces an error in Word, but it nicely matches danger points,
+    // and has a different first footer, so nice visual confirmation.
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraphOrTable(1), "PageDescName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTbLrHeight, "tblr-height.docx")
