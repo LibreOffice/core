@@ -366,6 +366,8 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
 SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         std::function<void (SwTextNode *, sw::mark::RestoreMode)> const*const pContentIndexRestore)
 {
+    bool isHide(false);
+    SwNode::Merge const eOldMergeFlag(GetRedlineMergeFlag());
     bool parentIsOutline = IsOutline();
 
     // create a node "in front" of me
@@ -479,10 +481,18 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         {   // call before making frames and before RegisterToNode
             (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
         }
+        if (eOldMergeFlag != SwNode::Merge::None)
+        {   // clear before making frames and before RegisterToNode
+            SetRedlineMergeFlag(SwNode::Merge::None);
+        }   // now RegisterToNode will set merge flags in both nodes properly!
 
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                isHide = true;
+            }
             pFrame->RegisterToNode( *pNode );
             if (!pFrame->IsFollow() && pFrame->GetOfst())
             {
@@ -522,6 +532,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         {
             MoveTextAttr_To_AttrSet();
         }
+        // in case there are frames, the RegisterToNode has set the merge flag
         pNode->MakeFramesForAdjacentContentNode(*this);
         lcl_ChangeFootnoteRef( *this );
         if (pContentIndexRestore)
@@ -584,20 +595,125 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         }
 
         if (pContentIndexRestore)
-        {   // call before making frames
+        {   // call before making frames and before RegisterToNode
             (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
         }
 
-        if ( HasWriterListeners() )
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
-            MakeFramesForAdjacentContentNode(*pNode);
+            frames.push_back(pFrame);
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                isHide = true;
+            }
         }
-        lcl_ChangeFootnoteRef( *pNode );
+        bool bNonMerged(false);
+        bool bRecreateThis(false);
+        for (SwTextFrame * pFrame : frames)
+        {
+            // sw_redlinehide: for this to work properly with hidden nodes,
+            // the frame needs to listen on them too.
+            // also: have to check the frame; this->GetRedlineMergeFlag()
+            // is None in case there's a delete redline inside the paragraph,
+            // but that could still result in a merged frame after split...
+            if (pFrame->GetMergedPara())
+            {
+                // Can't special case this == First here - that could (if
+                // both nodes are still merged by redline) lead to
+                // duplicate frames on "this".
+                // Update the extents with new node; also inits merge flag,
+                // so the MakeFramesForAdjacentContentNode below respects it
+                pFrame->RegisterToNode(*pNode);
+                if (pFrame->GetText().isEmpty())
+                {
+                    // turns out it's empty - in this case, it was not
+                    // invalidated because Cut didn't sent it any hints,
+                    // so we have to invalidate it here!
+                    pFrame->Prepare(PREP_CLEAR, nullptr, false);
+                }
+                if (!pFrame->GetMergedPara() ||
+                    !pFrame->GetMergedPara()->listener.IsListeningTo(this))
+                {
+                    // it's no longer listening - need to recreate frame
+                    // (note this is idempotent, can be done once per frame)
+                    SetRedlineMergeFlag(SwNode::Merge::None);
+                    bRecreateThis = true;
+                }
+            }
+            else
+            {
+                bNonMerged = true;
+            }
+        }
+        assert(!(bNonMerged && bRecreateThis)); // 2 layouts not handled yet - maybe best to simply use the other branch then?
+        if (!frames.empty() && bNonMerged)
+        {
+            // the existing frame on "this" should have been updated by Cut
+            MakeFramesForAdjacentContentNode(*pNode);
+            lcl_ChangeFootnoteRef(*pNode);
+        }
+        else if (bRecreateThis)
+        {
+            assert(pNode->HasWriterListeners()); // was just moved there
+            pNode->MakeFramesForAdjacentContentNode(*this);
+            lcl_ChangeFootnoteRef(*this);
+        }
+
         if (pContentIndexRestore)
         {   // call after making frames; listeners will take care of adding to the right frame
             (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
         }
     }
+
+#ifndef NDEBUG
+    if (isHide) // otherwise flags won't be set anyway
+    {
+        // First
+        // -> First,NonFirst
+        // -> First,Hidden
+        // -> None,First
+        // Hidden
+        // -> Hidden,Hidden (if still inside merge rl)
+        // -> NonFirst,First (if redline was split)
+        // NonFirst
+        // -> NonFirst,First (if split after end of "incoming" redline &
+        //                    before start of "outgoing" redline)
+        // -> NonFirst,None (if split after end of "incoming" redline)
+        // -> NonFirst,Hidden (if split after start of "outgoing" redline)
+        // -> Hidden, NonFirst (if split before end of "incoming" redline)
+        // None
+        // -> None,None
+        // -> First,NonFirst (if splitting inside a delete redline)
+        SwNode::Merge const eFirst(pNode->GetRedlineMergeFlag());
+        SwNode::Merge const eSecond(GetRedlineMergeFlag());
+        switch (eOldMergeFlag)
+        {
+            case Merge::First:
+                assert((eFirst == Merge::First && eSecond == Merge::NonFirst)
+                    || (eFirst == Merge::First && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::None && eSecond == Merge::First));
+            break;
+            case Merge::Hidden:
+                assert((eFirst == Merge::Hidden && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::First));
+            break;
+            case Merge::NonFirst:
+                assert((eFirst == Merge::NonFirst && eSecond == Merge::First)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::None)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::Hidden)
+                    || (eFirst == Merge::Hidden && eSecond == Merge::NonFirst));
+            break;
+            case Merge::None:
+                assert((eFirst == Merge::None && eSecond == Merge::None)
+                    || (eFirst == Merge::First && eSecond == Merge::NonFirst));
+            break;
+        }
+    }
+#else
+    (void) isHide;
+#endif
 
     {
         // Send Hint for PageDesc. This should be done in the Layout when
