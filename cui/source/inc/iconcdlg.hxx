@@ -96,7 +96,7 @@ class IconChoiceDialog : public SfxModalDialog
 private:
     friend class IconChoicePage;
 
-    std::vector< IconChoicePageData* > maPageList;
+    std::vector< std::unique_ptr<IconChoicePageData> > maPageList;
 
     VclPtr<SvtIconChoiceCtrl>       m_pIconCtrl;
 

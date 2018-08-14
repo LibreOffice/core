@@ -198,11 +198,10 @@ void IconChoiceDialog::dispose()
     //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized)), RTL_TEXTENCODING_ASCII_US));
     //aTabDlgOpt.SetPageID( mnCurrentPageId );
 
-    for (IconChoicePageData* pData : maPageList)
+    for (std::unique_ptr<IconChoicePageData> & pData : maPageList)
     {
         if ( pData->pPage )
             pData->pPage.disposeAndClear();
-        delete pData;
     }
     maPageList.clear();
 
@@ -232,8 +231,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     CreatePage      pCreateFunc /* != 0 */
 )
 {
-    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc );
-    maPageList.push_back( pData );
+    maPageList.emplace_back( new IconChoicePageData ( nId, pCreateFunc ) );
 
     SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
     pEntry->SetUserData ( reinterpret_cast<void*>(nId) );
@@ -431,7 +429,7 @@ void IconChoiceDialog::DeActivatePageImpl ()
         {
             // TODO refresh input set
             // flag all pages to be newly initialized
-            for (IconChoicePageData* pObj : maPageList)
+            for (auto & pObj : maPageList)
             {
                 if ( pObj->pPage.get() != pPage )
                     pObj->bRefresh = true;
@@ -540,7 +538,7 @@ void IconChoiceDialog::Start()
 bool IconChoiceDialog::QueryClose()
 {
     bool bRet = true;
-    for (IconChoicePageData* pData : maPageList)
+    for (auto & pData : maPageList)
     {
         if ( pData->pPage && !pData->pPage->QueryClose() )
         {
@@ -566,11 +564,11 @@ void IconChoiceDialog::Start_Impl()
 IconChoicePageData* IconChoiceDialog::GetPageData ( HyperLinkPageType nId )
 {
     IconChoicePageData *pRet = nullptr;
-    for (IconChoicePageData* pData : maPageList)
+    for (auto & pData : maPageList)
     {
         if ( pData->nId == nId )
         {
-            pRet = pData;
+            pRet = pData.get();
             break;
         }
     }
