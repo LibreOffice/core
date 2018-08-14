@@ -128,11 +128,12 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
 
 void Writer::storeTo( Reference< XOutputStream > const &xOutStream )
 {
-    for (auto const& font : maFonts)
+    for (auto & font : maFonts)
     {
         font->write( *mpFontsStream );
-        delete font;
+        font.reset();
     }
+    maFonts.clear();
 
     // Endtag
     mpMovieStream->WriteUInt16( 0 );
