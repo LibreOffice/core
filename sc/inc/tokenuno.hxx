@@ -42,7 +42,7 @@ public:
                         ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const css::uno::Sequence< css::sheet::FormulaToken >& rSequence );
-    static SC_DLLPUBLIC bool ConvertToTokenSequence(
+    static SC_DLLPUBLIC void ConvertToTokenSequence(
                         const ScDocument& rDoc,
                         css::uno::Sequence< css::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );

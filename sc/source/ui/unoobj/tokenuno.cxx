@@ -140,7 +140,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
         SetCompilerFlags( aCompiler );
 
         ScTokenArray* pCode = aCompiler.CompileString( aFormula );
-        (void)ScTokenConversion::ConvertToTokenSequence( rDoc, aRet, *pCode );
+        ScTokenConversion::ConvertToTokenSequence( rDoc, aRet, *pCode );
         delete pCode;
     }
 
@@ -353,7 +353,7 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
     return !rTokenArray.Fill(rSequence, rDoc.GetSharedStringPool(), rDoc.GetExternalRefManager());
 }
 
-bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
+void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
         uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
 {
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());
@@ -473,8 +473,6 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     }
     else
         rSequence.realloc(0);
-
-    return true;
 }
 
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler)

@@ -5066,7 +5066,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
             {
                 const ScTokenArray* pTokenArray = pFCell1->GetCode();
                 if (pTokenArray)
-                    (void)ScTokenConversion::ConvertToTokenSequence(rDoc, aSequence, *pTokenArray);
+                    ScTokenConversion::ConvertToTokenSequence(rDoc, aSequence, *pTokenArray);
             }
         }
     }
