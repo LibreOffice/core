@@ -3875,7 +3875,7 @@ private:
             return false;
         if (eHandled == TRISTATE_TRUE)
         {
-            *new_value = result;
+            *new_value = pThis->toGtk(result);
             return true;
         }
         return GTK_INPUT_ERROR;

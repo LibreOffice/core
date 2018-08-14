@@ -1314,8 +1314,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     return nValue;
 }
 
-static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
-                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
+bool MetricFormatter::TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit)
 {
     // Get value
     sal_Int64 nValue;
@@ -1334,7 +1334,7 @@ static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 
 
 bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
-    if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
+    if ( !TextToValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
         return true;
     else
     {
@@ -1425,7 +1425,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
 {
     double nTempValue;
     // caution: precision loss in double cast
-    if (!ImplMetricGetValue(rStr, nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
+    if (!TextToValue(rStr, nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         nTempValue = static_cast<double>(mnLastValue);
 
     // caution: precision loss in double cast
@@ -1788,7 +1788,7 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos
 sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
 {
     double nValue = 0;
-    ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
+    TextToValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
                         GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit );
 
     // convert to previously configured units

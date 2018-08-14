@@ -243,6 +243,17 @@ namespace weld
         return MetricField::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
     }
 
+    IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)
+    {
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        double fResult(0.0);
+        bool bRet = MetricFormatter::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
+        if (bRet)
+            *result = fResult;
+        return bRet;
+    }
+
     IMPL_LINK_NOARG(TimeSpinButton, spin_button_cursor_position, Entry&, void)
     {
         int nStartPos, nEndPos;
