@@ -1339,37 +1339,38 @@ void SAL_CALL SvxShape::dispose()
 
     if ( HasSdrObject() )
     {
-        EndListening( GetSdrObject()->getSdrModelFromSdrObject() );
+        SdrObject* pObject = GetSdrObject();
+
+        EndListening( pObject->getSdrModelFromSdrObject() );
         bool bFreeSdrObject = false;
 
-        if ( GetSdrObject()->IsInserted() && GetSdrObject()->GetPage() )
+        if ( pObject->IsInserted() && pObject->GetPage() )
         {
             OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
                 // normally, we are allowed to free the SdrObject only if we have its ownership.
                 // Why isn't this checked here?
 
-            SdrPage* pPage = GetSdrObject()->GetPage();
+            SdrPage* pPage = pObject->GetPage();
             // delete the SdrObject from the page
             const size_t nCount = pPage->GetObjCount();
             for ( size_t nNum = 0; nNum < nCount; ++nNum )
             {
-                if ( pPage->GetObj( nNum ) == GetSdrObject() )
+                if ( pPage->GetObj( nNum ) == pObject )
                 {
-                    OSL_VERIFY( pPage->RemoveObject( nNum ) == GetSdrObject() );
+                    OSL_VERIFY( pPage->RemoveObject( nNum ) == pObject );
                     bFreeSdrObject = true;
                     break;
                 }
             }
         }
 
-        GetSdrObject()->setUnoShape(nullptr);
+        pObject->setUnoShape(nullptr);
 
         if ( bFreeSdrObject )
         {
             // in case we have the ownership of the SdrObject, a Free
             // would do nothing. So ensure the ownership is reset.
             mpImpl->mbHasSdrObjectOwnership = false;
-            SdrObject* pObject = GetSdrObject();
             SdrObject::Free( pObject );
         }
     }
