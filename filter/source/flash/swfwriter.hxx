@@ -156,9 +156,6 @@ private:
     std::vector< sal_uInt16 > maGlyphOffsets;
 };
 
-typedef std::vector<FlashFont*> FontMap;
-
-
 /** this class helps creating flash tags */
 class Tag : public SvMemoryStream
 {
@@ -363,7 +360,7 @@ private:
 private:
     css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
 
-    FontMap                 maFonts;
+    std::vector<std::unique_ptr<FlashFont>> maFonts;
 
     sal_Int32 mnDocWidth;
     sal_Int32 mnDocHeight;

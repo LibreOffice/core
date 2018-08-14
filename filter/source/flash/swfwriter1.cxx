@@ -376,7 +376,7 @@ FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
     }
 
     FlashFont* pFont = new FlashFont( rFont, createID() );
-    maFonts.push_back( pFont );
+    maFonts.emplace_back( pFont );
     return *pFont;
 }
 
