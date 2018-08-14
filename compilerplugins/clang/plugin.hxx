@@ -109,7 +109,7 @@ public:
     explicit FilteringPlugin( const InstantiationData& data ) : Plugin(data) {}
 
     bool TraverseNamespaceDecl(NamespaceDecl * decl) {
-        if (ignoreLocation(decl->getLocStart()))
+        if (ignoreLocation(compat::getBeginLoc(decl)))
             return true;
         return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
     }
@@ -247,7 +247,7 @@ public:
     explicit FilteringRewritePlugin( const InstantiationData& data ) : RewritePlugin(data) {}
 
     bool TraverseNamespaceDecl(NamespaceDecl * decl) {
-        if (ignoreLocation(decl->getLocStart()))
+        if (ignoreLocation(compat::getBeginLoc(decl)))
             return true;
         return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
     }
