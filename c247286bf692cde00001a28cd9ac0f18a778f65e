@@ -16,6 +16,24 @@
       "revId": "c247286bf692cde00001a28cd9ac0f18a778f65e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a004afc7",
+        "filename": "sysui/desktop/apparmor/program.soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001796
+      },
+      "writtenOn": "2018-08-14T10:05:35Z",
+      "side": 1,
+      "message": "Just by opening file with KDE file widget from desktop. sysdig shows these events:\n\n1196369 13:00:58.141933691 1 soffice.bin (4110) \u003c openat fd\u003d32(\u003cf\u003e/home/vincas/.config/soffice.binrc.lock) \n1196370 13:00:58.141934643 1 soffice.bin (4110) \u003e flock fd\u003d32(\u003cf\u003e/home/vincas/.config/soffice.binrc.lock) operation\u003d6(LOCK_EX|LOCK_NB) \n1196371 13:00:58.141939889 1 soffice.bin (4110) \u003c flock res\u003d0 \n1196396 13:00:58.142000928 1 soffice.bin (4110) \u003e write fd\u003d32(\u003cf\u003e/home/vincas/.config/soffice.binrc.lock) size\u003d93 \n1196397 13:00:58.142019561 1 soffice.bin (4110) \u003c write res\u003d93 data\u003d4110.soffice.bin.vinco.be0c47ee1011441c88e47eac003d0c5f.9c1eb6ed-371a-4c92-b10d- \n1198848 13:00:58.146298132 1 soffice.bin (4110) \u003e close fd\u003d32(\u003cf\u003e/home/vincas/.config/soffice.binrc.lock) \n1198852 13:00:58.146298886 1 soffice.bin (4110) \u003c close res\u003d0",
+      "parentUuid": "dfeb2761_6040e708",
+      "revId": "c247286bf692cde00001a28cd9ac0f18a778f65e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
