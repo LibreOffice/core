@@ -219,7 +219,8 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
         ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 
         ScDBDocFunc aFunc( *rViewData.GetDocShell() );
-        bDone = aFunc.DoImportUno( aPos, aArgs );
+        aFunc.DoImportUno( aPos, aArgs );
+        bDone = true;
     }
     // cURLDocDataSource is never dispatched
 
