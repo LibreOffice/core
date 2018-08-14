@@ -241,7 +241,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
         DelSequenceArray();
     if(m_SequArr.empty())
     {
-        SwTOXSortTabBases aSortArr;
+        std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
         SwIterator<SwFormatField,SwFieldType> aIter( *this );
 
         SwTOXInternational aIntl(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
@@ -275,9 +275,9 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                 std::unique_ptr<SwTOXAuthority> pNew(
                     new SwTOXAuthority(*pTextNode, *pFormatField, aIntl));
 
-                for(SwTOXSortTabBases::size_type i = 0; i < aSortArr.size(); ++i)
+                for(size_t i = 0; i < aSortArr.size(); ++i)
                 {
-                    SwTOXSortTabBase* pOld = aSortArr[i];
+                    SwTOXSortTabBase* pOld = aSortArr[i].get();
                     if(*pOld == *pNew)
                     {
                         //only the first occurrence in the document
@@ -285,39 +285,34 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                         if(*pOld < *pNew)
                             pNew.reset();
                         else // remove the old content
-                        {
                             aSortArr.erase(aSortArr.begin() + i);
-                            delete pOld;
-                        }
                         break;
                     }
                 }
                 //if it still exists - insert at the correct position
                 if(pNew)
                 {
-                    SwTOXSortTabBases::size_type j {0};
+                    size_t j {0};
 
                     while(j < aSortArr.size())
                     {
-                        SwTOXSortTabBase* pOld = aSortArr[j];
+                        SwTOXSortTabBase* pOld = aSortArr[j].get();
                         if(*pNew < *pOld)
                             break;
                         ++j;
                     }
-                    aSortArr.insert(aSortArr.begin() + j, pNew.release());
+                    aSortArr.insert(aSortArr.begin() + j, std::move(pNew));
                 }
             }
         }
 
-        for(const auto *pBase : aSortArr)
+        for(auto & pBase : aSortArr)
         {
-            const SwTOXSortTabBase& rBase = *pBase;
-            SwFormatField& rFormatField = const_cast<SwTOXAuthority&>(static_cast<const SwTOXAuthority&>(rBase)).GetFieldFormat();
+            SwTOXSortTabBase& rBase = *pBase;
+            SwFormatField& rFormatField = static_cast<SwTOXAuthority&>(rBase).GetFieldFormat();
             SwAuthorityField* pAField = static_cast<SwAuthorityField*>(rFormatField.GetField());
             m_SequArr.push_back(pAField->GetHandle());
         }
-        for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
-            delete *it;
         aSortArr.clear();
     }
     //find nHandle
