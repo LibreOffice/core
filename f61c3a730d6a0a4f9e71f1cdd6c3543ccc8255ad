@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_20f89fc2",
+        "filename": "lotuswordpro/source/filter/lwpobjstrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-14T10:14:08Z",
+      "side": 1,
+      "message": "in which case the sal/log.hxx include can go again",
+      "revId": "f61c3a730d6a0a4f9e71f1cdd6c3543ccc8255ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
