@@ -1858,6 +1858,8 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         }
     }
 
+    std::unique_ptr<SwFrameDeleteGuard> xDeleteGuard(bMakePage ? new SwFrameDeleteGuard(pOldBoss) : nullptr);
+
     bool bSamePage = true;
     SwLayoutFrame *pNewUpper =
             m_rThis.GetLeaf( bMakePage ? MAKEPAGE_INSERT : MAKEPAGE_NONE, true );
@@ -1895,6 +1897,8 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         pNewBoss = pNewBoss->FindFootnoteBossFrame( true );
         pOldBoss = pOldBoss->FindFootnoteBossFrame( true );
         SwPageFrame* pNewPage = pOldPage;
+
+        xDeleteGuard.reset();
 
         // First, we move the footnotes.
         bool bFootnoteMoved = false;
