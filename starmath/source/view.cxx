@@ -1953,15 +1953,15 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, voi
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
-        SfxMedium* pMedium = mpImpl->pDocInserter->CreateMedium();
+        std::unique_ptr<SfxMedium> pMedium = mpImpl->pDocInserter->CreateMedium();
 
-        if ( pMedium != nullptr )
+        if ( pMedium )
         {
             if ( pMedium->IsStorage() )
                 Insert( *pMedium );
             else
                 InsertFrom( *pMedium );
-            delete pMedium;
+            pMedium.reset();
 
             SmDocShell* pDoc = GetDoc();
             pDoc->UpdateText();

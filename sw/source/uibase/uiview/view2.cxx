@@ -2074,7 +2074,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 
 long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUString& rFilterName, sal_Int16 nVersion )
 {
-    SfxMedium* pMed = nullptr;
+    std::unique_ptr<SfxMedium> pMed;
     SwDocShell* pDocSh = GetDocShell();
 
     if( !rFileName.isEmpty() )
@@ -2083,17 +2083,17 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
         std::shared_ptr<const SfxFilter> pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
-            pMed = new SfxMedium(rFileName, StreamMode::READ, nullptr, nullptr );
+            pMed.reset(new SfxMedium(rFileName, StreamMode::READ, nullptr, nullptr ));
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
             ErrCode nErr = aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE);
             if ( nErr )
-                DELETEZ(pMed);
+                pMed.reset();
             else
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed = new SfxMedium(rFileName, StreamMode::READ, pFilter, nullptr);
+            pMed.reset(new SfxMedium(rFileName, StreamMode::READ, pFilter, nullptr));
     }
     else
     {
@@ -2109,10 +2109,10 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     if( !pMed )
         return -1;
 
-    return InsertMedium( nSlotId, pMed, nVersion );
+    return InsertMedium( nSlotId, std::move(pMed), nVersion );
 }
 
-long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion )
+long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion )
 {
     bool bInsert = false, bCompare = false;
     long nFound = 0;
@@ -2145,11 +2145,10 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
 
         SfxObjectShellRef aRef( pDocSh );
 
-        ErrCode nError = SfxObjectShell::HandleFilter( pMedium, pDocSh );
+        ErrCode nError = SfxObjectShell::HandleFilter( pMedium.get(), pDocSh );
         // #i16722# aborted?
         if(nError != ERRCODE_NONE)
         {
-            delete pMedium;
             return -1;
         }
 
@@ -2250,7 +2249,6 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         }
     }
 
-    delete pMedium;
     return nFound;
 }
 
@@ -2418,12 +2416,12 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;
 
-    SfxMedium* pMed = m_pViewImpl->CreateMedium();
+    std::unique_ptr<SfxMedium> pMed = m_pViewImpl->CreateMedium();
     if ( !pMed )
         return;
 
     const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
-    long nFound = InsertMedium( nSlot, pMed, m_pViewImpl->GetParam() );
+    long nFound = InsertMedium( nSlot, std::move(pMed), m_pViewImpl->GetParam() );
 
     if ( SID_INSERTDOC == nSlot )
     {

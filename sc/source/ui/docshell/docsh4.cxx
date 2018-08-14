@@ -2486,7 +2486,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
         sal_uInt16 nSlot = m_pImpl->pRequest->GetSlot();
-        SfxMedium* pMed = m_pImpl->pDocInserter->CreateMedium();
+        std::unique_ptr<SfxMedium> pMed = m_pImpl->pDocInserter->CreateMedium();
         // #i87094# If a .odt was selected pMed is NULL.
         if (pMed)
         {
