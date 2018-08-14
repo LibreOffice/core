@@ -157,7 +157,7 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
 void
-ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*> &entries,
+ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<SwTOXSortTabBase>> &entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess)
 {
     // pTOXNd is only set at the first mark
