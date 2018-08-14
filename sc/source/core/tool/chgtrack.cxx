@@ -50,7 +50,6 @@
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
-IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
 
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
@@ -602,15 +601,13 @@ void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
         SCCOL nDx, SCROW nDy )
 {
     // Construct list of Contents
-    ScChangeActionCellListEntry* pListContents = nullptr;
+    std::vector<ScChangeActionContent*> aContentsList;
     for ( ScChangeActionLinkEntry* pL = pLinkDeleted; pL; pL = pL->GetNext() )
     {
         ScChangeAction* p = pL->GetAction();
         if ( p && p->GetType() == SC_CAT_CONTENT )
         {
-            ScChangeActionCellListEntry* pE = new ScChangeActionCellListEntry(
-                static_cast<ScChangeActionContent*>(p), pListContents );
-            pListContents = pE;
+            aContentsList.push_back(static_cast<ScChangeActionContent*>(p) );
         }
     }
     SetState( SC_CAS_REJECTED ); // Before UpdateReference for Move
@@ -619,16 +616,11 @@ void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
 
     // Work through list of Contents and delete
     ScDocument* pDoc = pTrack->GetDocument();
-    ScChangeActionCellListEntry* pE = pListContents;
-    while ( pE )
+    for (ScChangeActionContent* pContent : aContentsList)
     {
-        if ( !pE->pContent->IsDeletedIn() &&
-                pE->pContent->GetBigRange().aStart.IsValid( pDoc ) )
-            pE->pContent->PutNewValueToDoc( pDoc, nDx, nDy );
-        ScChangeActionCellListEntry* pNextEntry;
-        pNextEntry = pE->pNext;
-        delete pE;
-        pE = pNextEntry;
+        if ( !pContent->IsDeletedIn() &&
+                pContent->GetBigRange().aStart.IsValid( pDoc ) )
+            pContent->PutNewValueToDoc( pDoc, nDx, nDy );
     }
     DeleteCellEntries(); // Remove generated ones
 }
@@ -782,7 +774,6 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
         :
         ScChangeAction( SC_CAT_NONE, rRange ),
         pTrack( pTrackP ),
-        pFirstCell( nullptr ),
         pCutOff( nullptr ),
         nCutOff( 0 ),
         pLinkMove( nullptr ),
@@ -821,7 +812,6 @@ ScChangeActionDel::ScChangeActionDel(
     const ScChangeActionType eTypeP, const SCCOLROW nD, ScChangeTrack* pTrackP) : // which of nDx and nDy is set depends on the type
     ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     pTrack( pTrackP ),
-    pFirstCell( nullptr ),
     pCutOff( nullptr ),
     nCutOff( 0 ),
     pLinkMove( nullptr ),
@@ -846,14 +836,12 @@ ScChangeActionDel::~ScChangeActionDel()
 
 void ScChangeActionDel::AddContent( ScChangeActionContent* pContent )
 {
-    ScChangeActionCellListEntry* pE = new ScChangeActionCellListEntry(
-        pContent, pFirstCell );
-    pFirstCell = pE;
+    mvCells.push_back(pContent);
 }
 
 void ScChangeActionDel::DeleteCellEntries()
 {
-    pTrack->DeleteCellEntries( pFirstCell, this );
+    pTrack->DeleteCellEntries( mvCells, this );
 }
 
 bool ScChangeActionDel::IsBaseDelete() const
@@ -1154,7 +1142,6 @@ ScChangeActionMove::ScChangeActionMove(
     ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     aFromRange(aFromBigRange),
     pTrack( pTrackP ),
-    pFirstCell( nullptr ),
     nStartLastCut(0),
     nEndLastCut(0)
 {
@@ -1167,14 +1154,12 @@ ScChangeActionMove::~ScChangeActionMove()
 
 void ScChangeActionMove::AddContent( ScChangeActionContent* pContent )
 {
-    ScChangeActionCellListEntry* pE = new ScChangeActionCellListEntry(
-        pContent, pFirstCell );
-    pFirstCell = pE;
+    mvCells.push_back(pContent);
 }
 
 void ScChangeActionMove::DeleteCellEntries()
 {
-    pTrack->DeleteCellEntries( pFirstCell, this );
+    pTrack->DeleteCellEntries( mvCells, this );
 }
 
 void ScChangeActionMove::UpdateReference( const ScChangeTrack* /* pTrack */,
@@ -2848,21 +2833,17 @@ void ScChangeTrack::AppendInsert( const ScRange& rRange, bool bEndOfList )
     Append( pAct );
 }
 
-void ScChangeTrack::DeleteCellEntries( ScChangeActionCellListEntry*& pCellList,
+void ScChangeTrack::DeleteCellEntries( std::vector<ScChangeActionContent*>& rCellList,
         const ScChangeAction* pDeletor )
 {
-    ScChangeActionCellListEntry* pE = pCellList;
-    while ( pE )
+    for (ScChangeActionContent* pContent : rCellList)
     {
-        ScChangeActionCellListEntry* pNext = pE->pNext;
-        pE->pContent->RemoveDeletedIn( pDeletor );
-        if ( IsGenerated( pE->pContent->GetActionNumber() ) &&
-                !pE->pContent->IsDeletedIn() )
-            DeleteGeneratedDelContent( pE->pContent );
-        delete pE;
-        pE = pNext;
+        pContent->RemoveDeletedIn( pDeletor );
+        if ( IsGenerated( pContent->GetActionNumber() ) &&
+                !pContent->IsDeletedIn() )
+            DeleteGeneratedDelContent( pContent );
     }
-    pCellList = nullptr;
+    rCellList.clear();
 }
 
 ScChangeActionContent* ScChangeTrack::GenerateDelContent(

@@ -174,27 +174,6 @@ public:
 // this is only for the XML Export in the hxx
 class ScChangeActionContent;
 
-class ScChangeActionCellListEntry
-{
-    friend class ScChangeAction;
-    friend class ScChangeActionDel;
-    friend class ScChangeActionMove;
-    friend class ScChangeTrack;
-
-    ScChangeActionCellListEntry*    pNext;
-    ScChangeActionContent*          pContent;
-
-    ScChangeActionCellListEntry(
-        ScChangeActionContent* pContentP,
-        ScChangeActionCellListEntry* pNextP )
-        :   pNext( pNextP ),
-            pContent( pContentP )
-        {}
-
-public:
-    DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
-};
-
 class ScChangeAction
 {
     friend class ScChangeTrack;
@@ -453,7 +432,7 @@ class ScChangeActionDel : public ScChangeAction
     friend void ScChangeAction::Accept();
 
     ScChangeTrack*      pTrack;
-    ScChangeActionCellListEntry* pFirstCell;
+    std::vector<ScChangeActionContent*> mvCells;
     ScChangeActionIns*  pCutOff;        // cut insert
     short               nCutOff;        // +: start  -: end
     ScChangeActionDelMoveEntry* pLinkMove;
@@ -528,7 +507,7 @@ class ScChangeActionMove : public ScChangeAction
 
     ScBigRange          aFromRange;
     ScChangeTrack*      pTrack;
-    ScChangeActionCellListEntry* pFirstCell;
+    std::vector<ScChangeActionContent*> mvCells;
     sal_uLong               nStartLastCut;  // for PasteCut undo
     sal_uLong               nEndLastCut;
 
@@ -538,7 +517,6 @@ class ScChangeActionMove : public ScChangeAction
         : ScChangeAction( SC_CAT_MOVE, rToRange ),
             aFromRange( rFromRange ),
             pTrack( pTrackP ),
-            pFirstCell( nullptr ),
             nStartLastCut(0),
             nEndLastCut(0)
         {}
@@ -957,7 +935,7 @@ class ScChangeTrack : public utl::ConfigurationListener
         const ScAddress& rPos, const ScCellValue& rCell, const ScDocument* pFromDoc );
 
     void                DeleteCellEntries(
-                                    ScChangeActionCellListEntry*&,
+                                    std::vector<ScChangeActionContent*>&,
                                     const ScChangeAction* pDeletor );
 
                                 // Reject action and all dependent actions,
