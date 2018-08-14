@@ -527,6 +527,14 @@ static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShap
         }
     }
 
+    // Apply vertical adjustment for text on arc
+    SvxShape* pShape = SvxShape::getImplementation(xShape);
+    assert(pShape);
+    if (rClass == "fontwork-arch-up-curve")
+        pShape->GetSdrObject()->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ) );
+    else if (rClass == "fontwork-arch-down-curve")
+        pShape->GetSdrObject()->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP ) );
+
     // Apply preset shape
     xDefaulter->createCustomShapeDefaults( rClass );
 
