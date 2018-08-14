@@ -950,7 +950,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     SCTAB nTab;
     bool bUndo (rDoc.IsUndoEnabled());
 
-    ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
+    std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
     ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
 
@@ -1030,12 +1030,12 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     if (bUndo)
     {
         SCTAB nCurTab = GetViewData().GetTabNo();
-        ScPrintRangeSaver* pNewRanges = rDoc.CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pNewRanges = rDoc.CreatePrintRangeSaver();
         pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoPrintRange( pDocSh, nCurTab, pOldRanges, pNewRanges ) );
+                    new ScUndoPrintRange( pDocSh, nCurTab, std::move(pOldRanges), std::move(pNewRanges) ) );
     }
     else
-        delete pOldRanges;
+        pOldRanges.reset();
 
     //  update page breaks
 

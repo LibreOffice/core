@@ -100,10 +100,9 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 
     if (pPrintRanges)
     {
-        ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pNewRanges = pDoc->CreatePrintRangeSaver();
         if ( pNewRanges && *pPrintRanges == *pNewRanges )
             pPrintRanges.reset();
-        delete pNewRanges;
     }
 
     if (pDPCollection)
