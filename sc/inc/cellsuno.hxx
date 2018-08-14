@@ -800,7 +800,7 @@ private:
     const SfxItemPropertySet*       pSheetPropSet;
 
     SCTAB                   GetTab_Impl() const;
-    void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
+    void                    PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOldRanges );
 
 protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
