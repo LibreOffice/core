@@ -583,7 +583,7 @@ public:
                     const OUString& rFilterName, sal_Int16 nVersion = 0 );
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
-    long InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion );
+    long InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
 
     // status methods for clipboard.

@@ -100,7 +100,7 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
 
-SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
+std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFallbackHack)
 {
     std::unique_ptr<SfxMedium> pMedium;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
@@ -133,7 +133,7 @@ SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
             pMedium.reset();
     }
 
-    return pMedium.release();
+    return pMedium;
 }
 
 SfxMediumList* DocumentInserter::CreateMediumList()
