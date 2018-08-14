@@ -72,7 +72,7 @@ index f4a1688..f34d3b5 100644
  #include "fpdfsdk/cpdfsdk_helpers.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -651,6 +652,46 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+@@ -668,6 +669,46 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
    return true;
  }
  
@@ -118,14 +118,14 @@ index f4a1688..f34d3b5 100644
 +
  FPDF_EXPORT int FPDF_CALLCONV
  FPDFFormObj_CountObjects(FPDF_PAGEOBJECT page_object) {
-   auto* pPageObj = CPDFPageObjectFromFPDFPageObject(page_object);
+   const CPDF_PageObjectList* pObjectList =
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index f249e64..e14b2a5 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1151,6 +1151,19 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
+@@ -1152,6 +1152,19 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+ FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
+ FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
  
 +// Get the processed text of a text object.
 +//
@@ -140,9 +140,9 @@ index f249e64..e14b2a5 100644
 +                             int char_count,
 +                             unsigned short* result);
 +
- // Get the page object from a form object.
+ // Get the number of characters from a text object.
  //
- // form_object - Handle to a form object. Returned by FPDFPage_GetObject.
+ // text_object - Handle of text object returned by FPDFPageObj_NewTextObj
 -- 
 2.16.3
 

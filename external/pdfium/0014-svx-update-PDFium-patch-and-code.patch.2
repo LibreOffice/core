@@ -49,15 +49,6 @@ index 29c8b01..a52e1a9 100644
    return ret_count;
  }
  
-@@ -714,7 +714,7 @@ FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
-   {
-     const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
-     if (pObjectList)
--        return pObjectList->GetPageObjectByIndex(index);
-+        return FPDFPageObjectFromCPDFPageObject(pObjectList->GetPageObjectByIndex(index));
-   }
- 
-   return nullptr;
 -- 
 2.16.3
 

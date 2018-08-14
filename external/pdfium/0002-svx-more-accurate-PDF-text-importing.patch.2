@@ -40,9 +40,9 @@ index 912df63..3244943 100644
 diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1142,6 +1142,15 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+@@ -1152,6 +1152,15 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+ FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
+ FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
  
 +// Get the number of characters from a text object.
 +//
