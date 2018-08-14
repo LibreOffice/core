@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_8003eb0d",
+        "filename": "compilerplugins/clang/pluginhandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-14T06:44:59Z",
+      "side": 1,
+      "message": "SRCDIR \"/usr/\" doesn\u0027t work as intended (and is covered anyway at the bottom of this function, where everything not starting with WORKDIR, BUILDDIR, or SRCDIR is ignored)",
+      "revId": "02ded40612ca12004618822d49688f83322adc2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
