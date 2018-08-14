@@ -27,7 +27,7 @@ head -c -14 services.rdb  > templateservices.rdb
 tail -c +85 ./services/services.rdb >> templateservices.rdb
 for a in *fuzzer; do
     #some minimal fonts required
-    cp $a $OUT
+    mv $a $OUT
     mkdir -p $OUT/$a.fonts
     cp $SRC/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
     #minimal runtime requirements
