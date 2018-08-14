@@ -793,7 +793,7 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
-        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);
+        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, nIndex);
         ImportPdfObject(pFormObject, pTextPage, -1);
     }
 

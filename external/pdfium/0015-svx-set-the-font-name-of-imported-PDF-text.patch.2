@@ -54,9 +54,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index 4351649..f858ab2 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1142,6 +1142,17 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_PAGEOBJECT text);
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+@@ -1165,6 +1165,17 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
+                              int char_count,
+                              unsigned short* result);
  
 +// Get the font name of a text object.
 +//
