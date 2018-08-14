@@ -1357,39 +1357,43 @@ void SAL_CALL SvxShape::dispose()
     mpImpl->maDisposeListeners.disposeAndClear(aEvt);
     mpImpl->maPropertyNotifier.disposing();
 
+    bool bFreeSdrObject = false;
     if ( HasSdrObject() )
     {
-        EndListening( GetSdrObject()->getSdrModelFromSdrObject() );
-        bool bFreeSdrObject = false;
-
-        if ( GetSdrObject()->IsInserted() && GetSdrObject()->getSdrPageFromSdrObject() )
+        SdrObject* pObject = GetSdrObject();
+        EndListening( pObject->getSdrModelFromSdrObject() );
+        if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
         {
             OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
                 // normally, we are allowed to free the SdrObject only if we have its ownership.
                 // Why isn't this checked here?
 
-            SdrPage* pPage = GetSdrObject()->getSdrPageFromSdrObject();
+            SdrPage* pPage = pObject->getSdrPageFromSdrObject();
             // delete the SdrObject from the page
             const size_t nCount = pPage->GetObjCount();
             for ( size_t nNum = 0; nNum < nCount; ++nNum )
             {
-                if ( pPage->GetObj( nNum ) == GetSdrObject() )
+                if ( pPage->GetObj( nNum ) == pObject )
                 {
-                    OSL_VERIFY( pPage->RemoveObject( nNum ) == GetSdrObject() );
+                    OSL_VERIFY( pPage->RemoveObject( nNum ) == pObject );
                     bFreeSdrObject = true;
                     break;
                 }
             }
         }
+    }
 
-        GetSdrObject()->setUnoShape(nullptr);
+    if ( HasSdrObject() ) //tdf#114427 refetch SdrObject in light of RemoveObject
+    {
+        SdrObject* pObject = GetSdrObject();
+
+        pObject->setUnoShape(nullptr);
 
         if ( bFreeSdrObject )
         {
             // in case we have the ownership of the SdrObject, a Free
             // would do nothing. So ensure the ownership is reset.
             mpImpl->mbHasSdrObjectOwnership = false;
-            SdrObject* pObject = GetSdrObject();
             SdrObject::Free( pObject );
         }
     }
