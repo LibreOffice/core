@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
+#include <sfx2/docfile.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <memory>
@@ -29,7 +30,6 @@
 
 namespace sfx2 { class FileDialogHelper; }
 namespace weld { class Window; }
-class SfxMedium;
 class SfxItemSet;
 enum class FileDialogFlags;
 
@@ -66,7 +66,7 @@ public:
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
-    SfxMedium*              CreateMedium(char const* pFallbackHack = nullptr);
+    std::unique_ptr<SfxMedium> CreateMedium(char const* pFallbackHack = nullptr);
     SfxMediumList*          CreateMediumList();
 };
 

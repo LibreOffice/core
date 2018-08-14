@@ -265,7 +265,7 @@ void SwView_Impl::StartDocumentInserter(
     m_pDocInserter->StartExecuteModal( rEndDialogHdl );
 }
 
-SfxMedium* SwView_Impl::CreateMedium()
+std::unique_ptr<SfxMedium> SwView_Impl::CreateMedium()
 {
     return m_pDocInserter->CreateMedium();
 }

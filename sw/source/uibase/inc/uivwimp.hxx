@@ -159,7 +159,7 @@ public:
                                 const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl,
                                 const sal_uInt16 nSlotId
                             );
-    SfxMedium*              CreateMedium();
+    std::unique_ptr<SfxMedium> CreateMedium();
     void                    InitRequest( const SfxRequest& rRequest );
 
     SfxRequest*      GetRequest() const { return m_pRequest.get(); }
