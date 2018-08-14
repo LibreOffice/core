@@ -1930,22 +1930,21 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                              * better GRAM_ENGLISH_XL_R1C1. */
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
                             ScCompiler aComp( pDoc, aPos, eGrammar);
-                            ScTokenArray* pCode = aComp.CompileString( aText );
-                            pDoc->CheckLinkFormulaNeedingCheck( *pCode);
+                            std::unique_ptr<ScTokenArray> xCode(aComp.CompileString(aText)); // ctor/InsertMatrixFormula did copy TokenArray
+                            pDoc->CheckLinkFormulaNeedingCheck(*xCode);
                             if ( ch == 'M' )
                             {
                                 ScMarkData aMark;
                                 aMark.SelectTable( aPos.Tab(), true );
                                 pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
-                                    nRefRow, aMark, EMPTY_OUSTRING, pCode );
+                                    nRefRow, aMark, EMPTY_OUSTRING, xCode.get() );
                             }
                             else
                             {
                                 ScFormulaCell* pFCell = new ScFormulaCell(
-                                        pDoc, aPos, *pCode, eGrammar, ScMatrixMode::NONE);
+                                        pDoc, aPos, *xCode, eGrammar, ScMatrixMode::NONE);
                                 pDoc->SetFormulaCell(aPos, pFCell);
                             }
-                            delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
                         }
                         break;
                     }
