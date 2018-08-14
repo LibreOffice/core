@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e06cf79d",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-14T09:54:36Z",
+      "side": 1,
+      "message": "unnecessary, going out of scope?",
+      "revId": "650b05c798123aebf6a19ddc71bc8c8f92119543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
