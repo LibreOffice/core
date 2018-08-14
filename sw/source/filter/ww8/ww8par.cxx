@@ -4281,13 +4281,12 @@ SwWW8ImplReader::~SwWW8ImplReader()
 {
 }
 
-void SwWW8ImplReader::DeleteStack(SwFltControlStack* pStck)
+void SwWW8ImplReader::DeleteStack(std::unique_ptr<SwFltControlStack> pStck)
 {
     if( pStck )
     {
         pStck->SetAttr( *m_pPaM->GetPoint(), 0, false);
         pStck->SetAttr( *m_pPaM->GetPoint(), 0, false);
-        delete pStck;
     }
     else
     {
