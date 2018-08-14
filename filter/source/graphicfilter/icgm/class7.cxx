@@ -117,7 +117,7 @@ void CGM::ImplDoClass7()
                         if (mpEndValidSource - pAppData < 9)
                             throw css::uno::Exception("attempt to read past end of input", nullptr);
 
-                        TextEntry* pTextEntry = new TextEntry;
+                        std::unique_ptr<TextEntry> pTextEntry(new TextEntry);
                         pTextEntry->nTypeOfText = *reinterpret_cast<sal_uInt16*>( pAppData );
                         pTextEntry->nRowOrLineNum = *reinterpret_cast<sal_uInt16*>( pAppData + 2 );
                         pTextEntry->nColumnNum = *reinterpret_cast<sal_uInt16*>( pAppData + 4 );
@@ -132,7 +132,7 @@ void CGM::ImplDoClass7()
                         memcpy( pTextEntry->pText, pAppData, nLen );
                         pAppData += nLen;
 
-                        mpChart->InsertTextEntry( pTextEntry );
+                        mpChart->InsertTextEntry( std::move(pTextEntry) );
                     }
                     break;
                     case 0x321 : /*AppData - IOC_TABS */break;
