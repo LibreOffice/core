@@ -20,6 +20,7 @@
 
 #include <cclass_unicode.hxx>
 #include <unicode/uchar.h>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/KParseTokens.hpp>
@@ -317,13 +318,15 @@ const sal_Int32 cclass_Unicode::pParseTokensType[ nDefCnt ] =
 
 
 // static
-const sal_Unicode* cclass_Unicode::StrChr( const sal_Unicode* pStr, sal_Unicode c )
+const sal_Unicode* cclass_Unicode::StrChr( const sal_Unicode* pStr, sal_uInt32 c )
 {
     if ( !pStr )
         return nullptr;
+    sal_Unicode cs[2];
+    auto const n = rtl::splitSurrogates(c, cs);
     while ( *pStr )
     {
-        if ( *pStr == c )
+        if ( *pStr == cs[0] && (n == 1 || pStr[1] == cs[1]) )
             return pStr;
         pStr++;
     }
@@ -659,7 +662,7 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
 }
 
 
-ParserFlags cclass_Unicode::getStartCharsFlags( sal_Unicode c )
+ParserFlags cclass_Unicode::getStartCharsFlags( sal_uInt32 c )
 {
     if ( pStart )
     {
