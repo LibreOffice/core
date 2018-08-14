@@ -37,6 +37,8 @@
 @{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}
 #.epub
 @{libreoffice_ext} += [eE][pP][uU][bB]
+#.ps (printing to file)
+@{libreoffice_ext} += [pP][sS]
 
 #Images
 @{libreoffice_ext} += [jJ][pP][gG]
@@ -117,6 +119,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{HOME}/.cache/fontconfig/**    rw,
   owner @{HOME}/.config/gtk-???/bookmarks r,  #Make bookmarks work
   owner @{HOME}/.recently-used          rwk,
+  owner /tmp/psp[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]* rw, #/tmp/psp1534203998 (printing to file)
 
   owner /{,var/}run/user/*/dconf/user   rw,
   owner @{HOME}/.config/dconf/user      r,
@@ -131,6 +134,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /{usr/,}bin/sh                        rmix,
   /{usr/,}bin/bash                      rmix,
   /{usr/,}bin/dash                      rmix,
+  /{usr/,}bin/rm                        rmix, #deleting /tmp/psp1534203998 (printing to file)
   /usr/bin/bluetooth-sendto             rmPUx,
   /usr/bin/lpr                          rmPUx,
   /usr/bin/paperconf                    rmix,
