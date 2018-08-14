@@ -27,10 +27,10 @@
 // non-sentence separators on sentence separator.
 // The begin of paragraph is also the word beginning.
 
-bool SwWrtShell::SttWrd()
+void SwWrtShell::SttWrd()
 {
     if ( IsSttPara() )
-        return true;
+        return;
         // Create temporary cursor without selection.
     Push();
     ClearMark();
@@ -40,7 +40,6 @@ bool SwWrtShell::SttWrd()
     ClearMark();
         // If Mark was previously set, summarize.
     Combine();
-    return true;
 }
 
 // The end of a word is the follow of separator to nonseparator.
@@ -48,10 +47,10 @@ bool SwWrtShell::SttWrd()
 // punctuation marks.
 // The end of a paragraph is also the end of a word.
 
-bool SwWrtShell::EndWrd()
+void SwWrtShell::EndWrd()
 {
     if ( IsEndWrd() )
-        return true;
+        return;
         // Create temporary cursor without selection.
     Push();
     ClearMark();
@@ -61,7 +60,6 @@ bool SwWrtShell::EndWrd()
     ClearMark();
         // If Mark was previously set, summarize.
     Combine();
-    return true;
 }
 
 bool SwWrtShell::NxtWrd_()

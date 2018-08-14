@@ -310,7 +310,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // indexes
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = nullptr);
-    bool    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = nullptr);
+    void    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = nullptr);
 
     // numbering and bullets
     /**
@@ -539,8 +539,8 @@ private:
     SAL_DLLPRIVATE bool  PopCursor(bool bUpdate, bool bSelect = false);
 
     // take END cursor along when PageUp / -Down
-    SAL_DLLPRIVATE bool SttWrd();
-    SAL_DLLPRIVATE bool EndWrd();
+    SAL_DLLPRIVATE void SttWrd();
+    SAL_DLLPRIVATE void EndWrd();
     SAL_DLLPRIVATE bool NxtWrd_();
     SAL_DLLPRIVATE bool PrvWrd_();
     // #i92468#

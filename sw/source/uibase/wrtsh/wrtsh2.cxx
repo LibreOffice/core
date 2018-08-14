@@ -318,7 +318,7 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
 // Update directory - remove selection
 
-bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
+void SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
     if(CanInsert())
     {
@@ -333,8 +333,6 @@ bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
             }
         }
     }
-
-    return false;
 }
 
 // handler for click on the field given as parameter.
