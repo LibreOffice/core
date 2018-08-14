@@ -725,6 +725,7 @@ namespace sw {
 void UpdateMergedParaForInsert(MergedPara & rMerged,
         SwTextNode const& rNode, sal_Int32 const nIndex, sal_Int32 const nLen)
 {
+    assert(nLen); // can 0 happen?
     assert(nIndex <= rNode.Len());
     assert(nIndex + nLen <= rNode.Len());
     assert(rMerged.pFirstNode->GetIndex() <= rNode.GetIndex() && rNode.GetIndex() <= rMerged.pLastNode->GetIndex());
@@ -755,7 +756,7 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
                 it->nEnd += nLen;
             }
         }
-        else if (bFoundNode)
+        else if (rNode.GetIndex() < it->pNode->GetIndex() || bFoundNode)
         {
             itInsert = it;
             break;
@@ -767,6 +768,10 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
     {   // must be in a gap
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
         text.insert(nTFIndex, rNode.GetText().copy(nIndex, nLen));
+        if (rNode.GetIndex() < rMerged.pParaPropsNode->GetIndex())
+        {   // text inserted before current para-props node
+            rMerged.pParaPropsNode = &rNode;
+        }
     }
     rMerged.mergedText = text.makeStringAndClear();
 }
