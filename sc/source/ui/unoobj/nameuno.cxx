@@ -320,7 +320,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
     {
         ScTokenArray* pTokenArray = pData->GetCode();
         if ( pTokenArray )
-            (void)ScTokenConversion::ConvertToTokenSequence( pDocShell->GetDocument(), aSequence, *pTokenArray );
+            ScTokenConversion::ConvertToTokenSequence( pDocShell->GetDocument(), aSequence, *pTokenArray );
     }
     return aSequence;
 }
