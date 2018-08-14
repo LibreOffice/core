@@ -682,7 +682,7 @@ namespace sw
         void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
         {
             OSL_ENSURE(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
-            maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
+            maStack.emplace_back(new SwFltStackEntry(rPos,rAttr.Clone()));
         }
 
         class SameOpenRedlineType
@@ -691,7 +691,7 @@ namespace sw
             RedlineType_t meType;
         public:
             explicit SameOpenRedlineType(RedlineType_t eType) : meType(eType) {}
-            bool operator()(const SwFltStackEntry *pEntry) const
+            bool operator()(const std::unique_ptr<SwFltStackEntry> & pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
                     (pEntry->pAttr.get());
@@ -771,7 +771,7 @@ namespace sw
             }
         }
 
-        void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
+        void SetInDocAndDelete::operator()(std::unique_ptr<SwFltStackEntry>& pEntry)
         {
             SwPaM aRegion(pEntry->m_aMkPos.m_nNode);
             if (
@@ -805,11 +805,11 @@ namespace sw
                 mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::NONE | RedlineFlags::ShowInsert |
                      RedlineFlags::ShowDelete );
             }
-            delete pEntry;
+            pEntry.reset();
         }
 
-        bool CompareRedlines::operator()(const SwFltStackEntry *pOneE,
-            const SwFltStackEntry *pTwoE) const
+        bool CompareRedlines::operator()(const std::unique_ptr<SwFltStackEntry> & pOneE,
+            const std::unique_ptr<SwFltStackEntry> & pTwoE) const
         {
             const SwFltRedline *pOne= static_cast<const SwFltRedline*>
                 (pOneE->pAttr.get());

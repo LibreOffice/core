@@ -1395,19 +1395,19 @@ private:
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
                            SwPageDesc* pNewPageDesc, sal_uInt8 nCode );
 
-    void DeleteStack(SwFltControlStack* prStck);
+    void DeleteStack(std::unique_ptr<SwFltControlStack> prStck);
     void DeleteCtrlStack()
     {
-        DeleteStack(m_xCtrlStck.release());
+        DeleteStack(std::move(m_xCtrlStck));
     }
     void DeleteRefStacks()
     {
-        DeleteStack(m_xReffedStck.release());
-        DeleteStack(m_xReffingStck.release());
+        DeleteStack(std::move(m_xReffedStck));
+        DeleteStack(std::move(m_xReffingStck));
     }
     void DeleteAnchorStack()
     {
-        DeleteStack(m_xAnchorStck.release());
+        DeleteStack(std::move(m_xAnchorStck));
     }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const OUString& rAddString);
