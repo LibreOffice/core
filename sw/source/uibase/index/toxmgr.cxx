@@ -443,7 +443,8 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         pDoc->ChgTOX(*pTOX, *pNewTOX);
 
         pTOX->DisableKeepExpression();
-        bRet = pSh->UpdateTableOf(*pTOX, pSet);
+        pSh->UpdateTableOf(*pTOX, pSet);
+        bRet = false;
         pTOX->EnableKeepExpression();
 
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
