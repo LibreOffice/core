@@ -1149,7 +1149,9 @@ public:
                                                const long* pDXAry,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
-                                               SalLayoutFlags flags = SalLayoutFlags::NONE);
+                                               SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                               vcl::TextLayoutCache const* = nullptr,
+                                               SalLayout* pLayoutCache = nullptr);
     long                        GetTextArray( const OUString& rStr, long* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::TextLayoutCache const* = nullptr,
