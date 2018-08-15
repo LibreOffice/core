@@ -93,19 +93,3 @@ index 0689f11b..e7cd5c38 100644
 -- 
 2.16.3
 
-diff --git a/configure.ac b/configure.ac
-index 951b3ebe..b66bdc10 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -165,7 +165,10 @@ dnl ==========================================================================
- dnl Hack for autoconf version mismatch
- dnl ==========================================================================
- if test "z$shrext" = "z" ; then
--    shrext=$shrext_cmds
-+    AC_MSG_CHECKING(for shared library suffix)
-+    module=no
-+    eval shrext=$shrext_cmds
-+    AC_MSG_RESULT($shrext)
- fi
- 
- dnl ==========================================================================
