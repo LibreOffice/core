@@ -1058,14 +1058,6 @@ void ImplSalDDB::ImplDraw(
 }
 
 
-struct ImplBmpObj
-{
-    X11SalBitmap*   mpBmp;
-
-                ImplBmpObj( X11SalBitmap* pBmp ) :
-                    mpBmp( pBmp ) {}
-};
-
 ImplSalBitmapCache::ImplSalBitmapCache()
 {
 }
@@ -1077,34 +1069,21 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
 
 void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp )
 {
-    ImplBmpObj* pObj = nullptr;
-    bool        bFound = false;
-
-    for(
-        BmpList_impl::iterator it = maBmpList.begin();
-        (it != maBmpList.end() ) && !bFound ;
-        ++it
-    ) {
-        pObj = *it;
-        if( pObj->mpBmp == pBmp )
-            bFound = true;
+    for(auto pObj : maBmpList)
+    {
+        if( pObj == pBmp )
+            return;
     }
-
-    if( !bFound )
-        maBmpList.push_back( new ImplBmpObj( pBmp ) );
+    maBmpList.push_back( pBmp );
 }
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap const * pBmp )
 {
-    for(
-        BmpList_impl::iterator it = maBmpList.begin();
-        it != maBmpList.end();
-        ++it
-    ) {
-        if( (*it)->mpBmp == pBmp )
+    for( auto it = maBmpList.begin(); it != maBmpList.end(); ++it)
+    {
+        if( *it == pBmp )
         {
-            (*it)->mpBmp->ImplRemovedFromCache();
-            delete *it;
+            (*it)->ImplRemovedFromCache();
             maBmpList.erase( it );
             break;
         }
@@ -1113,13 +1092,9 @@ void ImplSalBitmapCache::ImplRemove( X11SalBitmap const * pBmp )
 
 void ImplSalBitmapCache::ImplClear()
 {
-    for(
-        BmpList_impl::iterator it = maBmpList.begin();
-        it != maBmpList.end();
-        ++it
-    ) {
-        (*it)->mpBmp->ImplRemovedFromCache();
-        delete *it;
+    for(auto pObj : maBmpList)
+    {
+        pObj->ImplRemovedFromCache();
     }
     maBmpList.clear();
 }
