@@ -282,7 +282,7 @@ public:
     explicit WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
         const wwSprmParser &rSprmParser);
     void  SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_);
-    SprmResult FindSprm(sal_uInt16 nId);
+    SprmResult FindSprm(sal_uInt16 nId, sal_uInt8* pNextByteMatch = nullptr);
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
