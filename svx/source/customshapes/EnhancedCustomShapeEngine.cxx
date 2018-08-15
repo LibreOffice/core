@@ -298,29 +298,27 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     bool bFlipH = aCustomShape2d.IsFlipHorz();
     bool bLineGeometryNeededOnly = bTextPathOn;
 
-    SdrObject* pRenderedShape = aCustomShape2d.CreateObject( bLineGeometryNeededOnly );
-    if ( pRenderedShape )
+    std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedShape(aCustomShape2d.CreateObject(bLineGeometryNeededOnly));
+    if (xRenderedShape)
     {
         if ( bTextPathOn )
         {
-            SdrObject* pRenderedFontWork(
+            std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedFontWork(
                 EnhancedCustomShapeFontWork::CreateFontWork(
-                    pRenderedShape,
+                    xRenderedShape.get(),
                     rSdrObjCustomShape));
 
-            if ( pRenderedFontWork )
+            if (xRenderedFontWork)
             {
-                SdrObject::Free( pRenderedShape );
-                pRenderedShape = pRenderedFontWork;
+                xRenderedShape = std::move(xRenderedFontWork);
             }
         }
-        SdrObject* pRenderedShape3d = EnhancedCustomShape3d::Create3DObject(pRenderedShape, rSdrObjCustomShape);
-        if ( pRenderedShape3d )
+        std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedShape3d(EnhancedCustomShape3d::Create3DObject(xRenderedShape.get(), rSdrObjCustomShape));
+        if (xRenderedShape3d)
         {
             bFlipV = bFlipH = false;
             nRotateAngle = 0;
-            SdrObject::Free( pRenderedShape );
-            pRenderedShape = pRenderedShape3d;
+            xRenderedShape = std::move(xRenderedShape3d);
         }
 
         tools::Rectangle aRect(rSdrObjCustomShape.GetSnapRect());
@@ -336,43 +334,44 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 nTan = -nTan;
             }
 
-            pRenderedShape->Shear(rSdrObjCustomShape.GetSnapRect().Center(), nShearAngle, nTan, false);
+            xRenderedShape->Shear(rSdrObjCustomShape.GetSnapRect().Center(), nShearAngle, nTan, false);
         }
         if(nRotateAngle )
         {
             double a = nRotateAngle * F_PI18000;
 
-            pRenderedShape->NbcRotate(rSdrObjCustomShape.GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ));
+            xRenderedShape->NbcRotate(rSdrObjCustomShape.GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ));
         }
         if ( bFlipV )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            pRenderedShape->NbcMirror( aLeft, aRight );
+            xRenderedShape->NbcMirror( aLeft, aRight );
         }
         if ( bFlipH )
         {
             Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            pRenderedShape->NbcMirror( aTop, aBottom );
+            xRenderedShape->NbcMirror( aTop, aBottom );
         }
 
-        pRenderedShape->NbcSetStyleSheet(rSdrObjCustomShape.GetStyleSheet(), true);
-        pRenderedShape->RecalcSnapRect();
+        xRenderedShape->NbcSetStyleSheet(rSdrObjCustomShape.GetStyleSheet(), true);
+        xRenderedShape->RecalcSnapRect();
     }
 
     if ( mbForceGroupWithText )
     {
-        pRenderedShape = ImplForceGroupWithText(
+        xRenderedShape.reset(ImplForceGroupWithText(
             rSdrObjCustomShape,
-            pRenderedShape);
+            xRenderedShape.release()));
     }
 
     Reference< drawing::XShape > xShape;
 
-    if ( pRenderedShape )
+    if (xRenderedShape)
     {
-        aCustomShape2d.ApplyGluePoints( pRenderedShape );
+        aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
+        SdrObject* pRenderedShape = xRenderedShape.release();
         xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
             pRenderedShape->GetObjInventor(), pRenderedShape );
     }
