@@ -55,6 +55,7 @@ Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 
 Image::Image(const OUString & rFileUrl)
 {
+    printf ("Image::Image %s\n", rFileUrl.toUtf8().getStr());
     sal_Int32 nIndex = 0;
     if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
     {
@@ -67,10 +68,9 @@ Image::Image(const OUString & rFileUrl)
     }
     else
     {
-        OUString aPath;
-        osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
         Graphic aGraphic;
-        if (ERRCODE_NONE == GraphicFilter::LoadGraphic(aPath, IMP_PNG, aGraphic))
+
+        if (ERRCODE_NONE == GraphicFilter::LoadGraphic(rFileUrl, IMP_PNG, aGraphic))
         {
             ImplInit(aGraphic.GetBitmapEx());
         }
