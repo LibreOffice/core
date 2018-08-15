@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_9ee10cd4",
+        "filename": "forms/source/component/ListBox.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-08-15T09:04:30Z",
+      "side": 1,
+      "message": "It looks like this replaces m_aConvertedBoundValues and m_aConvertedBoundValues is not used anymore and should be removed?",
+      "range": {
+        "startLine": 116,
+        "startChar": 48,
+        "endLine": 116,
+        "endChar": 79
+      },
+      "revId": "b52c16719845654f018844f145a2240290002686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
