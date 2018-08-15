@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_5eeb84af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-15T08:43:12Z",
+      "side": 1,
+      "message": "Seeing the Jenkins result and your new testcase, the answer to your question is \"yes\". Could you please update the commit message accordingly?",
+      "revId": "5fd6f862341ddbdf0c14238338ec0e75fc1f80b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
