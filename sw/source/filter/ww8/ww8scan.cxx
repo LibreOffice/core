@@ -917,7 +917,7 @@ void WW8SprmIter::UpdateMyMembers()
     }
 }
 
-SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId)
+SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, sal_uInt8* pNextByteMatch)
 {
     while (GetSprms())
     {
@@ -925,7 +925,13 @@ SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId)
         {
             sal_uInt16 nFixedLen =  mrSprmParser.DistanceToData(nId);
             sal_uInt16 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
-            return SprmResult(GetAktParams(), nL - nFixedLen); // SPRM found!
+            SprmResult aRet(GetAktParams(), nL - nFixedLen); // SPRM found!
+            // typically pNextByteMatch is nullptr and we just return the first match
+            if (!pNextByteMatch)
+                return aRet;
+            // very occasionally we want one with a specific following byte
+            if (aRet.nRemainingData >= 1 && *aRet.pSprm == *pNextByteMatch)
+                return aRet;
         }
         advance();
     }
@@ -3769,32 +3775,13 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
 
 SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 {
-    if (!pPLCF)
-        return SprmResult();
-
-    sal_uInt8* pSp = pSprms.get();
-    size_t i = 0;
-    while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
+    SprmResult aRet;
+    if (pPLCF)
     {
-        // Sprm found?
-        const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
-        if (nAktId == nId)
-        {
-            sal_uInt16 nFixedLen =  maSprmParser.DistanceToData(nId);
-            const sal_uInt8 *pRet = pSp + nFixedLen;
-            SprmResult aRet(pRet, x - nFixedLen);
-            if (aRet.nRemainingData >= 1 && *aRet.pSprm == n2nd)
-            {
-                return aRet;
-            }
-        }
-        // increment pointer so that it points to next SPRM
-        i += x;
-        pSp += x;
+        WW8SprmIter aIter(pSprms.get(), nSprmSiz, maSprmParser);
+        aRet = aIter.FindSprm(nId, &n2nd);
     }
-
-    return SprmResult();   // Sprm not found
+    return aRet;
 }
 
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib,
