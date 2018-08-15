@@ -393,7 +393,7 @@ public:
 
     bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );
-    bool                    AddMultiValueEntry( const ScQueryEntry& rEntry );
+    void                    AddMultiValueEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 };
