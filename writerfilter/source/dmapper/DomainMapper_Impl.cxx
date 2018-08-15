@@ -1160,7 +1160,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     return lcl_getListId(pParent, rStyleTable);
 }
 
-void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
+void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -1183,7 +1183,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
     //does not specify the numbering
-    if ( pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
+    if ( !bRemove && pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
     {
 
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable()) : -1;
