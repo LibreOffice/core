@@ -146,7 +146,7 @@ bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
     return aRecHeader.nIndex != 0;
 }
 
-bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo )
+void XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo )
 {
     if( LookAtuInt8() == 0x01 )
     {
@@ -178,7 +178,6 @@ bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, Exc
         rExtInfo.maTabName = aTabName;
         rFirstTab = rLastTab = 0;
     }
-    return true;
 }
 
 void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddress& rPosition )
@@ -515,7 +514,8 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 bool XclImpChTrFmlConverter::Read3DTabReference( sal_uInt16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
                                                  ExternalTabInfo& rExtInfo )
 {
-    return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );
+    rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
