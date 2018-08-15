@@ -165,7 +165,7 @@ private:
     bool                        mbMouseOver;    // is true if the mouse is over this handle
 
 protected:
-    sdr::overlay::OverlayObject* CreateOverlayObject(
+    std::unique_ptr<sdr::overlay::OverlayObject> CreateOverlayObject(
         const basegfx::B2DPoint& rPos,
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
         Point aMoveOutsideOffset = Point());
