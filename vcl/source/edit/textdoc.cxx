@@ -65,14 +65,12 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 
     const sal_Int32 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
     bool bInserted = false;
-    for (std::vector<std::unique_ptr<TextCharAttrib> >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
+    auto it = std::find_if(maAttribs.begin(), maAttribs.end(),
+        [nStart](std::unique_ptr<TextCharAttrib>& rAttrib) { return rAttrib->GetStart() > nStart; });
+    if (it != maAttribs.end())
     {
-        if ( (*it)->GetStart() > nStart )
-        {
-            maAttribs.insert( it, std::unique_ptr<TextCharAttrib>(pAttrib) );
-            bInserted = true;
-            break;
-        }
+        maAttribs.insert( it, std::unique_ptr<TextCharAttrib>(pAttrib) );
+        bInserted = true;
     }
     if ( !bInserted )
         maAttribs.push_back( std::unique_ptr<TextCharAttrib>(pAttrib) );

@@ -128,8 +128,8 @@ struct ScLookupCacheMapImpl
 private:
     void freeCaches()
     {
-        for (auto it( aCacheMap.begin()); it != aCacheMap.end(); ++it)
-            delete (*it).second;
+        for (auto& aCacheItem : aCacheMap)
+            delete aCacheItem.second;
     }
 };
 

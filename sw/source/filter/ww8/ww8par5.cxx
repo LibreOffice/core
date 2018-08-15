@@ -871,12 +871,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (!m_aFieldStack.empty())
     {
         auto aEnd = m_aFieldStack.cend();
-        for(auto aIter = m_aFieldStack.cbegin(); aIter != aEnd; ++aIter)
-        {
-            bNested = !AcceptableNestedField(aIter->mnFieldId);
-            if (bNested)
-                break;
-        }
+        auto aIter = std::find_if(m_aFieldStack.cbegin(), aEnd,
+            [](const WW8FieldEntry& aField) { return !AcceptableNestedField(aField.mnFieldId); });
+        bNested = aIter != aEnd;
     }
 
     WW8FieldDesc aF;

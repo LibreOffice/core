@@ -154,10 +154,8 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                 {
                     // search other modules...
                     bool bChangeCurWindow = false;
-                    auto it = aWindowTable.cbegin();
-                    for ( ; it != aWindowTable.cend(); ++it)
-                        if (it->second == pCurWin)
-                            break;
+                    auto it = std::find_if(aWindowTable.cbegin(), aWindowTable.cend(),
+                                           [this](WindowTable::value_type& item) { return item.second == pCurWin; });
                     if (it != aWindowTable.cend())
                         ++it;
                     BaseWindow* pWin = it != aWindowTable.cend() ? it->second.get() : nullptr;
