@@ -196,7 +196,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     bool                                                                                        m_bClosing;
     bool                                                                                        m_bAllowDocumentScripting;
     bool                                                                                        m_bHasBeenRecovered;
-    /// If XModel::attachResource() was called to inform us that the document is embedded into an other one.
+    /// If XModel::attachResource() was called to inform us that the document is embedded into another one.
     bool                                                                                        m_bEmbedded;
 
     enum StoreType { SAVE, SAVE_AS };
