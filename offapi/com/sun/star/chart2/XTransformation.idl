@@ -37,7 +37,7 @@ module chart2
     // ... access to source and destination coordinate system ?
 
 /** allows the transformation of numeric values from one
-    coordinate-system into an other.  Values may be transformed using
+    coordinate-system into another.  Values may be transformed using
     any mapping.
  */
 interface XTransformation : ::com::sun::star::uno::XInterface

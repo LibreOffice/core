@@ -85,7 +85,7 @@ public class PipedConnection implements XConnection {
     protected PipedConnection  _otherSide;
 
     /**
-     * Constructs a new <code>PipedConnection</code>, sees if there is an other
+     * Constructs a new <code>PipedConnection</code>, sees if there is another
      * side, which it should be connected to.
      *
      * @param    args   Another side could be in index 0.
