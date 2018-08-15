@@ -18,6 +18,7 @@
 */
 #include <DocumentRedlineManager.hxx>
 #include <frmfmt.hxx>
+#include <rootfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -666,6 +667,23 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
             m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
+            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+            {
+                // sw_redlinehide: the problem here is that MoveFromSection
+                // creates the frames wrongly (non-merged), because its own
+                // SwRangeRedline has wrong positions until after the nodes
+                // are all moved, so fix things up by force by re-creating
+                // all merged frames from scratch.
+                std::set<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
+                for (SwRootFrame *const pLayout : layouts)
+                {
+                    if (pLayout->IsHideRedlines())
+                    {
+                        pLayout->SetHideRedlines(false);
+                        pLayout->SetHideRedlines(true);
+                    }
+                }
+            }
         }
         meRedlineFlags = eMode;
         m_rDoc.getIDocumentState().SetModified();
