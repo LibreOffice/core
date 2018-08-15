@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_59a39e50",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-15T19:15:46Z",
+      "side": 1,
+      "message": "You should be able to put the !bRemove here, and skip this whole section - since the paragraph is going to be deleted anyway.",
+      "range": {
+        "startLine": 1186,
+        "startChar": 8,
+        "endLine": 1186,
+        "endChar": 30
+      },
+      "revId": "b793f75171f9b1bfc0497e0ec2260d0a68603670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
