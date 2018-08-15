@@ -205,7 +205,7 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
             continue;
         }
     }
-    return false;
+    return true;
 }
 
 Customization::Customization( SwCTBWrapper* wrapper )
