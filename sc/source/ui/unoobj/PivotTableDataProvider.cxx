@@ -617,7 +617,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
     {
         aLabel = ScGlobal::GetRscString(STR_PIVOT_TOTAL);
     }
-    else
+    else if (nIndex < m_aLabels.size())
     {
         for (ValueAndFormat const & rItem : m_aLabels[nIndex])
         {
