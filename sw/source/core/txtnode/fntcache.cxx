@@ -1725,10 +1725,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            sal_Int32 nOffs = 0;
             sal_Int32 nLen = sal_Int32(rInf.GetLen());
 
-            if( nOffs < nLen )
+            if( nLen > 0 )
             {
 
                 if ( bSwitchL2R )
@@ -1744,8 +1743,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get() + nOffs,
-                                             nTmpIdx + nOffs , nLen - nOffs );
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
+                                             nTmpIdx , nLen );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
@@ -1782,8 +1781,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 pKernArray [ i - 1 ] -= nAdd;
                         }
                     }
-                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, pKernArray.get() + nOffs,
-                                                 nTmpIdx + nOffs , nLen - nOffs );
+                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, pKernArray.get(),
+                                                 nTmpIdx , nLen );
                     pTmpFont->SetColor( aPreviousColor );
 
                     pTmpFont->SetUnderline(aPreviousUnderline);
