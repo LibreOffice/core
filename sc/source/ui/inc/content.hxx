@@ -139,7 +139,7 @@ public:
     void    ActiveDocChanged();
     void    ResetManualDoc();
     void    SetManualDoc(const OUString& rName);
-    bool    LoadFile(const OUString& rUrl);
+    void    LoadFile(const OUString& rUrl);
     void    SelectDoc(const OUString& rName);
     void    SelectEntryByName(const ScContentId nRoot, const OUString& rName);
 
