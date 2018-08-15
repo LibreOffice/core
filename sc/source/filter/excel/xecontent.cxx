@@ -459,7 +459,8 @@ OUString XclExpHyperlink::BuildFileName(
         sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded )
 {
     INetURLObject aURLObject( rUrl );
-    OUString aDosName( bEncoded ? aURLObject.GetURLPath() : aURLObject.getFSysPath( FSysStyle::Dos ) );
+    OUString aDosName(bEncoded ? aURLObject.GetMainURL(INetURLObject::DecodeMechanism::ToIUri)
+                               : aURLObject.getFSysPath(FSysStyle::Dos));
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 

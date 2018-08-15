@@ -206,6 +206,8 @@ public:
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
 
+    void testTdf118990();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testTdf111876);
@@ -310,6 +312,8 @@ public:
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
+
+    CPPUNIT_TEST(testTdf118990);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3994,6 +3998,35 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
+}
+
+void ScExportTest::testTdf118990()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf118990.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // TODO: also test A1, which contains a UNC reference to \\localhost\share\lookupsource.xlsx,
+    // but currently looses "localhost" part when normalized in INetURLObject, becoming
+    // file:///share/lookupsource.xlsx - which is incorrect, since it points to local filesystem
+    // and not to Windows network share.
+
+#if defined LINUX // following INetURLObject::setAbsURIRef
+#define TDF118990_SCHEME "smb:"
+#else // for Windows and macOS
+#define TDF118990_SCHEME "file:"
+#endif
+
+    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 1, 0),
+                         "VLOOKUP(B1,'" TDF118990_SCHEME "//192.168.1.1/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
+                         "Wrong Windows share (using host IP) URL in A2");
+
+    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 2, 0),
+                         "VLOOKUP(B1,'" TDF118990_SCHEME "//NETWORKHOST/share/lookupsource.xlsx'#$Sheet1.A1:B5,2)",
+                         "Wrong Windows share (using hostname) URL in A3");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
