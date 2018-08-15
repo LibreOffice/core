@@ -67,10 +67,9 @@ Image::Image(const OUString & rFileUrl)
     }
     else
     {
-        OUString aPath;
-        osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
         Graphic aGraphic;
-        if (ERRCODE_NONE == GraphicFilter::LoadGraphic(aPath, IMP_PNG, aGraphic))
+
+        if (ERRCODE_NONE == GraphicFilter::LoadGraphic(rFileUrl, IMP_PNG, aGraphic))
         {
             ImplInit(aGraphic.GetBitmapEx());
         }
