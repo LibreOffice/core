@@ -8,6 +8,7 @@
  */
 
 #include "rtfdocumentimpl.hxx"
+#include <algorithm>
 #include <memory>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -875,8 +876,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
     WmfExternal aExtHeader;
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
-    aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
-    aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
+    aExtHeader.xExt = sal_uInt16(
+        std::clamp<sal_Int32>(m_aStates.top().aPicture.nWidth, 0,
+                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+    aExtHeader.yExt = sal_uInt16(
+        std::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
+                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape,
                                                     uno::UNO_QUERY);
