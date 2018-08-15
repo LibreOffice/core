@@ -296,11 +296,11 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
 
     // fill the property name sequence and store original sort order
     sal_Int32 nSeqIdx = 0;
-    for( auto aIt = aPropNameVec.cbegin(), aEnd = aPropNameVec.cend();
-            aIt != aEnd; ++aIt, ++nSeqIdx )
+    for( auto& aPropName : aPropNameVec )
     {
-        maNameSeq[ nSeqIdx ] = aIt->first;
-        maNameOrder[ aIt->second ] = nSeqIdx;
+        maNameSeq[ nSeqIdx ] = aPropName.first;
+        maNameOrder[ aPropName.second ] = nSeqIdx;
+        ++nSeqIdx;
     }
 }
 

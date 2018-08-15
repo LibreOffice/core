@@ -470,15 +470,12 @@ void inflate_rc_template_to_file(
     {
         substitutor.set_language(iso_lang_identifier(iter->first));
 
-        auto rct_iter = rctmpl.cbegin();
-        auto rct_iter_end = rctmpl.cend();
-
         if (!rctmpl.empty())
             start_language_section(oi, iso_lang_identifier(iter->first));
 
-        for ( /**/ ;rct_iter != rct_iter_end; ++rct_iter)
+        for ( auto& rct : rctmpl)
         {
-            std::istringstream iss(*rct_iter);
+            std::istringstream iss(rct);
             std::string line;
 
             while (iss)

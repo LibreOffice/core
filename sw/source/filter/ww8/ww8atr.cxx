@@ -209,10 +209,9 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
 
 void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont, bool bWriteCombChars )
 {
-    auto aEnd = rItems.cend();
-    for ( auto aI = rItems.cbegin(); aI != aEnd; ++aI )
+    for ( const auto& rItem : rItems )
     {
-        const SfxPoolItem *pItem = aI->second;
+        const SfxPoolItem *pItem = rItem.second;
         sal_uInt16 nWhich = pItem->Which();
         if ( ( isCHRATR( nWhich ) || isTXTATR( nWhich ) ) && CollapseScriptsforWordOk( nScript, nWhich ) )
         {
@@ -297,10 +296,9 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             ExportPoolItemsToCHP(aItems, nScript, nullptr);
         if ( bPapFormat )
         {
-            auto aEnd = aItems.cend();
-            for ( auto aI = aItems.cbegin(); aI != aEnd; ++aI )
+            for ( const auto& rItem : aItems )
             {
-                pItem = aI->second;
+                pItem = rItem.second;
                 sal_uInt16 nWhich = pItem->Which();
                 // Handle fill attributes just like frame attributes for now.
                 if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
@@ -345,15 +343,8 @@ bool MSWordExportBase::ContentContainsChapterField(const SwFormatContent &rConte
         sal_uLong nStart = aIdx.GetIndex();
         sal_uLong nEnd = aEnd.GetIndex();
         //If the header/footer contains a chapter field
-        auto aIEnd = m_aChapterFieldLocs.cend();
-        for ( auto aI = m_aChapterFieldLocs.cbegin(); aI != aIEnd; ++aI )
-        {
-            if ( ( nStart <= *aI ) && ( *aI <= nEnd ) )
-            {
-                bRet = true;
-                break;
-            }
-        }
+        bRet = std::any_of(m_aChapterFieldLocs.cbegin(), m_aChapterFieldLocs.cend(),
+            [nStart, nEnd](sal_uLong i) { return ( nStart <= i ) && ( i <= nEnd ); });
     }
     return bRet;
 }

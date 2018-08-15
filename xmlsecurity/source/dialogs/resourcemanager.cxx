@@ -311,14 +311,10 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         while ( aIDs[i] )
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
-            for (auto idn = vecAttrValueOfDN.cbegin(); idn != vecAttrValueOfDN.cend(); ++idn)
-            {
-                if (idn->first == sPartId)
-                {
-                    retVal = idn->second;
-                    break;
-                }
-            }
+            auto idn = std::find_if(vecAttrValueOfDN.cbegin(), vecAttrValueOfDN.cend(),
+                [&sPartId](const pair< OUString, OUString >& dn) { return dn.first == sPartId; });
+            if (idn != vecAttrValueOfDN.cend())
+                retVal = idn->second;
             if (!retVal.isEmpty())
                 break;
         }

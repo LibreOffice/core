@@ -866,11 +866,10 @@ namespace sw
         {
             if (!mbHasRoot)
                 return;
-            auto aEnd = maTables.end();
-            for (auto aIter = maTables.begin(); aIter != aEnd; ++aIter)
+            for (auto& aTable : maTables)
             {
                 // If already a layout exists, then the BoxFrames must recreated at this table
-                SwTableNode *pTable = aIter->first->GetTableNode();
+                SwTableNode *pTable = aTable.first->GetTableNode();
                 OSL_ENSURE(pTable, "Why no expected table");
                 if (pTable)
                 {
@@ -878,7 +877,7 @@ namespace sw
 
                     if (pFrameFormat != nullptr)
                     {
-                        SwNodeIndex *pIndex = aIter->second;
+                        SwNodeIndex *pIndex = aTable.second;
                         pTable->DelFrames();
                         pTable->MakeFrames(pIndex);
                     }

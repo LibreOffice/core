@@ -113,9 +113,9 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
 
     PK11_SetPasswordFunc( nullptr ) ;
 
-    for (auto i = m_Slots.cbegin(); i != m_Slots.cend(); i++)
+    for (auto& slot : m_Slots)
     {
-        PK11_FreeSlot(*i);
+        PK11_FreeSlot(slot);
     }
 
     if( !m_tSymKeyList.empty()  ) {
@@ -185,9 +185,9 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
 OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()
 {
     OUStringBuffer buff;
-    for (auto is = m_Slots.cbegin(); is != m_Slots.cend(); ++is)
+    for (auto& slot : m_Slots)
     {
-        buff.append(OUString::createFromAscii(PK11_GetTokenName(*is)));
+        buff.append(OUString::createFromAscii(PK11_GetTokenName(slot)));
         buff.append("\n");
     }
     return buff.makeStringAndClear();
@@ -291,9 +291,8 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 
     updateSlots();
     //firstly, we try to find private keys in slot
-    for (auto is = m_Slots.cbegin(); is != m_Slots.cend(); ++is)
+    for (auto& slot : m_Slots)
     {
-        PK11SlotInfo *slot = *is;
         SECKEYPrivateKeyList* priKeyList ;
 
         if( PK11_NeedLogin(slot ) ) {
@@ -765,9 +764,9 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     }
     if(priKey == nullptr)
     {
-        for (auto is = m_Slots.cbegin(); is != m_Slots.cend(); ++is)
+        for (auto& slot : m_Slots)
         {
-            priKey = PK11_FindPrivateKeyFromCert(*is, const_cast<CERTCertificate*>(cert), nullptr);
+            priKey = PK11_FindPrivateKeyFromCert(slot, const_cast<CERTCertificate*>(cert), nullptr);
             if (priKey)
                 break;
         }
@@ -832,8 +831,11 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     std::unique_ptr<PK11SlotInfo*[]> sarSlots(new PK11SlotInfo*[cSlots]);
     PK11SlotInfo**  slots = sarSlots.get();
     int count = 0;
-    for (auto islots = m_Slots.cbegin();islots != m_Slots.cend(); ++islots, ++count)
-        slots[count] = *islots;
+    for (auto& slot : m_Slots)
+    {
+        slots[count] = slot;
+        ++count;
+    }
 
     xmlSecKeysMngrPtr pKeysMngr = xmlSecKeysMngrCreate();
     if (!pKeysMngr)
