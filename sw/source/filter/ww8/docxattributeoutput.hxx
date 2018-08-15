@@ -392,7 +392,7 @@ private:
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SwOLENode& rNode );
-    bool PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
+    void PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
     void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, bool bInsideRun);
