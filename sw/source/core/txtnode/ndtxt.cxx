@@ -363,6 +363,58 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
     }
 }
 
+namespace {
+
+// check if there are flys on the existing frames (now on "pNode")
+// that need to be moved to the new frames of "this"
+void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
+        SwTextNode const& rFirstNode, SwTextNode const& rSecondNode)
+{
+    for (sal_uLong nIndex = rSecondNode.GetIndex() + 1; ; ++nIndex)
+    {
+        SwNode *const pTmp(rSecondNode.GetNodes()[nIndex]);
+        if (pTmp->IsCreateFrameWhenHidingRedlines() || pTmp->IsEndNode())
+        {
+            break;
+        }
+        else if (pTmp->IsStartNode())
+        {
+            nIndex = pTmp->EndOfSectionIndex();
+        }
+        else if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst
+              && pTmp->IsTextNode())
+        {
+            lcl_ChangeFootnoteRef(*pTmp->GetTextNode());
+        }
+    }
+    for (SwTextFrame *const pFrame : rFrames)
+    {
+        if (SwSortedObjs *const pObjs = pFrame->GetDrawObjs())
+        {
+            std::vector<SwAnchoredObject*> objs;
+            objs.reserve(pObjs->size());
+            for (SwAnchoredObject *const pObj : *pObjs)
+            {
+                objs.push_back(pObj);
+            }
+            for (SwAnchoredObject *const pObj : objs)
+            {
+                SwFrameFormat & rFormat(pObj->GetFrameFormat());
+                SwFormatAnchor const& rAnchor(rFormat.GetAnchor());
+                if (rFirstNode.GetIndex() < rAnchor.GetContentAnchor()->nNode.GetIndex())
+                {
+                    // move it to the new frame of "this"
+                    rFormat.NotifyClients(&rAnchor, &rAnchor);
+                    // note pObjs will be deleted if it becomes empty
+                    assert(!pFrame->GetDrawObjs() || !pObjs->Contains(*pObj));
+                }
+            }
+        }
+    }
+}
+
+} // namespace
+
 SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         std::function<void (SwTextNode *, sw::mark::RestoreMode)> const*const pContentIndexRestore)
 {
@@ -486,6 +538,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             SetRedlineMergeFlag(SwNode::Merge::None);
         }   // now RegisterToNode will set merge flags in both nodes properly!
 
+        std::vector<SwTextFrame*> frames;
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
@@ -493,6 +546,10 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             {
                 isHide = true;
             }
+            frames.push_back(pFrame);
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
             pFrame->RegisterToNode( *pNode );
             if (!pFrame->IsFollow() && pFrame->GetOfst())
             {
@@ -538,6 +595,10 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         if (pContentIndexRestore)
         {   // call after making frames; listeners will take care of adding to the right frame
             (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
+        if (eOldMergeFlag != SwNode::Merge::None)
+        {
+            MoveMergedFlysAndFootnotes(frames, *pNode, *this);
         }
     }
     else
@@ -664,6 +725,11 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         if (pContentIndexRestore)
         {   // call after making frames; listeners will take care of adding to the right frame
             (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+        }
+
+        if (bRecreateThis)
+        {
+            MoveMergedFlysAndFootnotes(frames, *pNode, *this);
         }
     }
 
