@@ -826,9 +826,27 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
 
 namespace {
 
-void CheckResetRedlineMergeFlag(SwTextNode & rNode)
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool const bRecreateMerged)
 {
-    if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
+    if (bRecreateMerged)
+    {
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            frames.push_back(pFrame);
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
+            SwTextNode & rFirstNode(pFrame->GetMergedPara()
+                ? *pFrame->GetMergedPara()->pFirstNode
+                : rNode);
+            assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+            pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+        }
+    }
+    else if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
     {
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
         for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
@@ -934,12 +952,13 @@ SwContentNode *SwTextNode::JoinNext()
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
+        SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
-        CheckResetRedlineMergeFlag(*this);
+        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First);
     }
     else {
         OSL_FAIL( "No TextNode." );
@@ -1029,12 +1048,13 @@ void SwTextNode::JoinPrev()
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
+        SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
-        CheckResetRedlineMergeFlag(*this);
+        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::NonFirst);
     }
     else {
         OSL_FAIL( "No TextNode." );
