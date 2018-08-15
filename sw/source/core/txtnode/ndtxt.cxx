@@ -758,6 +758,35 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
 
 }
 
+namespace {
+
+void CheckResetRedlineMergeFlag(SwTextNode & rNode)
+{
+    if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
+    {
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (auto const pMergedPara = pFrame->GetMergedPara())
+            {
+                if (pMergedPara->pFirstNode == pMergedPara->pLastNode)
+                {
+                    assert(pMergedPara->pFirstNode == &rNode);
+                    rNode.SetRedlineMergeFlag(SwNode::Merge::None);
+                }
+                break; // checking once is enough
+            }
+            else if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                rNode.SetRedlineMergeFlag(SwNode::Merge::None);
+                break; // checking once is enough
+            }
+        }
+    }
+}
+
+} // namespace
+
 SwContentNode *SwTextNode::JoinNext()
 {
     SwNodes& rNds = GetNodes();
@@ -844,6 +873,7 @@ SwContentNode *SwTextNode::JoinNext()
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
+        CheckResetRedlineMergeFlag(*this);
     }
     else {
         OSL_FAIL( "No TextNode." );
@@ -938,6 +968,7 @@ void SwTextNode::JoinPrev()
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
+        CheckResetRedlineMergeFlag(*this);
     }
     else {
         OSL_FAIL( "No TextNode." );
