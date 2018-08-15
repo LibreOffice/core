@@ -2811,11 +2811,11 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     if(m_pForm)
     {
-        for (auto iter = m_aControlList.begin(); iter != m_aControlList.end(); ++iter)
-            iter->disposeAndClear();
+        for (auto& aControl : m_aControlList)
+            aControl.disposeAndClear();
         //apply current level settings to the form
-        for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
-             it->disposeAndClear();
+        for (auto& aControl : m_aControlList)
+            aControl.disposeAndClear();
         m_aControlList.clear();
     }
 
@@ -3395,10 +3395,8 @@ OUString SwTokenWindow::GetPattern() const
 {
     OUStringBuffer sRet;
 
-    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
+    for (const Control* pCtrl : m_aControlList)
     {
-        const Control *pCtrl = *it;
-
         const SwFormToken &rNewToken = pCtrl->GetType() == WindowType::EDIT
                 ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pCtrl))->GetFormToken()
                 : static_cast<const SwTOXButton*>(pCtrl)->GetFormToken();
@@ -3415,10 +3413,8 @@ bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
 
-    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
+    for (const Control* pCtrl : m_aControlList)
     {
-        const Control *pCtrl = *it;
-
         const SwFormToken &rNewToken = pCtrl->GetType() == WindowType::EDIT
                 ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pCtrl))->GetFormToken()
                 : static_cast<const SwTOXButton*>(pCtrl)->GetFormToken();
@@ -3555,9 +3551,9 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, Control&, rControl, void )
 {
     SwTOXButton* pBtn = static_cast<SwTOXButton*>(&rControl);
-    for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
+    for (auto& aControl : m_aControlList)
     {
-        Control *pControl = it->get();
+        Control *pControl = aControl.get();
 
         if (pControl && WindowType::EDIT != pControl->GetType())
             static_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
@@ -3602,9 +3598,8 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     }
 
     sal_uInt32 nIndex = 0;
-    for (auto it = m_aControlList.cbegin(); it != m_aControlList.cend(); ++it)
+    for (const Control* pControl : m_aControlList)
     {
-        const Control* pControl = *it;
         const SwFormToken& rNewToken = WindowType::EDIT == pControl->GetType()
             ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pControl))->GetFormToken()
             : static_cast<const SwTOXButton*>(pControl)->GetFormToken();

@@ -483,11 +483,11 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
 
     const ::osl::MutexGuard aGuard(m_entriesMutex);
 
-    for (auto iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
+    for (auto& vEntry : m_vEntries)
     {
-        aSize.setHeight( (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight );
+        aSize.setHeight( vEntry->m_bActive ? m_nActiveHeight : m_nStdHeight );
         ::tools::Rectangle aEntryRect(aStart, aSize);
-        DrawRow(rRenderContext, aEntryRect, *iIndex);
+        DrawRow(rRenderContext, aEntryRect, vEntry);
         aStart.AdjustY(aSize.Height() );
     }
 }

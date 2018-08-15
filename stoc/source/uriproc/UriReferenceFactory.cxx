@@ -418,11 +418,11 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             if (slash) {
                 abs.append('/');
             }
-            for (auto i(segments.begin()); i != segments.end(); ++i)
+            for (auto& i : segments)
             {
-                if (*i < -1) {
+                if (i < -1) {
                     OUString segment(
-                        baseUriReference->getPathSegment(-(*i + 2)));
+                        baseUriReference->getPathSegment(-(i + 2)));
                     if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
                             abs.append('/');
@@ -431,8 +431,8 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         slash = true;
                         abs.append('/');
                     }
-                } else if (*i > 1) {
-                    OUString segment(uriReference->getPathSegment(*i - 2));
+                } else if (i > 1) {
+                    OUString segment(uriReference->getPathSegment(i - 2));
                     if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
                             abs.append('/');
@@ -440,7 +440,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         abs.append(segment);
                         slash = false;
                     }
-                } else if (*i == 0) {
+                } else if (i == 0) {
                     if (segments.size() > 1 && !slash) {
                         abs.append('/');
                     }
@@ -454,7 +454,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                             abs.append('/');
                         }
                         abs.append("..");
-                        slash = *i < 0;
+                        slash = i < 0;
                         if (slash) {
                             abs.append('/');
                         }

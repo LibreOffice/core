@@ -723,8 +723,11 @@ Assembly ^ TypeEmitter::type_resolve(
                   gcnew array< ::System::Type^>( vecBaseTypes.size() );
 
             int index = 0;
-            for (auto i = vecBaseTypes.begin(); i != vecBaseTypes.end(); ++i, ++index)
-                base_interfaces[ index ] = get_type( *i );
+            for (auto const & vecBaseType : vecBaseTypes)
+            {
+                base_interfaces[ index ] = get_type( vecBaseType );
+                ++index;
+            }
             type_builder = m_module_builder->DefineType(
                 cts_name, attr, nullptr, base_interfaces );
         }

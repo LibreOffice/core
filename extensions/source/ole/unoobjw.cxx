@@ -1440,14 +1440,10 @@ bool  InterfaceOleWrapper::getInvocationInfoForCall( DISPID id, InvocationInfo& 
         // there's only one entry in the map.
         OUString sMemberName;
 
-        for(auto ci1= m_nameToDispIdMap.cbegin(); ci1 != m_nameToDispIdMap.cend(); ++ci1)
-        {
-            if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
-            {
-                sMemberName= (*ci1).first;
-                break;
-            }
-        }
+        auto ci1 = std::find_if(m_nameToDispIdMap.cbegin(), m_nameToDispIdMap.cend(),
+            [&id](const NameToIdMap::value_type& nameToDispId) { return nameToDispId.second == id; }); // item is a pair<OUString, DISPID>
+        if (ci1 != m_nameToDispIdMap.cend())
+            sMemberName= (*ci1).first;
         // Get information for the current call ( property or method).
         // There could be similar names which only differ in the cases
         // of letters. First we assume that the name which was passed into

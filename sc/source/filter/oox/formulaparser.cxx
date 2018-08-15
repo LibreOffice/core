@@ -620,8 +620,11 @@ ApiTokenSequence FormulaParserImpl::finalizeImport()
     if( aTokens.hasElements() )
     {
         ApiToken* pToken = aTokens.getArray();
-        for( auto aIt = maTokenIndexes.cbegin(), aEnd = maTokenIndexes.cend(); aIt != aEnd; ++aIt, ++pToken )
-            *pToken = maTokenStorage[ *aIt ];
+        for( auto& tokenIndex : maTokenIndexes )
+        {
+            *pToken = maTokenStorage[ tokenIndex ];
+            ++pToken;
+        }
     }
     return finalizeTokenArray( aTokens );
 }
