@@ -5,7 +5,7 @@ diff -ru firebird.orig/src/common/os/win32/mod_loader.cpp firebird/src/common/os
  					"msvcr120.dll",
 -#elif _MSC_VER == 1900
 -					"vcruntime140.dll",
-+#elif _MSC_VER >= 1900 && _MSC_VER <= 1914
++#elif _MSC_VER >= 1900 && _MSC_VER < 2000
 +					"vcruntime140.dll",
  #else
                      #error Specify CRT DLL name here !
