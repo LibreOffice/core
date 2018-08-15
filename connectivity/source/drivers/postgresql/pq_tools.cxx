@@ -1108,9 +1108,12 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             {
                 n +=2;
 //                 printf( "3\n" );
-                for (std::vector< OString >::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
+                for (auto& name : names)
                 {
-                    map[names[i]] = vec[n];
+                    if (n >= nSize)
+                        break;
+
+                    map[name] = vec[n];
                     if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase(",") )
                     {
                         n ++;
