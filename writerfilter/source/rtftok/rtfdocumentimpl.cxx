@@ -14,6 +14,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <o3tl/clamp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -875,8 +876,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
     WmfExternal aExtHeader;
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
-    aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
-    aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
+    aExtHeader.xExt = sal_uInt16(
+        o3tl::clamp<sal_Int32>(m_aStates.top().aPicture.nWidth, 0,
+                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+    aExtHeader.yExt = sal_uInt16(
+        o3tl::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
+                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape,
                                                     uno::UNO_QUERY);
