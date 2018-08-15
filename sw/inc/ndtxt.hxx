@@ -409,7 +409,7 @@ public:
                                 const SwTextFormatColl* pNew );
 
     /** Copy collection with all auto formats to dest-node.
-        The latter might be in an other document!
+        The latter might be in another document!
        (Method in ndcopy.cxx!!). */
     void CopyCollFormat( SwTextNode& rDestNd );
 
