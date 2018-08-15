@@ -99,7 +99,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private static final int DETAIL_SECTION_FIRST_STARTED = 1;
     // The first detail section has been printed.
     private static final int DETAIL_SECTION_FIRST_PRINTED = 2;
-    // An other detail section has started
+    // Another detail section has started
     private static final int DETAIL_SECTION_OTHER_STARTED = 3;
     // The other detail section has been printed.
     private static final int DETAIL_SECTION_OTHER_PRINTED = 4;

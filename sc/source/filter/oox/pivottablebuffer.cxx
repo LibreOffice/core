@@ -1292,7 +1292,7 @@ void PivotTable::finalizeFieldsImport()
     if (maFields.empty())
         return;
 
-    /* Check whether group fields are already imported for an other table
+    /* Check whether group fields are already imported for another table
        sharing the same groups. */
     ScDPObject* pDPObj = getDPObject();
     const ScDocument& rDoc = getDocImport().getDoc();

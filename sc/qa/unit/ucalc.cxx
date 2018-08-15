@@ -1566,7 +1566,7 @@ void Test::testNamedRange()
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].mpName));
     }
 
-    // Test using an other-sheet-local name, scope Sheet1.
+    // Test using another-sheet-local name, scope Sheet1.
     ScRangeData* pLocal1 = new ScRangeData( m_pDoc, "local1", ScAddress(0,0,0));
     ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", "$Sheet1.$A$1");
     ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "Sheet1.$A$1");

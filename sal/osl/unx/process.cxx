@@ -303,7 +303,7 @@ static void ChildStatusProc(void *pData)
                 SAL_WARN("sal.osl", "Failed to wait for child process, errno=" << errno << " (" << strerror(errno) << ")");
 
                 /*
-                We got an other error than EINTR. Anyway we have to wake up the
+                We got another error than EINTR. Anyway we have to wake up the
                 waiting thread under any circumstances */
 
                 child_pid = pid;

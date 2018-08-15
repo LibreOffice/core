@@ -614,7 +614,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
                 {
-                    // We now expect either an other group or a detail band.
+                    // We now expect either another group or a detail band.
 
                     if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group", attrs))
                     {
