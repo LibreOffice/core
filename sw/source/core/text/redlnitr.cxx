@@ -76,7 +76,11 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
 
         SwPosition const*const pStart(pRed->Start());
         SwPosition const*const pEnd(pRed->End());
-        assert(*pStart != *pEnd); // empty delete allowed if shown ???
+        if (*pStart == *pEnd)
+        {   // only allowed while moving
+            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
+            continue;
+        }
         bHaveRedlines = true;
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
