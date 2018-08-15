@@ -496,11 +496,10 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars
     if( rNd.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(&aExportSet);
 
-    auto aEnd = aRangeItems.cend();
-    for ( auto aI = aRangeItems.cbegin(); aI != aEnd; ++aI )
+    for ( const auto& aRangeItem : aRangeItems )
     {
-        if ( !bRuby || !lcl_isFontsizeItem( *aI->second ) )
-            aExportItems[aI->first] = aI->second;
+        if ( !bRuby || !lcl_isFontsizeItem( *(aRangeItem.second) ) )
+            aExportItems[aRangeItem.first] = aRangeItem.second;
     }
 
     if ( !aExportItems.empty() )

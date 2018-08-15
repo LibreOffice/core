@@ -737,11 +737,9 @@ void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
     if ( aColFind == m_aColumnStyleNames.end() )
         return;
 
-    auto aColIter = aColFind->second.cbegin();
-    auto aColEnd = aColFind->second.cend();
-    for (; aColIter != aColEnd; ++aColIter)
+    for (auto& aCol : aColFind->second)
     {
-        AddAttribute( m_sTableStyle,*aColIter );
+        AddAttribute(m_sTableStyle, aCol);
         SvXMLElementExport aColumn(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true);
     }
 }

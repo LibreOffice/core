@@ -168,14 +168,9 @@ namespace /* private */
         // a final '\0'
         environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
-        auto iter = merged_env.cbegin();
-        auto iter_end = merged_env.cend();
-
         sal_uInt32 pos = 0;
-        for (/**/; iter != iter_end; ++iter)
+        for (auto& envv : merged_env)
         {
-            rtl::OUString envv = *iter;
-
             OSL_ASSERT(envv.getLength());
 
             sal_uInt32 n = envv.getLength() + 1; // copy the final '\0', too

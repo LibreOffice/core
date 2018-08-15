@@ -92,10 +92,8 @@ public:
 
     explicit exclude(const std::vector<OString>& exclude_list)
     {
-        auto iter     = exclude_list.cbegin();
-        auto iter_end = exclude_list.cend();
-        for (/**/; iter != iter_end; ++iter)
-            exclude_list_.push_back(env_var_name(*iter));
+        for (auto& exclude_list_item : exclude_list)
+            exclude_list_.push_back(env_var_name(exclude_list_item));
     }
 
     bool operator() (const OString& env_var) const
@@ -259,8 +257,8 @@ public:
         std::vector<OString> parent_env;
         read_parent_environment(&parent_env);
 
-        for (auto iter = parent_env.cbegin(), end = parent_env.cend(); iter != end; ++iter)
-            std::cout << "initially parent env: " << *iter << "\n";
+        for (auto& env : parent_env)
+            std::cout << "initially parent env: " << env << "\n";
 
         //remove the environment variables that we have changed
         //in the child environment from the read parent environment
@@ -268,16 +266,16 @@ public:
             std::remove_if(parent_env.begin(), parent_env.end(), exclude(different_env_vars)),
             parent_env.end());
 
-        for (auto iter = parent_env.cbegin(), end = parent_env.cend(); iter != end; ++iter)
-            std::cout << "stripped parent env: " << *iter << "\n";
+        for (auto& env : parent_env)
+            std::cout << "stripped parent env: " << env << "\n";
 
         //read the child environment and exclude the variables that
         //are different
         std::vector<OString> child_env;
         read_child_environment(&child_env);
 
-        for (auto iter = child_env.cbegin(), end = child_env.cend(); iter != end; ++iter)
-            std::cout << "initial child env: " << *iter << "\n";
+        for (auto& env : child_env)
+            std::cout << "initial child env: " << env << "\n";
         //partition the child environment into the variables that
         //are different to the parent environment (they come first)
         //and the variables that should be equal between parent
@@ -288,17 +286,17 @@ public:
         std::vector<OString> different_child_env_vars(child_env.begin(), iter_logical_end);
         child_env.erase(child_env.begin(), iter_logical_end);
 
-        for (auto iter = child_env.cbegin(), end = child_env.cend(); iter != end; ++iter)
-            std::cout << "stripped child env: " << *iter << "\n";
+        for (auto& env : child_env)
+            std::cout << "stripped child env: " << env << "\n";
 
         bool common_env_size_equals    = (parent_env.size() == child_env.size());
         bool common_env_content_equals = std::equal(child_env.begin(), child_env.end(), parent_env.begin());
 
-        for (auto iter = different_env_vars.cbegin(), end = different_env_vars.cend(); iter != end; ++iter)
-            std::cout << "different should be: " << *iter << "\n";
+        for (auto& env_var : different_env_vars)
+            std::cout << "different should be: " << env_var << "\n";
 
-        for (auto iter = different_child_env_vars.cbegin(), end = different_child_env_vars.cend(); iter != end; ++iter)
-            std::cout << "different are: " << *iter << "\n";
+        for (auto& env_var : different_child_env_vars)
+            std::cout << "different are: " << env_var << "\n";
 
         bool different_env_size_equals    = (different_child_env_vars.size() == different_env_vars.size());
         bool different_env_content_equals =

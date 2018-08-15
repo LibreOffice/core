@@ -688,8 +688,8 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 names as they are already grouped is used here to resolve the
                 item names. */
             ::std::vector< OUString > aMembers;
-            for( auto aBeg2 = aIt->begin(), aIt2 = aBeg2, aEnd2 = aIt->end(); aIt2 != aEnd2; ++aIt2 )
-                if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, *aIt2 ) )
+            for( auto i : *aIt )
+                if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, i ) )
                     if( ::std::find( aMembers.begin(), aMembers.end(), pName->maGroupName ) == aMembers.end() )
                         aMembers.push_back( pName->maGroupName );
 
@@ -756,8 +756,8 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                         aPropSet.setProperty( PROP_GroupInfo, aGroupInfo );
                     }
                     // replace original item names in passed vector with group name
-                    for( auto aIt2 = aIt->begin(), aEnd2 = aIt->end(); aIt2 != aEnd2; ++aIt2 )
-                        if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElementAccess( orItemNames, *aIt2 ) )
+                    for( auto i : *aIt )
+                        if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElementAccess( orItemNames, i ) )
                             pName->maGroupName = aGroupName;
                 }
             }

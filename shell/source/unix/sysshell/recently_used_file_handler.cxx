@@ -125,11 +125,8 @@ namespace /* private */ {
             {
                 write_xml_start_tag(TAG_GROUPS, file, true);
 
-                auto iter = groups_.cbegin();
-                auto iter_end = groups_.cend();
-
-                for ( ; iter != iter_end; ++iter)
-                    write_xml_tag(TAG_GROUP, (*iter), file);
+                for (auto& group : groups_)
+                    write_xml_tag(TAG_GROUP, group, file);
 
                 write_xml_end_tag(TAG_GROUPS, file);
             }

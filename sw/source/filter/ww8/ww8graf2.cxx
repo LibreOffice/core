@@ -216,15 +216,9 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
  */
 sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 {
-    auto aIter = maDrawHeight.begin();
-    auto aEnd = maDrawHeight.end();
-
-    while (aIter != aEnd)
-    {
-        if ((*aIter & 0x1fff) > (nWwHeight & 0x1fff))
-            break;
-        ++aIter;
-    }
+    auto aIter = std::find_if(
+        maDrawHeight.begin(), maDrawHeight.end(),
+        [nWwHeight](short aHeight){ return (aHeight & 0x1fff) > (nWwHeight & 0x1fff); });
 
     aIter = maDrawHeight.insert(aIter, nWwHeight);
     return std::distance(maDrawHeight.begin(), aIter);

@@ -637,19 +637,16 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         WW8Fib& rFib = *rWrt.pFib;
         WW8_CP nCpOffs = GetCpOffset(rFib);
 
-        auto aEnd = maDrawObjs.cend();
-        auto aIter = maDrawObjs.cbegin();
-
-        for ( ; aIter < aEnd; ++aIter)
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnCp - nCpOffs);
+        for (const auto& rDrawObj : maDrawObjs)
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnCp - nCpOffs);
 
         SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
             rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
 
-        for (aIter = maDrawObjs.cbegin(); aIter < aEnd; ++aIter)
+        for (const auto& rDrawObj : maDrawObjs)
         {
             // write the fspa-struct
-            const ww8::Frame &rFrameFormat = aIter->maContent;
+            const ww8::Frame &rFrameFormat = rDrawObj.maContent;
             const SwFrameFormat &rFormat = rFrameFormat.GetFrameFormat();
             const SdrObject* pObj = rFormat.FindRealSdrObject();
 
@@ -710,7 +707,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             }
             else
             {
-                aRect -= aIter->maParentPos;
+                aRect -= rDrawObj.maParentPos;
                 aObjPos = aRect.TopLeft();
                 if (text::VertOrientation::NONE == rVOr.GetVertOrient())
                 {
@@ -726,7 +723,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 aRect.SetPos( aObjPos );
             }
 
-            sal_Int32 nThick = aIter->mnThick;
+            sal_Int32 nThick = rDrawObj.mnThick;
 
             //If we are being exported as an inline hack, set
             //corner to 0 and forget about border thickness for positioning
@@ -737,7 +734,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             }
 
             // spid
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnShapeId);
 
             SwTwips nLeft = aRect.Left() + nThick;
             SwTwips nRight = aRect.Right() - nThick;
@@ -2255,11 +2252,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         MakeZOrderArrAndFollowIds(pSdrObjs->GetObjArr(), aSorted);
 
         sal_uInt32 nShapeId=0;
-        auto aEnd = aSorted.end();
-        for (auto aIter = aSorted.begin(); aIter != aEnd; ++aIter)
+        for (auto& pObj : aSorted)
         {
             sal_Int32 nBorderThick=0;
-            DrawObj *pObj = (*aIter);
             OSL_ENSURE(pObj, "impossible");
             if (!pObj)
                 continue;

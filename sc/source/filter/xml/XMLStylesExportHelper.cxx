@@ -703,27 +703,14 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 
 ScFormatRangeStyles::~ScFormatRangeStyles()
 {
-    auto i(aStyleNames.begin());
-    auto endi(aStyleNames.end());
-    while (i != endi)
-    {
-        delete *i;
-        ++i;
-    }
-    i = aAutoStyleNames.begin();
-    endi = aAutoStyleNames.end();
-    while (i != endi)
-    {
-        delete *i;
-        ++i;
-    }
-    ScMyFormatRangeListVec::iterator j(aTables.begin());
-    ScMyFormatRangeListVec::iterator endj(aTables.end());
-    while (j != endj)
-    {
-        delete *j;
-        ++j;
-    }
+    for (auto& styleName : aStyleNames)
+        delete styleName;
+
+    for (auto& autoStyleName : aAutoStyleNames)
+        delete autoStyleName;
+
+    for (auto& table : aTables)
+        delete table;
 }
 
 void ScFormatRangeStyles::AddNewTable(const sal_Int32 nTable)
@@ -982,13 +969,8 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 
 ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
-    auto i(aStyleNames.begin());
-    auto endi(aStyleNames.end());
-    while (i != endi)
-    {
-        delete *i;
-        ++i;
-    }
+    for (auto& styleName : aStyleNames)
+        delete styleName;
 }
 
 sal_Int32 ScColumnRowStylesBase::AddStyleName(OUString* pString)

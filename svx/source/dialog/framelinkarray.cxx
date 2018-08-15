@@ -151,9 +151,11 @@ void lclRecalcCoordVec( std::vector<long>& rCoords, const std::vector<long>& rSi
 {
     DBG_ASSERT( rCoords.size() == rSizes.size() + 1, "lclRecalcCoordVec - inconsistent vectors" );
     auto aCIt = rCoords.begin();
-    auto aSIt = rSizes.cbegin(), aSEnd = rSizes.cend();
-    for( ; aSIt != aSEnd; ++aCIt, ++aSIt )
-        *(aCIt + 1) = *aCIt + *aSIt;
+    for( const auto& rSize : rSizes )
+    {
+        *(aCIt + 1) = *aCIt + rSize;
+        ++aCIt;
+    }
 }
 
 void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )

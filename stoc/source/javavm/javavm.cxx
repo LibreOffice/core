@@ -1399,9 +1399,8 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 getINetPropsFromConfig( &jvm, m_xContext->getServiceManager(), m_xContext);
                 const ::std::vector< OUString> & Props = jvm.getProperties();
 
-                for( auto i= Props.cbegin(); i != Props.cend(); ++i)
+                for( auto& prop : Props)
                 {
-                    OUString prop= *i;
                     sal_Int32 index= prop.indexOf( '=');
                     OUString propName= prop.copy( 0, index);
                     OUString propValue= prop.copy( index + 1);

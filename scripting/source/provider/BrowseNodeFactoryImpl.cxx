@@ -195,11 +195,10 @@ public:
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
         sal_Int32 index = 0;
 
-        auto it = m_vStr.begin();
-
-        for ( ; it != m_vStr.end(); ++it, index++ )
+        for ( auto& str : m_vStr )
         {
-            children[ index ].set( m_hBNA->find( *it )->second );
+            children[ index ].set( m_hBNA->find( str )->second );
+            ++index;
         }
 
         return children;

@@ -892,9 +892,8 @@ std::vector< const wwFont* > wwFontHelper::AsVector() const
 {
     std::vector<const wwFont *> aFontList( maFonts.size() );
 
-    auto aEnd = maFonts.cend();
-    for ( auto aIter = maFonts.cbegin(); aIter != aEnd; ++aIter )
-        aFontList[aIter->second] = &aIter->first;
+    for ( const auto& aFont : maFonts )
+        aFontList[aFont.second] = &aFont.first;
 
     return aFontList;
 }

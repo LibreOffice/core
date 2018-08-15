@@ -34,13 +34,13 @@ Modifications::~Modifications() {}
 void Modifications::add(std::vector<OUString> const & path) {
     Node * p = &root_;
     bool wasPresent = false;
-    for (auto i(path.begin()); i != path.end(); ++i) {
-        Node::Children::iterator j(p->children.find(*i));
+    for (auto const& pathItem : path) {
+        Node::Children::iterator j(p->children.find(pathItem));
         if (j == p->children.end()) {
             if (wasPresent && p->children.empty()) {
                 return;
             }
-            j = p->children.emplace(*i, Node()).first;
+            j = p->children.emplace(pathItem, Node()).first;
             wasPresent = false;
         } else {
             wasPresent = true;
