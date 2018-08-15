@@ -8083,7 +8083,7 @@ void ScInterpreter::ScAddressFunc()
         sTabStr = GetString().getString();
 
     FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;      // default
-    if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
+    if (nParamCount >= 4 && 0.0 == GetDoubleWithDefault( 1.0))
         eConv = FormulaGrammar::CONV_XL_R1C1;
     else
     {
