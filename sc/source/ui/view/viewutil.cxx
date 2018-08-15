@@ -325,7 +325,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
         rSet.DisableItem( nSlotId );
 }
 
-bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
+void ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -334,7 +334,6 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, true));
     pDlg->Execute();
-    return false;
 }
 
 bool ScViewUtil::IsFullScreen( const SfxViewShell& rViewShell )
