@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_193bd638",
+        "filename": "sysui/desktop/apparmor/program.soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-08-15T14:32:14Z",
+      "side": 1,
+      "message": "but that would allow rm for anything? (ok, we allow sh etc. for anything, too, but....",
+      "revId": "a65bae7927bcbd60a1e7a6091c4b5d3499b83723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
