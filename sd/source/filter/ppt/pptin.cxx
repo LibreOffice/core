@@ -2785,7 +2785,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPT(SvStream &rStream)
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
 
-        bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
+        try
+        {
+            bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
+        }
+        catch (...)
+        {
+        }
 
         xDocShRef->DoClose();
     }
