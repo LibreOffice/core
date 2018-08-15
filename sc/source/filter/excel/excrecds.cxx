@@ -702,7 +702,10 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         return true;
 
     if (GetOutput() != EXC_OUTPUT_BINARY && rItems.size() > 1)
-        return AddMultiValueEntry(rEntry);
+    {
+        AddMultiValueEntry(rEntry);
+        return true;
+    }
 
     bool bConflict = false;
     OUString  sText;
@@ -809,15 +812,13 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     return bConflict;
 }
 
-bool XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
+void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
 {
     meType = MultiValue;
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
     ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
     for (; itr != itrEnd; ++itr)
         maMultiValues.push_back(itr->maString.getString());
-
-    return false;
 }
 
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
