@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,tvhlp1,\
     cppu \
     cppuhelper \
     sal \
+    stl \
     $(gb_STDLIBS) \
 ))
 

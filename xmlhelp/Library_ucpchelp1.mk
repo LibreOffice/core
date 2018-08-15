@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,ucpchelp1,\
     cppu \
     cppuhelper \
     sal \
+    stl \
     ucbhelper \
     $(gb_STDLIBS) \
 ))
