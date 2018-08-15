@@ -55,13 +55,11 @@ Image Tools::GetImage (
     {
         if (rsURL.startsWith(".uno:"))
         {
-            const Image aPanelImage(vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame));
-            return aPanelImage;
+            return vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame);
         }
-        else if (rsURL.startsWith("private:graphicrepository"))
+        else
         {
-            const Image aPanelImage(rsURL);
-            return aPanelImage;
+            return Image(rsURL);
         }
     }
     return Image();
