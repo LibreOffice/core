@@ -568,7 +568,9 @@ namespace
     bool IsValidSel(const EditEngine& rEngine, const ESelection& rSel)
     {
         const auto nParaCount = rEngine.GetParagraphCount();
-        return rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount;
+        if (rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount)
+            return rSel.nStartPos >= 0 && rSel.nEndPos >= 0;
+        return false;
     }
 }
 
