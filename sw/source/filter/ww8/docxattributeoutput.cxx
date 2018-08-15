@@ -4756,14 +4756,7 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
         return;
     if( WriteOLEMath( rOLENode ))
         return;
-    if( PostponeOLE( rOLENode, rSize, pFlyFrameFormat ))
-        return;
-    // Then we fall back to just export the object as a graphic.
-    if( !m_pPostponedGraphic )
-        FlyFrameGraphic( nullptr, rSize, pFlyFrameFormat, &rOLENode );
-    else
-        // w:drawing should not be inside w:rPr, so write it out later
-        m_pPostponedGraphic->push_back(PostponedGraphic(nullptr, rSize, pFlyFrameFormat, &rOLENode, nullptr));
+    PostponeOLE( rOLENode, rSize, pFlyFrameFormat );
 }
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
@@ -5183,14 +5176,13 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
     return true;
 }
 
-bool DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
+void DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
     if( !m_pPostponedOLEs )
         //cannot be postponed, try to write now
         WriteOLE( rNode, rSize, pFlyFrameFormat );
     else
         m_pPostponedOLEs->push_back( PostponedOLE( &rNode, rSize, pFlyFrameFormat ) );
-    return true;
 }
 
 /*
