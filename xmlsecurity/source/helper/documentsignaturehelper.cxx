@@ -142,17 +142,9 @@ bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
 
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
 {
-    bool bOOo3_2 = false;
-    for (auto i = sigInfo.vSignatureReferenceInfors.cbegin();
-        i < sigInfo.vSignatureReferenceInfors.cend(); ++i)
-    {
-        if (i->ouURI == "META-INF/manifest.xml")
-        {
-            bOOo3_2 = true;
-            break;
-        }
-    }
-    return  bOOo3_2;
+    return std::any_of(sigInfo.vSignatureReferenceInfors.cbegin(),
+                       sigInfo.vSignatureReferenceInfors.cend(),
+                       [](const SignatureReferenceInformation& info) { return info.ouURI == "META-INF/manifest.xml"; });
 }
 
 DocumentSignatureAlgorithm

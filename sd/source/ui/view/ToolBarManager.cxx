@@ -685,12 +685,12 @@ void ToolBarManager::Implementation::PreUpdate()
         maToolBarList.GetToolBarsToDeactivate(aToolBars);
 
         // Turn off the tool bars.
-        for (auto iToolBar=aToolBars.cbegin(); iToolBar!=aToolBars.cend(); ++iToolBar)
+        for (auto& aToolBar : aToolBars)
         {
-            OUString sFullName (GetToolBarResourceName(*iToolBar));
+            OUString sFullName (GetToolBarResourceName(aToolBar));
             SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " << sFullName);
             mxLayouter->destroyElement(sFullName);
-            maToolBarList.MarkToolBarAsNotActive(*iToolBar);
+            maToolBarList.MarkToolBarAsNotActive(aToolBar);
         }
 
         SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PreUpdate ]");
@@ -714,12 +714,12 @@ void ToolBarManager::Implementation::PostUpdate()
         SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate [");
 
         // Turn on the tool bars that are visible in the new context.
-        for (auto iToolBar=aToolBars.cbegin(); iToolBar!=aToolBars.cend(); ++iToolBar)
+        for (auto& aToolBar : aToolBars)
         {
-            OUString sFullName (GetToolBarResourceName(*iToolBar));
+            OUString sFullName (GetToolBarResourceName(aToolBar));
             SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " << sFullName);
             mxLayouter->requestElement(sFullName);
-            maToolBarList.MarkToolBarAsActive(*iToolBar);
+            maToolBarList.MarkToolBarAsActive(aToolBar);
         }
 
         SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate ]");
@@ -1264,12 +1264,12 @@ void ToolBarList::GetToolBarsToActivate (std::vector<OUString>& rToolBars) const
     std::vector<OUString> aRequestedToolBars;
     MakeRequestedToolBarList(aRequestedToolBars);
 
-    for (auto iToolBar=aRequestedToolBars.cbegin(); iToolBar!=aRequestedToolBars.cend(); ++iToolBar)
+    for (auto& aToolBar : aRequestedToolBars)
     {
-        if (::std::find(maActiveToolBars.begin(),maActiveToolBars.end(),*iToolBar)
+        if (::std::find(maActiveToolBars.begin(),maActiveToolBars.end(),aToolBar)
             == maActiveToolBars.end())
         {
-            rToolBars.push_back(*iToolBar);
+            rToolBars.push_back(aToolBar);
         }
     }
 }
@@ -1279,12 +1279,12 @@ void ToolBarList::GetToolBarsToDeactivate (std::vector<OUString>& rToolBars) con
     std::vector<OUString> aRequestedToolBars;
     MakeRequestedToolBarList(aRequestedToolBars);
 
-    for (auto iToolBar=maActiveToolBars.cbegin(); iToolBar!=maActiveToolBars.cend(); ++iToolBar)
+    for (auto& aToolBar : maActiveToolBars)
     {
-        if (::std::find(aRequestedToolBars.begin(),aRequestedToolBars.end(),*iToolBar)
+        if (::std::find(aRequestedToolBars.begin(),aRequestedToolBars.end(),aToolBar)
             == aRequestedToolBars.end())
         {
-            rToolBars.push_back(*iToolBar);
+            rToolBars.push_back(aToolBar);
         }
     }
 }

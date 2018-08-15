@@ -142,17 +142,15 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
             rValue >>= aPropertyValue;
 
             std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
-            std::vector<OUString>::iterator aIter( aSubTypes.begin() );
-            const std::vector<OUString>::iterator aEnd( aSubTypes.end() );
 
-            mpControl->Enable( aIter != aEnd );
+            mpControl->Enable( !aSubTypes.empty() );
 
-            while( aIter != aEnd )
+            for( auto& aSubType : aSubTypes )
             {
-                sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( *aIter ) );
-                if( (*aIter) == aPropertyValue )
+                sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( aSubType ) );
+                if( aSubType == aPropertyValue )
                     mpControl->SelectEntryPos( nPos );
-                maPropertyValues[nPos] = (*aIter++);
+                maPropertyValues[nPos] = aSubType;
             }
         }
         else
