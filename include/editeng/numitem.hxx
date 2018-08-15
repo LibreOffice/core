@@ -125,7 +125,7 @@ private:
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
 
     short               nFirstLineOffset;   // First line indent
-    short               nAbsLSpace;         // Distance Border<->Number
+    sal_Int32           nAbsLSpace;         // Distance Border<->Number
     short               nCharTextDistance;  // Distance Number<->Text
 
     // specifies what follows the list label before the text of the first line
@@ -195,8 +195,8 @@ public:
     SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const { return mePositionAndSpaceMode;}
     void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
 
-    void            SetAbsLSpace(short nSet) {nAbsLSpace = nSet;}
-    short           GetAbsLSpace() const;
+    void            SetAbsLSpace(sal_Int32 nSet) {nAbsLSpace = nSet;}
+    sal_Int32       GetAbsLSpace() const;
     void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}
     short           GetFirstLineOffset() const;
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }

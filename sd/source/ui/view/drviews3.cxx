@@ -785,7 +785,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     // n#707779 (previously, LRSpace left indent could
                     // become negative - EditEngine really does not
                     // like that.
-                    const short nAbsLSpace=aFormat.GetAbsLSpace();
+                    const auto nAbsLSpace=aFormat.GetAbsLSpace();
                     const long  nTxtLeft=rItem.GetTextLeft();
                     const long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
                     aLRSpaceItem.SetTextLeft(nLeftIndent);

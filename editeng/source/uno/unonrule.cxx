@@ -245,7 +245,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
     aVal <<= static_cast<sal_Int16>(rFmt.GetStart());
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_START_WITH, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= static_cast<sal_Int32>(rFmt.GetAbsLSpace());
+    aVal <<= rFmt.GetAbsLSpace();
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_LEFT_MARGIN, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= static_cast<sal_Int32>(rFmt.GetFirstLineOffset());

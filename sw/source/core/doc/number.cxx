@@ -879,7 +879,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
 }
 
 /// change indent of all list levels by given difference
-void SwNumRule::ChangeIndent( const short nDiff )
+void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
 {
     for ( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
@@ -889,7 +889,7 @@ void SwNumRule::ChangeIndent( const short nDiff )
                                         aTmpNumFormat.GetPositionAndSpaceMode() );
         if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
-            short nNewIndent = nDiff +
+            auto nNewIndent = nDiff +
                                aTmpNumFormat.GetAbsLSpace();
             if ( nNewIndent < 0 )
             {
@@ -951,7 +951,7 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
 {
     SwNumFormat aTmpNumFormat( Get(0) );
 
-    short nDiff( 0 );
+    sal_Int32 nDiff( 0 );
     const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                         aTmpNumFormat.GetPositionAndSpaceMode() );
     if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -962,8 +962,7 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
     }
     else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        nDiff = static_cast<short>(nNewIndent
-                                   - aTmpNumFormat.GetIndentAt());
+        nDiff = nNewIndent - aTmpNumFormat.GetIndentAt();
     }
     if ( nDiff != 0  )
     {

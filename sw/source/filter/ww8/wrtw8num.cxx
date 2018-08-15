@@ -514,7 +514,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             // #i86652#
             if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                nIndentAt = nListTabPos = rFormat.GetAbsLSpace();
+                nIndentAt = nListTabPos = rFormat.GetAbsLSpace(); //TODO: overflow
                 nFirstLineIndex = GetWordFirstLineOffset(rFormat);
             }
             else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )

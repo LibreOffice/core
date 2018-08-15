@@ -529,7 +529,7 @@ public:
     // #i90078#
     /// Remove unused default parameter <nLevel> and <bRelative>.
     // Adjust method name and parameter name
-    void ChangeIndentOfAllListLevels( short nDiff );
+    void ChangeIndentOfAllListLevels( sal_Int32 nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
     bool IsFirstOfNumRuleAtCursorPos() const;

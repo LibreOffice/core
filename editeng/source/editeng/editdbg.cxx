@@ -90,7 +90,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                     aDebStr.append('(');
                     aDebStr.append(static_cast<sal_Int32>(pFmt->GetFirstLineOffset()));
                     aDebStr.append(',');
-                    aDebStr.append(static_cast<sal_Int32>(pFmt->GetAbsLSpace()));
+                    aDebStr.append(pFmt->GetAbsLSpace());
                     aDebStr.append(',');
                     if ( pFmt->GetNumberingType() == SVX_NUM_BITMAP )
                         aDebStr.append("Bitmap");

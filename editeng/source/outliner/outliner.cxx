@@ -1512,7 +1512,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         bool bOutlineMode = bool( pEditEngine->GetControlWord() & EEControlBits::OUTLINER );
 
         // the ODF attribute text:space-before which holds the spacing to add to the left of the label
-        const short nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
+        const auto nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
 
         const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
         aTopLeft.setX( rLR.GetTextLeft() + rLR.GetTextFirstLineOfst() + nSpaceBefore );
