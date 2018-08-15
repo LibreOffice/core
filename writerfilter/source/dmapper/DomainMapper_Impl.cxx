@@ -1160,7 +1160,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     return lcl_getListId(pParent, rStyleTable);
 }
 
-void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
+void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -1189,7 +1189,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable()) : -1;
         if ( nListId >= 0 )
         {
-            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
+            if (!bRemove)
+                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
 
             // Indent properties from the paragraph style have priority
             // over the ones from the numbering styles in Word
