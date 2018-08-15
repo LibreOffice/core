@@ -33,97 +33,6 @@ public:
 
     void run() override
     {
-        StringRef fn(handler.getMainFileName());
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/store"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/registry"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/unotools"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmlreader/"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/jvmfwk"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svtools"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basic"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas")) // TODO
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sax"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/oox"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cui"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/desktop"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/unx/source/svdde/ddedummy.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/appl/shutdownicon.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/control/minfitem.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/doc/docmacromode.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn,
-                                        SRCDIR "/ucb/source/cacher/contentresultsetwrapper.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/editeng/source/editeng/impedit2.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/doc/syspath.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/source/core/SvXMLAttrCollection.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/test/source/diff/diff.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/items/SmartTagItem.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/dialog/rulritem.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/svdograf.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/graphicfilter/ipict/ipict.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/svgwriter.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/connectivity/source/drivers/odbc/ODatabaseMetaDataResultSet.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/data/attrib.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/data/dptabsrc.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/data/formulacell.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/docshell/docfunc.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/access/accpara.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR
-                                        "/sw/source/core/doc/DocumentContentOperationsManager.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/tblcpy.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/edit/autofmt.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/edit/edglss.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/table/swnewtable.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/xml/xmlfmt.cxx"))
-            return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/reportdesign/source/ui/dlg/AddField.cxx"))
-            return;
-
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         for (auto& pair : problemFunctions)
@@ -210,14 +119,15 @@ bool ReturnConstant::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
 
     // ignore LINK macro stuff
     std::string aImmediateMacro = "";
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(functionDecl)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(functionDecl))
+        || compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(functionDecl)))
     {
         StringRef name{ Lexer::getImmediateMacroName(compat::getBeginLoc(functionDecl),
                                                      compiler.getSourceManager(),
                                                      compiler.getLangOpts()) };
         aImmediateMacro = name;
         if (name.contains("IMPL_LINK") || name.contains("IMPL_STATIC_LINK")
-            || name.contains("SFX_IMPL_POS_CHILDWINDOW_WITHID"))
+            || name.contains("DECL_LINK") || name.contains("SFX_IMPL_POS_CHILDWINDOW_WITHID"))
             return true;
     }
 
@@ -311,7 +221,7 @@ std::string ReturnConstant::getExprValue(Expr const* arg)
     return "unknown";
 }
 
-loplugin::Plugin::Registration<ReturnConstant> X("returnconstant", true);
+loplugin::Plugin::Registration<ReturnConstant> X("returnconstant", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
