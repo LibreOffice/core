@@ -117,44 +117,30 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
     if (!pDoc)
         return;
 
-    const SwFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
-    for( size_t n = 0; n < rTableFormats.size(); ++n )
+    uno::Reference< frame::XModel > xRes;
+    SwOLENode *pONd;
+    SwStartNode *pStNd;
+    SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+    while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        const SwFrameFormat* pFormat = rTableFormats[ n ];
-        SwTable* pTmpTable = SwTable::FindTable(pFormat);
-        if (!pTmpTable)
-            continue;
-        const SwTableNode* pTableNd = pTmpTable->GetTableNode();
-        if (!pTableNd)
-            continue;
-        if (!pTableNd->GetNodes().IsDocNodes())
-            continue;
-
-        uno::Reference< frame::XModel > xRes;
-        SwOLENode *pONd;
-        SwStartNode *pStNd;
-        SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-        while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
+        ++aIdx;
+        if (nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+            !pONd->GetChartTableName().isEmpty() /* is chart object? */)
         {
-            ++aIdx;
-            if (nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-                !pONd->GetChartTableName().isEmpty() /* is chart object? */)
+            uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
+            if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
             {
-                uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
-                if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+                xRes.set( xIP->getComponent(), uno::UNO_QUERY );
+                if (xRes.is())
                 {
-                    xRes.set( xIP->getComponent(), uno::UNO_QUERY );
-                    if (xRes.is())
-                    {
-                        if (bLock)
-                            xRes->lockControllers();
-                        else
-                            xRes->unlockControllers();
-                    }
+                    if (bLock)
+                        xRes->lockControllers();
+                    else
+                        xRes->unlockControllers();
                 }
             }
-            aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
         }
+        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
 
     bIsLocked = bLock;
