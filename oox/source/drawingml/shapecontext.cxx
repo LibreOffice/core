@@ -100,7 +100,9 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     }
     case XML_txXfrm:
     {
-        mpShapePtr->getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
+        const TextBodyPtr& rShapePtr = mpShapePtr->getTextBody();
+        if (rShapePtr)
+            rShapePtr->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
         return nullptr;
     }
     case XML_cNvSpPr:
