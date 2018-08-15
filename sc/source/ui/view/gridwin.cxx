@@ -3325,7 +3325,7 @@ void ScGridWindow::UpdateInputContext()
                                 // sensitive range (Pixel)
 #define SCROLL_SENSITIVE 20
 
-bool ScGridWindow::DropScroll( const Point& rMousePos )
+void ScGridWindow::DropScroll( const Point& rMousePos )
 {
     SCCOL nDx = 0;
     SCROW nDy = 0;
@@ -3355,8 +3355,6 @@ bool ScGridWindow::DropScroll( const Point& rMousePos )
         if ( nDy != 0 )
             pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
     }
-
-    return false;
 }
 
 static bool lcl_TestScenarioRedliningDrop( const ScDocument* pDoc, const ScRange& aDragRange)
