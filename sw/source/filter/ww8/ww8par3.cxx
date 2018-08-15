@@ -1684,7 +1684,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     // #i86652#
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        const long nAbsLSpace = rFormat.GetAbsLSpace();
+        const auto nAbsLSpace = rFormat.GetAbsLSpace();
         const long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
         aLR.SetTextLeft(nAbsLSpace);

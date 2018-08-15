@@ -1723,7 +1723,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int32 nValue = 0;
                     pProp->Value >>= nValue;
                     // #i23727# nValue can be negative
-                    aFormat.SetAbsLSpace(static_cast<short>(convertMm100ToTwip(nValue)));
+                    aFormat.SetAbsLSpace(convertMm100ToTwip(nValue));
                 }
                 break;
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,

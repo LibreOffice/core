@@ -24,6 +24,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/brushitem.hxx>
+#include <o3tl/clamp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
@@ -197,7 +198,9 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( nTmp16 ); cBullet = static_cast<sal_Unicode>(nTmp16);
 
     rStream.ReadInt16( nFirstLineOffset );
-    rStream.ReadInt16( nAbsLSpace );
+    sal_Int16 temp;
+    rStream.ReadInt16( temp );
+    nAbsLSpace = temp;
     rStream.SeekRel(2); //skip old now unused nLSpace;
 
     rStream.ReadInt16( nCharTextDistance );
@@ -259,7 +262,9 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     rStream.WriteUInt16( cBullet );
 
     rStream.WriteInt16( nFirstLineOffset );
-    rStream.WriteInt16( nAbsLSpace );
+    rStream.WriteInt16(
+        sal_Int16(o3tl::clamp<sal_Int32>(nAbsLSpace, SAL_MIN_INT16, SAL_MAX_INT16)) );
+        //TODO: better way to handle out-of-bounds value?
     rStream.WriteInt16( 0 ); // write a dummy for old now unused nLSpace
 
     rStream.WriteInt16( nCharTextDistance );
@@ -441,7 +446,7 @@ void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePosit
     mePositionAndSpaceMode = ePositionAndSpaceMode;
 }
 
-short SvxNumberFormat::GetAbsLSpace() const
+sal_Int32 SvxNumberFormat::GetAbsLSpace() const
 {
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
            ? nAbsLSpace

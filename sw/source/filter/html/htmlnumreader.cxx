@@ -105,7 +105,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
             nChrFormatPoolId = RES_POOLCHR_BUL_LEVEL;
         }
 
-        short nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
+        sal_Int32 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
 
         short nFirstLineIndent  = HTML_NUMBUL_INDENT;
         if( nLevel > 0 )

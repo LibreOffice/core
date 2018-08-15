@@ -3224,7 +3224,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 }
                 else
                 {
-                    aNumFmt.SetAbsLSpace( static_cast<short>(nValue) - aNumFmt.GetFirstLineOffset());
+                    aNumFmt.SetAbsLSpace( nValue - aNumFmt.GetFirstLineOffset());
                 }
             }
             else if (&rFld == m_pDistNumMF)
@@ -3235,7 +3235,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
             {
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
-                long nAbsLSpace = aNumFmt.GetAbsLSpace();
+                auto const nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(nAbsLSpace + nDiff);
                 aNumFmt.SetFirstLineOffset( -static_cast<short>(nValue) );
             }

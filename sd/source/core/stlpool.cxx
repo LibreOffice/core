@@ -1038,7 +1038,7 @@ void SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i
 {
     rNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
     rNumberFormat.SetBulletRelSize(45);
-    const short nLSpace = (i + 1) * 1200;
+    const auto nLSpace = (i + 1) * 1200;
     rNumberFormat.SetAbsLSpace(nLSpace);
     short nFirstLineOffset = -600;
 
@@ -1100,7 +1100,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
-                const short nLSpace = (i + 1) * 600;
+                const auto nLSpace = (i + 1) * 600;
                 aNumberFormat.SetAbsLSpace(nLSpace);
                 aNumberFormat.SetFirstLineOffset(-600);
                 aNumRule.SetLevel( i, aNumberFormat );

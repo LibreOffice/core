@@ -1220,7 +1220,7 @@ void SdDrawDocument::SetTextDefaults() const
 
     for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
     {
-        const short nLSpace = (i + 1) * 600;
+        const auto nLSpace = (i + 1) * 600;
         aNumberFormat.SetAbsLSpace(nLSpace);
         aNumberFormat.SetFirstLineOffset(-600);
         aNumRule.SetLevel( i, aNumberFormat );

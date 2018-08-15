@@ -254,7 +254,7 @@ public:
     SvxNumRule  MakeSvxNumRule() const;
 
     /// change indent of all list levels by given difference
-    void ChangeIndent( const short nDiff );
+    void ChangeIndent( const sal_Int32 nDiff );
     /// set indent of certain list level to given value
     void SetIndent( const short nNewIndent,
                     const sal_uInt16 nListLevel );

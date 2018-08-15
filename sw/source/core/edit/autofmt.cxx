@@ -1435,7 +1435,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         }
                     }
 
-                    short nAbsPos = lBullIndent;
+                    sal_Int32 nAbsPos = lBullIndent;
                     SwTwips nSpaceSteps = nLvl
                                             ? nLeftTextPos / nLvl
                                             : lBullIndent;
@@ -1519,7 +1519,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 }
                 else
                 {
-                    sal_uInt16 nSpaceSteps = nLvl ? sal_uInt16(nLeftTextPos / nLvl) : 0;
+                    auto const nSpaceSteps = nLvl ? nLeftTextPos / nLvl : 0;
                     sal_uInt16 n;
                     for( n = 0; n <= nLvl; ++n )
                     {

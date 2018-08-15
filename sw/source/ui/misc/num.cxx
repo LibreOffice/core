@@ -637,7 +637,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
                 }
                 else
                 {
-                    aNumFormat.SetAbsLSpace( static_cast<short>(nValue) - aNumFormat.GetFirstLineOffset());
+                    aNumFormat.SetAbsLSpace( nValue - aNumFormat.GetFirstLineOffset());
                 }
             }
             else if (&rField == m_xDistNumMF.get())
@@ -648,7 +648,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
             {
                 // now AbsLSpace also has to be modified by FirstLineOffset
                 long nDiff = nValue + aNumFormat.GetFirstLineOffset();
-                long nAbsLSpace = aNumFormat.GetAbsLSpace();
+                auto const nAbsLSpace = aNumFormat.GetAbsLSpace();
                 aNumFormat.SetAbsLSpace( nAbsLSpace + nDiff );
                 aNumFormat.SetFirstLineOffset( -nValue );
             }

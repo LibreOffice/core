@@ -334,7 +334,7 @@ bool SwEditShell::IsFirstOfNumRuleAtCursorPos() const
 }
 
 // -> #i23725#, #i90078#
-void SwEditShell::ChangeIndentOfAllListLevels( const short nDiff )
+void SwEditShell::ChangeIndentOfAllListLevels( const sal_Int32 nDiff )
 {
     StartAllAction();
 

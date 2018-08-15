@@ -1200,7 +1200,7 @@ static long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFormat &rFor
     const long nFirstLineDiff = rLR.GetTextFirstLineOfst();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
-    const long nPseudoListBodyIndent = rFormat.GetAbsLSpace();
+    const auto nPseudoListBodyIndent = rFormat.GetAbsLSpace();
     const long nReverseListIndented = GetListFirstLineIndent(rFormat);
     long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
 

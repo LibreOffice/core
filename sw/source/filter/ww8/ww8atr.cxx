@@ -643,7 +643,7 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
     }
 }
 
-void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, short nAbsLeft )
+void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_Int32 nAbsLeft )
 {
     if (const SvxTabStopItem *pItem = rSet.GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP))
     {
