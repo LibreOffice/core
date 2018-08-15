@@ -211,14 +211,12 @@ public:
 };
 
 
-struct ImplBmpObj;
+class X11SalBitmap;
 
 class ImplSalBitmapCache
 {
 private:
-    typedef ::std::list< ImplBmpObj* > BmpList_impl;
-
-    BmpList_impl    maBmpList;
+    std::vector<X11SalBitmap*>  maBmpList;
 
 public:
 
