@@ -3,7 +3,7 @@ new file mode 100755
 index 000000000000..425c39966171
 --- /dev/null
 +++ b/visual_studio/TWAIN_DSM_VS2015.vcxproj
-@@ -0,0 +1,256 @@
+@@ -0,0 +1,258 @@
 +﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 +  <ItemGroup Label="ProjectConfigurations">
@@ -122,7 +122,7 @@ index 000000000000..425c39966171
 +      <PrecompiledHeader>
 +      </PrecompiledHeader>
 +      <WarningLevel>Level4</WarningLevel>
-+      <TreatWarningAsError>true</TreatWarningAsError>
++      <TreatWarningAsError>false</TreatWarningAsError>
 +      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 +    </ClCompile>
 +    <Link>
@@ -158,7 +158,7 @@ index 000000000000..425c39966171
 +      <PrecompiledHeader>
 +      </PrecompiledHeader>
 +      <WarningLevel>Level4</WarningLevel>
-+      <TreatWarningAsError>true</TreatWarningAsError>
++      <TreatWarningAsError>false</TreatWarningAsError>
 +      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 +    </ClCompile>
 +    <ResourceCompile>
@@ -191,6 +191,7 @@ index 000000000000..425c39966171
 +      <PrecompiledHeader>
 +      </PrecompiledHeader>
 +      <WarningLevel>Level3</WarningLevel>
++      <TreatWarningAsError>false</TreatWarningAsError>
 +      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 +    </ClCompile>
 +    <Link>
@@ -223,6 +224,7 @@ index 000000000000..425c39966171
 +      <PrecompiledHeader>
 +      </PrecompiledHeader>
 +      <WarningLevel>Level3</WarningLevel>
++      <TreatWarningAsError>false</TreatWarningAsError>
 +      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 +    </ClCompile>
 +    <ResourceCompile>
