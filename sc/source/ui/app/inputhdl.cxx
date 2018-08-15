@@ -1908,7 +1908,7 @@ void ScInputHandler::SetInputWindow(  ScInputWindow* pNew )
 
 void ScInputHandler::StopInputWinEngine( bool bAll )
 {
-    if (pInputWin)
+    if (pInputWin && !pInputWin->IsDisposed())
         pInputWin->StopEditEngine( bAll );
 
     pTopView = nullptr; // invalid now
