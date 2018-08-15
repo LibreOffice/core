@@ -226,10 +226,10 @@ class RTFPicture : public virtual SvRefBase
 {
 public:
     RTFPicture();
-    sal_uInt16 nWidth = 0;
-    sal_uInt16 nHeight = 0;
-    sal_uInt16 nGoalWidth = 0;
-    sal_uInt16 nGoalHeight = 0;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
+    sal_Int32 nGoalWidth = 0;
+    sal_Int32 nGoalHeight = 0;
     sal_uInt16 nScaleX = 100;
     sal_uInt16 nScaleY = 100;
     short nCropT = 0;
