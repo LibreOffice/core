@@ -28,6 +28,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
 #include <o3tl/make_unique.hxx>
+#include <unotools/configmgr.hxx>
 
 namespace {
 
@@ -383,6 +384,9 @@ void ScDocumentImport::setMatrixCells(
     sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rBasePos.Tab(), rBasePos.Col());
 
     if (!pBlockPos)
+        return;
+
+    if (utl::ConfigManager::IsFuzzing()) //just too slow
         return;
 
     sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;
