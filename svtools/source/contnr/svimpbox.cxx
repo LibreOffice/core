@@ -1311,10 +1311,12 @@ void SvImpLBox::FillView()
 {
     if( !pStartEntry )
     {
-        sal_uInt16 nVisibleViewCount = static_cast<sal_uInt16>(pView->GetVisibleCount());
-        sal_uInt16 nTempThumb = static_cast<sal_uInt16>(aVerSBar->GetThumbPos());
-        if( nTempThumb >= nVisibleViewCount )
-            nTempThumb = nVisibleViewCount - 1;
+        sal_uLong nVisibleViewCount = pView->GetVisibleCount();
+        long nTempThumb = aVerSBar->GetThumbPos();
+        if( nTempThumb < 0 )
+            nTempThumb = 0;
+        else if( static_cast<unsigned long>(nTempThumb) >= nVisibleViewCount )
+            nTempThumb = nVisibleViewCount == 0 ? 0 : nVisibleViewCount - 1;
         pStartEntry = pView->GetEntryAtVisPos(nTempThumb);
     }
     if( !pStartEntry )
