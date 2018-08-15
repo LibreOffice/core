@@ -9722,38 +9722,9 @@ AC_SUBST(ENABLE_MINIMIZER)
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import])
-if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
-  AC_MSG_RESULT([yes])
-  ENABLE_PDFIMPORT=TRUE
+AC_MSG_RESULT([no - disabled])
+ENABLE_PDFIMPORT=FALSE
 
-  dnl ===================================================================
-  dnl Check for system poppler
-  dnl ===================================================================
-  AC_MSG_CHECKING([which pdf backend to use])
-  if test "$with_system_poppler" = "yes"; then
-      AC_MSG_RESULT([external])
-      SYSTEM_POPPLER=YES
-      PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
-      AC_LANG_PUSH([C++])
-      save_CXXFLAGS=$CXXFLAGS
-      save_CPPFLAGS=$CPPFLAGS
-      CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
-      CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
-      AC_CHECK_HEADER([cpp/poppler-version.h], [],
-                   [AC_MSG_ERROR([cpp/poppler-version.h not found. Install poppler])], [])
-      CXXFLAGS=$save_CXXFLAGS
-      CPPFLAGS=$save_CPPFLAGS
-      AC_LANG_POP([C++])
-      libo_MINGW_CHECK_DLL([libpoppler])
-  else
-      AC_MSG_RESULT([internal])
-      SYSTEM_POPPLER=NO
-      BUILD_TYPE="$BUILD_TYPE XPDF"
-  fi
-else
-  AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=FALSE
-fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
