@@ -235,7 +235,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 
-    bool            DropScroll( const Point& rMousePos );
+    void            DropScroll( const Point& rMousePos );
 
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
