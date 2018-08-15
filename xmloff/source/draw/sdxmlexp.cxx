@@ -2716,13 +2716,17 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
-        Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
-        if( xFac.is() )
+        try
         {
-            Reference<beans::XPropertySet> const xProps(xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
-            Reference<beans::XPropertySetInfo> const xInfo(xProps->getPropertySetInfo(), uno::UNO_QUERY);
+            Reference<lang::XMultiServiceFactory> xFactory(GetModel(), UNO_QUERY);
+            Reference<beans::XPropertySet> xProps;
+            Reference<beans::XPropertySetInfo> xInfo;
 
-            if (xProps.is() && xInfo.is())
+            if (xFactory.is())
+                xProps.set(xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+            if (xProps.is())
+                xInfo.set(xProps->getPropertySetInfo(), uno::UNO_QUERY);
+            if (xInfo.is() && xProps.is())
             {
                 if (xInfo->hasPropertyByName("EmbedFonts"))
                     xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
@@ -2735,6 +2739,10 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
                 if (xInfo->hasPropertyByName("EmbedComplexScriptFonts"))
                     xProps->getPropertyValue("EmbedComplexScriptFonts") >>= bEmbedComplexScript;
             }
+        } catch(...)
+        {
+            // clipboard document doesn't have shell so throws from getPropertyValue
+            // gallery elements may not support com.sun.star.document.Settings so throws from createInstance
         }
     }
 
