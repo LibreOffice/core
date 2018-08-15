@@ -307,7 +307,7 @@ namespace pcr
         */
         bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = nullptr );
 
-        bool Construct(vcl::Window* _pParentWin);
+        void Construct(vcl::Window* _pParentWin);
 
         /** retrieves the property handler for a given property name
             @param  _rPropertyName
