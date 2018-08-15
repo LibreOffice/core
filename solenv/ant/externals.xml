@@ -73,4 +73,16 @@
         system-path="${COMMONS_LOGGING_JAR}"
         internal-filename="commons-logging-1.1.3.jar"/>
 
+    <define-external
+        name="lucene-core"
+        system-test="${SYSTEM_LUCENE}"
+        system-path="${LUCENE_CORE_JAR}"
+        internal-filename="lucene-core-2.9.4-dev.jar"/>
+
+    <define-external
+        name="lucene-analyzers"
+        system-test="${SYSTEM_LUCENE}"
+        system-path="${LUCENE_ANALYZERS_JAR}"
+        internal-filename="lucene-analyzers-2.9.4-dev.jar"/>
+
 </project>

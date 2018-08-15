@@ -153,6 +153,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textconversiondlgs \
     ootk \
     tl \
+    tvhlp1 \
+    ucpchelp1 \
     utl \
     unordf \
     unoxml \

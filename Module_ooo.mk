@@ -103,6 +103,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     writerfilter \
     x11_extensions \
     xml2cmp \
+    xmlhelp \
     xmloff \
     xmlreader \
     xmlscript \

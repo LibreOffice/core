@@ -204,8 +204,8 @@ public class HelpSearch
         // Command line interface for testing
         private static String[] doQuery( Object[] args, Object[] aScoreOutArray ) throws Exception
         {
-             String aLanguageStr = "";
-             String aIndexStr = "";
+            String aLanguageStr = "";
+            String aIndexStr = "";
             String aQueryStr = "";
             boolean bCaptionOnly = false;
 

@@ -141,6 +141,8 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/writerfilter/util/writerfilter \
+    component/xmlhelp/source/treeview/tvhlp1 \
+    component/xmlhelp/util/ucpchelp1 \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
@@ -184,8 +186,6 @@ my_components = \
     svgfilter \
     syssh \
     t602filter \
-    tvhlp1 \
-    ucpchelp1 \
     updatefeed \
     updchk \
     vbaevents \
@@ -275,7 +275,7 @@ my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
-    LuceneHelpWrapper \
+    component/xmlhelp/java/LuceneHelpWrapper/LuceneHelpWrapper \
     ScriptFramework \
     ScriptProviderForJava \
     XMergeBridge \

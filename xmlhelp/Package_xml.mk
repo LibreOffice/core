@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,11 +17,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-# define HELPLINKER_DLLIMPLEMENTATION (see @ inc/xmlhelp/helplinkerdllapi.h)
-CDEFS += -DHELPLINKER_DLLIMPLEMENTATION
+$(eval $(call gb_Package_Package,xmlhelp_xml,$(SRCDIR)/xmlhelp))
 
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_Package_add_file,xmlhelp_xml,xml/ucpchelp.xml,util/ucpchelp.xml))

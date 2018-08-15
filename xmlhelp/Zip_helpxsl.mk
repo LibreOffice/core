@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,29 +17,16 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Zip_Zip,helpxsl,$(SRCDIR)/xmlhelp/util))
 
-PRJNAME=	xmlhelp
-TARGET=	    jaqe	
-AUTOSEG=	TRUE
+$(eval $(call gb_Zip_add_files,helpxsl,\
+	idxcaption.xsl \
+	idxcontent.xsl \
+	main_transform.xsl \
+))
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-.IF "$(GUI)"=="WNT"
-CFLAGS+=-GR
-.ENDIF
-
-SLOFILES=$(SLO)$/DocGenerator.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
+# vim: set noet sw=4 ts=4:
