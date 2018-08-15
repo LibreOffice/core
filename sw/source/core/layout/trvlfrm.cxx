@@ -533,7 +533,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
 //Problem: If two Flys have the same size and share the same position then
 //they end inside each other.
-//Because we recursively check if a Point doesn't randomly lie inside an other
+//Because we recursively check if a Point doesn't randomly lie inside another
 //fly which lies completely inside the current Fly we could trigger an endless
 //loop with the mentioned situation above.
 //Using the helper class SwCursorOszControl we prevent the recursion. During

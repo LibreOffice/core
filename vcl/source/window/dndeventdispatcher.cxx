@@ -94,7 +94,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
     vcl::Window* pChildWindow = findTopLevelWindow(location);
 
-    // handle the case that drop is in an other vcl window than the last dragOver
+    // handle the case that drop is in another vcl window than the last dragOver
     if( pChildWindow != m_pCurrentWindow.get() )
     {
         // fire dragExit on listeners of previous window
