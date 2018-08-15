@@ -7321,7 +7321,7 @@ BaseNode.prototype.registerDeactivatingListener = function( aNotifiee )
 
     if( !aNotifiee )
     {
-        log( 'BaseNode.registerDeactivatingListener(): invalid notifee' );
+        log( 'BaseNode.registerDeactivatingListener(): invalid notifiee' );
         return false;
     }
     this.aDeactivatingListenerArray.push( aNotifiee );
