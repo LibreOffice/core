@@ -499,7 +499,7 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
     {
         if ( isRectangleHit(rMEvt) )
         {
-            // there is an other component under use, break action
+            // there is another component under use, break action
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
         }
         // object was dragged

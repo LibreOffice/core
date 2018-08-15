@@ -261,7 +261,7 @@ namespace rtl_str
                 rtl::OString aStr1 = "Line for a hashCode.";
                 sal_Int32 nHashCode1 = rtl_str_hashCode( aStr1.getStr() );
 
-                rtl::OString aStr2 = "Line for an other hashcode.";
+                rtl::OString aStr2 = "Line for another hashcode.";
                 sal_Int32 nHashCode2 = rtl_str_hashCode( aStr2.getStr() );
 
                 CPPUNIT_ASSERT_MESSAGE("hashcodes must differ.", nHashCode1 != nHashCode2 );
