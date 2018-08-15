@@ -608,9 +608,9 @@ void SdrHdl::CreateB2dIAObject()
                         }
                         else
                         {
-                            pNewOverlayObject.reset(CreateOverlayObject(
+                            pNewOverlayObject = CreateOverlayObject(
                                                     aPosition, eColIndex, eKindOfMarker,
-                                                    aMoveOutsideOffset));
+                                                    aMoveOutsideOffset);
                         }
                         // OVERLAYMANAGER
                         if (pNewOverlayObject)
@@ -779,11 +779,11 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
 
 } // end anonymous namespace
 
-sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
+std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
     BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
-    sdr::overlay::OverlayObject* pRetval = nullptr;
+    std::unique_ptr<sdr::overlay::OverlayObject> pRetval;
 
     // support bigger sizes
     bool bForceBiggerSize(false);
@@ -862,23 +862,23 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
-            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1), 0,
-                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1), 0);
+                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1), 0));
         }
         else
         {
             // create centered handle as default
-            pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1));
         }
     }
     else
@@ -902,13 +902,13 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // upper left as reference point inside the handle for AnchorPressed, too
-            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
-                static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1), 0);
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
+                static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1), 0));
         }
         else
         {
@@ -934,7 +934,7 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
             }
 
             // create centered handle as default
-            pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY);
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY));
         }
     }
 
