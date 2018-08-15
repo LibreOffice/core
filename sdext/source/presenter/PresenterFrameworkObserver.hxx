@@ -41,7 +41,6 @@ class PresenterFrameworkObserver
       public PresenterFrameworkObserverInterfaceBase
 {
 public:
-    typedef ::std::function<bool ()> Predicate;
     typedef ::std::function<void (bool)> Action;
 
     PresenterFrameworkObserver(const PresenterFrameworkObserver&) = delete;
@@ -58,7 +57,6 @@ public:
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
-    Predicate maPredicate;
     Action maAction;
 
     /** Create a new PresenterFrameworkObserver object.
@@ -70,15 +68,10 @@ private:
     */
     PresenterFrameworkObserver (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-        const Predicate& rPredicate,
         const Action& rAction);
     virtual ~PresenterFrameworkObserver() override;
 
     void Shutdown();
-
-    /** Predicate that always returns true.
-    */
-    static bool True();
 };
 
 } }  // end of namespace ::sdext::presenter
