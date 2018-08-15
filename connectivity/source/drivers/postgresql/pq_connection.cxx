@@ -470,7 +470,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         else
         {
             // ignore for now
-            SAL_WARN("connectivity.postgresql", "sdbc-postgresql: unknown argument " << args[i].Name );
+            SAL_WARN("connectivity.postgresql", "sdbc-postgresql: unknown argument '" << args[i].Name << "' having value: " << args[i].Value );
         }
     }
 }
