@@ -1462,7 +1462,7 @@ IMPL_LINK_NOARG(ScContentTree, ExecDragHdl, void*, void)
     DoDrag();
 }
 
-bool ScContentTree::LoadFile( const OUString& rUrl )
+void ScContentTree::LoadFile( const OUString& rUrl )
 {
     OUString aDocName = rUrl;
     sal_Int32 nPos = aDocName.indexOf('#');
@@ -1487,8 +1487,6 @@ bool ScContentTree::LoadFile( const OUString& rUrl )
     }
 
     //  document is closed again by ScDocumentLoader in dtor
-
-    return false;
 }
 
 void ScContentTree::InitWindowBits( bool bButtons )
