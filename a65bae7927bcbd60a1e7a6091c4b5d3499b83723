@@ -16,6 +16,24 @@
       "revId": "a65bae7927bcbd60a1e7a6091c4b5d3499b83723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d9720e12",
+        "filename": "sysui/desktop/apparmor/program.soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001796
+      },
+      "writtenOn": "2018-08-15T15:13:41Z",
+      "side": 1,
+      "message": "No, it \"ix\", so \"rm\" inherits *all* rules soffice.bin has. If soffice.bin can delete (write) something, rm can too, but not more.\n\nI could write child profile for rm though, for deleting only /tmp/psp*. Maybe that would be more safe looking?\n\nAnd yes, it\u0027s called by \"sh\" process, probably some printing-specific script.",
+      "parentUuid": "dfeb2761_193bd638",
+      "revId": "a65bae7927bcbd60a1e7a6091c4b5d3499b83723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
