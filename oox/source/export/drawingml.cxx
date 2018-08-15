@@ -117,7 +117,6 @@ using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
-
 namespace oox {
 namespace drawingml {
 
@@ -138,6 +137,38 @@ namespace drawingml {
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
+
+// Wrapper for writting dash stop element.
+void WriteDashStopElement(FSHelperPtr pFS, sal_Int32 nMilliPercent1, sal_Int32 nMilliPercent2)
+{
+    pFS->singleElementNS(XML_a ,XML_ds,
+                       XML_d, I32S(nMilliPercent1),
+                       XML_sp, I32S(nMilliPercent2),
+                       FSEND);
+}
+
+// Use multiple dash stops to simulate one dash(dot) segment in LibreOffice.
+void WriteDashStop(FSHelperPtr pFS, sal_Int32 nDashLen, sal_Int32 nDistance, sal_Int32 nLineWidth)
+{
+    // Solid part.
+    for(sal_Int32 n = 0; n < nDashLen / nLineWidth; ++n)
+        WriteDashStopElement(pFS, 100000, 1);
+
+    sal_Int32 nLen1 = nDashLen % nLineWidth;
+    sal_Int32 nLen2 = nDistance % nLineWidth;
+
+    // Mixed part.
+    if (nLen1 || nLen2)
+    {
+        WriteDashStopElement(pFS,
+                std::max(nLen1 * 100000 / nLineWidth, sal_Int32(1)),
+                std::max(nLen2 * 100000 / nLineWidth, sal_Int32(1)));
+    }
+
+    // Hollow part.
+    for(sal_Int32 n = 0; n < nDistance / nLineWidth; ++n)
+        WriteDashStopElement(pFS, 1, 100000);
+}
 
 void DrawingML::ResetCounters()
 {
@@ -717,27 +748,11 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
             if ( nLineWidth > 0 && aLineDash.Distance > 0 )
             {
                 // Write 'dashes' first, and then 'dots'
-                int i;
-                if ( aLineDash.Dashes > 0 )
-                {
-                    for( i = 0; i < aLineDash.Dashes; i ++ )
-                    {
-                        mpFS->singleElementNS( XML_a , XML_ds,
-                                               XML_d , write1000thOfAPercent( aLineDash.DashLen  > 0 ? aLineDash.DashLen  / nLineWidth * 100 : 100 ),
-                                               XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
-                                               FSEND );
-                    }
-                }
-                if ( aLineDash.Dots > 0 )
-                {
-                    for( i = 0; i < aLineDash.Dots; i ++ )
-                    {
-                        mpFS->singleElementNS( XML_a, XML_ds,
-                                               XML_d , write1000thOfAPercent( aLineDash.DotLen   > 0 ? aLineDash.DotLen   / nLineWidth * 100 : 100 ),
-                                               XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
-                                               FSEND );
-                    }
-                }
+                for(sal_Int32 i = 0; i < aLineDash.Dashes; i++)
+                    WriteDashStop(mpFS, aLineDash.DashLen, aLineDash.Distance, nLineWidth);
+
+                for(sal_Int32 i = 0; i < aLineDash.Dots; i++)
+                    WriteDashStop(mpFS, aLineDash.DotLen, aLineDash.Distance, nLineWidth);
             }
 
             SAL_WARN_IF(nLineWidth <= 0,

@@ -153,6 +153,7 @@ public:
     void testTdf118768();
     void testTdf118836();
     void testTdf116350TextEffects();
+    void testDashStop();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -226,6 +227,7 @@ public:
     CPPUNIT_TEST(testTdf118768);
     CPPUNIT_TEST(testTdf118836);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testDashStop);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1843,6 +1845,45 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     assertXPath(pXmlDocContent, "//p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textArchUp");
     assertXPath(pXmlDocContent, "//p:sp[14]/p:txBody/a:bodyPr/a:prstTxWarp", "prst", "textCircle");
 
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testDashStop()
+{
+    utl::TempFile tempFile;
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "sd/qa/unit/data/odp/dash.odp" ), ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//a:custDash/a:ds", 16);
+
+    // Pairs of "d" and "sp" attributes
+    sal_Int32 aValues[] = {
+        100000, 1,
+        100000, 1,
+        54000, 27000,
+        1, 100000,
+        100000, 1,
+        100000, 1,
+        54000, 27000,
+        1, 100000,
+        100000, 1,
+        100000, 1,
+        54000, 27000,
+        1, 100000,
+        51000, 27000,
+        1, 100000,
+        51000, 27000,
+        1, 100000
+    };
+
+    sal_Int32 n = 0;
+    while(n < SAL_N_ELEMENTS(aValues))
+    {
+        sal_Int32 nIdx = n / 2 + 1;
+        OString sPath = "//a:custDash/a:ds[" + OString::number(nIdx) + "]";
+        assertXPath(pXmlDocContent, sPath,"d", OUString::number(aValues[n++]));
+        assertXPath(pXmlDocContent, sPath,"sp", OUString::number(aValues[n++]));
+    }
     xDocShRef->DoClose();
 }
 
