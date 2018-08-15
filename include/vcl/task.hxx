@@ -61,7 +61,7 @@ protected:
      *
      * Simply return Scheduler::ImmediateTimeoutMs if you're ready, like an
      * Idle. If you have to return Scheduler::InfiniteTimeoutMs, you probably
-     * need an other mechanism to wake up the Scheduler or rely on other
+     * need another mechanism to wake up the Scheduler or rely on other
      * Tasks to be scheduled, or simply use a polling Timer.
      *
      * @param nMinPeriod the currently expected sleep time

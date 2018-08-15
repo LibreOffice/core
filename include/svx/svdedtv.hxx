@@ -194,7 +194,7 @@ public:
     void DeleteLayer(const OUString& rName);
 
     // Marked objects which are outside a page
-    // are assigned to an other page; at the moment without undo!!!
+    // are assigned to another page; at the moment without undo!!!
     void ForceMarkedObjToAnotherPage();
     void ForceMarkedToAnotherPage()   { ForceMarkedObjToAnotherPage(); }
 

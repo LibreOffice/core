@@ -349,7 +349,7 @@ typedef enum
 
     /**
      * The size and/or the position of the view cursor changed. A view cursor
-     * is a cursor of an other view, the current view can't change it.
+     * is a cursor of another view, the current view can't change it.
      *
      * The payload format:
      *

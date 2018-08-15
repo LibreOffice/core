@@ -87,7 +87,7 @@ Condition	Feature_	N			Feature	1	Identifier		Reference to a Feature entry in Fea
 Condition	Level	N	0	32767					New selection Level to set in Feature table if Condition evaluates to TRUE.
 Control	Attributes	Y	0	2147483647					A 32-bit word that specifies the attribute flags to be applied to this control.
 Control	Control	N					Identifier		Name of the control. This name must be unique within a dialog, but can repeat on different dialogs. 
-Control	Control_Next	Y			Control	2	Identifier		The name of an other control on the same dialog. This link defines the tab order of the controls. The links have to form one or more cycles!
+Control	Control_Next	Y			Control	2	Identifier		The name of another control on the same dialog. This link defines the tab order of the controls. The links have to form one or more cycles!
 Control	Dialog_	N			Dialog	1	Identifier		External key to the Dialog table, name of the dialog.
 Control	Height	N	0	32767					Height of the bounding rectangle of the control.
 Control	Help	Y					Text		The help strings used with the button. The text is optional. 

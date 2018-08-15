@@ -30,7 +30,7 @@ published constants FormComponentType
 {
 
     /** This generic identifier is for controls which cannot be identified by
-                an other specific identifier.
+                another specific identifier.
      */
     const short CONTROL = 1;
 

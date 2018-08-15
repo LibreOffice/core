@@ -97,7 +97,7 @@ enum class SfxShellFeature
     FormTBMoreControls      = 0x0800,
     FormTBDesign            = 0x1000,
     FormShowDataNavigator   = 0x2000,
-    // masks to make sure modules don't use flags from an other
+    // masks to make sure modules don't use flags from another
     SwMask                  = 0x0001,
     BasicMask               = 0x0004,
     FormMask                = 0x3ff8
