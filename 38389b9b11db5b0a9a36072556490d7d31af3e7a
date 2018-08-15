@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_f9583257",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-15T17:01:02Z",
+      "side": 1,
+      "message": "Also ScripType should be fixed as ScriptType",
+      "revId": "38389b9b11db5b0a9a36072556490d7d31af3e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
