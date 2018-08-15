@@ -484,7 +484,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration1_caption_only"), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("an other image"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("another image"), xRange->getString());
     }
 
     // Cross references to text frames
@@ -564,7 +564,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
                     xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
                 OUString sValue;
                 xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("an other image"), sValue);
+                CPPUNIT_ASSERT_EQUAL(OUString("another image"), sValue);
                 xPropertySet->getPropertyValue("SourceName") >>= sValue;
                 CPPUNIT_ASSERT_EQUAL(OUString("Ref_Illustration1_caption_only"), sValue);
                 break;
