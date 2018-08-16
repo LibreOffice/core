@@ -1357,11 +1357,13 @@ void SAL_CALL SvxShape::dispose()
     mpImpl->maDisposeListeners.disposeAndClear(aEvt);
     mpImpl->maPropertyNotifier.disposing();
 
-    bool bFreeSdrObject = false;
     if ( HasSdrObject() )
     {
         SdrObject* pObject = GetSdrObject();
+
         EndListening( pObject->getSdrModelFromSdrObject() );
+        bool bFreeSdrObject = false;
+
         if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
         {
             OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
@@ -1381,11 +1383,6 @@ void SAL_CALL SvxShape::dispose()
                 }
             }
         }
-    }
-
-    if ( HasSdrObject() ) //tdf#114427 refetch SdrObject in light of RemoveObject
-    {
-        SdrObject* pObject = GetSdrObject();
 
         pObject->setUnoShape(nullptr);
 
