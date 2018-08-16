@@ -22,6 +22,30 @@
       "revId": "b793f75171f9b1bfc0497e0ec2260d0a68603670",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_345fc142",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2018-08-16T08:50:50Z",
+      "side": 1,
+      "message": "You are right! I am going to fix it. Thanks, László",
+      "parentUuid": "dfeb2761_59a39e50",
+      "range": {
+        "startLine": 1186,
+        "startChar": 8,
+        "endLine": 1186,
+        "endChar": 30
+      },
+      "revId": "b793f75171f9b1bfc0497e0ec2260d0a68603670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
