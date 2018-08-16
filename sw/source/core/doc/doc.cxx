@@ -46,6 +46,7 @@
 
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/multisel.hxx>
@@ -125,7 +126,6 @@
 
 #include <vector>
 #include <map>
-#include <set>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -1343,8 +1343,9 @@ void RemoveOrDeleteContents(SwTextNode* pTextNd, IDocumentContentOperations& xOp
         xOperations.DelFullPara(aPam);
     }
 }
-// Returns the node pointer which needs to hide, or nullptr if this field does not hide a node
-SwTextNode* HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes)
+// Returns if the data was actually modified
+bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
+                       IDocumentContentOperations& xOperations)
 {
     SwTextNode* pTextNd;
     if (rFormatField.GetTextField()
@@ -1352,9 +1353,10 @@ SwTextNode* HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes
         && pTextNd->GetpSwpHints() && pTextNd->IsHiddenByParaField()
         && &pTextNd->GetNodes() == &rNodes)
     {
-        return pTextNd;
+        RemoveOrDeleteContents(pTextNd, xOperations);
+        return true;
     }
-    return nullptr;
+    return false;
 }
 }
 
@@ -1393,24 +1395,37 @@ bool SwDoc::RemoveInvisibleContent()
     GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_DELETE_INVISIBLECNTNT, nullptr );
 
     {
+        class FieldTypeGuard : public SwClient
+        {
+        public:
+            explicit FieldTypeGuard(SwFieldType* pType)
+                : SwClient(pType)
+            {
+            }
+            const SwFieldType* get() const
+            {
+                return static_cast<const SwFieldType*>(GetRegisteredIn());
+            }
+        };
         // Removing some nodes for one SwFieldIds::Database type might remove the type from
-        // document's field types, or try to remove already removed nodes, invalidating iterators.
-        // So, we need to create own list of nodes prior to removing them.
-        std::set<SwTextNode*> aHiddenNodes;
-        for (const auto* pType : *getIDocumentFieldsAccess().GetFieldTypes())
+        // document's field types, invalidating iterators. So, we need to create own list of
+        // matching types prior to processing them.
+        std::vector<std::unique_ptr<FieldTypeGuard>> aHidingFieldTypes;
+        for (SwFieldType* pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (FieldCanHidePara(pType->Which()))
+                aHidingFieldTypes.push_back(o3tl::make_unique<FieldTypeGuard>(pType));
+        }
+        for (const auto& pTypeGuard : aHidingFieldTypes)
+        {
+            if (const SwFieldType* pType = pTypeGuard->get())
             {
                 SwIterator<SwFormatField, SwFieldType> aIter(*pType);
-                for (auto* pField = aIter.First(); pField; pField = aIter.Next())
-                    if (SwTextNode* pHiddenNode = HandleHidingField(*pField, GetNodes()))
-                        aHiddenNodes.insert(pHiddenNode);
+                for (SwFormatField* pFormatField = aIter.First(); pFormatField;
+                     pFormatField = aIter.Next())
+                    bRet |= HandleHidingField(*pFormatField, GetNodes(),
+                                              getIDocumentContentOperations());
             }
-        }
-        for (SwTextNode* pHiddenNode : aHiddenNodes)
-        {
-            bRet = true;
-            RemoveOrDeleteContents(pHiddenNode, getIDocumentContentOperations());
         }
     }
 
