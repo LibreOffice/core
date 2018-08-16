@@ -450,7 +450,7 @@ sal_Int32 SvxNumberFormat::GetAbsLSpace() const
 {
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
            ? nAbsLSpace
-           : static_cast<short>( GetFirstLineIndent() + GetIndentAt() );
+           : static_cast<sal_Int32>( GetFirstLineIndent() + GetIndentAt() );
 }
 short SvxNumberFormat::GetFirstLineOffset() const
 {
