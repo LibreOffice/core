@@ -118,12 +118,15 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         }
         nLastEnd = pEnd->nContent.GetIndex();
     }
+    if (pNode == &rTextNode)
+    {
+        if (rTextNode.GetRedlineMergeFlag() != SwNode::Merge::None)
+        {
+            rTextNode.SetRedlineMergeFlag(SwNode::Merge::None);
+        }
+    }
     if (!bHaveRedlines)
     {
-        if (pNode->GetRedlineMergeFlag() != SwNode::Merge::None)
-        {
-            pNode->SetRedlineMergeFlag(SwNode::Merge::None);
-        }
         return nullptr;
     }
     if (nLastEnd != pNode->Len())
