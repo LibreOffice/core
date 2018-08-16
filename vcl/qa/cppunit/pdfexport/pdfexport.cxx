@@ -156,7 +156,8 @@ void PdfExportTest::testTdf106059()
     // Explicitly enable the usage of the reference XObject markup.
     uno::Sequence<beans::PropertyValue> aFilterData =
     {
-        comphelper::makePropertyValue("UseReferenceXObject", true)
+        comphelper::makePropertyValue("UseReferenceXObject", true),
+        comphelper::makePropertyValue("SelectPdfVersion", static_cast<sal_Int32>(16))
     };
     aMediaDescriptor["FilterData"] <<= aFilterData;
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -181,6 +182,12 @@ void PdfExportTest::testTdf106059()
     // The image is a reference XObject.
     // This dictionary key was missing, so the XObject wasn't a reference one.
     CPPUNIT_ASSERT(pReferenceXObject->Lookup("Ref"));
+
+    // The following check used to fail in the past, header was "%PDF-1.5":
+    aStream.Seek(0);
+    OString aExpectedHeader("%PDF-1.6");
+    OString aHeader(read_uInt8s_ToOString(aStream, aExpectedHeader.getLength()));
+    CPPUNIT_ASSERT_EQUAL(aExpectedHeader, aHeader);
 }
 
 void PdfExportTest::testTdf106693()

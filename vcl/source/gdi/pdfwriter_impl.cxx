@@ -1816,6 +1816,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         default:
         case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
+        case PDFWriter::PDFVersion::PDF_1_6: aBuffer.append( "1.6" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
     aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
