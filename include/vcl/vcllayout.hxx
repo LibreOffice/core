@@ -159,7 +159,7 @@ public:
 
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const;
-    virtual SalLayoutGlyphs GetGlyphs() const;
+    virtual const SalLayoutGlyphs* GetGlyphs() const;
 
 protected:
     // used by layout engines

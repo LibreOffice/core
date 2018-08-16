@@ -169,9 +169,9 @@ std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OU
     return std::make_shared<vcl::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 
-SalLayoutGlyphs GenericSalLayout::GetGlyphs() const
+const SalLayoutGlyphs* GenericSalLayout::GetGlyphs() const
 {
-    return m_GlyphItems;
+    return &m_GlyphItems;
 }
 
 void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)

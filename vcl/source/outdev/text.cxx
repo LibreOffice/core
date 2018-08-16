@@ -788,7 +788,7 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
                              MetricVector* pVector, OUString* pDisplayText,
-                             SalLayout* pLayoutCache
+                             const SalLayoutGlyphs* pLayoutCache
                              )
 {
     assert(!is_double_buffered_window());
@@ -873,27 +873,10 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
             pLayoutCache = nullptr;
     #endif
 
-    // without cache
-    if(!pLayoutCache)
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, SalLayoutFlags::NONE, nullptr, pLayoutCache);
+    if(pSalLayout)
     {
-        std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
-        if(pSalLayout)
-        {
-            ImplDrawText( *pSalLayout );
-        }
-    }
-    else
-    {
-        // initialize font if needed
-        if( mbNewFont )
-            if( !ImplNewFont() )
-                return;
-        if( mbInitFont )
-            InitFont();
-
-        pLayoutCache->DrawBase() = ImplLogicToDevicePixel( rStartPt );
-
-        ImplDrawText( *pLayoutCache );
+        ImplDrawText( *pSalLayout );
     }
 
     if( mpAlphaVDev )
@@ -902,7 +885,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 
 long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
      vcl::TextLayoutCache const*const pLayoutCache,
-     SalLayout const*const pSalLayoutCache) const
+     SalLayoutGlyphs const*const pSalLayoutCache) const
 {
 
     long nWidth = GetTextArray( rStr, nullptr, nIndex,
@@ -946,7 +929,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const long* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   vcl::TextLayoutCache const*const pLayoutCache,
-                                  SalLayout* pSalLayoutCache )
+                                  const SalLayoutGlyphs* pSalLayoutCache )
 {
     assert(!is_double_buffered_window());
 
@@ -966,13 +949,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    SalLayout* pSalLayout = pSalLayoutCache;
-    std::unique_ptr<SalLayout> pLayout;
-    if (!pSalLayout)
-    {
-        pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, pLayoutCache);
-        pSalLayout = pLayout.get();
-    }
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, pLayoutCache, pSalLayoutCache);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -985,7 +962,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::TextLayoutCache const*const pLayoutCache,
-                                 SalLayout const*const pSalLayoutCache) const
+                                 SalLayoutGlyphs const*const pSalLayoutCache) const
 {
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
@@ -995,29 +972,22 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
         nLen = rStr.getLength() - nIndex;
     }
 
-    std::unique_ptr<SalLayout> xSalLayout;
-    const SalLayout*  pSalLayout = pSalLayoutCache;
-
-    if(!pSalLayoutCache)
+    // do layout
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
+            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache, pSalLayoutCache);
+    if( !pSalLayout )
     {
-        // do layout
-        xSalLayout = ImplLayout(rStr, nIndex, nLen,
-                Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
-        pSalLayout = xSalLayout.get();
-        if( !pSalLayout )
+        // The caller expects this to init the elements of pDXAry.
+        // Adapting all the callers to check that GetTextArray succeeded seems
+        // too much work.
+        // Init here to 0 only in the (rare) error case, so that any missing
+        // element init in the happy case will still be found by tools,
+        // and hope that is sufficient.
+        if (pDXAry)
         {
-            // The caller expects this to init the elements of pDXAry.
-            // Adapting all the callers to check that GetTextArray succeeded seems
-            // too much work.
-            // Init here to 0 only in the (rare) error case, so that any missing
-            // element init in the happy case will still be found by tools,
-            // and hope that is sufficient.
-            if (pDXAry)
-            {
-                memset(pDXAry, 0, nLen * sizeof(*pDXAry));
-            }
-            return 0;
+            memset(pDXAry, 0, nLen * sizeof(*pDXAry));
         }
+        return 0;
     }
 
 #if VCL_FLOAT_DEVICE_PIXEL
