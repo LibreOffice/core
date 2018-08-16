@@ -43,6 +43,7 @@ class SfxBroadcaster;
 class Pointer;
 class AutoTimer;
 class OutlinerParaObject;
+class Outliner;
 class SdrOutliner;
 class SdrDragStat;
 class SdrHdl;
@@ -904,6 +905,8 @@ public:
     void setUnoShape( const css::uno::Reference<css::uno::XInterface>& _rxUnoShape);
 
     const css::uno::WeakReference< css::uno::XInterface >& getWeakUnoShape() const { return maWeakUnoShape; }
+
+    void setSuitableOutlinerBg(Outliner& rOutliner) const;
 
 protected:
     tools::Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
