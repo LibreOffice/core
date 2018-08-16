@@ -20,15 +20,15 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_calc \
 	Configuration_dbase \
 	Configuration_flat \
-	Configuration_mysql \
 	Configuration_odbc \
 	Configuration_writer \
+	Configuration_mysql \
+	Library_mysqlc \
 	Library_calc \
 	Library_dbase \
 	Library_dbpool2 \
 	Library_file \
 	Library_flat \
-	Library_mysql \
 	$(if $(filter ANDROID IOS,$(OS)),,Library_odbc) \
 	Library_sdbc2 \
 	Library_writer \
