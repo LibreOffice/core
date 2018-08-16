@@ -1,0 +1,59 @@
+--- Modules/_ctypes/libffi/src/x86/ffi64.c
++++ Modules/_ctypes/libffi/src/x86/ffi64.c
+@@ -545,11 +545,15 @@
+   tramp = (volatile unsigned short *) &closure->tramp[0];
+ 
+   tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
+-  *((unsigned long long * volatile) &tramp[1])
+-    = (unsigned long) ffi_closure_unix64;
++  tramp[1] = (unsigned long) ffi_closure_unix64;
++  tramp[2] = ((unsigned long) ffi_closure_unix64) >> 16;
++  tramp[3] = ((unsigned long) ffi_closure_unix64) >> 32;
++  tramp[4] = ((unsigned long) ffi_closure_unix64) >> 48;
+   tramp[5] = 0xba49;		/* mov <data>, %r10	*/
+-  *((unsigned long long * volatile) &tramp[6])
+-    = (unsigned long) codeloc;
++  tramp[6] = (unsigned long) codeloc;
++  tramp[7] = ((unsigned long) codeloc) >> 16;
++  tramp[8] = ((unsigned long) codeloc) >> 32;
++  tramp[9] = ((unsigned long) codeloc) >> 48;
+ 
+   /* Set the carry bit iff the function uses any sse registers.
+      This is clc or stc, together with the first byte of the jmp.  */
+--- Objects/bytearrayobject.c
++++ Objects/bytearrayobject.c
+@@ -294,7 +294,7 @@
+         PyBuffer_Release(&vo);
+         return NULL;
+     }
+-    memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
++    if (vo.len != 0) memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
+     PyBuffer_Release(&vo);
+     Py_INCREF(self);
+     return (PyObject *)self;
+--- Objects/listobject.c
++++ Objects/listobject.c
+@@ -641,7 +641,7 @@
+             goto Error;
+         }
+     }
+-    memcpy(recycle, &item[ilow], s);
++    if (s != 0) memcpy(recycle, &item[ilow], s);
+ 
+     if (d < 0) { /* Delete -d items */
+         memmove(&item[ihigh+d], &item[ihigh],
+--- Modules/_ctypes/_ctypes.c
++++ Modules/_ctypes/_ctypes.c
+@@ -1328,8 +1328,10 @@
+     if (stgdict->shape == NULL)
+         goto error;
+     stgdict->shape[0] = length;
+-    memmove(&stgdict->shape[1], itemdict->shape,
+-        sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    if (itemdict->shape) {
++        memmove(&stgdict->shape[1], itemdict->shape,
++            sizeof(Py_ssize_t) * (stgdict->ndim - 1));
++    }
+ 
+     itemsize = itemdict->size;
+     if (length * itemsize < 0) {

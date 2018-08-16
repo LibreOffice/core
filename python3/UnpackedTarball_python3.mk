@@ -24,6 +24,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-gcc-4.8.patch.1 \
 	python3/python-3.3.0-pythreadstate.patch.1 \
 	python3/python-3.3.3-py17797.patch.1 \
+	python3/python-3.3.3-msvc2012-winxp.patch.1 \
+	python3/python-msvc-disable-sse2.patch.1 \
+	python3/ubsan.patch.0 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)

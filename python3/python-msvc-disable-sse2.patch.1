@@ -1,0 +1,23 @@
+fdo#82430 disable SSE2 default of MSVC2012
+
+--- python3/PCbuild/release.props.old	2014-10-01 23:47:33.348095403 +0200
++++ python3/PCbuild/release.props	2014-10-01 23:48:05.051092945 +0200
+@@ -9,6 +9,7 @@
+   <ItemDefinitionGroup>
+     <ClCompile>
+       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+     </ClCompile>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+--- python3/PCbuild/make_buildinfo.c.orig	2014-11-03 00:48:58.841000000 +0100
++++ python3/PCbuild/make_buildinfo.c	2014-11-03 00:49:16.266200000 +0100
+@@ -109,7 +109,7 @@
+ 
+ int main(int argc, char*argv[])
+ {
+-    char command[CMD_SIZE] = "cl.exe -c -D_WIN32 -DUSE_DL_EXPORT -D_WINDOWS -DWIN32 -D_WINDLL ";
++    char command[CMD_SIZE] = "cl.exe -arch:SSE -c -D_WIN32 -DUSE_DL_EXPORT -D_WINDOWS -DWIN32 -D_WINDLL ";
+     char tmppath[CMD_SIZE] = "";
+     int do_unlink, result;
+     char *tmpdir = NULL;
