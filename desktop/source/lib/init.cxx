@@ -2157,7 +2157,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nViewId = nOrigViewId;
         if (!isText)
         {
-            // Check if just switching to an other view is enough, that has
+            // Check if just switching to another view is enough, that has
             // less side-effects.
             if (nPart != doc_getPart(pThis))
             {

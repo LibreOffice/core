@@ -25,7 +25,7 @@ namespace connectivity
 {
     namespace mork
     {
-        // please don't name the class the same name as in an other namespaces
+        // please don't name the class the same name as in another namespaces
         // some compilers have problems with this task as I noticed on windows
         class OConnection;
         class OCatalog : public connectivity::sdbcx::OCatalog

@@ -77,7 +77,7 @@
 #define STR_ONL_ONE_COLUMN_PER_INDEX            NC_("STR_ONL_ONE_COLUMN_PER_INDEX", "The index could not be created. Only one column per index is allowed.")
 #define STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE   NC_("STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE", "The index could not be created. The values are not unique.")
 #define STR_COULD_NOT_CREATE_INDEX              NC_("STR_COULD_NOT_CREATE_INDEX", "The index could not be created. An unknown error appeared.")
-#define STR_COULD_NOT_CREATE_INDEX_NAME         NC_("STR_COULD_NOT_CREATE_INDEX_NAME", "The index could not be created. The file '$filename$' is used by an other index.")
+#define STR_COULD_NOT_CREATE_INDEX_NAME         NC_("STR_COULD_NOT_CREATE_INDEX_NAME", "The index could not be created. The file '$filename$' is used by another index.")
 #define STR_COULD_NOT_CREATE_INDEX_KEYSIZE      NC_("STR_COULD_NOT_CREATE_INDEX_KEYSIZE", "The index could not be created. The size of the chosen column is too big.")
 #define STR_SQL_NAME_ERROR                      NC_("STR_SQL_NAME_ERROR", "The name '$name$' doesn't match SQL naming constraints.")
 #define STR_COULD_NOT_DELETE_FILE               NC_("STR_COULD_NOT_DELETE_FILE", "The file $filename$ could not be deleted.")
