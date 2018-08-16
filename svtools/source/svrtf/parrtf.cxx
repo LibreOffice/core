@@ -174,8 +174,13 @@ int SvRTFParser::GetNextToken_()
                             if (!_inSkipGroup) {
                             // UPR - overread the group with the ansi
                             //       information
-                            while( '{' != GetNextToken_() )
-                                ;
+                            int nNextToken;
+                            do
+                            {
+                                nNextToken = GetNextToken_();
+                            }
+                            while (nNextToken != '{' && nNextToken != sal_Unicode(EOF));
+
                             SkipGroup();
                             GetNextToken_();  // overread the last bracket
                             nRet = 0;
