@@ -124,7 +124,7 @@ private:
     SwFltControlStack(SwFltControlStack const&) = delete;
     SwFltControlStack& operator=(SwFltControlStack const&) = delete;
 
-    typedef std::deque<std::unique_ptr<SwFltStackEntry>> Entries;
+    typedef std::vector<std::unique_ptr<SwFltStackEntry>> Entries;
     Entries m_Entries;
 
     sal_uLong nFieldFlags;
