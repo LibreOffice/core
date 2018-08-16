@@ -20,15 +20,11 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
-	python3/i100492-freebsd.patch.1 \
 	python3/python-3.3.0-i42553.patch.2 \
-	python3/python-3.3.3-aix.patch.1 \
-	python3/python-3.3.0-darwin.patch.1 \
 	python3/python-3.3.0-msvc2012.patch.1 \
 	python3/python-3.3.0-msvc-disable.patch.1 \
 	python3/python-3.3.0-msvc-x64.patch.1 \
 	python3/python-3.3.0-ssl.patch.1 \
-	python3/python-3.3.0-implicit-int.patch.1 \
 	python3/python-3.3.0-gcc-4.8.patch.1 \
 	python3/python-3.3.0-pythreadstate.patch.1 \
 	python3/python-3.3.3-py17797.patch.1 \

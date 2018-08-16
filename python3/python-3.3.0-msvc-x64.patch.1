@@ -323,7 +323,7 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
 --- python3/PCbuild/pythoncore.vcxproj
 +++ python3/PCbuild/pythoncore.vcxproj
-@@ -185,35 +185,35 @@
+@@ -195,35 +195,35 @@
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
      <Midl>
        <TargetEnvironment>X64</TargetEnvironment>
@@ -349,14 +349,14 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
        <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
        <BaseAddress>0x1e000000</BaseAddress>
      </Link>
+     <PreBuildEvent>
+       <Command>$(KillPythonExe)
+ IF %ERRORLEVEL% NEQ 0 (
+     echo kill_python: warning: could not kill running Pythons, exit code %ERRORLEVEL%
+     exit /b 0
+ )</Command>
+     </PreBuildEvent>
+     <PreBuildEvent>
+       <Message>Killing any running $(PythonExe) instances...</Message>
+     </PreBuildEvent>
    </ItemDefinitionGroup>
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-     <ClCompile>
-       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
-       <Optimization>Disabled</Optimization>
-       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-       <IntrinsicFunctions>false</IntrinsicFunctions>
-       <AdditionalIncludeDirectories>..\Python;..\Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-     </ClCompile>

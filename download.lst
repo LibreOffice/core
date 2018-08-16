@@ -16,6 +16,8 @@ ZLIB_MD5SUM := 85adef240c5f370b308da8c938951a68
 export ZLIB_TARBALL := zlib-1.2.11.tar.xz
 OPENSSL_MD5SUM := 44279b8557c3247cbe324e2322ecd114
 export OPENSSL_TARBALL := openssl-1.0.2o.tar.gz
+PYTHON_MD5SUM := 84e2f12f044ca53b577f6224c53f82ac
+export PYTHON_TARBALL := Python-3.3.7.tar.xz
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
@@ -84,7 +86,6 @@ export PIXMAN_TARBALL := c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 export PNG_MD5SUM := 6652e428d1d3fc3c6cb1362159b1cf3b
 export PNG_TARBALL := libpng-1.5.24.tar.gz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
-export PYTHON_TARBALL := f3ebe34d4d8695bf889279b54673e10c-Python-3.3.3.tar.bz2
 export RAPTOR_TARBALL := 4ceb9316488b0ea01acf011023cf7fff-raptor2-2.0.9.tar.gz
 export RASQAL_TARBALL := b12c5f9cfdb6b04efce5a4a186b8416b-rasqal-0.9.30.tar.gz
 export REDLAND_TARBALL := 32f8e1417a64d3c6f2c727f9053f55ea-redland-1.0.16.tar.gz
