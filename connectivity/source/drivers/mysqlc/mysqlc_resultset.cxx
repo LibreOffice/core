@@ -32,6 +32,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
+#include <sal/log.hxx>
+
 using namespace rtl;
 #include <comphelper/string.hxx>
 
@@ -559,6 +561,7 @@ void SAL_CALL OResultSet::close()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     mysql_free_result(m_pResult);
+    m_pResult = nullptr;
     dispose();
 }
 
