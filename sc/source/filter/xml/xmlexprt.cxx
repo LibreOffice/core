@@ -756,7 +756,7 @@ void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_In
         AddAttribute(sAttrColumnsRepeated, sOUEndCol);
     }
     if (nIndex != -1)
-        AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
     SvXMLElementExport aElemC(*this, sElemCol, true, true);
 }
 
@@ -922,9 +922,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         sal_Int32 nIndex;
         if (GetAutoStylePool()->Add(aName, XML_STYLE_FAMILY_TABLE_CELL, aDefaultStyle, aProps))
         {
-            OUString* pTemp(new OUString(aName));
-            if (!pCellStyles->AddStyleName(pTemp, nIndex))
-                delete pTemp;
+            pCellStyles->AddStyleName(aName, nIndex);
         }
         else
         {
@@ -1329,7 +1327,7 @@ void ScXMLExport::WriteRowContent()
             else
             {
                 if (nIndex != -1)
-                    AddAttribute(sAttrStyleName, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
+                    AddAttribute(sAttrStyleName, pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
                 if (nPrevValidationIndex > -1)
                     AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(nPrevValidationIndex));
                 if (nCols > 1)
@@ -1350,7 +1348,7 @@ void ScXMLExport::WriteRowContent()
     if (!bIsFirst)
     {
         if (nIndex != -1)
-            AddAttribute(sAttrStyleName, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
+            AddAttribute(sAttrStyleName, pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
         if (nPrevValidationIndex > -1)
             AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(nPrevValidationIndex));
         if (nCols > 1)
@@ -2104,9 +2102,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                 {
                     GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_CELL, *pOldName);
                     // add to pCellStyles, so the name is found for normal sheets
-                    OUString* pTemp(new OUString(*pOldName));
-                    if (!pCellStyles->AddStyleName(pTemp, nIndex))
-                        delete pTemp;
+                    pCellStyles->AddStyleName(*pOldName, nIndex);
                 }
             }
             else
@@ -2129,9 +2125,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                 bool bIsAutoStyle(true);
                 if (bAdded || GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates))
                 {
-                    OUString* pTemp(new OUString(sName));
-                    if (!pCellStyles->AddStyleName(pTemp, nIndex))
-                        delete pTemp;
+                    pCellStyles->AddStyleName(sName, nIndex);
                 }
                 else
                     nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
@@ -2150,13 +2144,9 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         }
         else
         {
-            OUString* pTemp(new OUString(EncodeStyleName(sStyleName)));
+            OUString sEncodedStyleName(EncodeStyleName(sStyleName));
             sal_Int32 nIndex(0);
-            if (!pCellStyles->AddStyleName(pTemp, nIndex, false))
-            {
-                delete pTemp;
-                pTemp = nullptr;
-            }
+            pCellStyles->AddStyleName(sEncodedStyleName, nIndex, false);
             if ( !pOldName )
             {
                 uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
@@ -3187,7 +3177,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     SetRepeatAttribute(nEqualCellCount, (aCell.nType != table::CellContentType_EMPTY));
 
     if (aCell.nStyleIndex != -1)
-        AddAttribute(sAttrStyleName, *pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
+        AddAttribute(sAttrStyleName, pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
     if (aCell.nValidationIndex > -1)
         AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(aCell.nValidationIndex));
     bool bIsMatrix(aCell.bIsMatrixBase || aCell.bIsMatrixCovered);
@@ -5058,7 +5048,7 @@ void ScXMLExport::WriteExternalRefCaches()
                         sal_Int32 nIndex = GetNumberFormatStyleIndex(nNumFmt);
                         if (nIndex >= 0)
                         {
-                            const OUString aStyleName = *pCellStyles->GetStyleNameByIndex(nIndex, true);
+                            const OUString & aStyleName = pCellStyles->GetStyleNameByIndex(nIndex, true);
                             AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, aStyleName);
                         }
 

@@ -174,11 +174,11 @@ struct ScMyFormatRange
 class ScFormatRangeStyles
 {
     typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
-    typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
+    typedef std::vector<ScMyFormatRangeAddresses> ScMyFormatRangeListVec;
 
     ScMyFormatRangeListVec      aTables;
-    std::vector<OUString*>      aStyleNames;
-    std::vector<OUString*>      aAutoStyleNames;
+    std::vector<OUString>       aStyleNames;
+    std::vector<OUString>       aAutoStyleNames;
     const ScMyDefaultStyleList* pColDefaults;
 
 public:
@@ -187,7 +187,7 @@ public:
 
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int32 nTable);
-    bool AddStyleName(OUString* pString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
+    bool AddStyleName(const OUString& rString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
     sal_Int32 GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix, bool& bIsAutoStyle);
     // does not delete ranges
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
@@ -199,7 +199,7 @@ public:
                     const sal_Int32 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const css::table::CellRangeAddress& rCellRangeAddress, const sal_Int32 nStringIndex,
                     const bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
-    OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
+    OUString& GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
     void Sort();
 };
 
