@@ -408,7 +408,8 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         pLayoutCache = pItem->mxLayoutCache.get();
     }
 
-    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pLayoutCache), rRenderContext.GetTextHeight());
+    const SalLayoutGlyphs* pGlyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : nullptr;
+    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs), rRenderContext.GetTextHeight());
 
     Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
 
@@ -418,7 +419,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                     aTextPos,
                     pItem->maText,
                     0, -1, nullptr, nullptr,
-                    pLayoutCache );
+                    pGlyphs );
     }
     else
     {
@@ -428,7 +429,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                     aTextPos,
                     pItem->maText,
                     0, -1, nullptr, nullptr,
-                    pLayoutCache );
+                    pGlyphs );
     }
 
     // call DrawItem if necessary
@@ -1192,7 +1193,8 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             long nFudge = GetTextHeight()/4;
 
             std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
-            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout.get() ) + nFudge;
+            const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
+            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
 
             // Store the calculated layout.
             pItem->mxLayoutCache = std::move(pSalLayout);

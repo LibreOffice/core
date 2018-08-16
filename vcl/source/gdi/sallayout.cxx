@@ -1579,10 +1579,10 @@ std::shared_ptr<vcl::TextLayoutCache> SalLayout::CreateTextLayoutCache(
     return nullptr; // by default, nothing to cache
 }
 
-SalLayoutGlyphs SalLayout::GetGlyphs() const
+const SalLayoutGlyphs* SalLayout::GetGlyphs() const
 {
     // No access to the glyphs by default.
-    return SalLayoutGlyphs();
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
