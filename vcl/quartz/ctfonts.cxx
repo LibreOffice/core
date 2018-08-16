@@ -62,7 +62,7 @@ CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatte
     // handle font stretching if any
     if( (rFSP.mnWidth != 0) && (rFSP.mnWidth != rFSP.mnHeight) )
     {
-        mfFontStretch = (float)rFSP.mnWidth / rFSP.mnHeight;
+        mfFontStretch = float(rFSP.mnWidth) / rFSP.mnHeight;
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
 
