@@ -461,7 +461,7 @@ public:
             if(nIndex < mnPaletteCount)
                 return mrPalette[nIndex].GetColor();
             else
-                return Color(COL_BLACK);
+                return COL_BLACK;
         }
     virtual void WritePixel( Color nColor ) override
         {
@@ -511,7 +511,7 @@ public:
             if(nIndex < mnPaletteCount)
                 return mrPalette[nIndex].GetColor();
             else
-                return Color(COL_BLACK);
+                return COL_BLACK;
         }
     virtual void WritePixel( Color nColor ) override
         {
@@ -556,7 +556,7 @@ public:
             if(nIndex < mnPaletteCount)
                 return mrPalette[nIndex].GetColor();
             else
-                return Color(COL_BLACK);
+                return COL_BLACK;
         }
     virtual void WritePixel( Color nColor ) override
         {
