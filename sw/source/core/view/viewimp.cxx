@@ -41,6 +41,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <drawdoc.hxx>
+#include <prevwpage.hxx>
 
 void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 {
@@ -433,7 +434,7 @@ void SwViewShellImp::InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFra
     }
 }
 
-void SwViewShellImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
+void SwViewShellImp::UpdateAccessiblePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                          const Fraction&  _rScale,
                                          const SwPageFrame* _pSelectedPageFrame,
                                          const Size&      _rPreviewWinSize )

@@ -80,6 +80,7 @@
 #include <memory>
 #include <vcl/EnumContext.hxx>
 #include <vcl/notebookbar.hxx>
+#include <prevwpage.hxx>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
