@@ -389,7 +389,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
+	numbertext \
 	odbc \
 	odfflatxml \
 	offacc \
@@ -707,7 +708,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	active_native \
-	mysqlc \
 	passive_native \
 ))
 
