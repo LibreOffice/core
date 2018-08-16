@@ -502,7 +502,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
                 OUString sFormat(pEntry->GetFormatstring());
 
                 pFormatter->PutandConvertEntry(sFormat, nDummy, nType, nFormat,
-                                        pEntry->GetLanguage(), nFormatLng );
+                                        pEntry->GetLanguage(), nFormatLng, false);
             }
             else
                 nFormat = nNewFormat;
@@ -610,7 +610,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 
             sal_uInt32 nTempFormat = nFormat;
             pFormatter->PutandConvertEntry(sFormat, nDummy, nType,
-                                           nTempFormat, pEntry->GetLanguage(), nLng);
+                                           nTempFormat, pEntry->GetLanguage(), nLng, true);
             nFormat = nTempFormat;
         }
         else
@@ -660,7 +660,7 @@ void SwValueField::SetLanguage( LanguageType nLng )
                     pFormatter->PutandConvertEntry( sFormat, nDummy, nType,
                                                     nNewFormat,
                                                     pEntry->GetLanguage(),
-                                                    nFormatLng );
+                                                    nFormatLng, false);
                 }
                 SetFormat( nNewFormat );
             }

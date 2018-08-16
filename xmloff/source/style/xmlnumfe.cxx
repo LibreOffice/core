@@ -1975,7 +1975,7 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
             pFormatter->PutandConvertEntry(
                             aFormatString,
                             nErrorPos, nType, nNewKey,
-                            pFormat->GetLanguage(), LANGUAGE_SYSTEM );
+                            pFormat->GetLanguage(), LANGUAGE_SYSTEM, true);
 
             // success? Then use new key.
             if( nErrorPos == 0 )
