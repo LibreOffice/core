@@ -162,7 +162,7 @@ private:
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
     SvStream&        rSt;
-    std::vector<WW8LSTInfo* > maLSTInfos;
+    std::vector<std::unique_ptr<WW8LSTInfo>> maLSTInfos;
     std::vector<std::unique_ptr<WW8LFOInfo>> m_LFOInfos;// D. from PLF LFO, sorted exactly like in the WW8 Stream
     sal_uInt16       nUniqueList; // current number for creating unique list names
     SprmResult GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
