@@ -110,7 +110,6 @@ class ScXMLExport : public SvXMLExport
     std::unique_ptr<ScMyMergedRangesContainer>  pMergedRangesContainer;
     std::unique_ptr<ScMyValidationsContainer>   pValidationsContainer;
     std::unique_ptr<ScChangeTrackingExportHelper> pChangeTrackingExportHelper;
-    const OUString         sLayerID;
     OUString               sExternalRefTabStyleName;
     OUString               sAttrName;
     OUString               sAttrStyleName;

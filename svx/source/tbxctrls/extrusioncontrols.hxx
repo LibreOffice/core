@@ -107,8 +107,6 @@ private:
     svt::ToolboxController& mrController;
     FieldUnit   meUnit;
     double      mfDepth;
-    const OUString msExtrusionDepth;
-    const OUString msMetricUnit;
 
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
 

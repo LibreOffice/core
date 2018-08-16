@@ -177,7 +177,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 
             OUString sFullKeyName(pKey->getName());
             if (sFullKeyName.getLength() > 1)
-                sFullKeyName += m_pRegistry->ROOT;
+                sFullKeyName += ORegistry::ROOT;
             sFullKeyName += sSubKeyName;
 
             rtl_uString_newFromString(&pSubKeys[nSubKeys], sFullKeyName.pData);
@@ -231,7 +231,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(m_pRegistry->getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(m_pRegistry->getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
         *pValueType = RegValueType::NOT_DEFINED;
         *pValueSize = 0;
@@ -301,7 +301,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT , sImplValueName, storeAccessMode::Create) )
+    if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT , sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -371,7 +371,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
+    if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -430,7 +430,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
+    if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -498,7 +498,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
+    if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -569,7 +569,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
         return RegError::VALUE_NOT_EXISTS;
     }
@@ -663,7 +663,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
         pValueList = nullptr;
         *pLen = 0;
@@ -777,7 +777,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
         pValueList = nullptr;
         *pLen = 0;
@@ -883,7 +883,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
         pValueList = nullptr;
         *pLen = 0;
@@ -1011,7 +1011,7 @@ OStoreDirectory ORegKey::getStoreDir() const
     OUString        relativName;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
-    if ( m_name == m_pRegistry->ROOT )
+    if ( m_name == ORegistry::ROOT )
     {
         fullPath.clear();
         relativName.clear();

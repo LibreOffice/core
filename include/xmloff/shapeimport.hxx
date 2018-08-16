@@ -242,11 +242,6 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     std::unique_ptr<SvXMLTokenMap>              mp3DSphereObjectAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mp3DLightAttrTokenMap;
 
-    const OUString       msStartShape;
-    const OUString       msEndShape;
-    const OUString       msStartGluePointIndex;
-    const OUString       msEndGluePointIndex;
-
     rtl::Reference< XMLTableImport > mxShapeTableImport;
 
 protected:

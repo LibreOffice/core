@@ -40,9 +40,6 @@ class XMLTextListAutoStylePool;
 class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 {
     SvXMLExport& rExport;
-    const OUString sNumberingRules;
-    const OUString sIsPhysical;
-    const OUString sIsContinuousNumbering;
     // Boolean indicating, if properties for position-and-space-mode LABEL_ALIGNMENT
     // are exported or not. (#i89178#)
     // These properties have been introduced in ODF 1.2. Thus, its export have

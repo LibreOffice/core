@@ -73,14 +73,14 @@ void XMLTextParagraphExport::exportTextFootnote(
 {
     // get footnote and associated text
     Any aAny;
-    aAny = rPropSet->getPropertyValue(sFootnote);
+    aAny = rPropSet->getPropertyValue(gsFootnote);
     Reference<XFootnote> xFootnote;
     aAny >>= xFootnote;
     Reference<XText> xText(xFootnote, UNO_QUERY);
 
     // are we an endnote?
     Reference<XServiceInfo> xServiceInfo( xFootnote, UNO_QUERY );
-    bool bIsEndnote = xServiceInfo->supportsService(sTextEndnoteService);
+    bool bIsEndnote = xServiceInfo->supportsService(gsTextEndnoteService);
 
     if (bAutoStyles)
     {
@@ -133,7 +133,7 @@ void XMLTextParagraphExport::exportTextFootnote(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
                                                     rPropSet ), bHasAutoStyle,
-                rPropSet, sCharStyleNames );
+                rPropSet, gsCharStyleNames );
             if( !sStyle.isEmpty() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
@@ -169,7 +169,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
     {
         // export reference Id (for reference fields)
         Reference<XPropertySet> xPropSet(rFootnote, UNO_QUERY);
-        Any aAny = xPropSet->getPropertyValue(sReferenceId);
+        Any aAny = xPropSet->getPropertyValue(gsReferenceId);
         sal_Int32 nNumber = 0;
         aAny >>= nNumber;
         OUStringBuffer aBuf;
@@ -255,34 +255,34 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
                                                      : XML_FOOTNOTE ) );
     // default/paragraph style
     lcl_exportString( GetExport(), rFootnoteConfig,
-                      sParaStyleName,
+                      gsParaStyleName,
                       XML_NAMESPACE_TEXT, XML_DEFAULT_STYLE_NAME,
                       true);
 
     // citation style
     lcl_exportString( GetExport(), rFootnoteConfig,
-                      sCharStyleName,
+                      gsCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,
                       true);
 
     // citation body style
     lcl_exportString( GetExport(), rFootnoteConfig,
-                      sAnchorCharStyleName,
+                      gsAnchorCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME,
                       true);
 
     // page style
     lcl_exportString( GetExport(), rFootnoteConfig,
-                      sPageStyleName,
+                      gsPageStyleName,
                       XML_NAMESPACE_TEXT, XML_MASTER_PAGE_NAME,
                       true );
 
     // prefix
-    lcl_exportString( GetExport(), rFootnoteConfig, sPrefix,
+    lcl_exportString( GetExport(), rFootnoteConfig, gsPrefix,
                       XML_NAMESPACE_STYLE, XML_NUM_PREFIX, false);
 
     // suffix
-    lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
+    lcl_exportString( GetExport(), rFootnoteConfig, gsSuffix,
                       XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, false);
 
 
@@ -290,7 +290,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
 
     // numbering style
     OUStringBuffer sBuffer;
-    aAny = rFootnoteConfig->getPropertyValue(sNumberingType);
+    aAny = rFootnoteConfig->getPropertyValue(gsNumberingType);
     sal_Int16 nNumbering = 0;
     aAny >>= nNumbering;
     GetExport().GetMM100UnitConverter().convertNumFormat( sBuffer, nNumbering);
@@ -304,7 +304,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     }
 
     // StartAt / start-value
-    aAny = rFootnoteConfig->getPropertyValue(sStartAt);
+    aAny = rFootnoteConfig->getPropertyValue(gsStartAt);
     sal_Int16 nOffset = 0;
     aAny >>= nOffset;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
@@ -315,12 +315,12 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     {
         // footnotes position
         aAny = rFootnoteConfig->getPropertyValue(
-            sPositionEndOfDoc);
+            gsPositionEndOfDoc);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FOOTNOTES_POSITION,
                                  ( (*o3tl::doAccess<bool>(aAny)) ?
                                         XML_DOCUMENT : XML_PAGE ) );
 
-        aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);
+        aAny = rFootnoteConfig->getPropertyValue(gsFootnoteCounting);
         sal_Int16 nTmp = 0;
         aAny >>= nTmp;
         enum XMLTokenEnum eElement;
@@ -353,7 +353,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         OUString sTmp;
 
         // end notice / quo vadis
-        aAny = rFootnoteConfig->getPropertyValue(sEndNotice);
+        aAny = rFootnoteConfig->getPropertyValue(gsEndNotice);
         aAny >>= sTmp;
 
         if (!sTmp.isEmpty())
@@ -365,7 +365,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         }
 
         // begin notice / ergo sum
-        aAny = rFootnoteConfig->getPropertyValue(sBeginNotice);
+        aAny = rFootnoteConfig->getPropertyValue(gsBeginNotice);
         aAny >>= sTmp;
 
         if (!sTmp.isEmpty())

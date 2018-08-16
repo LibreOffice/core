@@ -688,16 +688,17 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
     return pStyle;
 }
 
+static const OUStringLiteral gsCellStyleServiceName("com.sun.star.style.CellStyle");
+static const OUStringLiteral gsColumnStyleServiceName(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME);
+static const OUStringLiteral gsRowStyleServiceName(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME);
+static const OUStringLiteral gsTableStyleServiceName(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME);
+
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const uno::Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles )
     : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
-    , sCellStyleServiceName("com.sun.star.style.CellStyle")
-    , sColumnStyleServiceName(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)
-    , sRowStyleServiceName(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)
-    , sTableStyleServiceName(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)
     , nNumberFormatIndex(-1)
     , nConditionalFormatIndex(-1)
     , nCellStyleIndex(-1)
@@ -860,16 +861,16 @@ OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TABLE_COLUMN:
-            sServiceName = sColumnStyleServiceName;
+            sServiceName = gsColumnStyleServiceName;
             break;
         case XML_STYLE_FAMILY_TABLE_ROW:
-            sServiceName = sRowStyleServiceName;
+            sServiceName = gsRowStyleServiceName;
             break;
         case XML_STYLE_FAMILY_TABLE_CELL:
-            sServiceName = sCellStyleServiceName;
+            sServiceName = gsCellStyleServiceName;
             break;
         case XML_STYLE_FAMILY_TABLE_TABLE:
-            sServiceName = sTableStyleServiceName;
+            sServiceName = gsTableStyleServiceName;
             break;
         }
     }

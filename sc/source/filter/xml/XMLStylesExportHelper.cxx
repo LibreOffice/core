@@ -82,18 +82,19 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
         aVal.sFormula2 == sFormula2;
 }
 
+static const OUStringLiteral gsERRALSTY(SC_UNONAME_ERRALSTY);
+static const OUStringLiteral gsIGNOREBL(SC_UNONAME_IGNOREBL);
+static const OUStringLiteral gsSHOWLIST(SC_UNONAME_SHOWLIST);
+static const OUStringLiteral gsTYPE(SC_UNONAME_TYPE);
+static const OUStringLiteral gsSHOWINP(SC_UNONAME_SHOWINP);
+static const OUStringLiteral gsSHOWERR(SC_UNONAME_SHOWERR);
+static const OUStringLiteral gsINPTITLE(SC_UNONAME_INPTITLE);
+static const OUStringLiteral gsINPMESS(SC_UNONAME_INPMESS);
+static const OUStringLiteral gsERRTITLE(SC_UNONAME_ERRTITLE);
+static const OUStringLiteral gsERRMESS(SC_UNONAME_ERRMESS);
+
 ScMyValidationsContainer::ScMyValidationsContainer()
-    : aValidationVec(),
-    sERRALSTY(SC_UNONAME_ERRALSTY),
-    sIGNOREBL(SC_UNONAME_IGNOREBL),
-    sSHOWLIST(SC_UNONAME_SHOWLIST),
-    sTYPE(SC_UNONAME_TYPE),
-    sSHOWINP(SC_UNONAME_SHOWINP),
-    sSHOWERR(SC_UNONAME_SHOWERR),
-    sINPTITLE(SC_UNONAME_INPTITLE),
-    sINPMESS(SC_UNONAME_INPMESS),
-    sERRTITLE(SC_UNONAME_ERRTITLE),
-    sERRMESS(SC_UNONAME_ERRMESS)
+    : aValidationVec()
 {
 }
 
@@ -108,17 +109,17 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     if (xPropertySet.is())
     {
         OUString sErrorMessage;
-        xPropertySet->getPropertyValue(sERRMESS) >>= sErrorMessage;
+        xPropertySet->getPropertyValue(gsERRMESS) >>= sErrorMessage;
         OUString sErrorTitle;
-        xPropertySet->getPropertyValue(sERRTITLE) >>= sErrorTitle;
+        xPropertySet->getPropertyValue(gsERRTITLE) >>= sErrorTitle;
         OUString sImputMessage;
-        xPropertySet->getPropertyValue(sINPMESS) >>= sImputMessage;
+        xPropertySet->getPropertyValue(gsINPMESS) >>= sImputMessage;
         OUString sImputTitle;
-        xPropertySet->getPropertyValue(sINPTITLE) >>= sImputTitle;
-        bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWERR));
-        bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWINP));
+        xPropertySet->getPropertyValue(gsINPTITLE) >>= sImputTitle;
+        bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWERR));
+        bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
         sheet::ValidationType aValidationType;
-        xPropertySet->getPropertyValue(sTYPE) >>= aValidationType;
+        xPropertySet->getPropertyValue(gsTYPE) >>= aValidationType;
         if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
             !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sImputMessage.isEmpty() || !sImputTitle.isEmpty())
         {
@@ -130,9 +131,9 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             aValidation.bShowErrorMessage = bShowErrorMessage;
             aValidation.bShowImputMessage = bShowImputMessage;
             aValidation.aValidationType = aValidationType;
-            aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(sIGNOREBL));
-            xPropertySet->getPropertyValue(sSHOWLIST) >>= aValidation.nShowList;
-            xPropertySet->getPropertyValue(sERRALSTY) >>= aValidation.aAlertStyle;
+            aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(gsIGNOREBL));
+            xPropertySet->getPropertyValue(gsSHOWLIST) >>= aValidation.nShowList;
+            xPropertySet->getPropertyValue(gsERRALSTY) >>= aValidation.aAlertStyle;
             uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
             if (xCondition.is())
             {

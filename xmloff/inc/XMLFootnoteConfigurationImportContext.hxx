@@ -33,19 +33,6 @@ class SvXMLImport;
 /// import footnote and endnote configuration elements
 class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 {
-    const OUString sPropertyAnchorCharStyleName;
-    const OUString sPropertyCharStyleName;
-    const OUString sPropertyNumberingType;
-    const OUString sPropertyPageStyleName;
-    const OUString sPropertyParagraphStyleName;
-    const OUString sPropertyPrefix;
-    const OUString sPropertyStartAt;
-    const OUString sPropertySuffix;
-    const OUString sPropertyPositionEndOfDoc;
-    const OUString sPropertyFootnoteCounting;
-    const OUString sPropertyEndNotice;
-    const OUString sPropertyBeginNotice;
-
     OUString sCitationStyle;
     OUString sAnchorStyle;
     OUString sDefaultStyle;

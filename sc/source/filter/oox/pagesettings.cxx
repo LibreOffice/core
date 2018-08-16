@@ -428,11 +428,6 @@ private:
 private:
     typedef ::std::vector< HFPortionInfo >  HFPortionInfoVec;
 
-    const OUString      maPageNumberService;
-    const OUString      maPageCountService;
-    const OUString      maSheetNameService;
-    const OUString      maFileNameService;
-    const OUString      maDateTimeService;
     const std::set< OString >    maBoldNames;            /// All names for bold font style in lowercase UTF-8.
     const std::set< OString >    maItalicNames;          /// All names for italic font style in lowercase UTF-8.
     HFPortionInfoVec    maPortions;
@@ -466,13 +461,14 @@ static const sal_Char* const sppcItalicNames[] =
 
 } // namespace
 
+static const OUStringLiteral gaPageNumberService( "com.sun.star.text.TextField.PageNumber" );
+static const OUStringLiteral gaPageCountService( "com.sun.star.text.TextField.PageCount" );
+static const OUStringLiteral gaSheetNameService( "com.sun.star.text.TextField.SheetName" );
+static const OUStringLiteral gaFileNameService( "com.sun.star.text.TextField.FileName" );
+static const OUStringLiteral gaDateTimeService( "com.sun.star.text.TextField.DateTime" );
+
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maPageNumberService( "com.sun.star.text.TextField.PageNumber" ),
-    maPageCountService( "com.sun.star.text.TextField.PageCount" ),
-    maSheetNameService( "com.sun.star.text.TextField.SheetName" ),
-    maFileNameService( "com.sun.star.text.TextField.FileName" ),
-    maDateTimeService( "com.sun.star.text.TextField.DateTime" ),
     maBoldNames( sppcBoldNames, sppcBoldNames + SAL_N_ELEMENTS(sppcBoldNames) ),
     maItalicNames( sppcItalicNames, sppcItalicNames + SAL_N_ELEMENTS(sppcItalicNames) ),
     maPortions( static_cast< size_t >( HF_COUNT ) ),
@@ -547,18 +543,18 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     case 'R':   setNewPortion( HF_RIGHT );  break;  // right portion
 
                     case 'P':   // page number
-                        appendField( createField( maPageNumberService ) );
+                        appendField( createField( gaPageNumberService ) );
                     break;
                     case 'N':   // total page count
-                        appendField( createField( maPageCountService ) );
+                        appendField( createField( gaPageCountService ) );
                     break;
                     case 'A':   // current sheet name
-                        appendField( createField( maSheetNameService ) );
+                        appendField( createField( gaSheetNameService ) );
                     break;
 
                     case 'F':   // file name
                     {
-                        Reference<text::XTextContent> xContent = createField( maFileNameService );
+                        Reference<text::XTextContent> xContent = createField( gaFileNameService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::NAME_AND_EXT );
                         appendField( xContent );
@@ -566,7 +562,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     break;
                     case 'Z':   // file path (without file name), OOXML, BIFF12, and BIFF8 only
                     {
-                        Reference<text::XTextContent> xContent = createField( maFileNameService );
+                        Reference<text::XTextContent> xContent = createField( gaFileNameService );
                         PropertySet aPropSet( xContent );
                         // FilenameDisplayFormat::PATH not supported by Calc
                         aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::FULL );
@@ -579,7 +575,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     break;
                     case 'D':   // date
                     {
-                        Reference<text::XTextContent> xContent = createField( maDateTimeService );
+                        Reference<text::XTextContent> xContent = createField( gaDateTimeService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_IsDate, true );
                         appendField( xContent );
@@ -587,7 +583,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     break;
                     case 'T':   // time
                     {
-                        Reference<text::XTextContent> xContent = createField( maDateTimeService );
+                        Reference<text::XTextContent> xContent = createField( gaDateTimeService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_IsDate, false );
                         appendField( xContent );

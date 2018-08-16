@@ -420,11 +420,14 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 
 }
 
+#if __cplusplus <= 201402
+constexpr OUStringLiteral ORegistry::ROOT;
+#endif
+
 ORegistry::ORegistry()
     : m_refCount(1)
     , m_readOnly(false)
     , m_isOpen(false)
-    , ROOT("/")
 {
 }
 

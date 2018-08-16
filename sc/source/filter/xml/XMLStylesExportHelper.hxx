@@ -66,17 +66,6 @@ class ScMyValidationsContainer
 {
 private:
     ScMyValidationVec      aValidationVec;
-    const OUString         sERRALSTY;
-    const OUString         sIGNOREBL;
-    const OUString         sSHOWLIST;
-    const OUString         sTYPE;
-    const OUString         sSHOWINP;
-    const OUString         sSHOWERR;
-    const OUString         sINPTITLE;
-    const OUString         sINPMESS;
-    const OUString         sERRTITLE;
-    const OUString         sERRMESS;
-
 public:
                            ScMyValidationsContainer();
                            ~ScMyValidationsContainer();

@@ -1070,22 +1070,6 @@ uno::Any SdXShape::GetStyleSheet() const
 class SdUnoEventsAccess : public cppu::WeakImplHelper< css::container::XNameReplace, css::lang::XServiceInfo >
 {
 private:
-    const OUString      maStrOnClick;
-    const OUString      maStrServiceName;
-    const OUString      maStrEventType;
-    const OUString      maStrPresentation;
-    const OUString      maStrLibrary;
-    const OUString      maStrMacroName;
-    const OUString      maStrClickAction;
-    const OUString      maStrBookmark;
-    const OUString      maStrEffect;
-    const OUString      maStrPlayFull;
-    const OUString      maStrVerb;
-    const OUString      maStrSoundURL;
-    const OUString      maStrSpeed;
-    const OUString      maStrStarBasic;
-    const OUString      maStrScript;
-
     SdXShape*   mpShape;
 
 public:
@@ -1115,23 +1099,24 @@ uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  )
     return new SdUnoEventsAccess( this );
 }
 
+static const OUStringLiteral gaStrOnClick( "OnClick" );
+static const OUStringLiteral gaStrServiceName( "com.sun.star.documents.Events" );
+static const OUStringLiteral gaStrEventType( "EventType" );
+static const OUStringLiteral gaStrPresentation( "Presentation" );
+static const OUStringLiteral gaStrLibrary("Library");
+static const OUStringLiteral gaStrMacroName("MacroName");
+static const OUStringLiteral gaStrClickAction( "ClickAction" );
+static const OUStringLiteral gaStrBookmark( "Bookmark" );
+static const OUStringLiteral gaStrEffect( "Effect" );
+static const OUStringLiteral gaStrPlayFull( "PlayFull" );
+static const OUStringLiteral gaStrVerb( "Verb" );
+static const OUStringLiteral gaStrSoundURL( "SoundURL" );
+static const OUStringLiteral gaStrSpeed( "Speed" );
+static const OUStringLiteral gaStrStarBasic( "StarBasic" );
+static const OUStringLiteral gaStrScript( "Script" );
+
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
-: maStrOnClick( "OnClick" ),
-  maStrServiceName( "com.sun.star.documents.Events" ),
-  maStrEventType( "EventType" ),
-  maStrPresentation( "Presentation" ),
-  maStrLibrary("Library"),
-  maStrMacroName("MacroName"),
-  maStrClickAction( "ClickAction" ),
-  maStrBookmark( "Bookmark" ),
-  maStrEffect( "Effect" ),
-  maStrPlayFull( "PlayFull" ),
-  maStrVerb( "Verb" ),
-  maStrSoundURL( "SoundURL" ),
-  maStrSpeed( "Speed" ),
-  maStrStarBasic( "StarBasic" ),
-  maStrScript( "Script" ),
-  mpShape( pShape )
+  : mpShape( pShape )
 {
 }
 
@@ -1166,7 +1151,7 @@ static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 // XNameReplace
 void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
-    if( mpShape == nullptr || aName != maStrOnClick )
+    if( mpShape == nullptr || aName != gaStrOnClick )
         throw container::NoSuchElementException();
 
     uno::Sequence< beans::PropertyValue > aProperties;
@@ -1191,7 +1176,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     sal_Int32 nIndex;
     for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
     {
-        if( !( nFound & FoundFlags::EventType ) && pProperties->Name == maStrEventType )
+        if( !( nFound & FoundFlags::EventType ) && pProperties->Name == gaStrEventType )
         {
             if( pProperties->Value >>= aStrEventType )
             {
@@ -1199,7 +1184,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::ClickAction ) && pProperties->Name == maStrClickAction )
+        else if( !( nFound & FoundFlags::ClickAction ) && pProperties->Name == gaStrClickAction )
         {
             if( pProperties->Value >>= eClickAction )
             {
@@ -1207,7 +1192,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Macro ) && ( pProperties->Name == maStrMacroName || pProperties->Name == maStrScript ) )
+        else if( !( nFound & FoundFlags::Macro ) && ( pProperties->Name == gaStrMacroName || pProperties->Name == gaStrScript ) )
         {
             if( pProperties->Value >>= aStrMacro )
             {
@@ -1215,7 +1200,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Library ) && pProperties->Name == maStrLibrary )
+        else if( !( nFound & FoundFlags::Library ) && pProperties->Name == gaStrLibrary )
         {
             if( pProperties->Value >>= aStrLibrary )
             {
@@ -1223,7 +1208,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Effect ) && pProperties->Name == maStrEffect )
+        else if( !( nFound & FoundFlags::Effect ) && pProperties->Name == gaStrEffect )
         {
             if( pProperties->Value >>= eEffect )
             {
@@ -1231,7 +1216,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Bookmark ) && pProperties->Name == maStrBookmark )
+        else if( !( nFound & FoundFlags::Bookmark ) && pProperties->Name == gaStrBookmark )
         {
             if( pProperties->Value >>= aStrBookmark )
             {
@@ -1239,7 +1224,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Speed ) && pProperties->Name == maStrSpeed )
+        else if( !( nFound & FoundFlags::Speed ) && pProperties->Name == gaStrSpeed )
         {
             if( pProperties->Value >>= eSpeed )
             {
@@ -1247,7 +1232,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::SoundUrl ) && pProperties->Name == maStrSoundURL )
+        else if( !( nFound & FoundFlags::SoundUrl ) && pProperties->Name == gaStrSoundURL )
         {
             if( pProperties->Value >>= aStrSoundURL )
             {
@@ -1255,7 +1240,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::PlayFull ) && pProperties->Name == maStrPlayFull )
+        else if( !( nFound & FoundFlags::PlayFull ) && pProperties->Name == gaStrPlayFull )
         {
             if( pProperties->Value >>= bPlayFull )
             {
@@ -1263,7 +1248,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Verb ) && pProperties->Name == maStrVerb )
+        else if( !( nFound & FoundFlags::Verb ) && pProperties->Name == gaStrVerb )
         {
             if( pProperties->Value >>= nVerb )
             {
@@ -1281,7 +1266,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
         if( !( nFound & FoundFlags::EventType ) )
             break;
 
-        if( aStrEventType == maStrPresentation )
+        if( aStrEventType == gaStrPresentation )
         {
             if( !( nFound & FoundFlags::ClickAction ) )
                 break;
@@ -1436,7 +1421,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 // XNameAccess
 uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 {
-    if( mpShape == nullptr || aName != maStrOnClick )
+    if( mpShape == nullptr || aName != gaStrOnClick )
         throw container::NoSuchElementException();
 
     SdAnimationInfo* pInfo = mpShape->GetAnimationInfo();
@@ -1486,15 +1471,15 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
         {
             // Scripting Framework URL
-            aAny <<= maStrScript;
-            pProperties->Name = maStrEventType;
+            aAny <<= OUString(gaStrScript);
+            pProperties->Name = gaStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
             aAny <<= pInfo->GetBookmark();
-            pProperties->Name = maStrScript;
+            pProperties->Name = gaStrScript;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1503,8 +1488,8 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         else
         {
             // Old Basic macro URL
-            aAny <<= maStrStarBasic;
-            pProperties->Name = maStrEventType;
+            aAny <<= OUString(gaStrStarBasic);
+            pProperties->Name = gaStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1527,14 +1512,14 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             sBuffer.append( aMacroName );
 
             aAny <<= sBuffer.makeStringAndClear();
-            pProperties->Name = maStrMacroName;
+            pProperties->Name = gaStrMacroName;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
             aAny <<= OUString( "StarOffice" );
-            pProperties->Name = maStrLibrary;
+            pProperties->Name = gaStrLibrary;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1542,15 +1527,15 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     }
     else
     {
-        aAny <<= maStrPresentation;
-        pProperties->Name = maStrEventType;
+        aAny <<= OUString(gaStrPresentation);
+        pProperties->Name = gaStrEventType;
         pProperties->Handle = -1;
         pProperties->Value = aAny;
         pProperties->State = beans::PropertyState_DIRECT_VALUE;
         pProperties++;
 
         aAny <<= eClickAction;
-        pProperties->Name = maStrClickAction;
+        pProperties->Name = gaStrClickAction;
         pProperties->Handle = -1;
         pProperties->Value = aAny;
         pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1569,7 +1554,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_BOOKMARK:
             {
                 const OUString aStrBookmark( getPageApiNameFromUiName( pInfo->GetBookmark()) );
-                pProperties->Name = maStrBookmark;
+                pProperties->Name = gaStrBookmark;
                 pProperties->Handle = -1;
                 pProperties->Value <<= aStrBookmark;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1587,7 +1572,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
                     aURL += getPageApiNameFromUiName( aString.copy( nPos+1 ) );
                     aString = aURL;
                 }
-                pProperties->Name = maStrBookmark;
+                pProperties->Name = gaStrBookmark;
                 pProperties->Handle = -1;
                 pProperties->Value <<= aString;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1596,14 +1581,14 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
         case presentation::ClickAction_VANISH:
             aAny <<= pInfo->meSecondEffect;
-            pProperties->Name = maStrEffect;
+            pProperties->Name = gaStrEffect;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
             aAny <<= pInfo->meSecondSpeed;
-            pProperties->Name = maStrSpeed;
+            pProperties->Name = gaStrSpeed;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1615,13 +1600,13 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             if( eClickAction == presentation::ClickAction_SOUND || pInfo->mbSecondSoundOn )
             {
                 aAny <<= pInfo->GetBookmark();
-                pProperties->Name = maStrSoundURL;
+                pProperties->Name = gaStrSoundURL;
                 pProperties->Handle = -1;
                 pProperties->Value = aAny;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
-                pProperties->Name = maStrPlayFull;
+                pProperties->Name = gaStrPlayFull;
                 pProperties->Handle = -1;
                 pProperties->Value <<= pInfo->mbSecondPlayFull;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1630,7 +1615,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
         case presentation::ClickAction_VERB:
             aAny <<= static_cast<sal_Int32>(pInfo->mnVerb);
-            pProperties->Name = maStrVerb;
+            pProperties->Name = gaStrVerb;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -1646,13 +1631,12 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getElementNames(  )
 {
-    uno::Sequence< OUString > aStr( &maStrOnClick, 1 );
-    return aStr;
+    return { gaStrOnClick };
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
 {
-    return aName == maStrOnClick;
+    return aName == gaStrOnClick;
 }
 
 // XElementAccess
@@ -1679,8 +1663,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceNam
 
 uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames(  )
 {
-    uno::Sequence< OUString > aStr( &maStrServiceName, 1 );
-    return aStr;
+    return { gaStrServiceName };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

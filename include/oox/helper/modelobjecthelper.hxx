@@ -117,10 +117,6 @@ private:
     ObjectContainer     maGradientContainer;    ///< Contains all named fill gradients.
     ObjectContainer     maTransGradContainer;   ///< Contains all named transparency Gradients.
     ObjectContainer     maBitmapUrlContainer;   ///< Contains all named fill bitmap URLs.
-    const OUString      maDashNameBase;       ///< Base name for all named line dashes.
-    const OUString      maGradientNameBase;   ///< Base name for all named fill gradients.
-    const OUString      maTransGradNameBase;   ///< Base name for all named fill gradients.
-    const OUString      maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
 };
 
 

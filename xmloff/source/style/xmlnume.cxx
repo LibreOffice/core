@@ -615,11 +615,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 }
 
 
+static const OUStringLiteral gsNumberingRules( "NumberingRules" );
+static const OUStringLiteral gsIsPhysical( "IsPhysical" );
+static const OUStringLiteral gsIsContinuousNumbering( "IsContinuousNumbering" );
+
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     rExport( rExp ),
-    sNumberingRules( "NumberingRules" ),
-    sIsPhysical( "IsPhysical" ),
-    sIsContinuousNumbering( "IsContinuousNumbering" ),
     // Let list style creation depend on Load/Save option "ODF format version" (#i89178#)
     mbExportPositionAndSpaceModeLabelAlignment( true )
 {
@@ -671,9 +672,9 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     // text:consecutive-numbering="..."
     bool bContNumbering = false;
     if( xPropSetInfo.is() &&
-        xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
+        xPropSetInfo->hasPropertyByName( gsIsContinuousNumbering ) )
     {
-        Any aAny( xPropSet->getPropertyValue( sIsContinuousNumbering ) );
+        Any aAny( xPropSet->getPropertyValue( gsIsContinuousNumbering ) );
         bContNumbering = *o3tl::doAccess<bool>(aAny);
     }
     if( bContNumbering )
@@ -696,14 +697,14 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     // Don't export styles that aren't existing really. This may be the
     // case for StarOffice Writer's pool styles.
-    if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
+    if( xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
     {
-        aAny = xPropSet->getPropertyValue( sIsPhysical );
+        aAny = xPropSet->getPropertyValue( gsIsPhysical );
         if( !*o3tl::doAccess<bool>(aAny) )
             return;
     }
 
-    aAny = xPropSet->getPropertyValue( sNumberingRules );
+    aAny = xPropSet->getPropertyValue( gsNumberingRules );
     Reference<XIndexReplace> xNumRule;
     aAny >>= xNumRule;
 

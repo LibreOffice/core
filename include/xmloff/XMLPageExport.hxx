@@ -53,9 +53,6 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& rExport;
 
-    const OUString sIsPhysical;
-    const OUString sFollowStyle;
-
     css::uno::Reference< css::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
