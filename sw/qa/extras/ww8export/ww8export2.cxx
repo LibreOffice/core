@@ -282,6 +282,11 @@ DECLARE_WW8EXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx"
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), "ParaAdjust"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getProperty<sal_Int16>(getParagraph(1), "PageNumberOffset"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WW8Num1"), uno::UNO_QUERY);
