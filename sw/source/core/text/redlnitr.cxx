@@ -125,6 +125,13 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             rTextNode.SetRedlineMergeFlag(SwNode::Merge::None);
         }
     }
+    {
+        SwNode *const pNextNode(pNode->GetNodes()[pNode->GetIndex() + 1]);
+        if (!pNextNode->IsCreateFrameWhenHidingRedlines())
+        {   // clear stale flag caused by editing with redlines shown
+            pNextNode->SetRedlineMergeFlag(SwNode::Merge::None);
+        }
+    }
     if (!bHaveRedlines)
     {
         return nullptr;
