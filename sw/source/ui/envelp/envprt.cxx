@@ -118,7 +118,7 @@ IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
         // Call printer setup
         if (m_xPrt)
         {
-            PrinterSetupDialog aDlg(GetTabDialog()->GetFrameWeld());
+            PrinterSetupDialog aDlg(GetDialogController()->getDialog());
             aDlg.SetPrinter(m_xPrt);
             aDlg.execute();
             rBtn.grab_focus();
