@@ -82,7 +82,7 @@ class CoreTextStyle : public LogicalFontInstance
     friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
-    ~CoreTextStyle();
+    ~CoreTextStyle() override;
 
     void       GetFontMetric( ImplFontMetricDataRef const & );
     bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
