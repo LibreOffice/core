@@ -263,11 +263,18 @@ bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationS
     return hb_set_has(mpVertGlyphs, nGlyphIndex) != 0;
 }
 
-bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
+bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* pGlyphs)
 {
     // No need to touch m_GlyphItems at all for an empty string.
     if (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 0)
         return true;
+
+    if (pGlyphs)
+    {
+        // Work with pre-computed glyph items.
+        m_GlyphItems = *pGlyphs;
+        return true;
+    }
 
     hb_font_t *pHbFont = mpFont->GetHbFont();
     hb_face_t* pHbFace = hb_font_get_face(pHbFont);

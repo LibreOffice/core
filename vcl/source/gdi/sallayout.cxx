@@ -1017,7 +1017,7 @@ void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
     ++mnLevel;
 }
 
-bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
+bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs, const SalLayoutGlyphs* )
 {
     if( mnLevel <= 1 )
         return false;

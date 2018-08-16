@@ -1334,7 +1334,7 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackFont(
     if (!pFallback)
         return nullptr;
 
-    if (!pFallback->LayoutText(rLayoutArgs))
+    if (!pFallback->LayoutText(rLayoutArgs, nullptr))
     {
         // there is no need for a font that couldn't resolve anything
         return nullptr;
@@ -1418,7 +1418,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             break;
     }
 
-    if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs ) )
+    if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs, nullptr ) )
         pSalLayout = std::move(pMultiSalLayout);
 
     // restore orig font settings
