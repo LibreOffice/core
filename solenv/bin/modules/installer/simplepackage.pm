@@ -457,7 +457,7 @@ sub create_package
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            $infoline = "ERROR: Could not execute \"$systemcall\": $returnvalue\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
         else
