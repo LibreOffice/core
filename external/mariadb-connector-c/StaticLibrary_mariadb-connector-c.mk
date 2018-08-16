@@ -115,6 +115,8 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/client_plugin \
 	UnpackedTarball/mariadb-connector-c/libmariadb/my_auth \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_secure \
+$(if $(filter $(OS),WNT), \
+	UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv,) \
 ))
 
 # vim: set noet sw=4 ts=4:
