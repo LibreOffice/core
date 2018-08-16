@@ -142,7 +142,7 @@ double ImpGetDate( const SbxValues* p )
             OUString aStr = aDateStr + " HH:MM:SS";
 
             pFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-                                            nIndex, LANGUAGE_ENGLISH_US, eLangType );
+                                            nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
             bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
             if ( bSuccess )
             {
@@ -337,7 +337,7 @@ start:
                                             nType,
                                             nIndex,
                                             LANGUAGE_ENGLISH_US,
-                                            eLangType );
+                                            eLangType, true);
             pFormatter->GetOutputString( n, nIndex, *p->pOUString, &pColor );
 #endif
             break;

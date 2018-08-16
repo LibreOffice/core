@@ -438,12 +438,12 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
     pNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-        rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType );
+        rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType, true);
     nCheckPos = 0;
     aDateStr += " HH:MM:SS";
     aStr = aDateStr;
     pNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-        rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType );
+        rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType, true);
     return pNumberFormatter;
 }
 
