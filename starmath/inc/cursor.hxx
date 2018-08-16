@@ -225,14 +225,14 @@ private:
      * that includes pLine!
      * This method also deletes SmErrorNode's as they're just meta info in the line.
      */
-    static SmNodeList* LineToList(SmStructureNode* pLine, SmNodeList* pList);
+    static void LineToList(SmStructureNode* pLine, SmNodeList& rList);
 
     /** Auxiliary function for calling LineToList on a node
      *
      * This method sets pNode = NULL and remove it from its parent.
      * (Assuming it has a parent, and is a child of it).
      */
-    static SmNodeList* NodeToList(SmNode*& rpNode, SmNodeList* pList = new SmNodeList){
+    static void NodeToList(SmNode*& rpNode, SmNodeList& rList){
         //Remove from parent and NULL rpNode
         SmNode* pNode = rpNode;
         if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
@@ -242,11 +242,12 @@ private:
         }
         rpNode = nullptr;
         //Create line from node
-        if(pNode && IsLineCompositionNode(pNode))
-            return LineToList(static_cast<SmStructureNode*>(pNode), pList);
+        if(pNode && IsLineCompositionNode(pNode)){
+            LineToList(static_cast<SmStructureNode*>(pNode), rList);
+            return;
+        }
         if(pNode)
-            pList->push_front(pNode);
-        return pList;
+            rList.push_front(pNode);
     }
 
     /** Clone a visual line to a clipboard
@@ -342,7 +343,7 @@ private:
      * @param pStartLine    Line to take first position in, if PosAfterEdit cannot be found,
      *                      leave it NULL for pLineList.
      */
-    void FinishEdit(SmNodeList* pLineList,
+    void FinishEdit(std::unique_ptr<SmNodeList> pLineList,
                     SmStructureNode* pParent,
                     int nParentIndex,
                     SmCaretPos PosAfterEdit,
