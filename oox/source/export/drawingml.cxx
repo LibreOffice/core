@@ -700,14 +700,34 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
 
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH )
     {
-        // line style is a dash and it was not set by the shape style
-
-        if (aLineDash.Dashes == 1 && aLineDash.DashLen == 564 && aLineDash.Distance == 423)
+        // keep default preset linestyles (instead of custdash)
+        if (aLineDash.Dots == 1 && aLineDash.DotLen == 141 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 141)
         {
-            // That's exactly the predefined "dash" value.
-            mpFS->singleElementNS(XML_a, XML_prstDash,
-                                  XML_val, "dash",
-                                  FSEND);
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDot", FSEND);
+        }
+        else if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 1 && aLineDash.DashLen == 423 && aLineDash.Distance == 141)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDash", FSEND);
+        }
+        else if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 1 && aLineDash.DashLen == 564 && aLineDash.Distance == 423)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
+        }
+        else if (aLineDash.Dots == 1 && aLineDash.DotLen == 141 && aLineDash.Dashes == 1 && aLineDash.DashLen == 564 && aLineDash.Distance == 423)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dashDot", FSEND);
+        }
+        else if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 1 && aLineDash.DashLen == 1128 && aLineDash.Distance == 423)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDash", FSEND);
+        }
+        else if (aLineDash.Dots == 1 && aLineDash.DotLen == 141 && aLineDash.Dashes == 1 && aLineDash.DashLen == 1128 && aLineDash.Distance == 423)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDot", FSEND);
+        }
+        else if (aLineDash.Dots == 2 && aLineDash.DotLen == 141 && aLineDash.Dashes == 1 && aLineDash.DashLen == 1128 && aLineDash.Distance == 423)
+        {
+            mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDotDot", FSEND);
         }
         else
         {
