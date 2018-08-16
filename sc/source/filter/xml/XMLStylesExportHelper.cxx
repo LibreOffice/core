@@ -982,18 +982,11 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 
 ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
-    auto i(aStyleNames.begin());
-    auto endi(aStyleNames.end());
-    while (i != endi)
-    {
-        delete *i;
-        ++i;
-    }
 }
 
-sal_Int32 ScColumnRowStylesBase::AddStyleName(OUString* pString)
+sal_Int32 ScColumnRowStylesBase::AddStyleName(const OUString & rString)
 {
-    aStyleNames.push_back(pString);
+    aStyleNames.push_back(rString);
     return aStyleNames.size() - 1;
 }
 
@@ -1002,7 +995,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
     sal_Int32 nPrefixLength(rPrefix.getLength());
     OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && *aStyleNames.at(nIndex - 1) == rString)
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1) == rString)
         return nIndex - 1;
     else
     {
@@ -1010,7 +1003,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
         bool bFound(false);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
-            if (*aStyleNames.at(i) == rString)
+            if (aStyleNames.at(i) == rString)
                 bFound = true;
             else
                 ++i;
@@ -1022,15 +1015,8 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
     }
 }
 
-OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
+OUString& ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 {
-    if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
-    {
-        // should no longer happen, use first style then
-        OSL_FAIL("GetStyleNameByIndex: invalid index");
-        return aStyleNames[0];
-    }
-
     return aStyleNames[nIndex];
 }
 
