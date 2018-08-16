@@ -808,7 +808,7 @@ bool DetectRethrow(void* ppExcept)
     };
 
     constexpr auto PER_IS_MSVC_EH = [](EHExceptionRecord* p) {
-        constexpr DWORD EH_EXCEPTION_NUMBER = ('msc' | 0xE0000000); // The NT Exception # that msvcrt uses
+        constexpr DWORD EH_EXCEPTION_NUMBER = 0xE06D7363;           // The NT Exception # that msvcrt uses ('msc' | 0xE0000000)
         constexpr DWORD EH_MAGIC_NUMBER1 = 0x19930520;              // latest magic # in thrown object
         constexpr DWORD EH_MAGIC_NUMBER2 = 0x19930521;              // latest magic # in func info for exception specs
         constexpr DWORD EH_MAGIC_NUMBER3 = 0x19930522;              // latest magic #
