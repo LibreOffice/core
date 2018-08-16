@@ -90,7 +90,7 @@ private:
     tools::Rectangle   maPaintedPreviewDocRect;
     sal_uInt16  mnSelectedPageNum;
 
-    std::vector<PreviewPage*> maPreviewPages;
+    std::vector<std::unique_ptr<PreviewPage>> maPreviewPages;
 
     /** #i22014# - internal booleans to indicate, that a new print
        preview layout has been created during a paint. */
