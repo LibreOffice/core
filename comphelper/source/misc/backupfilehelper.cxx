@@ -545,16 +545,16 @@ namespace
 
     typedef std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
 
+    static const OUString gaRegPath { "/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml" };
+
     class ExtensionInfo
     {
     private:
         ExtensionInfoEntryVector    maEntries;
-        OUString const maRegPath;
 
     public:
         ExtensionInfo()
-            : maEntries(),
-              maRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml")
+            : maEntries()
         {
         }
 
@@ -677,19 +677,19 @@ namespace
     public:
         void createUserExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/uno_packages/cache" + maRegPath);
+            const OUString aPath(rUserConfigWorkURL + "/uno_packages/cache" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 
         void createSharedExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/extensions/shared" + maRegPath);
+            const OUString aPath(rUserConfigWorkURL + "/extensions/shared" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 
         void createBundledExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/extensions/bundled" + maRegPath);
+            const OUString aPath(rUserConfigWorkURL + "/extensions/bundled" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 

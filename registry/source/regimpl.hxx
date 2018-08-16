@@ -145,7 +145,7 @@ private:
     store::OStoreFile   m_file;
     KeyMap              m_openKeyTable;
 
-    const OUString ROOT;
+    static const OUString ROOT;
 };
 
 #endif

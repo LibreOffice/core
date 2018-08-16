@@ -88,16 +88,17 @@ void ObjectContainer::createContainer() const
     OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
+static const OUString gaDashNameBase(      "msLineDash " );      ///< Base name for all named line dashes.
+static const OUString gaGradientNameBase(  "msFillGradient " );  ///< Base name for all named fill gradients.
+static const OUString gaTransGradNameBase( "msTransGradient " ); ///< Base name for all named fill gradients.
+static const OUString gaBitmapUrlNameBase( "msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
+
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
     maDashContainer(      rxModelFactory, "com.sun.star.drawing.DashTable" ),
     maGradientContainer(  rxModelFactory, "com.sun.star.drawing.GradientTable" ),
     maTransGradContainer(  rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
-    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" ),
-    maDashNameBase(      "msLineDash " ),
-    maGradientNameBase(  "msFillGradient " ),
-    maTransGradNameBase( "msTransGradient " ),
-    maBitmapUrlNameBase( "msFillBitmap " )
+    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" )
 {
 }
 
@@ -116,24 +117,24 @@ bool ModelObjectHelper::insertLineMarker( const OUString& rMarkerName, const Pol
 
 OUString ModelObjectHelper::insertLineDash( const LineDash& rDash )
 {
-    return maDashContainer.insertObject( maDashNameBase, Any( rDash ), true );
+    return maDashContainer.insertObject( gaDashNameBase, Any( rDash ), true );
 }
 
 OUString ModelObjectHelper::insertFillGradient( const awt::Gradient& rGradient )
 {
-    return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
+    return maGradientContainer.insertObject( gaGradientNameBase, Any( rGradient ), true );
 }
 
 OUString ModelObjectHelper::insertTransGrandient( const awt::Gradient& rGradient )
 {
-    return maTransGradContainer.insertObject( maTransGradNameBase, Any( rGradient ), true );
+    return maTransGradContainer.insertObject( gaTransGradNameBase, Any( rGradient ), true );
 }
 
 OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     uno::Reference<awt::XBitmap> xBitmap(rxGraphic, uno::UNO_QUERY);
     if (xBitmap.is())
-        return maBitmapUrlContainer.insertObject(maBitmapUrlNameBase, Any(xBitmap), true);
+        return maBitmapUrlContainer.insertObject(gaBitmapUrlNameBase, Any(xBitmap), true);
     return OUString();
 }
 

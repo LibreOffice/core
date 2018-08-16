@@ -90,8 +90,6 @@ private:
                         mxTextStrm;
     css::uno::Sequence< sal_Unicode > maOpeningBracket;
     css::uno::Sequence< sal_Unicode > maClosingBracket;
-    const OString       maOpeningCData;
-    const OString       maClosingCData;
     OString             maBuffer;
     sal_Int32           mnBufferPos;
 };

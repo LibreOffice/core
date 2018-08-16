@@ -383,6 +383,8 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
+static const OUString gsPageLayoutNames( "PageLayoutNames" );
+
 SdXMLExport::SdXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -393,8 +395,7 @@ SdXMLExport::SdXMLExport(
     mnDocDrawPageCount(0),
     mnObjectCount(0),
     mpHandoutPageMaster(nullptr),
-    mbIsDraw(bIsDraw),
-    msPageLayoutNames( "PageLayoutNames" )
+    mbIsDraw(bIsDraw)
 {
 
 }
@@ -2078,9 +2079,9 @@ void SdXMLExport::ExportStyles_(bool bUsed)
     {
         Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-        if( xInfoSetInfo->hasPropertyByName( msPageLayoutNames ) )
+        if( xInfoSetInfo->hasPropertyByName( gsPageLayoutNames ) )
         {
-            xInfoSet->setPropertyValue( msPageLayoutNames, Any(maDrawPagesAutoLayoutNames) );
+            xInfoSet->setPropertyValue( gsPageLayoutNames, Any(maDrawPagesAutoLayoutNames) );
         }
     }
 }
@@ -2096,9 +2097,9 @@ void SdXMLExport::collectAutoStyles()
     {
         Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-        if( xInfoSetInfo->hasPropertyByName( msPageLayoutNames ) )
+        if( xInfoSetInfo->hasPropertyByName( gsPageLayoutNames ) )
         {
-            xInfoSet->getPropertyValue( msPageLayoutNames ) >>= maDrawPagesAutoLayoutNames;
+            xInfoSet->getPropertyValue( gsPageLayoutNames ) >>= maDrawPagesAutoLayoutNames;
         }
     }
 

@@ -457,9 +457,9 @@ BaseContent::getContentType()
         if( m_nState & JustInserted )
         {
             if ( m_bFolder )
-                return m_pMyShell->FolderContentType;
+                return TaskManager::FolderContentType;
             else
-                return m_pMyShell->FileContentType;
+                return TaskManager::FileContentType;
         }
         else
         {
@@ -477,9 +477,9 @@ BaseContent::getContentType()
                 if ( !xRow->wasNull() )
                 {
                     if ( IsDocument )
-                        return m_pMyShell->FileContentType;
+                        return TaskManager::FileContentType;
                     else
-                        return m_pMyShell->FolderContentType;
+                        return TaskManager::FolderContentType;
                 }
                 else
                 {
@@ -569,10 +569,10 @@ BaseContent::createNewContent( const ContentInfo& Info )
     if ( Info.Type.isEmpty() )
         return Reference< XContent >();
 
-    bool bFolder = Info.Type == m_pMyShell->FolderContentType;
+    bool bFolder = Info.Type == TaskManager::FolderContentType;
     if ( !bFolder )
     {
-        if ( Info.Type != m_pMyShell->FileContentType )
+        if ( Info.Type != TaskManager::FileContentType )
         {
             // Neither folder nor file to create!
             return Reference< XContent >();
@@ -733,8 +733,8 @@ BaseContent::getPropertyValues(
 
             if ( rProp.Name == "ContentType" )
             {
-                rValue <<= m_bFolder ? m_pMyShell->FolderContentType
-                    : m_pMyShell->FileContentType;
+                rValue <<= m_bFolder ? TaskManager::FolderContentType
+                    : TaskManager::FileContentType;
             }
             else if ( rProp.Name == "IsFolder" )
             {

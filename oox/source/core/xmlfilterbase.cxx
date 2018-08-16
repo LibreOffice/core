@@ -176,7 +176,6 @@ struct XmlFilterBaseImpl
     typedef RefMap< OUString, Relations > RelationsMap;
 
     FastParser                     maFastParser;
-    const OUString                 maBinSuffix;
     RelationsMap                   maRelationsMap;
     TextFieldStack                 maTextFieldStack;
     const NamespaceMap&            mrNamespaceMap;
@@ -185,8 +184,9 @@ struct XmlFilterBaseImpl
     explicit            XmlFilterBaseImpl();
 };
 
+static const OUString gaBinSuffix( ".bin" );
+
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
-    maBinSuffix( ".bin" ),
     mrNamespaceMap(StaticNamespaceMap::get())
 {
     // register XML namespaces
@@ -348,7 +348,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         return false;
 
     // try to import binary streams (fragment extension must be '.bin')
-    if (aFragmentPath.endsWith(mxImpl->maBinSuffix))
+    if (aFragmentPath.endsWith(gaBinSuffix))
     {
         try
         {
@@ -420,7 +420,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
         return xRet;
 
     // binary streams (fragment extension is '.bin') currently not supported
-    if (aFragmentPath.endsWith(mxImpl->maBinSuffix))
+    if (aFragmentPath.endsWith(gaBinSuffix))
         return xRet;
 
     // try to import XML stream

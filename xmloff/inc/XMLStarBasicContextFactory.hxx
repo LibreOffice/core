@@ -33,11 +33,6 @@ class XMLEventsImportContext;
 
 class XMLStarBasicContextFactory : public XMLEventContextFactory
 {
-    const OUString sEventType;
-    const OUString sLibrary;
-    const OUString sMacroName;
-    const OUString sStarBasic;
-
 public:
     XMLStarBasicContextFactory();
     virtual ~XMLStarBasicContextFactory() override;

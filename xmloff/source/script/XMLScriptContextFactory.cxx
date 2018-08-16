@@ -32,10 +32,11 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-XMLScriptContextFactory::XMLScriptContextFactory() :
-    sEventType("EventType"),
-    sScript("Script"),
-    sURL("Script")
+static const OUString gsEventType("EventType");
+static const OUString gsScript("Script");
+static const OUString gsURL("Script");
+
+XMLScriptContextFactory::XMLScriptContextFactory()
 {
 }
 
@@ -73,11 +74,11 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     Sequence<PropertyValue> aValues(2);
 
     // EventType
-    aValues[0].Name = sEventType;
-    aValues[0].Value <<= sScript;
+    aValues[0].Name = gsEventType;
+    aValues[0].Value <<= gsScript;
 
     // URL
-    aValues[1].Name = sURL;
+    aValues[1].Name = gsURL;
     aValues[1].Value <<= sURLVal;
 
     // add values for event now

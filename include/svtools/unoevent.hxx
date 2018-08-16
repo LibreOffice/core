@@ -207,8 +207,6 @@ class SVT_DLLPUBLIC SvDetachedEventDescriptor : public SvBaseEventDescriptor
     // the macros; aMacros[i] is the value for aSupportedMacroItemIDs[i]
     std::vector<std::unique_ptr<SvxMacro>> aMacros;
 
-    const OUString sImplName;
-
 public:
 
     SvDetachedEventDescriptor(const SvEventDescription* pSupportedMacroItems);

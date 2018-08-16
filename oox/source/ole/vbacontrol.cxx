@@ -98,12 +98,12 @@ public:
 private:
     ::std::set< OUString >
                         maCtrlNames;
-    const OUString      maDummyBaseName;
     sal_Int32           mnIndex;
 };
 
+static const OUString gaDummyBaseName( "DummyGroupSep" );
+
 VbaControlNamesSet::VbaControlNamesSet() :
-    maDummyBaseName( "DummyGroupSep" ),
     mnIndex( 0 )
 {
 }
@@ -120,7 +120,7 @@ OUString VbaControlNamesSet::generateDummyName()
     OUString aCtrlName;
     do
     {
-        aCtrlName = maDummyBaseName + OUString::number( ++mnIndex );
+        aCtrlName = gaDummyBaseName + OUString::number( ++mnIndex );
     }
     while( maCtrlNames.count( aCtrlName ) > 0 );
     maCtrlNames.insert( aCtrlName );

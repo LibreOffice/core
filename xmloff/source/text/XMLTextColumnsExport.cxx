@@ -43,16 +43,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 
+static const OUString gsSeparatorLineIsOn("SeparatorLineIsOn");
+static const OUString gsSeparatorLineWidth("SeparatorLineWidth");
+static const OUString gsSeparatorLineColor("SeparatorLineColor");
+static const OUString gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
+static const OUString gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
+static const OUString gsIsAutomatic("IsAutomatic");
+static const OUString gsAutomaticDistance("AutomaticDistance");
+static const OUString gsSeparatorLineStyle("SeparatorLineStyle");
+
 XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
-    rExport( rExp ),
-    sSeparatorLineIsOn("SeparatorLineIsOn"),
-    sSeparatorLineWidth("SeparatorLineWidth"),
-    sSeparatorLineColor("SeparatorLineColor"),
-    sSeparatorLineRelativeHeight("SeparatorLineRelativeHeight"),
-    sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment"),
-    sIsAutomatic("IsAutomatic"),
-    sAutomaticDistance("AutomaticDistance"),
-    sSeparatorLineStyle("SeparatorLineStyle")
+    rExport( rExp )
 {
 }
 
@@ -73,10 +74,10 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
     if( xPropSet.is() )
     {
-        Any aAny = xPropSet->getPropertyValue( sIsAutomatic );
+        Any aAny = xPropSet->getPropertyValue( gsIsAutomatic );
         if ( *o3tl::doAccess<bool>(aAny) )
         {
-            aAny = xPropSet->getPropertyValue( sAutomaticDistance );
+            aAny = xPropSet->getPropertyValue( gsAutomaticDistance );
             sal_Int32 nDistance = 0;
             aAny >>= nDistance;
             OUStringBuffer aBuffer;
@@ -93,11 +94,11 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
     if( xPropSet.is() )
     {
-        Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
+        Any aAny = xPropSet->getPropertyValue( gsSeparatorLineIsOn );
         if( *o3tl::doAccess<bool>(aAny) )
         {
             // style:width
-            aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );
+            aAny = xPropSet->getPropertyValue( gsSeparatorLineWidth );
             sal_Int32 nWidth = 0;
             aAny >>= nWidth;
             GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
@@ -106,7 +107,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style:color
-            aAny = xPropSet->getPropertyValue( sSeparatorLineColor );
+            aAny = xPropSet->getPropertyValue( gsSeparatorLineColor );
             sal_Int32 nColor = 0;
             aAny >>= nColor;
             ::sax::Converter::convertColor( sValue, nColor );
@@ -114,7 +115,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style:height
-            aAny = xPropSet->getPropertyValue( sSeparatorLineRelativeHeight );
+            aAny = xPropSet->getPropertyValue( gsSeparatorLineRelativeHeight );
             sal_Int8 nHeight = 0;
             aAny >>= nHeight;
             ::sax::Converter::convertPercent( sValue, nHeight );
@@ -122,7 +123,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style::style
-            aAny = xPropSet->getPropertyValue( sSeparatorLineStyle );
+            aAny = xPropSet->getPropertyValue( gsSeparatorLineStyle );
             sal_Int8 nStyle = 0;
             aAny >>= nStyle;
 
@@ -140,7 +141,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE, eStr );
 
             // style:vertical-align
-            aAny = xPropSet->getPropertyValue( sSeparatorLineVerticalAlignment );
+            aAny = xPropSet->getPropertyValue( gsSeparatorLineVerticalAlignment );
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
 

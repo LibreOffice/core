@@ -56,15 +56,16 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::document::XEventsSupplier;
 
+static const OUString gsIsPhysical( "IsPhysical" );
+static const OUString gsIsAutoUpdate( "IsAutoUpdate" );
+static const OUString gsFollowStyle( "FollowStyle" );
+static const OUString gsNumberingStyleName( "NumberingStyleName" );
+static const OUString gsOutlineLevel( "OutlineLevel" );
+
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP *pAutoStyleP ) :
     rExport( rExp ),
-    sIsPhysical( "IsPhysical" ),
-    sIsAutoUpdate( "IsAutoUpdate" ),
-    sFollowStyle( "FollowStyle" ),
-    sNumberingStyleName( "NumberingStyleName" ),
-    sOutlineLevel( "OutlineLevel" ),
     pAutoStylePool( pAutoStyleP  )
 {
 }
@@ -140,9 +141,9 @@ bool XMLStyleExport::exportStyle(
 
     // Don't export styles that aren't existing really. This may be the
     // case for StarOffice Writer's pool styles.
-    if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
+    if( xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
     {
-        aAny = xPropSet->getPropertyValue( sIsPhysical );
+        aAny = xPropSet->getPropertyValue( gsIsPhysical );
         if( !*o3tl::doAccess<bool>(aAny) )
             return false;
     }
@@ -193,9 +194,9 @@ bool XMLStyleExport::exportStyle(
                                     GetExport().EncodeStyleName( sParent ) );
 
     // style:next-style-name="..." (paragraph styles only)
-    if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
+    if( xPropSetInfo->hasPropertyByName( gsFollowStyle ) )
     {
-        aAny = xPropSet->getPropertyValue( sFollowStyle );
+        aAny = xPropSet->getPropertyValue( gsFollowStyle );
         OUString sNextName;
         aAny >>= sNextName;
         if( sName != sNextName )
@@ -206,9 +207,9 @@ bool XMLStyleExport::exportStyle(
     }
 
     // style:auto-update="..." (SW only)
-    if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
+    if( xPropSetInfo->hasPropertyByName( gsIsAutoUpdate ) )
     {
-        aAny = xPropSet->getPropertyValue( sIsAutoUpdate );
+        aAny = xPropSet->getPropertyValue( gsIsAutoUpdate );
         if( *o3tl::doAccess<bool>(aAny) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_AUTO_UPDATE,
                                       XML_TRUE );
@@ -216,12 +217,12 @@ bool XMLStyleExport::exportStyle(
 
     // style:default-outline-level"..."
     sal_Int32 nOutlineLevel = 0;
-    if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
+    if( xPropSetInfo->hasPropertyByName( gsOutlineLevel ) )
     {
         Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-        if( PropertyState_DIRECT_VALUE == xPropState->getPropertyState( sOutlineLevel ) )
+        if( PropertyState_DIRECT_VALUE == xPropState->getPropertyState( gsOutlineLevel ) )
         {
-            aAny = xPropSet->getPropertyValue( sOutlineLevel );
+            aAny = xPropSet->getPropertyValue( gsOutlineLevel );
             aAny >>= nOutlineLevel;
             if( nOutlineLevel > 0 )
             {
@@ -248,13 +249,13 @@ bool XMLStyleExport::exportStyle(
     }
 
     // style:list-style-name="..." (SW paragraph styles only)
-    if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+    if( xPropSetInfo->hasPropertyByName( gsNumberingStyleName ) )
     {
         Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
         if( PropertyState_DIRECT_VALUE ==
-                xPropState->getPropertyState( sNumberingStyleName  ) )
+                xPropState->getPropertyState( gsNumberingStyleName  ) )
         {
-            aAny = xPropSet->getPropertyValue( sNumberingStyleName );
+            aAny = xPropSet->getPropertyValue( gsNumberingStyleName );
             if( aAny.hasValue() )
             {
                 OUString sListName;
@@ -325,7 +326,7 @@ bool XMLStyleExport::exportStyle(
                     {
                         break;
                     }
-                    if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+                    if ( xPropState->getPropertyState( gsNumberingStyleName ) == PropertyState_DIRECT_VALUE )
                     {
                         bNoInheritedListStyle = false;
                         break;
@@ -478,7 +479,7 @@ void XMLStyleExport::exportStyleFamily(
                 Reference< XPropertySetInfo > xPropSetInfo =
                     xPropSet->getPropertySetInfo();
 
-                if (xPropSetInfo->hasPropertyByName( sFollowStyle ))
+                if (xPropSetInfo->hasPropertyByName( gsFollowStyle ))
                     pExportedStyles.reset(new std::set<OUString>);
                 bFirstStyle = false;
             }
@@ -512,9 +513,9 @@ void XMLStyleExport::exportStyleFamily(
             Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
             // styles that aren't existing really are ignored.
-            if (xPropSetInfo->hasPropertyByName( sIsPhysical ))
+            if (xPropSetInfo->hasPropertyByName( gsIsPhysical ))
             {
-                Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
+                Any aAny( xPropSet->getPropertyValue( gsIsPhysical ) );
                 if (!*o3tl::doAccess<bool>(aAny))
                     continue;
             }
@@ -522,13 +523,13 @@ void XMLStyleExport::exportStyleFamily(
             if (!xStyle->isInUse())
                 continue;
 
-            if (!xPropSetInfo->hasPropertyByName( sFollowStyle ))
+            if (!xPropSetInfo->hasPropertyByName( gsFollowStyle ))
             {
                 continue;
             }
 
             OUString sNextName;
-            xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
+            xPropSet->getPropertyValue( gsFollowStyle ) >>= sNextName;
             OUString sTmp( sNextName );
             // if the next style hasn't been exported by now, export it now
             // and remember its name.

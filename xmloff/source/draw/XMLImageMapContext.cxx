@@ -544,22 +544,22 @@ void XMLImageMapCircleContext::Prepare(
 }
 
 
+static const OUString gsImageMap("ImageMap");
+
 XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<XPropertySet> const & rPropertySet) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sImageMap("ImageMap"),
         xPropertySet(rPropertySet)
-
 {
     try
     {
         Reference < XPropertySetInfo > xInfo =
             xPropertySet->getPropertySetInfo();
-        if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
-            xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
+        if( xInfo.is() && xInfo->hasPropertyByName( gsImageMap ) )
+            xPropertySet->getPropertyValue(gsImageMap) >>= xImageMap;
     }
     catch(const css::uno::Exception& e)
     {
@@ -608,8 +608,8 @@ void XMLImageMapContext::EndElement()
 {
     Reference < XPropertySetInfo > xInfo =
         xPropertySet->getPropertySetInfo();
-    if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
-        xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );
+    if( xInfo.is() && xInfo->hasPropertyByName( gsImageMap ) )
+        xPropertySet->setPropertyValue(gsImageMap, uno::makeAny( xImageMap ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

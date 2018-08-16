@@ -84,6 +84,9 @@ static const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static const OUString gsParaStyleServiceName( "com.sun.star.style.ParagraphStyle" );
+static const OUString gsTextStyleServiceName( "com.sun.star.style.CharacterStyle" );
+
 const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 {
     if( !mpStyleStylesElemTokenMap )
@@ -730,10 +733,10 @@ OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        sServiceName = msParaStyleServiceName;
+        sServiceName = gsParaStyleServiceName;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
-        sServiceName = msTextStyleServiceName;
+        sServiceName = gsTextStyleServiceName;
         break;
     }
 
@@ -744,8 +747,6 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
                                         const uno::Reference< xml::sax::XAttributeList > &, bool bAuto ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
-    msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
     mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
     mpStyleStylesElemTokenMap( nullptr )
 {

@@ -116,28 +116,31 @@ TaskManager::MyProperty::~MyProperty()
 
 #include "filinl.hxx"
 
+        // Default properties
+
+static const OUString Title( "Title" );
+static const OUString CasePreservingURL( "CasePreservingURL" );
+static const OUString IsDocument( "IsDocument" );
+static const OUString IsFolder( "IsFolder" );
+static const OUString DateModified( "DateModified" );
+static const OUString Size( "Size" );
+static const OUString IsVolume( "IsVolume" );
+static const OUString IsRemoveable( "IsRemoveable" );
+static const OUString IsRemote( "IsRemote" );
+static const OUString IsCompactDisc( "IsCompactDisc" );
+static const OUString IsFloppy( "IsFloppy" );
+static const OUString IsHidden( "IsHidden" );
+static const OUString ContentType( "ContentType" );
+static const OUString IsReadOnly( "IsReadOnly" );
+static const OUString CreatableContentsInfo( "CreatableContentsInfo" );
+const OUString TaskManager::FolderContentType( "application/vnd.sun.staroffice.fsys-folder" );
+const OUString TaskManager::FileContentType( "application/vnd.sun.staroffice.fsys-file" );
+
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )
     : m_nCommandId( 0 ),
       m_pProvider( pProvider ),
       m_xContext( rxContext ),
-      Title( "Title" ),
-      CasePreservingURL( "CasePreservingURL" ),
-      IsDocument( "IsDocument" ),
-      IsFolder( "IsFolder" ),
-      DateModified( "DateModified" ),
-      Size( "Size" ),
-      IsVolume( "IsVolume" ),
-      IsRemoveable( "IsRemoveable" ),
-      IsRemote( "IsRemote" ),
-      IsCompactDisc( "IsCompactDisc" ),
-      IsFloppy( "IsFloppy" ),
-      IsHidden( "IsHidden" ),
-      ContentType( "ContentType" ),
-      IsReadOnly( "IsReadOnly" ),
-      CreatableContentsInfo( "CreatableContentsInfo" ),
-      FolderContentType( "application/vnd.sun.staroffice.fsys-folder" ),
-      FileContentType( "application/vnd.sun.staroffice.fsys-file" ),
       m_sCommandInfo( 9 )
 {
     // Title

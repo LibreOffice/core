@@ -46,15 +46,16 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+static const OUString gsPrinterIndependentLayout( "PrinterIndependentLayout" );
+static const OUString gsColorTableURL( "ColorTableURL" );
+static const OUString gsLineEndTableURL( "LineEndTableURL" );
+static const OUString gsHatchTableURL( "HatchTableURL" );
+static const OUString gsDashTableURL( "DashTableURL" );
+static const OUString gsGradientTableURL( "GradientTableURL" );
+static const OUString gsBitmapTableURL( "BitmapTableURL" );
+
 XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
 : m_rContext( i_rContext )
-, msPrinterIndependentLayout( "PrinterIndependentLayout" )
-, msColorTableURL( "ColorTableURL" )
-, msLineEndTableURL( "LineEndTableURL" )
-, msHatchTableURL( "HatchTableURL" )
-, msDashTableURL( "DashTableURL" )
-, msGradientTableURL( "GradientTableURL" )
-, msBitmapTableURL( "BitmapTableURL" )
 {
 }
 
@@ -483,7 +484,7 @@ void XMLSettingsExportHelper::exportAllSettings(
  */
 void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString& rName ) const
 {
-    if( rName == msPrinterIndependentLayout )
+    if( rName == gsPrinterIndependentLayout )
     {
         sal_Int16 nTmp = sal_Int16();
         if( rAny >>= nTmp )
@@ -496,8 +497,8 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString&
                 rAny <<= OUString("high-resolution");
         }
     }
-    else if( (rName == msColorTableURL) || (rName == msLineEndTableURL) || (rName == msHatchTableURL) ||
-             (rName == msDashTableURL) || (rName == msGradientTableURL) || (rName == msBitmapTableURL ) )
+    else if( (rName == gsColorTableURL) || (rName == gsLineEndTableURL) || (rName == gsHatchTableURL) ||
+             (rName == gsDashTableURL) || (rName == gsGradientTableURL) || (rName == gsBitmapTableURL ) )
     {
         if( !mxStringSubsitution.is() )
         {

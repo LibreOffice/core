@@ -645,28 +645,11 @@ namespace fileaccess
         // General
         ContentMap  m_aContent;
 
-        // Default properties
-
-        const OUString Title;
-        const OUString CasePreservingURL;
-        const OUString IsDocument;
-        const OUString IsFolder;
-        const OUString DateModified;
-        const OUString Size;
-        const OUString IsVolume;
-        const OUString IsRemoveable;
-        const OUString IsRemote;
-        const OUString IsCompactDisc;
-        const OUString IsFloppy;
-        const OUString IsHidden;
-        const OUString ContentType;
-        const OUString IsReadOnly;
-        const OUString CreatableContentsInfo;
 
     public:
 
-        const OUString FolderContentType;
-        const OUString FileContentType;
+        static const OUString FolderContentType;
+        static const OUString FileContentType;
 
 
     private:

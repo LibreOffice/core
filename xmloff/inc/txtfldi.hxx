@@ -181,7 +181,6 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
     sal_Int16 nSubType;         /// API subtype for ExtUser field
 
     const OUString sPropertyFixed;
-    const OUString sPropertyFieldSubType;
     const OUString sPropertyContent;
 
 protected:
@@ -216,7 +215,6 @@ protected:
 class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
     bool bAuthorFullName;
-    const OUString sPropertyAuthorFullName;
     const OUString sPropertyFixed;
     const OUString sPropertyContent;
 
@@ -245,8 +243,6 @@ protected:
 
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
 {
-    const OUString sPropertyPlaceholderType;
-    const OUString sPropertyPlaceholder;
     const OUString sPropertyHint;
 
     OUString sDescription;
@@ -278,7 +274,6 @@ protected:
     const OUString sPropertyFixed;
     const OUString sPropertyDateTimeValue;
     const OUString sPropertyDateTime;
-    const OUString sPropertyAdjust;
     const OUString sPropertyIsDate;
     const OUString sPropertyIsFixedLanguage;
 
@@ -330,7 +325,6 @@ public:
 class XMLPageContinuationImportContext : public XMLTextFieldImportContext
 {
     const OUString sPropertySubType;
-    const OUString sPropertyUserText;
     const OUString sPropertyNumberingType;
 
     OUString sString;            /// continuation string
@@ -390,12 +384,6 @@ public:
 /** superclass for database fields: handle database and table names */
 class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 {
-    const OUString sPropertyDataBaseName;
-    const OUString sPropertyDataBaseURL;
-    const OUString sPropertyTableName;
-    const OUString sPropertyDataCommandType;
-    const OUString sPropertyIsVisible;
-
     OUString sDatabaseName;
     OUString sDatabaseURL;
     OUString sTableName;
@@ -604,8 +592,6 @@ protected:
 /** import revision field (<text:editing-cycles>) */
 class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
-    const OUString sPropertyRevision;
-
 public:
 
     XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
@@ -677,9 +663,6 @@ protected:
 class XMLConditionalTextImportContext : public XMLTextFieldImportContext
 {
     const OUString sPropertyCondition;
-    const OUString sPropertyTrueContent;
-    const OUString sPropertyFalseContent;
-    const OUString sPropertyIsConditionTrue;
     const OUString sPropertyCurrentPresentation;
 
     OUString sCondition;
@@ -793,9 +776,6 @@ protected:
 /** import chapter fields (<text:chapter>) */
 class XMLChapterImportContext : public XMLTextFieldImportContext
 {
-    const OUString sPropertyChapterFormat;
-    const OUString sPropertyLevel;
-
     sal_Int16 nFormat;
     sal_Int8 nLevel;
 

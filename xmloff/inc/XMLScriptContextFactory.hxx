@@ -32,10 +32,6 @@ class XMLEventsImportContext;
 
 class XMLScriptContextFactory : public XMLEventContextFactory
 {
-    const OUString sEventType;
-    const OUString sScript;
-    const OUString sURL;
-
 public:
     XMLScriptContextFactory();
     virtual ~XMLScriptContextFactory() override;

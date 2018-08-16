@@ -41,9 +41,9 @@ using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
+static const OUString gsEventType("EventType");
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
-    sEventType("EventType"),
     rExport(rExp),
     bExtNamespace(false)
 {
@@ -205,7 +205,7 @@ void XMLEventExport::ExportEvent(
 
     for(sal_Int32 nVal = 0; nVal < nValues; nVal++)
     {
-        if (sEventType == pValues[nVal].Name)
+        if (gsEventType == pValues[nVal].Name)
         {
             // found! Now find handler and delegate
             OUString sType;

@@ -33,11 +33,12 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 
-XMLStarBasicContextFactory::XMLStarBasicContextFactory() :
-    sEventType("EventType"),
-    sLibrary("Library"),
-    sMacroName("MacroName"),
-    sStarBasic("StarBasic")
+static const OUString gsEventType("EventType");
+static const OUString gsLibrary("Library");
+static const OUString gsMacroName("MacroName");
+static const OUString gsStarBasic("StarBasic");
+
+XMLStarBasicContextFactory::XMLStarBasicContextFactory()
 {
 }
 
@@ -95,15 +96,15 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     Sequence<PropertyValue> aValues(3);
 
     // EventType
-    aValues[0].Name = sEventType;
-    aValues[0].Value <<= sStarBasic;
+    aValues[0].Name = gsEventType;
+    aValues[0].Value <<= gsStarBasic;
 
     // library name
-    aValues[1].Name = sLibrary;
+    aValues[1].Name = gsLibrary;
     aValues[1].Value <<= sLibraryVal;
 
     // macro name
-    aValues[2].Name = sMacroName;
+    aValues[2].Name = gsMacroName;
     aValues[2].Value <<= sMacroNameVal;
 
     // add values for event now

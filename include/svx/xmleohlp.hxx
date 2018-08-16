@@ -46,8 +46,6 @@ class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
 {
     ::osl::Mutex                maMutex;
 
-    const OUString       maReplacementGraphicsContainerStorageName;
-    const OUString       maReplacementGraphicsContainerStorageName60;
     OUString             maCurContainerStorageName;
 
 

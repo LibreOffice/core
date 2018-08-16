@@ -51,10 +51,10 @@ namespace sdr { namespace table {
 
 static SvxBorderLine gEmptyBorder;
 
+static const OUString gsSize( "Size" );
 
 TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 : mxTable( xTableModel )
-, msSize( "Size" )
 {
 }
 
@@ -572,7 +572,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
             }
             else
             {
-                xColSet->getPropertyValue( msSize ) >>= nColWidth;
+                xColSet->getPropertyValue( gsSize ) >>= nColWidth;
             }
 
             maColumns[nCol].mnSize = nColWidth;
@@ -650,7 +650,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
         if( bFit )
         {
             Reference< XPropertySet > xColSet( xCols->getByIndex(nCol), UNO_QUERY_THROW );
-            xColSet->setPropertyValue( msSize, Any( maColumns[nCol].mnSize ) );
+            xColSet->setPropertyValue( gsSize, Any( maColumns[nCol].mnSize ) );
         }
     }
 
@@ -732,7 +732,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
             }
             else
             {
-                xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
+                xRowSet->getPropertyValue( gsSize ) >>= nRowHeight;
             }
 
             maRows[nRow].mnSize = nRowHeight;
@@ -807,7 +807,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         if( bFit )
         {
             Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
-            xRowSet->setPropertyValue( msSize, Any( maRows[nRow].mnSize ) );
+            xRowSet->setPropertyValue( gsSize, Any( maRows[nRow].mnSize ) );
         }
     }
 
@@ -1070,7 +1070,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFir
                 nWidth = nAllWidth; // last column get round errors
 
             Reference< XPropertySet > xColSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
-            xColSet->setPropertyValue( msSize, Any( nWidth ) );
+            xColSet->setPropertyValue( gsSize, Any( nWidth ) );
 
             nAllWidth -= nWidth;
         }
@@ -1120,7 +1120,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
                 nHeight = nAllHeight; // last row get round errors
 
             Reference< XPropertySet > xRowSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
-            xRowSet->setPropertyValue( msSize, Any( nHeight ) );
+            xRowSet->setPropertyValue( gsSize, Any( nHeight ) );
 
             nAllHeight -= nHeight;
         }

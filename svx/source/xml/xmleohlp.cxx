@@ -120,10 +120,11 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     bStreamClosed = true;
 }
 
+static const OUString gaReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME );
+static const OUString gaReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 );
+
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
-    maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),
     meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
     mpStreamMap( nullptr )
@@ -132,8 +133,6 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
-    maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),
     meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
     mpStreamMap( nullptr )
@@ -282,8 +281,8 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             bool bOASIS = mxRootStorage.is() &&
                 ( SotStorage::GetVersion( mxRootStorage ) > SOFFICE_FILEFORMAT_60 );
             rContainerStorageName = bOASIS
-                    ? maReplacementGraphicsContainerStorageName
-                    : maReplacementGraphicsContainerStorageName60;
+                    ? gaReplacementGraphicsContainerStorageName
+                    : gaReplacementGraphicsContainerStorageName60;
 
             if( pGraphicRepl )
                 *pGraphicRepl = true;
