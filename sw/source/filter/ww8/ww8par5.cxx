@@ -478,7 +478,7 @@ SvNumFormatType SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt
 
         OUString sTemp(sParams);
         pFormatter->PutandConvertEntry(sTemp, nCheckPos, nType, rFormat,
-                                       LANGUAGE_ENGLISH_US, rLang);
+                                       LANGUAGE_ENGLISH_US, rLang, false);
         sParams = sTemp;
 
         return bHasTime ? SvNumFormatType::DATETIME : SvNumFormatType::DATE;

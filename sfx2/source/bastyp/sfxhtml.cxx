@@ -337,7 +337,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
             rFormatter.PutEntry( aFormat, nCheckPos, nType, nNumForm, eNumLang );
         else
             rFormatter.PutandConvertEntry( aFormat, nCheckPos, nType, nNumForm,
-                                           eParseLang, eNumLang );
+                                           eParseLang, eNumLang, true);
     }
     else
     {

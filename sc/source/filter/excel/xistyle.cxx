@@ -700,7 +700,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
         {
             OUString aFormat( rNumFmt.maFormat );
             rFormatter.PutandConvertEntry( aFormat, nCheckPos,
-                                           nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage );
+                                           nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage, false);
         }
         else
             nKey = rFormatter.GetFormatIndex( rNumFmt.meOffset, rNumFmt.meLanguage );

@@ -677,7 +677,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
             sal_Int32 nCheckPos;
             SvNumFormatType nType;
             rFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType,
-                                           nFormatKey, LANGUAGE_ENGLISH_US, eLang );
+                                           nFormatKey, LANGUAGE_ENGLISH_US, eLang, true);
             DBG_ASSERT( nCheckPos == 0, "SvxTimeFormat::HH12_MM_SS_00: could not insert format code" );
             if ( nCheckPos )
             {

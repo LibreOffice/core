@@ -462,7 +462,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     // convert additional and user defined from old system to new system
     SvNumberformat* pStdFormat = GetFormatEntry( nCLOffset + ZF_STANDARD );
     sal_uInt32 nLastKey = nMaxBuiltin;
-    pFormatScanner->SetConvertMode( eOldLanguage, LANGUAGE_SYSTEM, true );
+    pFormatScanner->SetConvertMode( eOldLanguage, LANGUAGE_SYSTEM, true , true);
     while ( !aOldTable.empty() )
     {
         nKey = aOldTable.begin()->first;
@@ -628,7 +628,7 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
                                            sal_uInt32& nKey,
                                            LanguageType eLnge,
                                            LanguageType eNewLnge,
-                                           bool bForExcelExport )
+                                           bool bConvertDateOrder )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bRes;
@@ -636,7 +636,7 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
     {
         eNewLnge = IniLnge;
     }
-    pFormatScanner->SetConvertMode(eLnge, eNewLnge, false, bForExcelExport);
+    pFormatScanner->SetConvertMode(eLnge, eNewLnge, false, bConvertDateOrder);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
     pFormatScanner->SetConvertMode(false);
     return bRes;
@@ -655,7 +655,7 @@ bool SvNumberFormatter::PutandConvertEntrySystem(OUString& rString,
     {
         eNewLnge = IniLnge;
     }
-    pFormatScanner->SetConvertMode(eLnge, eNewLnge, true);
+    pFormatScanner->SetConvertMode(eLnge, eNewLnge, true, true);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
     pFormatScanner->SetConvertMode(false);
     return bRes;
@@ -1718,7 +1718,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
 
         // Try English -> other or convert english to other
         LanguageType eFormatLang = LANGUAGE_ENGLISH_US;
-        pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge );
+        pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge, false, false);
         sTmpString = sFormatString;
         pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner.get(),
                                      pStringScanner.get(), nCheckPos, eFormatLang ));
@@ -1743,7 +1743,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 sal_Int32 nCheckPos2 = -1;
                 // try other --> english
                 eFormatLang = eLnge;
-                pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US );
+                pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US, false, false);
                 sTmpString = sFormatString;
                 std::unique_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner.get(),
                                                               pStringScanner.get(), nCheckPos2, eFormatLang ));
