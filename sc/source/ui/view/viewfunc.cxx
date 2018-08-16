@@ -2551,7 +2551,7 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
     {
         bChanged = rFunc.Unprotect( nTab, rPassword, false );
-        if (bChanged)
+        if (bChanged && nTab != TABLEID_DOC)
             SetTabProtectionSymbol(nTab, false);
     }
     else
