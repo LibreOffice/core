@@ -1005,11 +1005,6 @@ AC_ARG_ENABLE(dynamic-loading,
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
 )
 
-libo_FUZZ_ARG_ENABLE(ext-mariadb-connector,
-    AS_HELP_STRING([--enable-ext-mariadb-connector],
-        [Enable the build of the MariaDB/MySQL Connector extension.])
-)
-
 libo_FUZZ_ARG_ENABLE(report-builder,
     AS_HELP_STRING([--disable-report-builder],
         [Disable the Report Builder.])
@@ -1731,12 +1726,12 @@ AC_ARG_WITH(system-apache-commons,
 AC_ARG_WITH(system-mariadb,
     AS_HELP_STRING([--with-system-mariadb],
         [Use MariaDB/MySQL libraries already on system, for building the MariaDB Connector/LibreOffice
-         extension.]),,
+         .]),,
     [with_system_mariadb="$with_system_libs"])
 
 AC_ARG_ENABLE(bundle-mariadb,
     AS_HELP_STRING([--enable-bundle-mariadb],
-        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice extension.])
+        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice.])
 )
 
 AC_ARG_WITH(system-mysql-cppconn,
@@ -8320,18 +8315,12 @@ AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
 
-AC_MSG_CHECKING([whether to build the MariaDB/MySQL Connector extension])
-if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_MARIADBC=TRUE
-    MARIADBC_MAJOR=1
-    MARIADBC_MINOR=0
-    MARIADBC_MICRO=2
-    BUILD_TYPE="$BUILD_TYPE MARIADBC"
-else
-    AC_MSG_RESULT([no])
-    ENABLE_MARIADBC=
-fi
+ENABLE_MARIADBC=TRUE
+MARIADBC_MAJOR=1
+MARIADBC_MINOR=0
+MARIADBC_MICRO=2
+BUILD_TYPE="$BUILD_TYPE MARIADBC"
+
 AC_SUBST(ENABLE_MARIADBC)
 AC_SUBST(MARIADBC_MAJOR)
 AC_SUBST(MARIADBC_MINOR)
@@ -12549,9 +12538,6 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     if test "$WITH_WEBDAV" = "neon"; then
         AC_MSG_ERROR([need --with-webdav=serf or --without-webdav - webdav support.])
-    fi
-    if test "x$enable_ext_mariadb_connector" = "xyes"; then
-        AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
     fi
     if test -n "$ENABLE_PDFIMPORT"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
