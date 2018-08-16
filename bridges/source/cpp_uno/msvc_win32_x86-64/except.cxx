@@ -789,7 +789,7 @@ namespace
 // increment __ProcessingThrow, and so does not break following exception handling. We rely on the
 // definition of EHExceptionRecord, PER_IS_MSVC_EH and PER_PTHROW, that are current as of msvcrt
 // 2017 (14.14.26428).
-bool __DetectRethrow(void* ppExcept)
+bool DetectRethrow(void* ppExcept)
 {
     struct EHExceptionRecord
     {
@@ -828,7 +828,7 @@ bool __DetectRethrow(void* ppExcept)
     EHExceptionRecord* pExcept;
     if (!ppExcept)
         return false;
-    pExcept = *(EHExceptionRecord**)ppExcept;
+    pExcept = *static_cast<EHExceptionRecord**>(ppExcept);
     if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == nullptr)
     {
         return true;
@@ -851,7 +851,7 @@ int mscx_filterCppException(
     if (pRecord == nullptr || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
-    const bool rethrow = __DetectRethrow(&pRecord);
+    const bool rethrow = DetectRethrow(&pRecord);
     assert(pRecord == pPointers->ExceptionRecord);
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
