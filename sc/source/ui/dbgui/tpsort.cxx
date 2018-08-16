@@ -755,7 +755,7 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( !bPosInputOk )
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetTabDialog()->GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogController()->getDialog(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                       ScResId(STR_INVALID_TABREF)));
             xBox->run();
