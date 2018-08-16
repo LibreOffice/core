@@ -451,18 +451,18 @@ private:
     sal_uInt32 mnIdLst;
 public:
     explicit ListWithId(sal_uInt32 nIdLst) : mnIdLst(nIdLst) {}
-    bool operator() (const WW8LSTInfo *pEntry) const
+    bool operator() (const std::unique_ptr<WW8LSTInfo>& pEntry) const
         { return (pEntry->nIdLst == mnIdLst); }
 };
 
 // Access via List-Id of LST Entry
 WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
 {
-    std::vector<WW8LSTInfo *>::const_iterator aResult =
+    auto aResult =
         std::find_if(maLSTInfos.begin(),maLSTInfos.end(),ListWithId(nIdLst));
     if (aResult == maLSTInfos.end())
         return nullptr;
-    return *aResult;
+    return aResult->get();
 }
 
 static void lcl_CopyGreaterEight(OUString &rDest, OUString const &rSrc,
@@ -1216,7 +1216,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             aLST.bSimpleList || (aBits1 & 0x10));
 
         WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST);
-        maLSTInfos.push_back(pLSTInfo);
+        maLSTInfos.emplace_back(pLSTInfo);
 
         nRemainingPlcfLst -= cbLSTF;
     }
@@ -1228,7 +1228,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     {
         WW8aISet aItemSet;        // Character attributes from GrpprlChpx
 
-        WW8LSTInfo* pListInfo = maLSTInfos[nList];
+        WW8LSTInfo* pListInfo = maLSTInfos[nList].get();
         if( !pListInfo || !pListInfo->pNumRule ) break;
         SwNumRule& rMyNumRule = *pListInfo->pNumRule;
 
@@ -1474,15 +1474,14 @@ WW8ListManager::~WW8ListManager() COVERITY_NOEXCEPT_FALSE
      named lists remain in document
      unused automatic lists are removed from document (DelNumRule)
     */
-    for(std::vector<WW8LSTInfo *>::iterator aIter = maLSTInfos.begin();
-        aIter != maLSTInfos.end(); ++aIter)
+    for(auto & rpInfo : maLSTInfos)
     {
-        if ((*aIter)->pNumRule && !(*aIter)->bUsedInDoc &&
-            (*aIter)->pNumRule->IsAutoRule())
+        if (rpInfo->pNumRule && !rpInfo->bUsedInDoc &&
+            rpInfo->pNumRule->IsAutoRule())
         {
-            rDoc.DelNumRule((*aIter)->pNumRule->GetName());
+            rDoc.DelNumRule(rpInfo->pNumRule->GetName());
         }
-        delete *aIter;
+        rpInfo.reset();
     }
     for (auto aIter = m_LFOInfos.rbegin(); aIter != m_LFOInfos.rend(); ++aIter)
     {
