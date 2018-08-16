@@ -87,7 +87,7 @@ namespace dbaui
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
             // called at FIRST Init
-        bool FillListBox();
+        void FillListBox();
             // called at EACH Init
 
         virtual void OnEntryDoubleClicked(SvTreeListEntry* /*pEntry*/) { }
