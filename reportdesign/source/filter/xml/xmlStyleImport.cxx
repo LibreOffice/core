@@ -142,16 +142,17 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
+static const OUStringLiteral g_sTableStyleFamilyName( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME );
+static const OUStringLiteral g_sColumnStyleFamilyName( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME );
+static const OUStringLiteral g_sRowStyleFamilyName( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME );
+static const OUStringLiteral g_sCellStyleFamilyName( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
+
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    m_sTableStyleFamilyName( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
-    m_sColumnStyleFamilyName( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
-    m_sRowStyleFamilyName( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
-    m_sCellStyleFamilyName( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
     m_rImport(rImport),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
@@ -373,16 +374,16 @@ OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
         switch( nFamily )
         {
             case XML_STYLE_FAMILY_TABLE_TABLE:
-                sServiceName = m_sTableStyleFamilyName;
+                sServiceName = g_sTableStyleFamilyName;
                 break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
-                sServiceName = m_sColumnStyleFamilyName;
+                sServiceName = g_sColumnStyleFamilyName;
                 break;
             case XML_STYLE_FAMILY_TABLE_ROW:
-                sServiceName = m_sRowStyleFamilyName;
+                sServiceName = g_sRowStyleFamilyName;
                 break;
             case XML_STYLE_FAMILY_TABLE_CELL:
-                sServiceName = m_sCellStyleFamilyName;
+                sServiceName = g_sCellStyleFamilyName;
                 break;
             default:
                 break;

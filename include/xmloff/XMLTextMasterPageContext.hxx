@@ -31,7 +31,6 @@ namespace com { namespace sun { namespace star {
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {
-    const OUString sFollowStyle;
     OUString       sFollow;
     OUString       sPageMasterName;
 

@@ -342,6 +342,11 @@ void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUStrin
 
 } // anonymous namespace
 
+static const OUStringLiteral gaHTMLHeader(
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
+            "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
+            "<html>\r\n<head>\r\n" );
+
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
     const OUString& aPath,
@@ -369,10 +374,6 @@ HtmlExport::HtmlExport(
         maHTMLExtension(STR_HTMLEXP_DEFAULT_EXTENSION),
         maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
-        maHTMLHeader(
-            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
-            "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" ),
         mpButtonSet( new ButtonSet() )
 {
     bool bChange = mpDoc->IsChanged();
@@ -640,7 +641,7 @@ void HtmlExport::ExportSingleDocument()
     mnPagesWritten = 0;
     InitProgress(mnSdPageCount);
 
-    OUStringBuffer aStr(maHTMLHeader);
+    OUStringBuffer aStr(gaHTMLHeader);
     aStr.append(DocumentMetadata());
     aStr.append("\r\n");
     aStr.append("</head>\r\n");
@@ -1103,7 +1104,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         }
 
         // HTML head
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[nSdPage]));
@@ -1591,7 +1592,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         }
 
         // HTML Head
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
 
@@ -1916,7 +1917,7 @@ bool HtmlExport::CreateContentPage()
         SetDocColors();
 
     // html head
-    OUStringBuffer aStr(maHTMLHeader);
+    OUStringBuffer aStr(gaHTMLHeader);
     aStr.append(CreateMetaCharset());
     aStr.append("  <title>");
     aStr.append(StringToHTMLString(maPageNames[0]));
@@ -2056,7 +2057,7 @@ bool HtmlExport::CreateNotesPages()
             SetDocColors( pPage );
 
         // Html head
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[0]));
@@ -2095,7 +2096,7 @@ bool HtmlExport::CreateOutlinePages()
     for (sal_Int32 nPage = 0; nPage < (mbImpress?2:1) && bOk; ++nPage)
     {
         // Html head
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[0]));
@@ -2408,7 +2409,7 @@ bool HtmlExport::CreateNavBarFrames()
 
     for( int nFile = 0; nFile < 3 && bOk; nFile++ )
     {
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[0]));
@@ -2511,7 +2512,7 @@ bool HtmlExport::CreateNavBarFrames()
     // the navigation bar outliner closed...
     if(bOk)
     {
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[0]));
@@ -2534,7 +2535,7 @@ bool HtmlExport::CreateNavBarFrames()
     // ... and the outliner open
     if( bOk )
     {
-        OUStringBuffer aStr(maHTMLHeader);
+        OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[0]));

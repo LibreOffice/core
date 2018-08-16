@@ -52,11 +52,6 @@ class SvXMLExport;
 class XMLOFF_DLLPUBLIC XMLStyleExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& rExport;
-    const OUString sIsPhysical;
-    const OUString sIsAutoUpdate;
-    const OUString sFollowStyle;
-    const OUString sNumberingStyleName;
-    const OUString sOutlineLevel;
     SvXMLAutoStylePoolP *pAutoStylePool;
 
 protected:

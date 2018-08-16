@@ -46,14 +46,6 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
 
     css::uno::Reference< css::util::XStringSubstitution > mxStringSubsitution;
 
-    const OUString msPrinterIndependentLayout;
-    const OUString msColorTableURL;
-    const OUString msLineEndTableURL;
-    const OUString msHatchTableURL;
-    const OUString msDashTableURL;
-    const OUString msGradientTableURL;
-    const OUString msBitmapTableURL;
-
     void ManipulateSetting( css::uno::Any& rAny, const OUString& rName ) const;
 
     void CallTypeFunction(const css::uno::Any& rAny,

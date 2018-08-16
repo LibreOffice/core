@@ -32,19 +32,20 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
+static const OUStringLiteral gsHeaderText( "HeaderText" );
+static const OUStringLiteral gsHeaderOn( "HeaderIsOn" );
+static const OUStringLiteral gsHeaderShareContent( "HeaderIsShared" );
+static const OUStringLiteral gsHeaderTextFirst( "HeaderTextFirst" );
+static const OUStringLiteral gsHeaderTextLeft( "HeaderTextLeft" );
+static const OUStringLiteral gsFirstShareContent( "FirstIsShared" );
+static const OUStringLiteral gsFooterText( "FooterText" );
+static const OUStringLiteral gsFooterOn( "FooterIsOn" );
+static const OUStringLiteral gsFooterShareContent( "FooterIsShared" );
+static const OUStringLiteral gsFooterTextFirst( "FooterTextFirst" );
+static const OUStringLiteral gsFooterTextLeft( "FooterTextLeft" );
+
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
-    XMLPageExport( rExp ),
-    sHeaderText( "HeaderText" ),
-    sHeaderOn( "HeaderIsOn" ),
-    sHeaderShareContent( "HeaderIsShared" ),
-    sHeaderTextFirst( "HeaderTextFirst" ),
-    sHeaderTextLeft( "HeaderTextLeft" ),
-    sFirstShareContent( "FirstIsShared" ),
-    sFooterText( "FooterText" ),
-    sFooterOn( "FooterIsOn" ),
-    sFooterShareContent( "FooterIsShared" ),
-    sFooterTextFirst( "FooterTextFirst" ),
-    sFooterTextLeft( "FooterTextLeft" )
+    XMLPageExport( rExp )
 {
 }
 
@@ -83,27 +84,27 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     Any aAny;
 
     Reference < XText > xHeaderText;
-    aAny = rPropSet->getPropertyValue( sHeaderText );
+    aAny = rPropSet->getPropertyValue( gsHeaderText );
     aAny >>= xHeaderText;
 
     Reference < XText > xHeaderTextFirst;
-    aAny = rPropSet->getPropertyValue( sHeaderTextFirst );
+    aAny = rPropSet->getPropertyValue( gsHeaderTextFirst );
     aAny >>= xHeaderTextFirst;
 
     Reference < XText > xHeaderTextLeft;
-    aAny = rPropSet->getPropertyValue( sHeaderTextLeft );
+    aAny = rPropSet->getPropertyValue( gsHeaderTextLeft );
     aAny >>= xHeaderTextLeft;
 
     Reference < XText > xFooterText;
-    aAny = rPropSet->getPropertyValue( sFooterText );
+    aAny = rPropSet->getPropertyValue( gsFooterText );
     aAny >>= xFooterText;
 
     Reference < XText > xFooterTextFirst;
-    aAny = rPropSet->getPropertyValue( sFooterTextFirst );
+    aAny = rPropSet->getPropertyValue( gsFooterTextFirst );
     aAny >>= xFooterTextFirst;
 
     Reference < XText > xFooterTextLeft;
-    aAny = rPropSet->getPropertyValue( sFooterTextLeft );
+    aAny = rPropSet->getPropertyValue( gsFooterTextLeft );
     aAny >>= xFooterTextLeft;
 
     if( bAutoStyles )
@@ -123,21 +124,21 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     }
     else
     {
-        aAny = rPropSet->getPropertyValue( sHeaderOn );
+        aAny = rPropSet->getPropertyValue( gsHeaderOn );
         bool bHeader = false;
         aAny >>= bHeader;
 
         bool bHeaderFirstShared = false;
         if( bHeader )
         {
-            aAny = rPropSet->getPropertyValue( sFirstShareContent );
+            aAny = rPropSet->getPropertyValue( gsFirstShareContent );
             aAny >>= bHeaderFirstShared;
         }
 
         bool bHeaderLeftShared = false;
         if( bHeader )
         {
-            aAny = rPropSet->getPropertyValue( sHeaderShareContent );
+            aAny = rPropSet->getPropertyValue( gsHeaderShareContent );
             aAny >>= bHeaderLeftShared;
         }
 
@@ -171,21 +172,21 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xHeaderTextFirst, false );
         }
 
-        aAny = rPropSet->getPropertyValue( sFooterOn );
+        aAny = rPropSet->getPropertyValue( gsFooterOn );
         bool bFooter = false;
         aAny >>= bFooter;
 
         bool bFooterFirstShared = false;
         if( bFooter )
         {
-            aAny = rPropSet->getPropertyValue( sFirstShareContent );
+            aAny = rPropSet->getPropertyValue( gsFirstShareContent );
             aAny >>= bFooterFirstShared;
         }
 
         bool bFooterLeftShared = false;
         if( bFooter )
         {
-            aAny = rPropSet->getPropertyValue( sFooterShareContent );
+            aAny = rPropSet->getPropertyValue( gsFooterShareContent );
             aAny >>= bFooterLeftShared;
         }
 

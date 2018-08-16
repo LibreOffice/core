@@ -141,6 +141,8 @@ namespace
 
 
 
+static const OUStringLiteral gsIsPhysical(  "IsPhysical"  );
+static const OUStringLiteral gsFollowStyle(  "FollowStyle"  );
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -148,8 +150,6 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         bool bDefault )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
-,   msIsPhysical(  "IsPhysical"  )
-,   msFollowStyle(  "FollowStyle"  )
 ,   mxStyles( &rStyles )
 {
 }
@@ -388,9 +388,9 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
                     xPropSet->getPropertySetInfo();
-        if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
+        if( !bNew && xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
         {
-            Any aAny = xPropSet->getPropertyValue( msIsPhysical );
+            Any aAny = xPropSet->getPropertyValue( gsIsPhysical );
             bNew = !*o3tl::doAccess<bool>(aAny);
         }
         SetNew( bNew );
@@ -512,14 +512,14 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName( msFollowStyle ) )
+    if( xPropSetInfo->hasPropertyByName( gsFollowStyle ) )
     {
-        Any aAny = xPropSet->getPropertyValue( msFollowStyle );
+        Any aAny = xPropSet->getPropertyValue( gsFollowStyle );
         OUString sCurrFollow;
         aAny >>= sCurrFollow;
         if( sCurrFollow != sFollow )
         {
-            xPropSet->setPropertyValue( msFollowStyle, Any(sFollow) );
+            xPropSet->setPropertyValue( gsFollowStyle, Any(sFollow) );
         }
     }
 
