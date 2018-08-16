@@ -44,86 +44,56 @@ class SwPageNumAndTypeOfAnchors
             bool mbAnchoredAtMaster;
         };
 
-        std::vector< tEntry* > maObjList;
+        std::vector< tEntry > maObjList;
 
     public:
         SwPageNumAndTypeOfAnchors()
         {
         }
-        ~SwPageNumAndTypeOfAnchors()
-        {
-            for ( std::vector< tEntry* >::iterator aIter = maObjList.begin();
-                  aIter != maObjList.end(); ++aIter )
-            {
-                delete *aIter;
-            }
-            maObjList.clear();
-        }
 
         void Collect( SwAnchoredObject& _rAnchoredObj )
         {
-            tEntry* pNewEntry = new tEntry;
-            pNewEntry->mpAnchoredObj = &_rAnchoredObj;
+            tEntry aNewEntry;
+            aNewEntry.mpAnchoredObj = &_rAnchoredObj;
             // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
             // is replaced by method <FindPageFrameOfAnchor()>. It's return value
             // have to be checked.
             SwPageFrame* pPageFrameOfAnchor = _rAnchoredObj.FindPageFrameOfAnchor();
             if ( pPageFrameOfAnchor )
             {
-                pNewEntry->mnPageNumOfAnchor = pPageFrameOfAnchor->GetPhyPageNum();
+                aNewEntry.mnPageNumOfAnchor = pPageFrameOfAnchor->GetPhyPageNum();
             }
             else
             {
-                pNewEntry->mnPageNumOfAnchor = 0;
+                aNewEntry.mnPageNumOfAnchor = 0;
             }
             // --> #i26945# - collect type of anchor
             SwTextFrame* pAnchorCharFrame = _rAnchoredObj.FindAnchorCharFrame();
             if ( pAnchorCharFrame )
             {
-                pNewEntry->mbAnchoredAtMaster = !pAnchorCharFrame->IsFollow();
+                aNewEntry.mbAnchoredAtMaster = !pAnchorCharFrame->IsFollow();
             }
             else
             {
-                pNewEntry->mbAnchoredAtMaster = true;
+                aNewEntry.mbAnchoredAtMaster = true;
             }
-            maObjList.push_back( pNewEntry );
+            maObjList.push_back( aNewEntry );
         }
 
         SwAnchoredObject* operator[]( sal_uInt32 _nIndex )
         {
-            SwAnchoredObject* bRetObj = nullptr;
-
-            if ( _nIndex < Count())
-            {
-                bRetObj = maObjList[_nIndex]->mpAnchoredObj;
-            }
-
-            return bRetObj;
+            return maObjList[_nIndex].mpAnchoredObj;
         }
 
         sal_uInt32 GetPageNum( sal_uInt32 _nIndex ) const
         {
-            sal_uInt32 nRetPgNum = 0;
-
-            if ( _nIndex < Count())
-            {
-                nRetPgNum = maObjList[_nIndex]->mnPageNumOfAnchor;
-            }
-
-            return nRetPgNum;
+            return maObjList[_nIndex].mnPageNumOfAnchor;
         }
 
         // --> #i26945#
         bool AnchoredAtMaster( sal_uInt32 _nIndex )
         {
-            bool bAnchoredAtMaster( true );
-
-            if ( _nIndex < Count())
-            {
-                bAnchoredAtMaster = maObjList[_nIndex]->mbAnchoredAtMaster;
-            }
-
-            return bAnchoredAtMaster;
+            return maObjList[_nIndex].mbAnchoredAtMaster;
         }
 
         sal_uInt32 Count() const
