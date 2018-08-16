@@ -139,7 +139,7 @@ public:
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
     void            AddFallback( std::unique_ptr<SalLayout> pFallbackLayout,
                                  ImplLayoutRuns const &, const PhysicalFontFace* pFallbackFont );
-    bool            LayoutText(ImplLayoutArgs&) override;
+    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) override;
     void            AdjustLayout(ImplLayoutArgs&) override;
     void            InitFont() const override;
 
@@ -172,7 +172,7 @@ public:
                     ~GenericSalLayout() override;
 
     void            AdjustLayout(ImplLayoutArgs&) final override;
-    bool            LayoutText(ImplLayoutArgs&) final override;
+    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) final override;
     void            DrawText(SalGraphics&) const final override;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const final override;
     SalLayoutGlyphs GetGlyphs() const final override;

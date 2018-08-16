@@ -1277,7 +1277,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, long nLogicalWidth,
                                     const long* pDXArray, SalLayoutFlags flags,
-         vcl::TextLayoutCache const* pLayoutCache) const
+         vcl::TextLayoutCache const* pLayoutCache,
+         const SalLayoutGlyphs* pGlyphs) const
 {
     // we need a graphics
     if( !mpGraphics )
@@ -1307,6 +1308,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( mpFontInstance->mpConversion ) {
         mpFontInstance->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
         pLayoutCache = nullptr; // don't use cache with modified string!
+        pGlyphs = nullptr;
     }
     DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
@@ -1352,7 +1354,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
 
     // layout text
-    if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs ) )
+    if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ) )
     {
         pSalLayout.reset();
     }

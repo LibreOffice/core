@@ -131,7 +131,7 @@ public:
     const Point&    DrawOffset() const                      { return maDrawOffset; }
     Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
 
-    virtual bool    LayoutText( ImplLayoutArgs& ) = 0;  // first step of layouting
+    virtual bool    LayoutText( ImplLayoutArgs&, const SalLayoutGlyphs* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;

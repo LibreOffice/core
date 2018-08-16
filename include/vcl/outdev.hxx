@@ -150,6 +150,8 @@ namespace o3tl
 }
 
 typedef std::vector< tools::Rectangle > MetricVector;
+struct GlyphItem;
+typedef std::vector<GlyphItem> SalLayoutGlyphs;
 
 // OutputDevice-Types
 
@@ -1328,7 +1330,8 @@ public:
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                            vcl::TextLayoutCache const* = nullptr) const;
+                                            vcl::TextLayoutCache const* = nullptr,
+                                            const SalLayoutGlyphs* pGlyphs = nullptr) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
