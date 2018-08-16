@@ -228,8 +228,11 @@ endef
 endif # SYSTEM_EPOXY
 
 define gb_LinkTarget__use_iconv
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),libiconv.lib)
+else
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
-
+endif
 endef
 
 ifneq ($(SYSTEM_MARIADB_CONNECTOR_C),)
