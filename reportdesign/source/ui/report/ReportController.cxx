@@ -4175,6 +4175,10 @@ bool OReportController::impl_setPropertyAtControls_throw(const char* pUndoResId,
     {
         const uno::Reference< beans::XPropertySet > xControlModel(*aIter,uno::UNO_QUERY);
         if ( xControlModel.is() )
+            // tdf#117795: some elements may have not some property
+            // eg class "OFixedLine" doesn't have property "CharFontName"
+            // so in this case, instead of crashing when selecting all and changing font
+            // just display a warning
             try
             {
                 xControlModel->setPropertyValue(_sProperty,_aValue);
