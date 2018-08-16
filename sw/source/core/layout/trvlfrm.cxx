@@ -2040,13 +2040,15 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
     //First obtain the ContentFrames for the start and the end - those are needed
     //anyway.
-    SwContentFrame const* pStartFrame = pStartPos->nNode.GetNode().
+    SwContentFrame* pStartFrame = pStartPos->nNode.GetNode().
         GetContentNode()->getLayoutFrame( this, &rCursor.GetSttPos(), pStartPos );
 
-    SwContentFrame const* pEndFrame   = pEndPos->nNode.GetNode().
+    SwContentFrame* pEndFrame   = pEndPos->nNode.GetNode().
         GetContentNode()->getLayoutFrame( this, &rCursor.GetEndPos(), pEndPos );
 
-    OSL_ENSURE( (pStartFrame && pEndFrame), "No ContentFrames found." );
+    assert(pStartFrame && pEndFrame && "No ContentFrames found.");
+    //tdf#119224 start and end are expected to exist for the scope of this function
+    SwFrameDeleteGuard aStartFrameGuard(pStartFrame), aEndFrameGuard(pEndFrame);
 
     //Do not subtract the FlyFrames in which selected Frames lie.
     SwSortedObjs aSortObjs;
@@ -2126,6 +2128,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
     //ContentRects to Start- and EndFrames.
     SwRect aStRect, aEndRect;
+
     pStartFrame->GetCharRect( aStRect, *pStartPos, &aTmpState );
     Sw2LinesPos *pSt2Pos = aTmpState.m_p2Lines;
     aTmpState.m_p2Lines = nullptr;
