@@ -31,7 +31,7 @@ namespace connectivity
         class OCode;
         class OOperand;
         class OSQLAnalyzer;
-        typedef std::vector<OCode*> OCodeList;
+        typedef std::vector<std::unique_ptr<OCode>> OCodeList;
 
         class OPredicateCompiler final : public ::salhelper::SimpleReferenceObject
         {
