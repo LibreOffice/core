@@ -316,7 +316,7 @@ void LwpGraphicObject::GetBentoNamebyID(LwpObjectID const & rMyID, std::string& 
     sal_uInt32 nLow = rMyID.GetLow();
     char pTempStr[32];
     rName = std::string("Gr");
-    sprintf(pTempStr, "%X,%X", nHigh, nLow);
+    sprintf(pTempStr, "%X,%" SAL_PRIXUINT32, nHigh, nLow);
     rName.append(pTempStr);
 }
 
