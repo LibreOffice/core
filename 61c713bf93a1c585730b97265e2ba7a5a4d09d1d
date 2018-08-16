@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_af193889",
+        "filename": "i18npool/source/localedata/data/hu_HU.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-16T15:00:16Z",
+      "side": 1,
+      "message": "This changes the date edit format. Is that actually wanted? In fact it was you who introduced it back then with https://bz.apache.org/ooo/show_bug.cgi?id\u003d41488 ;-) as well as some others.",
+      "revId": "61c713bf93a1c585730b97265e2ba7a5a4d09d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_cf2a3c8f",
+        "filename": "i18npool/source/localedata/data/hu_HU.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-16T15:00:16Z",
+      "side": 1,
+      "message": "DefaultNarrowName is meant to be a one letter abbreviation, hence *narrow*, see i18npool/source/localedata/data/locale.dtd",
+      "revId": "61c713bf93a1c585730b97265e2ba7a5a4d09d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
