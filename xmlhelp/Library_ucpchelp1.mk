@@ -58,6 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,ucpchelp1,\
 
 $(call gb_Library_use_externals,ucpchelp1,\
 	expat_utf8 \
+	libxml2 \
 	libxslt \
 )
 
