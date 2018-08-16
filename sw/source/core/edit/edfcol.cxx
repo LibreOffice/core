@@ -1481,7 +1481,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     // Calc the ratio.
     double fRatio = 0;
 
-    VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
     vcl::Font aFont = pDevice->GetFont();
     aFont.SetFamilyName(sFont);
     aFont.SetFontSize(Size(0, 96));

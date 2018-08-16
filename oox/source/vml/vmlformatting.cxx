@@ -961,7 +961,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     {
         OUString sText = moString.get();
         double fRatio = 0;
-        VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+        ScopedVclPtrInstance<VirtualDevice> pDevice;
         vcl::Font aFont = pDevice->GetFont();
         aFont.SetFamilyName(sFont);
         aFont.SetFontSize(Size(0, 96));
