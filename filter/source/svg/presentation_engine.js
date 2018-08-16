@@ -2432,7 +2432,7 @@ initMasterPage : function()
     var sMasterPageId = this.element.getAttributeNS( NSS['ooo'], aOOOAttrMaster );
 
     // Check that the master page handler object has not already been
-    // created by an other slide that target the same master page.
+    // created by another slide that target the same master page.
     if( !this.theMetaDoc.aMasterPageSet.hasOwnProperty( sMasterPageId ) )
     {
         this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId, this );

@@ -1663,7 +1663,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                     }
 
                     // ...  but if the first one is LATIN, and there are CJK or CTL chars too,
-                    // we prefer that ScripType because we need an other font.
+                    // we prefer that ScriptType because we need another font.
                     if ( ( nTmpType == i18n::ScriptType::ASIAN ) || ( nTmpType == i18n::ScriptType::COMPLEX ) )
                     {
                         aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );

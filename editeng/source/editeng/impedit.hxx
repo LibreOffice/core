@@ -230,7 +230,7 @@ private:
     std::unique_ptr<Color>    pBackgroundColor;
     /// Containing view shell, if any.
     OutlinerViewShell*        mpViewShell;
-    /// An other shell, just listening to our state, if any.
+    /// Another shell, just listening to our state, if any.
     OutlinerViewShell*        mpOtherShell;
     EditEngine*               pEditEngine;
     VclPtr<vcl::Window>       pOutWin;
