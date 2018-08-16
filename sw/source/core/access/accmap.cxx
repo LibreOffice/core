@@ -671,7 +671,7 @@ public:
     SwAccPreviewData();
 
     void Update( const SwAccessibleMap& rAccMap,
-                 const std::vector<PreviewPage*>& _rPreviewPages,
+                 const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                  const Fraction&  _rScale,
                  const SwPageFrame* _pSelectedPageFrame,
                  const Size&      _rPreviewWinSize );
@@ -698,7 +698,7 @@ SwAccPreviewData::SwAccPreviewData() :
 }
 
 void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
-                               const std::vector<PreviewPage*>& _rPreviewPages,
+                               const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                const Fraction&  _rScale,
                                const SwPageFrame* _pSelectedPageFrame,
                                const Size&      _rPreviewWinSize )
@@ -715,14 +715,12 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
 
     // loop on preview pages to calculate <maPreviewRects>, <maLogicRects> and
     // <maVisArea>
-    for ( std::vector<PreviewPage*>::const_iterator aPageIter = _rPreviewPages.begin();
-          aPageIter != _rPreviewPages.end();
-          ++aPageIter )
+    for ( auto & rpPreviewPage : _rPreviewPages )
     {
-        aPage = (*aPageIter)->pPage;
+        aPage = rpPreviewPage->pPage;
 
         // add preview page rectangle to <maPreviewRects>
-        tools::Rectangle aPreviewPgRect( (*aPageIter)->aPreviewWinPos, (*aPageIter)->aPageSize );
+        tools::Rectangle aPreviewPgRect( rpPreviewPage->aPreviewWinPos, rpPreviewPage->aPageSize );
         maPreviewRects.push_back( aPreviewPgRect );
 
         // add logic page rectangle to <maLogicRects>
@@ -730,9 +728,9 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
         tools::Rectangle aLogicPgRect( aLogicPgSwRect.SVRect() );
         maLogicRects.push_back( aLogicPgRect );
         // union visible area with visible part of logic page rectangle
-        if ( (*aPageIter)->bVisible )
+        if ( rpPreviewPage->bVisible )
         {
-            if ( !(*aPageIter)->pPage->IsEmptyPage() )
+            if ( !rpPreviewPage->pPage->IsEmptyPage() )
             {
                 AdjustLogicPgRectToVisibleArea( aLogicPgSwRect,
                                                 SwRect( aPreviewPgRect ),
@@ -1781,7 +1779,7 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
 }
 
 uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
-                                    const std::vector<PreviewPage*>& _rPreviewPages,
+                                    const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                     const Fraction&  _rScale,
                                     const SwPageFrame* _pSelectedPageFrame,
                                     const Size&      _rPreviewWinSize )
@@ -2920,7 +2918,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
     return nIndex;
 }
 
-void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
+void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                      const Fraction&  _rScale,
                                      const SwPageFrame* _pSelectedPageFrame,
                                      const Size&      _rPreviewWinSize )
