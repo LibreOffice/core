@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+#include <config_clang.h>
 #include <array>
 #include <memory>
 #include <vector>
@@ -60,6 +62,18 @@ class Class5 {
     {
         for (auto p : m_pbar)
             delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+    }
+};
+class Class5a {
+    int* m_pbar[10]; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Class5a()
+    {
+        for (auto p : m_pbar)
+        {
+            int x = 1;
+            x = x + 2;
+            delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+        }
     }
 };
 class Class6 {
@@ -167,6 +181,7 @@ class Foo13 {
         }
     }
 };
+
 // check for unconditional inner compound statements
 class Foo14 {
     int * m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
@@ -177,10 +192,43 @@ class Foo14 {
         }
     }
 };
+
 void Foo15(int * p)
 {
-    delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted here or simplified [loplugin:useuniqueptr]}}
+    delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
 };
+
+class Foo16 {
+    Foo16(int * p)
+    {
+        delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
+    };
+    void foo(int * p)
+    {
+        delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
+    };
+};
+
+// check for delete on array members
+class Foo17 {
+    int * m_pbar1[6]; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo17()
+    {
+        delete m_pbar1[0]; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+    }
+};
+
+// this only starts to work somewhere after clang 3.8 and before clang7
+#if CLANG_VERSION >= 30900
+class Foo18 {
+    std::vector<char*> m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo18()
+    {
+        for (auto aIter = m_pbar1.begin(); aIter != m_pbar1.end(); ++aIter)
+            delete *aIter; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+    }
+};
+#endif
 
 //  ------------------------------------------------------------------------------------------------
 // tests for passing owning pointers to constructors
