@@ -206,6 +206,7 @@ namespace
                 {
                     SvxLRSpaceItem aLR( pColl->GetFormatAttr( RES_LR_SPACE ) );
                     aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
+                        //TODO: overflow
                     aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
                     pColl->SetFormatAttr( aLR );
                 }

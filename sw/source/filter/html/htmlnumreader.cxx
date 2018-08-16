@@ -107,7 +107,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
 
         sal_Int32 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
 
-        short nFirstLineIndent  = HTML_NUMBUL_INDENT;
+        sal_Int32 nFirstLineIndent  = HTML_NUMBUL_INDENT;
         if( nLevel > 0 )
         {
             const SwNumFormat& rPrevNumFormat = rInfo.GetNumRule()->Get( nLevel-1 );

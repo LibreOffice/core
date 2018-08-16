@@ -3210,7 +3210,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 {
                     if(0 == i)
                     {
-                        long nTmp = aNumFmt.GetFirstLineOffset();
+                        auto const nTmp = aNumFmt.GetFirstLineOffset();
                         aNumFmt.SetAbsLSpace( nValue - nTmp);
                     }
                     else
@@ -3237,7 +3237,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 auto const nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(nAbsLSpace + nDiff);
-                aNumFmt.SetFirstLineOffset( -static_cast<short>(nValue) );
+                aNumFmt.SetFirstLineOffset( -nValue );
             }
 
             pActNum->SetLevel( i, aNumFmt );

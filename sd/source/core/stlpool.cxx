@@ -1040,7 +1040,7 @@ void SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i
     rNumberFormat.SetBulletRelSize(45);
     const auto nLSpace = (i + 1) * 1200;
     rNumberFormat.SetAbsLSpace(nLSpace);
-    short nFirstLineOffset = -600;
+    sal_Int32 nFirstLineOffset = -600;
 
     switch(i)
     {

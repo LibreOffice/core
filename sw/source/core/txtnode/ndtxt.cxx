@@ -2888,7 +2888,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                rFLOffset = rFormat.GetFirstLineOffset();
+                rFLOffset = rFormat.GetFirstLineOffset(); //TODO: overflow
 
                 if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {

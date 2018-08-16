@@ -88,7 +88,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 if ( pFmt )
                 {
                     aDebStr.append('(');
-                    aDebStr.append(static_cast<sal_Int32>(pFmt->GetFirstLineOffset()));
+                    aDebStr.append(pFmt->GetFirstLineOffset());
                     aDebStr.append(',');
                     aDebStr.append(pFmt->GetAbsLSpace());
                     aDebStr.append(',');

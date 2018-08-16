@@ -2188,7 +2188,7 @@ void SwHTMLParser::GetMarginsFromContextWithNumBul( sal_uInt16& nLeft,
                                                             : MAXLEVEL) - 1 );
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get(nLevel);
         nLeft = nLeft + rNumFormat.GetAbsLSpace(); //TODO: overflow
-        nIndent = rNumFormat.GetFirstLineOffset();
+        nIndent = rNumFormat.GetFirstLineOffset(); //TODO: overflow
     }
 }
 

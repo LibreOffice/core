@@ -127,7 +127,7 @@ sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat)
     if (rFormat.GetNumAdjust() == SvxAdjust::Right)
         nFirstLineOffset = -rFormat.GetCharTextDistance();
     else
-        nFirstLineOffset = rFormat.GetFirstLineOffset();
+        nFirstLineOffset = rFormat.GetFirstLineOffset(); //TODO: overflow
     return nFirstLineOffset;
 }
 

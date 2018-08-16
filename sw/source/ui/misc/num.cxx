@@ -623,7 +623,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
                 {
                     if(0 == i)
                     {
-                        long nTmp = aNumFormat.GetFirstLineOffset();
+                        auto const nTmp = aNumFormat.GetFirstLineOffset();
                         aNumFormat.SetAbsLSpace( nValue - nTmp );
                     }
                     else

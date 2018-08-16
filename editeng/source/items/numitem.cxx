@@ -197,8 +197,10 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( nStart );
     rStream.ReadUInt16( nTmp16 ); cBullet = static_cast<sal_Unicode>(nTmp16);
 
-    rStream.ReadInt16( nFirstLineOffset );
-    sal_Int16 temp;
+    sal_Int16 temp = 0;
+    rStream.ReadInt16( temp );
+    nFirstLineOffset = temp;
+    temp = 0;
     rStream.ReadInt16( temp );
     nAbsLSpace = temp;
     rStream.SeekRel(2); //skip old now unused nLSpace;
@@ -261,7 +263,9 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     rStream.WriteUInt16( nStart );
     rStream.WriteUInt16( cBullet );
 
-    rStream.WriteInt16( nFirstLineOffset );
+    rStream.WriteInt16(
+        sal_Int16(o3tl::clamp<sal_Int32>(nFirstLineOffset, SAL_MIN_INT16, SAL_MAX_INT16)) );
+        //TODO: better way to handle out-of-bounds value?
     rStream.WriteInt16(
         sal_Int16(o3tl::clamp<sal_Int32>(nAbsLSpace, SAL_MIN_INT16, SAL_MAX_INT16)) );
         //TODO: better way to handle out-of-bounds value?
@@ -452,11 +456,11 @@ sal_Int32 SvxNumberFormat::GetAbsLSpace() const
            ? nAbsLSpace
            : static_cast<short>( GetFirstLineIndent() + GetIndentAt() );
 }
-short SvxNumberFormat::GetFirstLineOffset() const
+sal_Int32 SvxNumberFormat::GetFirstLineOffset() const
 {
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
            ? nFirstLineOffset
-           : static_cast<short>( GetFirstLineIndent() );
+           : static_cast<sal_Int32>( GetFirstLineIndent() );
 }
 short SvxNumberFormat::GetCharTextDistance() const
 {
