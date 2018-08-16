@@ -1,0 +1,38 @@
+--- python3/Modules/expat/xmltok.c~	2017-09-19 09:32:02.000000000 +0200
++++ python3/Modules/expat/xmltok.c	2018-08-16 14:09:32.350949800 +0200
+@@ -31,7 +31,12 @@
+ */
+ 
+ #include <stddef.h>
+-#include <stdbool.h>
++
++//#include <stdbool.h>
++typedef int bool;
++#define false 0
++#define true 1
++
+ #include <string.h>  // memcpy
+ 
+ #ifdef _WIN32
+@@ -404,6 +409,7 @@
+     output_exhausted = true;
+   }
+ 
++  {
+   /* Avoid copying partial characters (from incomplete input). */
+   const char * const fromLimBefore = fromLim;
+   align_limit_to_full_utf8_characters(*fromP, &fromLim);
+@@ -411,10 +417,13 @@
+     input_incomplete = true;
+   }
+ 
++  {
+   const ptrdiff_t bytesToCopy = fromLim - *fromP;
+   memcpy((void *)*toP, (const void *)*fromP, (size_t)bytesToCopy);
+   *fromP += bytesToCopy;
+   *toP += bytesToCopy;
++  }
++  }
+ 
+   if (output_exhausted)  // needs to go first
+     return XML_CONVERT_OUTPUT_EXHAUSTED;

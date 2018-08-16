@@ -1,0 +1,20 @@
+--- python3/PCbuild/pyexpat.vcxproj~	2017-09-19 09:32:02.000000000 +0200
++++ python3/PCbuild/pyexpat.vcxproj	2018-08-16 18:45:44.202252500 +0200
+@@ -222,6 +222,7 @@
+   <ItemGroup>
+     <ClCompile Include="..\Modules\pyexpat.c" />
+     <ClCompile Include="..\Modules\expat\xmlparse.c" />
++    <ClCompile Include="..\Modules\expat\loadlibrary.c" />
+     <ClCompile Include="..\Modules\expat\xmlrole.c" />
+     <ClCompile Include="..\Modules\expat\xmltok.c" />
+   </ItemGroup>
+--- python3/PCbuild/_elementtree.vcxproj~	2017-09-19 09:32:02.000000000 +0200
++++ python3/PCbuild/_elementtree.vcxproj	2018-08-16 19:21:43.515980500 +0200
+@@ -254,6 +254,7 @@
+   </ItemGroup>
+   <ItemGroup>
+     <ClCompile Include="..\Modules\_elementtree.c" />
++    <ClCompile Include="..\Modules\expat\loadlibrary.c" />
+     <ClCompile Include="..\Modules\expat\xmlparse.c" />
+     <ClCompile Include="..\Modules\expat\xmlrole.c" />
+     <ClCompile Include="..\Modules\expat\xmltok.c" />
