@@ -205,16 +205,16 @@ public:
 
 class ScColumnRowStylesBase
 {
-    std::vector<OUString*>   aStyleNames;
+    std::vector<OUString>   aStyleNames;
 
 public:
     ScColumnRowStylesBase();
     virtual ~ScColumnRowStylesBase();
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
-    sal_Int32 AddStyleName(OUString* pString);
+    sal_Int32 AddStyleName(const OUString & rString);
     sal_Int32 GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix);
-    OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
+    OUString& GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 
 struct ScColumnStyle

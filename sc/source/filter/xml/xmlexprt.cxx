@@ -747,7 +747,7 @@ void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_In
     const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible)
 {
     CheckAttrList();
-    AddAttribute(sAttrStyleName, *pColumnStyles->GetStyleNameByIndex(nStyleIndex));
+    AddAttribute(sAttrStyleName, pColumnStyles->GetStyleNameByIndex(nStyleIndex));
     if (!bIsVisible)
         AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
     if (nRepeatColumns > 1)
@@ -1365,7 +1365,7 @@ void ScXMLExport::WriteRowStartTag(
     const sal_Int32 nIndex, const sal_Int32 nEqualRows,
     bool bHidden, bool bFiltered)
 {
-    AddAttribute(sAttrStyleName, *pRowStyles->GetStyleNameByIndex(nIndex));
+    AddAttribute(sAttrStyleName, pRowStyles->GetStyleNameByIndex(nIndex));
     if (bHidden)
     {
         if (bFiltered)
@@ -2202,8 +2202,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
             {
                 GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_COLUMN, *pOldName);
                 // add to pColumnStyles, so the name is found for normal sheets
-                OUString* pTemp(new OUString(*pOldName));
-                rIndex = pColumnStyles->AddStyleName(pTemp);
+                rIndex = pColumnStyles->AddStyleName(*pOldName);
             }
         }
         else
@@ -2211,8 +2210,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
             OUString sName;
             if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, aPropStates))
             {
-                OUString* pTemp(new OUString(sName));
-                rIndex = pColumnStyles->AddStyleName(pTemp);
+                rIndex = pColumnStyles->AddStyleName(sName);
             }
             else
                 rIndex = pColumnStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
@@ -2233,8 +2231,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
             {
                 GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_ROW, *pOldName);
                 // add to pRowStyles, so the name is found for normal sheets
-                OUString* pTemp(new OUString(*pOldName));
-                rIndex = pRowStyles->AddStyleName(pTemp);
+                rIndex = pRowStyles->AddStyleName(*pOldName);
             }
         }
         else
@@ -2242,8 +2239,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
             OUString sName;
             if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_ROW, sParent, aPropStates))
             {
-                OUString* pTemp(new OUString(sName));
-                rIndex = pRowStyles->AddStyleName(pTemp);
+                rIndex = pRowStyles->AddStyleName(sName);
             }
             else
                 rIndex = pRowStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
