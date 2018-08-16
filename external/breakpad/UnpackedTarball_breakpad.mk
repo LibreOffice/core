@@ -13,12 +13,16 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,breakpad,0))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,breakpad,$(BREAKPAD_TARBALL)))
 
+# external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch upstreamed at
+#  <https://chromium-review.googlesource.com/c/breakpad/breakpad/+/1176811> "Handle race between
+#  ExceptionHandler::SignalHandler and ~ExceptionHandler":
 $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-use-correct-http-header.patch.1 \
 	external/breakpad/breakpad-wshadow.patch.1 \
 	external/breakpad/breakpad-wshadow2.patch.1 \
 	external/breakpad/breakpad-stackwalk.patch.1 \
 	external/breakpad/ucontext.patch \
+	external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch.1 \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
