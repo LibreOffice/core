@@ -843,6 +843,8 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     const sal_uInt16* pIds = eVer <= ww::eWW2 ? aVer2Ids0 : eVer <= ww::eWW7 ? aVer67Ids0 : aVer8Ids0;
 
+    SprmResult aRes = pSep->HasSprm(pIds[0]);
+    const sal_uInt8* pSprmBkc = aRes.pSprm;
     if (!maSegments.empty())
     {
         // Type of break: break codes are:
@@ -851,8 +853,6 @@ void wwSectionManager::CreateSep(const long nTextPos)
         // 2 New page
         // 3 Even page
         // 4 Odd page
-        SprmResult aRes = pSep->HasSprm(pIds[0]);
-        const sal_uInt8* pSprmBkc = aRes.pSprm;
         if (pSprmBkc && aRes.nRemainingData >= 1)
             aNewSection.maSep.bkc = *pSprmBkc;
     }
@@ -1005,7 +1005,13 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     aNewSection.maSep.pgnStart = ReadUSprm( pSep, pIds[7], 0 );
 
-    SprmResult aRes;
+    // if the document's first page number is unspecified, but it starts with an even page break,
+    // then set the first page number to two
+    if ( maSegments.empty() && !aNewSection.maSep.fPgnRestart && pSprmBkc && *pSprmBkc == 3 )
+    {
+        aNewSection.maSep.pgnStart = 2;
+        aNewSection.maSep.fPgnRestart = 1;
+    }
 
     if (eVer >= ww::eWW6)
     {
