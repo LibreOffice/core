@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>
 #include <comphelper/string.hxx>
+#include <o3tl/make_unique.hxx>
 #include "css1kywd.hxx"
 #include "parcss1.hxx"
 
@@ -732,13 +733,12 @@ void CSS1Parser::ParseStyleSheet()
 void CSS1Parser::ParseRule()
 {
     // selector
-    CSS1Selector *pSelector = ParseSelector();
+    std::unique_ptr<CSS1Selector> pSelector = ParseSelector();
     if( !pSelector )
         return;
 
     // process selector
-    if( SelectorParsed( pSelector, true ) )
-        delete pSelector;
+    SelectorParsed( std::move(pSelector), true );
 
     LOOP_CHECK_DECL
 
@@ -756,8 +756,7 @@ void CSS1Parser::ParseRule()
             return;
 
         // process selector
-        if( SelectorParsed( pSelector, false ) )
-            delete pSelector;
+        SelectorParsed( std::move(pSelector), false );
     }
 
     // '{'
@@ -767,13 +766,12 @@ void CSS1Parser::ParseRule()
 
     // declaration
     OUString aProperty;
-    CSS1Expression *pExpr = ParseDeclaration( aProperty );
+    std::unique_ptr<CSS1Expression> pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
         return;
 
     // process expression
-    if( DeclarationParsed( aProperty, pExpr ) )
-        delete pExpr;
+    DeclarationParsed( aProperty, std::move(pExpr) );
 
     LOOP_CHECK_RESTART
 
@@ -788,12 +786,11 @@ void CSS1Parser::ParseRule()
         // declaration
         if( CSS1_IDENT == nToken )
         {
-            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            std::unique_ptr<CSS1Expression> pExp = ParseDeclaration( aProperty );
             if( pExp )
             {
                 // process expression
-                if( DeclarationParsed( aProperty, pExp ) )
-                    delete pExp;
+                DeclarationParsed( aProperty, std::move(pExp) );
             }
         }
     }
@@ -823,12 +820,13 @@ void CSS1Parser::ParseRule()
 // pseude_element
 //  : IDENT
 
-CSS1Selector *CSS1Parser::ParseSelector()
+std::unique_ptr<CSS1Selector> CSS1Parser::ParseSelector()
 {
-    CSS1Selector *pRoot = nullptr, *pLast = nullptr;
+    std::unique_ptr<CSS1Selector> pRoot;
+    CSS1Selector *pLast = nullptr;
 
     bool bDone = false;
-    CSS1Selector *pNew = nullptr;
+    std::unique_ptr<CSS1Selector> pNew;
 
     LOOP_CHECK_DECL
 
@@ -872,7 +870,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
                     // that was a look-ahead
                     bNextToken = false;
                 }
-                pNew = new CSS1Selector( eType, aElement );
+                pNew.reset(new CSS1Selector( eType, aElement ));
             }
             break;
         case CSS1_DOT_W_WS:
@@ -884,7 +882,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
             if( CSS1_IDENT==nToken )
             {
                 // class
-                pNew = new CSS1Selector( CSS1_SELTYPE_CLASS, aToken );
+                pNew.reset(new CSS1Selector( CSS1_SELTYPE_CLASS, aToken ));
             }
             else
             {
@@ -901,7 +899,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
             if( CSS1_IDENT==nToken )
             {
                 // id_selector
-                pNew = new CSS1Selector( CSS1_SELTYPE_ID, aToken );
+                pNew.reset(new CSS1Selector( CSS1_SELTYPE_ID, aToken ));
             }
             else
             {
@@ -913,7 +911,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
         case CSS1_PAGE_SYM:
             {
                 //  @page
-                pNew = new CSS1Selector( CSS1_SELTYPE_PAGE, aToken );
+                pNew.reset(new CSS1Selector( CSS1_SELTYPE_PAGE, aToken ));
             }
             break;
 
@@ -928,13 +926,11 @@ CSS1Selector *CSS1Parser::ParseSelector()
         {
             OSL_ENSURE( (pRoot!=nullptr) == (pLast!=nullptr),
                     "Root-Selector, but no Last" );
-            if( pLast )
-                pLast->SetNext( pNew );
+            pLast = pNew.get();
+            if( pRoot )
+                pLast->SetNext( std::move(pNew) );
             else
-                pRoot = pNew;
-
-            pLast = pNew;
-            pNew = nullptr;
+                pRoot = std::move(pNew);
         }
 
         if( bNextToken && !bDone )
@@ -954,7 +950,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
         nToken = GetNextToken();
         if( CSS1_IDENT==nToken )
         {
-            pLast->SetNext( new CSS1Selector(CSS1_SELTYPE_PSEUDO,aToken) );
+            pLast->SetNext( o3tl::make_unique<CSS1Selector>(CSS1_SELTYPE_PSEUDO,aToken) );
             nToken = GetNextToken();
         }
         else
@@ -990,9 +986,10 @@ CSS1Selector *CSS1Parser::ParseSelector()
 
 // the sign is only used for numeric values (except PERCENTAGE)
 // and it's applied on nValue!
-CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
+std::unique_ptr<CSS1Expression> CSS1Parser::ParseDeclaration( OUString& rProperty )
 {
-    CSS1Expression *pRoot = nullptr, *pLast = nullptr;
+    std::unique_ptr<CSS1Expression> pRoot;
+    CSS1Expression *pLast = nullptr;
 
     // property
     if( CSS1_IDENT != nToken )
@@ -1017,7 +1014,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
     // be a problem
     bool bDone = false;
     sal_Unicode cSign = 0, cOp = 0;
-    CSS1Expression *pNew = nullptr;
+    std::unique_ptr<CSS1Expression> pNew;
 
     LOOP_CHECK_DECL
 
@@ -1049,7 +1046,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
         case CSS1_URL:
         case CSS1_RGB:
         case CSS1_HEXCOLOR:
-            pNew = new CSS1Expression( nToken, aToken, nValue, cOp );
+            pNew.reset(new CSS1Expression( nToken, aToken, nValue, cOp ));
             nValue = 0; // otherwise this also is applied to next ident
             cSign = 0;
             cOp = 0;
@@ -1075,13 +1072,11 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
         {
             OSL_ENSURE( (pRoot!=nullptr) == (pLast!=nullptr),
                     "Root-Selector, but no Last" );
-            if( pLast )
-                pLast->SetNext( pNew );
+            pLast = pNew.get();
+            if( pRoot )
+                pLast->SetNext( std::move(pNew) );
             else
-                pRoot = pNew;
-
-            pLast = pNew;
-            pNew = nullptr;
+                pRoot = std::move(pNew);
         }
 
         if( !bDone )
@@ -1165,15 +1160,14 @@ void CSS1Parser::ParseStyleOption( const OUString& rIn )
     }
 
     OUString aProperty;
-    CSS1Expression *pExpr = ParseDeclaration( aProperty );
+    std::unique_ptr<CSS1Expression> pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
     {
         return;
     }
 
     // process expression
-    if( DeclarationParsed( aProperty, pExpr ) )
-        delete pExpr;
+    DeclarationParsed( aProperty, std::move(pExpr) );
 
     LOOP_CHECK_DECL
 
@@ -1185,38 +1179,32 @@ void CSS1Parser::ParseStyleOption( const OUString& rIn )
         nToken = GetNextToken();
         if( CSS1_IDENT==nToken )
         {
-            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            std::unique_ptr<CSS1Expression> pExp = ParseDeclaration( aProperty );
             if( pExp )
             {
                 // process expression
-                if( DeclarationParsed( aProperty, pExp ) )
-                    delete pExp;
+                DeclarationParsed( aProperty, std::move(pExp) );
             }
         }
     }
 }
 
-bool CSS1Parser::SelectorParsed( CSS1Selector* /* pSelector */, bool /*bFirst*/ )
+void CSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> /* pSelector */, bool /*bFirst*/ )
 {
-    // delete selector
-    return true;
+     // delete selector
 }
 
-bool CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
-                                    const CSS1Expression * /* pExpr */ )
+void CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
+                                    std::unique_ptr<CSS1Expression> /* pExpr */ )
 {
-    // delete declaration
-    return true;
 }
 
 CSS1Selector::~CSS1Selector()
 {
-    delete pNext;
 }
 
 CSS1Expression::~CSS1Expression()
 {
-    delete pNext;
 }
 
 void CSS1Expression::GetURL( OUString& rURL  ) const

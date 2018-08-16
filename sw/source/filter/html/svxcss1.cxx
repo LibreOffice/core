@@ -668,7 +668,7 @@ void SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
     // you see nothing is happening here
 }
 
-bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
+void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, bool bFirst )
 {
     if( bFirst )
     {
@@ -685,22 +685,13 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
         m_Selectors.clear();
     }
 
-    m_Selectors.push_back(std::unique_ptr<CSS1Selector>(pSelector));
-
-    return false; // Selector saved. Deleting deadly!
+    m_Selectors.push_back(std::move(pSelector));
 }
 
-bool SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
-                                       const CSS1Expression *pExpr )
+void SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
+                                       std::unique_ptr<CSS1Expression> pExpr )
 {
-    OSL_ENSURE( pExpr, "DeclarationParsed() without Expression" );
-
-    if( !pExpr )
-        return true;
-
-    ParseProperty( rProperty, pExpr );
-
-    return true;    // the declaration isn't needed anymore. Delete it!
+    ParseProperty( rProperty, pExpr.get() );
 }
 
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,

@@ -87,11 +87,11 @@ class CSS1Selector
 {
     CSS1SelectorType eType; // the type
     OUString aSelector;     // the selector itself
-    CSS1Selector *pNext;    // the following component
+    std::unique_ptr<CSS1Selector> pNext;    // the following component
 
 public:
     CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
-        : eType(eTyp), aSelector( rSel ), pNext( nullptr )
+        : eType(eTyp), aSelector( rSel )
     {}
 
     ~CSS1Selector();
@@ -99,8 +99,8 @@ public:
     CSS1SelectorType GetType() const { return eType; }
     const OUString& GetString() const { return aSelector; }
 
-    void SetNext( CSS1Selector *pNxt ) { pNext = pNxt; }
-    const CSS1Selector *GetNext() const { return pNext; }
+    void SetNext( std::unique_ptr<CSS1Selector> pNxt ) { pNext = std::move(pNxt); }
+    const CSS1Selector *GetNext() const { return pNext.get(); }
 };
 
 /** a subexpression of a CSS1 declaration
@@ -116,12 +116,12 @@ struct CSS1Expression
     CSS1Token eType; // type of the expression
     OUString aValue; // value as string
     double nValue;   // value as number (TWIPs for LENGTH)
-    CSS1Expression *pNext; // the following component
+    std::unique_ptr<CSS1Expression> pNext; // the following component
 
 public:
     CSS1Expression( CSS1Token eTyp, const OUString &rVal,
                     double nVal, sal_Unicode cO = 0 )
-        : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(nullptr)
+        : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal)
     {}
 
     ~CSS1Expression();
@@ -138,8 +138,8 @@ public:
     void GetURL( OUString& rURL ) const;
     bool GetColor( Color &rRGB ) const;
 
-    void SetNext( CSS1Expression *pNxt ) { pNext = pNxt; }
-    const CSS1Expression *GetNext() const { return pNext; }
+    void SetNext( std::unique_ptr<CSS1Expression> pNxt ) { pNext = std::move(pNxt); }
+    const CSS1Expression *GetNext() const { return pNext.get(); }
 };
 
 inline void CSS1Expression::Set( CSS1Token eTyp, const OUString &rVal,
@@ -207,8 +207,8 @@ class CSS1Parser
 
     // parse parts of the grammar
     void ParseRule();
-    CSS1Selector *ParseSelector();
-    CSS1Expression *ParseDeclaration( OUString& rProperty );
+    std::unique_ptr<CSS1Selector> ParseSelector();
+    std::unique_ptr<CSS1Expression> ParseDeclaration( OUString& rProperty );
 
 protected:
     void ParseStyleSheet();
@@ -236,18 +236,16 @@ protected:
      *
      * @param pSelector The selector that was parsed
      * @param bFirst if true, a new declaration starts with this selector
-     * @return If true, the selector will be deleted. (Returns always true?)
      */
-    virtual bool SelectorParsed( CSS1Selector* pSelector, bool bFirst );
+    virtual void SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, bool bFirst );
 
     /** Called after a declaration or property was parsed
      *
      * @param rProperty The declaration/property
      * @param pExpr ???
-     * @return If true, the declaration will be deleted. (Returns always true?)
      */
-    virtual bool DeclarationParsed( const OUString& rProperty,
-                                    const CSS1Expression *pExpr );
+    virtual void DeclarationParsed( const OUString& rProperty,
+                                    std::unique_ptr<CSS1Expression> pExpr );
 
 public:
     CSS1Parser();
