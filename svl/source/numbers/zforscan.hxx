@@ -148,13 +148,13 @@ public:
     void ReplaceBooleanEquivalent( OUString& rString );
 
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
-            bool bSystemToSystem = false, bool bForExcelExport = false)
+            bool bSystemToSystem, bool bConvertDateOrder)
     {
         bConvertMode = true;
         eNewLnge = eNewLge;
         eTmpLnge = eTmpLge;
         bConvertSystemToSystem = bSystemToSystem;
-        mbConvertForExcelExport = bForExcelExport;
+        mbConvertDateOrder = bConvertDateOrder;
     }
     // Only changes the bool variable, in order to temporarily pause the convert mode
     void SetConvertMode(bool bMode) { bConvertMode = bMode; }
@@ -213,7 +213,7 @@ private: // Private section
     static const OUString sErrStr;              // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
-    bool mbConvertForExcelExport;               // Set in the convert mode whether to convert for Excel export
+    bool mbConvertDateOrder;                    // Set in the convert mode whether to convert date particles order
 
     LanguageType eNewLnge;                      // Language/country which the scanned string is converted to (for Excel filter)
     LanguageType eTmpLnge;                      // Language/country which the scanned string is converted from (for Excel filter)

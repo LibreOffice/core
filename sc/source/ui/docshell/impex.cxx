@@ -2035,7 +2035,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     SvNumFormatType nType;
                     sal_uInt32 nKey;
                     pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
-                                                                LANGUAGE_ENGLISH_US, ScGlobal::eLnge );
+                                                                LANGUAGE_ENGLISH_US, ScGlobal::eLnge, false);
                     if ( nCheckPos )
                         nKey = 0;
                     aFormats.push_back( nKey );

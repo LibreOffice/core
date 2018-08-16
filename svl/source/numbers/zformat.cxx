@@ -1883,7 +1883,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     SvNumFormatType nType = eType;
     OUString aFormatString( sFormatstring );
     rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
-                                   nKey, eConvertFrom, eConvertTo );
+                                   nKey, eConvertFrom, eConvertTo, false);
     const SvNumberformat* pFormat = rConverter.GetEntry( nKey );
     DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion without format" );
     if ( pFormat )

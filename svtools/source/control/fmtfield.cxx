@@ -574,7 +574,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetForm
             // convert the old format string into the new language
             sal_Int32 nCheckPos;
             SvNumFormatType nType;
-            pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
+            pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang, true);
             m_nFormatKey = nDestKey;
         }
         m_pFormatter = pFormatter;

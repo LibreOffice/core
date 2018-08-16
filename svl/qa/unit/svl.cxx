@@ -1637,7 +1637,7 @@ void Test::testColorNamesConversion()
     for (size_t i = NF_KEY_BLACK; i <= NF_KEY_WHITE; ++i)
     {
         aFormatCode = "[" + aGermanKeywords[i] + "]0";
-        aFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType, nKey, LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US);
+        aFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType, nKey, LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US, false);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Type should be NUMBER.", SvNumFormatType::NUMBER, nType);
         CPPUNIT_ASSERT_EQUAL( OUString("[" + rEnglishKeywords[i] + "]0"), aFormatCode);
