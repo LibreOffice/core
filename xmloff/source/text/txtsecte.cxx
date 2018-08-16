@@ -60,9 +60,9 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
     if (xPropSet.is())
     {
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(gsTextSection))
         {
-            xPropSet->getPropertyValue(sTextSection) >>= xNextSection;
+            xPropSet->getPropertyValue(gsTextSection) >>= xNextSection;
         }
         // else: no current section
     }

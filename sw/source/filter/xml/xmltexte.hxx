@@ -34,8 +34,6 @@ namespace com { namespace sun { namespace star { namespace style {
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
-    const OUString sEmbeddedObjectProtocol;
-
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;
     const SvGlobalName aIFrameClassId;

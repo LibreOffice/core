@@ -58,8 +58,6 @@ typedef ::std::map< OUString, XMLEventName > NameMap;
  */
 class XMLOFF_DLLPUBLIC XMLEventExport
 {
-    const OUString sEventType;
-
     SvXMLExport& rExport;
 
     HandlerMap aHandlerMap;

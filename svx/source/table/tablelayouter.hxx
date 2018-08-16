@@ -138,8 +138,6 @@ private:
 
     BorderLineMap maHorizontalBorders;
     BorderLineMap maVerticalBorders;
-
-    const OUString msSize;
 };
 
 } }

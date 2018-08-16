@@ -105,9 +105,6 @@ class DocumentHandlerImpl :
     t_OUString2LongMap m_URI2Uid;
     sal_Int32 m_uid_count;
 
-    OUString const m_sXMLNS_PREFIX_UNKNOWN;
-    OUString const m_sXMLNS;
-
     sal_Int32 m_nLastURI_lookup;
     OUString m_aLastURI_lookup;
 
@@ -169,13 +166,15 @@ public:
     virtual OUString SAL_CALL getUriByUid( sal_Int32 Uid ) override;
 };
 
+static OUString const g_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" );
+static OUString const g_sXMLNS( "xmlns" );
+
+
 DocumentHandlerImpl::DocumentHandlerImpl(
     Reference< xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse )
     : m_xRoot( xRoot ),
       m_uid_count( 0 ),
-      m_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" ),
-      m_sXMLNS( "xmlns" ),
       m_nLastURI_lookup( UID_UNKNOWN ),
       m_aLastURI_lookup( "<<< unknown URI >>>" ),
       m_nLastPrefix_lookup( UID_UNKNOWN ),
@@ -240,7 +239,7 @@ inline sal_Int32 DocumentHandlerImpl::getUidByPrefix(
         else
         {
             m_nLastPrefix_lookup = UID_UNKNOWN;
-            m_aLastPrefix_lookup = m_sXMLNS_PREFIX_UNKNOWN;
+            m_aLastPrefix_lookup = g_sXMLNS_PREFIX_UNKNOWN;
         }
     }
     return m_nLastPrefix_lookup;
@@ -286,7 +285,7 @@ inline void DocumentHandlerImpl::popPrefix(
     }
 
     m_nLastPrefix_lookup = UID_UNKNOWN;
-    m_aLastPrefix_lookup = m_sXMLNS_PREFIX_UNKNOWN;
+    m_aLastPrefix_lookup = g_sXMLNS_PREFIX_UNKNOWN;
 }
 
 inline void DocumentHandlerImpl::getElementName(
@@ -458,7 +457,7 @@ void DocumentHandlerImpl::startElement(
         pQNames[ nPos ] = xAttribs->getNameByIndex( nPos );
         OUString const & rQAttributeName = pQNames[ nPos ];
 
-        if (rQAttributeName.startsWith( m_sXMLNS ))
+        if (rQAttributeName.startsWith( g_sXMLNS ))
         {
             if (rQAttributeName.getLength() == 5) // set default namespace
             {
@@ -468,7 +467,7 @@ void DocumentHandlerImpl::startElement(
                     xAttribs->getValueByIndex( nPos ) );
                 elementEntry->m_prefixes.push_back( aDefNamespacePrefix );
                 pUids[ nPos ]          = UID_UNKNOWN;
-                pPrefixes[ nPos ]      = m_sXMLNS;
+                pPrefixes[ nPos ]      = g_sXMLNS;
                 pLocalNames[ nPos ]    = aDefNamespacePrefix;
             }
             else if (':' == rQAttributeName[ 5 ]) // set prefix
@@ -477,7 +476,7 @@ void DocumentHandlerImpl::startElement(
                 pushPrefix( aPrefix, xAttribs->getValueByIndex( nPos ) );
                 elementEntry->m_prefixes.push_back( aPrefix );
                 pUids[ nPos ]          = UID_UNKNOWN;
-                pPrefixes[ nPos ]      = m_sXMLNS;
+                pPrefixes[ nPos ]      = g_sXMLNS;
                 pLocalNames[ nPos ]    = aPrefix;
             }
             // else just a name starting with xmlns, but no prefix

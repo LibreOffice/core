@@ -50,10 +50,10 @@ void XMLTextParagraphExport::exportStyleAttributes(
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo(
             xPropSet->getPropertySetInfo());
-    if( xPropSetInfo->hasPropertyByName( sCategory ) )
+    if( xPropSetInfo->hasPropertyByName( gsCategory ) )
     {
         sal_Int16 nCategory = 0;
-        xPropSet->getPropertyValue( sCategory ) >>= nCategory;
+        xPropSet->getPropertyValue( gsCategory ) >>= nCategory;
         enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
         if( -1 != nCategory )
         {
@@ -82,13 +82,13 @@ void XMLTextParagraphExport::exportStyleAttributes(
         if( eValue != XML_TOKEN_INVALID )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_CLASS, eValue);
     }
-    if( xPropSetInfo->hasPropertyByName( sPageDescName ) )
+    if( xPropSetInfo->hasPropertyByName( gsPageDescName ) )
     {
         Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
         if( PropertyState_DIRECT_VALUE ==
-                xPropState->getPropertyState( sPageDescName  ) )
+                xPropState->getPropertyState( gsPageDescName  ) )
         {
-            xPropSet->getPropertyValue( sPageDescName ) >>= sName;
+            xPropSet->getPropertyValue( gsPageDescName ) >>= sName;
             // fix for #i5551#  if( sName.getLength() > 0 )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,

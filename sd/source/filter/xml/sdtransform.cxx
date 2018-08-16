@@ -66,9 +66,6 @@ public:
 
     SdDrawDocument& mrDocument;
     SdrOutliner& mrOutliner;
-    const OUString msEnableNumbering;
-    const OUString msTextNamespace;
-    const OUString msTrue;
 };
 
 /** transforms the given model from OOo 2.x to OOo 3.x. This maps
@@ -83,12 +80,13 @@ void TransformOOo2xDocument( SdDrawDocument* pDocument )
     }
 }
 
+static const OUStringLiteral gsEnableNumbering( "enable-numbering" );
+static const OUStringLiteral gsTextNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
+static const OUStringLiteral gsTrue( "true" );
+
 SdTransformOOo2xDocument::SdTransformOOo2xDocument( SdDrawDocument& rDocument )
 : mrDocument( rDocument )
 , mrOutliner( rDocument.GetDrawOutliner() )
-, msEnableNumbering( "enable-numbering" )
-, msTextNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0" )
-, msTrue( "true" )
 {
 }
 
@@ -282,10 +280,10 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )
         {
-            if( ( rAttr.GetAttrLName( nItem ) == msEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == msTextNamespace ) )
+            if( ( rAttr.GetAttrLName( nItem ) == gsEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == gsTextNamespace ) )
             {
                 const OUString& sValue( rAttr.GetAttrValue( nItem ) );
-                rState = sValue == msTrue;
+                rState = sValue == gsTrue;
                 return true;
             }
         }
@@ -328,7 +326,7 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )
         {
-            if( ( rAttr.GetAttrLName( nItem ) == msEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == msTextNamespace ) )
+            if( ( rAttr.GetAttrLName( nItem ) == gsEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == gsTextNamespace ) )
             {
                 if( nCount == 1 )
                 {

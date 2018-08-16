@@ -424,7 +424,6 @@ ORegistry::ORegistry()
     : m_refCount(1)
     , m_readOnly(false)
     , m_isOpen(false)
-    , ROOT("/")
 {
 }
 

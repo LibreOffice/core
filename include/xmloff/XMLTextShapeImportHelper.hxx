@@ -28,10 +28,6 @@ class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
 {
     SvXMLImport& rImport;
 
-    const OUString sAnchorType;
-    const OUString sAnchorPageNo;
-    const OUString sVertOrientPosition;
-
 public:
 
     XMLTextShapeImportHelper( SvXMLImport& rImp );

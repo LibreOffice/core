@@ -15,6 +15,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/casttovoid \
     compilerplugins/clang/test/commaoperator \
     compilerplugins/clang/test/constparams \
+    compilerplugins/clang/test/conststringfield \
     compilerplugins/clang/test/convertlong \
     compilerplugins/clang/test/cppunitassertequals \
     compilerplugins/clang/test/cstylecast \

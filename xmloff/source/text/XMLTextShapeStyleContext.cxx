@@ -134,13 +134,14 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
+static const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
+
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
     XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
                           nFamily ),
-    sIsAutoUpdate( "IsAutoUpdate" ),
     bAutoUpdate( false )
 {
 }
@@ -204,10 +205,10 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
+    if( xPropSetInfo->hasPropertyByName( gsIsAutoUpdate ) )
     {
         bool bTmp = bAutoUpdate;
-        xPropSet->setPropertyValue( sIsAutoUpdate, Any(bTmp) );
+        xPropSet->setPropertyValue( gsIsAutoUpdate, Any(bTmp) );
     }
 
     // tell the style about it's events (if applicable)

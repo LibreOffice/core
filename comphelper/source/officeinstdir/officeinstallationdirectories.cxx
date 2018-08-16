@@ -75,11 +75,12 @@ static bool makeCanonicalFileURL( OUString & rURL )
 
 namespace comphelper {
 
+static OUString const g_aOfficeBrandDirMacro("$(brandbaseurl)");
+static OUString const g_aUserDirMacro("$(userdataurl)");
+
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
-: m_aOfficeBrandDirMacro( "$(brandbaseurl)" ),
-  m_aUserDirMacro( "$(userdataurl)" ),
-  m_xCtx( xCtx ),
+: m_xCtx( xCtx ),
   m_pOfficeBrandDir( nullptr ),
   m_pUserDir( nullptr )
 {
@@ -131,7 +132,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
             return
                 aCanonicalURL.replaceAt( nIndex,
                                          m_pOfficeBrandDir->getLength(),
-                                         m_aOfficeBrandDirMacro );
+                                         g_aOfficeBrandDirMacro );
         }
         else
         {
@@ -141,7 +142,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
                 return
                     aCanonicalURL.replaceAt( nIndex,
                                              m_pUserDir->getLength(),
-                                             m_aUserDirMacro );
+                                             g_aUserDirMacro );
             }
         }
     }
@@ -155,26 +156,26 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
 {
     if ( !URL.isEmpty() )
     {
-        sal_Int32 nIndex = URL.indexOf( m_aOfficeBrandDirMacro );
+        sal_Int32 nIndex = URL.indexOf( g_aOfficeBrandDirMacro );
         if ( nIndex != -1 )
         {
             initDirs();
 
             return
                 URL.replaceAt( nIndex,
-                               m_aOfficeBrandDirMacro.getLength(),
+                               g_aOfficeBrandDirMacro.getLength(),
                                *m_pOfficeBrandDir );
         }
         else
         {
-            nIndex = URL.indexOf( m_aUserDirMacro );
+            nIndex = URL.indexOf( g_aUserDirMacro );
             if ( nIndex != -1 )
             {
                 initDirs();
 
                 return
                     URL.replaceAt( nIndex,
-                                   m_aUserDirMacro.getLength(),
+                                   g_aUserDirMacro.getLength(),
                                    *m_pUserDir );
             }
         }

@@ -38,10 +38,6 @@ typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLList
 class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
     : public SvXMLStyleContext
 {
-    const OUString       sIsPhysical;
-    const OUString       sNumberingRules;
-    const OUString       sIsContinuousNumbering;
-
     css::uno::Reference< css::container::XIndexReplace > xNumRules;
 
     std::unique_ptr<SvxXMLListStyle_Impl> pLevelStyles;

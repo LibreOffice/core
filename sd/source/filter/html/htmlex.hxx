@@ -138,8 +138,6 @@ class HtmlExport final
     OUString maCGIPath;
     PublishingScript meScript;
 
-    const OUString maHTMLHeader;
-
     std::unique_ptr< ButtonSet > mpButtonSet;
 
     static SdrTextObj* GetLayoutTextObject(SdrPage const * pPage);
