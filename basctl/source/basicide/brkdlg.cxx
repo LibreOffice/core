@@ -24,6 +24,7 @@
 #include <basidesh.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <vcl/lstbox.hxx>
 
 namespace basctl
 {
@@ -153,8 +154,9 @@ void BreakPointDialog::CheckButtons()
 IMPL_LINK( BreakPointDialog, CheckBoxHdl, Button *, pButton, void )
 {
     ::CheckBox * pChkBx = static_cast<::CheckBox*>(pButton);
-    BreakPoint& rBrk = GetSelectedBreakPoint();
-    rBrk.bEnabled = pChkBx->IsChecked();
+    BreakPoint* pBrk = GetSelectedBreakPoint();
+    if (pBrk)
+        pBrk->bEnabled = pChkBx->IsChecked();
 }
 
 IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
@@ -175,8 +177,9 @@ IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
         CheckButtons();
     else if (&rEdit == m_pNumericField)
     {
-        BreakPoint& rBrk = GetSelectedBreakPoint();
-        rBrk.nStopAfter = rEdit.GetText().toInt32();
+        BreakPoint* pBrk = GetSelectedBreakPoint();
+        if (pBrk)
+            pBrk->nStopAfter = rEdit.GetText().toInt32();
     }
 }
 
@@ -234,10 +237,12 @@ void BreakPointDialog::UpdateFields( BreakPoint const & rBrk )
 }
 
 
-BreakPoint& BreakPointDialog::GetSelectedBreakPoint()
+BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
 {
-    size_t nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
-    return m_aModifiedBreakPointList.at( nEntry );
+    sal_Int32 nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
+    if (nEntry == LISTBOX_ENTRY_NOTFOUND)
+        return nullptr;
+    return &m_aModifiedBreakPointList.at( nEntry );
 }
 
 } // namespace basctl

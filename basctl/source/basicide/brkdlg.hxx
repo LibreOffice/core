@@ -46,7 +46,7 @@ class BreakPointDialog final : public ModalDialog
     DECL_LINK( EditModifyHdl, Edit&, void );
     DECL_LINK( ButtonHdl, Button*, void );
     void            UpdateFields( BreakPoint const & rBrk );
-    BreakPoint&     GetSelectedBreakPoint();
+    BreakPoint*     GetSelectedBreakPoint();
 
 
 public:
