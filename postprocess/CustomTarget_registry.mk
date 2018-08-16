@@ -277,9 +277,9 @@ ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/dbase)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/flat)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysqlc)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
-postprocess_DRIVERS += dbase flat mysql odbc
+postprocess_DRIVERS += dbase flat mysqlc odbc
 ifeq (WNT,$(OS))
 else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
