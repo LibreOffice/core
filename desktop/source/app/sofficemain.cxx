@@ -116,8 +116,9 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
     CrashReporter::storeExceptionHandler(&eh);
 #elif defined WNT
-    google_breakpad::ExceptionHandler eh(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
-
+    google_breakpad::ExceptionHandler eh(L".", nullptr, dumpCallback, nullptr,
+                                         google_breakpad::ExceptionHandler::HANDLER_ALL,
+                                         MiniDumpWithFullMemory, (HANDLE)nullptr, nullptr);
     CrashReporter::storeExceptionHandler(&eh);
 #endif
 #endif
