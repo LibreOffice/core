@@ -41,22 +41,23 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
 
+static const OUStringLiteral gsFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
+static const OUStringLiteral gsBracketBefore("BracketBefore");
+static const OUStringLiteral gsBracketAfter("BracketAfter");
+static const OUStringLiteral gsIsNumberEntries("IsNumberEntries");
+static const OUStringLiteral gsIsSortByPosition("IsSortByPosition");
+static const OUStringLiteral gsSortKeys("SortKeys");
+static const OUStringLiteral gsSortKey("SortKey");
+static const OUStringLiteral gsIsSortAscending("IsSortAscending");
+static const OUStringLiteral gsSortAlgorithm("SortAlgorithm");
+static const OUStringLiteral gsLocale("Locale");
+
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList) :
         SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG),
-        sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography"),
-        sBracketBefore("BracketBefore"),
-        sBracketAfter("BracketAfter"),
-        sIsNumberEntries("IsNumberEntries"),
-        sIsSortByPosition("IsSortByPosition"),
-        sSortKeys("SortKeys"),
-        sSortKey("SortKey"),
-        sIsSortAscending("IsSortAscending"),
-        sSortAlgorithm("SortAlgorithm"),
-        sLocale("Locale"),
         sSuffix(),
         sPrefix(),
         sAlgorithm(),
@@ -193,12 +194,12 @@ SvXMLImportContextRef XMLIndexBibliographyConfigurationContext::CreateChildConte
             Sequence<PropertyValue> aKey(2);
 
             PropertyValue aNameValue;
-            aNameValue.Name = sSortKey;
+            aNameValue.Name = gsSortKey;
             aNameValue.Value <<= static_cast<sal_Int16>(nKey);
             aKey[0] = aNameValue;
 
             PropertyValue aSortValue;
-            aSortValue.Name = sIsSortAscending;
+            aSortValue.Name = gsIsSortAscending;
             aSortValue.Value <<= bSort;
             aKey[1] = aSortValue;
 
@@ -227,7 +228,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
         sal_Int32 nServiceCount(aServices.getLength());
         while (i < nServiceCount && !bFound)
         {
-            if (aServices[i] == sFieldMaster_Bibliography)
+            if (aServices[i] == gsFieldMaster_Bibliography)
             // here we should use a method which compares in reverse order if available
                 bFound = true;
             else
@@ -236,26 +237,26 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
         if (bFound)
         {
             Reference<XInterface> xIfc =
-                xFactory->createInstance(sFieldMaster_Bibliography);
+                xFactory->createInstance(gsFieldMaster_Bibliography);
             if( xIfc.is() )
             {
                 Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
                 Any aAny;
 
-                xPropSet->setPropertyValue(sBracketAfter, Any(sSuffix));
-                xPropSet->setPropertyValue(sBracketBefore, Any(sPrefix));
-                xPropSet->setPropertyValue(sIsNumberEntries, Any(bNumberedEntries));
-                xPropSet->setPropertyValue(sIsSortByPosition, Any(bSortByPosition));
+                xPropSet->setPropertyValue(gsBracketAfter, Any(sSuffix));
+                xPropSet->setPropertyValue(gsBracketBefore, Any(sPrefix));
+                xPropSet->setPropertyValue(gsIsNumberEntries, Any(bNumberedEntries));
+                xPropSet->setPropertyValue(gsIsSortByPosition, Any(bSortByPosition));
 
                 if( !maLanguageTagODF.isEmpty() )
                 {
                     aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
-                    xPropSet->setPropertyValue(sLocale, aAny);
+                    xPropSet->setPropertyValue(gsLocale, aAny);
                 }
 
                 if( !sAlgorithm.isEmpty() )
                 {
-                    xPropSet->setPropertyValue(sSortAlgorithm, Any(sAlgorithm));
+                    xPropSet->setPropertyValue(gsSortAlgorithm, Any(sAlgorithm));
                 }
 
                 sal_Int32 nCount = aSortKeys.size();
@@ -264,7 +265,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                 {
                     aKeysSeq[i] = aSortKeys[i];
                 }
-                xPropSet->setPropertyValue(sSortKeys, Any(aKeysSeq));
+                xPropSet->setPropertyValue(gsSortKeys, Any(aKeysSeq));
             }
             // else: can't get FieldMaster -> ignore
         }

@@ -25,8 +25,6 @@
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext
 {
-    const OUString        sIsAutoUpdate;
-
     bool                  bAutoUpdate : 1;
 
     SvXMLImportContextRef xEventContext;

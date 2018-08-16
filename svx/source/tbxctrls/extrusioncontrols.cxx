@@ -360,6 +360,9 @@ double ExtrusionDepthDialog::getDepth() const
 double const aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double const aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
+static const OUStringLiteral gsExtrusionDepth( ".uno:ExtrusionDepth" );
+static const OUStringLiteral gsMetricUnit(     ".uno:MetricUnit"     );
+
 ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
     vcl::Window* pParentWindow
@@ -367,8 +370,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     , mrController( rController )
     , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
-    , msExtrusionDepth( ".uno:ExtrusionDepth" )
-    , msMetricUnit(     ".uno:MetricUnit"     )
 {
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
@@ -389,8 +390,8 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
 
     SetOutputSizePixel( getMenuSize() );
 
-    AddStatusListener( msExtrusionDepth );
-    AddStatusListener( msMetricUnit );
+    AddStatusListener( gsExtrusionDepth );
+    AddStatusListener( gsMetricUnit );
 }
 
 void ExtrusionDepthWindow::implSetDepth( double fDepth )
@@ -447,7 +448,7 @@ void ExtrusionDepthWindow::statusChanged(
     const css::frame::FeatureStateEvent& Event
 )
 {
-    if( Event.FeatureURL.Main == msExtrusionDepth )
+    if( Event.FeatureURL.Main == gsExtrusionDepth )
     {
         if( !Event.IsEnabled )
         {
@@ -460,7 +461,7 @@ void ExtrusionDepthWindow::statusChanged(
                 implSetDepth( fValue );
         }
     }
-    else if( Event.FeatureURL.Main == msMetricUnit )
+    else if( Event.FeatureURL.Main == gsMetricUnit )
     {
         if( Event.IsEnabled )
         {
@@ -509,10 +510,10 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl, ToolbarMenu*, void)
             }
 
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = msExtrusionDepth.copy(5);
+            aArgs[0].Name = gsExtrusionDepth.copy(5);
             aArgs[0].Value <<= fDepth;
 
-            mrController.dispatchCommand( msExtrusionDepth,  aArgs );
+            mrController.dispatchCommand( gsExtrusionDepth,  aArgs );
             implSetDepth( fDepth );
 
             if ( IsInPopupMode() )

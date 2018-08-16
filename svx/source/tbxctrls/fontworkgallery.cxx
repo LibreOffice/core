@@ -283,17 +283,16 @@ public:
 private:
     svt::ToolboxController& mrController;
 
-    const OUString msFontworkAlignment;
-
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
 
+static const OUStringLiteral gsFontworkAlignment(".uno:FontworkAlignment");
+
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , msFontworkAlignment(".uno:FontworkAlignment")
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
@@ -311,7 +310,7 @@ FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rContro
 
     SetOutputSizePixel( getMenuSize() );
 
-    AddStatusListener( msFontworkAlignment );
+    AddStatusListener( gsFontworkAlignment );
 }
 
 void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
@@ -326,7 +325,7 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 
 void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
-    if( Event.FeatureURL.Main == msFontworkAlignment )
+    if( Event.FeatureURL.Main == gsFontworkAlignment )
     {
         if( !Event.IsEnabled )
         {
@@ -350,10 +349,10 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
     if( nAlignment >= 0 )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = msFontworkAlignment.copy(5);
+        aArgs[0].Name = gsFontworkAlignment.copy(5);
         aArgs[0].Value <<= nAlignment;
 
-        mrController.dispatchCommand( msFontworkAlignment, aArgs );
+        mrController.dispatchCommand( gsFontworkAlignment, aArgs );
 
         implSetAlignment( nAlignment, true );
     }
@@ -433,21 +432,18 @@ public:
 private:
     svt::ToolboxController& mrController;
 
-    const OUString msFontworkCharacterSpacing;
-    const OUString msFontworkKernCharacterPairs;
-
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs( bool bEnabled );
 
 };
+static const OUStringLiteral gsFontworkCharacterSpacing(".uno:FontworkCharacterSpacing");
+static const OUStringLiteral gsFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs");
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , msFontworkCharacterSpacing(".uno:FontworkCharacterSpacing")
-    , msFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs")
 {
     SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
 
@@ -462,8 +458,8 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxContr
 
     SetOutputSizePixel( getMenuSize() );
 
-    AddStatusListener( msFontworkCharacterSpacing );
-    AddStatusListener( msFontworkKernCharacterPairs );
+    AddStatusListener( gsFontworkCharacterSpacing );
+    AddStatusListener( gsFontworkKernCharacterPairs );
 }
 
 void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled )
@@ -500,7 +496,7 @@ void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool bEnabled )
 
 void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
-    if( Event.FeatureURL.Main == msFontworkCharacterSpacing )
+    if( Event.FeatureURL.Main == gsFontworkCharacterSpacing )
     {
         if( !Event.IsEnabled )
         {
@@ -513,7 +509,7 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
                 implSetCharacterSpacing( nValue, true );
         }
     }
-    else if( Event.FeatureURL.Main == msFontworkKernCharacterPairs )
+    else if( Event.FeatureURL.Main == gsFontworkKernCharacterPairs )
     {
         if( !Event.IsEnabled )
         {
@@ -548,7 +544,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
     if ( nSelection == 5 )  // custom spacing
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
+        aArgs[0].Name = gsFontworkCharacterSpacing.copy(5);
         aArgs[0].Value <<= nCharacterSpacing;
 
         mrController.dispatchCommand( ".uno:FontworkCharacterSpacingDialog", aArgs );
@@ -556,20 +552,20 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
     else if ( nSelection == 6 ) // KernCharacterPairs
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = msFontworkKernCharacterPairs.copy(5);
+        aArgs[0].Name = gsFontworkKernCharacterPairs.copy(5);
         aArgs[0].Value <<= true;
 
-        mrController.dispatchCommand( msFontworkKernCharacterPairs, aArgs );
+        mrController.dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
 
         implSetKernCharacterPairs( true );
     }
     else if( nSelection >= 0 )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
+        aArgs[0].Name = gsFontworkCharacterSpacing.copy(5);
         aArgs[0].Value <<= nCharacterSpacing;
 
-        mrController.dispatchCommand( msFontworkCharacterSpacing,  aArgs );
+        mrController.dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
 
         implSetCharacterSpacing( nCharacterSpacing, true );
     }

@@ -33,8 +33,6 @@ namespace com { namespace sun { namespace star {
 
 class XMLScriptExportHandler : public XMLEventExportHandler
 {
-    const OUString sURL;
-
 public:
     XMLScriptExportHandler();
     virtual ~XMLScriptExportHandler() override;

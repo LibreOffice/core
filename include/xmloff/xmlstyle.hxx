@@ -148,9 +148,6 @@ public:
 
 class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 {
-    const OUString msParaStyleServiceName;
-    const OUString msTextStyleServiceName;
-
     std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
     std::unique_ptr<SvXMLTokenMap>           mpStyleStylesElemTokenMap;
 

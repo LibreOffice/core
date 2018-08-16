@@ -69,8 +69,6 @@ public:
 private:
     void initDirs();
 
-    OUString const                             m_aOfficeBrandDirMacro;
-    OUString const                             m_aUserDirMacro;
     css::uno::Reference< css::uno::XComponentContext >    m_xCtx;
     std::unique_ptr<OUString>                  m_pOfficeBrandDir;
     std::unique_ptr<OUString>                  m_pUserDir;
