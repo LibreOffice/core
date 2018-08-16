@@ -152,10 +152,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode const * pPredicateNode)
 
         if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
         {
-            m_aCodeList.push_back(new OOp_OR);
+            m_aCodeList.emplace_back(new OOp_OR);
         }
         else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      // AND-Operator
-            m_aCodeList.push_back(new OOp_AND);
+            m_aCodeList.emplace_back(new OOp_AND);
         else
         {
             OSL_FAIL("OPredicateCompiler: Error in Parse Tree");
@@ -164,7 +164,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode const * pPredicateNode)
     else if (SQL_ISRULE(pPredicateNode,boolean_factor))
     {
         execute(pPredicateNode->getChild(1));
-        m_aCodeList.push_back(new OOp_NOT);
+        m_aCodeList.emplace_back(new OOp_NOT);
     }
     else if (SQL_ISRULE(pPredicateNode,comparison_predicate))
     {
@@ -188,10 +188,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode const * pPredicateNode)
         execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"+"))
         {
-            m_aCodeList.push_back(new OOp_ADD);
+            m_aCodeList.emplace_back(new OOp_ADD);
         }
         else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"-"))
-            m_aCodeList.push_back(new OOp_SUB);
+            m_aCodeList.emplace_back(new OOp_SUB);
         else
         {
             OSL_FAIL("OPredicateCompiler: Error in Parse Tree num_value_exp");
@@ -203,10 +203,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode const * pPredicateNode)
         execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"*"))
         {
-            m_aCodeList.push_back(new OOp_MUL);
+            m_aCodeList.emplace_back(new OOp_MUL);
         }
         else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"/"))
-            m_aCodeList.push_back(new OOp_DIV);
+            m_aCodeList.emplace_back(new OOp_DIV);
         else
         {
             OSL_FAIL("OPredicateCompiler: Error in Parse Tree num_value_exp");
@@ -261,7 +261,7 @@ void OPredicateCompiler::execute_COMPARE(OSQLParseNode const * pPredicateNode)
 
     execute(pPredicateNode->getChild(0));
     execute(pPredicateNode->getChild(2));
-    m_aCodeList.push_back( new OOp_COMPARE(ePredicateType) );
+    m_aCodeList.emplace_back( new OOp_COMPARE(ePredicateType) );
 }
 
 
@@ -310,7 +310,7 @@ void OPredicateCompiler::execute_LIKE(OSQLParseNode const * pPredicateNode)
     OBoolOperator* pOperator = bNotLike
                                     ? new OOp_NOTLIKE(cEscape)
                                     : new OOp_LIKE(cEscape);
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 }
 
 void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
@@ -335,12 +335,12 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
     OOperand* pColumnOp = execute(pColumn);
     OOperand* pOb1 = execute(p1stValue);
     OBoolOperator* pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::LESS_EQUAL : SQLFilterOperator::GREATER);
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 
     execute(pColumn);
     OOperand* pOb2 = execute(p2ndtValue);
     pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::GREATER_EQUAL : SQLFilterOperator::LESS);
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 
     if ( pColumnOp && pOb1 && pOb2 )
     {
@@ -387,7 +387,7 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
         pBoolOp = new OOp_OR;
     else
         pBoolOp = new OOp_AND;
-    m_aCodeList.push_back(pBoolOp);
+    m_aCodeList.emplace_back(pBoolOp);
 }
 
 void OPredicateCompiler::execute_ISNULL(OSQLParseNode const * pPredicateNode)
@@ -405,7 +405,7 @@ void OPredicateCompiler::execute_ISNULL(OSQLParseNode const * pPredicateNode)
     execute(pPredicateNode->getChild(0));
     OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::SQLNULL) ?
                                 new OOp_ISNULL : new OOp_ISNOTNULL;
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 }
 
 OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNode)
@@ -527,7 +527,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,nullptr);
     }
     if (pOperand)
-        m_aCodeList.push_back(pOperand);
+        m_aCodeList.emplace_back(pOperand);
     return pOperand;
 }
 
@@ -541,11 +541,11 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 
     for (auto const& code : rCodeList)
     {
-        OOperand* pOperand = dynamic_cast<OOperand* >(code);
+        OOperand* pOperand = dynamic_cast<OOperand* >(code.get());
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            static_cast<OOperator *>(code)->Exec(m_aStack);
+            static_cast<OOperator *>(code.get())->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();
@@ -567,11 +567,11 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList, ORowSetValue
 
     for (auto const& code : rCodeList)
     {
-        OOperand* pOperand = dynamic_cast<OOperand* >(code);
+        OOperand* pOperand = dynamic_cast<OOperand* >(code.get());
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            static_cast<OOperator *>(code)->Exec(m_aStack);
+            static_cast<OOperator *>(code.get())->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();
@@ -598,7 +598,7 @@ void OPredicateCompiler::execute_Fold(OSQLParseNode const * pPredicateNode)
     else
         pOperator = new OOp_Lower;
 
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 }
 
 void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)
@@ -780,7 +780,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)
         case SQL_TOKEN_NOW:
         case SQL_TOKEN_WEEK:
             {
-                m_aCodeList.push_back(new OStopOperand);
+                m_aCodeList.emplace_back(new OStopOperand);
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
                 for (size_t i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
@@ -850,7 +850,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)
             break;
 
         case SQL_TOKEN_SUBSTRING:
-            m_aCodeList.push_back(new OStopOperand);
+            m_aCodeList.emplace_back(new OStopOperand);
             if ( pPredicateNode->count() == 4 ) //char_substring_fct
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
@@ -867,7 +867,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)
             break;
 
         case SQL_TOKEN_POSITION:
-            m_aCodeList.push_back(new OStopOperand);
+            m_aCodeList.emplace_back(new OStopOperand);
             if ( pPredicateNode->count() == 4 ) //position_exp
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
@@ -885,7 +885,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)
             m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_FUNCTION_NOT_SUPPORTED,nullptr);
     }
 
-    m_aCodeList.push_back(pOperator);
+    m_aCodeList.emplace_back(pOperator);
 }
 
 

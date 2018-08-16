@@ -49,10 +49,6 @@ OPredicateInterpreter::~OPredicateInterpreter()
 
 void OPredicateCompiler::Clean()
 {
-    for(OCodeList::reverse_iterator aIter = m_aCodeList.rbegin(); aIter != m_aCodeList.rend();++aIter)
-    {
-        delete *aIter;
-    }
     m_aCodeList.clear();
 }
 
@@ -61,7 +57,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow const & _pRow)
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     for (auto const& code : rCodeList)
     {
-        OOperandParam* pParam = dynamic_cast<OOperandParam*>(code);
+        OOperandParam* pParam = dynamic_cast<OOperandParam*>(code.get());
         if ( pParam )
             pParam->bindValue(_pRow);
     }
