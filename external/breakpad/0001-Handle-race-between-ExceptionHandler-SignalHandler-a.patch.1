@@ -21,7 +21,7 @@ index b895f6d7..4d58e510 100644
    bool handled = false;
 -  for (int i = g_handler_stack_->size() - 1; !handled && i >= 0; --i) {
 -    handled = (*g_handler_stack_)[i]->HandleSignal(sig, info, uc);
-+  if (g_handler_stack_ != nullptr) {
++  if (g_handler_stack_ != NULL) {
 +    for (int i = g_handler_stack_->size() - 1; !handled && i >= 0; --i) {
 +      handled = (*g_handler_stack_)[i]->HandleSignal(sig, info, uc);
 +    }
