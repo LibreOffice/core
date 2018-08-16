@@ -261,7 +261,7 @@ bool isOkToRemoveArithmeticCast(
     clang::ASTContext & context, clang::QualType t1, clang::QualType t2, const clang::Expr* subExpr)
 {
     // Don't warn if the types are arithmetic (in the C++ meaning), and: either
-    // at least one is a typedef (and if both are typedefs,they're different),
+    // at least one is a typedef or decltype (and if both are, they're different),
     // or the sub-expression involves some operation that is likely to change
     // types through promotion, or the sub-expression is an integer literal (so
     // its type generally depends on its value and suffix if any---even with a
@@ -270,7 +270,8 @@ bool isOkToRemoveArithmeticCast(
          || t1->isRealFloatingType())
         && ((t1.getLocalUnqualifiedType() != t2.getLocalUnqualifiedType()
              && (loplugin::TypeCheck(t1).Typedef()
-                 || loplugin::TypeCheck(t2).Typedef()))
+                 || loplugin::TypeCheck(t2).Typedef()
+                 || llvm::isa<clang::DecltypeType>(t1) || llvm::isa<clang::DecltypeType>(t2)))
             || isArithmeticOp(subExpr)
             || llvm::isa<clang::IntegerLiteral>(subExpr->IgnoreParenImpCasts())))
     {
