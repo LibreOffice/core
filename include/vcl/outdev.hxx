@@ -142,10 +142,11 @@ enum class SalLayoutFlags
     SubstituteDigits        = 0x0400,
     KashidaJustification    = 0x0800,
     ForFallback             = 0x2000,
+    GlyphItemsOnly          = 0x4000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x2e77> {};
+    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x6e77> {};
 }
 
 typedef std::vector< tools::Rectangle > MetricVector;
