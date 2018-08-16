@@ -1412,6 +1412,8 @@ void PdfExportTest::testTdf113143()
         // ReduceImageResolution is on by default and that hides the bug we
         // want to test.
         { "ReduceImageResolution", uno::Any(false) },
+        // Set a custom PDF version.
+        { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(16)) },
     }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
     exportAndParse(aURL, aMediaDescriptor);
@@ -1456,6 +1458,12 @@ void PdfExportTest::testTdf113143()
 
     // This failed, both were 319, now nSmaller is 169.
     CPPUNIT_ASSERT_LESS(nLarger, nSmaller);
+
+    // The following check used to fail in the past, header was "%PDF-1.5":
+    maMemory.Seek(0);
+    OString aExpectedHeader("%PDF-1.6");
+    OString aHeader(read_uInt8s_ToOString(maMemory, aExpectedHeader.getLength()));
+    CPPUNIT_ASSERT_EQUAL(aExpectedHeader, aHeader);
 }
 
 void PdfExportTest::testForcePoint71()
