@@ -227,7 +227,7 @@ enum NfIndexTableOffset
     // (NF_..._START and NF_..._END above) to fill its categories with builtin
     // formats, make new formats known to svx/source/items/numfmtsh.cxx
     // SvxNumberFormatShell::FillEListWithStd_Impl(), otherwise they will not
-    // be be listed at all. Yes that is ugly.
+    // be listed at all. Yes that is ugly.
 
     NF_FRACTION_3D = NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // # ???/???
     NF_FRACTION_2,                          // # ?/2

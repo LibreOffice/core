@@ -4185,7 +4185,7 @@ bool OReportController::impl_setPropertyAtControls_throw(const char* pUndoResId,
             }
             catch(const UnknownPropertyException& e)
             {
-                SAL_WARN("reportdesign", "UnknowPropertyException:" << e);
+                SAL_WARN("reportdesign", "UnknownPropertyException:" << e);
             }
     }
 
