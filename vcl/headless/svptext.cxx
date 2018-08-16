@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <unotools/configmgr.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <headless/svpgdi.hxx>
@@ -103,6 +104,8 @@ bool SvpSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPo
 
 std::unique_ptr<SalLayout> SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return nullptr;
     return m_aTextRenderImpl.GetTextLayout(rArgs, nFallbackLevel);
 }
 
