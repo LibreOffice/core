@@ -116,6 +116,129 @@ public:
         // WW8TabBandDesc
         if (fn == SRCDIR "/sw/source/filter/ww8/ww8par2.cxx")
             return;
+        // StgAvlNode::Remove
+        if (fn == SRCDIR "/sot/source/sdstor/stgavl.cxx")
+            return;
+        // SfxItemPool::ReleaseDefaults and SfxItemPool::Free
+        if (fn == SRCDIR "/svl/source/items/itempool.cxx")
+            return;
+        // SwContourCache
+        if (fn == SRCDIR "/sw/source/core/text/txtfly.cxx")
+            return;
+        // too messy to cope with the SQL parser
+        if (fn == SRCDIR "/connectivity/source/parse/sqlnode.cxx")
+            return;
+        // I can't figure out the ownership of the SfxMedium in the call site(s)
+        if (fn == SRCDIR "/sfx2/source/doc/sfxbasemodel.cxx")
+            return;
+        // pointer passed via IMPL_LINK
+        if (fn == SRCDIR "/sfx2/source/control/dispatch.cxx")
+            return;
+        // NavigatorTreeModel::Remove
+        if (fn == SRCDIR "/svx/source/form/navigatortreemodel.cxx")
+            return;
+        // SdrModel::AddUndo
+        if (fn == SRCDIR "/svx/source/svdraw/svdmodel.cxx")
+            return;
+        // undo callback
+        if (fn == SRCDIR "/basctl/source/basicide/baside3.cxx")
+            return;
+        // ActualizeProgress::TimeoutHdl
+        if (fn == SRCDIR "/cui/source/dialogs/cuigaldlg.cxx")
+            return;
+        // ToolbarSaveInData::RemoveToolbar
+        if (fn == SRCDIR "/cui/source/customize/cfg.cxx")
+            return;
+        // OStorage_Impl::RemoveElement very complicated ownership passing going on
+        if (fn == SRCDIR "/package/source/xstor/xstorage.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/framework/tools/FrameworkHelper.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/presenter/CanvasUpdateRequester.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/sidebar/MasterPageContainer.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/tools/TimerBasedTaskExecution.cxx")
+            return;
+        // actually held via shared_ptr, uses protected deleter object
+        if (fn == SRCDIR "/sd/source/ui/view/ViewShellImplementation.cxx")
+            return;
+        // ScBroadcastAreaSlot::StartListeningArea manual ref-counting of ScBroadcastArea
+        if (fn == SRCDIR "/sc/source/core/data/bcaslot.cxx")
+            return;
+        // ScDrawLayer::AddCalcUndo undo stuff
+        if (fn == SRCDIR "/sc/source/core/data/drwlayer.cxx")
+            return;
+        // ScTable::SetFormulaCell
+        if (fn == SRCDIR "/sc/source/core/data/table2.cxx")
+            return;
+        // ScDocument::SetFormulaCell
+        if (fn == SRCDIR "/sc/source/core/data/documen2.cxx")
+            return;
+        // RemoveEditAttribsHandler, stored in mdds block
+        if (fn == SRCDIR "/sc/source/core/data/column2.cxx")
+            return;
+        // just turns into a mess
+        if (fn == SRCDIR "/sc/source/ui/Accessibility/AccessibleDocument.cxx")
+            return;
+        // SwCache::DeleteObj, linked list
+        if (fn == SRCDIR "/sw/source/core/bastyp/swcache.cxx")
+            return;
+        // SAXEventKeeperImpl::smashBufferNode
+        if (fn == SRCDIR "/xmlsecurity/source/framework/saxeventkeeperimpl.cxx")
+            return;
+        // ZipOutputStream, ownership of ZipEntry is horribly complicated here
+        if (fn == SRCDIR "/package/source/zipapi/ZipOutputStream.cxx")
+            return;
+        // SwDoc::DeleteExtTextInput
+        if (fn == SRCDIR "/sw/source/core/doc/extinput.cxx")
+            return;
+        // SwDoc::DelSectionFormat
+        if (fn == SRCDIR "/sw/source/core/docnode/ndsect.cxx")
+            return;
+        // SwFrame::DestroyFrame
+        if (fn == SRCDIR "/sw/source/core/layout/ssfrm.cxx")
+            return;
+        // SwGluePortion::Join
+        if (fn == SRCDIR "/sw/source/core/text/porglue.cxx")
+            return;
+        // SwDoc::DelFrameFormat
+        if (fn == SRCDIR "/sw/source/core/doc/docfmt.cxx")
+            return;
+        // SwTextAttr::Destroy
+        if (fn == SRCDIR "/sw/source/core/txtnode/txatbase.cxx")
+            return;
+        // IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
+        if (fn == SRCDIR "/sw/source/core/undo/undraw.cxx")
+            return;
+        // SwHTMLParser::EndAttr
+        if (fn == SRCDIR "/sw/source/filter/html/swhtml.cxx")
+            return;
+        // SwGlossaryHdl::Expand sometimes the pointer is owned, sometimes it is not
+        if (fn == SRCDIR "/sw/source/uibase/dochdl/gloshdl.cxx")
+            return;
+        // SwWrtShell::Insert only owned sometimes
+        if (fn == SRCDIR "/sw/source/uibase/wrtsh/wrtsh1.cxx")
+            return;
+        // NodeArrayDeleter
+        if (fn == SRCDIR "/unoxml/source/rdf/librdf_repository.cxx")
+            return;
+        // SmCursor::LineToList ran out of enthusiam to rework the node handling
+        if (fn == SRCDIR "/starmath/source/cursor.cxx")
+            return;
+        // XMLEventOASISTransformerContext::FlushEventMap
+        if (fn == SRCDIR "/xmloff/source/transform/EventOASISTContext.cxx")
+            return;
+        // XMLEventOOoTransformerContext::FlushEventMap
+        if (fn == SRCDIR "/xmloff/source/transform/EventOOoTContext.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
@@ -124,11 +247,12 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
     bool VisitCXXDeleteExpr(const CXXDeleteExpr* );
     bool TraverseFunctionDecl(FunctionDecl* );
+    bool TraverseCXXMethodDecl(CXXMethodDecl* );
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl* );
 private:
     void CheckCompoundStmt(const CXXMethodDecl*, const CompoundStmt* );
-    void CheckForUnconditionalDelete(const CXXMethodDecl*, const CompoundStmt* );
-    void CheckForSimpleDelete(const CXXMethodDecl*, const CompoundStmt* );
-    void CheckRangedLoopDelete(const CXXMethodDecl*, const CXXForRangeStmt* );
+    void CheckIfStmt(const CXXMethodDecl* methodDecl, const IfStmt* );
+    void CheckCXXForRangeStmt(const CXXMethodDecl*, const CXXForRangeStmt* );
     void CheckLoopDelete(const CXXMethodDecl*, const Stmt* );
     void CheckLoopDelete(const CXXMethodDecl*, const CXXDeleteExpr* );
     void CheckDeleteExpr(const CXXMethodDecl*, const CXXDeleteExpr*);
@@ -154,14 +278,15 @@ bool UseUniquePtr::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     return true;
 }
 
+/**
+ * check for simple call to delete i.e. direct unconditional call, or if-guarded call
+ */
 void UseUniquePtr::CheckCompoundStmt(const CXXMethodDecl* methodDecl, const CompoundStmt* compoundStmt)
 {
-    CheckForSimpleDelete(methodDecl, compoundStmt);
-
     for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
     {
         if (auto cxxForRangeStmt = dyn_cast<CXXForRangeStmt>(*i))
-            CheckRangedLoopDelete(methodDecl, cxxForRangeStmt);
+            CheckCXXForRangeStmt(methodDecl, cxxForRangeStmt);
         else if (auto forStmt = dyn_cast<ForStmt>(*i))
             CheckLoopDelete(methodDecl, forStmt->getBody());
         else if (auto whileStmt = dyn_cast<WhileStmt>(*i))
@@ -169,94 +294,86 @@ void UseUniquePtr::CheckCompoundStmt(const CXXMethodDecl* methodDecl, const Comp
         // check for unconditional inner compound statements
         else if (auto innerCompoundStmt = dyn_cast<CompoundStmt>(*i))
             CheckCompoundStmt(methodDecl, innerCompoundStmt);
+        else if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i))
+            CheckDeleteExpr(methodDecl, deleteExpr);
+        else if (auto parenExpr = dyn_cast<ParenExpr>(*i))
+            CheckParenExpr(methodDecl, parenExpr);
+        else if (auto ifStmt = dyn_cast<IfStmt>(*i))
+            CheckIfStmt(methodDecl, ifStmt);
     }
 }
 
-/**
- * check for simple call to delete in a destructor i.e. direct unconditional call, or if-guarded call
- */
-void UseUniquePtr::CheckForSimpleDelete(const CXXMethodDecl* methodDecl, const CompoundStmt* compoundStmt)
+// Check for conditional deletes like:
+//     if (m_pField != nullptr) delete m_pField;
+void UseUniquePtr::CheckIfStmt(const CXXMethodDecl* methodDecl, const IfStmt* ifStmt)
 {
-    for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+    auto cond = ifStmt->getCond()->IgnoreImpCasts();
+    if (auto ifCondMemberExpr = dyn_cast<MemberExpr>(cond))
     {
-        auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i);
-        if (deleteExpr)
-        {
-            CheckDeleteExpr(methodDecl, deleteExpr);
-            continue;
-        }
-        auto parenExpr = dyn_cast<ParenExpr>(*i);
+        // ignore "if (bMine)"
+        if (!loplugin::TypeCheck(ifCondMemberExpr->getType()).Pointer())
+            return;
+        // good
+    }
+    else if (auto binaryOp = dyn_cast<BinaryOperator>(cond))
+    {
+        if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImpCasts()))
+            return;
+        if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImpCasts()))
+            return;
+        // good
+    }
+    else // ignore anything more complicated
+        return;
+
+    auto deleteExpr = dyn_cast<CXXDeleteExpr>(ifStmt->getThen());
+    if (deleteExpr)
+    {
+        CheckDeleteExpr(methodDecl, deleteExpr);
+        return;
+    }
+
+    auto parenExpr = dyn_cast<ParenExpr>(ifStmt->getThen());
+    if (parenExpr)
+    {
+        CheckParenExpr(methodDecl, parenExpr);
+        return;
+    }
+
+    auto ifThenCompoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen());
+    if (!ifThenCompoundStmt)
+        return;
+    for (auto j = ifThenCompoundStmt->body_begin(); j != ifThenCompoundStmt->body_end(); ++j)
+    {
+        auto ifDeleteExpr = dyn_cast<CXXDeleteExpr>(*j);
+        if (ifDeleteExpr)
+            CheckDeleteExpr(methodDecl, ifDeleteExpr);
+        ParenExpr const * parenExpr = dyn_cast<ParenExpr>(*j);
         if (parenExpr)
-        {
             CheckParenExpr(methodDecl, parenExpr);
-            continue;
-        }
-        // Check for conditional deletes like:
-        //     if (m_pField != nullptr) delete m_pField;
-        auto ifStmt = dyn_cast<IfStmt>(*i);
-        if (!ifStmt)
-            continue;
-        auto cond = ifStmt->getCond()->IgnoreImpCasts();
-        if (auto ifCondMemberExpr = dyn_cast<MemberExpr>(cond))
-        {
-            // ignore "if (bMine)"
-            if (!loplugin::TypeCheck(ifCondMemberExpr->getType()).Pointer())
-                continue;
-            // good
-        }
-        else if (auto binaryOp = dyn_cast<BinaryOperator>(cond))
-        {
-            if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImpCasts()))
-                continue;
-            if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImpCasts()))
-                continue;
-            // good
-        }
-        else // ignore anything more complicated
-            continue;
-
-        deleteExpr = dyn_cast<CXXDeleteExpr>(ifStmt->getThen());
-        if (deleteExpr)
-        {
-            CheckDeleteExpr(methodDecl, deleteExpr);
-            continue;
-        }
-
-        parenExpr = dyn_cast<ParenExpr>(ifStmt->getThen());
-        if (parenExpr)
-        {
-            CheckParenExpr(methodDecl, parenExpr);
-            continue;
-        }
-
-        auto ifThenCompoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen());
-        if (!ifThenCompoundStmt)
-            continue;
-        for (auto j = ifThenCompoundStmt->body_begin(); j != ifThenCompoundStmt->body_end(); ++j)
-        {
-            auto ifDeleteExpr = dyn_cast<CXXDeleteExpr>(*j);
-            if (ifDeleteExpr)
-                CheckDeleteExpr(methodDecl, ifDeleteExpr);
-            ParenExpr const * parenExpr = dyn_cast<ParenExpr>(*j);
-            if (parenExpr)
-                CheckParenExpr(methodDecl, parenExpr);
-        }
     }
 }
 
-/**
- * Check the delete expression in a destructor.
- */
 void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDeleteExpr* deleteExpr)
 {
-    const ImplicitCastExpr* castExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
-    if (!castExpr)
+    auto deleteExprArg = deleteExpr->getArgument()->IgnoreParenImpCasts();
+
+    const MemberExpr* memberExpr = dyn_cast<MemberExpr>(deleteExprArg);
+    if (memberExpr)
+    {
+        CheckDeleteExpr(methodDecl, deleteExpr, memberExpr,
+            "unconditional call to delete on a member, should be using std::unique_ptr");
         return;
-    const MemberExpr* memberExpr = dyn_cast<MemberExpr>(castExpr->getSubExpr());
-    if (!memberExpr)
-        return;
-    CheckDeleteExpr(methodDecl, deleteExpr, memberExpr,
-        "unconditional call to delete on a member, should be using std::unique_ptr");
+    }
+
+    const ArraySubscriptExpr* arrayExpr = dyn_cast<ArraySubscriptExpr>(deleteExprArg);
+    if (arrayExpr)
+    {
+       auto baseMemberExpr = dyn_cast<MemberExpr>(arrayExpr->getBase()->IgnoreParenImpCasts());
+       if (baseMemberExpr)
+            CheckDeleteExpr(methodDecl, deleteExpr, baseMemberExpr,
+                "unconditional call to delete on a member, should be using std::unique_ptr");
+    }
 }
 
 /**
@@ -273,9 +390,6 @@ void UseUniquePtr::CheckParenExpr(const CXXMethodDecl* methodDecl, const ParenEx
     CheckDeleteExpr(methodDecl, deleteExpr);
 }
 
-/**
- * Check the delete expression in a destructor.
- */
 void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDeleteExpr* deleteExpr,
     const MemberExpr* memberExpr, StringRef message)
 {
@@ -378,6 +492,7 @@ void UseUniquePtr::CheckLoopDelete(const CXXMethodDecl* methodDecl, const CXXDel
 {
     const MemberExpr* memberExpr = nullptr;
     const Expr* subExpr = deleteExpr->getArgument();
+    // drill down looking for a MemberExpr
     for (;;)
     {
         subExpr = subExpr->IgnoreImpCasts();
@@ -387,10 +502,26 @@ void UseUniquePtr::CheckLoopDelete(const CXXMethodDecl* methodDecl, const CXXDel
             subExpr = arraySubscriptExpr->getBase();
         else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
         {
+            // look for deletes of an iterator object where the iterator is over a member field
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts()))
+            {
+                if (auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
+                {
+                    auto init = varDecl->getInit();
+                    if (auto x = dyn_cast<ExprWithCleanups>(init))
+                        init = x->getSubExpr();
+                    if (auto x = dyn_cast<CXXBindTemporaryExpr>(init))
+                        init = x->getSubExpr();
+                    if (auto x = dyn_cast<CXXMemberCallExpr>(init))
+                        init = x->getImplicitObjectArgument();
+                    memberExpr = dyn_cast<MemberExpr>(init);
+                    break;
+                }
+            }
+            // look for deletes like "delete m_pField[0]"
             if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
             {
                 memberExpr = dyn_cast<MemberExpr>(cxxOperatorCallExpr->getArg(0));
-                break;
             }
             break;
         }
@@ -403,11 +534,15 @@ void UseUniquePtr::CheckLoopDelete(const CXXMethodDecl* methodDecl, const CXXDel
     CheckDeleteExpr(methodDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
 }
 
-void UseUniquePtr::CheckRangedLoopDelete(const CXXMethodDecl* methodDecl, const CXXForRangeStmt* cxxForRangeStmt)
+void UseUniquePtr::CheckCXXForRangeStmt(const CXXMethodDecl* methodDecl, const CXXForRangeStmt* cxxForRangeStmt)
 {
     CXXDeleteExpr const * deleteExpr = nullptr;
     if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
-        deleteExpr = dyn_cast<CXXDeleteExpr>(*compoundStmt->body_begin());
+    {
+        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+            if ((deleteExpr = dyn_cast<CXXDeleteExpr>(*i)))
+                break;
+    }
     else
         deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
     if (!deleteExpr)
@@ -442,10 +577,7 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
         return true;
     }
 
-    auto pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
-    if (!pCastExpr)
-        return true;
-    auto declRefExpr = dyn_cast<DeclRefExpr>(pCastExpr->getSubExpr());
+    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
     if (!declRefExpr)
         return true;
     auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
@@ -486,6 +618,32 @@ bool UseUniquePtr::TraverseFunctionDecl(FunctionDecl* functionDecl)
     return ret;
 }
 
+bool UseUniquePtr::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
+{
+    if (ignoreLocation(methodDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = methodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(methodDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+
+bool UseUniquePtr::TraverseCXXConstructorDecl(CXXConstructorDecl* methodDecl)
+{
+    if (ignoreLocation(methodDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = methodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(methodDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+
 bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
 {
     if (!mpCurrentFunctionDecl)
@@ -512,6 +670,22 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
             || name == "lcl_MergeGCBox" || name == "lcl_MergeGCLine" || name == "lcl_DelHFFormat")
             return true;
     }
+    if (auto cxxMethodDecl = dyn_cast<CXXMethodDecl>(mpCurrentFunctionDecl))
+    {
+        // include/o3tl/deleter.hxx
+        if (cxxMethodDecl->getParent()->getName() == "default_delete")
+            return true;
+        // TODO Bitmap::ReleaseAccess
+        // Tricky because it reverberates through other code and requires that BitmapWriteAccess move into /include again
+        if (cxxMethodDecl->getParent()->getName() == "Bitmap")
+            return true;
+        // TODO virtual ones are much trickier, leave for later
+        if (cxxMethodDecl->isVirtual())
+            return true;
+        // sw/inc/unobaseclass.hxx holds SolarMutex while deleting
+        if (cxxMethodDecl->getParent()->getName() == "UnoImplPtrDeleter")
+            return true;
+    }
 
     auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
     if (!declRefExpr)
@@ -526,7 +700,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
     */
     report(
         DiagnosticsEngine::Warning,
-        "calling delete on a pointer param, should be either whitelisted here or simplified",
+        "calling delete on a pointer param, should be either whitelisted or simplified",
         compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
     return true;
