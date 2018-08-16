@@ -2974,7 +2974,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     switch (pLoc->getDateOrder())
                     {
                         case DateOrder::MDY:
-                            if (IsDateFragment( nDayPos, nMonthPos))
+                            // Convert only if the actual format is not of YDM
+                            // order (which would be a completely unusual order
+                            // anyway, but..), e.g. YYYY.DD.MM not to
+                            // YYYY/MM/DD
+                            if (IsDateFragment( nDayPos, nMonthPos) && !IsDateFragment( nYearPos, nDayPos))
                                 SwapArrayElements( nDayPos, nMonthPos);
                         break;
                         case DateOrder::YMD:
@@ -2997,7 +3001,10 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     switch (pLoc->getDateOrder())
                     {
                         case DateOrder::DMY:
-                            if (IsDateFragment( nMonthPos, nDayPos))
+                            // Convert only if the actual format is not of YMD
+                            // order, e.g. YYYY/MM/DD not to YYYY.DD.MM
+                            /* TODO: convert such to DD.MM.YYYY instead? */
+                            if (IsDateFragment( nMonthPos, nDayPos) && !IsDateFragment( nYearPos, nMonthPos))
                                 SwapArrayElements( nMonthPos, nDayPos);
                         break;
                         case DateOrder::YMD:
