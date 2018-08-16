@@ -1212,8 +1212,6 @@ public:
 
 private:
     OUString msTitle;
-    const OUString msColorKey;
-    const OUString msModeKey;
     Color mnColor;
     sal_Int16 mnMode;
     Reference<css::awt::XWindow> mxParent;
@@ -1235,10 +1233,11 @@ Sequence< OUString > ColorPicker_getSupportedServiceNames()
     return seq;
 }
 
+static const OUStringLiteral gsColorKey( "Color" );
+static const OUStringLiteral gsModeKey( "Mode" );
+
 ColorPicker::ColorPicker()
     : ColorPickerBase( m_aMutex )
-    , msColorKey( "Color" )
-    , msModeKey( "Mode" )
     , mnColor( 0 )
     , mnMode( 0 )
 {
@@ -1273,7 +1272,7 @@ Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  )
 {
     Sequence< PropertyValue > props(1);
-    props[0].Name = msColorKey;
+    props[0].Name = gsColorKey;
     props[0].Value <<= mnColor;
     return props;
 }
@@ -1282,11 +1281,11 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
 {
     for( sal_Int32 n = 0; n < aProps.getLength(); n++ )
     {
-        if( aProps[n].Name == msColorKey )
+        if( aProps[n].Name == gsColorKey )
         {
             aProps[n].Value >>= mnColor;
         }
-        else if( aProps[n].Name == msModeKey )
+        else if( aProps[n].Name == gsModeKey )
         {
             aProps[n].Value >>= mnMode;
         }

@@ -182,28 +182,6 @@ private:
 
     SAL_DLLPRIVATE const rtl::Reference< SvXMLExportPropertyMapper >& GetPropertySetMapper() const { return mxPropertySetMapper; }
 
-    const OUString                         msZIndex;
-    const OUString                         msPrintable;
-    const OUString                         msVisible;
-
-    const OUString                         msModel;
-    const OUString                         msStartShape;
-    const OUString                         msEndShape;
-    const OUString                         msOnClick;
-    const OUString                         msEventType;
-    const OUString                         msPresentation;
-    const OUString                         msMacroName;
-    const OUString                         msScript;
-    const OUString                         msLibrary;
-    const OUString                         msClickAction;
-    const OUString                         msBookmark;
-    const OUString                         msEffect;
-    const OUString                         msPlayFull;
-    const OUString                         msVerb;
-    const OUString                         msSoundURL;
-    const OUString                         msSpeed;
-    const OUString                         msStarBasic;
-
     OUStringBuffer msBuffer;
 
     SAL_DLLPRIVATE void ImpCalcShapeType(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType& eShapeType);

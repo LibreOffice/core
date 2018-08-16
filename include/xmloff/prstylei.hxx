@@ -40,8 +40,6 @@ typedef std::unordered_set<OUString> OldFillStyleDefinitionSet;
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {
 private:
-    const OUString msIsPhysical;
-    const OUString msFollowStyle;
     ::std::vector< XMLPropertyState >          maProperties;
     css::uno::Reference < css::style::XStyle > mxStyle;
     SvXMLImportContextRef                      mxStyles;

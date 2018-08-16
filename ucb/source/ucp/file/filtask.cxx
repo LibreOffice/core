@@ -116,28 +116,31 @@ TaskManager::MyProperty::~MyProperty()
 
 #include "filinl.hxx"
 
+        // Default properties
+
+static const OUStringLiteral Title( "Title" );
+static const OUStringLiteral CasePreservingURL( "CasePreservingURL" );
+static const OUStringLiteral IsDocument( "IsDocument" );
+static const OUStringLiteral IsFolder( "IsFolder" );
+static const OUStringLiteral DateModified( "DateModified" );
+static const OUStringLiteral Size( "Size" );
+static const OUStringLiteral IsVolume( "IsVolume" );
+static const OUStringLiteral IsRemoveable( "IsRemoveable" );
+static const OUStringLiteral IsRemote( "IsRemote" );
+static const OUStringLiteral IsCompactDisc( "IsCompactDisc" );
+static const OUStringLiteral IsFloppy( "IsFloppy" );
+static const OUStringLiteral IsHidden( "IsHidden" );
+static const OUStringLiteral ContentType( "ContentType" );
+static const OUStringLiteral IsReadOnly( "IsReadOnly" );
+static const OUStringLiteral CreatableContentsInfo( "CreatableContentsInfo" );
+const OUStringLiteral TaskManager::FolderContentType( "application/vnd.sun.staroffice.fsys-folder" );
+const OUStringLiteral TaskManager::FileContentType( "application/vnd.sun.staroffice.fsys-file" );
+
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )
     : m_nCommandId( 0 ),
       m_pProvider( pProvider ),
       m_xContext( rxContext ),
-      Title( "Title" ),
-      CasePreservingURL( "CasePreservingURL" ),
-      IsDocument( "IsDocument" ),
-      IsFolder( "IsFolder" ),
-      DateModified( "DateModified" ),
-      Size( "Size" ),
-      IsVolume( "IsVolume" ),
-      IsRemoveable( "IsRemoveable" ),
-      IsRemote( "IsRemote" ),
-      IsCompactDisc( "IsCompactDisc" ),
-      IsFloppy( "IsFloppy" ),
-      IsHidden( "IsHidden" ),
-      ContentType( "ContentType" ),
-      IsReadOnly( "IsReadOnly" ),
-      CreatableContentsInfo( "CreatableContentsInfo" ),
-      FolderContentType( "application/vnd.sun.staroffice.fsys-folder" ),
-      FileContentType( "application/vnd.sun.staroffice.fsys-file" ),
       m_sCommandInfo( 9 )
 {
     // Title
