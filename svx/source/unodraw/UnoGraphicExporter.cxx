@@ -178,83 +178,73 @@ namespace {
 
     /** creates a bitmap that is optionally transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, bool bTransparent, const Size* pSize )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, const Size* pSize )
     {
-        BitmapEx aBmpEx;
+        // use new primitive conversion tooling
+        basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
+        sal_uInt32 nMaximumQuadraticPixels(500000);
 
-        if(bTransparent)
+        if(pSize)
         {
-            // use new primitive conversion tooling
-            basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
-            sal_uInt32 nMaximumQuadraticPixels(500000);
+            // use 100th mm for primitive bitmap converter tool, input is pixel
+            // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
+            const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MapUnit::Map100thMM)));
 
-            if(pSize)
-            {
-                // use 100th mm for primitive bitmap converter tool, input is pixel
-                // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
-                const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MapUnit::Map100thMM)));
+            aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
 
-                aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
-
-                // when explicitly pixels are requested from the GraphicExporter, use a *very* high limit
-                // of 16gb (4096x4096 pixels), else use the default for the converters
-                nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(pSize->Width() * pSize->Height()));
-            }
-            else
-            {
-                // use 100th mm for primitive bitmap converter tool
-                const Size aSize100th(OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
-
-                aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
-            }
-
-            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
+            // when explicitly pixels are requested from the GraphicExporter, use a *very* high limit
+            // of 16gb (4096x4096 pixels), else use the default for the converters
+            nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(pSize->Width() * pSize->Height()));
         }
         else
         {
-            const SvtOptionsDrawinglayer aDrawinglayerOpt;
-            Size aTargetSize(0, 0);
+            // use 100th mm for primitive bitmap converter tool
+            const Size aSize100th(OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
 
-            if(pSize)
-            {
-                // #i122820# If a concrete target size in pixels is given, use it
-                aTargetSize = *pSize;
-
-                // get hairline and full bound rect to evtl. reduce given target pixel size when
-                // it is known that it will be expanded to get the right and bottom hairlines right
-                tools::Rectangle aHairlineRect;
-                const tools::Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
-
-                if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
-                {
-                    if(aRect.Right() == aHairlineRect.Right() || aRect.Bottom() == aHairlineRect.Bottom())
-                    {
-                        if(aTargetSize.Width())
-                        {
-                            aTargetSize.AdjustWidth( -1 );
-                        }
-
-                        if(aTargetSize.Height())
-                        {
-                            aTargetSize.AdjustHeight( -1 );
-                        }
-                    }
-                }
-            }
-
-            const GraphicConversionParameters aParameters(
-                aTargetSize,
-                true, // allow unlimited size
-                aDrawinglayerOpt.IsAntiAliasing(),
-                aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
-            const Graphic aGraphic(rMtf);
-
-            aBmpEx = aGraphic.GetBitmapEx(aParameters);
-            aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
-            aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
+            aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
         }
 
-        return aBmpEx;
+        // get hairline and full bound rect to evtl. correct logic size by the
+        // equivalent of one pixel to make those visible at right and bottom
+        tools::Rectangle aHairlineRect;
+        const tools::Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
+
+        if(!aRect.IsEmpty())
+        {
+            // tdf#105998 Correct the Metafile using information from it's real sizes measured
+            // using rMtf.GetBoundRect above and a copy
+            const Size aOnePixelInMtf(
+                Application::GetDefaultDevice()->PixelToLogic(
+                    Size(1, 1),
+                    rMtf.GetPrefMapMode()));
+            GDIMetaFile aMtf(rMtf);
+            const Size aHalfPixelInMtf(
+                (aOnePixelInMtf.getWidth() + 1) / 2,
+                (aOnePixelInMtf.getHeight() + 1) / 2);
+            const bool bHairlineBR(
+                !aHairlineRect.IsEmpty() && (aRect.Right() == aHairlineRect.Right() || aRect.Bottom() == aHairlineRect.Bottom()));
+
+            // Move the content to (0,0), usually TopLeft ist slightly
+            // negative. For better visualization, add a half pixel, too
+            aMtf.Move(
+                aHalfPixelInMtf.getWidth() - aRect.Left(),
+                aHalfPixelInMtf.getHeight() - aRect.Top());
+
+            // Do not Scale, but set the PrefSize. Some levels deeper the
+            // MetafilePrimitive will add a mapping to the decomposition
+            // (and possibly a clipping) to map the graphic content to
+            // a unit coordinate system.
+            // Size is the measured size plus one pixel if needed (bHairlineBR)
+            // and the moved half pixwel from above
+            aMtf.SetPrefSize(
+                Size(
+                    aRect.getWidth() + (bHairlineBR ? aOnePixelInMtf.getWidth() : 0) + aHalfPixelInMtf.getWidth(),
+                    aRect.getHeight() + (bHairlineBR ? aOnePixelInMtf.getHeight() : 0) + aHalfPixelInMtf.getHeight()));
+
+            return convertMetafileToBitmapEx(aMtf, aRange, nMaximumQuadraticPixels);
+        }
+
+        return BitmapEx();
     }
 
     Size* CalcSize( sal_Int32 nWidth, sal_Int32 nHeight, const Size& aBoundSize, Size& aOutSize )
@@ -788,7 +778,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), true, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -978,7 +968,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             if( !bVectorType )
             {
                 Size aOutSize;
-                aGraphic = GetBitmapFromMetaFile( aMtf, rSettings.mbTranslucent, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aBoundSize, aOutSize ) );
+                aGraphic = GetBitmapFromMetaFile( aMtf, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aBoundSize, aOutSize ) );
             }
             else
             {
