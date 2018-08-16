@@ -3561,6 +3561,15 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
+    AC_MSG_CHECKING([$CC is at least Visual Studio 2017 version 15.7])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
+        // between Visual Studio versions and _MSC_VER:
+        #if _MSC_VER < 1914
+        #error
+        #endif
+    ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
+
     # Check for 64-bit (cross-)compiler to use to build the 64-bit
     # version of the Explorer extension (and maybe other small
     # bits, too) needed when installing a 32-bit LibreOffice on a
