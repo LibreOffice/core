@@ -314,7 +314,7 @@ public:
 
 class Tcg255 : public TBBase
 {
-    std::vector< Tcg255SubStruct* > rgtcgData; // array of sub structures
+    std::vector< std::unique_ptr<Tcg255SubStruct> > rgtcgData; // array of sub structures
     Tcg255(const Tcg255&) = delete;
     Tcg255& operator = ( const Tcg255&) = delete;
     bool processSubStruct( sal_uInt8 nId, SvStream& );
