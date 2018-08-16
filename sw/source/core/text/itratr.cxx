@@ -412,8 +412,9 @@ static void InsertCharAttrs(SfxPoolItem const** pAttrs, SfxItemSet const& rItems
 
 // if return false: portion ends at start of redline, indexes unchanged
 // if return true: portion end not known (past end of redline), indexes point to first hint past end of redline
-bool CanSkipOverRedline(SwRangeRedline const& rRedline,
-        size_t & rStartIndex, size_t & rEndIndex)
+static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
+        size_t & rStartIndex, size_t & rEndIndex,
+        bool const isTheAnswerYes)
 {
     size_t nStartIndex(rStartIndex);
     size_t nEndIndex(rEndIndex);
@@ -470,7 +471,7 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
                     {
-                        return false; // always break
+                        if (!isTheAnswerYes) return false; // always break
                     }
                     break;
                 // these are guaranteed not to overlap
@@ -560,7 +561,7 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
                     {
-                        return false;
+                        if (!isTheAnswerYes) return false;
                     }
                     break;
                 case RES_TXTATR_AUTOFMT:
@@ -581,7 +582,7 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
                             }
                             if (!isFound)
                             {
-                                return false;
+                                if (!isTheAnswerYes) return false;
                             }
                         }
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
@@ -617,7 +618,7 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
     // if we didn't find a matching start for any end, then it really ends inside
     if (!activeCharFmts.empty())
     {
-        return false;
+        if (!isTheAnswerYes) return false;
     }
     for (size_t i = 0; i < SAL_N_ELEMENTS(activeCharAttrsStart); ++i)
     {
@@ -625,7 +626,7 @@ bool CanSkipOverRedline(SwRangeRedline const& rRedline,
 //        assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->IsItemPoolable(*activeCharAttrsStart[i]));
         if (activeCharAttrsStart[i] != activeCharAttrsEnd[i])
         {
-            return false;
+            if (!isTheAnswerYes) return false;
         }
     }
     rStartIndex = nStartIndex;
@@ -709,8 +710,9 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             if (redline.second.first)
             {
                 assert(m_pMergedPara);
-                if (CanSkipOverRedline(*redline.second.first, nStartIndex, nEndIndex))
-                {
+                if (CanSkipOverRedline(*redline.second.first,
+                        nStartIndex, nEndIndex, m_nPosition == redline.first))
+                {   // if current position is start of the redline, must skip!
                     nActRedline += redline.second.second;
                     if (&redline.second.first->End()->nNode.GetNode() != pTextNode)
                     {
