@@ -120,6 +120,16 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
 bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 {
     mKey.clear();
+    /*
+        KeySize (4 bytes): An unsigned integer that specifies the number of bits in the encryption key.
+        MUST be a multiple of 8. MUST be one of the values in the following table:
+        Algorithm   Value                               Comment
+        Any         0x00000000                          Determined by Flags
+        RC4         0x00000028 – 0x00000080             (inclusive) 8-bit increments.
+        AES         0x00000080, 0x000000C0, 0x00000100  128, 192 or 256-bit
+    */
+    if (mInfo.header.keyBits > 8192) // should we strictly enforce the above 256 bit limit ?
+        return false;
     mKey.resize(mInfo.header.keyBits / 8, 0);
     if (mKey.empty())
         return false;
