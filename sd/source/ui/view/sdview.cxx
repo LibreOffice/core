@@ -715,18 +715,18 @@ bool View::SdrBeginTextEdit(
 
     if (::Outliner* pOL = bReturn ? GetTextEditOutliner() : nullptr)
     {
-        if (pObj && pObj->getSdrPageFromSdrObject())
+        if (pObj)
         {
-            Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
+                Color aBackground;
                 aBackground = GetTextEditBackgroundColor(*this);
+                pOL->SetBackgroundColor( aBackground  );
             }
             else
             {
-                aBackground = pObj->getSdrPageFromSdrObject()->GetPageBackgroundColor(pPV);
+                pObj->setSuitableOutlinerBg(*pOL);
             }
-            pOL->SetBackgroundColor( aBackground  );
         }
 
         pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
