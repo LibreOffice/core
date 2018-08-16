@@ -1576,7 +1576,8 @@ bool ImpGraphic::ImplSwapIn()
 
                 bRet = ImplSwapIn( xIStm.get() );
                 xIStm.reset();
-                setOriginURL(mpSwapFile->maOriginURL);
+                if (mpSwapFile)
+                    setOriginURL(mpSwapFile->maOriginURL);
                 mpSwapFile.reset();
             }
         }
