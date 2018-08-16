@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_ef906098",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-16T10:07:24Z",
+      "side": 1,
+      "message": "SetTabProtectionSymbol() should not be called for nTab \u003d\u003d TABLEID_DOC which is not a sheet number but std::numeric_limits\u003cSCTAB\u003e::max() to indicate document protection. In fact ScTabView::SetTabProtectionSymbol() calls pTabControl-\u003eSetProtectionSymbol() with static_cast\u003csal_uInt16\u003e(nTab)+1 so likely will attempt to remove a sheet protection symbol from tab 0 in that case.",
+      "revId": "d064ced9e9db3f924dd954b86c40f21addab1c68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
