@@ -73,7 +73,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \
 	$(call gb_Helper_optional,MWAW,libmwaw) \
-	$(call gb_Helper_optional,MYSQL_CONNECTOR_CPP,mysql-connector-cpp) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NSS,nss) \
