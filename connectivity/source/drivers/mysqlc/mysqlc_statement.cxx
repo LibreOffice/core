@@ -61,10 +61,10 @@ OCommonStatement::~OCommonStatement() {}
 void OCommonStatement::disposeResultSet()
 {
     // free the cursor if alive
-    if (m_pMysqlResult != nullptr)
+    if (m_xResultSet.is())
     {
-        mysql_free_result(m_pMysqlResult);
-        m_pMysqlResult = nullptr;
+        m_xResultSet.clear();
+        m_pMysqlResult = nullptr; // it is freed by XResultSet
     }
 }
 
