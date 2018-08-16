@@ -291,9 +291,8 @@ void SmCursor::Delete(){
     FinishEdit(std::move(pLineList), pLineParent, nLineOffset, PosAfterDelete);
 }
 
-void SmCursor::InsertNodes(SmNodeList* pNewNodes){
+void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
     if(pNewNodes->empty()){
-        delete pNewNodes;
         return;
     }
 
@@ -331,8 +330,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
                         PatchLineList(pLineList.get(), patchIt);
     SmCaretPos PosAfterInsert = PatchLineList(pLineList.get(), it);
     //Release list, we've taken the nodes
-    delete pNewNodes;
-    pNewNodes = nullptr;
+    pNewNodes.reset();
 
     //Finish editing
     FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterInsert);
@@ -881,9 +879,9 @@ void SmCursor::InsertText(const OUString& aString)
     pText->AdjustFontDesc();
     pText->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
-    SmNodeList* pList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pList(new SmNodeList);
     pList->push_front(pText);
-    InsertNodes(pList);
+    InsertNodes(std::move(pList));
 
     EndEdit();
 }
@@ -983,9 +981,9 @@ void SmCursor::InsertElement(SmFormulaElement element){
     pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert new node
-    SmNodeList* pList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pList(new SmNodeList);
     pList->push_front(pNewNode);
-    InsertNodes(pList);
+    InsertNodes(std::move(pList));
 
     EndEdit();
 }
@@ -1010,9 +1008,9 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     pSpecial->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert the node
-    SmNodeList* pList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pList(new SmNodeList);
     pList->push_front(pSpecial);
-    InsertNodes(pList);
+    InsertNodes(std::move(pList));
 
     EndEdit();
 }
@@ -1035,7 +1033,7 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     Delete();
 
     //Insert it
-    InsertNodes(pLineList.release());
+    InsertNodes(std::move(pLineList));
 
     EndEdit();
 }
@@ -1087,9 +1085,9 @@ void SmCursor::Paste() {
     EndEdit();
 }
 
-SmNodeList* SmCursor::CloneList(SmClipboard &rClipboard){
+std::unique_ptr<SmNodeList> SmCursor::CloneList(SmClipboard &rClipboard){
     SmCloningVisitor aCloneFactory;
-    SmNodeList* pClones = new SmNodeList;
+    std::unique_ptr<SmNodeList> pClones(new SmNodeList);
 
     for(auto &xNode : rClipboard){
         SmNode *pClone = aCloneFactory.Clone(xNode.get());
