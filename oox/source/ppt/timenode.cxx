@@ -205,6 +205,8 @@ namespace oox { namespace ppt {
             OUString sServiceName = getServiceName(nNodeType);
 
             Reference< XAnimationNode > xNode = createAndInsert( rFilter, sServiceName, rxNode );
+            if (!xNode)
+                return;
             setNode(rFilter, xNode, pSlide, rxNode);
         }
         catch( const Exception& e )
@@ -236,7 +238,7 @@ namespace oox { namespace ppt {
             if( !maStCondList.empty() )
             {
                 Any aAny = AnimationCondition::convertList( pSlide, maStCondList );
-                 if( aAny.hasValue() )
+                if( aAny.hasValue() )
                 {
                     xNode->setBegin( aAny );
                 }
