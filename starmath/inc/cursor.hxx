@@ -261,7 +261,7 @@ private:
     void BuildGraph();
 
     /** Insert new nodes in the tree after position */
-    void InsertNodes(SmNodeList* pNewNodes);
+    void InsertNodes(std::unique_ptr<SmNodeList> pNewNodes);
 
     /** tries to set position to a specific SmCaretPos
      *
@@ -273,7 +273,7 @@ private:
     void AnnotateSelection();
 
     /** Clone list of nodes in a clipboard (creates a deep clone) */
-    static SmNodeList* CloneList(SmClipboard &rClipboard);
+    static std::unique_ptr<SmNodeList> CloneList(SmClipboard &rClipboard);
 
     /** Find an iterator pointing to the node in pLineList following rCaretPos
      *
