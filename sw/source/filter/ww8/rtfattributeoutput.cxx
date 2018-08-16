@@ -2834,7 +2834,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
 
     SvxLRSpaceItem aLR(rNdSet.Get(RES_LR_SPACE));
     aLR.SetTextLeft(aLR.GetTextLeft() + pFormat->GetIndentAt());
-    aLR.SetTextFirstLineOfst(pFormat->GetFirstLineOffset());
+    aLR.SetTextFirstLineOfst(pFormat->GetFirstLineOffset()); //TODO: overflow
 
     sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
     OString* pString = m_rExport.GetStyle(nStyle);

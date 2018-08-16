@@ -808,7 +808,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         aFormat.SetFirstLineOffset(0);
                         aLRSpaceItem.SetTextFirstLineOfst(
                             rItem.GetTextFirstLineOfst()
-                            - aFormat.GetFirstLineOffset()
+                            - aFormat.GetFirstLineOffset() //TODO: overflow
                             + aFormat.GetCharTextDistance());
                     }
 
@@ -911,6 +911,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                         aLRSpaceItem.SetTextLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTextLeft());
                         aLRSpaceItem.SetTextFirstLineOfst(
                             rLRSpaceItem.GetTextFirstLineOfst() + rFormat.GetFirstLineOffset()
+                                //TODO: overflow
                             - rFormat.GetCharTextDistance());
                     }
 

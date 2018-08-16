@@ -124,7 +124,7 @@ private:
     //         LABEL_ALIGNMENT is active.
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
 
-    short               nFirstLineOffset;   // First line indent
+    sal_Int32           nFirstLineOffset;   // First line indent
     sal_Int32           nAbsLSpace;         // Distance Border<->Number
     short               nCharTextDistance;  // Distance Number<->Text
 
@@ -197,8 +197,8 @@ public:
 
     void            SetAbsLSpace(sal_Int32 nSet) {nAbsLSpace = nSet;}
     sal_Int32       GetAbsLSpace() const;
-    void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}
-    short           GetFirstLineOffset() const;
+    void            SetFirstLineOffset(sal_Int32 nSet) { nFirstLineOffset = nSet;}
+    sal_Int32       GetFirstLineOffset() const;
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
     short           GetCharTextDistance() const;
 
