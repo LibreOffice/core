@@ -4303,21 +4303,30 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                             // the new text frames don't exist yet, so at this point
                             // we can only delete the footnote frames so they don't
                             // point to the merged SwTextFrame any more...
-                            SwTextNode const* pNode(&rTextNode);
-                            for (auto const& rExtent : pMergedPara->extents)
+                            assert(&rTextNode == pMergedPara->pFirstNode);
+                            // iterate over nodes, not extents: if a node has
+                            // no extents now but did have extents initially,
+                            // its flys need their frames deleted too!
+                            for (sal_uLong j = rTextNode.GetIndex() + 1;
+                                 j <= pMergedPara->pLastNode->GetIndex(); ++j)
                             {
-                                if (rExtent.pNode != pNode)
+                                SwNode *const pNode(rTextNode.GetNodes()[j]);
+                                assert(!pNode->IsEndNode());
+                                if (pNode->IsStartNode())
                                 {
-                                    sw::RemoveFootnotesForNode(*pFrame, *rExtent.pNode, nullptr);
+                                    j = pNode->EndOfSectionIndex();
+                                }
+                                else if (pNode->IsTextNode())
+                                {
+                                    sw::RemoveFootnotesForNode(*pFrame, *pNode->GetTextNode(), nullptr);
                                     // similarly, remove the anchored flys
-                                    if (auto const pFlys = rExtent.pNode->GetAnchoredFlys())
+                                    if (auto const pFlys = pNode->GetAnchoredFlys())
                                     {
                                         for (SwFrameFormat * pFormat : *pFlys)
                                         {
                                             pFormat->DelFrames(/*&rLayout*/);
                                         }
                                     }
-                                    pNode = rExtent.pNode;
                                 }
                             }
                             // rely on AppendAllObjs call at the end to add
