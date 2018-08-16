@@ -848,9 +848,10 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                             }
                             else
                             {
+                                sal_Int32 const nOldEnd(it->nEnd);
                                 it->nEnd = nIndex;
                                 it = rMerged.extents.emplace(it+1,
-                                    it->pNode, nIndex + nDeleteHere, it->nEnd);
+                                    it->pNode, nIndex + nDeleteHere, nOldEnd);
                             }
                             assert(nDeleteHere == nToDelete);
                         }
