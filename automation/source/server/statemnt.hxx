@@ -51,6 +51,7 @@
 #include <vcl/event.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <automation/commtypes.hxx>
+#include <automation/automationdllapi.h>
 
 class Window;
 class SystemWindow;
@@ -78,7 +79,7 @@ class EditWindow;
 extern "C"
 {
 #endif
-    void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString );
+    AUTOMATION_DLLPUBLIC void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString );
 #ifdef __cplusplus
 }
 #endif

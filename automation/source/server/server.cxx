@@ -961,7 +961,7 @@ RemoteControl::~RemoteControl()
 
 static ::osl::Mutex aMutex;
 static RemoteControl* pRemoteControl = 0;
-extern "C" void CreateRemoteControl()
+extern "C" AUTOMATION_DLLPUBLIC void CreateRemoteControl()
 {
     if ( !pRemoteControl )
     {
@@ -971,19 +971,19 @@ extern "C" void CreateRemoteControl()
     }
 }
 
-extern "C" void DestroyRemoteControl()
+extern "C" AUTOMATION_DLLPUBLIC void DestroyRemoteControl()
 {
     ::osl::MutexGuard aGuard( aMutex );
     delete pRemoteControl;
     pRemoteControl = 0;
 }
 
-extern "C" void CreateEventLogger()
+extern "C" AUTOMATION_DLLPUBLIC void CreateEventLogger()
 {
     MacroRecorder::GetMacroRecorder()->SetActionLog();
 }
 
-extern "C" void DestroyEventLogger()
+extern "C" AUTOMATION_DLLPUBLIC void DestroyEventLogger()
 {
     MacroRecorder::GetMacroRecorder()->SetActionLog( sal_False );   // Will delete MacroRecorder if necessary
 }
