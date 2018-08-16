@@ -59,16 +59,12 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
-    const OUString sStandardFormat;
-    const OUString sType;
     const OUString sAttrValue;
     const OUString sAttrDateValue;
     const OUString sAttrTimeValue;
     const OUString sAttrBooleanValue;
     const OUString sAttrStringValue;
     const OUString sAttrCurrency;
-    const OUString msCurrencySymbol;
-    const OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
 public:
     XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier);

@@ -3266,10 +3266,11 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 {
 }
 
+static const OUStringLiteral gaStdFormName( "Standard" ); /// Standard name of control forms.
+
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),
     oox::ole::MSConvertOCXControls( rRoot.GetDocShell()->GetModel() ),
-    maStdFormName( "Standard" ),
     mnOleImpFlags( 0 )
 {
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
@@ -3842,14 +3843,14 @@ void XclImpDffConverter::InitControlForm()
         Reference< XFormsSupplier > xFormsSupplier( rConvData.mrSdrPage.getUnoPage(), UNO_QUERY_THROW );
         Reference< XNameContainer > xFormsNC( xFormsSupplier->getForms(), UNO_SET_THROW );
         // find or create the Standard form used to insert the imported controls
-        if( xFormsNC->hasByName( maStdFormName ) )
+        if( xFormsNC->hasByName( gaStdFormName ) )
         {
-            xFormsNC->getByName( maStdFormName ) >>= rConvData.mxCtrlForm;
+            xFormsNC->getByName( gaStdFormName ) >>= rConvData.mxCtrlForm;
         }
         else if( SfxObjectShell* pDocShell = GetDocShell() )
         {
             rConvData.mxCtrlForm.set( ScfApiHelper::CreateInstance( pDocShell, "com.sun.star.form.component.Form" ), UNO_QUERY_THROW );
-            xFormsNC->insertByName( maStdFormName, Any( rConvData.mxCtrlForm ) );
+            xFormsNC->insertByName( gaStdFormName, Any( rConvData.mxCtrlForm ) );
         }
     }
     catch( const Exception& )

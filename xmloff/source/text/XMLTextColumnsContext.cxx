@@ -236,6 +236,14 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
     }
 }
 
+static const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
+static const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
+static const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
+static const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
+static const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
+static const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
+static const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
+
 XMLTextColumnsContext::XMLTextColumnsContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,
@@ -244,13 +252,6 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
 :   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
-,   sSeparatorLineIsOn("SeparatorLineIsOn")
-,   sSeparatorLineWidth("SeparatorLineWidth")
-,   sSeparatorLineColor("SeparatorLineColor")
-,   sSeparatorLineRelativeHeight("SeparatorLineRelativeHeight")
-,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
-,   sAutomaticDistance("AutomaticDistance")
-,   sSeparatorLineStyle("SeparatorLineStyle")
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
 ,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
@@ -398,33 +399,33 @@ void XMLTextColumnsContext::EndElement( )
     {
         bool bOn = mxColumnSep != nullptr;
 
-        xPropSet->setPropertyValue( sSeparatorLineIsOn, Any(bOn) );
+        xPropSet->setPropertyValue( gsSeparatorLineIsOn, Any(bOn) );
 
         if( mxColumnSep.is() )
         {
             if( mxColumnSep->GetWidth() )
             {
-                xPropSet->setPropertyValue( sSeparatorLineWidth, Any(mxColumnSep->GetWidth()) );
+                xPropSet->setPropertyValue( gsSeparatorLineWidth, Any(mxColumnSep->GetWidth()) );
             }
             if( mxColumnSep->GetHeight() )
             {
-                xPropSet->setPropertyValue( sSeparatorLineRelativeHeight,
+                xPropSet->setPropertyValue( gsSeparatorLineRelativeHeight,
                                             Any(mxColumnSep->GetHeight()) );
             }
             if ( mxColumnSep->GetStyle() )
             {
-                xPropSet->setPropertyValue( sSeparatorLineStyle, Any(mxColumnSep->GetStyle()) );
+                xPropSet->setPropertyValue( gsSeparatorLineStyle, Any(mxColumnSep->GetStyle()) );
             }
 
-            xPropSet->setPropertyValue( sSeparatorLineColor, Any(mxColumnSep->GetColor()) );
+            xPropSet->setPropertyValue( gsSeparatorLineColor, Any(mxColumnSep->GetColor()) );
 
-            xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, Any(mxColumnSep->GetVertAlign()) );
+            xPropSet->setPropertyValue( gsSeparatorLineVerticalAlignment, Any(mxColumnSep->GetVertAlign()) );
         }
 
         // handle 'automatic columns': column distance
         if( bAutomatic )
         {
-            xPropSet->setPropertyValue( sAutomaticDistance, Any(nAutomaticDistance) );
+            xPropSet->setPropertyValue( gsAutomaticDistance, Any(nAutomaticDistance) );
         }
     }
 

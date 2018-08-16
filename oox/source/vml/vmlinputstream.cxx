@@ -258,13 +258,14 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
 
 } // namespace
 
+static const OString gaOpeningCData( "<![CDATA[" );
+static const OString gaClosingCData( "]]>" );
+
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
     // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
     mxTextStrm( TextInputStream::createXTextInputStream( rxContext, rxInStrm, RTL_TEXTENCODING_ISO_8859_1 ) ),
     maOpeningBracket( 1 ),
     maClosingBracket( 1 ),
-    maOpeningCData( "<![CDATA[" ),
-    maClosingCData( "]]>" ),
     mnBufferPos( 0 )
 {
     if (!mxTextStrm.is())
@@ -352,10 +353,10 @@ void InputStream::updateBuffer()
             // read the element text (add the leading opening bracket manually)
             OString aElement = OString( '<' ) + readToElementEnd();
             // check for CDATA part, starting with '<![CDATA['
-            if( aElement.match( maOpeningCData ) )
+            if( aElement.match( gaOpeningCData ) )
             {
                 // search the end tag ']]>'
-                while( ((aElement.getLength() < maClosingCData.getLength()) || !aElement.endsWith( maClosingCData )) && !mxTextStrm->isEOF() )
+                while( ((aElement.getLength() < gaClosingCData.getLength()) || !aElement.endsWith( gaClosingCData )) && !mxTextStrm->isEOF() )
                     aElement += readToElementEnd();
                 // copy the entire CDATA part
                 aBuffer.append( aElement );

@@ -333,6 +333,8 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
     return xProperties->getMetric();
 }
 
+static const OUStringLiteral gsLayerID( SC_LAYERID );
+
 ScXMLExport::ScXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlag)
@@ -354,7 +356,6 @@ ScXMLExport::ScXMLExport(
     pMergedRangesContainer(nullptr),
     pValidationsContainer(nullptr),
     pChangeTrackingExportHelper(nullptr),
-    sLayerID( SC_LAYERID ),
     nOpenRow(-1),
     nProgressCount(0),
     nCurrentTable(0),
@@ -530,7 +531,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 continue;
 
             sal_Int16 nLayerID = 0;
-            bool bExtracted = xShapeProp->getPropertyValue(sLayerID) >>= nLayerID;
+            bool bExtracted = xShapeProp->getPropertyValue(gsLayerID) >>= nLayerID;
             if (!bExtracted)
                 continue;
 

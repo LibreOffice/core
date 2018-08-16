@@ -420,11 +420,12 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 
 }
 
+const OUStringLiteral ORegistry::ROOT("/");
+
 ORegistry::ORegistry()
     : m_refCount(1)
     , m_readOnly(false)
     , m_isOpen(false)
-    , ROOT("/")
 {
 }
 

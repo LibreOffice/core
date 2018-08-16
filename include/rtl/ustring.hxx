@@ -87,6 +87,9 @@ struct SAL_WARN_UNUSED OUStringLiteral
 
     int size;
     const char* data;
+
+    // So we can use this struct in some places interchangeably with OUString
+    sal_Int32 getLength() const { return size; }
 };
 
 /// @endcond

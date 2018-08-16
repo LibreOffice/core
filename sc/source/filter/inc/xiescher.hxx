@@ -1024,7 +1024,6 @@ private:
     typedef std::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
     typedef std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
-    const OUString maStdFormName;    /// Standard name of control forms.
     tools::SvRef<SotStorageStream> mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.

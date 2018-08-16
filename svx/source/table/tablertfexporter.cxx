@@ -60,7 +60,6 @@ private:
     SvStream& mrStrm;
     SdrTableObj& mrObj;
     Reference< XTable > mxTable;
-    const OUString msSize;
 };
 
 void SdrTableObj::ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
@@ -69,11 +68,12 @@ void SdrTableObj::ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
     aEx.Write();
 }
 
+static const OUStringLiteral gsSize( "Size" );
+
 SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 : mrStrm( rStrm )
 , mrObj( rObj )
 , mxTable( rObj.getTable() )
-, msSize( "Size" )
 {
 }
 
@@ -100,7 +100,7 @@ void SdrTableRtfExporter::Write()
     {
         Reference< XPropertySet > xSet( xColumns->getByIndex(nCol), UNO_QUERY_THROW );
         sal_Int32 nWidth = 0;
-        xSet->getPropertyValue( msSize ) >>= nWidth;
+        xSet->getPropertyValue( gsSize ) >>= nWidth;
         nPos += HundMMToTwips( nWidth );
         aColumnStart.push_back( nPos );
     }
@@ -129,7 +129,7 @@ void SdrTableRtfExporter::Write()
 void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sal_Int32 nRow, const std::vector< sal_Int32 >& aColumnStart )
 {
     sal_Int32 nRowHeight = 0;
-    xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
+    xRowSet->getPropertyValue( gsSize ) >>= nRowHeight;
 
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteCharPtr( OString::number(nRowHeight).getStr() );

@@ -111,8 +111,6 @@ class SdXMLExport : public SvXMLExport
 
     bool                    mbIsDraw;
 
-    const OUString         msPageLayoutNames;
-
     virtual void ExportStyles_(bool bUsed) override;
     virtual void ExportAutoStyles_() override;
     virtual void ExportFontDecls_() override;
