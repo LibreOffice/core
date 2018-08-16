@@ -54,6 +54,7 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <vcl/vcllayout.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
 #include <fntcap.hxx>
@@ -96,6 +97,36 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
     return nGridWidthAdd;
 }
 
+/**
+ * Pre-calculates glyph items for the rendered subset of rInf's text, assuming
+ * outdev state does not change between the outdev calls.
+ */
+SalLayoutGlyphs* lcl_CreateLayout(SwDrawTextInfo& rInf, const OUString& rText, sal_Int32 nIdx,
+                                  sal_Int32 nLen, SalLayoutGlyphs& rTextGlyphs)
+{
+    // Not the string we want to pre-calculate.
+    if (rText != rInf.GetText() || nIdx != rInf.GetIdx() || nLen != rInf.GetLen())
+        return nullptr;
+
+    // Use pre-calculated result.
+    if (!rTextGlyphs.empty())
+        return &rTextGlyphs;
+
+    // Calculate glyph items.
+    std::unique_ptr<SalLayout> pLayout = rInf.GetOut().ImplLayout(
+        rText, nIdx, nLen, Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    if (!pLayout)
+        return nullptr;
+
+    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
+    if (!pGlyphs)
+        return nullptr;
+
+    // Remember the calculation result.
+    rTextGlyphs = *pGlyphs;
+
+    return &rTextGlyphs;
+}
 }
 
 void SwFntCache::Flush( )
@@ -779,6 +810,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     vcl::Font* pTmpFont = bUseScrFont ? m_pScrFont : m_pPrtFont;
 
+    SalLayoutGlyphs aTextGlyphs;
+
     //  bDirectPrint and bUseScrFont should have these values:
 
     //  Outdev / RefDef  | Printer | VirtPrinter | Window
@@ -1393,8 +1426,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         // get screen array
         std::unique_ptr<long[]> pScrArray(new long[sal_Int32(rInf.GetLen())]);
+        SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(rInf, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                                                    sal_Int32(rInf.GetLen()), aTextGlyphs);
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray.get(),
-                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
 
         // OLE: no printer available
         // OSL_ENSURE( pPrinter, "DrawText needs pPrinter" )
@@ -1743,8 +1778,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
+                pGlyphs = lcl_CreateLayout(rInf, *pStr, nTmpIdx, nLen, aTextGlyphs);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
-                                             nTmpIdx , nLen );
+                                             nTmpIdx , nLen, SalLayoutFlags::NONE, nullptr, pGlyphs );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
