@@ -165,58 +165,6 @@ private:
     bool            mbIncomplete;
 };
 
-typedef sal_uInt16 sal_GlyphId;
-
-struct GlyphItem
-{
-    int     mnFlags;
-    int     mnCharPos;      // index in string
-    int     mnCharCount;    // number of characters making up this glyph
-
-    int     mnOrigWidth;    // original glyph width
-    int     mnNewWidth;     // width after adjustments
-    int     mnXOffset;
-
-    sal_GlyphId maGlyphId;
-    Point   maLinearPos;    // absolute position of non rotated string
-
-    int     mnFallbackLevel;
-
-public:
-            GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset )
-            :   mnFlags(nFlags)
-            ,   mnCharPos(nCharPos)
-            ,   mnCharCount(nCharCount)
-            ,   mnOrigWidth(nOrigWidth)
-            ,   mnNewWidth(nOrigWidth)
-            ,   mnXOffset(nXOffset)
-            ,   maGlyphId(aGlyphId)
-            ,   maLinearPos(rLinearPos)
-            ,   mnFallbackLevel(0)
-            { }
-
-    enum {
-        IS_IN_CLUSTER = 0x001,
-        IS_RTL_GLYPH  = 0x002,
-        IS_DIACRITIC  = 0x004,
-        IS_VERTICAL   = 0x008,
-        IS_SPACING    = 0x010,
-        ALLOW_KASHIDA = 0x020,
-        IS_DROPPED    = 0x040,
-        IS_CLUSTER_START = 0x080
-    };
-
-    bool    IsInCluster() const     { return ((mnFlags & IS_IN_CLUSTER) != 0); }
-    bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
-    bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
-    bool    IsVertical() const      { return ((mnFlags & IS_VERTICAL) != 0); }
-    bool    IsSpacing() const       { return ((mnFlags & IS_SPACING) != 0); }
-    bool    AllowKashida() const    { return ((mnFlags & ALLOW_KASHIDA) != 0); }
-    bool    IsDropped() const       { return ((mnFlags & IS_DROPPED) != 0); }
-    bool    IsClusterStart() const  { return ((mnFlags & IS_CLUSTER_START) != 0); }
-};
-
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
 public:
@@ -227,6 +175,7 @@ public:
     bool            LayoutText(ImplLayoutArgs&) final override;
     void            DrawText(SalGraphics&) const final override;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const final override;
+    SalLayoutGlyphs GetGlyphs() const final override;
 
     bool            IsKashidaPosValid(int nCharPos) const final override;
 
@@ -267,7 +216,7 @@ private:
     rtl::Reference<LogicalFontInstance> const mpFont;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
-    std::vector<GlyphItem> m_GlyphItems;
+    SalLayoutGlyphs m_GlyphItems;
 
     OString         msLanguage;
     std::vector<hb_feature_t> maFeatures;
