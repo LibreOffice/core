@@ -125,14 +125,6 @@ namespace connectivity
                                  m_aExprCondType( OR )
                             {}
 
-            virtual ~MQueryExpression() override {
-                for (ExprVector::iterator i(m_aExprVector.begin());
-                     i != m_aExprVector.end(); ++i)
-                {
-                    delete *i;
-                }
-            }
-
         private:
             ExprVector          m_aExprVector;
             bool_cond           m_aExprCondType;
