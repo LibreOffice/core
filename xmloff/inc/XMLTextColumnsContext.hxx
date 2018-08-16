@@ -32,15 +32,6 @@ typedef std::vector<rtl::Reference<XMLTextColumnContext_Impl>> XMLTextColumnsArr
 
 class XMLTextColumnsContext :public XMLElementPropertyContext
 {
-    const OUString sSeparatorLineIsOn;
-    const OUString sSeparatorLineWidth;
-    const OUString sSeparatorLineColor;
-    const OUString sSeparatorLineRelativeHeight;
-    const OUString sSeparatorLineVerticalAlignment;
-    const OUString sAutomaticDistance;
-    const OUString sSeparatorLineStyle;
-
-
     std::unique_ptr<XMLTextColumnsArray_Impl> pColumns;
     rtl::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;
     std::unique_ptr<SvXMLTokenMap> pColumnAttrTokenMap;

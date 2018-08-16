@@ -126,10 +126,6 @@ class XMLTableStylesContext : public SvXMLStylesContext
     css::uno::Reference< css::container::XNameContainer > xColumnStyles;
     css::uno::Reference< css::container::XNameContainer > xRowStyles;
     css::uno::Reference< css::container::XNameContainer > xTableStyles;
-    const OUString sCellStyleServiceName;
-    const OUString sColumnStyleServiceName;
-    const OUString sRowStyleServiceName;
-    const OUString sTableStyleServiceName;
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;

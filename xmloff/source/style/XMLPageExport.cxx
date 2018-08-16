@@ -42,6 +42,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
+static const OUStringLiteral gsIsPhysical( "IsPhysical" );
+static const OUStringLiteral gsFollowStyle( "FollowStyle" );
+
 bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {
     for( ::std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
@@ -90,9 +93,9 @@ bool XMLPageExport::exportStyle(
 
     // Don't export styles that aren't existing really. This may be the
     // case for StarOffice Writer's pool styles.
-    if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
+    if( xPropSetInfo->hasPropertyByName( gsIsPhysical ) )
     {
-        Any aAny = xPropSet->getPropertyValue( sIsPhysical );
+        Any aAny = xPropSet->getPropertyValue( gsIsPhysical );
         if( !*o3tl::doAccess<bool>(aAny) )
             return false;
     }
@@ -130,10 +133,10 @@ bool XMLPageExport::exportStyle(
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, GetExport().EncodeStyleName( sPMName ) );
 
         Reference<XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
-        if ( xInfo.is() && xInfo->hasPropertyByName(sFollowStyle) )
+        if ( xInfo.is() && xInfo->hasPropertyByName(gsFollowStyle) )
         {
             OUString sNextName;
-            xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
+            xPropSet->getPropertyValue( gsFollowStyle ) >>= sNextName;
 
             if( sName != sNextName && !sNextName.isEmpty() )
             {
@@ -152,9 +155,7 @@ bool XMLPageExport::exportStyle(
 }
 
 XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
-    rExport( rExp ),
-    sIsPhysical( "IsPhysical" ),
-    sFollowStyle( "FollowStyle" )
+    rExport( rExp )
 {
     xPageMasterPropHdlFactory = new XMLPageMasterPropHdlFactory;
     xPageMasterPropSetMapper = new XMLPageMasterPropSetMapper(

@@ -383,11 +383,9 @@ void SvEventDescriptor::getByName(
     }
 }
 
-
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
-    SvBaseEventDescriptor(pSupportedMacroItems),
-    sImplName("SvDetachedEventDescriptor")
+    SvBaseEventDescriptor(pSupportedMacroItems)
 {
     aMacros.resize(mnMacroItems);
 }
@@ -410,7 +408,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const SvMacroItemId nID) const
 
 OUString SvDetachedEventDescriptor::getImplementationName()
 {
-    return sImplName;
+    return OUString("SvDetachedEventDescriptor");
 }
 
 

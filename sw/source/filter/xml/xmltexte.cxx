@@ -75,11 +75,12 @@ SwNoTextNode *SwXMLTextParagraphExport::GetNoTextNode(
     return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTextNode();
 }
 
+static const OUStringLiteral gsEmbeddedObjectProtocol( "vnd.sun.star.EmbeddedObject:" );
+
 SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
-    sEmbeddedObjectProtocol( "vnd.sun.star.EmbeddedObject:" ),
     aAppletClassId( SO3_APPLET_CLASSID ),
     aPluginClassId( SO3_PLUGIN_CLASSID ),
     aIFrameClassId( SO3_IFRAME_CLASSID )
@@ -277,9 +278,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     // First the stuff common to each of Applet/Plugin/Floating Frame
     OUString sStyle;
     Any aAny;
-    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+    if( rPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
     {
-        aAny = rPropSet->getPropertyValue( sFrameStyleName );
+        aAny = rPropSet->getPropertyValue( gsFrameStyleName );
         aAny >>= sStyle;
     }
 
@@ -344,7 +345,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
             if ( !bIsOwnLink )
             {
-                sURL = sEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName();
+                sURL = gsEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName();
             }
 
             sURL = GetExport().AddEmbeddedObject( sURL );
@@ -496,7 +497,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         case SV_EMBEDDED_OUTPLACE:
             if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
             {
-                OUString sURL( sEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName() );
+                OUString sURL( gsEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName() );
 
                 if ( !( rXMLExport.getExportFlags() & SvXMLExportFlags::OASIS ) )
                     sURL += "?oasis=false";
