@@ -106,28 +106,28 @@
       <FormatCode># ##0,-- [$Ft-40E];[RED]-# ##0,-- [$Ft-40E]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>YYYY". "M". "D.</FormatCode>
+      <FormatCode>YYYY". "MM". "DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>YYYY". "MMMM D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY-MM-DD</FormatCode>
+      <FormatCode>YY.MM.DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>YYYY-MM-DD</FormatCode>
+      <FormatCode>YYYY.MM.DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>YY". "MMM D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>YYYY". "MMM D.</FormatCode>
+      <FormatCode>YYYY". "MM". "DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>YYYY". "MMM D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>YYYY". "MMMM D.</FormatCode>
+      <FormatCode>YYYY". "MMMMM D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
       <FormatCode>YYYY". "MMMM D.</FormatCode>
@@ -139,7 +139,7 @@
       <FormatCode>YYYY". "MMM D., NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY". "MMMM D., NN</FormatCode>
+      <FormatCode>YYYY". "MMMMM D., NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
       <FormatCode>YYYY". "MMMM D., NNN</FormatCode>
@@ -296,7 +296,7 @@
       <FormatCode>YY-MM-DD HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
+      <FormatCode>YYYY.MM.DD. HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -359,72 +359,84 @@
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>I.</DefaultAbbrvName>
           <DefaultFullName>január</DefaultFullName>
+          <DefaultNarrowName>jan.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
           <DefaultAbbrvName>II.</DefaultAbbrvName>
           <DefaultFullName>február</DefaultFullName>
+          <DefaultNarrowName>febr.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
           <DefaultAbbrvName>III.</DefaultAbbrvName>
           <DefaultFullName>március</DefaultFullName>
+          <DefaultNarrowName>márc.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
           <DefaultAbbrvName>IV.</DefaultAbbrvName>
           <DefaultFullName>április</DefaultFullName>
+          <DefaultNarrowName>ápr.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
           <DefaultAbbrvName>V.</DefaultAbbrvName>
           <DefaultFullName>május</DefaultFullName>
+          <DefaultNarrowName>máj.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
           <DefaultAbbrvName>VI.</DefaultAbbrvName>
           <DefaultFullName>június</DefaultFullName>
+          <DefaultNarrowName>jún.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
           <DefaultAbbrvName>VII.</DefaultAbbrvName>
           <DefaultFullName>július</DefaultFullName>
+          <DefaultNarrowName>júl.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
           <DefaultAbbrvName>VIII.</DefaultAbbrvName>
           <DefaultFullName>augusztus</DefaultFullName>
+          <DefaultNarrowName>aug.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>IX.</DefaultAbbrvName>
           <DefaultFullName>szeptember</DefaultFullName>
+          <DefaultNarrowName>szept.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
           <DefaultAbbrvName>X.</DefaultAbbrvName>
           <DefaultFullName>október</DefaultFullName>
+          <DefaultNarrowName>okt.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
           <DefaultAbbrvName>XI.</DefaultAbbrvName>
           <DefaultFullName>november</DefaultFullName>
+          <DefaultNarrowName>nov.</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
           <DefaultAbbrvName>XII.</DefaultAbbrvName>
           <DefaultFullName>december</DefaultFullName>
+          <DefaultNarrowName>dec.</DefaultNarrowName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>i. e.</DefaultAbbrvName>
+          <DefaultAbbrvName>i. e.</DefaultAbbrvName>
           <DefaultFullName>i. e.</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>i. sz.</DefaultAbbrvName>
+          <DefaultAbbrvName>i. sz.</DefaultAbbrvName>
           <DefaultFullName>i. sz.</DefaultFullName>
         </Era>
       </Eras>
