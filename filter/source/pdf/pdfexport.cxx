@@ -575,6 +575,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 mbEncrypt = false;              // no encryption
                 xEnc.clear();
                 break;
+            case 16:
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;
+                break;
             }
 
             // copy in context the values default in the constructor or set by the FilterData sequence of properties
