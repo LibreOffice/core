@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_6f9d6f58",
+        "filename": "sc/source/ui/inc/condformatdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-16T18:46:18Z",
+      "side": 1,
+      "message": "Nitpick: as this sets a range list, SetRange() is a misleading name indicating a single range. Better use plural SetRanges().",
+      "range": {
+        "startLine": 69,
+        "startChar": 9,
+        "endLine": 69,
+        "endChar": 17
+      },
+      "revId": "e735a0f607ed958f65abeeffa7d2673829264155",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
