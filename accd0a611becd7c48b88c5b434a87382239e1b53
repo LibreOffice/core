@@ -16,6 +16,23 @@
       "revId": "accd0a611becd7c48b88c5b434a87382239e1b53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_5540fe35",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-08-17T09:44:28Z",
+      "side": 1,
+      "message": "Shouldn\u0027t some checks in configure.ac be removed that are made obsolete with bumping the compiler baseline? At least that how I\u0027ve understood your statement in the linked thread.",
+      "revId": "accd0a611becd7c48b88c5b434a87382239e1b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
