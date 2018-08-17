@@ -360,7 +360,7 @@ public:
 
     sal_Int64   GetHashCode () const;
 
-    void        GetName( OUString& rName ) const;
+    const OUString& GetName() const { return aName; }
     void        SetName( const OUString& rNewName );
 
     void        SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData);

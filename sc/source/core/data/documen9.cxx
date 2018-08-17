@@ -154,8 +154,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             mpDrawLayer->ScAddPage( nTab );     // always add page, with or without the table
             if (maTabs[nTab])
             {
-                OUString aTabName;
-                maTabs[nTab]->GetName(aTabName);
+                OUString aTabName = maTabs[nTab]->GetName();
                 mpDrawLayer->ScRenamePage( nTab, aTabName );
 
                 maTabs[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
