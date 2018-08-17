@@ -2582,6 +2582,7 @@ void WW8AttributeOutput::TableCellBorders(
 
 void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
+    const SwTable * pTab = pTableTextNodeInfoInner->getTable();
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
@@ -2590,19 +2591,24 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     m_rWW8Export.InsUInt16( NS_sprm::sprmTDefTableShd80 );
     m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes * 2) );  // Len
 
+    Color aRowColor = COL_AUTO;
+    const SvxBrushItem *pTableColorProp = pTab->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if ( pTableColorProp )
+        aRowColor = pTableColorProp->GetColor();
+
+    const SvxBrushItem *pRowColorProp = pTabLine->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if ( pRowColorProp && pRowColorProp->GetColor() != COL_AUTO )
+        aRowColor = pRowColorProp->GetColor();
+
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
     {
         const SwTableBox * pBox1 = rTabBoxes[n];
         const SwFrameFormat * pFrameFormat = pBox1->GetFrameFormat();
-        const SfxPoolItem * pI = nullptr;
-        Color aColor;
+        Color aColor = aRowColor;
 
-        if ( SfxItemState::SET == pFrameFormat->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
-        {
-            aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
-        }
-        else
-            aColor = COL_AUTO;
+        const SvxBrushItem *pCellColorProp = pFrameFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+        if ( pCellColorProp && pCellColorProp->GetColor() != COL_AUTO )
+            aColor = pCellColorProp->GetColor();
 
         WW8_SHD aShd;
         WW8Export::TransBrush( aColor, aShd );
@@ -2624,17 +2630,11 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         {
             const SwTableBox * pBox1 = rTabBoxes[n];
             const SwFrameFormat * pFrameFormat = pBox1->GetFrameFormat();
-            const SfxPoolItem * pI = nullptr;
-            Color aColor;
+            Color aColor = aRowColor;
 
-                if ( SfxItemState::SET ==
-                         pFrameFormat->GetAttrSet().
-                         GetItemState( RES_BACKGROUND, false, &pI ) )
-            {
-                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
-            }
-            else
-                aColor = COL_AUTO;
+            const SvxBrushItem *pCellColorProp = pFrameFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+            if ( pCellColorProp && pCellColorProp->GetColor() != COL_AUTO )
+                aColor = pCellColorProp->GetColor();
 
             WW8SHDLong aSHD;
             aSHD.setCvFore( 0xFF000000 );
