@@ -253,8 +253,9 @@ public:
     /// Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd(sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd) const;
 
+    enum class Invalidation { Add, Remove };
     /// Initiate the layout.
-    void InvalidateRange();
+    void InvalidateRange(Invalidation);
 
     bool IsOwnRedline( const SwRangeRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }

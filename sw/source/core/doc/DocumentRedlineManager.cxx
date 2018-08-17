@@ -140,7 +140,7 @@ namespace
             eCmp = ComparePosition( *pSttRng, *pEndRng, *pRStt, *pREnd );
         }
 
-        pRedl->InvalidateRange();
+        pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
 
         switch( pRedl->GetType() )
         {
@@ -303,7 +303,7 @@ namespace
             eCmp = ComparePosition( *pSttRng, *pEndRng, *pRStt, *pREnd );
         }
 
-        pRedl->InvalidateRange();
+        pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
 
         switch( pRedl->GetType() )
         {
@@ -784,7 +784,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineFlags))
     {
-        pNewRedl->InvalidateRange();
+        pNewRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
 
         if( m_rDoc.IsAutoFormatRedline() )
         {
@@ -1900,7 +1900,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
                 break;
 
             case 3:
-                pRedline->InvalidateRange();
+                pRedline->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 mpRedlineTable->DeleteAndDestroy( n-- );
                 pRedline = nullptr;
                 break;
@@ -1960,13 +1960,13 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         {
         case SwComparePosition::Equal:
         case SwComparePosition::Outside:
-            pRedl->InvalidateRange();
+            pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
             mpRedlineTable->DeleteAndDestroy( n-- );
             bChg = true;
             break;
 
         case SwComparePosition::OverlapBefore:
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetStart( *pEnd, pRStt );
                 // re-insert
                 mpRedlineTable->Remove( n );
@@ -1975,7 +1975,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
 
         case SwComparePosition::OverlapBehind:
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetEnd( *pStt, pREnd );
                 if( !pRedl->HasValidRange() )
                 {
@@ -1989,7 +1989,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         case SwComparePosition::Inside:
             {
                 // this one needs to be splitted
-                pRedl->InvalidateRange();
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 if( *pRStt == *pStt )
                 {
                     pRedl->SetStart( *pEnd, pRStt );
@@ -2687,7 +2687,7 @@ void DocumentRedlineManager::UpdateRedlineAttr()
     for(SwRangeRedline* pRedl : rTable)
     {
         if( pRedl->IsVisible() )
-            pRedl->InvalidateRange();
+            pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
     }
 
     // #TODO - add 'SwExtraRedlineTable' also ?

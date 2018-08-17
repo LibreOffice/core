@@ -4476,7 +4476,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         // trigger repaint of text frames to add/remove the redline color font
         if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
         {
-            pRedline->InvalidateRange();
+            pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }
     }
 

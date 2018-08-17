@@ -95,6 +95,7 @@ public:
 
 namespace sw {
 
+/// new delete redline is created
 class RedlineDelText : public SfxHint
 {
 public:
@@ -102,6 +103,16 @@ public:
     sal_Int32 nLen;
 
     RedlineDelText(sal_Int32 nS, sal_Int32 nL);
+};
+
+/// delete redline is removed
+class RedlineUnDelText : public SfxHint
+{
+public:
+    sal_Int32 nStart;
+    sal_Int32 nLen;
+
+    RedlineUnDelText(sal_Int32 nS, sal_Int32 nL);
 };
 
 }

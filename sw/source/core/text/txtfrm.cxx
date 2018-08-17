@@ -722,15 +722,23 @@ SwTextFrame::~SwTextFrame()
 
 namespace sw {
 
-void UpdateMergedParaForInsert(MergedPara & rMerged,
+// 1. if real insert => correct nStart/nEnd for full nLen
+// 2. if rl un-delete => do not correct nStart/nEnd but just include un-deleted
+static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
+        bool const isRealInsert,
         SwTextNode const& rNode, sal_Int32 const nIndex, sal_Int32 const nLen)
 {
-    assert(nLen); // can 0 happen?
+    assert(!isRealInsert || nLen); // can 0 happen? yes, for redline in empty node
     assert(nIndex <= rNode.Len());
     assert(nIndex + nLen <= rNode.Len());
     assert(rMerged.pFirstNode->GetIndex() <= rNode.GetIndex() && rNode.GetIndex() <= rMerged.pLastNode->GetIndex());
+    if (!nLen)
+    {
+        return TextFrameIndex(0);
+    }
     OUStringBuffer text(rMerged.mergedText);
     sal_Int32 nTFIndex(0);
+    sal_Int32 nInserted(0);
     bool bInserted(false);
     bool bFoundNode(false);
     auto itInsert(rMerged.extents.end());
@@ -738,22 +746,75 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
     {
         if (it->pNode == &rNode)
         {
-            bFoundNode = true;
-            if (it->nStart <= nIndex && nIndex <= it->nEnd)
-            {   // note: this can happen only once
-                text.insert(nTFIndex + (nIndex - it->nStart),
-                        rNode.GetText().copy(nIndex, nLen));
-                it->nEnd += nLen;
-                bInserted = true;
-            }
-            else if (nIndex < it->nStart)
+            if (isRealInsert)
             {
-                if (itInsert == rMerged.extents.end())
+                bFoundNode = true;
+                if (it->nStart <= nIndex && nIndex <= it->nEnd)
+                {   // note: this can happen only once
+                    text.insert(nTFIndex + (nIndex - it->nStart),
+                            rNode.GetText().copy(nIndex, nLen));
+                    it->nEnd += nLen;
+                    nInserted = nLen;
+                    assert(!bInserted);
+                    bInserted = true;
+                }
+                else if (nIndex < it->nStart)
+                {
+                    if (itInsert == rMerged.extents.end())
+                    {
+                        itInsert = it;
+                    }
+                    it->nStart += nLen;
+                    it->nEnd += nLen;
+                }
+            }
+            else
+            {
+                assert(it == rMerged.extents.begin() || (it-1)->pNode != &rNode || (it-1)->nEnd < nIndex);
+                if (nIndex + nLen < it->nStart)
                 {
                     itInsert = it;
+                    break;
                 }
-                it->nStart += nLen;
-                it->nEnd += nLen;
+                if (nIndex < it->nStart)
+                {
+                    text.insert(nTFIndex,
+                        rNode.GetText().copy(nIndex, it->nStart - nIndex));
+                    nInserted += it->nStart - nIndex;
+                    it->nStart = nIndex;
+                    bInserted = true;
+                }
+                assert(it->nStart <= nIndex);
+                if (nIndex <= it->nEnd)
+                {
+                    nTFIndex += it->nEnd - it->nStart;
+                    while (it->nEnd < nIndex + nLen)
+                    {
+                        auto *const pNext(
+                            (it+1) != rMerged.extents.end() && (it+1)->pNode == it->pNode
+                                ? &*(it+1)
+                                : nullptr);
+                        if (pNext && pNext->nStart <= nIndex + nLen)
+                        {
+                            text.insert(nTFIndex,
+                                rNode.GetText().copy(it->nEnd, pNext->nStart - it->nEnd));
+                            nTFIndex += pNext->nStart - it->nEnd;
+                            nInserted += pNext->nStart - it->nEnd;
+                            pNext->nStart = it->nStart;
+                            it = rMerged.extents.erase(it);
+                        }
+                        else
+                        {
+                            text.insert(nTFIndex,
+                                rNode.GetText().copy(it->nEnd, nIndex + nLen - it->nEnd));
+                            nTFIndex += nIndex + nLen - it->nEnd;
+                            nInserted += nIndex + nLen - it->nEnd;
+                            it->nEnd = nIndex + nLen;
+                        }
+                    }
+                    bInserted = true;
+                    break;
+                }
             }
         }
         else if (rNode.GetIndex() < it->pNode->GetIndex() || bFoundNode)
@@ -768,12 +829,14 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
     {   // must be in a gap
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
         text.insert(nTFIndex, rNode.GetText().copy(nIndex, nLen));
+        nInserted = nLen;
         if (rNode.GetIndex() < rMerged.pParaPropsNode->GetIndex())
         {   // text inserted before current para-props node
             rMerged.pParaPropsNode = &rNode;
         }
     }
     rMerged.mergedText = text.makeStringAndClear();
+    return TextFrameIndex(nInserted);
 }
 
 // 1. if real delete => correct nStart/nEnd for full nLen
@@ -1621,6 +1684,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     SfxPoolItem const* pOld(nullptr);
     SfxPoolItem const* pNew(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
+    sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
     if (auto const pHint = dynamic_cast<sw::LegacyModifyHint const*>(&rHint))
     {
@@ -1630,6 +1694,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     else if (auto const pHynt = dynamic_cast<sw::RedlineDelText const*>(&rHint))
     {
         pRedlineDelText = pHynt;
+    }
+    else if (auto const pHnt = dynamic_cast<sw::RedlineUnDelText const*>(&rHint))
+    {
+        pRedlineUnDelText = pHnt;
     }
     else
     {
@@ -1717,6 +1785,34 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             }
         }
     }
+    else if (pRedlineUnDelText)
+    {
+        if (m_pMergedPara)
+        {
+            sal_Int32 const nNPos = pRedlineUnDelText->nStart;
+            sal_Int32 const nNLen = pRedlineUnDelText->nLen;
+            nPos = MapModelToView(&rNode, nNPos);
+            nLen = UpdateMergedParaForInsert(*m_pMergedPara, false, rNode, nNPos, nNLen);
+            if (IsIdxInside(nPos, nLen))
+            {
+                if (!nLen)
+                {
+                    // Refresh NumPortions even when line is empty!
+                    if (nPos)
+                        InvalidateSize();
+                    else
+                        Prepare();
+                }
+                else
+                    InvalidateRange_( SwCharRange( nPos, nLen ), nNLen );
+            }
+            lcl_SetWrong( *this, rNode, nNPos, nNLen, false );
+            lcl_SetScriptInval( *this, nPos );
+            bSetFieldsDirty = true;
+            if (HasFollow())
+                lcl_ModifyOfst( this, nPos, nLen );
+        }
+    }
     else switch (nWhich)
     {
         case RES_LINENUMBER:
@@ -1733,7 +1829,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             nLen = TextFrameIndex(nNLen);
             if (m_pMergedPara)
             {
-                UpdateMergedParaForInsert(*m_pMergedPara, rNode, nNPos, nNLen);
+                UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, nNPos, nNLen);
             }
             if( IsIdxInside( nPos, nLen ) )
             {
