@@ -3863,7 +3863,8 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             else if( rGrabBagElement.first == "val")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
-        m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList.get() );
+        if ( pAttrList )
+            m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList.get() );
     }
 }
 
