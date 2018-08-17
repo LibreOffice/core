@@ -54,8 +54,6 @@ public:
 
     void UnblockIdling() override;
 
-    void StartBackgroundJobs() override;
-
     bool IsDocIdle() const override;
 
 private:

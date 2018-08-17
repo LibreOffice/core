@@ -169,7 +169,7 @@ public:
 
         if (b)
         {
-            pDocument->getIDocumentTimerAccess().StartBackgroundJobs();
+            pDocument->getIDocumentTimerAccess().StartIdling();
         }
     }
 
