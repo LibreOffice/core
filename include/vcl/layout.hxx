@@ -675,7 +675,7 @@ private:
     {
         if (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
         {
-            Point aPos(rHelpEvent.GetMousePosPixel());
+            Point aPos(ScreenToOutputPixel(rHelpEvent.GetMousePosPixel()));
             tools::Rectangle aHelpArea(aPos.X(), aPos.Y());
             OUString sHelpTip = m_aQueryTooltipHdl.Call(aHelpArea);
             if (sHelpTip.isEmpty())
