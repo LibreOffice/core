@@ -49,9 +49,13 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    mbStartIdleTimer = true;
-    if( !mIdleBlockCount )
+    if( !mIdleBlockCount && !maIdle.IsActive() )
+    {
+        mbStartIdleTimer = false;
         maIdle.Start();
+    }
+    else
+        mbStartIdleTimer = true;
 }
 
 void DocumentTimerManager::StopIdling()
@@ -70,14 +74,10 @@ void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
     if( !mIdleBlockCount && mbStartIdleTimer && !maIdle.IsActive() )
+    {
+        mbStartIdleTimer = false;
         maIdle.Start();
-}
-
-void DocumentTimerManager::StartBackgroundJobs()
-{
-    // Trigger DoIdleJobs(), asynchronously.
-    if (!maIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maIdle.Start();
+    }
 }
 
 IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
@@ -87,6 +87,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
     if( !pModLogFile )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
+    BlockIdling();
 
     SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot &&
@@ -163,6 +164,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
             m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty( false );
         }
     }
+
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, static_cast<long&>(pModLogFile) = 1;

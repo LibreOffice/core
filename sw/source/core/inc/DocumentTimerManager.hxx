@@ -45,9 +45,6 @@ public:
 
     void UnblockIdling() override;
 
-    void StartBackgroundJobs() override;
-
-    // Our own 'IdleTimer' calls the following method
     DECL_LINK( DoIdleJobs, Timer *, void );
 
     virtual ~DocumentTimerManager() override;
