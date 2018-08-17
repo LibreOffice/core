@@ -124,6 +124,8 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
     bool VisitCXXDeleteExpr(const CXXDeleteExpr* );
     bool TraverseFunctionDecl(FunctionDecl* );
+    bool TraverseConstructorInitializer(CXXCtorInitializer*);
+
 private:
     void CheckCompoundStmt(const CXXMethodDecl*, const CompoundStmt* );
     void CheckForUnconditionalDelete(const CXXMethodDecl*, const CompoundStmt* );
@@ -530,6 +532,28 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
     return true;
+}
+
+bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
+{
+    if (!ctorInit->getSourceLocation().isValid() || ignoreLocation(ctorInit->getSourceLocation()))
+        return true;
+    if (!ctorInit->getMember())
+        return true;
+    if (!loplugin::TypeCheck(ctorInit->getMember()->getType()).Class("unique_ptr").StdNamespace())
+        return true;
+    auto constructExpr = dyn_cast<CXXConstructExpr>(ctorInit->getInit());
+    if (!constructExpr)
+        return true;
+    auto init = constructExpr->getArg(0)->IgnoreImpCasts();
+    if (!isa<DeclRefExpr>(init))
+        return true;
+    report(
+        DiagnosticsEngine::Warning,
+        "should be passing via std::unique_ptr param",
+        ctorInit->getSourceLocation())
+        << ctorInit->getSourceRange();
+    return RecursiveASTVisitor<UseUniquePtr>::TraverseConstructorInitializer(ctorInit);
 }
 
 loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", false);
