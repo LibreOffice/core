@@ -651,13 +651,16 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
         return this;
 
     LwpDocument* pDivision = GetFirstDivision();
-
+    std::set<LwpDocument*> aSeen;
     while (pDivision)
     {
+        aSeen.insert(pDivision);
         LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
-        if(pContentDivision)
+        if (pContentDivision)
             return pContentDivision;
         pDivision = pDivision->GetNextDivision();
+        if (aSeen.find(pDivision) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 }
