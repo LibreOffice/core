@@ -27,6 +27,7 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
+#include <o3tl/clamp.hxx>
 
 namespace com { namespace sun { namespace star { namespace rendering {
     class XGraphicDevice;
@@ -158,9 +159,9 @@ namespace basegfx
         // clamp color to [0.0..1.0] values in all three intensity components
         BColor& clamp()
         {
-            mfX = basegfx::clamp(mfX, 0.0, 1.0);
-            mfY = basegfx::clamp(mfY, 0.0, 1.0);
-            mfZ = basegfx::clamp(mfZ, 0.0, 1.0);
+            mfX = o3tl::clamp(mfX, 0.0, 1.0);
+            mfY = o3tl::clamp(mfY, 0.0, 1.0);
+            mfZ = o3tl::clamp(mfZ, 0.0, 1.0);
             return *this;
         }
 

@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/clamp.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
@@ -146,7 +148,7 @@ namespace slideshow
             // ================================
 
             // clamp nT to permissible [0,1] range
-            nT = ::basegfx::clamp( nT, 0.0, 1.0 );
+            nT = o3tl::clamp( nT, 0.0, 1.0 );
 
             // take acceleration/deceleration into account. if the sum
             // of mnAccelerationFraction and mnDecelerationFraction

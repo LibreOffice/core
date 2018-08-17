@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/clamp.hxx>
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -1325,7 +1328,7 @@ namespace svgio
                         setFill(aSvgPaint);
                         if(aOpacity.isSet())
                         {
-                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                            setOpacity(SvgNumber(o3tl::clamp(aOpacity.getNumber(), 0.0, 1.0)));
                         }
                     }
                     else if(!aURL.isEmpty())
@@ -1352,7 +1355,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        maFillOpacity = SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
+                        maFillOpacity = SvgNumber(o3tl::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
                     }
                     break;
                 }
@@ -1382,7 +1385,7 @@ namespace svgio
                         maStroke = aSvgPaint;
                         if(aOpacity.isSet())
                         {
-                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                            setOpacity(SvgNumber(o3tl::clamp(aOpacity.getNumber(), 0.0, 1.0)));
                         }
                     }
                     else if(!aURL.isEmpty())
@@ -1495,7 +1498,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        maStrokeOpacity = SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
+                        maStrokeOpacity = SvgNumber(o3tl::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet());
                     }
                     break;
                 }
@@ -1523,7 +1526,7 @@ namespace svgio
                         maStopColor = aSvgPaint;
                         if(aOpacity.isSet())
                         {
-                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                            setOpacity(SvgNumber(o3tl::clamp(aOpacity.getNumber(), 0.0, 1.0)));
                         }
                     }
                     break;
@@ -1836,7 +1839,7 @@ namespace svgio
                         maColor = aSvgPaint;
                         if(aOpacity.isSet())
                         {
-                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                            setOpacity(SvgNumber(o3tl::clamp(aOpacity.getNumber(), 0.0, 1.0)));
                         }
                     }
                     break;
@@ -1847,7 +1850,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        setOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
+                        setOpacity(SvgNumber(o3tl::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
                     }
                     break;
                 }

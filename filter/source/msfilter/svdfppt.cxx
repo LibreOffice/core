@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/clamp.hxx>
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
@@ -283,11 +286,11 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
        .ReadSChar( nShowComments );
     // clamp dodgy data to avoid overflow in later calculations
     const sal_Int32 nPageClamp = SAL_MAX_INT32/5;
-    rAtom.aSlidesPageSize.setWidth( basegfx::clamp<sal_Int32>(nSlideX, -nPageClamp, nPageClamp) );
-    rAtom.aSlidesPageSize.setHeight( basegfx::clamp<sal_Int32>(nSlideY, -nPageClamp, nPageClamp) );
+    rAtom.aSlidesPageSize.setWidth( o3tl::clamp<sal_Int32>(nSlideX, -nPageClamp, nPageClamp) );
+    rAtom.aSlidesPageSize.setHeight( o3tl::clamp<sal_Int32>(nSlideY, -nPageClamp, nPageClamp) );
     const sal_Int32 nNoteClamp = 65536;
-    rAtom.aNotesPageSize.setWidth( basegfx::clamp<sal_Int32>(nNoticeX, -nNoteClamp, nNoteClamp) );
-    rAtom.aNotesPageSize.setHeight( basegfx::clamp<sal_Int32>(nNoticeY, -nNoteClamp, nNoteClamp) );
+    rAtom.aNotesPageSize.setWidth( o3tl::clamp<sal_Int32>(nNoticeX, -nNoteClamp, nNoteClamp) );
+    rAtom.aNotesPageSize.setHeight( o3tl::clamp<sal_Int32>(nNoticeY, -nNoteClamp, nNoteClamp) );
     rAtom.eSlidesPageFormat = static_cast<PptPageFormat>(nSlidePageFormat);
     rAtom.bEmbeddedTrueType = nEmbeddedTrueType;
     rAtom.bTitlePlaceholdersOmitted = nTitlePlaceHoldersOmitted;

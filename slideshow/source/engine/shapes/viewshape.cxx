@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/clamp.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <math.h>
@@ -434,7 +436,7 @@ namespace slideshow
             if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-                                    ::basegfx::clamp(pAttr->getAlpha(),
+                                    o3tl::clamp(pAttr->getAlpha(),
                                                      0.0,
                                                      1.0) :
                                     1.0 );

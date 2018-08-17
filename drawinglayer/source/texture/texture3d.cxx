@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/texture/texture3d.hxx>
+#include <o3tl/clamp.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 #include <sal/log.hxx>
@@ -288,8 +289,8 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY)
         :   GeoTexSvxBitmapEx(rBitmapEx, rRange),
-            mfOffsetX(basegfx::clamp(fOffsetX, 0.0, 1.0)),
-            mfOffsetY(basegfx::clamp(fOffsetY, 0.0, 1.0)),
+            mfOffsetX(o3tl::clamp(fOffsetX, 0.0, 1.0)),
+            mfOffsetY(o3tl::clamp(fOffsetY, 0.0, 1.0)),
             mbUseOffsetX(!basegfx::fTools::equalZero(mfOffsetX)),
             mbUseOffsetY(!mbUseOffsetX && !basegfx::fTools::equalZero(mfOffsetY))
         {

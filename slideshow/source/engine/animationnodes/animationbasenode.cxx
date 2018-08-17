@@ -20,6 +20,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
+#include <o3tl/clamp.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/Timing.hpp>
@@ -449,7 +450,7 @@ AnimationBaseNode::fillCommonParameters() const
 
     // Calculate the minimum frame count that depends on the duration and
     // the minimum frame count.
-    const sal_Int32 nMinFrameCount (basegfx::clamp<sal_Int32>(
+    const sal_Int32 nMinFrameCount (o3tl::clamp<sal_Int32>(
         basegfx::fround(nDuration * FrameRate::MinimumFramesPerSecond), 1, 10));
 
     return ActivitiesFactory::CommonParameters(

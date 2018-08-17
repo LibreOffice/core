@@ -105,24 +105,6 @@ namespace basegfx
             return std::max(fVal, 0.00001);
     }
 
-    /** clamp given value against given minimum and maximum values
-    */
-    template <class T> inline const T& clamp(const T& value, const T& minimum, const T& maximum)
-    {
-        if(value < minimum)
-        {
-            return minimum;
-        }
-        else if(value > maximum)
-        {
-            return maximum;
-        }
-        else
-        {
-            return value;
-        }
-    }
-
     /** Convert value from degrees to radians
      */
     constexpr double deg2rad( double v )

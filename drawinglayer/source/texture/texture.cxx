@@ -21,6 +21,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <o3tl/clamp.hxx>
 
 #include <converters.hxx>
 
@@ -697,8 +698,8 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY)
         :   maRange(rRange),
-            mfOffsetX(basegfx::clamp(fOffsetX, 0.0, 1.0)),
-            mfOffsetY(basegfx::clamp(fOffsetY, 0.0, 1.0))
+            mfOffsetX(o3tl::clamp(fOffsetX, 0.0, 1.0)),
+            mfOffsetY(o3tl::clamp(fOffsetY, 0.0, 1.0))
         {
             if(!basegfx::fTools::equalZero(mfOffsetX))
             {

@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <o3tl/clamp.hxx>
 
 // helper class for animated graphics
 
@@ -590,8 +591,8 @@ namespace drawinglayer
                 // original in svtools uses:
                 // #define WATERMARK_LUM_OFFSET        50
                 // #define WATERMARK_CON_OFFSET        -70
-                fLuminance = basegfx::clamp(fLuminance + 0.5, -1.0, 1.0);
-                fContrast = basegfx::clamp(fContrast - 0.7, -1.0, 1.0);
+                fLuminance = o3tl::clamp(fLuminance + 0.5, -1.0, 1.0);
+                fContrast = o3tl::clamp(fContrast - 0.7, -1.0, 1.0);
                 aGraphicDrawMode = GraphicDrawMode::Standard;
             }
 

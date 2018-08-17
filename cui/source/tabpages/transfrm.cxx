@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/clamp.hxx>
 #include <sfx2/app.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/svdundo.hxx>
@@ -1309,10 +1312,10 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
     }
 
     const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
-    fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
-    fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
-    fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);
-    fBottom = basegfx::clamp(fBottom, -fMaxLong, fMaxLong);
+    fLeft = o3tl::clamp(fLeft, -fMaxLong, fMaxLong);
+    fRight = o3tl::clamp(fRight, -fMaxLong, fMaxLong);
+    fTop = o3tl::clamp(fTop, - fMaxLong, fMaxLong);
+    fBottom = o3tl::clamp(fBottom, -fMaxLong, fMaxLong);
 
     // #i75273# normalizing when setting the min/max values was wrong, removed
     m_xMtrPosX->set_range(basegfx::fround64(fLeft), basegfx::fround64(fRight), FUNIT_NONE);

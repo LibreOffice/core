@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/presentation/SlideShow.hpp>
+#include <o3tl/clamp.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/urihelper.hxx>
 
@@ -1684,7 +1685,7 @@ void SlideshowImpl::updateSlideShow()
                 const static sal_Int32 nMaximumFrameCount (60);
                 const static double nMinimumTimeout (1.0 / nMaximumFrameCount);
                 const static double nMaximumTimeout (4.0);
-                fUpdate = ::basegfx::clamp(fUpdate, nMinimumTimeout, nMaximumTimeout);
+                fUpdate = o3tl::clamp(fUpdate, nMinimumTimeout, nMaximumTimeout);
 
                 // Make sure that the maximum frame count has not been set
                 // too high (only then conversion to milliseconds and long

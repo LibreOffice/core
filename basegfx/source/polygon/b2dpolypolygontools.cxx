@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <o3tl/clamp.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -551,7 +552,7 @@ namespace basegfx
             }
             else
             {
-                nNumber=clamp<sal_uInt32>(nNumber,'0','9') - '0';
+                nNumber=o3tl::clamp<sal_uInt32>(nNumber,'0','9') - '0';
             }
 
             B2DPolygon aCurrSegment;
