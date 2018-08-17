@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_958206c8",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-08-17T11:43:57Z",
+      "side": 1,
+      "message": "This was SAL_INFO in the original source code, I\u0027m just reindenting it, but we can turn it into SAL_WARN if you prefer?",
+      "parentUuid": "dfeb2761_5527de13",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_152156fc",
         "filename": "vcl/source/window/builder.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_55559e4f",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-08-17T11:43:57Z",
+      "side": 1,
+      "message": "Right, I\u0027ll work on it.",
+      "parentUuid": "dfeb2761_152156fc",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_35245a0d",
         "filename": "vcl/source/window/builder.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-08-17T11:25:57Z",
       "side": 1,
       "message": "that is not ideal - any chance to separate out those, into a different patch if you plan to work on that, or as a simple TODO comment otherwise?",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_556c7e35",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-08-17T11:43:57Z",
+      "side": 1,
+      "message": "Well, it is not a TODO, it is just that these atk roles do not currently have corresponding roles in LO (and for most of them, probably never will).\n\nI put them in #if 0 just to optimize while keeping entries in the atk order. Using a hashmap would just avoid the issue completely.",
+      "parentUuid": "dfeb2761_35245a0d",
       "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
