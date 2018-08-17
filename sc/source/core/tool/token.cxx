@@ -3891,6 +3891,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rPos);
+
+                        if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
+                            // Sheet references not affected.
+                            break;
+
                         if (rCxt.maRange.In(aAbs))
                         {
                             // This range is entirely within the shifted region.
@@ -3911,10 +3916,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             if (aAbs.aStart.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.aEnd.Col())
                                 // column range of the reference is not entirely in the deleted column range.
-                                break;
-
-                            if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
-                                // wrong tables
                                 break;
 
                             ScRange aDeleted = rCxt.maRange;
@@ -3971,10 +3972,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             if (aAbs.aStart.Row() < rCxt.maRange.aStart.Row() || rCxt.maRange.aEnd.Row() < aAbs.aEnd.Row())
                                 // row range of the reference is not entirely in the deleted row range.
-                                break;
-
-                            if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
-                                // wrong tables
                                 break;
 
                             ScRange aDeleted = rCxt.maRange;
