@@ -49,9 +49,13 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    mbStartIdleTimer = true;
-    if( !mIdleBlockCount )
+    if( !mIdleBlockCount && !maDocIdle.IsActive() )
+    {
+        mbStartIdleTimer = false;
         maDocIdle.Start();
+    }
+    else
+        mbStartIdleTimer = true;
 }
 
 void DocumentTimerManager::StopIdling()
@@ -70,14 +74,10 @@ void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
     if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
+    {
+        mbStartIdleTimer = false;
         maDocIdle.Start();
-}
-
-void DocumentTimerManager::StartBackgroundJobs()
-{
-    // Trigger DoIdleJobs(), asynchronously.
-    if (!maDocIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maDocIdle.Start();
+    }
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
@@ -123,13 +123,14 @@ DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
     return IdleJob::None;
 }
 
-IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
+IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;
     if( !pModLogFile )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
+    BlockIdling();
 
     IdleJob eJob = GetNextIdleJob();
 
@@ -183,7 +184,8 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
     }
 
     if ( IdleJob::None != eJob )
-        pIdle->Start();
+        StartIdling();
+    UnblockIdling();
 
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
