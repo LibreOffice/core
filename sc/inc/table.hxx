@@ -366,7 +366,7 @@ public:
     void        SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData);
     ScDBData*   GetAnonymousDBData() { return pDBDataNoName.get();}
 
-    void        GetCodeName( OUString& rName ) const {  rName = aCodeName; }
+    const OUString& GetCodeName() const { return aCodeName; }
     void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
 
     const OUString& GetUpperName() const;

@@ -250,7 +250,7 @@ bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
         {
-            maTabs[nTab]->GetCodeName( rName );
+            rName = maTabs[nTab]->GetCodeName();
             return true;
         }
     rName.clear();
