@@ -4174,7 +4174,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
     }
     else if ( aObjHd.nRecType == DFF_msofbtSpContainer )
     {
-        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
+        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId, sal_False );
     }
     aObjHd.SeekToBegOfRecord( rSt );    // FilePos restaurieren
     return pRet;
@@ -4197,8 +4197,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         sal_Int32 nGroupRotateAngle = 0;
         sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
-        aRecHd.SeekToBegOfRecord( rSt );
-        pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
+        pRet = ImportShape( aRecHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId, sal_True );
         if ( pRet )
         {
             nSpFlags = nGroupShapeFlags;
@@ -4239,7 +4238,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
                     if ( pTmp )
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        (dynamic_cast<SdrObjGroup*>(pRet))->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4248,10 +4247,10 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 {
                     aRecHd2.SeekToBegOfRecord( rSt );
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
+                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId, sal_False );
                     if ( pTmp )
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        (dynamic_cast<SdrObjGroup*>(pRet))->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4284,7 +4283,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
 
 SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
                                             Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
-                                            int nCalledByGroup, sal_Int32* pShapeId )
+                                            int nCalledByGroup, sal_Int32* pShapeId, sal_Bool bShapeGroup )
 {
     SdrObject* pRet = NULL;
 
@@ -4324,11 +4323,15 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         rSt >> aObjData.nShapeId
             >> aObjData.nSpFlags;
         aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
+        if (bShapeGroup)
+            aObjData.nSpFlags |= SP_FGROUP;
+        else
+            aObjData.nSpFlags &= ~SP_FGROUP;
     }
     else
     {
         aObjData.nShapeId = 0;
-        aObjData.nSpFlags = 0;
+        aObjData.nSpFlags = bShapeGroup ? SP_FGROUP : 0;
         aObjData.eShapeType = mso_sptNil;
     }
 
@@ -4935,8 +4938,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             pRet->SetName( aObjName );
     }
 
-    pRet =
-        ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+    if (!bShapeGroup)
+        pRet = ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
 
     if ( pRet )
     {

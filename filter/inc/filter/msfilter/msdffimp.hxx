@@ -658,7 +658,7 @@ public:
         Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL );
 
     SdrObject* ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pData,
-        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
+        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL, sal_Bool bShapeGroup = sal_False);
 
     Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect );
     void GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt,
