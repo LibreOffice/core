@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_f8b4a737",
+        "filename": "i18npool/source/collator/collator_unicode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T18:00:11Z",
+      "side": 1,
+      "message": "Blanks help readability.",
+      "revId": "0885c270e9498249ce455315cf91c296e51fa387",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d8832356",
+        "filename": "i18npool/source/collator/collator_unicode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T18:00:11Z",
+      "side": 1,
+      "message": "And these closing parentheses each on its own line are very odd.",
+      "revId": "0885c270e9498249ce455315cf91c296e51fa387",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
