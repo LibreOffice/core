@@ -165,8 +165,7 @@ void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap
             p = new ScRangeName();
             SetRangeName(i, std::unique_ptr<ScRangeName>(p));
         }
-        OUString aTableName;
-        maTabs[i]->GetName(aTableName);
+        OUString aTableName = maTabs[i]->GetName();
         aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aTableName,p));
     }
     if (!pRangeName)

@@ -533,8 +533,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
             if (pSourceDoc->maTabs[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
-                    OUString aString;
-                    pSourceDoc->maTabs[i]->GetName(aString);
+                    OUString aString = pSourceDoc->maTabs[i]->GetName();
                     if ( i < static_cast<SCTAB>(maTabs.size()) )
                     {
                         maTabs[i].reset( new ScTable(this, i, aString) );

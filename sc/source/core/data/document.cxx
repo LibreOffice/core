@@ -216,7 +216,7 @@ bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
     {
         if (maTabs[nTab])
         {
-            maTabs[nTab]->GetName( rName );
+            rName = maTabs[nTab]->GetName();
             return true;
         }
     }
@@ -297,7 +297,7 @@ std::vector<OUString> ScDocument::GetAllTableNames() const
         if (*it)
         {
             const ScTable& rTab = **it;
-            rTab.GetName(aName);
+            aName = rTab.GetName();
         }
         aNames.push_back(aName);
     }
@@ -379,8 +379,7 @@ bool ScDocument::ValidNewTabName( const OUString& rName ) const
     for (; it != maTabs.end() && bValid; ++it)
         if ( *it )
         {
-            OUString aOldName;
-            (*it)->GetName(aOldName);
+            OUString aOldName = (*it)->GetName();
             bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
         }
     return bValid;
@@ -875,8 +874,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
             for (i=0; (i< static_cast<SCTAB>(maTabs.size())) && bValid; i++)
                 if (maTabs[i] && (i != nTab))
                 {
-                    OUString aOldName;
-                    maTabs[i]->GetName(aOldName);
+                    OUString aOldName = maTabs[i]->GetName();
                     bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
                 }
             if (bValid)
@@ -2190,8 +2188,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     {
         if( *itr )
         {
-            OUString aTabName;
-            (*itr)->GetName(aTabName);
+            OUString aTabName = (*itr)->GetName();
             pClipDoc->maTabNames.push_back(aTabName);
         }
         else
@@ -2290,8 +2287,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         {
             if( *itr )
             {
-                OUString aTabName;
-                (*itr)->GetName(aTabName);
+                OUString aTabName = (*itr)->GetName();
                 pClipDoc->maTabNames.push_back(aTabName);
             }
             else

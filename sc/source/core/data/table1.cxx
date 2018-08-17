@@ -359,11 +359,6 @@ sal_Int64 ScTable::GetHashCode() const
     return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 }
 
-void ScTable::GetName( OUString& rName ) const
-{
-    rName = aName;
-}
-
 void ScTable::SetName( const OUString& rNewName )
 {
     aName = rNewName;
