@@ -871,7 +871,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         }
     }
 //    assert(nFoundNode != 0 && "text node not found - why is it sending hints to us");
-    assert(nIndex - nDeleted <= rNode.Len());
+    assert(nIndex <= rNode.Len() + nLen);
     // if there's a remaining deletion, it must be in gap at the end of the node
 // can't do: might be last one in node was erased   assert(nLen == 0 || rMerged.empty() || (it-1)->nEnd <= nIndex);
     // note: if first node gets deleted then that must call DelFrames as
