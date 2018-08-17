@@ -121,29 +121,32 @@
                includeantruntime="false"/>
     </target>
 
-    <target name="test-check">
-        <local name="tests.present"/>
-        <available type="dir" file="${test.src.dir}" property="tests.present"/>
-        <echo message="No tests" unless:set="tests.present"/>
+    <macrodef name="check-test">
+        <sequential>
+            <local name="tests.present"/>
+            <available type="dir" file="${test.src.dir}" property="tests.present"/>
+            <echo message="No tests" unless:set="tests.present"/>
 
-        <local name="only.junit.absent"/>
-        <condition property="only.junit.absent">
-            <and>
-                <isset property="tests.present"/>
-                <not><isset property="OOO_JUNIT_JAR"/></not>
-            </and>
-        </condition>
-        <echo message="No junit, skipping tests" if:set="only.junit.absent"/>
+            <local name="only.junit.absent"/>
+            <condition property="only.junit.absent">
+                <and>
+                    <isset property="tests.present"/>
+                    <not><isset property="OOO_JUNIT_JAR"/></not>
+                </and>
+            </condition>
+            <echo message="No junit, skipping tests" if:set="only.junit.absent"/>
 
-        <condition property="test.skip">
-            <or>
-                <not><isset property="test.present"/></not>
-                <not><isset property="OOO_JUNIT_JAR"/></not>
-            </or>
-        </condition>
-    </target>
+            <condition property="test.skip">
+                <or>
+                    <not><isset property="test.present"/></not>
+                    <not><isset property="OOO_JUNIT_JAR"/></not>
+                </or>
+            </condition>
+        </sequential>
+    </macrodef>
 
-    <target name="test-compile" depends="compile,idl,test-check">
+    <target name="test-compile" depends="compile,idl">
+        <check-test/>
         <mkdir dir="${test.build.dir}" unless:set="test.skip"/>
         <javac srcdir="${test.src.dir}"
                destdir="${test.build.dir}"

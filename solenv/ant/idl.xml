@@ -36,81 +36,92 @@
     <property name="idl.classes.build.dir" location="${idl.build.dir}/classes"/>
     <property name="idl.javamaker.flag" location="${idl.build.dir}/idl.javamaker.flag"/>
 
-    <target name="idl" depends="idl-check,idl-javamaker"/>
-
-    <target name="idl-check">
-        <local name="idl.files.exist"/>
-        <condition property="idl.files.exist">
-            <resourcecount refid="idl.files" when="greater" count="0"/>
-        </condition>
-
-        <local name="idl.files.union"/>
-        <union id="idl.files.union" if:set="idl.files.exist">
-            <filelist refid="idl.files"/>
-        </union>
-        <uptodate property="idl.uptodate" targetfile="${idl.javamaker.flag}" if:set="idl.files.exist">
-            <srcresources refid="idl.files.union"/>
-        </uptodate>
-        <property name="idl.uptodate" value="true" unless:set="idl.files.exist"/>
+    <target name="idl">
+        <check-idl/>
+        <build-idl unless:set="idl.uptodate"/>
     </target>
 
+    <macrodef name="check-idl">
+        <sequential>
+            <local name="idl.files.exist"/>
+            <condition property="idl.files.exist">
+                <resourcecount refid="idl.files" when="greater" count="0"/>
+            </condition>
+
+            <local name="idl.files.union"/>
+            <union id="idl.files.union" if:set="idl.files.exist">
+                <filelist refid="idl.files"/>
+            </union>
+            <uptodate property="idl.uptodate" targetfile="${idl.javamaker.flag}" if:set="idl.files.exist">
+                <srcresources refid="idl.files.union"/>
+            </uptodate>
+            <property name="idl.uptodate" value="true" unless:set="idl.files.exist"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="build-idl">
+        <sequential>
+            <idlc/>
+            <regmerge/>
+            <javamaker
+                inputRdb="${idl.rdb.build.dir}/registry.rdb"
+                outputDirectory="${idl.classes.build.dir}"
+                noDependentTypes="true"
+                excludes="${OUTDIR}/bin/types.rdb"/>
+            <touch file="${idl.javamaker.flag}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="idlc">
+        <sequential>
+            <mkdir dir="${idl.urd.build.dir}"/>
+            <apply executable="${OUTDIR}/bin/idlc" failonerror="true">
+                <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <arg value="-I${OUTDIR}/idl"/>
+                <arg value="-O"/>
+                <arg value="${idl.urd.build.dir}"/>
+                <arg value="-verbose"/>
+                <arg value="-cid"/>
+                <arg value="-we"/>
+                <filelist refid="idl.files"/>
+            </apply>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="regmerge">
+        <sequential>
+            <mkdir dir="${idl.rdb.build.dir}"/>
+            <delete file="${idl.rdb.build.dir}/registry.rdb"/>
+            <apply executable="${OUTDIR}/bin/regmerge" failonerror="true">
+                <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <arg value="${idl.rdb.build.dir}/registry.rdb"/>
+                <arg value="/UCR"/>
+                <fileset dir="${idl.urd.build.dir}" includes="**/*.urd"/>
+            </apply>
+        </sequential>
+    </macrodef>
+
     <macrodef name="javamaker">
-        <attribute name="input-rdb"/>
-        <attribute name="output-directory"/>
-        <attribute name="no-dependent-types" default="false"/>
+        <attribute name="inputRdb"/>
+        <attribute name="outputDirectory"/>
+        <attribute name="noDependentTypes" default="false"/>
         <attribute name="excludes" default=""/>
         <sequential>
-            <mkdir dir="@{output-directory}"/>
+            <mkdir dir="@{outputDirectory}"/>
             <exec executable="${OUTDIR}/bin/javamaker" failonerror="true">
                 <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
                 <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-                <arg value="-O@{output-directory}"/>
+                <arg value="-O@{outputDirectory}"/>
                 <arg value="-BUCR"/>
                 <arg value="-nD"
-                    if:true="@{no-dependent-types}"/>
-                <arg value="@{input-rdb}"/>
+                    if:true="@{noDependentTypes}"/>
+                <arg value="@{inputRdb}"/>
                 <arg value="-X@{excludes}"
                     unless:blank="@{excludes}"/>
             </exec>
         </sequential>
     </macrodef>
-
-    <target name="idl-javamaker" depends="idl-regmerge" unless="idl.uptodate">
-        <mkdir dir="${idl.classes.build.dir}"/>
-        <javamaker
-            input-rdb="${idl.rdb.build.dir}/registry.rdb"
-            output-directory="${idl.classes.build.dir}"
-            no-dependent-types="true"
-            excludes="${OUTDIR}/bin/types.rdb"/>
-        <touch file="${idl.javamaker.flag}"/>
-    </target>
-
-    <target name="idl-regmerge" depends="idl-idlc" unless="idl.uptodate">
-        <mkdir dir="${idl.rdb.build.dir}"/>
-        <delete file="${idl.rdb.build.dir}/registry.rdb"/>
-        <apply executable="${OUTDIR}/bin/regmerge" failonerror="true">
-            <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <arg value="${idl.rdb.build.dir}/registry.rdb"/>
-            <arg value="/UCR"/>
-            <fileset dir="${idl.urd.build.dir}" includes="**/*.urd"/>
-        </apply>
-    </target>
-
-    <target name="idl-idlc" unless="idl.uptodate">
-        <mkdir dir="${idl.urd.build.dir}"/>
-        <apply executable="${OUTDIR}/bin/idlc" failonerror="true">
-            <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <arg value="-I${OUTDIR}/idl"/>
-            <arg value="-O"/>
-            <arg value="${idl.urd.build.dir}"/>
-            <arg value="-verbose"/>
-            <arg value="-cid"/>
-            <arg value="-we"/>
-            <filelist refid="idl.files"/>
-        </apply>
-    </target>
-
 </project>
 

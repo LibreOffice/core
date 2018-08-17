@@ -1,4 +1,0 @@
-mkdir: %_DEST%\bin%_EXT%
-
-..\%__SRC%\bin\smoketestdoc.sxw %_DEST%\bin%_EXT%\smoketestdoc.sxw
-..\%__SRC%\bin\TestExtension.oxt %_DEST%\bin%_EXT%\TestExtension.oxt
