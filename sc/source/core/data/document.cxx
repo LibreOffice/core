@@ -375,13 +375,19 @@ bool ScDocument::ValidTabName( const OUString& rName )
 bool ScDocument::ValidNewTabName( const OUString& rName ) const
 {
     bool bValid = ValidTabName(rName);
+    if (!bValid)
+        return false;
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
     TableContainer::const_iterator it = maTabs.begin();
-    for (; it != maTabs.end() && bValid; ++it)
-        if ( *it )
-        {
-            OUString aOldName = (*it)->GetName();
-            bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
-        }
+    for (const auto& a : maTabs)
+    {
+        if (!a)
+            continue;
+        const OUString& rOldName = a->GetUpperName();
+        bValid = rOldName != aUpperName;
+        if (!bValid)
+            break;
+    }
     return bValid;
 }
 
