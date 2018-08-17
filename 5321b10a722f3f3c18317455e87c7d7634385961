@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_15acb68a",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-08-17T10:24:08Z",
+      "side": 1,
+      "message": "changing string in the assert without changing the text in the document that it should match against is a big \"no no\"",
+      "range": {
+        "startLine": 750,
+        "startChar": 0,
+        "endLine": 750,
+        "endChar": 8
+      },
+      "revId": "5321b10a722f3f3c18317455e87c7d7634385961",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
