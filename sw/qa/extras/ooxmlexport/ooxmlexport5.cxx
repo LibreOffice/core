@@ -1070,6 +1070,13 @@ DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[4]", "c");
+
+    // tdf116436: The problem was that the table background was undefined, not white.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOO67471, "ooo67471-2.odt")

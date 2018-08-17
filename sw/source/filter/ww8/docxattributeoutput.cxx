@@ -3749,6 +3749,18 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSNS( XML_w, XML_val ), pJcVal,
             FSEND );
 
+    // Output the table background color (although cell value still needs to be specified)
+    const SvxBrushItem *pColorProp = pTableFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    Color aColor = pColorProp ? pColorProp->GetColor() : COL_AUTO;
+    if ( aColor != COL_AUTO )
+    {
+        OString sColor = msfilter::util::ConvertColor( aColor );
+        m_pSerializer->singleElementNS( XML_w, XML_shd,
+                FSNS( XML_w, XML_fill ), sColor.getStr( ),
+                FSNS( XML_w, XML_val ), "clear",
+                FSEND );
+    }
+
     // Output the table borders
     TableDefaultBorders( pTableTextNodeInfoInner );
 
@@ -3811,12 +3823,25 @@ void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::P
 
 void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
+    const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     const SwTableBox *pTableBox = pTableTextNodeInfoInner->getTableBox( );
+    const SwTableLine *pTableRow = pTableBox->GetUpper();
     const SwFrameFormat *pFormat = pTableBox->GetFrameFormat( );
 
     const SvxBrushItem *pColorProp = pFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
     Color aColor = pColorProp ? pColorProp->GetColor() : COL_AUTO;
-    OString sColor = msfilter::util::ConvertColor( aColor );
+
+    const SwFrameFormat *pRowFormat = pTableRow->GetFrameFormat( );
+    const SvxBrushItem *pRowColorProp = pRowFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if ( pRowColorProp && aColor == COL_AUTO)
+        aColor = pRowColorProp->GetColor();
+
+    const SwFrameFormat *pTableFormat = pTable->GetFrameFormat( );
+    const SvxBrushItem *pTableColorProp = pTableFormat->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if ( pTableColorProp && aColor == COL_AUTO )
+        aColor = pTableColorProp->GetColor();
+
+    const OString sColor = msfilter::util::ConvertColor( aColor );
 
     std::map<OUString, css::uno::Any> aGrabBag =
             pFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
