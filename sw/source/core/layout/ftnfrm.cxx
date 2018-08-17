@@ -2808,18 +2808,20 @@ SwSaveFootnoteHeight::~SwSaveFootnoteHeight()
 const SwContentFrame* SwFootnoteFrame::GetRef() const
 {
     const SwContentFrame* pRefAttr = GetRefFromAttr();
-    SAL_WARN_IF( mpReference != pRefAttr && !mpReference->IsAnFollow( pRefAttr )
-            && !pRefAttr->IsAnFollow( mpReference ),
-            "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
+    // check consistency: access to deleted frame?
+    assert(mpReference == pRefAttr || mpReference->IsAnFollow(pRefAttr)
+            || pRefAttr->IsAnFollow(mpReference));
+    (void) pRefAttr;
     return mpReference;
 }
 
 SwContentFrame* SwFootnoteFrame::GetRef()
 {
     const SwContentFrame* pRefAttr = GetRefFromAttr();
-    SAL_WARN_IF( mpReference != pRefAttr && !mpReference->IsAnFollow( pRefAttr )
-            && !pRefAttr->IsAnFollow( mpReference ),
-            "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
+    // check consistency: access to deleted frame?
+    assert(mpReference == pRefAttr || mpReference->IsAnFollow(pRefAttr)
+            || pRefAttr->IsAnFollow(mpReference));
+    (void) pRefAttr;
     return mpReference;
 }
 #endif
