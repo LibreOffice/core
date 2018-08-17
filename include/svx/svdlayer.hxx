@@ -62,6 +62,9 @@ class SVX_DLLPUBLIC SdrLayer
     OUString maName;
     OUString maTitle;
     OUString maDescription;
+    bool mbVisibleODF; // corresponds to ODF draw:display
+    bool mbPrintableODF; // corresponds to ODF draw:display
+    bool mbLockedODF; // corresponds to ODF draw:protected
     SdrModel*  pModel; // For broadcasting
     sal_uInt16 nType;  // 0= userdefined, 1= default layer
     SdrLayerID nID;
@@ -79,6 +82,15 @@ public:
 
     void SetDescription(const OUString& rDesc) { maDescription = rDesc; }
     const OUString& GetDescription() const { return maDescription; }
+
+    void SetVisibleODF(const bool& rVisibleODF) { mbVisibleODF = rVisibleODF; }
+    bool IsVisibleODF() const { return mbVisibleODF; }
+
+    void SetPrintableODF(const bool& rPrintableODF) { mbPrintableODF = rPrintableODF; }
+    bool IsPrintableODF() const { return mbPrintableODF; }
+
+    void SetLockedODF(const bool& rLockedODF) { mbLockedODF = rLockedODF; }
+    bool IsLockedODF() const { return mbLockedODF; }
 
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
@@ -114,16 +126,11 @@ public:
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
     SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
+    SdrLayerAdmin*    GetParent() const { return pParent; }
+
     void               SetModel(SdrModel* pNewModel);
-    void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
-    {
-        if(nPos==0xFFFF)
-            aLayer.push_back(pLayer);
-        else
-            aLayer.insert(aLayer.begin() + nPos, pLayer);
-        pLayer->SetModel(pModel);
-        Broadcast();
-    }
+
+    void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos);
     SdrLayer*          RemoveLayer(sal_uInt16 nPos);
 
     // Delete the entire layer
@@ -151,6 +158,12 @@ public:
 
     void               SetControlLayerName(const OUString& rNewName);
     const OUString&    GetControlLayerName() const { return maControlLayerName; }
+
+    // Removes all elements in rOutSet and then adds all IDs of layers from member aLayer
+    // that fullfill the criterion visible, printable, or locked respectively.
+    void               getVisibleLayersODF( SdrLayerIDSet& rOutSet) const;
+    void               getPrintableLayersODF( SdrLayerIDSet& rOutSet) const;
+    void               getLockedLayersODF( SdrLayerIDSet& rOutSet) const;
 };
 
 #endif // INCLUDED_SVX_SVDLAYER_HXX
