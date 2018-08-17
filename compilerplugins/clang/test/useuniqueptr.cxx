@@ -8,6 +8,7 @@
  */
 
 #include <array>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 
@@ -180,4 +181,23 @@ void Foo15(int * p)
 {
     delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted here or simplified [loplugin:useuniqueptr]}}
 };
+
+//  ------------------------------------------------------------------------------------------------
+// tests for passing owning pointers to constructors
+
+class Bravo1
+{
+    std::unique_ptr<int> m_field1;
+    Bravo1(int* p)
+        : m_field1(p) // expected-error {{should be passing via std::unique_ptr param [loplugin:useuniqueptr]}}
+    {}
+};
+class Bravo2
+{
+    std::unique_ptr<int> m_field1;
+    Bravo2(std::unique_ptr<int> p)
+        : m_field1(std::move(p)) // no warning expected
+    {}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
