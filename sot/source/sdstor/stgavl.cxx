@@ -40,7 +40,7 @@ StgAvlNode* StgAvlNode::Find( StgAvlNode const * pFind )
         StgAvlNode* p = this;
         while( p )
         {
-            short nRes = p->Compare( pFind );
+            sal_Int32 nRes = p->Compare( pFind );
             if( !nRes )
                 return p;
             else p = ( nRes < 0 ) ? p->m_pLeft : p->m_pRight;
@@ -52,11 +52,11 @@ StgAvlNode* StgAvlNode::Find( StgAvlNode const * pFind )
 // find point to add node to AVL tree and returns
 // +/0/- for >/=/< previous
 
-short StgAvlNode::Locate
+sal_Int32 StgAvlNode::Locate
     ( StgAvlNode const * pFind,
       StgAvlNode** pPivot, StgAvlNode **pParent, StgAvlNode** pPrev )
 {
-    short nRes = 0;
+    sal_Int32 nRes = 0;
     StgAvlNode* pCur = this;
 
     OSL_ENSURE( pPivot && pParent && pPrev, "The pointers may not be NULL!" );
@@ -98,7 +98,7 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode const * pNew )
     if( pCur == pNew || !pNew )
         return m_nBalance;
 
-    short nRes = Compare( pNew );
+    sal_Int32 nRes = Compare( pNew );
     if( nRes > 0 )
     {
         *pHeavy = pCur = m_pRight;
@@ -221,7 +221,7 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
     if( p && *p && pDel )
     {
         StgAvlNode* pCur = *p;
-        short nRes = bPtrs ? short( pCur == pDel ) : pCur->Compare( pDel );
+        sal_Int32 nRes = bPtrs ? sal_Int32( pCur == pDel ) : pCur->Compare( pDel );
         if( !nRes )
         {
             // Element found: remove
@@ -295,7 +295,7 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         return true;
     }
     // find insertion point and return if already present
-    short nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
+    sal_Int32 nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
     if( !nRes )
         return false;
 

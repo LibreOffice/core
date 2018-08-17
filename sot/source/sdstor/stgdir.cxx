@@ -92,9 +92,9 @@ StgDirEntry::~StgDirEntry()
 
 // Comparison function
 
-short StgDirEntry::Compare( const StgAvlNode* p ) const
+sal_Int32 StgDirEntry::Compare( const StgAvlNode* p ) const
 {
-    short nResult = -1;
+    sal_Int32 nResult = -1;
     if ( p )
     {
         const StgDirEntry* pEntry = static_cast<const StgDirEntry*>(p);
