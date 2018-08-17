@@ -12,12 +12,12 @@ VISIO_MD5SUM := 82628333418f101a20cd21f980cf9f40
 export VISIO_TARBALL := libvisio-0.0.31.tar.bz2
 NSS_MD5SUM := e55ee06b22687df68fafc6a30c0554b2
 export NSS_TARBALL := nss-3.29.5-with-nspr-4.13.1.tar.gz
-ZLIB_MD5SUM := 85adef240c5f370b308da8c938951a68
-export ZLIB_TARBALL := zlib-1.2.11.tar.xz
+ZLIB_MD5SUM := f4669c4b1eb2007b208b70c96dcd4108
+export ZLIB_TARBALL := zlib-1.2.11.tar.bz2
 OPENSSL_MD5SUM := 44279b8557c3247cbe324e2322ecd114
 export OPENSSL_TARBALL := openssl-1.0.2o.tar.gz
-PYTHON_MD5SUM := 84e2f12f044ca53b577f6224c53f82ac
-export PYTHON_TARBALL := Python-3.3.7.tar.xz
+PYTHON_MD5SUM := 6c5445faa455edc76d1c8616f54a4287
+export PYTHON_TARBALL := Python-3.3.7.tar.bz2
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
