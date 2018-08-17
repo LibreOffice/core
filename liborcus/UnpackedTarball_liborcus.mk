@@ -24,6 +24,11 @@ liborcus_patches += liborcus_0.1.0-dllimport.patch
 # fdo#63844
 liborcus_patches += liborcus-handle-invalid-xml.patch.1
 
+# backports
+liborcus_patches += 0001-Prevent-infinite-loop-in-case-the-magic-number-is-no.patch.1
+liborcus_patches += 0002-throw-an-exception-instead-of-asserting-on-invalid-i.patch.1
+liborcus_patches += 0003-protect-the-self-closing-xml-element-code-against-se.patch.1
+
 ifeq ($(OS),MACOSX)
 # no "tac" command on OS X, but "tail -r"
 liborcus_patches += liborcus_0.1.0-tac.patch

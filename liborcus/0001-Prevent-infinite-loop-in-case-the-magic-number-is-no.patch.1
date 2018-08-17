@@ -1,0 +1,27 @@
+From 8c8cdc53438a46d6f0c889b987353ec82cbe0ea2 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Sun, 1 Sep 2013 22:28:35 -0400
+Subject: [PATCH 1/3] Prevent infinite loop in case the magic number is not
+ found.
+
+(cherry picked from commit b554e16c154b6bf9e64ecc883e134cf5c2301b6f)
+---
+ src/parser/zip_archive.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/parser/zip_archive.cpp b/src/parser/zip_archive.cpp
+index e244908b..2e4f5885 100644
+--- a/src/parser/zip_archive.cpp
++++ b/src/parser/zip_archive.cpp
+@@ -529,7 +529,7 @@ size_t zip_archive_impl::seek_central_dir()
+     // Read stream backward and try to find the magic number.
+ 
+     size_t read_end_pos = m_stream_size;
+-    while (true)
++    while (read_end_pos)
+     {
+         if (read_end_pos < buf.size())
+             // Last segment to read.
+-- 
+2.13.7
+

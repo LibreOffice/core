@@ -1,0 +1,30 @@
+From 704dc974685d0c4c7fe41c1551078a2208ba07bd Mon Sep 17 00:00:00 2001
+From: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Date: Fri, 23 Dec 2016 01:37:45 +0100
+Subject: [PATCH 2/3] throw an exception instead of asserting on invalid input
+
+This was found by afl.
+
+(cherry picked from commit 43805da3c4168ff24b0e6b82041fbe58dc8b4e6d)
+---
+ include/orcus/csv_parser.hpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/orcus/csv_parser.hpp b/include/orcus/csv_parser.hpp
+index 3f80da0e..271f0248 100644
+--- a/include/orcus/csv_parser.hpp
++++ b/include/orcus/csv_parser.hpp
+@@ -192,7 +192,9 @@ void csv_parser<_Handler>::row()
+             return;
+         }
+ 
+-        assert(is_delim(c));
++        if (is_delim(c))
++            throw csv_parse_error("expected a delimiter");
++
+         next();
+ 
+         if (m_config.trim_cell_value)
+-- 
+2.13.7
+
