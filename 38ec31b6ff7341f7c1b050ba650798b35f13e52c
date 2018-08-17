@@ -1,0 +1,561 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_b21880d3",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "For date+time less than the nulldate nDateTime is negative, for example for our standard null date 1899-12-30 the date+time  1899-12-29 06:00:00  has the value -0.75, the algorithm then returns a wrong time value:\n\n std::trunc(-0.75) \u003d\u003e 0\n -0.75 - 0 \u003d\u003e -0.75\n -0.75 * 24 \u003d\u003e -18\n std::trunc(-18) \u003d\u003e -18\n\nCorrect value would be 6.\n\nSimilar errors for getMinute() and getSecond().\n\nSee ScInterpreter::ScGetHour() and related in sc/source/core/tool/interpr2.cxx for how to do this.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f21de8bd",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Why +1 ? Looks wrong to me.",
+      "range": {
+        "startLine": 57,
+        "startChar": 18,
+        "endLine": 57,
+        "endChar": 27
+      },
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_b27d20e9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Why obtain the value? ...",
+      "range": {
+        "startLine": 787,
+        "startChar": 0,
+        "endLine": 787,
+        "endChar": 67
+      },
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_92821cc8",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "The temporaries in each iteration are unnecessary. Obtain SvNumberFormatter* pFormatter once before the loop, and directly use SvNumFormatType::DATE and ScGlobal::eLnge.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_124f2cbe",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop instead of in each iteration.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d278a4f9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "... just to set the same value again?\nShouldn\u0027t this rather set only the format? Or is the purpose to set an actual text string instead of the date serial as cell content (as the name DATE_STRING may suggest)? Which then would have to be done differently.",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 794,
+        "endChar": 59
+      },
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_728798d9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_526c9435",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f2728811",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "This looks odd and wrong. If this is supposed to calculate the start of the year as the 1st of January of the given year then just do\n\n aDate.SetDay(1);\n aDate.SetMonth(1);\n nVal \u003d aDate - pFormatter-\u003eGetNullDate();",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d2c66417",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_52da54e9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_32523069",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Overcomplicated and probably wrong with negative date serials. Instead use\n\n aDate.SetMonth(12);\n aDate.SetDay(31);\n nVal \u003d aDate - pFormatter-\u003eGetNullDate();",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_72d558b9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_12e4ccab",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d2ef8485",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Eek, hard coded English month names?? Shouldn\u0027t these be the localized names of the current locale? Or rather just format the date serial with month name only instead of converting it to a hard coded string? What is the purpose of this transformation?",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f2e04899",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_b2f4005d",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_92e9fc81",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_12fdec39",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Instead, simply use\n\n aDate.SetDay(1);\n nVal \u003d aDate - pFormatter-\u003eGetNullDate();",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 918,
+        "endChar": 85
+      },
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f2f9684d",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d29424eb",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_929e9c05",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Instead, simply use\n\n aDate.SetDay( aDate.GetDaysInMonth());\n nVal \u003d aDate - pFormatter-\u003eGetNullDate();",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 943,
+        "endChar": 83
+      },
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_72a31851",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_528814c5",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_328590ae",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_12928cf7",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the formatter once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f28e08cf",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Obtain the format once before the loop.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d2bd4469",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Instead, use\n\n aDate.SetDay(1);\n aDate.SetMonth(1);\n nVal \u003d aDate - pFormatter-\u003eGetNullDate();",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_b2c2c0e8",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Similar, use class Date calculation.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_92b7bc87",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Similar, use class Date calculation.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_72bc3869",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-17T07:55:41Z",
+      "side": 1,
+      "message": "Similar, use class Date calculation.",
+      "revId": "38ec31b6ff7341f7c1b050ba650798b35f13e52c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
