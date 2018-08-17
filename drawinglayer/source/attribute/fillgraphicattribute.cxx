@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <o3tl/clamp.hxx>
 #include <vcl/graph.hxx>
 
 namespace drawinglayer
@@ -98,8 +99,8 @@ namespace drawinglayer
             double fOffsetY)
         :   mpFillGraphicAttribute(ImpFillGraphicAttribute(
                 rGraphic, rGraphicRange, bTiling,
-                    basegfx::clamp(fOffsetX, 0.0, 1.0),
-                    basegfx::clamp(fOffsetY, 0.0, 1.0)))
+                    o3tl::clamp(fOffsetX, 0.0, 1.0),
+                    o3tl::clamp(fOffsetY, 0.0, 1.0)))
         {
         }
 

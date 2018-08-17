@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/clamp.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/sidebar/SidebarDialControl.hxx>
@@ -1044,10 +1047,10 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fBottom -= maRect.getHeight();
 
     const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
-    fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
-    fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
-    fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);
-    fBottom = basegfx::clamp(fBottom, -fMaxLong, fMaxLong);
+    fLeft = o3tl::clamp(fLeft, -fMaxLong, fMaxLong);
+    fRight = o3tl::clamp(fRight, -fMaxLong, fMaxLong);
+    fTop = o3tl::clamp(fTop, - fMaxLong, fMaxLong);
+    fBottom = o3tl::clamp(fBottom, -fMaxLong, fMaxLong);
 
     mpMtrPosX->SetMin(basegfx::fround64(fLeft));
     mpMtrPosX->SetFirst(basegfx::fround64(fLeft));
