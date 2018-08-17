@@ -1968,6 +1968,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         case SwComparePosition::OverlapBefore:
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetStart( *pEnd, pRStt );
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                 // re-insert
                 mpRedlineTable->Remove( n );
                 mpRedlineTable->Insert( pRedl );
@@ -1977,6 +1978,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         case SwComparePosition::OverlapBehind:
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 pRedl->SetEnd( *pStt, pREnd );
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                 if( !pRedl->HasValidRange() )
                 {
                     // re-insert
@@ -1993,6 +1995,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                 if( *pRStt == *pStt )
                 {
                     pRedl->SetStart( *pEnd, pRStt );
+                    pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     // re-insert
                     mpRedlineTable->Remove( n );
                     mpRedlineTable->Insert( pRedl );
@@ -2005,10 +2008,12 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     {
                         pCpy = new SwRangeRedline( *pRedl );
                         pCpy->SetStart( *pEnd );
+                        pCpy->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     }
                     else
                         pCpy = nullptr;
                     pRedl->SetEnd( *pStt, pREnd );
+                    pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     if( !pRedl->HasValidRange() )
                     {
                         // re-insert
