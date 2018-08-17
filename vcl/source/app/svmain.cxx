@@ -493,7 +493,7 @@ void DeInitVCL()
     }
     pSVData->mpDefaultWin.disposeAndClear();
 
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     DbgGUIDeInitSolarMutexCheck();
 #endif
 
