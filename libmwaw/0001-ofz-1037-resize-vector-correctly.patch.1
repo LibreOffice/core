@@ -1,0 +1,25 @@
+From 68b3b74569881248bfb6cbb4266177cc253b292f Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sat, 8 Apr 2017 14:03:29 +0200
+Subject: [PATCH] ofz#1037 resize vector correctly
+
+---
+ src/lib/MsWrd1Parser.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/MsWrd1Parser.cxx b/src/lib/MsWrd1Parser.cxx
+index 63547e6..3626064 100644
+--- a/src/lib/MSW1Parser.cxx
++++ b/src/lib/MSW1Parser.cxx
+@@ -902,7 +902,7 @@ bool MsWrd1Parser::readFootnoteCorrespondance(MWAWVec2i limits)
+     int id = fIt++->second;
+     fPos[1] = fIt==footnoteMap.end() ? m_state->m_eot : fIt->first;
+     if (id >= int(m_state->m_footnotesList.size()))
+-      m_state->m_footnotesList.resize(size_t(id),0);
++      m_state->m_footnotesList.resize(size_t(id)+1,0);
+     m_state->m_footnotesList[size_t(id)]=fPos;
+   }
+   ascii().addDelimiter(input->tell(),'|');
+-- 
+2.13.0
+
