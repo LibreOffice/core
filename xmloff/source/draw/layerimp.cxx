@@ -60,6 +60,8 @@ private:
     OUString msName;
     OUStringBuffer sDescriptionBuffer;
     OUStringBuffer sTitleBuffer;
+    OUString msDisplay;
+    OUString msProtected;
 };
 
 SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
@@ -77,7 +79,14 @@ SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, 
             if( IsXMLToken( aLocalName, XML_NAME ) )
             {
                 msName = sValue;
-                break; // no more attributes needed
+            }
+            else if ( IsXMLToken( aLocalName, XML_DISPLAY))
+            {
+                msDisplay = sValue;
+            }
+            else if ( IsXMLToken( aLocalName, XML_PROTECTED))
+            {
+                msProtected = sValue;
             }
         }
     }
@@ -127,6 +136,19 @@ void SdXMLLayerContext::EndElement()
         {
             xLayer->setPropertyValue("Title", Any( sTitleBuffer.makeStringAndClear() ) );
             xLayer->setPropertyValue("Description", Any( sDescriptionBuffer.makeStringAndClear() ) );
+            bool bIsVisible( true );
+            bool bIsPrintable( true );
+            if ( !msDisplay.isEmpty() )
+            {
+                bIsVisible = (msDisplay == "always") || (msDisplay == "screen");
+                bIsPrintable = (msDisplay == "always") || (msDisplay == "printer");
+            }
+            xLayer->setPropertyValue("IsVisible", Any( bIsVisible ) );
+            xLayer->setPropertyValue("IsPrintable", Any( bIsPrintable ) );
+            bool bIsLocked( false );
+            if ( !msProtected.isEmpty() )
+                bIsLocked = (msProtected == "true");
+            xLayer->setPropertyValue("IsLocked", Any( bIsLocked ) );
         }
     }
     catch( Exception& )

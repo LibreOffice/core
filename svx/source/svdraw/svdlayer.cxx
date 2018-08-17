@@ -92,9 +92,14 @@ void SdrLayerIDSet::QueryValue( css::uno::Any & rAny ) const
     rAny <<= aSeq;
 }
 
+
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
     maName(rNewName), pModel(nullptr), nType(0), nID(nNewID)
 {
+    // ODF default values
+    mbVisibleODF = true;
+    mbPrintableODF = true;
+    mbLockedODF = false;
 }
 
 void SdrLayer::SetStandardLayer()
@@ -191,6 +196,16 @@ void SdrLayerAdmin::Broadcast() const
         pModel->Broadcast(aHint);
         pModel->SetChanged();
     }
+}
+
+void SdrLayerAdmin::InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
+{
+        if(nPos==0xFFFF)
+            aLayer.push_back(pLayer);
+        else
+            aLayer.insert(aLayer.begin() + nPos, pLayer);
+        pLayer->SetModel(pModel);
+        Broadcast();
 }
 
 SdrLayer* SdrLayerAdmin::RemoveLayer(sal_uInt16 nPos)
@@ -320,5 +335,36 @@ void SdrLayerAdmin::SetControlLayerName(const OUString& rNewName)
 {
     maControlLayerName = rNewName;
 }
+
+void  SdrLayerAdmin::getVisibleLayersODF( SdrLayerIDSet& rOutSet) const
+{
+    rOutSet.ClearAll();
+    for( auto it = aLayer.cbegin(); it != aLayer.cend(); ++it )
+    {
+        if ( (*it) && (*it)->IsVisibleODF() )
+            rOutSet.Set( (*it)->GetID() );
+    }
+}
+
+void SdrLayerAdmin::getPrintableLayersODF( SdrLayerIDSet& rOutSet) const
+{
+    rOutSet.ClearAll();
+    for( auto it = aLayer.cbegin(); it != aLayer.cend(); ++it )
+    {
+        if ( (*it) && (*it)->IsPrintableODF() )
+            rOutSet.Set( (*it)->GetID() );
+    }
+}
+
+void SdrLayerAdmin::getLockedLayersODF( SdrLayerIDSet& rOutSet) const
+{
+    rOutSet.ClearAll();
+    for( auto it = aLayer.cbegin(); it != aLayer.cend(); ++it )
+    {
+        if ( (*it) && (*it)->IsLockedODF() )
+            rOutSet.Set( (*it)->GetID() );
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

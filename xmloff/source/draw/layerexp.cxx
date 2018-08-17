@@ -56,8 +56,12 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     const OUString strName( "Name" );
     const OUString strTitle( "Title" );
     const OUString strDescription( "Description" );
+    const OUString strIsVisible( "IsVisible");
+    const OUString strIsPrintable( "IsPrintable");
+    const OUString strIsLocked( "IsLocked" );
 
     OUString sTmp;
+
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER_SET, true, true );
 
@@ -69,6 +73,32 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             xLayer->getPropertyValue( strName ) >>= sTmp;
             if(!sTmp.isEmpty())
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, sTmp );
+
+            bool bTmpVisible( true );
+            bool bTmpPrintable( true );
+            xLayer->getPropertyValue( strIsVisible) >>= bTmpVisible;
+            xLayer->getPropertyValue( strIsPrintable) >>= bTmpPrintable;
+            // only write non-default values, default is "always"
+            if ( bTmpVisible )
+            {
+                if ( !bTmpPrintable )
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("screen") );
+            }
+            else
+            {
+                if ( bTmpPrintable)
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("printer") );
+                else
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("none") );
+            }
+
+            bool bTmpLocked( false );
+            xLayer->getPropertyValue( strIsLocked ) >>= bTmpLocked;
+            // only write non-default value, default is "false"
+            if ( bTmpLocked )
+            {
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PROTECTED, OUString("true") );
+            }
 
             SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, true, true );
 
