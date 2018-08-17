@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_d54c0e78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-08-17T09:33:14Z",
+      "side": 1,
+      "message": "I noticed, that after upgrading to the latest VS 2017, I\u0027m not able to build LO on that VM. I havn\u0027t investigated the reason for the breakage, though.",
+      "revId": "accd0a611becd7c48b88c5b434a87382239e1b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
