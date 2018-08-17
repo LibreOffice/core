@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_5527de13",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-17T11:25:57Z",
+      "side": 1,
+      "message": "should that be rather SAL_WARN?",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_152156fc",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-17T11:25:57Z",
+      "side": 1,
+      "message": "I think with the amount of strings involved, a table-based lookup or hashmap is in order",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_35245a0d",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-17T11:25:57Z",
+      "side": 1,
+      "message": "that is not ideal - any chance to separate out those, into a different patch if you plan to work on that, or as a simple TODO comment otherwise?",
+      "revId": "09a90bb014be406007b04852b7161b7aee7e89b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
