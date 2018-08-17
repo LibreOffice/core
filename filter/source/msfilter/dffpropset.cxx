@@ -1099,7 +1099,11 @@ DffPropSet::~DffPropSet()
 void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
 {
     DffRecordHeader aHd;
+    sal_Size nEndOfStream, nEndOfRecord;
     rIn >> aHd;
+    nEndOfStream = rIn.Seek(STREAM_SEEK_TO_END);
+    aHd.SeekToContent( rIn );
+    nEndOfRecord = Min(aHd.GetRecEndFilePos(), nEndOfStream);
 
     if ( !bSetUninitializedOnly )
     {
@@ -1116,6 +1120,8 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
     {
         sal_uInt16 nTmp;
         sal_uInt32 nRecType, nContent;
+        if (nEndOfRecord - rIn.Tell() < 6)
+            break;
         rIn >> nTmp
             >> nContent;
 
@@ -1157,7 +1163,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                 aPropFlag.bBlip = sal_True;
             if ( nTmp & 0x8000 )
                 aPropFlag.bComplex = sal_True;
-            if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < aHd.GetRecEndFilePos() ) )
+            if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < nEndOfRecord ) )
             {
                 // normally nContent is the complete size of the complex property,
                 // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
@@ -1190,12 +1196,16 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                             nContent += 6;
 
                         // check if array fits into the PropertyContainer
-                        if ( ( nComplexDataFilePos + nContent ) > aHd.GetRecEndFilePos() )
+                        if ( nContent > nEndOfRecord - nComplexDataFilePos)
                             nContent = 0;
                     }
                     else
                         nContent = 0;
                     rIn.Seek( nOldPos );
+                } else {
+                    // check if complex property fits into the PropertyContainer
+                    if ( nContent > nEndOfRecord - nComplexDataFilePos)
+                        nContent = 0;
                 }
                 if ( nContent )
                 {
@@ -1301,7 +1311,7 @@ bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
     sal_Size nOldPos = rStrm.Tell();
     ::rtl::OUStringBuffer aBuffer;
     sal_uInt32 nBufferSize = GetPropertyValue( nId );
-    if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
+    if( (nBufferSize > 0) && IsComplex( nId ) && SeekToContent( nId, rStrm ) )
     {
         sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
         aBuffer.ensureCapacity( nStrLen );
