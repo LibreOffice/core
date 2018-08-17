@@ -868,6 +868,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
+	$(if $(SYSTEM_LIBNUMBERTEXT),,libnumbertext_numbertext) \
 	officecfg_misc \
 	$(if $(filter $(OS),MACOSX), \
 		extensions_mdibundle \
