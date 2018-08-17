@@ -469,6 +469,11 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     bool bWasMsg = false, bOneEvent = false, bWasTimeoutMsg = false;
     ImplSVData *const pSVData = ImplGetSVData();
     WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
+    const bool bNoYieldLock = GetSalData()->mpInstance->mbNoYieldLock;
+
+    assert( !bNoYieldLock );
+    if ( bNoYieldLock )
+        return false;
 
     sal_uInt32 nCurTicks = 0;
     if ( bHandleAllCurrentEvents )
@@ -563,27 +568,45 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
 #define CASE_NOYIELDLOCK( salmsg, function ) \
     case salmsg: \
-        assert( !pInst->mbNoYieldLock ); \
-        pInst->mbNoYieldLock = true; \
-        function; \
-        pInst->mbNoYieldLock = false; \
+        if (bIsOtherThreadMessage) \
+        { \
+            assert( !pInst->mbNoYieldLock ); \
+            pInst->mbNoYieldLock = true; \
+            function; \
+            pInst->mbNoYieldLock = false; \
+        } \
+        else \
+        { \
+            DBG_TESTSOLARMUTEX(); \
+            function; \
+        } \
         break;
 
 #define CASE_NOYIELDLOCK_RESULT( salmsg, function ) \
     case salmsg: \
-        assert( !pInst->mbNoYieldLock ); \
-        pInst->mbNoYieldLock = true; \
-        nRet = reinterpret_cast<LRESULT>( function ); \
-        pInst->mbNoYieldLock = false; \
+        if (bIsOtherThreadMessage) \
+        { \
+            assert( !pInst->mbNoYieldLock ); \
+            pInst->mbNoYieldLock = true; \
+            nRet = reinterpret_cast<LRESULT>( function ); \
+            pInst->mbNoYieldLock = false; \
+        } \
+        else \
+        { \
+            DBG_TESTSOLARMUTEX(); \
+            nRet = reinterpret_cast<LRESULT>( function ); \
+        } \
         break;
 
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
+    const BOOL bIsOtherThreadMessage = InSendMessage();
     LRESULT nRet = 0;
     WinSalInstance *pInst = GetSalData()->mpInstance;
     WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
 
-SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam << ", lParam=" << lParam << ")");
+    SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam
+                                << ", lParam=" << lParam << "); inSendMsg: " << bIsOtherThreadMessage);
 
     switch ( nMsg )
     {
