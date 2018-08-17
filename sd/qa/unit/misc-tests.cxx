@@ -49,11 +49,12 @@
 #include <DrawViewShell.hxx>
 #include <chrono>
 #include <sdpage.hxx>
+#include <comphelper/base64.hxx>
 
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
-class SdMiscTest : public SdModelTestBase
+class SdMiscTest : public SdModelTestBaseXML
 {
 public:
     void testTdf96206();
@@ -63,6 +64,8 @@ public:
     void testFillGradient();
     void testTdf44774();
     void testTdf38225();
+    void testTdf101242_ODF();
+    void testTdf101242_settings();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -72,7 +75,31 @@ public:
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST(testTdf38225);
+    CPPUNIT_TEST(testTdf101242_ODF);
+    CPPUNIT_TEST(testTdf101242_settings);
     CPPUNIT_TEST_SUITE_END();
+
+virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
+    {
+        struct { char const * pPrefix; char const * pURI; } namespaces[] =
+        {
+            // ODF
+            { "config", "urn:oasis:names:tc:opendocument:xmlns:config:1.0"},
+            { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
+            { "fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" },
+            { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
+            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+            { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
+            { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
+            { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
+        };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
+        {
+            xmlXPathRegisterNs(pXmlXPathCtx,
+                reinterpret_cast<xmlChar const *>(namespaces[i].pPrefix),
+                reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
+        }
+    }
 
 private:
     sd::DrawDocShellRef Load(const OUString& rURL, sal_Int32 nFormat);
@@ -360,6 +387,105 @@ void SdMiscTest::testTdf38225()
     CPPUNIT_ASSERT(!pStyle);
     pStyle = pSSPool->Find("StyleWithName2", SfxStyleFamily::Para);
     CPPUNIT_ASSERT(pStyle);
+}
+
+/// Draw miscellaneous tests.
+
+void SdMiscTest::testTdf101242_ODF()
+{
+    // Loads a document, which has the visible/printable/locked information for layers
+    // only in the ODF attributes draw:display and draw:protected.
+    // The resaved document should still have the ODF attributes and in addition (at least in a
+    // transition period) the Visible, Printable and Locked items in settings.xml.
+
+    // loading and saving document
+    // "Load" is needed for to handle layers, simple "loadURL" does not work.
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+
+    // Verify, that the saved document still has the ODF attributes
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
+
+    // Verify, that the saved document has got the items in settings.xml
+    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
+    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
+    // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
+    OUString sBase64;
+    uno::Sequence<sal_Int8> aDecodedSeq;
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F );
+
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf101242_settings()
+{
+    // Loads a document, which has the visible/printable/locked information for layers
+    // only in the items in settings.xml That is the case for all old documents.
+    // The resaved document should still have these items in settings.xml (at least in a
+    // transition period) and in addition the ODF attributes draw:display and draw:protected.
+
+    // loading and saving document
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+
+    // Verify, that the saved document has the ODF attributes
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='controls' and @draw:display='screen']");
+    assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
+
+    // Verify, that the saved document still has the items in settings.xml
+    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
+    const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
+    // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
+    OUString sBase64;
+    uno::Sequence<sal_Int8> aDecodedSeq;
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x0F, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F );
+
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x17, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+
+    sBase64 = getXPathContent(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

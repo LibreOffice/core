@@ -474,6 +474,36 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
         else GetDocSh()->GetDoc()->ReadUserDataSequenceValue(pValue);
     }
 
+    // The parameter rSequence contains the config-items from
+    // <config:config-item-set config:name="ooo:view-settings">. Determine, whether
+    // they contain "VisibleLayers", "PrintableLayers" and "LockedLayers". If not, it
+    // is a foreign document or a new document after transition period and the corresponding
+    // information were read from <draw:layer-set>. In that case we need to bring
+    // the information from model to view.
+    bool bHasVisiPrnLockSettings(false);
+    for ( auto & rPropertyValue : rSequence )
+    {
+        if ( rPropertyValue.Name == sUNO_View_VisibleLayers
+          || rPropertyValue.Name == sUNO_View_PrintableLayers
+          || rPropertyValue.Name == sUNO_View_LockedLayers )
+        {
+            bHasVisiPrnLockSettings = true;
+            break;
+        }
+    }
+    if ( !bHasVisiPrnLockSettings )
+    {
+        const SdrLayerAdmin& rLayerAdmin = GetDocSh()->GetDoc()->GetLayerAdmin();
+        SdrLayerIDSet aSdrLayerIDSet;
+        rLayerAdmin.getVisibleLayersODF( aSdrLayerIDSet );
+        mpFrameView -> SetVisibleLayers( aSdrLayerIDSet );
+        rLayerAdmin.getPrintableLayersODF( aSdrLayerIDSet );
+        mpFrameView -> SetPrintableLayers( aSdrLayerIDSet );
+        rLayerAdmin.getLockedLayersODF( aSdrLayerIDSet );
+        mpFrameView -> SetLockedLayers( aSdrLayerIDSet );
+    }
+
+
     if( mpFrameView->GetPageKind() != mePageKind )
     {
         mePageKind = mpFrameView->GetPageKind();

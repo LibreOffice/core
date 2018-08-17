@@ -136,6 +136,9 @@ SdLayer::SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_)
 , pLayer(pSdrLayer_)
 , pPropSet(ImplGetSdLayerPropertySet())
 {
+    // no defaults possible yet, a "set" would overwrite existing information
+    // in view, which is currently needed for saving, because pLayer is not updated
+    // from view.
 }
 
 SdLayer::~SdLayer() throw()
@@ -183,17 +186,20 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     {
     case WID_LAYER_LOCKED:
     {
-        set(LOCKED, cppu::any2bool(aValue));
+        pLayer->SetLockedODF( cppu::any2bool(aValue) );
+        set(LOCKED, cppu::any2bool(aValue)); // changes the View, if any exists
         break;
     }
     case WID_LAYER_PRINTABLE:
     {
-        set(PRINTABLE, cppu::any2bool(aValue));
+        pLayer->SetPrintableODF( cppu::any2bool(aValue) );
+        set(PRINTABLE, cppu::any2bool(aValue)); // changes the View, if any exists
         break;
     }
     case WID_LAYER_VISIBLE:
     {
-        set(VISIBLE, cppu::any2bool(aValue));
+        pLayer->SetVisibleODF( cppu::any2bool(aValue) );
+        set(VISIBLE, cppu::any2bool(aValue)); // changes the View, if any exists
         break;
     }
     case WID_LAYER_NAME:

@@ -143,11 +143,48 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     {
         aPgOrg.setX(mpPage->GetLeftBorder() );
         aPgOrg.setY(mpPage->GetUpperBorder() );
+
+        // Get layersets from document, master page or page to be ODF conform.
+        // Currently only partly implemented, the comments show, what is missing.
+        const SdrLayerAdmin& rPageLayerAdmin( mpPage->GetLayerAdmin() );
+        if ( rPageLayerAdmin.GetLayerCount() == 0 )
+        {
+            // if (master page has layers)
+            //      Get LayerIDSet from master page.
+            // else
+            //      Get default LayerIDSet from document
+            //      Currently the parent LayerAdmin is the LayerAdmin of the document
+                    SdrLayerAdmin* pParentLayerAdmin = rPageLayerAdmin.GetParent();
+                    if ( pParentLayerAdmin )
+                    {
+                        pParentLayerAdmin->getVisibleLayersODF( aLayerVisi );
+                        pParentLayerAdmin->getPrintableLayersODF( aLayerPrn );
+                        pParentLayerAdmin->getLockedLayersODF( aLayerLock );
+                    }
+                     else
+                    {
+                        // This should not happen. ToDo: assertion for debug mode
+                        aLayerVisi.SetAll();
+                        aLayerPrn.SetAll();
+                    }
+        }
+        else
+        {
+            // page has own Layers. Get LayerIDSet from page, maybe from master page in addition.
+            rPageLayerAdmin.getVisibleLayersODF( aLayerVisi );
+            rPageLayerAdmin.getPrintableLayersODF( aLayerPrn );
+            rPageLayerAdmin.getLockedLayersODF( aLayerLock );
+            // if (master page has layers)
+            //        Add the layer IDs for master page layers to the set from the page.
+        }
+    }
+    else
+    {   // SdrPageView without page?
+        // ToDo: assertion for debug mode
+        aLayerVisi.SetAll();
+        aLayerPrn.SetAll();
     }
     mbHasMarked = false;
-    aLayerVisi.SetAll();
-    aLayerPrn.SetAll();
-
     mbVisible = false;
     pCurrentList = nullptr;
     pCurrentGroup = nullptr;
