@@ -1400,8 +1400,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         if (!m_aAnchoredStack.empty())
             m_aAnchoredStack.top( ).bToRemove = true;
         RemoveLastParagraph();
-        m_aTextAppendStack.pop();
-
+        SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text stack");
+        if (!m_aTextAppendStack.empty())
+            m_aTextAppendStack.pop();
 
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
 
