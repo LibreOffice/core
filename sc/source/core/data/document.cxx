@@ -288,15 +288,14 @@ std::vector<OUString> ScDocument::GetAllTableNames() const
 {
     std::vector<OUString> aNames;
     aNames.reserve(maTabs.size());
-    TableContainer::const_iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& a : maTabs)
     {
         // Positions need to be preserved for ScCompiler and address convention
         // context, so still push an empty string for NULL tabs.
         OUString aName;
-        if (*it)
+        if (a)
         {
-            const ScTable& rTab = **it;
+            const ScTable& rTab = *a;
             aName = rTab.GetName();
         }
         aNames.push_back(aName);
@@ -498,12 +497,10 @@ void ScDocument::SetTabNameOnLoad(SCTAB nTab, const OUString& rName)
 
 void ScDocument::InvalidateStreamOnSave()
 {
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& a : maTabs)
     {
-        ScTable* pTab = it->get();
-        if (pTab)
-            pTab->SetStreamValid(false);
+        if (a)
+            a->SetStreamValid(false);
     }
 }
 
@@ -545,20 +542,22 @@ bool ScDocument::InsertTab(
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
-                TableContainer::iterator it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->UpdateInsertTab(aCxt);
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->UpdateInsertTab(aCxt);
+                }
                 maTabs.emplace(maTabs.begin() + nPos, new ScTable(this, nPos, rName));
 
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,1);
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->UpdateCompile();
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->UpdateCompile();
+                }
 
                 StartAllListeners();
 
@@ -634,10 +633,11 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,nNewSheets ) );
 
-                TableContainer::iterator it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->UpdateInsertTab(aCxt);
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->UpdateInsertTab(aCxt);
+                }
                 for (SCTAB i = 0; i < nNewSheets; ++i)
                 {
                     maTabs.emplace(maTabs.begin() + nPos + i, new ScTable(this, nPos + i, rNames.at(i)) );
@@ -647,11 +647,10 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,nNewSheets);
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
+                for (const auto& a : maTabs)
                 {
-                    if ( *it )
-                        (*it)->UpdateCompile();
+                    if (a)
+                        a->UpdateCompile();
                 }
 
                 StartAllListeners();
@@ -738,10 +737,11 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1);
-                TableContainer::iterator it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->UpdateCompile();
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->UpdateCompile();
+                }
                 // Excel-Filter deletes some Tables while loading, Listeners will
                 // only be triggered after the loading is done.
                 if ( !bInsertingFromOtherDoc )
@@ -833,10 +833,11 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1*nSheets);
-                TableContainer::iterator it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->UpdateCompile();
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->UpdateCompile();
+                }
                 // Excel-Filter deletes some Tables while loading, Listeners will
                 // only be triggered after the loading is done.
                 if ( !bInsertingFromOtherDoc )
@@ -892,10 +893,11 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
 
                 // If formulas refer to the renamed sheet, the TokenArray remains valid,
                 // but the XML stream must be re-generated.
-                TableContainer::iterator it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->SetStreamValid( false );
+                for (const auto& a : maTabs)
+                {
+                    if (a)
+                        a->SetStreamValid( false );
+                }
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
                 {
@@ -1337,10 +1339,11 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
             // dirty.
-            TableContainer::iterator it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->SetDirtyIfPostponed();
+            for (const auto& a : maTabs)
+            {
+                if (a)
+                    a->SetDirtyIfPostponed();
+            }
 
             std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
         }
@@ -1447,10 +1450,11 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
 
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
-        TableContainer::iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->SetDirtyIfPostponed();
+        for (const auto& a : maTabs)
+        {
+            if (a)
+                a->SetDirtyIfPostponed();
+        }
 
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
@@ -1649,10 +1653,11 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
 
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
-        TableContainer::iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->SetDirtyIfPostponed();
+        for (const auto& a : maTabs)
+        {
+            if (a)
+                a->SetDirtyIfPostponed();
+        }
 
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
@@ -3823,10 +3828,11 @@ void ScDocument::CheckVectorizationState()
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // no multiple calculations
 
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CheckVectorizationState();
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            a->CheckVectorizationState();
+    }
 
     SetAutoCalc(bOldAutoCalc);
 }
@@ -3837,10 +3843,11 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     bAutoCalc = false;      // no multiple calculations
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
-        TableContainer::iterator it = maTabs.begin();
-        for (;it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->SetAllFormulasDirty(rCxt);
+        for (const auto& a : maTabs)
+        {
+            if (a)
+                a->SetAllFormulasDirty(rCxt);
+        }
     }
 
     // Although Charts are also set to dirty in Tracking without AutoCalc
@@ -3933,13 +3940,16 @@ void ScDocument::CalcAll()
     PrepareFormulaCalc();
     ClearLookupCaches();    // Ensure we don't deliver zombie data.
     sc::AutoCalcSwitch aSwitch(*this, true);
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->SetDirtyVar();
-    for (it = maTabs.begin(); it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CalcAll();
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            a->SetDirtyVar();
+    }
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            a->CalcAll();
+    }
     ClearFormulaTree();
 
     // In eternal hard recalc state caches were not added as listeners,
@@ -3952,10 +3962,11 @@ void ScDocument::CalcAll()
 void ScDocument::CompileAll()
 {
     sc::CompileFormulaContext aCxt(this);
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CompileAll(aCxt);
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            a->CompileAll(aCxt);
+    }
 
     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
     SetAllFormulasDirty(aFormulaDirtyCxt);
@@ -4005,14 +4016,12 @@ bool ScDocument::CompileErrorCells(FormulaError nErrCode)
 {
     bool bCompiled = false;
     sc::CompileFormulaContext aCxt(this);
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& a : maTabs)
     {
-        ScTable* pTab = it->get();
-        if (!pTab)
+        if (!a)
             continue;
 
-        if (pTab->CompileErrorCells(aCxt, nErrCode))
+        if (a->CompileErrorCells(aCxt, nErrCode))
             bCompiled = true;
     }
 
@@ -4027,13 +4036,16 @@ void ScDocument::CalcAfterLoad( bool bStartListening )
     bCalcingAfterLoad = true;
     sc::CompileFormulaContext aCxt(this);
     {
-        TableContainer::iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->CalcAfterLoad(aCxt, bStartListening);
-        for (it = maTabs.begin(); it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->SetDirtyAfterLoad();
+        for (const auto& a : maTabs)
+        {
+            if (a)
+                a->CalcAfterLoad(aCxt, bStartListening);
+        }
+        for (const auto& a : maTabs)
+        {
+            if (a)
+                a->SetDirtyAfterLoad();
+        }
     }
     bCalcingAfterLoad = false;
 
@@ -4555,11 +4567,10 @@ bool ScDocument::IsManualRowHeight(SCROW nRow, SCTAB nTab) const
 
 void ScDocument::SyncColRowFlags()
 {
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
+    for (const auto& a : maTabs)
     {
-        if (*it)
-            (*it)->SyncColRowFlags();
+        if (a)
+            a->SyncColRowFlags();
     }
 }
 
@@ -4932,11 +4943,12 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY )
 {
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->StyleSheetChanged
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            a->StyleSheetChanged
                 ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
+    }
 
     if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD) )
     {
@@ -4963,15 +4975,16 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 
         bool bIsUsed = false;
 
-        TableContainer::const_iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
+        for (const auto& a : maTabs)
+        {
+            if (a)
             {
-                if ( (*it)->IsStyleSheetUsed( rStyle ) )
+                if ( a->IsStyleSheetUsed( rStyle ) )
                 {
                     bIsUsed = true;
                 }
             }
+        }
 
         bStyleSheetUsageInvalid = false;
 
@@ -6065,10 +6078,11 @@ sal_uLong ScDocument::GetCellCount() const
 {
     sal_uLong nCellCount = 0;
 
-    TableContainer::const_iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if ( *it )
-            nCellCount += (*it)->GetCellCount();
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            nCellCount += a->GetCellCount();
+    }
 
     return nCellCount;
 }
@@ -6090,10 +6104,11 @@ sal_uLong ScDocument::GetCodeCount() const
 {
     sal_uLong nCodeCount = 0;
 
-    TableContainer::const_iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if ( *it )
-            nCodeCount += (*it)->GetCodeCount();
+    for (const auto& a : maTabs)
+    {
+        if (a)
+            nCodeCount += a->GetCodeCount();
+    }
 
     return nCodeCount;
 }
@@ -6178,10 +6193,14 @@ bool ScDocument::HasPrintRange()
 {
     bool bResult = false;
 
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end() && !bResult; ++it)
-        if ( *it )
-            bResult = (*it)->IsPrintEntireSheet() || ((*it)->GetPrintRangeCount() > 0);
+    for (const auto& a : maTabs)
+    {
+        if (!a)
+            continue;
+        bResult = a->IsPrintEntireSheet() || (a->GetPrintRangeCount() > 0);
+        if (bResult)
+            break;
+    }
 
     return bResult;
 }
@@ -6542,12 +6561,10 @@ size_t ScDocument::GetNoteCount( SCTAB nTab, SCCOL nCol ) const
 
 void ScDocument::CreateAllNoteCaptions()
 {
-    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
-    for (; it != itEnd; ++it)
+    for (const auto& a : maTabs)
     {
-        ScTable* p = it->get();
-        if (p)
-            p->CreateAllNoteCaptions();
+        if (a)
+            a->CreateAllNoteCaptions();
     }
 }
 
