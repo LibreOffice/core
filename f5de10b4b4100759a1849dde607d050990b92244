@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_b5bceabb",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-08-17T10:26:11Z",
+      "side": 1,
+      "message": "changing strings in assert without changing the text of the actual document it compares against is a big nono, same witht the change below",
+      "range": {
+        "startLine": 487,
+        "startChar": 0,
+        "endLine": 487,
+        "endChar": 77
+      },
+      "revId": "f5de10b4b4100759a1849dde607d050990b92244",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
