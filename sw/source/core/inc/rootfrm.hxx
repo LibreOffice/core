@@ -245,7 +245,7 @@ public:
         // May be NULL if called from SfxBaseModel::dispose
         // (this happens in the build test 'rtfexport').
         if (pCurrShell != nullptr)
-            pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
+            pCurrShell->GetDoc()->getIDocumentTimerAccess().StartIdling();
     }
     bool IsIdleFormat()  const { return mbIdleFormat; }
     void ResetIdleFormat()     { mbIdleFormat = false; }
@@ -261,7 +261,7 @@ public:
             // May be NULL if called from SfxBaseModel::dispose
             // (this happens in the build test 'rtfexport').
             if (pCurrShell != nullptr)
-                pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
+                pCurrShell->GetDoc()->getIDocumentTimerAccess().StartIdling();
         }
     }
 
