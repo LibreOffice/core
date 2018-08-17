@@ -20,10 +20,9 @@
 #ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
 #define INCLUDED_OOX_CORE_BINARYCODEC_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <sal/config.h>
+
 #include <oox/dllapi.h>
-#include <rtl/cipher.h>
-#include <rtl/digest.h>
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
