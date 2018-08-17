@@ -67,6 +67,19 @@ DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableW
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table relative width percent", sal_Int16(98), getProperty<sal_Int16>(xTable, "RelativeWidth"));
  }
 
+DECLARE_WW8EXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xF8DF7C), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell.set(xTable->getCellByName("A6"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x81D41A), getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell.set(xTable->getCellByName("B6"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFBCC), getProperty<sal_Int32>(xCell, "BackColor"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
 {
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
