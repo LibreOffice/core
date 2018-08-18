@@ -19,6 +19,7 @@
 
 #include <mysql/YDriver.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::mysql;
 using ::com::sun::star::uno::Reference;

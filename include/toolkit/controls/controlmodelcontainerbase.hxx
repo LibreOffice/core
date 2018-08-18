@@ -31,6 +31,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/weak.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>

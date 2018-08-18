@@ -22,7 +22,7 @@
 
 #include "sal/config.h"
 #include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Type.hxx"
+#include <com/sun/star/uno/Type.h>
 #include "sal/types.h"
 
 namespace cppu
