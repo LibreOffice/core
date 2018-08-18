@@ -82,6 +82,11 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 } else {
                     mMainMenu.findItem(R.id.action_UNO_commands).setVisible(true);
                 }
+                if(mContext.getTileProvider() != null && mContext.getTileProvider().isSpreadsheet()){
+                    mMainMenu.setGroupVisible(R.id.group_spreadsheet_options, true);
+                } else if(mContext.getTileProvider() != null && mContext.getTileProvider().isPresentation()){
+                    mMainMenu.setGroupVisible(R.id.group_presentation_options, true);
+                }
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
                 mToolbarTop.setLogo(null);
                 setEditModeOn(true);
@@ -145,6 +150,11 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 setEditModeOn(false);
                 mContext.hideBottomToolbar();
                 mContext.hideSoftKeyboard();
+                if(mContext.getTileProvider() != null && mContext.getTileProvider().isSpreadsheet()){
+                    mMainMenu.setGroupVisible(R.id.group_spreadsheet_options, false);
+                } else if(mContext.getTileProvider() != null && mContext.getTileProvider().isPresentation()){
+                    mMainMenu.setGroupVisible(R.id.group_presentation_options, false);
+                }
             }
         });
     }
