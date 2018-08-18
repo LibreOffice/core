@@ -22,6 +22,30 @@
       "revId": "b833c0ed5e93629ef5114deea6ce76e71977210a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_38244f0d",
+        "filename": "sw/source/ui/index/cnttab.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-18T15:28:01Z",
+      "side": 1,
+      "message": "Duplicate seems introduced from https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dd1091fd50adb1c01d1b1393fd662278611f9e7e1",
+      "parentUuid": "dfeb2761_b82f3ff5",
+      "range": {
+        "startLine": 2817,
+        "startChar": 0,
+        "endLine": 2818,
+        "endChar": 39
+      },
+      "revId": "b833c0ed5e93629ef5114deea6ce76e71977210a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
