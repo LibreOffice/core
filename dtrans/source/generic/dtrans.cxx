@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include "clipboardmanager.hxx"
 #include "generic_clipboard.hxx"
 
