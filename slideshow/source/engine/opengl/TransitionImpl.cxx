@@ -729,7 +729,6 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
 {
     Primitive Slide;
     TransitionSettings aSettings;
-    aSettings.mnRequiredGLVersion = 3.0;
 
     Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
     Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
@@ -892,7 +891,6 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
 {
     Primitive Slide;
     TransitionSettings aSettings;
-    aSettings.mnRequiredGLVersion = 3.0;
 
     double w, h;
 

@@ -46,7 +46,7 @@ struct TransitionSettings
     TransitionSettings() :
         mbUseMipMapLeaving( true ),
         mbUseMipMapEntering( true ),
-        mnRequiredGLVersion( 2.1f )
+        mnRequiredGLVersion( 3.0f )
     {
     }
 
