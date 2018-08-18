@@ -96,27 +96,12 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
 void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    bool bDispose(false);
+    Action aAction(maAction);
+    Shutdown();
+    aAction(true);
 
-    Action aAction (maAction);
-    if (rEvent.Type == "ConfigurationUpdateEnd")
-    {
-        Shutdown();
-        aAction(true);
-        bDispose = true;
-    }
-    else
-    {
-        Shutdown();
-        aAction(true);
-        bDispose = true;
-    }
-
-    if (bDispose)
-    {
-        maAction = nullptr;
-        dispose();
-    }
+    maAction = nullptr;
+    dispose();
 }
 
 } }  // end of namespace ::sdext::presenter
