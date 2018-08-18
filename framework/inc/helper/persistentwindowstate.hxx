@@ -31,6 +31,7 @@
 
 #include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 namespace framework{
 

@@ -19,6 +19,7 @@
 
 #include "wincommon.hxx"
 #include "manager.hxx"
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace ::com::sun::star;
 

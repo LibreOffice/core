@@ -28,6 +28,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 #include <svx/svxdllapi.h>
+#include <cppuhelper/weakref.hxx>
 
 class SdrModel;
 

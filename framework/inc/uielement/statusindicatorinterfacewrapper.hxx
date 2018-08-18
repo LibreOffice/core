@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <vector>
 

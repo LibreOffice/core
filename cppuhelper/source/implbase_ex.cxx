@@ -26,6 +26,7 @@
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
 #include <cppuhelper/compbase_ex.hxx>
+#include <cppuhelper/implbase_ex.hxx>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 

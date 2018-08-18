@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace framework{

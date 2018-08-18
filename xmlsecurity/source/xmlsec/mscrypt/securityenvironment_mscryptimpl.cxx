@@ -33,6 +33,7 @@
 
 #include "x509certificate_mscryptimpl.hxx"
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <xmlsec-wrapper.h>
 #include "akmngr.hxx"
