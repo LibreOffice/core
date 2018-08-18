@@ -154,8 +154,8 @@ SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 n
     //swap header <-> footer in UI
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
-        m_xPageLbl.reset(m_xBuilder->weld_label("labelFooterFormat"));
-        m_xTurnOnBox.reset(m_xBuilder->weld_check_button("checkFooterOn"));
+        m_xPageLbl = m_xBuilder->weld_label("labelFooterFormat");
+        m_xTurnOnBox = m_xBuilder->weld_check_button("checkFooterOn");
 
         /* Set custom HIDs for the Footer help page (shared/01/05040400.xhp)
         otherwise it would display the same extended help
@@ -172,8 +172,8 @@ SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 n
     }
     else //Header
     {
-        m_xPageLbl.reset(m_xBuilder->weld_label("labelHeaderFormat"));
-        m_xTurnOnBox.reset(m_xBuilder->weld_check_button("checkHeaderOn"));
+        m_xPageLbl = m_xBuilder->weld_label("labelHeaderFormat");
+        m_xTurnOnBox = m_xBuilder->weld_check_button("checkHeaderOn");
     }
     m_xTurnOnBox->show();
     m_xPageLbl->show();

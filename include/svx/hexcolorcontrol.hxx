@@ -41,7 +41,7 @@ private:
 
     DECL_LINK(ImplProcessInputHdl, OUString&, bool);
 public:
-    HexColorControl(weld::Entry* pEdit);
+    HexColorControl(std::unique_ptr<weld::Entry> pEdit);
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
 

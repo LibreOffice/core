@@ -112,7 +112,7 @@ class SVT_DLLPUBLIC URLBox
     SVT_DLLPRIVATE void             Init();
 
 public:
-    URLBox(weld::ComboBoxText* pWidget);
+    URLBox(std::unique_ptr<weld::ComboBoxText> pWidget);
     ~URLBox();
 
     void                            SetText(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }

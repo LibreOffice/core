@@ -5116,228 +5116,228 @@ public:
             gtk_container_add(GTK_CONTAINER(m_pParentWidget), pWidget);
     }
 
-    virtual weld::MessageDialog* weld_message_dialog(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString &id, bool bTakeOwnership) override
     {
         GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pMessageDialog)
             return nullptr;
         gtk_window_set_transient_for(GTK_WINDOW(pMessageDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
-        return new GtkInstanceMessageDialog(pMessageDialog, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceMessageDialog>(pMessageDialog, bTakeOwnership);
     }
 
-    virtual weld::Dialog* weld_dialog(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
     {
         GtkDialog* pDialog = GTK_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDialog)
             return nullptr;
         gtk_window_set_transient_for(GTK_WINDOW(pDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
-        return new GtkInstanceDialog(pDialog, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceDialog>(pDialog, bTakeOwnership);
     }
 
-    virtual weld::Window* weld_window(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         GtkWindow* pWindow = GTK_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
-        return pWindow ? new GtkInstanceWindow(pWindow, bTakeOwnership) : nullptr;
+        return pWindow ? o3tl::make_unique<GtkInstanceWindow>(pWindow, bTakeOwnership) : nullptr;
     }
 
-    virtual weld::Widget* weld_widget(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id, bool bTakeOwnership) override
     {
         GtkWidget* pWidget = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pWidget)
             return nullptr;
         auto_add_parentless_widgets_to_container(pWidget);
-        return new GtkInstanceWidget(pWidget, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceWidget>(pWidget, bTakeOwnership);
     }
 
-    virtual weld::Container* weld_container(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Container> weld_container(const OString &id, bool bTakeOwnership) override
     {
         GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pContainer)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
-        return new GtkInstanceContainer(pContainer, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceContainer>(pContainer, bTakeOwnership);
     }
 
-    virtual weld::Frame* weld_frame(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override
     {
         GtkFrame* pFrame = GTK_FRAME(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pFrame)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pFrame));
-        return new GtkInstanceFrame(pFrame, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceFrame>(pFrame, bTakeOwnership);
     }
 
-    virtual weld::ScrolledWindow* weld_scrolled_window(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bTakeOwnership) override
     {
         GtkScrolledWindow* pScrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScrolledWindow)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScrolledWindow));
-        return new GtkInstanceScrolledWindow(pScrolledWindow, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceScrolledWindow>(pScrolledWindow, bTakeOwnership);
     }
 
-    virtual weld::Notebook* weld_notebook(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
     {
         GtkNotebook* pNotebook = GTK_NOTEBOOK(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pNotebook)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pNotebook));
-        return new GtkInstanceNotebook(pNotebook, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceNotebook>(pNotebook, bTakeOwnership);
     }
 
-    virtual weld::Button* weld_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Button> weld_button(const OString &id, bool bTakeOwnership) override
     {
         GtkButton* pButton = GTK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
-        return new GtkInstanceButton(pButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceButton>(pButton, bTakeOwnership);
     }
 
-    virtual weld::MenuButton* weld_menu_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id, bool bTakeOwnership) override
     {
         GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
-        return new GtkInstanceMenuButton(pButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceMenuButton>(pButton, bTakeOwnership);
     }
 
-    virtual weld::ToggleButton* weld_toggle_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id, bool bTakeOwnership) override
     {
         GtkToggleButton* pToggleButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pToggleButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pToggleButton));
-        return new GtkInstanceToggleButton(pToggleButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceToggleButton>(pToggleButton, bTakeOwnership);
     }
 
-    virtual weld::RadioButton* weld_radio_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id, bool bTakeOwnership) override
     {
         GtkRadioButton* pRadioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pRadioButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pRadioButton));
-        return new GtkInstanceRadioButton(pRadioButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceRadioButton>(pRadioButton, bTakeOwnership);
     }
 
-    virtual weld::CheckButton* weld_check_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id, bool bTakeOwnership) override
     {
         GtkCheckButton* pCheckButton = GTK_CHECK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pCheckButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCheckButton));
-        return new GtkInstanceCheckButton(pCheckButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceCheckButton>(pCheckButton, bTakeOwnership);
     }
 
-    virtual weld::Scale* weld_scale(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id, bool bTakeOwnership) override
     {
         GtkScale* pScale = GTK_SCALE(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScale)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScale));
-        return new GtkInstanceScale(pScale, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceScale>(pScale, bTakeOwnership);
     }
 
-    virtual weld::ProgressBar* weld_progress_bar(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id, bool bTakeOwnership) override
     {
         GtkProgressBar* pProgressBar = GTK_PROGRESS_BAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pProgressBar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
-        return new GtkInstanceProgressBar(pProgressBar, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceProgressBar>(pProgressBar, bTakeOwnership);
     }
 
-    virtual weld::Entry* weld_entry(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override
     {
         GtkEntry* pEntry = GTK_ENTRY(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pEntry)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pEntry));
-        return new GtkInstanceEntry(pEntry, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceEntry>(pEntry, bTakeOwnership);
     }
 
-    virtual weld::SpinButton* weld_spin_button(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id, bool bTakeOwnership) override
     {
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
-        return new GtkInstanceSpinButton(pSpinButton, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceSpinButton>(pSpinButton, bTakeOwnership);
     }
 
-    virtual weld::TimeSpinButton* weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+    virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
                                                         bool bTakeOwnership) override
     {
-        return new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat);
+        return o3tl::make_unique<weld::TimeSpinButton>(weld_spin_button(id, bTakeOwnership), eFormat);
     }
 
-    virtual weld::ComboBoxText* weld_combo_box_text(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::ComboBoxText> weld_combo_box_text(const OString &id, bool bTakeOwnership) override
     {
         GtkComboBoxText* pComboBoxText = GTK_COMBO_BOX_TEXT(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pComboBoxText)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pComboBoxText));
-        return new GtkInstanceComboBoxText(pComboBoxText, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceComboBoxText>(pComboBoxText, bTakeOwnership);
     }
 
-    virtual weld::TreeView* weld_tree_view(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
         GtkTreeView* pTreeView = GTK_TREE_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pTreeView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTreeView));
-        return new GtkInstanceTreeView(pTreeView, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceTreeView>(pTreeView, bTakeOwnership);
     }
 
-    virtual weld::Label* weld_label(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
     {
         GtkLabel* pLabel = GTK_LABEL(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pLabel)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pLabel));
-        return new GtkInstanceLabel(pLabel, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceLabel>(pLabel, bTakeOwnership);
     }
 
-    virtual weld::TextView* weld_text_view(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id, bool bTakeOwnership) override
     {
         GtkTextView* pTextView = GTK_TEXT_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pTextView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTextView));
-        return new GtkInstanceTextView(pTextView, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceTextView>(pTextView, bTakeOwnership);
     }
 
-    virtual weld::Expander* weld_expander(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id, bool bTakeOwnership) override
     {
         GtkExpander* pExpander = GTK_EXPANDER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pExpander)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pExpander));
-        return new GtkInstanceExpander(pExpander, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceExpander>(pExpander, bTakeOwnership);
     }
 
-    virtual weld::DrawingArea* weld_drawing_area(const OString &id, const a11yref& rA11y,
+    virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11y,
             FactoryFunction /*pUITestFactoryFunction*/, void* /*pUserData*/, bool bTakeOwnership) override
     {
         GtkDrawingArea* pDrawingArea = GTK_DRAWING_AREA(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDrawingArea)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pDrawingArea));
-        return new GtkInstanceDrawingArea(pDrawingArea, rA11y, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceDrawingArea>(pDrawingArea, rA11y, bTakeOwnership);
     }
 
-    virtual weld::Menu* weld_menu(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id, bool bTakeOwnership) override
     {
         GtkMenu* pMenu = GTK_MENU(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pMenu)
             return nullptr;
-        return new GtkInstanceMenu(pMenu, bTakeOwnership);
+        return o3tl::make_unique<GtkInstanceMenu>(pMenu, bTakeOwnership);
     }
 
-    virtual weld::SizeGroup* create_size_group() override
+    virtual std::unique_ptr<weld::SizeGroup> create_size_group() override
     {
-        return new GtkInstanceSizeGroup;
+        return o3tl::make_unique<GtkInstanceSizeGroup>();
     }
 };
 

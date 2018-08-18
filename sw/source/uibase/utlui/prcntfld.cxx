@@ -279,8 +279,8 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
     return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
 }
 
-SwPercentField::SwPercentField(weld::MetricSpinButton* pControl)
-    : m_pField(pControl)
+SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
+    : m_pField(std::move(pControl))
     , nOldMax(0)
     , nOldMin(0)
     , nLastPercent(-1)

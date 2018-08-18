@@ -47,7 +47,7 @@ class SW_DLLPUBLIC SwNumberingTypeListBox
     std::unique_ptr<SwNumberingTypeListBox_Impl> m_xImpl;
 
 public:
-    SwNumberingTypeListBox(weld::ComboBoxText* pWidget);
+    SwNumberingTypeListBox(std::unique_ptr<weld::ComboBoxText> pWidget);
     ~SwNumberingTypeListBox();
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_changed(rLink); }

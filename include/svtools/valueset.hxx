@@ -475,7 +475,7 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 public:
-    SvtValueSet(weld::ScrolledWindow* pScrolledWindow);
+    SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
     virtual         ~SvtValueSet() override;
 
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

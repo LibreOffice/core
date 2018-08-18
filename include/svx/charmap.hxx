@@ -65,7 +65,7 @@ protected:
     vcl::Font maFont;
     std::unique_ptr<weld::ScrolledWindow> mxScrollArea;
 public:
-    SvxShowCharSet(weld::ScrolledWindow* pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
+    SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
     virtual ~SvxShowCharSet() override;
 
     virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);

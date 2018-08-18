@@ -1517,7 +1517,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         m_aFixedTexts.back()->show();
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            m_xTypeListBox.reset(m_aBuilders.back()->weld_combo_box_text("listbox"));
+            m_xTypeListBox = m_aBuilders.back()->weld_combo_box_text("listbox");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xLeft.get());
             else
@@ -1539,7 +1539,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            m_xIdentifierBox.reset(m_aBuilders.back()->weld_combo_box_text("combobox"));
+            m_xIdentifierBox = m_aBuilders.back()->weld_combo_box_text("combobox");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xLeft.get());
             else
@@ -1567,7 +1567,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else
         {
-            pEdits[nIndex].reset(m_aBuilders.back()->weld_entry("entry"));
+            pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
             if (bLeft)
                 m_aOrigContainers.back()->move(pEdits[nIndex].get(), m_xLeft.get());
             else

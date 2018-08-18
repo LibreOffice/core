@@ -3734,8 +3734,8 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
-ColorListBox::ColorListBox(weld::MenuButton* pControl, weld::Window* pTopLevel, bool bInterimBuilder)
-    : m_xButton(pControl)
+ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevel, bool bInterimBuilder)
+    : m_xButton(std::move(pControl))
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())

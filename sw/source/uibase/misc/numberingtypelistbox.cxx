@@ -38,8 +38,8 @@ struct SwNumberingTypeListBox_Impl
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 
-SwNumberingTypeListBox::SwNumberingTypeListBox(weld::ComboBoxText* pWidget)
-    : m_xWidget(pWidget)
+SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBoxText> pWidget)
+    : m_xWidget(std::move(pWidget))
     , m_xImpl(new SwNumberingTypeListBox_Impl)
 {
     uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );

@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SvxPaperSizeListBox
 private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
 public:
-    SvxPaperSizeListBox(weld::ComboBoxText *pControl);
+    SvxPaperSizeListBox(std::unique_ptr<weld::ComboBoxText> pControl);
 
     void FillPaperSizeEntries(PaperSizeApp eApp);
     void SetSelection(Paper eSize);

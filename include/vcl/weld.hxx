@@ -17,6 +17,7 @@
 #include <vcl/field.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 
@@ -590,9 +591,9 @@ protected:
     void update_width_chars();
 
 public:
-    MetricSpinButton(SpinButton* pSpinButton, FieldUnit eSrcUnit)
+    MetricSpinButton(std::unique_ptr<SpinButton> pSpinButton, FieldUnit eSrcUnit)
         : m_eSrcUnit(eSrcUnit)
-        , m_xSpinButton(pSpinButton)
+        , m_xSpinButton(std::move(pSpinButton))
     {
         update_width_chars();
         m_xSpinButton->connect_output(LINK(this, MetricSpinButton, spin_button_output));
@@ -748,9 +749,9 @@ protected:
     void update_width_chars();
 
 public:
-    TimeSpinButton(SpinButton* pSpinButton, TimeFieldFormat eFormat)
+    TimeSpinButton(std::unique_ptr<SpinButton> pSpinButton, TimeFieldFormat eFormat)
         : m_eFormat(eFormat)
-        , m_xSpinButton(pSpinButton)
+        , m_xSpinButton(std::move(pSpinButton))
     {
         update_width_chars();
         m_xSpinButton->connect_output(LINK(this, TimeSpinButton, spin_button_output));
@@ -920,43 +921,67 @@ public:
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
         m_sHelpRoot = m_sHelpRoot + OString('/');
     }
-    virtual MessageDialog* weld_message_dialog(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual Dialog* weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual Window* weld_window(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual Widget* weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Container* weld_container(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Button* weld_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual MenuButton* weld_menu_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Frame* weld_frame(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual ScrolledWindow* weld_scrolled_window(const OString& id, bool bTakeOwnership = false)
+    virtual std::unique_ptr<MessageDialog> weld_message_dialog(const OString& id,
+                                                               bool bTakeOwnership = true)
         = 0;
-    virtual Notebook* weld_notebook(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual ToggleButton* weld_toggle_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual RadioButton* weld_radio_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual CheckButton* weld_check_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual SpinButton* weld_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
-    MetricSpinButton* weld_metric_spin_button(const OString& id, FieldUnit eUnit,
-                                              bool bTakeOwnership = false)
+    virtual std::unique_ptr<Dialog> weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<Widget> weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<Container> weld_container(const OString& id,
+                                                      bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Button> weld_button(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id,
+                                                         bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Frame> weld_frame(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<ScrolledWindow> weld_scrolled_window(const OString& id,
+                                                                 bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Notebook> weld_notebook(const OString& id, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<ToggleButton> weld_toggle_button(const OString& id,
+                                                             bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<RadioButton> weld_radio_button(const OString& id,
+                                                           bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<CheckButton> weld_check_button(const OString& id,
+                                                           bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<SpinButton> weld_spin_button(const OString& id,
+                                                         bool bTakeOwnership = false)
+        = 0;
+    std::unique_ptr<MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                                                              bool bTakeOwnership = false)
     {
-        return new MetricSpinButton(weld_spin_button(id, bTakeOwnership), eUnit);
+        return o3tl::make_unique<MetricSpinButton>(weld_spin_button(id, bTakeOwnership), eUnit);
     }
-    virtual TimeSpinButton* weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                                  bool bTakeOwnership = false)
+    virtual std::unique_ptr<TimeSpinButton>
+    weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
         = 0;
-    virtual ComboBoxText* weld_combo_box_text(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual TreeView* weld_tree_view(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Label* weld_label(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual TextView* weld_text_view(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Scale* weld_scale(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual ProgressBar* weld_progress_bar(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual DrawingArea* weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
-                                           FactoryFunction pUITestFactoryFunction = nullptr,
-                                           void* pUserData = nullptr, bool bTakeOwnership = false)
+    virtual std::unique_ptr<ComboBoxText> weld_combo_box_text(const OString& id,
+                                                              bool bTakeOwnership = false)
         = 0;
-    virtual Menu* weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual SizeGroup* create_size_group() = 0;
+    virtual std::unique_ptr<TreeView> weld_tree_view(const OString& id, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Label> weld_label(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<TextView> weld_text_view(const OString& id, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Expander> weld_expander(const OString& id, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Entry> weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<Scale> weld_scale(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<ProgressBar> weld_progress_bar(const OString& id,
+                                                           bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<DrawingArea>
+    weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
+                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
+                      bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<Menu> weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
     virtual ~Builder() {}
 };
 

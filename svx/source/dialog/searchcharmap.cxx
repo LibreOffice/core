@@ -44,8 +44,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-SvxSearchCharSet::SvxSearchCharSet(weld::ScrolledWindow* pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
-    : SvxShowCharSet(pScrolledWindow, rVirDev)
+SvxSearchCharSet::SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
+    : SvxShowCharSet(std::move(pScrolledWindow), rVirDev)
     , nCount(0)
 {
 }

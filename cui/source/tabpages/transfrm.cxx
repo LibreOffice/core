@@ -414,11 +414,11 @@ SvxSlantTabPage::SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
 {
     for (int i = 0; i < 2; ++i)
     {
-        m_aControlGroups[i].reset(m_xBuilder->weld_widget("controlgroups" + OString::number(i+1)));
-        m_aControlGroupX[i].reset(m_xBuilder->weld_widget("controlgroupx" + OString::number(i+1)));
-        m_aControlX[i].reset(m_xBuilder->weld_metric_spin_button("controlx" + OString::number(i+1), FUNIT_CM));
-        m_aControlGroupY[i].reset(m_xBuilder->weld_widget("controlgroupy" + OString::number(i+1)));
-        m_aControlY[i].reset(m_xBuilder->weld_metric_spin_button("controly" + OString::number(i+1), FUNIT_CM));
+        m_aControlGroups[i] = m_xBuilder->weld_widget("controlgroups" + OString::number(i+1));
+        m_aControlGroupX[i] = m_xBuilder->weld_widget("controlgroupx" + OString::number(i+1));
+        m_aControlX[i] = m_xBuilder->weld_metric_spin_button("controlx" + OString::number(i+1), FUNIT_CM);
+        m_aControlGroupY[i] = m_xBuilder->weld_widget("controlgroupy" + OString::number(i+1));
+        m_aControlY[i] = m_xBuilder->weld_metric_spin_button("controly" + OString::number(i+1), FUNIT_CM);
     }
 
     // this page needs ExchangeSupport

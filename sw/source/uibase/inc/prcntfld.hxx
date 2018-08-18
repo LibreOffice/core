@@ -109,7 +109,7 @@ class SW_DLLPUBLIC SwPercentField
 
 public:
 
-    SwPercentField(weld::MetricSpinButton* pControl);
+    SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl);
     const weld::MetricSpinButton* get() const { return m_pField.get(); }
     weld::MetricSpinButton* get() { return m_pField.get(); }
     void connect_value_changed(const Link<weld::MetricSpinButton&, void>& rLink) { m_pField->connect_value_changed(rLink); }

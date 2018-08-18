@@ -110,7 +110,7 @@ private:
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
 public:
-    ColorListBox(weld::MenuButton* pControl, weld::Window* pWindow, bool bInterimBuilder = false);
+    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pWindow, bool bInterimBuilder = false);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink)
