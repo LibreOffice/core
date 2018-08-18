@@ -4738,7 +4738,7 @@ void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
     if (nFore == COL_AUTO)
         nFore = COL_BLACK;
 
-    //NO auto for shading so background: Auto = Weiss
+    //NO auto for shading so background: Auto = White
     Color nUseBack = nBack;
     if (nUseBack == COL_AUTO)
         nUseBack = COL_WHITE;

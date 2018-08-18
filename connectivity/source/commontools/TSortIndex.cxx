@@ -117,7 +117,7 @@ void OSortIndex::AddKeyValue(std::unique_ptr<OKeyValue> pKeyValue)
 void OSortIndex::Freeze()
 {
     OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");
-    // Sortierung:
+    // sorting:
     if (m_aKeyType[0] != OKeyType::NONE)
         // we will sort ourself when the first keyType say so
         std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));

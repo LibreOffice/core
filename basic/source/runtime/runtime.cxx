@@ -231,11 +231,11 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
     &SbiRuntime::StepFIND,      // load (+StringID+Typ)
     &SbiRuntime::StepELEM,          // load element (+StringID+Typ)
     &SbiRuntime::StepPARAM,     // Parameter (+Offset+Typ)
-    // Verzweigen
+    // branches
     &SbiRuntime::StepCALL,      // Declare-Call (+StringID+Typ)
     &SbiRuntime::StepCALLC,     // CDecl-Declare-Call (+StringID+Typ)
     &SbiRuntime::StepCASEIS,        // Case-Test (+Test-Opcode+False-Target)
-    // Verwaltung
+    // management
     &SbiRuntime::StepSTMNT,         // beginning of a statement (+Line+Col)
     // E/A
     &SbiRuntime::StepOPEN,          // (+StreamMode+Flags)
