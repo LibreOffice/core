@@ -19,6 +19,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "cmdmailsuppl.hxx"
 
 using namespace ::com::sun::star::uno;

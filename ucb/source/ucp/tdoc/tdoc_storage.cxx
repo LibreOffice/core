@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
