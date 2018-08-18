@@ -19,6 +19,7 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
 #include "xolefactory.hxx"

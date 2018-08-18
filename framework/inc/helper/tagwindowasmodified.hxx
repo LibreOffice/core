@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 namespace framework{
 

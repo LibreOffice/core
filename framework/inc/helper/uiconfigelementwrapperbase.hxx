@@ -34,6 +34,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 namespace framework
 {

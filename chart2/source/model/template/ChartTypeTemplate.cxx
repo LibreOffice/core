@@ -32,6 +32,7 @@
 #include <unonames.hxx>
 
 #include <cppuhelper/component_context.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
