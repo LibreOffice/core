@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_b82f3ff5",
+        "filename": "sw/source/ui/index/cnttab.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-08-18T14:04:24Z",
+      "side": 1,
+      "message": "Suspicious code duplicate.",
+      "range": {
+        "startLine": 2817,
+        "startChar": 0,
+        "endLine": 2818,
+        "endChar": 39
+      },
+      "revId": "b833c0ed5e93629ef5114deea6ce76e71977210a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
