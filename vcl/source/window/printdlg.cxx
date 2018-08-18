@@ -1343,7 +1343,7 @@ static OUString searchAndReplace( const OUString& i_rOrig, const char* i_pRepl, 
     if( nPos != -1 )
     {
         OUStringBuffer aBuf( i_rOrig.getLength() );
-        aBuf.appendCopy( i_rOrig, nPos );
+        aBuf.appendCopy( i_rOrig, 0, nPos );
         aBuf.append( i_rRepl );
         if( nPos + i_nReplLen < i_rOrig.getLength() )
             aBuf.appendCopy( i_rOrig, nPos + i_nReplLen );
