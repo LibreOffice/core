@@ -18,6 +18,8 @@
  */
 
 #include <cppuhelper/implementationentry.hxx>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <osl/diagnose.h>
 

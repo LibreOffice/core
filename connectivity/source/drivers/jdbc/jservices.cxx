@@ -19,6 +19,7 @@
 
 #include <java/sql/Driver.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity;
 using ::com::sun::star::uno::Reference;
