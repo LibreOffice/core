@@ -40,8 +40,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxRelativeField(VclPtr<vcl::Window> & 
                                             eUnit);
 }
 
-RelativeField::RelativeField(weld::MetricSpinButton* pControl)
-    : m_xSpinButton(pControl)
+RelativeField::RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
+    : m_xSpinButton(std::move(pControl))
     , nRelMin(0)
     , nRelMax(0)
     , bRelativeMode(false)

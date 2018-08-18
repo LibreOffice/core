@@ -62,9 +62,9 @@ FactoryFunction SvxShowCharSet::GetUITestFactory() const
     return SvxShowCharSetUIObject::create;
 }
 
-SvxShowCharSet::SvxShowCharSet(weld::ScrolledWindow* pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
+SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
-    , mxScrollArea(pScrolledWindow)
+    , mxScrollArea(std::move(pScrolledWindow))
     , mxContext(comphelper::getProcessComponentContext())
     , nX(0)
     , nY(0)

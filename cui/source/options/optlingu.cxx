@@ -312,17 +312,17 @@ public:
         if (nRID == EID_NUM_PRE_BREAK)
         {
             m_xBeforeFrame->show();
-            m_xBreakNF.reset(m_xBuilder->weld_spin_button("beforebreak"));
+            m_xBreakNF = m_xBuilder->weld_spin_button("beforebreak");
         }
         else if(nRID == EID_NUM_POST_BREAK)
         {
             m_xAfterFrame->show();
-            m_xBreakNF.reset(m_xBuilder->weld_spin_button("afterbreak"));
+            m_xBreakNF = m_xBuilder->weld_spin_button("afterbreak");
         }
         else if(nRID == EID_NUM_MIN_WORDLEN)
         {
             m_xMinimalFrame->show();
-            m_xBreakNF.reset(m_xBuilder->weld_spin_button("wordlength"));
+            m_xBreakNF = m_xBuilder->weld_spin_button("wordlength");
         }
     }
 

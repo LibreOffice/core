@@ -21,8 +21,8 @@
 
 namespace weld {
 
-HexColorControl::HexColorControl(weld::Entry* pEntry)
-    : m_xEntry(pEntry)
+HexColorControl::HexColorControl(std::unique_ptr<weld::Entry> pEntry)
+    : m_xEntry(std::move(pEntry))
 {
     m_xEntry->set_max_length(6);
     m_xEntry->set_width_chars(6);

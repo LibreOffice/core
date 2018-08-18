@@ -53,7 +53,7 @@ class ScrollBar;
 class SVX_DLLPUBLIC SvxSearchCharSet : public SvxShowCharSet
 {
 public:
-    SvxSearchCharSet(weld::ScrolledWindow* pScrolledWindow, const VclPtr<VirtualDevice> &rDevice);
+    SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice> &rDevice);
     virtual ~SvxSearchCharSet() override;
 
     virtual void                        RecalculateFont(vcl::RenderContext& rRenderContext) override;

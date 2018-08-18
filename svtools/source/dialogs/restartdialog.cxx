@@ -30,37 +30,37 @@ public:
     {
         switch (reason) {
         case svtools::RESTART_REASON_JAVA:
-            reason_.reset(m_xBuilder->weld_widget("reason_java"));
+            reason_ = m_xBuilder->weld_widget("reason_java");
             break;
         case svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT:
-            reason_.reset(m_xBuilder->weld_widget("reason_pdf"));
+            reason_ = m_xBuilder->weld_widget("reason_pdf");
             break;
         case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
-            reason_.reset(m_xBuilder->weld_widget("reason_bibliography_install"));
+            reason_ = m_xBuilder->weld_widget("reason_bibliography_install");
             break;
         case svtools::RESTART_REASON_MAILMERGE_INSTALL:
-            reason_.reset(m_xBuilder->weld_widget("reason_mailmerge_install"));
+            reason_ = m_xBuilder->weld_widget("reason_mailmerge_install");
             break;
         case svtools::RESTART_REASON_LANGUAGE_CHANGE:
-            reason_.reset(m_xBuilder->weld_widget("reason_language_change"));
+            reason_ = m_xBuilder->weld_widget("reason_language_change");
             break;
         case svtools::RESTART_REASON_ADDING_PATH:
-            reason_.reset(m_xBuilder->weld_widget("reason_adding_path"));
+            reason_ = m_xBuilder->weld_widget("reason_adding_path");
             break;
         case svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS:
-            reason_.reset(m_xBuilder->weld_widget("reason_assigning_javaparameters"));
+            reason_ = m_xBuilder->weld_widget("reason_assigning_javaparameters");
             break;
         case svtools::RESTART_REASON_ASSIGNING_FOLDERS:
-            reason_.reset(m_xBuilder->weld_widget("reason_assigning_folders"));
+            reason_ = m_xBuilder->weld_widget("reason_assigning_folders");
             break;
         case svtools::RESTART_REASON_EXP_FEATURES:
-            reason_.reset(m_xBuilder->weld_widget("reason_exp_features"));
+            reason_ = m_xBuilder->weld_widget("reason_exp_features");
             break;
         case svtools::RESTART_REASON_EXTENSION_INSTALL:
-            reason_.reset(m_xBuilder->weld_widget("reason_extension_install"));
+            reason_ = m_xBuilder->weld_widget("reason_extension_install");
             break;
         case svtools::RESTART_REASON_OPENGL:
-            reason_.reset(m_xBuilder->weld_widget("reason_opengl"));
+            reason_ = m_xBuilder->weld_widget("reason_opengl");
             break;
         default:
             assert(false); // this cannot happen

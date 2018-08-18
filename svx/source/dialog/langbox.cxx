@@ -754,8 +754,8 @@ IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBoxText&, rControl, void)
     }
 }
 
-LanguageBox::LanguageBox(weld::ComboBoxText* pControl)
-    : m_xControl(pControl)
+LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl)
+    : m_xControl(std::move(pControl))
     , m_aAllString(SvxResId(RID_SVXSTR_LANGUAGE_ALL))
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)

@@ -2276,9 +2276,9 @@ void ValueSet::SetEdgeBlending(bool bNew)
     }
 }
 
-SvtValueSet::SvtValueSet(weld::ScrolledWindow* pScrolledWindow)
+SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : maVirDev( VclPtr<VirtualDevice>::Create())
-    , mxScrolledWindow(pScrolledWindow)
+    , mxScrolledWindow(std::move(pScrolledWindow))
     , maColor(COL_TRANSPARENT)
     , mnStyle(0)
     , mbFormat(true)

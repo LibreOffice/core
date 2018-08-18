@@ -142,7 +142,7 @@ private:
     DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
 
 public:
-    SmFontPickListBox(weld::ComboBoxText* pWidget);
+    SmFontPickListBox(std::unique_ptr<weld::ComboBoxText> pWidget);
     SmFontPickListBox& operator = (const SmFontPickList& rList);
     virtual void    Insert(const vcl::Font &rFont) override;
 };

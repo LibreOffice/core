@@ -39,7 +39,7 @@ class SVX_DLLPUBLIC SvxPageNumberListBox
 private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
 public:
-    SvxPageNumberListBox(weld::ComboBoxText* pControl);
+    SvxPageNumberListBox(std::unique_ptr<weld::ComboBoxText> pControl);
     int get_count() const { return m_xControl->get_count(); }
     OUString get_id(int pos) const { return m_xControl->get_id(pos); }
     int get_active() const { return m_xControl->get_active(); }

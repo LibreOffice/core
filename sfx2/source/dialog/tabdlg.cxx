@@ -1964,10 +1964,10 @@ void SfxTabDialogController::setPreviewsToSamePlace()
             continue;
         if (!pDataObject->pTabPage->m_xBuilder)
             continue;
-        weld::Widget* pGrid = pDataObject->pTabPage->m_xBuilder->weld_widget("maingrid");
+        std::unique_ptr<weld::Widget> pGrid = pDataObject->pTabPage->m_xBuilder->weld_widget("maingrid");
         if (!pGrid)
             continue;
-        aGrids.emplace_back(pGrid);
+        aGrids.emplace_back(std::move(pGrid));
     }
 
     m_xSizeGroup.reset();
@@ -1975,7 +1975,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
     if (aGrids.size() <= 1)
         return;
 
-    m_xSizeGroup.reset(m_xBuilder->create_size_group());
+    m_xSizeGroup = m_xBuilder->create_size_group();
     for (auto& rGrid : aGrids)
         m_xSizeGroup->add_widget(rGrid.get());
 }

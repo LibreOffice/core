@@ -713,12 +713,12 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
                     m_xBuilder->weld_metric_spin_button("width4", FUNIT_CM),
                     m_xBuilder->weld_metric_spin_button("width5", FUNIT_CM),
                     m_xBuilder->weld_metric_spin_button("width6", FUNIT_CM) }
-    , m_aTextArr { std::unique_ptr<weld::Label>(m_xBuilder->weld_label("1")),
-                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("2")),
-                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("3")),
-                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("4")),
-                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("5")),
-                   std::unique_ptr<weld::Label>(m_xBuilder->weld_label("6")) }
+    , m_aTextArr { m_xBuilder->weld_label("1"),
+                   m_xBuilder->weld_label("2"),
+                   m_xBuilder->weld_label("3"),
+                   m_xBuilder->weld_label("4"),
+                   m_xBuilder->weld_label("5"),
+                   m_xBuilder->weld_label("6") }
     , m_xModifyTableCB(m_xBuilder->weld_check_button("adaptwidth"))
     , m_xProportionalCB(m_xBuilder->weld_check_button("adaptcolumns"))
     , m_xSpaceFT(m_xBuilder->weld_label("spaceft"))

@@ -45,7 +45,7 @@ private:
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    RelativeField(weld::MetricSpinButton* pControl);
+    RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl);
 
     void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax );
     void            SetRelative( bool bRelative );

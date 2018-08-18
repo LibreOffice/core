@@ -95,7 +95,7 @@ private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
 
 public:
-    TextEncodingBox(weld::ComboBoxText* pControl);
+    TextEncodingBox(std::unique_ptr<weld::ComboBoxText> pControl);
 
     ~TextEncodingBox();
 

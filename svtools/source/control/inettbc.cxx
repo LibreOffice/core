@@ -2009,9 +2009,9 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
         m_xWidget->clear();
 }
 
-URLBox::URLBox(weld::ComboBoxText* pWidget)
+URLBox::URLBox(std::unique_ptr<weld::ComboBoxText> pWidget)
     : bHistoryDisabled(false)
-    , m_xWidget(pWidget)
+    , m_xWidget(std::move(pWidget))
 {
     Init();
 

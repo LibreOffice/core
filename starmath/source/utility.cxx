@@ -120,9 +120,9 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-SmFontPickListBox::SmFontPickListBox(weld::ComboBoxText* pWidget)
+SmFontPickListBox::SmFontPickListBox(std::unique_ptr<weld::ComboBoxText> pWidget)
     : SmFontPickList(4)
-    , m_xWidget(pWidget)
+    , m_xWidget(std::move(pWidget))
 {
     m_xWidget->connect_changed(LINK(this, SmFontPickListBox, SelectHdl));
 }

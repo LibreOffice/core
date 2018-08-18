@@ -58,8 +58,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFrameDirectionListBox
 private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
 public:
-    explicit            SvxFrameDirectionListBox(weld::ComboBoxText* pControl)
-        : m_xControl(pControl)
+    explicit SvxFrameDirectionListBox(std::unique_ptr<weld::ComboBoxText> pControl)
+        : m_xControl(std::move(pControl))
     {
     }
 

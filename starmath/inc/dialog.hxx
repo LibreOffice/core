@@ -280,7 +280,7 @@ class SmShowSymbolSet : public weld::CustomWidgetController
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
 public:
-    SmShowSymbolSet(weld::ScrolledWindow* pScrolledWindow);
+    SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {

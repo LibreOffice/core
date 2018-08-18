@@ -610,7 +610,7 @@ SmCategoryDesc::SmCategoryDesc(weld::Builder& rBuilder, sal_uInt16 nCategoryIdx)
         if (xLabel)
         {
             Strings[i] = xLabel->get_label();
-            Graphics[i].reset(rBuilder.weld_widget(OString::number(nCategoryIdx)+"image"+OString::number(i+1)));
+            Graphics[i] = rBuilder.weld_widget(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
         }
         else
         {
@@ -959,14 +959,14 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-SmShowSymbolSet::SmShowSymbolSet(weld::ScrolledWindow* pScrolledWindow)
+SmShowSymbolSet::SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : nLen(0)
     , nRows(0)
     , nColumns(0)
     , nXOffset(0)
     , nYOffset(0)
     , nSelectSymbol(SYMBOL_NONE)
-    , m_xScrolledWindow(pScrolledWindow)
+    , m_xScrolledWindow(std::move(pScrolledWindow))
 {
     m_xScrolledWindow->set_user_managed_scrolling();
     m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SmShowSymbolSet, ScrollHdl));

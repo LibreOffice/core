@@ -160,7 +160,7 @@ private:
     SVX_DLLPRIVATE void ImplClear();
     DECL_LINK(ChangeHdl, weld::ComboBoxText&, void);
 public:
-    LanguageBox(weld::ComboBoxText* pControl);
+    LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false );
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );

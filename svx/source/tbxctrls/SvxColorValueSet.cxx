@@ -29,8 +29,8 @@ SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-ColorValueSet::ColorValueSet(weld::ScrolledWindow* pWindow)
-    : SvtValueSet(pWindow)
+ColorValueSet::ColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
+    : SvtValueSet(std::move(pWindow))
 {
     SetEdgeBlending(true);
 }
