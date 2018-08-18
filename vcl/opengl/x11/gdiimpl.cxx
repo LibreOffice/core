@@ -296,7 +296,9 @@ bool X11OpenGLContext::ImplInit()
     if (!g_vShareList.empty())
         pSharedCtx = g_vShareList.front();
 
-    if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
+    //tdf#112166 for, e.g. VirtualBox GL, claiming OpenGL 2.1
+    static bool hasCreateContextAttribsARB = glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXCreateContextAttribsARB")) != nullptr;
+    if (hasCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
         GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering);
