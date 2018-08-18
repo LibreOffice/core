@@ -726,6 +726,21 @@ void RtfAttributeOutput::TableDefaultBorders(
 void RtfAttributeOutput::TableBackgrounds(
     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
+    const SwTable* pTable = pTableTextNodeInfoInner->getTable();
+    const SwTableBox* pTableBox = pTableTextNodeInfoInner->getTableBox();
+    const SwTableLine* pTableLine = pTableBox->GetUpper();
+
+    Color aColor = COL_AUTO;
+    const SvxBrushItem* pTableColorProp
+        = pTable->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if (pTableColorProp)
+        aColor = pTableColorProp->GetColor();
+
+    const SvxBrushItem* pRowColorProp
+        = pTableLine->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
+    if (pRowColorProp && pRowColorProp->GetColor() != COL_AUTO)
+        aColor = pRowColorProp->GetColor();
+
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
     const SwWriteTableCell* const pCell
@@ -735,11 +750,14 @@ void RtfAttributeOutput::TableBackgrounds(
     if (pCellFormat->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
     {
         auto& rBack = static_cast<const SvxBrushItem&>(*pItem);
-        if (!rBack.GetColor().GetTransparency())
-        {
-            m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
-            m_aRowDefs.append(static_cast<sal_Int32>(m_rExport.GetColor(rBack.GetColor())));
-        }
+        if (rBack.GetColor() != COL_AUTO)
+            aColor = rBack.GetColor();
+    }
+
+    if (!aColor.GetTransparency())
+    {
+        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
+        m_aRowDefs.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
     }
 }
 
