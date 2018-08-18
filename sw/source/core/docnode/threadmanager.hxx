@@ -27,6 +27,7 @@
 
 #include <deque>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/util/XJobManager.hpp>
 #include <observablethread.hxx>
 #include "cancellablejob.hxx"
