@@ -19,9 +19,15 @@
 #ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 #define INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 
-#include "cppuhelper/weak.hxx"
-#include "cppuhelper/weakagg.hxx"
-#include "com/sun/star/lang/XTypeProvider.hpp"
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/genfunc.h>
+#include <cppuhelper/cppuhelperdllapi.h>
+#include <sal/types.h>
+
+namespace cppu { class OWeakAggObject; }
+namespace cppu { class OWeakObject; }
 
 
 /* If you need to define implementation helper classes that deal with more than

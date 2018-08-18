@@ -39,6 +39,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "OleHandler.hxx"
 #include <memory>
