@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "shellexec.hxx"
 
 using namespace ::com::sun::star::uno;

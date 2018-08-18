@@ -26,6 +26,7 @@
 #include <com/sun/star/gallery/XGalleryItem.hpp>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <cppuhelper/weakagg.hxx>
 
 class GalleryTheme;
 struct GalleryObject;
