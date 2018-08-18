@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl,\
 	sal/qa/rtl/oustringbuffer/test_oustringbuffer_tostring \
 	sal/qa/rtl/oustringbuffer/test_oustringbuffer_utf32 \
 	sal/qa/rtl/oustring/rtl_OUString2 \
+	sal/qa/rtl/oustring/rtl_OUStringStatic \
 	sal/qa/rtl/process/rtl_Process \
 	sal/qa/rtl/random/rtl_random \
 	sal/qa/rtl/ref/rtl_ref \
