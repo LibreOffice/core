@@ -84,6 +84,7 @@ static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, cons
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
+        case vcl::EnumContext::Application::WriterForm:
             officecfg::Office::UI::ToolbarMode::ActiveWriter::set( sFileName, aBatch );
             break;
         case vcl::EnumContext::Application::Calc:
@@ -106,6 +107,7 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
+        case vcl::EnumContext::Application::WriterForm:
             return officecfg::Office::UI::ToolbarMode::ActiveWriter::get();
             break;
         case vcl::EnumContext::Application::Calc:
