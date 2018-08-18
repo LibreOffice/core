@@ -103,7 +103,7 @@ namespace osl {
             }
             pStrings[ nItems ] = NULL;
             sal_uInt32 nRet = osl_readProfileIdent( profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nDefault);
-            delete pStrings;
+            delete[] pStrings;
             return nRet;
         }
 
@@ -134,7 +134,7 @@ namespace osl {
             pStrings[ nItems ] = NULL;
             sal_Bool bRet =
                 osl_writeProfileIdent( profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nValue );
-            delete pStrings;
+            delete[] pStrings;
             return bRet;
         }
 
@@ -164,7 +164,7 @@ namespace osl {
                 int nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aEntries.push_back( rtl::OString( pBuf+n ) );
-                delete pBuf;
+                delete[] pBuf;
             }
 
             return aEntries;
@@ -187,7 +187,7 @@ namespace osl {
                 int nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aSections.push_back( rtl::OString( pBuf+n ) );
-                delete pBuf;
+                delete[] pBuf;
             }
 
             return aSections;
