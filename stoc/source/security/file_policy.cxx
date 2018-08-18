@@ -36,6 +36,7 @@
 #include <com/sun/star/security/RuntimePermission.hpp>
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <unordered_map>
 

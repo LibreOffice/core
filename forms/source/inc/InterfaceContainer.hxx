@@ -42,6 +42,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/component.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase8.hxx>
 #include <unordered_map>
 

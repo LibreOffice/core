@@ -22,9 +22,8 @@
 #include "cppuhelper/weakagg.hxx"
 #include "cppuhelper/interfacecontainer.h"
 
-#include "cppuhelper/implbase1.hxx"
-
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XTypeProvider.hpp"
 
 #include "cppuhelper/cppuhelperdllapi.h"
 
