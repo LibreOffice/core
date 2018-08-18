@@ -32,6 +32,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <i18nlangtag/mslangid.hxx>
 

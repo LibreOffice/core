@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;

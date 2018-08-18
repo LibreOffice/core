@@ -24,6 +24,7 @@
 
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <osl/module.hxx>

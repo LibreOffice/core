@@ -53,6 +53,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/GraphicObject.hxx>
 
