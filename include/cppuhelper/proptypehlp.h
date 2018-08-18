@@ -19,8 +19,9 @@
 #ifndef INCLUDED_CPPUHELPER_PROPTYPEHLP_H
 #define INCLUDED_CPPUHELPER_PROPTYPEHLP_H
 
-#include "com/sun/star/uno/Any.h"
+#include <sal/types.h>
 
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 namespace cppu {
 

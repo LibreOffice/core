@@ -22,17 +22,10 @@
 
 #include "sal/config.h"
 
-#include <exception>
-
-#include "com/sun/star/beans/PropertyVetoException.hpp"
-#include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XFastPropertySet.hpp"
 #include "com/sun/star/beans/XPropertyAccess.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/Reference.h>
 #include "com/sun/star/uno/Sequence.hxx"
 #include "sal/types.h"
 #include "cppuhelper/cppuhelperdllapi.h"
@@ -45,16 +38,12 @@ namespace com { namespace sun { namespace star {
         struct PropertyValue;
     }
     namespace uno {
-        class Any;
         class Type;
         class XComponentContext;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace cppu {
-
-template< typename T > class PropertySetMixin;
 
 /**
    @short A helper base class for <code>cppu::PropertySetMixin</code>.
