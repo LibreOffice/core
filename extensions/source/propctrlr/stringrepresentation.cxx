@@ -34,6 +34,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbconversion.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
