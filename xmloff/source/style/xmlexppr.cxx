@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <list>
 #include <map>
 
