@@ -268,7 +268,6 @@ enum DFF_TextHeader {
 #define DFF_Prop_tableRowProperties          928  //  LONG*
 #define DFF_Prop_fHidden                     958  //  sal_Bool              Do not display
 #define DFF_Prop_fPrint                      959  //  sal_Bool              Print this shape
-// entsprechende BitFlags
 
 // properties of the second property set
 #define DFF_Prop_metroBlob                   937  // XML ZipPackage*
