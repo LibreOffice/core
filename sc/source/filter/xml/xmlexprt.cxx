@@ -880,6 +880,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHe
             nColsRepeated = 1;
         }
     }
+    assert(nPrevIndex >= 0 && "coverity#1438402");
     WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
     if (!bIsClosed)
         CloseHeaderColumn();
@@ -1486,6 +1487,7 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                     ++nEqualRows;
                 else
                 {
+                    assert(nPrevIndex >= 0 && "coverity#1438402");
                     if (nRow < nEndRow)
                     {
                         ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges.get());
@@ -1501,6 +1503,7 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 }
             }
         }
+        assert(nPrevIndex >= 0 && "coverity#1438402");
         OpenNewRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
     }
     else
