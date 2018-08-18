@@ -1172,8 +1172,8 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
         {
             xMotion->getPath() >>= aPath;
             ::basegfx::B2DPolyPolygon aPolyPoly;
-            ::basegfx::utils::importFromSvgD(aPolyPoly, aPath, true, nullptr);
-            aPath = ::basegfx::utils::exportToSvgD(aPolyPoly, false, false, true, true);
+            if (::basegfx::utils::importFromSvgD(aPolyPoly, aPath, true, nullptr))
+                aPath = ::basegfx::utils::exportToSvgD(aPolyPoly, false, false, true, true);
         }
 
         pFS->startElementNS(XML_p, nXmlNodeType,
