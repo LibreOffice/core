@@ -29,6 +29,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <iostream>
 #include <algorithm>
 #include <rtl/math.hxx>
