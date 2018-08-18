@@ -38,6 +38,8 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <uno/lbnames.h>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::skeleton;
 using ::rtl::OUString;

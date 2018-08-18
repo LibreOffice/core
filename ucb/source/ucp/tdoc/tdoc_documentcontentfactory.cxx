@@ -26,6 +26,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "tdoc_documentcontentfactory.hxx"
 
