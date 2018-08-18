@@ -19,6 +19,7 @@
 
 #include <writer/WDriver.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace com::sun::star;
 
