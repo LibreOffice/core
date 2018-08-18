@@ -50,11 +50,11 @@
         <item android:id="@+id/action_UNO_commands"
             android:title="@string/action_UNO_commands"
             android:orderInCategory="100" />
+    </group>
 
-        <item android:id="@+id/action_add_slide"
-            android:title="@string/action_add_slide"
-            android:orderInCategory="100"
-            android:visible="false" />
+    <group android:id="@+id/group_spreadsheet_options"
+        android:visible="false"
+        tools:visible="true">
 
         <item android:id="@+id/action_add_worksheet"
             android:title="@string/action_add_worksheet"
@@ -69,6 +69,16 @@
             android:title="@string/action_delete_worksheet"
             android:orderInCategory="100"
             android:visible="false"/>
+    </group>
+
+    <group android:id="@+id/group_presentation_options"
+        android:visible="false"
+        tools:visible="true">
+
+        <item android:id="@+id/action_add_slide"
+            android:title="@string/action_add_slide"
+            android:orderInCategory="100"
+            android:visible="false" />
 
         <item android:id="@+id/action_delete_slide"
             android:title="@string/action_delete_slide"
