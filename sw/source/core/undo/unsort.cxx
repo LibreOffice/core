@@ -35,7 +35,7 @@
 SwSortUndoElement::~SwSortUndoElement()
 {
     // are there string pointers saved?
-    if( 0xffffffff != SORT_TXT_TBL.TXT.nKenn ) // Kenn(ung) = identifier
+    if( 0xffffffff != SORT_TXT_TBL.TXT.nID )
     {
         delete SORT_TXT_TBL.TBL.pSource;
         delete SORT_TXT_TBL.TBL.pTarget;
