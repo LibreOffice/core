@@ -29,12 +29,13 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/alloc.h"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uno/Sequence.h"
 #include "com/sun/star/lang/EventObject.hpp"
 
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 /** */ //for docpp
 namespace cppu

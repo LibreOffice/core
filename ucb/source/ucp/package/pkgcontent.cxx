@@ -60,6 +60,7 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>

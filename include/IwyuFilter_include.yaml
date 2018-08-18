@@ -46,3 +46,45 @@ blacklist:
     include/registry/types.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/cppuhelper/compbase1.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase1.hxx
+    include/cppuhelper/compbase2.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase2.hxx
+    include/cppuhelper/compbase3.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase3.hxx
+    include/cppuhelper/compbase4.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase4.hxx
+    include/cppuhelper/compbase5.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase5.hxx
+    include/cppuhelper/compbase6.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase6.hxx
+    include/cppuhelper/compbase7.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase7.hxx
+    include/cppuhelper/compbase8.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase8.hxx
+    include/cppuhelper/compbase9.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase9.hxx
+    include/cppuhelper/compbase10.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase10.hxx
+    include/cppuhelper/compbase11.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase11.hxx
+    include/cppuhelper/compbase12.hxx:
+    # Needed for template functions
+    - cppuhelper/implbase12.hxx
+    include/cppuhelper/exc_hlp.hxx:
+    #Needed for implicit destructor
+    - com/sun/star/uno/Any.hxx
+    include/cppuhelper/propertysetmixin.hxx:
+    #Needed for implicit destructor
+    - com/sun/star/uno/Sequence.hxx

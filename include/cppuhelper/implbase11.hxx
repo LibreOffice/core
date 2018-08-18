@@ -21,6 +21,7 @@
 
 #include "cppuhelper/implbase_ex.hxx"
 #include "rtl/instance.hxx"
+#include <com/sun/star/lang/XTypeProvider.hpp>
 
 namespace cppu
 {
