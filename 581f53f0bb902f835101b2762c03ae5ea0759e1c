@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_78b657dc",
+        "filename": "sw/qa/extras/rtfexport/rtfexport3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-18T11:12:47Z",
+      "side": 1,
+      "message": "I used the exact same odt file for the DOC test, and copy/pasted the same test code, and yet got different IMPORT values (-1) in the RTF test.  Since this is an ODT file, the import should not be affected at all by the format I am testing.",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "581f53f0bb902f835101b2762c03ae5ea0759e1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
