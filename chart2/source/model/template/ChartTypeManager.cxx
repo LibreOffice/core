@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

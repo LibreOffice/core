@@ -33,6 +33,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
