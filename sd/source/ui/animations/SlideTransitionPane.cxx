@@ -33,6 +33,7 @@
 #include <DrawController.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/lok.hxx>
 #include <svtools/controldims.hxx>
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
@@ -693,8 +694,17 @@ void SlideTransitionPane::updateControls()
         mpMF_ADVANCE_AUTO_AFTER->SetValue( aEffect.mfTime * 100.0);
     }
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-    mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mpPB_PLAY->Hide();
+        mpCB_AUTO_PREVIEW->Check(false);
+        mpCB_AUTO_PREVIEW->Hide();
+    }
+    else
+    {
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+        mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
+    }
 
     mbUpdatingControls = false;
 
