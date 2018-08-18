@@ -33,6 +33,7 @@
 #include <strings.hrc>
 #include <EventMultiplexer.hxx>
 
+#include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
@@ -684,8 +685,17 @@ void SlideTransitionPane::updateControls()
         mpMF_ADVANCE_AUTO_AFTER->SetValue( aEffect.mfTime * 100.0);
     }
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-    mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mpPB_PLAY->Hide();
+        mpCB_AUTO_PREVIEW->Check(false);
+        mpCB_AUTO_PREVIEW->Hide();
+    }
+    else
+    {
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+        mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
+    }
 
     mbUpdatingControls = false;
 
@@ -908,22 +918,22 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
 
     Window *pFocusWindow = Application::GetFocusWindow();
 
-    ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
-    impl::TransitionEffect aEffect = getTransitionEffectFromControls();
-    if( ! pSelectedPages->empty())
-    {
-        lcl_CreateUndoForPages( pSelectedPages, mrBase );
-        lcl_ApplyToPages( pSelectedPages, aEffect );
-        mrBase.GetDocShell()->SetModified();
-    }
-    if( mpCB_AUTO_PREVIEW->IsEnabled() &&
-        mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
-    {
-        if (aEffect.mnType) // mnType = 0 denotes no transition
-            playCurrentEffect();
-        else if( mxView.is() )
-            SlideShow::Stop( mrBase );
-    }
+        ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
+        impl::TransitionEffect aEffect = getTransitionEffectFromControls();
+        if( ! pSelectedPages->empty())
+        {
+            lcl_CreateUndoForPages( pSelectedPages, mrBase );
+            lcl_ApplyToPages( pSelectedPages, aEffect );
+            mrBase.GetDocShell()->SetModified();
+        }
+        if( mpCB_AUTO_PREVIEW->IsEnabled() &&
+            mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
+        {
+            if (aEffect.mnType) // mnType = 0 denotes no transition
+                playCurrentEffect();
+            else if( mxView.is() )
+                SlideShow::Stop( mrBase );
+        }
 
     if (pFocusWindow)
         pFocusWindow->GrabFocus();
