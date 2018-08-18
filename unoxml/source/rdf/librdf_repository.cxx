@@ -59,6 +59,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
