@@ -22,6 +22,7 @@
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include "gio_provider.hxx"
 #include "gio_content.hxx"
 

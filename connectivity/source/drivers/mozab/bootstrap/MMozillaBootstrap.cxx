@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include "MMozillaBootstrap.hxx"
 #include "MNSFolders.hxx"
