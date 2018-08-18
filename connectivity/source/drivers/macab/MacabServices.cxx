@@ -20,6 +20,7 @@
 
 #include "MacabDriver.hxx"
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::macab;
 using ::com::sun::star::uno::Reference;
