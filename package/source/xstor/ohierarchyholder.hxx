@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 

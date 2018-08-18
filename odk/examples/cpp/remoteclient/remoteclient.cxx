@@ -46,6 +46,8 @@
 
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

@@ -32,6 +32,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>

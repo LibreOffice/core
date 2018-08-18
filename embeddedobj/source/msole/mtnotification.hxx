@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <rtl/ref.hxx>
 

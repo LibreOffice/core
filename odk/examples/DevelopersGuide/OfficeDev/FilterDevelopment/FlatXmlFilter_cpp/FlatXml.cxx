@@ -41,6 +41,8 @@
 #include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

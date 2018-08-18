@@ -10,6 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contenthelper.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 

@@ -19,13 +19,13 @@
 #ifndef INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 #define INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 
-#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace cppu
 {

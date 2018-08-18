@@ -36,6 +36,7 @@
 #include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <vcl/errcode.hxx>
 

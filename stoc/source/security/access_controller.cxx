@@ -38,6 +38,7 @@
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

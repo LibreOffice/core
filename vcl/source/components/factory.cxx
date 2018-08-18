@@ -22,6 +22,7 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <vcl/dllapi.h>
 
 #include <factory.hxx>

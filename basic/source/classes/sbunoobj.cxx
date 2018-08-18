@@ -32,6 +32,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>

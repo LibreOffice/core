@@ -29,6 +29,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
+
 #include <memory>
 
 namespace sd { namespace framework {

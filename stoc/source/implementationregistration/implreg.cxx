@@ -46,6 +46,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "mergekeys.hxx"
 

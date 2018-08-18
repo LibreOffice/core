@@ -37,6 +37,7 @@
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::cppu;
 using namespace ::osl;

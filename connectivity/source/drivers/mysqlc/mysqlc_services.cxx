@@ -22,6 +22,7 @@
 #include <cppuhelper/factory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <uno/lbnames.h>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::mysqlc;
 using ::com::sun::star::lang::XMultiServiceFactory;

@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <facreg.hxx>
 #include <sddll.hxx>

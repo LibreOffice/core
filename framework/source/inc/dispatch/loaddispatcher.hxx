@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 namespace framework{
 

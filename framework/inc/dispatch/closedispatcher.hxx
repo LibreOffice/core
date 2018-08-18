@@ -35,6 +35,7 @@
 
 #include <memory>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <vcl/evntpost.hxx>
 #include <vcl/vclptr.hxx>
 

@@ -20,6 +20,7 @@
 
 #include <hsqldb/HDriver.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::hsqldb;
 using css::uno::Reference;

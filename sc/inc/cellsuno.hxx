@@ -85,6 +85,7 @@
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <memory>
 #include <vector>

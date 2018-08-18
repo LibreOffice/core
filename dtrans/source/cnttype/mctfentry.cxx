@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include "mcnttfactory.hxx"

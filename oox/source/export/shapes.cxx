@@ -77,6 +77,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
