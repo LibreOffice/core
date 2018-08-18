@@ -27,6 +27,8 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <framework/documentundoguard.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>

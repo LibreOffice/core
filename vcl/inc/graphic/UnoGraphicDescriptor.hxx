@@ -23,6 +23,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/weakagg.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/graph.hxx>
 

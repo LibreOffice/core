@@ -23,14 +23,12 @@
 #include "sal/config.h"
 
 #include <cstddef>
-#include <exception>
 #include <utility>
 
 #include "com/sun/star/lang/XTypeProvider.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/Any.h>
 #include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
+#include <com/sun/star/uno/Type.h>
 #include "cppuhelper/implbase_ex.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/instance.hxx"
