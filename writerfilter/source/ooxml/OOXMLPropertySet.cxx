@@ -23,6 +23,7 @@
 #include <ooxml/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
+#include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
 
 namespace writerfilter {
@@ -592,6 +593,20 @@ OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
     if (strcmp(pValue, "auto"))
     {
         mnValue = rtl_str_toUInt32(pValue, 16);
+
+        // Convert hash-encoded values (like #FF0080)
+        const sal_Int32 nLen = strlen(pValue);
+        if ( !mnValue && nLen > 1 && pValue[0] == '#' )
+        {
+            sal_Int32 nColor(COL_AUTO);
+            // Word appears to require strict 6 digit length, else it ignores it
+            if ( nLen == 7 )
+            {
+                const OUString sHashColor(pValue, nLen, RTL_TEXTENCODING_ASCII_US);
+                sax::Converter::convertColor( nColor, sHashColor );
+            }
+            mnValue = nColor;
+        }
     }
 }
 
