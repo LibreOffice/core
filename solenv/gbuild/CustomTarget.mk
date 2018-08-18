@@ -56,6 +56,7 @@ $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
 $(call gb_CustomTarget_get_workdir,$(1))/% : \
   $(call gb_CustomTarget_get_target,$(1))
+$(eval $(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
 endef
 
 
