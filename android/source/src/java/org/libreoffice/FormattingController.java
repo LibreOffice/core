@@ -53,6 +53,7 @@ class FormattingController implements View.OnClickListener {
         mContext.findViewById(R.id.button_italic).setOnClickListener(this);
         mContext.findViewById(R.id.button_strikethrough).setOnClickListener(this);
         mContext.findViewById(R.id.button_underlined).setOnClickListener(this);
+        mContext.findViewById(R.id.button_clearformatting).setOnClickListener(this);
 
         mContext.findViewById(R.id.button_align_left).setOnClickListener(this);
         mContext.findViewById(R.id.button_align_center).setOnClickListener(this);
@@ -102,8 +103,11 @@ class FormattingController implements View.OnClickListener {
             case R.id.button_strikethrough:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Strikeout"));
                 break;
+            case R.id.button_clearformatting:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:ResetAttributes"));
+                break;
             case R.id.button_underlined:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Underline"));
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:UnderlineDouble"));
                 break;
             case R.id.button_align_left:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:LeftPara"));

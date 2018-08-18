@@ -107,6 +107,16 @@
                                         android:paddingTop="12dp"
                                         android:src="@drawable/ic_format_strikethrough" />
 
+                                    <ImageButton
+                                        android:id="@+id/button_clearformatting"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        app:srcCompat="@drawable/ic_format_clear_black_24dp" />
+
                                 </LinearLayout>
 
                                 <Spinner
