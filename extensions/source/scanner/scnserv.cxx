@@ -22,6 +22,7 @@
 #include "scanner.hxx"
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace com::sun::star::registry;
 

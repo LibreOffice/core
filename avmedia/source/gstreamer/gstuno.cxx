@@ -18,6 +18,7 @@
  */
 
 #include <mediamisc.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include "gstmanager.hxx"
 
 using namespace ::com::sun::star;

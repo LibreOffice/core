@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <rtl/ref.hxx>
 

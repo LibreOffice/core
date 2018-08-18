@@ -31,6 +31,7 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <svl/languageoptions.hxx>
