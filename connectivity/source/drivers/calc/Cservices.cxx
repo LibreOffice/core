@@ -19,6 +19,7 @@
 
 #include <calc/CDriver.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace connectivity::calc;
 using ::com::sun::star::uno::Reference;

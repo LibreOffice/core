@@ -32,6 +32,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/GraphicObject.hxx>

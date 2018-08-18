@@ -20,6 +20,7 @@
 
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "pppoptimizerdialog.hxx"
 
 using namespace ::cppu;
