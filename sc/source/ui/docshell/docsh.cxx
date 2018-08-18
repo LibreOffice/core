@@ -71,6 +71,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <config_folders.h>
 

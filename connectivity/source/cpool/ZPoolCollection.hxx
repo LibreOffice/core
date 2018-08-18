@@ -24,6 +24,7 @@
 #include <map>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
