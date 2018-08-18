@@ -30,6 +30,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>

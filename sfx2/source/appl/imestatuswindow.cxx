@@ -42,6 +42,7 @@
 #include <sal/types.h>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 //TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
 class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
