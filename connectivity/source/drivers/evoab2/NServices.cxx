@@ -19,6 +19,7 @@
 
 #include "NDriver.hxx"
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/diagnose.h>
 
 using namespace connectivity::evoab;

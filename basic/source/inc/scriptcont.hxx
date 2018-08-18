@@ -24,6 +24,7 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 namespace basic
 {

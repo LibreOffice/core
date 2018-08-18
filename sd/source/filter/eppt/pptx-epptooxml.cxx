@@ -81,6 +81,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
