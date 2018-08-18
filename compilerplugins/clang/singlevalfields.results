@@ -116,7 +116,7 @@ sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
 sw/source/core/inc/UndoSort.hxx:38
-    SwSortUndoElement::(anonymous union)::(anonymous) nKenn
+    SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
 sw/source/filter/html/htmlcss1.cxx:77
     SwCSS1ItemIds nFormatBreak
