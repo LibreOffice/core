@@ -51,6 +51,7 @@
 
 #include <vcl/button.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -472,8 +473,17 @@ void CustomAnimationPane::updateControls()
     mpFTDuration->Enable( mxView.is() );
     mpCBXDuration->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
-    mpPBPlay->Enable( mxView.is() );
-    mpCBAutoPreview->Enable( mxView.is() );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mpPBPlay->Hide();
+        mpCBAutoPreview->Check(false);
+        mpCBAutoPreview->Hide();
+    }
+    else
+    {
+        mpPBPlay->Enable( mxView.is() );
+        mpCBAutoPreview->Enable( mxView.is() );
+    }
 
     if( !mxView.is() )
     {
