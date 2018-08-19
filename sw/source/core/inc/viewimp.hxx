@@ -244,7 +244,7 @@ public:
 
     inline void AddAccessibleObj( const SdrObject *pObj );
 
-    /// Invalidate accessible frame's frame's content
+    /// Invalidate accessible frame's content
     void InvalidateAccessibleFrameContent( const SwFrame *pFrame );
 
     /// Invalidate accessible frame's cursor position
