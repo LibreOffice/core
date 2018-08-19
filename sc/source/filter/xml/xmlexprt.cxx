@@ -1518,6 +1518,7 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
             bHidden = rRowAttr.rowHidden(nTable, nStartRow, nEndRowHidden);
             bFiltered = rRowAttr.rowFiltered(nTable, nStartRow, nEndRowFiltered);
         }
+        assert(nIndex >= 0 && "coverity#1438402");
         OpenNewRow(nIndex, nStartRow, 1, bHidden, bFiltered);
     }
     nOpenRow = nStartRow + nRepeatRow - 1;
