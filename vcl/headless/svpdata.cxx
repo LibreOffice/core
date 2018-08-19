@@ -9,6 +9,7 @@
 
 #include <unx/gendata.hxx>
 #include <headless/svpinst.hxx>
+#include <o3tl/make_unique.hxx>
 
 class SvpSalData : public GenericUnixSalData
 {
@@ -21,7 +22,7 @@ public:
 // plugin factory function
 SalInstance* svp_create_SalInstance()
 {
-    SvpSalInstance* pInstance = new SvpSalInstance( new SvpSalYieldMutex() );
+    SvpSalInstance* pInstance = new SvpSalInstance( o3tl::make_unique<SvpSalYieldMutex>() );
     new SvpSalData( pInstance );
     return pInstance;
 }

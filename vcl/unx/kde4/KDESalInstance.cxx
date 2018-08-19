@@ -31,8 +31,8 @@
 
 using namespace com::sun::star;
 
-KDESalInstance::KDESalInstance(SalYieldMutex* pMutex)
-    : X11SalInstance(pMutex)
+KDESalInstance::KDESalInstance(std::unique_ptr<SalYieldMutex> pMutex)
+    : X11SalInstance(std::move(pMutex))
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
