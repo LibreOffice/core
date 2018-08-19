@@ -2817,6 +2817,7 @@ EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxP
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo(new EditUndoInsertFeature(pEditEngine, CreateEPaM(aPaM), rItem));
     aPaM = aEditDoc.InsertFeature( aPaM, rItem );
+    UpdateFields();
 
     ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
     OSL_ENSURE( pPortion, "Blind Portion in InsertFeature" );

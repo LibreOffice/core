@@ -606,8 +606,8 @@ void Test::testHyperlinkCopyPaste()
 
     // Assert URL Fields and text before copy
     // Check text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfortestingfeaturefields"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aRepres1.getLength() + aRepres2.getLength()), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefields"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check Field 1
     EFieldInfo aURLFieldInfo1 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(0) );
@@ -637,10 +637,10 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(3), aEditEngine.GetFieldCount(0) );
 
     // Check the updated text length
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 ), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 + aRepres1.getLength()*2 + aRepres2.getLength()), rDoc.GetTextLen() );
 
     // Check the updated text contents
-    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfortestingfeaturefieldsfortesting"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefieldsforuser@example.comtesting"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check the Fields and their values
 
@@ -830,7 +830,6 @@ void Test::testHyperlinkSearch()
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
     aEngine.InsertField(aSel, aField);
-    aEngine.UpdateFields();
 
     OUString aContent = pNode->GetExpandedText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", OUString("Please write email to jim@bob.com. if you find a fish(not a dog)."),
