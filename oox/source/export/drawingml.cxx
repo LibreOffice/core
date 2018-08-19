@@ -738,23 +738,26 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
             {
                 // Write 'dashes' first, and then 'dots'
                 int i;
+                sal_Int32 nSp = aLineDash.Distance * 100 / nLineWidth;
                 if ( aLineDash.Dashes > 0 )
                 {
+                    sal_Int32 nD = aLineDash.DashLen * 100 / nLineWidth;
                     for( i = 0; i < aLineDash.Dashes; i ++ )
                     {
                         mpFS->singleElementNS( XML_a , XML_ds,
-                                               XML_d , write1000thOfAPercent( aLineDash.DashLen  > 0 ? aLineDash.DashLen  / nLineWidth * 100 : 100 ),
-                                               XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
+                                               XML_d , write1000thOfAPercent(nD),
+                                               XML_sp, write1000thOfAPercent(nSp),
                                                FSEND );
                     }
                 }
                 if ( aLineDash.Dots > 0 )
                 {
+                    sal_Int32 nD = aLineDash.DotLen * 100 / nLineWidth;
                     for( i = 0; i < aLineDash.Dots; i ++ )
                     {
                         mpFS->singleElementNS( XML_a, XML_ds,
-                                               XML_d , write1000thOfAPercent( aLineDash.DotLen   > 0 ? aLineDash.DotLen   / nLineWidth * 100 : 100 ),
-                                               XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
+                                               XML_d , write1000thOfAPercent(nD),
+                                               XML_sp, write1000thOfAPercent(nSp),
                                                FSEND );
                     }
                 }

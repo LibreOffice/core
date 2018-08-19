@@ -55,11 +55,8 @@ void lclSetDashData( LineDash& orLineDash, sal_Int16 nDots, sal_Int32 nDotLen,
 }
 
 /** Converts the specified preset dash to API dash.
-
-    Line length and dot length are set relative to line width and have to be
-    multiplied by the actual line width after this function.
  */
-void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
+void lclConvertPresetDash(LineDash& orLineDash, sal_Int32 nPresetDash, sal_Int32 nLineWidth)
 {
     switch( nPresetDash )
     {
@@ -80,54 +77,41 @@ void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
             OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
             lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
     }
+    // convert relative dash/dot length to absolute length
+    orLineDash.DotLen *= nLineWidth;
+    orLineDash.DashLen *= nLineWidth;
+    orLineDash.Distance *= nLineWidth;
 }
 
-/** Converts the passed custom dash to API dash.
-
-    Line length and dot length are set relative to line width and have to be
-    multiplied by the actual line width after this function.
+/** Converts the passed custom dash to API dash. rCustomDash should not be empty.
  */
-void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopVector& rCustomDash )
+void lclConvertCustomDash(LineDash& orLineDash, const LineProperties::DashStopVector& rCustomDash, sal_Int32 nLineWidth)
 {
-    if( rCustomDash.empty() )
-    {
-        OSL_FAIL( "lclConvertCustomDash - unexpected empty custom dash" );
-        lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
-        return;
-    }
+    OSL_ASSERT(!rCustomDash.empty());
+    orLineDash.Dashes = 0;
+    // Follow the order we export custDash: dashes first.
+    orLineDash.DashLen = rCustomDash[0].first;
+    // Also assume dash and dot have the same sp values.
+    orLineDash.Distance = rCustomDash[0].second;
+    orLineDash.DotLen = 0;
 
-    // count dashes and dots (stops equal or less than 2 are assumed to be dots)
-    sal_Int16 nDots = 0;
-    sal_Int32 nDotLen = 0;
-    sal_Int16 nDashes = 0;
-    sal_Int32 nDashLen = 0;
-    sal_Int32 nDistance = 0;
-    sal_Int32 nConvertedLen = 0;
-    sal_Int32 nConvertedDistance = 0;
-    for( LineProperties::DashStopVector::const_iterator aIt = rCustomDash.begin(), aEnd = rCustomDash.end(); aIt != aEnd; ++aIt )
+    for(const auto& rIt : rCustomDash)
     {
-        // Get from "1000th of percent" ==> percent ==> multiplier
-        nConvertedLen      = aIt->first  / 1000 / 100;
-        nConvertedDistance = aIt->second / 1000 / 100;
-
-        // Check if it is a dot (100% = dot)
-        if( nConvertedLen == 1 )
+        sal_Int32 nLen = rIt.first;
+        if (nLen != orLineDash.DashLen)
         {
-            ++nDots;
-            nDotLen += nConvertedLen;
+            orLineDash.DotLen = nLen;
+            break;
         }
-        else
-        {
-            ++nDashes;
-            nDashLen += nConvertedLen;
-        }
-        nDistance += nConvertedDistance;
+        ++orLineDash.Dashes;
     }
-    orLineDash.DotLen = (nDots > 0) ? ::std::max< sal_Int32 >( nDotLen / nDots, 1 ) : 0;
-    orLineDash.Dots = nDots;
-    orLineDash.DashLen = (nDashes > 0) ? ::std::max< sal_Int32 >( nDashLen / nDashes, 1 ) : 0;
-    orLineDash.Dashes = nDashes;
-    orLineDash.Distance = ::std::max< sal_Int32 >( nDistance / rCustomDash.size(), 1 );
+    // TODO: verify the assumption and approximate complex line patterns.
+
+    // Assume we only have two types of dash stops, the rest are all dots.
+    orLineDash.Dots = rCustomDash.size() - orLineDash.Dashes;
+    orLineDash.DashLen = orLineDash.DashLen / 100000.0 * nLineWidth;
+    orLineDash.DotLen = orLineDash.DotLen / 100000.0 * nLineWidth;
+    orLineDash.Distance = orLineDash.Distance / 100000.0 * nLineWidth;
 }
 
 DashStyle lclGetDashStyle( sal_Int32 nToken )
@@ -386,16 +370,14 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
 
             // convert preset dash or custom dash
-            if( moPresetDash.differsFrom( XML_solid ) )
-                lclConvertPresetDash( aLineDash, moPresetDash.get() );
+            if(moPresetDash.differsFrom(XML_solid) || maCustomDash.empty())
+            {
+                sal_Int32 nBaseLineWidth = ::std::max<sal_Int32>(nLineWidth, 35);
+                lclConvertPresetDash(aLineDash, moPresetDash.get(XML_dash), nBaseLineWidth);
+            }
             else
-                lclConvertCustomDash( aLineDash, maCustomDash );
+                lclConvertCustomDash(aLineDash, maCustomDash, nLineWidth);
 
-            // convert relative dash/dot length to absolute length
-            sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
-            aLineDash.DotLen *= nBaseLineWidth;
-            aLineDash.DashLen *= nBaseLineWidth;
-            aLineDash.Distance *= nBaseLineWidth;
 
             if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;

@@ -766,6 +766,17 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf73547, "tdf73547-dash.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
+    double nSp = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "sp").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(35000.0, nSp, 5000.0); // was 100000
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
