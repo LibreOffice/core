@@ -184,7 +184,7 @@ class GtkInstance : public X11SalInstance
     typedef X11SalInstance Superclass_t;
 #endif
 public:
-            GtkInstance( SalYieldMutex* pMutex );
+            GtkInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~GtkInstance() override;
     void    EnsureInit();
     virtual void AfterAppInit() override;
