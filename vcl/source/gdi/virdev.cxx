@@ -168,7 +168,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     meOutDevType    = OUTDEV_VIRDEV;
     mbDevOutput     = true;
-    mpFontCollection      = pSVData->maGDIData.mpScreenFontList;
+    mxFontCollection = pSVData->maGDIData.mxScreenFontList;
     mxFontCache     = pSVData->maGDIData.mxScreenFontCache;
     mnDPIX          = pOutDev->mnDPIX;
     mnDPIY          = pOutDev->mnDPIY;
@@ -494,13 +494,12 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // preserve global font lists
     ImplSVData* pSVData = ImplGetSVData();
-    if( mpFontCollection && (mpFontCollection != pSVData->maGDIData.mpScreenFontList) )
-        delete mpFontCollection;
+    mxFontCollection.reset();
     mxFontCache.reset();
 
     // get font list with scalable fonts only
     AcquireGraphics();
-    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone();
+    mxFontCollection.reset(pSVData->maGDIData.mxScreenFontList->Clone());
 
     // prepare to use new font lists
     mxFontCache.reset(new ImplFontCache);

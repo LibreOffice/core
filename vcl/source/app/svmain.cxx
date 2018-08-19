@@ -360,7 +360,7 @@ bool InitVCL()
     pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
 
     // Initialize global data
-    pSVData->maGDIData.mpScreenFontList     = new PhysicalFontCollection;
+    pSVData->maGDIData.mxScreenFontList.reset(new PhysicalFontCollection);
     pSVData->maGDIData.mxScreenFontCache.reset(new ImplFontCache);
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
@@ -615,8 +615,7 @@ void DeInitVCL()
     pSVData->maWinData.mpAutoScrollWin = nullptr;
     pSVData->maWinData.mpLastWheelWindow = nullptr;
 
-    delete pSVData->maGDIData.mpScreenFontList;
-    pSVData->maGDIData.mpScreenFontList = nullptr;
+    pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();
 
     // Deinit Sal
