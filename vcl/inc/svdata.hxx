@@ -185,7 +185,7 @@ struct ImplSVGDIData
     VclPtr<Printer>         mpLastPrinter;                  // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList = nullptr;   // List of all printer queue
     PhysicalFontCollection* mpScreenFontList = nullptr;     // Screen-Font-List
-    ImplFontCache*          mpScreenFontCache = nullptr;    // Screen-Font-Cache
+    std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
     ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
