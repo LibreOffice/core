@@ -288,7 +288,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
-    const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mpScreenFontList;
+    const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
     PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
     if( pFontFamily )
     {

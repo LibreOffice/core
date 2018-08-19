@@ -340,7 +340,7 @@ private:
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
-    mutable PhysicalFontCollection* mpFontCollection;
+    mutable std::shared_ptr<PhysicalFontCollection> mxFontCollection;
     mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::unique_ptr<OutDevStateStack>               mpOutDevStateStack;

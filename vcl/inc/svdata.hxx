@@ -184,7 +184,7 @@ struct ImplSVGDIData
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
     VclPtr<Printer>         mpLastPrinter;                  // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList = nullptr;   // List of all printer queue
-    PhysicalFontCollection* mpScreenFontList = nullptr;     // Screen-Font-List
+    std::shared_ptr<PhysicalFontCollection> mxScreenFontList; // Screen-Font-List
     std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
     ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
