@@ -884,7 +884,6 @@ main/setup_native/source/packinfo/linuxcopyrightfile
 main/setup_native/source/packinfo/private1copyrightfile
 main/setup_native/source/packinfo/solariscopyrightfile
 main/sfx2/workben/custompanel/delzip
-main/smoketestdoc/com/sun/star/comp/smoketest/MANIFEST.MF
 main/smoketestdoc/com/sun/star/comp/smoketest/delzip
 main/solenv/ant/manifest.empty
 main/solenv/bin/genmap
@@ -961,6 +960,7 @@ main/xmerge/source/activesync/XMergeFilter.h
 main/xmerge/source/activesync/XMergeSync.h
 main/xmerge/source/activesync/resource.h
 main/xmerge/source/activesync/stdafx.h
+main/xmlhelp/java/LuceneHelpWrapper/MANIFEST.MF
 main/xmlhelp/source/com/sun/star/help/MANIFEST.MF
 main/xmlhelp/util/delzip
 main/xmlsecurity/test_docs/CAs/Root_1/demoCA/crl/DO_NOT_CREATE_A_CRL
@@ -1030,6 +1030,7 @@ main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/crl/DO_NOT_INSTALL_THIS_CR
 main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/crlnumber
 main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/serial
 main/xmlsecurity/tools/demo/manifest
+test/smoketestdoc/MANIFEST.MF
 test/testassistant/META-INF/MANIFEST.MF
 test/testassistant.feature/.project
 test/testassistant.feature/build.properties
