@@ -361,7 +361,7 @@ bool InitVCL()
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new PhysicalFontCollection;
-    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
+    pSVData->maGDIData.mxScreenFontCache.reset(new ImplFontCache);
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") != nullptr;
@@ -617,8 +617,7 @@ void DeInitVCL()
 
     delete pSVData->maGDIData.mpScreenFontList;
     pSVData->maGDIData.mpScreenFontList = nullptr;
-    delete pSVData->maGDIData.mpScreenFontCache;
-    pSVData->maGDIData.mpScreenFontCache = nullptr;
+    pSVData->maGDIData.mxScreenFontCache.reset();
 
     // Deinit Sal
     if (pSVData->mpDefInst)

@@ -531,8 +531,8 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     {
         ImplSVData* pSVData = ImplGetSVData();
 
-        if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
-            mpFontCache->Invalidate();
+        if (mxFontCache && mxFontCache != pSVData->maGDIData.mxScreenFontCache)
+            mxFontCache->Invalidate();
 
         if ( bNewFontLists )
         {
@@ -546,10 +546,8 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
                 {
                     if( mpFontCollection && mpFontCollection != pSVData->maGDIData.mpScreenFontList )
                         delete mpFontCollection;
-                    if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
-                        delete mpFontCache;
+                    mxFontCache.reset();
                     mpFontCollection = nullptr;
-                    mpFontCache = nullptr;
                 }
             }
         }
@@ -586,7 +584,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
                 if( mpPDFWriter )
                 {
                     mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone();
-                    mpFontCache = new ImplFontCache();
+                    mxFontCache.reset(new ImplFontCache);
                 }
                 else
                 {
@@ -621,7 +619,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     ImplUpdateFontDataForAllFrames( &OutputDevice::ImplClearFontData, bNewFontLists );
 
     // clear global font lists to have them updated
-    pSVData->maGDIData.mpScreenFontCache->Invalidate();
+    pSVData->maGDIData.mxScreenFontCache->Invalidate();
     if ( bNewFontLists )
     {
         pSVData->maGDIData.mpScreenFontList->Clear();
@@ -917,7 +915,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    rtl::Reference<LogicalFontInstance> pFontInstance = pOutDev->mpFontCache->GetFontInstance( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
+                    rtl::Reference<LogicalFontInstance> pFontInstance = pOutDev->mxFontCache->GetFontInstance( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
                     if (pFontInstance)
                     {
                         assert(pFontInstance->GetFontFace());
@@ -1031,7 +1029,7 @@ bool OutputDevice::ImplNewFont() const
     {
         const ImplSVData* pSVData = ImplGetSVData();
         if( mpFontCollection == pSVData->maGDIData.mpScreenFontList
-        ||  mpFontCache == pSVData->maGDIData.mpScreenFontCache )
+        ||  mxFontCache == pSVData->maGDIData.mxScreenFontCache )
             const_cast<OutputDevice&>(*this).ImplUpdateFontData();
     }
 
@@ -1067,7 +1065,7 @@ bool OutputDevice::ImplNewFont() const
 
     // get font entry
     rtl::Reference<LogicalFontInstance> pOldFontInstance = mpFontInstance;
-    mpFontInstance = mpFontCache->GetFontInstance( mpFontCollection, maFont, aSize, fExactHeight );
+    mpFontInstance = mxFontCache->GetFontInstance( mpFontCollection, maFont, aSize, fExactHeight );
     bool bNewFontInstance = pOldFontInstance.get() != mpFontInstance.get();
     pOldFontInstance.clear();
 
@@ -1382,7 +1380,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontInstance = mpFontInstance; // reset the fontinstance to base-level
 
-        rtl::Reference<LogicalFontInstance> pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
+        rtl::Reference<LogicalFontInstance> pFallbackFont = mxFontCache->GetGlyphFallbackFont( mpFontCollection,
             aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;

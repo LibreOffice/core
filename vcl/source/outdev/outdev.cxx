@@ -58,7 +58,6 @@ OutputDevice::OutputDevice() :
     mpNextGraphics                  = nullptr;
     mpMetaFile                      = nullptr;
     mpFontInstance                     = nullptr;
-    mpFontCache                     = nullptr;
     mpFontCollection                = nullptr;
     mpDeviceFontList                = nullptr;
     mpDeviceFontSizeList            = nullptr;
@@ -179,14 +178,7 @@ void OutputDevice::dispose()
     mpDeviceFontSizeList.reset();
 
     // release ImplFontCache specific to this OutputDevice
-    // TODO: refcount ImplFontCache
-    if( mpFontCache
-    && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache)
-    && (ImplGetSVData()->maGDIData.mpScreenFontCache != nullptr) )
-    {
-        delete mpFontCache;
-        mpFontCache = nullptr;
-    }
+    mxFontCache.reset();
 
     // release ImplFontList specific to this OutputDevice
     // TODO: refcount ImplFontList
