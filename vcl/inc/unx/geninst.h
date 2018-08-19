@@ -47,8 +47,8 @@ protected:
     std::unique_ptr<SalYieldMutex> mpSalYieldMutex;
 
 public:
-    SalGenericInstance( SalYieldMutex* pMutex )
-        : mbPrinterInit( false ), mpSalYieldMutex( pMutex ) {}
+    SalGenericInstance( std::unique_ptr<SalYieldMutex> pMutex )
+        : mbPrinterInit( false ), mpSalYieldMutex( std::move(pMutex) ) {}
     virtual ~SalGenericInstance() override;
 
     // Yield mutex

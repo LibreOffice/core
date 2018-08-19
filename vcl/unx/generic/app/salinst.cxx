@@ -54,7 +54,7 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
-        X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
+        X11SalInstance* pInstance = new X11SalInstance( o3tl::make_unique<SalYieldMutex>() );
 
         // initialize SalData
         X11SalData *pSalData = new X11SalData( SAL_DATA_UNX, pInstance );
@@ -66,8 +66,8 @@ extern "C"
     }
 }
 
-X11SalInstance::X11SalInstance(SalYieldMutex* pMutex)
-    : SalGenericInstance(pMutex)
+X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
+    : SalGenericInstance(std::move(pMutex))
     , mpXLib(nullptr)
 {
     ImplSVData* pSVData = ImplGetSVData();

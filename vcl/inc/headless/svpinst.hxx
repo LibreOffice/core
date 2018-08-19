@@ -112,7 +112,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
 public:
     static SvpSalInstance*  s_pDefaultInstance;
 
-    SvpSalInstance( SalYieldMutex *pMutex );
+    SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~SvpSalInstance() override;
 
     void                    CloseWakeupPipe(bool log);
