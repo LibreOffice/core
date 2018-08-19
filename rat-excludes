@@ -961,7 +961,6 @@ main/xmerge/source/activesync/XMergeSync.h
 main/xmerge/source/activesync/resource.h
 main/xmerge/source/activesync/stdafx.h
 main/xmlhelp/java/LuceneHelpWrapper/MANIFEST.MF
-main/xmlhelp/source/com/sun/star/help/MANIFEST.MF
 main/xmlhelp/util/delzip
 main/xmlsecurity/test_docs/CAs/Root_1/demoCA/crl/DO_NOT_CREATE_A_CRL
 main/xmlsecurity/test_docs/CAs/Root_1/demoCA/crlnumber
