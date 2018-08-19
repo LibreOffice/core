@@ -57,4 +57,4 @@ How-to add a new template category
 		+ add all files contained in foo0.ott (except mimetype) in extras_FOO_XMLFILES
 		+ if foo0.ott contains files with other extension than .xml, .rdf, .svm, .svg, .png and .jpg
 			+ add a CPY call at the end of the file
-		+ optionaly, replace extension ott (4 places)
+		+ optionally, replace extension ott (4 places)
