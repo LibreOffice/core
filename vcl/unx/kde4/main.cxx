@@ -73,7 +73,7 @@ extern "C" {
         }
 #endif
 
-        KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
+        KDESalInstance* pInstance = new KDESalInstance( o3tl::make_unique<SalYieldMutex>() );
         SAL_INFO( "vcl.kde4", "created KDESalInstance " << &pInstance );
 
         // initialize SalData

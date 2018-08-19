@@ -30,7 +30,7 @@ protected:
     virtual SalX11Display* CreateDisplay() const override;
 
 public:
-    explicit KDESalInstance(SalYieldMutex* pMutex);
+    explicit KDESalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }

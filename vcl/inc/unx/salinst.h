@@ -47,7 +47,7 @@ protected:
     virtual SalX11Display* CreateDisplay() const;
 
 public:
-    explicit X11SalInstance(SalYieldMutex* pMutex);
+    explicit X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual ~X11SalInstance() override;
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;

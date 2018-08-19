@@ -63,8 +63,8 @@ static void atfork_child()
 
 #endif
 
-SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex )
-    : SalGenericInstance( pMutex )
+SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
+    : SalGenericInstance( std::move(pMutex) )
 {
     m_aTimeout.tv_sec       = 0;
     m_aTimeout.tv_usec      = 0;

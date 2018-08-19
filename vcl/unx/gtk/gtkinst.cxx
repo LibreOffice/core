@@ -91,8 +91,6 @@ extern "C"
         }
 #endif
 
-        GtkYieldMutex *pYieldMutex;
-
         // init gdk thread protection
         bool const sup = g_thread_supported();
             // extracted from the 'if' to avoid Clang -Wunreachable-code
@@ -102,11 +100,11 @@ extern "C"
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
         SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
 
-        pYieldMutex = new GtkYieldMutex();
+        auto pYieldMutex = o3tl::make_unique<GtkYieldMutex>();
 
         gdk_threads_init();
 
-        GtkInstance* pInstance = new GtkInstance( pYieldMutex );
+        GtkInstance* pInstance = new GtkInstance( std::move(pYieldMutex) );
         SAL_INFO("vcl.gtk", "creating GtkInstance " << pInstance);
 
         // Create SalData, this does not leak
@@ -147,11 +145,11 @@ static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 }
 #endif
 
-GtkInstance::GtkInstance( SalYieldMutex* pMutex )
+GtkInstance::GtkInstance( std::unique_ptr<SalYieldMutex> pMutex )
 #if GTK_CHECK_VERSION(3,0,0)
-    : SvpSalInstance( pMutex )
+    : SvpSalInstance( std::move(pMutex) )
 #else
-    : X11SalInstance( pMutex )
+    : X11SalInstance( std::move(pMutex) )
 #endif
     , m_pTimer(nullptr)
     , bNeedsInit(true)
