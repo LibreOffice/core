@@ -80,8 +80,8 @@ namespace svt
             {
             }
 
-            Dialog(weld::DialogController* pWeldDialog)
-                : m_xWeldDialog(pWeldDialog)
+            Dialog(std::unique_ptr<weld::DialogController> pWeldDialog)
+                : m_xWeldDialog(std::move(pWeldDialog))
             {
             }
 

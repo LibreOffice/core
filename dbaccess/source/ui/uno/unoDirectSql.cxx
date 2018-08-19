@@ -97,7 +97,7 @@ namespace dbaui
         if (!xConnection.is())
         {
             // can't create the dialog if I have improper settings
-            return svt::OGenericUnoDialog::Dialog(nullptr);
+            return svt::OGenericUnoDialog::Dialog();
         }
 
         return svt::OGenericUnoDialog::Dialog(VclPtr<DirectSQLDialog>::Create(_pParent, xConnection));
