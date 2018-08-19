@@ -119,7 +119,7 @@ namespace dbaui
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
         {
             // can't create the dialog if I have improper settings
-            return svt::OGenericUnoDialog::Dialog(nullptr);
+            return svt::OGenericUnoDialog::Dialog();
         }
 
         return svt::OGenericUnoDialog::Dialog(createComposerDialog(_pParent, xConnection, xColumns));

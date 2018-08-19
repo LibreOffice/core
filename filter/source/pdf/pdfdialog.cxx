@@ -86,8 +86,8 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 svt::OGenericUnoDialog::Dialog PDFDialog::createDialog(vcl::Window* pParent)
 {
     if( mxSrcDoc.is() )
-        return svt::OGenericUnoDialog::Dialog(new ImpPDFTabDialog(pParent ? pParent->GetFrameWeld() : nullptr, maFilterData, mxSrcDoc));
-    return svt::OGenericUnoDialog::Dialog(static_cast<weld::DialogController*>(nullptr));
+        return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<ImpPDFTabDialog>(pParent ? pParent->GetFrameWeld() : nullptr, maFilterData, mxSrcDoc));
+    return svt::OGenericUnoDialog::Dialog();
 }
 
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
