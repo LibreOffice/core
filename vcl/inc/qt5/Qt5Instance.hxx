@@ -54,7 +54,7 @@ Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
 
 public:
-    explicit Qt5Instance(SalYieldMutex* pMutex, bool bUseCairo = false);
+    explicit Qt5Instance(std::unique_ptr<SalYieldMutex> pMutex, bool bUseCairo = false);
     virtual ~Qt5Instance() override;
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
