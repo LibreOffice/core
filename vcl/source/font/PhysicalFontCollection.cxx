@@ -928,7 +928,7 @@ static const std::map<OUString, OUString> aMetricCompatibleMap =
     { "Calibri",         "Carlito" },
 };
 
-static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
+static bool FindMetricCompatibleFont(FontSelectPatternAttributes& rFontSelData)
 {
     for (const auto& aSub : aMetricCompatibleMap)
     {
