@@ -78,7 +78,7 @@ class HStreamIODev final: public HIODev
         std::unique_ptr<HStream> _stream;
         gz_stream *_gzfp;
     public:
-        explicit HStreamIODev(HStream* stream);
+        explicit HStreamIODev(std::unique_ptr<HStream> stream);
         virtual ~HStreamIODev() override;
 /**
  * Check whether the stream is available
