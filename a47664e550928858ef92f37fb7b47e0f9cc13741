@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2370a072",
+        "filename": "vcl/source/gdi/virdev.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-20T04:02:58Z",
+      "side": 1,
+      "message": "Clone() should ideally return std::shared_ptr\u003cImplFontCollection\u003e to indicate how it wants to be held",
+      "revId": "a47664e550928858ef92f37fb7b47e0f9cc13741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
