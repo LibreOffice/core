@@ -87,7 +87,7 @@ Dim FileNames() as String
 	ToggleDialogControls(False)
 	oProgressBar.ProgressValueMin = 0
 	oProgressBar.ProgressValueMax = 100
-	bStartUpRun  = True
+	bStartUpRun = True
 	nOldHeight = 200
 	nOldY = SBPAGEY
 	nOldX = SBPAGEX
@@ -156,7 +156,7 @@ Dim FileNames() as String
 		nOldLevel = iCurLevel
 	Next i
 	ToggleDialogControls(True)
-	DlgReadDir.Model.cmdGoOn.Enabled = False	
+	DlgReadDir.Model.cmdGoOn.Enabled = False
 End Sub
 
 
@@ -166,7 +166,7 @@ Dim aPoint As New com.sun.star.awt.Point
 
 	aPoint.X = CalculateXPoint()
 	aPoint.Y = nOldY + SBRELDIST * nOldHeight
-	nOldY  = aPoint.Y
+	nOldY = aPoint.Y
 
 	oTextShape = oDocument.createInstance(&quot;com.sun.star.drawing.TextShape&quot;)
 	oTextShape.LineStyle = 1
@@ -177,7 +177,7 @@ Dim aPoint As New com.sun.star.awt.Point
 	oTextShape.TextAutoGrowHeight = TRUE
 	oTextShape.String = FileName
 
-	&apos; Configure Size And Position of the TextShape  according to its Scripting
+	&apos; Configure Size And Position of the TextShape according to its Scripting
 	aPoint.X = iLevelPos(iCurLevel,SBBASEX)
 	oTextShape.Position = aPoint
 	CreateTextShape() = oTextShape
@@ -246,7 +246,7 @@ Dim MaxFileIndex as Integer
 		m = m + 1
 		DirContent() = oUcbObject.GetFolderContents(Source,True)
 		If Ubound(DirContent()) &lt;&gt; -1 Then
-			MaxFileIndex  = Ubound(DirContent()) 
+			MaxFileIndex = Ubound(DirContent())
 			For i = 0 to MaxFileIndex
 				FileName = DirContent(i)
 				FileNameList(n,0) = FileName
@@ -274,16 +274,16 @@ Sub CloseDialog
 End Sub
 
 
-Sub	AdjustPageHeight(lShapeHeight, FileCount)
+Sub AdjustPageHeight(lShapeHeight, FileCount)
 Dim lNecHeight as Long
 Dim lBorders as Long
 	oDocument.LockControllers
 	lBorders = oPage.BorderTop + oPage.BorderBottom
 	lNecHeight = SBPAGEY + (FileCount * SBRELDIST * lShapeHeight)
 	If lNecHeight &gt; (oPage.Height - lBorders) Then
-		oPage.Height = lNecHeight + lBorders + 500 
+		oPage.Height = lNecHeight + lBorders + 500
 	End If
-	oDocument.UnlockControllers	
+	oDocument.UnlockControllers
 End Sub
 
 
