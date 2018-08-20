@@ -26,12 +26,12 @@
 #include <PhysicalFontFamily.hxx>
 #include <sal/log.hxx>
 
-size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
+size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPatternAttributes& rFSD ) const
 {
     return rFSD.hashCode();
 }
 
-bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const FontSelectPattern& rB) const
+bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPatternAttributes& rA, const FontSelectPatternAttributes& rB) const
 {
     // check normalized font family name
     if( rA.maSearchName != rB.maSearchName )

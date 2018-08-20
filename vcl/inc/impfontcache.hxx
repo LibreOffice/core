@@ -37,9 +37,9 @@ private:
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
 
     // cache of recently used font instances
-    struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
-    struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
+    struct IFSD_Equal { bool operator()( const FontSelectPatternAttributes&, const FontSelectPatternAttributes& ) const; };
+    struct IFSD_Hash { size_t operator()( const FontSelectPatternAttributes& ) const; };
+    typedef std::unordered_map<FontSelectPatternAttributes, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
     rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
