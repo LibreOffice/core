@@ -33,15 +33,15 @@ private:
     DECL_LINK( Delete, Timer*, void );
 
 public:
-    explicit SfxItemDisruptor_Impl(SfxPoolItem *pItemToDesrupt);
+    explicit SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDesrupt);
     void LaunchDeleteOnIdle();
     ~SfxItemDisruptor_Impl();
     SfxItemDisruptor_Impl(const SfxItemDisruptor_Impl&) = delete;
     SfxItemDisruptor_Impl& operator=(const SfxItemDisruptor_Impl&) = delete;
 };
 
-SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(SfxPoolItem *const pItemToDisrupt)
-    : pItem(pItemToDisrupt)
+SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDisrupt)
+    : pItem(std::move(pItemToDisrupt))
     , m_Idle("sfx SfxItemDisruptor_Impl::Delete")
 {
     m_Idle.SetInvokeHandler(LINK(this, SfxItemDisruptor_Impl, Delete));
@@ -72,10 +72,10 @@ IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Timer*, void)
     delete this;
 }
 
-void DeleteItemOnIdle(SfxPoolItem* pItem)
+void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem)
 {
     DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
-    SfxItemDisruptor_Impl *pDesruptor = new SfxItemDisruptor_Impl(pItem);
+    SfxItemDisruptor_Impl *pDesruptor = new SfxItemDisruptor_Impl(std::move(pItem));
     pDesruptor->LaunchDeleteOnIdle();
     // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
 }

@@ -19,9 +19,11 @@
 #ifndef INCLUDED_SFX2_ITEMDEL_HXX
 #define INCLUDED_SFX2_ITEMDEL_HXX
 
+#include <memory>
+
 class SfxPoolItem;
 
-void DeleteItemOnIdle( SfxPoolItem* pItem );
+void DeleteItemOnIdle( std::unique_ptr<SfxPoolItem> pItem );
 
 #endif
 

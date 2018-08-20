@@ -491,7 +491,7 @@ const SfxPoolItem* SfxShell::GetSlotState
         eState = SfxItemState::UNKNOWN;
 
     // Evaluate Item and item status and possibly maintain them in pStateSet
-    SfxPoolItem *pRetItem = nullptr;
+    std::unique_ptr<SfxPoolItem> pRetItem;
     if ( eState <= SfxItemState::DISABLED )
     {
         if ( pStateSet )
@@ -502,17 +502,18 @@ const SfxPoolItem* SfxShell::GetSlotState
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);
-        pRetItem = new SfxVoidItem(0);
+        pRetItem.reset( new SfxVoidItem(0) );
     }
     else
     {
         if ( pStateSet && pStateSet->Put( *pItem ) )
             return &pStateSet->Get( pItem->Which() );
-        pRetItem = pItem->Clone();
+        pRetItem.reset(pItem->Clone());
     }
-    DeleteItemOnIdle(pRetItem);
+    auto pTemp = pRetItem.get();
+    DeleteItemOnIdle(std::move(pRetItem));
 
-    return pRetItem;
+    return pTemp;
 }
 
 SFX_EXEC_STUB(SfxShell, VerbExec)
