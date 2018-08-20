@@ -825,7 +825,7 @@ class PPTNumberFormatCreator
 
 protected:
 
-    PPTNumberFormatCreator( PPTExtParaProv* );
+    PPTNumberFormatCreator( std::unique_ptr<PPTExtParaProv> );
     ~PPTNumberFormatCreator();
 
 public:
