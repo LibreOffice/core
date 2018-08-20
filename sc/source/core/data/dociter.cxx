@@ -747,20 +747,20 @@ ScDBQueryDataIterator::Value::Value() :
     ::rtl::math::setNan(&mfValue);
 }
 
-ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, ScDBQueryParamBase* pParam) :
-    mpParam (pParam)
+ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, std::unique_ptr<ScDBQueryParamBase> pParam) :
+    mpParam (std::move(pParam))
 {
     switch (mpParam->GetType())
     {
         case ScDBQueryParamBase::INTERNAL:
         {
-            ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pParam);
+            ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(mpParam.get());
             mpData.reset(new DataAccessInternal(p, pDocument, rContext));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
         {
-            ScDBQueryParamMatrix* p = static_cast<ScDBQueryParamMatrix*>(pParam);
+            ScDBQueryParamMatrix* p = static_cast<ScDBQueryParamMatrix*>(mpParam.get());
             mpData.reset(new DataAccessMatrix(p));
         }
     }
