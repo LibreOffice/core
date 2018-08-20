@@ -5012,13 +5012,13 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     rStr += "]";
 }
 
-void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID )
+void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted )
 {
     if ( nLCID == 0 )
         return;
     OUStringBuffer aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
-    if ( nPosInsertLCID >= 8
+    if ( bDBNumInserted && nPosInsertLCID >= 8
         && aLCIDString.getLength() > 4
         && rFormatStr.indexOf( "[DBNum", nPosInsertLCID-8) == nPosInsertLCID-8 )
     {   // remove DBNumX code if long LCID
@@ -5142,6 +5142,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
 
         SvNumberNatNum aNatNum = NumFor[n].GetNatNum();
+        bool bDBNumInserted = false;
         if (aNatNum.IsComplete() && (aNatNum.GetDBNum() > 0 || nOriginalLang != LANGUAGE_DONTKNOW))
         {   // GetFormatStringForExcel() may have changed language to en_US
             if (aNatNum.GetLang() == LANGUAGE_ENGLISH_US && nOriginalLang != LANGUAGE_DONTKNOW)
@@ -5151,6 +5152,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 aPrefix += "[DBNum";
                 aPrefix += OUString::number( aNatNum.GetDBNum() );
                 aPrefix += "]";
+                bDBNumInserted = true;
             }
         }
 
@@ -5367,7 +5369,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             if ( nLanguageID == LANGUAGE_SYSTEM && nOriginalLang != LANGUAGE_DONTKNOW )
                 nLanguageID = nOriginalLang;
         }
-        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + static_cast<sal_uInt16>(nLanguageID), nPosInsertLCID );
+        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + static_cast<sal_uInt16>(nLanguageID), nPosInsertLCID,
+                bDBNumInserted);
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
