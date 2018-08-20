@@ -28,9 +28,9 @@
 #include <expr.hxx>
 
 
-SbiExprNode::SbiExprNode( SbiExprNode* l, SbiToken t, SbiExprNode* r ) :
-    pLeft(l),
-    pRight(r),
+SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, SbiToken t, std::unique_ptr<SbiExprNode> r ) :
+    pLeft(std::move(l)),
+    pRight(std::move(r)),
     pWithParent(nullptr),
     eNodeType(SbxNODE),
     eType(SbxVARIANT), // Nodes are always Variant
@@ -73,9 +73,9 @@ SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprListPtr l ) 
 }
 
 // #120061 TypeOf
-SbiExprNode::SbiExprNode( SbiExprNode* l, sal_uInt16 nId ) :
+SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, sal_uInt16 nId ) :
     nTypeStrId(nId),
-    pLeft(l),
+    pLeft(std::move(l)),
     pWithParent(nullptr),
     eNodeType(SbxTYPEOF),
     eType(SbxBOOL),
@@ -109,7 +109,7 @@ SbiExprNode::~SbiExprNode()
     if( IsVariable() )
     {
         delete aVar.pPar;
-        delete aVar.pNext;
+        aVar.pNext.reset();
         delete aVar.pvMorePar;
     }
 }
@@ -138,7 +138,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
     {
         SbiExprNode* p = this;
         while( p->aVar.pNext )
-            p = p->aVar.pNext;
+            p = p->aVar.pNext.get();
         return p;
     }
     else
