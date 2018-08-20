@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e31758ed",
+        "filename": "sc/source/core/data/dpshttab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-20T07:32:43Z",
+      "side": 1,
+      "message": "A sheet name can contain # characters so this would have to check if that is the case. If the assembling uses ScGlobal::AddQuotes() (see comment at ScCellShell::ExecuteDataPilotDialog()) then here \n\n ScGlobal::FindUnquoted( maRangeName, \u0027#\u0027)\n\ncan be used.",
+      "revId": "6e00fde315ab682412fa07d424084410d83b58c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_83dc0c47",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-20T07:32:43Z",
+      "side": 1,
+      "message": "pScope should be named aScope, and construction should be moved into the if(pRangeName) block as otherwise it\u0027s unnecessary. Then again, the loop there doesn\u0027t need to check aScope.isEmpty() for each element, either the ranges are scoped or they aren\u0027t, so using two distinct loops would be appropriate.",
+      "range": {
+        "startLine": 2806,
+        "startChar": 21,
+        "endLine": 2806,
+        "endChar": 27
+      },
+      "revId": "6e00fde315ab682412fa07d424084410d83b58c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c3d21435",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-20T07:32:43Z",
+      "side": 1,
+      "message": "Blanks would help readability..",
+      "range": {
+        "startLine": 2806,
+        "startChar": 72,
+        "endLine": 2806,
+        "endChar": 78
+      },
+      "revId": "6e00fde315ab682412fa07d424084410d83b58c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a3d71024",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2810,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-20T07:32:43Z",
+      "side": 1,
+      "message": "Again, blanks help readability.. pScope.isEmpty()?elem.second-\u003eGetName():pScope\n\nApart from that, this duplicates a global rangename to rangename#rangename.\n\nA sheet name can contain # characters, to disambiguate (see comment at ScSheetSourceDesc::GetSourceRange()) enquote the sheet name using\n\n ScGlobal::AddQuotes( aSheetName, \u0027\\\u0027\u0027)",
+      "revId": "6e00fde315ab682412fa07d424084410d83b58c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
