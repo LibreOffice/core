@@ -149,7 +149,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 
 void CellColorHandler::lcl_sprm(Sprm &) {}
 
-TablePropertyMapPtr  CellColorHandler::getProperties()
+TablePropertyMapPtr  CellColorHandler::getProperties(const bool bAllowCOL_AUTO)
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
 
@@ -205,7 +205,10 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     if( !nWW8BrushStyle )
     {
         // Clear-Brush
-        nApplyColor = m_nFillColor;
+        if ( bAllowCOL_AUTO && m_bAutoFillColor )
+            nApplyColor = sal_Int32(COL_AUTO);
+        else
+            nApplyColor = m_nFillColor;
     }
     else
     {
@@ -279,7 +282,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
     }
-    else if (nWW8BrushStyle || !m_bAutoFillColor)
+    else if ( nWW8BrushStyle || !m_bAutoFillColor || bAllowCOL_AUTO )
         pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                             : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 

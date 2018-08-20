@@ -53,7 +53,7 @@ public:
     CellColorHandler( );
     virtual ~CellColorHandler() override;
 
-    ::tools::SvRef<TablePropertyMap>            getProperties();
+    ::tools::SvRef<TablePropertyMap> getProperties(const bool bAllowCOL_AUTO = false);
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 

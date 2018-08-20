@@ -1763,7 +1763,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler );
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
-                rContext->InsertProps(pCellColorHandler->getProperties().get());
+
+                // Allow COL_AUTO if it overrides a non-auto inherited value
+                sal_Int32 nStyleColor = sal_Int32(COL_AUTO);
+                m_pImpl->GetPropertyFromStyleSheet(PROP_CHAR_BACK_COLOR) >>= nStyleColor;
+                rContext->InsertProps(pCellColorHandler->getProperties( nStyleColor != sal_Int32(COL_AUTO) ).get());
+
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_SHADING_MARKER, uno::makeAny(true), true, CHAR_GRAB_BAG );
             }
             break;
