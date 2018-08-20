@@ -845,7 +845,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
+HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
                                     const PhysicalFontFace * i_pFontFace,
                                     float& o_rFontScale,
                                     HFONT& o_rOldFont)
@@ -860,7 +860,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
         hdcScreen = GetDC(nullptr);
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( getHDC(), i_pFont, i_pFontFace, aLogFont );
+    ImplGetLogFontFromFontSelect( getHDC(), &i_rFont, i_pFontFace, aLogFont );
 
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
@@ -912,7 +912,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
     return hNewFont;
 }
 
-void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel )
+void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
 {
     // return early if there is no new font
     if( !pFont )
@@ -939,10 +939,10 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
 
     // WinSalGraphics::GetEmbedFontData does not set mpFontInstance
     // since it is interested in font file data only.
-    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance.get() );
+    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>(pFont);
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = ImplDoSetFont(pFont, nullptr, mfFontScale[ nFallbackLevel ], hOldFont);
+    HFONT hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), nullptr, mfFontScale[ nFallbackLevel ], hOldFont);
     mfCurrentFontScale = mfFontScale[nFallbackLevel];
 
     if( !mhDefFont )
@@ -1659,7 +1659,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     ScopedFont aOldFont(*this);
     float fScale = 1.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(&aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
 
     WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(pFont);
 
@@ -1780,7 +1780,7 @@ const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
 
     float fScale = 0.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(&aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
 
     // get the raw font file data
     RawFontData aRawFontData( getHDC() );
@@ -1811,7 +1811,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
 
     float fScale = 0.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(&aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
 
     // get raw font file data
     const RawFontData xRawFontData( getHDC() );
