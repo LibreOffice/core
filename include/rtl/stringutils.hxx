@@ -13,7 +13,6 @@
 #include "sal/config.h"
 
 #include <cstddef>
-#include <cstring>
 
 #include "sal/types.h"
 
@@ -165,8 +164,20 @@ struct ConstCharArrayDetector< const char[ N ], T >
     typedef T Type;
     static const std::size_t length = N - 1;
     static const bool ok = true;
-    static bool isValid(char const (& literal)[N])
-    { return std::strlen(literal) == length; }
+#if defined LIBO_INTERNAL_ONLY
+    constexpr
+#endif
+    static bool isValid(char const (& literal)[N]) {
+        for (std::size_t i = 0; i != N - 1; ++i) {
+            if (literal[i] == '\0') {
+                return false;
+            }
+        }
+        return literal[N - 1] == '\0';
+    }
+#if defined LIBO_INTERNAL_ONLY
+    constexpr
+#endif
     static char const * toPointer(char const (& literal)[N]) { return literal; }
 };
 #if defined LIBO_INTERNAL_ONLY
