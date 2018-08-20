@@ -131,7 +131,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
                 eOp = SbiOpcode::FIND_STATIC_;
             }
         }
-        for( SbiExprNode* p = this; p; p = p->aVar.pNext )
+        for( SbiExprNode* p = this; p; p = p->aVar.pNext.get() )
         {
             if( p == this && pWithParent_ != nullptr )
             {

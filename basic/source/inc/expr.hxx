@@ -39,7 +39,7 @@ typedef std::unique_ptr<SbiExprList> SbiExprListPtr;
 typedef std::vector<SbiExprListPtr> SbiExprListVector;
 
 struct SbVar {
-    SbiExprNode*        pNext;      // next element (for structures)
+    std::unique_ptr<SbiExprNode> pNext;      // next element (for structures)
     SbiSymDef*          pDef;       // symbol definition
     SbiExprList*        pPar;       // optional parameters (is deleted)
     SbiExprListVector*  pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
@@ -117,8 +117,8 @@ public:
     SbiExprNode( double, SbxDataType );
     SbiExprNode( const OUString& );
     SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprListPtr = nullptr );
-    SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
-    SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
+    SbiExprNode( std::unique_ptr<SbiExprNode>, SbiToken, std::unique_ptr<SbiExprNode> );
+    SbiExprNode( std::unique_ptr<SbiExprNode>, sal_uInt16 );    // #120061 TypeOf
     SbiExprNode( sal_uInt16 );                  // new <type>
     ~SbiExprNode();
 
@@ -158,20 +158,20 @@ protected:
     bool          bByVal;           // true: ByVal-Parameter
     bool          bBracket;         // true: Parameter list with brackets
     sal_uInt16        nParenLevel;
-    SbiExprNode* Term( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );
-    SbiExprNode* ObjTerm( SbiSymDef& );
-    SbiExprNode* Operand( bool bUsedForTypeOf = false );
-    SbiExprNode* Unary();
-    SbiExprNode* Exp();
-    SbiExprNode* MulDiv();
-    SbiExprNode* IntDiv();
-    SbiExprNode* Mod();
-    SbiExprNode* AddSub();
-    SbiExprNode* Cat();
-    SbiExprNode* Like();
-    SbiExprNode* VBA_Not();
-    SbiExprNode* Comp();
-    SbiExprNode* Boolean();
+    std::unique_ptr<SbiExprNode> Term( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );
+    std::unique_ptr<SbiExprNode> ObjTerm( SbiSymDef& );
+    std::unique_ptr<SbiExprNode> Operand( bool bUsedForTypeOf = false );
+    std::unique_ptr<SbiExprNode> Unary();
+    std::unique_ptr<SbiExprNode> Exp();
+    std::unique_ptr<SbiExprNode> MulDiv();
+    std::unique_ptr<SbiExprNode> IntDiv();
+    std::unique_ptr<SbiExprNode> Mod();
+    std::unique_ptr<SbiExprNode> AddSub();
+    std::unique_ptr<SbiExprNode> Cat();
+    std::unique_ptr<SbiExprNode> Like();
+    std::unique_ptr<SbiExprNode> VBA_Not();
+    std::unique_ptr<SbiExprNode> Comp();
+    std::unique_ptr<SbiExprNode> Boolean();
 public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
         SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr ); // parsing Ctor
