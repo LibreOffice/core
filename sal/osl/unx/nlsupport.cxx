@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cstring>
 
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
