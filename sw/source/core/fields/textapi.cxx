@@ -53,9 +53,9 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
     return &aSvxTextPortionPropertySet;
 }
 
-SwTextAPIObject::SwTextAPIObject( SwTextAPIEditSource* p )
-: SvxUnoText( p, ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
-, pSource(p)
+SwTextAPIObject::SwTextAPIObject( std::unique_ptr<SwTextAPIEditSource> p )
+: SvxUnoText( p.get(), ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
+, pSource(std::move(p))
 {
 }
 
