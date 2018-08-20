@@ -56,6 +56,11 @@ LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, cons
     const_cast<FontSelectPattern*>(&m_aFontSelData)->mpFontInstance = this;
 }
 
+void LogicalFontInstance::SetNonAntialiased(bool bNonAntialiased)
+{
+    const_cast<FontSelectPattern*>(&m_aFontSelData)->mbNonAntialiased = bNonAntialiased;
+}
+
 LogicalFontInstance::~LogicalFontInstance()
 {
     mpUnicodeFallbackList.reset();

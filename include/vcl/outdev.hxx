@@ -1341,7 +1341,7 @@ public:
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 getFallbackFont(
-                                    FontSelectPattern &rFontSelData, int nFallbackLevel,
+                                    LogicalFontInstance* pLogicalFont, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
 
 
