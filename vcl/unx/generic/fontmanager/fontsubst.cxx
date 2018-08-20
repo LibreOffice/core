@@ -64,7 +64,7 @@ static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, 
 
 namespace
 {
-    bool uselessmatch(const FontSelectPattern &rOrig, const FontSelectPattern &rNew)
+    bool uselessmatch(const FontSelectPatternAttributes &rOrig, const FontSelectPatternAttributes &rNew)
     {
         return
           (
