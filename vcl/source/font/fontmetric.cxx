@@ -191,7 +191,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
+ImplFontMetricData::ImplFontMetricData( const FontSelectPatternAttributes& rFontSelData )
     : FontAttributes( rFontSelData )
     , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )
@@ -231,19 +231,10 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnDStrikeoutOffset2( 0 )
 {
     // initialize the used font name
-    if (rFontSelData.mpFontInstance)
-    {
-        SetFamilyName(rFontSelData.mpFontInstance->GetFontFace()->GetFamilyName());
-        SetStyleName(rFontSelData.mpFontInstance->GetFontFace()->GetStyleName());
-    }
-    else
-    {
-        sal_Int32 nTokenPos = 0;
-        SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
-        SetStyleName( rFontSelData.GetStyleName() );
-    }
+    sal_Int32 nTokenPos = 0;
+    SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
+    SetStyleName( rFontSelData.GetStyleName() );
 }
-
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
