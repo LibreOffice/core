@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0380fc8a",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-08-20T13:12:30Z",
+      "side": 1,
+      "message": "Here you can use\nfor (auto \u0026 rPropertyValue : rSequence)\n\nAFAICS \"i\" is not used so it\u0027s just a simple iteration",
+      "revId": "15d7856c63191ea10039314016a47b1438587aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c34b3485",
+        "filename": "svx/source/svdraw/svdlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-08-20T13:12:30Z",
+      "side": 1,
+      "message": "this is also a simple iteration only..\nyou can probably use for (SdrLayer* pCurrentLayer : aLayer)",
+      "revId": "15d7856c63191ea10039314016a47b1438587aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
