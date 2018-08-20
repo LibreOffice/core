@@ -1260,7 +1260,7 @@ BaseContent::cPCL()
 
     if( length )
     {
-        ListenerMap* listener = new ListenerMap;
+        std::unique_ptr<ListenerMap> listener(new ListenerMap);
         for( sal_Int32 i = 0; i < length; ++i )
         {
             cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(seqNames[i]);
@@ -1269,8 +1269,7 @@ BaseContent::cPCL()
             (*listener)[seqNames[i]] = pContainer->getElements();
         }
 
-        p.reset( new PropertyChangeNotifier( this,
-                                        listener ) );
+        p.reset( new PropertyChangeNotifier( this, std::move(listener) ) );
     }
 
     return p;
