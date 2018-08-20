@@ -1359,7 +1359,7 @@ class OutlineNumbering : public cppu::WeakImplHelper < container::XIndexAccess >
     std::unique_ptr<const OutlineNumberingLevel_Impl[]> m_pOutlineLevels;
     sal_Int16                         m_nCount;
 public:
-    OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlineLevels, int nLevels);
+    OutlineNumbering(std::unique_ptr<const OutlineNumberingLevel_Impl[]> pOutlineLevels, int nLevels);
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
@@ -1392,7 +1392,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
         {
             int j;
 
-            OutlineNumberingLevel_Impl* level = new OutlineNumberingLevel_Impl[ nLevels+1 ];
+            std::unique_ptr<OutlineNumberingLevel_Impl[]> level(new OutlineNumberingLevel_Impl[ nLevels+1 ]);
             sal_Unicode const *** pLevel = pStyle[i];
             for( j = 0;  j < nLevels;  j++ )
             {
@@ -1430,7 +1430,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
             level[j].nFirstLineOffset    = 0;
             level[j].sTransliteration.clear();
             level[j].nNatNum             = 0;
-            aRet[i] = new OutlineNumbering( level, nLevels );
+            aRet[i] = new OutlineNumbering( std::move(level), nLevels );
         }
         return aRet;
     }
@@ -1522,8 +1522,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 
-OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevels, int nLevels) :
-    m_pOutlineLevels(pOutlnLevels),
+OutlineNumbering::OutlineNumbering(std::unique_ptr<const OutlineNumberingLevel_Impl[]> pOutlnLevels, int nLevels) :
+    m_pOutlineLevels(std::move(pOutlnLevels)),
     m_nCount(sal::static_int_cast<sal_Int16>(nLevels))
 {
 }
