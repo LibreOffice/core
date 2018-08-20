@@ -195,7 +195,7 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
     mnMatchType |= lcl_IsCJKFont( maFamilyName );
 }
 
-PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern& rFSD ) const
+PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPatternAttributes& rFSD ) const
 {
     if( maFontFaces.empty() )
         return nullptr;
