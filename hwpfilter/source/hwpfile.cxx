@@ -65,9 +65,9 @@ HWPFile::~HWPFile()
     hiodev.reset();
 }
 
-int HWPFile::ReadHwpFile(HStream * stream)
+int HWPFile::ReadHwpFile(std::unique_ptr<HStream> stream)
 {
-    if (Open(stream) != HWP_NoError)
+    if (Open(std::move(stream)) != HWP_NoError)
         return State();
     InfoRead();
     FontRead();
@@ -92,9 +92,9 @@ int detect_hwp_version(const char *str)
 
 // HIODev wrapper
 
-int HWPFile::Open(HStream * stream)
+int HWPFile::Open(std::unique_ptr<HStream> stream)
 {
-    HStreamIODev *hstreamio = new HStreamIODev(stream);
+    HStreamIODev *hstreamio = new HStreamIODev(std::move(stream));
 
     if (!hstreamio->open())
     {
