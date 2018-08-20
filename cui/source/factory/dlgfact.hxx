@@ -129,8 +129,8 @@ class CuiAbstractTabController_Impl : public SfxAbstractTabDialog
 protected:
     std::unique_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit CuiAbstractTabController_Impl(SfxTabDialogController* p)
-        : m_xDlg(p)
+    explicit CuiAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -207,8 +207,8 @@ class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 protected:
     std::unique_ptr<SvxZoomDialog> m_xDlg;
 public:
-    explicit AbstractSvxZoomDialog_Impl(SvxZoomDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxZoomDialog_Impl(std::unique_ptr<SvxZoomDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -233,8 +233,8 @@ class AbstractTitleDialog_Impl : public AbstractTitleDialog
 protected:
     std::unique_ptr<TitleDialog> m_xDlg;
 public:
-    explicit AbstractTitleDialog_Impl(TitleDialog* p)
-        : m_xDlg(p)
+    explicit AbstractTitleDialog_Impl(std::unique_ptr<TitleDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -259,8 +259,8 @@ class AbstractGalleryIdDialog_Impl : public AbstractGalleryIdDialog
 protected:
     std::unique_ptr<GalleryIdDialog> m_xDlg;
 public:
-    explicit AbstractGalleryIdDialog_Impl(GalleryIdDialog* p)
-        : m_xDlg(p)
+    explicit AbstractGalleryIdDialog_Impl(std::unique_ptr<GalleryIdDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -284,8 +284,8 @@ class AbstractSvxSearchSimilarityDialog_Impl :public AbstractSvxSearchSimilarity
 protected:
     std::unique_ptr<SvxSearchSimilarityDialog> m_xDlg;
 public:
-    explicit AbstractSvxSearchSimilarityDialog_Impl(SvxSearchSimilarityDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxSearchSimilarityDialog_Impl(std::unique_ptr<SvxSearchSimilarityDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -338,8 +338,8 @@ class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 protected:
     std::unique_ptr<FmInputRecordNoDialog> m_xDlg;
 public:
-    explicit AbstractFmInputRecordNoDialog_Impl(FmInputRecordNoDialog* p)
-        : m_xDlg(p)
+    explicit AbstractFmInputRecordNoDialog_Impl(std::unique_ptr<FmInputRecordNoDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -353,8 +353,8 @@ class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 protected:
     std::unique_ptr<SvxNewDictionaryDialog> m_xDlg;
 public:
-    explicit AbstractSvxNewDictionaryDialog_Impl(SvxNewDictionaryDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxNewDictionaryDialog_Impl(std::unique_ptr<SvxNewDictionaryDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -367,8 +367,8 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 protected:
     std::unique_ptr<SvxNameDialog> m_xDlg;
 public:
-    explicit AbstractSvxNameDialog_Impl(SvxNameDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxNameDialog_Impl(std::unique_ptr<SvxNameDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -391,8 +391,8 @@ class AbstractSvxObjectNameDialog_Impl : public AbstractSvxObjectNameDialog
 protected:
     std::unique_ptr<SvxObjectNameDialog> m_xDlg;
 public:
-    explicit AbstractSvxObjectNameDialog_Impl(SvxObjectNameDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxObjectNameDialog_Impl(std::unique_ptr<SvxObjectNameDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -409,8 +409,8 @@ class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDi
 protected:
     std::unique_ptr<SvxObjectTitleDescDialog> m_xDlg;
 public:
-    explicit AbstractSvxObjectTitleDescDialog_Impl(SvxObjectTitleDescDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxObjectTitleDescDialog_Impl(std::unique_ptr<SvxObjectTitleDescDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -433,8 +433,8 @@ class AbstractSvxPathSelectDialog_Impl : public AbstractSvxMultiPathDialog
 protected:
     std::unique_ptr<SvxPathSelectDialog> m_xDlg;
 public:
-    explicit AbstractSvxPathSelectDialog_Impl(SvxPathSelectDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxPathSelectDialog_Impl(std::unique_ptr<SvxPathSelectDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -484,8 +484,8 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 protected:
     std::unique_ptr<InsertObjectDialog_Impl> m_xDlg;
 public:
-    explicit AbstractInsertObjectDialog_Impl(InsertObjectDialog_Impl* p)
-        : m_xDlg(p)
+    explicit AbstractInsertObjectDialog_Impl(std::unique_ptr<InsertObjectDialog_Impl> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -499,8 +499,8 @@ class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 protected:
     std::unique_ptr<SvPasteObjectDialog> m_xDlg;
 public:
-    explicit AbstractPasteDialog_Impl(SvPasteObjectDialog* p)
-        : m_xDlg(p)
+    explicit AbstractPasteDialog_Impl(std::unique_ptr<SvPasteObjectDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -522,8 +522,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 private:
     std::unique_ptr<SvxPostItDialog> m_xDlg;
 public:
-    AbstractSvxPostItDialog_Impl(SvxPostItDialog* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSvxPostItDialog_Impl(std::unique_ptr<SvxPostItDialog> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short               Execute() override;
@@ -551,8 +551,8 @@ class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenMod
 protected:
     std::unique_ptr<PasswordToOpenModifyDialog> m_xDlg;
 public:
-    explicit AbstractPasswordToOpenModifyDialog_Impl(PasswordToOpenModifyDialog* p)
-        : m_xDlg(p)
+    explicit AbstractPasswordToOpenModifyDialog_Impl(std::unique_ptr<PasswordToOpenModifyDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -567,8 +567,8 @@ class AbstractSvxCharacterMapDialog_Impl : public SfxAbstractDialog
 protected:
     std::unique_ptr<SvxCharacterMap> m_xDlg;
 public:
-    explicit AbstractSvxCharacterMapDialog_Impl(SvxCharacterMap* p)
-        : m_xDlg(p)
+    explicit AbstractSvxCharacterMapDialog_Impl(std::unique_ptr<SvxCharacterMap> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -589,8 +589,8 @@ protected:
     std::unique_ptr<SignatureLineDialog> m_xDlg;
 
 public:
-    explicit AbstractSignatureLineDialog_Impl(SignatureLineDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSignatureLineDialog_Impl(std::unique_ptr<SignatureLineDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -603,8 +603,8 @@ protected:
     std::unique_ptr<SignSignatureLineDialog> m_xDlg;
 
 public:
-    explicit AbstractSignSignatureLineDialog_Impl(SignSignatureLineDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSignSignatureLineDialog_Impl(std::unique_ptr<SignSignatureLineDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
