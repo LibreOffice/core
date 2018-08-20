@@ -192,7 +192,7 @@ FreetypeFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     // font not cached yet => create new font item
     FreetypeFont* pNew = nullptr;
     if( mpFtManager )
-        pNew = mpFtManager->CreateFont( rFontSelData );
+        pNew = mpFtManager->CreateFont(rFontSelData.mpFontInstance.get());
 
     if( pNew )
     {
