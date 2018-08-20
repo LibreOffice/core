@@ -161,7 +161,7 @@ public:
 
     XMLTextFieldExport( SvXMLExport& rExp,
                         /// XMLPropertyState for the combined characters field
-                        XMLPropertyState* pCombinedCharState );
+                        std::unique_ptr<XMLPropertyState> pCombinedCharState );
     ~XMLTextFieldExport();
 
     /// Export this field and the surrounding span element with the formatting.
