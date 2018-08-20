@@ -52,10 +52,10 @@ using namespace ::com::sun::star::chart2;
 NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount
                      , bool bNoArea
-                     , PlottingPositionHelper* pPlottingPositionHelper
+                     , std::unique_ptr<PlottingPositionHelper> pPlottingPositionHelper
                      )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, true )
-        , m_pMainPosHelper(pPlottingPositionHelper)
+        , m_pMainPosHelper(std::move(pPlottingPositionHelper))
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_xSeriesTarget(nullptr)
