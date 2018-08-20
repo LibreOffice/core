@@ -820,7 +820,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 SvNumFormatType nType = SvNumFormatType::DEFINED;
                 sal_uInt32 nTempKey;
                 OUString aTemp( pEntry->GetFormatstring());
-                rTempFormatter.PutandConvertEntry( aTemp, nCheckPos, nType, nTempKey, nLang, LANGUAGE_ENGLISH_US, true);
+                rTempFormatter.PutandConvertEntry( aTemp, nCheckPos, nType, nTempKey, nLang, LANGUAGE_ENGLISH_US, false);
                 SAL_WARN_IF( nCheckPos != 0, "svl.numbers",
                         "SvNumberFormatter::GetFormatStringForExcel - format code not convertible");
                 if (nTempKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
