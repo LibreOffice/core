@@ -585,21 +585,19 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 
     const SwCharFormat *const pFormat =
         static_txtattr_cast<SwTextRuby const*>(rCreate.pAttr)->GetCharFormat();
-    SwFont *pRubyFont;
+    std::unique_ptr<SwFont> pRubyFont;
     if( pFormat )
     {
         const SwAttrSet& rSet = pFormat->GetAttrSet();
-         pRubyFont = new SwFont( rFnt );
+        pRubyFont.reset(new SwFont( rFnt ));
         pRubyFont->SetDiffFnt( &rSet, &rIDocumentSettingAccess );
 
         // we do not allow a vertical font for the ruby text
         pRubyFont->SetVertical( rFnt.GetOrientation() , OnRight() );
     }
-    else
-        pRubyFont = nullptr;
 
     OUString aStr = rRuby.GetText().copy( sal_Int32(nOffs) );
-    SwFieldPortion *pField = new SwFieldPortion( aStr, pRubyFont );
+    SwFieldPortion *pField = new SwFieldPortion( aStr, std::move(pRubyFont) );
     pField->SetNextOffset( nOffs );
     pField->SetFollow( true );
 
