@@ -242,8 +242,8 @@ private:
 
 public:
 
-                                GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, GalleryTheme* pTheme ) :
-                                    mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {}
+                                GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, std::unique_ptr<GalleryTheme> pTheme ) :
+                                    mpThemeEntry( pThemeEntry ), mpTheme( std::move(pTheme) ) {}
 
     const GalleryThemeEntry*    GetThemeEntry() const { return mpThemeEntry; }
     GalleryTheme*               GetTheme() const { return mpTheme.get(); }
@@ -703,6 +703,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
+            std::unique_ptr<GalleryTheme> pNewTheme;
             if( FileExists( aURL ) )
             {
                 std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
@@ -711,14 +712,11 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
                 {
                     try
                     {
-                        pTheme = new GalleryTheme( this, const_cast<GalleryThemeEntry*>(pThemeEntry) );
-                        ReadGalleryTheme( *pIStm, *pTheme );
+                        pNewTheme.reset( new GalleryTheme( this, const_cast<GalleryThemeEntry*>(pThemeEntry) ) );
+                        ReadGalleryTheme( *pIStm, *pNewTheme );
 
                         if( pIStm->GetError() )
-                        {
-                            delete pTheme;
-                            pTheme = nullptr;
-                        }
+                            pNewTheme.reset();
                     }
                     catch (const css::ucb::ContentCreationException&)
                     {
@@ -726,8 +724,9 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
                 }
             }
 
+            pTheme = pNewTheme.get();
             if( pTheme )
-                aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, pTheme ));
+                aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, std::move(pNewTheme) ));
         }
     }
 
