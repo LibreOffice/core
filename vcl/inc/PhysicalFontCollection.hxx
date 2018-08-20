@@ -55,7 +55,8 @@ public:
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
-    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
+    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPatternAttributes&,
+                                                  LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
