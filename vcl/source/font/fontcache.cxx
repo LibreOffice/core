@@ -212,7 +212,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
         if (nFallbackLevel == 1)
             pFallbackData = pFontCollection->FindFontFamily("EUDC");
         if (!pFallbackData)
-            pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
+            pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, rFontSelData.mpFontInstance.get(), rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
         if( !pFallbackData  )
             return nullptr;
