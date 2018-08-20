@@ -929,7 +929,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
     const IDocumentSettingAccess* pIDSA = &pDoc->getIDocumentSettingAccess();
-    SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
+    std::unique_ptr<SwFont> pNumFnt(new SwFont( pParSet, pIDSA ));
 
     // #i37142#
     // Underline style of paragraph font should not be considered
@@ -949,7 +949,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
-    SwFootnoteNumPortion* pNewPor = new SwFootnoteNumPortion( aFootnoteText, pNumFnt );
+    SwFootnoteNumPortion* pNewPor = new SwFootnoteNumPortion( aFootnoteText, std::move(pNumFnt) );
     pNewPor->SetLeft( !m_pFrame->IsRightToLeft() );
     return pNewPor;
 }

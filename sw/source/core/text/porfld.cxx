@@ -52,14 +52,14 @@ SwLinePortion *SwFieldPortion::Compress()
 
 SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
 {
-    SwFont *pNewFnt = m_pFont.get();
-    if( nullptr != pNewFnt )
+    std::unique_ptr<SwFont> pNewFnt;
+    if( m_pFont )
     {
-        pNewFnt = new SwFont( *m_pFont );
+        pNewFnt.reset(new SwFont( *m_pFont ));
     }
     // #i107143#
     // pass placeholder property to created <SwFieldPortion> instance.
-    SwFieldPortion* pClone = new SwFieldPortion( rExpand, pNewFnt, m_bPlaceHolder );
+    SwFieldPortion* pClone = new SwFieldPortion( rExpand, std::move(pNewFnt), m_bPlaceHolder );
     pClone->SetNextOffset( m_nNextOffset );
     pClone->m_bNoLength = m_bNoLength;
     return pClone;
@@ -73,8 +73,8 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
     m_bFollow = true;
 }
 
-SwFieldPortion::SwFieldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
-    : m_aExpand(rExpand), m_pFont(pFont), m_nNextOffset(0), m_nNextScriptChg(COMPLETE_STRING), m_nViewWidth(0)
+SwFieldPortion::SwFieldPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold )
+    : m_aExpand(rExpand), m_pFont(std::move(pFont)), m_nNextOffset(0), m_nNextScriptChg(COMPLETE_STRING), m_nViewWidth(0)
     , m_bFollow( false ), m_bLeft( false), m_bHide( false)
     , m_bCenter (false), m_bHasFollow( false )
     , m_bAnimated( false), m_bNoPaint( false)
@@ -473,10 +473,10 @@ SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 
 SwFieldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
-    SwFont *pNewFnt = m_pFont.get();
-    if( nullptr != pNewFnt )
-        pNewFnt = new SwFont( *m_pFont );
-    return new SwHiddenPortion( rExpand, pNewFnt );
+    std::unique_ptr<SwFont> pNewFnt;
+    if( m_pFont )
+        pNewFnt.reset(new SwFont( *m_pFont ));
+    return new SwHiddenPortion( rExpand, std::move(pNewFnt) );
 }
 
 void SwHiddenPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -496,12 +496,12 @@ bool SwHiddenPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) 
 }
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
-                                  SwFont *pFont,
+                                  std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-        : SwFieldPortion( rExpand, pFont ),
+        : SwFieldPortion( rExpand, std::move(pFont) ),
           nFixWidth(0),
           nMinDist( nMinDst ),
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
@@ -519,11 +519,11 @@ TextFrameIndex SwNumberPortion::GetCursorOfst(const sal_uInt16) const
 
 SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 {
-    SwFont *pNewFnt = m_pFont.get();
-    if( nullptr != pNewFnt )
-        pNewFnt = new SwFont( *m_pFont );
+    std::unique_ptr<SwFont> pNewFnt;
+    if( m_pFont )
+        pNewFnt.reset(new SwFont( *m_pFont ));
 
-    return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
+    return new SwNumberPortion( rExpand, std::move(pNewFnt), IsLeft(), IsCenter(),
                                 nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
 }
 
@@ -739,13 +739,13 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const OUString& rBulletFollowedBy,
-                                  SwFont *pFont,
+                                  std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwNumberPortion( OUStringLiteral1(cBullet) + rBulletFollowedBy,
-                       pFont, bLft, bCntr, nMinDst,
+                       std::move(pFont), bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {
     SetWhichPor( POR_BULLET );

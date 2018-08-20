@@ -275,18 +275,16 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
     if( bNewFlyPor )
     {
-        SwFont *pTmpFnt = nullptr;
+        std::unique_ptr<SwFont> pTmpFnt;
         if( !bName )
         {
-            pTmpFnt = new SwFont( *m_pFont );
+            pTmpFnt.reset(new SwFont( *m_pFont ));
             pTmpFnt->SetDiffFnt(&pChFormat->GetAttrSet(), &m_pFrame->GetDoc().getIDocumentSettingAccess());
         }
-        {
-            OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard) );
-            pRet = new SwFieldPortion(aStr, pTmpFnt, bPlaceHolder);
-        }
+        OUString const aStr( bName
+                ? pField->GetFieldName()
+                : pField->ExpandField(bInClipboard) );
+        pRet = new SwFieldPortion(aStr, std::move(pTmpFnt), bPlaceHolder);
     }
 
     return pRet;
@@ -516,7 +514,6 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             // The SwFont is created dynamically and passed in the ctor,
             // as the CharFormat only returns an SV-Font.
             // In the dtor of SwNumberPortion, the SwFont is deleted.
-            SwFont *pNumFnt = nullptr;
             const SwAttrSet* pFormat = rNumFormat.GetCharFormat() ?
                                     &rNumFormat.GetCharFormat()->GetAttrSet() :
                                     nullptr;
@@ -527,7 +524,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 const vcl::Font *pFormatFnt = rNumFormat.GetBulletFont();
 
                 // Build a new bullet font basing on the current paragraph font:
-                pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
+                std::unique_ptr<SwFont> pNumFnt(new SwFont( &rInf.GetCharAttr(), pIDSA ));
 
                 // #i53199#
                 if ( !pIDSA->get(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
@@ -552,7 +549,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 if( pFormat )
                     pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
-                checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
+                checkApplyParagraphMarkFormatToNumbering( pNumFnt.get(), rInf, pIDSA );
 
                 if ( pFormatFnt )
                 {
@@ -571,7 +568,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 // --> OD 2008-01-23 #newlistelevelattrs#
                 pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
                                             pTextNd->GetLabelFollowedBy(),
-                                            pNumFnt,
+                                            std::move(pNumFnt),
                                             bLeft, bCenter, nMinDist,
                                             bLabelAlignmentPosAndSpaceModeActive );
             }
@@ -591,7 +588,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 {
 
                     // Build a new numbering font basing on the current paragraph font:
-                    pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
+                    std::unique_ptr<SwFont> pNumFnt(new SwFont( &rInf.GetCharAttr(), pIDSA ));
 
                     // #i53199#
                     if ( !pIDSA->get(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
@@ -608,12 +605,12 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     if( pFormat )
                         pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
-                    checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
+                    checkApplyParagraphMarkFormatToNumbering( pNumFnt.get(), rInf, pIDSA );
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
-                    pRet = new SwNumberPortion( aText, pNumFnt,
+                    pRet = new SwNumberPortion( aText, std::move(pNumFnt),
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
                 }
