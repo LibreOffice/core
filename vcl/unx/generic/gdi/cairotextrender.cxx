@@ -84,7 +84,7 @@ CairoTextRender::CairoTextRender()
         rp = nullptr;
 }
 
-void CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLevel )
+void CairoTextRender::setFont( LogicalFontInstance *pEntry, int nFallbackLevel )
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -102,7 +102,7 @@ void CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         return;
 
     // handle the request for a non-native X11-font => use the GlyphCache
-    FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+    FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont(pEntry->GetFontSelectPattern());
     if( pFreetypeFont != nullptr )
     {
         // ignore fonts with e.g. corrupted font files
@@ -364,7 +364,7 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 
 // SalGraphics
 
-void CairoTextRender::SetFont( const FontSelectPattern *pEntry, int nFallbackLevel )
+void CairoTextRender::SetFont( LogicalFontInstance *pEntry, int nFallbackLevel )
 {
     setFont(pEntry, nFallbackLevel);
 }
