@@ -327,13 +327,13 @@ void FreetypeManager::ClearFontList( )
     maFontList.clear();
 }
 
-FreetypeFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
+FreetypeFont* FreetypeManager::CreateFont(LogicalFontInstance* pFontInstance)
 {
     // find a FontInfo matching to the font id
-    if (!rFSD.mpFontInstance)
+    if (!pFontInstance)
         return nullptr;
 
-    const PhysicalFontFace* pFontFace = rFSD.mpFontInstance->GetFontFace();
+    const PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
     if (!pFontFace)
         return nullptr;
 
@@ -344,7 +344,7 @@ FreetypeFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     if (!pFontInfo)
         return nullptr;
 
-    return new FreetypeFont(rFSD, pFontInfo);
+    return new FreetypeFont(pFontInstance, pFontInfo);
 }
 
 FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes& rDFA )
@@ -360,9 +360,9 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const F
 
 // FreetypeFont
 
-FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
+FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo* pFI )
 :   maGlyphList( 0),
-    mpFontInstance(static_cast<FreetypeFontInstance*>(rFSD.mpFontInstance.get())),
+    mpFontInstance(static_cast<FreetypeFontInstance*>(pFontInstance)),
     mnRefCount(1),
     mnBytesUsed( sizeof(FreetypeFont) ),
     mpPrevGCFont( nullptr ),
@@ -384,6 +384,8 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mpFontInstance->SetFreetypeFont( this );
 
     maFaceFT = pFI->GetFaceFT();
+
+    const FontSelectPatternAttributes& rFSD = pFontInstance->GetFontSelectPattern();
 
     if( rFSD.mnOrientation != 0 )
     {
