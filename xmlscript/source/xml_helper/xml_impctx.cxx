@@ -310,8 +310,9 @@ class ExtendedAttributes :
 public:
     inline ExtendedAttributes(
         sal_Int32 nAttributes,
-        sal_Int32 * pUids,
-        OUString * pLocalNames, OUString * pQNames,
+        std::unique_ptr<sal_Int32[]> pUids,
+        std::unique_ptr<OUString[]> pLocalNames,
+        std::unique_ptr<OUString[]> pQNames,
         Reference< xml::sax::XAttributeList > const & xAttributeList );
 
     // XAttributes
@@ -336,13 +337,13 @@ public:
 
 inline ExtendedAttributes::ExtendedAttributes(
     sal_Int32 nAttributes,
-    sal_Int32 * pUids,
-    OUString * pLocalNames, OUString * pQNames,
+    std::unique_ptr<sal_Int32[]> pUids,
+    std::unique_ptr<OUString[]> pLocalNames, std::unique_ptr<OUString[]> pQNames,
     Reference< xml::sax::XAttributeList > const & xAttributeList )
     : m_nAttributes( nAttributes )
-    , m_pUids( pUids )
-    , m_pLocalNames( pLocalNames )
-    , m_pQNames( pQNames )
+    , m_pUids( std::move(pUids) )
+    , m_pLocalNames( std::move(pLocalNames) )
+    , m_pQNames( std::move(pQNames) )
     , m_pValues( new OUString[ nAttributes ] )
 {
     for ( sal_Int32 nPos = 0; nPos < nAttributes; ++nPos )
@@ -441,10 +442,10 @@ void DocumentHandlerImpl::startElement(
     sal_Int16 nAttribs = xAttribs->getLength();
 
     // save all namespace ids
-    sal_Int32 * pUids = new sal_Int32[ nAttribs ];
+    std::unique_ptr<sal_Int32[]> pUids(new sal_Int32[ nAttribs ]);
     OUString * pPrefixes = new OUString[ nAttribs ];
-    OUString * pLocalNames = new OUString[ nAttribs ];
-    OUString * pQNames = new OUString[ nAttribs ];
+    std::unique_ptr<OUString[]> pLocalNames(new OUString[ nAttribs ]);
+    std::unique_ptr<OUString[]> pQNames(new OUString[ nAttribs ]);
 
     // first recognize all xmlns attributes
     sal_Int16 nPos;
@@ -511,7 +512,7 @@ void DocumentHandlerImpl::startElement(
     // ownership of arrays belongs to attribute list
     xAttributes = static_cast< xml::input::XAttributes * >(
         new ExtendedAttributes(
-            nAttribs, pUids, pLocalNames, pQNames,
+            nAttribs, std::move(pUids), std::move(pLocalNames), std::move(pQNames),
             xAttribs ) );
 
     getElementName( rQElementName, &nUid, &aLocalName );
