@@ -31,7 +31,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <memory>
 
 

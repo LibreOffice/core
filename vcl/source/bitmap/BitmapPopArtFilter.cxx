@@ -13,7 +13,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <cstdlib>
 

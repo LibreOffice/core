@@ -25,7 +25,7 @@
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 enum class GraphicFilterImportFlags;
 

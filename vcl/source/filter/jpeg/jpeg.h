@@ -26,7 +26,7 @@
 #include <sal/types.h>
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/bitmap.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <jpeglib.h>
 

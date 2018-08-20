@@ -21,7 +21,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <salbmp.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>

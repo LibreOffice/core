@@ -13,7 +13,7 @@
 #include <vcl/BitmapDuoToneFilter.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 static inline sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 color1,
                                                      sal_uInt16 color2)

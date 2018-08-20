@@ -18,7 +18,7 @@
 #endif
 
 #include <vcl/graph.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace com::sun::star;

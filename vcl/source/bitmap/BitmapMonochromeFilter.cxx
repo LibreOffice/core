@@ -13,7 +13,7 @@
 #include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx)
 {

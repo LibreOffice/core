@@ -13,7 +13,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx)
 {

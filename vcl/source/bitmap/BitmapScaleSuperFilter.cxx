@@ -21,7 +21,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>

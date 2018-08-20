@@ -34,7 +34,7 @@
 #endif
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 using namespace css;
 

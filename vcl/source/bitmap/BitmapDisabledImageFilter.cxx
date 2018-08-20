@@ -12,7 +12,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <BitmapDisabledImageFilter.hxx>
 
 BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx)

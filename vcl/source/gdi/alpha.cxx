@@ -20,7 +20,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <sal/log.hxx>
 
 AlphaMask::AlphaMask() = default;

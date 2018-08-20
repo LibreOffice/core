@@ -42,7 +42,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <sal/log.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )

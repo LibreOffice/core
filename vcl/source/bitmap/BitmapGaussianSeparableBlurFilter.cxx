@@ -15,7 +15,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx)
 {

@@ -22,7 +22,7 @@
 #include "gifread.hxx"
 #include <memory>
 #include <o3tl/make_unique.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 

@@ -12,7 +12,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <BitmapLightenFilter.hxx>
 
 BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx)

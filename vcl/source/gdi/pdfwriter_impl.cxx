@@ -83,7 +83,7 @@
 #include <sallayout.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include "pdfwriter_impl.hxx"
 

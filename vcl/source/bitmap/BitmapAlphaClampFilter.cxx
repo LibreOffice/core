@@ -13,7 +13,7 @@
 #include <vcl/BitmapAlphaClampFilter.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx)
 {

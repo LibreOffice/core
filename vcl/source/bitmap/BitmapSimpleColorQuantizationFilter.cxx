@@ -13,7 +13,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <impoctree.hxx>
 
 #include <cstdlib>

@@ -13,7 +13,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapSepiaFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx)
 {

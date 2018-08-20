@@ -35,7 +35,7 @@
 #include <BitmapScaleConvolutionFilter.hxx>
 #include <BitmapFastScaleFilter.hxx>
 #include <BitmapInterpolateScaleFilter.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <octree.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>

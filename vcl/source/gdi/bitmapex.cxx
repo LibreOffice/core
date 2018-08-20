@@ -42,7 +42,7 @@
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <BitmapFastScaleFilter.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <image.h>
 
 #include <o3tl/any.hxx>

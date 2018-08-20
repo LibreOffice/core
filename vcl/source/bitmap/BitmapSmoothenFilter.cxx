@@ -15,7 +15,7 @@
 #include <vcl/BitmapSeparableUnsharpenFilter.hxx>
 #include <vcl/BitmapSmoothenFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx)
 {

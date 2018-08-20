@@ -34,7 +34,7 @@
 
 #include <outdata.hxx>
 #include <salgdi.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 namespace
 {

@@ -13,7 +13,7 @@
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <cstdlib>
 

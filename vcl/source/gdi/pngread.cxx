@@ -35,7 +35,7 @@
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 #include <o3tl/make_unique.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 namespace vcl
 {

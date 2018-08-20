@@ -16,7 +16,7 @@
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 #include <vcl/BitmapSharpenFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx)
 {

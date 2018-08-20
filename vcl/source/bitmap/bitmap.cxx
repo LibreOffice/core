@@ -25,7 +25,7 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salbmp.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>

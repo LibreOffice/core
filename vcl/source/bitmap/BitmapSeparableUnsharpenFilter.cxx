@@ -16,7 +16,7 @@
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
 #include <vcl/BitmapSeparableUnsharpenFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx)
 {
