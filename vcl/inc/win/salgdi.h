@@ -185,7 +185,7 @@ private:
 
     bool CacheGlyphs(const GenericSalLayout& rLayout);
     bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
-    HFONT ImplDoSetFont(FontSelectPattern const * i_pFont, const PhysicalFontFace * i_pFontFace, float& o_rFontScale, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, float& o_rFontScale, HFONT& o_rOldFont);
 
 public:
     HDC getHDC() const { return mhLocalDC; }
@@ -337,7 +337,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( Color nColor ) override;
     // set the font
-    virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font

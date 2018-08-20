@@ -36,7 +36,7 @@
 
 void Qt5Graphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
 
-void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
+void Qt5Graphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
 {
     // release the text styles
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
@@ -48,11 +48,8 @@ void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
 
     if (!pReqFont)
         return;
-    assert(pReqFont->mpFontInstance);
-    if (!pReqFont->mpFontInstance)
-        return;
 
-    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont->mpFontInstance.get());
+    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont);
 }
 
 void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)

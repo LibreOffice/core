@@ -1003,17 +1003,15 @@ void OutputDevice::InitFont() const
     {
         // decide if antialiasing is appropriate
         bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
-        FontSelectPattern aPattern(mpFontInstance->GetFontSelectPattern());
         if (!utl::ConfigManager::IsFuzzing())
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
-            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > aPattern.mnHeight);
+            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontInstance->GetFontSelectPattern().mnHeight);
         }
-        aPattern.mbNonAntialiased = bNonAntialiased;
-
+        mpFontInstance->SetNonAntialiased(bNonAntialiased);
         // select font in the device layers
-        mpGraphics->SetFont(&aPattern, 0);
+        mpGraphics->SetFont(mpFontInstance.get(), 0);
         mbInitFont = false;
     }
 }
@@ -1314,7 +1312,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 }
 
 std::unique_ptr<SalLayout> OutputDevice::getFallbackFont(
-    FontSelectPattern &rFontSelData, int nFallbackLevel,
+    LogicalFontInstance* pLogicalFont, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
     // we need a graphics
@@ -1322,7 +1320,7 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackFont(
         return nullptr;
 
     assert(mpGraphics != nullptr);
-    mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
+    mpGraphics->SetFont( pLogicalFont, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
     std::unique_ptr<SalLayout> pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
@@ -1383,7 +1381,6 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         if( !pFallbackFont )
             break;
 
-        aFontSelData.mpFontInstance = pFallbackFont;
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
@@ -1397,14 +1394,14 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         }
 
         // create and add glyph fallback layout to multilayout
-        std::unique_ptr<SalLayout> pFallback = getFallbackFont(aFontSelData,
+        std::unique_ptr<SalLayout> pFallback = getFallbackFont(pFallbackFont.get(),
             nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {
             if( !pMultiSalLayout )
                 pMultiSalLayout.reset( new MultiSalLayout( std::move(pSalLayout) ) );
             pMultiSalLayout->AddFallback( std::move(pFallback),
-                rLayoutArgs.maRuns, aFontSelData.mpFontInstance->GetFontFace() );
+                rLayoutArgs.maRuns, pFallbackFont->GetFontFace() );
             if (nFallbackLevel == MAX_FALLBACK-1)
                 pMultiSalLayout->SetIncomplete(true);
         }
