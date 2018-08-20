@@ -592,7 +592,7 @@ bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     return m_pFreetypeFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLevel )
+void GenPspGraphics::SetFont( LogicalFontInstance *pFontInstance, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -606,32 +606,36 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
     }
 
     // return early if there is no new font
-    if( !pEntry )
+    if (!pFontInstance)
         return;
 
-    sal_IntPtr nID = pEntry->mpFontInstance ? pEntry->mpFontInstance->GetFontFace()->GetFontId() : 0;
+    sal_IntPtr nID = pFontInstance->GetFontFace()->GetFontId();
+
+    const FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
 
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
     bool bArtBold = false;
-    if( pEntry->GetItalic() == ITALIC_OBLIQUE || pEntry->GetItalic() == ITALIC_NORMAL )
+    if( rEntry.GetItalic() == ITALIC_OBLIQUE || rEntry.GetItalic() == ITALIC_NORMAL )
     {
         FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
         if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
             bArtItalic = true;
     }
-    int nWeight = static_cast<int>(pEntry->GetWeight());
+    int nWeight = static_cast<int>(rEntry.GetWeight());
     int nRealWeight = static_cast<int>(m_pPrinterGfx->GetFontMgr().getFontWeight( nID ));
     if( nRealWeight <= int(WEIGHT_MEDIUM) && nWeight > int(WEIGHT_MEDIUM) )
     {
         bArtBold = true;
     }
 
+    assert(rEntry.mpFontInstance == pFontInstance);
+
     // also set the serverside font for layouting
-    if( pEntry->mpFontInstance )
+    if( rEntry.mpFontInstance )
     {
         // requesting a font provided by builtin rasterizer
-        FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+        FreetypeFont* pFreetypeFont = GlyphCache::GetInstance().CacheFont( rEntry );
         if( pFreetypeFont != nullptr )
         {
             if( pFreetypeFont->TestFont() )
@@ -643,10 +647,10 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
 
     // set the printer font
     m_pPrinterGfx->SetFont( nID,
-                            pEntry->mnHeight,
-                            pEntry->mnWidth,
-                            pEntry->mnOrientation,
-                            pEntry->mbVertical,
+                            rEntry.mnHeight,
+                            rEntry.mnWidth,
+                            rEntry.mnOrientation,
+                            rEntry.mbVertical,
                             bArtItalic,
                             bArtBold
                             );
