@@ -143,6 +143,10 @@ namespace sw
                 { return *get(); }
             UnoCursorPointer& operator=(UnoCursorPointer aOther)
             {
+                if (m_pCursor)
+                {
+                    EndListening(m_pCursor->m_aNotifier);
+                }
                 if(aOther.m_pCursor)
                     StartListening(aOther.m_pCursor->m_aNotifier);
                 m_pCursor = aOther.m_pCursor;
@@ -154,7 +158,7 @@ namespace sw
             {
                 if(pNew)
                     StartListening(pNew->m_aNotifier);
-                else if(m_pCursor)
+                if (m_pCursor)
                     EndListening(m_pCursor->m_aNotifier);
                 m_pCursor = pNew;
             }
