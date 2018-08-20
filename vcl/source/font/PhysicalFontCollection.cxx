@@ -866,22 +866,22 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     return pFoundData;
 }
 
-PhysicalFontCollection* PhysicalFontCollection::Clone() const
+std::shared_ptr<PhysicalFontCollection> PhysicalFontCollection::Clone() const
 {
-    PhysicalFontCollection* pClonedCollection = new PhysicalFontCollection;
-    pClonedCollection->mpPreMatchHook = mpPreMatchHook;
-    pClonedCollection->mpFallbackHook = mpFallbackHook;
+    std::shared_ptr<PhysicalFontCollection> xClonedCollection(new PhysicalFontCollection);
+    xClonedCollection->mpPreMatchHook = mpPreMatchHook;
+    xClonedCollection->mpFallbackHook = mpFallbackHook;
 
     // TODO: clone the config-font attributes too?
-    pClonedCollection->mbMatchData    = false;
+    xClonedCollection->mbMatchData    = false;
 
     for (auto const& family : maPhysicalFontFamilies)
     {
         const PhysicalFontFamily* pFontFace = family.second.get();
-        pFontFace->UpdateCloneFontList(*pClonedCollection);
+        pFontFace->UpdateCloneFontList(*xClonedCollection);
     }
 
-    return pClonedCollection;
+    return xClonedCollection;
 }
 
 std::unique_ptr<ImplDeviceFontList> PhysicalFontCollection::GetDeviceFontList() const

@@ -499,7 +499,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // get font list with scalable fonts only
     AcquireGraphics();
-    mxFontCollection.reset(pSVData->maGDIData.mxScreenFontList->Clone());
+    mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
 
     // prepare to use new font lists
     mxFontCache.reset(new ImplFontCache);
