@@ -6220,7 +6220,23 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                         nMainTab2 = 0;
                     }
                 break;
+                // Treat a scalar value as 1x1 matrix.
+                case svDouble:
+                    pMainMatrix = GetNewMat(1,1);
+                    nMainCol1 = nMainCol2 = 0;
+                    nMainRow1 = nMainRow2 = 0;
+                    nMainTab1 = nMainTab2 = 0;
+                    pMainMatrix->PutDouble( GetDouble(), 0, 0);
+                break;
+                case svString:
+                    pMainMatrix = GetNewMat(1,1);
+                    nMainCol1 = nMainCol2 = 0;
+                    nMainRow1 = nMainRow2 = 0;
+                    nMainTab1 = nMainTab2 = 0;
+                    pMainMatrix->PutString( GetString(), 0, 0);
+                break;
                 default:
+                    PopError();
                     PushError( FormulaError::IllegalParameter);
                     return;
             }
