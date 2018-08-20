@@ -88,7 +88,7 @@ namespace fileaccess {
     public:
         PropertyChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            ListenerMap* pListeners );
+            std::unique_ptr<ListenerMap> pListeners );
 
         ~PropertyChangeNotifier();
 
