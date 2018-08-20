@@ -15,6 +15,10 @@ $(eval $(call gb_Library_use_externals,mysqlc,\
 	mariadb-connector-c \
 ))
 
+ifeq ($(OS)-$(SYSTEM_MARIADB_CONNECTOR_C),MACOSX-)
+$(eval $(call gb_Library_use_external,mysqlc,iconv))
+endif
+
 ifeq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
 $(eval $(call gb_Library_add_libs,mysqlc,\
 	$(if $(filter-out WNT,$(OS)),$(if $(filter MACOSX SOLARIS,$(OS)),-lz -lm,\
