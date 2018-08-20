@@ -60,7 +60,7 @@ public:
     int                     GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
 
-    bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
+    bool                    IsBetterMatch( const FontSelectPatternAttributes&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
