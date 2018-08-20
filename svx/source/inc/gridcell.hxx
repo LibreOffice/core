@@ -717,7 +717,7 @@ protected:
     virtual ~FmXGridCell() override;
 
 public:
-    FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
+    FmXGridCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
     void init();
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper)
@@ -798,8 +798,8 @@ private:
 class FmXDataCell : public FmXGridCell
 {
 public:
-    FmXDataCell( DbGridColumn* pColumn, DbCellControl& _rControl )
-        :FmXGridCell( pColumn, &_rControl )
+    FmXDataCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl )
+        :FmXGridCell( pColumn, std::move(pControl) )
     {
     }
 
@@ -836,7 +836,7 @@ protected:
     bool    m_bFastPaint;
 
 public:
-    FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+    FmXTextCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
                const tools::Rectangle& rRect,
@@ -857,7 +857,7 @@ class FmXEditCell final : public FmXTextCell,
                     public FmXEditCell_Base
 {
 public:
-    FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+    FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
@@ -920,7 +920,7 @@ protected:
     virtual ~FmXCheckBoxCell() override;
 
 public:
-    FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+    FmXCheckBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell)
@@ -957,7 +957,7 @@ class FmXListBoxCell final :public FmXTextCell
                         ,public FmXListBoxCell_Base
 {
 public:
-    FmXListBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+    FmXListBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
@@ -1017,7 +1017,7 @@ protected:
     virtual ~FmXComboBoxCell() override;
 
 public:
-    FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+    FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
@@ -1053,7 +1053,7 @@ class FmXFilterCell final : public FmXGridCell
                     ,public FmXFilterCell_Base
 {
 public:
-    FmXFilterCell(DbGridColumn* pColumn, DbFilterField* pControl);
+    FmXFilterCell(DbGridColumn* pColumn, std::unique_ptr<DbFilterField> pControl);
 
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)
