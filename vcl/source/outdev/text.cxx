@@ -218,7 +218,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     if( !pVDev->SetOutputSizePixel( aBoundRect.GetSize() ) )
         return false;
 
-    const FontSelectPattern& rPattern = mpFontInstance->GetFontSelectPattern();
+    const FontSelectPatternAttributes& rPattern = mpFontInstance->GetFontSelectPattern();
     vcl::Font aFont( GetFont() );
     aFont.SetOrientation( 0 );
     aFont.SetFontSize( Size( rPattern.mnWidth, rPattern.mnHeight ) );
