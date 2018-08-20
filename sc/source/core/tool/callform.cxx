@@ -85,7 +85,7 @@ public:
     ModuleData(const ModuleData&) = delete;
     const ModuleData& operator=(const ModuleData&) = delete;
 
-    ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
+    ModuleData(const OUString& rStr, std::unique_ptr<osl::Module> pInst) : aName(rStr), pInstance(std::move(pInst)) {}
 
     const OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance.get(); }
@@ -193,7 +193,7 @@ bool InitExternalFunc(const OUString& rModuleName)
     }
 
     // include module into the collection
-    ModuleData* pModuleData = new ModuleData(rModuleName, pLib.release());
+    ModuleData* pModuleData = new ModuleData(rModuleName, std::move(pLib));
     aModuleCollection.insert(pModuleData);
 
     // initialize interface
