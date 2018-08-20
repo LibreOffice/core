@@ -273,7 +273,7 @@ inline Sequence<OUString> const GetStringSequenceProperty(
 
 
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
-                                        XMLPropertyState* pCombinedCharState)
+                                        std::unique_ptr<XMLPropertyState> pCombinedCharState)
     : rExport(rExp),
       sServicePrefix("com.sun.star.text.textfield."),
       sFieldMasterPrefix("com.sun.star.text.FieldMaster."),
@@ -346,7 +346,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyHelp("Help"),
       sPropertyTooltip("Tooltip"),
       sPropertyTextRange("TextRange"),
-      pCombinedCharactersPropertyState(pCombinedCharState)
+      pCombinedCharactersPropertyState(std::move(pCombinedCharState))
 {
     SetExportOnlyUsedFieldDeclarations();
 }
