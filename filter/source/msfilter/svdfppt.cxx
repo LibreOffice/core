@@ -3383,7 +3383,7 @@ PPTExtParaProv::~PPTExtParaProv()
 {
 }
 
-PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )
+PPTNumberFormatCreator::PPTNumberFormatCreator( std::unique_ptr<PPTExtParaProv> pParaProv )
     : nIsBullet(0)
     , nBulletChar(0)
     , nBulletFont(0)
@@ -3391,7 +3391,7 @@ PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )
     , nBulletColor(0)
     , nTextOfs(0)
     , nBulletOfs(0)
-    , pExtParaProv(pParaProv)
+    , pExtParaProv(std::move(pParaProv))
 {
 }
 
@@ -4075,7 +4075,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                               const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
                               const PPTTextSpecInfo& rTextSpecInfo ) :
 
-    PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) ),
+    PPTNumberFormatCreator  ( o3tl::make_unique<PPTExtParaProv>( rManager, rIn, &rSlideHd ) ),
     maTxSI                  ( rTextSpecInfo )
 {
     sal_uInt32 nOldFilePos = rIn.Tell();
