@@ -60,14 +60,14 @@ class CoreTextGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    bool FindFontSubstitute(FontSelectPattern&, OUString&) const override;
+    bool FindFontSubstitute(FontSelectPatternAttributes&, LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
 
-bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rPattern,
+bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPatternAttributes& rPattern, LogicalFontInstance* pLogicalFont,
     OUString& rMissingChars) const
 {
     bool bFound = false;
-    CoreTextStyle* pStyle = static_cast<CoreTextStyle*>(rPattern.mpFontInstance.get());
+    CoreTextStyle* pStyle = static_cast<CoreTextStyle*>(pLogicalFont);
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(pStyle->GetStyleDict(), kCTFontAttributeName));
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
@@ -86,14 +86,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
             rPattern.SetItalic(rAttr.GetItalic());
             rPattern.SetPitch(rAttr.GetPitch());
             rPattern.SetWidthType(rAttr.GetWidthType());
-
-            SalData* pSalData = GetSalData();
-            if (pSalData->mpFontList)
-            {
-                const CoreTextFontFace *pFontFace = pSalData->mpFontList->GetFontDataFromId(reinterpret_cast<sal_IntPtr>(pDesc));
-                if (pFontFace)
-                    rPattern.mpFontInstance = pFontFace->CreateFontInstance(rPattern);
-            }
 
             CFRelease(pFallback);
             CFRelease(pDesc);

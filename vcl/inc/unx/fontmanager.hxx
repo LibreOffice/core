@@ -310,7 +310,7 @@ public:
     void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
     static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize);
 
-    void Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
+    void Substitute(FontSelectPatternAttributes &rPattern, OUString& rMissingCodes);
 
 };
 
