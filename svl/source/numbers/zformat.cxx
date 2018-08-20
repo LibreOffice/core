@@ -5016,6 +5016,10 @@ void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPo
 {
     if ( nLCID == 0 )
         return;
+    if (nPosInsertLCID == rFormatStr.getLength() && !bDBNumInserted)
+        // No format code, no locale.
+        return;
+
     OUStringBuffer aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
     if ( bDBNumInserted && nPosInsertLCID >= 8
