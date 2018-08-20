@@ -197,9 +197,9 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
 
 PropertyChangeNotifier::PropertyChangeNotifier(
     const css::uno::Reference< XContent >& xCreatorContent,
-    ListenerMap* pListeners )
+    std::unique_ptr<ListenerMap> pListeners )
     : m_xCreatorContent( xCreatorContent ),
-      m_pListeners( pListeners )
+      m_pListeners( std::move(pListeners) )
 {
 }
 
