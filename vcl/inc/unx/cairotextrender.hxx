@@ -42,7 +42,7 @@ protected:
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                releaseCairoContext(cairo_t* cr) = 0;
 
-    void                        setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
+    void                        setFont( const LogicalFontInstance *pEntry, int nFallbackLevel );
 
     virtual void                clipRegion(cairo_t* cr) = 0;
 
@@ -51,7 +51,7 @@ public:
 
 
     virtual void                SetTextColor( Color nColor ) override;
-    virtual void                SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void                SetFont( const LogicalFontInstance*, int nFallbackLevel ) override;
     virtual void                GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual const FontCharMapRef GetFontCharMap() const override;
     virtual bool                GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;

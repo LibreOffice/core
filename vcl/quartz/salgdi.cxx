@@ -474,7 +474,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     CGContextRestoreGState(mrContext);
 }
 
-void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
+void AquaSalGraphics::SetFont(const LogicalFontInstance* pReqFont, int nFallbackLevel)
 {
     // release the text style
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
@@ -486,26 +486,9 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
 
     if (!pReqFont)
         return;
-    assert(pReqFont->mpFontInstance);
-    if (!pReqFont->mpFontInstance)
-        return;
 
     // update the text style
-    mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont->mpFontInstance.get());
-
-    SAL_INFO("vcl.ct",
-            "SetFont"
-               " to "     << mpTextStyle[nFallbackLevel]->GetFontFace()->GetFamilyName()
-            << ", "       << mpTextStyle[nFallbackLevel]->GetFontFace()->GetStyleName()
-            << " fontid=" << mpTextStyle[nFallbackLevel]->GetFontFace()->GetFontId()
-            << " for "    << pReqFont->GetFamilyName()
-            << ", "       << pReqFont->GetStyleName()
-            << " weight=" << pReqFont->GetWeight()
-            << " slant="  << pReqFont->GetItalic()
-            << " size="   << pReqFont->mnHeight << "x" << pReqFont->mnWidth
-            << " orientation=" << pReqFont->mnOrientation
-            << " fallback level " << nFallbackLevel
-            );
+    mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont);
 }
 
 std::unique_ptr<SalLayout> AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)

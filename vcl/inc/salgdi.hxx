@@ -123,7 +123,7 @@ public:
     virtual void                SetTextColor( Color nColor ) = 0;
 
     // set the font
-    virtual void                SetFont( const FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                SetFont( const LogicalFontInstance*, int nFallbackLevel ) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }

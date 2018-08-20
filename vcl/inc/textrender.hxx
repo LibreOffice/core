@@ -35,7 +35,7 @@ public:
     virtual ~TextRenderImpl() {}
 
     virtual void                    SetTextColor( Color nColor ) = 0;
-    virtual void                    SetFont( const FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                    SetFont( const LogicalFontInstance*, int nFallbackLevel ) = 0;
     virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) = 0;
     virtual const FontCharMapRef    GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
