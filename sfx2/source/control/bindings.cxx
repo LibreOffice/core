@@ -925,14 +925,15 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
         // cache binds to an external dispatch provider
         sal_Int16 eRet = pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
-        SfxPoolItem *pPool;
+        std::unique_ptr<SfxPoolItem> pPool;
         if ( eRet == css::frame::DispatchResultState::DONTKNOW )
-            pPool = new SfxVoidItem( nId );
+            pPool.reset( new SfxVoidItem( nId ) );
         else
-            pPool = new SfxBoolItem( nId, eRet == css::frame::DispatchResultState::SUCCESS);
+            pPool.reset( new SfxBoolItem( nId, eRet == css::frame::DispatchResultState::SUCCESS) );
 
-        DeleteItemOnIdle( pPool );
-        return pPool;
+        auto pTemp = pPool.get();
+        DeleteItemOnIdle( std::move(pPool) );
+        return pTemp;
     }
 
     // slot is handled internally by SfxDispatcher
@@ -976,9 +977,9 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     const SfxPoolItem* pRet = aReq.GetReturnValue();
     if ( !pRet )
     {
-        SfxPoolItem *pVoid = new SfxVoidItem( nId );
-        DeleteItemOnIdle( pVoid );
-        pRet = pVoid;
+        std::unique_ptr<SfxPoolItem> pVoid(new SfxVoidItem( nId ));
+        pRet = pVoid.get();
+        DeleteItemOnIdle( std::move(pVoid) );
     }
 
     return pRet;

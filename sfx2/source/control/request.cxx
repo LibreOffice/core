@@ -57,7 +57,7 @@ struct SfxRequest_Impl: public SfxListener
     SfxRequest*     pAnti;       // Owner because of dying pool
     OUString        aTarget;     // if possible from target object set by App
     SfxItemPool*    pPool;       // ItemSet build with this pool
-    SfxPoolItem*    pRetVal;     // Return value belongs to itself
+    std::unique_ptr<SfxPoolItem> pRetVal; // Return value belongs to itself
     SfxShell*       pShell;      // run from this shell
     const SfxSlot*  pSlot;       // executed Slot
     sal_uInt16      nModifier;   // which Modifier was pressed?
@@ -76,7 +76,6 @@ struct SfxRequest_Impl: public SfxListener
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
         , pPool(nullptr)
-        , pRetVal(nullptr)
         , pShell(nullptr)
         , pSlot(nullptr)
         , nModifier(0)
@@ -125,7 +124,7 @@ SfxRequest::~SfxRequest()
     // Clear object
     pArgs.reset();
     if ( pImpl->pRetVal )
-        DeleteItemOnIdle(pImpl->pRetVal);
+        DeleteItemOnIdle(std::move(pImpl->pRetVal));
 }
 
 
@@ -141,7 +140,6 @@ SfxRequest::SfxRequest
     pImpl->bAllowRecording = rOrig.pImpl->bAllowRecording;
     pImpl->bDone = false;
     pImpl->bIgnored = false;
-    pImpl->pRetVal = nullptr;
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = rOrig.pImpl->nCallMode;
@@ -198,7 +196,6 @@ SfxRequest::SfxRequest
     pImpl->bDone = false;
     pImpl->bIgnored = false;
     pImpl->SetPool( &pViewFrame->GetPool() );
-    pImpl->pRetVal = nullptr;
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = SfxCallMode::SYNCHRON;
@@ -232,7 +229,6 @@ SfxRequest::SfxRequest
     pImpl->bDone = false;
     pImpl->bIgnored = false;
     pImpl->SetPool( &rPool );
-    pImpl->pRetVal = nullptr;
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = nMode;
@@ -252,7 +248,6 @@ SfxRequest::SfxRequest
     pImpl->bDone = false;
     pImpl->bIgnored = false;
     pImpl->SetPool( &rPool );
-    pImpl->pRetVal = nullptr;
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = nMode;
@@ -276,7 +271,6 @@ SfxRequest::SfxRequest
     pImpl->bDone = false;
     pImpl->bIgnored = false;
     pImpl->SetPool( rSfxArgs.GetPool() );
-    pImpl->pRetVal = nullptr;
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = nMode;
@@ -432,14 +426,13 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
     DBG_ASSERT(!pImpl->pRetVal, "Set Return value multiple times?");
-    delete pImpl->pRetVal;
-    pImpl->pRetVal = rItem.Clone();
+    pImpl->pRetVal.reset(rItem.Clone());
 }
 
 
 const SfxPoolItem* SfxRequest::GetReturnValue() const
 {
-    return pImpl->pRetVal;
+    return pImpl->pRetVal.get();
 }
 
 
