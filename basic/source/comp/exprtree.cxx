@@ -32,7 +32,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
-    pExpr.reset((t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean());
+    pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
     {
         pExpr->Optimize(pParser);
@@ -157,14 +157,14 @@ static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExp
 
 // currently even keywords are allowed (because of Dflt properties of the same name)
 
-SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
+std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     if( pParser->Peek() == DOT )
     {
         SbiExprNode* pWithVar = pParser->GetWithVar();
         // #26608: get to the node-chain's end to pass the correct object
         SbiSymDef* pDef = pWithVar ? pWithVar->GetRealVar() : nullptr;
-        SbiExprNode* pNd = nullptr;
+        std::unique_ptr<SbiExprNode> pNd;
         if( !pDef )
         {
             pParser->Next();
@@ -180,7 +180,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( !pNd )
         {
             pParser->Error( ERRCODE_BASIC_UNEXPECTED, DOT );
-            pNd = new SbiExprNode( 1.0, SbxDOUBLE );
+            pNd = o3tl::make_unique<SbiExprNode>( 1.0, SbxDOUBLE );
         }
         return pNd;
     }
@@ -200,7 +200,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     if( eNextTok == ASSIGN )
     {
         pParser->UnlockColumn();
-        return new SbiExprNode( aSym );
+        return o3tl::make_unique<SbiExprNode>( aSym );
     }
     // no keywords allowed from here on!
     if( SbiTokenizer::IsKwd( eTok )
@@ -292,11 +292,11 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             delete pvMoreParLcl;
             if( pConst->GetType() == SbxSTRING )
             {
-                return new SbiExprNode( pConst->GetString() );
+                return o3tl::make_unique<SbiExprNode>( pConst->GetString() );
             }
             else
             {
-                return new SbiExprNode( pConst->GetValue(), pConst->GetType() );
+                return o3tl::make_unique<SbiExprNode>( pConst->GetValue(), pConst->GetType() );
             }
         }
 
@@ -347,7 +347,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             }
         }
     }
-    SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
+    std::unique_ptr<SbiExprNode> pNd(new SbiExprNode( *pDef, eType ));
     if( !pPar )
     {
         pPar = SbiExprList::ParseParameters( pParser,false,false );
@@ -372,7 +372,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         }
         if( !bError )
         {
-            pNd->aVar.pNext = ObjTerm( *pDef );
+            pNd->aVar.pNext = ObjTerm( *pDef ).release();
         }
     }
 
@@ -383,7 +383,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
 // construction of an object term. A term of this kind is part
 // of an expression that begins with an object variable.
 
-SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
+std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
 {
     pParser->Next();
     SbiToken eTok = pParser->Next();
@@ -453,7 +453,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         pDef->SetType( eType );
     }
 
-    SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
+    std::unique_ptr<SbiExprNode> pNd(new SbiExprNode( *pDef, eType ));
     pNd->aVar.pPar = pPar.release();
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
@@ -469,7 +469,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         }
         if( !bError )
         {
-            pNd->aVar.pNext = ObjTerm( *pDef );
+            pNd->aVar.pNext = ObjTerm( *pDef ).release();
             pNd->eType = eType;
         }
     }
@@ -484,9 +484,9 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 //      functions
 //      bracketed expressions
 
-SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
+std::unique_ptr<SbiExprNode> SbiExpression::Operand( bool bUsedForTypeOf )
 {
-    SbiExprNode *pRes;
+    std::unique_ptr<SbiExprNode> pRes;
 
     // test operand:
     switch( SbiToken eTok = pParser->Peek() )
@@ -497,24 +497,24 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
         if( !bUsedForTypeOf && pParser->IsVBASupportOn() && pParser->Peek() == IS )
         {
             eTok = pParser->Next();
-            pRes = new SbiExprNode( pRes, eTok, Like() );
+            pRes = o3tl::make_unique<SbiExprNode>( std::move(pRes), eTok, Like() );
         }
         break;
     case DOT:   // .with
         pRes = Term(); break;
     case NUMBER:
         pParser->Next();
-        pRes = new SbiExprNode( pParser->GetDbl(), pParser->GetType() );
+        pRes = o3tl::make_unique<SbiExprNode>( pParser->GetDbl(), pParser->GetType() );
         break;
     case FIXSTRING:
         pParser->Next();
-        pRes = new SbiExprNode( pParser->GetSym() ); break;
+        pRes = o3tl::make_unique<SbiExprNode>( pParser->GetSym() ); break;
     case LPAREN:
         pParser->Next();
         if( nParenLevel == 0 && m_eMode == EXPRMODE_LPAREN_PENDING && pParser->Peek() == RPAREN )
         {
             m_eMode = EXPRMODE_EMPTY_PAREN;
-            pRes = new SbiExprNode();   // Dummy node
+            pRes = o3tl::make_unique<SbiExprNode>();   // Dummy node
             pParser->Next();
             break;
         }
@@ -559,7 +559,7 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
         else
         {
             pParser->Next();
-            pRes = new SbiExprNode( 1.0, SbxDOUBLE );
+            pRes = o3tl::make_unique<SbiExprNode>( 1.0, SbxDOUBLE );
             pParser->Error( ERRCODE_BASIC_UNEXPECTED, eTok );
         }
         break;
@@ -567,16 +567,16 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
     return pRes;
 }
 
-SbiExprNode* SbiExpression::Unary()
+std::unique_ptr<SbiExprNode> SbiExpression::Unary()
 {
-    SbiExprNode* pNd;
+    std::unique_ptr<SbiExprNode> pNd;
     SbiToken eTok = pParser->Peek();
     switch( eTok )
     {
         case MINUS:
             eTok = NEG;
             pParser->Next();
-            pNd = new SbiExprNode( Unary(), eTok, nullptr );
+            pNd = o3tl::make_unique<SbiExprNode>( Unary(), eTok, nullptr );
             break;
         case NOT:
             if( pParser->IsVBASupportOn() )
@@ -586,7 +586,7 @@ SbiExprNode* SbiExpression::Unary()
             else
             {
                 pParser->Next();
-                pNd = new SbiExprNode( Unary(), eTok, nullptr );
+                pNd = o3tl::make_unique<SbiExprNode>( Unary(), eTok, nullptr );
             }
             break;
         case PLUS:
@@ -596,11 +596,11 @@ SbiExprNode* SbiExpression::Unary()
         case TYPEOF:
         {
             pParser->Next();
-            SbiExprNode* pObjNode = Operand( true/*bUsedForTypeOf*/ );
+            std::unique_ptr<SbiExprNode> pObjNode = Operand( true/*bUsedForTypeOf*/ );
             pParser->TestToken( IS );
             SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
             pParser->TypeDecl( *pTypeDef, true );
-            pNd = new SbiExprNode( pObjNode, pTypeDef->GetTypeId() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pObjNode), pTypeDef->GetTypeId() );
             break;
         }
         case NEW:
@@ -608,7 +608,7 @@ SbiExprNode* SbiExpression::Unary()
             pParser->Next();
             SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
             pParser->TypeDecl( *pTypeDef, true );
-            pNd = new SbiExprNode( pTypeDef->GetTypeId() );
+            pNd = o3tl::make_unique<SbiExprNode>( pTypeDef->GetTypeId() );
             break;
         }
         default:
@@ -617,23 +617,23 @@ SbiExprNode* SbiExpression::Unary()
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Exp()
+std::unique_ptr<SbiExprNode> SbiExpression::Exp()
 {
-    SbiExprNode* pNd = Unary();
+    std::unique_ptr<SbiExprNode> pNd = Unary();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         while( pParser->Peek() == EXPON )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Unary() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Unary() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::MulDiv()
+std::unique_ptr<SbiExprNode> SbiExpression::MulDiv()
 {
-    SbiExprNode* pNd = Exp();
+    std::unique_ptr<SbiExprNode> pNd = Exp();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         for( ;; )
@@ -644,43 +644,43 @@ SbiExprNode* SbiExpression::MulDiv()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Exp() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Exp() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::IntDiv()
+std::unique_ptr<SbiExprNode> SbiExpression::IntDiv()
 {
-    SbiExprNode* pNd = MulDiv();
+    std::unique_ptr<SbiExprNode> pNd = MulDiv();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         while( pParser->Peek() == IDIV )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, MulDiv() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, MulDiv() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Mod()
+std::unique_ptr<SbiExprNode> SbiExpression::Mod()
 {
-    SbiExprNode* pNd = IntDiv();
+    std::unique_ptr<SbiExprNode> pNd = IntDiv();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         while( pParser->Peek() == MOD )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, IntDiv() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, IntDiv() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::AddSub()
+std::unique_ptr<SbiExprNode> SbiExpression::AddSub()
 {
-    SbiExprNode* pNd = Mod();
+    std::unique_ptr<SbiExprNode> pNd = Mod();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         for( ;; )
@@ -691,15 +691,15 @@ SbiExprNode* SbiExpression::AddSub()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Mod() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Mod() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Cat()
+std::unique_ptr<SbiExprNode> SbiExpression::Cat()
 {
-    SbiExprNode* pNd = AddSub();
+    std::unique_ptr<SbiExprNode> pNd = AddSub();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         for( ;; )
@@ -710,15 +710,15 @@ SbiExprNode* SbiExpression::Cat()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, AddSub() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, AddSub() );
         }
     }
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Comp()
+std::unique_ptr<SbiExprNode> SbiExpression::Comp()
 {
-    SbiExprNode* pNd = Cat();
+    std::unique_ptr<SbiExprNode> pNd = Cat();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         short nCount = 0;
@@ -735,7 +735,7 @@ SbiExprNode* SbiExpression::Comp()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Cat() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Cat() );
             nCount++;
         }
     }
@@ -743,15 +743,15 @@ SbiExprNode* SbiExpression::Comp()
 }
 
 
-SbiExprNode* SbiExpression::VBA_Not()
+std::unique_ptr<SbiExprNode> SbiExpression::VBA_Not()
 {
-    SbiExprNode* pNd = nullptr;
+    std::unique_ptr<SbiExprNode> pNd;
 
     SbiToken eTok = pParser->Peek();
     if( eTok == NOT )
     {
         pParser->Next();
-        pNd = new SbiExprNode( VBA_Not(), eTok, nullptr );
+        pNd = o3tl::make_unique<SbiExprNode>( VBA_Not(), eTok, nullptr );
     }
     else
     {
@@ -760,16 +760,16 @@ SbiExprNode* SbiExpression::VBA_Not()
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Like()
+std::unique_ptr<SbiExprNode> SbiExpression::Like()
 {
-    SbiExprNode* pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();
+    std::unique_ptr<SbiExprNode> pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         short nCount = 0;
         while( pParser->Peek() == LIKE )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Comp() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Comp() );
             nCount++;
         }
         // multiple operands in a row does not work
@@ -782,9 +782,9 @@ SbiExprNode* SbiExpression::Like()
     return pNd;
 }
 
-SbiExprNode* SbiExpression::Boolean()
+std::unique_ptr<SbiExprNode> SbiExpression::Boolean()
 {
-    SbiExprNode* pNd = Like();
+    std::unique_ptr<SbiExprNode> pNd = Like();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         for( ;; )
@@ -797,7 +797,7 @@ SbiExprNode* SbiExpression::Boolean()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Like() );
+            pNd = o3tl::make_unique<SbiExprNode>( std::move(pNd), eTok, Like() );
         }
     }
     return pNd;
