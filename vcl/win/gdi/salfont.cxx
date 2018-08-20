@@ -149,7 +149,7 @@ class WinPreMatchFontSubstititution
 :    public ImplPreMatchFontSubstitution
 {
 public:
-    bool FindFontSubstitute(FontSelectPattern&) const override;
+    bool FindFontSubstitute(FontSelectPatternAttributes&) const override;
 };
 
 class WinGlyphFallbackSubstititution
@@ -166,7 +166,7 @@ public:
         ReleaseDC(nullptr, mhDC);
     };
 
-    bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingChars ) const override;
+    bool FindFontSubstitute(FontSelectPatternAttributes&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
 private:
     HDC mhDC;
     bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
@@ -257,7 +257,7 @@ static const std::map<OUString, OUString> aBitmapFontSubs =
 };
 
 // TODO: See if Windows have API that we can use here to improve font fallback.
-bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPattern& rFontSelData) const
+bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPatternAttributes& rFontSelData) const
 {
     if (rFontSelData.IsSymbolFont() || IsStarSymbol(rFontSelData.maSearchName))
         return false;
@@ -276,7 +276,7 @@ bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPattern& rFontS
 
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and preferred?
-bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, OUString& rMissingChars ) const
+bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPatternAttributes& rFontSelData, LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
 {
     // guess a locale matching to the missing chars
     LanguageType eLang = rFontSelData.meLanguage;
