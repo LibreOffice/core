@@ -111,7 +111,7 @@ class DLLEXPORT HWPFile
  * @returns 0 if success, otherwise error code
  * @see State()
  */
-        int Open( HStream * );
+        int Open( std::unique_ptr<HStream> );
 
 /**
  * Say current state
@@ -170,7 +170,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads all information of hwp file from stream
  */
-        int ReadHwpFile( HStream *);
+        int ReadHwpFile( std::unique_ptr<HStream> );
 /**
  * Reads document information of hwp file from HIODev
  */

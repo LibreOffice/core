@@ -132,7 +132,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
         }
 
         HWPFile hwpfile;
-        if (hwpfile.ReadHwpFile(stream.release()))
+        if (hwpfile.ReadHwpFile(std::move(stream)))
             return false;
     }
     catch (...)
@@ -164,7 +164,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 
     if( nTotal == 0 ) return false;
 
-    if (hwpfile.ReadHwpFile(stream.release()))
+    if (hwpfile.ReadHwpFile(std::move(stream)))
           return false;
 
     if (m_rxDocumentHandler.is())
