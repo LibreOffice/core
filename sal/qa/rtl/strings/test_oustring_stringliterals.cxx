@@ -41,6 +41,9 @@ private:
 
     void testcall( const char str[] );
 
+    // Check that OUStringLiteral ctor is actually constexpr:
+    static constexpr rtlunittest::OUStringLiteral dummy{"dummy"};
+
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST(checkUsage);
