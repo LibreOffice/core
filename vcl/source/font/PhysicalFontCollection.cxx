@@ -216,7 +216,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
             OUString aOldMissingCodes = rMissingCodes;
 
             // call the hook to query the best matching glyph fallback font
-            if( mpFallbackHook->FindFontSubstitute( rFontSelData, rMissingCodes ) )
+            if (mpFallbackHook->FindFontSubstitute(rFontSelData, rFontSelData.mpFontInstance.get(), rMissingCodes))
                 // apply outdev3.cxx specific fontname normalization
                 rFontSelData.maSearchName = GetEnglishSearchFontName( rFontSelData.maSearchName );
             else
