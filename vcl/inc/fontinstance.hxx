@@ -60,6 +60,7 @@ public: // TODO: make data members private
 
     inline hb_font_t* GetHbFont();
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = nFactor; }
+    void SetNonAntialiased(bool bNonAntialiased);
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 

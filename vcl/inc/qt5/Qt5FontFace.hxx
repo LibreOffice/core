@@ -28,7 +28,7 @@
 #include <QtCore/QString>
 
 class FontAttributes;
-class FontSelectPattern;
+class FontSelectPatternAttributes;
 class QFont;
 
 class Qt5FontFace : public PhysicalFontFace
