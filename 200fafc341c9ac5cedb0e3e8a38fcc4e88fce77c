@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_9e18e3d3",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-20T19:18:16Z",
+      "side": 1,
+      "message": "small nit - no need for extra variables here, why not move\nthat down, and call getAccObjectPtr() with sal_Int32(lParam), sal_uInt32(wParam)?\n\nAnd a warning - both lparam and wparam are 64 bit ints on Win64, not sure if that\u0027s a lossy conversion then",
+      "revId": "200fafc341c9ac5cedb0e3e8a38fcc4e88fce77c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
