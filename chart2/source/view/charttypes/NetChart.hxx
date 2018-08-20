@@ -35,7 +35,7 @@ public:
     NetChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bNoArea
-             , PlottingPositionHelper* pPlottingPositionHelper //takes ownership
+             , std::unique_ptr<PlottingPositionHelper> pPlottingPositionHelper //takes ownership
              );
     virtual ~NetChart() override;
 
