@@ -32,6 +32,7 @@
 #include <Outliner.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdundo.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -123,9 +124,9 @@ const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
     return &aSdTextPortionPropertyMap;
 }
 
-TextApiObject::TextApiObject( TextAPIEditSource* pEditSource )
-: SvxUnoText( pEditSource, ImplGetSdTextPortionPropertyMap(), Reference < XText >() )
-, mpSource(pEditSource)
+TextApiObject::TextApiObject( std::unique_ptr<TextAPIEditSource> pEditSource )
+: SvxUnoText( pEditSource.get(), ImplGetSdTextPortionPropertyMap(), Reference < XText >() )
+, mpSource(std::move(pEditSource))
 {
 }
 
@@ -136,7 +137,7 @@ TextApiObject::~TextApiObject() throw()
 
 rtl::Reference< TextApiObject > TextApiObject::create( SdDrawDocument* pDoc )
 {
-    rtl::Reference< TextApiObject > xRet( new TextApiObject( new TextAPIEditSource( pDoc ) ) );
+    rtl::Reference< TextApiObject > xRet( new TextApiObject( o3tl::make_unique<TextAPIEditSource>( pDoc ) ) );
     return xRet;
 }
 
