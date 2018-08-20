@@ -48,7 +48,7 @@ public:
 
 private:
     std::unique_ptr<TextAPIEditSource>  mpSource;
-    TextApiObject( TextAPIEditSource* pEditSource );
+    TextApiObject( std::unique_ptr<TextAPIEditSource> pEditSource );
 };
 
 } // namespace sd
