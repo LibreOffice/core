@@ -254,6 +254,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mariadb-connector-c \
 )
+ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-liconv \
+)
+endif
 
 endef
 define gb_ExternalProject__use_mariadb-connector-c
