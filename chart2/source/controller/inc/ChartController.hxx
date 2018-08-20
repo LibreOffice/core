@@ -418,7 +418,7 @@ private:
     rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     bool impl_isDisposedOrSuspended() const;
-    ReferenceSizeProvider* impl_createReferenceSizeProvider();
+    std::unique_ptr<ReferenceSizeProvider> impl_createReferenceSizeProvider();
     void impl_adaptDataSeriesAutoResize();
 
     void impl_createDrawViewController();

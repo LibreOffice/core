@@ -69,6 +69,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/diagnose_ex.h>
@@ -155,11 +156,11 @@ bool lcl_deleteDataCurve(
 
 } // anonymous namespace
 
-ReferenceSizeProvider* ChartController::impl_createReferenceSizeProvider()
+std::unique_ptr<ReferenceSizeProvider> ChartController::impl_createReferenceSizeProvider()
 {
     awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
 
-    return new ReferenceSizeProvider(
+    return o3tl::make_unique<ReferenceSizeProvider>(
         aPageSize, Reference<chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
 }
 
