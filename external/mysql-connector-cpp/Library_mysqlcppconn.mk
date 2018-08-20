@@ -32,6 +32,8 @@ $(eval $(call gb_Library_use_externals,mysqlcppconn,\
 endif
 endif
 
+$(eval $(call gb_Library_add_cxxflags,mysqlcppconn,$(filter-out -Werror=%,$(gb_CXX03FLAGS))))
+
 $(eval $(call gb_Library_set_external_code,mysqlcppconn))
 
 $(eval $(call gb_Library_set_warnings_not_errors,mysqlcppconn))
