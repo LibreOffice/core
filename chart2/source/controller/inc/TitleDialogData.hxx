@@ -36,7 +36,7 @@ struct TitleDialogData
     css::uno::Sequence< OUString > aTextList;
     std::unique_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
 
-    TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = nullptr);
+    TitleDialogData(std::unique_ptr<ReferenceSizeProvider> pReferenzeSizeProvider = nullptr);
 
     void readFromModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
     /* return true if anything has changed;

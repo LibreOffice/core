@@ -27,11 +27,11 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-TitleDialogData::TitleDialogData( ReferenceSizeProvider* pRefSizeProvider )
+TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSizeProvider )
         : aPossibilityList(7)
         , aExistenceList(7)
         , aTextList(7)
-        , apReferenceSizeProvider( pRefSizeProvider )
+        , apReferenceSizeProvider( std::move(pRefSizeProvider) )
 {
     for (sal_Int32 i = 0; i < 7; i++)
     {
