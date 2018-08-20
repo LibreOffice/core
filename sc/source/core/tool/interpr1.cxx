@@ -7657,7 +7657,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
             SetError(FormulaError::NoValue);
             return;
         }
-        ScDBQueryDataIterator aValIter(pDok, mrContext, pQueryParam.release());
+        ScDBQueryDataIterator aValIter(pDok, mrContext, std::move(pQueryParam));
         ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
         {
@@ -7761,7 +7761,7 @@ void ScInterpreter::ScDBCount()
                 SetError(FormulaError::NoValue);
                 return;
             }
-            ScDBQueryDataIterator aValIter( pDok, mrContext, pQueryParam.release());
+            ScDBQueryDataIterator aValIter( pDok, mrContext, std::move(pQueryParam));
             ScDBQueryDataIterator::Value aValue;
             if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
             {
@@ -7792,7 +7792,7 @@ void ScInterpreter::ScDBCount2()
         }
         sal_uLong nCount = 0;
         pQueryParam->mbSkipString = false;
-        ScDBQueryDataIterator aValIter( pDok, mrContext, pQueryParam.release());
+        ScDBQueryDataIterator aValIter( pDok, mrContext, std::move(pQueryParam));
         ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
         {
@@ -7846,7 +7846,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
             SetError(FormulaError::NoValue);
             return;
         }
-        ScDBQueryDataIterator aValIter(pDok, mrContext, pQueryParam.release());
+        ScDBQueryDataIterator aValIter(pDok, mrContext, std::move(pQueryParam));
         ScDBQueryDataIterator::Value aValue;
         if (aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE)
         {
