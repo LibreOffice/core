@@ -63,7 +63,7 @@ public:
     void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
 
     // misc utilities
-    PhysicalFontCollection* Clone() const;
+    std::shared_ptr<PhysicalFontCollection> Clone() const;
     std::unique_ptr<ImplDeviceFontList> GetDeviceFontList() const;
     std::unique_ptr<ImplDeviceFontSizeList> GetDeviceFontSizeList( const OUString& rFontName ) const;
 

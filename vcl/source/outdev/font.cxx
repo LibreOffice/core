@@ -581,7 +581,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
             {
                 if( mpPDFWriter )
                 {
-                    mxFontCollection.reset(pSVData->maGDIData.mxScreenFontList->Clone());
+                    mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
                     mxFontCache.reset(new ImplFontCache);
                 }
                 else
