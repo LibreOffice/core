@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c32d7447",
+        "filename": "registry/source/regimpl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-20T06:36:14Z",
+      "side": 1,
+      "message": "make it constexpr and use in-class initialization?",
+      "revId": "d79534d74db4cfb3cae0e9bbed9ed52c51405599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
