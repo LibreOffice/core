@@ -316,8 +316,8 @@ void SvxPageDescPage::Init_Impl()
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
     m_xPaperHeightEdit->connect_value_changed(LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
-    m_xLandscapeBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
-    m_xPortraitBtn->connect_toggled(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xLandscapeBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xPortraitBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
 
     Link<weld::MetricSpinButton&, void> aLink = LINK(this, SvxPageDescPage, BorderModify_Impl);
     m_xLeftMarginEdit->connect_value_changed(aLink);
@@ -905,7 +905,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, 
     RangeHdl_Impl();
 }
 
-IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::ToggleButton&, rBtn, void)
+IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::Button&, rBtn, void)
 {
     if (
         (!bLandscape && &rBtn == m_xLandscapeBtn.get()) ||
