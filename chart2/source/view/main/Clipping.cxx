@@ -153,13 +153,14 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
     }
 
     //make sure that we have enough polygons
-    if(nPolygonIndex >= rPoly.SequenceX.getLength() )
+    if (nPolygonIndex >= rPoly.SequenceX.getLength())
     {
         rPoly.SequenceX.realloc(nPolygonIndex+1);
         rPoly.SequenceY.realloc(nPolygonIndex+1);
         rPoly.SequenceZ.realloc(nPolygonIndex+1);
-        rResultPointCount.resize(nPolygonIndex+1,0);
     }
+    if (static_cast<size_t>(nPolygonIndex) >= rResultPointCount.size())
+        rResultPointCount.resize(nPolygonIndex+1,0);
 
     drawing::DoubleSequence* pOuterSequenceX = &rPoly.SequenceX.getArray()[nPolygonIndex];
     drawing::DoubleSequence* pOuterSequenceY = &rPoly.SequenceY.getArray()[nPolygonIndex];
