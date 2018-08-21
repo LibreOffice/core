@@ -23,6 +23,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <o3tl/safeint.hxx>
+#include <array>
 
 namespace vcl {
 namespace bitmap {
@@ -112,6 +113,11 @@ VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( BitmapEx const & rBmpEx, Bitmap & rBitmap, unsigned char*& data, bool& bHasAlpha, long& rnWidth, long& rnHeight );
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const css::geometry::IntegerRectangle2D& rect);
+
+// helper to construct historical 8x8 bitmaps with two colors
+
+BitmapEx VCL_DLLPUBLIC createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack);
+bool VCL_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront);
 
 }} // end vcl::bitmap
 
