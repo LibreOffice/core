@@ -1777,7 +1777,10 @@ const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
     FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     ScopedFont aOldFont(*this);
-    SetFont( &aIFSD, 0 );
+
+    float fScale = 0.0;
+    HFONT hOldFont = nullptr;
+    ImplDoSetFont(&aIFSD, pFont, fScale, hOldFont);
 
     // get the raw font file data
     RawFontData aRawFontData( getHDC() );
