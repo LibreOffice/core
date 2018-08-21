@@ -28,8 +28,8 @@ class FcPreMatchSubstitution
 :   public ImplPreMatchFontSubstitution
 {
 public:
-    bool FindFontSubstitute( FontSelectPatternAttributes& ) const override;
-    typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
+    bool FindFontSubstitute( FontSelectPattern& ) const override;
+    typedef ::std::pair<FontSelectPattern, FontSelectPattern> value_type;
 private:
     typedef ::std::list<value_type> CachedFontMapType;
     mutable CachedFontMapType maCachedFontMap;
@@ -40,7 +40,7 @@ class FcGlyphFallbackSubstitution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute(FontSelectPatternAttributes&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const override;
+    bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const override;
 };
 
 void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
@@ -54,9 +54,9 @@ void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFont
     pFontCollection->SetFallbackHook( &aSubstFallback );
 }
 
-static FontSelectPatternAttributes GetFcSubstitute(const FontSelectPatternAttributes &rFontSelData, OUString& rMissingCodes)
+static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, OUString& rMissingCodes)
 {
-    FontSelectPatternAttributes aSubstituted(rFontSelData);
+    FontSelectPattern aSubstituted(rFontSelData);
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.Substitute(aSubstituted, rMissingCodes);
     return aSubstituted;
@@ -64,7 +64,7 @@ static FontSelectPatternAttributes GetFcSubstitute(const FontSelectPatternAttrib
 
 namespace
 {
-    bool uselessmatch(const FontSelectPatternAttributes &rOrig, const FontSelectPatternAttributes &rNew)
+    bool uselessmatch(const FontSelectPattern &rOrig, const FontSelectPattern &rNew)
     {
         return
           (
@@ -79,9 +79,9 @@ namespace
     class equal
     {
     private:
-        const FontSelectPatternAttributes& mrAttributes;
+        const FontSelectPattern& mrAttributes;
     public:
-        explicit equal(const FontSelectPatternAttributes& rAttributes)
+        explicit equal(const FontSelectPattern& rAttributes)
             : mrAttributes(rAttributes)
         {
         }
@@ -90,7 +90,7 @@ namespace
     };
 }
 
-bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPatternAttributes &rFontSelData) const
+bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPattern &rFontSelData) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
@@ -104,7 +104,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPatternAttributes &rFo
     //different fonts depending on fontsize, bold, etc settings so don't cache
     //just on the name, cache map all the input and all the output not just map
     //from original selection to output fontname
-    FontSelectPatternAttributes& rPatternAttributes = rFontSelData;
+    FontSelectPattern& rPatternAttributes = rFontSelData;
     CachedFontMapType &rCachedFontMap = maCachedFontMap;
     CachedFontMapType::iterator itr = std::find_if(rCachedFontMap.begin(), rCachedFontMap.end(), equal(rPatternAttributes));
     if (itr != rCachedFontMap.end())
@@ -120,7 +120,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPatternAttributes &rFo
     }
 
     OUString aDummy;
-    const FontSelectPatternAttributes aOut = GetFcSubstitute( rFontSelData, aDummy );
+    const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
 
     if( aOut.maSearchName.isEmpty() )
         return false;
@@ -155,7 +155,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPatternAttributes &rFo
     return bHaveSubstitute;
 }
 
-bool FcGlyphFallbackSubstitution::FindFontSubstitute(FontSelectPatternAttributes& rFontSelData,
+bool FcGlyphFallbackSubstitution::FindFontSubstitute(FontSelectPattern& rFontSelData,
     LogicalFontInstance* /*pLogicalFont*/,
     OUString& rMissingCodes ) const
 {
@@ -166,7 +166,7 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute(FontSelectPatternAttributes
     if ( IsStarSymbol(rFontSelData.maSearchName) )
         return false;
 
-    const FontSelectPatternAttributes aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
+    const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
     // TODO: cache the unicode + srcfont specific result
     // FC doing it would be preferable because it knows the invariables
     // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans

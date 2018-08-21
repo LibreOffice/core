@@ -48,7 +48,7 @@
 #include <PhysicalFontFace.hxx>
 
 class StyleSettings;
-class FontSelectPatternAttributes;
+class FontSelectPattern;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;

@@ -145,7 +145,7 @@ public:
 // win32 specific physical font instance
 class WinFontInstance : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPatternAttributes&) const;
+    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
 public:
     virtual ~WinFontInstance() override;
@@ -162,7 +162,7 @@ public:
     void UnsetHFONT() { m_hFont = nullptr; }
 
 private:
-    explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPatternAttributes&);
+    explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 

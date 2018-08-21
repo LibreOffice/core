@@ -49,13 +49,13 @@ public:
     // find the device font family
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
     PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*     FindFontFamily( FontSelectPatternAttributes& ) const;
+    PhysicalFontFamily*     FindFontFamily( FontSelectPattern& ) const;
     PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
     PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
-    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPatternAttributes&,
+    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
                                                   LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 

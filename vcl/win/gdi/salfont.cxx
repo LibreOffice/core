@@ -149,7 +149,7 @@ class WinPreMatchFontSubstititution
 :    public ImplPreMatchFontSubstitution
 {
 public:
-    bool FindFontSubstitute(FontSelectPatternAttributes&) const override;
+    bool FindFontSubstitute(FontSelectPattern&) const override;
 };
 
 class WinGlyphFallbackSubstititution
@@ -166,7 +166,7 @@ public:
         ReleaseDC(nullptr, mhDC);
     };
 
-    bool FindFontSubstitute(FontSelectPatternAttributes&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
+    bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
 private:
     HDC mhDC;
     bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
@@ -179,10 +179,10 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
     FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
     if( !xFontCharMap.is() )
     {
-        // construct a Size structure as the parameter of constructor of class FontSelectPatternAttributes
+        // construct a Size structure as the parameter of constructor of class FontSelectPattern
         const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
-        // create a FontSelectPatternAttributes object for getting s LOGFONT
-        const FontSelectPatternAttributes aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
+        // create a FontSelectPattern object for getting s LOGFONT
+        const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
         // construct log font
         LOGFONTW aLogFont;
         ImplGetLogFontFromFontSelect( mhDC, &aFSD, pFace, aLogFont );
@@ -257,7 +257,7 @@ static const std::map<OUString, OUString> aBitmapFontSubs =
 };
 
 // TODO: See if Windows have API that we can use here to improve font fallback.
-bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPatternAttributes& rFontSelData) const
+bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPattern& rFontSelData) const
 {
     if (rFontSelData.IsSymbolFont() || IsStarSymbol(rFontSelData.maSearchName))
         return false;
@@ -276,7 +276,7 @@ bool WinPreMatchFontSubstititution::FindFontSubstitute(FontSelectPatternAttribut
 
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and preferred?
-bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPatternAttributes& rFontSelData, LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
+bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFontSelData, LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
 {
     // guess a locale matching to the missing chars
     LanguageType eLang = rFontSelData.meLanguage;
@@ -660,7 +660,7 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
+rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new WinFontInstance(*this, rFSD);
 }
@@ -760,7 +760,7 @@ int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*,
 }
 
 void ImplGetLogFontFromFontSelect( HDC hDC,
-                                   const FontSelectPatternAttributes* pFont,
+                                   const FontSelectPattern* pFont,
                                    const PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
 {
@@ -842,7 +842,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(FontSelectPatternAttributes const & i_rFont,
+HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
                                     const PhysicalFontFace * i_pFontFace,
                                     float& o_rFontScale,
                                     HFONT& o_rOldFont)
@@ -1647,10 +1647,10 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 {
     // TODO: use more of the central font-subsetting code, move stuff there if needed
 
-    // create matching FontSelectPatternAttributes
+    // create matching FontSelectPattern
     // we need just enough to get to the font file data
     // use height=1000 for easier debugging (to match psprint's font units)
-    FontSelectPatternAttributes aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
+    FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -1769,9 +1769,9 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
 const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
 {
-    // create matching FontSelectPatternAttributes
+    // create matching FontSelectPattern
     // we need just enough to get to the font file data
-    FontSelectPatternAttributes aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
+    FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     ScopedFont aOldFont(*this);
     SetFont( &aIFSD, 0 );
@@ -1796,9 +1796,9 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                      std::vector< sal_Int32 >& rWidths,
                                      Ucs2UIntMap& rUnicodeEnc )
 {
-    // create matching FontSelectPatternAttributes
+    // create matching FontSelectPattern
     // we need just enough to get to the font file data
-    FontSelectPatternAttributes aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
+    FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);

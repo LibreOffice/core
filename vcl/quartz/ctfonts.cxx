@@ -45,7 +45,7 @@ inline double toRadian(int nDegree)
     return nDegree * (M_PI / 1800.0);
 }
 
-CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatternAttributes& rFSP)
+CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
@@ -284,7 +284,7 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
+rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new CoreTextStyle(*this, rFSD);
 }

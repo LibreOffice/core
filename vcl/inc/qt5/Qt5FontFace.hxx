@@ -28,7 +28,7 @@
 #include <QtCore/QString>
 
 class FontAttributes;
-class FontSelectPatternAttributes;
+class FontSelectPattern;
 class QFont;
 
 class Qt5FontFace : public PhysicalFontFace
@@ -48,7 +48,7 @@ public:
     bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPatternAttributes& rFSD) const override;
+    CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
 protected:
     Qt5FontFace(const Qt5FontFace&);
