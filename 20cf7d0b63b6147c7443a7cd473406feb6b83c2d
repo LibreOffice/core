@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_4424cac6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-21T17:44:16Z",
+      "side": 1,
+      "message": "Am I doing something wrong here?  The character properties of the whole paragraph in the cell has a COL_AUTO value - so that the character background blends in with the table instead of being white. Yet, the test returns white values both with and without the patch.",
+      "range": {
+        "startLine": 64,
+        "startChar": 75,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "20cf7d0b63b6147c7443a7cd473406feb6b83c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
