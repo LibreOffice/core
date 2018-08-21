@@ -16,7 +16,8 @@
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
 #include <vcl/scheduler.hxx>
-
+#include <tools/datetime.hxx>
+#include <tools/time.hxx>
 #include <memory>
 
 class ScDataTransformationTest : public ScBootstrapFixture
@@ -543,269 +544,440 @@ void ScDataTransformationTest::testReplaceNull()
 
 void ScDataTransformationTest::testGetDateString()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.5624189815);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("05/28/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/25/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("05/28/16"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/25/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("10/12/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/23/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("08/15/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetYear()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::YEAR   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1900, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1909, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1902, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1913, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2011, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1994, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1996, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1947, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetStartOfYear()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.5624189815);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
-    m_pDoc->SetValue(2, 3, 0, 44217.5624189815);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/16"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/21"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetEndOfYear()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.5624189815);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
-    m_pDoc->SetValue(2, 3, 0, 44217.5624189815);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/16"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/21"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("12/31/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("12/31/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("12/31/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("12/31/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetMonth()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::MONTH   );
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetMonthName()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("January"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("February"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("August"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("May"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("October"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("September"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("August"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetStartOfMonth()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.562418981);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
-    m_pDoc->SetValue(2, 3, 0, 44217.5624189815);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("05/01/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/01/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("05/01/16"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/21"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("10/01/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/01/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("08/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetEndOfMonth()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.5624189815);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
-    m_pDoc->SetValue(2, 3, 0, 44217.5624189815);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("05/31/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/31/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("05/31/16"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/31/21"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/31/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("10/31/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/30/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("08/31/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetDay()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(24, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(13, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(12, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(23, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetDayOfWeek()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 0, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetDayOfYear()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(55, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(225, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(142, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(285, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(267, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(227, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetQuarter()
 {
-    m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
-    m_pDoc->SetValue(2, 3, 0, 4890.22);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::QUARTER   );
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(2, 1, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetStartOfQuarter()
 {
-    m_pDoc->SetValue(2, 0, 0, 43148.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 43264.3055555556);
-    m_pDoc->SetValue(2, 2, 0, 43306.4946990741);
-    m_pDoc->SetValue(2, 3, 0, 43406.4946990741);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("04/01/18"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/01/18"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10/01/18"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("10/01/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("07/01/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("07/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetEndOfQuarter()
 {
-    m_pDoc->SetValue(2, 0, 0, 43148.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 43264.3055555556);
-    m_pDoc->SetValue(2, 2, 0, 43306.4946990741);
-    m_pDoc->SetValue(2, 3, 0, 43406.4946990741);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    css::util::Date aDate1(25,1,2011);
+    css::util::Date aDate2(12,10,1994);
+    css::util::Date aDate3(23,9,1996);
+    css::util::Date aDate4(15,8,1947);
+
+    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+
+    m_pDoc->SetValue(2, 0, 0, nDate1);
+    m_pDoc->SetValue(2, 1, 0, nDate2);
+    m_pDoc->SetValue(2, 2, 0, nDate3);
+    m_pDoc->SetValue(2, 3, 0, nDate4);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("03/31/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("06/30/18"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/30/18"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/18"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/31/11"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("12/31/94"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/30/96"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("09/30/47"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetTime()
 {
-    m_pDoc->SetValue(2, 0, 0, 20.562419);
-    m_pDoc->SetValue(2, 1, 0, 43249.3077546296);
-    m_pDoc->SetValue(2, 2, 0, 43249.3990740741);
-    m_pDoc->SetValue(2, 3, 0, 43249.4234837963);
+    tools::Time aTime1(5,30,12);
+    tools::Time aTime2(7,23,9);
+    tools::Time aTime3(9,34,40);
+    tools::Time aTime4(22,9,49);
+
+    m_pDoc->SetValue(2, 0, 0, aTime1.GetTimeInDays());
+    m_pDoc->SetValue(2, 1, 0, aTime2.GetTimeInDays());
+    m_pDoc->SetValue(2, 2, 0, aTime3.GetTimeInDays());
+    m_pDoc->SetValue(2, 3, 0, aTime4.GetTimeInDays());
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::TIME  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01:29:53 PM"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("05:30:12 AM"), m_pDoc->GetString(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("07:23:09 AM"), m_pDoc->GetString(2, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("09:34:40 AM"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:09:49 AM"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("10:09:49 PM"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetHour()
 {
-    m_pDoc->SetValue(2, 0, 0, 20.562419);
-    m_pDoc->SetValue(2, 1, 0, 43249.3077546296);
-    m_pDoc->SetValue(2, 2, 0, 43249.3990740741);
-    m_pDoc->SetValue(2, 3, 0, 43249.4234837963);
+    tools::Time aTime1(5,30,12);
+    tools::Time aTime2(7,23,9);
+    tools::Time aTime3(9,34,40);
+    tools::Time aTime4(22,9,49);
+
+    m_pDoc->SetValue(2, 0, 0, aTime1.GetTimeInDays());
+    m_pDoc->SetValue(2, 1, 0, aTime2.GetTimeInDays());
+    m_pDoc->SetValue(2, 2, 0, aTime3.GetTimeInDays());
+    m_pDoc->SetValue(2, 3, 0, aTime4.GetTimeInDays());
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::HOUR  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(13, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 0, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7, m_pDoc->GetValue(2, 1, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetMinute()
 {
-    m_pDoc->SetValue(2, 0, 0, 20.562419);
-    m_pDoc->SetValue(2, 1, 0, 43249.3077546296);
-    m_pDoc->SetValue(2, 2, 0, 43249.3990740741);
-    m_pDoc->SetValue(2, 3, 0, 43249.4234837963);
+    tools::Time aTime1(5,30,12);
+    tools::Time aTime2(7,23,9);
+    tools::Time aTime3(9,34,40);
+    tools::Time aTime4(22,9,49);
+
+    m_pDoc->SetValue(2, 0, 0, aTime1.GetTimeInDays());
+    m_pDoc->SetValue(2, 1, 0, aTime2.GetTimeInDays());
+    m_pDoc->SetValue(2, 2, 0, aTime3.GetTimeInDays());
+    m_pDoc->SetValue(2, 3, 0, aTime4.GetTimeInDays());
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::MINUTE  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(29, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(30, m_pDoc->GetValue(2, 0, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(23, m_pDoc->GetValue(2, 1, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(34, m_pDoc->GetValue(2, 2, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9, m_pDoc->GetValue(2, 3, 0), 0);
@@ -813,16 +985,21 @@ void ScDataTransformationTest::testGetMinute()
 
 void ScDataTransformationTest::testGetSecond()
 {
-    m_pDoc->SetValue(2, 0, 0, 20.562419);
-    m_pDoc->SetValue(2, 1, 0, 43249.3077546296);
-    m_pDoc->SetValue(2, 2, 0, 43249.3990740741);
-    m_pDoc->SetValue(2, 3, 0, 43249.4234837963);
+    tools::Time aTime1(5,30,53);
+    tools::Time aTime2(7,23,10);
+    tools::Time aTime3(9,34,40);
+    tools::Time aTime4(22,9,49);
+
+    m_pDoc->SetValue(2, 0, 0, aTime1.GetTimeInDays());
+    m_pDoc->SetValue(2, 1, 0, aTime2.GetTimeInDays());
+    m_pDoc->SetValue(2, 2, 0, aTime3.GetTimeInDays());
+    m_pDoc->SetValue(2, 3, 0, aTime4.GetTimeInDays());
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::SECOND   );
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(53, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(9, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10, m_pDoc->GetValue(2, 1, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(40, m_pDoc->GetValue(2, 2, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(49, m_pDoc->GetValue(2, 3, 0), 0);
 }
