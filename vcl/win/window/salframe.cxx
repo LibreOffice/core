@@ -2180,7 +2180,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
                 // specified by this font name; but it seems to decide whether
                 // to use that font's horizontal or vertical variant based on a
                 // '@' in front of this font name.
-                ImplGetLogFontFromFontSelect(hDC, &pContext->mpFont->GetFontSelectPattern(),
+                ImplGetLogFontFromFontSelect(hDC, pContext->mpFont->GetFontSelectPattern(),
                                              nullptr, aLogFont);
                 ReleaseDC( pFrame->mhWnd, hDC );
                 ImmSetCompositionFontW( hIMC, &aLogFont );
