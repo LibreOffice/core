@@ -68,24 +68,6 @@ public:
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant
 };
 
-
-class FontSelectPattern : public FontSelectPatternAttributes
-{
-public:
-                    FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
-                                       const Size&, float fExactHeight );
-#ifdef _WIN32
-// ifdeffed to prevent it going into unusedcode.easy
-                    FontSelectPattern( const PhysicalFontFace&, const Size&,
-                                       float fExactHeight, int nOrientation, bool bVertical );
-#endif
-
-public: // TODO: change to private
-    rtl::Reference<LogicalFontInstance> mpFontInstance;                // pointer to the resulting FontCache entry
-
-    void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
-};
-
 #endif // INCLUDED_VCL_INC_FONTSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

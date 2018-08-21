@@ -87,7 +87,7 @@ class VirtualDevice;
 struct SalTwoRect;
 class VirtualDevice;
 class Printer;
-class FontSelectPattern;
+class FontSelectPatternAttributes;
 class VCLXGraphics;
 class OutDevStateStack;
 struct BitmapSystemData;
