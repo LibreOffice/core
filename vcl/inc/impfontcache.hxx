@@ -42,7 +42,7 @@ private:
     typedef std::unordered_map<FontSelectPatternAttributes, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
-    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
+    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPatternAttributes&);
 
 public:
                         ImplFontCache();
@@ -50,7 +50,8 @@ public:
 
     rtl::Reference<LogicalFontInstance> GetFontInstance( PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
+    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPatternAttributes&,
+                            LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
 
     void                Invalidate();

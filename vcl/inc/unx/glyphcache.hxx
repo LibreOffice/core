@@ -65,7 +65,7 @@ public:
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
-    FreetypeFont*           CacheFont( const FontSelectPattern& );
+    FreetypeFont*           CacheFont(LogicalFontInstance* pFontInstance);
     void                    UncacheFont( FreetypeFont& );
     void                    ClearFontCache();
     void                    InvalidateAllGlyphs();
@@ -83,9 +83,9 @@ private:
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
-    struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
-    struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
+    struct IFSD_Equal{  bool operator()( const rtl::Reference<LogicalFontInstance>&, const rtl::Reference<LogicalFontInstance>& ) const; };
+    struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
+    typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
 
     FontList                maFontList;
     sal_uLong               mnMaxSize;      // max overall cache size in bytes
