@@ -44,7 +44,7 @@
 
 class FontSubsetInfo;
 class FontConfigFontOptions;
-class FontSelectPatternAttributes;
+class FontSelectPattern;
 class GenericUnixSalData;
 
 namespace psp {
@@ -310,7 +310,7 @@ public:
     void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
     static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize);
 
-    void Substitute(FontSelectPatternAttributes &rPattern, OUString& rMissingCodes);
+    void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
 
 };
 

@@ -311,7 +311,7 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
     return std::unique_ptr<SalLayout>(aLayout);
 }
 
-WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPatternAttributes& rFSP)
+WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , m_hFont(nullptr)
 {
@@ -325,7 +325,7 @@ WinFontInstance::~WinFontInstance()
 
 bool WinFontInstance::hasHScale() const
 {
-    const FontSelectPatternAttributes &rPattern = GetFontSelectPattern();
+    const FontSelectPattern &rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
     return nWidth != nHeight;

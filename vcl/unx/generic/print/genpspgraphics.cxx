@@ -611,7 +611,7 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
 
     sal_IntPtr nID = pFontInstance->GetFontFace()->GetFontId();
 
-    const FontSelectPatternAttributes& rEntry = pFontInstance->GetFontSelectPattern();
+    const FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
 
     // determine which font attributes need to be emulated
     bool bArtItalic = false;

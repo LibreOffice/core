@@ -39,7 +39,7 @@ class PhysicalFontFace;
 class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceObject
 {
     // just declaring the factory function doesn't work AKA
-    // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPatternAttributes&) const;
+    // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
     friend class PhysicalFontFace;
     friend class ImplFontCache;
 
@@ -62,7 +62,7 @@ public: // TODO: make data members private
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = nFactor; }
     void SetNonAntialiased(bool bNonAntialiased);
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
-    const FontSelectPatternAttributes& GetFontSelectPattern() const { return m_aFontSelData; }
+    const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
@@ -73,7 +73,7 @@ public: // TODO: make data members private
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
-    explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPatternAttributes&);
+    explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     // Takes ownership of pHbFace.
     hb_font_t* InitHbFont(hb_face_t* pHbFace) const;
@@ -87,7 +87,7 @@ private:
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     ImplFontCache * mpFontCache;
-    const FontSelectPatternAttributes m_aFontSelData;
+    const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<PhysicalFontFace> m_pFontFace;
