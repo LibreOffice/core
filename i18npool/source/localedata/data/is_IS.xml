@@ -20,7 +20,7 @@
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>.</LongDateDaySeparator>
+      <LongDateDaySeparator>. </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
