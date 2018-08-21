@@ -44,7 +44,7 @@
 
 class FontSubsetInfo;
 class FontConfigFontOptions;
-class FontSelectPattern;
+class FontSelectPatternAttributes;
 class GenericUnixSalData;
 
 namespace psp {
