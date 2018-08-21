@@ -1540,14 +1540,12 @@ Private Function _CollectNames(ByRef poCollection As Object, ByVal psPrefix As S
 &apos;	Result = 2 items array:		(0) list of hierarchical names
 &apos;								(1) list of persistent names
 &apos;	
-Dim oObject As Object, vNamesList() As Variant, vPersistentList As Variant, i As Integer, vCollect As Variant
+Dim oObject As Object, vNamesList() As Variant, vPersistentList As Variant, i As Integer, sCollect(0 To 1) As String
 Dim sName As String, sType As String, sPrefix As String
 Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
 Const cstSeparator = &quot;\;&quot;
 
-	_CollectNames = Array()
-	vCollect = Array()
-	ReDim vCollect(0 To 1)
+	_CollectNames = sCollect()
 	vPersistentList = Array()
 
 	With poCollection
@@ -1564,9 +1562,9 @@ Const cstSeparator = &quot;\;&quot;
 					vNamesList(i) = psPrefix &amp; vNamesList(i)
 					vPersistentList(i) = oObject.PersistentName
 				Case &quot;&quot;				&apos;	Folder
-					vCollect = _CollectNames(oObject, psPrefix &amp; sName &amp; &quot;/&quot;)
-					vNamesList(i) = vCollect(0)
-					vPersistentList(i) = vCollect(1)
+					sCollect = _CollectNames(oObject, psPrefix &amp; sName &amp; &quot;/&quot;)
+					vNamesList(i) = sCollect(0)
+					vPersistentList(i) = sCollect(1)
 				Case Else
 			End Select
 		Next i
@@ -1574,9 +1572,9 @@ Const cstSeparator = &quot;\;&quot;
 	End With
 
 	Set oObject = Nothing
-	vCollect(0) = Join(vNamesList, cstSeparator)
-	vCollect(1) = Join(vPersistentList, cstSeparator)
-	_CollectNames = vCollect
+	sCollect(0) = Join(vNamesList, cstSeparator)
+	sCollect(1) = Join(vPersistentList, cstSeparator)
+	_CollectNames = sCollect()
 
 End Function			&apos;	_CollectNames	V6.2.0
 
