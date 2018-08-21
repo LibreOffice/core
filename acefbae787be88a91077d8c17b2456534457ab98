@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e4a75e4f",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-21T16:41:12Z",
+      "side": 1,
+      "message": "this can also be constexpr (just in case)",
+      "revId": "acefbae787be88a91077d8c17b2456534457ab98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
