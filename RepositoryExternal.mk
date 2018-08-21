@@ -828,6 +828,10 @@ else # !SYSTEM_LIBNUMBERTEXT
 
 ifneq ($(ENABLE_LIBNUMBERTEXT),)
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	libnumbertext_numbertext \
+))
+
 define gb_LinkTarget__use_libnumbertext
 $(call gb_LinkTarget_use_package,$(1),libnumbertext_numbertext)
 $(call gb_LinkTarget_set_include,$(1),\
