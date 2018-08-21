@@ -142,11 +142,12 @@ class STLPropertySet;
 class CustomAnimationDialog : public TabDialog
 {
 public:
-    CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& Page);
+    CustomAnimationDialog(vcl::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& Page);
     virtual ~CustomAnimationDialog() override;
     virtual void dispose() override;
 
     STLPropertySet* getResultSet();
+    STLPropertySet* getPropertySet() const { return mpSet.get(); }
 
     static std::unique_ptr<STLPropertySet> createDefaultSet();
 

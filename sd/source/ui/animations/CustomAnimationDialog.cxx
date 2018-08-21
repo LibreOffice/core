@@ -2154,9 +2154,9 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, void)
     updateControlStates();
 }
 
-CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& sPage)
+CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
-, mpSet( pSet )
+, mpSet( std::move(pSet) )
 , mpResultSet( nullptr )
 {
     get(mpTabControl, "tabs");
@@ -2171,8 +2171,8 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     mpTabControl->SetTabPage( nTimingId, mpDurationTabPage );
 
     bool bHasText = false;
-    if( pSet->getPropertyState( nHandleHasText ) != STLPropertyState::Ambiguous )
-        pSet->getPropertyValue( nHandleHasText ) >>= bHasText;
+    if( mpSet->getPropertyState( nHandleHasText ) != STLPropertyState::Ambiguous )
+        mpSet->getPropertyValue( nHandleHasText ) >>= bHasText;
 
     if( bHasText )
     {

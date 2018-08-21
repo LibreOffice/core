@@ -1668,13 +1668,16 @@ void CustomAnimationPane::showOptions(const OString& sPage)
 {
     std::unique_ptr<STLPropertySet> pSet = createSelectionSet();
 
-    VclPtrInstance< CustomAnimationDialog > pDlg(this, pSet.get(), sPage);
-    if( pDlg->Execute() )
-    {
-        addUndo();
-        changeSelection( pDlg->getResultSet(), pSet.get() );
-        updateControls();
-    }
+    auto pDlg = VclPtr<CustomAnimationDialog>::Create(this, std::move(pSet), sPage);
+
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                if (nResult )
+                {
+                    addUndo();
+                    changeSelection( pDlg->getResultSet(), pDlg->getPropertySet() );
+                    updateControls();
+                }
+            });
 }
 
 void CustomAnimationPane::onChangeCurrentPage()
