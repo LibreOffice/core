@@ -2208,7 +2208,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                         aOldSet.ClearItem( RES_PARATR_SPLIT );
                         aNewSet.ClearItem( RES_PARATR_SPLIT );
                     }
-                    SwContentFrame::Modify( &aOldSet, &aNewSet );
+                    if (aOldSet.Count() || aNewSet.Count())
+                    {
+                        SwContentFrame::Modify( &aOldSet, &aNewSet );
+                    }
                 }
                 else
                     SwContentFrame::Modify( pOld, pNew );
