@@ -353,7 +353,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 {
 }
 
-rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
 {
     return new FreetypeFontInstance(*this, rFSD);
 }

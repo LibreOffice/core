@@ -943,7 +943,7 @@ static bool FindMetricCompatibleFont(FontSelectPatternAttributes& rFontSelData)
     return false;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPatternAttributes& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
