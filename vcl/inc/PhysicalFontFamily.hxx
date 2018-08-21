@@ -69,7 +69,7 @@ public:
 
     void                AddFontFace( PhysicalFontFace* );
 
-    PhysicalFontFace*   FindBestFontFace( const FontSelectPatternAttributes& rFSD ) const;
+    PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                UpdateDevFontList( ImplDeviceFontList& ) const;
     void                UpdateCloneFontList(PhysicalFontCollection&) const;

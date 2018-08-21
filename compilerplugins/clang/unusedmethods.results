@@ -1167,7 +1167,7 @@ vcl/inc/fontinstance.hxx:63
 vcl/inc/fontinstance.hxx:80
     void LogicalFontInstance::ReleaseHbFont()
 vcl/inc/fontselect.hxx:48
-    _Bool FontSelectPatternAttributes::operator!=(const class FontSelectPatternAttributes &) const
+    _Bool FontSelectPattern::operator!=(const class FontSelectPattern &) const
 vcl/inc/headless/svpgdi.hxx:230
     void SvpSalGraphics::drawBitmap(const struct SalTwoRect &,struct BitmapBuffer *,enum _cairo_operator)
 vcl/inc/impgraph.hxx:57

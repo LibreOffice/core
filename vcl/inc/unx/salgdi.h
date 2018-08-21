@@ -43,7 +43,7 @@
 typedef unsigned long Pixel;
 
 class FontAttributes;
-class FontSelectPatternAttributes;
+class FontSelectPattern;
 class SalBitmap;
 class SalColormap;
 class SalDisplay;

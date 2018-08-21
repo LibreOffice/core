@@ -170,7 +170,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     mpFallbackList  = std::move(pFallbackList);
 }
 
-PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatternAttributes& rFontSelData,
+PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
                                                                   LogicalFontInstance* pFontInstance,
                                                                   OUString& rMissingCodes,
                                                                   int nFallbackLevel ) const
@@ -929,7 +929,7 @@ static const std::map<OUString, OUString> aMetricCompatibleMap =
     { "Calibri",         "Carlito" },
 };
 
-static bool FindMetricCompatibleFont(FontSelectPatternAttributes& rFontSelData)
+static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
 {
     for (const auto& aSub : aMetricCompatibleMap)
     {
@@ -943,7 +943,7 @@ static bool FindMetricCompatibleFont(FontSelectPatternAttributes& rFontSelData)
     return false;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPatternAttributes& rFSD ) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
@@ -970,7 +970,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPatternAtt
 
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX);
+        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
         OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
 
