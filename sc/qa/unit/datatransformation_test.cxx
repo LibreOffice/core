@@ -543,16 +543,18 @@ void ScDataTransformationTest::testReplaceNull()
 
 void ScDataTransformationTest::testGetDateString()
 {
-    m_pDoc->SetValue(2, 0, 0, 43248.5624189815);
-    m_pDoc->SetValue(2, 1, 0, 42941.5624189815);
-    m_pDoc->SetValue(2, 2, 0, 42518.5624189815);
+    m_pDoc->SetValue(2, 0, 0, 20.5624189815);
+    m_pDoc->SetValue(2, 1, 0, 43248.5624189815);
+    m_pDoc->SetValue(2, 2, 0, 42941.5624189815);
+    m_pDoc->SetValue(2, 3, 0, 42518.5624189815);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("05/28/18"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/25/17"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("05/28/16"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("01/19/00"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("05/28/18"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("07/25/17"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("05/28/16"), m_pDoc->GetString(2, 3, 0));
 }
 
 void ScDataTransformationTest::testGetYear()
@@ -606,7 +608,7 @@ void ScDataTransformationTest::testGetEndOfYear()
 void ScDataTransformationTest::testGetMonth()
 {
     m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
+    m_pDoc->SetValue(2, 1, 0, 43248.5624189815);
     m_pDoc->SetValue(2, 2, 0, 955.05);
     m_pDoc->SetValue(2, 3, 0, 4890.22);
 
@@ -614,7 +616,7 @@ void ScDataTransformationTest::testGetMonth()
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 1, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8, m_pDoc->GetValue(2, 2, 0), 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 3, 0), 0);
 }
@@ -622,8 +624,8 @@ void ScDataTransformationTest::testGetMonth()
 void ScDataTransformationTest::testGetMonthName()
 {
     m_pDoc->SetValue(2, 0, 0, 20);
-    m_pDoc->SetValue(2, 1, 0, 3342.44);
-    m_pDoc->SetValue(2, 2, 0, 955.05);
+    m_pDoc->SetValue(2, 1, 0, 34);
+    m_pDoc->SetValue(2, 2, 0, 70);
     m_pDoc->SetValue(2, 3, 0, 4890.22);
 
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
@@ -631,7 +633,7 @@ void ScDataTransformationTest::testGetMonthName()
 
     CPPUNIT_ASSERT_EQUAL(OUString("January"), m_pDoc->GetString(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("February"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("August"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("March"), m_pDoc->GetString(2, 2, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("May"), m_pDoc->GetString(2, 3, 0));
 }
 
@@ -677,10 +679,10 @@ void ScDataTransformationTest::testGetDay()
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(24, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(13, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(19, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(23, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(12, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(21, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetDayOfWeek()
@@ -693,10 +695,10 @@ void ScDataTransformationTest::testGetDayOfWeek()
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetDayOfYear()
@@ -709,10 +711,10 @@ void ScDataTransformationTest::testGetDayOfYear()
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20, m_pDoc->GetValue(2, 0, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(55, m_pDoc->GetValue(2, 1, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(225, m_pDoc->GetValue(2, 2, 0), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(142, m_pDoc->GetValue(2, 3, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(19, m_pDoc->GetValue(2, 0, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(54, m_pDoc->GetValue(2, 1, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(224, m_pDoc->GetValue(2, 2, 0), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(141, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
 void ScDataTransformationTest::testGetQuarter()
@@ -774,7 +776,7 @@ void ScDataTransformationTest::testGetTime()
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("01:29:53 PM"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07:23:09 AM"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("07:23:10 AM"), m_pDoc->GetString(2, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("09:34:40 AM"), m_pDoc->GetString(2, 2, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("10:09:49 AM"), m_pDoc->GetString(2, 3, 0));
 }
