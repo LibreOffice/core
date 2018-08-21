@@ -402,7 +402,7 @@ bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
-    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    const FontSelectPatternAttributes& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
         return;
 
