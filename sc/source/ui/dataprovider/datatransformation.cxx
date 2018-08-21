@@ -14,62 +14,15 @@
 #include <cmath>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
+#include <globalnames.hxx>
+
 namespace {
 
-int getHour(double nDateTime)
+Date getDate(double nDateTime, SvNumberFormatter* pFormatter)
 {
-    long nDays = std::trunc(nDateTime);
-    double nTime = nDateTime - nDays;
-    return std::trunc(nTime*24);
-}
-
-int getMinute(double nDateTime)
-{
-    long nDays = std::trunc(nDateTime);
-    double nTime = nDateTime - nDays;
-    nTime = nTime*24;
-    nTime = nTime - std::trunc(nTime);
-    return std::trunc(nTime*60);
-}
-
-int getSecond(double nDateTime)
-{
-    double nDays = std::trunc(nDateTime);
-    double nTime = nDateTime - nDays;
-    nTime = nTime*24;
-    nTime = nTime - std::trunc(nTime);
-    nTime = nTime*60;
-    nTime = nTime - std::trunc(nTime);
-    return std::trunc(nTime*60);
-}
-
-OUString getTwoDigitString(OUString sString)
-{
-    if(sString.getLength() == 1)
-        sString = "0" + sString;
-    return sString;
-}
-
-DateTime getDate(double nDateTime, SvNumberFormatter* pFormatter)
-{
-    sal_Int32 nDays = std::trunc(nDateTime);
-    Date aDate =    pFormatter->GetNullDate();
-    aDate.AddDays(nDays + 1);
+    Date aDate = pFormatter->GetNullDate();
+    aDate.AddDays(static_cast<sal_Int32>(::rtl::math::approxFloor(nDateTime)));
     return aDate;
-}
-
-OUString getTimeString(double nDateTime)
-{
-    OUString sHour = OUString::number(getHour(nDateTime));
-    sHour = getTwoDigitString(sHour);
-
-    OUString sMinute = OUString::number(getMinute(nDateTime));
-    sMinute = getTwoDigitString(sMinute);
-
-    OUString sSecond = OUString::number(getSecond(nDateTime));
-    sSecond = getTwoDigitString(sSecond);
-
-    return sHour + ":" + sMinute + ":" + sSecond;
 }
 }
 
@@ -781,20 +734,17 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
         {
             case DATETIME_TRANSFORMATION_TYPE::DATE_STRING:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType        eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
                     rDoc.GetCellType(rCol, nRow, 0, eType);
                     if (eType == CELLTYPE_VALUE)
                     {
-                        double nVal = rDoc.GetValue(rCol, nRow, 0);
-
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType        eLanguage = ScGlobal::eLnge;
                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
-                        rDoc.SetValue(rCol, nRow, 0, nVal);
                         rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
@@ -802,6 +752,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::YEAR:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -809,7 +760,6 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
                         rDoc.SetValue(rCol, nRow, 0, aDate.GetYear());
                     }
@@ -818,6 +768,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType        eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -825,17 +779,12 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
-                        nVal -= aDate.GetDayOfYear() - 2;
-                        nVal = std::trunc(nVal);
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType        eLanguage = ScGlobal::eLnge;
-                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+                        aDate.SetDay(1);
+                        aDate.SetMonth(1);
+                        nVal = aDate - pFormatter->GetNullDate();
+                        ScAddress aAddress(rCol, nRow, 0);
                         rDoc.SetValue(rCol, nRow, 0, nVal);
-
                         rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
@@ -843,6 +792,11 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType        eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
+
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -850,17 +804,12 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
-                        nVal += ( aDate.GetDaysInYear() - aDate.GetDayOfYear() + 1);
-                        nVal = std::trunc(nVal);
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType        eLanguage = ScGlobal::eLnge;
+                        aDate.SetMonth(12);
+                        aDate.SetDay(31);
+                        nVal = aDate - pFormatter->GetNullDate();
                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                         rDoc.SetValue(rCol, nRow, 0, nVal);
-
                         rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
@@ -868,6 +817,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::MONTH:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -875,7 +825,6 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
                         rDoc.SetValue(rCol, nRow, 0, aDate.GetMonth());
                     }
@@ -884,25 +833,29 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::MONTH_NAME:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                LanguageType eLanguage = ScGlobal::eLnge;
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
                     rDoc.GetCellType(rCol, nRow, 0, eType);
                     if (eType == CELLTYPE_VALUE)
                     {
-                        OUString aMonths[] = {"January", "February", "March", "April", "May",
-                       "June", "July", "August", "September", "October", "November", "December"};
-
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                        Date aDate = getDate(nVal, pFormatter);
-                        rDoc.SetString(rCol, nRow, 0, aMonths[aDate.GetMonth() - 1]);
+                        Color* pColor = nullptr;
+                        OUString aResult;
+                        pFormatter->GetPreviewStringGuess("MMMM", nVal, aResult, &pColor, eLanguage);
+                        rDoc.SetString(rCol, nRow, 0, aResult);
                     }
                 }
             }
             break;
             case DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -910,16 +863,11 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType eLanguage = ScGlobal::eLnge;
                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
-
                         Date aDate = getDate(nVal, pFormatter);
-                        Date aStart(1,aDate.GetMonth(), aDate.GetYear());
-                        int nDays = aDate.GetDayOfYear() - aStart.GetDayOfYear() - 1;
-                        rDoc.SetValue(rCol, nRow, 0, nVal - nDays);
+                        aDate.SetDay(1);
+                        nVal = aDate - pFormatter->GetNullDate();
+                        rDoc.SetValue(rCol, nRow, 0, nVal);
                         rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
@@ -927,6 +875,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -934,17 +886,11 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType eLanguage = ScGlobal::eLnge;
                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
-
                         Date aDate = getDate(nVal, pFormatter);
-                        Date aEnd(aDate.GetDaysInMonth(),aDate.GetMonth(), aDate.GetYear());
-
-                        int nDays = aEnd.GetDayOfYear() - aDate.GetDayOfYear() + 1;
-                        rDoc.SetValue(rCol, nRow, 0, nVal + nDays);
+                        aDate.SetDay(aDate.GetDaysInMonth());
+                        nVal = aDate - pFormatter->GetNullDate();
+                        rDoc.SetValue(rCol, nRow, 0, nVal);
                         rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
@@ -952,6 +898,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::DAY:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -959,7 +906,6 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
                         rDoc.SetValue(rCol, nRow, 0, aDate.GetDay());
                     }
@@ -968,6 +914,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -975,7 +922,6 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
                         rDoc.SetValue(rCol, nRow, 0, aDate.GetDayOfWeek());
                     }
@@ -984,6 +930,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -991,7 +938,6 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
                         rDoc.SetValue(rCol, nRow, 0, aDate.GetDayOfYear());
                     }
@@ -1000,6 +946,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::QUARTER:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -1007,10 +954,9 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                         Date aDate = getDate(nVal, pFormatter);
 
-                        int nMonth = 1 + aDate.GetMonth();
+                        int nMonth = aDate.GetMonth();
 
                         if(nMonth >= 1 && nMonth <=3)
                             rDoc.SetValue(rCol, nRow, 0, 1);
@@ -1032,6 +978,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     CellType eType;
@@ -1039,44 +989,40 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                        SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                        LanguageType eLanguage = ScGlobal::eLnge;
                         ScAddress aAddress(rCol, nRow, 0);
-                        sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                         Date aDate = getDate(nVal, pFormatter);
 
                         int nMonth = aDate.GetMonth();
 
                         if(nMonth >= 1 && nMonth <=3)
                         {
-                            Date aQuarterDate(1,1,aDate.GetYear());
-                            int days = aDate.GetDayOfYear() - aQuarterDate.GetDayOfYear() - 1;
-                            nVal -= days;
+                            aDate.SetDay(1);
+                            aDate.SetMonth(1);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
                         else if(nMonth >= 4 && nMonth <=6)
                         {
-                            Date aQuarterDate(1,4,aDate.GetYear());
-                            int days = aDate.GetDayOfYear() - aQuarterDate.GetDayOfYear() - 1;
-                            nVal -= days;
+                            aDate.SetDay(1);
+                            aDate.SetMonth(4);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
                         else if(nMonth >= 7 && nMonth <=9)
                         {
-                            Date aQuarterDate(1,7,aDate.GetYear());
-                            int days = aDate.GetDayOfYear() - aQuarterDate.GetDayOfYear() - 1;
-                            nVal -= days;
+                            aDate.SetDay(1);
+                            aDate.SetMonth(7);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
                         else if(nMonth >= 10 && nMonth <=12)
                         {
-                            Date aQuarterDate(1,10,aDate.GetYear());
-                            int days = aDate.GetDayOfYear() - aQuarterDate.GetDayOfYear() - 1;
-                            nVal -= days;
+                            aDate.SetDay(1);
+                            aDate.SetMonth(10);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
@@ -1088,55 +1034,53 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::DATE;
+                LanguageType        eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                    SvNumFormatType nFormatType = SvNumFormatType::DATE;
-                    LanguageType        eLanguage = ScGlobal::eLnge;
                     ScAddress aAddress(rCol, nRow, 0);
-                    sal_uLong nFormat = pFormatter->GetStandardFormat( nFormatType, eLanguage );
                     CellType eType;
                     rDoc.GetCellType(rCol, nRow, 0, eType);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        nVal = std::trunc(nVal);
                         Date aDate = getDate(nVal, pFormatter);
-
                         int nMonth = aDate.GetMonth();
 
                         if(nMonth >= 1 && nMonth <=3)
                         {
-                            Date aQuarterDate(31,3,aDate.GetYear());
-                            int days = aQuarterDate.GetDayOfYear() - aDate.GetDayOfYear() + 1;
-                            nVal += days;
+                            aDate.SetDay(31);
+                            aDate.SetMonth(3);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
 
                         else if(nMonth >= 4 && nMonth <=6)
                         {
-                            Date aQuarterDate(30,6,aDate.GetYear());
-                            int days = aQuarterDate.GetDayOfYear() - aDate.GetDayOfYear() + 1;
-                            nVal += days;
+                            aDate.SetDay(30);
+                            aDate.SetMonth(6);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
 
                         else if(nMonth >= 7 && nMonth <=9)
                         {
-                            Date aQuarterDate(30,9,aDate.GetYear());
-                            int days = aQuarterDate.GetDayOfYear() - aDate.GetDayOfYear() + 1;
-                            nVal += days;
+                            aDate.SetDay(30);
+                            aDate.SetMonth(9);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
 
                         else if(nMonth >= 10 && nMonth <=12)
                         {
-                            Date aQuarterDate(31,12,aDate.GetYear());
-                            int days = aQuarterDate.GetDayOfYear() - aDate.GetDayOfYear() + 1;
-                            nVal += days;
+                            aDate.SetDay(31);
+                            aDate.SetMonth(12);
+                            nVal = aDate - pFormatter->GetNullDate();
                             rDoc.SetValue(rCol, nRow, 0, nVal);
                             rDoc.SetNumberFormat(aAddress, nFormat);
                         }
@@ -1149,14 +1093,18 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             break;
             case DATETIME_TRANSFORMATION_TYPE::TIME:
             {
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                SvNumFormatType nFormatType = SvNumFormatType::TIME;
+                LanguageType eLanguage = ScGlobal::eLnge;
+                sal_uInt32 nFormat = pFormatter->GetStandardFormat(nFormatType, eLanguage);
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
+                    ScAddress aAddress(rCol, nRow, 0);
                     CellType eType;
                     rDoc.GetCellType(rCol, nRow, 0, eType);
                     if (eType == CELLTYPE_VALUE)
                     {
-                        double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        rDoc.SetString(rCol, nRow, 0, getTimeString(nVal));
+                        rDoc.SetNumberFormat(aAddress, nFormat);
                     }
                 }
             }
@@ -1170,7 +1118,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        rDoc.SetValue(rCol, nRow, 0, getHour(nVal));
+                        sal_uInt16 nHour, nMinute, nSecond;
+                        double fFractionOfSecond;
+                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        rDoc.SetValue(rCol, nRow, 0, nHour);
                     }
                 }
             }
@@ -1184,7 +1135,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        rDoc.SetValue(rCol, nRow, 0, getMinute(nVal));
+                        sal_uInt16 nHour, nMinute, nSecond;
+                        double fFractionOfSecond;
+                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        rDoc.SetValue(rCol, nRow, 0, nMinute);
                     }
                 }
             }
@@ -1198,7 +1152,10 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        rDoc.SetValue(rCol, nRow, 0, getSecond(nVal));
+                        sal_uInt16 nHour, nMinute, nSecond;
+                        double fFractionOfSecond;
+                        tools::Time::GetClock( nVal, nHour, nMinute, nSecond, fFractionOfSecond, 0);
+                        rDoc.SetValue(rCol, nRow, 0, nSecond);
                     }
                 }
             }
