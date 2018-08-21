@@ -1442,7 +1442,7 @@ void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
     BitmapColor aBack;
     BitmapColor aFront;
 
-    if (isHistorical8x8(rBitmapEx, aBack, aFront))
+    if (vcl::bitmap::isHistorical8x8(rBitmapEx, aBack, aFront))
     {
         Bitmap aBitmap(rBitmapEx.GetBitmap());
         Bitmap::ScopedReadAccess pRead(aBitmap);
