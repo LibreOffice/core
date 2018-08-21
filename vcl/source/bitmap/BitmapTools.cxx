@@ -997,6 +997,71 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return aRes;
     }
 
+    BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
+    {
+        BitmapPalette aPalette(2);
+
+        aPalette[0] = BitmapColor(aColorBack);
+        aPalette[1] = BitmapColor(aColorPix);
+
+        Bitmap aBitmap(Size(8, 8), 1, &aPalette);
+        BitmapWriteAccess* pContent(aBitmap.AcquireWriteAccess());
+
+        for(sal_uInt16 a(0); a < 8; a++)
+        {
+            for(sal_uInt16 b(0); b < 8; b++)
+            {
+                if(pArray[(a * 8) + b])
+                {
+                    pContent->SetPixelIndex(a, b, 1);
+                }
+                else
+                {
+                    pContent->SetPixelIndex(a, b, 0);
+                }
+            }
+        }
+
+        return BitmapEx(aBitmap);
+    }
+
+    bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
+    {
+        bool bRet(false);
+
+        if(!rBitmapEx.IsTransparent())
+        {
+            Bitmap aBitmap(rBitmapEx.GetBitmap());
+
+            if(8 == aBitmap.GetSizePixel().Width() && 8 == aBitmap.GetSizePixel().Height())
+            {
+                if(2 == aBitmap.GetColorCount())
+                {
+                    BitmapReadAccess* pRead = aBitmap.AcquireReadAccess();
+
+                    if(pRead)
+                    {
+                        if(pRead->HasPalette() && 2 == pRead->GetPaletteEntryCount())
+                        {
+                            const BitmapPalette& rPalette = pRead->GetPalette();
+
+                            // #i123564# background and foreground were exchanged; of course
+                            // rPalette[0] is the background color
+                            o_rFront = rPalette[1];
+                            o_rBack = rPalette[0];
+
+                            bRet = true;
+                        }
+
+                        Bitmap::ReleaseAccess(pRead);
+                    }
+                }
+            }
+        }
+
+        return bRet;
+    }
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
