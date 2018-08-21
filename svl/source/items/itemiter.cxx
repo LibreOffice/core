@@ -27,7 +27,7 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
 {
     if (!m_rSet.m_nCount)
     {
-        m_nStart = 1;
+        m_nStart = 0;
         m_nEnd = 0;
     }
     else
