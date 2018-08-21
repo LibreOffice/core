@@ -11786,7 +11786,7 @@
           <ref name="ST_DecimalNumber"/>
         </attribute>
         <attribute name="hanging">
-          <ref name="ST_TwipsMeasure"/>
+          <ref name="ST_TwipsMeasure_asSigned"/>
         </attribute>
         <attribute name="hangingChars">
           <ref name="ST_DecimalNumber"/>
