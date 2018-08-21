@@ -185,7 +185,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
         const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
         // construct log font
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, &aFSD, pFace, aLogFont );
+        ImplGetLogFontFromFontSelect( mhDC, aFSD, pFace, aLogFont );
 
         // create HFONT from log font
         HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
@@ -760,7 +760,7 @@ int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*,
 }
 
 void ImplGetLogFontFromFontSelect( HDC hDC,
-                                   const FontSelectPattern* pFont,
+                                   const FontSelectPattern& rFont,
                                    const PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
 {
@@ -768,7 +768,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     if (pFontFace)
         aName = pFontFace->GetFamilyName();
     else
-        aName = pFont->GetFamilyName().getToken( 0, ';' );
+        aName = rFont.GetFamilyName().getToken( 0, ';' );
 
     UINT nNameLen = aName.getLength();
     if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -784,9 +784,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
     else
     {
-        rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
-        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->GetPitch() )
-                                  | ImplFamilyToWin( pFont->GetFamilyType() );
+        rLogFont.lfCharSet = rFont.IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
+        rLogFont.lfPitchAndFamily = ImplPitchToWin( rFont.GetPitch() )
+                                  | ImplFamilyToWin( rFont.GetFamilyType() );
     }
 
     static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
@@ -798,26 +798,26 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
             nDefaultQuality = DEFAULT_QUALITY;
     }
 
-    rLogFont.lfWeight          = ImplWeightToWin( pFont->GetWeight() );
-    rLogFont.lfHeight          = static_cast<LONG>(-pFont->mnHeight);
-    rLogFont.lfWidth           = static_cast<LONG>(pFont->mnWidth);
+    rLogFont.lfWeight          = ImplWeightToWin( rFont.GetWeight() );
+    rLogFont.lfHeight          = static_cast<LONG>(-rFont.nHeight);
+    rLogFont.lfWidth           = static_cast<LONG>(rFont.mnWidth);
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
-    rLogFont.lfItalic          = BYTE(pFont->GetItalic() != ITALIC_NONE);
-    rLogFont.lfEscapement      = pFont->mnOrientation;
+    rLogFont.lfItalic          = BYTE(rFont.GetItalic() != ITALIC_NONE);
+    rLogFont.lfEscapement      = rFont.mnOrientation;
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
     rLogFont.lfQuality         = nDefaultQuality;
     rLogFont.lfOutPrecision    = OUT_TT_PRECIS;
-    if ( pFont->mnOrientation )
+    if ( rFont.mnOrientation )
         rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
 
     // disable antialiasing if requested
-    if ( pFont->mbNonAntialiased )
+    if ( rFont.mbNonAntialiased )
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 
     // select vertical mode if requested and available
-    if ( pFont->mbVertical && nNameLen )
+    if ( rFont.mbVertical && nNameLen )
     {
         // vertical fonts start with an '@'
         memmove( &rLogFont.lfFaceName[1], &rLogFont.lfFaceName[0],
@@ -857,7 +857,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
         hdcScreen = GetDC(nullptr);
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( getHDC(), &i_rFont, i_pFontFace, aLogFont );
+    ImplGetLogFontFromFontSelect( getHDC(), i_rFont, i_pFontFace, aLogFont );
 
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
