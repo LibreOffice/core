@@ -37,7 +37,7 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
             SetSymbolFlag( true );
 }
 
-rtl::Reference<LogicalFontInstance> PhysicalFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> PhysicalFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
 {
     return new LogicalFontInstance(*this, rFSD);
 }

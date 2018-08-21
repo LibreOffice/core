@@ -68,7 +68,7 @@ public:
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
+    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPatternAttributes&) const override;
 
 private:
     const sal_IntPtr                mnFontId;
@@ -79,7 +79,7 @@ private:
 
 class CoreTextStyle : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPatternAttributes&) const;
 
 public:
     ~CoreTextStyle() override;
@@ -96,7 +96,7 @@ public:
     float               mfFontRotation;
 
 private:
-    explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPatternAttributes&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 

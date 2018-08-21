@@ -660,7 +660,7 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
 {
     return new WinFontInstance(*this, rFSD);
 }
