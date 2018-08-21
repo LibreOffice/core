@@ -33,19 +33,19 @@ class LogicalFontInstance;
 class PhysicalFontFace;
 class Size;
 
-class FontSelectPatternAttributes : public FontAttributes
+class FontSelectPattern : public FontAttributes
 {
 public:
-                    FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,
+                    FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
                                                  const Size&, float fExactHeight );
 #ifdef _WIN32
-                    FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
+                    FontSelectPattern( const PhysicalFontFace&, const Size&,
                                                  float fExactHeight, int nOrientation, bool bVertical );
 #endif
 
     size_t          hashCode() const;
-    bool operator==(const FontSelectPatternAttributes& rOther) const;
-    bool operator!=(const FontSelectPatternAttributes& rOther) const
+    bool operator==(const FontSelectPattern& rOther) const;
+    bool operator!=(const FontSelectPattern& rOther) const
     {
         return !(*this == rOther);
     }

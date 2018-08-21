@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     m_aCurrentRequests.clear();
 }
 
-void PrintFontManager::Substitute(FontSelectPatternAttributes &rPattern, OUString& rMissingCodes)
+void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 

@@ -85,9 +85,9 @@ size_t GlyphCache::IFSD_Hash::operator()(const rtl::Reference<LogicalFontInstanc
     // TODO: is it worth to improve this hash function?
     sal_uIntPtr nFontId = GetFontId(*rFontInstance);
 
-    const FontSelectPatternAttributes& rFontSelData = rFontInstance->GetFontSelectPattern();
+    const FontSelectPattern& rFontSelData = rFontInstance->GetFontSelectPattern();
 
-    if (rFontSelData.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
+    if (rFontSelData.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
         != -1)
     {
         OString aFeatName = OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
@@ -115,8 +115,8 @@ bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance
     if (GetFontId(*rAFontInstance) != GetFontId(*rBFontInstance))
         return false;
 
-    const FontSelectPatternAttributes& rA = rAFontInstance->GetFontSelectPattern();
-    const FontSelectPatternAttributes& rB = rBFontInstance->GetFontSelectPattern();
+    const FontSelectPattern& rA = rAFontInstance->GetFontSelectPattern();
+    const FontSelectPattern& rB = rBFontInstance->GetFontSelectPattern();
 
     // compare with the requested metrics
     if( (rA.mnHeight         != rB.mnHeight)
@@ -140,9 +140,9 @@ bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance
    if (rA.meLanguage != rB.meLanguage)
         return false;
    // check for features
-   if ((rA.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
+   if ((rA.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
         != -1 ||
-        rB.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
+        rB.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
         != -1) && rA.maTargetName != rB.maTargetName)
         return false;
 
@@ -354,7 +354,7 @@ void FreetypeFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-FreetypeFontInstance::FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPatternAttributes& rFSP)
+FreetypeFontInstance::FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mpFreetypeFont(nullptr)
 {}
