@@ -765,9 +765,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
                                    LOGFONTW& rLogFont )
 {
     OUString aName;
-    if (!pFontFace && pFont->mpFontInstance)
-        pFontFace = pFont->mpFontInstance->GetFontFace();
-
     if (pFontFace)
         aName = pFontFace->GetFamilyName();
     else
@@ -942,7 +939,7 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>(pFont);
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), nullptr, mfFontScale[ nFallbackLevel ], hOldFont);
+    HFONT hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), pFont->GetFontFace(), mfFontScale[ nFallbackLevel ], hOldFont);
     mfCurrentFontScale = mfFontScale[nFallbackLevel];
 
     if( !mhDefFont )
