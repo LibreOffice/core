@@ -30,14 +30,6 @@
 const char FontSelectPatternAttributes::FEAT_PREFIX = ':';
 const char FontSelectPatternAttributes::FEAT_SEPARATOR = '&';
 
-FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
-    const OUString& rSearchName, const Size& rSize, float fExactHeight)
-    : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
-    , mpFontInstance( nullptr )
-{
-}
-
-
 FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight )
     : maSearchName( rSearchName )
@@ -89,18 +81,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace
     // NOTE: no normalization for width/height/orientation
 }
 
-FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
-    const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
-    : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
-    , mpFontInstance( nullptr )
-{
-}
 #endif
-
-void FontSelectPattern::copyAttributes(const FontSelectPatternAttributes &rAttributes)
-{
-    static_cast<FontSelectPatternAttributes&>(*this) = rAttributes;
-}
 
 size_t FontSelectPatternAttributes::hashCode() const
 {
