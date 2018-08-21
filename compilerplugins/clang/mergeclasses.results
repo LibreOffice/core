@@ -36,7 +36,6 @@ merge FailTest with testMathMalformedXml
 merge FillTypeLB with SvxFillTypeBox
 merge FmGridListener with FmXGridPeer::GridListenerDelegator
 merge FmXDisposeListener with DisposeListenerGridBridge
-merge FontSelectPatternAttributes with FontSelectPattern
 merge GLWindow with GLX11Window
 merge GroupTable with PPTWriterBase
 merge HostDetailsContainer with DavDetailsContainer

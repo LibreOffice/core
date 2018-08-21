@@ -34,7 +34,7 @@
 
 class PhysicalFontCollection;
 class SalBitmap;
-class FontSelectPatternAttributes;
+class FontSelectPattern;
 class FontAttributes;
 class PhysicalFontFace;
 class SalLayout;

@@ -40,7 +40,7 @@ namespace std
 }
 
 
-LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPatternAttributes& rFontSelData )
+LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFontSelData )
     : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
@@ -57,7 +57,7 @@ LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, cons
 
 void LogicalFontInstance::SetNonAntialiased(bool bNonAntialiased)
 {
-    const_cast<FontSelectPatternAttributes*>(&m_aFontSelData)->mbNonAntialiased = bNonAntialiased;
+    const_cast<FontSelectPattern*>(&m_aFontSelData)->mbNonAntialiased = bNonAntialiased;
 }
 
 LogicalFontInstance::~LogicalFontInstance()

@@ -55,7 +55,7 @@ static QFont::Weight GetQFontWeight(FontWeight eWeight)
     return QFont::Normal;
 }
 
-Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPatternAttributes& rFSP)
+Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));

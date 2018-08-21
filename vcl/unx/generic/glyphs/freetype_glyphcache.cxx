@@ -353,7 +353,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 {
 }
 
-rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPatternAttributes& rFSD) const
+rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new FreetypeFontInstance(*this, rFSD);
 }
@@ -385,7 +385,7 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
 
     maFaceFT = pFI->GetFaceFT();
 
-    const FontSelectPatternAttributes& rFSD = pFontInstance->GetFontSelectPattern();
+    const FontSelectPattern& rFSD = pFontInstance->GetFontSelectPattern();
 
     if( rFSD.mnOrientation != 0 )
     {
