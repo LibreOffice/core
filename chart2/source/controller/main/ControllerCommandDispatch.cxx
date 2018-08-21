@@ -30,6 +30,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <StatisticsHelper.hxx>
+#include <ReferenceSizeProvider.hxx>
 #include "ShapeController.hxx"
 
 #include <vcl/svapp.hxx>
@@ -41,6 +42,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 

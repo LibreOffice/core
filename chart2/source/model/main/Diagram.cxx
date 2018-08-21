@@ -40,6 +40,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <cppuhelper/supportsservice.hxx>

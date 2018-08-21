@@ -26,6 +26,7 @@
 #include <servicenames.hxx>
 #include <ResId.hxx>
 #include <dlg_DataSource.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include "ControllerCommandDispatch.hxx"
 #include <strings.hrc>

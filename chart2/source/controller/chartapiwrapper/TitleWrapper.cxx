@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/propshlp.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;

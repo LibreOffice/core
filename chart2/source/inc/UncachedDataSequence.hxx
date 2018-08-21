@@ -28,8 +28,6 @@
 
 // interfaces and types
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
@@ -37,6 +35,9 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XInternalDataProvider; } } } }
 
 namespace chart
 {

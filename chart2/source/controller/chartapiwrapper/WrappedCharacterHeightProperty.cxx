@@ -20,6 +20,8 @@
 #include "WrappedCharacterHeightProperty.hxx"
 #include <RelativeSizeHelper.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

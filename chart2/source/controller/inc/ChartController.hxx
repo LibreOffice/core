@@ -31,7 +31,11 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <memory>
 #include <set>
@@ -51,12 +55,8 @@ namespace com { namespace sun { namespace star { namespace frame { class XContro
 namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XLayoutManagerEventBroadcaster; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XInitialization; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XServiceInfo; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 namespace com { namespace sun { namespace star { namespace util { class XCloseable; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XCloseListener; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 

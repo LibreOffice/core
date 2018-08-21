@@ -23,6 +23,7 @@
 #include <ChartWindow.hxx>
 #include <ResId.hxx>
 #include <CommonConverters.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <TitleHelper.hxx>
@@ -50,6 +51,7 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -57,6 +59,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>

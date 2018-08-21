@@ -14,6 +14,7 @@
 #include <ChartController.hxx>
 #include <ObjectHierarchy.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <vcl/svapp.hxx>
 

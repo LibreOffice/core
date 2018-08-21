@@ -21,6 +21,7 @@
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShape.hxx>

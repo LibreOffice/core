@@ -30,12 +30,15 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 
 #include <map>
 #include <vector>
+#include <memory>
 
 #include <MutexContainer.hxx>
 
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 namespace utl { class AccessibleStateSetHelper; }

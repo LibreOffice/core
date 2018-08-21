@@ -18,9 +18,11 @@
  */
 
 #include <TitleHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <ReferenceSizeProvider.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>

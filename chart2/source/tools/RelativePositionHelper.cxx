@@ -18,6 +18,8 @@
  */
 
 #include <RelativePositionHelper.hxx>
+#include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 

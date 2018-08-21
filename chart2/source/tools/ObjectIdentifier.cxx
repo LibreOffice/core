@@ -23,6 +23,7 @@
 
 #include <ObjectIdentifier.hxx>
 #include <TitleHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -36,6 +37,8 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

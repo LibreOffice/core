@@ -20,6 +20,8 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>

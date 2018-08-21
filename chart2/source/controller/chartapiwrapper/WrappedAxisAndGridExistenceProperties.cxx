@@ -21,6 +21,7 @@
 #include <AxisHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <TitleHelper.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

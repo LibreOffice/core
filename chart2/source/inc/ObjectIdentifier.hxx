@@ -19,20 +19,22 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_OBJECTIDENTIFIER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_OBJECTIDENTIFIER_HXX
 
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include "TitleHelper.hxx"
 #include "charttoolsdllapi.hxx"
-#include <ChartModel.hxx>
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace awt { struct Point; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 namespace chart
 {

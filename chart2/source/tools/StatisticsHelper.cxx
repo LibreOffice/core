@@ -28,6 +28,7 @@
 
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <tools/diagnose_ex.h>

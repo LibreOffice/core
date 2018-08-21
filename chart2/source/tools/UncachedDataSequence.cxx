@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -21,6 +21,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <AxisHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>

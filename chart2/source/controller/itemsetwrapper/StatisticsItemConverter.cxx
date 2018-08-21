@@ -38,6 +38,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <tools/diagnose_ex.h>

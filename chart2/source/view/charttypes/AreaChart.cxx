@@ -39,11 +39,13 @@
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace chart
 {

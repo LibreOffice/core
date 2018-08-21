@@ -20,12 +20,14 @@
 #define INCLUDED_CHART2_SOURCE_INC_MEDIADESCRIPTORHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XStream; } } } }
 
 /*
 * This class helps to read and write the properties mentioned in the service description

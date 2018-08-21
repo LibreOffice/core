@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

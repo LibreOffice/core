@@ -54,6 +54,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
 #include <memory>
 

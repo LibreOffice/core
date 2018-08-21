@@ -26,12 +26,13 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/propshlp.hxx>
 
 #include <memory>
 #include <vector>
+
+namespace cppu { class IPropertyArrayHelper; }
+namespace cppu { class OPropertyArrayHelper; }
 
 namespace chart
 {

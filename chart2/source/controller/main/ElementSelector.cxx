@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace chart
 {
