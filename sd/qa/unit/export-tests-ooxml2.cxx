@@ -192,6 +192,7 @@ public:
     void testTdf118836();
     void testTdf116350TextEffects();
     void testTdf118825();
+    void testTdf119118();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -267,6 +268,7 @@ public:
     CPPUNIT_TEST(testTdf118836);
     CPPUNIT_TEST(testTdf116350TextEffects);
     CPPUNIT_TEST(testTdf118825);
+    CPPUNIT_TEST(testTdf119118);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1964,6 +1966,17 @@ void SdOOXMLExportTest2::testTdf118825()
     CPPUNIT_ASSERT_MOTIONPATH(sPath2, getXPath(pXmlDocContent, "(//p:animMotion)[2]", "path"));
     CPPUNIT_ASSERT_MOTIONPATH(sPath3, getXPath(pXmlDocContent, "(//p:animMotion)[3]", "path"));
     CPPUNIT_ASSERT_MOTIONPATH(sPath4, getXPath(pXmlDocContent, "(//p:animMotion)[4]", "path"));
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf119118()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc( "sd/qa/unit/data/pptx/tdf119118.pptx" ), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:iterate", "type", "lt");
+    assertXPath(pXmlDocContent, "//p:tmAbs", "val", "200");
     xDocShRef->DoClose();
 }
 
