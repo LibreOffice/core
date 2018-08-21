@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/BitmapTools.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <vcl/dibtools.hxx>
 
@@ -146,7 +146,13 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 
 BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
 {
-    vcl::bitmap::RawBitmap aBitmap(Size(8, 8), 24);
+    BitmapPalette aPalette(2);
+
+    aPalette[0] = BitmapColor(aColorBack);
+    aPalette[1] = BitmapColor(aColorPix);
+
+    Bitmap aBitmap(Size(8, 8), 1, &aPalette);
+    BitmapWriteAccess* pContent(aBitmap.AcquireWriteAccess());
 
     for(sal_uInt16 a(0); a < 8; a++)
     {
@@ -154,16 +160,16 @@ BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, C
         {
             if(pArray[(a * 8) + b])
             {
-                aBitmap.SetPixel(a, b, aColorBack);
+                pContent->SetPixelIndex(a, b, 1);
             }
             else
             {
-                aBitmap.SetPixel(a, b, aColorPix);
+                pContent->SetPixelIndex(a, b, 0);
             }
         }
     }
 
-    return vcl::bitmap::CreateFromData(std::move(aBitmap));
+    return BitmapEx(aBitmap);
 }
 
 bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
