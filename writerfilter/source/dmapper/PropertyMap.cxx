@@ -717,13 +717,18 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
             nColSum = 0;
             for ( sal_Int32 nCol = 0; nCol <= m_nColumnCount; ++nCol )
             {
-                pColumn[nCol].LeftMargin = nCol ? m_aColDistance[nCol - 1] / 2 : 0;
-                pColumn[nCol].RightMargin = nCol == m_nColumnCount ? 0 : m_aColDistance[nCol] / 2;
-                pColumn[nCol].Width = sal_Int32( (double( m_aColWidth[nCol] + pColumn[nCol].RightMargin + pColumn[nCol].LeftMargin ) + 0.5) * fRel );
+                const double fLeft = nCol ? m_aColDistance[nCol - 1] / 2 : 0;
+                pColumn[nCol].LeftMargin = fLeft;
+                const double fRight = nCol == m_nColumnCount ? 0 : m_aColDistance[nCol] / 2;
+                pColumn[nCol].RightMargin = fRight;
+                const double fWidth = m_aColWidth[nCol];
+                pColumn[nCol].Width = (fWidth + fLeft + fRight) * fRel;
                 nColSum += pColumn[nCol].Width;
             }
             if ( nColSum != nRefValue )
-                pColumn[m_nColumnCount].Width -= (nColSum - nRefValue);
+                pColumn[m_nColumnCount].Width += (nRefValue - nColSum);
+            assert( pColumn[m_nColumnCount].Width >= 0 );
+
             xColumns->setColumns( aColumns );
         }
         else

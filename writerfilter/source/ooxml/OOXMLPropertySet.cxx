@@ -612,7 +612,9 @@ OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
 
 // OOXMLUniversalMeasureValue
 // ECMA-376 5th ed. Part 1 , 22.9.2.15
-OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt)
+OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue,
+                                                       sal_uInt32 npPt,
+                                                       const bool bAllowNegative)
 {
     double val = rtl_str_toDouble(pValue); // will ignore the trailing unit
 
@@ -651,6 +653,10 @@ OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue, sal_
     {
         mnValue = static_cast<int>(val);
     }
+
+    // TODO how does MS handle this: Zero? Absolute? Negative?
+    if ( !bAllowNegative && mnValue < 0 )
+        mnValue = abs(mnValue);
 }
 
 OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()

@@ -16646,7 +16646,7 @@
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_SignedTwipsMeasure" resource="TwipsMeasure"/>
+    <resource name="ST_SignedTwipsMeasure" resource="SignedTwipsMeasure"/>
     <resource name="CT_SignedTwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>

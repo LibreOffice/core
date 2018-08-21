@@ -275,7 +275,8 @@ class OOXMLUniversalMeasureValue : public OOXMLValue
 private:
     int mnValue;
 public:
-    OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt);
+    OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt,
+                               const bool bAllowNegative = true);
     virtual ~OOXMLUniversalMeasureValue() override;
 
     OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue const &) = default;
@@ -293,8 +294,8 @@ public:
 template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue : public OOXMLUniversalMeasureValue
 {
 public:
-    explicit OOXMLNthPtMeasureValue(const char * pValue)
-        : OOXMLUniversalMeasureValue(pValue, npPt) {}
+    explicit OOXMLNthPtMeasureValue(const char * pValue, const bool bAllowNegative = true)
+        : OOXMLUniversalMeasureValue(pValue, npPt, bAllowNegative) {}
     virtual OOXMLValue* clone() const override
     {
         return new OOXMLNthPtMeasureValue<npPt>(*this);

@@ -38,7 +38,7 @@ def createFastChildContextFromFactory(model):
             switch (nResource)
             {""")
     resources = [
-        "List", "Integer", "Hex", "HexColor", "String", "TwipsMeasure",
+        "List", "Integer", "Hex", "HexColor", "String", "SignedTwipsMeasure", "TwipsMeasure",
         "HpsMeasure", "Boolean", "MeasurementOrPercent",
     ]
     for resource in [r.getAttribute("resource") for r in model.getElementsByTagName("resource")]:
