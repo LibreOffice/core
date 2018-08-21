@@ -29,6 +29,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dialogs.hrc>
@@ -73,7 +74,7 @@ public:
     {
         if (!pBmpArray)
             return BitmapEx();
-        return createHistorical8x8FromArray(*pBmpArray, aPixelColor, aBackgroundColor);
+        return vcl::bitmap::createHistorical8x8FromArray(*pBmpArray, aPixelColor, aBackgroundColor);
     }
 
     void SetBmpArray( std::array<sal_uInt8,64> const & pPixel ) { pBmpArray = &pPixel; }
@@ -296,7 +297,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
     {
         BitmapColor aBack;
         BitmapColor aFront;
-        bool bIs8x8(isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBack, aFront));
+        bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBack, aFront));
 
         m_pLbColor->SetNoSelection();
         m_pLbBackgroundColor->SetNoSelection();
