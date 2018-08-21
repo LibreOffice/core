@@ -590,6 +590,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
     nMargin = getProperty<sal_Int32>(xMyStyle, "ParaRightMargin");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1900), nMargin);
     CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(882), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf104797, "tdf104797.docx")

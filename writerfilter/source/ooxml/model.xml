@@ -11767,8 +11767,9 @@
         <attribute name="rightChars">
           <ref name="ST_DecimalNumber"/>
         </attribute>
+        <!-- Documented as TwipsMeasure, but MS implements as Signed -->
         <attribute name="hanging">
-          <ref name="ST_TwipsMeasure"/>
+          <ref name="ST_SignedTwipsMeasure"/>
         </attribute>
         <attribute name="hangingChars">
           <ref name="ST_DecimalNumber"/>
