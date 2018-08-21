@@ -1028,8 +1028,20 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                  * context is used, which is most likely
                                  * the case.
                                  * */
+
+                                // Strip a plain locale identifier if locale
+                                // data is available to avoid duplicated
+                                // formats with and without LCID for the same
+                                // locale. Besides it looks ugly and confusing
+                                // and is unnecessary as the format will be
+                                // listed for the resulting locale.
+                                if (aTmpLocale.isPlainLocale())
+                                    sStr.clear();
                             }
-                            sStr = "$-" + aTmpLocale.generateCode();
+                            else
+                            {
+                                sStr = "$-" + aTmpLocale.generateCode();
+                            }
                             NumFor[nIndex].SetNatNumLang( MsLangId::getRealLanguage( aTmpLocale.meLanguage));
 
                             // "$-NNCCLLLL" Numerals and Calendar
@@ -1542,6 +1554,11 @@ SvNumberformat::LocaleType::LocaleType(sal_uInt32 nRawNum)
     mnCalendarType = static_cast<sal_uInt8>(nRawNum & 0xFF);
     nRawNum = (nRawNum >> 8);
     mnNumeralShape = static_cast<sal_uInt8>(nRawNum & 0xFF);
+}
+
+bool SvNumberformat::LocaleType::isPlainLocale() const
+{
+    return meSubstitute == Substitute::NONE && !mnCalendarType && !mnNumeralShape;
 }
 
 // static

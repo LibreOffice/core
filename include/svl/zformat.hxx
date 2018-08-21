@@ -161,6 +161,8 @@ class SVL_DLLPUBLIC SvNumberformat
 
         LocaleType();
         LocaleType(sal_uInt32 nRawCode);
+
+        bool isPlainLocale() const;
     };
 
 public:
