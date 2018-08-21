@@ -29,6 +29,7 @@
 class LogicalFontInstance;
 struct FontMatchStatus;
 class FontSelectPattern;
+class FontSelectPatternAttributes;
 class PhysicalFontFamily;
 
 struct FontMatchStatus
