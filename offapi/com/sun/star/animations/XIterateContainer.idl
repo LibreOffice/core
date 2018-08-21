@@ -54,8 +54,7 @@ interface XIterateContainer : XTimeContainer
     */
     [attribute] short IterateType;
 
-    /** the time interval in percentage of the containers running time
-        before the next iterated content is animated.
+    /** the time interval in second before the next iterated content is animated.
     */
     [attribute] double IterateInterval;
 };
