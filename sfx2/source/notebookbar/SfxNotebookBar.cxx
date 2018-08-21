@@ -60,7 +60,6 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-        case vcl::EnumContext::Application::WriterForm:
             return OUString( "Writer" );
             break;
         case vcl::EnumContext::Application::Calc:
@@ -88,7 +87,6 @@ static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, cons
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-        case vcl::EnumContext::Application::WriterForm:
             officecfg::Office::UI::ToolbarMode::ActiveWriter::set( sFileName, aBatch );
             break;
         case vcl::EnumContext::Application::Calc:
@@ -111,7 +109,6 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-        case vcl::EnumContext::Application::WriterForm:
             return officecfg::Office::UI::ToolbarMode::ActiveWriter::get();
             break;
         case vcl::EnumContext::Application::Calc:
@@ -215,8 +212,14 @@ bool SfxNotebookBar::IsActive()
     else
         return false;
 
+    OUString appName(lcl_getAppName( eApp ));
+
+    if (appName.isEmpty())
+        return false;
+
+
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-    aPath.append( lcl_getAppName( eApp ) );
+    aPath.append( appName );
 
     const utl::OConfigurationTreeRoot aAppNode(
                                         ::comphelper::getProcessComponentContext(),
