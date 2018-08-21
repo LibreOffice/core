@@ -402,7 +402,7 @@ public:
 // Init/Deinit Graphics
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( Color nColor );
-void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
+void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern&,
             const PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
