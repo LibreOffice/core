@@ -28,11 +28,11 @@
 class Qt5Font final : public QFont, public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
-    Qt5FontFace::CreateFontInstance(const FontSelectPattern&) const;
+    Qt5FontFace::CreateFontInstance(const FontSelectPatternAttributes&) const;
 
     virtual hb_font_t* ImplInitHbFont() override;
 
-    explicit Qt5Font(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit Qt5Font(const PhysicalFontFace&, const FontSelectPatternAttributes&);
 
 public:
     virtual ~Qt5Font() override;
