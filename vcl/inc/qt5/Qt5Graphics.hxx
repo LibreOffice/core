@@ -172,7 +172,7 @@ public:
     // Text rendering + font support
 
     virtual void SetTextColor(Color nColor) override;
-    virtual void SetFont(const FontSelectPatternAttributes*, int nFallbackLevel) override;
+    virtual void SetFont(const FontSelectPattern*, int nFallbackLevel) override;
     virtual void GetFontMetric(ImplFontMetricDataRef&, int nFallbackLevel) override;
     virtual const FontCharMapRef GetFontCharMap() const override;
     virtual bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const override;

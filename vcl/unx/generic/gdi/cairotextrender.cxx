@@ -198,7 +198,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (cairo_glyphs.empty())
         return;
 
-    const FontSelectPatternAttributes& rFSD = rInstance.GetFontSelectPattern();
+    const FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
