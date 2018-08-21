@@ -24,6 +24,7 @@
 #include <AxisHelper.hxx>
 #include <ContainerHelper.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>

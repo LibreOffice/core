@@ -19,12 +19,17 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTY_HXX
 #define INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTY_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <map>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace chart
 {

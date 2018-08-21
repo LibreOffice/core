@@ -31,8 +31,11 @@
 #include <com/sun/star/chart2/XColorScheme.hpp>
 
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 
 #include <memory>

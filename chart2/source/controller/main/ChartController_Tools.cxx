@@ -19,6 +19,7 @@
 
 #include <ChartController.hxx>
 #include <ChartWindow.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <TitleHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -50,6 +51,8 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>

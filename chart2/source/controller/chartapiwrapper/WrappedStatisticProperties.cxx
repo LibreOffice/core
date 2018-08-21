@@ -33,6 +33,7 @@
 #include <com/sun/star/chart/ChartRegressionCurveType.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;

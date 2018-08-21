@@ -20,6 +20,8 @@
 #include "WrappedAutomaticPositionProperties.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <tools/diagnose_ex.h>
 

@@ -22,6 +22,7 @@
 #include <ChartWindow.hxx>
 #include <DrawViewWrapper.hxx>
 #include <PositionAndSizeHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>

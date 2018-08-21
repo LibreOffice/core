@@ -22,8 +22,7 @@
 #include "MutexContainer.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 
 namespace com { namespace sun { namespace star {
 namespace chart2 {
@@ -31,6 +30,9 @@ namespace chart2 {
     class XDataSeries;
     class XAxis;
 }}}}
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 namespace chart
 {

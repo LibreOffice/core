@@ -28,9 +28,11 @@
 #include <FormattedStringHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DateHelper.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace chart
 {

@@ -56,6 +56,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/propshlp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;

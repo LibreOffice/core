@@ -27,6 +27,8 @@
 #include "Tickmarks_Equidistant.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <osl/diagnose.h>
+
 #include <vector>
 
 namespace chart

@@ -19,14 +19,15 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_TITLEHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_TITLEHELPER_HXX
 
-#include "ReferenceSizeProvider.hxx"
+#include <com/sun/star/uno/Reference.h>
+#include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
-#include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 
-#include <ChartModel.hxx>
+namespace chart { class ChartModel; }
+namespace chart { class ReferenceSizeProvider; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XTitle; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

@@ -21,10 +21,11 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "charttoolsdllapi.hxx"
 
 #include <unordered_map>
+
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 namespace chart
 {

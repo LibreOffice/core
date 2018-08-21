@@ -36,6 +36,7 @@
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <memory>

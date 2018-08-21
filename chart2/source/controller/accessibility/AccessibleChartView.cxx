@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>

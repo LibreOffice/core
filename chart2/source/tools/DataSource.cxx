@@ -20,6 +20,7 @@
 #include <DataSource.hxx>
 #include <LabeledDataSequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

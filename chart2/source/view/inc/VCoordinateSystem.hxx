@@ -23,6 +23,7 @@
 #include <ThreeDHelper.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
+#include <com/sun/star/uno/Sequence.h>
 
 #include <map>
 #include <memory>

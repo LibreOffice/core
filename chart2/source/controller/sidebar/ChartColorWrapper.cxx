@@ -10,6 +10,7 @@
 #include "ChartColorWrapper.hxx"
 
 #include <ChartController.hxx>
+#include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <svx/tbcontrl.hxx>
 

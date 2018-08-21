@@ -23,7 +23,9 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatter; } } } }
 
 namespace chart
 {

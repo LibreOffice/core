@@ -31,6 +31,8 @@
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <DiagramHelper.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

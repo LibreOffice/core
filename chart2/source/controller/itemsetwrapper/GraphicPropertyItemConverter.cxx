@@ -42,6 +42,7 @@
 #include <com/sun/star/chart2/FillBitmap.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

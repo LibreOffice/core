@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_LINEARREGRESSIONCURVECALCULATOR_HXX
 #define INCLUDED_CHART2_SOURCE_INC_LINEARREGRESSIONCURVECALCULATOR_HXX
 
-#include "RegressionCurveCalculator.hxx"
 #include "PolynomialRegressionCurveCalculator.hxx"
 
 namespace chart

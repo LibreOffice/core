@@ -19,18 +19,19 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
 
-#include <com/sun/star/chart2/XRegressionCurve.hpp>
-#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <svx/chrtitem.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurve; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurveCalculator; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurveContainer; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

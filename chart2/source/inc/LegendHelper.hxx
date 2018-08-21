@@ -19,13 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_LEGENDHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_LEGENDHELPER_HXX
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/chart2/XLegend.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include "charttoolsdllapi.hxx"
 
-#include <ChartModel.hxx>
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XLegend; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

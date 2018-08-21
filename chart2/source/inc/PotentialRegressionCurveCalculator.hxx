@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_POTENTIALREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {

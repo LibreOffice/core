@@ -20,9 +20,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_THREEDHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_THREEDHELPER_HXX
 
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include "charttoolsdllapi.hxx"
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
 
 namespace chart
 {

@@ -20,8 +20,12 @@
 #define INCLUDED_CHART2_SOURCE_INC_NUMBERFORMATTERWRAPPER_HXX
 
 #include "charttoolsdllapi.hxx"
-#include <svl/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <tools/solar.h>
+#include <tools/date.hxx>
+
+class SvNumberFormatter;
+class Color;
 
 namespace chart
 {

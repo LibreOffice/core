@@ -33,6 +33,7 @@
 #include <svl/stritem.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <tools/diagnose_ex.h>
 

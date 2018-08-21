@@ -87,18 +87,13 @@ blacklist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
-    chart2/source/inc/MediaDescriptorHelper.hxx:
+    chart2/source/inc/LabeledDataSequence.hxx:
     # base class has to be a complete type
-    - com/sun/star/beans/PropertyValue.hpp
-    - com/sun/star/embed/XStorage.hpp
-    - com/sun/star/io/XInputStream.hpp
-    - com/sun/star/io/XOutputStream.hpp
-    - com/sun/star/io/XStream.hpp
+    - com/sun/star/chart2/data/XLabeledDataSequence2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     chart2/source/inc/ModifyListenerHelper.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/XWeak.hpp
     - com/sun/star/util/XModifyListener.hpp
-    - cppuhelper/weakref.hxx
     chart2/source/inc/NameContainer.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameContainer.hpp
@@ -107,51 +102,26 @@ blacklist:
     chart2/source/inc/NumberFormatterWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XNumberFormatsSupplier.hpp
-    - svl/zforlist.hxx
     chart2/source/inc/PropertyHelper.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/uno/Any.hxx
     chart2/source/inc/PopupRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XRequestCallback.hpp
     chart2/source/inc/RangeHighlighter.hxx:
     # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/chart2/data/XRangeHighlighter.hpp
-    - com/sun/star/view/XSelectionSupplier.hpp
-    chart2/source/inc/RelativePositionHelper.hxx:
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/inc/RegressionCurveCalculator.hxx:
     # base class has to be a complete type
-    - com/sun/star/awt/Size.hpp
-    - com/sun/star/chart2/RelativeSize.hpp
-    chart2/source/inc/RelativeSizeHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/Size.hpp
-    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/XRegressionCurveCalculator.hpp
     chart2/source/inc/Scaling.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XScaling.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XServiceName.hpp
-    chart2/source/inc/StatisticsHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XDataSeries.hpp
-    - com/sun/star/chart2/data/XDataProvider.hpp
-    - com/sun/star/chart2/data/XDataSource.hpp
-    - com/sun/star/uno/Sequence.hxx
-    chart2/source/inc/SceneProperties.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/Property.hpp
-    chart2/source/inc/ThreeDHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XDiagram.hpp
-    chart2/source/inc/UserDefinedProperties.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/Property.hpp
     chart2/source/inc/UncachedDataSequence.hxx:
     # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/chart2/XInternalDataProvider.hpp
     - com/sun/star/chart2/data/XDataSequence.hpp
     - com/sun/star/chart2/data/XNumericalDataSequence.hpp
     - com/sun/star/chart2/data/XTextualDataSequence.hpp
@@ -165,16 +135,13 @@ blacklist:
     - com/sun/star/util/XModifyListener.hpp
     - com/sun/star/view/XSelectionChangeListener.hpp
     chart2/source/inc/WrappedProperty.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
-    - com/sun/star/beans/XPropertyState.hpp
+    # Needed for implicit dtor
+    - com/sun/star/uno/Any.hxx
     chart2/source/inc/WrappedPropertySet.hxx:
     # base class has to be a complete type
-    - com/sun/star/beans/Property.hpp
     - com/sun/star/beans/XMultiPropertySet.hpp
     - com/sun/star/beans/XMultiPropertyStates.hpp
     - com/sun/star/beans/XPropertySet.hpp
-    - cppuhelper/propshlp.hxx
     - com/sun/star/beans/XPropertyState.hpp
     chart2/source/model/inc/BaseCoordinateSystem.hxx:
     # base class has to be a complete type
@@ -359,6 +326,10 @@ blacklist:
     - com/sun/star/frame/XLayoutManagerListener.hpp
     - com/sun/star/ui/XContextMenuInterception.hpp
     - com/sun/star/util/XModeChangeListener.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloseListener.hpp
+    - com/sun/star/util/XModifyListener.hpp
     chart2/source/controller/inc/ItemPropertyMap.hxx:
     # base class has to be a complete type
     - map

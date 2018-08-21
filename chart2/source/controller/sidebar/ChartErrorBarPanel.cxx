@@ -21,6 +21,7 @@
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include "ChartErrorBarPanel.hxx"
 #include <ChartController.hxx>
