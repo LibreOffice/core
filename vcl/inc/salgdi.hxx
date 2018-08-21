@@ -34,7 +34,7 @@
 
 class PhysicalFontCollection;
 class SalBitmap;
-class FontSelectPattern;
+class FontSelectPatternAttributes;
 class FontAttributes;
 class PhysicalFontFace;
 class SalLayout;
@@ -123,7 +123,7 @@ public:
     virtual void                SetTextColor( Color nColor ) = 0;
 
     // set the font
-    virtual void                SetFont( LogicalFontInstance*, int nFallbackLevel ) = 0;
+    virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }

@@ -95,12 +95,12 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
     const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
     // initialize internal font request object
-    FontSelectPattern aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight);
+    FontSelectPatternAttributes aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight);
     return GetFontInstance( pFontList, aFontSelData );
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
-    FontSelectPattern& aFontSelData )
+    FontSelectPatternAttributes& aFontSelData )
 {
     rtl::Reference<LogicalFontInstance> pFontInstance;
     PhysicalFontFamily* pFontFamily = nullptr;
@@ -192,7 +192,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection const * pFontCollection,
-    FontSelectPattern& rFontSelData, int nFallbackLevel, OUString& rMissingCodes )
+    FontSelectPatternAttributes& rFontSelData, LogicalFontInstance* pFontInstance, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
     // unless the previously selected font got a device specific substitution
@@ -212,7 +212,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
         if (nFallbackLevel == 1)
             pFallbackData = pFontCollection->FindFontFamily("EUDC");
         if (!pFallbackData)
-            pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, rFontSelData.mpFontInstance.get(), rMissingCodes, nFallbackLevel-1);
+            pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, pFontInstance, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
         if( !pFallbackData  )
             return nullptr;
