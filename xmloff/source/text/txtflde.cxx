@@ -2148,7 +2148,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     }
     // else: no declarations element
 
-    // DDE field field masters:
+    // DDE field masters:
     if ( !aDdeName.empty() )
     {
         SvXMLElementExport aElem( GetExport(),

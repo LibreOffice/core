@@ -136,7 +136,7 @@ class textCase(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #1. Open attached file
-        #2. Select cels from C2 to C14
+        #2. Select cells from C2 to C14
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C2:C14"}))
         #3. Go to menu: Format->Text->Capitalize Every Word
         self.xUITest.executeCommand(".uno:ChangeCaseToTitleCase")
