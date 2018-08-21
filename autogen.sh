@@ -175,7 +175,7 @@ if ($src_path ne $build_path)
     {
         my $dir = basename (dirname ($module));
         mkdir ($dir);
-        system ("rm $dir/Makefile");
+        system ("rm -f $dir/Makefile");
         system ("printf 'module_directory:=$src_path_win/$dir/\ninclude \$(module_directory)/../solenv/gbuild/partial_build.mk\n' > $dir/Makefile");
     }
     my @external_modules = <$src_path/external/*/Makefile>;
@@ -185,7 +185,7 @@ if ($src_path ne $build_path)
     {
         my $dir = basename (dirname ($module));
         mkdir ("external/$dir");
-        system ("rm external/$dir/Makefile");
+        system ("rm -f external/$dir/Makefile");
         system ("printf 'module_directory:=$src_path_win/external/$dir/\ninclude \$(module_directory)/../../solenv/gbuild/partial_build.mk\n' > external/$dir/Makefile");
     }
 }
