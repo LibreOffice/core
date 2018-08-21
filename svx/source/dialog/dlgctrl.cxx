@@ -46,6 +46,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <svx/xbtmpit.hxx>
 
 #define OUTPUT_DRAWMODE_COLOR       (DrawModeFlags::Default)
@@ -1442,7 +1443,7 @@ void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
     BitmapColor aBack;
     BitmapColor aFront;
 
-    if (isHistorical8x8(rBitmapEx, aBack, aFront))
+    if (vcl::bitmap::isHistorical8x8(rBitmapEx, aBack, aFront))
     {
         Bitmap aBitmap(rBitmapEx.GetBitmap());
         Bitmap::ScopedReadAccess pRead(aBitmap);
