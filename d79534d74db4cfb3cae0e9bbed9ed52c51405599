@@ -16,6 +16,24 @@
       "revId": "d79534d74db4cfb3cae0e9bbed9ed52c51405599",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_69afa794",
+        "filename": "registry/source/regimpl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-21T05:38:11Z",
+      "side": 1,
+      "message": "...which should work now after f0fcbcadac148a5bfd36b2a26795d45aef8eace4 \"Make OUStringLiteral ctor actually constexpr\"",
+      "parentUuid": "dfeb2761_c32d7447",
+      "revId": "d79534d74db4cfb3cae0e9bbed9ed52c51405599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
