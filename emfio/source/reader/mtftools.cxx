@@ -1616,7 +1616,7 @@ namespace emfio
         BitmapEx aBmpEx( rBitmap );
         if ( mbComplexClip )
         {
-            VclPtrInstance< VirtualDevice > pVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode aMapMode( MapUnit::Map100thMM );
             aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
             const Size aOutputSizePixel( pVDev->LogicToPixel( rSize, aMapMode ) );
