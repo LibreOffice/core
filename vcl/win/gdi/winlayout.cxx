@@ -325,7 +325,7 @@ WinFontInstance::~WinFontInstance()
 
 bool WinFontInstance::hasHScale() const
 {
-    const FontSelectPattern &rPattern = GetFontSelectPattern();
+    const FontSelectPatternAttributes &rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
     return nWidth != nHeight;
