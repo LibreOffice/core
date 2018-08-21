@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_092edba4",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-21T10:33:20Z",
+      "side": 1,
+      "message": "var can be\n   const \u0026 \n?",
+      "revId": "360b07bba94c0e4350ed5177dbc27fb3d68aeb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
