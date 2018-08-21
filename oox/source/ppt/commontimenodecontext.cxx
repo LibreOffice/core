@@ -647,14 +647,14 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
         case PPT_TOKEN( tmAbs ):
             if( mbIterate )
             {
-                double fTime = rAttribs.getUnsigned( XML_val, 0 );
-                // time in ms. property is in % TODO
-                mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fTime;
+                double fTime = rAttribs.getUnsigned( XML_val, 0 ) / 1000.0; // convert ms. to second.
+                mpNode->getNodeProperties()[NP_ITERATEINTERVAL] <<= fTime;
             }
             return this;
         case PPT_TOKEN( tmPct ):
             if( mbIterate )
             {
+                // TODO: should use duration to get iterate interval in second.
                 double fPercent = static_cast<double>(rAttribs.getUnsigned( XML_val, 0 )) / 100000.0;
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fPercent;
             }
