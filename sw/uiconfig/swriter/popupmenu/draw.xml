@@ -15,6 +15,7 @@
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
+  <menu:menuitem menu:id=".uno:MeasureAttributes"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>

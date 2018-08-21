@@ -596,6 +596,9 @@ cmd/sc_rectangletoolbox.png cmd/sc_rect.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
 
+cmd/lc_measureattributes.png cmd/lc_measureline.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
+
 # Format
 cmd/lc_styleapply.png cmd/lc_formatarea.png
 cmd/lc_fillstyle.png cmd/lc_formatarea.png
