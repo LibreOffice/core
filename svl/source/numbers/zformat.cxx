@@ -1042,6 +1042,10 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             }
                             else
                             {
+                                if (nIndex == 0)
+                                    // Locale data not available, remember.
+                                    maLocale.meLanguageWithoutLocaleData = aTmpLocale.meLanguage;
+
                                 sStr = "$-" + aTmpLocale.generateCode();
                             }
                             NumFor[nIndex].SetNatNumLang( MsLangId::getRealLanguage( aTmpLocale.meLanguage));
@@ -1497,7 +1501,9 @@ OUString SvNumberformat::LocaleType::generateCode() const
     }
 #endif
 
-    sal_uInt16 n16 = static_cast<sal_uInt16>(meLanguage);
+    sal_uInt16 n16 = static_cast<sal_uInt16>(
+            (meLanguageWithoutLocaleData == LANGUAGE_DONTKNOW) ? meLanguage :
+            meLanguageWithoutLocaleData);
     if (meLanguage == LANGUAGE_SYSTEM)
     {
         switch (meSubstitute)
@@ -1529,6 +1535,7 @@ OUString SvNumberformat::LocaleType::generateCode() const
 
 SvNumberformat::LocaleType::LocaleType()
     : meLanguage(LANGUAGE_DONTKNOW)
+    , meLanguageWithoutLocaleData(LANGUAGE_DONTKNOW)
     , meSubstitute(Substitute::NONE)
     , mnNumeralShape(0)
     , mnCalendarType(0)
@@ -1537,6 +1544,7 @@ SvNumberformat::LocaleType::LocaleType()
 
 SvNumberformat::LocaleType::LocaleType(sal_uInt32 nRawNum)
     : meLanguage(LANGUAGE_DONTKNOW)
+    , meLanguageWithoutLocaleData(LANGUAGE_DONTKNOW)
     , meSubstitute(Substitute::NONE)
     , mnNumeralShape(0)
     , mnCalendarType(0)
@@ -5068,7 +5076,8 @@ void lcl_incrementAlphabetWithNatNum ( sal_uInt32& nAlphabetID, sal_uInt32 nNatN
 
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                                 const LocaleDataWrapper& rLocWrp,
-                                                LanguageType nOriginalLang /* =LANGUAGE_DONTKNOW */ ) const
+                                                LanguageType nOriginalLang /* =LANGUAGE_DONTKNOW */,
+                                                bool bSystemLanguage /* =false */ ) const
 {
     OUStringBuffer aStr;
     if (maLocale.meSubstitute != LocaleType::Substitute::NONE)
@@ -5384,6 +5393,20 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             // Add LCID to DBNum
             if ( aNatNum.GetDBNum() > 0 && nLanguageID == LANGUAGE_SYSTEM )
                 nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
+        }
+        else if (!bSystemLanguage && nOriginalLang != LANGUAGE_DONTKNOW)
+        {
+            // Explicit locale, write only to the first subformat.
+            if (n == 0)
+                nLanguageID = MsLangId::getRealLanguage( nOriginalLang);
+        }
+        else if (bSystemLanguage && maLocale.meLanguageWithoutLocaleData != LANGUAGE_DONTKNOW)
+        {
+            // Explicit locale but no locale data thus assigned to system
+            // locale, preserve for roundtrip, write only to the first
+            // subformat.
+            if (n == 0)
+                nLanguageID = maLocale.meLanguageWithoutLocaleData;
         }
         if ( nCalendarID > 0 )
         {   // Add alphabet and language to calendar

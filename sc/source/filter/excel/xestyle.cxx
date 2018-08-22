@@ -44,6 +44,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/langitem.hxx>
 #include <document.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
@@ -2135,10 +2136,21 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     }
 
     // number format
-    mnScNumFmt = (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
-        rItemSet.Get( ATTR_VALUE_FORMAT ).GetValue() : nForceScNumFmt;
+    if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        mnXclNumFmt = nForceScNumFmt;
+    else
+    {
+        // Built-in formats of dedicated languages may be attributed using the
+        // system language (or even other?) format with a language attribute,
+        // obtain the "real" format key.
+        mnScNumFmt = rItemSet.Get( ATTR_VALUE_FORMAT ).GetValue();
+        LanguageType nLang = rItemSet.Get( ATTR_LANGUAGE_FORMAT).GetLanguage();
+        if (mnScNumFmt >= SV_COUNTRY_LANGUAGE_OFFSET || nLang != LANGUAGE_SYSTEM)
+            mnScNumFmt = GetFormatter().GetFormatForLanguageIfBuiltIn( mnScNumFmt, nLang);
+    }
     mnXclNumFmt = GetNumFmtBuffer().Insert( mnScNumFmt );
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
+
     // alignment
     mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, bForceLineBreak, GetBiff(), IsStyleXF() );
 

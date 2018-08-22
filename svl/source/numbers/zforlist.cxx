@@ -811,9 +811,13 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
         }
         else
         {
+            bool bSystemLanguage = false;
             LanguageType nLang = pEntry->GetLanguage();
             if (nLang == LANGUAGE_SYSTEM)
+            {
+                bSystemLanguage = true;
                 nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
+            }
             if (nLang != LANGUAGE_ENGLISH_US)
             {
                 sal_Int32 nCheckPos;
@@ -833,7 +837,8 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 // before (which doesn't do anything if it was the same locale
                 // already).
                 rTempFormatter.ChangeIntl( LANGUAGE_ENGLISH_US);
-                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData(), nLang );
+                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData(), nLang,
+                        bSystemLanguage);
             }
         }
     }
