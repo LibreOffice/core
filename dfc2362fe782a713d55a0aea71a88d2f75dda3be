@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_bbe97481",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-22T19:56:14Z",
+      "side": 1,
+      "message": "Shorten() in vcl/source/edit/textundo.cxx\nand\nOutputDevice::ImplGetEllipsisString\nmight be useful here",
+      "revId": "dfc2362fe782a713d55a0aea71a88d2f75dda3be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
