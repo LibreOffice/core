@@ -42,83 +42,132 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
 
 CustomWidgetDraw::~CustomWidgetDraw() {}
 
-bool CustomWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart /*ePart*/)
+bool CustomWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
 {
-    switch (eType)
-    {
-        case ControlType::Pushbutton:
-            return true;
-        default:
-            break;
-    }
-
-    return false;
+    return s_pWidgetImplementation->isNativeControlSupported(eType, ePart);
 }
 
 bool CustomWidgetDraw::hitTestNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,
                                             const tools::Rectangle& /*rBoundingControlRegion*/,
                                             const Point& /*aPos*/, bool& /*rIsInside*/)
 {
-    //printf ("CustomWidgetDraw::hitTestNativeControl\n");
     return false;
 }
 
 bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                          const tools::Rectangle& rControlRegion,
-                                         ControlState /*eState*/,
-                                         const ImplControlValue& /*aValue*/,
+                                         ControlState eState, const ImplControlValue& rValue,
                                          const OUString& /*aCaptions*/)
 {
-    printf("CustomWidgetDraw::drawNativeControl %d %d\n", sal_Int32(eType), sal_Int32(ePart));
     if (s_pWidgetImplementation == nullptr)
         return false;
+
+    cairo_t* pCairoContext = m_rGraphics.getCairoContext(true);
+    m_rGraphics.clipRegion(pCairoContext);
+
+    cairo_translate(pCairoContext, rControlRegion.Left(), rControlRegion.Top());
+
+    long nWidth = rControlRegion.GetWidth();
+    long nHeight = rControlRegion.GetHeight();
+
+    bool bOK = false;
+
+    ControlDrawParameters aParameters{ pCairoContext, ePart, eState, ButtonValue::DontKnow };
 
     switch (eType)
     {
         case ControlType::Generic:
-            break;
+        {
+        }
+        break;
         case ControlType::Pushbutton:
         {
-            printf("drawNativeControl -- ControlType::Pushbutton\n");
-
-            cairo_t* pCairoContext = m_rGraphics.getCairoContext(false);
-            m_rGraphics.clipRegion(pCairoContext);
-            cairo_translate(pCairoContext, rControlRegion.Left(), rControlRegion.Top());
-
-            long nX = 0;
-            long nY = 0;
-            long nWidth = rControlRegion.GetWidth();
-            long nHeight = rControlRegion.GetHeight();
-
-            if (ePart == ControlPart::Focus)
-                s_pWidgetImplementation->drawPushButtonFocus(pCairoContext, nX, nY, nWidth,
-                                                             nHeight);
-            else
-                s_pWidgetImplementation->drawPushButton(pCairoContext, nX, nY, nWidth, nHeight);
-
-            cairo_destroy(pCairoContext); // unref
-
-            return true;
+            bOK = s_pWidgetImplementation->drawPushButton(aParameters, nWidth, nHeight);
         }
         break;
         case ControlType::Radiobutton:
-            break;
+        {
+            aParameters.eButtonValue = rValue.getTristateVal();
+            bOK = s_pWidgetImplementation->drawRadiobutton(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Checkbox:
-            break;
+        {
+            aParameters.eButtonValue = rValue.getTristateVal();
+            bOK = s_pWidgetImplementation->drawCheckbox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Combobox:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawCombobox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Editbox:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawEditbox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::EditboxNoBorder:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawEditbox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::MultilineEditbox:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawEditbox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Listbox:
             break;
         case ControlType::Spinbox:
-            break;
+        {
+            if (rValue.getType() == ControlType::SpinButtons)
+            {
+                const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue*>(&rValue);
+
+                ControlPart upBtnPart = pSpinVal->mnUpperPart;
+                ControlState upBtnState = pSpinVal->mnUpperState;
+
+                ControlPart downBtnPart = pSpinVal->mnLowerPart;
+                ControlState downBtnState = pSpinVal->mnLowerState;
+                {
+                    ControlDrawParameters aParametersUp{ pCairoContext, upBtnPart, upBtnState,
+                                                         ButtonValue::DontKnow };
+                    cairo_save(pCairoContext);
+                    cairo_translate(pCairoContext,
+                                    pSpinVal->maUpperRect.Left() - rControlRegion.Left(),
+                                    pSpinVal->maUpperRect.Top() - rControlRegion.Top());
+                    bOK = s_pWidgetImplementation->drawSpinbox(aParametersUp,
+                                                               pSpinVal->maUpperRect.GetWidth(),
+                                                               pSpinVal->maUpperRect.GetHeight());
+                    cairo_restore(pCairoContext);
+                }
+
+                if (bOK)
+                {
+                    ControlDrawParameters aParametersDown{ pCairoContext, downBtnPart, downBtnState,
+                                                           ButtonValue::DontKnow };
+                    cairo_save(pCairoContext);
+                    cairo_translate(pCairoContext,
+                                    pSpinVal->maLowerRect.Left() - rControlRegion.Left(),
+                                    pSpinVal->maLowerRect.Top() - rControlRegion.Top());
+                    bOK = s_pWidgetImplementation->drawSpinbox(aParametersDown,
+                                                               pSpinVal->maLowerRect.GetWidth(),
+                                                               pSpinVal->maLowerRect.GetHeight());
+                    cairo_restore(pCairoContext);
+                }
+            }
+            else
+            {
+                bOK = s_pWidgetImplementation->drawSpinbox(aParameters, nWidth, nHeight);
+            }
+        }
+        break;
         case ControlType::SpinButtons:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawSpinButtons(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::TabItem:
             break;
         case ControlType::TabPane:
@@ -128,7 +177,10 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         case ControlType::TabBody:
             break;
         case ControlType::Scrollbar:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawScrollbar(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Slider:
             break;
         case ControlType::Fixedline:
@@ -146,9 +198,15 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         case ControlType::Tooltip:
             break;
         case ControlType::WindowBackground:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawWindowsBackground(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Frame:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawFrame(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::ListNode:
             break;
         case ControlType::ListNet:
@@ -156,7 +214,13 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         case ControlType::ListHeader:
             break;
     }
-    return false;
+
+    basegfx::B2DRange aExtents(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.Right(),
+                               rControlRegion.Bottom());
+
+    m_rGraphics.releaseCairoContext(pCairoContext, true, aExtents);
+
+    return bOK;
 }
 
 bool CustomWidgetDraw::getNativeControlRegion(ControlType /*eType*/, ControlPart /*ePart*/,
@@ -167,7 +231,6 @@ bool CustomWidgetDraw::getNativeControlRegion(ControlType /*eType*/, ControlPart
                                               tools::Rectangle& /*rNativeBoundingRegion*/,
                                               tools::Rectangle& /*rNativeContentRegion*/)
 {
-    //printf ("CustomWidgetDraw::getNativeControlRegion\n");
     return false;
 }
 

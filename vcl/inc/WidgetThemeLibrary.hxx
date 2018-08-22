@@ -13,17 +13,49 @@
 
 #include <cairo.h>
 #include <vcl/dllapi.h>
+#include <vcl/salnativewidgets.hxx>
 
 namespace vcl
 {
+struct ControlDrawParameters
+{
+    ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState,
+                          ButtonValue i_eButtonValue)
+        : pCairo(i_pCairo)
+        , ePart(i_ePart)
+        , eState(i_eState)
+        , eButtonValue(i_eButtonValue)
+    {
+    }
+
+    cairo_t* pCairo;
+    ControlPart ePart;
+    ControlState eState;
+    ButtonValue eButtonValue;
+};
+
 class SAL_DLLPUBLIC_RTTI WidgetThemeLibrary
 {
 public:
     WidgetThemeLibrary();
     virtual ~WidgetThemeLibrary();
 
-    virtual bool drawPushButtonFocus(cairo_t* pCairo, long nX, long nY, long nWidth, long nHeight);
-    virtual bool drawPushButton(cairo_t* pCairo, long nX, long nY, long nWidth, long nHeight);
+    virtual bool isNativeControlSupported(ControlType eType, ControlPart ePart);
+
+    virtual bool drawPushButton(ControlDrawParameters const& rParameters, long nWidth,
+                                long nHeight);
+    virtual bool drawRadiobutton(ControlDrawParameters const& rParameters, long nWidth,
+                                 long nHeight);
+    virtual bool drawCheckbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawCombobox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawEditbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawScrollbar(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawSpinButtons(ControlDrawParameters const& rParameters, long nWidth,
+                                 long nHeight);
+    virtual bool drawSpinbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawWindowsBackground(ControlDrawParameters const& rParameters, long nWidth,
+                                       long nHeight);
+    virtual bool drawFrame(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
 };
 
 extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();
