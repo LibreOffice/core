@@ -37,8 +37,12 @@ public:
     void create_001()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void create_002()
         {
@@ -48,8 +52,12 @@ public:
     void create_003()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeCBC);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void create_004()
         {
@@ -101,14 +109,22 @@ public:
     void createBF_001()
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void createBF_002()
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeCBC);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void createBF_003()
         {
@@ -141,6 +157,12 @@ public:
     void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+            (void) _nKeyValue;
+            (void) _nArgValue;
+            (void) _sPlainTextStr;
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -184,11 +206,18 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
 
     void test_encode_and_decode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+            (void) _nKeyValue;
+            (void) _nArgValue;
+            (void) _sPlainTextStr;
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -236,6 +265,7 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
 
     void decode_001()
@@ -286,8 +316,12 @@ public:
     void destroy_001()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeCBC);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroy(aCipher);
+#endif
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
@@ -305,10 +339,14 @@ public:
     void destroyBF_001()
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
             rtl_cipher_destroyBF(aCipher);
             // more proforma
             // should not GPF
+#endif
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
@@ -326,6 +364,12 @@ public:
     void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, sal_uInt8 _nDataValue)
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+            (void) _nKeyValue;
+            (void) _nArgValue;
+            (void) _nDataValue;
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -360,6 +404,7 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
 
     void encode_001()
@@ -407,6 +452,9 @@ public:
     void init_001()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -424,11 +472,15 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
 
     void init_002()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -447,10 +499,14 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void init_003()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -469,10 +525,14 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
     void init_004()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            CPPUNIT_ASSERT_EQUAL(rtlCipher(nullptr), aCipher);
+#else
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != nullptr);
 
             sal_uInt32     nKeyLen = 16;
@@ -492,6 +552,7 @@ public:
             delete [] pKeyBuffer;
 
             rtl_cipher_destroy(aCipher);
+#endif
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
