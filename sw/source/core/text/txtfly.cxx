@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
@@ -121,28 +122,18 @@ namespace
 }
 
 SwContourCache::SwContourCache() :
-    nPntCnt( 0 ), nObjCnt( 0 )
+    nPntCnt( 0 )
 {
-    memset( pSdrObj, 0, sizeof(pSdrObj) );
-    memset( pTextRanger, 0, sizeof(pTextRanger) );
 }
 
 SwContourCache::~SwContourCache()
 {
-    for( sal_uInt16 i = 0; i < nObjCnt; delete pTextRanger[ i++ ] )
-        ;
 }
 
 void SwContourCache::ClrObject( sal_uInt16 nPos )
 {
-    assert(pTextRanger[nPos] && "ClrObject: Already cleared. Good Bye!");
-    nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
-    delete pTextRanger[ nPos ];
-    --nObjCnt;
-    memmove( const_cast<SdrObject**>(pSdrObj) + nPos, pSdrObj + nPos + 1,
-             ( nObjCnt - nPos ) * sizeof( SdrObject* ) );
-    memmove( pTextRanger + nPos, pTextRanger + nPos + 1,
-             ( nObjCnt - nPos ) * sizeof( TextRanger* ) );
+    nPntCnt -= mvItems[ nPos ].mxTextRanger->GetPointCount();
+    mvItems.erase(mvItems.begin() + nPos);
 }
 
 void ClrContourCache( const SdrObject *pObj )
@@ -160,10 +151,7 @@ void ClrContourCache()
 {
     if( pContourCache )
     {
-        for( sal_uInt16 i = 0; i < pContourCache->GetCount();
-             delete pContourCache->pTextRanger[ i++ ] )
-             ;
-        pContourCache->nObjCnt = 0;
+        pContourCache->mvItems.clear();
         pContourCache->nPntCnt = 0;
     }
 }
@@ -223,14 +211,14 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 {
     SwRect aRet;
     sal_uInt16 nPos = 0; // Search in the Cache
-    while( nPos < GetCount() && pObj != pSdrObj[ nPos ] )
+    while( nPos < GetCount() && pObj != mvItems[ nPos ].mpSdrObj )
         ++nPos;
     if( GetCount() == nPos ) // Not found
     {
-        if( nObjCnt == POLY_CNT )
+        if( GetCount() == POLY_CNT )
         {
-            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
-            delete pTextRanger[ nObjCnt ];
+            nPntCnt -= mvItems.back().mxTextRanger->GetPointCount();
+            mvItems.pop_back();
         }
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         ::basegfx::B2DPolyPolygon* pPolyPolygon = nullptr;
@@ -258,33 +246,30 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         }
         const SvxLRSpaceItem &rLRSpace = pFormat->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFormat->GetULSpace();
-        memmove( pTextRanger + 1, pTextRanger, nObjCnt * sizeof( TextRanger* ) );
-        memmove( const_cast<SdrObject**>(pSdrObj) + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
-        pSdrObj[ 0 ] = pObj; // due to #37347 the Object must be entered only
-                             // after GetContour()
-        pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
-            static_cast<sal_uInt16>(rLRSpace.GetLeft()), static_cast<sal_uInt16>(rLRSpace.GetRight()),
-            pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() );
-        pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
-        pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
+        CacheItem item {
+            pObj, // due to #37347 the Object must be entered only after GetContour()
+            o3tl::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon, 20,
+                static_cast<sal_uInt16>(rLRSpace.GetLeft()), static_cast<sal_uInt16>(rLRSpace.GetRight()),
+                pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() )
+        };
+        mvItems.insert(mvItems.begin(), std::move(item));
+        mvItems[0].mxTextRanger->SetUpper( rULSpace.GetUpper() );
+        mvItems[0].mxTextRanger->SetLower( rULSpace.GetLower() );
 
         delete pPolyPolygon;
 
-        nPntCnt += pTextRanger[ 0 ]->GetPointCount();
-        while( nPntCnt > POLY_MAX && nObjCnt > POLY_MIN )
+        nPntCnt += mvItems[0].mxTextRanger->GetPointCount();
+        while( nPntCnt > POLY_MAX && mvItems.size() > POLY_MIN )
         {
-            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
-            delete pTextRanger[ nObjCnt ];
+            nPntCnt -= mvItems.back().mxTextRanger->GetPointCount();
+            mvItems.pop_back();
         }
     }
     else if( nPos )
     {
-        const SdrObject* pTmpObj = pSdrObj[ nPos ];
-        TextRanger* pTmpRanger = pTextRanger[ nPos ];
-        memmove( const_cast<SdrObject**>(pSdrObj) + 1, pSdrObj, nPos * sizeof( SdrObject* ) );
-        memmove( pTextRanger + 1, pTextRanger, nPos * sizeof( TextRanger* ) );
-        pSdrObj[ 0 ] = pTmpObj;
-        pTextRanger[ 0 ] = pTmpRanger;
+        CacheItem item = std::move(mvItems[nPos]);
+        mvItems.erase(mvItems.begin() + nPos);
+        mvItems.insert(mvItems.begin(), std::move(item));
     }
     SwRectFnSet aRectFnSet(pFrame);
     long nTmpTop = aRectFnSet.GetTop(rLine);
@@ -293,7 +278,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 
     Range aRange( std::min( nTmpTop, nTmpBottom ), std::max( nTmpTop, nTmpBottom ) );
 
-    LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
+    LongDqPtr pTmp = mvItems[0].mxTextRanger->GetTextRanges( aRange );
 
     const size_t nCount = pTmp->size();
     if( 0 != nCount )
