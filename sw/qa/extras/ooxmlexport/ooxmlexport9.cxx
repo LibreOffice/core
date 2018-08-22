@@ -1148,6 +1148,13 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
 DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
 {
     // LO crashed while export because of character background color handling
+
+    //tdf76683 - Cannot be negative number - use firstLine instead of hanging
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathNoAttribute(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "hanging");
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "firstLine","360");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
