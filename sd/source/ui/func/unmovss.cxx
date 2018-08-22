@@ -23,7 +23,7 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 
-SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted)
+SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDoc, StyleSheetCopyResultVector& rTheStyles, bool bInserted)
 : SdUndoAction(pTheDoc)
 , mbMySheets( !bInserted )
 {
@@ -32,9 +32,9 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
     maListOfChildLists.resize( maStyles.size() );
     // create list with lists of style sheet children
     std::size_t i = 0;
-    for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+    for (auto& a : maStyles)
     {
-        maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList( (*iter).get() );
+        maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList(a.m_xStyleSheet.get());
     }
 }
 
@@ -47,28 +47,33 @@ void SdMoveStyleSheetsUndoAction::Undo()
         // the styles have to be inserted in the pool
 
         // first insert all styles to the pool
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+        for (auto& a : maStyles)
         {
-            pPool->Insert((*iter).get());
+            if (!a.m_bCreatedByCopy) // tdf#119259, existed before this action, so leave it alone
+                continue;
+            pPool->Insert(a.m_xStyleSheet.get());
         }
 
         // now assign the children again
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter, ++childlistiter )
+        for (auto& a : maStyles)
         {
-            OUString aParent((*iter)->GetName());
+            OUString aParent(a.m_xStyleSheet->GetName());
             for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); ++childiter )
             {
                 (*childiter)->SetParent(aParent);
             }
+            ++childlistiter;
         }
     }
     else
     {
         // remove the styles again from the pool
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+        for (auto& a : maStyles)
         {
-            pPool->Remove((*iter).get());
+            if (!a.m_bCreatedByCopy) // tdf#119259, existed before this action, so leave it alone
+                continue;
+            pPool->Remove(a.m_xStyleSheet.get());
         }
     }
     mbMySheets = !mbMySheets;
