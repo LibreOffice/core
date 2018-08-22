@@ -41,15 +41,15 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
