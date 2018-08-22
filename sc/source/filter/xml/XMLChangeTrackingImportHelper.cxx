@@ -78,16 +78,6 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
     return maCell;
 }
 
-ScMyDeleted::ScMyDeleted()
-    : nID(0)
-    , pCellInfo(nullptr)
-{
-}
-
-ScMyDeleted::~ScMyDeleted()
-{
-}
-
 ScMyGenerated::ScMyGenerated(std::unique_ptr<ScMyCellInfo> pTempCellInfo, const ScBigRange& aTempBigRange)
     : aBigRange(aTempBigRange)
     , nID(0)
@@ -295,17 +285,12 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
 {
-    ScMyDeleted* pDeleted = new ScMyDeleted();
-    pDeleted->nID = nID;
-    pCurrentAction->aDeletedList.push_front(pDeleted);
+    pCurrentAction->aDeletedList.push_front( ScMyDeleted { nID, nullptr } );
 }
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo)
 {
-    ScMyDeleted* pDeleted = new ScMyDeleted();
-    pDeleted->nID = nID;
-    pDeleted->pCellInfo = std::move(pCellInfo);
-    pCurrentAction->aDeletedList.push_front(pDeleted);
+    pCurrentAction->aDeletedList.push_front( ScMyDeleted { nID, std::move(pCellInfo) } );
 }
 
 void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMultiSpanned)
@@ -669,28 +654,26 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
         }
         if (!pAction->aDeletedList.empty())
         {
-            ScMyDeletedList::iterator aItr(pAction->aDeletedList.begin());
-            ScMyDeletedList::iterator aEndItr(pAction->aDeletedList.end());
+            auto aItr(pAction->aDeletedList.begin());
+            auto aEndItr(pAction->aDeletedList.end());
             while(aItr != aEndItr)
             {
-                pAct->SetDeletedInThis((*aItr)->nID, pTrack);
-                ScChangeAction* pDeletedAct = pTrack->GetAction((*aItr)->nID);
-                if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && (*aItr)->pCellInfo)
+                pAct->SetDeletedInThis(aItr->nID, pTrack);
+                ScChangeAction* pDeletedAct = pTrack->GetAction(aItr->nID);
+                if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && aItr->pCellInfo)
                 {
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
-                    if (pContentAct && (*aItr)->pCellInfo)
+                    if (pContentAct && aItr->pCellInfo)
                     {
-                        const ScCellValue& rCell = (*aItr)->pCellInfo->CreateCell(pDoc);
+                        const ScCellValue& rCell = aItr->pCellInfo->CreateCell(pDoc);
                         if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
                         {
                             // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
                             // instead pass the input string to SetNewCell.
-                            pContentAct->SetNewCell(rCell, pDoc, (*aItr)->pCellInfo->sInputString);
+                            pContentAct->SetNewCell(rCell, pDoc, aItr->pCellInfo->sInputString);
                         }
                     }
                 }
-                if (*aItr)
-                    delete *aItr;
                 aItr = pAction->aDeletedList.erase(aItr);
             }
         }
