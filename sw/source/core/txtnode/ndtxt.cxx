@@ -764,7 +764,10 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             break;
             case Merge::Hidden:
                 assert((eFirst == Merge::Hidden && eSecond == Merge::Hidden)
-                    || (eFirst == Merge::NonFirst && eSecond == Merge::First));
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::First)
+                        // next ones can happen temp. in UndoDelete :(
+                    || (eFirst == Merge::Hidden && eSecond == Merge::NonFirst)
+                    || (eFirst == Merge::NonFirst && eSecond == Merge::None));
             break;
             case Merge::NonFirst:
                 assert((eFirst == Merge::NonFirst && eSecond == Merge::First)

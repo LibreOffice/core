@@ -41,6 +41,9 @@
 #include <sfx2/app.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
+#include <frmtool.hxx>
+#include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <strings.hrc>
 #include <vector>
 
@@ -764,6 +767,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwNodeIndex aIdx(rDoc.GetNodes(), nCalcStt);
     SwNode* pInsNd = &aIdx.GetNode();
+    SwNode* pMovedNode = nullptr;
 
     {   // code block so that SwPosition is detached when deleting a Node
         SwPosition aPos( aIdx );
@@ -839,7 +843,6 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     ++aPos.nNode;
             }
         }
-        SwNode* pMovedNode = nullptr;
         if( m_nSectDiff )
         {
             sal_uLong nMoveIndex = aPos.nNode.GetIndex();
@@ -867,7 +870,11 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeRange aRange( *m_pMvStt, 0, *m_pMvStt, m_nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            rDoc.GetUndoManager().GetUndoNodes().Copy_( aRange, aPos.nNode );
+            rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.nNode,
+                    // sw_redlinehide: delay creating frames: the flags on the
+                    // nodes aren't necessarily up-to-date, and the redlines
+                    // from m_pRedlSaveData aren't applied yet...
+                    false);
 
             if( m_nReplaceDummy )
             {
@@ -889,9 +896,6 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetNodes().Delete( aMvIdx);
             }
         }
-
-        if( pMovedNode )
-            lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
 
         if( m_aSttStr )
         {
@@ -958,6 +962,52 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.GetNodes().Delete( aIdx );
     if( m_pRedlSaveData )
         SetSaveData(rDoc, *m_pRedlSaveData);
+
+    if (m_aSttStr && (!m_bFromTableCopy || 0 != m_nNode))
+    {
+        // only now do we have redlines in the document again; fix up the split
+        // frames
+        SwTextNode *const pStartNode(aIdx.GetNodes()[nSttNode]->GetTextNode());
+        assert(pStartNode);
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+            }
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
+            // SplitNode could have moved the original frame to the start node
+            // & created a new one on end, or could have created new frame on
+            // start node... grab start node's frame and recreate MergedPara.
+            SwTextNode & rFirstNode(pFrame->GetMergedPara()
+                ? *pFrame->GetMergedPara()->pFirstNode
+                : *pStartNode);
+            assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
+            pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+            // note: this may or may not delete frames on the end node
+        }
+    }
+
+    // create frames after SetSaveData has recreated redlines
+    if (0 != m_nNode)
+    {
+        // don't include end node in the range: it may have been merged already
+        // by the start node, or it may be merged by one of the moved nodes,
+        // but if it isn't merged, its current frame(s) should be good...
+        SwNodeIndex const start(rDoc.GetNodes(), nSttNode + (m_bDelFullPara ? 0 : 1));
+        SwNodeIndex const end(rDoc.GetNodes(), nEndNode);
+        ::MakeFrames(&rDoc, start, end);
+    }
+
+    if (pMovedNode)
+    {   // probably better do this after creating all frames
+        lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
+    }
 
     AddUndoRedoPaM(rContext, true);
 }
