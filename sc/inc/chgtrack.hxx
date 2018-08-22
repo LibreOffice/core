@@ -215,8 +215,6 @@ protected:
     // only to be used in the XML import
     ScChangeAction( ScChangeActionType, const ScBigRange&, const sal_uLong nAction);
 
-    virtual ~ScChangeAction();
-
     OUString GetRefString(
         const ScBigRange& rRange, const ScDocument* pDoc, bool bFlag3D = false) const;
 
@@ -277,6 +275,8 @@ protected:
     virtual const ScChangeTrack* GetChangeTrack() const = 0;
 
 public:
+    virtual ~ScChangeAction();
+
     bool IsInsertType() const;
     bool IsDeleteType() const;
     bool IsVirgin() const;
@@ -367,7 +367,6 @@ class ScChangeActionIns : public ScChangeAction
     bool mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
 
     ScChangeActionIns( const ScRange& rRange, bool bEndOfList = false );
-    virtual                     ~ScChangeActionIns() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override {}
     virtual void                DeleteCellEntries() override {}
@@ -377,6 +376,7 @@ class ScChangeActionIns : public ScChangeAction
     virtual const ScChangeTrack*    GetChangeTrack() const override { return nullptr; }
 
 public:
+    virtual                     ~ScChangeActionIns() override;
     ScChangeActionIns(
         const sal_uLong nActionNumber,
         const ScChangeActionState eState,
@@ -437,7 +437,6 @@ class ScChangeActionDel : public ScChangeAction
     SCROW               nDy;
 
     ScChangeActionDel( const ScRange& rRange, SCCOL nDx, SCROW nDy, ScChangeTrack* );
-    virtual ~ScChangeActionDel() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override;
     virtual void                DeleteCellEntries() override;
@@ -461,6 +460,7 @@ public:
         const OUString &sComment, const ScChangeActionType eType,
         const SCCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
                                             // which of nDx and nDy is set is dependent on the type
+    virtual ~ScChangeActionDel() override;
 
     // is the last in a row (or single)
     bool IsBaseDelete() const;
@@ -1123,7 +1123,7 @@ public:
 
     sal_uLong           AddLoadedGenerated( const ScCellValue& rNewCell,
                             const ScBigRange& aBigRange, const OUString& sNewValue ); // only to use in the XML import
-    void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
+    void                AppendLoaded( std::unique_ptr<ScChangeAction> pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import
 
