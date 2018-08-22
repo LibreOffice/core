@@ -111,16 +111,21 @@
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
-          <menu:menuitem menu:id=".uno:GridUse"/>
           <menu:menuitem menu:id=".uno:GridFront"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:HelplinesMove"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:SnapLinesMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:HelplinesVisible"/>
-          <menu:menuitem menu:id=".uno:HelplinesUse"/>
           <menu:menuitem menu:id=".uno:HelplinesFront"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:GridUse"/>
+          <menu:menuitem menu:id=".uno:HelplinesUse"/>
+          <menu:menuitem menu:id=".uno:SnapFrame"/>
+          <menu:menuitem menu:id=".uno:SnapPoints"/>
+          <menu:menuitem menu:id=".uno:SnapBorder"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
