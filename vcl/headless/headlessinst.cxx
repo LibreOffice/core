@@ -13,13 +13,13 @@
 class HeadlessSalInstance : public SvpSalInstance
 {
 public:
-    explicit HeadlessSalInstance( SalYieldMutex *pMutex );
+    explicit HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex);
 
     virtual SalSystem* CreateSalSystem() override;
 };
 
-HeadlessSalInstance::HeadlessSalInstance( SalYieldMutex *pMutex ) :
-    SvpSalInstance( pMutex)
+HeadlessSalInstance::HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex)
+    : SvpSalInstance(std::move(pMutex))
 {
 }
 
@@ -90,7 +90,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    HeadlessSalInstance* pInstance = new HeadlessSalInstance( new SvpSalYieldMutex() );
+    HeadlessSalInstance* pInstance = new HeadlessSalInstance(o3tl::make_unique<SvpSalYieldMutex>());
     new HeadlessSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;
