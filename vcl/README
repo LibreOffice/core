@@ -1,4 +1,6 @@
-Visual Components Library is responsible for the widgets (windowing, buttons, controls, file-pickers etc.) operating system abstraction, including basic rendering (e.g. the output device).
+Visual Class Library is responsible for the widgets (windowing, buttons, controls, file-pickers etc.), operating system abstraction, including basic rendering (e.g. the output device).
+
+It should not be confused with Borland's Visual Component Library, which is entirely unrelated.
 
 VCL provides a graphical toolkit similar to gtk+, Qt, SWING etc.
 
