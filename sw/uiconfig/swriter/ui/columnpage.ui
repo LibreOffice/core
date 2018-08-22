@@ -704,7 +704,7 @@
                             </child>
                             <child>
                               <object class="svxlo-FrameDirectionListBox" id="textdirectionlb">
-                                <property name="visible">True</property>
+                                <property name="no_show_all">True</property>
                                 <property name="can_focus">False</property>
                               </object>
                               <packing>
