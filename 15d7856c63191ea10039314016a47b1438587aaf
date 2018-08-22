@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_5bab88d5",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-22T12:05:50Z",
+      "side": 1,
+      "message": "I didn\u0027t know if for range loops were ok for sequences but in that case, you can even use:\nfor (auto const\u0026 elem : rSequence)\nsince the elements of the sequence are read only.\n\nAlso nLength may also be removed.",
+      "parentUuid": "dfeb2761_0380fc8a",
+      "revId": "15d7856c63191ea10039314016a47b1438587aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3bb8c428",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-08-22T12:05:50Z",
+      "side": 1,
+      "message": "since the content of if blocks are identical, perhaps you may merge them?\n\"\nif (\n     pValue2-\u003eName \u003d\u003d sUNO_View_VisibleLayers\n ||  pValue2-\u003eName \u003d\u003d sUNO_View_PrintableLayers\n ||  pValue2-\u003eName \u003d\u003d sUNO_View_LockedLayers\n   )\n\"",
+      "range": {
+        "startLine": 487,
+        "startChar": 8,
+        "endLine": 487,
+        "endChar": 55
+      },
+      "revId": "15d7856c63191ea10039314016a47b1438587aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_c34b3485",
         "filename": "svx/source/svdraw/svdlayer.cxx",
         "patchSetId": 1
