@@ -88,10 +88,10 @@ ScMyDeleted::~ScMyDeleted()
 {
 }
 
-ScMyGenerated::ScMyGenerated(ScMyCellInfo* pTempCellInfo, const ScBigRange& aTempBigRange)
+ScMyGenerated::ScMyGenerated(std::unique_ptr<ScMyCellInfo> pTempCellInfo, const ScBigRange& aTempBigRange)
     : aBigRange(aTempBigRange)
     , nID(0)
-    , pCellInfo(pTempCellInfo)
+    , pCellInfo(std::move(pTempCellInfo))
 {
 }
 
@@ -300,11 +300,11 @@ void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
     pCurrentAction->aDeletedList.push_front(pDeleted);
 }
 
-void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo)
+void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo)
 {
     ScMyDeleted* pDeleted = new ScMyDeleted();
     pDeleted->nID = nID;
-    pDeleted->pCellInfo.reset(pCellInfo);
+    pDeleted->pCellInfo = std::move(pCellInfo);
     pCurrentAction->aDeletedList.push_front(pDeleted);
 }
 
@@ -379,9 +379,9 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
     }
 }
 
-void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange)
+void ScXMLChangeTrackingImportHelper::AddGenerated(std::unique_ptr<ScMyCellInfo> pCellInfo, const ScBigRange& aBigRange)
 {
-    ScMyGenerated* pGenerated = new ScMyGenerated(pCellInfo, aBigRange);
+    ScMyGenerated* pGenerated = new ScMyGenerated(std::move(pCellInfo), aBigRange);
     if (pCurrentAction->nActionType == SC_CAT_MOVE)
     {
         static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
