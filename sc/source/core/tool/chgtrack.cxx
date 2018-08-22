@@ -2379,8 +2379,9 @@ void ScChangeTrack::MasterLinks( ScChangeAction* pAppend )
     }
 }
 
-void ScChangeTrack::AppendLoaded( ScChangeAction* pAppend )
+void ScChangeTrack::AppendLoaded( std::unique_ptr<ScChangeAction> pActionParam )
 {
+    ScChangeAction* pAppend = pActionParam.release();
     aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
