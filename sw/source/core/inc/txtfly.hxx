@@ -54,10 +54,13 @@ void ClrContourCache( const SdrObject *pObj );
 class SwContourCache
 {
     friend void ClrContourCache();
-    const SdrObject *pSdrObj[ POLY_CNT ];
-    TextRanger *pTextRanger[ POLY_CNT ];
+    struct CacheItem
+    {
+        const SdrObject *mpSdrObj;
+        std::unique_ptr<TextRanger> mxTextRanger;
+    };
+    std::vector<CacheItem> mvItems;
     long nPntCnt;
-    sal_uInt16 nObjCnt;
     const SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
         const SwTextFrame* pFrame, const SwRect &rLine, const long nXPos,
         const bool bRight );
@@ -65,8 +68,8 @@ class SwContourCache
 public:
     SwContourCache();
     ~SwContourCache();
-    const SdrObject* GetObject( sal_uInt16 nPos ) const{ return pSdrObj[ nPos ]; }
-    sal_uInt16 GetCount() const { return nObjCnt; }
+    const SdrObject* GetObject( sal_uInt16 nPos ) const{ return mvItems[ nPos ].mpSdrObj; }
+    sal_uInt16 GetCount() const { return mvItems.size(); }
     void ClrObject( sal_uInt16 nPos );
 
     /**
