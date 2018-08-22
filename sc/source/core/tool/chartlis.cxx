@@ -104,10 +104,10 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
     ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
+ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std::unique_ptr<vector<ScTokenRef>> pTokens ) :
     SvtListener(),
     mpExtRefListener(nullptr),
-    mpTokens(pTokens),
+    mpTokens(std::move(pTokens)),
     maName(rName),
     mpDoc( pDocP ),
     bUsed( false ),

@@ -4032,7 +4032,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
             (*aIt)->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )
         {
-            ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
+            ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, std::move(xRefTokens) ) );
             xListener->SetUsed( true );
             xListener->StartListeningTo();
             pChartCollection->insert( xListener.release() );
