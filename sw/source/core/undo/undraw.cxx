@@ -65,14 +65,14 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(pUndo, pMarkList, this) );
+        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(std::unique_ptr<SdrUndoAction>(pUndo), pMarkList, this) );
     }
     else
         delete pUndo;
 }
 
-SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::DRAWUNDO, pDoc ), pSdrUndo( pUndo )
+SwSdrUndo::SwSdrUndo( std::unique_ptr<SdrUndoAction> pUndo, const SdrMarkList* pMrkLst, const SwDoc* pDoc )
+    : SwUndo( SwUndoId::DRAWUNDO, pDoc ), pSdrUndo( std::move(pUndo) )
 {
     if( pMrkLst && pMrkLst->GetMarkCount() )
         pMarkList.reset( new SdrMarkList( *pMrkLst ) );

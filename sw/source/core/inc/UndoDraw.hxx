@@ -40,7 +40,7 @@ class SwSdrUndo : public SwUndo
     std::unique_ptr<SdrMarkList> pMarkList; // MarkList for all selected SdrObjects
 
 public:
-    SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList, const SwDoc* pDoc );
+    SwSdrUndo( std::unique_ptr<SdrUndoAction> , const SdrMarkList* pMarkList, const SwDoc* pDoc );
 
     virtual ~SwSdrUndo() override;
 
