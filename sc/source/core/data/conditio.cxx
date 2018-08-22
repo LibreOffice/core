@@ -1672,7 +1672,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 if( eDay != SUNDAY )
                 {
                     Date aBegin(rActDate - (1 + static_cast<sal_Int32>(eDay)));
-                    Date aEnd(rActDate + (5 + static_cast<sal_Int32>(eDay)));
+                    Date aEnd(rActDate + (5 - static_cast<sal_Int32>(eDay)));
                     return aCellDate.IsBetween( aBegin, aEnd );
                 }
                 else
