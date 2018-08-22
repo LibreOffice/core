@@ -104,6 +104,7 @@ public:
     void testChartTitlePropertiesGradientFillXLSX();
     void testChartTitlePropertiesBitmapFillXLSX();
     void testBarChartDataPointPropXLSX();
+    void testDataseriesOverlapStackedChartXLSX();
     void testAxisCharacterPropertiesXLSX();
     void testTitleCharacterPropertiesXLSX();
     void testPlotVisOnlyXLSX();
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillXLSX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillXLSX);
     CPPUNIT_TEST(testBarChartDataPointPropXLSX);
+    CPPUNIT_TEST(testDataseriesOverlapStackedChartXLSX);
     CPPUNIT_TEST(testAxisCharacterPropertiesXLSX);
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
@@ -1604,6 +1606,27 @@ void Chart2ExportTest::testBarChartDataPointPropXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "f6f8fc");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", "c7d5ed");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "70ad47");
+}
+
+void Chart2ExportTest::testDataseriesOverlapStackedChartXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testDataseriesOverlapStackedChart.xlsx");
+
+    // test the overlap value of a simple Stacked Column Chart
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 0);
+
+    // test the overlap value of a Percent Stacked Bar Chart
+    xChartDoc = getChartDocFromSheet( 1, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 35);
+
+    reload("Calc Office Open XML");
+
+    xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 100);
+
+    xChartDoc = getChartDocFromSheet( 1, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 100);
 }
 
 void Chart2ExportTest::testAxisCharacterPropertiesXLSX()

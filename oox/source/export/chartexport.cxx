@@ -1498,9 +1498,24 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
         if( aBarPositionSequence.getLength() )
         {
             sal_Int32 nOverlap = aBarPositionSequence[0];
-            pFS->singleElement( FSNS( XML_c, XML_overlap ),
+            // Stacked/Percent Bar/Column chart Overlap-workaround
+            // Export the Overlap value with 100% for stacked charts,
+            // because the default overlap value of the Bar/Column chart is 0% and
+            // LibreOffice do nothing with the overlap value in Stacked charts case,
+            // unlike the MS Office, which is interpreted differently.
+            if( ( mbStacked || mbPercent ) && nOverlap != 100 )
+            {
+                nOverlap = 100;
+                pFS->singleElement( FSNS( XML_c, XML_overlap ),
                     XML_val, I32S( nOverlap ),
                     FSEND );
+            }
+            else // Normal bar chart
+            {
+                pFS->singleElement( FSNS( XML_c, XML_overlap ),
+                    XML_val, I32S( nOverlap ),
+                    FSEND );
+            }
         }
     }
 
