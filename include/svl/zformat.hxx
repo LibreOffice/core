@@ -153,6 +153,7 @@ class SVL_DLLPUBLIC SvNumberformat
         };
 
         LanguageType meLanguage;
+        LanguageType meLanguageWithoutLocaleData;
         Substitute meSubstitute;
         sal_uInt8 mnNumeralShape;
         sal_uInt8 mnCalendarType;
@@ -225,7 +226,8 @@ public:
     // Build a format string of application defined keywords
     OUString GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                     const LocaleDataWrapper& rLoc,
-                                    LanguageType nOriginalLang = LANGUAGE_DONTKNOW ) const;
+                                    LanguageType nOriginalLang = LANGUAGE_DONTKNOW,
+                                    bool bSystemLanguage = false ) const;
 
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
 
