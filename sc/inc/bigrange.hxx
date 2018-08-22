@@ -40,6 +40,7 @@ public:
                 : nRow( nRowP ), nCol( nColP ), nTab( nTabP ) {}
             ScBigAddress( const ScBigAddress& r )
                 : nRow( r.nRow ), nCol( r.nCol ), nTab( r.nTab ) {}
+            ScBigAddress( ScBigAddress&& ) = default;
             ScBigAddress( const ScAddress& r )
                 : nRow( r.Row() ), nCol( r.Col() ), nTab( r.Tab() ) {}
 
@@ -64,6 +65,7 @@ public:
 
     ScBigAddress&   operator=( const ScBigAddress& r )
                     { nCol = r.nCol; nRow = r.nRow; nTab = r.nTab; return *this; }
+    ScBigAddress&   operator=( ScBigAddress&& ) = default;
     ScBigAddress&   operator=( const ScAddress& r )
                     { nCol = r.Col(); nRow = r.Row(); nTab = r.Tab(); return *this; }
     bool            operator==( const ScBigAddress& r ) const
@@ -112,6 +114,7 @@ public:
                     ScBigRange() : aStart(), aEnd() {}
                     ScBigRange( const ScBigRange& r )
                         : aStart( r.aStart ), aEnd( r.aEnd ) {}
+                    ScBigRange( ScBigRange&& ) = default;
                     ScBigRange( const ScRange& r )
                         : aStart( r.aStart ), aEnd( r.aEnd ) {}
                     ScBigRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
@@ -141,6 +144,7 @@ public:
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
+    ScBigRange&     operator=( ScBigRange&& ) = default;
     bool            operator==( const ScBigRange& r ) const
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
     bool            operator!=( const ScBigRange& r ) const
