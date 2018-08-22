@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <qt5/Qt5Instance.hxx>
 #include "KDE5SalFrame.hxx"
 
@@ -28,7 +32,7 @@ class SalFrame;
 class KDE5SalInstance : public Qt5Instance
 {
 public:
-    explicit KDE5SalInstance(SalYieldMutex* pMutex);
+    explicit KDE5SalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }

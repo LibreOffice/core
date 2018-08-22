@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 //#include "KDE4FilePicker.hxx"
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QThread>
@@ -24,6 +28,7 @@
 #include <QtGui/QClipboard>
 #include <QtWidgets/QFrame>
 
+#include <o3tl/make_unique.hxx>
 #include <osl/process.h>
 #include <sal/log.hxx>
 
@@ -34,8 +39,8 @@
 
 using namespace com::sun::star;
 
-KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
-    : Qt5Instance(pMutex, true)
+KDE5SalInstance::KDE5SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
+    : Qt5Instance(std::move(pMutex), true)
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
@@ -130,7 +135,7 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
 
     QApplication::setQuitOnLastWindowClosed(false);
 
-    KDE5SalInstance* pInstance = new KDE5SalInstance(new SalYieldMutex());
+    KDE5SalInstance* pInstance = new KDE5SalInstance(o3tl::make_unique<SalYieldMutex>());
 
     // initialize SalData
     new KDE5SalData(pInstance);
