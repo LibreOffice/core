@@ -584,12 +584,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellContentDeletio
 
 void SAL_CALL ScXMLCellContentDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    ScMyCellInfo* pCellInfo(new ScMyCellInfo(maCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType,
+    std::unique_ptr<ScMyCellInfo> pCellInfo(new ScMyCellInfo(maCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType,
             nMatrixFlag, nMatrixCols, nMatrixRows));
     if (nID)
-        pChangeTrackingImportHelper->AddDeleted(nID, pCellInfo);
+        pChangeTrackingImportHelper->AddDeleted(nID, std::move(pCellInfo));
     else
-        pChangeTrackingImportHelper->AddGenerated(pCellInfo, aBigRange);
+        pChangeTrackingImportHelper->AddGenerated(std::move(pCellInfo), aBigRange);
 }
 
 ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,

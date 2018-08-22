@@ -76,7 +76,7 @@ struct ScMyGenerated
     sal_uInt32      nID;
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
-    ScMyGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
+    ScMyGenerated(std::unique_ptr<ScMyCellInfo> pCellInfo, const ScBigRange& aBigRange);
     ~ScMyGenerated();
 };
 
@@ -211,13 +211,13 @@ public:
     void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
     void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_front(nID); }
     void AddDeleted(const sal_uInt32 nID);
-    void AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo);
+    void AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo);
     void SetMultiSpanned(const sal_Int16 nMultiSpanned);
     void SetInsertionCutOff(const sal_uInt32 nID, const sal_Int32 nPosition);
     void AddMoveCutOff(const sal_uInt32 nID, const sal_Int32 nStartPosition, const sal_Int32 nEndPosition);
     void SetMoveRanges(const ScBigRange& aSourceRange, const ScBigRange& aTargetRange);
     void GetMultiSpannedRange();
-    void AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
+    void AddGenerated(std::unique_ptr<ScMyCellInfo> pCellInfo, const ScBigRange& aBigRange);
 
     void EndChangeAction();
 
