@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_7b7d2c1b",
+        "filename": "sw/source/core/doc/doc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-08-22T16:36:44Z",
+      "side": 1,
+      "message": "\"x\" prefix? why???",
+      "revId": "f792906fb5b220c37d6956afcae2c0d817b1aa74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
