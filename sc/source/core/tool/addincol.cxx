@@ -39,6 +39,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>
+#include <com/sun/star/sheet/XVolatileResult.hpp>
 
 #include <addincol.hxx>
 #include <addinhelpid.hxx>
