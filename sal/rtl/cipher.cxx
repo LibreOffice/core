@@ -23,7 +23,15 @@
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
 #include <algorithm>
+#include <cstring>
+#include <limits>
 
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+#include <openssl/blowfish.h>
+#include <openssl/rc4.h>
+#endif
+
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define RTL_CIPHER_NTOHL(c, l) \
     ((l)  = (static_cast<sal_uInt32>(*((c)++))) << 24, \
      (l) |= (static_cast<sal_uInt32>(*((c)++))) << 16, \
@@ -82,6 +90,7 @@
         case 1: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 24) & 0xff); \
     } \
 }
+#endif
 
 typedef rtlCipherError(cipher_init_t) (
     rtlCipher          Cipher,
@@ -183,6 +192,7 @@ void SAL_CALL rtl_cipher_destroy(rtlCipher Cipher) SAL_THROW_EXTERN_C()
         pImpl->m_delete(Cipher);
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_ROUNDS_BF 16
 
 struct CipherKeyBF
@@ -190,9 +200,15 @@ struct CipherKeyBF
     sal_uInt32 m_S[4][256];
     sal_uInt32 m_P[CIPHER_ROUNDS_BF + 2];
 };
+#endif
 
 struct CipherContextBF
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    BF_KEY m_key;
+    unsigned char m_iv[8];
+    int m_offset;
+#else
     CipherKeyBF    m_key;
     union
     {
@@ -200,6 +216,7 @@ struct CipherContextBF
         sal_uInt8  m_byte[8];
     } m_iv;
     sal_uInt32     m_offset;
+#endif
 };
 
 struct CipherBF_Impl
@@ -221,6 +238,7 @@ static rtlCipherError BF_update(
     const sal_uInt8    *pData,   sal_Size nDatLen,
     sal_uInt8          *pBuffer, sal_Size nBufLen);
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static void BF_updateECB(
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
@@ -609,6 +627,7 @@ static const CipherKeyBF BF_key =
         0x9216D5D9L, 0x8979FB1BL
     }
 };
+#endif
 
 static rtlCipherError BF_init(
     CipherContextBF *ctx,
@@ -616,6 +635,17 @@ static rtlCipherError BF_init(
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
     const sal_uInt8 *pArgData, sal_Size nArgLen)
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    (void) eMode;
+    if (nKeyLen > std::numeric_limits<int>::max()) {
+        return rtl_Cipher_E_BufferSize;
+    }
+    BF_set_key(&ctx->m_key, static_cast<int>(nKeyLen), pKeyData);
+    auto const n = std::min(nArgLen, sal_Size(8));
+    std::memcpy(ctx->m_iv, pArgData, n);
+    std::memset(ctx->m_iv + n, 0, 8 - n);
+    ctx->m_offset = 0;
+#else
     CipherKeyBF *key;
     sal_uInt32   D, DL, DR;
     sal_uInt16   i, j, k;
@@ -673,6 +703,7 @@ static rtlCipherError BF_init(
             ctx->m_iv.m_long[1] = DR;
         }
     }
+#endif
 
     return rtl_Cipher_E_None;
 }
@@ -695,6 +726,9 @@ static rtlCipherError BF_update(
     if (eMode == rtl_Cipher_ModeECB)
     {
         /* Block mode. */
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+        return rtl_Cipher_E_Mode; // not actually used in LO itself, so not supported here
+#else
         while (nDatLen > 8)
         {
             BF_updateECB(ctx, eDirection, pData, pBuffer, 8);
@@ -703,10 +737,14 @@ static rtlCipherError BF_update(
             pBuffer += 8;
         }
         BF_updateECB(ctx, eDirection, pData, pBuffer, nDatLen);
+#endif
     }
     else if (eMode == rtl_Cipher_ModeCBC)
     {
         /* Block mode. */
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+        return rtl_Cipher_E_Mode; // not actually used in LO itself, so not supported here
+#else
         while (nDatLen > 8)
         {
             BF_updateCBC (ctx, eDirection, pData, pBuffer, 8);
@@ -715,10 +753,19 @@ static rtlCipherError BF_update(
             pBuffer += 8;
         }
         BF_updateCBC (ctx, eDirection, pData, pBuffer, nDatLen);
+#endif
     }
     else
     {
         /* Stream mode. */
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+        if (nDatLen > std::numeric_limits<long>::max()) {
+            return rtl_Cipher_E_BufferSize;
+        }
+        BF_cfb64_encrypt(
+            pData, pBuffer, static_cast<long>(nDatLen), &ctx->m_key, ctx->m_iv, &ctx->m_offset,
+            eDirection == rtl_Cipher_DirectionEncode ? BF_ENCRYPT : BF_DECRYPT);
+#else
         while (nDatLen > 0)
         {
             BF_updateCFB (ctx, eDirection, pData, pBuffer);
@@ -726,10 +773,12 @@ static rtlCipherError BF_update(
             pData   += 1;
             pBuffer += 1;
         }
+#endif
     }
     return rtl_Cipher_E_None;
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static void BF_updateECB(
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
@@ -932,6 +981,7 @@ static sal_uInt32 BF(CipherKeyBF *key, sal_uInt32 x)
 
     return y;
 }
+#endif
 
 /**
     rtl_cipherBF (Blowfish) implementation.
@@ -1044,12 +1094,18 @@ void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
     }
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_CBLOCK_ARCFOUR 256
+#endif
 
 struct ContextARCFOUR_Impl
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    RC4_KEY m_key;
+#else
     unsigned int m_S[CIPHER_CBLOCK_ARCFOUR];
     unsigned int m_X, m_Y;
+#endif
 };
 
 struct CipherARCFOUR_Impl
@@ -1067,6 +1123,12 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     ContextARCFOUR_Impl *ctx,
     const sal_uInt8     *pKeyData, sal_Size nKeyLen)
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    if (nKeyLen > std::numeric_limits<int>::max()) {
+        return rtl_Cipher_E_BufferSize;
+    }
+    RC4_set_key(&ctx->m_key, static_cast<int>(nKeyLen), pKeyData);
+#else
     unsigned int  K[CIPHER_CBLOCK_ARCFOUR];
     unsigned int *L, *S;
     unsigned int  x, y;
@@ -1107,6 +1169,7 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     /* Initialize counters X and Y. */
     ctx->m_X = 0;
     ctx->m_Y = 0;
+#endif
 
     return rtl_Cipher_E_None;
 }
@@ -1116,15 +1179,22 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
     const sal_uInt8     *pData,   sal_Size nDatLen,
     sal_uInt8           *pBuffer, sal_Size nBufLen)
 {
-    unsigned int *S;
-    sal_Size k;
-
     /* Check arguments. */
     if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
     if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
         return rtl_Cipher_E_BufferSize;
+
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    RC4(&ctx->m_key, nDatLen, pData, pBuffer);
+        // while RC4's len parameter is documented to be of type unsigned long (e.g. at
+        // <https://www.openssl.org/docs/man1.1.0/crypto/RC4.html>), actual declarations in
+        // openssl/rc4.h (e.g., from current external/openssl's openssl-1.0.2o.tar.gz, or
+        // openssl-devel-1.1.0h-3.fc28.x86_64) specify it as size_t (i.e., compatible with sal_Size)
+#else
+    unsigned int *S;
+    sal_Size k;
 
     /* Update. */
     S = &(ctx->m_S[0]);
@@ -1147,6 +1217,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
         t = (S[x] + S[y]) % CIPHER_CBLOCK_ARCFOUR;
         pBuffer[k] = pData[k] ^ static_cast<sal_uInt8>(S[t] & 0xff);
     }
+#endif
 
     return rtl_Cipher_E_None;
 }

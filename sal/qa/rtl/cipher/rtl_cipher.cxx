@@ -166,7 +166,14 @@ public:
             memset(pCipherBuffer, 0, nCipherLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                "wrong encode",
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+                rtl_Cipher_E_Mode,
+#else
+                rtl_Cipher_E_None,
+#endif
+                aError);
 
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
@@ -214,18 +221,34 @@ public:
             memset(pCipherBuffer, 0, nCipherLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                "wrong encode",
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+                rtl_Cipher_E_Mode,
+#else
+                rtl_Cipher_E_None,
+#endif
+                aError);
 
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
             memset(pPlainText2Buffer, 0, nPlainText2Len);
 
             /* rtlCipherError */ aError = rtl_cipher_decode(aCipher, pCipherBuffer, nCipherLen, pPlainText2Buffer, nPlainText2Len);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong decode", rtl_Cipher_E_None, aError);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                "wrong decode",
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+                rtl_Cipher_E_Mode,
+#else
+                rtl_Cipher_E_None,
+#endif
+                aError);
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
             sal_Int32 nCompare = memcmp(pPlainTextBuffer, pPlainText2Buffer, 16);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("compare between plain and decoded plain failed", static_cast<sal_Int32>(0), nCompare);
+#endif
 
             delete [] pPlainText2Buffer;
 
@@ -351,7 +374,14 @@ public:
             memset(pBuffer, 0, nLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pDataBuffer, nDataLen, pBuffer, nLen);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                "wrong encode",
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+                rtl_Cipher_E_Mode,
+#else
+                rtl_Cipher_E_None,
+#endif
+                aError);
 
             delete [] pBuffer;
             delete [] pDataBuffer;
