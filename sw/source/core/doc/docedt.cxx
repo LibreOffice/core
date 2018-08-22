@@ -412,7 +412,13 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                     rPam.GetBound( false ) = aAlphaPos;
             }
             // delete the Node, at last!
+            SwNode::Merge const eOldMergeFlag(pOldTextNd->GetRedlineMergeFlag());
+            if (eOldMergeFlag == SwNode::Merge::First)
+            {
+                sw::MoveDeletedPrevFrames(*pOldTextNd, *pTextNd);
+            }
             pDoc->GetNodes().Delete( aOldIdx );
+            sw::CheckResetRedlineMergeFlag(*pTextNd, eOldMergeFlag == SwNode::Merge::NonFirst);
         }
         else
         {

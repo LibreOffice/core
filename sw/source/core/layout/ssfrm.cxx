@@ -27,6 +27,7 @@
 #include <fmtfsize.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <fmtclds.hxx>
 #include <viewimp.hxx>
 #include <sortedobjs.hxx>
@@ -440,14 +441,20 @@ SwContentFrame::~SwContentFrame()
 {
 }
 
-void SwTextFrame::RegisterToNode(SwTextNode & rNode)
+void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFirst)
 {
+    if (isForceNodeAsFirst && m_pMergedPara)
+    {   // nothing registered here, in particular no redlines
+        assert(m_pMergedPara->pFirstNode->GetIndex() + 1 == rNode.GetIndex());
+        assert(rNode.GetDoc()->getIDocumentRedlineAccess().GetRedlinePos(
+                *m_pMergedPara->pFirstNode, USHRT_MAX) == SwRedlineTable::npos);
+    }
     assert(&rNode != GetDep());
     assert(!m_pMergedPara
         || (m_pMergedPara->pFirstNode->GetIndex() < rNode.GetIndex())
         || (rNode.GetIndex() + 1 == m_pMergedPara->pFirstNode->GetIndex()));
     SwTextNode & rFirstNode(
-        (m_pMergedPara && m_pMergedPara->pFirstNode->GetIndex() < rNode.GetIndex())
+        (!isForceNodeAsFirst && m_pMergedPara && m_pMergedPara->pFirstNode->GetIndex() < rNode.GetIndex())
             ? *m_pMergedPara->pFirstNode
             : rNode);
     // sw_redlinehide: use New here, because the only caller also calls lcl_ChangeFootnoteRef
