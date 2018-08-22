@@ -254,4 +254,12 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 
 endif # ifneq ($(OS),WNT)
 
+ifeq ($(ENABLE_CIPHER_OPENSSL_BACKEND),TRUE)
+$(eval $(call gb_Library_add_defs,sal,-DLIBO_CIPHER_OPENSSL_BACKEND))
+$(eval $(call gb_Library_use_externals,sal, \
+    openssl \
+    openssl_headers \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
