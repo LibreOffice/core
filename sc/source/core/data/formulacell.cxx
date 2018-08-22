@@ -1803,17 +1803,6 @@ void ScFormulaCell::Interpret()
 #endif
 }
 
-namespace {
-class StackCleaner
-{
-    std::unique_ptr<ScInterpreter>  pInt;
-    public:
-    StackCleaner( ScInterpreter* pI )
-        : pInt(pI)
-        {}
-};
-}
-
 void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTailParameter eTailParam )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
@@ -1841,8 +1830,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
     if( pCode->GetCodeLen() && pDocument )
     {
-        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, rContext, aPos, *pCode );
-        StackCleaner aStackCleaner(pInterpreter);
+        std::unique_ptr<ScInterpreter> pInterpreter(new ScInterpreter( this, pDocument, rContext, aPos, *pCode ));
         FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
@@ -2244,8 +2232,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation()
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode );
-        StackCleaner aStackCleaner(pInterpreter);
+        std::unique_ptr<ScInterpreter> pInterpreter(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
 
         switch (pInterpreter->GetVolatileType())
         {
