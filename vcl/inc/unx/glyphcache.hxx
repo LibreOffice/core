@@ -159,7 +159,7 @@ private:
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 
-    typedef std::unordered_map<int,GlyphData> GlyphList;
+    typedef std::unordered_map<sal_GlyphId, GlyphData> GlyphList;
     mutable GlyphList       maGlyphList;
 
     rtl::Reference<FreetypeFontInstance> mpFontInstance;
