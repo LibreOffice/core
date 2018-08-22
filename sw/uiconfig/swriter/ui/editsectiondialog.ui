@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -8,6 +8,9 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="editsectiondialog|EditSectionDialog">Edit Sections</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -281,10 +284,10 @@
                                       <object class="GtkLabel" id="sectionft">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes" context="editsectiondialog|sectionft">_Section</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">section</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -318,10 +321,10 @@
                                           <object class="GtkLabel" id="filenameft">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="editsectiondialog|filenameft">_File name</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">filename</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -333,10 +336,10 @@
                                           <object class="GtkLabel" id="ddeft">
                                             <property name="can_focus">False</property>
                                             <property name="no_show_all">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="editsectiondialog|ddeft">DDE _Command</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">filename</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -403,7 +406,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="protect">
-                                <property name="label" translatable="yes" context="editsectiondialog|protect">_Protected</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|protect">_Protect</property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
@@ -548,10 +551,10 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes" context="editsectiondialog|conditionft">_With Condition</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">condition</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
