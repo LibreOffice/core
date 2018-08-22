@@ -302,7 +302,7 @@ void SdTransferable::CreateData()
         sal_Int32 nPos = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
         if( nPos != -1 )
             aOldLayoutName = aOldLayoutName.copy( 0, nPos );
-        SdStyleSheetVector aCreatedSheets;
+        StyleSheetCopyResultVector aCreatedSheets;
         pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
 
