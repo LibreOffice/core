@@ -553,24 +553,22 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-        ScMyMoveCutOffs::iterator aItr(pAction->aMoveCutOffs.begin());
-        ScMyMoveCutOffs::iterator aEndItr(pAction->aMoveCutOffs.end());
-        while(aItr != aEndItr)
+        for (const ScMyMoveCutOff & rCutOff : pAction->aMoveCutOffs)
         {
-            ScChangeAction* pChangeAction = pTrack->GetAction(aItr->nID);
+            ScChangeAction* pChangeAction = pTrack->GetAction(rCutOff.nID);
             if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
             {
                 ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
                 if (pMoveAction && pDelAct)
-                    pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(aItr->nStartPosition),
-                                        static_cast<sal_Int16>(aItr->nEndPosition));
+                    pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(rCutOff.nStartPosition),
+                                        static_cast<sal_Int16>(rCutOff.nEndPosition));
             }
             else
             {
                 OSL_FAIL("no cut off move action");
             }
-            aItr = pAction->aMoveCutOffs.erase(aItr);
         }
+        pAction->aMoveCutOffs.clear();
     }
 }
 
@@ -625,13 +623,11 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     {
         if (!pAction->aDependencies.empty())
         {
-            ScMyDependencies::iterator aItr(pAction->aDependencies.begin());
-            ScMyDependencies::iterator aEndItr(pAction->aDependencies.end());
-            while(aItr != aEndItr)
+            for (const auto & rID : pAction->aDependencies)
             {
-                pAct->AddDependent(*aItr, pTrack);
-                aItr = pAction->aDependencies.erase(aItr);
+                pAct->AddDependent(rID, pTrack);
             }
+            pAction->aDependencies.clear();
         }
         if (!pAction->aDeletedList.empty())
         {
@@ -758,8 +754,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         // old files didn't store nanoseconds, disable until encountered
         pTrack->SetTimeNanoSeconds( false );
 
-        ScMyActions::iterator aItr(aActions.begin());
-        ScMyActions::iterator aEndItr(aActions.end());
+        auto aItr(aActions.begin());
+        auto aEndItr(aActions.end());
         while (aItr != aEndItr)
         {
             ScChangeAction* pAction = nullptr;
