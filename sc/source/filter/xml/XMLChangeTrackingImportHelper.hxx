@@ -70,14 +70,12 @@ struct ScMyDeleted
 struct ScMyGenerated
 {
     ScBigRange      aBigRange;
-    sal_uInt32      nID;
+    sal_uInt32      nID = 0;
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
-    ScMyGenerated(std::unique_ptr<ScMyCellInfo> pCellInfo, const ScBigRange& aBigRange);
-    ~ScMyGenerated();
+    ScMyGenerated(ScBigRange range, sal_uInt32 id, std::unique_ptr<ScMyCellInfo> p)
+      : aBigRange(range), nID(id), pCellInfo(std::move(p)) {}
 };
-
-typedef std::list<ScMyGenerated*> ScMyGeneratedList;
 
 struct ScMyInsertionCutOff
 {
@@ -135,7 +133,7 @@ struct ScMyInsAction : public ScMyBaseAction
 
 struct ScMyDelAction : public ScMyBaseAction
 {
-    ScMyGeneratedList aGeneratedList;
+    std::deque<ScMyGenerated> aGeneratedList;
     std::unique_ptr<ScMyInsertionCutOff> pInsCutOff;
     ScMyMoveCutOffs aMoveCutOffs;
     sal_Int32 nD;
@@ -146,7 +144,7 @@ struct ScMyDelAction : public ScMyBaseAction
 
 struct ScMyMoveAction : public ScMyBaseAction
 {
-    ScMyGeneratedList aGeneratedList;
+    std::deque<ScMyGenerated> aGeneratedList;
     std::unique_ptr<ScMyMoveRanges> pMoveRanges;
 
     ScMyMoveAction();
@@ -188,7 +186,7 @@ private:
     ScChangeAction* CreateRejectionAction(const ScMyRejAction* pAction);
     ScChangeAction* CreateContentAction(const ScMyContentAction* pAction);
 
-    void CreateGeneratedActions(ScMyGeneratedList& rList);
+    void CreateGeneratedActions(std::deque<ScMyGenerated>& rList);
 
 public:
     ScXMLChangeTrackingImportHelper();
