@@ -280,6 +280,9 @@ cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
 cmd/sc_shapesmenu.svg cmd/sc_basicshapes.round-quadrat.svg
 cmd/sc_shapeslinemenu.svg cmd/sc_line.svg
 
+cmd/lc_measureattributes.png cmd/lc_measureline.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
+
 # Open
 cmd/lc_openfromwriter.svg cmd/lc_open.svg
 cmd/lc_openfromcalc.svg cmd/lc_open.svg

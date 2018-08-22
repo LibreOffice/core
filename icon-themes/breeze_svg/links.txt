@@ -288,6 +288,9 @@ cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
 cmd/sc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-document.png
 
+cmd/lc_measureattributes.png cmd/lc_measureline.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
+
 cmd/lc_emojicontrol.png cmd/lc_symbolshapes.png
 cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
 
