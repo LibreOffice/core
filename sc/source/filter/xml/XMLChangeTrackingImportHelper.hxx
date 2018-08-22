@@ -91,8 +91,6 @@ struct ScMyMoveCutOff
             nID(nTempID), nStartPosition(nStartPos), nEndPosition(nEndPos) {}
 };
 
-typedef std::list<ScMyMoveCutOff> ScMyMoveCutOffs;
-
 struct ScMyMoveRanges
 {
     ScBigRange aSourceRange;
@@ -102,13 +100,11 @@ struct ScMyMoveRanges
             aSourceRange(rSource), aTargetRange(rTarget) {}
 };
 
-typedef std::list<sal_uInt32> ScMyDependencies;
-
 struct ScMyBaseAction
 {
     ScMyActionInfo aInfo;
     ScBigRange aBigRange;
-    ScMyDependencies aDependencies;
+    std::deque<sal_uInt32> aDependencies;
     std::deque<ScMyDeleted> aDeletedList;
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
@@ -130,7 +126,7 @@ struct ScMyDelAction : public ScMyBaseAction
 {
     std::deque<ScMyGenerated> aGeneratedList;
     std::unique_ptr<ScMyInsertionCutOff> pInsCutOff;
-    ScMyMoveCutOffs aMoveCutOffs;
+    std::deque<ScMyMoveCutOff> aMoveCutOffs;
     sal_Int32 nD;
 
     explicit ScMyDelAction(const ScChangeActionType nActionType);
@@ -160,12 +156,10 @@ struct ScMyRejAction : public ScMyBaseAction
     virtual ~ScMyRejAction() override;
 };
 
-typedef std::list<ScMyBaseAction*> ScMyActions;
-
 class ScXMLChangeTrackingImportHelper
 {
     std::set<OUString>  aUsers;
-    ScMyActions         aActions;
+    std::deque<ScMyBaseAction*> aActions;
     css::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
