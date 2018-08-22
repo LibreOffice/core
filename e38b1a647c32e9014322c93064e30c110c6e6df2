@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_fb137cb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-22T18:16:57Z",
+      "side": 1,
+      "message": "Bit more rationale what\u0027s fixed would be great! :)",
+      "revId": "e38b1a647c32e9014322c93064e30c110c6e6df2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3b48c4ca",
+        "filename": "xmloff/source/draw/sdpropls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-22T18:16:57Z",
+      "side": 1,
+      "message": "Hmm, all the whitespace changes in this section seem superfluous?",
+      "revId": "e38b1a647c32e9014322c93064e30c110c6e6df2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1b4500b4",
+        "filename": "xmloff/source/draw/sdpropls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-22T18:16:57Z",
+      "side": 1,
+      "message": "This all need the MID_FLAG_ELEMENT_ITEM_EXPORT flag - we can\u0027t export that just yet, but import should work",
+      "revId": "e38b1a647c32e9014322c93064e30c110c6e6df2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
