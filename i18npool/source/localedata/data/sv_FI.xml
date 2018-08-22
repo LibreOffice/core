@@ -39,7 +39,7 @@
       <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
       <LongDateDaySeparator>. </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
-      <LongDateYearSeparator/>
+      <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
       <QuotationStart>’</QuotationStart>
