@@ -733,11 +733,16 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
+    bool bShowArea = true, bShowMeasure = true;
 
-    if ( rMarkList.GetMarkCount() == 1 )
+    for (size_t i = 0; i < nMarkCount && i < 50; ++i)
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         sal_uInt16 nObjType = pObj->GetObjIdentifier();
+
+        if ( nObjType != OBJ_MEASURE )
+            bShowMeasure = false;
 
         // If marked object is 2D, disable format area command.
         if ( nObjType == OBJ_PLIN     ||
@@ -745,9 +750,19 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
              nObjType == OBJ_PATHLINE ||
              nObjType == OBJ_FREELINE ||
              nObjType == OBJ_EDGE     ||
-             nObjType == OBJ_CARC )
-            rSet.DisableItem( SID_ATTRIBUTES_AREA );
+             nObjType == OBJ_CARC     ||
+             bShowMeasure )
+            bShowArea = false;
+
+        if (!bShowArea && !bShowMeasure)
+            break;
     }
+
+    if (!bShowArea)
+        rSet.DisableItem(SID_ATTRIBUTES_AREA);
+
+    if (!bShowMeasure)
+        rSet.DisableItem(SID_MEASURE_DLG);
 
     Disable(rSet);
 

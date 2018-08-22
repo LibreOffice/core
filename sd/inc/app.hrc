@@ -336,7 +336,6 @@
 #define SID_GLUE_ESCDIR_BOTTOM              (SID_SD_START+317)
 #define SID_DRAWTBX_INSERT                  (SID_SD_START+318)
 #define SID_POLYGON_MORPHING                (SID_SD_START+319)
-#define SID_MEASURE_DLG                     (SID_SD_START+320)
     // FREE
 // In svxids.hrc: SID_GRID_VISIBLE              (SID_SD_START+322)
 // In svxids.hrc: ID_VAL_USEFIRSTROWSTYLE       (SID_SD_START+323)

@@ -208,6 +208,10 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteAreaDlg( rReq );
             break;
 
+        case SID_MEASURE_DLG:
+            ExecuteMeasureDlg( rReq );
+            break;
+
         case SID_DRAWTEXT_ATTR_DLG:
             ExecuteTextAttrDlg( rReq );
             break;
@@ -446,6 +450,33 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
     {
         if ( bHasMarked )
             pView->SetAttributes( *pDlg->GetOutputItemSet() );
+        else
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
+
+        pView->InvalidateAttribs();
+        rReq.Done();
+    }
+}
+
+void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
+{
+    ScDrawView* pView       = pViewData->GetScDrawView();
+    bool        bHasMarked  = pView->AreObjectsMarked();
+    SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
+
+    if( bHasMarked )
+        pView->MergeAttrFromMarked( aNewAttr, false );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    vcl::Window* pWin = pViewData->GetDialogParent();
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(pWin, aNewAttr, pView, RID_SVXPAGE_MEASURE));
+
+    sal_uInt16 nResult = pDlg->Execute();
+
+    if ( RET_OK == nResult )
+    {
+        if ( bHasMarked )
+            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 

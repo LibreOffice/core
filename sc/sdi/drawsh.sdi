@@ -100,6 +100,7 @@ interface TableDraw
     SID_ATTR_LINE_CAP [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTRIBUTES_AREA     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
     SID_ATTRIBUTES_LINE     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_MEASURE_DLG         [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
     SID_ATTR_TRANSFORM      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
 
     // For the sidebar

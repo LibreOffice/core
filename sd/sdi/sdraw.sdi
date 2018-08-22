@@ -2435,23 +2435,6 @@ SfxBoolItem MasterPage SID_MASTERPAGE
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem MeasureAttributes SID_MEASURE_DLG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
-]
-
 SfxVoidItem MirrorHorz SID_HORIZONTAL
 ()
 [

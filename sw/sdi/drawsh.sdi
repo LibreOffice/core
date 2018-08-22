@@ -196,6 +196,12 @@ interface TextDraw : TextDrawBase
         StateMethod = DisableState ;
     ]
 
+    SID_MEASURE_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
     FN_DRAWTEXT_ATTR_DLG
     [
         ExecMethod = ExecDrawDlg ;

@@ -967,10 +967,11 @@ class SfxStringItem;
 #define SID_INSERT_SIGNATURELINE                        ( SID_SVX_START + 1173 )
 #define SID_EDIT_SIGNATURELINE                          ( SID_SVX_START + 1174 )
 #define SID_SIGN_SIGNATURELINE                          ( SID_SVX_START + 1175 )
+#define SID_MEASURE_DLG                                 ( SID_SVX_START + 1176 )
 
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SIGN_SIGNATURELINE + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_MEASURE_DLG + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

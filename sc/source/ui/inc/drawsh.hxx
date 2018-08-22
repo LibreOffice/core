@@ -82,6 +82,7 @@ public:
     void    ExecuteLineDlg( SfxRequest& rReq );
     void    ExecuteAreaDlg( SfxRequest& rReq );
     void    ExecuteTextAttrDlg( SfxRequest& rReq );
+    void    ExecuteMeasureDlg( SfxRequest& rReq );
 
     ScDrawView* GetDrawView();
 
