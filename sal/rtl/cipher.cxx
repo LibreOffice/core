@@ -23,7 +23,15 @@
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
 #include <algorithm>
+#include <cassert>
+#include <cstring>
+#include <limits>
 
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+#include <openssl/evp.h>
+#endif
+
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define RTL_CIPHER_NTOHL(c, l) \
     ((l)  = (static_cast<sal_uInt32>(*((c)++))) << 24, \
      (l) |= (static_cast<sal_uInt32>(*((c)++))) << 16, \
@@ -82,6 +90,7 @@
         case 1: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 24) & 0xff); \
     } \
 }
+#endif
 
 typedef rtlCipherError(cipher_init_t) (
     rtlCipher          Cipher,
@@ -183,6 +192,7 @@ void SAL_CALL rtl_cipher_destroy(rtlCipher Cipher) SAL_THROW_EXTERN_C()
         pImpl->m_delete(Cipher);
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_ROUNDS_BF 16
 
 struct CipherKeyBF
@@ -190,9 +200,13 @@ struct CipherKeyBF
     sal_uInt32 m_S[4][256];
     sal_uInt32 m_P[CIPHER_ROUNDS_BF + 2];
 };
+#endif
 
 struct CipherContextBF
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    EVP_CIPHER_CTX * m_context;
+#else
     CipherKeyBF    m_key;
     union
     {
@@ -200,6 +214,7 @@ struct CipherContextBF
         sal_uInt8  m_byte[8];
     } m_iv;
     sal_uInt32     m_offset;
+#endif
 };
 
 struct CipherBF_Impl
@@ -208,11 +223,13 @@ struct CipherBF_Impl
     CipherContextBF m_context;
 };
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static rtlCipherError BF_init(
     CipherContextBF *ctx,
     rtlCipherMode    eMode,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
     const sal_uInt8 *pArgData, sal_Size nArgLen);
+#endif
 
 static rtlCipherError BF_update(
     CipherContextBF    *ctx,
@@ -221,6 +238,7 @@ static rtlCipherError BF_update(
     const sal_uInt8    *pData,   sal_Size nDatLen,
     sal_uInt8          *pBuffer, sal_Size nBufLen);
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static void BF_updateECB(
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
@@ -609,7 +627,9 @@ static const CipherKeyBF BF_key =
         0x9216D5D9L, 0x8979FB1BL
     }
 };
+#endif
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static rtlCipherError BF_init(
     CipherContextBF *ctx,
     rtlCipherMode    eMode,
@@ -676,6 +696,7 @@ static rtlCipherError BF_init(
 
     return rtl_Cipher_E_None;
 }
+#endif
 
 static rtlCipherError BF_update(
     CipherContextBF    *ctx,
@@ -692,6 +713,31 @@ static rtlCipherError BF_update(
         return rtl_Cipher_E_BufferSize;
 
     /* Update. */
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    assert(eMode == rtl_Cipher_ModeStream);
+    (void) eDirection;
+    while (nDatLen > std::numeric_limits<int>::max()) {
+        int outl;
+        if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, std::numeric_limits<int>::max())
+            == 0)
+        {
+            return rtl_Cipher_E_Unknown;
+        }
+        assert(outl == std::numeric_limits<int>::max());
+        pData += std::numeric_limits<int>::max();
+        nDatLen -= std::numeric_limits<int>::max();
+        pBuffer += std::numeric_limits<int>::max();
+    }
+    int outl;
+    if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, static_cast<int>(nDatLen)) == 0)
+    {
+        return rtl_Cipher_E_Unknown;
+    }
+    assert(outl == static_cast<int>(nDatLen));
+    // A final call to EVP_CipherFinal_ex is intentionally missing; it wouldn't fit the rtl/cipher.h
+    // interface, and is hopefully not needed, as each individual Blowfish CFB update step doesn't
+    // hold back any data that would need to be finally flushed.
+#else
     if (eMode == rtl_Cipher_ModeECB)
     {
         /* Block mode. */
@@ -727,9 +773,11 @@ static rtlCipherError BF_update(
             pBuffer += 1;
         }
     }
+#endif
     return rtl_Cipher_E_None;
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 static void BF_updateECB(
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
@@ -932,6 +980,7 @@ static sal_uInt32 BF(CipherKeyBF *key, sal_uInt32 x)
 
     return y;
 }
+#endif
 
 /**
     rtl_cipherBF (Blowfish) implementation.
@@ -944,6 +993,12 @@ rtlCipher SAL_CALL rtl_cipher_createBF(rtlCipherMode Mode) SAL_THROW_EXTERN_C()
 
     if (Mode == rtl_Cipher_ModeInvalid)
         return nullptr;
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    if (Mode != rtl_Cipher_ModeStream) {
+        // Cannot easily support ModeECB and ModeCBC, and they aren't used in the LO code at least:
+        return nullptr;
+    }
+#endif
 
     pImpl = static_cast<CipherBF_Impl*>(rtl_allocateZeroMemory(sizeof (CipherBF_Impl)));
     if (pImpl)
@@ -979,9 +1034,45 @@ rtlCipherError SAL_CALL rtl_cipher_initBF(
     else
         return rtl_Cipher_E_Direction;
 
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    if (pImpl->m_cipher.m_direction == rtl_Cipher_DirectionBoth) {
+        // Cannot easily support DirectionBoth, and it isn't used in the LO code at least:
+        return rtl_Cipher_E_Direction;
+    }
+    if (nKeyLen > std::numeric_limits<int>::max()) {
+        return rtl_Cipher_E_BufferSize;
+    }
+    if (pImpl->m_context.m_context != nullptr) {
+        EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
+    }
+    pImpl->m_context.m_context = EVP_CIPHER_CTX_new();
+    if (pImpl->m_context.m_context == nullptr) {
+        return rtl_Cipher_E_Memory;
+    }
+    unsigned char iv[8];
+    auto const n = std::min(nArgLen, sal_Size(8));
+    std::memcpy(iv, pArgData, n);
+    std::memset(iv + n, 0, 8 - n);
+    if (EVP_CipherInit_ex(
+            pImpl->m_context.m_context, EVP_bf_cfb(), nullptr, nullptr, iv,
+            pImpl->m_cipher.m_direction == rtl_Cipher_DirectionDecode ? 0 : 1)
+        == 0)
+    {
+        return rtl_Cipher_E_Unknown;
+    }
+    if (EVP_CIPHER_CTX_set_key_length(pImpl->m_context.m_context, static_cast<int>(nKeyLen)) == 0) {
+        return rtl_Cipher_E_Unknown;
+    }
+    if (EVP_CipherInit_ex(pImpl->m_context.m_context, nullptr, nullptr, pKeyData, nullptr, -1) == 0)
+    {
+        return rtl_Cipher_E_Unknown;
+    }
+    return rtl_Cipher_E_None;
+#else
     return BF_init(
         &(pImpl->m_context), pImpl->m_cipher.m_mode,
         pKeyData, nKeyLen, pArgData, nArgLen);
+#endif
 }
 
 rtlCipherError SAL_CALL rtl_cipher_encodeBF(
@@ -1038,18 +1129,31 @@ void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
     if (pImpl)
     {
         if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF)
+        {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            if (pImpl->m_context.m_context != nullptr) {
+                EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
+            }
+#endif
             rtl_freeZeroMemory(pImpl, sizeof(CipherBF_Impl));
+        }
         else
             rtl_freeMemory(pImpl);
     }
 }
 
+#if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_CBLOCK_ARCFOUR 256
+#endif
 
 struct ContextARCFOUR_Impl
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    EVP_CIPHER_CTX * m_context;
+#else
     unsigned int m_S[CIPHER_CBLOCK_ARCFOUR];
     unsigned int m_X, m_Y;
+#endif
 };
 
 struct CipherARCFOUR_Impl
@@ -1067,6 +1171,29 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     ContextARCFOUR_Impl *ctx,
     const sal_uInt8     *pKeyData, sal_Size nKeyLen)
 {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    if (nKeyLen > std::numeric_limits<int>::max()) {
+        return rtl_Cipher_E_BufferSize;
+    }
+    if (ctx->m_context != nullptr) {
+        EVP_CIPHER_CTX_free(ctx->m_context);
+    }
+    ctx->m_context = EVP_CIPHER_CTX_new();
+    if (ctx->m_context == nullptr) {
+        return rtl_Cipher_E_Memory;
+    }
+    if (EVP_CipherInit_ex(ctx->m_context, EVP_rc4(), nullptr, nullptr, nullptr, 0) == 0) {
+            // RC4 en- and decryption is identical, so we can use 0=decrypt regardless of direction,
+            // and thus also support rtl_Cipher_DirectionBoth
+        return rtl_Cipher_E_Unknown;
+    }
+    if (EVP_CIPHER_CTX_set_key_length(ctx->m_context, static_cast<int>(nKeyLen)) == 0) {
+        return rtl_Cipher_E_Unknown;
+    }
+    if (EVP_CipherInit_ex(ctx->m_context, nullptr, nullptr, pKeyData, nullptr, -1) == 0) {
+        return rtl_Cipher_E_Unknown;
+    }
+#else
     unsigned int  K[CIPHER_CBLOCK_ARCFOUR];
     unsigned int *L, *S;
     unsigned int  x, y;
@@ -1107,6 +1234,7 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     /* Initialize counters X and Y. */
     ctx->m_X = 0;
     ctx->m_Y = 0;
+#endif
 
     return rtl_Cipher_E_None;
 }
@@ -1116,15 +1244,37 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
     const sal_uInt8     *pData,   sal_Size nDatLen,
     sal_uInt8           *pBuffer, sal_Size nBufLen)
 {
-    unsigned int *S;
-    sal_Size k;
-
     /* Check arguments. */
     if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
     if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
         return rtl_Cipher_E_BufferSize;
+
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+    while (nDatLen > std::numeric_limits<int>::max()) {
+        int outl;
+        if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, std::numeric_limits<int>::max())
+            == 0)
+        {
+            return rtl_Cipher_E_Unknown;
+        }
+        assert(outl == std::numeric_limits<int>::max());
+        pData += std::numeric_limits<int>::max();
+        nDatLen -= std::numeric_limits<int>::max();
+        pBuffer += std::numeric_limits<int>::max();
+    }
+    int outl;
+    if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, static_cast<int>(nDatLen)) == 0) {
+        return rtl_Cipher_E_Unknown;
+    }
+    assert(outl == static_cast<int>(nDatLen));
+    // A final call to EVP_CipherFinal_ex is intentionally missing; it wouldn't fit the rtl/cipher.h
+    // interface, and is hopefully not needed, as each individual RC4 update step doesn't hold back
+    // any data that would need to be finally flushed.
+#else
+    unsigned int *S;
+    sal_Size k;
 
     /* Update. */
     S = &(ctx->m_S[0]);
@@ -1147,6 +1297,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
         t = (S[x] + S[y]) % CIPHER_CBLOCK_ARCFOUR;
         pBuffer[k] = pData[k] ^ static_cast<sal_uInt8>(S[t] & 0xff);
     }
+#endif
 
     return rtl_Cipher_E_None;
 }
@@ -1249,7 +1400,14 @@ void SAL_CALL rtl_cipher_destroyARCFOUR(rtlCipher Cipher) SAL_THROW_EXTERN_C()
     if (pImpl)
     {
         if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR)
+        {
+#if defined LIBO_CIPHER_OPENSSL_BACKEND
+            if (pImpl->m_context.m_context != nullptr) {
+                EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
+            }
+#endif
             rtl_freeZeroMemory(pImpl, sizeof(CipherARCFOUR_Impl));
+        }
         else
             rtl_freeMemory(pImpl);
     }
