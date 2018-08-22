@@ -33,6 +33,7 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
+#include <headless/CustomWidgetDraw.hxx>
 
 #include <cairo.h>
 
@@ -258,6 +259,26 @@ public:
     virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
+
+    // Native Widget Drawing interface
+    bool IsNativeControlSupported(ControlType eType, ControlPart ePart) override;
+
+    bool hitTestNativeControl(ControlType eType, ControlPart ePart,
+                               const tools::Rectangle& rBoundingControlRegion,
+                               const Point& rPosition, bool& rIsInside) override;
+
+    bool drawNativeControl(ControlType eType, ControlPart ePart,
+                           const tools::Rectangle& rBoundingControlRegion,
+                           ControlState eState, const ImplControlValue& aValue,
+                           const OUString& aCaptions) override;
+
+    bool getNativeControlRegion(ControlType eType, ControlPart ePart,
+                                 const tools::Rectangle& rBoundingControlRegion,
+                                 ControlState eState,
+                                 const ImplControlValue& aValue,
+                                 const OUString& aCaption,
+                                 tools::Rectangle& rNativeBoundingRegion,
+                                 tools::Rectangle& rNativeContentRegion) override;
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
