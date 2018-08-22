@@ -220,7 +220,7 @@ the system message wasn't already our timer. As a result we can also skip the
 polling. All this is one more reason to drop the single message processing
 in favour of always processing all pending (system) events.
 
-There is an other special case, we have to handle: window updates during move
+There is another special case, we have to handle: window updates during move
 and resize of windows. These system actions run in their own nested message
 loop. So we have to completely switch to timers, even for 0ms. But these
 posted events prevent any event processing, while we're busy. The only viable

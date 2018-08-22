@@ -712,7 +712,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      * Use 'convertToFieldName(dbfield)' to convert a dbfield name in the right.
      *
      * @param _xSection        in which section the formatted field will store
-     * @param _sFormattedfield as String a dbfield or an other function
+     * @param _sFormattedfield as String a dbfield or another function
      * @param _aRect           .X, .Y are the absolute position (1/100mm) where the formatted field will set
      * @param _nWidth          the width of the field in 1/100mm
      * @param _aSO

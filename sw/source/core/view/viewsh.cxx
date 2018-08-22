@@ -313,7 +313,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             //JP 27.11.97: what hid the selection, must also Show it,
             //             else we get Paint errors!
             // e.g. additional mode, page half visible vertically, in the
-            // middle a selection and with an other cursor jump to left
+            // middle a selection and with another cursor jump to left
             // right border. Without ShowCursor the selection disappears.
             bool bShowCursor = pRegion && dynamic_cast<const SwCursorShell*>(this) !=  nullptr;
             if( bShowCursor )
