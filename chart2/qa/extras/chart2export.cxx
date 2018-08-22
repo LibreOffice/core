@@ -1889,7 +1889,7 @@ void Chart2ExportTest::testTdf116163()
     xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "-5400000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart[1]/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "-5400000");
 }
 
 void Chart2ExportTest::testTdf119029()
