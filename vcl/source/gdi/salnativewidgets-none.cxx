@@ -21,9 +21,6 @@
 
 bool SalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)
 {
-    if (hasWidgetDraw())
-        return m_pWidgetDraw->isNativeControlSupported(eType, ePart);
-
     return false;
 }
 
@@ -31,11 +28,6 @@ bool SalGraphics::hitTestNativeControl(ControlType eType, ControlPart ePart,
                                        const tools::Rectangle& rBoundingControlRegion,
                                        const Point& rPosition, bool& rIsInside)
 {
-    if (hasWidgetDraw())
-    {
-        return m_pWidgetDraw->hitTestNativeControl(eType, ePart, rBoundingControlRegion, rPosition, rIsInside);
-    }
-
     return false;
 }
 
@@ -44,12 +36,6 @@ bool SalGraphics::drawNativeControl(ControlType eType, ControlPart ePart,
                                    ControlState eState, const ImplControlValue& aValue,
                                    const OUString& aCaptions)
 {
-    if (hasWidgetDraw())
-    {
-        return m_pWidgetDraw->drawNativeControl(eType, ePart, rBoundingControlRegion,
-                                                eState, aValue, aCaptions);
-    }
-
     return false;
 }
 
@@ -61,13 +47,6 @@ bool SalGraphics::getNativeControlRegion(ControlType eType, ControlPart ePart,
                                          tools::Rectangle& rNativeBoundingRegion,
                                          tools::Rectangle& rNativeContentRegion)
 {
-    if (hasWidgetDraw())
-    {
-        return m_pWidgetDraw->getNativeControlRegion(eType, ePart, rBoundingControlRegion,
-                                                     eState, aValue, aCaption,
-                                                     rNativeBoundingRegion, rNativeContentRegion);
-    }
-
     return false;
 }
 
