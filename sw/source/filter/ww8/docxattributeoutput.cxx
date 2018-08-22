@@ -6635,9 +6635,10 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
 
     sal_Int32 nToken = ecmaDialect ? XML_left : XML_start;
+    sal_Int32 nIndentToken = nFirstLineIndex > 0 ? XML_firstLine : XML_hanging;
     m_pSerializer->singleElementNS( XML_w, XML_ind,
             FSNS( XML_w, nToken ), OString::number( nIndentAt ).getStr(),
-            FSNS( XML_w, XML_hanging ), OString::number( -nFirstLineIndex ).getStr(),
+            FSNS( XML_w, nIndentToken ), OString::number( abs(nFirstLineIndex) ).getStr(),
             FSEND );
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
