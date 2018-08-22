@@ -580,6 +580,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.
     CPPUNIT_ASSERT(nDistB >= 0);
+
+    // tdf#115670 the shadow should not be enabled (no on="t")
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!getProperty<bool>(xPropertySet, "Shadow"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104115, "tdf104115.docx")
