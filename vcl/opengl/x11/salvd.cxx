@@ -35,8 +35,8 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics const * pGraphics,
                                                       long nDX, long nDY,
                                                       const SystemGraphicsData *pData,
-                                                      X11SalGraphics* pNewGraphics) :
-    mpGraphics(pNewGraphics),
+                                                      std::unique_ptr<X11SalGraphics> pNewGraphics) :
+    mpGraphics(std::move(pNewGraphics)),
     mbGraphics( false ),
     mnXScreen( 0 )
 {

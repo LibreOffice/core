@@ -32,24 +32,25 @@
 
 #include <salinst.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
-        X11SalGraphics* pNewGraphics)
+        std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
     if (OpenGLHelper::isVCLOpenGLEnabled())
-        return std::unique_ptr<SalVirtualDevice>(new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, pData, pNewGraphics ));
+        return std::unique_ptr<SalVirtualDevice>(new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, pData, std::move(pNewGraphics) ));
     else
-        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, pNewGraphics));
+        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::move(pNewGraphics)));
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
-    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, new X11SalGraphics());
+    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, o3tl::make_unique<X11SalGraphics>());
 }
 
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
@@ -88,8 +89,8 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 
 X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
                                          DeviceFormat eFormat, const SystemGraphicsData *pData,
-                                         X11SalGraphics* pNewGraphics) :
-    pGraphics_(pNewGraphics),
+                                         std::unique_ptr<X11SalGraphics> pNewGraphics) :
+    pGraphics_(std::move(pNewGraphics)),
     m_nXScreen(0),
     bGraphics_(false)
 {
