@@ -258,7 +258,7 @@ void DocumentHelper::ProvideStyles (
         static_cast<SdStyleSheetPool*>(rSourceDocument.GetStyleSheetPool());
     SdStyleSheetPool* pTargetStyleSheetPool =
         static_cast<SdStyleSheetPool*>(rTargetDocument.GetStyleSheetPool());
-    SdStyleSheetVector aCreatedStyles;
+    StyleSheetCopyResultVector aCreatedStyles;
     pTargetStyleSheetPool->CopyLayoutSheets (
         sLayoutName,
         *pSourceStyleSheetPool,

@@ -90,14 +90,14 @@ OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > >
     return OUString();
 }
 
-SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, const OUString& aStyleName)
+SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, const OUString& aStyleName)
 {
     if( aStyleName.isEmpty() )
         return nullptr;
-    for(SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    for (const auto& a : rStyles)
     {
-        if((*aIt)->GetName() == aStyleName)
-            return (*aIt).get();
+        if (a.m_xStyleSheet->GetName() == aStyleName)
+            return a.m_xStyleSheet.get();
     }
     return nullptr;
 }
@@ -586,23 +586,23 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
     }
 }
 
-void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
+void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets)
 {
     CopySheets( rSourcePool, SfxStyleFamily::Frame, rCreatedSheets );
 }
 
-void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString const &rRenameSuffix)
+void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, OUString const &rRenameSuffix)
 {
     CopySheets( rSourcePool, SfxStyleFamily::Para, rCreatedSheets, rRenameSuffix );
 }
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
 {
-    SdStyleSheetVector aTmpSheets;
+    StyleSheetCopyResultVector aTmpSheets;
     CopySheets(rSourcePool, eFamily, aTmpSheets);
 }
 
-void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets)
 {
     CopySheets(rSourcePool, eFamily, rCreatedSheets, "");
 }
@@ -624,7 +624,7 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
 
 }
 
-void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, const OUString& rRenameSuffix)
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, const OUString& rRenameSuffix)
 {
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > > aNewStyles;
     std::vector< std::pair< OUString, OUString > > aRenamedList;
@@ -689,13 +689,13 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             }
             xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
-            rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( xNewSheet.get() ) );
+            rCreatedSheets.emplace_back(static_cast<SdStyleSheet*>(xNewSheet.get()), true);
             aRenamedList.emplace_back( xSheet->GetName(), aName );
         }
         else if (bAddToList)
         {
             // Add to list - used for renaming
-            rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( pExistingSheet ) );
+            rCreatedSheets.emplace_back(static_cast<SdStyleSheet*>(pExistingSheet), false);
             aRenamedList.emplace_back( xSheet->GetName(), aName );
         }
     }
@@ -731,7 +731,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
+void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets)
 {
     SfxStyleSheetBase* pSheet = nullptr;
 
@@ -752,7 +752,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
                 OUString file;
                 rNewSheet.SetHelpId( file, pSourceSheet->GetHelpId( file ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
-                rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( &rNewSheet ) );
+                rCreatedSheets.emplace_back(static_cast<SdStyleSheet*>(&rNewSheet), true);
             }
         }
     }

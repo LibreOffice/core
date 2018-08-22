@@ -336,26 +336,26 @@ namespace
 {
 
 void
-lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, SdStyleSheetVector& rStyles)
+lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetCopyResultVector& rStyles)
 {
-    SdStyleSheetVector aUsedStyles;
+    StyleSheetCopyResultVector aUsedStyles;
     aUsedStyles.reserve(rStyles.size());
-    for (SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    for (const auto& a : rStyles)
     {
-        if ((*aIt)->IsUsed())
-            aUsedStyles.push_back(*aIt);
+        if (a.m_xStyleSheet->IsUsed())
+            aUsedStyles.push_back(a);
         else
-            pStyleSheetPool->Remove((*aIt).get());
+            pStyleSheetPool->Remove(a.m_xStyleSheet.get());
     }
     rStyles = aUsedStyles;
 }
 
-SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, const OUString& aStyleName)
+SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, const OUString& aStyleName)
 {
-    for(SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    for (const auto& a : rStyles)
     {
-        if((*aIt)->GetName().startsWith(aStyleName))
-            return (*aIt).get();
+        if (a.m_xStyleSheet->GetName().startsWith(aStyleName))
+            return a.m_xStyleSheet.get();
     }
     return nullptr;
 }
@@ -504,7 +504,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     std::vector<OUString>::const_iterator pIter;
     for ( pIter = aLayoutsToTransfer.begin(); pIter != aLayoutsToTransfer.end(); ++pIter )
     {
-        SdStyleSheetVector aCreatedStyles;
+        StyleSheetCopyResultVector aCreatedStyles;
         OUString layoutName = *pIter;
 
         rStyleSheetPool.CopyLayoutSheets(layoutName, rBookmarkStyleSheetPool,aCreatedStyles);
@@ -523,12 +523,12 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    SdStyleSheetVector aNewGraphicStyles;
+    StyleSheetCopyResultVector aNewGraphicStyles;
     OUString aRenameStr;
     if(!bReplace && !bNoDialogs)
         aRenameStr = "_";
     rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, aNewGraphicStyles, aRenameStr);
-    SdStyleSheetVector aNewCellStyles;
+    StyleSheetCopyResultVector aNewCellStyles;
     rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, aNewCellStyles);
 
     // TODO handle undo of table styles too
@@ -1304,8 +1304,12 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
 
                     if( bUndo )
                     {
+                        StyleSheetCopyResultVector aUndoRemove;
+                        aUndoRemove.reserve(aRemove.size());
+                        for (const auto& a : aRemove)
+                            aUndoRemove.emplace_back(a.get(), true);
                         // This list belongs to UndoAction
-                        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aRemove, false );
+                        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aUndoRemove, false);
 
                         if (pUndoMgr)
                             pUndoMgr->AddUndoAction(pMovStyles);
@@ -1544,7 +1548,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pSourceStyleSheetPool->SetSearchMask(SfxStyleFamily::Page);
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SfxStyleFamily::Page);
 
-            SdStyleSheetVector aCreatedStyles;          // List of created stylesheets
+            StyleSheetCopyResultVector aCreatedStyles;          // List of created stylesheets
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
 
             while (pHisSheet)
@@ -1589,7 +1593,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         pMySheet->GetItemSet().ClearItem();  // Delete all
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
 
-                        aCreatedStyles.emplace_back( static_cast< SdStyleSheet* >( pMySheet ) );
+                        aCreatedStyles.emplace_back(static_cast<SdStyleSheet*>(pMySheet), true);
                     }
 
                     StyleReplaceData aReplData;
@@ -1801,7 +1805,11 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         if( bUndo )
         {
-            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, true);
+            StyleSheetCopyResultVector aUndoInsert;
+            aUndoInsert.reserve(aCreatedStyles.size());
+            for (const auto& a : aCreatedStyles)
+                aUndoInsert.emplace_back(a.get(), true);
+            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aUndoInsert, true);
             pUndoMgr->AddUndoAction(pMovStyles);
         }
 

@@ -637,7 +637,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
             // Move with all of the master page's layouts
             OUString aOldLayoutName(const_cast<SdDrawDocument*>(this)->GetMasterSdPage(i, PageKind::Standard)->GetLayoutName());
             aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
-            SdStyleSheetVector aCreatedSheets;
+            StyleSheetCopyResultVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
         }
 
