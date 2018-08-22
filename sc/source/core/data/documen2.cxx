@@ -113,23 +113,10 @@ using namespace com::sun::star;
 // dtor plus helpers are convenient.
 struct ScLookupCacheMapImpl
 {
-    std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aCacheMap;
-    ~ScLookupCacheMapImpl()
-    {
-        freeCaches();
-    }
+    std::unordered_map< ScRange, std::unique_ptr<ScLookupCache>, ScLookupCache::Hash > aCacheMap;
     void clear()
     {
-        freeCaches();
-        // free mapping
-        std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aTmp;
-        aCacheMap.swap( aTmp);
-    }
-private:
-    void freeCaches()
-    {
-        for (auto& aCacheItem : aCacheMap)
-            delete aCacheItem.second;
+        aCacheMap.clear();
     }
 };
 
@@ -1201,7 +1188,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
             AddLookupCache(*pCache);
         }
         else
-            pCache = (*it).second;
+            pCache = (*it).second.get();
     }
     else
     {
@@ -1214,7 +1201,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
             AddLookupCache(*pCache);
         }
         else
-            pCache = (*it).second;
+            pCache = (*it).second.get();
     }
     return *pCache;
 }
@@ -1254,7 +1241,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
         }
         else
         {
-            ScLookupCache* pCache = (*it).second;
+            ScLookupCache* pCache = (*it).second.release();
             maNonThreaded.pLookupCacheMapImpl->aCacheMap.erase(it);
             EndListeningArea(pCache->getRange(), false, &rCache);
         }
@@ -1268,7 +1255,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
         }
         else
         {
-            ScLookupCache* pCache = (*it).second;
+            ScLookupCache* pCache = (*it).second.release();
             maThreadSpecific.pLookupCacheMapImpl->aCacheMap.erase(it);
             EndListeningArea(pCache->getRange(), false, &rCache);
         }
