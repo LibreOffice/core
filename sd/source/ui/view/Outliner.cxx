@@ -1203,11 +1203,11 @@ void SdOutliner::ShowEndOfSearchDialog()
     else
         aString = SdResId(STR_END_SPELLING);
 
-    // Show the message in an info box that is modal with respect to the
-    // whole application.
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+    // Show the message in an info box that is modal with respect to the whole application.
+    VclPtr<vcl::Window> xParent(GetMessageBoxParent());
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(xParent ? xParent->GetFrameWeld() : nullptr,
                                                   VclMessageType::Info, VclButtonsType::Ok, aString));
-    ShowModalMessageBox(*xInfoBox.get());
+    xInfoBox->run();
 }
 
 bool SdOutliner::ShowWrapArroundDialog()
@@ -1245,9 +1245,10 @@ bool SdOutliner::ShowWrapArroundDialog()
 
     // Pop up question box that asks the user whether to wrap around.
     // The dialog is made modal with respect to the whole application.
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+    VclPtr<vcl::Window> xParent(GetMessageBoxParent());
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(xParent ? xParent->GetFrameWeld() : nullptr,
                                                    VclMessageType::Question, VclButtonsType::YesNo, SdResId(pStringId)));
-    sal_uInt16 nBoxResult = ShowModalMessageBox(*xQueryBox.get());
+    sal_uInt16 nBoxResult = xQueryBox->run();
 
     return (nBoxResult == RET_YES);
 }
@@ -1683,7 +1684,7 @@ bool SdOutliner::ConvertNextDocument()
     return !mbEndOfSearch;
 }
 
-sal_uInt16 SdOutliner::ShowModalMessageBox(weld::MessageDialog& rMessageBox)
+VclPtr<vcl::Window> SdOutliner::GetMessageBoxParent()
 {
     // We assume that the parent of the given message box is NULL, i.e. it is
     // modal with respect to the top application window. However, this
@@ -1713,16 +1714,12 @@ sal_uInt16 SdOutliner::ShowModalMessageBox(weld::MessageDialog& rMessageBox)
 
     if (pChildWindow != nullptr)
         pSearchDialog = pChildWindow->GetWindow();
-    if (pSearchDialog != nullptr)
-        pSearchDialog->EnableInput(false);
 
-    sal_uInt16 nResult = rMessageBox.run();
+    if (pSearchDialog)
+        return pSearchDialog;
 
-    // Unlock the search dialog.
-    if (pSearchDialog != nullptr)
-        pSearchDialog->EnableInput();
-
-    return nResult;
+    std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
+    return pViewShell->GetActiveWindow();
 }
 
 //===== SdOutliner::Implementation ==============================================

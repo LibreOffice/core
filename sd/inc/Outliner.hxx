@@ -519,12 +519,11 @@ private:
     */
     virtual bool SpellNextDocument() override;
 
-    /** Show the given message box and make it modal.  It is assumed that
-        the parent of the given dialog is NULL, i.e. the application
-        window.  This function makes sure that the otherwise non-modal
-        search dialog, if visible, is locked, too.
+    /** Find the right parent to use for a message. This function makes sure
+        that the otherwise non-modal search or spell dialogs, if visible, are
+        locked, too.
     */
-    sal_uInt16 ShowModalMessageBox(weld::MessageDialog& rMessageBox);
+    VclPtr<vcl::Window> GetMessageBoxParent();
 };
 
 #endif
