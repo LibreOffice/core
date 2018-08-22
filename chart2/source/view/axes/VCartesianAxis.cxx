@@ -131,6 +131,7 @@ Reference< drawing::XShape > createSingleLabel(
           , const AxisProperties& rAxisProperties
           , const tNameSequence& rPropNames
           , const tAnySequence& rPropValues
+          , bool bIsHorizontalAxis
           )
 {
     if(rLabel.isEmpty())
@@ -144,7 +145,8 @@ Reference< drawing::XShape > createSingleLabel(
     Reference< drawing::XShape > xShape2DText = ShapeFactory::getOrCreateShapeFactory(xShapeFactory)
                     ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
-    if( rAxisProperties.m_bLimitSpaceForLabels )
+    // FIXME: implement horizontal text shortening
+    if( rAxisProperties.m_bLimitSpaceForLabels && bIsHorizontalAxis )
         lcl_ResizeTextShapeToFitAvailableSpace(xShape2DText, rAxisLabelProperties, aLabel, rPropNames, rPropValues);
 
     LabelPositionHelper::correctPositionForRotation( xShape2DText
@@ -831,7 +833,7 @@ bool VCartesianAxis::createTextShapes(
             pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
                                     , aAnchorScreenPosition2D, aLabel
                                     , rAxisLabelProperties, m_aAxisProperties
-                                    , aPropNames, aPropValues );
+                                    , aPropNames, aPropValues, bIsHorizontalAxis );
         if(!pTickInfo->xTextShape.is())
             continue;
 
@@ -997,7 +999,7 @@ bool VCartesianAxis::createTextShapesSimple(
             pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
                                     , aAnchorScreenPosition2D, aLabel
                                     , rAxisLabelProperties, m_aAxisProperties
-                                    , aPropNames, aPropValues );
+                                    , aPropNames, aPropValues, bIsHorizontalAxis );
         if(!pTickInfo->xTextShape.is())
             continue;
 
