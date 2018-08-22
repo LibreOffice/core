@@ -159,21 +159,21 @@ struct ScMyRejAction : public ScMyBaseAction
 class ScXMLChangeTrackingImportHelper
 {
     std::set<OUString>  aUsers;
-    std::deque<ScMyBaseAction*> aActions;
+    std::deque<std::unique_ptr<ScMyBaseAction>> aActions;
     css::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
-    ScMyBaseAction*     pCurrentAction;
+    std::unique_ptr<ScMyBaseAction> pCurrentAction;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
 
 private:
     void ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime);
-    ScChangeAction* CreateInsertAction(const ScMyInsAction* pAction);
-    ScChangeAction* CreateDeleteAction(const ScMyDelAction* pAction);
-    ScChangeAction* CreateMoveAction(const ScMyMoveAction* pAction);
-    ScChangeAction* CreateRejectionAction(const ScMyRejAction* pAction);
-    ScChangeAction* CreateContentAction(const ScMyContentAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateInsertAction(const ScMyInsAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateDeleteAction(const ScMyDelAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateMoveAction(const ScMyMoveAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateRejectionAction(const ScMyRejAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateContentAction(const ScMyContentAction* pAction);
 
     void CreateGeneratedActions(std::deque<ScMyGenerated>& rList);
 

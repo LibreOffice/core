@@ -26,6 +26,7 @@
 #include <tools/datetime.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sax/tools/converter.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
@@ -168,29 +169,29 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_INSERT_TABS:
         {
-            pCurrentAction = new ScMyInsAction(nActionType);
+            pCurrentAction = o3tl::make_unique<ScMyInsAction>(nActionType);
         }
         break;
         case SC_CAT_DELETE_COLS:
         case SC_CAT_DELETE_ROWS:
         case SC_CAT_DELETE_TABS:
         {
-            pCurrentAction = new ScMyDelAction(nActionType);
+            pCurrentAction = o3tl::make_unique<ScMyDelAction>(nActionType);
         }
         break;
         case SC_CAT_MOVE:
         {
-            pCurrentAction = new ScMyMoveAction();
+            pCurrentAction = o3tl::make_unique<ScMyMoveAction>();
         }
         break;
         case SC_CAT_CONTENT:
         {
-            pCurrentAction = new ScMyContentAction();
+            pCurrentAction = o3tl::make_unique<ScMyContentAction>();
         }
         break;
         case SC_CAT_REJECT:
         {
-            pCurrentAction = new ScMyRejAction();
+            pCurrentAction = o3tl::make_unique<ScMyRejAction>();
         }
         break;
         default:
@@ -231,7 +232,7 @@ void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPrevio
                             ScMyCellInfo* pCellInfo)
 {
     OSL_ENSURE(pCurrentAction->nActionType == SC_CAT_CONTENT, "wrong action type");
-    ScMyContentAction* pAction = static_cast<ScMyContentAction*>(pCurrentAction);
+    ScMyContentAction* pAction = static_cast<ScMyContentAction*>(pCurrentAction.get());
     pAction->nPreviousAction = nPreviousAction;
     pAction->pCellInfo.reset( pCellInfo );
 }
@@ -298,7 +299,7 @@ void ScXMLChangeTrackingImportHelper::SetInsertionCutOff(const sal_uInt32 nID, c
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction)->pInsCutOff.reset( new ScMyInsertionCutOff(nID, nPosition) );
+        static_cast<ScMyDelAction*>(pCurrentAction.get())->pInsCutOff.reset( new ScMyInsertionCutOff(nID, nPosition) );
     }
     else
     {
@@ -311,7 +312,7 @@ void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const 
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction)->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
+        static_cast<ScMyDelAction*>(pCurrentAction.get())->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
     }
     else
     {
@@ -323,7 +324,7 @@ void ScXMLChangeTrackingImportHelper::SetMoveRanges(const ScBigRange& aSourceRan
 {
     if (pCurrentAction->nActionType == SC_CAT_MOVE)
     {
-         static_cast<ScMyMoveAction*>(pCurrentAction)->pMoveRanges.reset( new ScMyMoveRanges(aSourceRange, aTargetRange) );
+         static_cast<ScMyMoveAction*>(pCurrentAction.get())->pMoveRanges.reset( new ScMyMoveRanges(aSourceRange, aTargetRange) );
     }
     else
     {
@@ -338,7 +339,7 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
     {
         if (nMultiSpannedSlaveCount)
         {
-            static_cast<ScMyDelAction*>(pCurrentAction)->nD = nMultiSpannedSlaveCount;
+            static_cast<ScMyDelAction*>(pCurrentAction.get())->nD = nMultiSpannedSlaveCount;
         }
         ++nMultiSpannedSlaveCount;
         if (nMultiSpannedSlaveCount >= nMultiSpanned)
@@ -358,12 +359,12 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(std::unique_ptr<ScMyCellInfo>
     ScMyGenerated aGenerated { aBigRange, 0, std::move(pCellInfo) };
     if (pCurrentAction->nActionType == SC_CAT_MOVE)
     {
-        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(std::move(aGenerated));
+        static_cast<ScMyMoveAction*>(pCurrentAction.get())->aGeneratedList.push_back(std::move(aGenerated));
     }
     else if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction)->aGeneratedList.push_back(std::move(aGenerated));
+        static_cast<ScMyDelAction*>(pCurrentAction.get())->aGeneratedList.push_back(std::move(aGenerated));
     }
     else
     {
@@ -384,7 +385,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
         GetMultiSpannedRange();
 
     if  (pCurrentAction->nActionNumber > 0)
-        aActions.push_back(pCurrentAction);
+        aActions.push_back(std::move(pCurrentAction));
     else
     {
         OSL_FAIL("no current action");
@@ -412,7 +413,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
         rUser = aInfo.sUser; // shouldn't happen
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(const ScMyInsAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateInsertAction(const ScMyInsAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -420,12 +421,11 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(const ScMyIn
 
     OUString sComment (pAction->aInfo.sComment);
 
-    ScChangeAction* pNewAction = new ScChangeActionIns(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return o3tl::make_unique<ScChangeActionIns>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType);
-    return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(const ScMyDelAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateDeleteAction(const ScMyDelAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -433,12 +433,11 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(const ScMyDe
 
     OUString sComment (pAction->aInfo.sComment);
 
-    ScChangeAction* pNewAction = new ScChangeActionDel(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return o3tl::make_unique<ScChangeActionDel>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType, pAction->nD, pTrack);
-    return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(const ScMyMoveAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateMoveAction(const ScMyMoveAction* pAction)
 {
     OSL_ENSURE(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
@@ -449,14 +448,13 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(const ScMyMove
 
         OUString sComment (pAction->aInfo.sComment);
 
-        ScChangeAction* pNewAction = new ScChangeActionMove(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+        return o3tl::make_unique<ScChangeActionMove>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
             pAction->pMoveRanges->aTargetRange, aUser, aDateTime, sComment, pAction->pMoveRanges->aSourceRange , pTrack);
-        return pNewAction;
     }
     return nullptr;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(const ScMyRejAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateRejectionAction(const ScMyRejAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -464,12 +462,11 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(const ScM
 
     OUString sComment (pAction->aInfo.sComment);
 
-    ScChangeAction* pNewAction = new ScChangeActionReject(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return o3tl::make_unique<ScChangeActionReject>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment);
-    return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyContentAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyContentAction* pAction)
 {
     ScCellValue aCell;
     OUString sInputString;
@@ -485,9 +482,8 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyC
 
     OUString sComment (pAction->aInfo.sComment);
 
-    ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
+    return o3tl::make_unique<ScChangeActionContent>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, sInputString);
-    return pNewAction;
 }
 
 void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::deque<ScMyGenerated>& rList)
@@ -752,7 +748,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         auto aEndItr(aActions.end());
         while (aItr != aEndItr)
         {
-            ScChangeAction* pAction = nullptr;
+            std::unique_ptr<ScChangeAction> pAction;
 
             switch ((*aItr)->nActionType)
             {
@@ -760,33 +756,33 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 case SC_CAT_INSERT_ROWS:
                 case SC_CAT_INSERT_TABS:
                 {
-                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(*aItr));
+                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(aItr->get()));
                 }
                 break;
                 case SC_CAT_DELETE_COLS:
                 case SC_CAT_DELETE_ROWS:
                 case SC_CAT_DELETE_TABS:
                 {
-                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(*aItr);
+                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(aItr->get());
                     pAction = CreateDeleteAction(pDelAct);
                     CreateGeneratedActions(pDelAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_MOVE:
                 {
-                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(*aItr);
+                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(aItr->get());
                     pAction = CreateMoveAction(pMovAct);
                     CreateGeneratedActions(pMovAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_CONTENT:
                 {
-                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(*aItr));
+                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(aItr->get()));
                 }
                 break;
                 case SC_CAT_REJECT:
                 {
-                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(*aItr));
+                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(aItr->get()));
                 }
                 break;
                 default:
@@ -796,7 +792,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             }
 
             if (pAction)
-                pTrack->AppendLoaded(pAction);
+                pTrack->AppendLoaded(std::move(pAction));
             else
             {
                 OSL_FAIL("no action");
@@ -811,16 +807,12 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         aEndItr = aActions.end();
         while (aItr != aEndItr)
         {
-            SetDependencies(*aItr);
+            SetDependencies(aItr->get());
 
             if ((*aItr)->nActionType == SC_CAT_CONTENT)
                 ++aItr;
             else
-            {
-                if (*aItr)
-                    delete *aItr;
                 aItr = aActions.erase(aItr);
-            }
         }
 
         aItr = aActions.begin();
@@ -828,9 +820,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         while (aItr != aEndItr)
         {
             OSL_ENSURE((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
-            SetNewCell(static_cast<ScMyContentAction*>(*aItr));
-            if (*aItr)
-                delete *aItr;
+            SetNewCell(static_cast<ScMyContentAction*>(aItr->get()));
             aItr = aActions.erase(aItr);
         }
         if (aProtect.getLength())
