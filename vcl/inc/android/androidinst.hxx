@@ -25,7 +25,7 @@ class AndroidSalInstance : public SvpSalInstance
     JNIEnv *m_pJNIEnv;
 
 public:
-    AndroidSalInstance( SalYieldMutex *pMutex );
+    AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~AndroidSalInstance();
     static AndroidSalInstance *getInstance();
 

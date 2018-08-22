@@ -17,6 +17,7 @@
 #include <headless/svpdummies.hxx>
 #include <unx/gendata.hxx>
 #include <osl/detail/android-bootstrap.h>
+#include <o3tl/make_unique.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -54,8 +55,8 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
     return static_cast<AndroidSalInstance *>(pData->m_pInstance);
 }
 
-AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
-    : SvpSalInstance( pMutex )
+AndroidSalInstance::AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
+    : SvpSalInstance( std::move(pMutex) )
 {
     int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
     LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
@@ -191,7 +192,7 @@ SalData::~SalData()
 SalInstance *CreateSalInstance()
 {
     LOGI("Android: CreateSalInstance!");
-    AndroidSalInstance* pInstance = new AndroidSalInstance( new SvpSalYieldMutex() );
+    AndroidSalInstance* pInstance = new AndroidSalInstance( o3tl::make_unique<SvpSalYieldMutex>() );
     new AndroidSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;
