@@ -138,7 +138,7 @@
 
             <condition property="test.skip">
                 <or>
-                    <not><isset property="test.present"/></not>
+                    <not><isset property="tests.present"/></not>
                     <not><isset property="OOO_JUNIT_JAR"/></not>
                 </or>
             </condition>
