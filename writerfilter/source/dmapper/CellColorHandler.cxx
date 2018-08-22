@@ -39,6 +39,7 @@ m_nShadingPattern( drawing::ShadingPattern::CLEAR ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),
 m_bAutoFillColor( true ),
+m_bFillSpecified( false ),
     m_OutputFormat( Form )
 {
 }
@@ -116,6 +117,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
                 m_bAutoFillColor = false;
 
             m_nFillColor = nIntValue;
+            m_bFillSpecified = true;
         break;
         case NS_ooxml::LN_CT_Shd_color:
             createGrabBag("color", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue))));
@@ -205,7 +207,10 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     if( !nWW8BrushStyle )
     {
         // Clear-Brush
-        nApplyColor = m_nFillColor;
+        if ( m_bFillSpecified && m_bAutoFillColor )
+            nApplyColor = sal_Int32(COL_AUTO);
+        else
+            nApplyColor = m_nFillColor;
     }
     else
     {
@@ -273,13 +278,14 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 
     if (m_OutputFormat == Paragraph)
     {
-        // If brush style = clear and FillColor = COLOR_AUTO, then don't enable the fill style - just pre-select the default color
         if (nWW8BrushStyle || !m_bAutoFillColor)
             pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
+        else if ( m_bFillSpecified && m_bAutoFillColor )
+            pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_NONE));
 
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
     }
-    else if (nWW8BrushStyle || !m_bAutoFillColor)
+    else if ( nWW8BrushStyle || !m_bAutoFillColor || m_bFillSpecified )
         pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                             : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 
