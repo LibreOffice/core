@@ -1317,7 +1317,7 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
  */
-void SwContentNode::DelFrames(SwRootFrame const*const pLayout, bool const fromDtor)
+void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
 {
     if( !HasWriterListeners() )
         return;
@@ -1336,24 +1336,27 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout, bool const fromDt
             {
                 if (this != pMerged->pFirstNode)
                 {
-                    if (fromDtor)
+                    // pointer should have been updated to a different node
+                    assert(this != pMerged->pParaPropsNode);
+                    // SwNodes::RemoveNode iterates *backwards* - so
+                    // ensure there are no more extents pointing to this
+                    // node as SwFrame::InvalidatePage() will access them.
+                    // Note: cannot send via SwClientNotify from dtor
+                    // because that would access deleted wrong-lists
+                    sw::UpdateMergedParaForDelete(*pMerged, true,
+                            *static_cast<SwTextNode*>(this), 0, Len());
+                    if (this == pMerged->pLastNode)
                     {
-                        // pointer should have been updated to a different node
-                        assert(this != pMerged->pParaPropsNode);
-                        // manual update required i'm afraid...
-                        if (this == pMerged->pLastNode)
-                        {
-                            pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
-                            // at first glance nothing guarantees this...
-                            // but the redline must end on a text-node...
-                            // so everything before this node that isn't a text
-                            // node should have been deleted already so that
-                            // there's a text node before.
-                            assert(pMerged->pLastNode->IsTextNode());
-                        }
-                        // avoid re-parenting mess (ModifyChangedHint)
-                        pMerged->listener.EndListening(this);
+                        pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
+                        // at first glance nothing guarantees this...
+                        // but the redline must end on a text-node...
+                        // so everything before this node that isn't a text
+                        // node should have been deleted already so that
+                        // there's a text node before.
+                        assert(pMerged->pLastNode->IsTextNode());
                     }
+                    // avoid re-parenting mess (ModifyChangedHint)
+                    pMerged->listener.EndListening(this);
                     continue; // don't delete
                 }
             }

@@ -102,6 +102,10 @@ std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTe
 
 bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
 
+TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+        bool isRealDelete,
+        SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
