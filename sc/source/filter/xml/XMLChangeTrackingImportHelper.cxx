@@ -521,14 +521,12 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         if (pDelAct)
         {
-            auto aItr(pAction->aGeneratedList.begin());
-            auto aEndItr(pAction->aGeneratedList.end());
-            while (aItr != aEndItr)
+            for (const ScMyGenerated & rGenerated : pAction->aGeneratedList)
             {
-                OSL_ENSURE(aItr->nID, "a not inserted generated action");
-                pDelAct->SetDeletedInThis(aItr->nID, pTrack);
-                aItr = pAction->aGeneratedList.erase(aItr);
+                OSL_ENSURE(rGenerated.nID, "a not inserted generated action");
+                pDelAct->SetDeletedInThis(rGenerated.nID, pTrack);
             }
+            pAction->aGeneratedList.clear();
         }
     }
     if (pAction->pInsCutOff)
@@ -580,14 +578,12 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
         {
             if (pMoveAct)
             {
-                auto aItr(pAction->aGeneratedList.begin());
-                auto aEndItr(pAction->aGeneratedList.end());
-                while (aItr != aEndItr)
+                for (const ScMyGenerated & rGenerated : pAction->aGeneratedList)
                 {
-                    OSL_ENSURE(aItr->nID, "a not inserted generated action");
-                    pMoveAct->SetDeletedInThis(aItr->nID, pTrack);
-                    aItr = pAction->aGeneratedList.erase(aItr);
+                    OSL_ENSURE(rGenerated.nID, "a not inserted generated action");
+                    pMoveAct->SetDeletedInThis(rGenerated.nID, pTrack);
                 }
+                pAction->aGeneratedList.clear();
             }
         }
     }
@@ -631,28 +627,26 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
         }
         if (!pAction->aDeletedList.empty())
         {
-            auto aItr(pAction->aDeletedList.begin());
-            auto aEndItr(pAction->aDeletedList.end());
-            while(aItr != aEndItr)
+            for(const ScMyDeleted & rDeleted : pAction->aDeletedList)
             {
-                pAct->SetDeletedInThis(aItr->nID, pTrack);
-                ScChangeAction* pDeletedAct = pTrack->GetAction(aItr->nID);
-                if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && aItr->pCellInfo)
+                pAct->SetDeletedInThis(rDeleted.nID, pTrack);
+                ScChangeAction* pDeletedAct = pTrack->GetAction(rDeleted.nID);
+                if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && rDeleted.pCellInfo)
                 {
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
-                    if (pContentAct && aItr->pCellInfo)
+                    if (pContentAct && rDeleted.pCellInfo)
                     {
-                        const ScCellValue& rCell = aItr->pCellInfo->CreateCell(pDoc);
+                        const ScCellValue& rCell = rDeleted.pCellInfo->CreateCell(pDoc);
                         if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
                         {
                             // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
                             // instead pass the input string to SetNewCell.
-                            pContentAct->SetNewCell(rCell, pDoc, aItr->pCellInfo->sInputString);
+                            pContentAct->SetNewCell(rCell, pDoc, rDeleted.pCellInfo->sInputString);
                         }
                     }
                 }
-                aItr = pAction->aDeletedList.erase(aItr);
             }
+            pAction->aDeletedList.clear();
         }
         if ((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS))
