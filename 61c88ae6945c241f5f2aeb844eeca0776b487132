@@ -22,6 +22,30 @@
       "revId": "61c88ae6945c241f5f2aeb844eeca0776b487132",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_5b94a88b",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-08-22T12:06:33Z",
+      "side": 1,
+      "message": "Done in: [1].\n\n* [1] https://gerrit.libreoffice.org/59445",
+      "parentUuid": "dfeb2761_1bb50032",
+      "range": {
+        "startLine": 168,
+        "startChar": 1,
+        "endLine": 168,
+        "endChar": 46
+      },
+      "revId": "61c88ae6945c241f5f2aeb844eeca0776b487132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
