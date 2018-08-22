@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_1bb50032",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-08-22T12:03:23Z",
+      "side": 1,
+      "message": "Now, that MSVC 2017 is the only supported compiler version, it can be done unconditionally.",
+      "range": {
+        "startLine": 168,
+        "startChar": 1,
+        "endLine": 168,
+        "endChar": 46
+      },
+      "revId": "61c88ae6945c241f5f2aeb844eeca0776b487132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
