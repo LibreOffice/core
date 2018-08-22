@@ -221,7 +221,7 @@ protected:
     virtual ServerFontLayoutEngine* GetLayoutEngine() { return NULL; }
 
 private:
-    typedef ::std::hash_map<int,GlyphData> GlyphList;
+    typedef ::std::hash_map<sal_GlyphId,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
     const ImplFontSelectData    maFontSelData;
@@ -304,7 +304,7 @@ protected:
 public:
     sal_Int32       GetByteCount() const { return mnBytesUsed; }
     virtual void    RemovingFont( ServerFont& ) {}
-    virtual void    RemovingGlyph( ServerFont&, GlyphData&, int ) {}
+    virtual void    RemovingGlyph( ServerFont&, GlyphData&, sal_GlyphId ) {}
 
 protected:
     sal_Int32       mnBytesUsed;
