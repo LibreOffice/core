@@ -128,7 +128,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             if(pUndoManager->GetUndoActionCount() != 0)
             {
-                // If an other view created the first undo action, prevent redoing it from this view.
+                // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
                 if (pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
                 {
@@ -157,7 +157,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             if(pUndoManager->GetRedoActionCount() != 0)
             {
-                // If an other view created the first undo action, prevent redoing it from this view.
+                // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
                 if (pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
                 {
