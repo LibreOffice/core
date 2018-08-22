@@ -1362,13 +1362,25 @@
         <node oor:name="TAB_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToNextTable</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:JumpToNextTable</value>
+          </prop>
+        </node>
+        <node oor:name="TAB_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:JumpToNextTable</value>
           </prop>
         </node>
         <node oor:name="TAB_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToPrevTable</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:JumpToPrevTable</value>
+          </prop>
+        </node>
+        <node oor:name="TAB_SHIFT_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:JumpToPrevTable</value>
           </prop>
         </node>
       </node>
