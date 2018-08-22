@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_3b4fa4be",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2819,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-22T19:30:11Z",
+      "side": 1,
+      "message": "This enquotes the range name,I meant to enquote the sheet name (aScope) instead.",
+      "revId": "d7ab4aab05531fb6513272e4cf4c840ccd509f6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
