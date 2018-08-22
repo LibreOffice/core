@@ -1290,9 +1290,6 @@ public:
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */
     ScLookupCache & GetLookupCache( const ScRange & rRange );
-                    /** Only ScLookupCache ctor uses AddLookupCache(), do not
-                        use elsewhere! */
-    void            AddLookupCache( ScLookupCache & rCache );
                     /** Only ScLookupCache dtor uses RemoveLookupCache(), do
                         not use elsewhere! */
     void            RemoveLookupCache( ScLookupCache & rCache );

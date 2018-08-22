@@ -113,23 +113,10 @@ using namespace com::sun::star;
 // dtor plus helpers are convenient.
 struct ScLookupCacheMapImpl
 {
-    std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aCacheMap;
-    ~ScLookupCacheMapImpl()
-    {
-        freeCaches();
-    }
+    std::unordered_map< ScRange, std::unique_ptr<ScLookupCache>, ScLookupCache::Hash > aCacheMap;
     void clear()
     {
-        freeCaches();
-        // free mapping
-        std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aTmp;
-        aCacheMap.swap( aTmp);
-    }
-private:
-    void freeCaches()
-    {
-        for (auto& aCacheItem : aCacheMap)
-            delete aCacheItem.second;
+        aCacheMap.clear();
     }
 };
 
@@ -1190,57 +1177,25 @@ ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {
     ScLookupCache* pCache = nullptr;
-    if (!IsThreadedGroupCalcInProgress())
-    {
-        if (!maNonThreaded.pLookupCacheMapImpl)
-            maNonThreaded.pLookupCacheMapImpl = new ScLookupCacheMapImpl;
-        auto it(maNonThreaded.pLookupCacheMapImpl->aCacheMap.find(rRange));
-        if (it == maNonThreaded.pLookupCacheMapImpl->aCacheMap.end())
-        {
-            pCache = new ScLookupCache(this, rRange);
-            AddLookupCache(*pCache);
-        }
-        else
-            pCache = (*it).second;
-    }
-    else
-    {
-        if (!maThreadSpecific.pLookupCacheMapImpl)
-            maThreadSpecific.pLookupCacheMapImpl = new ScLookupCacheMapImpl;
-        auto it(maThreadSpecific.pLookupCacheMapImpl->aCacheMap.find(rRange));
-        if (it == maThreadSpecific.pLookupCacheMapImpl->aCacheMap.end())
-        {
-            pCache = new ScLookupCache(this, rRange);
-            AddLookupCache(*pCache);
-        }
-        else
-            pCache = (*it).second;
-    }
-    return *pCache;
-}
+    ScLookupCacheMapImpl*& rpCacheMapImpl (
+        !IsThreadedGroupCalcInProgress()
+        ? maNonThreaded.pLookupCacheMapImpl
+        : maThreadSpecific.pLookupCacheMapImpl );
 
-void ScDocument::AddLookupCache( ScLookupCache & rCache )
-{
-    if (!IsThreadedGroupCalcInProgress())
+    if (!rpCacheMapImpl)
+        rpCacheMapImpl = new ScLookupCacheMapImpl;
+    auto findIt(rpCacheMapImpl->aCacheMap.find(rRange));
+    if (findIt == rpCacheMapImpl->aCacheMap.end())
     {
-        if (!maNonThreaded.pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
-                ScLookupCache*>(rCache.getRange(), &rCache)).second)
-        {
-            OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
-        }
-        else
-            StartListeningArea(rCache.getRange(), false, &rCache);
+        auto insertIt = rpCacheMapImpl->aCacheMap.emplace_hint(findIt,
+                    rRange, o3tl::make_unique<ScLookupCache>(this, rRange) );
+        pCache = insertIt->second.get();
+        StartListeningArea(rRange, false, pCache);
     }
     else
-    {
-        if (!maThreadSpecific.pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
-                ScLookupCache*>(rCache.getRange(), &rCache)).second)
-        {
-            OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
-        }
-        else
-            StartListeningArea(rCache.getRange(), false, &rCache);
-    }
+        pCache = (*findIt).second.get();
+
+    return *pCache;
 }
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
@@ -1254,7 +1209,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
         }
         else
         {
-            ScLookupCache* pCache = (*it).second;
+            ScLookupCache* pCache = (*it).second.release();
             maNonThreaded.pLookupCacheMapImpl->aCacheMap.erase(it);
             EndListeningArea(pCache->getRange(), false, &rCache);
         }
@@ -1268,7 +1223,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
         }
         else
         {
-            ScLookupCache* pCache = (*it).second;
+            ScLookupCache* pCache = (*it).second.release();
             maThreadSpecific.pLookupCacheMapImpl->aCacheMap.erase(it);
             EndListeningArea(pCache->getRange(), false, &rCache);
         }
