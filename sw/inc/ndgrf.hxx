@@ -113,7 +113,7 @@ public:
     void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
-    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
+    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */

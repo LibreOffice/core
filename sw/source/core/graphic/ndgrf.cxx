@@ -711,7 +711,7 @@ void SwGrfNode::ScaleImageMap()
     }
 }
 
-SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwContentNode* SwGrfNode::MakeCopy(SwDoc* pDoc, const SwNodeIndex& rIdx, bool) const
 {
     // copy formats into the other document
     SwGrfFormatColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );

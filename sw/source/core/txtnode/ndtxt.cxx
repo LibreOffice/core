@@ -111,7 +111,7 @@ typedef std::vector<SwTextAttr*> SwpHts;
 #endif
 
 SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
-                                 SwTextFormatColl *pColl )
+                                 SwTextFormatColl *pColl, bool const bNewFrames)
 {
     OSL_ENSURE( pColl, "Collection pointer is 0." );
 
@@ -125,7 +125,8 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
     // if there is no layout or it is in a hidden section, MakeFrames is not needed
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
+    if (!bNewFrames ||
+        !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
         ( nullptr != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
