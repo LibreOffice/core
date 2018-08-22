@@ -389,7 +389,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case VML_TOKEN( shadow ):
         {
             mrTypeModel.maShadowModel.mbHasShadow = true;
-            mrTypeModel.maShadowModel.moShadowOn.assignIfUsed(lclDecodeBool(rAttribs, XML_on));
+            mrTypeModel.maShadowModel.moShadowOn = lclDecodeBool(rAttribs, XML_on).get(false);
             mrTypeModel.maShadowModel.moColor.assignIfUsed(rAttribs.getString(XML_color));
             mrTypeModel.maShadowModel.moOffset.assignIfUsed(rAttribs.getString(XML_offset));
             mrTypeModel.maShadowModel.moOpacity = lclDecodePercent(rAttribs, XML_opacity, 1.0);
