@@ -155,6 +155,19 @@ private:
 
 typedef std::vector< rtl::Reference< SdStyleSheet > > SdStyleSheetVector;
 
+struct StyleSheetCopyResult
+{
+    rtl::Reference<SdStyleSheet> m_xStyleSheet;
+    bool m_bCreatedByCopy;
+    StyleSheetCopyResult(SdStyleSheet* pStyleSheet, bool bCreatedByCopy)
+        : m_xStyleSheet(pStyleSheet)
+        , m_bCreatedByCopy(bCreatedByCopy)
+    {
+    }
+};
+
+typedef std::vector<StyleSheetCopyResult> StyleSheetCopyResultVector;
+
 #endif // INCLUDED_SD_INC_STLSHEET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
