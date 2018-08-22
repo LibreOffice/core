@@ -365,3 +365,7 @@ blacklist:
     sc/inc/unitconv.hxx:
     # base class has to be a complete type
     - map
+    sc/source/core/inc/addinlis.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XResultListener.hpp

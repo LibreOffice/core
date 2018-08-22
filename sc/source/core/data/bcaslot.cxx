@@ -29,6 +29,7 @@
 #include <refupdat.hxx>
 #include <table.hxx>
 #include <bulkdatahint.hxx>
+#include <columnspanset.hxx>
 
 #if DEBUG_AREA_BROADCASTER
 #include <formulacell.hxx>

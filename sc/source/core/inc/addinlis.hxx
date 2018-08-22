@@ -23,11 +23,11 @@
 #include <memory>
 #include "adiasync.hxx"
 #include <com/sun/star/sheet/XResultListener.hpp>
-#include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
-#include <list>
+
+namespace com { namespace sun { namespace star { namespace sheet { class XVolatileResult; } } } }
+namespace rtl { template <class reference_type> class Reference; }
 
 class ScDocument;
 

@@ -101,6 +101,7 @@
 #include <tokenstringcontext.hxx>
 #include <compressedarray.hxx>
 #include <docsh.hxx>
+#include <brdcst.hxx>
 
 #include <formula/vectortoken.hxx>
 

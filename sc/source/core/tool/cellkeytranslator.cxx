@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <global.hxx>
 #include <cellkeytranslator.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
