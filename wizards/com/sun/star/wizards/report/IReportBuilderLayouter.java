@@ -96,7 +96,7 @@ public interface IReportBuilderLayouter
     void layout();
 
     /**
-     * Initialize the current Layouter with data's out of an other Layouter.
+     * Initialize the current Layouter with data's out of another Layouter.
      *
      * This Method copies the internal fields, groups and titles
      */

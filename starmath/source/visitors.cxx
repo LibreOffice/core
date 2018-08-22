@@ -1452,7 +1452,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmPlaceNode* pNode )
 /** SmErrorNode is context dependent metadata, it can't be selected
  *
  * @remarks There's no point in deleting, copying and/or moving an instance
- * of SmErrorNode as it may not exist in an other context! Thus there are no
+ * of SmErrorNode as it may not exist in another context! Thus there are no
  * positions to select an SmErrorNode.
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmErrorNode* )
