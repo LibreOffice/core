@@ -8333,7 +8333,7 @@ void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
         m_bIgnoreNextFill = false;
 
     // Don't round-trip grabbag OriginalBackground if the background has been cleared.
-    if ( m_pBackgroundAttrList.is() && rFillStyle.GetValue() == drawing::FillStyle_NONE )
+    if ( m_pBackgroundAttrList.is() && m_sOriginalBackgroundColor != "auto" && rFillStyle.GetValue() == drawing::FillStyle_NONE )
         m_pBackgroundAttrList.clear();
 }
 
