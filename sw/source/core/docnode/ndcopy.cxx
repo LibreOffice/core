@@ -52,7 +52,7 @@ struct MapTableFrameFormat
 
 typedef std::vector<MapTableFrameFormat> MapTableFrameFormats;
 
-SwContentNode* SwTextNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwContentNode* SwTextNode::MakeCopy(SwDoc* pDoc, const SwNodeIndex& rIdx, bool const bNewFrames) const
 {
     // the Copy-Textnode is the Node with the Text, the Copy-Attrnode is the
     // node with the collection and hard attributes. Normally is the same
@@ -75,7 +75,7 @@ SwContentNode* SwTextNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) cons
     if( !pColl )
         pColl = pDoc->CopyTextColl( *GetTextColl() );
 
-    SwTextNode* pTextNd = pDoc->GetNodes().MakeTextNode( rIdx, pColl );
+    SwTextNode* pTextNd = pDoc->GetNodes().MakeTextNode(rIdx, pColl, bNewFrames);
 
     // METADATA: register copy
     pTextNd->RegisterAsCopyOf(*pCpyTextNd);

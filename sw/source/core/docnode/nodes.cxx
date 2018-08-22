@@ -1858,11 +1858,8 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         case SwNodeType::Grf:
         case SwNodeType::Ole:
             {
-                SwContentNode* pNew = static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
-                                            pDoc, aInsPos );
-                // frames are always created as default, so delete if needed
-                if( !bNewFrames )
-                    pNew->DelFrames(nullptr);
+                 static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
+                                            pDoc, aInsPos, bNewFrames);
             }
             break;
 
