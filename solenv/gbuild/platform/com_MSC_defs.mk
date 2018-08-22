@@ -167,7 +167,7 @@ endif
 
 gb_CXXFLAGS := \
 	-utf-8 \
-	$(if $(filter-out 140,$(VCVER)),-std:c++17) \
+	-std:c++17 \
 	-Gd \
 	-GR \
 	-Gs \
