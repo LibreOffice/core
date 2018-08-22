@@ -78,17 +78,6 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
     return maCell;
 }
 
-ScMyGenerated::ScMyGenerated(std::unique_ptr<ScMyCellInfo> pTempCellInfo, const ScBigRange& aTempBigRange)
-    : aBigRange(aTempBigRange)
-    , nID(0)
-    , pCellInfo(std::move(pTempCellInfo))
-{
-}
-
-ScMyGenerated::~ScMyGenerated()
-{
-}
-
 ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
     : aDependencies(),
     aDeletedList(),
@@ -366,19 +355,18 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
 
 void ScXMLChangeTrackingImportHelper::AddGenerated(std::unique_ptr<ScMyCellInfo> pCellInfo, const ScBigRange& aBigRange)
 {
-    ScMyGenerated* pGenerated = new ScMyGenerated(std::move(pCellInfo), aBigRange);
+    ScMyGenerated aGenerated { aBigRange, 0, std::move(pCellInfo) };
     if (pCurrentAction->nActionType == SC_CAT_MOVE)
     {
-        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
+        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(std::move(aGenerated));
     }
     else if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
+        static_cast<ScMyDelAction*>(pCurrentAction)->aGeneratedList.push_back(std::move(aGenerated));
     }
     else
     {
-        delete pGenerated;
         OSL_FAIL("try to insert a generated action to a wrong action");
     }
 }
@@ -502,27 +490,24 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyC
     return pNewAction;
 }
 
-void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& rList)
+void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::deque<ScMyGenerated>& rList)
 {
     if (!rList.empty())
     {
-        ScMyGeneratedList::iterator aItr(rList.begin());
-        ScMyGeneratedList::iterator aEndItr(rList.end());
-        while (aItr != aEndItr)
+        for (ScMyGenerated & rGenerated : rList)
         {
-            if ((*aItr)->nID == 0)
+            if (rGenerated.nID == 0)
             {
                 ScCellValue aCell;
-                if ((*aItr)->pCellInfo)
-                    aCell = (*aItr)->pCellInfo->CreateCell(pDoc);
+                if (rGenerated.pCellInfo)
+                    aCell = rGenerated.pCellInfo->CreateCell(pDoc);
 
                 if (!aCell.isEmpty())
                 {
-                    (*aItr)->nID = pTrack->AddLoadedGenerated(aCell, (*aItr)->aBigRange, (*aItr)->pCellInfo->sInputString);
-                    OSL_ENSURE((*aItr)->nID, "could not insert generated action");
+                    rGenerated.nID = pTrack->AddLoadedGenerated(aCell, rGenerated.aBigRange, rGenerated.pCellInfo->sInputString);
+                    OSL_ENSURE(rGenerated.nID, "could not insert generated action");
                 }
             }
-            ++aItr;
         }
     }
 }
@@ -536,14 +521,12 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         if (pDelAct)
         {
-            ScMyGeneratedList::iterator aItr(pAction->aGeneratedList.begin());
-            ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
+            auto aItr(pAction->aGeneratedList.begin());
+            auto aEndItr(pAction->aGeneratedList.end());
             while (aItr != aEndItr)
             {
-                OSL_ENSURE((*aItr)->nID, "a not inserted generated action");
-                pDelAct->SetDeletedInThis((*aItr)->nID, pTrack);
-                if (*aItr)
-                    delete *aItr;
+                OSL_ENSURE(aItr->nID, "a not inserted generated action");
+                pDelAct->SetDeletedInThis(aItr->nID, pTrack);
                 aItr = pAction->aGeneratedList.erase(aItr);
             }
         }
@@ -599,14 +582,12 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
         {
             if (pMoveAct)
             {
-                ScMyGeneratedList::iterator aItr(pAction->aGeneratedList.begin());
-                ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
+                auto aItr(pAction->aGeneratedList.begin());
+                auto aEndItr(pAction->aGeneratedList.end());
                 while (aItr != aEndItr)
                 {
-                    OSL_ENSURE((*aItr)->nID, "a not inserted generated action");
-                    pMoveAct->SetDeletedInThis((*aItr)->nID, pTrack);
-                    if (*aItr)
-                        delete *aItr;
+                    OSL_ENSURE(aItr->nID, "a not inserted generated action");
+                    pMoveAct->SetDeletedInThis(aItr->nID, pTrack);
                     aItr = pAction->aGeneratedList.erase(aItr);
                 }
             }
