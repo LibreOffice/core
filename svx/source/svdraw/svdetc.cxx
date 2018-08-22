@@ -286,7 +286,8 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         }
         case drawing::FillStyle_BITMAP:
         {
-            Bitmap aBitmap(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+            Color aWhite(COL_WHITE);
+            Bitmap aBitmap(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap(&aWhite));
             const Size aSize(aBitmap.GetSizePixel());
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();
