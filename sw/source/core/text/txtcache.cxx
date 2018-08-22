@@ -21,9 +21,9 @@
 #include <txtfrm.hxx>
 #include "porlay.hxx"
 
-SwTextLine::SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew ) :
+SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew ) :
     SwCacheObj( static_cast<void const *>(pFrame) ),
-    pLine( pNew )
+    pLine( std::move(pNew) )
 {
 }
 
@@ -125,7 +125,7 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
     }
     else if ( pNew )
     {   // Insert a new one
-        SwTextLine *pTextLine = new SwTextLine( this, pNew );
+        SwTextLine *pTextLine = new SwTextLine( this, std::unique_ptr<SwParaPortion>(pNew) );
         if ( SwTextFrame::GetTextCache()->Insert( pTextLine ) )
             mnCacheIndex = pTextLine->GetCachePos();
         else

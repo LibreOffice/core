@@ -31,7 +31,7 @@ class SwTextLine : public SwCacheObj
     std::unique_ptr<SwParaPortion> pLine;
 
 public:
-    SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew = nullptr );
+    SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr );
     virtual ~SwTextLine() override;
 
     SwParaPortion *GetPara()       { return pLine.get(); }
