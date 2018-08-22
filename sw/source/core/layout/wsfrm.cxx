@@ -2924,7 +2924,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
               nullptr != (pCnt = static_cast<SwFootnoteFrame*>(this)->GetRefFromAttr() ) )
         {
             if ( pCnt->IsFollow() )
-            {   // If we are in an other column/page than the frame with the
+            {   // If we are in another column/page than the frame with the
                 // reference, we don't need to invalidate its master.
                 SwFrame *pTmp = pCnt->FindFootnoteBossFrame(true) == FindFootnoteBossFrame(true)
                               ?  &pCnt->FindMaster()->GetFrame() : pCnt;
