@@ -106,6 +106,9 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
 
+void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool bRecreateMerged);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
@@ -730,7 +733,7 @@ public:
 
     static void repaintTextFrames( const SwTextNode& rNode );
 
-    void RegisterToNode( SwTextNode& );
+    void RegisterToNode(SwTextNode &, bool isForceNodeAsFirst = false);
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

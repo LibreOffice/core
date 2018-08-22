@@ -825,8 +825,45 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
 
 }
 
-namespace {
+namespace sw {
 
+/// if first node is deleted & second survives, then the first node's frame
+/// will be deleted too; prevent this by moving the frame to the second node
+/// if necessary.
+void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode)
+{
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rDeletedPrev);
+    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        frames.push_back(pFrame);
+    }
+    {
+        auto frames2(frames);
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIt(rNode);
+        for (SwTextFrame* pFrame = aIt.First(); pFrame; pFrame = aIt.Next())
+        {
+            auto const it(std::find(frames2.begin(), frames2.end(), pFrame));
+            assert(it != frames2.end());
+            frames2.erase(it);
+        }
+        assert(frames2.empty());
+    }
+    for (SwTextFrame *const pFrame : frames)
+    {
+        pFrame->RegisterToNode(rNode, true);
+    }
+}
+
+// typical Join:
+// None,Node->None
+// None,First->First
+// First,NonFirst->First
+// NonFirst,First->NonFirst
+// NonFirst,None->NonFirst
+
+/// if first node is First, its frames may need to be moved, never deleted.
+/// if first node is NonFirst, second node's own frames (First/None) must be deleted
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool const bRecreateMerged)
 {
     if (bRecreateMerged)
@@ -845,6 +882,9 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool const bRecreateMerged)
             assert(rFirstNode.GetIndex() <= rNode.GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, sw::FrameMode::Existing));
+            assert(pFrame->GetMergedPara());
+            assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
+            assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
         }
     }
     else if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
@@ -1050,6 +1090,10 @@ void SwTextNode::JoinPrev()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
+        if (eOldMergeFlag == SwNode::Merge::First)
+        {
+            sw::MoveDeletedPrevFrames(*pTextNode, *this);
+        }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
