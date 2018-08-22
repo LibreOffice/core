@@ -22,7 +22,6 @@
 
 #include <formula/opcode.hxx>
 #include <formula/paramclass.hxx>
-#include <sys/types.h>
 
 /** Activate parameter classification documentation.
 

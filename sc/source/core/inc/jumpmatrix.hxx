@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 
-#include <formula/token.hxx>
-#include <formula/errorcodes.hxx>
 #include <limits.h>
 #include <vector>
 #include <types.hxx>
 #include <address.hxx>
 #include <token.hxx>
+
+namespace formula { class FormulaToken; }
 
 typedef ::std::vector< const formula::FormulaToken*> ScTokenVec;
 

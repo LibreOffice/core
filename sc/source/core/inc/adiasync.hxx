@@ -22,6 +22,7 @@
 
 #include <svl/broadcast.hxx>
 #include <set>
+#include <tools/solar.h>
 
 #include <callform.hxx>
 

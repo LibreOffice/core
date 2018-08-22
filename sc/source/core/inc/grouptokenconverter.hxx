@@ -10,12 +10,14 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
 
-#include <document.hxx>
-#include <formulacell.hxx>
 #include <scdllapi.h>
-#include <tokenarray.hxx>
 #include <types.hxx>
 #include <formulalogger.hxx>
+
+class ScDocument;
+class ScFormulaCell;
+class ScTokenArray;
+namespace sc { struct FormulaGroupContext; }
 
 class SC_DLLPUBLIC ScGroupTokenConverter
 {

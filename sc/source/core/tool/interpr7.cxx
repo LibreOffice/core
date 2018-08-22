@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 

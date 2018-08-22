@@ -26,6 +26,8 @@
 #include <brdcst.hxx>
 #include <sc.hrc>
 
+#include <com/sun/star/sheet/XVolatileResult.hpp>
+
 using namespace com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )

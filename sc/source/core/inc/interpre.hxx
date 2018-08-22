@@ -20,16 +20,12 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
 
-#include <math.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/textsearch.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <scdll.hxx>
 #include <scdllapi.h>
-#include <interpretercontext.hxx>
 #include <types.hxx>
 #include <externalrefmgr.hxx>
 #include <calcconfig.hxx>
@@ -43,10 +39,11 @@
 #include <limits>
 #include <ostream>
 
+namespace sfx2 { class LinkManager; }
+
 class ScDocument;
 class SbxVariable;
 class ScFormulaCell;
-class SvNumberFormatter;
 class ScDBRangeBase;
 struct ScQueryParam;
 struct ScDBQueryParamBase;
@@ -54,15 +51,13 @@ struct ScQueryEntry;
 
 struct ScSingleRefData;
 struct ScComplexRefData;
+struct ScInterpreterContext;
 
-namespace formula { class FormulaToken; }
 class ScJumpMatrix;
 struct ScRefCellValue;
 
 namespace sc {
 
-struct RangeMatrix;
-struct Compare;
 struct CompareOptions;
 
 struct ParamIfsResult

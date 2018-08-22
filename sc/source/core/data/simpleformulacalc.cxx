@@ -13,6 +13,7 @@
 #include <tokenarray.hxx>
 #include <interpre.hxx>
 #include <compiler.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #define DISPLAY_LEN 15
 

@@ -20,19 +20,19 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 
-#include <functional>
 #include <memory>
 #include <map>
-#include <set>
 #include <unordered_set>
 
 #include <svl/broadcast.hxx>
+#include <svl/hint.hxx>
+#include <tools/solar.h>
 
+#include <document.hxx>
 #include <global.hxx>
-#include <brdcst.hxx>
-#include <columnspanset.hxx>
 
-class ScBroadcastArea;
+namespace sc { class ColumnSpanSet; }
+class ScHint;
 
 namespace sc {
 
