@@ -61,14 +61,11 @@ struct ScMyCellInfo
 
 struct ScMyDeleted
 {
-    sal_uInt32 nID;
+    sal_uInt32 nID = 0;
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
-    ScMyDeleted();
-    ~ScMyDeleted();
+    ScMyDeleted(sal_uInt32 id, std::unique_ptr<ScMyCellInfo> p) : nID(id), pCellInfo(std::move(p)) {}
 };
-
-typedef std::list<ScMyDeleted*> ScMyDeletedList;
 
 struct ScMyGenerated
 {
@@ -119,7 +116,7 @@ struct ScMyBaseAction
     ScMyActionInfo aInfo;
     ScBigRange aBigRange;
     ScMyDependencies aDependencies;
-    ScMyDeletedList aDeletedList;
+    std::deque<ScMyDeleted> aDeletedList;
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
     sal_uInt32 nPreviousAction;
