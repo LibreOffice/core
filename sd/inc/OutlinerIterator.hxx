@@ -88,7 +88,7 @@ public:
         @param pObject
             A copy of this object will become the implementation object.
     */
-    explicit Iterator (IteratorImplBase* pObject);
+    explicit Iterator (std::unique_ptr<IteratorImplBase> pObject);
 
     ~Iterator();
 

@@ -69,8 +69,8 @@ Iterator::Iterator (Iterator&& rIterator)
 {
 }
 
-Iterator::Iterator (IteratorImplBase* pObject)
-    : mxIterator(pObject)
+Iterator::Iterator (std::unique_ptr<IteratorImplBase> pObject)
+    : mxIterator(std::move(pObject))
 {
 }
 
@@ -207,7 +207,7 @@ Iterator OutlinerContainer::CreateSelectionIterator (
                 break;
         }
 
-    return Iterator (new SelectionIteratorImpl (
+    return Iterator (o3tl::make_unique<SelectionIteratorImpl> (
         rObjectList, nObjectIndex, pDocument, rpViewShell, bDirectionIsForward));
 }
 
@@ -271,7 +271,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
         ePageKind, eEditMode, bDirectionIsForward, aLocation);
 
     return Iterator (
-        new DocumentIteratorImpl (nPageIndex, ePageKind, eEditMode,
+        o3tl::make_unique<DocumentIteratorImpl> (nPageIndex, ePageKind, eEditMode,
             pDocument, rpViewShell, bDirectionIsForward));
 }
 
