@@ -338,7 +338,7 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
     GtkSalGraphics *pGtkSalGraphics = dynamic_cast<GtkSalGraphics*>(pG);
     assert(pGtkSalGraphics);
     return CreateX11VirtualDevice(pG, nDX, nDY, eFormat, pGd,
-            new GtkSalGraphics(pGtkSalGraphics->GetGtkFrame(),
+            o3tl::make_unique<GtkSalGraphics>(pGtkSalGraphics->GetGtkFrame(),
                                pGtkSalGraphics->GetGtkWidget(),
                                pGtkSalGraphics->GetScreenNumber()));
 #endif
