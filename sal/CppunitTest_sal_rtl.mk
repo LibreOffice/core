@@ -63,4 +63,8 @@ $(call gb_CppunitTest_get_target,sal_rtl) : \
 
 $(eval $(call gb_CppunitTest_use_external,sal_rtl,boost_headers))
 
+ifeq ($(ENABLE_CIPHER_OPENSSL_BACKEND),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,sal_rtl,-DLIBO_CIPHER_OPENSSL_BACKEND))
+endif
+
 # vim: set noet sw=4 ts=4:

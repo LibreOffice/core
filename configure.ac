@@ -1455,6 +1455,11 @@ AC_ARG_ENABLE(openssl,
          use only if you are hacking on it.]),
 ,enable_openssl=yes)
 
+libo_FUZZ_ARG_ENABLE(cipher-openssl-backend,
+    AS_HELP_STRING([--enable-cipher-openssl-backend],
+        [Enable using OpenSSL as the actual implementation of the rtl/cipher.h functionality.
+         Requires --enable-openssl.]))
+
 AC_ARG_ENABLE(library-bin-tar,
     AS_HELP_STRING([--enable-library-bin-tar],
         [Enable the building and reused of tarball of binary build for some 'external' libraries.
@@ -9450,6 +9455,24 @@ else
 fi
 
 AC_SUBST([DISABLE_OPENSSL])
+
+if test "$enable_cipher_openssl_backend" = yes && test "$DISABLE_OPENSSL" = TRUE; then
+    if test "$libo_fuzzed_enable_cipher_openssl_backend" = yes; then
+        AC_MSG_NOTICE([Resetting --enable-cipher-openssl-backend=no])
+        enable_cipher_openssl_backend=no
+    else
+        AC_MSG_ERROR([--enable-cipher-openssl-backend needs OpenSSL, but --disable-openssl was given.])
+    fi
+fi
+AC_MSG_CHECKING([whether to enable the OpenSSL backend for rtl/cipher.h])
+ENABLE_CIPHER_OPENSSL_BACKEND=
+if test "$enable_cipher_openssl_backend" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_CIPHER_OPENSSL_BACKEND=TRUE
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST([ENABLE_CIPHER_OPENSSL_BACKEND])
 
 dnl ===================================================================
 dnl Check for building gnutls
