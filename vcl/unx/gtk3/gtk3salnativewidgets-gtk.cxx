@@ -2172,8 +2172,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 {
     if (m_pWidgetDraw)
     {
-        bool bReturn = m_pWidgetDraw->drawNativeControl(nType, nPart, rControlRegion,
-                                                nState, rValue, aCaptions);
+        bool bReturn = SvpSalGraphics::drawNativeControl(nType, nPart, rControlRegion,
+                                                         nState, rValue, aCaptions);
 
         if (bReturn && !rControlRegion.IsEmpty())
             mpFrame->damaged(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
