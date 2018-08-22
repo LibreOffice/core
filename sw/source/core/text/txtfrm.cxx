@@ -841,7 +841,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
 
 // 1. if real delete => correct nStart/nEnd for full nLen
 // 2. if rl delete => do not correct nStart/nEnd but just exclude deleted
-static TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool const isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 const nLen)
 {
