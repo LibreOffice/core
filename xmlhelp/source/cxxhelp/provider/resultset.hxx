@@ -42,7 +42,7 @@ namespace chelp {
         DynamicResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::ucb::OpenCommandArgument2& rCommand,
-            ResultSetFactory* pFactory );
+            std::unique_ptr<ResultSetFactory> pFactory );
 
         virtual ~DynamicResultSet() override;
     };
