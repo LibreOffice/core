@@ -140,6 +140,19 @@ bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, con
     return bRet;
 }
 
+unsigned int round_up_nearest_pow2(unsigned int v)
+{
+    // compute the next highest power of 2 of 32-bit v
+    --v;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    ++v;
+    return v;
+}
+
 void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         , const drawing::Position3D& rPos
         , sal_Int32 nPolygonIndex
@@ -170,7 +183,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
 
     if( nSeqLength <= nNewResultPointCount )
     {
-        sal_Int32 nReallocLength = nReservePointCount;
+        sal_Int32 nReallocLength = nReservePointCount > SAL_MAX_INT16 ? round_up_nearest_pow2(nNewResultPointCount) * 2 : nReservePointCount;
         if( nNewResultPointCount > nReallocLength )
         {
             nReallocLength = nNewResultPointCount;
