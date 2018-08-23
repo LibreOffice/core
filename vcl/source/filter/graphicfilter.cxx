@@ -1667,11 +1667,10 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
     }
 
     // Set error code or try to set native buffer
-    if(nStatus != ERRCODE_NONE)
-    {
+    if (nStatus != ERRCODE_NONE)
         ImplSetError(nStatus, &rIStream);
+    if (nStatus != ERRCODE_NONE || eLinkType == GfxLinkType::NONE)
         rIStream.Seek(nStreamBegin);
-    }
 
     return aGraphic;
 }
