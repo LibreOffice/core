@@ -268,7 +268,7 @@ css::task::UrlRecord find(
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::uno::RuntimeException
-    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword );
+    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword, css::task::PasswordRequestMode mode );
 
     /// @throws css::uno::RuntimeException
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword );
