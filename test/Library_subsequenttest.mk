@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xarrayformularange \
 	test/source/sheet/xcalculatable \
 	test/source/sheet/xcelladdressable \
+	test/source/table/xcellcursor \
 	test/source/sheet/xcellformatrangessupplier \
 	test/source/sheet/xcellrangeaddressable \
 	test/source/sheet/xcellrangedata \
