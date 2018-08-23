@@ -101,10 +101,10 @@ static OUString lcl_getTypePath(OUString& rType)
 }
 
 // Stack entry for all text attributes
-SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
+SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, std::unique_ptr<SfxPoolItem> pHt)
     : m_aMkPos(rStartPos)
     , m_aPtPos(rStartPos)
-    , pAttr( pHt )            // store a copy of the attribute
+    , pAttr( std::move(pHt) )
     , m_isAnnotationOnEnd(false)
     , mnStartCP(-1)
     , mnEndCP(-1)
@@ -295,7 +295,7 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
     }
     else
     {
-        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone() );
+        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, std::unique_ptr<SfxPoolItem>(rAttr.Clone()) );
         pTmp->SetStartCP(GetCurrAttrCP());
         m_Entries.push_back(std::unique_ptr<SwFltStackEntry>(pTmp));
     }

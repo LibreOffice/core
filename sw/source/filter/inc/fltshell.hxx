@@ -101,7 +101,7 @@ public:
     sal_Int32 mnEndCP;
     bool bIsParaEnd;
 
-    SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
+    SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, std::unique_ptr<SfxPoolItem> pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
 
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
