@@ -3117,7 +3117,7 @@ namespace
 {
     const sal_uLong WW_BLOCKSIZE = 0x200;
 
-    void EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    ErrCode EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         sal_uLong nLen = rIn.Tell();
@@ -3126,16 +3126,19 @@ namespace
         sal_uInt8 in[WW_BLOCKSIZE];
         for (std::size_t nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
-            std::size_t nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            std::size_t nBS = std::min(nLen - nI, WW_BLOCKSIZE);
             nBS = rIn.ReadBytes(in, nBS);
-            rCtx.InitCipher(nBlock);
+            if (!rCtx.InitCipher(nBlock)) {
+                return ERRCODE_IO_NOTSUPPORTED;
+            }
             rCtx.Encode(in, nBS, in, nBS);
             rOut.WriteBytes(in, nBS);
         }
+        return ERRCODE_NONE;
     }
 }
 
-void MSWordExportBase::ExportDocument( bool bWriteAll )
+ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
 {
     m_nCharFormatStart = DEFAULT_STYLES_COUNT;
     m_nFormatCollStart = m_nCharFormatStart + m_pDoc->GetCharFormats()->size() - 1;
@@ -3202,7 +3205,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
-    ExportDocument_Impl();
+    ErrCode err = ExportDocument_Impl();
 
     m_aFrames.clear();
 
@@ -3215,6 +3218,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     *m_pCurPam = *m_pOrigPam;
 
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);
+
+    return err;
 }
 
 bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )
@@ -3269,7 +3274,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
     return ( aEncryptionData.getLength() != 0 );
 }
 
-void WW8Export::ExportDocument_Impl()
+ErrCode WW8Export::ExportDocument_Impl()
 {
     PrepareStorage();
 
@@ -3367,6 +3372,7 @@ void WW8Export::ExportDocument_Impl()
 
     StoreDoc1();
 
+    ErrCode err = ERRCODE_NONE;
     if ( bEncrypt )
     {
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
@@ -3374,10 +3380,17 @@ void WW8Export::ExportDocument_Impl()
         pTableStrmTemp = xTableStrm.get();
         pDataStrmTemp = xDataStrm.get();
 
-        if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp)
-            EncryptRC4(aCtx, *pDataStrm, *pDataStrmTemp);
+        if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp) {
+            err = EncryptRC4(aCtx, *pDataStrm, *pDataStrmTemp);
+            if (err != ERRCODE_NONE) {
+                goto done;
+            }
+        }
 
-        EncryptRC4(aCtx, *pTableStrm, *pTableStrmTemp);
+        err = EncryptRC4(aCtx, *pTableStrm, *pTableStrmTemp);
+        if (err != ERRCODE_NONE) {
+            goto done;
+        }
 
         // Write Unencrypted Header 52 bytes to the start of the table stream
         // EncryptionVersionInfo (4 bytes): A Version structure where Version.vMajor MUST be 0x0001, and Version.vMinor MUST be 0x0001.
@@ -3395,7 +3408,10 @@ void WW8Export::ExportDocument_Impl()
         pTableStrmTemp->WriteBytes(pSaltData, 16);
         pTableStrmTemp->WriteBytes(pSaltDigest, 16);
 
-        EncryptRC4(aCtx, GetWriter().Strm(), *pStrmTemp);
+        err = EncryptRC4(aCtx, GetWriter().Strm(), *pStrmTemp);
+        if (err != ERRCODE_NONE) {
+            goto done;
+        }
 
         // Write Unencrypted Fib 68 bytes to the start of the workdocument stream
         pFib->m_fEncrypted = true; // fEncrypted indicates the document is encrypted.
@@ -3405,6 +3421,7 @@ void WW8Export::ExportDocument_Impl()
 
         pStrmTemp->Seek( 0 );
         pFib->WriteHeader( *pStrmTemp );
+    done:;
     }
 
     DELETEZ( m_pGrf );
@@ -3445,6 +3462,8 @@ void WW8Export::ExportDocument_Impl()
         pDataStrm = nullptr;
         GetWriter().GetStorage().Remove(SL::aData);
     }
+
+    return err;
 }
 
 void WW8Export::PrepareStorage()
@@ -3524,16 +3543,17 @@ ErrCode SwWW8Writer::WriteStorage()
     }
 
     // Do the actual export
+    ErrCode err = ERRCODE_NONE;
     {
         bool bDot = mpMedium->GetFilter()->GetName().endsWith("Vorlage");
         WW8Export aExport(this, pDoc, pCurPam, pOrigPam, bDot);
         m_pExport = &aExport;
-        aExport.ExportDocument( bWriteAll );
+        err = aExport.ExportDocument( bWriteAll );
         m_pExport = nullptr;
     }
 
     ::EndProgress( pDoc->GetDocShell() );
-    return ERRCODE_NONE;
+    return err;
 }
 
 ErrCode SwWW8Writer::WriteMedium( SfxMedium& )

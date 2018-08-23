@@ -660,7 +660,7 @@ void RtfExport::WritePageDescTable()
     m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 }
 
-void RtfExport::ExportDocument_Impl()
+ErrCode RtfExport::ExportDocument_Impl()
 {
     // Make the header
     Strm()
@@ -931,6 +931,8 @@ void RtfExport::ExportDocument_Impl()
     WriteMainText();
 
     Strm().WriteChar('}');
+
+    return ERRCODE_NONE;
 }
 
 void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
