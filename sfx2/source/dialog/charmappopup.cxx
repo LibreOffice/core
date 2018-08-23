@@ -44,4 +44,10 @@ VclPtr<SfxPopupWindow> CharmapPopup::CreatePopupWindow()
     return pControl;
 }
 
+void SAL_CALL CharmapPopup::execute( sal_Int16 /*KeyModifier*/ )
+{
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aArgs;
+    Dispatch(".uno:InsertSymbol", aArgs);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
