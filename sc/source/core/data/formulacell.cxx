@@ -1457,8 +1457,15 @@ class RecursionCounter
 {
     ScRecursionHelper&  rRec;
     bool                bStackedInIteration;
+#ifdef DBG_UTIL
+    const ScFormulaCell* cell;
+#endif
 public:
-    RecursionCounter( ScRecursionHelper& r, ScFormulaCell* p ) : rRec(r)
+    RecursionCounter( ScRecursionHelper& r, ScFormulaCell* p )
+        : rRec(r)
+#ifdef DBG_UTIL
+        , cell(p)
+#endif
     {
         bStackedInIteration = rRec.IsDoingIteration();
         if (bStackedInIteration)
@@ -1469,7 +1476,12 @@ public:
     {
         rRec.DecRecursionCount();
         if (bStackedInIteration)
+        {
+#ifdef DBG_UTIL
+            assert(rRec.GetRecursionInIterationStack().top() == cell);
+#endif
             rRec.GetRecursionInIterationStack().pop();
+        }
     }
 };
 }
@@ -1806,7 +1818,9 @@ void ScFormulaCell::Interpret()
 void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTailParameter eTailParam )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
-    nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
+    // TODO If this cell is not an iteration cell, add it to the list of iteration cells?
+    if(bIsIterCell)
+        nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
     if( !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
     {
         // #i11719# no RPN and no error and no token code but result string present
