@@ -627,9 +627,9 @@ public:
     Impl(SwXMeta& rThis, SwDoc& rDoc,
             ::sw::Meta* const pMeta,
             uno::Reference<text::XText> const& xParentText,
-            TextRangeList_t const * const pPortions)
+            std::unique_ptr<TextRangeList_t const> pPortions)
         : m_EventListeners(m_Mutex)
-        , m_pTextPortions(pPortions)
+        , m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(nullptr == pMeta)
         , m_xParentText(xParentText)
@@ -678,8 +678,8 @@ uno::Reference<text::XText> const & SwXMeta::GetParentText() const
 
 SwXMeta::SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         uno::Reference<text::XText> const& xParentText,
-        TextRangeList_t const*const pPortions)
-    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, pMeta, xParentText, pPortions) )
+        std::unique_ptr<TextRangeList_t const> pPortions)
+    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, pMeta, xParentText, std::move(pPortions)) )
 {
 }
 
@@ -750,9 +750,9 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     if (!xParentText.is()) { return nullptr; }
     SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFormatMeta()->Which())
         ? new SwXMeta     (pTextNode->GetDoc(), &rMeta, xParentText,
-                            pPortions.release()) // temporarily un-unique_ptr :-(
+                            std::move(pPortions))
         : new SwXMetaField(pTextNode->GetDoc(), &rMeta, xParentText,
-                            pPortions.release()));
+                            std::move(pPortions)));
     // this is why the constructor is private: need to acquire pXMeta here
     xMeta.set(pXMeta);
     // in order to initialize the weak pointer cache in the core object
@@ -1257,8 +1257,8 @@ inline const ::sw::MetaField* SwXMeta::Impl::GetMetaField() const
 
 SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         uno::Reference<text::XText> const& xParentText,
-        TextRangeList_t const*const pPortions)
-    : SwXMetaField_Base(pDoc, pMeta, xParentText, pPortions)
+        std::unique_ptr<TextRangeList_t const> pPortions)
+    : SwXMetaField_Base(pDoc, pMeta, xParentText, std::move(pPortions))
 {
     OSL_ENSURE(dynamic_cast< ::sw::MetaField* >(pMeta),
         "SwXMetaField created for wrong hint!");
