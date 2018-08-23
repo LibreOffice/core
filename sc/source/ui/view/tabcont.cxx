@@ -483,16 +483,16 @@ void ScTabControl::DoDrag()
     aTabMark.ResetMark();   // doesn't change marked table information
     aTabMark.SetMarkArea( aTabRange );
 
-    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     ScClipParam aClipParam(aTabRange, false);
-    rDoc.CopyToClip(aClipParam, pClipDoc, &aTabMark, false, false);
+    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aTabMark, false, false);
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScTransferObj ctor
 
-    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
 
     pTransferObj->SetDragSourceFlags(ScDragSrc::Table);
 
