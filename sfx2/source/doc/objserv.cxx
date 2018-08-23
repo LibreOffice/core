@@ -1069,7 +1069,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         if ( !sMessage.isEmpty() )
                         {
                             auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
-                            if (pInfoBar == nullptr)
+                            if (pInfoBar == nullptr || pInfoBar->IsDisposed())
                                 return;
                             VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
                             xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
