@@ -904,7 +904,8 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt1
           nSlotId == SID_LINE_ARROW_CIRCLE     ||
           nSlotId == SID_LINE_CIRCLE_ARROW     ||
           nSlotId == SID_LINE_ARROW_SQUARE     ||
-          nSlotId == SID_LINE_SQUARE_ARROW) )
+          nSlotId == SID_LINE_SQUARE_ARROW     ||
+          nSlotId == SID_DRAW_MEASURELINE) )
         return;
 
     // set attributes of line start and ends
@@ -958,6 +959,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt1
     switch (nSlotId)
     {
         case SID_LINE_ARROWS:
+        case SID_DRAW_MEASURELINE:
         {
             // connector with arrow ends
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
@@ -3086,9 +3088,13 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
         }
         else if(dynamic_cast<const SdrMeasureObj*>( pObj) !=  nullptr)
         {
-                sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
-                static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+            sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+            static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
+            static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+
+            SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
+            SetLineEnds(aAttr, *pObj, nSlotId);
+            pObj->SetMergedItemSet(aAttr);
         }
         else if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
         {
