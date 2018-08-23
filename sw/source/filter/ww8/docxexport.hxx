@@ -191,7 +191,7 @@ public:
 
 protected:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl() override;
+    virtual ErrCode ExportDocument_Impl() override;
 
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& ) override;
