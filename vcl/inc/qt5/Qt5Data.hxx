@@ -26,11 +26,13 @@
 #include <memory>
 #include <vclpluginapi.h>
 
+class GlyphCache;
 class QCursor;
 
 class VCLPLUG_QT5_PUBLIC Qt5Data : public GenericUnixSalData
 {
     o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
+    std::unique_ptr<GlyphCache> m_pGlyphCache;
 
 public:
     explicit Qt5Data(SalInstance* pInstance);
