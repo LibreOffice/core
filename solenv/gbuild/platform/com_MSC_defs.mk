@@ -211,7 +211,8 @@ ifneq ($(COM_IS_CLANG),TRUE)
 
 gb_CXXFLAGS += \
 	-Wv:18 \
-
+# Work around MSVC 2017 compiler bug
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
 endif
 
 # rc.exe does not support -nologo in 6.1.6723.1 that is in the Windows SDK 6.0A
