@@ -18,11 +18,11 @@
 namespace {
 
 class SubtleZeroInit final:
-    public RecursiveASTVisitor<SubtleZeroInit>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<SubtleZeroInit>
 {
 public:
     explicit SubtleZeroInit(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     bool VisitCXXNewExpr(CXXNewExpr const * expr) {
         if (ignoreLocation(expr)) {

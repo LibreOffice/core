@@ -24,11 +24,11 @@
 namespace {
 
 class UseUniquePtr:
-    public RecursiveASTVisitor<UseUniquePtr>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UseUniquePtr>
 {
 public:
     explicit UseUniquePtr(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

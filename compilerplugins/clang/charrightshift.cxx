@@ -13,11 +13,11 @@
 namespace {
 
 class CharRightShift:
-    public RecursiveASTVisitor<CharRightShift>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<CharRightShift>
 {
 public:
     explicit CharRightShift(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

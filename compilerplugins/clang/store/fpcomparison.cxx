@@ -23,11 +23,11 @@ comparing floating point numbers using == or != is a bad idea.
 namespace {
 
 class FpComparison:
-    public RecursiveASTVisitor<FpComparison>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<FpComparison>
 {
 public:
     explicit FpComparison(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {

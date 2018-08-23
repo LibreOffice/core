@@ -22,11 +22,11 @@
 namespace {
 
 class FragileDestructor:
-    public RecursiveASTVisitor<FragileDestructor>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<FragileDestructor>
 {
 public:
     explicit FragileDestructor(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

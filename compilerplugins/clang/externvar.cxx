@@ -41,10 +41,10 @@ bool hasExternalLinkage(VarDecl const * decl) {
     return true;
 }
 
-class ExternVar: public RecursiveASTVisitor<ExternVar>, public loplugin::Plugin
+class ExternVar: public loplugin::FilteringPlugin<ExternVar>
 {
 public:
-    explicit ExternVar(loplugin::InstantiationData const & data): Plugin(data)
+    explicit ExternVar(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     void run() override

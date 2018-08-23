@@ -42,11 +42,11 @@ bool operator<(const MyFuncInfo& lhs, const MyFuncInfo& rhs) { return lhs.name <
 static std::set<MyFuncInfo> definitionSet;
 static std::set<std::string> callSet;
 
-class VirtualDown : public RecursiveASTVisitor<VirtualDown>, public loplugin::Plugin
+class VirtualDown : public loplugin::FilteringPlugin<VirtualDown>
 {
 public:
     explicit VirtualDown(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

@@ -29,10 +29,10 @@ look for unnecessary blocks that just catch and rethrow:
 namespace {
 
 class UnnecessaryCatchThrow:
-    public RecursiveASTVisitor<UnnecessaryCatchThrow>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnnecessaryCatchThrow>
 {
 public:
-    explicit UnnecessaryCatchThrow(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryCatchThrow(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

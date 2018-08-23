@@ -18,11 +18,11 @@
 namespace {
 
 class UnicodeToChar final:
-    public RecursiveASTVisitor<UnicodeToChar>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnicodeToChar>
 {
 public:
     explicit UnicodeToChar(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         subExprs_.push(expr->getSubExpr());

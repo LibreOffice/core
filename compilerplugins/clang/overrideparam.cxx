@@ -26,11 +26,11 @@
 namespace {
 
 class OverrideParam:
-    public RecursiveASTVisitor<OverrideParam>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<OverrideParam>
 {
 public:
     explicit OverrideParam(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override;
 

@@ -36,10 +36,10 @@
 namespace {
 
 class RedundantPointerOps:
-    public RecursiveASTVisitor<RedundantPointerOps>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<RedundantPointerOps>
 {
 public:
-    explicit RedundantPointerOps(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit RedundantPointerOps(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

@@ -25,11 +25,11 @@
  */
 namespace
 {
-class ConvertLong : public RecursiveASTVisitor<ConvertLong>, public loplugin::Plugin
+class ConvertLong : public loplugin::FilteringPlugin<ConvertLong>
 {
 public:
     explicit ConvertLong(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

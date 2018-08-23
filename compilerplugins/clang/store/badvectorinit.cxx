@@ -85,10 +85,10 @@ namespace {
 
 
 class BadVectorInit:
-    public RecursiveASTVisitor<BadVectorInit>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<BadVectorInit>
 {
 public:
-    explicit BadVectorInit(InstantiationData const & data): Plugin(data) {}
+    explicit BadVectorInit(InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

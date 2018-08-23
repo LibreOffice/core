@@ -20,11 +20,11 @@
 namespace {
 
 class BlockBlock:
-    public RecursiveASTVisitor<BlockBlock>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<BlockBlock>
 {
 public:
     explicit BlockBlock(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override
     {

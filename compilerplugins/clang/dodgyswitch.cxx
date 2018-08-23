@@ -17,10 +17,10 @@
 namespace {
 
 class DodgySwitch:
-    public RecursiveASTVisitor<DodgySwitch>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DodgySwitch>
 {
 public:
-    explicit DodgySwitch(loplugin::InstantiationData const & data): Plugin(data)
+    explicit DodgySwitch(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     virtual void run() override

@@ -17,11 +17,11 @@
  */
 namespace
 {
-class DoubleConvert final : public RecursiveASTVisitor<DoubleConvert>, public loplugin::Plugin
+class DoubleConvert final : public loplugin::FilteringPlugin<DoubleConvert>
 {
 public:
     explicit DoubleConvert(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
     void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

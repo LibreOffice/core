@@ -43,11 +43,11 @@ bool isDtorOrDealloc(FunctionDecl const * decl) {
 }
 
 class DynExcSpec:
-    public RecursiveASTVisitor<DynExcSpec>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<DynExcSpec>
 {
 public:
     explicit DynExcSpec(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

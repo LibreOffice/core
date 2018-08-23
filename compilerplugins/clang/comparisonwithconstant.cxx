@@ -23,10 +23,10 @@
 namespace {
 
 class ComparisonWithConstant :
-    public RecursiveASTVisitor<ComparisonWithConstant>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<ComparisonWithConstant>
 {
 public:
-    explicit ComparisonWithConstant(loplugin::InstantiationData const & data): RewritePlugin(data) {}
+    explicit ComparisonWithConstant(loplugin::InstantiationData const & data): FilteringRewritePlugin(data) {}
 
     virtual void run() override
     {

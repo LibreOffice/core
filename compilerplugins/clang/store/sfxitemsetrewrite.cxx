@@ -20,10 +20,10 @@ namespace {
 bool gap(APSInt n1, APSInt n2) { return n1 < n2 && n2 - n1 > 1; }
 
 class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<Visitor>
 {
 public:
-    explicit Visitor(InstantiationData const & data): RewritePlugin(data) {}
+    explicit Visitor(InstantiationData const & data): FilteringRewritePlugin(data) {}
 
     bool VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         if (ignoreLocation(expr)) {

@@ -24,11 +24,11 @@
 
 namespace
 {
-class ChangeToolsGen : public RecursiveASTVisitor<ChangeToolsGen>, public loplugin::RewritePlugin
+class ChangeToolsGen : public loplugin::FilteringRewritePlugin<ChangeToolsGen>
 {
 public:
     explicit ChangeToolsGen(loplugin::InstantiationData const& data)
-        : RewritePlugin(data)
+        : FilteringRewritePlugin(data)
     {
     }
     virtual void run() override;

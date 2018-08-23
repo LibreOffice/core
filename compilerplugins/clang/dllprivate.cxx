@@ -12,10 +12,10 @@
 namespace {
 
 class DllPrivate final:
-    public RecursiveASTVisitor<DllPrivate>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DllPrivate>
 {
 public:
-    explicit DllPrivate(loplugin::InstantiationData const & data): Plugin(data)
+    explicit DllPrivate(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     bool VisitNamedDecl(NamedDecl const * decl) {

@@ -33,7 +33,7 @@ namespace loplugin
   so it is off by default.
 */
 
-class UnusedVariableMore : public RecursiveASTVisitor<UnusedVariableMore>, public Plugin
+class UnusedVariableMore : public loplugin::FilteringPlugin<UnusedVariableMore>
 {
 public:
     explicit UnusedVariableMore(const InstantiationData& data);
@@ -52,7 +52,7 @@ private:
 };
 
 UnusedVariableMore::UnusedVariableMore(const InstantiationData& data)
-    : Plugin(data)
+    : FilteringPlugin(data)
 {
 }
 
