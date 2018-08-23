@@ -409,7 +409,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& )
     }
 }
 
-std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aMasterPasswd )
+std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
 {
     if( !aMasterPasswd.isEmpty() )
     {
@@ -455,7 +455,8 @@ std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLin
 
     // problems with decoding
     OSL_FAIL( "Problem with decoding" );
-    throw RuntimeException("Can't decode!" );
+    throw css::task::NoMasterException(
+        "Can't decode!", css::uno::Reference<css::uno::XInterface>(), mode);
 }
 
 OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPasswd )
@@ -578,7 +579,7 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, b
     {
         try
         {
-            ::std::vector< OUString > aDecodedPasswords = DecodePasswords( aRecord.GetPersPasswords(), GetMasterPassword( aHandler ) );
+            ::std::vector< OUString > aDecodedPasswords = DecodePasswords( aRecord.GetPersPasswords(), GetMasterPassword( aHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER );
             aPasswords.insert( aPasswords.end(), aDecodedPasswords.begin(), aDecodedPasswords.end() );
         }
         catch( NoMasterException& )
@@ -840,7 +841,7 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                     }
                     else
                     {
-                        std::vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
+                        std::vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass, aRMode ) );
                         if( aRM.empty() || aPass != aRM[0] )
                         {
                             bAskAgain = true;
@@ -997,7 +998,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
             {
                 sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
-                aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersPasswords(), GetMasterPassword( xHandler ) ) ) );
+                aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
             }
 
         if( aUsers.getLength() )
