@@ -266,7 +266,6 @@ void GlyphCache::GarbageCollect()
         pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
-        maFontList.erase(pFreetypeFont->GetFontInstance());
         mnBytesUsed -= pFreetypeFont->GetByteCount();
 
         // remove font from list of garbage collected fonts
@@ -277,7 +276,7 @@ void GlyphCache::GarbageCollect()
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
 
-        delete pFreetypeFont;
+        maFontList.erase(pFreetypeFont->GetFontInstance());
     }
 }
 
