@@ -727,7 +727,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog( v
 VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg(weld::Window* pParent,
        SwDocShell& rDocSh, SvStream* pStream)
 {
-    return VclPtr<AbstractSwAsciiFilterDlg_Impl>::Create(new SwAsciiFilterDlg(pParent, rDocSh, pStream));
+    return VclPtr<AbstractSwAsciiFilterDlg_Impl>::Create(o3tl::make_unique<SwAsciiFilterDlg>(pParent, rDocSh, pStream));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl::Window *pParent,
@@ -740,7 +740,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDl
 
 VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSwBreakDlg_Impl>::Create(new SwBreakDlg(pParent, rSh));
+    return VclPtr<AbstractSwBreakDlg_Impl>::Create(o3tl::make_unique<SwBreakDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
@@ -758,7 +758,7 @@ VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(vcl:
 
 VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
 {
-    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(new SwConvertTableDlg(rView, bToTable));
+    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(o3tl::make_unique<SwConvertTableDlg>(rView, bToTable));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV)
@@ -778,26 +778,26 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(new SwFootNoteOptionDlg(pParent, rSh));
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwFootNoteOptionDlg>(pParent, rSh));
 }
 
 VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(weld::Window *pParent,
     SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(new sw::DropDownFieldDialog(pParent, rSh, pField, bPrevButton, bNextButton));
+    return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(o3tl::make_unique<sw::DropDownFieldDialog>(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                                  SwWrtShell* pWrtSh, Printer* pPrt,
                                                                  bool bInsert)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(new SwEnvDlg(pParent, rSet, pWrtSh,pPrt, bInsert));
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwEnvDlg>(pParent, rSet, pWrtSh,pPrt, bInsert));
 }
 
 VclPtr<AbstractSwLabDlg> SwAbstractDialogFactory_Impl::CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel)
 {
-    return VclPtr<AbstractSwLabDlg_Impl>::Create(new SwLabDlg(pParent, rSet, pDBManager, bLabel));
+    return VclPtr<AbstractSwLabDlg_Impl>::Create(o3tl::make_unique<SwLabDlg>(pParent, rSet, pDBManager, bLabel));
 }
 
 SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
@@ -828,17 +828,17 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(vcl
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSwTableHeightDlg_Impl>::Create(new SwTableHeightDlg(pParent, rSh));
+    return VclPtr<AbstractSwTableHeightDlg_Impl>::Create(o3tl::make_unique<SwTableHeightDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSwSortDlg_Impl>::Create(new SwSortDlg(pParent, rSh));
+    return VclPtr<AbstractSwSortDlg_Impl>::Create(o3tl::make_unique<SwSortDlg>(pParent, rSh));
 }
 
 VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSplitTableDialog_Impl>::Create(new SwSplitTableDlg(pParent, rSh));
+    return VclPtr<AbstractSplitTableDialog_Impl>::Create(o3tl::make_unique<SwSplitTableDlg>(pParent, rSh));
 }
 
 VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(const OUString &rShortName)
@@ -850,7 +850,9 @@ VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossa
 VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(weld::Window* pParent,
     SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
 {
-    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(new SwAutoFormatDlg(pParent, pShell, bSetAutoFormat, pSelFormat));
+    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(
+                std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>>(
+                    new SwAutoFormatDlg(pParent, pShell, bSetAutoFormat, pSelFormat)));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )
@@ -867,7 +869,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::W
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)
 {
-    return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(new SwTableWidthDlg(pParent, rFnc));
+    return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(o3tl::make_unique<SwTableWidthDlg>(pParent, rFnc));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent,
@@ -893,7 +895,7 @@ VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXN
     css::uno::Reference< css::container::XNamed > & xNamed,
     css::uno::Reference< css::container::XNameAccess > & xNameAccess)
 {
-    return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create(new SwRenameXNamedDlg(pParent,xNamed, xNameAccess));
+    return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create(o3tl::make_unique<SwRenameXNamedDlg>(pParent,xNamed, xNameAccess));
 }
 
 VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(vcl::Window *pParent)
@@ -904,7 +906,7 @@ VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwMo
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev)
 {
-    return VclPtr<AbstractSwMergeTableDlg_Impl>::Create(new SwMergeTableDlg(pParent, rWithPrev));
+    return VclPtr<AbstractSwMergeTableDlg_Impl>::Create(o3tl::make_unique<SwMergeTableDlg>(pParent, rWithPrev));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const OUString &rDialogType,
@@ -940,34 +942,34 @@ VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxV
 VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(weld::Window *pParent,
     SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    return VclPtr<AbstractFieldInputDlg_Impl>::Create(new SwFieldInputDlg(pParent, rSh, pField, bPrevButton, bNextButton));
+    return VclPtr<AbstractFieldInputDlg_Impl>::Create(o3tl::make_unique<SwFieldInputDlg>(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
 VclPtr<AbstractInsFootNoteDlg> SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(
     weld::Window * pParent, SwWrtShell &rSh, bool bEd )
 {
-    return VclPtr<AbstractInsFootNoteDlg_Impl>::Create(new SwInsFootNoteDlg(pParent, rSh, bEd));
+    return VclPtr<AbstractInsFootNoteDlg_Impl>::Create(o3tl::make_unique<SwInsFootNoteDlg>(pParent, rSh, bEd));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg(weld::Window *pParent)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(new SwTitlePageDlg(pParent));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(o3tl::make_unique<SwTitlePageDlg>(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(SwView& rView)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(new SwLineNumberingDlg(rView));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(o3tl::make_unique<SwLineNumberingDlg>(rView));
 }
 
 VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
 {
-    return VclPtr<AbstractInsTableDlg_Impl>::Create(new SwInsTableDlg(rView));
+    return VclPtr<AbstractInsTableDlg_Impl>::Create(o3tl::make_unique<SwInsTableDlg>(rView));
 }
 
 VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
     weld::Window* pParent, SwWrtShell* pWrtSh)
 {
-    return VclPtr<AbstractJavaEditDialog_Impl>::Create(new SwJavaEditDialog(pParent, pWrtSh));
+    return VclPtr<AbstractJavaEditDialog_Impl>::Create(o3tl::make_unique<SwJavaEditDialog>(pParent, pWrtSh));
 }
 
 VclPtr<AbstractMailMergeDlg> SwAbstractDialogFactory_Impl::CreateMailMergeDlg(
@@ -995,7 +997,7 @@ VclPtr<AbstractMailMergeFieldConnectionsDlg> SwAbstractDialogFactory_Impl::Creat
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr)
 {
-    return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(new SwMultiTOXMarkDlg(pParent, rTOXMgr));
+    return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(o3tl::make_unique<SwMultiTOXMarkDlg>(pParent, rTOXMgr));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(vcl::Window* pParent,
@@ -1010,7 +1012,7 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialo
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh )
 {
-    return VclPtr<AbstractTabController_Impl>::Create(new SwOutlineTabDialog(pParent, pSwItemSet, rWrtSh));
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwOutlineTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
 VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(

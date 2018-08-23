@@ -99,8 +99,8 @@ class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 protected:
     std::unique_ptr<SwAsciiFilterDlg> m_xDlg;
 public:
-    explicit AbstractSwAsciiFilterDlg_Impl(SwAsciiFilterDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwAsciiFilterDlg_Impl(std::unique_ptr<SwAsciiFilterDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -117,8 +117,8 @@ class AbstractGenericDialog_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<weld::GenericDialogController> m_xDlg;
 public:
-    explicit AbstractGenericDialog_Impl(weld::GenericDialogController* p)
-        : m_xDlg(p)
+    explicit AbstractGenericDialog_Impl(std::unique_ptr<weld::GenericDialogController> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -129,8 +129,8 @@ class AbstractSwSortDlg_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<SwSortDlg> m_xDlg;
 public:
-    explicit AbstractSwSortDlg_Impl(SwSortDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwSortDlg_Impl(std::unique_ptr<SwSortDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -141,8 +141,8 @@ class AbstractMultiTOXMarkDlg_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<SwMultiTOXMarkDlg> m_xDlg;
 public:
-    explicit AbstractMultiTOXMarkDlg_Impl(SwMultiTOXMarkDlg* p)
-        : m_xDlg(p)
+    explicit AbstractMultiTOXMarkDlg_Impl(std::unique_ptr<SwMultiTOXMarkDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -153,8 +153,8 @@ class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 protected:
     std::unique_ptr<SwBreakDlg> m_xDlg;
 public:
-    explicit AbstractSwBreakDlg_Impl(SwBreakDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwBreakDlg_Impl(std::unique_ptr<SwBreakDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -168,8 +168,8 @@ class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<SwTableWidthDlg> m_xDlg;
 public:
-    explicit AbstractSwTableWidthDlg_Impl(SwTableWidthDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwTableWidthDlg_Impl(std::unique_ptr<SwTableWidthDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -180,8 +180,8 @@ class AbstractSwTableHeightDlg_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<SwTableHeightDlg> m_xDlg;
 public:
-    explicit AbstractSwTableHeightDlg_Impl(SwTableHeightDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwTableHeightDlg_Impl(std::unique_ptr<SwTableHeightDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -192,8 +192,8 @@ class AbstractSwMergeTableDlg_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<SwMergeTableDlg> m_xDlg;
 public:
-    explicit AbstractSwMergeTableDlg_Impl(SwMergeTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwMergeTableDlg_Impl(std::unique_ptr<SwMergeTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -204,8 +204,8 @@ class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 protected:
     std::unique_ptr<SwSplitTableDlg> m_xDlg;
 public:
-    explicit AbstractSplitTableDialog_Impl(SwSplitTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSplitTableDialog_Impl(std::unique_ptr<SwSplitTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -228,8 +228,8 @@ class AbstractTabController_Impl : virtual public SfxAbstractTabDialog
 protected:
     std::unique_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit AbstractTabController_Impl(SfxTabDialogController* p)
-        : m_xDlg(p)
+    explicit AbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -259,8 +259,8 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
 protected:
     std::unique_ptr<SwConvertTableDlg> m_xDlg;
 public:
-    explicit AbstractSwConvertTableDlg_Impl(SwConvertTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwConvertTableDlg_Impl(std::unique_ptr<SwConvertTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -282,8 +282,8 @@ class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 protected:
     std::unique_ptr<sw::DropDownFieldDialog> m_xDlg;
 public:
-    explicit AbstractDropDownFieldDialog_Impl(sw::DropDownFieldDialog* p)
-        : m_xDlg(p)
+    explicit AbstractDropDownFieldDialog_Impl(std::unique_ptr<sw::DropDownFieldDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -296,8 +296,8 @@ class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 protected:
     std::unique_ptr<SwLabDlg> m_xDlg;
 public:
-    explicit AbstractSwLabDlg_Impl(SwLabDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwLabDlg_Impl(std::unique_ptr<SwLabDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -324,8 +324,8 @@ class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 protected:
     std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> m_xDlg;
 public:
-    explicit AbstractSwAutoFormatDlg_Impl(SwAutoFormatDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwAutoFormatDlg_Impl(std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -354,8 +354,8 @@ class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 protected:
     std::unique_ptr<SwRenameXNamedDlg> m_xDlg;
 public:
-    explicit AbstractSwRenameXNamedDlg_Impl(SwRenameXNamedDlg* p)
-        : m_xDlg(p)
+    explicit AbstractSwRenameXNamedDlg_Impl(std::unique_ptr<SwRenameXNamedDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -385,8 +385,8 @@ class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 protected:
     std::unique_ptr<SwFieldInputDlg> m_xDlg;
 public:
-    explicit AbstractFieldInputDlg_Impl(SwFieldInputDlg* p)
-        : m_xDlg(p)
+    explicit AbstractFieldInputDlg_Impl(std::unique_ptr<SwFieldInputDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -401,8 +401,8 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 protected:
     std::unique_ptr<SwInsFootNoteDlg> m_xDlg;
 public:
-    explicit AbstractInsFootNoteDlg_Impl(SwInsFootNoteDlg* p)
-        : m_xDlg(p)
+    explicit AbstractInsFootNoteDlg_Impl(std::unique_ptr<SwInsFootNoteDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -420,8 +420,8 @@ class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 protected:
     std::unique_ptr<SwInsTableDlg> m_xDlg;
 public:
-    explicit AbstractInsTableDlg_Impl(SwInsTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractInsTableDlg_Impl(std::unique_ptr<SwInsTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -436,8 +436,8 @@ class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 protected:
     std::unique_ptr<SwJavaEditDialog> m_xDlg;
 public:
-    explicit AbstractJavaEditDialog_Impl(SwJavaEditDialog* p)
-        : m_xDlg(p)
+    explicit AbstractJavaEditDialog_Impl(std::unique_ptr<SwJavaEditDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
