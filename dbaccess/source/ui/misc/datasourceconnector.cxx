@@ -36,6 +36,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/button.hxx>
 #include <svl/filenotation.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>
@@ -128,7 +129,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
+                    xHandler.set( InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface(m_pErrorMessageParent)), UNO_QUERY );
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
