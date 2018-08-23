@@ -222,7 +222,8 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal
          nSlotId == SID_LINE_ARROW_CIRCLE     ||
          nSlotId == SID_LINE_CIRCLE_ARROW     ||
          nSlotId == SID_LINE_ARROW_SQUARE     ||
-         nSlotId == SID_LINE_SQUARE_ARROW )
+         nSlotId == SID_LINE_SQUARE_ARROW     ||
+         nSlotId == SID_DRAW_MEASURELINE )
     {
 
         // set attributes of line start and ends
@@ -276,6 +277,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal
         switch (nSlotId)
         {
             case SID_LINE_ARROWS:
+            case SID_DRAW_MEASURELINE:
             {
                 // connector with arrow ends
                 rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
