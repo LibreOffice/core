@@ -279,7 +279,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+        ScTransferObj* pTransferObj = new ScTransferObj( ScDocumentUniquePtr(pClipDoc), aObjDesc );
         uno::Reference<css::datatransfer::XTransferable2> xTransferObj = pTransferObj;
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
@@ -396,7 +396,7 @@ bool ScViewFunc::CopyToClipMultiRange( ScDocument* pInputClipDoc, const ScRangeL
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        ScTransferObj* pTransferObj = new ScTransferObj( pDocClip.release(), aObjDesc );
+        ScTransferObj* pTransferObj = new ScTransferObj( std::move(pDocClip), aObjDesc );
         uno::Reference<css::datatransfer::XTransferable2> xTransferObj = pTransferObj;
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
@@ -429,13 +429,13 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
                         rMark ) )
         {
-            ScDocument *pClipDoc = new ScDocument( SCDOCMODE_CLIP );    // create one (deleted by ScTransferObj)
+            ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));    // create one (deleted by ScTransferObj)
 
             bool bAnyOle = pDoc->HasOLEObjectsInArea( aRange, &rMark );
             ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
 
             ScClipParam aClipParam(aRange, false);
-            pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, true);
+            pDoc->CopyToClip(aClipParam, pClipDoc.get(), &rMark, false, true);
 
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
             pClipDoc->ExtendMerge( aRange, true );
@@ -444,7 +444,7 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+            ScTransferObj* pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
             return pTransferObj;
         }
     }

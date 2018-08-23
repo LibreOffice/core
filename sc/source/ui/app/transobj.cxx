@@ -117,8 +117,8 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     ScPrintFunc::DrawToDev( pDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
 }
 
-ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
-    m_pDoc( pClipDoc ),
+ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc ) :
+    m_pDoc( std::move(pClipDoc ) ),
     m_nNonFiltered(0),
     m_aObjDesc( rDesc ),
     m_nDragHandleX( 0 ),

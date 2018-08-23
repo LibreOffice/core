@@ -23,6 +23,7 @@
 #include <svtools/transfer.hxx>
 #include <global.hxx>
 #include <address.hxx>
+#include <document.hxx>
 #include <sfx2/objsh.hxx>
 
 
@@ -40,7 +41,7 @@ namespace com { namespace sun { namespace star {
 class ScTransferObj : public TransferableHelper
 {
 private:
-    std::unique_ptr<ScDocument>     m_pDoc;
+    ScDocumentUniquePtr             m_pDoc;
     ScRange                         m_aBlock;
     SCROW                           m_nNonFiltered;       // non-filtered rows
     TransferableObjectDescriptor    m_aObjDesc;
@@ -69,7 +70,7 @@ private:
     static void GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
-            ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc );
+            ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc );
     virtual ~ScTransferObj() override;
 
     virtual void        AddSupportedFormats() override;
