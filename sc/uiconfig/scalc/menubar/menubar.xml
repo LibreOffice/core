@@ -385,6 +385,10 @@
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
             <menu:menuitem menu:id=".uno:PageFormatDialog"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
+            <menu:menuitem menu:id=".uno:AutoFormat"/>
+            <menu:menuitem menu:id=".uno:ChooseDesign"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatImageMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Crop"/>
@@ -567,9 +571,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
-            <menu:menuitem menu:id=".uno:AutoFormat"/>
-            <menu:menuitem menu:id=".uno:ChooseDesign"/>
             <menu:menuitem menu:id=".uno:SetTabBgColor"/>
             <menu:menuitem menu:id=".uno:TableEvents"/>
             <menu:menuseparator/>
