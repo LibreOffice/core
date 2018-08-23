@@ -1142,6 +1142,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
 
                         bool bDone = false;
                         // Read until closing -->. If not found restart at first >
+                        sTmpBuffer = aToken;
                         while( !bDone && !rInput.eof() && IsParserWorking() )
                         {
                             if( '>'==nNextCh )
@@ -1149,19 +1150,20 @@ HtmlTokenId HTMLParser::GetNextToken_()
                                 if( !nCStreamPos )
                                 {
                                     nCStreamPos = rInput.Tell();
-                                    nCStrLen = aToken.getLength();
+                                    nCStrLen = sTmpBuffer.getLength();
                                     nCLineNr = GetLineNr();
                                     nCLinePos = GetLinePos();
                                 }
-                                bDone = aToken.endsWith( "--" );
+                                bDone = sTmpBuffer.getLength() >= 2 && sTmpBuffer[sTmpBuffer.getLength() - 2] == '-' && sTmpBuffer[sTmpBuffer.getLength() - 1] == '-';
                                 if( !bDone )
-                                aToken += OUString(&nNextCh,1);
+                                    sTmpBuffer.appendUtf32(nNextCh);
                             }
                             else
-                                aToken += OUString(&nNextCh,1);
+                                sTmpBuffer.appendUtf32(nNextCh);
                             if( !bDone )
                                 nNextCh = GetNextChar();
                         }
+                        aToken = sTmpBuffer.makeStringAndClear();
                         if( !bDone && IsParserWorking() && nCStreamPos )
                         {
                             rInput.Seek( nCStreamPos );
