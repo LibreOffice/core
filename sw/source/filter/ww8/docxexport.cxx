@@ -504,7 +504,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
     aExport.WriteShape(xShape);
 }
 
-void DocxExport::ExportDocument_Impl()
+ErrCode DocxExport::ExportDocument_Impl()
 {
     // Set the 'Track Revisions' flag in the settings structure
     m_aSettings.trackRevisions = bool( RedlineFlags::On & m_nOrigRedlineFlags );
@@ -543,6 +543,8 @@ void DocxExport::ExportDocument_Impl()
     delete m_pStyles;
     m_pStyles = nullptr;
     m_pSections.reset();
+
+    return ERRCODE_NONE;
 }
 
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
