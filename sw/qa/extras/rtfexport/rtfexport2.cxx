@@ -655,8 +655,12 @@ DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
 {
-    // Check if the style is loaded
+    // Ensure non-default style is loaded
     getStyles("ParagraphStyles")->getByName("Text body justified");
+    // Ensure default styles were modified, vs testFdo69384Inserted where it is not
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Text Body"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(68.f, getProperty<float>(xPropertySet, "CharHeight"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
@@ -666,8 +670,11 @@ DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/fdo69384-paste.rtf", xEnd);
 
-    // During insert of the RTF document we do not insert new styles
-    CPPUNIT_ASSERT(!getStyles("ParagraphStyles")->hasByName("Text body justified"));
+    // During insert of the RTF document we do not change pre-existing styles
+    // vs testFdo69384 where it is
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Text Body"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xPropertySet, "CharHeight"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
