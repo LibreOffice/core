@@ -5255,8 +5255,8 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     uno::Reference< accessibility::XMSAAService > xMSAA( pSVData->mxAccessBridge, uno::UNO_QUERY );
     if ( xMSAA.is() )
     {
-        sal_Int32 lParam32 = (sal_Int32)lParam;
-        sal_uInt32 wParam32 = (sal_uInt32)wParam;
+        sal_Int32 lParam32 = static_cast<sal_Int32>(lParam);
+        sal_uInt32 wParam32 = static_cast<sal_uInt32>(wParam);
 
         // mhOnSetTitleWnd not set to reasonable value anywhere...
         if ( lParam32 == OBJID_CLIENT )
