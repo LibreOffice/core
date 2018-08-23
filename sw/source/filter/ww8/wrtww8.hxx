@@ -581,7 +581,7 @@ public:
 
 public:
     /// The main function to export the document.
-    void ExportDocument( bool bWriteAll );
+    ErrCode ExportDocument( bool bWriteAll );
 
     /// Iterate through the nodes and call the appropriate OutputNode() on them.
     void WriteText();
@@ -799,7 +799,7 @@ public:
 
 protected:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl() = 0;
+    virtual ErrCode ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
     sal_Int32 GetNextPos( SwWW8AttrIter const * pAttrIter, const SwTextNode& rNode, sal_Int32 nCurrentPos );
@@ -1000,7 +1000,7 @@ public:
     virtual bool AddSectionBreaksForTOX() const override { return false; }
 private:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl() override;
+    virtual ErrCode ExportDocument_Impl() override;
 
     void PrepareStorage();
     void WriteFkpPlcUsw();

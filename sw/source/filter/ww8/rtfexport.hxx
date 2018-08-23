@@ -118,7 +118,7 @@ public:
 
 protected:
     /// Format-dependent part of the actual export.
-    void ExportDocument_Impl() override;
+    ErrCode ExportDocument_Impl() override;
 
     void SectionBreaksAndFrames(const SwTextNode& /*rNode*/) override {}
 
