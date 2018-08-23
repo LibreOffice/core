@@ -29,9 +29,9 @@ using namespace std;
 using namespace com::sun::star;
 using namespace osl;
 
-Communicator::Communicator( IBluetoothSocket *pSocket ):
+Communicator::Communicator( std::unique_ptr<IBluetoothSocket> pSocket ):
     Thread( "CommunicatorThread" ),
-    mpSocket( pSocket ),
+    mpSocket( std::move(pSocket) ),
     pTransmitter( nullptr ),
     mListener( nullptr )
 {
