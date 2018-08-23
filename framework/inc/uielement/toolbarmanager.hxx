@@ -52,6 +52,7 @@
 #include <vcl/timer.hxx>
 
 #include <unordered_map>
+#include <atomic>
 
 class PopupMenu;
 class ToolBox;
@@ -155,10 +156,11 @@ class ToolBarManager : public ToolbarManager_Base
 
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::container::XIndexAccess > > MenuDescriptionMap;
 
-        bool m_bDisposed : 1,
-             m_bAddedToTaskPaneList : 1,
-             m_bFrameActionRegistered : 1,
-             m_bUpdateControllers : 1;
+        bool m_bAddedToTaskPaneList : 1,
+             m_bFrameActionRegistered : 1;
+        std::atomic<bool> m_bDisposed;
+        std::atomic<bool> m_bDisposing;
+        std::atomic<bool> m_bUpdateControllers;
 
         sal_Int16 m_eSymbolSize;
 
