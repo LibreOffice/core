@@ -1,0 +1,1915 @@
+diff -urN glew.org/build/vc14/common.props glew/build/vc14/common.props
+--- glew.org/build/vc14/common.props	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/common.props	2014-12-11 10:09:36.000000000 +0100
+@@ -0,0 +1,29 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ImportGroup Label="PropertySheets" />
++  <PropertyGroup Label="UserMacros">
++    <INCLUDE_DIR>..\..\include</INCLUDE_DIR>
++    <LIB_DIR>..\..\lib</LIB_DIR>
++    <BIN_DIR>..\..\bin</BIN_DIR>
++  </PropertyGroup>
++  <PropertyGroup />
++  <ItemDefinitionGroup>
++    <ClCompile>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++    </ClCompile>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <BuildMacro Include="INCLUDE_DIR">
++      <Value>$(INCLUDE_DIR)</Value>
++      <EnvironmentVariable>true</EnvironmentVariable>
++    </BuildMacro>
++    <BuildMacro Include="LIB_DIR">
++      <Value>$(LIB_DIR)</Value>
++      <EnvironmentVariable>true</EnvironmentVariable>
++    </BuildMacro>
++    <BuildMacro Include="BIN_DIR">
++      <Value>$(BIN_DIR)</Value>
++      <EnvironmentVariable>true</EnvironmentVariable>
++    </BuildMacro>
++  </ItemGroup>
++</Project>
+\ No newline at end of file
+diff -urN glew.org/build/vc14/glew.sln glew/build/vc14/glew.sln
+--- glew.org/build/vc14/glew.sln	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/glew.sln	2018-08-23 09:24:24.000000000 +0200
+@@ -0,0 +1,94 @@
++﻿
++Microsoft Visual Studio Solution File, Format Version 12.00
++# Visual Studio 14
++VisualStudioVersion = 14.0.25420.1
++MinimumVisualStudioVersion = 10.0.40219.1
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew_shared", "glew_shared.vcxproj", "{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew_static", "glew_static.vcxproj", "{664E6F0D-6784-4760-9565-D54F8EB1EDF4}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glewinfo", "glewinfo.vcxproj", "{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "visualinfo", "visualinfo.vcxproj", "{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}"
++EndProject
++Global
++	GlobalSection(SolutionConfigurationPlatforms) = preSolution
++		Debug MX|Win32 = Debug MX|Win32
++		Debug MX|x64 = Debug MX|x64
++		Debug|Win32 = Debug|Win32
++		Debug|x64 = Debug|x64
++		Release MX|Win32 = Release MX|Win32
++		Release MX|x64 = Release MX|x64
++		Release|Win32 = Release|Win32
++		Release|x64 = Release|x64
++	EndGlobalSection
++	GlobalSection(ProjectConfigurationPlatforms) = postSolution
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug MX|Win32.ActiveCfg = Debug MX|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug MX|Win32.Build.0 = Debug MX|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug MX|x64.ActiveCfg = Debug MX|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug MX|x64.Build.0 = Debug MX|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug|Win32.ActiveCfg = Debug|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug|Win32.Build.0 = Debug|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug|x64.ActiveCfg = Debug|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Debug|x64.Build.0 = Debug|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release MX|Win32.ActiveCfg = Release MX|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release MX|Win32.Build.0 = Release MX|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release MX|x64.ActiveCfg = Release MX|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release MX|x64.Build.0 = Release MX|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release|Win32.ActiveCfg = Release|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release|Win32.Build.0 = Release|Win32
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release|x64.ActiveCfg = Release|x64
++		{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}.Release|x64.Build.0 = Release|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug MX|Win32.ActiveCfg = Debug MX|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug MX|Win32.Build.0 = Debug MX|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug MX|x64.ActiveCfg = Debug MX|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug MX|x64.Build.0 = Debug MX|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug|Win32.ActiveCfg = Debug|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug|Win32.Build.0 = Debug|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug|x64.ActiveCfg = Debug|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Debug|x64.Build.0 = Debug|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release MX|Win32.ActiveCfg = Release MX|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release MX|Win32.Build.0 = Release MX|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release MX|x64.ActiveCfg = Release MX|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release MX|x64.Build.0 = Release MX|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release|Win32.ActiveCfg = Release|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release|Win32.Build.0 = Release|Win32
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release|x64.ActiveCfg = Release|x64
++		{664E6F0D-6784-4760-9565-D54F8EB1EDF4}.Release|x64.Build.0 = Release|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug MX|Win32.ActiveCfg = Debug MX|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug MX|Win32.Build.0 = Debug MX|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug MX|x64.ActiveCfg = Debug MX|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug MX|x64.Build.0 = Debug MX|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug|Win32.ActiveCfg = Debug|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug|Win32.Build.0 = Debug|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug|x64.ActiveCfg = Debug|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Debug|x64.Build.0 = Debug|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release MX|Win32.ActiveCfg = Release MX|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release MX|Win32.Build.0 = Release MX|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release MX|x64.ActiveCfg = Release MX|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release MX|x64.Build.0 = Release MX|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release|Win32.ActiveCfg = Release|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release|Win32.Build.0 = Release|Win32
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release|x64.ActiveCfg = Release|x64
++		{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}.Release|x64.Build.0 = Release|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug MX|Win32.ActiveCfg = Debug MX|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug MX|Win32.Build.0 = Debug MX|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug MX|x64.ActiveCfg = Debug MX|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug MX|x64.Build.0 = Debug MX|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug|Win32.ActiveCfg = Debug|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug|Win32.Build.0 = Debug|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug|x64.ActiveCfg = Debug|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Debug|x64.Build.0 = Debug|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release MX|Win32.ActiveCfg = Release MX|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release MX|Win32.Build.0 = Release MX|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release MX|x64.ActiveCfg = Release MX|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release MX|x64.Build.0 = Release MX|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release|Win32.ActiveCfg = Release|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release|Win32.Build.0 = Release|Win32
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release|x64.ActiveCfg = Release|x64
++		{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}.Release|x64.Build.0 = Release|x64
++	EndGlobalSection
++	GlobalSection(SolutionProperties) = preSolution
++		HideSolutionNode = FALSE
++	EndGlobalSection
++EndGlobal
+diff -urN glew.org/build/vc14/glew_shared.vcxproj glew/build/vc14/glew_shared.vcxproj
+--- glew.org/build/vc14/glew_shared.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/glew_shared.vcxproj	2018-08-23 09:24:20.000000000 +0200
+@@ -0,0 +1,472 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug MX|Win32">
++      <Configuration>Debug MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug MX|x64">
++      <Configuration>Debug MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|Win32">
++      <Configuration>Release MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|x64">
++      <Configuration>Release MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <SccProjectName />
++    <SccLocalPath />
++    <ProjectGuid>{55AE3D72-7DE6-F19F-AEF2-9AE8CA26CF3D}</ProjectGuid>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32d</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glew32d</TargetName>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;GLEW_MX;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++      <TargetEnvironment>Win32</TargetEnvironment>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalOptions> /ignore:4089</AdditionalOptions>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;GLEW_MX;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalOptions> /ignore:4089</AdditionalOptions>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++      <TargetEnvironment>Win32</TargetEnvironment>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalOptions> /ignore:4089</AdditionalOptions>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalOptions> /ignore:4089</AdditionalOptions>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_MX;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++      <TargetEnvironment>Win32</TargetEnvironment>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_MX;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++      <TargetEnvironment>Win32</TargetEnvironment>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++    </ClCompile>
++    <Midl>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MkTypLibCompatible>true</MkTypLibCompatible>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
++      <BaseAddress>0x62AA0000</BaseAddress>
++      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>
++      </AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\src\glew.c" />
++  </ItemGroup>
++  <ItemGroup>
++    <ClInclude Include="..\..\include\GL\glew.h" />
++    <ClInclude Include="..\..\include\GL\wglew.h" />
++  </ItemGroup>
++  <ItemGroup>
++    <ResourceCompile Include="..\glew.rc" />
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file
+diff -urN glew.org/build/vc14/glew_static.vcxproj glew/build/vc14/glew_static.vcxproj
+--- glew.org/build/vc14/glew_static.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/glew_static.vcxproj	2018-08-23 09:24:22.000000000 +0200
+@@ -0,0 +1,400 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug MX|Win32">
++      <Configuration>Debug MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug MX|x64">
++      <Configuration>Debug MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|Win32">
++      <Configuration>Release MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|x64">
++      <Configuration>Release MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <SccProjectName />
++    <SccLocalPath />
++    <ProjectGuid>{664E6F0D-6784-4760-9565-D54F8EB1EDF4}</ProjectGuid>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32mxsd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32mxsd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32s</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32s</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32mxs</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32mxs</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32sd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <TargetName>glew32sd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;WIN32_LEAN_AND_MEAN;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Lib>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <ClCompile>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++    </ClCompile>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <ClCompile>
++      <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++    </ClCompile>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\src\glew.c" />
++  </ItemGroup>
++  <ItemGroup>
++    <ClInclude Include="..\..\include\GL\glew.h" />
++    <ClInclude Include="..\..\include\GL\wglew.h" />
++  </ItemGroup>
++  <ItemGroup>
++    <ResourceCompile Include="..\glew.rc" />
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file
+diff -urN glew.org/build/vc14/glewinfo.vcxproj glew/build/vc14/glewinfo.vcxproj
+--- glew.org/build/vc14/glewinfo.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/glewinfo.vcxproj	2018-08-23 09:24:22.000000000 +0200
+@@ -0,0 +1,446 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug MX|Win32">
++      <Configuration>Debug MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug MX|x64">
++      <Configuration>Debug MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|Win32">
++      <Configuration>Release MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|x64">
++      <Configuration>Release MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <SccProjectName />
++    <SccLocalPath />
++    <ProjectGuid>{8EFB5DCB-C0C4-1670-5938-A0E0F1A1C5EA}</ProjectGuid>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo-mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo-mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo-mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo-mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfod</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfod</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>glewinfo</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <TargetName>glewinfo</TargetName>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <TargetName>glewinfo</TargetName>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxs.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxs.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxsd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxsd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\glewinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <Link>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++    <ClCompile />
++    <ClCompile>
++    </ClCompile>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <Link>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++    <ClCompile />
++    <ClCompile>
++    </ClCompile>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\src\glewinfo.c" />
++  </ItemGroup>
++  <ItemGroup>
++    <ProjectReference Include="glew_static.vcxproj">
++      <Project>{664e6f0d-6784-4760-9565-d54f8eb1edf4}</Project>
++    </ProjectReference>
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file
+diff -urN glew.org/build/vc14/visualinfo.vcxproj glew/build/vc14/visualinfo.vcxproj
+--- glew.org/build/vc14/visualinfo.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ glew/build/vc14/visualinfo.vcxproj	2018-08-23 09:24:22.000000000 +0200
+@@ -0,0 +1,445 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug MX|Win32">
++      <Configuration>Debug MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug MX|x64">
++      <Configuration>Debug MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|Win32">
++      <Configuration>Release MX</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release MX|x64">
++      <Configuration>Release MX</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <SccProjectName />
++    <SccLocalPath />
++    <ProjectGuid>{79AA8443-86F4-649A-0BEB-0CB5E51B7D7E}</ProjectGuid>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <UseOfMfc>false</UseOfMfc>
++    <PlatformToolset>v140</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'" Label="PropertySheets">
++    <Import Project="common.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo-mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo-mxd</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfod</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfod</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo-mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo-mx</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++    <LinkIncremental>false</LinkIncremental>
++    <TargetName>visualinfo</TargetName>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
++    <TargetName>visualinfo</TargetName>
++    <IntDir>tmp\$(TargetName)\$(Configuration)\$(PlatformName)\</IntDir>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <OutDir>..\..\bin/</OutDir>
++    <TargetName>visualinfo</TargetName>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxsd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxsd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32sd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
++      <FunctionLevelLinking>false</FunctionLevelLinking>
++      <Optimization>Disabled</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32sd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxs.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MX|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;GLEW_MX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32mxs.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32s.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <StringPooling>true</StringPooling>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <Optimization>MaxSpeed</Optimization>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <WarningLevel>Level3</WarningLevel>
++      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ClCompile>
++    <Midl>
++      <TypeLibraryName>.\..\..\bin\visualinfo.tlb</TypeLibraryName>
++    </Midl>
++    <ResourceCompile>
++      <Culture>0x0409</Culture>
++      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++    </ResourceCompile>
++    <Bscmake>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++    </Bscmake>
++    <Link>
++      <SuppressStartupBanner>true</SuppressStartupBanner>
++      <SubSystem>Console</SubSystem>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32s.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
++    <ClCompile>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++      <AdditionalDependencies>glew32sd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
++    <ClCompile>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <AdditionalDependencies>glew32sd.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</AdditionalLibraryDirectories>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\src\visualinfo.c" />
++  </ItemGroup>
++  <ItemGroup>
++    <ProjectReference Include="glew_static.vcxproj">
++      <Project>{664e6f0d-6784-4760-9565-d54f8eb1edf4}</Project>
++    </ProjectReference>
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file

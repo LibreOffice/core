@@ -22,6 +22,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-msvc-disable-sse2.patch.1 \
+	external/glew/glew-vc14.patch.1 \
 ))
 else
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
