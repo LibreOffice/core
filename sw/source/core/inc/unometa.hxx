@@ -84,7 +84,7 @@ protected:
     /// @param pDoc and pMeta != 0, but not & because of ImplInheritanceHelper
     SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         css::uno::Reference< css::text::XText> const&  xParentText,
-        TextRangeList_t const*const pPortions);
+        std::unique_ptr<TextRangeList_t const> pPortions);
 
     SwXMeta(SwDoc *const pDoc);
 
@@ -205,7 +205,7 @@ private:
 
     SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         css::uno::Reference< css::text::XText> const& xParentText,
-        TextRangeList_t const*const pPortions);
+        std::unique_ptr<TextRangeList_t const> pPortions);
 
     friend css::uno::Reference<css::rdf::XMetadatable>
         SwXMeta::CreateXMeta(SwDoc &, bool);
