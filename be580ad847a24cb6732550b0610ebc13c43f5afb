@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_1173a117",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-08-23T22:32:42Z",
+      "side": 1,
+      "message": "This can be removed.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 49
+      },
+      "revId": "be580ad847a24cb6732550b0610ebc13c43f5afb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f1615d3b",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-08-23T22:32:42Z",
+      "side": 1,
+      "message": "You can replace aArgs with {}",
+      "range": {
+        "startLine": 202,
+        "startChar": 53,
+        "endLine": 202,
+        "endChar": 58
+      },
+      "revId": "be580ad847a24cb6732550b0610ebc13c43f5afb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
