@@ -45,11 +45,11 @@ bool hasExternalLinkage(VarDecl const * decl) {
 }
 
 class ConstStringVar:
-    public RecursiveASTVisitor<ConstStringVar>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ConstStringVar>
 {
 public:
     explicit ConstStringVar(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

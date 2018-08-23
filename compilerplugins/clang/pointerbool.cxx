@@ -23,11 +23,11 @@
 
 namespace
 {
-class PointerBool : public RecursiveASTVisitor<PointerBool>, public loplugin::Plugin
+class PointerBool : public loplugin::FilteringPlugin<PointerBool>
 {
 public:
     explicit PointerBool(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

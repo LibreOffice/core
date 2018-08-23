@@ -17,11 +17,11 @@
 
 namespace
 {
-class NestedUnnamed : public RecursiveASTVisitor<NestedUnnamed>, public loplugin::Plugin
+class NestedUnnamed : public loplugin::FilteringPlugin<NestedUnnamed>
 {
 public:
     explicit NestedUnnamed(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

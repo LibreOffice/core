@@ -12,10 +12,10 @@
 namespace {
 
 class DeadClass:
-    public RecursiveASTVisitor<DeadClass>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DeadClass>
 {
 public:
-    explicit DeadClass(InstantiationData const & data): Plugin(data) {}
+    explicit DeadClass(InstantiationData const & data): FilteringPlugin(data) {}
 
     void run() override;
 

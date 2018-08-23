@@ -23,10 +23,10 @@
 namespace {
 
 class StylePolice :
-    public RecursiveASTVisitor<StylePolice>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<StylePolice>
 {
 public:
-    explicit StylePolice(InstantiationData const & data): Plugin(data) {}
+    explicit StylePolice(InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

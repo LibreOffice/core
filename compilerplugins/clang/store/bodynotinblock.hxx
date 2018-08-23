@@ -18,8 +18,7 @@ namespace loplugin
 {
 
 class BodyNotInBlock
-    : public RecursiveASTVisitor< BodyNotInBlock >
-    , public Plugin
+    : public loplugin::FilteringPlugin<BodyNotInBlock>
     {
     public:
         explicit BodyNotInBlock( const InstantiationData& data );

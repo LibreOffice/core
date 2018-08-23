@@ -51,11 +51,11 @@ CXXMethodDecl const* getTemplateInstantiationPattern(CXXMethodDecl const* decl)
     return p == nullptr ? decl : cast<CXXMethodDecl>(p);
 }
 
-class SalCall final : public RecursiveASTVisitor<SalCall>, public loplugin::RewritePlugin
+class SalCall final : public loplugin::FilteringRewritePlugin<SalCall>
 {
 public:
     explicit SalCall(loplugin::InstantiationData const& data)
-        : RewritePlugin(data)
+        : FilteringRewritePlugin(data)
     {
     }
 

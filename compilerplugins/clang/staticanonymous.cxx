@@ -17,8 +17,7 @@ namespace loplugin
 {
 
 class StaticAnonymous
-    : public RecursiveASTVisitor< StaticAnonymous >
-    , public Plugin
+    : public loplugin::FilteringPlugin<StaticAnonymous>
     {
     public:
         explicit StaticAnonymous( const InstantiationData& data );
@@ -28,7 +27,7 @@ class StaticAnonymous
     };
 
 StaticAnonymous::StaticAnonymous( const InstantiationData& data )
-    : Plugin( data )
+    : FilteringPlugin( data )
     {
     }
 

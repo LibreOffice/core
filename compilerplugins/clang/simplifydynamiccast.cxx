@@ -19,11 +19,11 @@
 
 namespace
 {
-class SimplifyDynamicCast : public RecursiveASTVisitor<SimplifyDynamicCast>, public loplugin::Plugin
+class SimplifyDynamicCast : public loplugin::FilteringPlugin<SimplifyDynamicCast>
 {
 public:
     explicit SimplifyDynamicCast(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

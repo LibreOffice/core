@@ -14,11 +14,11 @@
 namespace {
 
 class RedundantInline:
-    public RecursiveASTVisitor<RedundantInline>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<RedundantInline>
 {
 public:
     explicit RedundantInline(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

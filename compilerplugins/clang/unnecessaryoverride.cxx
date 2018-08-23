@@ -64,10 +64,10 @@ bool hasMultipleBaseInstances(
 }
 
 class UnnecessaryOverride:
-    public RecursiveASTVisitor<UnnecessaryOverride>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnnecessaryOverride>
 {
 public:
-    explicit UnnecessaryOverride(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryOverride(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

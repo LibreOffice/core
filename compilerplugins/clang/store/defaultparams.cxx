@@ -18,10 +18,10 @@
 namespace {
 
 class DefaultParams:
-    public RecursiveASTVisitor<DefaultParams>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DefaultParams>
 {
 public:
-    explicit DefaultParams(InstantiationData const & data): Plugin(data) {}
+    explicit DefaultParams(InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

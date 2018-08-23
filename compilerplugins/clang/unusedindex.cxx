@@ -24,11 +24,11 @@
 */
 namespace
 {
-class UnusedIndex : public RecursiveASTVisitor<UnusedIndex>, public loplugin::Plugin
+class UnusedIndex : public loplugin::FilteringPlugin<UnusedIndex>
 {
 public:
     explicit UnusedIndex(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

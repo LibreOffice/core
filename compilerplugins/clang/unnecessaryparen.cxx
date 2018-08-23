@@ -59,11 +59,11 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
 }
 
 class UnnecessaryParen:
-    public RecursiveASTVisitor<UnnecessaryParen>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<UnnecessaryParen>
 {
 public:
     explicit UnnecessaryParen(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override
     {

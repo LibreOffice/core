@@ -13,11 +13,11 @@
 
 namespace
 {
-class RedundantFCast final : public RecursiveASTVisitor<RedundantFCast>, public loplugin::Plugin
+class RedundantFCast final : public loplugin::FilteringPlugin<RedundantFCast>
 {
 public:
     explicit RedundantFCast(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

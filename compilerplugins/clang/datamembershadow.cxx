@@ -26,11 +26,11 @@ namespace
 {
 
 class DataMemberShadow:
-    public RecursiveASTVisitor<DataMemberShadow>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DataMemberShadow>
 {
 public:
     explicit DataMemberShadow(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

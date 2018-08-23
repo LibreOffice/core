@@ -43,11 +43,11 @@ bool isStatic(ValueDecl const * decl, bool * memberEnumerator) {
 }
 
 class StaticAccess:
-    public RecursiveASTVisitor<StaticAccess>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<StaticAccess>
 {
 public:
     explicit StaticAccess(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

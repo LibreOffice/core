@@ -22,11 +22,11 @@
  */
 namespace
 {
-class EmptyIf : public RecursiveASTVisitor<EmptyIf>, public loplugin::RewritePlugin
+class EmptyIf : public loplugin::FilteringRewritePlugin<EmptyIf>
 {
 public:
     explicit EmptyIf(loplugin::InstantiationData const& data)
-        : RewritePlugin(data)
+        : FilteringRewritePlugin(data)
     {
     }
 

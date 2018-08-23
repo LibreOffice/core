@@ -28,10 +28,10 @@ static bool startswith(const std::string& rStr, const char* pSubStr) {
 }
 
 class ExpressionAlwaysZero:
-    public RecursiveASTVisitor<ExpressionAlwaysZero>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ExpressionAlwaysZero>
 {
 public:
-    explicit ExpressionAlwaysZero(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit ExpressionAlwaysZero(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

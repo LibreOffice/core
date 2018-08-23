@@ -24,10 +24,10 @@ TODO look for places where we are working around the warning by doing
  */
 namespace {
 
-class CheckUnusedParams: public RecursiveASTVisitor<CheckUnusedParams>, public loplugin::Plugin {
+class CheckUnusedParams: public loplugin::FilteringPlugin<CheckUnusedParams> {
 public:
     explicit CheckUnusedParams(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
     void run() override;
     bool VisitFunctionDecl(FunctionDecl const *);
     bool VisitUnaryAddrOf(UnaryOperator const *);

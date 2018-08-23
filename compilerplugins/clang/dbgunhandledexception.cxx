@@ -24,7 +24,7 @@ Check that DBG_UNHANDLED_EXCEPTION is always the first statement in a catch bloc
 it does not work properly.
 */
 
-class DbgUnhandledException : public RecursiveASTVisitor<DbgUnhandledException>, public Plugin
+class DbgUnhandledException : public loplugin::FilteringPlugin<DbgUnhandledException>
 {
 public:
     explicit DbgUnhandledException(InstantiationData const& data);
@@ -37,7 +37,7 @@ private:
 };
 
 DbgUnhandledException::DbgUnhandledException(const InstantiationData& data)
-    : Plugin(data)
+    : FilteringPlugin(data)
 {
 }
 

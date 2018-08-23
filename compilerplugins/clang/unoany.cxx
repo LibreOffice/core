@@ -12,10 +12,10 @@
 
 
 class UnoAny:
-    public RecursiveASTVisitor<UnoAny>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnoAny>
 {
 public:
-    explicit UnoAny(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit UnoAny(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

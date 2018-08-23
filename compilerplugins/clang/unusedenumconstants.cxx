@@ -59,10 +59,10 @@ static std::set<MyFieldInfo> readSet;
 
 
 class UnusedEnumConstants:
-    public RecursiveASTVisitor<UnusedEnumConstants>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<UnusedEnumConstants>
 {
 public:
-    explicit UnusedEnumConstants(loplugin::InstantiationData const & data): Plugin(data) {}
+    explicit UnusedEnumConstants(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override
     {

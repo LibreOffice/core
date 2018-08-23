@@ -33,10 +33,10 @@ bool isJniFunction(NamedDecl const * decl) {
 }
 
 class ReservedId:
-    public RecursiveASTVisitor<ReservedId>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ReservedId>
 {
 public:
-    explicit ReservedId(loplugin::InstantiationData const & data): Plugin(data)
+    explicit ReservedId(loplugin::InstantiationData const & data): FilteringPlugin(data)
     {}
 
     void run() override;

@@ -44,11 +44,11 @@ Expr const * lookThroughInitListExpr(Expr const * expr) {
 }
 
 class CastToVoid final:
-    public RecursiveASTVisitor<CastToVoid>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<CastToVoid>
 {
 public:
     explicit CastToVoid(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         auto const dre = checkCast(expr);

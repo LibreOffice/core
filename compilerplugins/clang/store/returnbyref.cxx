@@ -25,10 +25,10 @@
 namespace {
 
 class ReturnByRef:
-    public RecursiveASTVisitor<ReturnByRef>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<ReturnByRef>
 {
 public:
-    explicit ReturnByRef(InstantiationData const & data): Plugin(data) {}
+    explicit ReturnByRef(InstantiationData const & data): FilteringPlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

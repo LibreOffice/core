@@ -21,11 +21,11 @@
 namespace {
 
 class Flatten:
-    public RecursiveASTVisitor<Flatten>, public loplugin::RewritePlugin
+    public loplugin::FilteringRewritePlugin<Flatten>
 {
 public:
     explicit Flatten(loplugin::InstantiationData const & data):
-        RewritePlugin(data) {}
+        FilteringRewritePlugin(data) {}
 
     virtual void run() override
     {
