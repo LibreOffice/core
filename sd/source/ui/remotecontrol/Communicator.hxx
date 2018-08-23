@@ -39,7 +39,7 @@ namespace sd
     class Communicator : public salhelper::Thread
     {
         public:
-            explicit Communicator( IBluetoothSocket *pSocket );
+            explicit Communicator( std::unique_ptr<IBluetoothSocket> pSocket );
             virtual ~Communicator() override;
 
             void presentationStarted( const css::uno::Reference<

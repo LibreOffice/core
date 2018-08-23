@@ -51,6 +51,7 @@
 #endif
 
 #include "Communicator.hxx"
+#include <o3tl/make_unique.hxx>
 
 using namespace sd;
 
@@ -557,7 +558,7 @@ void incomingCallback( void *userRefCon,
     IOBluetoothRFCOMMChannel* channel = [IOBluetoothRFCOMMChannel withRFCOMMChannelRef:reinterpret_cast<IOBluetoothRFCOMMChannelRef>(objectRef)];
 
     OSXBluetoothWrapper* socket = new OSXBluetoothWrapper( channel);
-    Communicator* pCommunicator = new Communicator( socket );
+    Communicator* pCommunicator = new Communicator( std::unique_ptr<IBluetoothSocket>(socket) );
     pServer->addCommunicator( pCommunicator );
 
     ChannelDelegate* delegate = [[ChannelDelegate alloc] initWithCommunicatorAndSocket: pCommunicator socket: socket];
@@ -920,7 +921,7 @@ DBusHandlerResult ProfileMessageFunction
                     (void)fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
 
                     SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
-                    Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nDescriptor ) );
+                    Communicator* pCommunicator = new Communicator( o3tl::make_unique<BufferedStreamSocket>( nDescriptor ) );
                     pCommunicators->push_back( pCommunicator );
                     pCommunicator->launch();
                 }
@@ -1289,7 +1290,7 @@ void SAL_CALL BluetoothServer::run()
                 SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );
             } else {
                 SAL_INFO( "sdremote.bluetooth", "connection accepted " << nClient );
-                Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nClient ) );
+                Communicator* pCommunicator = new Communicator( o3tl::make_unique<BufferedStreamSocket>( nClient ) );
                 mpCommunicators->push_back( pCommunicator );
                 pCommunicator->launch();
             }
@@ -1388,7 +1389,7 @@ void SAL_CALL BluetoothServer::run()
             WSACleanup();
             return;
         } else {
-            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( socket) );
+            Communicator* pCommunicator = new Communicator( o3tl::make_unique<BufferedStreamSocket>( socket) );
             mpCommunicators->push_back( pCommunicator );
             pCommunicator->launch();
         }
