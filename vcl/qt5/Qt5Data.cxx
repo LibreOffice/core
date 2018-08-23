@@ -149,8 +149,11 @@
 #include <unx/x11_cursors/wsshow_curs.h>
 #include <unx/x11_cursors/wsshow_mask.h>
 
+#include <unx/glyphcache.hxx>
+
 Qt5Data::Qt5Data(SalInstance* pInstance)
     : GenericUnixSalData(SAL_DATA_QT5, pInstance)
+    , m_pGlyphCache(new GlyphCache())
 {
     ImplSVData* pSVData = ImplGetSVData();
 
