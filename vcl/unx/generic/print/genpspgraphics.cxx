@@ -570,10 +570,7 @@ void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     Point aPos;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
-    {
-        sal_Int32 nAdvance = pGlyph->mnNewWidth / rLayout.GetUnitsPerPixel();
-        m_pPrinterGfx->DrawGlyph(aPos, *pGlyph, nAdvance);
-    }
+        m_pPrinterGfx->DrawGlyph(aPos, *pGlyph);
 }
 
 const FontCharMapRef GenPspGraphics::GetFontCharMap() const
