@@ -17,6 +17,7 @@ class Class1
         : m_field1("xxxx")
     // expected-error@-1 {{string field can be static const [loplugin:conststringfield]}}
     {
+        (void)m_field1;
     }
 };
 
@@ -27,6 +28,7 @@ class Class2
         : m_field1("xxxx")
     // expected-error@-1 {{string field can be static const [loplugin:conststringfield]}}
     {
+        (void)m_field1;
     }
 };
 
@@ -37,6 +39,7 @@ class Class4
     Class4()
         : m_field1("xxxx")
     {
+        (void)m_field1;
     }
 };
 
