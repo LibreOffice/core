@@ -3053,6 +3053,18 @@ SfxPoolItem* SvxRsidItem::Clone( SfxItemPool * ) const
     return new SvxRsidItem( *this );
 }
 
+bool SvxRsidItem::GetPresentation
+(
+    SfxItemPresentation /*ePres*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
+    OUString&           rText, const IntlWrapper& /*rIntl*/
+)   const
+{
+    rText.clear();
+    return false;
+}
+
 void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxRsidItem"));
