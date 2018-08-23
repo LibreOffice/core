@@ -65,8 +65,8 @@ GlyphSet::GetGlyphID (
                       sal_Int32* nOutGlyphSetID
                      )
 {
-    if (LookupGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID))
-           AddGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID);
+    if (!LookupGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID))
+        AddGlyphID(nGlyph, nOutGlyphID, nOutGlyphSetID);
 }
 
 bool
