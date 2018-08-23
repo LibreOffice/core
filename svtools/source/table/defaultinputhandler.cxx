@@ -89,6 +89,8 @@ namespace svt { namespace table
             bool handled = false;
             for (auto const& mouseFunction : i_impl.aMouseFunctions)
             {
+                if (handled)
+                    break;
                 if (mouseFunction == i_impl.pActiveFunction)
                     // we already invoked this function
                     continue;
