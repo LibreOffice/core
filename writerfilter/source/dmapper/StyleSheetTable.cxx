@@ -911,13 +911,6 @@ uno::Sequence< OUString > PropValVector::getNames()
 
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
-    if (!m_pImpl->m_bIsNewDoc)
-    {
-        // tdf#72942: do not import styles from document being inserted,
-        // while they corrupts original styles in master document
-        return;
-    }
-
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
