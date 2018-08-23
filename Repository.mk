@@ -983,6 +983,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_reem \
 		fonts_sourcecode \
 		fonts_sourcesans \
+		fonts_sourceserif \
 		fonts_scheherazade \
 	) \
 ))
