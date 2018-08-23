@@ -177,21 +177,9 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
 }
 
 
-size_t SvxNumberFormatShell::GetUpdateDataCount() const
+std::vector<sal_uInt32> const & SvxNumberFormatShell::GetUpdateData() const
 {
-    return aDelList.size();
-}
-
-
-void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize )
-{
-    const size_t nListSize = aDelList.size();
-
-    DBG_ASSERT( pDelArray && ( nSize == nListSize ), "Array not initialised!" );
-
-    if ( pDelArray && ( nSize == nListSize ) )
-        for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); it != aDelList.end(); ++it )
-            *pDelArray++ = *it;
+    return aDelList;
 }
 
 

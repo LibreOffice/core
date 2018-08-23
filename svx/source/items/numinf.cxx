@@ -26,9 +26,7 @@
     pFormatter      ( pNum ),           \
     eValueType      ( eVal ),           \
     aStringVal      ( rStr ),           \
-    nDoubleVal      ( nDouble ),        \
-    pDelFormatArr   ( nullptr ),           \
-    nDelCount       ( 0 )
+    nDoubleVal      ( nDouble )        \
 
 SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 
@@ -83,17 +81,8 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     eValueType   ( rItem.eValueType ),
     aStringVal   ( rItem.aStringVal ),
     nDoubleVal   ( rItem.nDoubleVal ),
-    pDelFormatArr( nullptr ),
-    nDelCount    ( rItem.nDelCount )
-
+    mvDelFormats( rItem.mvDelFormats )
 {
-    if ( rItem.nDelCount > 0 )
-    {
-        pDelFormatArr.reset( new sal_uInt32[ rItem.nDelCount ] );
-
-        for ( sal_uInt32 i = 0; i < rItem.nDelCount; ++i )
-            pDelFormatArr[i] = rItem.pDelFormatArr[i];
-    }
 }
 
 
@@ -121,30 +110,11 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 
     const SvxNumberInfoItem& rOther = static_cast<const SvxNumberInfoItem&>(rItem);
 
-    bool bEqual = false;
-
-    if ( nDelCount == rOther.nDelCount )
-    {
-        if ( nDelCount > 0 )
-        {
-            if ( pDelFormatArr != nullptr && rOther.pDelFormatArr != nullptr )
-            {
-                bEqual = true;
-
-                for ( sal_uInt32 i = 0; i < nDelCount && bEqual; ++i )
-                    bEqual = ( pDelFormatArr[i] == rOther.pDelFormatArr[i] );
-            }
-        }
-        else if ( nDelCount == 0 )
-            bEqual = ( pDelFormatArr == nullptr && rOther.pDelFormatArr == nullptr );
-
-        bEqual = bEqual &&
-                 pFormatter == rOther.pFormatter &&
-                 eValueType == rOther.eValueType &&
-                 nDoubleVal == rOther.nDoubleVal &&
-                 aStringVal == rOther.aStringVal;
-    }
-    return bEqual;
+    return mvDelFormats == rOther.mvDelFormats &&
+           pFormatter == rOther.pFormatter &&
+           eValueType == rOther.eValueType &&
+           nDoubleVal == rOther.nDoubleVal &&
+           aStringVal == rOther.aStringVal;
 }
 
 
@@ -154,23 +124,9 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 }
 
 
-void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
-                                           const sal_uInt32 nCount )
+void SvxNumberInfoItem::SetDelFormats( std::vector<sal_uInt32> const & aData )
 {
-    pDelFormatArr.reset();
-
-    nDelCount = nCount;
-
-    if ( nCount > 0 )
-    {
-        pDelFormatArr.reset( new sal_uInt32[ nCount ] );
-
-        if ( pData != nullptr )
-        {
-            for ( sal_uInt32 i = 0; i < nCount; ++i )
-                pDelFormatArr[i] = pData[i];
-        }
-    }
+    mvDelFormats = aData;
 }
 
 
