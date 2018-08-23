@@ -256,8 +256,7 @@ public:
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawGlyph(const Point& rPoint,
-                              sal_GlyphId aGlyphId,
-                              sal_Int32 nDelta);
+                              sal_GlyphId aGlyphId);
 public:
     PrinterGfx();
     ~PrinterGfx();
@@ -336,8 +335,7 @@ public:
     { maTextColor = rTextColor; }
 
     void            DrawGlyph(const Point& rPoint,
-                              const GlyphItem& rGlyph,
-                              sal_Int32 nDelta);
+                              const GlyphItem& rGlyph);
 
 };
 
