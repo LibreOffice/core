@@ -174,8 +174,7 @@ GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
 
 void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
                          const Point& rPoint,
-                         const sal_GlyphId nGlyphId,
-                         const sal_Int32 nDelta)
+                         const sal_GlyphId nGlyphId)
 {
     unsigned char nGlyphID;
     sal_Int32 nGlyphSetID;
@@ -183,14 +182,10 @@ void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
     // convert to font glyph id and font subset
     GetGlyphID (nGlyphId, &nGlyphID, &nGlyphSetID);
 
-    // show the text using the PrinterGfx text api
-    Point aPoint = rPoint;
-    aPoint.Move (nDelta, 0);
-
     OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
 
     rGfx.PSSetFont  (aGlyphSetName, RTL_TEXTENCODING_DONTKNOW);
-    rGfx.PSMoveTo   (aPoint);
+    rGfx.PSMoveTo   (rPoint);
     rGfx.PSShowGlyph(nGlyphID);
 }
 
