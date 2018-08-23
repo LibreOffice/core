@@ -76,6 +76,7 @@
             <path refid="test.classpath" if:set="has.test.classpath"/>
             <pathelement location="${idl.classes.build.dir}"/>
             <pathelement location="${OOO_JUNIT_JAR}"/>
+            <pathelement location="${HAMCREST_CORE_JAR}" if:set="HAMCREST_CORE_JAR"/>
         </path>
 
         <local name="has.idl.files"/>
