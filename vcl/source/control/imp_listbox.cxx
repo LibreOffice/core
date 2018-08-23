@@ -2683,18 +2683,16 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             if (bHasFocus && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
             {
                 if ( !ImplGetSVData()->maNWFData.mbNoFocusRects )
+                {
                     rRenderContext.SetFillColor( rStyleSettings.GetHighlightColor() );
+                    rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                }
                 else
                 {
                     rRenderContext.SetLineColor();
                     rRenderContext.SetFillColor();
+                    rRenderContext.SetTextColor( rStyleSettings.GetFieldTextColor() );
                 }
-                Color aColor;
-                if( bNativeOK && (nState & ControlState::ROLLOVER) )
-                    aColor = rStyleSettings.GetFieldRolloverTextColor();
-                else
-                    aColor = rStyleSettings.GetFieldTextColor();
-                rRenderContext.SetTextColor( aColor );
                 rRenderContext.DrawRect( maFocusRect );
             }
             else
