@@ -380,7 +380,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
-
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
             {
                 SvtScriptType nScript = pTableView->GetSelectedScriptType();

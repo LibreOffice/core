@@ -178,6 +178,7 @@ interface BaseText
 
     SID_CHARMAP_CONTROL
     [
+        ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

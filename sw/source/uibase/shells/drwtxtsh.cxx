@@ -383,6 +383,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             rReq.Done();
         }
         break;
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
     {  // Insert special character
             InsertSymbol(rReq);

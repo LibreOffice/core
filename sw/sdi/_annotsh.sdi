@@ -186,6 +186,7 @@ interface _Annotation
 
     SID_CHARMAP_CONTROL
     [
+        ExecMethod = Exec ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 

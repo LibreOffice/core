@@ -518,7 +518,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
         {
             InsertSymbol( rReq );

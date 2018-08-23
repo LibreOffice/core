@@ -1444,6 +1444,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERT_ZWNBSP :
         case SID_INSERT_ZWSP:
         case SID_CHARMAP:
+        case SID_CHARMAP_CONTROL:
         {
             SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
             Cancel();

@@ -72,12 +72,13 @@ rtl::Reference<FuPoor> FuBullet::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 
 void FuBullet::DoExecute( SfxRequest& rReq )
 {
-    if( rReq.GetSlot() == SID_CHARMAP )
+    sal_uInt16 nSlot( rReq.GetSlot() );
+    if( SID_CHARMAP == nSlot || SID_CHARMAP_CONTROL == nSlot )
         InsertSpecialCharacter(rReq);
     else
     {
         sal_Unicode cMark = 0;
-        switch( rReq.GetSlot() )
+        switch( nSlot )
         {
             case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
             case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;

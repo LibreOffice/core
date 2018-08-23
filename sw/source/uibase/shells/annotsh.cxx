@@ -425,6 +425,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             rReq.Done();
             break;
         }
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
         {
             if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)

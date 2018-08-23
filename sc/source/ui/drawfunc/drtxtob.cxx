@@ -206,7 +206,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 pOutView->SetSelection( aSel );
             }
             break;
-
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
             {
                 const SvxFontItem& rItem = pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);

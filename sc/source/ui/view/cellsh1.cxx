@@ -2390,7 +2390,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pData->GetDocShell()->GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
             }
             break;
-
+        case SID_CHARMAP_CONTROL:
         case SID_CHARMAP:
             if( pReqArgs != nullptr )
             {
