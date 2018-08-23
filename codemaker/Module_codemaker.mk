@@ -21,18 +21,24 @@
 
 
 
-PRJ := ..$/..
-PRJNAME := codemaker
-TARGET := commoncpp
+$(eval $(call gb_Module_Module,codemaker))
 
-ENABLE_EXCEPTIONS := TRUE
+$(eval $(call gb_Module_add_targets,codemaker,\
+	Executable_cppumaker \
+	Executable_javamaker \
+	StaticLibrary_codemaker \
+	StaticLibrary_commoncpp \
+	StaticLibrary_commonjava \
+	Package_inc \
+))
 
-.INCLUDE: settings.mk
+ifeq ($(ENABLE_UNIT_TESTS),YES)
+ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
+$(eval $(call gb_Module_add_targets,codemaker,\
+	Ant_codemaker_test \
+	GoogleTest_cppumaker \
+))
+endif
+endif
 
-SLOFILES = $(SLO)$/commoncpp.obj
-
-LIB1TARGET=$(LB)$/$(TARGET).lib
-LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-LIB1OBJFILES=$(SLOFILES)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

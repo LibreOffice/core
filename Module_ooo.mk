@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     basegfx \
     binaryurp \
     canvas \
+    codemaker \
     comphelper \
     configmgr \
     cosv \

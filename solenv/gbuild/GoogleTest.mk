@@ -97,6 +97,7 @@ $(eval $(foreach method,\
 	add_libs \
 	set_library_path_flags \
 	add_api \
+	set_private_api \
 	add_linked_libs \
 	add_linked_static_libs \
 	use_external \

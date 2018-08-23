@@ -21,41 +21,7 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Ant_Ant,jurt,$(SRCDIR)/codemaker/test/javamaker/build.xml))
 
-PRJNAME=codemaker
-TARGET=cppumaker
-TARGETTYPE=CUI
-LIBTARGET=NO
+# vim: set noet sw=4 ts=4:
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/codemaker.pmk
-
-# --- Files --------------------------------------------------------
-
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-CFLAGSNOOPT+=-Ob0
-.ENDIF
-.ENDIF
-
-OBJFILES=   $(OBJ)$/cppumaker.obj	\
-            $(OBJ)$/cppuoptions.obj \
-            $(OBJ)$/cpputype.obj \
-            $(OBJ)$/dumputils.obj \
-            $(OBJ)$/includes.obj
-
-NOOPTFILES= \
-            $(OBJ)$/cpputype.obj
-
-APP1TARGET= $(TARGET)
-APP1RPATH=SDK
-APP1OBJS=   $(OBJFILES)
-
-APP1DEPN= $(OUT)$/lib$/$(CODEMAKERLIBDEPN) $(OUT)$/lib$/$(COMMONCPPLIBDEPN)
-APP1STDLIBS= $(SALLIB) $(SALHELPERLIB) $(REGLIB) $(CODEMAKERLIBST) $(COMMONCPPLIBST)
-
-.INCLUDE :  target.mk

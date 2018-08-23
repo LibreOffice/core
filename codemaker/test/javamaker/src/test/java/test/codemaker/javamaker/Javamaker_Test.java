@@ -30,8 +30,9 @@ import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XNamingService;
-import complexlib.ComplexTestCase;
 import java.util.EventListener;
+import org.junit.Before;
+import org.junit.Test;
 import test.codemaker.javamaker.Enum1;
 import test.codemaker.javamaker.Enum2;
 import test.codemaker.javamaker.PolyStruct;
@@ -74,155 +75,156 @@ import test.codemaker.javamaker.services.service_volatile;
 import test.codemaker.javamaker.services.service_while;
 import test.codemaker.javamaker.singleton_abstract;
 
-public final class Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "testEnum1", "testEnum2", "testPolyStruct", "testEmptyStruct2",
-            "testFullStruct2", "testXEventListener", "testS1", "testS2",
-            "testKeywordServices", "testSingletons" };
-    }
+import static org.junit.Assert.*;
 
+public final class Javamaker_Test {
+    @Before
     public void before() throws Exception {
         context = Bootstrap.createInitialComponentContext(null);
     }
 
+    @Test
     public void testEnum1() {
-        assure(Enum1.VALUE1.getValue() == -100);
-        assure(Enum1.VALUE2.getValue() == 100);
-        assure(Enum1.VALUE1_value == -100);
-        assure(Enum1.VALUE2_value == 100);
-        assure(Enum1.getDefault() == Enum1.VALUE1);
-        assure(Enum1.fromInt(-101) == null);
-        assure(Enum1.fromInt(-100) == Enum1.VALUE1);
-        assure(Enum1.fromInt(-99) == null);
-        assure(Enum1.fromInt(0) == null);
-        assure(Enum1.fromInt(99) == null);
-        assure(Enum1.fromInt(100) == Enum1.VALUE2);
-        assure(Enum1.fromInt(101) == null);
+        assertTrue(Enum1.VALUE1.getValue() == -100);
+        assertTrue(Enum1.VALUE2.getValue() == 100);
+        assertTrue(Enum1.VALUE1_value == -100);
+        assertTrue(Enum1.VALUE2_value == 100);
+        assertTrue(Enum1.getDefault() == Enum1.VALUE1);
+        assertTrue(Enum1.fromInt(-101) == null);
+        assertTrue(Enum1.fromInt(-100) == Enum1.VALUE1);
+        assertTrue(Enum1.fromInt(-99) == null);
+        assertTrue(Enum1.fromInt(0) == null);
+        assertTrue(Enum1.fromInt(99) == null);
+        assertTrue(Enum1.fromInt(100) == Enum1.VALUE2);
+        assertTrue(Enum1.fromInt(101) == null);
     }
 
+    @Test
     public void testEnum2() {
-        assure(Enum2.VALUE0.getValue() == 0);
-        assure(Enum2.VALUE1.getValue() == 1);
-        assure(Enum2.VALUE2.getValue() == 2);
-        assure(Enum2.VALUE4.getValue() == 4);
-        assure(Enum2.VALUE0_value == 0);
-        assure(Enum2.VALUE1_value == 1);
-        assure(Enum2.VALUE2_value == 2);
-        assure(Enum2.VALUE4_value == 4);
-        assure(Enum2.getDefault() == Enum2.VALUE0);
-        assure(Enum2.fromInt(-1) == null);
-        assure(Enum2.fromInt(0) == Enum2.VALUE0);
-        assure(Enum2.fromInt(1) == Enum2.VALUE1);
-        assure(Enum2.fromInt(2) == Enum2.VALUE2);
-        assure(Enum2.fromInt(3) == null);
-        assure(Enum2.fromInt(4) == Enum2.VALUE4);
-        assure(Enum2.fromInt(5) == null);
+        assertTrue(Enum2.VALUE0.getValue() == 0);
+        assertTrue(Enum2.VALUE1.getValue() == 1);
+        assertTrue(Enum2.VALUE2.getValue() == 2);
+        assertTrue(Enum2.VALUE4.getValue() == 4);
+        assertTrue(Enum2.VALUE0_value == 0);
+        assertTrue(Enum2.VALUE1_value == 1);
+        assertTrue(Enum2.VALUE2_value == 2);
+        assertTrue(Enum2.VALUE4_value == 4);
+        assertTrue(Enum2.getDefault() == Enum2.VALUE0);
+        assertTrue(Enum2.fromInt(-1) == null);
+        assertTrue(Enum2.fromInt(0) == Enum2.VALUE0);
+        assertTrue(Enum2.fromInt(1) == Enum2.VALUE1);
+        assertTrue(Enum2.fromInt(2) == Enum2.VALUE2);
+        assertTrue(Enum2.fromInt(3) == null);
+        assertTrue(Enum2.fromInt(4) == Enum2.VALUE4);
+        assertTrue(Enum2.fromInt(5) == null);
     }
 
+    @Test
     public void testPolyStruct() {
         PolyStruct s = new PolyStruct();
-        assure(s.member1 == null);
-        assure(s.member2 == 0);
+        assertTrue(s.member1 == null);
+        assertTrue(s.member2 == 0);
         s = new PolyStruct("ABC", 5);
-        assure(s.member1.equals("ABC"));
-        assure(s.member2 == 5);
+        assertTrue(s.member1.equals("ABC"));
+        assertTrue(s.member2 == 5);
     }
 
+    @Test
     public void testEmptyStruct2() {
         Struct2 s = new Struct2();
-        assure(s.p1 == false);
-        assure(s.p2 == 0);
-        assure(s.p3 == 0);
-        assure(s.p4 == 0);
-        assure(s.p5 == 0);
-        assure(s.p6 == 0);
-        assure(s.p7 == 0L);
-        assure(s.p8 == 0L);
-        assure(s.p9 == 0.0f);
-        assure(s.p10 == 0.0);
-        assure(s.p11 == '\u0000');
-        assure(s.p12.equals(""));
-        assure(s.p13.equals(Type.VOID));
-        assure(s.p14.equals(Any.VOID));
-        assure(s.p15 == Enum2.VALUE0);
-        assure(s.p16.member1 == 0);
-        assure(s.p17 == null);
-        assure(s.p18 == null);
-        assure(s.t1 == false);
-        assure(s.t2 == 0);
-        assure(s.t3 == 0);
-        assure(s.t4 == 0);
-        assure(s.t5 == 0);
-        assure(s.t6 == 0);
-        assure(s.t7 == 0L);
-        assure(s.t8 == 0L);
-        assure(s.t9 == 0.0f);
-        assure(s.t10 == 0.0);
-        assure(s.t11 == '\u0000');
-        assure(s.t12.equals(""));
-        assure(s.t13.equals(Type.VOID));
-        assure(s.t14.equals(Any.VOID));
-        assure(s.t15 == Enum2.VALUE0);
-        assure(s.t16.member1 == 0);
-        assure(s.t17 == null);
-        assure(s.t18 == null);
-        assure(s.a1.length == 0);
-        assure(s.a2.length == 0);
-        assure(s.a3.length == 0);
-        assure(s.a4.length == 0);
-        assure(s.a5.length == 0);
-        assure(s.a6.length == 0);
-        assure(s.a7.length == 0);
-        assure(s.a8.length == 0);
-        assure(s.a9.length == 0);
-        assure(s.a10.length == 0);
-        assure(s.a11.length == 0);
-        assure(s.a12.length == 0);
-        assure(s.a13.length == 0);
-        assure(s.a14.length == 0);
-        assure(s.a15.length == 0);
-        assure(s.a16.length == 0);
-        assure(s.a17.length == 0);
-        assure(s.a18.length == 0);
-        assure(s.aa1.length == 0);
-        assure(s.aa2.length == 0);
-        assure(s.aa3.length == 0);
-        assure(s.aa4.length == 0);
-        assure(s.aa5.length == 0);
-        assure(s.aa6.length == 0);
-        assure(s.aa7.length == 0);
-        assure(s.aa8.length == 0);
-        assure(s.aa9.length == 0);
-        assure(s.aa10.length == 0);
-        assure(s.aa11.length == 0);
-        assure(s.aa12.length == 0);
-        assure(s.aa13.length == 0);
-        assure(s.aa14.length == 0);
-        assure(s.aa15.length == 0);
-        assure(s.aa16.length == 0);
-        assure(s.aa17.length == 0);
-        assure(s.aa18.length == 0);
-        assure(s.at1.length == 0);
-        assure(s.at2.length == 0);
-        assure(s.at3.length == 0);
-        assure(s.at4.length == 0);
-        assure(s.at5.length == 0);
-        assure(s.at6.length == 0);
-        assure(s.at7.length == 0);
-        assure(s.at8.length == 0);
-        assure(s.at9.length == 0);
-        assure(s.at10.length == 0);
-        assure(s.at11.length == 0);
-        assure(s.at12.length == 0);
-        assure(s.at13.length == 0);
-        assure(s.at14.length == 0);
-        assure(s.at15.length == 0);
-        assure(s.at16.length == 0);
-        assure(s.at17.length == 0);
-        assure(s.at18.length == 0);
+        assertTrue(s.p1 == false);
+        assertTrue(s.p2 == 0);
+        assertTrue(s.p3 == 0);
+        assertTrue(s.p4 == 0);
+        assertTrue(s.p5 == 0);
+        assertTrue(s.p6 == 0);
+        assertTrue(s.p7 == 0L);
+        assertTrue(s.p8 == 0L);
+        assertTrue(s.p9 == 0.0f);
+        assertTrue(s.p10 == 0.0);
+        assertTrue(s.p11 == '\u0000');
+        assertTrue(s.p12.equals(""));
+        assertTrue(s.p13.equals(Type.VOID));
+        assertTrue(s.p14.equals(Any.VOID));
+        assertTrue(s.p15 == Enum2.VALUE0);
+        assertTrue(s.p16.member1 == 0);
+        assertTrue(s.p17 == null);
+        assertTrue(s.p18 == null);
+        assertTrue(s.t1 == false);
+        assertTrue(s.t2 == 0);
+        assertTrue(s.t3 == 0);
+        assertTrue(s.t4 == 0);
+        assertTrue(s.t5 == 0);
+        assertTrue(s.t6 == 0);
+        assertTrue(s.t7 == 0L);
+        assertTrue(s.t8 == 0L);
+        assertTrue(s.t9 == 0.0f);
+        assertTrue(s.t10 == 0.0);
+        assertTrue(s.t11 == '\u0000');
+        assertTrue(s.t12.equals(""));
+        assertTrue(s.t13.equals(Type.VOID));
+        assertTrue(s.t14.equals(Any.VOID));
+        assertTrue(s.t15 == Enum2.VALUE0);
+        assertTrue(s.t16.member1 == 0);
+        assertTrue(s.t17 == null);
+        assertTrue(s.t18 == null);
+        assertTrue(s.a1.length == 0);
+        assertTrue(s.a2.length == 0);
+        assertTrue(s.a3.length == 0);
+        assertTrue(s.a4.length == 0);
+        assertTrue(s.a5.length == 0);
+        assertTrue(s.a6.length == 0);
+        assertTrue(s.a7.length == 0);
+        assertTrue(s.a8.length == 0);
+        assertTrue(s.a9.length == 0);
+        assertTrue(s.a10.length == 0);
+        assertTrue(s.a11.length == 0);
+        assertTrue(s.a12.length == 0);
+        assertTrue(s.a13.length == 0);
+        assertTrue(s.a14.length == 0);
+        assertTrue(s.a15.length == 0);
+        assertTrue(s.a16.length == 0);
+        assertTrue(s.a17.length == 0);
+        assertTrue(s.a18.length == 0);
+        assertTrue(s.aa1.length == 0);
+        assertTrue(s.aa2.length == 0);
+        assertTrue(s.aa3.length == 0);
+        assertTrue(s.aa4.length == 0);
+        assertTrue(s.aa5.length == 0);
+        assertTrue(s.aa6.length == 0);
+        assertTrue(s.aa7.length == 0);
+        assertTrue(s.aa8.length == 0);
+        assertTrue(s.aa9.length == 0);
+        assertTrue(s.aa10.length == 0);
+        assertTrue(s.aa11.length == 0);
+        assertTrue(s.aa12.length == 0);
+        assertTrue(s.aa13.length == 0);
+        assertTrue(s.aa14.length == 0);
+        assertTrue(s.aa15.length == 0);
+        assertTrue(s.aa16.length == 0);
+        assertTrue(s.aa17.length == 0);
+        assertTrue(s.aa18.length == 0);
+        assertTrue(s.at1.length == 0);
+        assertTrue(s.at2.length == 0);
+        assertTrue(s.at3.length == 0);
+        assertTrue(s.at4.length == 0);
+        assertTrue(s.at5.length == 0);
+        assertTrue(s.at6.length == 0);
+        assertTrue(s.at7.length == 0);
+        assertTrue(s.at8.length == 0);
+        assertTrue(s.at9.length == 0);
+        assertTrue(s.at10.length == 0);
+        assertTrue(s.at11.length == 0);
+        assertTrue(s.at12.length == 0);
+        assertTrue(s.at13.length == 0);
+        assertTrue(s.at14.length == 0);
+        assertTrue(s.at15.length == 0);
+        assertTrue(s.at16.length == 0);
+        assertTrue(s.at17.length == 0);
+        assertTrue(s.at18.length == 0);
     }
 
+    @Test
     public void testFullStruct2() {
         //TODO:
         Struct2 s = new Struct2(
@@ -247,125 +249,127 @@ public final class Test extends ComplexTestCase {
             new char[0][], new String[0][], new Type[0][], new Object[0][],
             new Enum2[0][], new Struct1[0][], new Object[0][],
             new XNamingService[0][]);
-        assure(s.p1 == true);
-        assure(s.p2 == 1);
-        assure(s.p3 == 2);
-        assure(s.p4 == 3);
-        assure(s.p5 == 4);
-        assure(s.p6 == 5);
-        assure(s.p7 == 6L);
-        assure(s.p8 == 7L);
-        assure(s.p9 == 0.8f);
-        assure(s.p10 == 0.9);
-        assure(s.p11 == 'A');
-        assure(s.p12.equals("BCD"));
-        assure(s.p13.equals(Type.UNSIGNED_HYPER));
-        assure(s.p14.equals(new Integer(22)));
-        assure(s.p15 == Enum2.VALUE4);
-        assure(s.p16.member1 == 1);
-        assure(s.p17 == null);
-        assure(s.p18 == null);
-        assure(s.t1 == false);
-        assure(s.t2 == 0);
-        assure(s.t3 == 0);
-        assure(s.t4 == 0);
-        assure(s.t5 == 0);
-        assure(s.t6 == 0);
-        assure(s.t7 == 0L);
-        assure(s.t8 == 0L);
-        assure(s.t9 == 0.0f);
-        assure(s.t10 == 0.0);
-        assure(s.t11 == '\u0000');
-        assure(s.t12.equals(""));
-        assure(s.t13.equals(Type.VOID));
-        assure(s.t14.equals(Any.VOID));
-        assure(s.t15 == Enum2.VALUE0);
-        assure(s.t16.member1 == 0);
-        assure(s.t17 == null);
-        assure(s.t18 == null);
-        assure(s.a1.length == 2);
-        assure(s.a1[0] == false);
-        assure(s.a1[1] == true);
-        assure(s.a2.length == 2);
-        assure(s.a2[0] == 1);
-        assure(s.a2[1] == 2);
-        assure(s.a3.length == 0);
-        assure(s.a4.length == 0);
-        assure(s.a5.length == 0);
-        assure(s.a6.length == 0);
-        assure(s.a7.length == 0);
-        assure(s.a8.length == 0);
-        assure(s.a9.length == 0);
-        assure(s.a10.length == 0);
-        assure(s.a11.length == 0);
-        assure(s.a12.length == 0);
-        assure(s.a13.length == 0);
-        assure(s.a14.length == 0);
-        assure(s.a15.length == 0);
-        assure(s.a16.length == 2);
-        assure(s.a16[0].member1 == 1);
-        assure(s.a16[1].member1 == 2);
-        assure(s.a17.length == 0);
-        assure(s.a18.length == 0);
-        assure(s.aa1.length == 0);
-        assure(s.aa2.length == 0);
-        assure(s.aa3.length == 0);
-        assure(s.aa4.length == 0);
-        assure(s.aa5.length == 0);
-        assure(s.aa6.length == 0);
-        assure(s.aa7.length == 0);
-        assure(s.aa8.length == 0);
-        assure(s.aa9.length == 0);
-        assure(s.aa10.length == 0);
-        assure(s.aa11.length == 0);
-        assure(s.aa12.length == 0);
-        assure(s.aa13.length == 0);
-        assure(s.aa14.length == 0);
-        assure(s.aa15.length == 0);
-        assure(s.aa16.length == 0);
-        assure(s.aa17.length == 0);
-        assure(s.aa18.length == 0);
-        assure(s.at1.length == 0);
-        assure(s.at2.length == 0);
-        assure(s.at3.length == 0);
-        assure(s.at4.length == 0);
-        assure(s.at5.length == 0);
-        assure(s.at6.length == 0);
-        assure(s.at7.length == 0);
-        assure(s.at8.length == 0);
-        assure(s.at9.length == 0);
-        assure(s.at10.length == 0);
-        assure(s.at11.length == 0);
-        assure(s.at12.length == 0);
-        assure(s.at13.length == 0);
-        assure(s.at14.length == 0);
-        assure(s.at15.length == 0);
-        assure(s.at16.length == 0);
-        assure(s.at17.length == 0);
-        assure(s.at18.length == 0);
+        assertTrue(s.p1 == true);
+        assertTrue(s.p2 == 1);
+        assertTrue(s.p3 == 2);
+        assertTrue(s.p4 == 3);
+        assertTrue(s.p5 == 4);
+        assertTrue(s.p6 == 5);
+        assertTrue(s.p7 == 6L);
+        assertTrue(s.p8 == 7L);
+        assertTrue(s.p9 == 0.8f);
+        assertTrue(s.p10 == 0.9);
+        assertTrue(s.p11 == 'A');
+        assertTrue(s.p12.equals("BCD"));
+        assertTrue(s.p13.equals(Type.UNSIGNED_HYPER));
+        assertTrue(s.p14.equals(new Integer(22)));
+        assertTrue(s.p15 == Enum2.VALUE4);
+        assertTrue(s.p16.member1 == 1);
+        assertTrue(s.p17 == null);
+        assertTrue(s.p18 == null);
+        assertTrue(s.t1 == false);
+        assertTrue(s.t2 == 0);
+        assertTrue(s.t3 == 0);
+        assertTrue(s.t4 == 0);
+        assertTrue(s.t5 == 0);
+        assertTrue(s.t6 == 0);
+        assertTrue(s.t7 == 0L);
+        assertTrue(s.t8 == 0L);
+        assertTrue(s.t9 == 0.0f);
+        assertTrue(s.t10 == 0.0);
+        assertTrue(s.t11 == '\u0000');
+        assertTrue(s.t12.equals(""));
+        assertTrue(s.t13.equals(Type.VOID));
+        assertTrue(s.t14.equals(Any.VOID));
+        assertTrue(s.t15 == Enum2.VALUE0);
+        assertTrue(s.t16.member1 == 0);
+        assertTrue(s.t17 == null);
+        assertTrue(s.t18 == null);
+        assertTrue(s.a1.length == 2);
+        assertTrue(s.a1[0] == false);
+        assertTrue(s.a1[1] == true);
+        assertTrue(s.a2.length == 2);
+        assertTrue(s.a2[0] == 1);
+        assertTrue(s.a2[1] == 2);
+        assertTrue(s.a3.length == 0);
+        assertTrue(s.a4.length == 0);
+        assertTrue(s.a5.length == 0);
+        assertTrue(s.a6.length == 0);
+        assertTrue(s.a7.length == 0);
+        assertTrue(s.a8.length == 0);
+        assertTrue(s.a9.length == 0);
+        assertTrue(s.a10.length == 0);
+        assertTrue(s.a11.length == 0);
+        assertTrue(s.a12.length == 0);
+        assertTrue(s.a13.length == 0);
+        assertTrue(s.a14.length == 0);
+        assertTrue(s.a15.length == 0);
+        assertTrue(s.a16.length == 2);
+        assertTrue(s.a16[0].member1 == 1);
+        assertTrue(s.a16[1].member1 == 2);
+        assertTrue(s.a17.length == 0);
+        assertTrue(s.a18.length == 0);
+        assertTrue(s.aa1.length == 0);
+        assertTrue(s.aa2.length == 0);
+        assertTrue(s.aa3.length == 0);
+        assertTrue(s.aa4.length == 0);
+        assertTrue(s.aa5.length == 0);
+        assertTrue(s.aa6.length == 0);
+        assertTrue(s.aa7.length == 0);
+        assertTrue(s.aa8.length == 0);
+        assertTrue(s.aa9.length == 0);
+        assertTrue(s.aa10.length == 0);
+        assertTrue(s.aa11.length == 0);
+        assertTrue(s.aa12.length == 0);
+        assertTrue(s.aa13.length == 0);
+        assertTrue(s.aa14.length == 0);
+        assertTrue(s.aa15.length == 0);
+        assertTrue(s.aa16.length == 0);
+        assertTrue(s.aa17.length == 0);
+        assertTrue(s.aa18.length == 0);
+        assertTrue(s.at1.length == 0);
+        assertTrue(s.at2.length == 0);
+        assertTrue(s.at3.length == 0);
+        assertTrue(s.at4.length == 0);
+        assertTrue(s.at5.length == 0);
+        assertTrue(s.at6.length == 0);
+        assertTrue(s.at7.length == 0);
+        assertTrue(s.at8.length == 0);
+        assertTrue(s.at9.length == 0);
+        assertTrue(s.at10.length == 0);
+        assertTrue(s.at11.length == 0);
+        assertTrue(s.at12.length == 0);
+        assertTrue(s.at13.length == 0);
+        assertTrue(s.at14.length == 0);
+        assertTrue(s.at15.length == 0);
+        assertTrue(s.at16.length == 0);
+        assertTrue(s.at17.length == 0);
+        assertTrue(s.at18.length == 0);
     }
 
+    @Test
     public void testXEventListener() {
-        assure(EventListener.class.isAssignableFrom(XEventListener.class));
+        assertTrue(EventListener.class.isAssignableFrom(XEventListener.class));
     }
 
+    @Test
     public void testS1() throws com.sun.star.uno.Exception {
         //TODO:
         try {
             S1.create1(context);
-            failed("S1.create1");
+            fail("S1.create1");
         } catch (DeploymentException e) {}
         try {
             S1.create2(context, new Any[0]);
-            failed("S1.create2");
+            fail("S1.create2");
         } catch (com.sun.star.uno.Exception e) {}
         try {
             S1.create3(context, new Any[0]);
-            failed("S1.create3");
+            fail("S1.create3");
         } catch (DeploymentException e) {}
         try {
             S1.create4(context, 0, 0, 0);
-            failed("S1.create4");
+            fail("S1.create4");
         } catch (DeploymentException e) {}
         try {
             S1.create5(
@@ -389,165 +393,168 @@ public final class Test extends ComplexTestCase {
                 new char[0][], new String[0][], new Type[0][], new Object[0][],
                 new Enum2[0][], new Struct1[0][], new Object[0][],
                 new XNamingService[0][]);
-            failed("S1.create4");
+            fail("S1.create4");
         } catch (DeploymentException e) {}
     }
 
+    @Test
     public void testS2() {
         //TODO
     }
 
+    @Test
     public void testKeywordServices() {
         try {
             service_abstract.method_abstract(context, 0);
-            failed("service_abstract.method_abstract");
+            fail("service_abstract.method_abstract");
         } catch (DeploymentException e) {}
         try {
             service_assert.method_assert(context, 0);
-            failed("service_assert.method_assert");
+            fail("service_assert.method_assert");
         } catch (DeploymentException e) {}
         try {
             service_break.method_break(context, 0);
-            failed("service_break.method_break");
+            fail("service_break.method_break");
         } catch (DeploymentException e) {}
         try {
             service_catch.method_catch(context, 0);
-            failed("service_catch.method_catch");
+            fail("service_catch.method_catch");
         } catch (DeploymentException e) {}
         try {
             service_class.method_class(context, 0);
-            failed("service_class.method_class");
+            fail("service_class.method_class");
         } catch (DeploymentException e) {}
         try {
             service_continue.method_continue(context, 0);
-            failed("service_continue.method_continue");
+            fail("service_continue.method_continue");
         } catch (DeploymentException e) {}
         try {
             service_do.method_do(context, 0);
-            failed("service_do.method_do");
+            fail("service_do.method_do");
         } catch (DeploymentException e) {}
         try {
             service_else.method_else(context, 0);
-            failed("service_else.method_else");
+            fail("service_else.method_else");
         } catch (DeploymentException e) {}
         try {
             service_extends.method_extends(context, 0);
-            failed("service_extends.method_extends");
+            fail("service_extends.method_extends");
         } catch (DeploymentException e) {}
         try {
             service_final.method_final(context, 0);
-            failed("service_final.method_final");
+            fail("service_final.method_final");
         } catch (DeploymentException e) {}
         try {
             service_finally.method_finally(context, 0);
-            failed("service_finally.method_finally");
+            fail("service_finally.method_finally");
         } catch (DeploymentException e) {}
         try {
             service_for.method_for(context, 0);
-            failed("service_for.method_for");
+            fail("service_for.method_for");
         } catch (DeploymentException e) {}
         try {
             service_goto.method_goto(context, 0);
-            failed("service_goto.method_goto");
+            fail("service_goto.method_goto");
         } catch (DeploymentException e) {}
         try {
             service_if.method_if(context, 0);
-            failed("service_if.method_if");
+            fail("service_if.method_if");
         } catch (DeploymentException e) {}
         try {
             service_implements.method_implements(context, 0);
-            failed("service_implements.method_implements");
+            fail("service_implements.method_implements");
         } catch (DeploymentException e) {}
         try {
             service_import.method_import(context, 0);
-            failed("service_import.method_import");
+            fail("service_import.method_import");
         } catch (DeploymentException e) {}
         try {
             service_instanceof.method_instanceof(context, 0);
-            failed("service_instanceof.method_instanceof");
+            fail("service_instanceof.method_instanceof");
         } catch (DeploymentException e) {}
         try {
             service_int.method_int(context, 0);
-            failed("service_int.method_int");
+            fail("service_int.method_int");
         } catch (DeploymentException e) {}
         try {
             service_native.method_native(context, 0);
-            failed("service_native.method_native");
+            fail("service_native.method_native");
         } catch (DeploymentException e) {}
         try {
             service_new.method_new(context, 0);
-            failed("service_new.method_new");
+            fail("service_new.method_new");
         } catch (DeploymentException e) {}
         try {
             service_package.method_package(context, 0);
-            failed("service_package.method_package");
+            fail("service_package.method_package");
         } catch (DeploymentException e) {}
         try {
             service_private.method_private(context, 0);
-            failed("service_private.method_private");
+            fail("service_private.method_private");
         } catch (DeploymentException e) {}
         try {
             service_protected.method_protected(context, 0);
-            failed("service_protected.method_protected");
+            fail("service_protected.method_protected");
         } catch (DeploymentException e) {}
         try {
             service_public.method_public(context, 0);
-            failed("service_public.method_public");
+            fail("service_public.method_public");
         } catch (DeploymentException e) {}
         try {
             service_return.method_return(context, 0);
-            failed("service_return.method_return");
+            fail("service_return.method_return");
         } catch (DeploymentException e) {}
         try {
             service_static.method_static(context, 0);
-            failed("service_static.method_static");
+            fail("service_static.method_static");
         } catch (DeploymentException e) {}
         try {
             service_strictfp.method_strictfp(context, 0);
-            failed("service_strictfp.method_strictfp");
+            fail("service_strictfp.method_strictfp");
         } catch (DeploymentException e) {}
         try {
             service_super.method_super(context, 0);
-            failed("service_super.method_super");
+            fail("service_super.method_super");
         } catch (DeploymentException e) {}
         try {
             service_synchronized.method_synchronized(context, 0);
-            failed("service_synchronized.method_synchronized");
+            fail("service_synchronized.method_synchronized");
         } catch (DeploymentException e) {}
         try {
             service_this.method_this(context, 0);
-            failed("service_this.method_this");
+            fail("service_this.method_this");
         } catch (DeploymentException e) {}
         try {
             service_throw.method_throw(context, 0);
-            failed("service_throw.method_throw");
+            fail("service_throw.method_throw");
         } catch (DeploymentException e) {}
         try {
             service_throws.method_throws(context, 0);
-            failed("service_throws.method_throws");
+            fail("service_throws.method_throws");
         } catch (DeploymentException e) {}
         try {
             service_try.method_try(context, 0);
-            failed("service_try.method_try");
+            fail("service_try.method_try");
         } catch (DeploymentException e) {}
         try {
             service_volatile.method_volatile(context, 0);
-            failed("service_volatile.method_volatile");
+            fail("service_volatile.method_volatile");
         } catch (DeploymentException e) {}
         try {
             service_while.method_while(context, 0);
-            failed("service_while.method_while");
+            fail("service_while.method_while");
         } catch (DeploymentException e) {}
     }
 
+    @Test
     public void testSingletons() {
         try {
             S4.get(context);
-            failed("S4");
+            fail("S4");
         } catch (DeploymentException e) {}
         try {
             singleton_abstract.get(context);
-            failed("singleton_abstract");
+            fail("singleton_abstract");
         } catch (DeploymentException e) {}
     }
 

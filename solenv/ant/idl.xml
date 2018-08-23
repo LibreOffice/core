@@ -41,6 +41,12 @@
         <build-idl unless:set="idl.uptodate"/>
     </target>
 
+    <target name="unoprivateapi-cppumaker">
+        <property name="idl.cppumaker.flag" location="${unoprivateapi.outdir}/idl.cppumaker.flag"/>
+        <check-idl-cppumaker/>
+        <build-idl-cppumaker unless:set="idl.cppumaker.uptodate"/>
+    </target>
+
     <macrodef name="check-idl">
         <sequential>
             <local name="idl.files.exist"/>
@@ -48,21 +54,35 @@
                 <resourcecount refid="idl.files" when="greater" count="0"/>
             </condition>
 
-            <local name="idl.files.union"/>
-            <union id="idl.files.union" if:set="idl.files.exist">
-                <filelist refid="idl.files"/>
-            </union>
             <uptodate property="idl.uptodate" targetfile="${idl.javamaker.flag}" if:set="idl.files.exist">
-                <srcresources refid="idl.files.union"/>
+                <srcresources>
+                    <resources refid="idl.files"/>
+                </srcresources>
             </uptodate>
             <property name="idl.uptodate" value="true" unless:set="idl.files.exist"/>
         </sequential>
     </macrodef>
 
+    <macrodef name="check-idl-cppumaker">
+        <sequential>
+            <uptodate property="idl.cppumaker.uptodate" targetfile="${idl.cppumaker.flag}">
+                <srcresources>
+                    <file name="${unoprivateapi.idl}"/>
+                </srcresources>
+            </uptodate>
+        </sequential>
+    </macrodef>
+
     <macrodef name="build-idl">
         <sequential>
-            <idlc/>
-            <regmerge/>
+            <idlc urdDirectory="${idl.urd.build.dir}">
+                <idlFiles>
+                    <resources refid="idl.files"/>
+                </idlFiles>
+            </idlc>
+            <regmerge
+                urdDirectory="${idl.urd.build.dir}"
+                rdbDirectory="${idl.rdb.build.dir}"/>
             <javamaker
                 inputRdb="${idl.rdb.build.dir}/registry.rdb"
                 outputDirectory="${idl.classes.build.dir}"
@@ -72,33 +92,56 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="idlc">
+    <macrodef name="build-idl-cppumaker">
         <sequential>
-            <mkdir dir="${idl.urd.build.dir}"/>
+            <idlc urdDirectory="${unoprivateapi.outdir}/urd">
+                <idlFiles>
+                    <file name="${unoprivateapi.idl}"/>
+                </idlFiles>
+            </idlc>
+            <regmerge
+                urdDirectory="${unoprivateapi.outdir}/urd"
+                rdbDirectory="${unoprivateapi.outdir}/rdb"/>
+            <cppumaker
+                inputRdb="${unoprivateapi.outdir}/rdb/registry.rdb"
+                outputDirectory="${unoprivateapi.outdir}/inc"/>
+            <touch file="${idl.cppumaker.flag}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="idlc">
+        <element name="idlFiles"/>
+        <attribute name="urdDirectory"/>
+        <sequential>
+            <mkdir dir="@{urdDirectory}"/>
             <apply executable="${OUTDIR}/bin/idlc" failonerror="true">
                 <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
                 <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
                 <arg value="-I${OUTDIR}/idl"/>
                 <arg value="-O"/>
-                <arg value="${idl.urd.build.dir}"/>
+                <arg value="@{urdDirectory}"/>
                 <arg value="-verbose"/>
                 <arg value="-cid"/>
                 <arg value="-we"/>
-                <filelist refid="idl.files"/>
+                <resources>
+                    <idlFiles/>
+                </resources>
             </apply>
         </sequential>
     </macrodef>
 
     <macrodef name="regmerge">
+        <attribute name="urdDirectory"/>
+        <attribute name="rdbDirectory"/>
         <sequential>
-            <mkdir dir="${idl.rdb.build.dir}"/>
-            <delete file="${idl.rdb.build.dir}/registry.rdb"/>
+            <mkdir dir="@{rdbDirectory}"/>
+            <delete file="@{rdbDirectory}/registry.rdb"/>
             <apply executable="${OUTDIR}/bin/regmerge" failonerror="true">
                 <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
                 <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-                <arg value="${idl.rdb.build.dir}/registry.rdb"/>
+                <arg value="@{rdbDirectory}/registry.rdb"/>
                 <arg value="/UCR"/>
-                <fileset dir="${idl.urd.build.dir}" includes="**/*.urd"/>
+                <fileset dir="@{urdDirectory}" includes="**/*.urd"/>
             </apply>
         </sequential>
     </macrodef>
@@ -120,6 +163,23 @@
                 <arg value="@{inputRdb}"/>
                 <arg value="-X@{excludes}"
                     unless:blank="@{excludes}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="cppumaker">
+        <attribute name="inputRdb"/>
+        <attribute name="outputDirectory"/>
+        <sequential>
+            <mkdir dir="@{outputDirectory}"/>
+            <exec executable="${OUTDIR}/bin/cppumaker" failonerror="true">
+                <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <arg value="-O@{outputDirectory}"/>
+                <arg value="-BUCR"/>
+                <arg value="-C"/>
+                <arg value="@{inputRdb}"/>
+                <arg value="${OUTDIR}/bin/udkapi.rdb"/>
             </exec>
         </sequential>
     </macrodef>

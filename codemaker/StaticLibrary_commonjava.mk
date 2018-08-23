@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,31 +17,29 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-PRJ := ..$/..
-PRJNAME := codemaker
-TARGET := codemaker
+$(eval $(call gb_StaticLibrary_StaticLibrary,commonjava))
 
-ENABLE_EXCEPTIONS := TRUE
+$(eval $(call gb_StaticLibrary_add_package_headers,commonjava,codemaker_inc))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Library_add_precompiled_header,commonjava,$(SRCDIR)/commonjava/inc/pch/precompiled_commonjava))
 
-SLOFILES = \
-    $(SLO)$/dependencies.obj \
-    $(SLO)$/exceptiontree.obj \
-    $(SLO)$/global.obj \
-    $(SLO)$/options.obj \
-    $(SLO)$/typemanager.obj \
-    $(SLO)$/unotype.obj \
-    $(SLO)$/codemaker.obj
+#$(eval $(call gb_StaticLibrary_add_api,commonjava,\
+#	udkapi \
+#	offapi \
+#))
 
-LIB1TARGET=$(LB)$/$(TARGET).lib
-.IF "$(GUI)" != "OS2"
-LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-.ENDIF
-LIB1OBJFILES=$(SLOFILES)
+$(eval $(call gb_StaticLibrary_set_include,commonjava,\
+	-I$(SRCDIR)/codemaker/inc \
+        -I$(SRCDIR)/codemaker/inc/pch \
+	$$(INCLUDE) \
+))
 
-.INCLUDE: target.mk
+$(eval $(call gb_StaticLibrary_add_exception_objects,commonjava,\
+	codemaker/source/commonjava/commonjava \
+))
+
+# vim: set noet sw=4 ts=4:

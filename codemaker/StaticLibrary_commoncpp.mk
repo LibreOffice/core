@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,21 +17,29 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-PRJ := ..$/..
-PRJNAME := codemaker
-TARGET := test_codemaker_javamaker
+$(eval $(call gb_StaticLibrary_StaticLibrary,commoncpp))
 
-PACKAGE := test$/codemaker$/javamaker
-JAVATESTFILES := Test.java
-IDLTESTFILES := types.idl
-JARFILES := juh.jar jurt.jar ridl.jar OOoRunner.jar
+$(eval $(call gb_StaticLibrary_add_package_headers,commoncpp,codemaker_inc))
 
-JAVAMAKER = $(AUGMENT_LIBRARY_PATH) $(BIN)$/javamaker$(EXECPOST)
+$(eval $(call gb_Library_add_precompiled_header,commoncpp,$(SRCDIR)/commoncpp/inc/pch/precompiled_commoncpp))
 
-.INCLUDE: javaunittest.mk
+#$(eval $(call gb_StaticLibrary_add_api,commoncpp,\
+#	udkapi \
+#	offapi \
+#))
 
-$(MISC)$/$(TARGET).javamaker.flag: $(BIN)$/javamaker$(EXECPOST)
+$(eval $(call gb_StaticLibrary_set_include,commoncpp,\
+	-I$(SRCDIR)/codemaker/inc \
+        -I$(SRCDIR)/codemaker/inc/pch \
+	$$(INCLUDE) \
+))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,commoncpp,\
+	codemaker/source/commoncpp/commoncpp \
+))
+
+# vim: set noet sw=4 ts=4:

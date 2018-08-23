@@ -72,6 +72,7 @@ gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
 gb_UnoApiOutTarget_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
+gb_UnoPrivateApiTarget_get_target = $(WORKDIR)/UnoPrivateApi/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)

@@ -46,6 +46,8 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_executables,SDK, \
     autodoc \
+    cppumaker \
+    javamaker \
     regcompare \
     uno-skeletonmaker \
 ))

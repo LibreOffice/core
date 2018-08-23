@@ -19,36 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=codemaker
-TARGET=javamaker
-TARGETTYPE=CUI
-LIBTARGET=NO
-
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/codemaker.pmk
-
-# --- Files --------------------------------------------------------
-
-OBJFILES = \
-    $(OBJ)$/classfile.obj \
-    $(OBJ)$/javamaker.obj \
-    $(OBJ)$/javaoptions.obj \
-    $(OBJ)$/javatype.obj
-
-APP1TARGET= $(TARGET)
-APP1RPATH=SDK
-APP1OBJS = $(OBJFILES)
-
-APP1DEPN= $(OUT)$/lib$/$(CODEMAKERLIBDEPN) $(OUT)$/lib$/$(COMMONJAVALIBDEPN)
-APP1STDLIBS= $(SALLIB) $(SALHELPERLIB) $(REGLIB) $(CODEMAKERLIBST) $(COMMONJAVALIBST)
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

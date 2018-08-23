@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,22 +17,30 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
+$(eval $(call gb_GoogleTest_GoogleTest,cppumaker_test))
 
-PRJ := ..$/..
-PRJNAME := codemaker
-TARGET := commonjava
+$(eval $(call gb_GoogleTest_add_exception_objects,cppumaker_test, \
+	codemaker/test/cppumaker/test_codemaker_cppumaker \
+))
 
-ENABLE_EXCEPTIONS := TRUE
+$(eval $(call gb_GoogleTest_set_include,cppumaker_test,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/codemaker/inc \
+	-I$(SRCDIR)/codemaker/inc/pch \
+))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_GoogleTest_set_private_api,cppumaker_test,\
+	$(SRCDIR)/codemaker/test/cppumaker/types.idl \
+))
 
-SLOFILES = $(SLO)$/commonjava.obj
+$(eval $(call gb_GoogleTest_add_linked_libs,cppumaker_test, \
+	cppu \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
 
-LIB1TARGET=$(LB)$/$(TARGET).lib
-LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-LIB1OBJFILES=$(SLOFILES)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

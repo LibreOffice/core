@@ -21,29 +21,24 @@
 
 
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
+PRJ=..
+TARGET=prj
+
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-CODEMAKERLIBDEPN=codemaker.lib
-COMMONCPPLIBDEPN=commoncpp.lib
-COMMONJAVALIBDEPN=commonjava.lib
-.IF "$(COM)"=="GCC" && ("$(GUI)"=="WNT" || "$(GUI)"=="OS2")
-CODEMAKERLIBST=-lcodemaker
-COMMONCPPLIBST=-lcommoncpp
-COMMONJAVALIBST=-lcommonjava
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
 .ELSE
-CODEMAKERLIBST=codemaker.lib
-COMMONCPPLIBST=commoncpp.lib
-COMMONJAVALIBST=commonjava.lib
-.ENDIF
-.ELSE
-CODEMAKERLIBDEPN=libcodemaker.a
-COMMONCPPLIBDEPN=libcommoncpp.a
-COMMONJAVALIBDEPN=libcommonjava.a
-CODEMAKERLIBST=-lcodemaker
-COMMONCPPLIBST=-lcommoncpp
-COMMONJAVALIBST=-lcommonjava
+DEBUG_ARGUMENT=
 .ENDIF
 
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

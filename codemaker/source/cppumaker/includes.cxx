@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_codemaker.hxx"
+#include "precompiled_cppumaker.hxx"
 
 #include "includes.hxx"
 

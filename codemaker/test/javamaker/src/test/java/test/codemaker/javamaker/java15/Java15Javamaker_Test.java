@@ -26,47 +26,47 @@ package test.codemaker.javamaker.java15;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.XComponentContext;
-import complexlib.ComplexTestCase;
+import org.junit.Test;
 
-public final class Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "testPlainPolyStruct", "testBooleanPolyStruct", "testStruct",
-            "testService" };
-    }
+import static org.junit.Assert.*;
 
+public final class Java15Javamaker_Test {
+    @Test
     public void testPlainPolyStruct() {
         PolyStruct s = new PolyStruct();
-        assure(s.member1 == null);
-        assure(s.member2 == 0);
+        assertTrue(s.member1 == null);
+        assertTrue(s.member2 == 0);
         s = new PolyStruct("ABC", 5);
-        assure(s.member1.equals("ABC"));
-        assure(s.member2 == 5);
+        assertTrue(s.member1.equals("ABC"));
+        assertTrue(s.member2 == 5);
     }
 
+    @Test
     public void testBooleanPolyStruct() {
         PolyStruct<Boolean,Object> s = new PolyStruct<Boolean,Object>();
-        assure(s.member1 == null);
-        assure(s.member2 == 0);
+        assertTrue(s.member1 == null);
+        assertTrue(s.member2 == 0);
         s = new PolyStruct<Boolean,Object>(true, 5);
-        assure(s.member1 == true);
-        assure(s.member2 == 5);
+        assertTrue(s.member1 == true);
+        assertTrue(s.member2 == 5);
     }
 
+    @Test
     public void testStruct() {
         Struct s = new Struct();
-        assure(s.member.member1 == null);
-        assure(s.member.member2 == 0);
+        assertTrue(s.member.member1 == null);
+        assertTrue(s.member.member2 == 0);
         s = new Struct(
             new PolyStruct<PolyStruct<boolean[], Object>, Integer>(
                 new PolyStruct<boolean[], Object>(new boolean[] { true }, 3),
                 4));
-        assure(s.member.member1.member1.length == 1);
-        assure(s.member.member1.member1[0] == true);
-        assure(s.member.member1.member2 == 3);
-        assure(s.member.member2 == 4);
+        assertTrue(s.member.member1.member1.length == 1);
+        assertTrue(s.member.member1.member1[0] == true);
+        assertTrue(s.member.member1.member2 == 3);
+        assertTrue(s.member.member2 == 4);
     }
 
+    @Test
     public void testService() {
         XComponentContext context = new XComponentContext() {
                 public Object getValueByName(String name) {
@@ -79,12 +79,12 @@ public final class Test extends ComplexTestCase {
             };
         try {
             Service.create(context);
-            failed();
+            fail();
         } catch (DeploymentException e) {}
         try {
             Service.create(
                 context, false, (byte) 1, (short) 2, Integer.valueOf(4));
-            failed();
+            fail();
         } catch (DeploymentException e) {}
     }
 
