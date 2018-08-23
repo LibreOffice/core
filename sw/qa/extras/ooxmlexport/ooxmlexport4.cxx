@@ -971,6 +971,9 @@ DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
     if (!pXmlDoc) return;
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
+
+    // tdf#70195 the default header should start at 720, not 0
+    assertXPath(pXmlDoc, "//w:pgMar", "header", "720");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")

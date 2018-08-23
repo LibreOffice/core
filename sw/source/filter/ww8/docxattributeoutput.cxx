@@ -7981,14 +7981,14 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
         HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
-        sal_Int32 nHeader = 0;
+        sal_Int32 nHeader = 720;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
 
         // Page top
         m_pageMargins.nTop = aDistances.dyaTop;
 
-        sal_Int32 nFooter = 0;
+        sal_Int32 nFooter = 720;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
 
