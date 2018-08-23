@@ -25,6 +25,8 @@
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/sheet/xusedareacursor.hxx>
+#include <test/table/xcellcursor.hxx>
+
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -37,6 +39,7 @@ namespace sc_apitest {
 
 class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XArrayFormulaRange,
+                                               public apitest::XCellCursor,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellRangeData,
@@ -69,6 +72,9 @@ public:
 
     // XArrayFormulaRange
     CPPUNIT_TEST(testGetSetArrayFormula);
+
+    // XCellCursor
+    CPPUNIT_TEST(testGoToNext)
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);
