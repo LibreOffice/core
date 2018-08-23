@@ -6746,27 +6746,100 @@ void ScInterpreter::ScLookup()
         // Do not propagate errors from matrix while copying to vector.
         pDataMat->SetErrorInterpreter( nullptr);
 
+        // Excel has an undocumented behaviour in that it seems to internally
+        // sort an interim array (i.e. error values specifically #DIV/0! are
+        // sorted to the end) or ignore error values that makes these "get last
+        // non-empty" searches work, e.g. =LOOKUP(2,1/NOT(ISBLANK(A:A)),A:A)
+        // see tdf#117016
+        // Instead of sorting a million entries of which mostly only a bunch of
+        // rows are filled and moving error values to the end which most are
+        // already anyway, assume the matrix to be sorted except error values
+        // and omit the coded DoubleError values.
+        // Do this only for a numeric matrix (that includes errors coded as
+        // doubles), which covers the case in question.
+        /* TODO: it's unclear whether this really matches Excel behaviour in
+         * all constellations or if there are cases that include unsorted error
+         * values and thus yield arbitrary binary search results or something
+         * different or whether there are cases where error values are also
+         * omitted from mixed numeric/string arrays or if it's not an interim
+         * matrix but a cell range reference instead. */
+        const bool bOmitErrorValues = (eDataArrayType == svMatrix && pDataMat->IsNumeric());
+
         // In case of non-vector matrix, only search the first row or column.
         ScMatrixRef pDataMat2;
-        if (bVertical)
+        std::vector<long> vIndex;
+        if (bOmitErrorValues)
         {
-            ScMatrixRef pTempMat = GetNewMat(1, nR);
-            for (SCSIZE i = 0; i < nR; ++i)
-                if (pDataMat->IsValue(0, i))
-                    pTempMat->PutDouble(pDataMat->GetDouble(0, i), 0, i);
-                else
-                    pTempMat->PutString(pDataMat->GetString(0, i), 0, i);
-            pDataMat2 = pTempMat;
+            std::vector<double> vArray;
+            if (bVertical)
+            {
+                for (SCSIZE i = 0; i < nR; ++i)
+                {
+                    const double fVal = pDataMat->GetDouble(0, i);
+                    if (rtl::math::isFinite(fVal))
+                    {
+                        vArray.push_back(fVal);
+                        vIndex.push_back(i);
+                    }
+                }
+                if (vArray.empty())
+                {
+                    PushNA();
+                    return;
+                }
+                ScMatrixRef pTempMat = GetNewMat( 1, vArray.size());
+                pTempMat->PutDoubleVector( vArray, 0, 0);
+                pDataMat2 = pTempMat;
+            }
+            else
+            {
+                for (SCSIZE i = 0; i < nC; ++i)
+                {
+                    const double fVal = pDataMat->GetDouble(i, 0);
+                    if (rtl::math::isFinite(fVal))
+                    {
+                        vArray.push_back(fVal);
+                        vIndex.push_back(i);
+                    }
+                }
+                if (vArray.empty())
+                {
+                    PushNA();
+                    return;
+                }
+                ScMatrixRef pTempMat = GetNewMat( vArray.size(), 1);
+                const size_t n = vArray.size();
+                for (size_t i=0; i < n; ++i)
+                    pTempMat->PutDouble( vArray[i], i, 0);
+                pDataMat2 = pTempMat;
+            }
+            if (vArray.size() == nLenMajor)
+                std::vector<long>().swap( vIndex);  // no error value omitted
+            else
+                nLenMajor = vArray.size();
         }
         else
         {
-            ScMatrixRef pTempMat = GetNewMat(nC, 1);
-            for (SCSIZE i = 0; i < nC; ++i)
-                if (pDataMat->IsValue(i, 0))
-                    pTempMat->PutDouble(pDataMat->GetDouble(i, 0), i, 0);
-                else
-                    pTempMat->PutString(pDataMat->GetString(i, 0), i, 0);
-            pDataMat2 = pTempMat;
+            if (bVertical)
+            {
+                ScMatrixRef pTempMat = GetNewMat(1, nR);
+                for (SCSIZE i = 0; i < nR; ++i)
+                    if (pDataMat->IsValue(0, i))
+                        pTempMat->PutDouble(pDataMat->GetDouble(0, i), 0, i);
+                    else
+                        pTempMat->PutString(pDataMat->GetString(0, i), 0, i);
+                pDataMat2 = pTempMat;
+            }
+            else
+            {
+                ScMatrixRef pTempMat = GetNewMat(nC, 1);
+                for (SCSIZE i = 0; i < nC; ++i)
+                    if (pDataMat->IsValue(i, 0))
+                        pTempMat->PutDouble(pDataMat->GetDouble(i, 0), i, 0);
+                    else
+                        pTempMat->PutString(pDataMat->GetString(i, 0), i, 0);
+                pDataMat2 = pTempMat;
+            }
         }
 
         // Do not propagate errors from matrix while searching.
@@ -6830,6 +6903,9 @@ void ScInterpreter::ScLookup()
 
         if (bFound)
         {
+            if (!vIndex.empty())
+                nDelta = vIndex[nDelta];
+
             VectorMatrixAccessor aMatAcc(*pDataMat, bVertical);
             SCCOLROW i = nDelta;
             SCSIZE n = aMatAcc.GetElementCount();
