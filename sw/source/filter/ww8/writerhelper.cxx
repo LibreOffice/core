@@ -682,7 +682,7 @@ namespace sw
         void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
         {
             OSL_ENSURE(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
-            maStack.emplace_back(new SwFltStackEntry(rPos,rAttr.Clone()));
+            maStack.emplace_back(new SwFltStackEntry(rPos, std::unique_ptr<SfxPoolItem>(rAttr.Clone())));
         }
 
         class SameOpenRedlineType
