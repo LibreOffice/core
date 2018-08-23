@@ -1,5 +1,6 @@
---- /dev/null
-+++ foo/foo/lcms2/Projects/VC2013/lcms2.rc
+diff -urN lcms2.org/Projects/VC2015/lcms2.rc lcms2/Projects/VC2015/lcms2.rc
+--- lcms2.org/Projects/VC2015/lcms2.rc	1970-01-01 01:00:00.000000000 +0100
++++ lcms2/Projects/VC2015/lcms2.rc	2018-08-23 13:11:59.556155700 +0200
 @@ -0,0 +1,104 @@
 +// Microsoft Visual C++ generated resource script.
 +//
@@ -105,30 +106,12 @@
 +/////////////////////////////////////////////////////////////////////////////
 +#endif    // not APSTUDIO_INVOKED
 +
---- /dev/null
-+++ foo/foo/lcms2/Projects/VC2013/resource.h
-@@ -0,0 +1,16 @@
-+//{{NO_DEPENDENCIES}}
-+// Microsoft Visual C++ generated include file.
-+// Used by lcms2.rc
-+//
-+
-+// Next default values for new objects
-+// 
-+#ifdef APSTUDIO_INVOKED
-+#ifndef APSTUDIO_READONLY_SYMBOLS
-+#define _APS_NO_MFC                     1
-+#define _APS_NEXT_RESOURCE_VALUE        101
-+#define _APS_NEXT_COMMAND_VALUE         40001
-+#define _APS_NEXT_CONTROL_VALUE         1000
-+#define _APS_NEXT_SYMED_VALUE           101
-+#endif
-+#endif
---- /dev/null
-+++ foo/foo/lcms2/Projects/VC2013/lcms2_DLL/lcms2_DLL.vcxproj
+diff -urN lcms2.org/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj lcms2/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj
+--- lcms2.org/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ lcms2/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj	2018-08-23 13:12:37.650399400 +0200
 @@ -0,0 +1,240 @@
 +﻿<?xml version="1.0" encoding="utf-8"?>
-+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 +  <ItemGroup Label="ProjectConfigurations">
 +    <ProjectConfiguration Include="Debug|Win32">
 +      <Configuration>Debug</Configuration>
@@ -157,23 +140,23 @@
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <CharacterSet>Unicode</CharacterSet>
 +    <WholeProgramOptimization>true</WholeProgramOptimization>
-+    <PlatformToolset>v120</PlatformToolset>
++    <PlatformToolset>v140</PlatformToolset>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <CharacterSet>Unicode</CharacterSet>
 +    <WholeProgramOptimization>true</WholeProgramOptimization>
-+    <PlatformToolset>v120</PlatformToolset>
++    <PlatformToolset>v140</PlatformToolset>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <CharacterSet>Unicode</CharacterSet>
-+    <PlatformToolset>v120</PlatformToolset>
++    <PlatformToolset>v140</PlatformToolset>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <CharacterSet>Unicode</CharacterSet>
-+    <PlatformToolset>v120</PlatformToolset>
++    <PlatformToolset>v140</PlatformToolset>
 +  </PropertyGroup>
 +  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
 +  <ImportGroup Label="ExtensionSettings">
@@ -367,8 +350,10 @@
 +  <ImportGroup Label="ExtensionTargets">
 +  </ImportGroup>
 +</Project>
---- /dev/null
-+++ foo/foo/lcms2/Projects/VC2013/lcms2_DLL/lcms2_DLL.vcxproj.filters
+\ No newline at end of file
+diff -urN lcms2.org/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj.filters lcms2/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj.filters
+--- lcms2.org/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj.filters	1970-01-01 01:00:00.000000000 +0100
++++ lcms2/Projects/VC2015/lcms2_DLL/lcms2_DLL.vcxproj.filters	2018-08-23 13:11:59.571806200 +0200
 @@ -0,0 +1,118 @@
 +﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -488,3 +473,23 @@
 +    </CustomBuild>
 +  </ItemGroup>
 +</Project>
+diff -urN lcms2.org/Projects/VC2015/resource.h lcms2/Projects/VC2015/resource.h
+--- lcms2.org/Projects/VC2015/resource.h	1970-01-01 01:00:00.000000000 +0100
++++ lcms2/Projects/VC2015/resource.h	2018-08-23 13:11:59.556155700 +0200
+@@ -0,0 +1,16 @@
++//{{NO_DEPENDENCIES}}
++// Microsoft Visual C++ generated include file.
++// Used by lcms2.rc
++//
++
++// Next default values for new objects
++// 
++#ifdef APSTUDIO_INVOKED
++#ifndef APSTUDIO_READONLY_SYMBOLS
++#define _APS_NO_MFC                     1
++#define _APS_NEXT_RESOURCE_VALUE        101
++#define _APS_NEXT_COMMAND_VALUE         40001
++#define _APS_NEXT_CONTROL_VALUE         1000
++#define _APS_NEXT_SYMED_VALUE           101
++#endif
++#endif
