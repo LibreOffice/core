@@ -34,6 +34,7 @@ public:
     virtual ~CharmapPopup() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    virtual void SAL_CALL execute( sal_Int16 /*KeyModifier*/ ) override;
 };
 
 #endif
