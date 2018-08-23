@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0e181c1b",
+        "filename": "solenv/gbuild/platform/com_MSC_defs.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-23T07:31:57Z",
+      "side": 1,
+      "message": "I wanted to write:  \"Please end the comment in a colon to make it more obvious that it pertains to the following, not the preceding line.  (And one problem with such a comment is that if later more lines are added after the $(if ...) line, it becomes unclear whether ther comment pertains to just the first or to all following lines.)\"\n\nBut then I noticed that a comment syntactically doesn\u0027t work at that place in the makefile anyway, so you need to restructure that somehow (e.g., put the comment in front of the gb_CXXFLAGS+\u003d line, with a bullet point for -wd4702, where more bullet points for other flags can be added in the future as need be).\n\nAlso, with workarounds for compiler bugs, it is important to know what incarnation of bug they exactly work around, so that the workaround can eventually be removed again when certain compiler versions/revisions are no longer supported.  To that end, I would add (links to) as much information as possible at the place in the code where the workaround is established.  You added information to the commit message, which is one more level of indirection when trying to find it, but may still be fully acceptable.  (Also, you used \u003chttp://document-foundation-mail-archive.969070.n3.nabble.com/...\u003e URLs, and I\u0027m not sure whether we\u0027d want to consider them more or less stable than \u003chttps://lists.freedesktop.org/archives/libreoffice/...\u003e URLs---though the latter of course suffer from no useful threading across multiple months.)",
+      "revId": "1e8084ee70ccfec14ab59bfd99970a547aebf053",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
