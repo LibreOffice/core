@@ -576,6 +576,23 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
+namespace
+{
+    weld::Window* GetFrameWeld(const Reference<XModel>& rModel)
+    {
+        if (!rModel.is())
+            return nullptr;
+        Reference<XController> xController(rModel->getCurrentController());
+        if (!xController.is())
+            return nullptr;
+        Reference<XFrame> xFrame(xController->getFrame());
+        if (!xFrame.is())
+            return nullptr;
+        Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
+        return Application::GetFrameWeld(xWindow);
+    }
+}
+
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
@@ -593,7 +610,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             bNeedMigration = true;
         else
         {
-            MigrationWarnDialog aWarnDlg{nullptr};
+            MigrationWarnDialog aWarnDlg(GetFrameWeld(m_pImpl->getModel_noCreate()));
             bNeedMigration = aWarnDlg.run() == RET_OK;
         }
         if (bNeedMigration)
