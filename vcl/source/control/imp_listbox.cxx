@@ -2690,12 +2690,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
                     rRenderContext.SetLineColor();
                     rRenderContext.SetFillColor();
                 }
-                Color aColor;
-                if( bNativeOK && (nState & ControlState::ROLLOVER) )
-                    aColor = rStyleSettings.GetFieldRolloverTextColor();
-                else
-                    aColor = rStyleSettings.GetFieldTextColor();
-                rRenderContext.SetTextColor( aColor );
+                rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
                 rRenderContext.DrawRect( maFocusRect );
             }
             else
