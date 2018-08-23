@@ -337,7 +337,7 @@ public:
                 if( pObj )
                 {
                     if( pObj->m_pObject == nullptr )
-                        pObj->m_pObject = pNewValue.release();
+                        pObj->m_pObject = pNewValue.get();
                     else
                     {
                         pMsg = "second value for object";
