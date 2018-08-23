@@ -681,26 +681,23 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                 if (RET_OK == pDlg->Execute())
                 {
-                    const SfxPoolItem* pNumberFormatItem = GetView().GetDocShell()->
-                                    GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+                    const SvxNumberInfoItem* pNumberFormatItem
+                        = GetView().GetDocShell()->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-                    if( pNumberFormatItem && 0 != static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->GetDelCount() )
+                    if( pNumberFormatItem )
                     {
-                        const sal_uInt32* pDelArr = static_cast<const SvxNumberInfoItem*>(
-                                                        pNumberFormatItem)->GetDelArray();
-
-                        for ( sal_uInt32 i = 0; i < static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->GetDelCount(); i++ )
-                            static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->
-                            GetNumberFormatter()->DeleteEntry( pDelArr[i] );
+                        for ( sal_uInt32 key : pNumberFormatItem->GetDelFormats() )
+                            pNumberFormatItem->GetNumberFormatter()->DeleteEntry( key );
                     }
 
+                    const SfxPoolItem* pNumberFormatValueItem = nullptr;
                     if( SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(
-                        SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatItem ))
+                        SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatValueItem ))
                     {
                         SfxItemSet aBoxFormatSet( *aCoreSet.GetPool(),
                                     svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT>{} );
                         aBoxFormatSet.Put( SwTableBoxNumFormat(
-                                static_cast<const SfxUInt32Item*>(pNumberFormatItem)->GetValue() ));
+                                static_cast<const SfxUInt32Item*>(pNumberFormatValueItem)->GetValue() ));
                         rSh.SetTableBoxFormulaAttrs( aBoxFormatSet );
 
                     }

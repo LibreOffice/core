@@ -378,12 +378,10 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
         const SfxPoolItem* pItem = pView->GetDocShell()->
                         GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-        if( pItem && 0 != static_cast<const SvxNumberInfoItem*>(pItem)->GetDelCount() )
+        if( pItem )
         {
-            const sal_uInt32* pDelArr = static_cast<const SvxNumberInfoItem*>(pItem)->GetDelArray();
-
-            for ( sal_uInt32 i = 0; i < static_cast<const SvxNumberInfoItem*>(pItem)->GetDelCount(); i++ )
-                pFormatter->DeleteEntry( pDelArr[i] );
+            for ( sal_uInt32 key : static_cast<const SvxNumberInfoItem*>(pItem)->GetDelFormats() )
+                pFormatter->DeleteEntry( key );
         }
 
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

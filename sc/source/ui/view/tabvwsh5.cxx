@@ -386,15 +386,8 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, const S
 void ScTabViewShell::UpdateNumberFormatter(
                         const SvxNumberInfoItem& rInfoItem )
 {
-    const sal_uInt32 nDelCount = rInfoItem.GetDelCount();
-
-    if ( nDelCount > 0 )
-    {
-        const sal_uInt32* pDelArr = rInfoItem.GetDelArray();
-
-        for ( sal_uInt32 i=0; i<nDelCount; i++ )
-            rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
-    }
+    for ( sal_uInt32 key : rInfoItem.GetDelFormats() )
+        rInfoItem.GetNumberFormatter()->DeleteEntry( key );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

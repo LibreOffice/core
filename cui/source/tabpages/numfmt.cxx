@@ -757,14 +757,12 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
         // List of changed user defined formats:
 
-        const size_t nDelCount = pNumFmtShell->GetUpdateDataCount();
+        std::vector<sal_uInt32> const & aDelFormats = pNumFmtShell->GetUpdateData();
 
-        if ( nDelCount > 0 )
+        if ( !aDelFormats.empty() )
         {
-            std::unique_ptr<sal_uInt32[]> pDelArr(new sal_uInt32[nDelCount]);
 
-            pNumFmtShell->GetUpdateData( pDelArr.get(), nDelCount );
-            pNumItem->SetDelFormatArray( pDelArr.get(), nDelCount );
+            pNumItem->SetDelFormats( aDelFormats );
 
             if(bNumItemFlag)
             {

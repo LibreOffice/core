@@ -56,12 +56,10 @@ public:
     const OUString&         GetValueString() const { return aStringVal; }
     double                  GetValueDouble() const  { return nDoubleVal; }
 
-    const sal_uInt32*       GetDelArray() const { return pDelFormatArr.get(); }
-    void                    SetDelFormatArray( const sal_uInt32* pData,
-                                               const sal_uInt32  nCount );
+    const std::vector<sal_uInt32> & GetDelFormats() const { return mvDelFormats; }
+    void                    SetDelFormats( std::vector<sal_uInt32> const & );
 
     SvxNumberValueType      GetValueType() const { return eValueType; }
-    sal_uInt32              GetDelCount() const  { return nDelCount; }
 
 private:
     SvNumberFormatter*  pFormatter;
@@ -69,9 +67,7 @@ private:
     OUString            aStringVal;
     double              nDoubleVal;
 
-    std::unique_ptr<sal_uInt32[]>
-                        pDelFormatArr;
-    sal_uInt32          nDelCount;
+    std::vector<sal_uInt32> mvDelFormats;
 };
 
 #endif
