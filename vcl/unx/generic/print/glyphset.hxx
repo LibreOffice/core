@@ -74,8 +74,7 @@ public:
 
     void            DrawGlyph (PrinterGfx& rGfx,
                                const Point& rPoint,
-                               const sal_GlyphId nGlyphId,
-                               const sal_Int32 nDelta);
+                               const sal_GlyphId nGlyphId);
     void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::vector< OString >& rSuppliedFonts );
 };
 

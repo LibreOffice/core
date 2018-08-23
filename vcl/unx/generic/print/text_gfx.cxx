@@ -60,8 +60,7 @@ void PrinterGfx::SetFont(
 }
 
 void PrinterGfx::drawGlyph(const Point& rPoint,
-                           sal_GlyphId aGlyphId,
-                           sal_Int32 nDelta)
+                           sal_GlyphId aGlyphId)
 {
 
     // draw the string
@@ -71,7 +70,7 @@ void PrinterGfx::drawGlyph(const Point& rPoint,
         if ( (elem.GetFontID()  == mnFontID)
              && (elem.IsVertical() == mbTextVertical))
         {
-            elem.DrawGlyph (*this, rPoint, aGlyphId, nDelta);
+            elem.DrawGlyph (*this, rPoint, aGlyphId);
             bGlyphFound = true;
             break;
         }
@@ -80,13 +79,12 @@ void PrinterGfx::drawGlyph(const Point& rPoint,
     if (!bGlyphFound)
     {
         maPS3Font.emplace_back(mnFontID, mbTextVertical);
-        maPS3Font.back().DrawGlyph (*this, rPoint, aGlyphId, nDelta);
+        maPS3Font.back().DrawGlyph (*this, rPoint, aGlyphId);
     }
 }
 
 void PrinterGfx::DrawGlyph(const Point& rPoint,
-                           const GlyphItem& rGlyph,
-                           sal_Int32 nDelta)
+                           const GlyphItem& rGlyph)
 {
     // move and rotate the user coordinate system
     // avoid the gsave/grestore for the simple cases since it allows
@@ -125,14 +123,14 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
             PSTranslate( aPoint );
         PSRotate (900);
         // draw the rotated glyph
-        drawGlyph(aRotPoint, rGlyph.maGlyphId, 0);
+        drawGlyph(aRotPoint, rGlyph.maGlyphId);
 
         // restore previous state
         maVirtualStatus = aSaveStatus;
         PSGRestore();
     }
     else
-        drawGlyph(aPoint, rGlyph.maGlyphId, nDelta);
+        drawGlyph(aPoint, rGlyph.maGlyphId);
 
     // restore the user coordinate system
     if (nCurrentTextAngle != 0)
