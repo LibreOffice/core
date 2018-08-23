@@ -313,7 +313,7 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
             aChanges->commit();
         }
 
-        Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
+        Communicator* pCommunicator = new Communicator( std::unique_ptr<IBluetoothSocket>(apClient->mpStreamSocket) );
         MutexGuard aGuard( sDataMutex );
 
         sCommunicators.push_back( pCommunicator );
