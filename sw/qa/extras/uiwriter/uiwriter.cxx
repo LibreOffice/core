@@ -217,6 +217,7 @@ public:
     void testTdf113877NoMerge();
     void testTdf113877_default_style();
     void testTdf113877_Standard_style();
+    void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -332,6 +333,7 @@ public:
     CPPUNIT_TEST(testTdf113877NoMerge);
     CPPUNIT_TEST(testTdf113877_default_style);
     CPPUNIT_TEST(testTdf113877_Standard_style);
+    CPPUNIT_TEST(testInconsistentBookmark);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4019,6 +4021,65 @@ void SwUiWriterTest::testTdf113877_Standard_style()
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
+}
+
+// Unit test for fix inconsistent bookmark behavior around at-char/as-char anchored frames
+//
+// We have a placeholder character in the sw doc model for as-char anchored frames,
+// so it's possible to have a bookmark before/after the frame or a non-collapsed bookmark
+// which covers the frame. The same is not true for at-char anchored frames,
+// where the anchor points to a doc model position, but there is no placeholder character.
+// If a bookmark is created covering the start and end of the anchor of the frame,
+// internally we create a collapsed bookmark which has the same position as the anchor of the frame.
+// When this doc model is handled by SwXParagraph::createEnumeration(),
+// first the frame and then the bookmark is appended to the text portion enumeration,
+// so your bookmark around the frame is turned into a collapsed bookmark after the frame.
+// (The same happens when we roundtrip an ODT document representing this doc model.)
+//
+// Fix the problem by inserting collapsed bookmarks with affected anchor positions
+// (same position is the anchor for an at-char frame) into the enumeration in two stages:
+// first the start of them before frames and then the end of them + other bookmarks.
+// This way UNO API users get their non-collapsed bookmarks around at-char anchored frames,
+// similar to as-char ones.
+void SwUiWriterTest::testInconsistentBookmark()
+{
+    // create test document with text and bookmark
+    {
+        SwDoc* pDoc(createDoc("testInconsistentBookmark.ott"));
+        IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+        SwCursor aPaM(SwPosition(aIdx), nullptr);
+        aPaM.SetMark();
+        aPaM.MovePara(GetfnParaCurr(), GetfnParaStart());
+        aPaM.MovePara(GetfnParaCurr(), GetfnParaEnd());
+        rIDMA.makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK);
+        aPaM.Exchange();
+        aPaM.DeleteMark();
+    }
+
+    // save document and verify the bookmark scoup
+    {
+        // save document
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // load only content.xml
+        if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+        {
+            const OString aPath("/office:document-content/office:body/office:text/text:p");
+
+            const OUString aTagBookmarkStart("bookmark-start");
+            const OUString aTagControl("control");
+            const OUString aTagBookmarkEnd("bookmark-end");
+
+            const int pos1 = getXPathPosition(pXmlDoc, aPath, aTagBookmarkStart);
+            const int pos2 = getXPathPosition(pXmlDoc, aPath, aTagControl);
+            const int pos3 = getXPathPosition(pXmlDoc, aPath, aTagBookmarkEnd);
+
+            CPPUNIT_ASSERT(pos1 < pos2);
+            CPPUNIT_ASSERT(pos2 < pos3);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
