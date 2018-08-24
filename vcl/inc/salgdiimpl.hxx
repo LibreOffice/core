@@ -103,12 +103,14 @@ public:
     virtual bool drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
 
     virtual bool drawPolyLine(
+                const basegfx::B2DHomMatrix& rObjectToDevice,
                 const basegfx::B2DPolygon&,
                 double fTransparency,
                 const basegfx::B2DVector& rLineWidths,
                 basegfx::B2DLineJoin,
                 css::drawing::LineCap,
-                double fMiterMinimumAngle) = 0;
+                double fMiterMinimumAngle,
+                bool bPixelSnapHairline) = 0;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
