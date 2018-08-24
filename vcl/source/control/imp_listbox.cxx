@@ -2684,13 +2684,16 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             if (bHasFocus && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
             {
                 if ( !ImplGetSVData()->maNWFData.mbNoFocusRects )
+                {
                     rRenderContext.SetFillColor( rStyleSettings.GetHighlightColor() );
+                    rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                }
                 else
                 {
                     rRenderContext.SetLineColor();
                     rRenderContext.SetFillColor();
+                    rRenderContext.SetTextColor( rStyleSettings.GetFieldTextColor() );
                 }
-                rRenderContext.SetTextColor( rStyleSettings.GetHighlightTextColor() );
                 rRenderContext.DrawRect( maFocusRect );
             }
             else
