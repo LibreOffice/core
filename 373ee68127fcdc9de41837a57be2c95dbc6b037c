@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_ec94e0ea",
+        "filename": "include/svl/itemprop.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-24T14:35:55Z",
+      "side": 1,
+      "message": "good spotting! but this can just be\n\n    SfxItemPropertyMap m_OwnMap;\n\nbecause SfxItemPropertyMap is declared in this same file at line 116",
+      "revId": "373ee68127fcdc9de41837a57be2c95dbc6b037c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
