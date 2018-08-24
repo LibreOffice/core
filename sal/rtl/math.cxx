@@ -464,7 +464,7 @@ inline void doubleToString(typename T::String ** pResult,
     if (nBuf > nBufMax)
     {
         pBuf = static_cast< typename T::Char * >(
-            rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
+            malloc(nBuf * sizeof (typename T::Char)));
         OSL_ENSURE(pBuf, "Out of memory");
     }
     else
@@ -707,7 +707,7 @@ inline void doubleToString(typename T::String ** pResult,
         T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
 
     if (pBuf != &aBuf[0])
-        rtl_freeMemory(pBuf);
+        free(pBuf);
 }
 
 }
