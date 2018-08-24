@@ -336,7 +336,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
 
     sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(mxContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
+        new ScEditFieldObj(mxContent, o3tl::make_unique<ScCellEditSource>(pDocShell, aCellPos), eType, aSelection));
     return xRet;
 }
 
@@ -493,7 +493,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection));
+        new ScEditFieldObj(xTextRange, o3tl::make_unique<ScHeaderFooterEditSource>(mrData), eRealType, aSelection));
     return xRet;
 }
 
@@ -1061,10 +1061,10 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel) :
+    std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
     pPropSet(nullptr),
-    mpEditSource(pEditSrc),
+    mpEditSource(std::move(pEditSrc)),
     aSelection(rSel),
     meType(eType), mpData(nullptr), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
 {
@@ -1093,7 +1093,7 @@ ScEditFieldObj::ScEditFieldObj(
 }
 
 void ScEditFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent, ScEditSource* pEditSrc, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, std::unique_ptr<ScEditSource> pEditSrc, const ESelection& rSel)
 {
     if (!mpEditSource)
     {
@@ -1101,7 +1101,7 @@ void ScEditFieldObj::InitDoc(
         mpData.reset();
 
         aSelection = rSel;
-        mpEditSource.reset( pEditSrc );
+        mpEditSource = std::move( pEditSrc );
     }
 }
 
