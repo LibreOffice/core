@@ -252,17 +252,22 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         if( bDrawnOk && IsLineColor() )
         {
             const basegfx::B2DVector aHairlineWidth(1,1);
-            const int nPolyCount = aB2DPolyPolygon.count();
-            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            const sal_uInt32 nPolyCount(aB2DPolyPolygon.count());
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
+
+            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
-                const basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+                const basegfx::B2DPolygon aOnePoly(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
+
                 mpGraphics->DrawPolyLine(
+                    basegfx::B2DHomMatrix(),
                     aOnePoly,
                     fTransparency,
                     aHairlineWidth,
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
-                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline,
                     this );
             }
         }
@@ -355,17 +360,22 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             mpGraphics->SetFillColor();
             // draw the border line
             const basegfx::B2DVector aLineWidths( 1, 1 );
-            const int nPolyCount = aB2DPolyPolygon.count();
-            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            const sal_uInt32 nPolyCount(aB2DPolyPolygon.count());
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
+
+            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
-                const basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+                const basegfx::B2DPolygon aPolygon(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
+
                 bDrawn = mpGraphics->DrawPolyLine(
-                    rPolygon,
+                    basegfx::B2DHomMatrix(),
+                    aPolygon,
                     fTransparency,
                     aLineWidths,
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
-                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline,
                     this );
             }
             // prepare to restore the fill color

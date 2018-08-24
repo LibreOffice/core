@@ -129,9 +129,9 @@ namespace drawinglayer
 
         bool VclPixelProcessor2D::tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency)
         {
-            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
+            const basegfx::B2DPolygon& rLocalPolygon(rSource.getB2DPolygon());
 
-            if(!aLocalPolygon.count())
+            if(!rLocalPolygon.count())
             {
                 // no geometry, done
                 return true;
@@ -141,15 +141,14 @@ namespace drawinglayer
 
             mpOutputDevice->SetFillColor();
             mpOutputDevice->SetLineColor(Color(aLineColor));
-            aLocalPolygon.transform(maCurrentTransformation);
+            //aLocalPolygon.transform(maCurrentTransformation);
 
             // try drawing; if it did not work, use standard fallback
-            if(mpOutputDevice->DrawPolyLineDirect( aLocalPolygon, 0.0, fTransparency))
-            {
-                return true;
-            }
-
-            return false;
+            return mpOutputDevice->DrawPolyLineDirect(
+                maCurrentTransformation,
+                rLocalPolygon,
+                0.0,
+                fTransparency);
         }
 
         bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
@@ -164,6 +163,10 @@ namespace drawinglayer
 
             aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+
+            // simplify curve segments
+            // moved to PolygonStrokePrimitive2D::PolygonStrokePrimitive2D
+            // aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
 
             if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
             {
@@ -187,33 +190,35 @@ namespace drawinglayer
                 return true;
             }
 
+            // check if LineWidth can be simplified in world coordinates
+            double fLineWidth(rSource.getLineAttribute().getWidth());
+
+            if(basegfx::fTools::more(fLineWidth, 0.0))
+            {
+                basegfx::B2DVector aLineWidth(fLineWidth, 0.0);
+                aLineWidth = maCurrentTransformation * aLineWidth;
+                const double fWorldLineWidth(aLineWidth.getLength());
+
+                // draw simple hairline for small line widths
+                // see also RenderPolygonStrokePrimitive2D which is used if this try fails
+                bool bIsAntiAliasing = getOptionsDrawinglayer().IsAntiAliasing();
+                if (   (basegfx::fTools::lessOrEqual(fWorldLineWidth, 1.0) && bIsAntiAliasing)
+                    || (basegfx::fTools::lessOrEqual(fWorldLineWidth, 1.5) && !bIsAntiAliasing))
+                {
+                    // draw simple hairline
+                    fLineWidth = 0.0;
+                }
+            }
+
             const basegfx::BColor aLineColor(
                 maBColorModifierStack.getModifiedColor(
                     rSource.getLineAttribute().getColor()));
 
             mpOutputDevice->SetFillColor();
             mpOutputDevice->SetLineColor(Color(aLineColor));
-            aHairLinePolyPolygon.transform(maCurrentTransformation);
 
-            double fLineWidth(rSource.getLineAttribute().getWidth());
-
-            if(basegfx::fTools::more(fLineWidth, 0.0))
-            {
-                basegfx::B2DVector aLineWidth(fLineWidth, 0.0);
-
-                aLineWidth = maCurrentTransformation * aLineWidth;
-                fLineWidth = aLineWidth.getLength();
-            }
-
-            // draw simple hairline for small line widths
-            // see also RenderPolygonStrokePrimitive2D which is used if this try fails
-            bool bIsAntiAliasing = getOptionsDrawinglayer().IsAntiAliasing();
-            if (   (basegfx::fTools::lessOrEqual(fLineWidth, 1.0) && bIsAntiAliasing)
-                || (basegfx::fTools::lessOrEqual(fLineWidth, 1.5) && !bIsAntiAliasing))
-            {
-                // draw simple hairline
-                fLineWidth = 0.0;
-            }
+            // do not transform self
+            // aHairLinePolyPolygon.transform(maCurrentTransformation);
 
             bool bHasPoints(false);
             bool bTryWorked(false);
@@ -227,6 +232,7 @@ namespace drawinglayer
                     bHasPoints = true;
 
                     if(mpOutputDevice->DrawPolyLineDirect(
+                        maCurrentTransformation,
                         aSingle,
                         fLineWidth,
                         fTransparency,

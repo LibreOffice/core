@@ -559,15 +559,34 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
 }
 
 bool X11SalGraphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
-    return mxImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
-            eLineJoin, eLineCap, fMiterMinimumAngle );
+    if(0 == rPolygon.count())
+    {
+        return true;
+    }
+
+    if(fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    return mxImpl->drawPolyLine(
+        rObjectToDevice,
+        rPolygon,
+        fTransparency,
+        rLineWidth,
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle,
+        bPixelSnapHairline);
 }
 
 bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
