@@ -153,26 +153,26 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_buffer  (nullptr)
 {
     ::InitializeCriticalSection (&m_mutex);
-    m_buffer = static_cast<sal_uInt8 *>(rtl_allocateMemory(m_bufsiz));
+    m_buffer = static_cast<sal_uInt8 *>(malloc(m_bufsiz));
     if (m_buffer)
         memset (m_buffer, 0, m_bufsiz);
 }
 
 FileHandle_Impl::~FileHandle_Impl()
 {
-    rtl_freeMemory(m_buffer);
+    free(m_buffer);
     m_buffer = nullptr;
     ::DeleteCriticalSection (&m_mutex);
 }
 
 void * FileHandle_Impl::operator new(size_t n)
 {
-    return rtl_allocateMemory(n);
+    return malloc(n);
 }
 
 void FileHandle_Impl::operator delete(void * p, size_t)
 {
-    rtl_freeMemory(p);
+    free(p);
 }
 
 SIZE_T FileHandle_Impl::getpagesize()
