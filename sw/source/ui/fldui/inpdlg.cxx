@@ -106,7 +106,7 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Window *pParent, SwWrtShell &rS,
 
     // preselect all text to allow quickly changing the content
     if (bEnable)
-        m_xEditED->select_region(0, m_xEditED->get_text().getLength());
+        m_xEditED->select_region(0, -1);
 }
 
 SwFieldInputDlg::~SwFieldInputDlg()
