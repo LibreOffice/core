@@ -290,41 +290,33 @@ Reference<XPropertySetInfo> const & SfxItemPropertySet::getPropertySetInfo() con
     return m_xInfo;
 }
 
-struct SfxItemPropertySetInfo_Impl
-{
-    SfxItemPropertyMap*         m_pOwnMap;
-};
-
 SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap )
-    :  m_pImpl( new SfxItemPropertySetInfo_Impl )
+    : m_aOwnMap( rMap )
 {
-    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( rMap );
 }
 
 SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries )
-    : m_pImpl( new SfxItemPropertySetInfo_Impl )
+    : m_aOwnMap( pEntries )
 {
-    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( pEntries );
 }
 
 Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
 {
-    return m_pImpl->m_pOwnMap->getProperties();
+    return m_aOwnMap.getProperties();
 }
 
 SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
 {
-    delete m_pImpl->m_pOwnMap;
 }
 
 Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
 {
-    return m_pImpl->m_pOwnMap->getPropertyByName( rName );
+    return m_aOwnMap.getPropertyByName( rName );
 }
 
 sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
-    return m_pImpl->m_pOwnMap->hasPropertyByName( rName );
+    return m_aOwnMap.hasPropertyByName( rName );
 }
 
 SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pMap,
