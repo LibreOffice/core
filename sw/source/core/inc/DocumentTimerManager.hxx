@@ -66,14 +66,14 @@ private:
 
     SwDoc& m_rDoc;
 
-    bool mbStartIdleTimer; //< idle timer mode start/stop
-    sal_Int32 mIdleBlockCount;
-    SwDocIdle maDocIdle;
+    sal_uInt32 m_nIdleBlockCount; ///< Don't run the Idle, if > 0
+    bool m_bStartOnUnblock; ///< true, if the last unblock should start the timer
+    SwDocIdle m_aDocIdle;
 };
 
 inline bool DocumentTimerManager::IsDocIdle() const
 {
-    return( GetNextIdleJob() != IdleJob::Busy );
+    return ((0 == m_nIdleBlockCount) && (GetNextIdleJob() != IdleJob::Busy));
 }
 
 }

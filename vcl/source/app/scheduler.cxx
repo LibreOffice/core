@@ -502,6 +502,11 @@ next_entry:
     return !!pMostUrgent;
 }
 
+void Scheduler::Wakeup()
+{
+    Scheduler::ImplStartTimer( 0, false, tools::Time::GetSystemTicks() );
+}
+
 void Task::StartTimer( sal_uInt64 nMS )
 {
     Scheduler::ImplStartTimer( nMS, false, tools::Time::GetSystemTicks() );
