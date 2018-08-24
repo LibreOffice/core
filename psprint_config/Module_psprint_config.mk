@@ -20,23 +20,18 @@
 #**************************************************************
 
 
-PRJ=..$/..
-PRJNAME=psp_config
-TARGET=unxfontsxp3ppds
 
-.INCLUDE : settings.mk
+$(eval $(call gb_Module_Module,psprint_config))
 
-.IF "$(WITHOUT_PPDS)"=="YES"
-all:
-    @echo "Building without OOo postscript printer definition files."
-.ENDIF
+$(eval $(call gb_Module_add_targets,psprint_config,\
+	Zip_fontunxpsprint \
+))
 
-ZIP1TARGET      = fontunxppds
-.IF "$(WITH_SYSTEM_PPD_DIR)" != ""
-ZIP1LIST = SGENPRT.PS SGENT42.PS GENERIC.PS
-.ELSE
-ZIP1LIST        = * -x makefile.* -x delzip
-.ENDIF
+ifneq ($(WITHOUT_PPDS),YES)
+$(eval $(call gb_Module_add_targets,psprint_config,\
+        Zip_fontunxppds \
+))
+endif
 
-.INCLUDE : target.mk
 
+# vim: set noet sw=4 ts=4:

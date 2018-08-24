@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     configmgr \
     cosv \
     cppcanvas \
+    cpputools \
     cui \
     dbaccess \
     drawinglayer \
@@ -65,6 +66,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oox \
     package \
     padmin \
+    psprint_config \
     rdbmaker \
     registry \
     remotebridges \

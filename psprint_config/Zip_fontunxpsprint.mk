@@ -1,4 +1,4 @@
-# *************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,15 +17,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-# *************************************************************
-PRJ=..
-PRJNAME=psprint_config
-TARGET=unxfontspsprintgeneral
+###############################################################
 
-.INCLUDE : settings.mk
 
-ZIP1TARGET      = fontunxpsprint
-ZIP1LIST        = psprint.conf
 
-.INCLUDE : target.mk
+$(eval $(call gb_Zip_Zip,fontunxpsprint,$(SRCDIR)/psprint_config/configuration))
 
+$(eval $(call gb_Zip_add_files,fontunxpsprint,\
+	psprint.conf \
+))
+
+# vim: set noet sw=4 ts=4:
