@@ -35,6 +35,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 
 #if ENABLE_CAIRO_CANVAS
 #   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
@@ -720,8 +722,15 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
-                 css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/);
+    drawPolyLine(
+        basegfx::B2DHomMatrix(),
+        aPoly,
+        0.0,
+        basegfx::B2DVector(1.0, 1.0),
+        basegfx::B2DLineJoin::Miter,
+        css::drawing::LineCap_BUTT,
+        basegfx::deg2rad(15.0) /*default*/,
+        false);
 }
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -879,6 +888,37 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     releaseCairoContext(cr, false, extents);
 }
 
+class SystemDependentData_CairoPath : public basegfx::SystemDependentData
+{
+private:
+    cairo_path_t*       mpCairoPath;
+
+public:
+    SystemDependentData_CairoPath(
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        cairo_path_t* pCairoPath);
+    virtual ~SystemDependentData_CairoPath();
+
+    cairo_path_t* getCairoPath() { return mpCairoPath; }
+};
+
+SystemDependentData_CairoPath::SystemDependentData_CairoPath(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    cairo_path_t* pCairoPath)
+:   basegfx::SystemDependentData(rSystemDependentDataManager),
+    mpCairoPath(pCairoPath)
+{
+}
+
+SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
+{
+    if(nullptr != mpCairoPath)
+    {
+        cairo_path_destroy(mpCairoPath);
+        mpCairoPath = nullptr;
+    }
+}
+
 basegfx::B2DRange SvpSalGraphics::drawPolyLine(
     cairo_t* cr,
     const Color& rLineColor,
@@ -943,64 +983,149 @@ basegfx::B2DRange SvpSalGraphics::drawPolyLine(
     cairo_set_line_width(cr, rLineWidths.getX());
     cairo_set_miter_limit(cr, fMiterLimit);
 
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
 
-    basegfx::B2DRange extents(0, 0, 0, 0);
-
-    if (!bNoJoin)
+    if(pSystemDependentData_CairoPath)
     {
-        AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !bAntiAliasB2DDraw, true);
-        extents = getClippedStrokeDamage(cr);
-        cairo_stroke(cr);
+        // check data validity
+        if(nullptr == pSystemDependentData_CairoPath->getCairoPath())
+        {
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
+        }
+    }
+
+    if(pSystemDependentData_CairoPath)
+    {
+        // re-use data
+        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
     }
     else
     {
-        const int nPointCount = rPolyLine.count();
-        // emulate rendering::PathJoinType::NONE by painting single edges
-        const sal_uInt32 nEdgeCount(rPolyLine.isClosed() ? nPointCount : nPointCount - 1);
-        basegfx::B2DPolygon aEdge;
-        aEdge.append(rPolyLine.getB2DPoint(0));
-        aEdge.append(basegfx::B2DPoint(0.0, 0.0));
-
-        for (sal_uInt32 i = 0; i < nEdgeCount; ++i)
+        // create data
+        if (!bNoJoin)
         {
-            const sal_uInt32 nNextIndex((i + 1) % nPointCount);
-            aEdge.setB2DPoint(1, rPolyLine.getB2DPoint(nNextIndex));
-            aEdge.setNextControlPoint(0, rPolyLine.getNextControlPoint(i % nPointCount));
-            aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
+            AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !bAntiAliasB2DDraw, true);
+        }
+        else
+        {
+            const sal_uInt32 nPointCount(rPolyLine.count());
+            const sal_uInt32 nEdgeCount(rPolyLine.isClosed() ? nPointCount : nPointCount - 1);
+            basegfx::B2DPolygon aEdge;
 
-            AddPolygonToPath(cr, aEdge, false, !bAntiAliasB2DDraw, true);
+            aEdge.append(rPolyLine.getB2DPoint(0));
+            aEdge.append(basegfx::B2DPoint(0.0, 0.0));
 
-            extents.expand(getStrokeDamage(cr));
+            for (sal_uInt32 i(0); i < nEdgeCount; i++)
+            {
+                const sal_uInt32 nNextIndex((i + 1) % nPointCount);
+                aEdge.setB2DPoint(1, rPolyLine.getB2DPoint(nNextIndex));
+                aEdge.setNextControlPoint(0, rPolyLine.getNextControlPoint(i));
+                aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
 
-            cairo_stroke(cr);
+                AddPolygonToPath(cr, aEdge, false, !bAntiAliasB2DDraw, true);
 
-            // prepare next step
-            aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+                // prepare next step
+                aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+            }
         }
 
-        extents.intersect(getClipBox(cr));
+        // copy and add to buffering mechanism
+        rPolyLine.addOrReplaceSystemDependentData(SalGraphics::getSystemDependentDataManager(), cairo_copy_path(cr));
     }
+
+    // extract extents
+    const basegfx::B2DRange extents(getClippedStrokeDamage(cr));
+
+    // draw and consume
+    cairo_stroke(cr);
 
     return extents;
 }
 
 bool SvpSalGraphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     // short circuit if there is nothing to do
-    if (rPolyLine.count() <= 0)
+    if(0 == rPolyLine.count())
+    {
         return true;
+    }
+
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    basegfx::B2DVector aLineWidths(rLineWidths);
+    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
+    const basegfx::B2DVector aDeviceLineWidths(bObjectToDeviceIsIdentity ? rLineWidths : rObjectToDevice * rLineWidths);
+    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0 && aLineWidths.getX() >= 1.0);
+
+    // on-demand inverse of ObjectToDevice transformation
+    basegfx::B2DHomMatrix aObjectToDeviceInv;
+
+    if(bCorrectLineWidth)
+    {
+        if(aObjectToDeviceInv.isIdentity())
+        {
+            aObjectToDeviceInv = rObjectToDevice;
+            aObjectToDeviceInv.invert();
+        }
+
+        // calculate-back logical LineWidth for a hairline
+        aLineWidths = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+    }
 
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    basegfx::B2DRange extents = drawPolyLine(cr, m_aLineColor, getAntiAliasB2DDraw(), rPolyLine,
-                                             fTransparency, rLineWidths, eLineJoin, eLineCap, fMiterMinimumAngle);
+    if(!bObjectToDeviceIsIdentity)
+    {
+        // set ObjectToDevice transformation
+        cairo_matrix_t aMatrix;
+
+        cairo_matrix_init(
+            &aMatrix,
+            rObjectToDevice.get( 0, 0 ),
+            rObjectToDevice.get( 1, 0 ),
+            rObjectToDevice.get( 0, 1 ),
+            rObjectToDevice.get( 1, 1 ),
+            rObjectToDevice.get( 0, 2 ),
+            rObjectToDevice.get( 1, 2 ));
+        cairo_set_matrix(cr, &aMatrix);
+    }
+
+    basegfx::B2DRange extents(
+        drawPolyLine(
+            cr,
+            m_aLineColor,
+            getAntiAliasB2DDraw(),
+            rPolyLine,
+            fTransparency,
+            aLineWidths,
+            eLineJoin,
+            eLineCap,
+            fMiterMinimumAngle));
+
+    if(!bObjectToDeviceIsIdentity)
+    {
+        // reset ObjectToDevice transformation if was set (safe, may
+        // be better suited at ::getCairoContext)
+        cairo_identity_matrix(cr);
+
+        // transform extents to DeviceCoordiinates if used. These
+        // were calculated with ObjectToDevice transformation actively set,
+        // but use DeviceCoordinates locally
+        if(!extents.isEmpty())
+        {
+            extents.transform(rObjectToDevice);
+        }
+    }
 
     releaseCairoContext(cr, false, extents);
 
