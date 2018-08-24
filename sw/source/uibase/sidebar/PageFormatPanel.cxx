@@ -215,9 +215,14 @@ void PageFormatPanel::NotifyItemUpdate(
 IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
 {
     Paper ePaper = mpPaperSizeBox->GetSelection();
-    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
+    Size  aSize;
 
-    if(mpPaperOrientation->GetSelectedEntryPos() == 1)
+    if(ePaper!=PAPER_USER)
+       aSize = SvxPaperInfo::GetPaperSize(ePaper, meUnit);
+    else
+       aSize = Size(GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
+
+    if(mpPaperOrientation->GetSelectedEntryPos() == 1 || ePaper==PAPER_USER)
         Swap(aSize);
 
     mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 1);
