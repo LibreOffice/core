@@ -6787,9 +6787,20 @@ void ScInterpreter::ScLookup()
                     PushNA();
                     return;
                 }
-                ScMatrixRef pTempMat = GetNewMat( 1, vArray.size());
-                pTempMat->PutDoubleVector( vArray, 0, 0);
-                pDataMat2 = pTempMat;
+                const size_t nElems = vArray.size();
+                if (nElems == nR)
+                {
+                    // No error value omitted, use as is.
+                    pDataMat2 = pDataMat;
+                    std::vector<long>().swap( vIndex);
+                }
+                else
+                {
+                    ScMatrixRef pTempMat = GetNewMat( 1, nElems);
+                    pTempMat->PutDoubleVector( vArray, 0, 0);
+                    pDataMat2 = pTempMat;
+                    nLenMajor = nElems;
+                }
             }
             else
             {
@@ -6807,16 +6818,22 @@ void ScInterpreter::ScLookup()
                     PushNA();
                     return;
                 }
-                ScMatrixRef pTempMat = GetNewMat( vArray.size(), 1);
-                const size_t n = vArray.size();
-                for (size_t i=0; i < n; ++i)
-                    pTempMat->PutDouble( vArray[i], i, 0);
-                pDataMat2 = pTempMat;
+                const size_t nElems = vArray.size();
+                if (nElems == nC)
+                {
+                    // No error value omitted, use as is.
+                    pDataMat2 = pDataMat;
+                    std::vector<long>().swap( vIndex);
+                }
+                else
+                {
+                    ScMatrixRef pTempMat = GetNewMat( nElems, 1);
+                    for (size_t i=0; i < nElems; ++i)
+                        pTempMat->PutDouble( vArray[i], i, 0);
+                    pDataMat2 = pTempMat;
+                    nLenMajor = nElems;
+                }
             }
-            if (vArray.size() == nLenMajor)
-                std::vector<long>().swap( vIndex);  // no error value omitted
-            else
-                nLenMajor = vArray.size();
         }
         else
         {
