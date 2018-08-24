@@ -38,46 +38,39 @@ namespace sw
 {
 
 DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                mbStartIdleTimer( false ),
-                                                                mIdleBlockCount( 0 ),
-                                                                maDocIdle( i_rSwdoc )
+                                                                m_nIdleBlockCount( 0 ),
+                                                                m_aDocIdle( i_rSwdoc )
 {
-    maDocIdle.SetPriority( TaskPriority::LOWEST );
-    maDocIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
-    maDocIdle.SetDebugName( "sw::DocumentTimerManager maDocIdle" );
+    m_aDocIdle.SetPriority(TaskPriority::LOWEST);
+    m_aDocIdle.SetInvokeHandler(LINK( this, DocumentTimerManager, DoIdleJobs));
+    m_aDocIdle.SetDebugName("sw::DocumentTimerManager m_aDocIdle");
 }
 
 void DocumentTimerManager::StartIdling()
 {
-    if( !mIdleBlockCount )
-    {
-        mbStartIdleTimer = false;
-        maDocIdle.Start();
-    }
-    else
-        mbStartIdleTimer = true;
+    if (!m_aDocIdle.IsActive())
+        m_aDocIdle.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
-    mbStartIdleTimer = false;
-    maDocIdle.Stop();
+    m_aDocIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maDocIdle.Stop();
-    ++mIdleBlockCount;
+    assert(SAL_MAX_UINT32 != m_nIdleBlockCount);
+    ++m_nIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
-    --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
-    {
-        mbStartIdleTimer = false;
-        maDocIdle.Start();
-    }
+    assert(0 != m_nIdleBlockCount);
+    --m_nIdleBlockCount;
+
+    // kick the active idle, if it's not anymore blocked by IsDocIdle()
+    if (m_aDocIdle.IsActive() && IsDocIdle())
+        m_aDocIdle.Start();
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
