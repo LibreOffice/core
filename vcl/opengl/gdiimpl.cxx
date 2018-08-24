@@ -1842,8 +1842,15 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
-                 css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default*/);
+    drawPolyLine(
+        basegfx::B2DHomMatrix(),
+        aPoly,
+        0.0,
+        basegfx::B2DVector(1.0, 1.0),
+        basegfx::B2DLineJoin::Miter,
+        css::drawing::LineCap_BUTT,
+        basegfx::deg2rad(15.0) /*default*/,
+        false);
 }
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -1916,12 +1923,14 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLine(
-            const basegfx::B2DPolygon& rPolygon,
-            double fTransparency,
-            const basegfx::B2DVector& rLineWidth,
-            basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap,
-            double fMiterMinimumAngle)
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& rPolygon,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidth,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
@@ -1929,19 +1938,23 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     if (rPolygon.count() <= 1)
         return true;
 
-    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
-    const float fLineWidth = bIsHairline ? 1.0f : rLineWidth.getX();
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidth);
+    basegfx::B2DPolygon aPolyLine(rPolygon);
+    aPolyLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+
+    const bool bIsHairline = (aLineWidths.getX() == aLineWidths.getY()) && (aLineWidths.getX() <= 1.2);
+    const float fLineWidth = bIsHairline ? 1.0f : aLineWidths.getX();
 
     PreDraw(XOROption::IMPLEMENT_XOR);
 
     if (UseLine(mnLineColor, 0.0f, fLineWidth, mrParent.getAntiAliasB2DDraw()))
     {
-        basegfx::B2DPolygon aPolygon(rPolygon);
+        if (aPolyLine.areControlPointsUsed())
+            aPolyLine = aPolyLine.getDefaultAdaptiveSubdivision();
 
-        if (aPolygon.areControlPointsUsed())
-            aPolygon = aPolygon.getDefaultAdaptiveSubdivision();
-
-        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
+        DrawPolyLine(aPolyLine, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
     }
     PostDraw();
 

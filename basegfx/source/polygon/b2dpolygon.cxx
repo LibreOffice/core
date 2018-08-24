@@ -25,6 +25,7 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <rtl/instance.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/tools/systemdependentdata.hxx>
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -464,20 +465,21 @@ public:
     }
 };
 
-class ImplBufferedData
+class ImplBufferedData : public basegfx::SystemDependentDataHolder
 {
 private:
     // Possibility to hold the last subdivision
-    std::unique_ptr< basegfx::B2DPolygon >        mpDefaultSubdivision;
+    std::unique_ptr< basegfx::B2DPolygon >  mpDefaultSubdivision;
 
     // Possibility to hold the last B2DRange calculation
-    std::unique_ptr< basegfx::B2DRange >          mpB2DRange;
+    std::unique_ptr< basegfx::B2DRange >    mpB2DRange;
 
 public:
     ImplBufferedData()
     :   mpDefaultSubdivision(),
         mpB2DRange()
-    {}
+    {
+    }
 
     const basegfx::B2DPolygon& getDefaultAdaptiveSubdivision(const basegfx::B2DPolygon& rSource) const
     {
@@ -1092,6 +1094,26 @@ public:
             maPoints.transform(rMatrix);
         }
     }
+
+    void addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData)
+    {
+        if(!mpBufferedData)
+        {
+            mpBufferedData.reset(new ImplBufferedData);
+        }
+
+        mpBufferedData->addOrReplaceSystemDependentData(rData);
+    }
+
+    basegfx::SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const
+    {
+        if(mpBufferedData)
+        {
+            return mpBufferedData->getSystemDependentData(hash_code);
+        }
+
+        return basegfx::SystemDependentData_SharedPtr();
+    }
 };
 
 namespace basegfx
@@ -1462,6 +1484,23 @@ namespace basegfx
         {
             mpPolygon->transform(rMatrix);
         }
+    }
+
+    void B2DPolygon::addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const
+    {
+        // Need to get ImplB2DPolygon* from cow_wrapper *without*
+        // calling make_unique() here - we do not want to
+        // 'modify' the ImplB2DPolygon, but add buffered data that
+        // is valid for all referencing instances
+        const B2DPolygon* pMe(this);
+        const ImplB2DPolygon* pMyImpl(pMe->mpPolygon.get());
+
+        const_cast<ImplB2DPolygon*>(pMyImpl)->addOrReplaceSystemDependentData(rData);
+    }
+
+    SystemDependentData_SharedPtr B2DPolygon::getSystemDependantDataInternal(size_t hash_code) const
+    {
+        return mpPolygon->getSystemDependentData(hash_code);
     }
 
 } // end of namespace basegfx

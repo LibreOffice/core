@@ -59,136 +59,12 @@ inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
     }
 }
 
-// Helper class to manage Gdiplus::Bitmap instances inside of
-// WinSalBitmap
-
-struct Comparator
-{
-    bool operator()(WinSalBitmap* pA, WinSalBitmap* pB) const
-    {
-        return pA < pB;
-    }
-};
-
-typedef ::std::map< WinSalBitmap*, sal_uInt32, Comparator > EntryMap;
-static const sal_uInt32 nDefaultCycles(60);
-
-class GdiPlusBuffer : protected comphelper::OBaseMutex, public Timer
-{
-private:
-    EntryMap        maEntries;
-
-public:
-    GdiPlusBuffer( const sal_Char *pDebugName )
-    :   Timer( pDebugName ),
-        maEntries()
-    {
-        SetTimeout(1000);
-        Stop();
-    }
-
-    ~GdiPlusBuffer()
-    {
-        Stop();
-    }
-
-    void addEntry(WinSalBitmap& rEntry)
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        EntryMap::iterator aFound = maEntries.find(&rEntry);
-
-        if(aFound == maEntries.end())
-        {
-            if(maEntries.empty())
-            {
-                Start();
-            }
-
-            maEntries[&rEntry] = nDefaultCycles;
-        }
-    }
-
-    void remEntry(WinSalBitmap& rEntry)
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        EntryMap::iterator aFound = maEntries.find(&rEntry);
-
-        if(aFound != maEntries.end())
-        {
-            maEntries.erase(aFound);
-
-            if(maEntries.empty())
-            {
-                Stop();
-            }
-        }
-    }
-
-    void touchEntry(WinSalBitmap& rEntry)
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        EntryMap::iterator aFound = maEntries.find(&rEntry);
-
-        if(aFound != maEntries.end())
-        {
-            aFound->second = nDefaultCycles;
-        }
-    }
-
-    // from parent Timer
-    virtual void Invoke()
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        EntryMap::iterator aIter(maEntries.begin());
-
-        while(aIter != maEntries.end())
-        {
-            if(aIter->second)
-            {
-                aIter->second--;
-                ++aIter;
-            }
-            else
-            {
-                EntryMap::iterator aDelete(aIter);
-                WinSalBitmap* pSource = aDelete->first;
-                ++aIter;
-                maEntries.erase(aDelete);
-
-                if(maEntries.empty())
-                {
-                    Stop();
-                }
-
-                // delete at WinSalBitmap after entry is removed; this
-                // way it would not hurt to call remEntry from there, too
-                if(pSource->maGdiPlusBitmap.get())
-                {
-                    pSource->maGdiPlusBitmap.reset();
-                    pSource->mpAssociatedAlpha = 0;
-                }
-            }
-        }
-
-        if(!maEntries.empty())
-        {
-            Start();
-        }
-    }
-};
-
-// Global instance of GdiPlusBuffer which manages Gdiplus::Bitmap
-// instances
-
-static GdiPlusBuffer aGdiPlusBuffer( "vcl::win GdiPlusBuffer aGdiPlusBuffer" );
-
-
 WinSalBitmap::WinSalBitmap()
-:   maSize(),
-    mhDIB(0),
-    mhDDB(0),
-    maGdiPlusBitmap(),
-    mpAssociatedAlpha(0),
+:   SalBitmap(),
+    basegfx::SystemDependentDataHolder(),
+    maSize(),
+    mhDIB(nullptr),
+    mhDDB(nullptr),
     mnBitCount(0)
 {
 }
@@ -200,11 +76,6 @@ WinSalBitmap::~WinSalBitmap()
 
 void WinSalBitmap::Destroy()
 {
-    if(maGdiPlusBitmap.get())
-    {
-        aGdiPlusBuffer.remEntry(*this);
-    }
-
     if( mhDIB )
         GlobalFree( mhDIB );
     else if( mhDDB )
@@ -214,45 +85,85 @@ void WinSalBitmap::Destroy()
     mnBitCount = 0;
 }
 
-GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
+class SystemDependentData_GdiPlusBitmap : public basegfx::SystemDependentData
 {
-    WinSalBitmap* pThat = const_cast< WinSalBitmap* >(this);
+private:
+    std::shared_ptr<Gdiplus::Bitmap>    mpGdiPlusBitmap;
+    const WinSalBitmap*                 mpAssociatedAlpha;
 
-    if(maGdiPlusBitmap.get() && pAlphaSource != mpAssociatedAlpha)
-    {
-        // #122350# if associated alpha with which the GDIPlus was constructed has changed
-        // it is necessary to remove it from buffer, reset reference to it and reconstruct
-        pThat->maGdiPlusBitmap.reset();
-        aGdiPlusBuffer.remEntry(const_cast< WinSalBitmap& >(*this));
-    }
+public:
+    SystemDependentData_GdiPlusBitmap(
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager);
+    virtual ~SystemDependentData_GdiPlusBitmap() override;
 
-    if(maGdiPlusBitmap.get())
+    const WinSalBitmap* getAssociatedAlpha() const { return mpAssociatedAlpha; }
+    void setAssociatedAlpha(const WinSalBitmap* pNew) { mpAssociatedAlpha = pNew; }
+
+    const std::shared_ptr<Gdiplus::Bitmap>& getGdiPlusBitmap() const { return mpGdiPlusBitmap; }
+    void setGdiPlusBitmap(const std::shared_ptr<Gdiplus::Bitmap>& rNew) { mpGdiPlusBitmap = rNew; }
+};
+
+SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager)
+:   basegfx::SystemDependentData(rSystemDependentDataManager),
+    mpGdiPlusBitmap(),
+    mpAssociatedAlpha(nullptr)
+{
+}
+
+SystemDependentData_GdiPlusBitmap::~SystemDependentData_GdiPlusBitmap()
+{
+}
+
+std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
+{
+    std::shared_ptr< Gdiplus::Bitmap > aRetval;
+
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_GdiPlusBitmap> pSystemDependentData_GdiPlusBitmap(
+        getSystemDependentData<SystemDependentData_GdiPlusBitmap>());
+
+    if(pSystemDependentData_GdiPlusBitmap)
     {
-        aGdiPlusBuffer.touchEntry(const_cast< WinSalBitmap& >(*this));
-    }
-    else
-    {
-        if(maSize.Width() > 0 && maSize.Height() > 0)
+        // check data validity
+        if(pSystemDependentData_GdiPlusBitmap->getAssociatedAlpha() != pAlphaSource
+            || 0 == maSize.Width()
+            || 0 == maSize.Height())
         {
-            if(pAlphaSource)
-            {
-                pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap(*pAlphaSource));
-                pThat->mpAssociatedAlpha = pAlphaSource;
-            }
-            else
-            {
-                pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap());
-                pThat->mpAssociatedAlpha = 0;
-            }
-
-            if(maGdiPlusBitmap.get())
-            {
-                aGdiPlusBuffer.addEntry(*pThat);
-            }
+            // #122350# if associated alpha with which the GDIPlus was constructed has changed
+            // it is necessary to remove it from buffer, reset reference to it and reconstruct
+            // data invalid, forget
+            pSystemDependentData_GdiPlusBitmap.reset();
         }
     }
 
-    return maGdiPlusBitmap;
+    if(pSystemDependentData_GdiPlusBitmap)
+    {
+        // use from buffer
+        aRetval = pSystemDependentData_GdiPlusBitmap->getGdiPlusBitmap();
+    }
+    else if(maSize.Width() > 0 && maSize.Height() > 0)
+    {
+        // add to buffering mechanism
+        pSystemDependentData_GdiPlusBitmap = addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
+            SalGraphics::getSystemDependentDataManager());
+
+        // create and set data
+        if(pAlphaSource)
+        {
+            aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap(*pAlphaSource));
+            pSystemDependentData_GdiPlusBitmap->setGdiPlusBitmap(aRetval);
+            pSystemDependentData_GdiPlusBitmap->setAssociatedAlpha(pAlphaSource);
+        }
+        else
+        {
+            aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap());
+            pSystemDependentData_GdiPlusBitmap->setGdiPlusBitmap(aRetval);
+            pSystemDependentData_GdiPlusBitmap->setAssociatedAlpha(nullptr);
+        }
+    }
+
+    return aRetval;
 }
 
 Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
