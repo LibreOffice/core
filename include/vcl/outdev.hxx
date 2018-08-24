@@ -800,6 +800,7 @@ public:
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool.
     bool                        DrawPolyLineDirect(
+                                    const basegfx::B2DHomMatrix& rObjectTransform,
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,

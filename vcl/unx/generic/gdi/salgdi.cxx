@@ -696,16 +696,18 @@ void X11SalGraphics::clipRegion(cairo_t* cr)
 #endif // ENABLE_CAIRO_CANVAS
 
 bool X11SalGraphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     const int nPointCount(rPolygon.count());
 
-    if(nPointCount <= 0)
+    if(0 == rPolygon.count())
     {
         return true;
     }
@@ -723,17 +725,37 @@ bool X11SalGraphics::drawPolyLine(
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
 
-        SvpSalGraphics::drawPolyLine(cr, mnPenColor, getAntiAliasB2DDraw(),
-                                     rPolygon, fTransparency, rLineWidth,
-                                     eLineJoin, eLineCap, fMiterMinimumAngle);
+        // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+        basegfx::B2DPolygon aPolyLine(rPolygon);
+        aPolyLine.transform(rObjectToDevice);
+        if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+        const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
+
+        SvpSalGraphics::drawPolyLine(
+            cr,
+            mnPenColor,
+            getAntiAliasB2DDraw(),
+            aPolyLine,
+            fTransparency,
+            aLineWidth,
+            eLineJoin,
+            eLineCap,
+            fMiterMinimumAngle);
 
         releaseCairoContext(cr);
         return true;
     }
 #endif // ENABLE_CAIRO_CANVAS
 
-    return mxImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
-            eLineJoin, eLineCap, fMiterMinimumAngle );
+    return mxImpl->drawPolyLine(
+        rObjectToDevice,
+        rPolygon,
+        fTransparency,
+        rLineWidth,
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle,
+        bPixelSnapHairline);
 }
 
 bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
