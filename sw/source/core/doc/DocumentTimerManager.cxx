@@ -33,50 +33,56 @@
 #include <docsh.hxx>
 #include <docfld.hxx>
 #include <fldbas.hxx>
+#include <vcl/scheduler.hxx>
 
 namespace sw
 {
 
 DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                mbStartIdleTimer( false ),
-                                                                mIdleBlockCount( 0 ),
-                                                                maDocIdle( i_rSwdoc )
+                                                                m_nIdleBlockCount( 0 ),
+                                                                m_bStartOnUnblock( false ),
+                                                                m_aDocIdle( i_rSwdoc )
 {
-    maDocIdle.SetPriority( TaskPriority::LOWEST );
-    maDocIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
-    maDocIdle.SetDebugName( "sw::DocumentTimerManager maDocIdle" );
+    m_aDocIdle.SetPriority(TaskPriority::LOWEST);
+    m_aDocIdle.SetInvokeHandler(LINK( this, DocumentTimerManager, DoIdleJobs));
+    m_aDocIdle.SetDebugName("sw::DocumentTimerManager m_aDocIdle");
 }
 
 void DocumentTimerManager::StartIdling()
 {
-    if( !mIdleBlockCount && !maDocIdle.IsActive() )
+    m_bStartOnUnblock = true;
+    if (0 == m_nIdleBlockCount)
     {
-        mbStartIdleTimer = false;
-        maDocIdle.Start();
+        if (!m_aDocIdle.IsActive())
+            m_aDocIdle.Start();
+        else
+            Scheduler::Wakeup();
     }
-    else
-        mbStartIdleTimer = true;
 }
 
 void DocumentTimerManager::StopIdling()
 {
-    mbStartIdleTimer = false;
-    maDocIdle.Stop();
+    m_bStartOnUnblock = false;
+    m_aDocIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maDocIdle.Stop();
-    ++mIdleBlockCount;
+    assert(SAL_MAX_UINT32 != m_nIdleBlockCount);
+    ++m_nIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
-    --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
+    assert(0 != m_nIdleBlockCount);
+    --m_nIdleBlockCount;
+
+    if ((0 == m_nIdleBlockCount) && m_bStartOnUnblock)
     {
-        mbStartIdleTimer = false;
-        maDocIdle.Start();
+        if (!m_aDocIdle.IsActive())
+            m_aDocIdle.Start();
+        else
+            Scheduler::Wakeup();
     }
 }
 
@@ -131,6 +137,7 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
     BlockIdling();
+    StopIdling();
 
     IdleJob eJob = GetNextIdleJob();
 
