@@ -93,6 +93,8 @@
 #include <opengl/zone.hxx>
 #include <opengl/watchdog.hxx>
 
+#include <basegfx/tools/systemdependentdata.hxx>
+
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 #include <rtl/strbuf.hxx>
@@ -370,6 +372,10 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
+
+    // cleanup SystemDependentData
+    SalGraphics::getSystemDependentDataManager().flushAll();
+
     // lp#1560328: clear cache before disposing rest of VCL
     if(pSVData->mpBlendFrameCache)
         pSVData->mpBlendFrameCache->m_aLastResult.Clear();

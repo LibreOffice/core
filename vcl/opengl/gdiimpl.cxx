@@ -1842,8 +1842,15 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
-                 css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default*/);
+    drawPolyLine(
+        basegfx::B2DHomMatrix(),
+        aPoly,
+        0.0,
+        basegfx::B2DVector(1.0, 1.0),
+        basegfx::B2DLineJoin::Miter,
+        css::drawing::LineCap_BUTT,
+        basegfx::deg2rad(15.0) /*default*/,
+        false);
 }
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -1916,12 +1923,14 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLine(
-            const basegfx::B2DPolygon& rPolygon,
-            double fTransparency,
-            const basegfx::B2DVector& rLineWidth,
-            basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap,
-            double fMiterMinimumAngle)
+    const basegfx::B2DHomMatrix& /*rObjectToDevice*/,
+    const basegfx::B2DPolygon& rPolygon,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidth,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool /*bPixelSnapHairline*/)
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
