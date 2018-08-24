@@ -365,7 +365,7 @@ public:
                                          SCCOLROW nNewEnd, SCTAB nNewEndTab,
                                          ScDocument* pNewUndoDoc,
                                          const std::vector<sc::ColRowSpan>& rRanges,
-                                         ScOutlineTable* pNewUndoTab,
+                                         std::unique_ptr<ScOutlineTable> pNewUndoTab,
                                          ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips,
                                          bool bNewWidth );
     virtual         ~ScUndoWidthOrHeight() override;
