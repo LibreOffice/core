@@ -69,9 +69,9 @@
 
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                InsCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData,
                                 bool bNewPartOfPaste ) :
-    ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
     nCount( nNewCount ),
     pTabs( pNewTabs ),
@@ -338,8 +338,8 @@ bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
-    ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
+                                DelCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData ) :
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
     nCount( nNewCount ),
     pTabs( pNewTabs ),
@@ -623,8 +623,8 @@ ScUndoDeleteMulti::ScUndoDeleteMulti(
     ScDocShell* pNewDocShell,
     bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
     const std::vector<sc::ColRowSpan>& rSpans,
-    ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
-    ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
+    ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData ) :
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), pRefData, SC_UNDO_REFLAST ),
     mbRows(bNewRows),
     mbRefresh(bNeedsRefresh),
     nTab( nNewTab ),
@@ -1171,8 +1171,8 @@ bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
                     const ScRange& rRange, const ScAddress& aNewDestPos, bool bNewCut,
-                    ScDocument* pUndoDocument, bool bScenario ) :
-    ScMoveUndo( pNewDocShell, pUndoDocument, nullptr, SC_UNDO_REFLAST ),
+                    ScDocumentUniquePtr pUndoDocument, bool bScenario ) :
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), nullptr, SC_UNDO_REFLAST ),
     mnPaintExtFlags( 0 ),
     aSrcRange( rRange ),
     bCut( bNewCut ),

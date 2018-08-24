@@ -97,7 +97,7 @@ public:
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
                             const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
-                            ScDocument* pUndoDocument,
+                            ScDocumentUniquePtr pUndoDocument,
                             ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteTab() override;
 

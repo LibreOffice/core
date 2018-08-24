@@ -406,10 +406,10 @@ void ScMultiBlockUndo::ShowBlock()
     }
 }
 
-ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocument* pRefDoc, ScRefUndoData* pRefData,
+ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, ScRefUndoData* pRefData,
                                                 ScMoveUndoMode eRefMode ) :
     ScSimpleUndo( pDocSh ),
-    pRefUndoDoc( pRefDoc ),
+    pRefUndoDoc( std::move(pRefDoc) ),
     pRefUndoData( pRefData ),
     eMode( eRefMode )
 {
