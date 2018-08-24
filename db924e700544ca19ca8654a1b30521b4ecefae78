@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_6c88d0c5",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-24T14:45:09Z",
+      "side": 1,
+      "message": "mixing rtl_reallocateMemory with malloc/free looks odd",
+      "revId": "db924e700544ca19ca8654a1b30521b4ecefae78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_4c850cad",
+        "filename": "sal/rtl/byteseq.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-24T14:45:09Z",
+      "side": 1,
+      "message": "mixing rtl_reallocateMemory with malloc/free looks odd",
+      "revId": "db924e700544ca19ca8654a1b30521b4ecefae78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
