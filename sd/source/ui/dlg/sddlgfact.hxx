@@ -70,8 +70,8 @@ class SdAbstractGenericDialog_Impl : public VclAbstractDialog
 protected:
     std::unique_ptr<weld::GenericDialogController> m_xDlg;
 public:
-    explicit SdAbstractGenericDialog_Impl(weld::GenericDialogController* p)
-        : m_xDlg(p)
+    explicit SdAbstractGenericDialog_Impl(std::unique_ptr<weld::GenericDialogController> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -82,7 +82,7 @@ class AbstractMasterLayoutDialog_Impl : public VclAbstractDialog
 private:
     std::unique_ptr<sd::MasterLayoutDialog> m_xDlg;
 public:
-    AbstractMasterLayoutDialog_Impl(::sd::MasterLayoutDialog* pDlg);
+    AbstractMasterLayoutDialog_Impl(std::unique_ptr<::sd::MasterLayoutDialog> pDlg);
     virtual short Execute() override;
 };
 
@@ -91,7 +91,7 @@ class AbstractBreakDlg_Impl : public VclAbstractDialog
 private:
     std::unique_ptr<sd::BreakDlg> m_xDlg;
 public:
-    AbstractBreakDlg_Impl(::sd::BreakDlg* pDlg);
+    AbstractBreakDlg_Impl(std::unique_ptr<::sd::BreakDlg> pDlg);
     virtual short Execute() override;
 };
 
@@ -107,8 +107,8 @@ class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
 private:
     std::unique_ptr<SdCustomShowDlg> m_xDlg;
 public:
-    AbstractSdCustomShowDlg_Impl(SdCustomShowDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdCustomShowDlg_Impl(std::unique_ptr<SdCustomShowDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short       Execute() override;
@@ -157,8 +157,8 @@ class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
 private:
     std::unique_ptr<SdModifyFieldDlg> m_xDlg;
 public:
-    AbstractSdModifyFieldDlg_Impl(SdModifyFieldDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdModifyFieldDlg_Impl(std::unique_ptr<SdModifyFieldDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short Execute() override;
@@ -172,8 +172,8 @@ class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
 private:
     std::unique_ptr<SdSnapLineDlg> m_xDlg;
 public:
-    AbstractSdSnapLineDlg_Impl(SdSnapLineDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdSnapLineDlg_Impl(std::unique_ptr<SdSnapLineDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short Execute() override;
@@ -191,8 +191,8 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
 private:
     std::unique_ptr<SdInsertLayerDlg> m_xDlg;
 public:
-    AbstractSdInsertLayerDlg_Impl(SdInsertLayerDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdInsertLayerDlg_Impl(std::unique_ptr<SdInsertLayerDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short   Execute() override;
@@ -215,8 +215,8 @@ class AbstractMorphDlg_Impl : public AbstractMorphDlg
 private:
     std::unique_ptr<sd::MorphDlg> m_xDlg;
 public:
-    AbstractMorphDlg_Impl(::sd::MorphDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractMorphDlg_Impl(std::unique_ptr<::sd::MorphDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short   Execute() override;
@@ -232,8 +232,8 @@ class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
 private:
     std::unique_ptr<SdStartPresentationDlg> m_xDlg;
 public:
-    AbstractSdStartPresDlg_Impl(SdStartPresentationDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdStartPresDlg_Impl(std::unique_ptr<SdStartPresentationDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short   Execute() override;
@@ -260,8 +260,8 @@ class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg
 private:
     std::unique_ptr<SdVectorizeDlg> m_xDlg;
 public:
-    AbstractSdVectorizeDlg_Impl(SdVectorizeDlg* pDlg)
-        : m_xDlg(pDlg)
+    AbstractSdVectorizeDlg_Impl(std::unique_ptr<SdVectorizeDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
     {
     }
     virtual short Execute() override;
