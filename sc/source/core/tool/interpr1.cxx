@@ -6767,7 +6767,7 @@ void ScInterpreter::ScLookup()
 
         // In case of non-vector matrix, only search the first row or column.
         ScMatrixRef pDataMat2;
-        std::vector<long> vIndex;
+        std::vector<SCCOLROW> vIndex;
         if (bOmitErrorValues)
         {
             std::vector<double> vArray;
@@ -6792,7 +6792,7 @@ void ScInterpreter::ScLookup()
             {
                 // No error value omitted, use as is.
                 pDataMat2 = pDataMat;
-                std::vector<long>().swap( vIndex);
+                std::vector<SCCOLROW>().swap( vIndex);
             }
             else
             {
