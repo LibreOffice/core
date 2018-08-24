@@ -5135,6 +5135,16 @@ void Test::testFuncLOOKUParrayWithError()
     m_pDoc->SetString(4,1,0, "");                                   // E2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should find match for second last column.", OUString("b"), m_pDoc->GetString(0,0,0));
 
+    m_pDoc->SetString(6,1,0, "one");                                // G2
+    m_pDoc->SetString(6,5,0, "two");                                // G6
+    // Creates an interim array {1,#DIV/0!,#DIV/0!,#DIV/0!,1,#DIV/0!,#DIV/0!,#DIV/0!}
+    m_pDoc->SetString(7,8,0, "=LOOKUP(2;1/(NOT(ISBLANK(G2:G9)));G2:G9)"); // H9
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should find match for last row.", OUString("two"), m_pDoc->GetString(7,8,0));
+
+    // Lookup on empty range.
+    m_pDoc->SetString(9,8,0, "=LOOKUP(2;1/(NOT(ISBLANK(I2:I9)));I2:I9)"); // J9
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should find no match.", OUString("#N/A"), m_pDoc->GetString(9,8,0));
+
     m_pDoc->DeleteTab(0);
 }
 
