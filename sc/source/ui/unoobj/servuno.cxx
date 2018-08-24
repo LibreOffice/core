@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 
+#include <editsrc.hxx>
 #include <servuno.hxx>
 #include <unonames.hxx>
 #include <appluno.hxx>

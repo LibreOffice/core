@@ -204,7 +204,7 @@ public:
 
     ScEditFieldObj(
         const css::uno::Reference<css::text::XTextRange>& rContent,
-        ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel);
+        std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel);
     virtual ~ScEditFieldObj() override;
 
     sal_Int32 GetFieldType() const { return meType;}
@@ -213,7 +213,7 @@ public:
     SvxFieldItem CreateFieldItem();
     void InitDoc(
         const css::uno::Reference<css::text::XTextRange>& rContent,
-        ScEditSource* pEditSrc, const ESelection& rSel);
+        std::unique_ptr<ScEditSource> pEditSrc, const ESelection& rSel);
 
                             // XTextField
     virtual OUString SAL_CALL getPresentation( sal_Bool bShowCommand ) override;
