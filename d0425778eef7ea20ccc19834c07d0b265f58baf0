@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2c2e48a5",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-24T17:02:04Z",
+      "side": 0,
+      "message": "See .rng, decimal-replacement for scientific IMHO makes no sense.",
+      "revId": "d0425778eef7ea20ccc19834c07d0b265f58baf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
