@@ -661,12 +661,12 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
 
         case SAL_MSG_TIMER_CALLBACK:
             assert( pTimer != nullptr );
-            nRet = static_cast<LRESULT>( pTimer->ImplHandleTimerEvent( wParam ) );
+            pTimer->ImplHandleTimerEvent( wParam );
             break;
 
         case WM_TIMER:
             assert( pTimer != nullptr );
-            nRet = static_cast<LRESULT>( pTimer->ImplHandle_WM_TIMER( wParam ) );
+            pTimer->ImplHandle_WM_TIMER( wParam );
             break;
 
         case SAL_MSG_DUMMY:
