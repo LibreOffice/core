@@ -19,12 +19,12 @@
 
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 
 #include <rtl/byteseq.h>
-#include <rtl/alloc.h>
 
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
@@ -50,17 +50,17 @@ void SAL_CALL rtl_byte_sequence_reference2One(
         nElements = pSequence->nElements;
         if (nElements)
         {
-            pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nElements ));
+            pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nElements ));
 
             if ( pNew != nullptr )
                 memcpy( pNew->elements, pSequence->elements, nElements );
 
             if (! osl_atomic_decrement( &pSequence->nRefCount ))
-                rtl_freeMemory( pSequence );
+                free( pSequence );
         }
         else
         {
-            pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE ));
+            pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE ));
         }
 
         if ( pNew != nullptr )
@@ -88,7 +88,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
 
     if (pSequence->nRefCount > 1) // split
     {
-        pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nSize ));
+        pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nSize ));
 
         if ( pNew != nullptr )
         {
@@ -104,12 +104,12 @@ void SAL_CALL rtl_byte_sequence_realloc(
         }
 
         if (! osl_atomic_decrement( &pSequence->nRefCount ))
-            rtl_freeMemory( pSequence );
+            free( pSequence );
         pSequence = pNew;
     }
     else
     {
-        pSequence = static_cast<sal_Sequence *>(rtl_reallocateMemory(
+        pSequence = static_cast<sal_Sequence *>(realloc(
             pSequence, SAL_SEQUENCE_HEADER_SIZE + nSize ));
     }
 
@@ -136,7 +136,7 @@ void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
     {
         if (! osl_atomic_decrement( &(pSequence->nRefCount )) )
         {
-            rtl_freeMemory( pSequence );
+            free( pSequence );
         }
     }
 }
@@ -178,7 +178,7 @@ void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , 
         *ppSequence = nullptr;
     }
 
-    *ppSequence = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nLength ));
+    *ppSequence = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nLength ));
 
     if ( *ppSequence != nullptr )
     {
