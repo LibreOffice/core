@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include <sal/types.h>
 #include <osl/endian.h>
@@ -430,7 +431,7 @@ void SAL_CALL rtl_digest_destroyMD2(rtlDigest Digest) SAL_THROW_EXTERN_C()
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD2)
             rtl_freeZeroMemory(pImpl, sizeof(DigestMD2_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -813,7 +814,7 @@ void SAL_CALL rtl_digest_destroyMD5(rtlDigest Digest) SAL_THROW_EXTERN_C()
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5)
             rtl_freeZeroMemory(pImpl, sizeof(DigestMD5_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -1227,7 +1228,7 @@ void SAL_CALL rtl_digest_destroySHA(rtlDigest Digest) SAL_THROW_EXTERN_C()
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA)
             rtl_freeZeroMemory(pImpl, sizeof(DigestSHA_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -1387,7 +1388,7 @@ void SAL_CALL rtl_digest_destroySHA1(rtlDigest Digest) SAL_THROW_EXTERN_C()
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1)
             rtl_freeZeroMemory(pImpl, sizeof(DigestSHA_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -1584,7 +1585,7 @@ void SAL_CALL rtl_digest_destroyHMAC_MD5(rtlDigest Digest) SAL_THROW_EXTERN_C()
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_MD5)
             rtl_freeZeroMemory(pImpl, sizeof(DigestHMAC_MD5_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -1781,7 +1782,7 @@ void SAL_CALL rtl_digest_destroyHMAC_SHA1(rtlDigest Digest)
         if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1)
             rtl_freeZeroMemory(pImpl, sizeof(DigestHMAC_SHA1_Impl));
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
