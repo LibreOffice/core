@@ -1028,7 +1028,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
         ScSubTotalParam aNewParam( rParam );        // end of range is being changed
         ScDocument*     pUndoDoc = nullptr;
-        ScOutlineTable* pUndoTab = nullptr;
+        std::unique_ptr<ScOutlineTable> pUndoTab;
         ScRangeName*    pUndoRange = nullptr;
         ScDBCollection* pUndoDB = nullptr;
 
@@ -1041,7 +1041,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
             if (pTable)
             {
-                pUndoTab = new ScOutlineTable( *pTable );
+                pUndoTab.reset(new ScOutlineTable( *pTable ));
 
                 // column/row state
                 SCCOLROW nOutStartCol, nOutEndCol;
@@ -1110,7 +1110,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoSubTotals( &rDocShell, nTab,
                                         rParam, aNewParam.nRow2,
-                                        pUndoDoc, pUndoTab, // pUndoDBData,
+                                        pUndoDoc, std::move(pUndoTab), // pUndoDBData,
                                         pUndoRange, pUndoDB ) );
         }
 

@@ -3533,7 +3533,7 @@ bool ScDocFunc::SetWidthOrHeight(
     }
 
     ScDocument*     pUndoDoc = nullptr;
-    ScOutlineTable* pUndoTab = nullptr;
+    std::unique_ptr<ScOutlineTable> pUndoTab;
     std::vector<sc::ColRowSpan> aUndoRanges;
 
     if ( bRecord )
@@ -3556,7 +3556,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
         ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
         if (pTable)
-            pUndoTab = new ScOutlineTable( *pTable );
+            pUndoTab.reset(new ScOutlineTable( *pTable ));
     }
 
     bool bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
@@ -3650,7 +3650,7 @@ bool ScDocFunc::SetWidthOrHeight(
     rDoc.SetDrawPageSize(nTab);
 
     if (!bOutline)
-        DELETEZ(pUndoTab);
+        pUndoTab.reset();
 
     if (bRecord)
     {
@@ -3659,7 +3659,7 @@ bool ScDocFunc::SetWidthOrHeight(
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoWidthOrHeight(
                 &rDocShell, aMark, nStart, nTab, nEnd, nTab, pUndoDoc,
-                aUndoRanges, pUndoTab, eMode, nSizeTwips, bWidth));
+                aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
     }
 
     rDoc.UpdatePageBreaks( nTab );
