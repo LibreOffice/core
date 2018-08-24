@@ -97,6 +97,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \
+	set_private_extract_of_public_api \
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
