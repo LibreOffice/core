@@ -578,6 +578,7 @@ void ODatabaseSource::disposing()
 
 namespace
 {
+#if ENABLE_FIREBIRD_SDBC
     weld::Window* GetFrameWeld(const Reference<XModel>& rModel)
     {
         if (!rModel.is())
@@ -591,6 +592,7 @@ namespace
         Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
         return Application::GetFrameWeld(xWindow);
     }
+#endif
 }
 
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
