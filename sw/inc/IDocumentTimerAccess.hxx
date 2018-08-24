@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
 
 /**
- * Handle the background job of the Writer document.
+ * Handle the background jobs of a Writer document.
  *
  * Initially it's disabled and unblocked.
  *
@@ -34,7 +34,9 @@ class IDocumentTimerAccess
 {
 public:
     /**
-     * Start the idle job depending on the block count.
+     * Start the idle task.
+     *
+     * Depends on the block count and various document states.
      */
     virtual void StartIdling() = 0;
 
@@ -47,13 +49,14 @@ public:
      * Increment block count.
      *
      * Prevents further background idle processing.
+     * This doesn't guarantee the Idle task is not currently running!
      */
     virtual void BlockIdling() = 0;
 
     /**
      * Decrement block count.
      *
-     * May start the idle job.
+     * May re-start the idle task, if active.
      */
     virtual void UnblockIdling() = 0;
 

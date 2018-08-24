@@ -65,6 +65,18 @@ public:
      */
     static void       ProcessEventsToIdle();
 
+    /**
+     * Wakes up the scheduler
+     *
+     * This doesn't handle any events! It just ensures the Scheduler is run as
+     * soon as possible by forcing the Scheduler timer to fire.
+     *
+     * Can be used for complex UpdateMinPeriod function, where the task is
+     * actually active but not ready and we want to skip the Task::Start()
+     * queue append for faster reaction.
+     */
+    static void       Wakeup();
+
     /// Control the deterministic mode.  In this mode, two subsequent runs of
     /// LibreOffice fire about the same amount idles.
     static void       SetDeterministicMode(bool bDeterministic);
