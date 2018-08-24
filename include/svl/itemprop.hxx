@@ -181,14 +181,12 @@ public:
     const SfxItemPropertyMap& getPropertyMap() const {return m_aMap;}
 };
 
-struct SfxItemPropertySetInfo_Impl;
-
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE SfxItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
 
 class SVL_DLLPUBLIC SfxItemPropertySetInfo : public SfxItemPropertySetInfo_Base
 {
-    std::unique_ptr<SfxItemPropertySetInfo_Impl> m_pImpl;
+    std::unique_ptr<SfxItemPropertyMap> m_pOwnMap;
 
 public:
     SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );
