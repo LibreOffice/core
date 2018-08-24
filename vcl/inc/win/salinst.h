@@ -39,7 +39,7 @@ public:
     SalYieldMutex*      mpSalYieldMutex;
 
     osl::Condition      maWaitingYieldCond;
-    bool                mbNoYieldLock;
+    unsigned            m_nNoYieldLock;
 
 public:
     WinSalInstance();
