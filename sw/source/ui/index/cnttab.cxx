@@ -2811,8 +2811,6 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     if(m_pForm)
     {
-        for (auto& aControl : m_aControlList)
-            aControl.disposeAndClear();
         //apply current level settings to the form
         for (auto& aControl : m_aControlList)
             aControl.disposeAndClear();
