@@ -362,10 +362,12 @@ bool Scheduler::ProcessTaskScheduling()
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
     sal_uInt64         nMostUrgentPeriod = InfiniteTimeoutMs;
     sal_uInt64         nReadyPeriod = InfiniteTimeoutMs;
+    unsigned           nTasks = 0;
 
     pSchedulerData = rSchedCtx.mpFirstSchedulerData;
     while ( pSchedulerData )
     {
+        ++nTasks;
         const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
         if ( timer )
             SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
@@ -423,7 +425,8 @@ next_entry:
     }
 
     if ( InfiniteTimeoutMs != nMinPeriod )
-        SAL_INFO("vcl.schedule", "Calculated minimum timeout as " << nMinPeriod );
+        SAL_INFO("vcl.schedule", "Calculated minimum timeout as " << nMinPeriod
+                                 << " of " << nTasks << " tasks" );
     UpdateSystemTimer( rSchedCtx, nMinPeriod, true, nTime );
 
     if ( pMostUrgent )
