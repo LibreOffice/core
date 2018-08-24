@@ -130,7 +130,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
     WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst && pInst->IsMainThread() )
     {
-        if ( pInst->mbNoYieldLock )
+        if ( pInst->m_nNoYieldLock )
             return;
         // tdf#96887 If this is the main thread, then we must wait for two things:
         // - the mpSalYieldMutex being freed
@@ -161,7 +161,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
-    if ( pInst && pInst->mbNoYieldLock && pInst->IsMainThread() )
+    if ( pInst && pInst->m_nNoYieldLock && pInst->IsMainThread() )
         return 1;
 
     sal_uInt32 nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
@@ -176,7 +176,7 @@ bool SalYieldMutex::tryToAcquire()
     WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
     {
-        if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
+        if ( pInst->m_nNoYieldLock && pInst->IsMainThread() )
             return true;
         else
             return comphelper::SolarMutex::tryToAcquire();
@@ -210,7 +210,7 @@ void ImplSalYieldMutexRelease()
 
 bool SalYieldMutex::IsCurrentThread() const
 {
-    if ( !GetSalData()->mpInstance->mbNoYieldLock )
+    if ( !GetSalData()->mpInstance->m_nNoYieldLock )
         // For the Windows backend, the LO identifier is the system thread ID
         return m_nThreadId == GetCurrentThreadId();
     else
@@ -423,7 +423,7 @@ void DestroySalInstance( SalInstance* pInst )
 
 WinSalInstance::WinSalInstance()
     : mhComWnd( nullptr )
-    , mbNoYieldLock( false )
+    , m_nNoYieldLock( 0 )
 {
     mpSalYieldMutex = new SalYieldMutex();
     mpSalYieldMutex->acquire();
@@ -469,7 +469,7 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     bool bWasMsg = false, bOneEvent = false, bWasTimeoutMsg = false;
     ImplSVData *const pSVData = ImplGetSVData();
     WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
-    const bool bNoYieldLock = GetSalData()->mpInstance->mbNoYieldLock;
+    const bool bNoYieldLock = (GetSalData()->mpInstance->m_nNoYieldLock > 0);
 
     assert( !bNoYieldLock );
     if ( bNoYieldLock )
@@ -570,10 +570,9 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     case salmsg: \
         if (bIsOtherThreadMessage) \
         { \
-            assert( !pInst->mbNoYieldLock ); \
-            pInst->mbNoYieldLock = true; \
+            ++pInst->m_nNoYieldLock; \
             function; \
-            pInst->mbNoYieldLock = false; \
+            --pInst->m_nNoYieldLock; \
         } \
         else \
         { \
@@ -586,10 +585,9 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     case salmsg: \
         if (bIsOtherThreadMessage) \
         { \
-            assert( !pInst->mbNoYieldLock ); \
-            pInst->mbNoYieldLock = true; \
+            ++pInst->m_nNoYieldLock; \
             nRet = reinterpret_cast<LRESULT>( function ); \
-            pInst->mbNoYieldLock = false; \
+            --pInst->m_nNoYieldLock; \
         } \
         else \
         { \
