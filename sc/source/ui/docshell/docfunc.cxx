@@ -1798,11 +1798,11 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important due to TrackFormulas at UpdateReference
 
-    ScDocument* pRefUndoDoc = nullptr;
+    ScDocumentUniquePtr pRefUndoDoc;
     ScRefUndoData* pUndoData = nullptr;
     if ( bRecord )
     {
-        pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1 );
 
         // pRefUndoDoc is filled in InsertCol / InsertRow
@@ -1968,24 +1968,24 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     switch (eCmd)
     {
         case INS_CELLSDOWN:
-            bSuccess = rDoc.InsertRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
+            bSuccess = rDoc.InsertRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc.get(), &aFullMark );
             nPaintEndRow = MAXROW;
             break;
         case INS_INSROWS_BEFORE:
         case INS_INSROWS_AFTER:
-            bSuccess = rDoc.InsertRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
+            bSuccess = rDoc.InsertRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc.get(), &aFullMark );
             nPaintStartCol = 0;
             nPaintEndCol = MAXCOL;
             nPaintEndRow = MAXROW;
             nPaintFlags |= PaintPartFlags::Left;
             break;
         case INS_CELLSRIGHT:
-            bSuccess = rDoc.InsertCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
+            bSuccess = rDoc.InsertCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc.get(), &aFullMark );
             nPaintEndCol = MAXCOL;
             break;
         case INS_INSCOLS_BEFORE:
         case INS_INSCOLS_AFTER:
-            bSuccess = rDoc.InsertCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
+            bSuccess = rDoc.InsertCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc.get(), &aFullMark );
             nPaintStartRow = 0;
             nPaintEndRow = MAXROW;
             nPaintEndCol = MAXCOL;
@@ -2025,7 +2025,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
             rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertCells(
                 &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),
-                nUndoPos, pTabs, pScenarios, eCmd, pRefUndoDoc, pUndoData, bPartOfPaste ) );
+                nUndoPos, pTabs, pScenarios, eCmd, std::move(pRefUndoDoc), pUndoData, bPartOfPaste ) );
         }
 
         // #i8302 : we remerge growing ranges, with the new part inserted
@@ -2121,7 +2121,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         rDocShell.GetUndoManager()->LeaveListAction();
         rDocShell.GetUndoManager()->RemoveLastUndoAction();
 
-        delete pRefUndoDoc;
+        pRefUndoDoc.reset();
         delete pUndoData;
         if (!bApi)
             rDocShell.ErrorMessage(STR_INSERT_FULL);        // column/row full
@@ -2451,7 +2451,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important because of TrackFormulas in UpdateReference
 
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     ScDocument* pRefUndoDoc = nullptr;
     ScRefUndoData* pUndoData = nullptr;
     if ( bRecord )
@@ -2459,7 +2459,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         // With the fix for #101329#, UpdateRef always puts cells into pRefUndoDoc at their old position,
         // so it's no longer necessary to copy more than the deleted range into pUndoDoc.
 
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, (eCmd==DelCellCmd::Cols), (eCmd==DelCellCmd::Rows) );
         itr = aMark.begin();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -2558,7 +2558,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDeleteCells(
             &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),nUndoPos, pTabs, pScenarios,
-            eCmd, pUndoDoc, pUndoData ) );
+            eCmd, std::move(pUndoDoc), pUndoData ) );
     }
 
     // #i8302 want to be able to insert into the middle of merged cells
@@ -2834,7 +2834,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     //  do it
 
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
 
     if (bRecord)
     {
@@ -2842,7 +2842,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         bool bWholeRows = ( nStartCol == 0 && nEndCol == MAXCOL );
         InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
 
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab, bWholeCols, bWholeRows );
 
         if (bCut)
@@ -2889,7 +2889,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                 if (!bApi)      // "Merge of already merged cells not possible"
                     rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
 
-                delete pUndoDoc;
                 return false;
             }
 
@@ -2910,7 +2909,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     rDoc.CopyFromClip(
         aPasteDest, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS,
-        pUndoDoc, pClipDoc.get(), true, false, bIncludeFiltered);
+        pUndoDoc.get(), pClipDoc.get(), true, false, bIncludeFiltered);
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -2934,7 +2933,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDragDrop(
-                &rDocShell, aUndoRange, aDestPos, bCut, pUndoDoc, bScenariosAdded));
+                &rDocShell, aUndoRange, aDestPos, bCut, std::move(pUndoDoc), bScenariosAdded));
     }
 
     SCCOL nDestPaintEndCol = nDestEndCol;
@@ -3181,11 +3180,11 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
     if ( bVbaEnabled )
         bRecord = false;
     bool bWasLinked = rDoc.IsLinked(nTab);
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     ScRefUndoData* pUndoData = nullptr;
     if (bRecord)
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nCount = rDoc.GetTableCount();
 
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );     // only nTab with Flags
@@ -3230,7 +3229,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
             vector<SCTAB> theTabs;
             theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
+                        new ScUndoDeleteTab( &rDocShell, theTabs, std::move(pUndoDoc), pUndoData ));
         }
         //  Update views:
         if( bVbaEnabled )
@@ -3263,7 +3262,6 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
     }
     else
     {
-        delete pUndoDoc;
         delete pUndoData;
     }
     return bSuccess;

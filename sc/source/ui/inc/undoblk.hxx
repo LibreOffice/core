@@ -44,7 +44,7 @@ class ScUndoInsertCells: public ScMoveUndo
 public:
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                       InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                       InsCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData,
                                        bool bNewPartOfPaste );
     virtual         ~ScUndoInsertCells() override;
 
@@ -79,7 +79,7 @@ class ScUndoDeleteCells: public ScMoveUndo
 public:
                     ScUndoDeleteCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                       DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+                                       DelCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteCells() override;
 
     virtual void    Undo() override;
@@ -111,7 +111,7 @@ public:
     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
                        bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
                        const std::vector<sc::ColRowSpan>& rSpans,
-                       ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+                       ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData );
 
     virtual         ~ScUndoDeleteMulti() override;
 
@@ -220,7 +220,7 @@ class ScUndoDragDrop: public ScMoveUndo
 public:
                     ScUndoDragDrop( ScDocShell* pNewDocShell,
                                     const ScRange& rRange, const ScAddress& aNewDestPos, bool bNewCut,
-                                    ScDocument* pUndoDocument,
+                                    ScDocumentUniquePtr pUndoDocument,
                                     bool bScenario );
     virtual         ~ScUndoDragDrop() override;
 

@@ -2330,11 +2330,11 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         --nNewTab;
 
     bool bWasLinked = false;
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     ScRefUndoData* pUndoData = nullptr;
     if (bRecord)
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nCount = rDoc.GetTableCount();
 
         OUString aOldName;
@@ -2411,7 +2411,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoDeleteTab( GetViewData().GetDocShell(), TheTabs,
-                                            pUndoDoc, pUndoData ));
+                                            std::move(pUndoDoc), pUndoData ));
     }
 
     if (bDelDone)
@@ -2437,7 +2437,6 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     }
     else
     {
-        delete pUndoDoc;
         delete pUndoData;
     }
     return bDelDone;

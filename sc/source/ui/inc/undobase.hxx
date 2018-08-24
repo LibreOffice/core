@@ -142,13 +142,13 @@ class ScMoveUndo: public ScSimpleUndo               // with references
 {
 public:
                     ScMoveUndo( ScDocShell* pDocSh,
-                                ScDocument* pRefDoc, ScRefUndoData* pRefData,
+                                ScDocumentUniquePtr pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
     virtual         ~ScMoveUndo() override;
 
 protected:
     std::unique_ptr<SdrUndoAction>  pDrawUndo;
-    std::unique_ptr<ScDocument>     pRefUndoDoc;
+    ScDocumentUniquePtr             pRefUndoDoc;
     std::unique_ptr<ScRefUndoData>  pRefUndoData;
     ScMoveUndoMode  eMode;
 

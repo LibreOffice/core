@@ -1820,11 +1820,11 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
     WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
 
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     ScRefUndoData* pUndoData = nullptr;
     if (bRecord)
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, !bRows, bRows );      // row height
 
         for (sc::ColRowSpan & rSpan : aSpans)
@@ -1877,7 +1877,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoDeleteMulti(
-                pDocSh, bRows, bNeedRefresh, nTab, aSpans, pUndoDoc, pUndoData));
+                pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), pUndoData));
     }
 
     if (!AdjustRowHeight(0, MAXROW))
