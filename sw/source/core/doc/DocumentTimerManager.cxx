@@ -49,13 +49,9 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
+    mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-    {
-        mbStartIdleTimer = false;
         maDocIdle.Start();
-    }
-    else
-        mbStartIdleTimer = true;
 }
 
 void DocumentTimerManager::StopIdling()
@@ -74,10 +70,7 @@ void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
     if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
-    {
-        mbStartIdleTimer = false;
         maDocIdle.Start();
-    }
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
