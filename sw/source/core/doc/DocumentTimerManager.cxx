@@ -49,13 +49,9 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    if( !mIdleBlockCount )
-    {
-        mbStartIdleTimer = false;
+    mbStartIdleTimer = true;
+    if( !mIdleBlockCount && !maDocIdle.IsActive() )
         maDocIdle.Start();
-    }
-    else
-        mbStartIdleTimer = true;
 }
 
 void DocumentTimerManager::StopIdling()
@@ -66,18 +62,14 @@ void DocumentTimerManager::StopIdling()
 
 void DocumentTimerManager::BlockIdling()
 {
-    maDocIdle.Stop();
     ++mIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
-    {
-        mbStartIdleTimer = false;
+    if( !mIdleBlockCount && mbStartIdleTimer )
         maDocIdle.Start();
-    }
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
@@ -131,6 +123,10 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
     BlockIdling();
+    // The Idle deactivates itself before execution.
+    // But to detect someone re-starting it, we have to change the internal
+    // state to stopped, so Unblocking won't start it for IdleJob::None.
+    mbStartIdleTimer = false;
 
     IdleJob eJob = GetNextIdleJob();
 

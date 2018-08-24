@@ -73,7 +73,7 @@ private:
 
 inline bool DocumentTimerManager::IsDocIdle() const
 {
-    return( GetNextIdleJob() != IdleJob::Busy );
+    return( GetNextIdleJob() != IdleJob::Busy && !mIdleBlockCount );
 }
 
 }
