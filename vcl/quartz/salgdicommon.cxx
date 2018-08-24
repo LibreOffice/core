@@ -943,18 +943,20 @@ void AquaSalGraphics::drawPixel( long nX, long nY, Color nColor )
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
-bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
-                                    double fTransparency,
-                                    const basegfx::B2DVector& rLineWidths,
-                                    basegfx::B2DLineJoin eLineJoin,
-                                    css::drawing::LineCap eLineCap,
-                                    double fMiterMinimumAngle)
+bool AquaSalGraphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidths,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     DBG_DRAW_OPERATION("drawPolyLine", true);
 
     // short circuit if there is nothing to do
-    const int nPointCount = rPolyLine.count();
-    if( nPointCount <= 0 )
+    if(0 == rPolyLine.count())
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return true;
@@ -968,15 +970,22 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     }
 #endif
 
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidths);
+
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLineJoin::NONE == eLineJoin) &&
-        (rLineWidths.getX() > 1.3) )
+    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3) )
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
     }
+
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolygon aPolyLine(rPolyLine);
+    aPolyLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
 
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
@@ -1014,7 +1023,12 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
-    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
+    AddPolygonToPath(
+        xPath,
+        aPolyLine,
+        aPolyLine.isClosed(),
+        !getAntiAliasB2DDraw(),
+        true);
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     SAL_INFO( "vcl.cg", "CGPathGetBoundingBox(" << xPath << ") = " << aRefreshRect );
@@ -1034,7 +1048,7 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineCap( mrContext, aCGLineCap );
-        CGContextSetLineWidth( mrContext, rLineWidths.getX() );
+        CGContextSetLineWidth( mrContext, aLineWidths.getX() );
         CGContextSetMiterLimit(mrContext, fCGMiterLimit);
         SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
         CGContextDrawPath( mrContext, kCGPathStroke );

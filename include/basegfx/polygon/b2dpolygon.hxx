@@ -29,6 +29,7 @@
 #include <basegfx/basegfxdllapi.h>
 
 class ImplB2DPolygon;
+class SalGraphicsImpl;
 
 namespace basegfx
 {
@@ -37,6 +38,8 @@ namespace basegfx
     class B2DVector;
     class B2DHomMatrix;
     class B2DCubicBezier;
+    class SystemDependentData;
+    typedef std::shared_ptr<SystemDependentData> SystemDependentData_SharedPtr;
 }
 
 namespace basegfx
@@ -218,6 +221,10 @@ namespace basegfx
 
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        // exclusive management op's for SystemDependentData at B2DPolygon
+        bool addOrReplaceSystemDependentData(SystemDependentData_SharedPtr& rData);
+        SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const;
     };
 
     // typedef for a vector of B2DPolygons

@@ -132,18 +132,21 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         aB2DPolyLine.append(basegfx::B2DPoint(rEndPt.X(), rEndPt.Y()));
         aB2DPolyLine.transform( aTransform );
 
-        if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-        {
-            aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
-        }
+        const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
+        // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
+        // {
+        //     aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        // }
 
         if( mpGraphics->DrawPolyLine(
+            basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
             aB2DLineWidth,
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,
             basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+            bPixelSnapHairline,
             this))
         {
             return;
@@ -242,24 +245,30 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
         {
             const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
             bool bDone(false);
 
             if(bTryAA)
             {
                 bDone = mpGraphics->DrawPolyLine(
+                    basegfx::B2DHomMatrix(),
                     aCandidate,
                     0.0,
                     basegfx::B2DVector(1.0,1.0),
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline,
                     this);
             }
 
             if(!bDone)
             {
                 tools::Polygon aPolygon(aCandidate);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()), this);
+                mpGraphics->DrawPolyLine(
+                    aPolygon.GetSize(),
+                    reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
+                    this);
             }
         }
     }

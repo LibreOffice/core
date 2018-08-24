@@ -316,28 +316,44 @@ bool Qt5Graphics::drawPolyPolygonBezier(sal_uInt32 /*nPoly*/, const sal_uInt32* 
     return false;
 }
 
-bool Qt5Graphics::drawPolyLine(const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                               const basegfx::B2DVector& rLineWidths,
-                               basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
-                               double fMiterMinimumAngle)
+bool Qt5Graphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidths,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
         return true;
 
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
-    if (nPointCount <= 0)
+    if(0 == rPolyLine.count())
         return true;
+
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolygon aPolyLine(rPolyLine);
+    aPolyLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidths);
 
     // setup poly-polygon path
     QPainterPath aPath;
-    AddPolygonToPath(aPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+    AddPolygonToPath(
+        aPath,
+        aPolyLine,
+        aPolyLine.isClosed(),
+        !getAntiAliasB2DDraw(),
+        true);
 
     Qt5Painter aPainter(*this, false, 255 * (1.0 - fTransparency));
 
     // setup line attributes
     QPen aPen = aPainter.pen();
-    aPen.setWidth(rLineWidths.getX());
+    aPen.setWidth(aLineWidths.getX());
 
     switch (eLineJoin)
     {

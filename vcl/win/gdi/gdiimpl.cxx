@@ -35,6 +35,7 @@
 #include <vcl/salbtype.hxx>
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 
 #include <outdata.hxx>
 #include <win/salids.hrc>
@@ -1823,27 +1824,83 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     return bRet;
 }
 
+basegfx::B2DPoint impPixelSnap(
+    const basegfx::B2DPolygon& rPolygon,
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    basegfx::B2DHomMatrix& rObjectToDeviceInv,
+    sal_uInt32 nIndex)
+{
+    const sal_uInt32 nCount(rPolygon.count());
+
+    // get the data
+    const basegfx::B2ITuple aPrevTuple(basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + nCount - 1) % nCount)));
+    const basegfx::B2DPoint aCurrPoint(rObjectToDevice * rPolygon.getB2DPoint(nIndex));
+    const basegfx::B2ITuple aCurrTuple(basegfx::fround(aCurrPoint));
+    const basegfx::B2ITuple aNextTuple(basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + 1) % nCount)));
+
+    // get the states
+    const bool bPrevVertical(aPrevTuple.getX() == aCurrTuple.getX());
+    const bool bNextVertical(aNextTuple.getX() == aCurrTuple.getX());
+    const bool bPrevHorizontal(aPrevTuple.getY() == aCurrTuple.getY());
+    const bool bNextHorizontal(aNextTuple.getY() == aCurrTuple.getY());
+    const bool bSnapX(bPrevVertical || bNextVertical);
+    const bool bSnapY(bPrevHorizontal || bNextHorizontal);
+
+    if(bSnapX || bSnapY)
+    {
+        basegfx::B2DPoint aSnappedPoint(
+            bSnapX ? aCurrTuple.getX() : aCurrPoint.getX(),
+            bSnapY ? aCurrTuple.getY() : aCurrPoint.getY());
+
+        if(rObjectToDeviceInv.isIdentity())
+        {
+            rObjectToDeviceInv = rObjectToDevice;
+            rObjectToDeviceInv.invert();
+        }
+
+        aSnappedPoint *= rObjectToDeviceInv;
+
+        return aSnappedPoint;
+    }
+
+    return rPolygon.getB2DPoint(nIndex);
+}
+
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(
     Gdiplus::GraphicsPath& rGraphicsPath,
     const basegfx::B2DPolygon& rPolygon,
-    bool bNoLineJoin)
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    bool bNoLineJoin,
+    bool bPixelSnapHairline)
 {
     sal_uInt32 nCount(rPolygon.count());
 
     if(nCount)
     {
         const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nCount : nCount - 1);
-        const bool bControls(rPolygon.areControlPointsUsed());
-        basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
 
         if(nEdgeCount)
         {
+            const bool bControls(rPolygon.areControlPointsUsed());
+            basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
+            basegfx::B2DHomMatrix aObjectToDeviceInv;
+
+            if(bPixelSnapHairline)
+            {
+                aCurr = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, 0);
+            }
+
             for(sal_uInt32 a(0); a < nEdgeCount; a++)
             {
                 const sal_uInt32 nNextIndex((a + 1) % nCount);
-                const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+                basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
                 const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
                 const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
+
+                if(bPixelSnapHairline)
+                {
+                    aNext = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nNextIndex);
+                }
 
                 if(b1stControlPointUsed || b2ndControlPointUsed)
                 {
@@ -1914,7 +1971,12 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
                 aGraphicsPath.StartFigure();
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolyPolygon.getB2DPolygon(a), false);
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(
+                aGraphicsPath,
+                rPolyPolygon.getB2DPolygon(a),
+                basegfx::B2DHomMatrix(),
+                false,
+                false);
 
             aGraphicsPath.CloseFigure();
         }
@@ -1954,99 +2016,171 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
      return true;
 }
 
+class SystemDependentData_GraphicsPath : public basegfx::SystemDependentData
+{
+private:
+    Gdiplus::GraphicsPath           maGraphicsPath;
+    bool                            mbPixelSnapHairline;
+
+public:
+    SystemDependentData_GraphicsPath(
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager);
+    virtual ~SystemDependentData_GraphicsPath();
+
+    Gdiplus::GraphicsPath& getGraphicsPath() { return maGraphicsPath; }
+
+    bool getPixelSnapHairline() const { return mbPixelSnapHairline; }
+    void setPixelSnapHairline(bool bNew) { mbPixelSnapHairline = bNew; }
+};
+
+SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager)
+:   basegfx::SystemDependentData(rSystemDependentDataManager),
+    maGraphicsPath(),
+    mbPixelSnapHairline(false)
+{
+}
+
+SystemDependentData_GraphicsPath::~SystemDependentData_GraphicsPath()
+{
+}
+
 bool WinSalGraphicsImpl::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
-    const sal_uInt32 nCount(rPolygon.count());
-
-    if(mbPen && nCount)
+    if(!mbPen || 0 == rPolygon.count())
     {
-        Gdiplus::Graphics aGraphics(mrParent.getHDC());
-        const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
-        const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
-        Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
-        Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
-        bool bNoLineJoin(false);
+        return true;
+    }
 
-        switch(eLineJoin)
+    Gdiplus::Graphics aGraphics(mrParent.getHDC());
+    const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
+    const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
+    Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
+    bool bNoLineJoin(false);
+    Gdiplus::Matrix aMatrix;
+
+    // Set full (Object-to-Device) transformation
+    aMatrix.SetElements(
+        rObjectToDevice.get(0, 0),
+        rObjectToDevice.get(1, 0),
+        rObjectToDevice.get(0, 1),
+        rObjectToDevice.get(1, 1),
+        rObjectToDevice.get(0, 2),
+        rObjectToDevice.get(1, 2));
+    aGraphics.SetTransform(&aMatrix);
+
+    switch(eLineJoin)
+    {
+        case basegfx::B2DLineJoin::NONE :
         {
-            case basegfx::B2DLineJoin::NONE :
+            if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
             {
-                if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
-                {
-                    bNoLineJoin = true;
-                }
-                break;
+                bNoLineJoin = true;
             }
-            case basegfx::B2DLineJoin::Bevel :
-            {
-                aPen.SetLineJoin(Gdiplus::LineJoinBevel);
-                break;
-            }
-            case basegfx::B2DLineJoin::Miter :
-            {
-                const Gdiplus::REAL aMiterLimit(1.0/sin(fMiterMinimumAngle/2.0));
-
-                aPen.SetMiterLimit(aMiterLimit);
-                // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional
-                // graphics, somewhere clipped in some distance from the edge point, dependent
-                // of MiterLimit. The more default-like option is LineJoinMiterClipped, so use
-                // that instead
-                aPen.SetLineJoin(Gdiplus::LineJoinMiterClipped);
-                break;
-            }
-            case basegfx::B2DLineJoin::Round :
-            {
-                aPen.SetLineJoin(Gdiplus::LineJoinRound);
-                break;
-            }
+            break;
         }
-
-        switch(eLineCap)
+        case basegfx::B2DLineJoin::Bevel :
         {
-            default: /*css::drawing::LineCap_BUTT*/
-            {
-                // nothing to do
-                break;
-            }
-            case css::drawing::LineCap_ROUND:
-            {
-                aPen.SetStartCap(Gdiplus::LineCapRound);
-                aPen.SetEndCap(Gdiplus::LineCapRound);
-                break;
-            }
-            case css::drawing::LineCap_SQUARE:
-            {
-                aPen.SetStartCap(Gdiplus::LineCapSquare);
-                aPen.SetEndCap(Gdiplus::LineCapSquare);
-                break;
-            }
+            aPen.SetLineJoin(Gdiplus::LineJoinBevel);
+            break;
         }
+        case basegfx::B2DLineJoin::Miter :
+        {
+            const Gdiplus::REAL aMiterLimit(1.0/sin(fMiterMinimumAngle/2.0));
 
-        impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolygon, bNoLineJoin);
+            aPen.SetMiterLimit(aMiterLimit);
+            // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional
+            // graphics, somewhere clipped in some distance from the edge point, dependent
+            // of MiterLimit. The more default-like option is LineJoinMiterClipped, so use
+            // that instead
+            aPen.SetLineJoin(Gdiplus::LineJoinMiterClipped);
+            break;
+        }
+        case basegfx::B2DLineJoin::Round :
+        {
+            aPen.SetLineJoin(Gdiplus::LineJoinRound);
+            break;
+        }
+    }
+
+    switch(eLineCap)
+    {
+        default: /*css::drawing::LineCap_BUTT*/
+        {
+            // nothing to do
+            break;
+        }
+        case css::drawing::LineCap_ROUND:
+        {
+            aPen.SetStartCap(Gdiplus::LineCapRound);
+            aPen.SetEndCap(Gdiplus::LineCapRound);
+            break;
+        }
+        case css::drawing::LineCap_SQUARE:
+        {
+            aPen.SetStartCap(Gdiplus::LineCapSquare);
+            aPen.SetEndCap(Gdiplus::LineCapSquare);
+            break;
+        }
+    }
+
+    const size_t hash_code(typeid(SystemDependentData_GraphicsPath).hash_code());
+    basegfx::SystemDependentData_SharedPtr pSysDepRep(rPolygon.getSystemDependentData(hash_code));
+    SystemDependentData_GraphicsPath* pSystemDependentData_GraphicsPath(nullptr);
+
+    if(pSysDepRep)
+    {
+        pSystemDependentData_GraphicsPath = static_cast<SystemDependentData_GraphicsPath*>(pSysDepRep.get());
+
+        if(pSystemDependentData_GraphicsPath->getPixelSnapHairline() != bPixelSnapHairline)
+        {
+            pSysDepRep.reset();
+            pSystemDependentData_GraphicsPath = nullptr;
+        }
+    }
+
+    if(!pSysDepRep)
+    {
+        pSysDepRep = std::make_shared< SystemDependentData_GraphicsPath >(SalGraphics::getSystemDependentDataManager());
+        pSystemDependentData_GraphicsPath = static_cast<SystemDependentData_GraphicsPath*>(pSysDepRep.get());
+        pSystemDependentData_GraphicsPath->setPixelSnapHairline(bPixelSnapHairline);
+
+        impAddB2DPolygonToGDIPlusGraphicsPathReal(
+            pSystemDependentData_GraphicsPath->getGraphicsPath(),
+            rPolygon,
+            rObjectToDevice,
+            bNoLineJoin,
+            bPixelSnapHairline);
 
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
             // #i101491# needed to create the correct line joins
-            aGraphicsPath.CloseFigure();
+            pSystemDependentData_GraphicsPath->getGraphicsPath().CloseFigure();
         }
 
-        if(mrParent.getAntiAliasB2DDraw())
-        {
-            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-        }
-        else
-        {
-            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
-        }
-
-        aGraphics.DrawPath(&aPen, &aGraphicsPath);
+        const_cast< basegfx::B2DPolygon& >(rPolygon).addOrReplaceSystemDependentData(pSysDepRep);
     }
+
+    if(mrParent.getAntiAliasB2DDraw())
+    {
+        aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+    }
+    else
+    {
+        aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
+    }
+
+    aGraphics.DrawPath(
+        &aPen,
+        &pSystemDependentData_GraphicsPath->getGraphicsPath());
 
     return true;
 }

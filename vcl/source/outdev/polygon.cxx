@@ -86,21 +86,25 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         if(bSuccess && IsLineColor())
         {
             const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-            {
-                aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
-            }
+            // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
+            // {
+            //     aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            // }
 
             for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
-                                                     0.0,
-                                                     aB2DLineWidth,
-                                                     basegfx::B2DLineJoin::NONE,
-                                                     css::drawing::LineCap_BUTT,
-                                                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                                                     this);
+                bSuccess = mpGraphics->DrawPolyLine(
+                    basegfx::B2DHomMatrix(),
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline,
+                    this);
             }
         }
 
@@ -199,19 +203,23 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         if(bSuccess && IsLineColor())
         {
             const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-            {
-                aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
-            }
+            // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
+            // {
+            //     aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+            // }
 
-            bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
-                                                 0.0,
-                                                 aB2DLineWidth,
-                                                 basegfx::B2DLineJoin::NONE,
-                                                 css::drawing::LineCap_BUTT,
-                                                 basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                                                 this);
+            bSuccess = mpGraphics->DrawPolyLine(
+                basegfx::B2DHomMatrix(),
+                aB2DPolygon,
+                0.0,
+                aB2DLineWidth,
+                basegfx::B2DLineJoin::NONE,
+                css::drawing::LineCap_BUTT,
+                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                bPixelSnapHairline,
+                this);
         }
 
         if(bSuccess)
@@ -302,21 +310,25 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         if(bSuccess && IsLineColor())
         {
             const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-            {
-                aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
-            }
+            // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
+            // {
+            //     aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            // }
 
             for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
-                                                     0.0,
-                                                     aB2DLineWidth,
-                                                     basegfx::B2DLineJoin::NONE,
-                                                     css::drawing::LineCap_BUTT,
-                                                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                                                     this);
+                bSuccess = mpGraphics->DrawPolyLine(
+                    basegfx::B2DHomMatrix(),
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline,
+                    this);
             }
         }
 

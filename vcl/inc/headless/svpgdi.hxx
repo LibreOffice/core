@@ -193,12 +193,15 @@ public:
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
-    virtual bool            drawPolyLine( const basegfx::B2DPolygon&,
-                                          double fTransparency,
-                                          const basegfx::B2DVector& rLineWidths,
-                                          basegfx::B2DLineJoin,
-                                          css::drawing::LineCap,
-                                          double fMiterMinimumAngle) override;
+    virtual bool            drawPolyLine(
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolygon&,
+                                double fTransparency,
+                                const basegfx::B2DVector& rLineWidths,
+                                basegfx::B2DLineJoin,
+                                css::drawing::LineCap,
+                                double fMiterMinimumAngle,
+                                bool bPixelSnapHairline) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,

@@ -229,12 +229,14 @@ public:
     virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
     virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
     virtual bool            drawPolyLine(
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolygon&,
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
                                 css::drawing::LineCap eLineCap,
-                                double fMiterMinimumAngle) override;
+                                double fMiterMinimumAngle,
+                                bool bPixelSnapHairline) override;
     virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
     // CopyArea --> No RasterOp, but ClipRegion

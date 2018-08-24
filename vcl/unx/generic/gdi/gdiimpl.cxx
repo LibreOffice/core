@@ -1564,14 +1564,18 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
 }
 
 bool X11SalGraphicsImpl::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
-    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
+    const bool bIsHairline((aLineWidth.getX() == aLineWidth.getY()) && (aLineWidth.getX() <= 1.2));
 
     // #i101491#
     if( !bIsHairline && (rPolygon.count() > 1000) )
@@ -1585,18 +1589,23 @@ bool X11SalGraphicsImpl::drawPolyLine(
         return false;
     }
 
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolygon aPolyLine(rPolygon);
+    aPolyLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
     const Color aKeepBrushColor = mnBrushColor;
     mnBrushColor = mnPenColor;
 
     // #i11575#desc5#b adjust B2D tessellation result to raster positions
-    basegfx::B2DPolygon aPolygon = rPolygon;
-    const double fHalfWidth = 0.5 * rLineWidth.getX();
+    // basegfx::B2DPolygon aPolygon = rPolygon;
+    const double fHalfWidth = 0.5 * aLineWidth.getX();
 
     // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
     // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
-    aPolygon.transform( basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) );
+    aPolyLine.transform( basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) );
 
     // shortcut for hairline drawing to improve performance
     bool bDrawnOk = true;
@@ -1605,7 +1614,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
         // hairlines can benefit from a simplified tessellation
         // e.g. for hairlines the linejoin style can be ignored
         basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::utils::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
+        basegfx::utils::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolyLine, aLineWidth.getX() );
 
         // draw tessellation result
         const int nTrapCount = aB2DTrapVector.size();
@@ -1618,21 +1627,25 @@ bool X11SalGraphicsImpl::drawPolyLine(
     }
 
     // get the area polygon for the line polygon
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
+    if( (aLineWidth.getX() != aLineWidth.getY()) && !basegfx::fTools::equalZero( aLineWidth.getY() ) )
     {
         // prepare for createAreaGeometry() with anisotropic linewidth
-        aPolygon.transform( basegfx::utils::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
+        aPolyLine.transform( basegfx::utils::createScaleB2DHomMatrix(1.0, aLineWidth.getX() / aLineWidth.getY()));
     }
 
     // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::utils::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap, fMiterMinimumAngle) );
+    const basegfx::B2DPolyPolygon aAreaPolyPoly(
+        basegfx::utils::createAreaGeometry(
+            aPolyLine,
+            fHalfWidth,
+            eLineJoin,
+            eLineCap,
+            fMiterMinimumAngle));
 
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
+    if( (aLineWidth.getX() != aLineWidth.getY()) && !basegfx::fTools::equalZero( aLineWidth.getX() ) )
     {
         // postprocess createAreaGeometry() for anisotropic linewidth
-        aPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
+        aPolyLine.transform(basegfx::utils::createScaleB2DHomMatrix(1.0, aLineWidth.getY() / aLineWidth.getX()));
     }
 
     // draw each area polypolygon component individually

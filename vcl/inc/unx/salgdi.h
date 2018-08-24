@@ -163,12 +163,14 @@ public:
     virtual bool                    drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
 
     virtual bool                    drawPolyLine(
+                                        const basegfx::B2DHomMatrix& rObjectToDevice,
                                         const basegfx::B2DPolygon&,
                                         double fTransparency,
                                         const basegfx::B2DVector& rLineWidth,
                                         basegfx::B2DLineJoin,
                                         css::drawing::LineCap,
-                                        double fMiterMinimumAngle) override;
+                                        double fMiterMinimumAngle,
+                                        bool bPixelSnapHairline) override;
 
     virtual bool                    drawGradient( const tools::PolyPolygon&, const Gradient& ) override;
 

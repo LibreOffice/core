@@ -128,12 +128,15 @@ public:
                                              PCONSTSALPOINT* pPtAry ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&,
                                              double fTransparency ) override;
-    virtual bool            drawPolyLine( const basegfx::B2DPolygon&,
-                                          double fTransparency,
-                                          const basegfx::B2DVector& rLineWidths,
-                                          basegfx::B2DLineJoin,
-                                          css::drawing::LineCap,
-                                          double fMiterMinimumAngle) override;
+    virtual bool            drawPolyLine(
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolygon&,
+                                double fTransparency,
+                                const basegfx::B2DVector& rLineWidths,
+                                basegfx::B2DLineJoin,
+                                css::drawing::LineCap,
+                                double fMiterMinimumAngle,
+                                bool bPixelSnapHairline) override;
     virtual bool            drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const PolyFlags* pFlgAry ) override;
