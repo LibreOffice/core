@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_07b59f31",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-24T19:45:40Z",
+      "side": 1,
+      "message": "I would wrap this up in a template to make the call sites cleaner, something like:\n\n    template\u003ctypename T\u003e\n    std::shared_ptr\u003cT\u003e getSystemDependantData()\n    {\n        return std::static_member_cast\u003cT\u003e(getInternal(typename(T).hash_code());\n    }\n\nand use it like\n\n    auto pSysDepRep(rPolyLine.getSystemDependantData\u003cSystemDependentData_CairoPath\u003e());",
+      "revId": "f4aae3eff1155c93de11a761dc2fa0f9027df55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_e783db55",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-24T19:45:40Z",
+      "side": 1,
+      "message": "similarly here, I would wrap up the code so the signature of this looked like:\n\n    template\u003ctypename T, class... Args\u003e\n    std::shared_ptr\u003cT\u003e addOrReplaceSystemDependentData(Args\u0026\u0026... args) const\n    {\n        auto r \u003d std::maked_shared\u003cT\u003e(            \n            SalGraphics::getSystemDependentDataManager, std::forward(args)...);\n        addInternal(r);\n        return r;\n    }\n\nthen it can be used from the call site like so:\n\n    pSysDepRep \u003d rPolyLine.addOrReplaceSystemDependentData\u003cSystemDependentData_CairoPath\u003e( cairo_copy_path(cr) );",
+      "revId": "f4aae3eff1155c93de11a761dc2fa0f9027df55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
