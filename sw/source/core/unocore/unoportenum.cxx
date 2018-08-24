@@ -627,7 +627,7 @@ static void lcl_ExportBookmark(
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end(); aIter != aEnd; )
     {
-        SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
+        const SwXBookmarkPortion_ImplSharedPtr& pPtr = (*aIter);
         if ( nIndex > pPtr->getIndex() )
         {
             if (bOnlyFrameStarts)
@@ -639,9 +639,8 @@ static void lcl_ExportBookmark(
         if ( nIndex < pPtr->getIndex() )
             break;
 
-        SwXTextPortion* pPortion = nullptr;
-        if ((BKM_TYPE_START == pPtr->nBkmType && !bOnlyFrameStarts) ||
-            (BKM_TYPE_START_END == pPtr->nBkmType))
+        if ((BkmType::Start == pPtr->nBkmType && bOnlyFrameStarts) ||
+            (BkmType::StartEnd == pPtr->nBkmType))
         {
             bool bFrameStart = rFramePositions.find(nIndex) != rFramePositions.end();
             bool bEnd = pPtr->nBkmType == BKM_TYPE_START_END && bFrameStart && !bOnlyFrameStarts;
@@ -654,21 +653,22 @@ static void lcl_ExportBookmark(
                 // - this is the start or end (depending on bOnlyFrameStarts)
                 //   of a collapsed bookmark at the same position as an at-char
                 //   anchored frame
-                pPortion =
+                SwXTextPortion* pPortion =
                     new SwXTextPortion(pUnoCursor, xParent, bEnd ? PORTION_BOOKMARK_END : PORTION_BOOKMARK_START);
                 rPortions.emplace_back(pPortion);
                 pPortion->SetBookmark(pPtr->xBookmark);
                 pPortion->SetCollapsed( BKM_TYPE_START_END == pPtr->nBkmType && !bFrameStart );
             }
-
         }
-        if (BKM_TYPE_END == pPtr->nBkmType && !bOnlyFrameStarts)
+        else if (BkmType::End == pPtr->nBkmType && !bOnlyFrameStarts)
         {
-            pPortion =
+            SwXTextPortion* pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_END);
             rPortions.push_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
         }
+
+        // next bookmark
         if (bOnlyFrameStarts)
             ++aIter;
         else
