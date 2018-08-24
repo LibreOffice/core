@@ -1458,7 +1458,9 @@ Const cstMaxRows = 200
 					If Not vFieldsBin(i) Then
 						If bDataArray Then vDataCell = pvData(i, j) Else vDataCell = vData(i, j)
 						If vDataCell Is Nothing Then vDataCell = Null		&apos;	Necessary because Null object has not a VarType = vbNull
-						If IsDate(vDataCell) And VarType(vDataCell) = vbString Then vDataCell = CDate(vDataCell)
+						If VarType(vDataCell) = vbString Then	&apos;	Null string gives IsDate = True !
+							If Len(vDataCell) &gt; 0 And IsDate(vDataCell) Then vDataCell = CDate(vDataCell)
+						End If
 						Select Case VarType(vDataCell)
 							Case vbEmpty, vbNull
 								vTdClass() = _AddArray(vTdClass, &quot;null&quot;)
@@ -1563,7 +1565,7 @@ Dim i As Integer, l As Long
 
 	lCurrentChar = 1
 	sOutput = &quot;&quot;
-	
+
 	Do While lCurrentChar &lt;= Len(psString)
 		&apos;	Where is next closest pattern ?
 		lPattern = Len(psString) + 1
