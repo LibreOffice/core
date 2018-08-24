@@ -6771,59 +6771,37 @@ void ScInterpreter::ScLookup()
         if (bOmitErrorValues)
         {
             std::vector<double> vArray;
-            if (bVertical)
+            VectorMatrixAccessor aMatAcc(*pDataMat, bVertical);
+            const SCSIZE nElements = aMatAcc.GetElementCount();
+            for (SCSIZE i=0; i < nElements; ++i)
             {
-                for (SCSIZE i = 0; i < nR; ++i)
+                const double fVal = aMatAcc.GetDouble(i);
+                if (rtl::math::isFinite(fVal))
                 {
-                    const double fVal = pDataMat->GetDouble(0, i);
-                    if (rtl::math::isFinite(fVal))
-                    {
-                        vArray.push_back(fVal);
-                        vIndex.push_back(i);
-                    }
+                    vArray.push_back(fVal);
+                    vIndex.push_back(i);
                 }
-                if (vArray.empty())
-                {
-                    PushNA();
-                    return;
-                }
-                const size_t nElems = vArray.size();
-                if (nElems == nR)
-                {
-                    // No error value omitted, use as is.
-                    pDataMat2 = pDataMat;
-                    std::vector<long>().swap( vIndex);
-                }
-                else
+            }
+            if (vArray.empty())
+            {
+                PushNA();
+                return;
+            }
+            const size_t nElems = vArray.size();
+            if (nElems == nElements)
+            {
+                // No error value omitted, use as is.
+                pDataMat2 = pDataMat;
+                std::vector<long>().swap( vIndex);
+            }
+            else
+            {
+                nLenMajor = nElems;
+                if (bVertical)
                 {
                     ScMatrixRef pTempMat = GetNewMat( 1, nElems);
                     pTempMat->PutDoubleVector( vArray, 0, 0);
                     pDataMat2 = pTempMat;
-                    nLenMajor = nElems;
-                }
-            }
-            else
-            {
-                for (SCSIZE i = 0; i < nC; ++i)
-                {
-                    const double fVal = pDataMat->GetDouble(i, 0);
-                    if (rtl::math::isFinite(fVal))
-                    {
-                        vArray.push_back(fVal);
-                        vIndex.push_back(i);
-                    }
-                }
-                if (vArray.empty())
-                {
-                    PushNA();
-                    return;
-                }
-                const size_t nElems = vArray.size();
-                if (nElems == nC)
-                {
-                    // No error value omitted, use as is.
-                    pDataMat2 = pDataMat;
-                    std::vector<long>().swap( vIndex);
                 }
                 else
                 {
@@ -6831,7 +6809,6 @@ void ScInterpreter::ScLookup()
                     for (size_t i=0; i < nElems; ++i)
                         pTempMat->PutDouble( vArray[i], i, 0);
                     pDataMat2 = pTempMat;
-                    nLenMajor = nElems;
                 }
             }
         }
