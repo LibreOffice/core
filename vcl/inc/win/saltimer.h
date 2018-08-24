@@ -42,9 +42,9 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
-    bool ImplHandleTimerEvent( WPARAM aWPARAM );
+    void ImplHandleTimerEvent( WPARAM aWPARAM );
     void ImplHandleElapsedTimer();
-    bool ImplHandle_WM_TIMER( WPARAM aWPARAM );
+    void ImplHandle_WM_TIMER( WPARAM aWPARAM );
 
 public:
     WinSalTimer();
