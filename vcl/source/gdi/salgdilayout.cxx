@@ -31,6 +31,9 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <basegfx/numeric/ftools.hxx> //for F_PI180
+#include <basegfx/utils/systemdependentdata.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 // The only common SalFrame method
 
@@ -73,6 +76,116 @@ namespace
         TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
 #endif
     }
+}
+
+basegfx::SystemDependentDataManager& SalGraphics::getSystemDependentDataManager()
+{
+    typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
+
+    class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex, public Timer
+    {
+    private:
+        EntryMap        maEntries;
+
+    public:
+        SystemDependentDataBuffer( const sal_Char *pDebugName )
+        :   basegfx::SystemDependentDataManager(),
+            Timer( pDebugName ),
+            maEntries()
+        {
+            SetTimeout(1000);
+            SetStatic();
+        }
+
+        virtual ~SystemDependentDataBuffer() override
+        {
+            Stop();
+        }
+
+        void startUsage(basegfx::SystemDependentData_SharedPtr& rData)
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound == maEntries.end())
+            {
+                if(maEntries.empty())
+                {
+                    Start();
+                }
+
+                maEntries[rData] = rData->getHoldCycles();
+            }
+        }
+
+        void endUsage(basegfx::SystemDependentData_SharedPtr& rData)
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                maEntries.erase(aFound);
+
+                if(maEntries.empty())
+                {
+                    Stop();
+                }
+            }
+        }
+
+        void touchUsage(basegfx::SystemDependentData_SharedPtr& rData)
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                aFound->second = rData->getHoldCycles();
+            }
+        }
+
+        // from parent Timer
+        virtual void Invoke() override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aIter(maEntries.begin());
+
+            while(aIter != maEntries.end())
+            {
+                if(aIter->second)
+                {
+                    aIter->second--;
+                    ++aIter;
+                }
+                else
+                {
+                    EntryMap::iterator aDelete(aIter);
+                    ++aIter;
+                    maEntries.erase(aDelete);
+
+                    if(maEntries.empty())
+                    {
+                        Stop();
+                    }
+                }
+            }
+
+            if(!maEntries.empty())
+            {
+                Start();
+            }
+        }
+    };
+
+    static std::unique_ptr<SystemDependentDataBuffer> aSystemDependentDataBuffer;
+
+    if(!aSystemDependentDataBuffer)
+    {
+        aSystemDependentDataBuffer = std::make_unique<SystemDependentDataBuffer>(nullptr);
+    }
+
+    return *aSystemDependentDataBuffer.get();
 }
 
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
@@ -512,22 +625,56 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
-                                double i_fTransparency,
-                                const basegfx::B2DVector& i_rLineWidth,
-                                basegfx::B2DLineJoin i_eLineJoin,
-                                css::drawing::LineCap i_eLineCap,
-                                double i_fMiterMinimumAngle,
-                                const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& i_rPolygon,
+    double i_fTransparency,
+    const basegfx::B2DVector& i_rLineWidth,
+    basegfx::B2DLineJoin i_eLineJoin,
+    css::drawing::LineCap i_eLineCap,
+    double i_fMiterMinimumAngle,
+    bool bPixelSnapHairline,
+    const OutputDevice* i_pOutDev)
 {
     bool bRet = false;
+
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
-        basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
-        bRet = drawPolyLine( aMirror, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle );
+        // if mirrored, we need to apply transformation since it is
+        // not clear what 'mirror' does - might be changed when this
+        // happens often
+        basegfx::B2DPolygon aMirror(i_rPolygon);
+
+        aMirror.transform(rObjectToDevice);
+        aMirror = mirror(aMirror, i_pOutDev);
+        // basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
+
+        // also need to transform LineWidth
+        const basegfx::B2DVector aLineWidth(rObjectToDevice * i_rLineWidth);
+
+        bRet = drawPolyLine(
+            basegfx::B2DHomMatrix(), // now empty transformation, already used
+            aMirror,
+            i_fTransparency,
+            aLineWidth,
+            i_eLineJoin,
+            i_eLineCap,
+            i_fMiterMinimumAngle,
+            bPixelSnapHairline);
     }
     else
-        bRet = drawPolyLine( i_rPolygon, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle );
+    {
+        bRet = drawPolyLine(
+            rObjectToDevice,
+            i_rPolygon,
+            i_fTransparency,
+            i_rLineWidth,
+            i_eLineJoin,
+            i_eLineCap,
+            i_fMiterMinimumAngle,
+            bPixelSnapHairline);
+    }
+
     return bRet;
 }
 
