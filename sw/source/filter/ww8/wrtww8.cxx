@@ -3378,11 +3378,12 @@ ErrCode WW8Export::ExportDocument_Impl()
         pTableStrmTemp = xTableStrm.get();
         pDataStrmTemp = xDataStrm.get();
 
-        if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp)
+        if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp) {
             err = EncryptRC4(aCtx, *pDataStrm, *pDataStrmTemp);
             if (err != ERRCODE_NONE) {
                 goto done;
             }
+        }
 
         err = EncryptRC4(aCtx, *pTableStrm, *pTableStrmTemp);
         if (err != ERRCODE_NONE) {
