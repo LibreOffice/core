@@ -59,31 +59,38 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         InitLineColor();
 
     // use b2dpolygon drawing if possible
-    if ( DrawPolyLineDirect( rPoly.getB2DPolygon() ) )
+    if(DrawPolyLineDirect(
+        basegfx::B2DHomMatrix(),
+        rPoly.getB2DPolygon()))
     {
-        basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
-        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+        return;
+    }
 
-        // transform the polygon
-        aB2DPolyLine.transform( aTransform );
+    const basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
+    const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+    const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+    const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-        if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-        {
-            aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
-        }
+    // transform the polygon - do not (!)
+    // aB2DPolyLine.transform( aTransform );
 
-        if(mpGraphics->DrawPolyLine(
-            aB2DPolyLine,
-            0.0,
-            aB2DLineWidth,
-            basegfx::B2DLineJoin::NONE,
-            css::drawing::LineCap_BUTT,
-            basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
-            this))
-        {
-            return;
-        }
+    // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
+    // {
+    //     aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+    // }
+
+    if(mpGraphics->DrawPolyLine(
+        aTransform,
+        aB2DPolyLine,
+        0.0,
+        aB2DLineWidth,
+        basegfx::B2DLineJoin::NONE,
+        css::drawing::LineCap_BUTT,
+        basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
+        bPixelSnapHairline,
+        this))
+    {
+        return;
     }
 
     tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -175,8 +182,17 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
 
     // use b2dpolygon drawing if possible
-    if ( DrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap, fMiterMinimumAngle) )
+    if(DrawPolyLineDirect(
+        basegfx::B2DHomMatrix(),
+        rB2DPolygon,
+        fLineWidth,
+        0.0,
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle))
+    {
         return;
+    }
 
     // #i101491#
     // no output yet; fallback to geometry decomposition and use filled polygon paint
@@ -222,9 +238,15 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            (void)DrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0,
-                                     basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                                     basegfx::deg2rad(15.0) /*default, not used*/, bTryAA);
+            (void)DrawPolyLineDirect(
+                basegfx::B2DHomMatrix(),
+                aAreaPolyPolygon.getB2DPolygon(a),
+                0.0,
+                0.0,
+                basegfx::B2DLineJoin::NONE,
+                css::drawing::LineCap_BUTT,
+                basegfx::deg2rad(15.0) /*default, not used*/,
+                bTryAA);
         }
     }
     else
@@ -287,13 +309,15 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
-                                       double fLineWidth,
-                                       double fTransparency,
-                                       basegfx::B2DLineJoin eLineJoin,
-                                       css::drawing::LineCap eLineCap,
-                                       double fMiterMinimumAngle,
-                                       bool bBypassAACheck)
+bool OutputDevice::DrawPolyLineDirect(
+    const basegfx::B2DHomMatrix& rObjectTransform,
+    const basegfx::B2DPolygon& rB2DPolygon,
+    double fLineWidth,
+    double fTransparency,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bBypassAACheck)
 {
     assert(!is_double_buffered_window());
 
@@ -322,37 +346,43 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
 
     if(bTryAA)
     {
-        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+        // combine rObjectTransform with WorldToDevice
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
+        const bool bLineWidthZero(basegfx::fTools::equalZero(fLineWidth));
+        const basegfx::B2DVector aB2DLineWidth(bLineWidthZero ? 1.0 : fLineWidth, bLineWidthZero ? 1.0 : fLineWidth);
 
         // transform the line width if used
-        if( fLineWidth != 0.0 )
-        {
-            aB2DLineWidth = aTransform * basegfx::B2DVector( fLineWidth, fLineWidth );
-        }
+        // if( fLineWidth != 0.0 )
+        // {
+        //     aB2DLineWidth = aTransform * basegfx::B2DVector( fLineWidth, fLineWidth );
+        // }
 
-        // transform the polygon
-        basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
-        aB2DPolygon.transform(aTransform);
+        // transform the polygon - no!
+        // basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+        // aB2DPolygon.transform(aTransform);
 
-        if((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) &&
-           aB2DPolygon.count() < 1000)
-        {
-            // #i98289#, #i101491#
-            // better to remove doubles on device coordinates. Also assume from a given amount
-            // of points that the single edges are not long enough to smooth
-            aB2DPolygon.removeDoublePoints();
-            aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
-        }
+        const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
+        // if((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) &&
+        //    aB2DPolygon.count() < 1000)
+        // {
+        //     // #i98289#, #i101491#
+        //     // better to remove doubles on device coordinates. Also assume from a given amount
+        //     // of points that the single edges are not long enough to smooth
+        //     aB2DPolygon.removeDoublePoints();
+        //     aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+        // }
 
         // draw the polyline
-        bool bDrawSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
-                                                      fTransparency,
-                                                      aB2DLineWidth,
-                                                      eLineJoin,
-                                                      eLineCap,
-                                                      fMiterMinimumAngle,
-                                                      this );
+        bool bDrawSuccess = mpGraphics->DrawPolyLine(
+            aTransform,
+            rB2DPolygon,
+            fTransparency,
+            aB2DLineWidth,
+            eLineJoin,
+            eLineCap,
+            fMiterMinimumAngle,
+            bPixelSnapHairline,
+            this);
 
         if( bDrawSuccess )
         {
