@@ -6820,26 +6820,8 @@ void ScInterpreter::ScLookup()
         }
         else
         {
-            if (bVertical)
-            {
-                ScMatrixRef pTempMat = GetNewMat(1, nR);
-                for (SCSIZE i = 0; i < nR; ++i)
-                    if (pDataMat->IsValue(0, i))
-                        pTempMat->PutDouble(pDataMat->GetDouble(0, i), 0, i);
-                    else
-                        pTempMat->PutString(pDataMat->GetString(0, i), 0, i);
-                pDataMat2 = pTempMat;
-            }
-            else
-            {
-                ScMatrixRef pTempMat = GetNewMat(nC, 1);
-                for (SCSIZE i = 0; i < nC; ++i)
-                    if (pDataMat->IsValue(i, 0))
-                        pTempMat->PutDouble(pDataMat->GetDouble(i, 0), i, 0);
-                    else
-                        pTempMat->PutString(pDataMat->GetString(i, 0), i, 0);
-                pDataMat2 = pTempMat;
-            }
+            // Just use as is with the VectorMatrixAccessor.
+            pDataMat2 = pDataMat;
         }
 
         // Do not propagate errors from matrix while searching.
