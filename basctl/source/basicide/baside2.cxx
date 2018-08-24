@@ -622,7 +622,15 @@ bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
 
+    // tdf#118572 make a currently running dialog, regardless of what its modal
+    // to, insensitive to user input until after this error dialog goes away.
+    auto xDialog = Dialog::GetMostRecentExecutingDialog();
+    const bool bToggleEnableInput = xDialog && xDialog->IsInputEnabled();
+    if (bToggleEnableInput)
+        xDialog->EnableInput(false);
     ErrorHandler::HandleError(StarBASIC::GetErrorCode(), GetFrameWeld());
+    if (bToggleEnableInput)
+        xDialog->EnableInput(true);
 
     // #i47002#
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
