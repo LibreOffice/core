@@ -32,15 +32,24 @@ bool WinSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygo
 }
 
 bool WinSalGraphics::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
-    return mpImpl->drawPolyLine(rPolygon, fTransparency, rLineWidths,
-            eLineJoin, eLineCap, fMiterMinimumAngle);
+    return mpImpl->drawPolyLine(
+        rObjectToDevice,
+        rPolygon,
+        fTransparency,
+        rLineWidths,
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle,
+        bPixelSnapHairline);
 }
 
 bool WinSalGraphics::blendBitmap(

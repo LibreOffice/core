@@ -1549,8 +1549,15 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
-                 css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/);
+    drawPolyLine(
+        basegfx::B2DHomMatrix(),
+        aPoly,
+        0.0,
+        basegfx::B2DVector(1.0, 1.0),
+        basegfx::B2DLineJoin::Miter,
+        css::drawing::LineCap_BUTT,
+        basegfx::deg2rad(15.0) /*default*/,
+        false);
 }
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -1594,19 +1601,39 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPoly
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::drawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
-                                         const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
-                                         css::drawing::LineCap eLineCap, double fMiterMinimumAngle)
+bool OpenGLSalGraphicsImpl::drawPolyLine(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& rPolygon,
+    double fTransparency,
+    const basegfx::B2DVector& rLineWidth,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
     VCL_GL_INFO("::drawPolyLine " << rPolygon.getB2DRange());
 
+    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolygon aPolyLine(rPolygon);
+    aPolyLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
+
     // addDrawPolyLine() assumes that there are no duplicate points in the
     // polygon.
-    basegfx::B2DPolygon aPolygon(rPolygon);
-    aPolygon.removeDoublePoints();
+    // basegfx::B2DPolygon aPolygon(rPolygon);
+    aPolyLine.removeDoublePoints();
 
-    mpRenderList->addDrawPolyLine(aPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap,
-                                  fMiterMinimumAngle, mnLineColor, mrParent.getAntiAliasB2DDraw());
+    mpRenderList->addDrawPolyLine(
+        aPolyLine,
+        fTransparency,
+        aLineWidth,
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle,
+        mnLineColor,
+        mrParent.getAntiAliasB2DDraw());
+
     PostBatchDraw();
     return true;
 }
