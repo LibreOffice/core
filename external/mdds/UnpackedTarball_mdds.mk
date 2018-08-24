@@ -13,13 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
-# c++17.patch upstreamed as <https://gitlab.com/mdds/mdds/merge_requests/11> "Remove some
-#  unnecessary uses of obsolete std::unary_function";
-# gcc9.patch upstreamed at <https://gitlab.com/mdds/mdds/merge_requests/14> "Remove unnecessary
-#  user-provided special members that cause -Wdeprecated-copy":
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-    external/mdds/c++17.patch \
-    external/mdds/gcc9.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

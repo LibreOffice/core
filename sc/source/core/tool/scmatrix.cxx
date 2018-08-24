@@ -161,6 +161,12 @@ public:
         maNewMatValues.reserve(nRow*nCol);
     }
 
+    CompareMatrixElemFunc( const CompareMatrixElemFunc& ) = delete;
+    CompareMatrixElemFunc& operator= ( const CompareMatrixElemFunc& ) = delete;
+
+    CompareMatrixElemFunc( CompareMatrixElemFunc&& ) = default;
+    CompareMatrixElemFunc& operator= ( CompareMatrixElemFunc&& ) = default;
+
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         switch (node.type)
@@ -980,7 +986,7 @@ void ScMatrixImpl::CompareEqual()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemEqualZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -988,7 +994,7 @@ void ScMatrixImpl::CompareNotEqual()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemNotEqualZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -996,7 +1002,7 @@ void ScMatrixImpl::CompareLess()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemLessZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -1004,7 +1010,7 @@ void ScMatrixImpl::CompareGreater()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemGreaterZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -1012,7 +1018,7 @@ void ScMatrixImpl::CompareLessEqual()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemLessEqualZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -1020,7 +1026,7 @@ void ScMatrixImpl::CompareGreaterEqual()
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     CompareMatrixElemFunc<ElemGreaterEqualZero> aFunc(aSize.row, aSize.column);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(maMat);
 }
 
@@ -1175,18 +1181,32 @@ public:
 template<typename Op>
 class WalkElementBlocksMultipleValues
 {
-    const std::vector<std::unique_ptr<Op>>& maOp;
+    const std::vector<std::unique_ptr<Op>>* mpOp;
     std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
 public:
     WalkElementBlocksMultipleValues(const std::vector<std::unique_ptr<Op>>& aOp) :
-        maOp(aOp), mbFirst(true)
+        mpOp(&aOp), mbFirst(true)
     {
-        for (const auto& rpOp : maOp)
+        for (const auto& rpOp : *mpOp)
         {
             maRes.emplace_back(rpOp->mInitVal, rpOp->mInitVal, 0);
         }
         maRes.emplace_back(0.0, 0.0, 0); // count
+    }
+
+    WalkElementBlocksMultipleValues( const WalkElementBlocksMultipleValues& ) = delete;
+    WalkElementBlocksMultipleValues& operator= ( const WalkElementBlocksMultipleValues& ) = delete;
+
+    WalkElementBlocksMultipleValues( WalkElementBlocksMultipleValues&& r ) :
+        mpOp(r.mpOp), maRes(std::move(r.maRes)), mbFirst(r.mbFirst) {}
+
+    WalkElementBlocksMultipleValues& operator= ( WalkElementBlocksMultipleValues&& r )
+    {
+        mpOp = r.mpOp;
+        maRes = std::move(r.maRes);
+        mbFirst = r.mbFirst;
+        return *this;
     }
 
     const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
@@ -1205,17 +1225,17 @@ public:
                 {
                     if (mbFirst)
                     {
-                        for (auto i = 0u; i < maOp.size(); ++i)
+                        for (auto i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*maOp[i])(maRes[i].mfFirst, *it);
+                            (*(*mpOp)[i])(maRes[i].mfFirst, *it);
                         }
                         mbFirst = false;
                     }
                     else
                     {
-                        for (auto i = 0u; i < maOp.size(); ++i)
+                        for (auto i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*maOp[i])(maRes[i].mfRest, *it);
+                            (*(*mpOp)[i])(maRes[i].mfRest, *it);
                         }
                     }
                 }
@@ -1232,17 +1252,17 @@ public:
                 {
                     if (mbFirst)
                     {
-                        for (auto i = 0u; i < maOp.size(); ++i)
+                        for (auto i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*maOp[i])(maRes[i].mfFirst, *it);
+                            (*(*mpOp)[i])(maRes[i].mfFirst, *it);
                         }
                         mbFirst = false;
                     }
                     else
                     {
-                        for (auto i = 0u; i < maOp.size(); ++i)
+                        for (auto i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*maOp[i])(maRes[i].mfRest, *it);
+                            (*(*mpOp)[i])(maRes[i].mfRest, *it);
                         }
                     }
                 }
@@ -1307,8 +1327,8 @@ template<typename Type>
 class WalkAndMatchElements
 {
     Type maMatchValue;
-    const size_t mnStartIndex;
-    const size_t mnStopIndex;
+    size_t mnStartIndex;
+    size_t mnStopIndex;
     size_t mnResult;
     size_t mnIndex;
 
@@ -1666,6 +1686,24 @@ public:
         maResValues.reserve(nResSize);
     }
 
+    CompareMatrixFunc( const CompareMatrixFunc& ) = delete;
+    CompareMatrixFunc& operator= ( const CompareMatrixFunc& ) = delete;
+
+    CompareMatrixFunc( CompareMatrixFunc&& r ) :
+        mrComp(r.mrComp),
+        mnMatPos(r.mnMatPos),
+        mpOptions(r.mpOptions),
+        maResValues(std::move(r.maResValues)) {}
+
+    CompareMatrixFunc& operator= ( CompareMatrixFunc&& r )
+    {
+        mrComp = r.mrComp;
+        mnMatPos = r.mnMatPos;
+        mpOptions = r.mpOptions;
+        maResValues = std::move(r.maResValues);
+        return *this;
+    }
+
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         sc::Compare::Cell& rCell = mrComp.maCells[mnMatPos];
@@ -1774,6 +1812,24 @@ public:
         maResValues.reserve(nResSize);
     }
 
+    CompareMatrixToNumericFunc( const CompareMatrixToNumericFunc& ) = delete;
+    CompareMatrixToNumericFunc& operator= ( const CompareMatrixToNumericFunc& ) = delete;
+
+    CompareMatrixToNumericFunc( CompareMatrixToNumericFunc&& r ) :
+        mrComp(r.mrComp),
+        mfRightValue(r.mfRightValue),
+        mpOptions(r.mpOptions),
+        maResValues(std::move(r.maResValues)) {}
+
+    CompareMatrixToNumericFunc& operator= ( CompareMatrixToNumericFunc&& r )
+    {
+        mrComp = r.mrComp;
+        mfRightValue = r.mfRightValue;
+        mpOptions = r.mpOptions;
+        maResValues = std::move(r.maResValues);
+        return *this;
+    }
+
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         sc::Compare::Cell& rCell = mrComp.maCells[0];
@@ -1837,11 +1893,39 @@ class ToDoubleArray
     double mfNaN;
     bool mbEmptyAsZero;
 
+    void moveArray( ToDoubleArray& r )
+    {
+        // Re-create the iterator from the new array after the array has been
+        // moved, to ensure that the iterator points to a valid array
+        // position.
+        size_t n = std::distance(r.maArray.begin(), r.miPos);
+        maArray = std::move(r.maArray);
+        miPos = maArray.begin();
+        std::advance(miPos, n);
+    }
+
 public:
     ToDoubleArray( size_t nSize, bool bEmptyAsZero ) :
         maArray(nSize, 0.0), miPos(maArray.begin()), mbEmptyAsZero(bEmptyAsZero)
     {
         mfNaN = CreateDoubleError( FormulaError::ElementNaN);
+    }
+
+    ToDoubleArray( const ToDoubleArray& ) = delete;
+    ToDoubleArray& operator= ( const ToDoubleArray& ) = delete;
+
+    ToDoubleArray( ToDoubleArray&& r ) :
+        mfNaN(r.mfNaN), mbEmptyAsZero(r.mbEmptyAsZero)
+    {
+        moveArray(r);
+    }
+
+    ToDoubleArray& operator= ( ToDoubleArray&& r )
+    {
+        mfNaN = r.mfNaN;
+        mbEmptyAsZero = r.mbEmptyAsZero;
+        moveArray(r);
+        return *this;
     }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1914,6 +1998,12 @@ public:
         mfNaN = CreateDoubleError( FormulaError::ElementNaN);
     }
 
+    MergeDoubleArrayFunc( const MergeDoubleArrayFunc& ) = delete;
+    MergeDoubleArrayFunc& operator= ( const MergeDoubleArrayFunc& ) = delete;
+
+    MergeDoubleArrayFunc( MergeDoubleArrayFunc&& ) = default;
+    MergeDoubleArrayFunc& operator= ( MergeDoubleArrayFunc&& ) = default;
+
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         using namespace mdds::mtv;
@@ -1979,7 +2069,7 @@ template<typename TOp>
 ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImplType& maMat)
 {
     WalkElementBlocks<TOp> aFunc(bTextAsZero);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
 }
 
@@ -2003,49 +2093,49 @@ ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors) const
 {
     CountElements aFunc(bCountStrings, bCountErrors);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getCount();
 }
 
 size_t ScMatrixImpl::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
 {
     WalkAndMatchElements<double> aFunc(fValue, maMat.size(), nCol1, nCol2);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getMatching();
 }
 
 size_t ScMatrixImpl::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const
 {
     WalkAndMatchElements<svl::SharedString> aFunc(rStr, maMat.size(), nCol1, nCol2);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getMatching();
 }
 
 double ScMatrixImpl::GetMaxValue( bool bTextAsZero ) const
 {
     CalcMaxMinValue<MaxOp> aFunc(bTextAsZero);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getValue();
 }
 
 double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
 {
     CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getValue();
 }
 
 double ScMatrixImpl::GetGcd() const
 {
     CalcGcdLcm<Gcd> aFunc;
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
 }
 
 double ScMatrixImpl::GetLcm() const
 {
     CalcGcdLcm<Lcm> aFunc;
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
 }
 
@@ -2062,7 +2152,7 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
             // function object that has much less branching for much better
             // performance.
             CompareMatrixToNumericFunc aFunc(nSize, rComp, rComp.maCells[1].mfValue, pOptions);
-            maMat.walk(aFunc);
+            aFunc = maMat.walk(std::move(aFunc));
 
             // We assume the result matrix has the same dimension as this matrix.
             const std::vector<double>& rResVal = aFunc.getValues();
@@ -2074,7 +2164,7 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
     }
 
     CompareMatrixFunc aFunc(nSize, rComp, nMatPos, pOptions);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
 
     // We assume the result matrix has the same dimension as this matrix.
     const std::vector<double>& rResVal = aFunc.getValues();
@@ -2088,7 +2178,7 @@ void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZer
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     ToDoubleArray aFunc(aSize.row*aSize.column, bEmptyAsZero);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     aFunc.swap(rArray);
 }
 
@@ -2104,7 +2194,7 @@ void ScMatrixImpl::MergeDoubleArray( std::vector<double>& rArray, ScFullMatrix::
         case ScFullMatrix::Mul:
         {
             MergeDoubleArrayFunc<ArrayMul> aFunc(rArray);
-            maMat.walk(aFunc);
+            aFunc = maMat.walk(std::move(aFunc));
         }
         break;
         default:
@@ -2326,14 +2416,24 @@ struct MatrixOpWrapper
 private:
     MatrixImplType& mrMat;
     MatrixImplType::position_type pos;
-    T maOp;
+    const T* mpOp;
 
 public:
-    MatrixOpWrapper(MatrixImplType& rMat, T const & aOp):
+    MatrixOpWrapper(MatrixImplType& rMat, const T& aOp):
         mrMat(rMat),
         pos(rMat.position(0,0)),
-        maOp(aOp)
+        mpOp(&aOp)
     {
+    }
+
+    MatrixOpWrapper( const MatrixOpWrapper& r ) : mrMat(r.mrMat), pos(r.pos), mpOp(r.mpOp) {}
+
+    MatrixOpWrapper& operator= ( const MatrixOpWrapper& r )
+    {
+        mrMat = r.mrMat;
+        pos = r.pos;
+        mpOp = r.mpOp;
+        return *this;
     }
 
     void operator()(const MatrixImplType::element_block_node_type& node)
@@ -2346,7 +2446,7 @@ public:
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
-                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, *mpOp);
                 pos = mrMat.set(pos,aFunc.begin(), aFunc.end());
             }
             break;
@@ -2357,7 +2457,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
 
-                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, *mpOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
             }
             break;
@@ -2368,17 +2468,17 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
 
-                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, *mpOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
             }
             break;
             case mdds::mtm::element_empty:
             {
-                if (maOp.useFunctionForEmpty())
+                if (mpOp->useFunctionForEmpty())
                 {
                     std::vector<char> aVec(node.size);
                     MatrixIteratorWrapper<std::vector<char>, T, typename T::number_value_type>
-                        aFunc(aVec.begin(), aVec.end(), maOp);
+                        aFunc(aVec.begin(), aVec.end(), *mpOp);
                     pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                 }
             }
@@ -2394,14 +2494,14 @@ template<typename T>
 void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 {
     MatrixOpWrapper<T> aFunc(rMat.maMat, aOp);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(aFunc);
 }
 
 template<typename T>
 std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const std::vector<std::unique_ptr<T>>& aOp)
 {
     WalkElementBlocksMultipleValues<T> aFunc(aOp);
-    maMat.walk(aFunc);
+    aFunc = maMat.walk(std::move(aFunc));
     return aFunc.getResult();
 }
 
@@ -2541,8 +2641,10 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
 {
     WalkElementBlockOperation aFunc(maMat.size().row,
             aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
-    maMat.walk(aFunc, MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
-            MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
+    aFunc = maMat.walk(
+        aFunc,
+        MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
+        MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
 }
 
 #if DEBUG_MATRIX
