@@ -622,7 +622,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
 
-    ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
+    ErrorHandler::HandleError(StarBASIC::GetErrorCode(), GetFrameWeld());
 
     // #i47002#
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
