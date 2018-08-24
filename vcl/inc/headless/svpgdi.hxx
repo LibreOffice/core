@@ -90,6 +90,25 @@ public:
     void setSurface(cairo_surface_t* pSurface);
     static cairo_user_data_key_t* getDamageKey();
 
+    static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
+
+    // need this static version of ::drawPolyLine for usage from
+    // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
+    // ::drawPolyLine with some added parameters (see there)
+    static bool drawPolyLine(
+        cairo_t* cr,
+        basegfx::B2DRange* pExtents,
+        const Color& rLineColor,
+        bool bAntiAliasB2DDraw,
+        const basegfx::B2DHomMatrix& rObjectToDevice,
+        const basegfx::B2DPolygon& rPolyLine,
+        double fTransparency,
+        const basegfx::B2DVector& rLineWidths,
+        basegfx::B2DLineJoin eLineJoin,
+        css::drawing::LineCap eLineCap,
+        double fMiterMinimumAngle,
+        bool bPixelSnapHairline);
+
 private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
@@ -175,12 +194,15 @@ public:
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
-    virtual bool            drawPolyLine( const basegfx::B2DPolygon&,
-                                          double fTransparency,
-                                          const basegfx::B2DVector& rLineWidths,
-                                          basegfx::B2DLineJoin,
-                                          css::drawing::LineCap,
-                                          double fMiterMinimumAngle) override;
+    virtual bool            drawPolyLine(
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolygon&,
+                                double fTransparency,
+                                const basegfx::B2DVector& rLineWidths,
+                                basegfx::B2DLineJoin,
+                                css::drawing::LineCap,
+                                double fMiterMinimumAngle,
+                                bool bPixelSnapHairline) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,

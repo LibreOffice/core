@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <win/wincomp.hxx>
 #include <salbmp.hxx>
+#include <basegfx/tools/systemdependentdata.hxx>
 #include <memory>
 
 
@@ -33,25 +34,12 @@ class   SalGraphics;
 namespace Gdiplus { class Bitmap; }
 typedef std::shared_ptr< Gdiplus::Bitmap > GdiPlusBmpPtr;
 
-class WinSalBitmap : public SalBitmap
+class WinSalBitmap : public SalBitmap, public basegfx::SystemDependentDataHolder
 {
 private:
-    friend class GdiPlusBuffer; // allow buffer to remove maGdiPlusBitmap and mpAssociatedAlpha eventually
-
     Size                maSize;
     HGLOBAL             mhDIB;
     HBITMAP             mhDDB;
-
-    // the buffered evtl. used Gdiplus::Bitmap instance. It is managed by
-    // GdiPlusBuffer. To make this safe, it is only handed out as shared
-    // pointer; the GdiPlusBuffer may delete the local instance.
-
-    // mpAssociatedAlpha holds the last WinSalBitmap used to construct an
-    // evtl. buffered GdiPlusBmp. This is needed since the GdiPlusBmp is a single
-    // instance and remembered only on the content-WinSalBitmap, not on the
-    // alpha-WinSalBitmap.
-    GdiPlusBmpPtr       maGdiPlusBitmap;
-    const WinSalBitmap* mpAssociatedAlpha;
 
     sal_uInt16          mnBitCount;
 
@@ -98,6 +86,22 @@ public:
 
     virtual bool                Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     virtual bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
+
+    // exclusive management op's for SystemDependentData at WinSalBitmap
+    template<class T>
+    std::shared_ptr<T> getSystemDependentData() const
+    {
+        return std::static_pointer_cast<T>(basegfx::SystemDependentDataHolder::getSystemDependentData(typeid(T).hash_code()));
+    }
+
+    template<class T, class... Args>
+    std::shared_ptr<T> addOrReplaceSystemDependentData(basegfx::SystemDependentDataManager& manager, Args&&... args) const
+    {
+        std::shared_ptr<T> r = std::make_shared<T>(manager, std::forward<Args>(args)...);
+        basegfx::SystemDependentData_SharedPtr r2(r);
+        const_cast< WinSalBitmap* >(this)->basegfx::SystemDependentDataHolder::addOrReplaceSystemDependentData(r2);
+        return r;
+    }
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALBMP_H

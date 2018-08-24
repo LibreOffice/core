@@ -54,6 +54,7 @@ namespace basegfx {
     class B2DVector;
     class B2DPolygon;
     class B2DPolyPolygon;
+    class SystemDependentDataManager;
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
@@ -78,6 +79,10 @@ public:
     virtual                     ~SalGraphics();
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
+
+    // access to single global managing instance of a basegfx::SystemDependentDataManager,
+    // used to handle graphic data in system-dependent form
+    static basegfx::SystemDependentDataManager& getSystemDependentDataManager();
 
     /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
     rtl::Reference<OpenGLContext> GetOpenGLContext() const;
@@ -263,12 +268,14 @@ public:
                                     const OutputDevice *i_pOutDev);
 
     bool                        DrawPolyLine(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon& i_rPolygon,
                                     double i_fTransparency,
                                     const basegfx::B2DVector& i_rLineWidth,
                                     basegfx::B2DLineJoin i_eLineJoin,
                                     css::drawing::LineCap i_eLineCap,
                                     double i_fMiterMinimumAngle,
+                                    bool bPixelSnapHairline,
                                     const OutputDevice* i_pOutDev);
 
     bool                        DrawPolyLineBezier(
@@ -462,12 +469,14 @@ protected:
     virtual bool                drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
 
     virtual bool                drawPolyLine(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon&,
                                     double fTransparency,
                                     const basegfx::B2DVector& rLineWidths,
                                     basegfx::B2DLineJoin,
                                     css::drawing::LineCap,
-                                    double fMiterMinimumAngle) = 0;
+                                    double fMiterMinimumAngle,
+                                    bool bPixelSnapHairline) = 0;
 
     virtual bool                drawPolyLineBezier(
                                     sal_uInt32 nPoints,
