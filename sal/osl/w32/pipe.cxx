@@ -87,8 +87,8 @@ void osl_destroyPipeImpl(oslPipe pPipe)
 
         if (pPipe->m_Security)
         {
-            rtl_freeMemory(pPipe->m_Security->lpSecurityDescriptor);
-            rtl_freeMemory(pPipe->m_Security);
+            free(pPipe->m_Security->lpSecurityDescriptor);
+            free(pPipe->m_Security);
         }
 
         CloseHandle(pPipe->m_ReadEvent);
@@ -98,7 +98,7 @@ void osl_destroyPipeImpl(oslPipe pPipe)
         if (pPipe->m_Name)
             rtl_uString_release(pPipe->m_Name);
 
-        rtl_freeMemory(pPipe);
+        free(pPipe);
     }
 }
 
@@ -135,13 +135,13 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         {
             PSECURITY_DESCRIPTOR pSecDesc;
 
-            pSecDesc = static_cast< PSECURITY_DESCRIPTOR >(rtl_allocateMemory(SECURITY_DESCRIPTOR_MIN_LENGTH));
+            pSecDesc = static_cast< PSECURITY_DESCRIPTOR >(malloc(SECURITY_DESCRIPTOR_MIN_LENGTH));
 
             /* add a NULL disc. ACL to the security descriptor */
             OSL_VERIFY(InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION));
             OSL_VERIFY(SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE));
 
-            pSecAttr = static_cast< PSECURITY_ATTRIBUTES >(rtl_allocateMemory(sizeof(SECURITY_ATTRIBUTES)));
+            pSecAttr = static_cast< PSECURITY_ATTRIBUTES >(malloc(sizeof(SECURITY_ATTRIBUTES)));
             pSecAttr->nLength = sizeof(SECURITY_ATTRIBUTES);
             pSecAttr->lpSecurityDescriptor = pSecDesc;
             pSecAttr->bInheritHandle = TRUE;

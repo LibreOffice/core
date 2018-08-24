@@ -345,7 +345,7 @@ static oslSocketAddr createSocketAddrFromSystem( struct sockaddr *pSystemSockAdd
 
 static void destroySocketAddr( oslSocketAddr addr )
 {
-    rtl_freeMemory( addr );
+    free( addr );
 }
 
 oslSocketAddr SAL_CALL osl_createEmptySocketAddr(oslAddrFamily Family)

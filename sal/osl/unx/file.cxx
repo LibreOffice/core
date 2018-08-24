@@ -186,7 +186,7 @@ FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, char const * path)
         if (pagesize != size_t(-1))
         {
             m_bufsiz = pagesize;
-            m_buffer = static_cast<sal_uInt8 *>(rtl_allocateMemory(m_bufsiz));
+            m_buffer = static_cast<sal_uInt8 *>(malloc(m_bufsiz));
             if (m_buffer)
                 memset(m_buffer, 0, m_bufsiz);
         }
@@ -197,7 +197,7 @@ FileHandle_Impl::~FileHandle_Impl()
 {
     if (m_kind == KIND_FD)
     {
-        rtl_freeMemory(m_buffer);
+        free(m_buffer);
         m_buffer = nullptr;
     }
 
@@ -208,12 +208,12 @@ FileHandle_Impl::~FileHandle_Impl()
 
 void* FileHandle_Impl::operator new (size_t n)
 {
-    return rtl_allocateMemory(n);
+    return malloc(n);
 }
 
 void FileHandle_Impl::operator delete (void * p)
 {
-    rtl_freeMemory(p);
+    free(p);
 }
 
 size_t FileHandle_Impl::getpagesize()

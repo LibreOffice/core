@@ -236,7 +236,7 @@ void destroySocketImpl(oslSocketImpl *pImpl)
 {
     if (pImpl)
     {
-        rtl_freeMemory (pImpl);
+        free (pImpl);
     }
 }
 
@@ -285,7 +285,7 @@ static void destroySocketAddr( oslSocketAddr addr )
 #if OSL_DEBUG_LEVEL > 0
     g_nSocketAddr --;
 #endif
-    rtl_freeMemory( addr );
+    free( addr );
 }
 
 oslSocketAddr SAL_CALL osl_createEmptySocketAddr(oslAddrFamily Family)
@@ -475,7 +475,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         return nullptr;
     }
 
-    pAddr= static_cast<oslHostAddr>(rtl_allocateMemory (sizeof (struct oslHostAddrImpl)));
+    pAddr= static_cast<oslHostAddr>(malloc (sizeof (struct oslHostAddrImpl)));
 
     if (pAddr == nullptr)
     {
@@ -595,7 +595,7 @@ void SAL_CALL osl_destroyHostAddr(oslHostAddr pAddr)
         if (pAddr->pSockAddr)
             osl_destroySocketAddr( pAddr->pSockAddr );
 
-        rtl_freeMemory (pAddr);
+        free (pAddr);
     }
 }
 
@@ -1623,7 +1623,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 {
     oslSocketSetImpl* pSet;
 
-    pSet = static_cast<oslSocketSetImpl*>(rtl_allocateMemory(sizeof(oslSocketSetImpl)));
+    pSet = static_cast<oslSocketSetImpl*>(malloc(sizeof(oslSocketSetImpl)));
 
     if(pSet)
     {
@@ -1636,7 +1636,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 void SAL_CALL osl_destroySocketSet (oslSocketSet Set)
 {
     if(Set)
-        rtl_freeMemory(Set);
+        free(Set);
 }
 
 void SAL_CALL osl_clearSocketSet (oslSocketSet Set)

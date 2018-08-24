@@ -493,7 +493,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
     /* The resulting decoded string length is shorter or equal to the source length */
 
     nSrcLen = rtl_string_getLength(strUTF8);
-    pBuffer = static_cast<sal_Char*>(rtl_allocateMemory((nSrcLen + 1) * sizeof(sal_Char)));
+    pBuffer = static_cast<sal_Char*>(malloc((nSrcLen + 1) * sizeof(sal_Char)));
 
     pDest = pBuffer;
     pSrc = rtl_string_getStr(strUTF8);
@@ -543,7 +543,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
         OSL_ASSERT(*pstrDecodedURL != nullptr);
     }
 
-    rtl_freeMemory( pBuffer );
+    free( pBuffer );
 
     return bValidEncoded;
 }
@@ -561,7 +561,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
 
     rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
 
-    pszEncodedURL = static_cast<sal_Char*>(rtl_allocateMemory( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(sal_Char) ));
+    pszEncodedURL = static_cast<sal_Char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(sal_Char) ));
 
     pURLDest = pszEncodedURL;
     pURLScan = rtl_string_getStr( strUTF8 );
@@ -614,7 +614,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
 
     rtl_string_release( strUTF8 );
     rtl_string_newFromStr( pstrEncodedURL, pszEncodedURL );
-    rtl_freeMemory( pszEncodedURL );
+    free( pszEncodedURL );
 }
 
 oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
@@ -904,7 +904,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             nBufferLength = dwResult + 1;
             lpBuffer = lpBuffer ?
                 static_cast<LPWSTR>(rtl_reallocateMemory(lpBuffer, nBufferLength * sizeof(WCHAR))) :
-                static_cast<LPWSTR>(rtl_allocateMemory(nBufferLength * sizeof(WCHAR)));
+                static_cast<LPWSTR>(malloc(nBufferLength * sizeof(WCHAR)));
 
             dwResult = SearchPathW( lpszSearchPath, lpszSearchFile, nullptr, nBufferLength, lpBuffer, &lpszFilePart );
         } while ( dwResult && dwResult >= nBufferLength );
@@ -934,7 +934,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             }
         }
 
-        rtl_freeMemory( lpBuffer );
+        free( lpBuffer );
     }
 
     if ( ustrSysPath )

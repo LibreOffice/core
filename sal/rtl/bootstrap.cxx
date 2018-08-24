@@ -320,9 +320,9 @@ struct Bootstrap_Impl
     ~Bootstrap_Impl();
 
     static void * operator new (std::size_t n)
-        { return rtl_allocateMemory (sal_uInt32(n)); }
+        { return malloc (sal_uInt32(n)); }
     static void operator delete (void * p , std::size_t)
-        { rtl_freeMemory (p); }
+        { free (p); }
 
     bool getValue(
         rtl::OUString const & key, rtl_uString ** value,

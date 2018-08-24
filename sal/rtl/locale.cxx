@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stdlib.h>
 #include <rtl/locale.h>
 
 #include <osl/diagnose.h>
-#include <rtl/alloc.h>
 
 #include <rtllifecycle.h>
 
@@ -56,8 +56,8 @@ extern "C" void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
     if (entry->Next)
         rtl_hashentry_destroy(entry->Next);
 
-    rtl_freeMemory(entry->Entry);
-    rtl_freeMemory(entry);
+    free(entry->Entry);
+    free(entry);
 }
 
 extern "C" void rtl_hashtable_destroy(RTL_HASHTABLE* table)
@@ -77,8 +77,8 @@ extern "C" void rtl_hashtable_destroy(RTL_HASHTABLE* table)
         size--;
     }
 
-    rtl_freeMemory(table->Table);
-    rtl_freeMemory(table);
+    free(table->Table);
+    free(table);
 }
 
 extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
@@ -88,12 +88,12 @@ extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
     if (*table)
         rtl_hashtable_destroy(*table);
 
-    *table = static_cast< RTL_HASHTABLE* >(rtl_allocateMemory(sizeof(RTL_HASHTABLE)));
+    *table = static_cast< RTL_HASHTABLE* >(malloc(sizeof(RTL_HASHTABLE)));
 
     (*table)->iSize = sizeIndex;
     (*table)->Size = nSize;
     (*table)->Elements = 0;
-    (*table)->Table = static_cast< RTL_HASHENTRY** >(rtl_allocateMemory((*table)->Size * sizeof(RTL_HASHENTRY*)));
+    (*table)->Table = static_cast< RTL_HASHENTRY** >(malloc((*table)->Size * sizeof(RTL_HASHENTRY*)));
 
     while (nSize)
     {
@@ -130,7 +130,7 @@ extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* valu
         pEntry = &(*pEntry)->Next;
     }
 
-    RTL_HASHENTRY *newEntry = static_cast< RTL_HASHENTRY* >(rtl_allocateMemory(sizeof(RTL_HASHENTRY)));
+    RTL_HASHENTRY *newEntry = static_cast< RTL_HASHENTRY* >(malloc(sizeof(RTL_HASHENTRY)));
     newEntry->Entry = value;
     newEntry->Next = nullptr;
     *pEntry = newEntry;
@@ -158,18 +158,18 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
             {
                 rtl_hashtable_add(&pNewTable, pEntry->Next->Entry);
                 pNext = pEntry->Next;
-                rtl_freeMemory(pEntry);
+                free(pEntry);
                 pEntry = pNext;
             }
 
-            rtl_freeMemory(pEntry);
+            free(pEntry);
         }
 
         i++;
     }
 
-    rtl_freeMemory((*table)->Table);
-    rtl_freeMemory(*table);
+    free((*table)->Table);
+    free(*table);
     (*table) = pNewTable;
 
     return true;
@@ -247,7 +247,7 @@ rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sa
     rtl_uString_newFromStr(&sCountry, country);
     rtl_uString_newFromStr(&sVariant, variant);
 
-    newLocale = static_cast<rtl_Locale*>(rtl_allocateMemory( sizeof(rtl_Locale) ));
+    newLocale = static_cast<rtl_Locale*>(malloc( sizeof(rtl_Locale) ));
 
     newLocale->Language = sLanguage;
     newLocale->Country = sCountry;

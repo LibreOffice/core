@@ -92,11 +92,11 @@ DirectoryItem_Impl::~DirectoryItem_Impl()
 
 void * DirectoryItem_Impl::operator new(size_t n)
 {
-    return rtl_allocateMemory(n);
+    return malloc(n);
 }
 void DirectoryItem_Impl::operator delete(void * p)
 {
-    rtl_freeMemory(p);
+    free(p);
 }
 
 void DirectoryItem_Impl::acquire()
@@ -170,7 +170,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
             if( pdir )
             {
-                oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) rtl_allocateMemory( sizeof(oslDirectoryImpl) );
+                oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) malloc( sizeof(oslDirectoryImpl) );
 
                 if( pDirImpl )
                     {
@@ -197,7 +197,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
             if( pdir )
             {
                 /* create and initialize impl structure */
-                oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(rtl_allocateMemory( sizeof(oslDirectoryImpl) ));
+                oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(malloc( sizeof(oslDirectoryImpl) ));
 
                 if( pDirImpl )
                 {
@@ -251,7 +251,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
     /* cleanup members */
     rtl_uString_release(pDirImpl->ustrPath);
 
-    rtl_freeMemory(pDirImpl);
+    free(pDirImpl);
 
     return err;
 }
