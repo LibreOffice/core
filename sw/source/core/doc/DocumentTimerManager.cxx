@@ -49,7 +49,7 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    if( !mIdleBlockCount && !maDocIdle.IsActive() )
+    if( !mIdleBlockCount )
     {
         mbStartIdleTimer = false;
         maDocIdle.Start();
