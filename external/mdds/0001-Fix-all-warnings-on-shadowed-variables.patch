@@ -1,0 +1,422 @@
+From 98f8965ff4df35cde1c357bdd3e2f76542c930ed Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Fri, 24 Aug 2018 17:36:47 -0400
+Subject: [PATCH] Fix all warnings on shadowed variables.
+
+---
+ include/mdds/multi_type_matrix.hpp |  2 +-
+ include/mdds/point_quad_tree.hpp   | 22 ++++++------
+ include/mdds/rtree.hpp             | 22 ++++++------
+ include/mdds/rtree_def.inl         | 29 ++++++++--------
+ include/mdds/trie_map_def.inl      | 14 ++++----
+ src/flat_segment_tree_test.cpp     | 12 +++----
+ src/rectangle_set_test.cpp         |  8 ++---
+ src/trie_map_test.cpp              | 54 +++++++++++++++---------------
+ 8 files changed, 81 insertions(+), 82 deletions(-)
+
+diff --git a/include/mdds/multi_type_matrix.hpp b/include/mdds/multi_type_matrix.hpp
+index 0cb98f2..408b650 100644
+--- a/include/mdds/multi_type_matrix.hpp
++++ b/include/mdds/multi_type_matrix.hpp
+@@ -101,7 +101,7 @@ public:
+         size_type row;
+         size_type column;
+         size_pair_type() : row(0), column(0) {}
+-        size_pair_type(size_type row, size_type column) : row(row), column(column) {}
++        size_pair_type(size_type _row, size_type _column) : row(_row), column(_column) {}
+         size_pair_type(std::initializer_list<size_type> vs)
+         {
+             if (vs.size() != 2)
+diff --git a/include/mdds/point_quad_tree.hpp b/include/mdds/point_quad_tree.hpp
+index 15af83a..b1aacd7 100644
+--- a/include/mdds/point_quad_tree.hpp
++++ b/include/mdds/point_quad_tree.hpp
+@@ -1387,12 +1387,12 @@ void point_quad_tree<_Key,_Value>::set_new_root(
+ }
+ 
+ template<typename _Key, typename _Value>
+-void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
++void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& this_node)
+ {
+     node_ptr cur_node = dest;
+     while (true)
+     {
+-        if (cur_node->x == node->x && cur_node->y == node->y)
++        if (cur_node->x == this_node->x && cur_node->y == this_node->y)
+         {
+             // When inserting a node instance directly (likely as part of tree
+             // re-insertion), we are not supposed to have another node at
+@@ -1400,7 +1400,7 @@ void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
+             throw general_error("node with identical position encountered.");
+         }
+ 
+-        node_quadrant_t quad = cur_node->get_quadrant(node->x, node->y);
++        node_quadrant_t quad = cur_node->get_quadrant(this_node->x, this_node->y);
+         switch (quad)
+         {
+             case quad_northeast:
+@@ -1408,8 +1408,8 @@ void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
+                     cur_node = cur_node->northeast;
+                 else
+                 {
+-                    cur_node->northeast = node;
+-                    node->parent = cur_node;
++                    cur_node->northeast = this_node;
++                    this_node->parent = cur_node;
+                     return;
+                 }
+                 break;
+@@ -1418,8 +1418,8 @@ void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
+                     cur_node = cur_node->northwest;
+                 else
+                 {
+-                    cur_node->northwest = node;
+-                    node->parent = cur_node;
++                    cur_node->northwest = this_node;
++                    this_node->parent = cur_node;
+                     return;
+                 }
+                 break;
+@@ -1428,8 +1428,8 @@ void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
+                     cur_node = cur_node->southeast;
+                 else
+                 {
+-                    cur_node->southeast = node;
+-                    node->parent = cur_node;
++                    cur_node->southeast = this_node;
++                    this_node->parent = cur_node;
+                     return;
+                 }
+                 break;
+@@ -1438,8 +1438,8 @@ void point_quad_tree<_Key,_Value>::insert_node(node_ptr& dest, node_ptr& node)
+                     cur_node = cur_node->southwest;
+                 else
+                 {
+-                    cur_node->southwest = node;
+-                    node->parent = cur_node;
++                    cur_node->southwest = this_node;
++                    this_node->parent = cur_node;
+                     return;
+                 }
+                 break;
+diff --git a/include/mdds/rtree.hpp b/include/mdds/rtree.hpp
+index f934ba0..2209dcd 100644
+--- a/include/mdds/rtree.hpp
++++ b/include/mdds/rtree.hpp
+@@ -153,7 +153,7 @@ public:
+         point_type end;
+ 
+         extent_type();
+-        extent_type(const point_type& start, const point_type& end);
++        extent_type(const point_type& _start, const point_type& _end);
+ 
+         std::string to_string() const;
+ 
+@@ -238,7 +238,7 @@ private:
+ 
+         node_store();
+         node_store(node_store&& r);
+-        node_store(node_type type, const extent_type& extent, node* node_ptr);
++        node_store(node_type _type, const extent_type& _extent, node* _node_ptr);
+         ~node_store();
+ 
+         node_store clone() const;
+@@ -300,12 +300,12 @@ private:
+         dir_store_segment() : size(0) {}
+ 
+         dir_store_segment(
+-            typename dir_store_type::iterator begin,
+-            typename dir_store_type::iterator end,
+-            size_t size) :
+-            begin(std::move(begin)),
+-            end(std::move(end)),
+-            size(size) {}
++            typename dir_store_type::iterator _begin,
++            typename dir_store_type::iterator _end,
++            size_t _size) :
++            begin(std::move(_begin)),
++            end(std::move(_end)),
++            size(_size) {}
+     };
+ 
+     struct distribution
+@@ -338,8 +338,8 @@ private:
+         value_type value;
+ 
+         value_node() = delete;
+-        value_node(value_type&& value);
+-        value_node(const value_type& value);
++        value_node(value_type&& _value);
++        value_node(const value_type& _value);
+         ~value_node();
+     };
+ 
+@@ -395,7 +395,7 @@ public:
+             node_store_type* ns;
+             size_t depth;
+ 
+-            entry(node_store_type* ns, size_t depth);
++            entry(node_store_type* _ns, size_t _depth);
+         };
+ 
+         using store_type = std::vector<entry>;
+diff --git a/include/mdds/rtree_def.inl b/include/mdds/rtree_def.inl
+index d6e3b4f..fb4c700 100644
+--- a/include/mdds/rtree_def.inl
++++ b/include/mdds/rtree_def.inl
+@@ -459,8 +459,8 @@ template<typename _Key, typename _Value, typename _Trait>
+ rtree<_Key,_Value,_Trait>::extent_type::extent_type() {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+-rtree<_Key,_Value,_Trait>::extent_type::extent_type(const point_type& start, const point_type& end) :
+-    start(start), end(end) {}
++rtree<_Key,_Value,_Trait>::extent_type::extent_type(const point_type& _start, const point_type& _end) :
++    start(_start), end(_end) {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+ std::string
+@@ -558,8 +558,8 @@ rtree<_Key,_Value,_Trait>::node_store::node_store(node_store&& r) :
+ }
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+-rtree<_Key,_Value,_Trait>::node_store::node_store(node_type type, const extent_type& extent, node* node_ptr) :
+-    type(type), extent(extent), parent(nullptr), node_ptr(node_ptr), count(0), valid_pointer(true) {}
++rtree<_Key,_Value,_Trait>::node_store::node_store(node_type _type, const extent_type& _extent, node* _node_ptr) :
++    type(_type), extent(_extent), parent(nullptr), node_ptr(_node_ptr), count(0), valid_pointer(true) {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+ rtree<_Key,_Value,_Trait>::node_store::~node_store()
+@@ -807,12 +807,12 @@ template<typename _Key, typename _Value, typename _Trait>
+ rtree<_Key,_Value,_Trait>::node::~node() {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+-rtree<_Key,_Value,_Trait>::value_node::value_node(value_type&& value) :
+-    value(std::move(value)) {}
++rtree<_Key,_Value,_Trait>::value_node::value_node(value_type&& _value) :
++    value(std::move(_value)) {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+-rtree<_Key,_Value,_Trait>::value_node::value_node(const value_type& value) :
+-    value(value) {}
++rtree<_Key,_Value,_Trait>::value_node::value_node(const value_type& _value) :
++    value(_value) {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+ rtree<_Key,_Value,_Trait>::value_node::~value_node() {}
+@@ -980,8 +980,8 @@ void rtree<_Key,_Value,_Trait>::search_results_base<_NS>::add_node_store(
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+ template<typename _NS>
+-rtree<_Key,_Value,_Trait>::search_results_base<_NS>::entry::entry(node_store_type* ns, size_t depth) :
+-    ns(ns), depth(depth) {}
++rtree<_Key,_Value,_Trait>::search_results_base<_NS>::entry::entry(node_store_type* _ns, size_t _depth) :
++    ns(_ns), depth(_depth) {}
+ 
+ template<typename _Key, typename _Value, typename _Trait>
+ template<typename _SelfIter, typename _StoreIter, typename _ValueT>
+@@ -2453,9 +2453,8 @@ void rtree<_Key,_Value,_Trait>::perform_forced_reinsertion(
+ 
+     for (size_t i = 0; i < trait_type::reinsertion_size; ++i)
+     {
+-        size_t pos = buckets[i].src_pos;
+-
+-        dir->children[pos].swap(nodes_to_reinsert[i]);
++        size_t this_pos = buckets[i].src_pos;
++        dir->children[this_pos].swap(nodes_to_reinsert[i]);
+     }
+ 
+     // Erase the swapped out nodes from the directory.
+@@ -2686,8 +2685,8 @@ void rtree<_Key,_Value,_Trait>::search_descend(
+             if (!dir_cond(ns))
+                 return;
+ 
+-            auto* node = ns.get_directory_node();
+-            for (auto& child : node->children)
++            auto* dir_node = ns.get_directory_node();
++            for (auto& child : dir_node->children)
+                 search_descend(depth+1, dir_cond, value_cond, child, results);
+             break;
+         }
+diff --git a/include/mdds/trie_map_def.inl b/include/mdds/trie_map_def.inl
+index a1e97cf..3bb3ee1 100644
+--- a/include/mdds/trie_map_def.inl
++++ b/include/mdds/trie_map_def.inl
+@@ -63,8 +63,8 @@ trie_map<_KeyTrait,_ValueT>::begin() const
+ 
+     while (!node_stack.back().node->has_value)
+     {
+-        auto it = node_stack.back().child_pos;
+-        const_iterator::push_child_node_to_stack(node_stack, buf, it);
++        auto this_it = node_stack.back().child_pos;
++        const_iterator::push_child_node_to_stack(node_stack, buf, this_it);
+     }
+ 
+     return const_iterator(
+@@ -317,9 +317,9 @@ void packed_trie_map<_KeyTrait,_ValueT>::dump_node(
+     std::for_each(node.children.begin(), node.children.end(),
+         [&](const trie_node* p)
+         {
+-            const trie_node& node = *p;
+-            ktt::push_back(buffer, node.key);
+-            dump_node(buffer, node);
++            const trie_node& this_node = *p;
++            ktt::push_back(buffer, this_node.key);
++            dump_node(buffer, this_node);
+             ktt::pop_back(buffer);
+         }
+     );
+@@ -675,10 +675,10 @@ packed_trie_map<_KeyTrait,_ValueT>::find(const key_unit_type* input, size_type l
+     auto end = node_stack.end();
+     --end;  // Skip the node with value which doesn't store a key element.
+     std::for_each(node_stack.begin(), end,
+-        [&](const stack_item& si)
++        [&](const stack_item& this_si)
+         {
+             using ktt = key_trait_type;
+-            ktt::push_back(buf, *si.child_pos);
++            ktt::push_back(buf, *this_si.child_pos);
+         }
+     );
+ 
+diff --git a/src/flat_segment_tree_test.cpp b/src/flat_segment_tree_test.cpp
+index b94f0fd..47c3bb9 100644
+--- a/src/flat_segment_tree_test.cpp
++++ b/src/flat_segment_tree_test.cpp
+@@ -142,14 +142,14 @@ void fst_test_tree_build()
+         int lower = 0, upper = 100, delta = 10;
+         flat_segment_tree<int, int> db(lower, upper, 0);
+         {
+-            stack_printer __stack_printer__("::fst_test_tree_build insertion");
++            stack_printer __stack_printer2__("::fst_test_tree_build insertion");
+             for (int i = lower; i < upper; i+=delta)
+                 db.insert_front(i, i+delta, i*2);
+         }
+         db.dump_leaf_nodes();
+ 
+         {
+-            stack_printer __stack_printer__("::fst_test_tree_build tree construction");
++            stack_printer __stack_printer2__("::fst_test_tree_build tree construction");
+             db.build_tree();
+             db.dump_tree();
+         }
+@@ -1641,8 +1641,8 @@ void fst_perf_test_position_search()
+         stack_printer __stack_printer__("::fst_perf_test_position_search (normal)");
+         for (long i = 0; i < upper; ++i)
+         {
+-            bool val;
+-            ret_type ret = db.search(i, val);
++            bool val2;
++            ret_type ret = db.search(i, val2);
+             assert(ret.second);
+         }
+     }
+@@ -1652,8 +1652,8 @@ void fst_perf_test_position_search()
+         itr = db.begin();
+         for (long i = 0; i < upper; ++i)
+         {
+-            bool val;
+-            ret_type ret = db.search(itr, i, val);
++            bool val2;
++            ret_type ret = db.search(itr, i, val2);
+             assert(ret.second);
+             itr = ret.first;
+         }
+diff --git a/src/trie_map_test.cpp b/src/trie_map_test.cpp
+index ce051c4..2abadbc 100644
+--- a/src/trie_map_test.cpp
++++ b/src/trie_map_test.cpp
+@@ -1,7 +1,7 @@
+ /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ /*************************************************************************
+  *
+- * Copyright (c) 2015 Kohei Yoshida
++ * Copyright (c) 2015-2018 Kohei Yoshida
+  *
+  * Permission is hereby granted, free of charge, to any person
+  * obtaining a copy of this software and associated documentation
+@@ -588,19 +588,19 @@ void trie_test1()
+         auto matches = db.prefix_search(MDDS_ASCII("B"));
+         size_t n = std::distance(matches.begin(), matches.end());
+         assert(n == 2);
+-        auto it = matches.begin();
+-        assert(it->first == "Barak");
+-        assert(it->second.data == "Obama");
+-        ++it;
+-        assert(it->first == "Bob");
+-        assert(it->second.data == "Marley");
++        auto it2 = matches.begin();
++        assert(it2->first == "Barak");
++        assert(it2->second.data == "Obama");
++        ++it2;
++        assert(it2->first == "Bob");
++        assert(it2->second.data == "Marley");
+ 
+         matches = db.prefix_search(MDDS_ASCII("Hi"));
+         n = std::distance(matches.begin(), matches.end());
+         assert(n == 1);
+-        it = matches.begin();
+-        assert(it->first == "Hideki");
+-        assert(it->second.data == "Matsui");
++        it2 = matches.begin();
++        assert(it2->first == "Hideki");
++        assert(it2->second.data == "Matsui");
+ 
+         // Invalid prefix searches.
+         matches = db.prefix_search(MDDS_ASCII("Bad"));
+@@ -619,23 +619,23 @@ void trie_test1()
+             auto results = packed.prefix_search(MDDS_ASCII("B"));
+             size_t n = std::distance(results.begin(), results.end());
+             assert(n == 2);
+-            auto it = results.begin();
+-            assert(it->first == "Barak");
+-            assert(it->second.data == "Obama");
+-            ++it;
+-            assert(it->first == "Bob");
+-            assert(it->second.data == "Marley");
+-            ++it;
+-            assert(it == results.end());
++            auto it2 = results.begin();
++            assert(it2->first == "Barak");
++            assert(it2->second.data == "Obama");
++            ++it2;
++            assert(it2->first == "Bob");
++            assert(it2->second.data == "Marley");
++            ++it2;
++            assert(it2 == results.end());
+         }
+ 
+         {
+             auto results = db.prefix_search(MDDS_ASCII("Hi"));
+             size_t n = std::distance(results.begin(), results.end());
+             assert(n == 1);
+-            auto it = results.begin();
+-            assert(it->first == "Hideki");
+-            assert(it->second.data == "Matsui");
++            auto it2 = results.begin();
++            assert(it2->first == "Hideki");
++            assert(it2->second.data == "Matsui");
+         }
+ 
+         // Invalid prefix searches.
+@@ -650,12 +650,12 @@ void trie_test1()
+         auto results = packed.prefix_search(MDDS_ASCII("B"));
+         size_t n = std::distance(results.begin(), results.end());
+         assert(n == 2);
+-        auto it = results.begin();
+-        assert(it->first == "Barak");
+-        assert(it->second.data == "Obama");
+-        ++it;
+-        assert(it->first == "Bob");
+-        assert(it->second.data == "Marley");
++        auto it2 = results.begin();
++        assert(it2->first == "Barak");
++        assert(it2->second.data == "Obama");
++        ++it2;
++        assert(it2->first == "Bob");
++        assert(it2->second.data == "Marley");
+     }
+ 
+     // Erase an existing key.
+-- 
+2.17.1
+
