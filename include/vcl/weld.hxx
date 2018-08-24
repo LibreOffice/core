@@ -484,6 +484,7 @@ public:
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
     virtual void set_max_length(int nChars) = 0;
+    // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
