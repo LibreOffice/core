@@ -1068,7 +1068,7 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
                 SAL_INFO("sal.osl", "read failed " << strerror(errno));
 
                 if( pLine )
-                    rtl_freeMemory( pLine );
+                    free( pLine );
                 pLine = nullptr;
                 break;
             }
@@ -1088,11 +1088,11 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
              pChr++);
 
         Max = pChr - pFile->m_pReadPtr;
-        pNewLine = static_cast<sal_Char*>(rtl_allocateMemory( nLineBytes + Max + 1 ));
+        pNewLine = static_cast<sal_Char*>(malloc( nLineBytes + Max + 1 ));
         if( pLine )
         {
             memcpy( pNewLine, pLine, nLineBytes );
-            rtl_freeMemory( pLine );
+            free( pLine );
         }
         memcpy(pNewLine+nLineBytes, pFile->m_pReadPtr, Max);
         nLineBytes += Max;
@@ -1546,7 +1546,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     while ( ( pLine=OslProfile_getLine(pFile) ) != nullptr )
     {
         sal_Char* bWasAdded = addLine( pProfile, pLine );
-        rtl_freeMemory( pLine );
+        free( pLine );
         SAL_WARN_IF(!bWasAdded, "sal.osl", "addLine( pProfile, pLine ) ==> false");
         if ( ! bWasAdded )
             return false;

@@ -1138,7 +1138,7 @@ void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
             rtl_freeZeroMemory(pImpl, sizeof(CipherBF_Impl));
         }
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 
@@ -1409,7 +1409,7 @@ void SAL_CALL rtl_cipher_destroyARCFOUR(rtlCipher Cipher) SAL_THROW_EXTERN_C()
             rtl_freeZeroMemory(pImpl, sizeof(CipherARCFOUR_Impl));
         }
         else
-            rtl_freeMemory(pImpl);
+            free(pImpl);
     }
 }
 

@@ -65,8 +65,8 @@ bool rtl_ImplIsWhitespace( sal_Unicode c )
  */
 static rtl_arena_type *pre_arena = nullptr;
 
-rtl_allocateStringFn rtl_allocateString = rtl_allocateMemory;
-rtl_freeStringFn rtl_freeString = rtl_freeMemory;
+rtl_allocateStringFn rtl_allocateString = malloc;
+rtl_freeStringFn rtl_freeString = free;
 
 extern "C" {
 static void *pre_allocateStringFn(sal_Size n)
@@ -110,8 +110,8 @@ void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
     else
     {
         rtl_arena_foreach(pre_arena, mark_static);
-        rtl_allocateString = rtl_allocateMemory;
-        rtl_freeString = rtl_freeMemory;
+        rtl_allocateString = malloc;
+        rtl_freeString = free;
 
         // TODO: also re-initialize main allocator as well.
     }

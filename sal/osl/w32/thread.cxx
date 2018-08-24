@@ -448,14 +448,14 @@ void osl_callThreadKeyCallbackOnThreadDetach(void)
 
 oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
 {
-    PTLS    pTls = static_cast<PTLS>(rtl_allocateMemory( sizeof(TLS) ));
+    PTLS    pTls = static_cast<PTLS>(malloc( sizeof(TLS) ));
 
     if ( pTls )
     {
         pTls->pfnCallback = pCallback;
         if ( DWORD(-1) == (pTls->dwIndex = TlsAlloc()) )
         {
-            rtl_freeMemory( pTls );
+            free( pTls );
             pTls = nullptr;
         }
         else
@@ -473,7 +473,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 
         RemoveKeyFromList( pTls );
         TlsFree( pTls->dwIndex );
-        rtl_freeMemory( pTls );
+        free( pTls );
     }
 }
 

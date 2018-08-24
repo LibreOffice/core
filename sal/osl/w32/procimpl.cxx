@@ -546,7 +546,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         CloseHandle(process_info.hThread);
 
         oslProcessImpl* pProcImpl = static_cast<oslProcessImpl*>(
-            rtl_allocateMemory(sizeof(oslProcessImpl)));
+            malloc(sizeof(oslProcessImpl)));
 
         if (pProcImpl != nullptr)
         {

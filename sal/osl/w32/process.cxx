@@ -147,7 +147,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
     if (hProcess)
     {
-        pProcImpl = static_cast< oslProcessImpl*>( rtl_allocateMemory(sizeof(oslProcessImpl)) );
+        pProcImpl = static_cast< oslProcessImpl*>( malloc(sizeof(oslProcessImpl)) );
         pProcImpl->m_hProcess  = hProcess;
         pProcImpl->m_IdProcess = Ident;
     }
@@ -163,7 +163,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
     {
         CloseHandle(static_cast<oslProcessImpl*>(Process)->m_hProcess);
 
-        rtl_freeMemory(Process);
+        free(Process);
     }
 }
 

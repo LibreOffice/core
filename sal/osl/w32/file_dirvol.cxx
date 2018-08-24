@@ -344,7 +344,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
                 nSuffLen = 3;
             }
 
-            WCHAR* szFileMask = static_cast< WCHAR* >( rtl_allocateMemory( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
+            WCHAR* szFileMask = static_cast< WCHAR* >( malloc( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
 
             wcscpy( szFileMask, o3tl::toW(rtl_uString_getStr( pPath )) );
             wcscat( szFileMask, pSuffix );
@@ -360,7 +360,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
                     pDirectory = nullptr;
                 }
             }
-            rtl_freeMemory(szFileMask);
+            free(szFileMask);
         }
     }
 
@@ -436,7 +436,7 @@ static oslFileError osl_openLocalRoot(
     {
         Directory_Impl  *pDirImpl;
 
-        pDirImpl = static_cast<Directory_Impl*>(rtl_allocateMemory( sizeof(Directory_Impl)));
+        pDirImpl = static_cast<Directory_Impl*>(malloc( sizeof(Directory_Impl)));
         ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strSysPath );
 
@@ -479,7 +479,7 @@ static oslFileError osl_openLocalRoot(
                     pDirImpl->m_pDirectoryPath = nullptr;
                 }
 
-                rtl_freeMemory(pDirImpl);
+                free(pDirImpl);
                 pDirImpl = nullptr;
             }
 
@@ -500,7 +500,7 @@ static oslFileError osl_openFileDirectory(
         return osl_File_E_INVAL;
     *pDirectory = nullptr;
 
-    Directory_Impl *pDirImpl = static_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
+    Directory_Impl *pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
     ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
     rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strDirectoryPath );
 
@@ -535,7 +535,7 @@ static oslFileError osl_openFileDirectory(
             pDirImpl->m_pDirectoryPath = nullptr;
         }
 
-        rtl_freeMemory(pDirImpl);
+        free(pDirImpl);
         pDirImpl = nullptr;
     }
 
@@ -565,7 +565,7 @@ static oslFileError osl_openNetworkServer(
     {
         Directory_Impl  *pDirImpl;
 
-        pDirImpl = static_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
+        pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
         ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         pDirImpl->uType = DIRECTORYTYPE_NETROOT;
         pDirImpl->hDirectory = hEnum;
@@ -783,7 +783,7 @@ static oslFileError osl_getNextNetResource(
         case NO_ERROR:
         case ERROR_MORE_DATA:
         {
-            pItemImpl = static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+            pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
             if ( !pItemImpl )
                 return osl_File_E_NOMEM;
 
@@ -817,7 +817,7 @@ static oslFileError osl_getNextDrive(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+    pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
@@ -839,7 +839,7 @@ static oslFileError osl_getNextDrive(
             pItemImpl->m_pFullPath = nullptr;
         }
 
-        rtl_freeMemory( pItemImpl );
+        free( pItemImpl );
         return oslTranslateFileError( GetLastError() );
     }
 }
@@ -858,7 +858,7 @@ static oslFileError osl_getNextFileItem(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+    pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
@@ -887,7 +887,7 @@ static oslFileError osl_getNextFileItem(
             pItemImpl->m_pFullPath = nullptr;
         }
 
-        rtl_freeMemory( pItemImpl );
+        free( pItemImpl );
         return oslTranslateFileError( GetLastError() );
     }
 }
@@ -951,7 +951,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
             pDirImpl->m_pDirectoryPath = nullptr;
         }
 
-        rtl_freeMemory(pDirImpl);
+        free(pDirImpl);
     }
     return eError;
 }
@@ -999,7 +999,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     case PATHTYPE_NETSERVER:
         {
             DirectoryItem_Impl* pItemImpl =
-                static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+                static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
 
             if ( !pItemImpl )
                 error = osl_File_E_NOMEM;
@@ -1030,7 +1030,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     case PATHTYPE_VOLUME:
         {
             DirectoryItem_Impl* pItemImpl =
-                static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+                static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
 
             if ( !pItemImpl )
                 error = osl_File_E_NOMEM;
@@ -1067,7 +1067,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             if ( hFind != INVALID_HANDLE_VALUE )
             {
                 DirectoryItem_Impl  *pItemImpl =
-                    static_cast<DirectoryItem_Impl*>(rtl_allocateMemory(sizeof(DirectoryItem_Impl)));
+                    static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
 
                 ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
                 osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
@@ -1120,7 +1120,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
             pItemImpl->m_pFullPath = nullptr;
         }
 
-        rtl_freeMemory( pItemImpl );
+        free( pItemImpl );
     }
 
     return osl_File_E_None;

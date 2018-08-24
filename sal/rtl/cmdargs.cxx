@@ -37,7 +37,7 @@ ArgHolder::~ArgHolder()
     while (g_nCommandArgCount > 0)
         rtl_uString_release (g_ppCommandArgs[--g_nCommandArgCount]);
 
-    rtl_freeMemory (g_ppCommandArgs);
+    free (g_ppCommandArgs);
     g_ppCommandArgs = nullptr;
 }
 

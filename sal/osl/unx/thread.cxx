@@ -964,7 +964,7 @@ struct wrapper_pthread_key
 
 oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
-    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(rtl_allocateMemory(sizeof(wrapper_pthread_key)));
+    wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(malloc(sizeof(wrapper_pthread_key)));
 
     if (pKey)
     {
@@ -972,7 +972,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
 
         if (pthread_key_create(&(pKey->m_key), pKey->pfnCallback) != 0)
         {
-            rtl_freeMemory(pKey);
+            free(pKey);
             pKey = nullptr;
         }
     }
@@ -986,7 +986,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
     if (pKey)
     {
         pthread_key_delete(pKey->m_key);
-        rtl_freeMemory(pKey);
+        free(pKey);
     }
 }
 
