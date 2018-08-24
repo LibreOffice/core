@@ -1176,7 +1176,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
         mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
         if (!mxPreparedPasswords.is()) {
             OUString msg;
-            ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TOOD: handle failure
+            ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TODO: handle failure
             std::unique_ptr<weld::MessageDialog>(
                 Application::CreateMessageDialog(
                     GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))

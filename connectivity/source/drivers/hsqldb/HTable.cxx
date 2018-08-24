@@ -214,7 +214,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
             ||  bOldAutoIncrement != bAutoIncrement )
         {
             // special handling because they change the type names to distinguish
-            // if a column should be an auto_incmrement one
+            // if a column should be an auto_increment one
             if ( bOldAutoIncrement != bAutoIncrement )
             {
                 /// TODO: insert special handling for auto increment "IDENTITY" and primary key
