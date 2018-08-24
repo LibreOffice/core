@@ -369,6 +369,7 @@ basegfx/source/tools/gradienttools.cxx
 basegfx/source/tools/keystoplerp.cxx
 basegfx/source/tools/numbertools.cxx
 basegfx/source/tools/stringconversiontools.cxx
+basegfx/source/tools/systemdependentdata.cxx
 basegfx/source/tools/tools.cxx
 basegfx/source/tools/unopolypolygon.cxx
 basegfx/source/tools/unotools.cxx
@@ -5881,6 +5882,7 @@ include/basegfx/utils/gradienttools.hxx
 include/basegfx/utils/keystoplerp.hxx
 include/basegfx/utils/lerp.hxx
 include/basegfx/utils/rectcliptools.hxx
+include/basegfx/utils/systemdependentdata.hxx
 include/basegfx/utils/tools.hxx
 include/basegfx/utils/unopolypolygon.hxx
 include/basegfx/utils/unotools.hxx

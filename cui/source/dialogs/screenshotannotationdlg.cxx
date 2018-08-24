@@ -40,6 +40,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/button.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 using namespace com::sun::star;
 
@@ -454,6 +455,7 @@ void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
 
         // try to use transparency
         if (!mpVirtualBufferDevice->DrawPolyLineDirect(
+            basegfx::B2DHomMatrix(),
             aPolygon,
             fLineWidth,
             fTransparency,
