@@ -22,6 +22,7 @@
 #include "impdialog.hxx"
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -1173,6 +1174,15 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();
 
         mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
+        if (!mxPreparedPasswords.is()) {
+            OUString msg;
+            ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TOOD: handle failure
+            std::unique_ptr<weld::MessageDialog>(
+                Application::CreateMessageDialog(
+                    GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
+                ->run();
+            return;
+        }
 
         if( mbHaveOwnerPassword )
         {
