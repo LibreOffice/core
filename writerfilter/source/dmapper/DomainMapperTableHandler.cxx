@@ -1015,8 +1015,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         {
             xStart = m_aTableRanges[0][0][0];
             uno::Sequence< uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableRanges[m_aTableRanges.size() - 1];
-            uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
-            xEnd = rLastCell[1];
+            if (rLastRow.getLength())
+            {
+                uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
+                xEnd = rLastCell[1];
+            }
         }
         uno::Reference<text::XTextTable> xTable;
         try
