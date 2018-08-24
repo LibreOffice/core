@@ -101,6 +101,8 @@
 #include <opengl/zone.hxx>
 #include <opengl/watchdog.hxx>
 
+#include <basegfx/utils/systemdependentdata.hxx>
+
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 #include <rtl/strbuf.hxx>
@@ -425,6 +427,9 @@ void DeInitVCL()
         ::comphelper::JoinAsyncEventNotifiers();
     }
     ImplSVData* pSVData = ImplGetSVData();
+
+    // cleanup SystemDependentData
+    SalGraphics::getSystemDependentDataManager().flushAll();
 
     // lp#1560328: clear cache before disposing rest of VCL
     if(pSVData->mpBlendFrameCache)
