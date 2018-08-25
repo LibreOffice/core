@@ -43,8 +43,8 @@ class ImplDockFloatWin2 : public FloatingWindow
 private:
     ImplDockingWindowWrapper*  mpDockWin;
     sal_uInt64      mnLastTicks;
-    Idle            maDockIdle;
-    Idle            maEndDockIdle;
+    Timer           m_aDockTimer;
+    Timer           m_aEndDockTimer;
     Point           maDockPos;
     tools::Rectangle       maDockRect;
     bool            mbInMove;
@@ -87,13 +87,15 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
-    maDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
-    maDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
-    maDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maDockIdle" );
+    m_aDockTimer.SetInvokeHandler( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
+    m_aDockTimer.SetPriority( TaskPriority::HIGH_IDLE );
+    m_aDockTimer.SetTimeout( 50 );
+    m_aDockTimer.SetDebugName( "vcl::ImplDockFloatWin2 m_aDockTimer" );
 
-    maEndDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maEndDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
-    maEndDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maEndDockIdle" );
+    m_aEndDockTimer.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
+    m_aEndDockTimer.SetPriority( TaskPriority::HIGH_IDLE );
+    m_aEndDockTimer.SetTimeout( 50 );
+    m_aEndDockTimer.SetDebugName( "vcl::ImplDockFloatWin2 m_aEndDockTimer" );
 }
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
@@ -112,7 +114,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl, Timer *, void)
 {
     SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "docktimer called but not floating" );
 
-    maDockIdle.Stop();
     PointerState aState = GetPointerState();
 
     if( aState.mnState & KEY_MOD1 )
@@ -120,7 +121,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl, Timer *, void)
         // i43499 CTRL disables docking now
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
         if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
-            maDockIdle.Start();
+            m_aDockTimer.Start();
     }
     else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
@@ -130,7 +131,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl, Timer *, void)
     else
     {
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Big | ShowTrackFlags::TrackWindow );
-        maDockIdle.Start();
+        m_aDockTimer.Start();
     }
 }
 
@@ -138,7 +139,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl, Timer *, void)
 {
     SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "enddocktimer called but not floating" );
 
-    maEndDockIdle.Stop();
     PointerState aState = GetPointerState();
     if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
@@ -146,9 +146,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl, Timer *, void)
         mpDockWin->EndDocking( maDockRect, true );
     }
     else
-    {
-        maEndDockIdle.Start();
-    }
+        m_aEndDockTimer.Start();
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
@@ -205,14 +203,14 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
             maDockRect.SetPos( mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ScreenToOutputPixel(
                  maDockRect.TopLeft() ) );
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Big | ShowTrackFlags::TrackWindow );
-            maEndDockIdle.Stop();
-            DockTimerHdl( nullptr );
+            m_aEndDockTimer.Stop();
+            m_aDockTimer.Invoke();
         }
         else
         {
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
-            maDockIdle.Stop();
-            EndDockTimerHdl( nullptr );
+            m_aDockTimer.Stop();
+            m_aEndDockTimer.Invoke();
         }
     }
     mbInMove = false;
