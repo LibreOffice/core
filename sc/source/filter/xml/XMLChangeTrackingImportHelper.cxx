@@ -804,8 +804,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
 
         aItr = aActions.begin();
-        aEndItr = aActions.end();
-        while (aItr != aEndItr)
+        while (aItr != aActions.end())
         {
             SetDependencies(aItr->get());
 
@@ -816,8 +815,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         }
 
         aItr = aActions.begin();
-        aEndItr = aActions.end();
-        while (aItr != aEndItr)
+        while (aItr != aActions.end())
         {
             OSL_ENSURE((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
             SetNewCell(static_cast<ScMyContentAction*>(aItr->get()));
