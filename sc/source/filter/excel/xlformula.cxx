@@ -873,7 +873,6 @@ bool XclTokenArrayHelper::GetString( OUString& rString, const ScTokenArray& rScT
 bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep )
 {
     bool bRet = true;
-    OUString aString;
     XclTokenArrayIterator aIt( rScTokArr, true );
     enum { STATE_START, STATE_STR, STATE_SEP, STATE_END } eState = STATE_START;
     while( eState != STATE_END ) switch( eState )
@@ -882,10 +881,13 @@ bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArr
             eState = aIt.Is() ? STATE_STR : STATE_END;
         break;
         case STATE_STR:
+        {
+            OUString aString;
             bRet = GetTokenString( aString, *aIt );
             if( bRet ) rStringList += aString ;
             eState = (bRet && (++aIt).Is()) ? STATE_SEP : STATE_END;
-        break;
+            break;
+        }
         case STATE_SEP:
             bRet = aIt->GetOpCode() == ocSep;
             if( bRet ) rStringList += OUStringLiteral1(cSep);
