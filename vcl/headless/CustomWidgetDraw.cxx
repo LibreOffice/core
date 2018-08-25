@@ -118,7 +118,10 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         }
         break;
         case ControlType::Listbox:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawListbox(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Spinbox:
         {
             if (rValue.getType() == ControlType::SpinButtons)
