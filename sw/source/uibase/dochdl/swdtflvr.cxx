@@ -3478,7 +3478,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );
 
-    // at first, select INetFelder!
+    // at first, select InetFields!
     if( TransferBufferType::InetField == m_eBufferType )
     {
         if( &rSrcSh == &rSh )

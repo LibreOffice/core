@@ -81,8 +81,8 @@ SfxPoolItem* SwTableBoxFormula::Clone( SfxItemPool* ) const
 
 /** Get node type of the node containing this formula
 
-    E.g. TextFeld -> TextNode, or
-     BoxAttribute -> BoxStartNode
+    E.g. TextField -> TextNode, or
+      BoxAttribute -> BoxStartNode
 
     Caution: Must override when inheriting.
 */

@@ -2049,7 +2049,7 @@ void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
             m_pMemoStream->WriteChar( cEOF ).WriteChar( cEOF );
         } break;
         case MemoFoxPro:
-        case MemodBaseIV: // dBase IV-Memofeld with length
+        case MemodBaseIV: // dBase IV-Memofield with length
         {
             if ( MemodBaseIV == m_aMemoHeader.db_typ )
                 (*m_pMemoStream).WriteUChar( 0xFF )

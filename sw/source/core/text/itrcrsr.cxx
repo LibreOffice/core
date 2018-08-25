@@ -516,7 +516,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 
         // First all portions without Len at beginning of line are skipped.
         // Exceptions are the mean special portions from WhichFirstPortion:
-        // Num, ErgoSum, FootnoteNum, FeldReste
+        // Num, ErgoSum, FootnoteNum, FieldRests
         // 8477: but also the only Textportion of an empty line with
         // Right/Center-Adjustment! So not just pPor->GetExpandPortion() ...
         while( pPor && !pPor->GetLen() && ! bInsideFirstField )
