@@ -22,6 +22,7 @@ Private	Title					As String
 Private	Document				As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
 Private	Connection				As Object				&apos;	com.sun.star.sdbc.drivers.OConnectionWrapper or com.sun.star.sdbc.XConnection
 Private	URL						As String
+Private Location				As String				&apos;	Different from URL for registered databases
 Private _ReadOnly				As Boolean
 Private	MetaData				As Object				&apos;	interface XDatabaseMetaData
 Private _RDBMS					As Integer				&apos;	DBMS constants

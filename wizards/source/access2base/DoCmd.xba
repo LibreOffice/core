@@ -363,6 +363,7 @@ Const cstProgressMeterLimit = 100
 										Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, vField)
 									End If
 								Next i
+
 								If oOutput.RowSet.IsNew And oOutput.RowSet.IsModified Then oOutput.RowSet.insertRow()
 								oOutput._EditMode = dbEditNone
 								lInputRecs = lInputRecs + 1

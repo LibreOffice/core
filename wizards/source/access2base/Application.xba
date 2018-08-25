@@ -1329,6 +1329,7 @@ Const cstThisSub = &quot;OpenDatabase&quot;
 		If UCase(sDbNames(i)) = UCase(pvDatabaseURL) Then
 			sDatabaseURL = sDbNames(i)
 			Set oBaseSource = oBaseContext.getByName(sDatabaseURL)
+			odbDatabase.Location = oBaseContext.getDatabaseLocation(sDbNames(i))
 			bFound = True
 			Exit For
 		End If
