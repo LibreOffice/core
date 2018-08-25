@@ -582,7 +582,7 @@ endif
 
 $(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag): $(2)
 	$(call gb_Output_announce,$@,$(true),PVTUNOTYPES,2)
-	-$$(call gb_Helper_abbreviate_dirs,\
+	-$$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) && \
 		$(gb_UnoApiTarget_CPPUMAKERCOMMAND) \
 			-O $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) \
