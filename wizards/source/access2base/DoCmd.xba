@@ -275,6 +275,7 @@ Const cstProgressMeterLimit = 100
 					_ConvertDataDescriptor oSourceCol, oSourceDatabase._RDBMS, oTargetCol, oDatabase
 					oTarget.Columns.appendByDescriptor(oTargetCol)
 				Next i
+
 				&apos;	Copy keys
 				Set oSourceKeys = oSourceTable.Keys
 				Set oTargetKey = oTarget.Keys.createDataDescriptor()

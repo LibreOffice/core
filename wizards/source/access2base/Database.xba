@@ -228,7 +228,7 @@ Const cstThisSub = &quot;Database.Close&quot;
 	If _DbConnect &lt;&gt; DBCONNECTANY Then Goto Error_NotApplicable
 
 	With Connection
-		If Utils.hasUNOMethod(Connection, &quot;flush&quot;) Then .flush
+		If Utils._hasUNOMethod(Connection, &quot;flush&quot;) Then .flush
 		.close()
 		.dispose()
 	End With
