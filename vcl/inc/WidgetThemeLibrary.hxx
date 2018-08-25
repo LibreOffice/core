@@ -53,6 +53,10 @@ public:
     virtual bool drawSpinButtons(ControlDrawParameters const& rParameters, long nWidth,
                                  long nHeight);
     virtual bool drawSpinbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawTabItem(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawTabPane(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawTabHeader(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawTabBody(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawWindowsBackground(ControlDrawParameters const& rParameters, long nWidth,
                                        long nHeight);
     virtual bool drawListbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);

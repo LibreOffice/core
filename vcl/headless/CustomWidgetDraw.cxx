@@ -172,13 +172,25 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         }
         break;
         case ControlType::TabItem:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawTabItem(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::TabPane:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawTabPane(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::TabHeader:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawTabHeader(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::TabBody:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawTabBody(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Scrollbar:
         {
             bOK = s_pWidgetImplementation->drawScrollbar(aParameters, nWidth, nHeight);
