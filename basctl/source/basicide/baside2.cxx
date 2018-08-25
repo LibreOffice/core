@@ -496,7 +496,7 @@ void ModulWindow::ImportDialog()
 
 void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 {
-    DBG_ASSERT( XModule().is(), "No Modul!" );
+    DBG_ASSERT( XModule().is(), "No Module!" );
 
     if ( XModule().is() )
     {
