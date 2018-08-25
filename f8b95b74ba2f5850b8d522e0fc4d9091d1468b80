@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a75953ff",
+        "filename": "sw/source/core/inc/DocumentTimerManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-25T07:12:41Z",
+      "side": 1,
+      "message": "thisis being touched from multiple different threads without being either volatile or atomic or locked",
+      "revId": "f8b95b74ba2f5850b8d522e0fc4d9091d1468b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
