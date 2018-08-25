@@ -16,6 +16,24 @@
       "revId": "f8b95b74ba2f5850b8d522e0fc4d9091d1468b80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_2702e3b5",
+        "filename": "sw/source/core/inc/DocumentTimerManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-08-25T09:25:18Z",
+      "side": 1,
+      "message": "No idea. The code never had any locking. We can stick the DBG_TESTSOLARMUTEX or even a SolarMutexGuard in all functions to be sure. This lockless access would always have been an error. Since the DocumentTimerManager is always part of a SwDoc I\u0027m assumimg these access rights apply.\n\nOTOH - the former  DocumentTimerManager::StartBackgroundJobs() didn\u0027t access mbStartIdleTimer, so there is an indicator for this error and probably for the unit test failure.\n\nReally have to check if the JUnit tests now always fail. But not today.",
+      "parentUuid": "dfeb2761_a75953ff",
+      "revId": "f8b95b74ba2f5850b8d522e0fc4d9091d1468b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
