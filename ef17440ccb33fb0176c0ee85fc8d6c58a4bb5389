@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_a7e6f3e7",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001661
+      },
+      "writtenOn": "2018-08-25T19:22:38Z",
+      "side": 1,
+      "message": "If the aDestRange is valid _or correctly truncated_, the validateCellRange() return true and exception is not thrown. Otherwise, for example, if aDestRange.aStart \u003c 0, it will be necessary to stop execution of the subsequent code.",
+      "parentUuid": "ffe62b97_eefce43f",
+      "revId": "ef17440ccb33fb0176c0ee85fc8d6c58a4bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe62b97_cef9204e",
         "filename": "sc/source/filter/oox/tablebuffer.cxx",
         "patchSetId": 2
