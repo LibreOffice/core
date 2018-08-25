@@ -38,19 +38,18 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.9.4
+LIBXML2VERSION=2.9.8
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-TARFILE_MD5=ae249165c173b1ff386ee8ad676815f5
+TARFILE_MD5=b786e353e2aa1b872d70d5d1ca0c740d
 
-PATCH_FILES=libxml2-configure.patch \
-    libxml2-c99.patch
+PATCH_FILES=libxml2-configure.patch
 
 # libxml2-global-symbols: #i112480#: Solaris ld won't export non-listed symbols
 #            libxml2-global-symbols.patch
 
 .IF "$(OS)" == "WNT"
-PATCH_FILES+= libxml2-long-path.patch
+PATCH_FILES+= libxml2-nan-inf-fix.patch
 .ENDIF
 
 # This is only for UNX environment now

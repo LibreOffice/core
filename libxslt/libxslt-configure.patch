@@ -1,7 +1,7 @@
-diff -ur misc/libxslt-1.1.29/configure misc/build/libxslt-1.1.29/configure
---- misc/libxslt-1.1.29/configure	2016-05-23 18:49:13.000000000 -0700
-+++ misc/build/libxslt-1.1.29/configure	2016-08-11 11:06:10.448691000 -0700
-@@ -6691,7 +6691,7 @@
+diff -ur misc/libxslt-1.1.32/configure misc/build/libxslt-1.1.32/configure
+--- misc/libxslt-1.1.32/configure	2017-11-02 13:34:22.000000000 -0700
++++ misc/build/libxslt-1.1.32/configure	2018-08-22 23:00:50.689433000 -0700
+@@ -6698,7 +6698,7 @@
  
  cygwin*)
    # func_win32_libid is a shell function defined in ltmain.sh
@@ -10,9 +10,9 @@ diff -ur misc/libxslt-1.1.29/configure misc/build/libxslt-1.1.29/configure
    lt_cv_file_magic_cmd='func_win32_libid'
    ;;
  
-diff -ur misc/libxslt-1.1.29/xslt-config.in misc/build/libxslt-1.1.29/xslt-config.in
---- misc/libxslt-1.1.29/xslt-config.in	2015-05-10 07:11:30.000000000 -0700
-+++ misc/build/libxslt-1.1.29/xslt-config.in	2016-08-11 11:06:10.442201000 -0700
+diff -ur misc/libxslt-1.1.32/xslt-config.in misc/build/libxslt-1.1.32/xslt-config.in
+--- misc/libxslt-1.1.32/xslt-config.in	2015-05-10 07:11:30.000000000 -0700
++++ misc/build/libxslt-1.1.32/xslt-config.in	2018-08-22 23:00:50.689988000 -0700
 @@ -1,10 +1,15 @@
  #! /bin/sh
  

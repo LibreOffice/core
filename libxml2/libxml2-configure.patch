@@ -1,6 +1,6 @@
-diff -ur misc/libxml2-2.9.4/include/libxml/xmlversion.h misc/build/libxml2-2.9.4/include/libxml/xmlversion.h
---- misc/libxml2-2.9.4/include/libxml/xmlversion.h	2015-11-20 01:49:39.000000000 -0800
-+++ misc/build/libxml2-2.9.4/include/libxml/xmlversion.h	2016-03-26 09:46:21.124032000 -0700
+diff -ur misc/libxml2-2.9.8/include/libxml/xmlversion.h misc/build/libxml2-2.9.8/include/libxml/xmlversion.h
+--- misc/libxml2-2.9.8/include/libxml/xmlversion.h	2018-03-05 07:54:29.000000000 -0800
++++ misc/build/libxml2-2.9.8/include/libxml/xmlversion.h	2018-08-22 22:53:15.488158000 -0700
 @@ -273,7 +273,7 @@
   *
   * Whether iconv support is available
@@ -19,9 +19,9 @@ diff -ur misc/libxml2-2.9.4/include/libxml/xmlversion.h misc/build/libxml2-2.9.4
  #define LIBXML_DEBUG_ENABLED
  #endif
  
-diff -ur misc/libxml2-2.9.4/xml2-config.in misc/build/libxml2-2.9.4/xml2-config.in
---- misc/libxml2-2.9.4/xml2-config.in	2015-05-06 05:04:36.000000000 -0700
-+++ misc/build/libxml2-2.9.4/xml2-config.in	2016-03-26 10:00:17.756184000 -0700
+diff -ur misc/libxml2-2.9.8/xml2-config.in misc/build/libxml2-2.9.8/xml2-config.in
+--- misc/libxml2-2.9.8/xml2-config.in	2016-06-07 03:04:14.000000000 -0700
++++ misc/build/libxml2-2.9.8/xml2-config.in	2018-08-22 22:53:15.489086000 -0700
 @@ -1,9 +1,14 @@
  #! /bin/sh
  

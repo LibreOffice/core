@@ -1,7 +1,7 @@
-diff -ur misc/libxslt-1.1.29/win32/configure.js misc/build/libxslt-1.1.29/win32/configure.js
---- misc/libxslt-1.1.29/win32/configure.js	2012-09-04 07:26:23.000000000 -0700
-+++ misc/build/libxslt-1.1.29/win32/configure.js	2016-08-11 12:06:45.212750000 -0700
-@@ -52,7 +52,7 @@
+diff -ur misc/libxslt-1.1.32/win32/configure.js misc/build/libxslt-1.1.32/win32/configure.js
+--- misc/libxslt-1.1.32/win32/configure.js	2017-10-26 00:55:47.000000000 -0700
++++ misc/build/libxslt-1.1.32/win32/configure.js	2018-08-22 23:07:38.152976000 -0700
+@@ -51,7 +51,7 @@
  var dirSep = "\\";
  var compiler = "msvc";
  var cruntime = "/MD";

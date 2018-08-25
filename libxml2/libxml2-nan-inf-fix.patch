@@ -1,0 +1,60 @@
+From 7abec671473b837f99181442d59edd0cc2ee01d1 Mon Sep 17 00:00:00 2001
+From: Nick Wellnhofer <wellnhofer@aevum.de>
+Date: Thu, 15 Mar 2018 19:33:52 +0100
+Subject: [PATCH] NaN and Inf fixes for pre-C99 compilers
+
+On some pre-C99 compilers, the NAN and INFINITY macros don't expand to
+constant expressions.
+
+Some MSVC versions complain about floating point division by zero in
+constants.
+
+Thanks to Fabrice Manfroi for the report.
+---
+ xpath.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff -ur misc/libxml2-2.9.8/xpath.c misc/build/libxml2-2.9.8/xpath.c
+--- misc/libxml2-2.9.8/xpath.c	2017-12-02 00:58:10.000000000 -0800
++++ misc/build/libxml2-2.9.8/xpath.c	2018-08-23 15:05:24.276900000 -0700
+@@ -477,27 +477,28 @@ int wrap_cmp( xmlNodePtr x, xmlNodePtr y );
+  *									*
+  ************************************************************************/
+ 
+-#ifndef NAN
+-#define NAN (0.0 / 0.0)
++#ifndef INFINITY
++#define INFINITY (DBL_MAX * DBL_MAX)
+ #endif
+ 
+-#ifndef INFINITY
+-#define INFINITY HUGE_VAL
++#ifndef NAN
++#define NAN (INFINITY / INFINITY)
+ #endif
+ 
+-double xmlXPathNAN = NAN;
+-double xmlXPathPINF = INFINITY;
+-double xmlXPathNINF = -INFINITY;
++double xmlXPathNAN;
++double xmlXPathPINF;
++double xmlXPathNINF;
+ 
+ /**
+  * xmlXPathInit:
+  *
+  * Initialize the XPath environment
+- *
+- * Does nothing but must be kept as public function.
+  */
+ void
+ xmlXPathInit(void) {
++    xmlXPathNAN = NAN;
++    xmlXPathPINF = INFINITY;
++    xmlXPathNINF = -INFINITY;
+ }
+ 
+ /**
+-- 
+2.18.0
+
