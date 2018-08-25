@@ -282,7 +282,6 @@ void ScPrintAreasDlg::Impl_Reset()
     // printing area
 
     aStrRange.clear();
-    OUString aOne;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
     sal_uInt16 nRangeCount = pDoc->GetPrintRangeCount( nCurTab );
@@ -293,8 +292,7 @@ void ScPrintAreasDlg::Impl_Reset()
         {
             if ( !aStrRange.isEmpty() )
                 aStrRange += OUStringLiteral1(sep);
-            aOne = pPrintRange->Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
-            aStrRange += aOne;
+            aStrRange += pPrintRange->Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
         }
     }
     pEdPrintArea->SetText( aStrRange );
