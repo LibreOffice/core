@@ -413,12 +413,7 @@ static inline void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPro
                            const OUString& rName,
                            const beans::PropertyValue& rPropertyValue )
 {
-    auto aIterator = std::find_if(
-        rPropVec.begin(), rPropVec.end(),
-        [rName]( const beans::PropertyValue& rValue ) { return rValue.Name == rName; } );
-
-    if (aIterator != rPropVec.end())
-        rPropVec.erase( aIterator );
+    lcl_resetPropertyValue( rPropVec, rName );
 
     rPropVec.push_back( rPropertyValue );
 }
