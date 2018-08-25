@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,cpputools,\
 ))
 
 ifeq ($(GUIBASE),WIN)
-elif ($(GUIBASE),OS2)
+else if ($(GUIBASE),OS2)
 else
 $(eval $(call gb_Module_add_targets,cpputools,\
 	Package_bin \
