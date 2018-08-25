@@ -744,45 +744,43 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         // old files didn't store nanoseconds, disable until encountered
         pTrack->SetTimeNanoSeconds( false );
 
-        auto aItr(aActions.begin());
-        auto aEndItr(aActions.end());
-        while (aItr != aEndItr)
+        for (const auto & rAction : aActions)
         {
             std::unique_ptr<ScChangeAction> pAction;
 
-            switch ((*aItr)->nActionType)
+            switch (rAction->nActionType)
             {
                 case SC_CAT_INSERT_COLS:
                 case SC_CAT_INSERT_ROWS:
                 case SC_CAT_INSERT_TABS:
                 {
-                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(aItr->get()));
+                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(rAction.get()));
                 }
                 break;
                 case SC_CAT_DELETE_COLS:
                 case SC_CAT_DELETE_ROWS:
                 case SC_CAT_DELETE_TABS:
                 {
-                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(aItr->get());
+                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(rAction.get());
                     pAction = CreateDeleteAction(pDelAct);
                     CreateGeneratedActions(pDelAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_MOVE:
                 {
-                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(aItr->get());
+                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(rAction.get());
                     pAction = CreateMoveAction(pMovAct);
                     CreateGeneratedActions(pMovAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_CONTENT:
                 {
-                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(aItr->get()));
+                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(rAction.get()));
                 }
                 break;
                 case SC_CAT_REJECT:
                 {
-                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(aItr->get()));
+                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(rAction.get()));
                 }
                 break;
                 default:
@@ -797,13 +795,11 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             {
                 OSL_FAIL("no action");
             }
-
-            ++aItr;
         }
         if (pTrack->GetLast())
             pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
 
-        aItr = aActions.begin();
+        auto aItr = aActions.begin();
         while (aItr != aActions.end())
         {
             SetDependencies(aItr->get());
