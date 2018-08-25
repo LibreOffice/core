@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_67cfcb7f",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-25T14:51:52Z",
+      "side": 1,
+      "message": "That is not what is specified by ODF decimal-replacement, which is the replacement character to use for display if the number of decimals is less, for example with 0.-- the number 5 is displayed as 5.-- and ODF number:decimal-replacement\u003d\"-\"\n\n19.344 number:decimal-replacement\n\nThe number:decimal-replacement attribute specifies a replacement text for decimal places if a number style specifies that decimal places are used but the number displayed is an integer.\n\nNote: What replacement text is supported is implementation-dependent.\n\nThe number:decimal-replacement attribute is usable with the following element: \u003cnumber:number\u003e 16.27.3.\n\nThe number:decimal-replacement attribute has the data type string 18.2.",
+      "parentUuid": "dfeb2761_87e1af01",
+      "range": {
+        "startLine": 2077,
+        "startChar": 0,
+        "endLine": 2080,
+        "endChar": 32
+      },
+      "revId": "5e97b4c2022dd446419fe1ae25b8f29161de541e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_cc1ebc6f",
         "filename": "xmloff/source/style/xmlnumfe.cxx",
         "patchSetId": 2
