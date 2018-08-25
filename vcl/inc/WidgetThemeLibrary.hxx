@@ -55,6 +55,7 @@ public:
     virtual bool drawSpinbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawWindowsBackground(ControlDrawParameters const& rParameters, long nWidth,
                                        long nHeight);
+    virtual bool drawListbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawFrame(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
 };
 
