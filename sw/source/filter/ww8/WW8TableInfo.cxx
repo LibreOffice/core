@@ -119,6 +119,10 @@ void WW8TableNodeInfoInner::setRect(const SwRect & rRect)
     maRect = rRect;
 }
 
+bool WW8TableNodeInfoInner::isFinalRow() const
+{
+    return mpTable && mpTable->GetTabLines().size() - 1 == mnRow;
+}
 
 const SwNode * WW8TableNodeInfoInner::getNode() const
 {
