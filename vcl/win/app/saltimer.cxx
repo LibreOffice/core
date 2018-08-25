@@ -42,8 +42,11 @@ void WinSalTimer::ImplStop()
     const WinSalInstance *pInst = pSalData->mpInstance;
     assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
-    if ( m_bForceRealTimer && m_bDirectTimeout )
+    if ( m_bSetTimerRunning )
+    {
+        m_bSetTimerRunning = false;
         KillTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId );
+    }
     m_bDirectTimeout = false;
 
     const HANDLE hTimer = m_nTimerId;
@@ -83,6 +86,7 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
         // with posted 0ms SAL_MSG_TIMER_CALLBACK messages
         SetTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId,
                   USER_TIMER_MINIMUM, nullptr );
+        m_bSetTimerRunning = true;
     }
     // we don't need any wakeup message, as this code can just run in the
     // main thread!
@@ -92,6 +96,7 @@ WinSalTimer::WinSalTimer()
     : m_nTimerId( nullptr )
     , m_bDirectTimeout( false )
     , m_bForceRealTimer( false )
+    , m_bSetTimerRunning( false )
 {
 }
 
@@ -183,9 +188,11 @@ void WinSalTimer::SetForceRealTimer( const bool bVal )
 void WinSalTimer::ImplHandle_WM_TIMER( const WPARAM aWPARAM )
 {
     assert( m_aWmTimerId == aWPARAM );
-    if ( !(m_aWmTimerId == aWPARAM && m_bDirectTimeout && m_bForceRealTimer) )
+    if ( !(m_aWmTimerId == aWPARAM && m_bSetTimerRunning) )
         return;
 
+    m_bSetTimerRunning = false;
+    KillTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId );
     ImplHandleElapsedTimer();
 }
 
