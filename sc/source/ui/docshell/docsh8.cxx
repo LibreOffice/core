@@ -119,8 +119,7 @@ namespace
 
         // get connection
 
-        OUString aConnUrl("sdbc:dbase:");
-        aConnUrl += aPath;
+        const OUString aConnUrl{"sdbc:dbase:" + aPath};
 
         // sdbc:dbase is based on the css.sdbc.FILEConnectionProperties UNOIDL service, so we can
         // transport the raw rtl_TextEncoding value instead of having to translate it into a IANA
