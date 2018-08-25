@@ -61,19 +61,6 @@ End
 
 #endif
 
-/* ** MySQL Connector ** */
-
-#ifdef WITH_EXTENSION_MARIADBC
-
-File gid_File_Oxt_MySQLConnector
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Extension/mysql-connector-ooo.filelist";
-End
-
-#endif
-
 /* ** Script provider for BeanShell ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
