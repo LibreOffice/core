@@ -39,6 +39,7 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
     HANDLE       m_nTimerId;          ///< Windows timer id
     bool         m_bDirectTimeout;    ///< timeout can be processed directly
     bool         m_bForceRealTimer;   ///< enforce using a real timer for 0ms
+    bool         m_bSetTimerRunning;  ///< true, if a SetTimer is running
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
