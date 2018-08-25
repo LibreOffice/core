@@ -325,12 +325,20 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     // simple string concatination here to handle that.
                     uno::Reference<uri::XUriReference> xPart = xFac->parse(sMyTarget);
                     uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, true, uri::RelativeUriExcessParentSegments_RETAIN);
-                    rDocumentTarget = xAbs->getPath();
-                    // path will start with the fragment separator. need to
-                    // remove that
-                    rDocumentTarget = rDocumentTarget.copy( 1 );
-                    if(sStreamType == sEmbeddingsType)
-                        embeddingsTarget = rDocumentTarget;
+                    if (!xAbs.is())
+                    {
+                        //it was invalid gibberish
+                        bFound = false;
+                    }
+                    else
+                    {
+                        rDocumentTarget = xAbs->getPath();
+                        // path will start with the fragment separator. need to
+                        // remove that
+                        rDocumentTarget = rDocumentTarget.copy( 1 );
+                        if(sStreamType == sEmbeddingsType)
+                            embeddingsTarget = rDocumentTarget;
+                    }
                 }
 
                 break;
