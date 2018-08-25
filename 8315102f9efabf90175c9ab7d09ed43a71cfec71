@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c718d7d4",
+        "filename": "test/source/table/xcellcursor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-08-25T20:39:21Z",
+      "side": 1,
+      "message": "Please use the notation that we use all over the place.\n\nThe following prefixes:\n\nn : numeric type\nx : an UNO type\ns : strings\np : pointer\na : anything else\n\nadditionally we are using a m prefix for member variables.",
+      "revId": "8315102f9efabf90175c9ab7d09ed43a71cfec71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_07459fb3",
+        "filename": "test/source/table/xcellcursor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-08-25T20:39:21Z",
+      "side": 1,
+      "message": "The test fails here as startCol and startCol are different. This looks expected from a quick debugging run.",
+      "revId": "8315102f9efabf90175c9ab7d09ed43a71cfec71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
