@@ -214,22 +214,18 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUStr
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             sal_uLong nIndex = 1;
-            bool bLoop = true;
-            while( bLoop )
+            for(;;)
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
                 const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::pCharClass->uppercase(aToken));
-                if (pRangeData)
+                if (!pRangeData)
+                    break;
+                ScRange aRange;
+                if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                 {
-                    ScRange aRange;
-                    if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
-                    {
-                        aNewName = ScGlobal::addToken(aNewName, aToken, ';');
-                        aRangeList.push_back( aRange );
-                    }
+                    aNewName = ScGlobal::addToken(aNewName, aToken, ';');
+                    aRangeList.push_back( aRange );
                 }
-                else
-                    bLoop = false;
             }
         }
         else
