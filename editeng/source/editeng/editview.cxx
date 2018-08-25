@@ -1217,7 +1217,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
             if (rAttr.GetStart() == nXPos)
                 if (rAttr.Which() == EE_FEATURE_FIELD)
                 {
-                    DBG_ASSERT(dynamic_cast<const SvxFieldItem* >(rAttr.GetItem() ) != nullptr, "No FeldItem...");
+                    DBG_ASSERT(dynamic_cast<const SvxFieldItem* >(rAttr.GetItem() ) != nullptr, "No FieldItem...");
                     return static_cast<const SvxFieldItem*>(rAttr.GetItem());
                 }
         }
