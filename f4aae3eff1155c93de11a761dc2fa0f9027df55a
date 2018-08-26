@@ -33,6 +33,24 @@
       "revId": "f4aae3eff1155c93de11a761dc2fa0f9027df55a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a79ef304",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-26T15:28:12Z",
+      "side": 1,
+      "message": "\u003e similarly here, I would wrap up the code so the signature of this\n \u003e looked like:\n \u003e \n \u003e template\u003ctypename T, class... Args\u003e\n \u003e std::shared_ptr\u003cT\u003e addOrReplaceSystemDependentData(Args\u0026\u0026... args)\n \u003e const\n \u003e {\n \u003e auto r \u003d std::maked_shared\u003cT\u003e(\n \u003e SalGraphics::getSystemDependentDataManager, std::forward(args)...);\n \u003e addInternal(r);\n \u003e return r;\n \u003e }\n \u003e \n \u003e then it can be used from the call site like so:\n \u003e \n \u003e pSysDepRep \u003d rPolyLine.addOrReplaceSystemDependentData\u003cSystemDependentData_CairoPath\u003e(\n \u003e cairo_copy_path(cr) );",
+      "parentUuid": "dfeb2761_e783db55",
+      "revId": "f4aae3eff1155c93de11a761dc2fa0f9027df55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
