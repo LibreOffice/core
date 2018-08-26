@@ -369,3 +369,9 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XResultListener.hpp
+    sc/source/core/opencl/formulagroupcl.cxx:
+    # Needed for implicit dtor in inverseMatrix()
+    - scmatrix.hxx
+    sc/source/core/opencl/opbase.hxx:
+    # Needed for FormulaTreeNode()
+    - formula/token.hxx
