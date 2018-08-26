@@ -829,29 +829,23 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     mpNextFloat = nullptr;
 
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
+    mbPopupModeTearOff = nFlags & FloatWinPopupEndFlags::TearOff &&
+                         nPopupModeFlags & FloatWinPopupFlags::AllowTearOff;
 
     // hide window again if it was not deleted
-    if ( !(nFlags & FloatWinPopupEndFlags::TearOff) ||
-         !(nPopupModeFlags & FloatWinPopupFlags::AllowTearOff) )
-    {
+    if (!mbPopupModeTearOff)
         Show( false, ShowFlags::NoFocusChange );
 
-        if (HasChildPathFocus() && xFocusId != nullptr)
-        {
-            // restore focus to previous focus window if we still have the focus
-            Window::EndSaveFocus(xFocusId);
-        }
-        else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
-                  ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
-        {
-            // maybe pass focus on to a suitable FloatingWindow
-            pSVData->maWinData.mpFirstFloat->GrabFocus();
-        }
-        mbPopupModeTearOff = false;
-    }
-    else
+    if (HasChildPathFocus() && xFocusId != nullptr)
     {
-        mbPopupModeTearOff = true;
+        // restore focus to previous focus window if we still have the focus
+        Window::EndSaveFocus(xFocusId);
+    }
+    else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
+              ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
+    {
+        // maybe pass focus on to a suitable FloatingWindow
+        pSVData->maWinData.mpFirstFloat->GrabFocus();
     }
 
     mbPopupModeCanceled = bool(nFlags & FloatWinPopupEndFlags::Cancel);
