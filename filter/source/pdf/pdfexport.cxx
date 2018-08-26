@@ -665,7 +665,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 //set values needed in encryption
 //set encryption level, fixed, but here it can set by the UI if needed.
 // true is 128 bit, false 40
-//note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
+//note that in 40 bit mode the UI needs reworking, since the current UI is meaningful only for
 //128bit security mode
                 aContext.Encryption.Security128bit = sal_True;
 

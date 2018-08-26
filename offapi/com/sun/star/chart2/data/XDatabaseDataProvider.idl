@@ -131,7 +131,7 @@ interface XDatabaseDataProvider
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningfull together with the <member>Command</member>
+        <p>This property is only meaningful together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType

@@ -205,7 +205,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
 
 //--------------------------------------------------------------------------
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True),   // TODO: a meaningfull default
+    :m_bRemberPassword(sal_True),   // TODO: a meaningful default
     m_bCanSetUserName(sal_True)
 {
 }

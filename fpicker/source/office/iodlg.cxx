@@ -3068,7 +3068,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbTemplates->SetHelpId( HID_FILEOPEN_VERSION );
             // This is strange. During the re-factoring during 96930, I discovered that this help id
             // is set in the "Templates mode". This was hidden in the previous implementation.
-            // Shouldn't this be a more meaningfull help id.
+            // Shouldn't this be a more meaningful help id.
             // 96930 - 15.08.2002 - fs@openoffice.org
     }
     else if ( _nExtraBits & SFX_EXTRA_IMAGE_TEMPLATE )

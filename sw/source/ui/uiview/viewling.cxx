@@ -968,7 +968,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     return 0;
     } else {
     this->selection=pBox->GetSelectEntryPos();
-    EndDialog(9); //@TODO have meaningfull returns...
+    EndDialog(9); //@TODO have meaningful returns...
     return 1;
     }
 }

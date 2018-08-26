@@ -181,7 +181,7 @@ void AccessibleContextBase::SetRelationSet (
 {
     OSL_TRACE ("setting relation set");
 
-    // Try to emit some meaningfull events indicating differing relations in
+    // Try to emit some meaningful events indicating differing relations in
     // both sets.
     typedef std::pair<short int,short int> RD;
     const RD aRelationDescriptors[] = {
