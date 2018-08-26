@@ -48,8 +48,6 @@ $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DMARIADBC_VERSION_MAJOR=$(MARIADBC_MAJOR) \
 	-DMARIADBC_VERSION_MINOR=$(MARIADBC_MINOR) \
 	-DMARIADBC_VERSION_MICRO=$(MARIADBC_MICRO) \
-	$(if $(SYSTEM_MYSQL_CONNECTOR_CPP),,\
-	-DCPPCONN_LIB=\"$(call gb_Library_get_runtime_filename,mysqlcppconn)\") \
 	$(if $(BUNDLE_MARIADB_CONNECTOR_C),-DBUNDLE_MARIADB=\"$(LIBMARIADB)\") \
 ))
 
