@@ -197,7 +197,29 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         }
         break;
         case ControlType::Slider:
-            break;
+        {
+            cairo_save(pCairoContext);
+            bOK = s_pWidgetImplementation->drawSlider(aParameters, nWidth, nHeight);
+            cairo_restore(pCairoContext);
+
+            if (bOK)
+            {
+                const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
+
+                ControlDrawParameters aParametersButton{ pCairoContext, ControlPart::Button,
+                                                         eState | pSliderValue->mnThumbState,
+                                                         ButtonValue::DontKnow };
+                cairo_save(pCairoContext);
+                cairo_translate(pCairoContext,
+                                pSliderValue->maThumbRect.Left() - rControlRegion.Left(),
+                                pSliderValue->maThumbRect.Top() - rControlRegion.Top());
+                bOK = s_pWidgetImplementation->drawSlider(aParametersButton,
+                                                          pSliderValue->maThumbRect.GetWidth(),
+                                                          pSliderValue->maThumbRect.GetHeight());
+                cairo_restore(pCairoContext);
+            }
+        }
+        break;
         case ControlType::Fixedline:
             break;
         case ControlType::Toolbar:
