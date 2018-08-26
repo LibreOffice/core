@@ -234,8 +234,9 @@ void ToolBarManager::Destroy()
 
     // Hide toolbar as lazy delete can destroy the toolbar much later.
     m_pToolBar->Hide();
-    /* #i99167# removed change for i93173 since there is some weird crash */
-        // #i93173# delete toolbar lazily as we can still be in one of its handlers
+    // #i93173# delete toolbar lazily as we can still be in one of its handlers
+    // tdf#119390 this will reparent the toolbar, so focus is restored from a
+    // floating toolbar to the last focused control of the application window.
     m_pToolBar->doLazyDelete();
 
     m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
