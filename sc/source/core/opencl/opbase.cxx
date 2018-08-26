@@ -8,6 +8,7 @@
  */
 
 #include <opencl/openclwrapper.hxx>
+#include <formula/vectortoken.hxx>
 #include <sal/log.hxx>
 
 #include "opbase.hxx"
