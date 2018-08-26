@@ -150,7 +150,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
 	) \
-	$(if $(ENABLE_HEADLESS), \
+	$(if $(DISABLE_GUI), \
 		vcl/vcl.headless \
 	) \
 	$(if $(filter ANDROID,$(OS)), \
@@ -298,7 +298,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
-	$(if $(ENABLE_HEADLESS),,desktop/source/splash/spl) \
+	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
 	extensions/source/abpilot/abp \
 	extensions/source/config/ldap/ldapbe2 \
 	$(if $(filter WNT,$(OS)),\
@@ -315,7 +315,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/unix/exec/syssh \
 	) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
-		$(if $(ENABLE_HEADLESS),, \
+		$(if $(DISABLE_GUI),, \
 			shell/source/backends/desktopbe/desktopbe1 \
 			vcl/vcl.unx \
 		) \

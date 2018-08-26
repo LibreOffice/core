@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_externals,tk,\
     boost_headers \
 ))
 
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,tk,\
     epoxy \
 ))

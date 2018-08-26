@@ -13,7 +13,7 @@ $(eval $(call gb_Executable_use_externals,icontest,\
     boost_headers \
 	glm_headers \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Executable_use_externals,icontest,\
     epoxy \
 ))

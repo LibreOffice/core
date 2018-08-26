@@ -29,7 +29,7 @@ $(eval $(call gb_Library_set_precompiled_header,slideshow,$(SRCDIR)/slideshow/in
 $(eval $(call gb_Library_use_externals,slideshow,\
 	boost_headers \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,slideshow,\
      epoxy \
  ))

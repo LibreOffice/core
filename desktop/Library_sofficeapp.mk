@@ -123,7 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/migration/migration \
 ))
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \
 	-lpthread \
@@ -161,7 +161,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/lokclipboard \
 ))
 endif
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/lib/init \
     desktop/source/lib/lokinteractionhandler \

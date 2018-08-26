@@ -61,7 +61,7 @@ $(eval $(call gb_Executable_use_system_win32_libs,gengal,\
 ))
 endif
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Executable_add_libs,gengal,\
 	$(DLOPEN_LIBS) \
 	-lpthread \

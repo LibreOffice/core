@@ -20,7 +20,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
 	RESPONSEFILE=$(call var2file,$(shell $(call gb_MKTEMP)),100,$(GALLERY_FILES)) && \
 	$(call gb_Helper_print_on_error,\
-		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
+		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(DISABLE_GUI),, \
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
 		$(call gb_Executable_get_command,gengal,$(ICECREAM_RUN)) \

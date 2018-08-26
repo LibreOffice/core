@@ -29,7 +29,7 @@ else ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
 else ifeq ($(OS),IOS)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
-else ifeq ($(ENABLE_HEADLESS),TRUE)
+else ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
@@ -122,7 +122,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     lcms2 \
     mdds_headers \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,vcl,\
      epoxy \
  ))
@@ -613,7 +613,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \

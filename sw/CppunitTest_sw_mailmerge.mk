@@ -81,7 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     uui/util/uui \
     vcl/vcl.common \
     $(if $(filter-out MACOSX WNT,$(OS)), \
-        $(if $(ENABLE_HEADLESS),, \
+        $(if $(DISABLE_GUI),, \
             vcl/vcl.unx \
         ) \
     ) \

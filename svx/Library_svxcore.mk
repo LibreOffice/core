@@ -86,7 +86,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	libxml2 \
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,svxcore,\
      epoxy \
  ))

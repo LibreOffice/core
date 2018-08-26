@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
 ))
 endif
 
-ifneq ($(ENABLE_HEADLESS),TRUE)
+ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
