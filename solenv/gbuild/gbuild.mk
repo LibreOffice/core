@@ -227,7 +227,7 @@ gb_GLOBALDEFS += -DDEBUG \
 endif
 endif
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 gb_GLOBALDEFS += -DLIBO_HEADLESS \
 
 endif

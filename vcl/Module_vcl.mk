@@ -28,11 +28,11 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \
-			$(if $(ENABLE_HEADLESS),, \
+			$(if $(DISABLE_GUI),, \
 				Executable_ui-previewer)) \
 		$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
 			Executable_outdevgrind \
-			$(if $(ENABLE_HEADLESS),, \
+			$(if $(DISABLE_GUI),, \
 				Executable_vcldemo \
 				Executable_icontest \
 				Executable_visualbackendtest \
@@ -224,7 +224,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 ))
 endif
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
 ))

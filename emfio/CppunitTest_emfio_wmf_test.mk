@@ -85,7 +85,7 @@ $(eval $(call gb_CppunitTest_use_externals,emfio_wmf,\
     icuuc \
     lcms2 \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_CppunitTest_use_externals,emfio_wmf,\
      epoxy \
  ))
@@ -119,7 +119,7 @@ $(eval $(call gb_CppunitTest_use_externals,emfio_wmf,\
 ))
 endif
 
-ifeq ($(ENABLE_HEADLESS),TRUE)
+ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_CppunitTest_use_externals,emfio_wmf,\
     cairo \
     freetype \

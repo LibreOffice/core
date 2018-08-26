@@ -29,7 +29,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 ))
 
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,chartcore,\
     epoxy \
 ))

@@ -42,7 +42,7 @@ MERGE_LIBRARY_LIST := \
 	sfx \
 	sofficeapp \
 	sot \
-	$(if $(ENABLE_HEADLESS),,spl) \
+	$(if $(DISABLE_GUI),,spl) \
 	svl \
 	svt \
 	svx \

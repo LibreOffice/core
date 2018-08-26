@@ -20,7 +20,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     $(if $(ENABLE_BREAKPAD), \
         Library_crashreport \
         ) \
-    $(if $(ENABLE_HEADLESS),,Library_spl) \
+    $(if $(DISABLE_GUI),,Library_spl) \
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
     UIConfig_deployment \

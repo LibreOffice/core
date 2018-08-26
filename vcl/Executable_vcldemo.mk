@@ -20,7 +20,7 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 	glm_headers \
 	harfbuzz \
 ))
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Executable_use_externals,vcldemo,\
     epoxy \
 ))

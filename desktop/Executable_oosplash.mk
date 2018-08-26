@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 
 endif
 
-ifneq ($(ENABLE_HEADLESS),TRUE)
+ifneq ($(DISABLE_GUI),TRUE)
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,oosplash,\

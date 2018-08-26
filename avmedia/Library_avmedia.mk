@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 	boost_headers \
 ))
 
-ifeq ($(ENABLE_HEADLESS),)
+ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,avmedia,\
     epoxy \
 ))
