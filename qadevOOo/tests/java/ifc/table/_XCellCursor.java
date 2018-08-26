@@ -57,113 +57,6 @@ public class _XCellCursor extends MultiMethodTest {
     public XCellCursor oObj = null;
 
     /**
-     * <code>XCellRangeAddressable</code> interface is queried
-     * first for getting current position of cursor. The cursor
-     * is moved to next cell. Address of cursor obtained before
-     * and after moving. <p>
-     * Has <b> OK </b> status if cursor column is changed after
-     * movement. <p>
-     */
-    public void _gotoNext(){
-        boolean bResult = false;
-        int startCol;
-        int startCol2;
-
-        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
-        CellRangeAddress oAddr = oRange.getRangeAddress();
-        startCol = oAddr.StartColumn;
-        oObj.gotoNext();
-
-        oAddr = oRange.getRangeAddress();
-        startCol2 = oAddr.StartColumn;
-        if (startCol != startCol2){
-            bResult = true;
-        }
-        tRes.tested( "gotoNext()", bResult );
-    }
-
-    /**
-     * <code>XCellRangeAddressable</code> interface is queried
-     * first for getting current position of cursor. The cursor
-     * is moved then. Address of cursor obtained before
-     * and after moving. <p>
-     * Has <b> OK </b> status if starting column and row of
-     * cursor is changed after movement. <p>
-     */
-    public void _gotoOffset(){
-        boolean bResult = false;
-        int startCol, startRow;
-        int startCol2, startRow2;
-
-        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
-        CellRangeAddress oAddr = oRange.getRangeAddress();
-        startRow = oAddr.StartRow;
-        startCol = oAddr.StartColumn;
-        oObj.gotoOffset(4,4);
-
-        oAddr = oRange.getRangeAddress();
-        startRow2 = oAddr.StartRow;
-        startCol2 = oAddr.StartColumn;
-        if ((startCol != startCol2) || (startRow == startRow2)){
-            bResult = true;
-        }
-        tRes.tested( "gotoOffset()", bResult );
-    }
-
-    /**
-     * <code>XCellRangeAddressable</code> interface is queried
-     * first for getting current position of cursor. The cursor
-     * is moved to previous cell. Address of cursor obtained before
-     * and after moving. <p>
-     * Has <b> OK </b> status if cursor column is changed after
-     * movement. <p>
-     */
-    public void _gotoPrevious(){
-        boolean bResult = false;
-        int startCol;
-        int startCol2;
-
-        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
-        CellRangeAddress oAddr = oRange.getRangeAddress();
-        startCol = oAddr.StartColumn;
-        oObj.gotoPrevious();
-
-        oAddr = oRange.getRangeAddress();
-        startCol2 = oAddr.StartColumn;
-        if (startCol != startCol2){
-            bResult = true;
-        }
-        tRes.tested( "gotoPrevious()", bResult );
-    }
-
-    /**
-     * <code>XCellRangeAddressable</code> interface is queried
-     * first for getting current position of cursor. The cursor
-     * is moved to the start of its range .
-     * Address of cursor obtained before and after moving. <p>
-     * Has <b> OK </b> status if cursor was collapsed to a single
-     * cell (i.e. start column is the same as end column) after
-     * movement. <p>
-     */
-    public void _gotoStart(){
-        boolean bResult = false;
-        int startCol, endCol, startRow, endRow = 0;
-
-        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
-        oObj.gotoStart();
-        CellRangeAddress oAddr = oRange.getRangeAddress();
-        startRow = oAddr.StartRow;
-        startCol = oAddr.StartColumn;
-        endRow = oAddr.EndRow;
-        endCol = oAddr.EndColumn;
-        if ((startCol == endCol) && (endRow == startRow)){
-            bResult = true;
-        }
-
-        tRes.tested( "gotoStart()", bResult );
-    }
-
-    /**
      * A new cell range is created using spreadsheet passed by relation.
      * The method is tested on that range. <code>gotoEnd</code> is
      * called and range address is checked.<p>
@@ -176,8 +69,7 @@ public class _XCellCursor extends MultiMethodTest {
         XSpreadsheet oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
         XCellRange testRange = oSheet.getCellRangeByName("$A$1:$g$7") ;
         XSheetCellRange testSheetRange = UnoRuntime.queryInterface(XSheetCellRange.class,testRange);
-        XSheetCellCursor oCellCursor = oSheet.createCursorByRange
-            (testSheetRange);
+        XSheetCellCursor oCellCursor = oSheet.createCursorByRange(testSheetRange);
         XCellCursor oCursor = UnoRuntime.queryInterface(XCellCursor.class,oCellCursor);
 
         boolean bResult = false;
@@ -207,4 +99,3 @@ public class _XCellCursor extends MultiMethodTest {
 
 
 } //EOC _XCellCursor
-
