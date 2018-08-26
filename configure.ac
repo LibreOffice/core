@@ -8451,7 +8451,6 @@ int main(int argc, char **argv) {
         LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE MYSQL_CONNECTOR_CPP"
         SYSTEM_MYSQL_CONNECTOR_CPP=
     fi
     AC_LANG_POP([C++])
