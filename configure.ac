@@ -8413,49 +8413,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_SUBST(LIBMARIADB)
     AC_SUBST(LIBMARIADB_PATH)
     AC_SUBST(BUNDLE_MARIADB_CONNECTOR_C)
-
-    AC_LANG_PUSH([C++])
-    dnl ===================================================================
-    dnl Check for system MySQL C++ Connector
-    dnl ===================================================================
-    # FIXME!
-    # who thought this too-generic cppconn dir was a good idea?
-    AC_MSG_CHECKING([MySQL Connector/C++])
-    if test "$with_system_mysql_cppconn" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_MYSQL_CONNECTOR_CPP=TRUE
-        AC_LANG_PUSH([C++])
-        AC_CHECK_HEADER(mysql_driver.h, [],
-                    [AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
-        AC_CHECK_LIB([mysqlcppconn], [main], [:],
-                    [AC_MSG_ERROR(MySQL C++ Connectivity lib not found or functional)], [])
-        save_LIBS=$LIBS
-        LIBS="$LIBS -lmysqlcppconn"
-        AC_MSG_CHECKING([version])
-        AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <mysql_driver.h>
-
-int main(int argc, char **argv) {
-    sql::Driver *driver;
-    driver = get_driver_instance();
-    if (driver->getMajorVersion() > 1 || \
-       (driver->getMajorVersion() == 1 && driver->getMinorVersion() > 0) || \
-       (driver->getMajorVersion() == 1 && driver->getMinorVersion() == 0 && driver->getPatchVersion() >= 6))
-        return 0;
-      else
-        return 1;
-}
-      ]])],[AC_MSG_RESULT(OK)],[AC_MSG_ERROR([not suitable, we need >= 1.0.6])],[AC_MSG_ERROR([MySQL C++ Connecter not tested with cross-compilation])])
-
-        AC_LANG_POP([C++])
-        LIBS=$save_LIBS
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_MYSQL_CONNECTOR_CPP=
-    fi
-    AC_LANG_POP([C++])
 fi
-AC_SUBST(SYSTEM_MYSQL_CONNECTOR_CPP)
 
 dnl ===================================================================
 dnl Check for system hsqldb
