@@ -45,7 +45,6 @@
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <boost/optional.hpp>
 
 namespace boost {
     template <class T> class optional;
