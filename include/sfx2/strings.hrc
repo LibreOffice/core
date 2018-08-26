@@ -209,7 +209,7 @@
 #define STR_ERROR_WRONG_CONFIRM                 NC_("STR_ERROR_WRONG_CONFIRM", "Faulty password confirmation")
 #define STR_PDF_EXPORT_SEND                     NC_("STR_PDF_EXPORT_SEND", "Send")
 #define STR_FONT_TABPAGE                        NC_("STR_FONT_TABPAGE", "Font")
-#define STR_PREVIEW_CHECKBOX                    NC_("STR_PREVIEW_CHECKBOX", "Show Previews")
+#define STR_PREVIEW_CHECKBOX                    NC_("STR_PREVIEW_CHECKBOX", "Show previews")
 
 #define STR_VIEWVERSIONCOMMENT                  NC_("STR_VIEWVERSIONCOMMENT", "View Version Comment")
 #define STR_NO_NAME_SET                         NC_("STR_NO_NAME_SET", "(no name set)")
