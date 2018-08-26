@@ -813,8 +813,8 @@ void ScInputHandler::GetFormulaData()
 
         const OUString aParenthesesReplacement( cParenthesesReplacement);
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-        sal_uLong nListCount = pFuncList->GetCount();
-        for(sal_uLong i=0;i<nListCount;i++)
+        sal_uInt32 nListCount = pFuncList->GetCount();
+        for(sal_uInt32 i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->mxFuncName )
@@ -1428,7 +1428,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if ( pCalc->IsValue() )
     {
         double n = pCalc->GetValue();
-        sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
+        sal_uInt32 nFormat = aFormatter.GetStandardFormat( n, 0,
                 pCalc->GetFormatType(), ScGlobal::eLnge );
         aFormatter.GetInputLineString( n, nFormat, aValue );
         //! display OutputString but insert InputLineString
@@ -1436,7 +1436,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     else
     {
         OUString aStr = pCalc->GetString().getString();
-        sal_uLong nFormat = aFormatter.GetStandardFormat(
+        sal_uInt32 nFormat = aFormatter.GetStandardFormat(
                 pCalc->GetFormatType(), ScGlobal::eLnge);
         {
             Color* pColor;
@@ -2072,7 +2072,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
                 {
-                    sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                    sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                     bCellHasPercentFormat = ( SvNumFormatType::PERCENT ==
                                               rDoc.GetFormatTable()->GetType( nFormat ) );
                 }
