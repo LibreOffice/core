@@ -10,16 +10,16 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPBASE_HXX
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPBASE_HXX
 
-#include <sal/log.hxx>
-
 #include <clew/clew.h>
-
 #include <formula/token.hxx>
-#include <formula/vectortoken.hxx>
+#include <formula/types.hxx>
 #include <memory>
 #include <set>
+#include <vector>
 
-#include <calcconfig.hxx>
+namespace formula { class DoubleVectorRefToken; }
+namespace formula { class FormulaToken; }
+struct ScCalcConfig;
 
 namespace sc { namespace opencl {
 
