@@ -175,7 +175,7 @@ public class Bootstrap {
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code>.
      *
      * @throws Exception if things go awry.
-     * @return     a freshly boostrapped service manager
+     * @return     a freshly bootstrapped service manager
      */
     public static XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
