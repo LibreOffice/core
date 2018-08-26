@@ -1784,7 +1784,7 @@ void ScModule::EndReference()
  */
 void ScModule::AnythingChanged()
 {
-    sal_uLong nOldTime = m_aIdleTimer.GetTimeout();
+    sal_uInt64 nOldTime = m_aIdleTimer.GetTimeout();
     if ( nOldTime != SC_IDLE_MIN )
         m_aIdleTimer.SetTimeout( SC_IDLE_MIN );
 
@@ -1849,8 +1849,8 @@ IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
         }
     }
 
-    sal_uLong nOldTime = m_aIdleTimer.GetTimeout();
-    sal_uLong nNewTime = nOldTime;
+    sal_uInt64 nOldTime = m_aIdleTimer.GetTimeout();
+    sal_uInt64 nNewTime = nOldTime;
     if ( bMore )
     {
         nNewTime = SC_IDLE_MIN;

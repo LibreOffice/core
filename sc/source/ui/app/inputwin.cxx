@@ -1931,11 +1931,11 @@ void ScPosWnd::FillFunctions()
     if (pMRUList)
     {
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-        sal_uLong nListCount = pFuncList->GetCount();
+        sal_uInt32 nListCount = pFuncList->GetCount();
         for (sal_uInt16 i=0; i<nMRUCount; i++)
         {
             sal_uInt16 nId = pMRUList[i];
-            for (sal_uLong j=0; j<nListCount; j++)
+            for (sal_uInt32 j=0; j<nListCount; j++)
             {
                 const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
                 if ( pDesc->nFIndex == nId && pDesc->mxFuncName )
