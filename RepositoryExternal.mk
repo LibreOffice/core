@@ -297,43 +297,6 @@ endef
 
 endif
 
-ifneq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
-
-define gb_LinkTarget__use_mysql-connector-cpp
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lmysqlcppconn \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_MYSQL_CPPCONN \
-)
-endef
-
-else
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OXT,\
-	mysqlcppconn \
-))
-
-# note: this does not link mysqlcppconn, it is loaded via osl_loadModuleRelative
-define gb_LinkTarget__use_mysql-connector-cpp
-
-$(call gb_LinkTarget_use_unpacked,$(1),mysql-connector-cpp)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DCPPCONN_LIB_BUILD \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,mysql-connector-cpp) \
-	-I$(call gb_UnpackedTarball_get_dir,mysql-connector-cpp)/cppconn \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif
-
 ifneq ($(SYSTEM_ZLIB),)
 
 define gb_LinkTarget__use_zlib
