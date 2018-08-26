@@ -9,16 +9,15 @@
 
 #include <formulagroup.hxx>
 #include <formulagroupcl.hxx>
-#include <grouptokenconverter.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
 #include <compiler.hxx>
-#include <interpre.hxx>
 #include <comphelper/random.hxx>
 #include <formula/vectortoken.hxx>
 #include <scmatrix.hxx>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 #include <opencl/openclwrapper.hxx>
 
@@ -127,7 +126,6 @@ static const char* const publicFunc =
 #include <vector>
 #include <map>
 #include <iostream>
-#include <sstream>
 #include <algorithm>
 
 #include <rtl/digest.h>
