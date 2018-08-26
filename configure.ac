@@ -4413,17 +4413,17 @@ if test "$with_x" = "no"; then
     AC_MSG_ERROR([Use --disable-gui instead. How can we get rid of this option? No idea where it comes from.])
 fi
 
-ENABLE_HEADLESS=""
+DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
     if test "$USING_X11" != TRUE; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
     fi
     USING_X11=
-    ENABLE_HEADLESS=TRUE
+    DISABLE_GUI=TRUE
     AC_DEFINE(HAVE_FEATURE_UI,0)
     test_cairo=yes
 fi
-AC_SUBST(ENABLE_HEADLESS)
+AC_SUBST(DISABLE_GUI)
 
 WORKDIR="${BUILDDIR}/workdir"
 INSTDIR="${BUILDDIR}/instdir"

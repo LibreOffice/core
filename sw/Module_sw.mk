@@ -97,7 +97,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_unowriter \
 ))
 
-ifneq ($(ENABLE_HEADLESS),TRUE)
+ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \

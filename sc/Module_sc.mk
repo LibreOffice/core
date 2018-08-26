@@ -50,7 +50,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_cache_test \
 ))
 
-ifneq ($(ENABLE_HEADLESS),TRUE)
+ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_tiledrendering \
