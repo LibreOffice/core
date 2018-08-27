@@ -39,7 +39,9 @@
 using ::std::vector;
 using namespace formula;
 
-#define MAX_COUNT_DOUBLE_FOR_SORT 100000
+/// Two columns of data should be sortable with GetSortArray() and QuickSort()
+// This is an arbitrary limit.
+#define MAX_COUNT_DOUBLE_FOR_SORT (MAXROWCOUNT * 2)
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
