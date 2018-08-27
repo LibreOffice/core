@@ -22,6 +22,7 @@
 #include <externalrefmgr.hxx>
 #include <tokenstringcontext.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/helper/progressbar.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>

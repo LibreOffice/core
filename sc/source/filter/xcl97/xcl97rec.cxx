@@ -39,6 +39,7 @@
 #include <formulacell.hxx>
 #include <drwlayer.hxx>
 
+#include <root.hxx>
 #include <xcl97rec.hxx>
 #include <xcl97esc.hxx>
 #include <editutil.hxx>

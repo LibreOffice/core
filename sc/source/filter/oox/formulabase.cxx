@@ -18,6 +18,8 @@
  */
 
 #include <formulabase.hxx>
+#include <rangelst.hxx>
+#include <addressconverter.hxx>
 
 #include <map>
 #include <com/sun/star/beans/XPropertySet.hpp>

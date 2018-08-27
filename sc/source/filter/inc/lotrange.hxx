@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_LOTRANGE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_LOTRANGE_HXX
 
-#include <compiler.hxx>
+#include <refdata.hxx>
+#include <types.hxx>
 
-class LotusRangeList;
+struct LOTUS_ROOT;
 
 typedef sal_uInt16  LR_ID;
 

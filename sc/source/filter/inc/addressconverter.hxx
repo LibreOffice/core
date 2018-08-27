@@ -21,9 +21,11 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_ADDRESSCONVERTER_HXX
 
 #include <vector>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rangelst.hxx>
 #include "workbookhelper.hxx"
+#include <com/sun/star/uno/Sequence.h>
+
+namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
 
 namespace oox {
 namespace xls {
