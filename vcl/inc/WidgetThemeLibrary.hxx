@@ -19,12 +19,12 @@ namespace vcl
 {
 struct ControlDrawParameters
 {
-    ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState,
-                          ButtonValue i_eButtonValue)
+    ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState)
         : pCairo(i_pCairo)
         , ePart(i_ePart)
         , eState(i_eState)
-        , eButtonValue(i_eButtonValue)
+        , eButtonValue(ButtonValue::DontKnow)
+        , nValue(0)
     {
     }
 
@@ -32,6 +32,7 @@ struct ControlDrawParameters
     ControlPart ePart;
     ControlState eState;
     ButtonValue eButtonValue;
+    sal_Int64 nValue;
 };
 
 class SAL_DLLPUBLIC_RTTI WidgetThemeLibrary
