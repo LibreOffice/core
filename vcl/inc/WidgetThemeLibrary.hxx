@@ -64,6 +64,10 @@ public:
                                        long nHeight);
     virtual bool drawListbox(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawFrame(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawListNode(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawListNet(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawListHeader(ControlDrawParameters const& rParameters, long nWidth,
+                                long nHeight);
 };
 
 extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();
