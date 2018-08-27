@@ -83,6 +83,7 @@ namespace {
         explicit GotoNextEffectCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual void Execute() override;
+        virtual bool IsEnabled() const override;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -536,6 +537,18 @@ void GotoNextEffectCommand::Execute()
         return;
 
     mpPresenterController->GetSlideShowController()->gotoNextEffect();
+}
+
+bool GotoNextEffectCommand::IsEnabled() const
+{
+    if ( ! mpPresenterController.is())
+        return false;
+
+    if ( ! mpPresenterController->GetSlideShowController().is())
+        return false;
+
+   return ( mpPresenterController->GetSlideShowController()->getNextSlideIndex() < mpPresenterController->GetSlideShowController()->getSlideCount() );
+
 }
 
 //===== GotoNextSlide =========================================================
