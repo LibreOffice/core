@@ -3115,6 +3115,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_SLIDE_TRANSITIONS_PANEL:
+        case SID_MASTER_SLIDES_PANEL:
         case SID_CUSTOM_ANIMATION_PANEL:
         case SID_GALLERY:
         {
@@ -3128,6 +3129,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 panelId = "GalleryPanel";
             else if (nSId == SID_SLIDE_TRANSITIONS_PANEL)
                 panelId = "SdSlideTransitionPanel";
+            else if (nSId == SID_MASTER_SLIDES_PANEL)
+                panelId = "SdAllMasterPagesPanel";
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 panelId,
