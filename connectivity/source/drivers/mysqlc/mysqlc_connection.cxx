@@ -64,6 +64,7 @@ void lcl_executeUpdate(MYSQL* pMySql, const rtl::OString& sql)
 
 OConnection::OConnection(MysqlCDriver& _rDriver)
     : OMetaConnection_BASE(m_aMutex)
+    , m_mysql()
     , m_xMetaData(nullptr)
     , m_xDriver(&_rDriver)
 {
