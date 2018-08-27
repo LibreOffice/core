@@ -144,6 +144,8 @@ public:
     void endParagraphGroup();
     void startCharacterGroup();
     void endCharacterGroup();
+    virtual void pushBiDiEmbedLevel();
+    virtual void popBiDiEmbedLevel();
     void startSdt();
     void endSdt();
 
@@ -340,6 +342,9 @@ public:
     virtual void setDefaultIntegerValue() override;
     virtual void setDefaultHexValue() override;
     virtual void setDefaultStringValue() override;
+
+    virtual void pushBiDiEmbedLevel() override;
+    virtual void popBiDiEmbedLevel() override;
 
 protected:
     OOXMLValue::Pointer_t mpValue;
