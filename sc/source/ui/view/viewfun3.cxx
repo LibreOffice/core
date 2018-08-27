@@ -113,10 +113,10 @@ void ScViewFunc::CutToClip()
         ScAddress aOldEnd( aRange.aEnd );       //  combined cells in this range?
         pDoc->ExtendMerge( aRange, true );
 
-        ScDocument* pUndoDoc = nullptr;
+        ScDocumentUniquePtr pUndoDoc;
         if ( bRecord )
         {
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndoSelected( pDoc, rMark );
             // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
             ScRange aCopyRange = aRange;
@@ -139,7 +139,7 @@ void ScViewFunc::CutToClip()
 
         if ( bRecord )                          // Draw-Undo now available
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoCut( pDocSh, aRange, aOldEnd, rMark, pUndoDoc ) );
+                new ScUndoCut( pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
 
         aModificator.SetDocumentModified();
         pDocSh->UpdateOle(&GetViewData());
@@ -1241,13 +1241,13 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     bool bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
     bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
 
-    ScDocument* pUndoDoc    = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     ScDocument* pRefUndoDoc = nullptr;
     ScRefUndoData* pUndoData = nullptr;
 
     if ( bRecord )
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndoSelected( pDoc, aFilteredMark, bColInfo, bRowInfo );
 
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
@@ -1376,20 +1376,20 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if ( bRecord )
     {
-        ScDocument* pRedoDoc    = nullptr;
+        ScDocumentUniquePtr pRedoDoc;
         // copy redo data after appearance of the first undo
         // don't create Redo-Doc without RefUndoDoc
 
         if (pRefUndoDoc)
         {
-            pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pRedoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pRedoDoc->InitUndo( pDoc, nStartTab, nEndTab, bColInfo, bRowInfo );
 
             //      move adapted refs to Redo-Doc
 
             SCTAB nTabCount = pDoc->GetTableCount();
             pRedoDoc->AddUndoTab( 0, nTabCount-1 );
-            pDoc->CopyUpdated( pRefUndoDoc, pRedoDoc );
+            pDoc->CopyUpdated( pRefUndoDoc, pRedoDoc.get() );
 
             //      move old refs to Undo-Doc
 
@@ -1413,7 +1413,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
         SfxUndoAction* pUndo = new ScUndoPaste(
             pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
-            aFilteredMark, pUndoDoc, pRedoDoc, nFlags | nUndoFlags, pUndoData,
+            aFilteredMark, std::move(pUndoDoc), std::move(pRedoDoc), nFlags | nUndoFlags, pUndoData,
             false, &aOptions );     // false = Redo data not yet copied
 
         if ( bInsertCells )
@@ -1611,7 +1611,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         aOptions.eMoveMode  = eMoveMode;
 
         ScUndoPaste* pUndo = new ScUndoPaste(pDocSh,
-            aMarkedRange, aMark, pUndoDoc.release(), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions);
+            aMarkedRange, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions);
 
         if (bInsertCells)
             pUndoMgr->AddUndoAction(new ScUndoWrapper(pUndo), true);
@@ -1776,7 +1776,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         aOptions.eMoveMode  = eMoveMode;
 
         ScUndoPaste* pUndo = new ScUndoPaste(
-            pDocSh, aRanges, aMark, pUndoDoc.release(), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions);
+            pDocSh, aRanges, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions);
 
         pUndoMgr->AddUndoAction(pUndo);
         pUndoMgr->LeaveListAction();

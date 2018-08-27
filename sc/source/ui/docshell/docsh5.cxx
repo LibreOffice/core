@@ -692,7 +692,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
 
                 if (bRecord)
                 {
-                    ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                    ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
                     pUndoDoc->InitUndo( &m_aDocument, nTab,nEndTab );             // also all scenarios
                     //  shown table:
                     m_aDocument.CopyToDocument(nStartCol, nStartRow, nTab,
@@ -718,7 +718,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                     GetUndoManager()->AddUndoAction(
                         new ScUndoUseScenario( this, aScenMark,
                                         ScArea( nTab,nStartCol,nStartRow,nEndCol,nEndRow ),
-                                        pUndoDoc, rName ) );
+                                        std::move(pUndoDoc), rName ) );
                 }
 
                 m_aDocument.CopyScenario( nSrcTab, nTab );
