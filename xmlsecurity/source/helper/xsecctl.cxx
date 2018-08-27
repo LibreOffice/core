@@ -661,6 +661,14 @@ void XSecController::exportSignature(
                     pAttributeList->AddAttribute(
                         "URI",
                         "#" + refInfor.ouURI);
+
+                    if (bXAdESCompliantIfODF && refInfor.ouURI == "idSignedProperties")
+                    {
+                        // The reference which points to the SignedProperties
+                        // shall have this specific type.
+                        pAttributeList->AddAttribute("Type",
+                                                     "http://uri.etsi.org/01903#SignedProperties");
+                    }
                 }
 
                 xDocumentHandler->startElement( "Reference", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
