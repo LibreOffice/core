@@ -878,9 +878,9 @@ void Desktop::HandleBootstrapErrors(
 
         OUString aDiagnosticMessage;
         if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
-            aDiagnosticMessage = DpResId(STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE);
+            aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_NOTENOUGHDISKSPACE);
         else
-            aDiagnosticMessage = DpResId(STR_BOOSTRAP_ERR_NOACCESSRIGHTS);
+            aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_NOACCESSRIGHTS);
         aDiagnosticMessage += aUserInstallationPath;
 
         FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
