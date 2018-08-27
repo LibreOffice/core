@@ -35,11 +35,13 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
 {
 }
 
-FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor)
+FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor,
+                           const std::function<bool(const sal_Int32)>& rIsDeckOpenFunctor)
     : mpDeckTitleBar(),
       maPanels(),
       maButtons(),
       maShowPanelFunctor(rShowPanelFunctor),
+      mbIsDeckOpenFunctor(rIsDeckOpenFunctor),
       mbObservingContentControlFocus(false),
       mpFirstFocusedContentControl(nullptr),
       mpLastFocusedWindow(nullptr)
@@ -59,6 +61,11 @@ void FocusManager::GrabFocus()
 void FocusManager::GrabFocusPanel()
 {
     FocusPanel(0, false);
+}
+
+void FocusManager::GrabFocusButton(const sal_Int32 nIndex)
+{
+    FocusButton(nIndex);
 }
 
 void FocusManager::Clear()
@@ -275,10 +282,13 @@ void FocusManager::FocusButton (const sal_Int32 nButtonIndex)
 
 void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
 {
-    maButtons[nButtonIndex]->Click();
+    if (mbIsDeckOpenFunctor)
+    {
+        if (!mbIsDeckOpenFunctor(-1) || !mbIsDeckOpenFunctor(nButtonIndex-1))
+            maButtons[nButtonIndex]->Click();
+    }
     if (nButtonIndex > 0)
-        if ( ! maPanels.empty())
-            FocusPanel(0, true);
+        FocusPanel(0, true);
     maButtons[nButtonIndex]->GetParent()->Invalidate();
 }
 
@@ -377,11 +387,6 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelTitle:
                     // Toggle panel between expanded and collapsed.
                     maPanels[aLocation.mnIndex]->SetExpanded( ! maPanels[aLocation.mnIndex]->IsExpanded());
-                    break;
-
-                case PC_TabBar:
-                    // Activate the button.
-                    ClickButton(aLocation.mnIndex);
                     break;
 
                 default:

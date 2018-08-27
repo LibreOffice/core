@@ -109,7 +109,8 @@ SidebarController::SidebarController (
       mbIsDeckOpen(),
       mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
-      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
+      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); },
+                     [this](const sal_Int32 nIndex){ return this->IsDeckOpen(nIndex); }),
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(nullptr),
@@ -1105,19 +1106,34 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
     return true;
 }
 
-void SidebarController::RequestCloseDeck()
+void SidebarController::RequestCloseDeck(bool bFocusMenuTab)
 {
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
-    // remove highlight from TabBar, because Deck will be closed
-    mpTabBar->RemoveDeckHighlight();
+    if (mpCurrentDeck.get())
+    {
+        sal_Int32 nIndex(bFocusMenuTab ? 0 : mpTabBar->GetDeckIndexForId(mpCurrentDeck->GetId()));
+        maFocusManager.GrabFocusButton(nIndex);
+    }
+    else
+        mpTabBar->RemoveDeckHighlight();
 }
 
 void SidebarController::RequestOpenDeck()
 {
     mbIsDeckRequestedOpen = true;
     UpdateDeckOpenState();
+}
+
+bool SidebarController::IsDeckOpen(const sal_Int32 nIndex)
+{
+    if (nIndex >= 0)
+    {
+        OUString asDeckId(mpTabBar->GetDeckIdForIndex(nIndex));
+        return IsDeckVisible(asDeckId);
+    }
+    return mbIsDeckOpen && mbIsDeckOpen.get();
 }
 
 bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
