@@ -470,6 +470,7 @@ print ("""/*
  */
 
 #include <config_features.h>
+#include <config_gpgme.h>
 #include <osl/detail/component-mapping.h>
 
 """)
