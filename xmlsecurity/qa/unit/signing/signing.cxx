@@ -775,6 +775,10 @@ void SigningTest::testXAdES()
 
     // Assert that the digest of the signing certificate is included.
     assertXPath(pXmlDoc, "//xd:CertDigest", 1);
+
+    // Assert that the Type attribute on the idSignedProperties reference is
+    // not missing.
+    assertXPath(pXmlDoc, "/odfds:document-signatures/dsig:Signature/dsig:SignedInfo/dsig:Reference[@URI='#idSignedProperties']", "Type", "http://uri.etsi.org/01903#SignedProperties");
 }
 
 void SigningTest::testXAdESGood()
