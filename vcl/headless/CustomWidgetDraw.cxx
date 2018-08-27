@@ -227,7 +227,11 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         case ControlType::MenuPopup:
             break;
         case ControlType::Progress:
-            break;
+        {
+            aParameters.nValue = rValue.getNumericVal();
+            bOK = s_pWidgetImplementation->drawProgress(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::IntroProgress:
             break;
         case ControlType::Tooltip:
