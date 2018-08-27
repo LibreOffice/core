@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_3de31408",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-27T12:03:09Z",
+      "side": 1,
+      "message": "This specific line doesn\u0027t get the value (mpValue.get() is nullptr here)",
+      "range": {
+        "startLine": 1239,
+        "startChar": 4,
+        "endLine": 1239,
+        "endChar": 75
+      },
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
