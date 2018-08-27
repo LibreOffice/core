@@ -24,6 +24,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
+#include "xlformula.hxx"
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <svx/sdtaitm.hxx>
 #include <rtl/ustring.hxx>

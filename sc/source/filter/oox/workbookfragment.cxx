@@ -23,6 +23,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/olestorage.hxx>

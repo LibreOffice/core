@@ -26,6 +26,7 @@
 #include <xcl97rec.hxx>
 #include <document.hxx>
 #include <editutil.hxx>
+#include <root.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>

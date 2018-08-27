@@ -24,6 +24,7 @@
 #include <progress.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
+#include <tools/stream.hxx>
 
 #include <climits>
 

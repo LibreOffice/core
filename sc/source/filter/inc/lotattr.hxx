@@ -24,13 +24,11 @@
 #include <memory>
 
 #include <address.hxx>
-#include <scitems.hxx>
 
 class ScDocumentPool;
 class ScPatternAttr;
 class SvxColorItem;
 class Color;
-class LotAttrTable;
 struct LOTUS_ROOT;
 
 namespace editeng { class SvxBorderLine; }

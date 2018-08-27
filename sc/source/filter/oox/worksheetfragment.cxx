@@ -18,6 +18,7 @@
  */
 
 #include <worksheetfragment.hxx>
+#include <formulaparser.hxx>
 
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>

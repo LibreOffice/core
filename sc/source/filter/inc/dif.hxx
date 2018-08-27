@@ -20,20 +20,17 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 
-#include <array>
 #include <map>
 #include <memory>
 #include <vector>
 
 #include <rtl/ustring.hxx>
 
-#include <address.hxx>
-#include <global.hxx>
+#include <types.hxx>
 
 class SvStream;
 class SvNumberFormatter;
 class ScDocument;
-class ScPatternAttr;
 
 extern const sal_Unicode pKeyTABLE[];
 extern const sal_Unicode pKeyVECTORS[];
@@ -126,7 +123,6 @@ inline bool DifParser::IsNumber( const sal_Unicode cChar )
     return ( cChar >= '0' && cChar <= '9' );
 }
 
-class DifAttrCache;
 class DifColumn
 {
     friend class DifAttrCache;

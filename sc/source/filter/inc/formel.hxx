@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_FORMEL_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_FORMEL_HXX
 
-#include <compiler.hxx>
-#include <global.hxx>
 #include <tools/stream.hxx>
 
-#include "root.hxx"
 #include "tokstack.hxx"
 
 #include <memory>
@@ -39,8 +36,6 @@ class SharedStringPool;
 
 class XclImpStream;
 class ScTokenArray;
-struct ScSingleRefData;
-struct ScComplexRefData;
 
 enum class ConvErr
 {
