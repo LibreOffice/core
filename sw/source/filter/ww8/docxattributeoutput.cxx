@@ -3031,7 +3031,6 @@ static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
     rOptions.tag = XML_tblBorders;
     rOptions.bUseStartEnd = !bEcma;
     rOptions.bWriteTag = true;
-    rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
 
     return rOptions;
@@ -3044,7 +3043,6 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.tag = XML_tcBorders;
     rOptions.bUseStartEnd = !bEcma;
     rOptions.bWriteTag = true;
-    rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = false;
 
     return rOptions;
@@ -3057,7 +3055,6 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.tag = XML_pBdr;
     rOptions.bUseStartEnd = false;
     rOptions.bWriteTag = false;
-    rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = true;
 
     return rOptions;
@@ -3084,8 +3081,6 @@ static void impl_borders( FSHelperPtr const & pSerializer,
     bool tagWritten = false;
     const SvxBoxItemLine* pBrd = aBorders;
 
-    bool bWriteInsideH = false;
-    bool bWriteInsideV = false;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
@@ -3150,28 +3145,6 @@ static void impl_borders( FSHelperPtr const & pSerializer,
         }
 
         impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist, bWriteShadow, aStyleProps );
-
-        // When exporting default borders, we need to export these 2 attr
-        if ( rOptions.bWriteInsideHV) {
-            if ( i == 2 )
-                bWriteInsideH = true;
-            else if ( i == 3 )
-                bWriteInsideV = true;
-        }
-    }
-    if (bWriteInsideH)
-    {
-        const table::BorderLine2 *aStyleProps = nullptr;
-        if( rTableStyleConf.find( SvxBoxItemLine::BOTTOM ) != rTableStyleConf.end() )
-            aStyleProps = &rTableStyleConf[ SvxBoxItemLine::BOTTOM ];
-        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(SvxBoxItemLine::BOTTOM), 0, false, aStyleProps );
-    }
-    if (bWriteInsideV)
-    {
-        const table::BorderLine2 *aStyleProps = nullptr;
-        if( rTableStyleConf.find( SvxBoxItemLine::RIGHT ) != rTableStyleConf.end() )
-            aStyleProps = &rTableStyleConf[ SvxBoxItemLine::RIGHT ];
-        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(SvxBoxItemLine::RIGHT), 0, false, aStyleProps );
     }
     if (tagWritten && rOptions.bWriteTag) {
         pSerializer->endElementNS( XML_w, rOptions.tag );

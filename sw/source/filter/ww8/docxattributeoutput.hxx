@@ -84,7 +84,6 @@ struct OutputBorderOptions
     sal_Int32           tag = 0;
     bool                bUseStartEnd = false;
     bool                bWriteTag = true;
-    bool                bWriteInsideHV = false;
     bool                bWriteDistance = false;
     SvxShadowLocation   aShadowLocation = SvxShadowLocation::NONE;
     std::shared_ptr<editeng::WordBorderDistances> pDistances;
