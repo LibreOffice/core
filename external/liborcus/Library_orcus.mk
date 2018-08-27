@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/detection_result \
 	UnpackedTarball/liborcus/src/liborcus/dom_tree \
 	UnpackedTarball/liborcus/src/liborcus/format_detection \
+	UnpackedTarball/liborcus/src/liborcus/formula_result \
 	UnpackedTarball/liborcus/src/liborcus/global \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_cell_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_context \
@@ -96,6 +97,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
 	UnpackedTarball/liborcus/src/liborcus/session_context \
+	UnpackedTarball/liborcus/src/liborcus/spreadsheet_iface_util \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_interface \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_types \
 	UnpackedTarball/liborcus/src/liborcus/string_helper \
