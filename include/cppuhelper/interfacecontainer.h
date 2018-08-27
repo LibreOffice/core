@@ -127,6 +127,8 @@ private:
 class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper
 {
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -136,6 +138,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     /**
        Create an interface container.
@@ -311,6 +314,8 @@ template< class key, class hashImpl = void, class equalImpl = std::equal_to<key>
 class OMultiTypeInterfaceContainerHelperVar
 {
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -320,6 +325,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     /**
       Create a container of interface containers.
@@ -511,6 +517,8 @@ struct hashType_Impl
 class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper
 {
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -520,6 +528,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     /**
       Create a container of interface containers.

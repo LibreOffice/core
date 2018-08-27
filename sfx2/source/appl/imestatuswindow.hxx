@@ -83,8 +83,6 @@ public:
 
     using ImeStatusWindow_Impl::acquire;
     using ImeStatusWindow_Impl::release;
-    using ImeStatusWindow_Impl::operator new;
-    using ImeStatusWindow_Impl::operator delete;
 
 private:
     ImeStatusWindow(ImeStatusWindow &) = delete;

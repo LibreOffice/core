@@ -52,6 +52,8 @@ class Type;
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Any : public uno_Any
 {
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new ( size_t nSize )
@@ -63,6 +65,7 @@ public:
     static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Default constructor: Any holds no value; its type is void.
     */

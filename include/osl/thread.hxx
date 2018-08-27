@@ -50,6 +50,8 @@ class Thread
     Thread( const Thread& ) SAL_DELETED_FUNCTION;
     Thread& operator= ( const Thread& ) SAL_DELETED_FUNCTION;
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -59,6 +61,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     Thread(): m_hThread(NULL){}
 

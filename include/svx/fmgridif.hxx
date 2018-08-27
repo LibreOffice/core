@@ -82,10 +82,6 @@ public:
 
 // css::util::XModifyListener
     virtual void SAL_CALL modified(const css::lang::EventObject& Source) override;
-
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
-    using OWeakSubObject::operator new;
-    using OWeakSubObject::operator delete;
 };
 
 
@@ -107,10 +103,6 @@ public:
 // css::form::XUpdateListener
     virtual sal_Bool SAL_CALL approveUpdate(const css::lang::EventObject &) override;
     virtual void SAL_CALL updated(const css::lang::EventObject &) override;
-
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
-    using OWeakSubObject::operator new;
-    using OWeakSubObject::operator delete;
 };
 
 
@@ -131,10 +123,6 @@ public:
 
 // css::view::XSelectionChangeListener
     virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
-
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
-    using OWeakSubObject::operator new;
-    using OWeakSubObject::operator delete;
 };
 
 
@@ -155,10 +143,6 @@ public:
 
 // css::view::XSelectionChangeListener
     virtual void SAL_CALL columnChanged( const css::lang::EventObject& _event ) override;
-
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
-    using OWeakSubObject::operator new;
-    using OWeakSubObject::operator delete;
 };
 
 
@@ -180,10 +164,6 @@ public:
     virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;
     virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) override;
     virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
-
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
-    using OWeakSubObject::operator new;
-    using OWeakSubObject::operator delete;
 };
 
 

@@ -50,6 +50,8 @@ class TypeDescription
     mutable typelib_TypeDescription * _pTypeDescr;
 
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new ( size_t nSize )
@@ -61,6 +63,7 @@ public:
     static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Constructor:
 

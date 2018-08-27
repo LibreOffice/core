@@ -186,8 +186,12 @@ namespace comphelper
         virtual void SAL_CALL terminate() override;
 
         using osl::Thread::join;
+
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
         using osl::Thread::operator new;
         using osl::Thread::operator delete; // clang really wants this?
+#endif
 
         static void launch(std::shared_ptr<AsyncEventNotifierAutoJoin> const&);
     };

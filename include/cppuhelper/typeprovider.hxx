@@ -39,6 +39,8 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OTypeCollection
     css::uno::Sequence< css::uno::Type > _aTypes;
 
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
@@ -50,6 +52,7 @@ public:
     static void SAL_CALL operator delete( void *, void * )
         {}
     /// @endcond
+#endif
 
     OTypeCollection(
         const css::uno::Type & rType1,
@@ -171,8 +174,9 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OImplementationId
     sal_Bool _bUseEthernetAddress;
 
 public:
+// leaving these here for external code for backwards compatibility
+#ifndef LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
-
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -182,6 +186,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     ~OImplementationId();
 
