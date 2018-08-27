@@ -204,6 +204,11 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_MASTER_SLIDES_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_PRESENTATION_DLG
     [
         ExecMethod = FuTemporary ;
