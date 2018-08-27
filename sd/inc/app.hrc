@@ -229,6 +229,7 @@
 #define SID_BEFORE_OBJ                      (SID_SD_START+181)
     // FREE
 #define SID_CUSTOM_ANIMATION_PANEL          (SID_SD_START+183)
+#define SID_MASTER_SLIDES_PANEL             (SID_SD_START+184)
     // FREE
 // and even more...
 #define ID_VAL_ENDINTENS                    (SID_SD_START+197)
