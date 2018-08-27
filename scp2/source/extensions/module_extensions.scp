@@ -105,20 +105,6 @@ Module gid_Module_Optional_Extensions_LanguageTool
 End
 #endif
 
-/* ** MySQL Connector ** */
-
-#ifdef WITH_EXTENSION_MARIADBC
-Module gid_Module_Optional_Extensions_MySQLConnector
- PackageInfo = "packinfo_extensions.txt";
- MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MARIADBC);
- ParentID = gid_Module_Optional_Extensions;
- Files = (
- gid_File_Oxt_MySQLConnector );
- Default = YES;
- Styles = ( );
-End
-#endif
-
 /* ** Script provider for BeanShell ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
