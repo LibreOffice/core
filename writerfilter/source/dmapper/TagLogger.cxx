@@ -21,6 +21,9 @@
 #include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
 #include <unordered_map>
+#ifdef DEBUG_WRITERFILTER
+#include <unotools/pathoptions.hxx>
+#endif
 
 using namespace css;
 
@@ -49,7 +52,7 @@ namespace writerfilter
         if (temp != nullptr)
             fileName += temp;
         else
-            fileName += "/tmp";
+            fileName += SvtPathOptions().GetTempPath().toUtf8().getStr();
 
         std::string sPrefix = filename;
         size_t nLastSlash = sPrefix.find_last_of('/');
