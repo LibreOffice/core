@@ -1725,8 +1725,7 @@ AC_ARG_WITH(system-apache-commons,
 
 AC_ARG_WITH(system-mariadb,
     AS_HELP_STRING([--with-system-mariadb],
-        [Use MariaDB/MySQL libraries already on system, for building the MariaDB Connector/LibreOffice
-         .]),,
+        [Use MariaDB/MySQL libraries already on system.]),,
     [with_system_mariadb="$with_system_libs"])
 
 AC_ARG_ENABLE(bundle-mariadb,
