@@ -594,7 +594,7 @@ public:
     void SetIsLastSectionGroup( bool bIsLast );
     bool GetIsLastSectionGroup() { return m_bIsLastSectionGroup;}
     void SetIsFirstParagraphInSection( bool bIsFirst );
-    bool GetIsFirstParagraphInSection() { return m_bIsFirstParaInSection;}
+    bool GetIsFirstParagraphInSection();
     void SetIsFirstParagraphInShape(bool bIsFirst);
     bool GetIsFirstParagraphInShape() { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );

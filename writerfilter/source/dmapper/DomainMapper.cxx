@@ -656,7 +656,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 else
                 {
                     // tdf#104354 first paragraphs of table cells and shapes get zero top margin
-                    if ((m_pImpl->GetIsFirstParagraphInSection() && !m_pImpl->IsInShape() && m_pImpl->m_nTableDepth > 0) ||
+                    if ((m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->m_nTableDepth > 0) ||
                          m_pImpl->GetIsFirstParagraphInShape())
                         default_spacing = 0;
                     else

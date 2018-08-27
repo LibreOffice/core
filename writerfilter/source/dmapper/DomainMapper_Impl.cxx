@@ -478,6 +478,13 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
     m_bIsFirstParaInSection = bIsFirst;
 }
 
+bool DomainMapper_Impl::GetIsFirstParagraphInSection()
+{
+    // Anchored objects may include multiple paragraphs,
+    // and none of them should be considered the first para in section.
+    return m_bIsFirstParaInSection && !IsInShape();
+}
+
 void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 {
     m_bIsFirstParaInShape = bIsFirst;
