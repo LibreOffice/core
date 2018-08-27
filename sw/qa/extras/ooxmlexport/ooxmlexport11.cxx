@@ -271,6 +271,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117805, "tdf117805.odt")
     // This failed, the header was lost. It's still referenced at an incorrect
     // location in document.xml, though.
     CPPUNIT_ASSERT(xNameAccess->hasByName("word/header1.xml"));
+
+    uno::Reference<text::XText> textbox(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs(textbox));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
