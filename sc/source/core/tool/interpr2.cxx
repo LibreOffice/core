@@ -142,28 +142,66 @@ void ScInterpreter::ScGetDay()
     PushDouble(static_cast<double>(aDate.GetDay()));
 }
 
+/* TODO: move this to tools::Time so also SvNumberFormatter and everything else
+ * can use it and all display the same values. */
+static void lcl_getHourMinuteSecond( double fTimeInDays, sal_Int32& nHour, sal_Int32& nMinute, sal_Int32& nSecond )
+{
+    const double fTime = fTimeInDays - rtl::math::approxFloor(fTimeInDays); // date part absent
+
+    // If 0 then full day (or no day), shortcut.
+    // If < 0 then approxFloor() effectively returned the ceiling (note this
+    // also holds for negative fTimeInDays values) because of a near identical
+    // value, shortcut this to a full day as well.
+    // If >= 1.0 (actually == 1.0) then fTimeInDays is a negative small value
+    // not significant for a representable time and approxFloor() returned -1,
+    // shortcut to 0:0:0, otherwise it would become 24:0:0.
+    if (fTime <= 0.0 || fTime >= 1.0)
+    {
+        nHour = nMinute = nSecond = 0;
+        return;
+    }
+
+    // In seconds, including milli and nano.
+    const double fRawSeconds = fTime * DATE_TIME_FACTOR;
+
+    // Round to nanoseconds, which is the highest resolution this could be
+    // influenced by.
+    double fSeconds = rtl::math::round( fRawSeconds, 9);
+
+    // If this ended up as a full day the original value was very very close
+    // but not quite. Take that.
+    if (fSeconds >= tools::Time::secondPerDay)
+        fSeconds = fRawSeconds;
+
+    // Now do not round values (specifically not up), but truncate to the next
+    // magnitude, so 23:59:59.99 is still 23:59:59 and not 24:00:00 (or even
+    // 00:00:00 which Excel does).
+    nHour = fSeconds / tools::Time::secondPerHour;
+    fSeconds -= nHour * tools::Time::secondPerHour;
+    nMinute = fSeconds / tools::Time::secondPerMinute;
+    fSeconds -= nMinute * tools::Time::secondPerMinute;
+    nSecond = fSeconds;
+}
+
 void ScInterpreter::ScGetMin()
 {
-    double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) % ::tools::Time::secondPerHour;
-    PushDouble( static_cast<double>(nVal / ::tools::Time::secondPerMinute) );
+    sal_Int32 nHour, nMinute, nSecond;
+    lcl_getHourMinuteSecond( GetDouble(), nHour, nMinute, nSecond);
+    PushDouble( nMinute);
 }
 
 void ScInterpreter::ScGetSec()
 {
-    double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) % ::tools::Time::secondPerMinute;
-    PushDouble( static_cast<double>(nVal) );
+    sal_Int32 nHour, nMinute, nSecond;
+    lcl_getHourMinuteSecond( GetDouble(), nHour, nMinute, nSecond);
+    PushDouble( nSecond);
 }
 
 void ScInterpreter::ScGetHour()
 {
-    double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
-    long nVal = static_cast<long>(::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR)) / ::tools::Time::secondPerHour;
-    PushDouble(static_cast<double>(nVal));
+    sal_Int32 nHour, nMinute, nSecond;
+    lcl_getHourMinuteSecond( GetDouble(), nHour, nMinute, nSecond);
+    PushDouble( nHour);
 }
 
 void ScInterpreter::ScGetDateValue()
