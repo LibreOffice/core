@@ -75,11 +75,11 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
         {
             bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
-                bFound = *pOleId == aInsertConfig.m_aGlobalNames[nId  ];
+                bFound = *pOleId == m_aInsertConfig.m_aGlobalNames[nId  ];
             if(!bFound)
-                return aInsertConfig.m_pOLEMiscOpt.get();
+                return m_aInsertConfig.m_pOLEMiscOpt.get();
         }
-        return aInsertConfig.m_pCapOptions->Find(eType, pOleId);
+        return m_aInsertConfig.m_pCapOptions->Find(eType, pOleId);
     }
 }
 
@@ -97,17 +97,17 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
         {
             bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
-                bFound = pOpt->GetOleId() == aInsertConfig.m_aGlobalNames[nId  ];
+                bFound = pOpt->GetOleId() == m_aInsertConfig.m_aGlobalNames[nId  ];
             if(!bFound)
             {
-                if(aInsertConfig.m_pOLEMiscOpt)
-                    *aInsertConfig.m_pOLEMiscOpt = *pOpt;
+                if(m_aInsertConfig.m_pOLEMiscOpt)
+                    *m_aInsertConfig.m_pOLEMiscOpt = *pOpt;
                 else
-                    aInsertConfig.m_pOLEMiscOpt.reset(new InsCaptionOpt(*pOpt));
+                    m_aInsertConfig.m_pOLEMiscOpt.reset(new InsCaptionOpt(*pOpt));
             }
         }
 
-        InsCaptionOptArr& rArr = *aInsertConfig.m_pCapOptions;
+        InsCaptionOptArr& rArr = *m_aInsertConfig.m_pCapOptions;
         InsCaptionOpt *pObj = rArr.Find(pOpt->GetObjType(), &pOpt->GetOleId());
 
         if (pObj)
@@ -117,7 +117,7 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
         else
             rArr.Insert(new InsCaptionOpt(*pOpt));
 
-        aInsertConfig.SetModified();
+        m_aInsertConfig.SetModified();
         bRet = true;
     }
 
@@ -125,11 +125,11 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
 }
 
 SwModuleOptions::SwModuleOptions() :
-    aInsertConfig(false),
-    aWebInsertConfig(true),
-    aTableConfig(false),
-    aWebTableConfig(true),
-    bHideFieldTips(false)
+    m_aInsertConfig(false),
+    m_aWebInsertConfig(true),
+    m_aTableConfig(false),
+    m_aWebTableConfig(true),
+    m_bHideFieldTips(false)
 {
 }
 
