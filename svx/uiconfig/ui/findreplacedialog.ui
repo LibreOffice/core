@@ -167,6 +167,9 @@
                             <property name="wrap">True</property>
                             <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
+                            <accessibility>
+                              <role type="static"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
