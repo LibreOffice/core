@@ -257,7 +257,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		connectivity/source/drivers/firebird/firebird_sdbc \
 	) \
 	connectivity/source/drivers/flat/flat \
-	connectivity/source/drivers/mysqlc/mysqlc \
+	$(if $(ENABLE_MARIADBC), \
+		connectivity/source/drivers/mysqlc/mysqlc \
+	) \
 	$(if $(filter MACOSX,$(OS)), \
 		connectivity/source/drivers/macab/macab1 \
 	) \
