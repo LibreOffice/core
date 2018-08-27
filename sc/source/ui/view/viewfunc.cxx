@@ -1353,7 +1353,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
         if ( bRecord )
         {
             SCTAB nTab = rViewData.GetTabNo();
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab );
             ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
             for (; itr != itrEnd; ++itr)
@@ -1368,7 +1368,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
             OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, pUndoDoc ) );
+                new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, std::move(pUndoDoc) ) );
         }
 
         rDoc.ApplySelectionStyle( static_cast<const ScStyleSheet&>(*pStyleSheet), aFuncMark );
@@ -1386,7 +1386,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
         if ( bRecord )
         {
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab );
             ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
             for (; itr != itrEnd; ++itr)
@@ -1402,7 +1402,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
             OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionStyle( pDocSh, aUndoMark, aMarkRange, aName, pUndoDoc ) );
+                new ScUndoSelectionStyle( pDocSh, aUndoMark, aMarkRange, aName, std::move(pUndoDoc) ) );
         }
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
@@ -2062,7 +2062,7 @@ void ScViewFunc::SetWidthOrHeight(
         bFormula = rOpts.GetOption( VOPT_FORMULAS );
     }
 
-    ScDocument*     pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScOutlineTable> pUndoTab;
     std::vector<sc::ColRowSpan> aUndoRanges;
 
@@ -2070,7 +2070,7 @@ void ScViewFunc::SetWidthOrHeight(
     {
         rDoc.BeginDrawUndo();                          // Drawing Updates
 
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         itr = aMarkData.begin();
         for (; itr != itrEnd; ++itr)
         {
@@ -2232,7 +2232,7 @@ void ScViewFunc::SetWidthOrHeight(
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoWidthOrHeight(
                 pDocSh, aMarkData, nStart, nCurTab, nEnd, nCurTab,
-                pUndoDoc, aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
+                std::move(pUndoDoc), aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
     }
 
     if (nCurX < 0)

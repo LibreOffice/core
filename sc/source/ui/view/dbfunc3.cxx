@@ -437,7 +437,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         ScDocShellModificator aModificator( *pDocSh );
 
         ScSubTotalParam aNewParam( rParam );        // change end of range
-        ScDocument*     pUndoDoc = nullptr;
+        ScDocumentUniquePtr pUndoDoc;
         std::unique_ptr<ScOutlineTable> pUndoTab;
         ScRangeName*    pUndoRange = nullptr;
         ScDBCollection* pUndoDB = nullptr;
@@ -446,7 +446,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         {
             bool bOldFilter = bDo && rParam.bDoSort;
             SCTAB nTabCount = rDoc.GetTableCount();
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
             if (pTable)
             {
@@ -526,7 +526,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSubTotals( pDocSh, nTab,
                                         rParam, aNewParam.nRow2,
-                                        pUndoDoc, std::move(pUndoTab), // pUndoDBData,
+                                        std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
                                         pUndoRange, pUndoDB ) );
         }
 
@@ -2130,7 +2130,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         //! undo only needed data ?
 
-        ScDocument* pUndoDoc = nullptr;
+        ScDocumentUniquePtr pUndoDoc;
         ScOutlineTable* pUndoTab = nullptr;
         ScRangeName* pUndoRange = nullptr;
         ScDBCollection* pUndoDB = nullptr;
@@ -2138,7 +2138,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         if (bRecord)
         {
             SCTAB nTabCount = pDoc->GetTableCount();
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
             if (pTable)
             {
@@ -2235,7 +2235,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
                                         nStartCol, nStartRow, nEndCol, nEndRow,
                                         nNewEndRow,
                                         nCurX, nCurY,
-                                        pUndoDoc, pUndoTab,
+                                        std::move(pUndoDoc), pUndoTab,
                                         pUndoRange, pUndoDB,
                                         pOld, pNew ) );
         }
