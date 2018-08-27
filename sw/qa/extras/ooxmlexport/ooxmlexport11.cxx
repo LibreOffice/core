@@ -315,6 +315,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
+{
+    // The runs inside <w:dir> were ignored
+    const OUString sParaText = getParagraph(1)->getString();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString::fromUtf8(
+            u8"عندما يريد العالم أن يتكلّم ‬ ، فهو يتحدّث "
+            u8"بلغة "
+            u8"يونيكود. تسجّل الآن لحضور المؤتمر الدولي العاشر "
+            u8"ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 "
+            u8"آذار 1997 بمدينة مَايِنْتْس، ألمانيا. و سيجمع المؤتمر "
+            u8"بين خبراء من كافة قطاعات الصناعة على الشبكة "
+            u8"العالمية انترنيت ويونيكود، حيث ستتم، على الصعيدين "
+            u8"الدولي والمحلي على حد سواء مناقشة سبل استخدام "
+            u8"يونكود في النظم القائمة وفيما يخص التطبيقات "
+            u8"الحاسوبية، الخطوط، تصميم النصوص والحوسبة متعددة "
+            u8"اللغات."),
+        sParaText);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
