@@ -24,7 +24,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
-#include <cairo.h>
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
@@ -34,6 +33,8 @@
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
 #else
+
+#include <cairo.h>
 
 //Using formats that match cairo's formats. For android we patch cairo,
 //which is internal in that case, to swap the rgb components so that

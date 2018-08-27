@@ -33,7 +33,7 @@ class IosSalFrame;
 class IosSalInstance : public SvpSalInstance
 {
 public:
-    IosSalInstance( SalYieldMutex *pMutex );
+    IosSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~IosSalInstance();
     static IosSalInstance *getInstance();
 
