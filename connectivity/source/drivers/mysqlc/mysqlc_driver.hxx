@@ -54,11 +54,9 @@ protected:
     OWeakRefArray m_xConnections; // vector containing a list
         // of all the Connection objects
         // for this Driver
-#ifndef SYSTEM_MYSQL_CPPCONN
 #ifdef BUNDLE_MARIADB
     oslModule m_hCConnModule;
     bool m_bAttemptedLoadCConn;
-#endif
 #endif
 public:
     explicit MysqlCDriver(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
