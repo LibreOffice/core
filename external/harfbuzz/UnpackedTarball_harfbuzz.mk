@@ -26,4 +26,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
 ))
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
+    external/harfbuzz/harfbuzz-ios.patch \
+))
+
 # vim: set noet sw=4 ts=4:
