@@ -79,6 +79,15 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 	libxml2 \
 ))
 
+ifneq ($(DBUS_HAVE_GLIB),)
+$(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
+	$(DBUS_GLIB_CFLAGS) \
+))
+$(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
+	$(DBUS_GLIB_LIBS) \
+))
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
     sd/qa/unit/uimpress \
 ))
