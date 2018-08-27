@@ -72,7 +72,7 @@ namespace {
         // The next slide command is always enabled, even when the current slide
         // is the last slide:  from the last slide it goes to the pause slide,
         // and from there it ends the slide show.
-        virtual bool IsEnabled() const override { return true; }
+        virtual bool IsEnabled() const override;// { return true; }
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -159,6 +159,15 @@ namespace {
     private:
         rtl::Reference<PresenterController> mpPresenterController;
         const sal_Int32 mnSizeChange;
+    };
+
+    class ExitPresentation : public Command
+    {
+    public:
+        explicit ExitPresentation(const rtl::Reference<PresenterController>& rpPresenterController);
+        virtual void Execute() override;
+    private:
+        rtl::Reference<PresenterController> mpPresenterController;
     };
 
 } // end of anonymous namespace
@@ -396,6 +405,8 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
         return new SetHelpViewCommand(true, rpPresenterController);
     if (rsURLPath == "ShrinkNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, -1);
+    if (rsURLPath == "ExitPresentation")
+        return new ExitPresentation(rpPresenterController, -1);
 
     return nullptr;
 }
@@ -487,6 +498,21 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
 void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject&)
 {
     mbIsListeningToWindowManager = false;
+}
+
+//===== GotoPreviousSlideCommand ==============================================
+
+bool GotoNextSlideCommand::IsEnabled() const
+{
+    return true;
+/*    if ( ! mpPresenterController.is())
+        return false;
+
+    if ( ! mpPresenterController->GetSlideShowController().is())
+        return false;
+
+    return mpPresenterController->GetSlideShowController()->getCurrentSlideIndex()>0;
+*/
 }
 
 //===== GotoPreviousSlideCommand ==============================================
@@ -729,5 +755,27 @@ Any NotesFontSizeCommand::GetState() const
 }
 
 } } // end of namespace ::sdext::presenter
+
+//===== ExitPresentation ==================================================
+
+ExitPresentation::ExitPresentation (const rtl::Reference<PresenterController>& rpPresenterController)
+: mpPresenterController(rpPresenterController)
+{
+}
+
+void ExitPresentation::Execute()
+{
+    if ( ! mpPresenterController.is())
+        return;
+
+    Reference< XPresentationSupplier > xPS( mxController->getModel(), UNO_QUERY );
+    if( xPS.is() )
+    {
+        Reference< XPresentation > xP( xPS->getPresentation() );
+        if( xP.is() )
+            xP->end();
+    }
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
