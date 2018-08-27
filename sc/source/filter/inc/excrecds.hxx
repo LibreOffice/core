@@ -22,22 +22,11 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <svl/zforlist.hxx>
-#include <tools/solar.h>
 #include <tools/color.hxx>
-#include <vcl/vclenum.hxx>
 
-#include <olinetab.hxx>
-#include <filter.hxx>
-#include <rangelst.hxx>
 #include "xerecord.hxx"
 #include "xeroot.hxx"
-#include "xeformula.hxx"
-#include "xestring.hxx"
-#include "root.hxx"
 #include "excdefs.hxx"
-#include <memory>
-#include <vector>
 
 //------------------------------------------------------------------ Forwards -
 

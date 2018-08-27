@@ -20,12 +20,14 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLEXP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLEXP_HXX
 
-#include <global.hxx>
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 #include <memory>
+#include <map>
+#include <svx/xoutbmp.hxx>
 
 #include "expbase.hxx"
 

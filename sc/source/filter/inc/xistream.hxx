@@ -22,6 +22,7 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <filter/msfilter/mscodec.hxx>
+#include <tools/stream.hxx>
 #include <memory>
 #include "xlstream.hxx"
 #include "xlconst.hxx"

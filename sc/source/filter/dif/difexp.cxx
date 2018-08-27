@@ -33,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <formula/errorcodes.hxx>
+#include <tools/stream.hxx>
 
 void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach )

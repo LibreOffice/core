@@ -23,13 +23,10 @@
 #include <rtl/ustring.hxx>
 
 #include "imp_op.hxx"
-#include "flttypes.hxx"
 #include "ftools.hxx"
 #include "lotform.hxx"
 #include "lotattr.hxx"
 
-class ScFormulaCell;
-class LotusFontBuffer;
 struct LotusContext;
 
 class ImportLotus : public ImportTyp

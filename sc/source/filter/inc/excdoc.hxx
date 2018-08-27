@@ -20,16 +20,17 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCDOC_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCDOC_HXX
 
-#include "excrecds.hxx"
 #include "xeroot.hxx"
-#include "root.hxx"
-#include "xeescher.hxx"
+#include "xerecord.hxx"
+#include "excrecds.hxx"
 #include <memory>
 
 // Forwards -
 
 class SvStream;
-
+class XclExpNote;
+class XclExpStream;
+class XclExpXmlStream;
 class XclExpChangeTrack;
 
 // class ExcTable -

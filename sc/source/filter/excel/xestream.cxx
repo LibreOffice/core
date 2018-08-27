@@ -44,6 +44,7 @@
 #include <refreshtimerprotector.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <root.hxx>
 
 #include <docsh.hxx>
 #include <viewdata.hxx>

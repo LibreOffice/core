@@ -20,13 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCIMP8_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCIMP8_HXX
 
-#include <string.h>
-
 #include "imp_op.hxx"
 #include "root.hxx"
 #include "excscen.hxx"
-#include "excdefs.hxx"
-#include "ftools.hxx"
 #include <queryparam.hxx>
 
 class ScDBData;

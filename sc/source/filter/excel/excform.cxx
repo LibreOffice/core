@@ -36,6 +36,7 @@
 #include <xihelper.hxx>
 #include <xilink.hxx>
 #include <xiname.hxx>
+#include <xistyle.hxx>
 #include <documentimport.hxx>
 
 using ::std::vector;

@@ -32,6 +32,7 @@
 #include <progress.hxx>
 #include <rangenam.hxx>
 #include <editutil.hxx>
+#include <olinetab.hxx>
 
 #include <excrecds.hxx>
 #include <root.hxx>

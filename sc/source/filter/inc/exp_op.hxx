@@ -21,13 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
 
 #include <memory>
-#include <filter.hxx>
-#include "root.hxx"
 #include "xeroot.hxx"
 
-class ScDocument;
-class ScPatternAttr;
-class ScFormulaCell;
 class ExcDocument;
 
 class ExportTyp

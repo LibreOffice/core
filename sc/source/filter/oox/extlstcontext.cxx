@@ -18,6 +18,8 @@
 #include <condformatbuffer.hxx>
 #include <condformatcontext.hxx>
 #include <document.hxx>
+#include <worksheetfragment.hxx>
+#include <workbookfragment.hxx>
 
 #include <rangeutl.hxx>
 #include <o3tl/make_unique.hxx>

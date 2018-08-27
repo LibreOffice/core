@@ -20,6 +20,7 @@
 #include <sheetdatacontext.hxx>
 
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

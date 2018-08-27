@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_DEFNAMESBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_DEFNAMESBUFFER_HXX
 
-#include "formulabase.hxx"
-#include <rangenam.hxx>
+#include "workbookhelper.hxx"
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/refvector.hxx>
 
 #include <memory>
 

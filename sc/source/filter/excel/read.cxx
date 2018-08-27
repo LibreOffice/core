@@ -33,6 +33,7 @@
 #include <xicontent.hxx>
 #include <xiescher.hxx>
 #include <xipivot.hxx>
+#include <xistyle.hxx>
 #include <XclImpChangeTrack.hxx>
 #include <documentimport.hxx>
 

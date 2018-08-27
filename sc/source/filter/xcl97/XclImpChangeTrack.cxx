@@ -29,6 +29,7 @@
 #include <xilink.hxx>
 #include <externalrefmgr.hxx>
 #include <document.hxx>
+#include <excdefs.hxx>
 
 // class XclImpChangeTrack
 

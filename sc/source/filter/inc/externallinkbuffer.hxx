@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <oox/helper/containerhelper.hxx>
 #include "defnamesbuffer.hxx"
+#include "formulabase.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace sheet { struct DDEItemInfo; }
