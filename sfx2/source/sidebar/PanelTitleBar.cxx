@@ -183,6 +183,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
             {
                 mpPanel->SetExpanded( ! mpPanel->IsExpanded());
                 Invalidate();
+                GrabFocus();
             }
         }
     }
