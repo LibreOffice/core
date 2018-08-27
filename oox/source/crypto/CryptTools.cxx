@@ -456,14 +456,16 @@ bool CryptoHash::update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength)
 #if USE_TLS_OPENSSL + USE_TLS_NSS > 0
     sal_uInt32 nActualInputLength = (nInputLength == 0 || nInputLength > rInput.size()) ? rInput.size() : nInputLength;
 #else
-    (void)input;
-    (void)inputLength;
+    (void)rInput;
+    (void)nInputLength;
 #endif
 
 #if USE_TLS_OPENSSL
     return HMAC_Update(mpImpl->mpHmacContext.get(), rInput.data(), nActualInputLength) != 0;
 #elif USE_TLS_NSS
     return PK11_DigestOp(mpImpl->mContext, rInput.data(), nActualInputLength) == SECSuccess;
+#else
+    return false; // ???
 #endif
 }
 
