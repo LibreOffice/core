@@ -301,6 +301,18 @@ OUString const & TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
     return maItems[nIndex].msDeckId;
 }
 
+sal_Int32 TabBar::GetDeckIndexForId (const OUString& rsDeckId)
+{
+    sal_Int32 nIndex(1);
+    for (auto const& item : maItems)
+    {
+        if (item.msDeckId == rsDeckId)
+            return nIndex;
+        nIndex++;
+    }
+    return 0;
+}
+
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 {
     if (nIndex<0 || static_cast<size_t>(nIndex) >= maItems.size())
