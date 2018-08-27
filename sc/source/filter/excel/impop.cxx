@@ -65,6 +65,9 @@
 #include <unonames.hxx>
 #include <paramisc.hxx>
 #include <postit.hxx>
+#include <colrowst.hxx>
+#include <otlnbuff.hxx>
+#include <xistyle.hxx>
 
 #include <fapihelper.hxx>
 #include <namebuff.hxx>

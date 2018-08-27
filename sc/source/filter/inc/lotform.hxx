@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_LOTFORM_HXX
 
 #include "formel.hxx"
-#include <rtl/ustring.hxx>
 
 enum FUNC_TYPE
 {

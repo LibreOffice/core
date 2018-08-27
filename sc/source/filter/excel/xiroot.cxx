@@ -19,6 +19,7 @@
 
 #include <xiroot.hxx>
 #include <addincol.hxx>
+#include <colrowst.hxx>
 #include <document.hxx>
 #include <scextopt.hxx>
 #include <xltracer.hxx>

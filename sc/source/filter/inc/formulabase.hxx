@@ -21,13 +21,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_FORMULABASE_HXX
 
 #include <com/sun/star/beans/Pair.hpp>
-#include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/refvector.hxx>
-#include "addressconverter.hxx"
+#include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -35,6 +32,11 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox { template< typename Type > class Matrix; }
+namespace com { namespace sun { namespace star { namespace sheet { struct FormulaOpCodeMapEntry; } } } }
+namespace com { namespace sun { namespace star { namespace table { struct CellAddress; } } } }
+namespace oox { class SequenceInputStream; }
+namespace oox { namespace xls { struct BinAddress; } }
+class ScRangeList;
 
 namespace oox {
 namespace xls {

@@ -21,13 +21,9 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_FTOOLS_HXX
 
 #include <vector>
-#include <map>
 #include <limits>
-#include <sal/macros.h>
-#include <sot/storage.hxx>
-#include <oox/helper/helper.hxx>
+#include <tools/ref.hxx>
 #include <filter.hxx>
-#include <scdllapi.h>
 
 // Common macros ==============================================================
 
@@ -114,6 +110,8 @@ class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class SvStream;
+class SotStorage;
+class SotStorageStream;
 
 /** Contains static methods used anywhere in the filters. */
 class ScfTools

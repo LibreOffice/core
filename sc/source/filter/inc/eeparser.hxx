@@ -24,9 +24,11 @@
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
+#include <boost/optional.hpp>
 #include <address.hxx>
 #include <memory>
 #include <vector>
+#include <map>
 
 const sal_Char nHorizontal = 1;
 const sal_Char nVertical = 2;

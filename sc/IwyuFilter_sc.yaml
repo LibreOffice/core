@@ -375,3 +375,11 @@ blacklist:
     sc/source/core/opencl/opbase.hxx:
     # Needed for FormulaTreeNode()
     - formula/token.hxx
+    sc/source/filter/inc/drawingfragment.hxx:
+    # Needed for implicit dtor
+    - drawingbase.hxx
+    sc/source/filter/inc/excdoc.hxx:
+    # Needed for unique_ptr type
+    - class XclExpChangeTrack
+    # Needed for typedef
+    - excrecds.hxx

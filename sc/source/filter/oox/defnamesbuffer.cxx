@@ -34,6 +34,7 @@
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <externallinkbuffer.hxx>
+#include <formulabase.hxx>
 #include <formulaparser.hxx>
 #include <worksheetbuffer.hxx>
 #include <tokenarray.hxx>

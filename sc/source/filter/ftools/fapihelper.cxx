@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>

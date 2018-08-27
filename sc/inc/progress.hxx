@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/progress.hxx>
+#include <tools/solar.h>
 #include "scdllapi.h"
 
 class ScDocument;
