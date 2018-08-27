@@ -1296,7 +1296,7 @@ void Test::testSharedFormulasCopyPaste()
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0, true, true);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
+    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, ScDocumentUniquePtr(pUndoDoc)));
 
     // First, make sure the formula cells are shared in the undo document.
     aPos.SetCol(1);

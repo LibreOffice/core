@@ -256,13 +256,13 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
     if( pUndoDoc && pDoc->IsUndoEnabled() && pDocSh )
     {
-        ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+        ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
         ScMarkData aDestMark;
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc.release(), pRedoDoc, InsertDeleteFlags::ALL, nullptr));
+            new ScUndoPaste(pDocSh, aRange, aDestMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
     }
     pUndoDoc.reset();
     if( pDocSh )

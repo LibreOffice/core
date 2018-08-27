@@ -3339,9 +3339,9 @@ void Test::testCopyPaste()
     copyToClip(m_pDoc, aRange, &aClipDoc);
 
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
+    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, std::move(pUndoDoc)));
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
@@ -3735,21 +3735,21 @@ void Test::testCopyPasteSkipEmpty()
     }
 
     // Create undo document.
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, pUndoDoc, &aClipDoc, true, false, false, true/*bSkipEmpty*/);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, pUndoDoc.get(), &aClipDoc, true, false, false, true/*bSkipEmpty*/);
 
     // Create redo document.
-    ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
     pRedoDoc->InitUndo(m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pRedoDoc, &aMark);
 
     // Create an undo object for this.
     ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, pRefUndoData);
+    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, pRefUndoData);
 
     // Check the content after the paste.
     {
@@ -3847,11 +3847,11 @@ void Test::testCutPasteRefUndo()
     aClipDoc.SetValue(ScAddress(1,1,0), 12.0);
 
     // Set up undo document for reference update.
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
-    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc);
+    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, InsertDeleteFlags::CONTENTS, pUndoDoc.get(), &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0,1,0));
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,1,0), "C2", "A2 should be referencing C2.");
@@ -3859,7 +3859,7 @@ void Test::testCutPasteRefUndo()
     // At this point, the ref undo document should contain a formula cell at A2 that references B2.
     ASSERT_FORMULA_EQUAL(*pUndoDoc, ScAddress(0,1,0), "B2", "A2 in the undo document should be referencing B2.");
 
-    ScUndoPaste aUndo(&getDocShell(), ScRange(2,1,0), aMark, pUndoDoc, nullptr, InsertDeleteFlags::CONTENTS, nullptr, false, nullptr);
+    ScUndoPaste aUndo(&getDocShell(), ScRange(2,1,0), aMark, std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false, nullptr);
     aUndo.Undo();
 
     // Now A2 should be referencing B2 once again.
@@ -3935,7 +3935,7 @@ void Test::testCutPasteGroupRefUndo()
     aMark.SetMarkArea(aPasteRange);
     ScDocument* pPasteUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pPasteUndoDoc->InitUndoSelected( m_pDoc, aMark);
-    std::unique_ptr<ScUndoPaste> pUndoPaste( createUndoPaste( getDocShell(), aPasteRange, pPasteUndoDoc));
+    std::unique_ptr<ScUndoPaste> pUndoPaste( createUndoPaste( getDocShell(), aPasteRange, ScDocumentUniquePtr(pPasteUndoDoc)));
     m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::ALL, pPasteUndoDoc, &aClipDoc);
 
     // Check data after Paste.
@@ -4042,13 +4042,13 @@ void Test::testUndoCut()
     aMark.MarkToMulti();
 
     // Set up an undo object for cutting A1:A3.
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0 ,0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
     ASSERT_DOUBLES_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
     ASSERT_DOUBLES_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
     ASSERT_DOUBLES_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
-    ScUndoCut aUndo(&getDocShell(), aRange, aRange.aEnd, aMark, pUndoDoc);
+    ScUndoCut aUndo(&getDocShell(), aRange, aRange.aEnd, aMark, std::move(pUndoDoc));
 
     // "Cut" the selection.
     m_pDoc->DeleteSelection(InsertDeleteFlags::ALL, aMark);
@@ -6685,10 +6685,10 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Taken from ScViewFunc::CutToClip()
-    ScDocument* pUndoDoc = nullptr;
+    ScDocumentUniquePtr pUndoDoc;
     if (bCreateUndo)
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndoSelected( pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
@@ -6704,7 +6704,7 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
     aMark.MarkToSimple();
 
     if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, pUndoDoc );
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
 
     return nullptr;
 }
@@ -6736,7 +6736,7 @@ void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
-ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc)
+ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
 {
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData;
@@ -6744,7 +6744,7 @@ ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, Sc
     ScRefUndoData* pRefUndoData = new ScRefUndoData(&rDoc);
 
     return new ScUndoPaste(
-        &rDocSh, rRange, aMarkData, pUndoDoc, nullptr, InsertDeleteFlags::ALL, pRefUndoData, false);
+        &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, pRefUndoData, false);
 }
 
 void Test::setExpandRefs(bool bExpand)
