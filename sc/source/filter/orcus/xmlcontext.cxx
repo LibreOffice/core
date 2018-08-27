@@ -24,6 +24,7 @@
 #include <orcus/orcus_xml.hpp>
 #include <orcus/global.hpp>
 #include <orcus/sax_parser_base.hpp>
+#include <orcus/stream.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/processfactory.hxx>
@@ -289,7 +290,9 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             }
         }
 
-        filter.read_file(path);
+        std::string content = orcus::load_file_content(path);
+        filter.read_stream(content.data(), content.size());
+
         aFactory.finalize();
     }
     catch (const std::exception&)

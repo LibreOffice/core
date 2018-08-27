@@ -101,6 +101,11 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
     mrDoc.setOriginDate(year, month, day);
 }
 
+void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t /*cs*/)
+{
+    // TODO
+}
+
 void ScOrcusGlobalSettings::set_default_formula_grammar(os::formula_grammar_t grammar)
 {
     meCalcGrammar = getCalcGrammarFromOrcus(grammar);
@@ -463,6 +468,11 @@ size_t ScOrcusFactory::addString(const OUString& rStr)
     return appendString(rStr);
 }
 
+const OUString* ScOrcusFactory::getString(size_t nIndex) const
+{
+    return nIndex < maStrings.size() ? &maStrings[nIndex] : nullptr;
+}
+
 void ScOrcusFactory::pushCellStoreAutoToken( const ScAddress& rPos, const OUString& rVal )
 {
     maCellStoreTokens.emplace_back(rPos, CellStoreToken::Type::Auto);
@@ -816,8 +826,195 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     maProperties(mnTab, mrDoc),
     maConditionalFormat(mnTab, rDoc.getDoc()),
     maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab),
+    maFormula(*this),
+    maArrayFormula(*this),
     mnCellCount(0)
 {
+}
+
+void ScOrcusFormula::reset()
+{
+    mnCol = -1;
+    mnRow = -1;
+    maFormula.clear();
+    meGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED;
+    mnSharedFormulaIndex = 0;
+    mbShared = false;
+    meResType = ResultType::NotSet;
+    mnResult = 0;
+    mfResult = 0.0;
+}
+
+ScOrcusFormula::ScOrcusFormula( ScOrcusSheet& rSheet ) :
+    mrSheet(rSheet),
+    mnCol(-1),
+    mnRow(-1),
+    meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED),
+    mnSharedFormulaIndex(0),
+    mbShared(false),
+    meResType(ResultType::NotSet),
+    mnResult(0),
+    mfResult(0.0) {}
+
+ScOrcusFormula::~ScOrcusFormula() {}
+
+void ScOrcusFormula::set_position(os::row_t row, os::col_t col)
+{
+    mnCol = col;
+    mnRow = row;
+}
+
+void ScOrcusFormula::set_formula(os::formula_grammar_t grammar, const char* p, size_t n)
+{
+    maFormula = OUString(p, n, RTL_TEXTENCODING_UTF8);
+    meGrammar = getCalcGrammarFromOrcus(grammar);
+}
+
+void ScOrcusFormula::set_shared_formula_index(size_t index)
+{
+    mnSharedFormulaIndex = index;
+    mbShared = true;
+}
+
+void ScOrcusFormula::set_result_value(double value)
+{
+    meResType = ResultType::Value;
+    mfResult = value;
+}
+
+void ScOrcusFormula::set_result_string(size_t sindex)
+{
+    meResType = ResultType::String;
+    mnResult = sindex;
+}
+
+void ScOrcusFormula::set_result_empty()
+{
+    meResType = ResultType::Empty;
+}
+
+void ScOrcusFormula::set_result_bool(bool value)
+{
+    meResType = ResultType::Value;
+    mfResult = value ? 1.0 : 0.0;
+}
+
+void ScOrcusFormula::commit()
+{
+    ScOrcusFactory& rFactory = mrSheet.getFactory();
+    sc::SharedFormulaGroups& rGroups = mrSheet.getSharedFormulaGroups();
+    ScAddress aPos(mnCol, mnRow, mrSheet.getIndex());
+
+    if (mbShared)
+    {
+        if (maFormula.isEmpty())
+        {
+            // shared formula that references existing formula token.
+            const ScTokenArray* pArray = rGroups.get(mnSharedFormulaIndex);
+            if (!pArray)
+                return;
+        }
+        else
+        {
+            // topmost shared formula with new formula token.
+
+            // Compile the formula expression into tokens.
+            ScCompiler aComp(&mrSheet.getDoc().getDoc(), aPos, meGrammar);
+            ScTokenArray* pArray = aComp.CompileString(maFormula);
+            if (!pArray)
+                // Tokenization failed.
+                return;
+
+            rGroups.set(mnSharedFormulaIndex, pArray);
+        }
+        rFactory.pushSharedFormulaToken(aPos, mnSharedFormulaIndex);
+    }
+    else
+    {
+        // non-shared formula
+        rFactory.pushCellStoreToken(aPos, maFormula, meGrammar);
+    }
+
+    switch (meResType)
+    {
+        case ResultType::String:
+        {
+            const OUString* pStr = rFactory.getString(mnResult);
+            if (pStr)
+                rFactory.pushFormulaResult(aPos, *pStr);
+            break;
+        }
+        case ResultType::Value:
+            rFactory.pushFormulaResult(aPos, mfResult);
+            break;
+        default:
+            ;
+    }
+
+    mrSheet.cellInserted();
+}
+
+void ScOrcusArrayFormula::reset()
+{
+    mnCol = -1;
+    mnRow = -1;
+    mnColRange = 0;
+    mnRowRange = 0;
+
+    maFormula.clear();
+    meGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED;
+}
+
+ScOrcusArrayFormula::ScOrcusArrayFormula( ScOrcusSheet& rSheet ) :
+    mrSheet(rSheet),
+    mnCol(-1),
+    mnRow(-1),
+    mnColRange(0),
+    mnRowRange(0),
+    meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED) {}
+
+ScOrcusArrayFormula::~ScOrcusArrayFormula() {}
+
+void ScOrcusArrayFormula::set_range(const os::range_t& range)
+{
+    mnCol = range.first.column;
+    mnRow = range.first.row;
+
+    mnColRange = range.last.column - range.first.column + 1;
+    mnRowRange = range.last.row - range.first.column + 1;
+}
+
+void ScOrcusArrayFormula::set_formula(os::formula_grammar_t grammar, const char* p, size_t n)
+{
+    meGrammar = getCalcGrammarFromOrcus(grammar);
+    maFormula = OUString(p, n, RTL_TEXTENCODING_UTF8);
+}
+
+void ScOrcusArrayFormula::set_result_value(os::row_t /*row*/, os::col_t /*col*/, double /*value*/)
+{
+    // TODO : implement result cache for matrix
+}
+
+void ScOrcusArrayFormula::set_result_string(os::row_t /*row*/, os::col_t /*col*/, size_t /*sindex*/)
+{
+    // TODO : implement result cache for matrix
+}
+
+void ScOrcusArrayFormula::set_result_empty(os::row_t /*row*/, os::col_t /*col*/)
+{
+    // TODO : implement result cache for matrix
+}
+
+void ScOrcusArrayFormula::set_result_bool(os::row_t /*row*/, os::col_t /*col*/, bool /*value*/)
+{
+    // TODO : implement result cache for matrix
+}
+
+void ScOrcusArrayFormula::commit()
+{
+    ScAddress aPos(mnCol, mnRow, mrSheet.getIndex());
+    mrSheet.getFactory().pushMatrixFormulaToken(aPos, maFormula, meGrammar, mnRowRange, mnColRange);
+    mrSheet.cellInserted();
 }
 
 void ScOrcusSheet::cellInserted()
@@ -828,6 +1025,11 @@ void ScOrcusSheet::cellInserted()
         mrFactory.incrementProgress();
         mnCellCount = 0;
     }
+}
+
+ScDocumentImport& ScOrcusSheet::getDoc()
+{
+    return mrDoc;
 }
 
 os::iface::import_auto_filter* ScOrcusSheet::get_auto_filter()
@@ -853,6 +1055,18 @@ os::iface::import_conditional_format* ScOrcusSheet::get_conditional_format()
 os::iface::import_named_expression* ScOrcusSheet::get_named_expression()
 {
     return &maNamedExpressions;
+}
+
+os::iface::import_formula* ScOrcusSheet::get_formula()
+{
+    maFormula.reset();
+    return &maFormula;
+}
+
+os::iface::import_array_formula* ScOrcusSheet::get_array_formula()
+{
+    maArrayFormula.reset();
+    return &maArrayFormula;
 }
 
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
@@ -921,83 +1135,6 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
     mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
 }
 
-void ScOrcusSheet::set_formula(
-    os::row_t row, os::col_t col, os::formula_grammar_t grammar, const char* p, size_t n)
-{
-    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
-    mrFactory.pushCellStoreToken(
-        ScAddress(col, row, mnTab), aFormula, getCalcGrammarFromOrcus(grammar));
-    cellInserted();
-}
-
-void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* p, size_t n)
-{
-    OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
-    mrFactory.pushFormulaResult(ScAddress(col, row, mnTab), aResult);
-}
-
-void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double val)
-{
-    mrFactory.pushFormulaResult(ScAddress(col, row, mnTab), val);
-}
-
-void ScOrcusSheet::set_shared_formula(
-    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
-    const char* p_formula, size_t n_formula)
-{
-    ScAddress aPos(col, row, mnTab);
-    OUString aFormula(p_formula, n_formula, RTL_TEXTENCODING_UTF8);
-    formula::FormulaGrammar::Grammar eGram = getCalcGrammarFromOrcus(grammar);
-
-    // Compile the formula expression into tokens.
-    ScCompiler aComp(&mrDoc.getDoc(), aPos, eGram);
-    ScTokenArray* pArray = aComp.CompileString(aFormula);
-    if (!pArray)
-        // Tokenization failed.
-        return;
-
-    maFormulaGroups.set(sindex, pArray);
-
-    mrFactory.pushSharedFormulaToken(aPos, sindex);
-    cellInserted();
-}
-
-void ScOrcusSheet::set_shared_formula(
-    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
-    const char* p_formula, size_t n_formula, const char* /*p_range*/, size_t /*n_range*/)
-{
-    set_shared_formula(row, col, grammar, sindex, p_formula, n_formula);
-}
-
-void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sindex)
-{
-    ScAddress aPos(col, row, mnTab);
-
-    const ScTokenArray* pArray = maFormulaGroups.get(sindex);
-    if (!pArray)
-        return;
-
-    mrFactory.pushSharedFormulaToken(aPos, sindex);
-    cellInserted();
-}
-
-void ScOrcusSheet::set_array_formula(
-    os::row_t row, os::col_t col, os::formula_grammar_t grammar,
-    const char* p, size_t n, os::row_t array_rows, os::col_t array_cols)
-{
-    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
-    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus(grammar);
-
-    ScAddress aPos(col, row, mnTab);
-    mrFactory.pushMatrixFormulaToken(aPos, aFormula, eGrammar, array_rows, array_cols);
-}
-
-void ScOrcusSheet::set_array_formula(
-    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/,
-    const char* /*p*/, size_t /*n*/, const char* /*p_range*/, size_t /*n_range*/)
-{
-}
-
 orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
 {
     orcus::spreadsheet::range_size_t ret;
@@ -1010,6 +1147,16 @@ orcus::spreadsheet::range_size_t ScOrcusSheet::get_sheet_size() const
 const sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups() const
 {
     return maFormulaGroups;
+}
+
+sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups()
+{
+    return maFormulaGroups;
+}
+
+ScOrcusFactory& ScOrcusSheet::getFactory()
+{
+    return mrFactory;
 }
 
 ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
@@ -1087,7 +1234,7 @@ ScOrcusStyles::font::font():
 }
 
 ScOrcusStyles::fill::fill():
-    maPattern(""),
+    mePattern(orcus::spreadsheet::fill_pattern_t::none),
     maFgColor(COL_WHITE),
     maBgColor(COL_WHITE),
     mbHasFillAttr(false)
@@ -1143,13 +1290,13 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
 {
-    if (maPattern.equalsIgnoreAsciiCase("none"))
+    if (mePattern == orcus::spreadsheet::fill_pattern_t::none)
     {
         SAL_INFO("sc.orcus.style", "no fill style");
         return;
     }
 
-    if (maPattern.equalsIgnoreAsciiCase("solid"))
+    if (mePattern == orcus::spreadsheet::fill_pattern_t::solid)
         rSet.Put(SvxBrushItem(maFgColor, ATTR_BACKGROUND));
 }
 
@@ -1575,10 +1722,9 @@ void ScOrcusStyles::set_fill_count(size_t /*n*/)
     // needed at all?
 }
 
-void ScOrcusStyles::set_fill_pattern_type(const char* s, size_t n)
+void ScOrcusStyles::set_fill_pattern_type(orcus::spreadsheet::fill_pattern_t fp)
 {
-    maCurrentFill.maPattern = OUString(s, n, RTL_TEXTENCODING_UTF8);
-    maCurrentFill.mbHasFillAttr = true;
+    maCurrentFill.mePattern = fp;
 }
 
 void ScOrcusStyles::set_fill_fg_color(
@@ -1962,12 +2108,12 @@ ScOrcusAutoFilter::~ScOrcusAutoFilter()
 {
 }
 
-void ScOrcusAutoFilter::set_range(const char* p_ref, size_t n_ref)
+void ScOrcusAutoFilter::set_range(const orcus::spreadsheet::range_t& range)
 {
-    OUString aRange(p_ref, n_ref, RTL_TEXTENCODING_UTF8);
-    SAL_INFO("sc.orcus.autofilter", "set_range: " << aRange);
-
-    maRange.Parse(aRange);
+    maRange.aStart.SetRow(range.first.row);
+    maRange.aStart.SetCol(range.first.column);
+    maRange.aEnd.SetRow(range.last.row);
+    maRange.aEnd.SetCol(range.last.column);
 }
 
 void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t col)
