@@ -387,6 +387,10 @@ void OOXMLFastContextHandler::endCharacterGroup()
     }
 }
 
+void OOXMLFastContextHandler::pushBiDiEmbedLevel() {}
+
+void OOXMLFastContextHandler::popBiDiEmbedLevel() {}
+
 void OOXMLFastContextHandler::startParagraphGroup()
 {
     if (isForwardEvents())
@@ -1276,6 +1280,20 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
         setValue(pValue);
     }
 }
+
+// ECMA-376-1:2016 17.3.2.8; https://www.unicode.org/reports/tr9/#Explicit_Directional_Embeddings
+void OOXMLFastContextHandlerValue::pushBiDiEmbedLevel()
+{
+    const bool bRtl
+        = mpValue.get() && mpValue.get()->getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
+    OOXMLFactory::characters(this, OUString(sal_Unicode(bRtl ? 0x202B : 0x202A))); // RLE / LRE
+}
+
+void OOXMLFastContextHandlerValue::popBiDiEmbedLevel()
+{
+    OOXMLFactory::characters(this, OUString(sal_Unicode(0x202C))); // PDF (POP DIRECTIONAL FORMATTING)
+}
+
 /*
   class OOXMLFastContextHandlerTable
 */
