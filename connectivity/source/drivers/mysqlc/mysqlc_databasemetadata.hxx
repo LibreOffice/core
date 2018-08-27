@@ -39,7 +39,6 @@ class ODatabaseMetaData final : public ODatabaseMetaData_BASE
 {
     OConnection& m_rConnection;
     MYSQL* m_pMySql;
-    rtl::OUString identifier_quote_string;
 
 public:
     const OConnection& getOwnConnection() const { return m_rConnection; }
