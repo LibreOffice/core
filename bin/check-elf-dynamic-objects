@@ -127,6 +127,11 @@ local file="$1"
         */libvclplug_kde4lo.so|*/libkde4be1lo.so)
             whitelist="${whitelist} ${x11whitelist} ${kde4whitelist}"
         ;;
+        */libvclplug_kde5lo.so|*/libkde5be1lo.so)
+            if [ "$ENABLE_KDE5" = TRUE ]; then
+                whitelist="${whitelist} ${qt5whitelist} ${kf5whitelist} libxcb.so.1"
+            fi
+        ;;
         */libvclplug_gtklo.so|*/libqstart_gtklo.so|*/updater)
             whitelist="${whitelist} ${x11whitelist} ${gtk2whitelist}"
         ;;
