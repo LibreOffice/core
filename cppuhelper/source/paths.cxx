@@ -64,7 +64,7 @@ rtl::OUString cppu::getUnoIniUri() {
     // Wouldn't it be lovely to avoid this ugly hard-coding.
     // The problem is that the 'create_bootstrap_macro_expander_factory()'
     // required for bootstrapping services, calls cppu::get_unorc directly
-    // instead of re-using the BoostrapHandle from:
+    // instead of re-using the BootstrapHandle from:
     //     defaultBootstrap_InitialComponentContext
     // and since rtlBootstrapHandle is not ref-counted doing anything
     // clean here is hardish.

@@ -174,8 +174,8 @@
 #define STR_TITLE_USERDATALOCKED                            NC_("STR_TITLE_USERDATALOCKED", "%PRODUCTNAME %PRODUCTVERSION")
 #define STR_ERR_PRINTDISABLED                               NC_("STR_ERR_PRINTDISABLED", "Printing is disabled. No documents can be printed.")
 #define STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE                NC_("STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE", "The path manager is not available.\n")
-#define STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE                 NC_("STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE", "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n")
-#define STR_BOOSTRAP_ERR_NOACCESSRIGHTS                     NC_("STR_BOOSTRAP_ERR_NOACCESSRIGHTS", "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n")
+#define STR_BOOTSTRAP_ERR_NOTENOUGHDISKSPACE                 NC_("STR_BOOTSTRAP_ERR_NOTENOUGHDISKSPACE", "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n")
+#define STR_BOOTSTRAP_ERR_NOACCESSRIGHTS                     NC_("STR_BOOTSTRAP_ERR_NOACCESSRIGHTS", "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n")
 
 #define RID_STR_UNOPKG_ACCEPT_LIC_1                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_1", "Extension Software License Agreement of $NAME:")
 #define RID_STR_UNOPKG_ACCEPT_LIC_2                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_2", "Read the complete License Agreement displayed above. " \
