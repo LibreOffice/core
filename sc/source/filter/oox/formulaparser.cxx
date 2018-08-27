@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <oox/core/filterbase.hxx>

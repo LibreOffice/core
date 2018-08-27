@@ -23,17 +23,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include "ftools.hxx"
-#include <scdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XMultiPropertySet; } } } }
 
 namespace comphelper { class IDocPasswordVerifier; }
 

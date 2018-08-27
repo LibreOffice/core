@@ -31,6 +31,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
+#include <tools/stream.hxx>
 
 #include "xlstream.hxx"
 #include "xestring.hxx"

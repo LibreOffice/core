@@ -23,8 +23,6 @@
 #include "condformatbuffer.hxx"
 #include "excelhandlers.hxx"
 
-class IconSetRule;
-
 namespace oox {
 namespace xls {
 

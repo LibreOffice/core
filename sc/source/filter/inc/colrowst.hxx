@@ -22,7 +22,8 @@
 
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>
-#include <o3tl/typed_flags_set.hxx>
+
+namespace o3tl { template <typename T> struct typed_flags; }
 
 enum class ExcColRowFlags : sal_uInt8 {
     NONE         = 0x00,
