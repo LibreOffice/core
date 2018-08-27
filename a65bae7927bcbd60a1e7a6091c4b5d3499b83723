@@ -34,6 +34,24 @@
       "revId": "a65bae7927bcbd60a1e7a6091c4b5d3499b83723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c3efb485",
+        "filename": "sysui/desktop/apparmor/program.soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001796
+      },
+      "writtenOn": "2018-08-27T14:07:20Z",
+      "side": 1,
+      "message": "Ping Rene. Should I write child profile for rm process?",
+      "parentUuid": "dfeb2761_d9720e12",
+      "revId": "a65bae7927bcbd60a1e7a6091c4b5d3499b83723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
