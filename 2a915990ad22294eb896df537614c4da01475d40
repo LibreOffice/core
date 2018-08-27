@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_dd2788b6",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-27T11:18:31Z",
+      "side": 1,
+      "message": "I think you meant top here...",
+      "range": {
+        "startLine": 1390,
+        "startChar": 87,
+        "endLine": 1390,
+        "endChar": 95
+      },
+      "revId": "2a915990ad22294eb896df537614c4da01475d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_bd2cc499",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-27T11:18:31Z",
+      "side": 1,
+      "message": "for consistency and simplicity, make this like bool bPrevParaAutoBefore \u003d itPrevParaAutoBefore !\u003d aPrevProperties.end();\n\nand since they don\u0027t change, make them both const?",
+      "range": {
+        "startLine": 1393,
+        "startChar": 20,
+        "endLine": 1393,
+        "endChar": 55
+      },
+      "revId": "2a915990ad22294eb896df537614c4da01475d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
