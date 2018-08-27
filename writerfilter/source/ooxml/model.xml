@@ -13939,10 +13939,25 @@
           <element name="sdt">
             <ref name="CT_SdtRun"/>
           </element>
+          <element name="dir">
+            <ref name="CT_DirContentRun"/>
+          </element>
           <element name="r">
             <ref name="CT_R"/>
           </element>
           <ref name="EG_RunLevelElts"/>
+        </choice>
+      </define>
+      <define name="CT_DirContentRun">
+        <ref name="EG_PContent"/>
+        <attribute name="val">
+          <ref name="ST_Direction"/>
+        </attribute>
+      </define>
+      <define name="ST_Direction">
+        <choice>
+          <value>ltr</value>
+          <value>rtl</value>
         </choice>
       </define>
       <define name="CT_SdtContentRun">
@@ -18127,6 +18142,15 @@
     </resource>
     <resource name="CT_SdtEndPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtEndPr_rPr"/>
+    </resource>
+    <resource name="CT_DirContentRun" resource="Value">
+      <attribute name="val" tokenid="ooxml:CT_DirContentRun_val" action="setValue"/>
+      <action name="start" action="pushBiDiEmbedLevel"/>
+      <action name="end" action="popBiDiEmbedLevel"/>
+    </resource>
+    <resource name="ST_Direction" resource="List">
+      <value tokenid="ooxml:Value_ST_Direction_ltr">ltr</value>
+      <value tokenid="ooxml:Value_ST_Direction_rtl">rtl</value>
     </resource>
     <resource name="CT_SdtContentRun" resource="Stream"/>
     <resource name="CT_SdtContentBlock" resource="Stream"/>
