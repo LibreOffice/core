@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_9db580f1",
+        "filename": "include/com/sun/star/uno/Any.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-27T12:24:49Z",
+      "side": 1,
+      "message": "that looks wrong; internal code doing\n\n  p \u003d new Any\n\nwill now call ::operator new, while external code receiving p and doing\n\n  delete p\n\nwill call rtl_freeMemory",
+      "revId": "e5b2138dcb2a7f71f806e9e801ec82835bbb63c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
