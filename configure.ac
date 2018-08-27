@@ -8316,7 +8316,7 @@ AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
 
 ENABLE_MARIADBC=TRUE
-if test "$_os" = "Android"; then
+if test "$_os" = "Android" -o "$_os" = "iOS"; then
     ENABLE_MARIADBC=
 fi
 MARIADBC_MAJOR=1
