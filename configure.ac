@@ -6098,7 +6098,7 @@ dnl ===================================================================
 dnl Identify the C++ library
 dnl ===================================================================
 
-AC_MSG_CHECKING([What the C++ library is])
+AC_MSG_CHECKING([what the C++ library is])
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
