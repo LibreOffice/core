@@ -61,8 +61,8 @@ class SC_DLLPUBLIC ScChartArray             // only parameter-struct
     ScChartPositioner aPositioner;
 
 private:
-    ScMemChart* CreateMemChartSingle();
-    ScMemChart* CreateMemChartMulti();
+    std::unique_ptr<ScMemChart> CreateMemChartSingle();
+    std::unique_ptr<ScMemChart> CreateMemChartMulti();
 public:
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList );
 
@@ -73,7 +73,7 @@ public:
     bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
     bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
 
-    ScMemChart* CreateMemChart();
+    std::unique_ptr<ScMemChart> CreateMemChart();
 };
 
 #endif

@@ -60,7 +60,7 @@ ScChartArray::ScChartArray(
     pDocument( pDoc ),
     aPositioner(pDoc, rRangeList) {}
 
-ScMemChart* ScChartArray::CreateMemChart()
+std::unique_ptr<ScMemChart> ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());
     size_t nCount = aRangeListRef->size();
@@ -112,7 +112,7 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
 
 }
 
-ScMemChart* ScChartArray::CreateMemChartSingle()
+std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
 {
     SCSIZE nCol;
     SCSIZE nRow;
@@ -207,7 +207,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     }
 
     //  Data
-    ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
+    std::unique_ptr<ScMemChart> pMemChart(new ScMemChart( nColCount, nRowCount ));
 
     if ( bValidData )
     {
@@ -275,7 +275,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     return pMemChart;
 }
 
-ScMemChart* ScChartArray::CreateMemChartMulti()
+std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
 {
     SCSIZE nColCount = GetPositionMap()->GetColCount();
     SCSIZE nRowCount = GetPositionMap()->GetRowCount();
@@ -300,7 +300,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     }
 
     //  Data
-    ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
+    std::unique_ptr<ScMemChart> pMemChart(new ScMemChart( nColCount, nRowCount ));
 
     SCSIZE nCol = 0;
     SCSIZE nRow = 0;
