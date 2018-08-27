@@ -21,7 +21,7 @@ LibreOfficeKitInit.h for you.
 functionality as in LibreOfficeKit.h.)
 
 An example program can be seen on:
-https://github.com/ojwb/lloconv
+https://gitlab.com/ojwb/lloconv
 
 Tiled Rendering
 ---------------
