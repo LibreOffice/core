@@ -446,9 +446,9 @@ void initDataRows(
 
 }
 
-ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
+std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
 {
-    ScSortInfoArray* pArray = nullptr;
+    std::unique_ptr<ScSortInfoArray> pArray;
 
     if (rParam.mbByRow)
     {
@@ -458,7 +458,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
         SCCOL nCol1 = rParam.maSortRange.aStart.Col();
         SCCOL nCol2 = rParam.maSortRange.aEnd.Col();
 
-        pArray = new ScSortInfoArray(0, nRow1, nRow2);
+        pArray.reset(new ScSortInfoArray(0, nRow1, nRow2));
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
         pArray->SetUpdateRefs(rParam.mbUpdateRefs);
 
@@ -471,7 +471,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
         SCCOLROW nCol1 = rParam.maSortRange.aStart.Col();
         SCCOLROW nCol2 = rParam.maSortRange.aEnd.Col();
 
-        pArray = new ScSortInfoArray(0, nCol1, nCol2);
+        pArray.reset(new ScSortInfoArray(0, nCol1, nCol2));
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
         pArray->SetUpdateRefs(rParam.mbUpdateRefs);
     }
@@ -479,14 +479,14 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
     return pArray;
 }
 
-ScSortInfoArray* ScTable::CreateSortInfoArray(
+std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray(
     const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
     bool bKeepQuery, bool bUpdateRefs )
 {
     sal_uInt16 nUsedSorts = 1;
     while ( nUsedSorts < rSortParam.GetSortKeyCount() && rSortParam.maKeyState[nUsedSorts].bDoSort )
         nUsedSorts++;
-    ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
+    std::unique_ptr<ScSortInfoArray> pArray(new ScSortInfoArray( nUsedSorts, nInd1, nInd2 ));
     pArray->SetKeepQuery(bKeepQuery);
     pArray->SetUpdateRefs(bUpdateRefs);
 

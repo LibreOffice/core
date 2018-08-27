@@ -1153,8 +1153,8 @@ private:
         ScRefCellValue& rCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
-    ScSortInfoArray* CreateSortInfoArray( const sc::ReorderParam& rParam );
-    ScSortInfoArray* CreateSortInfoArray(
+    std::unique_ptr<ScSortInfoArray> CreateSortInfoArray( const sc::ReorderParam& rParam );
+    std::unique_ptr<ScSortInfoArray> CreateSortInfoArray(
         const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
         bool bKeepQuery, bool bUpdateRefs );
     void        QuickSort( ScSortInfoArray*, SCCOLROW nLo, SCCOLROW nHi);
