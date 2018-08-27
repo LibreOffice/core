@@ -616,6 +616,7 @@ struct VbaFormatInfo
     const char* mpOOoFormat;     // if meType = VbaFormatType::UserDefined
 };
 
+#if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo pFormatInfoTable[] =
 {
     { VbaFormatType::Offset,      OUStringLiteral("Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
@@ -631,7 +632,6 @@ const VbaFormatInfo pFormatInfoTable[] =
     { VbaFormatType::Null,        OUStringLiteral(""),            NF_INDEX_TABLE_ENTRIES, nullptr }
 };
 
-#if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
 {
     const VbaFormatInfo* pInfo = pFormatInfoTable;
