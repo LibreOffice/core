@@ -2995,7 +2995,7 @@ void SAL_CALL ScCellRangesBase::incrementIndent()
 
 // XChartData
 
-ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
+std::unique_ptr<ScMemChart> ScCellRangesBase::CreateMemChart_Impl() const
 {
     if ( pDocShell && !aRanges.empty() )
     {

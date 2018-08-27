@@ -202,7 +202,7 @@ private:
     void            PaintGridRanges_Impl();
     ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
     void            ForceChartListener_Impl();
-    ScMemChart*     CreateMemChart_Impl() const;
+    std::unique_ptr<ScMemChart> CreateMemChart_Impl() const;
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
