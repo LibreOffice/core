@@ -169,6 +169,7 @@ tools::Rectangle LayoutPanels (
         nTotalPreferredHeight += rItem.maLayoutSize.Preferred;
     }
 
+
     if (nTotalMinimumHeight > nAvailableHeight
         && ! bShowVerticalScrollBar)
     {
