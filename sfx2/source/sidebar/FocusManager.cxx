@@ -265,6 +265,9 @@ void FocusManager::FocusPanel (
 
 void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 {
+    if (!maPanels[nPanelIndex]->IsExpanded())
+        maPanels[nPanelIndex]->SetExpanded(true);
+
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
     if (pWindow)
     {
