@@ -72,7 +72,7 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
 
     bool bOK = false;
 
-    ControlDrawParameters aParameters{ pCairoContext, ePart, eState, ButtonValue::DontKnow };
+    ControlDrawParameters aParameters{ pCairoContext, ePart, eState };
 
     switch (eType)
     {
@@ -134,8 +134,7 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                 ControlPart downBtnPart = pSpinVal->mnLowerPart;
                 ControlState downBtnState = pSpinVal->mnLowerState;
                 {
-                    ControlDrawParameters aParametersUp{ pCairoContext, upBtnPart, upBtnState,
-                                                         ButtonValue::DontKnow };
+                    ControlDrawParameters aParametersUp{ pCairoContext, upBtnPart, upBtnState };
                     cairo_save(pCairoContext);
                     cairo_translate(pCairoContext,
                                     pSpinVal->maUpperRect.Left() - rControlRegion.Left(),
@@ -148,8 +147,8 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
 
                 if (bOK)
                 {
-                    ControlDrawParameters aParametersDown{ pCairoContext, downBtnPart, downBtnState,
-                                                           ButtonValue::DontKnow };
+                    ControlDrawParameters aParametersDown{ pCairoContext, downBtnPart,
+                                                           downBtnState };
                     cairo_save(pCairoContext);
                     cairo_translate(pCairoContext,
                                     pSpinVal->maLowerRect.Left() - rControlRegion.Left(),
@@ -207,8 +206,7 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                 const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
 
                 ControlDrawParameters aParametersButton{ pCairoContext, ControlPart::Button,
-                                                         eState | pSliderValue->mnThumbState,
-                                                         ButtonValue::DontKnow };
+                                                         eState | pSliderValue->mnThumbState };
                 cairo_save(pCairoContext);
                 cairo_translate(pCairoContext,
                                 pSliderValue->maThumbRect.Left() - rControlRegion.Left(),
