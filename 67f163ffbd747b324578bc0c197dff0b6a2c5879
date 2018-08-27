@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e24bc984",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this adds +1 here. Could you elaborate?\nIt looks wrong to me, because the date serial number stored is the offset in days since the null date, so adding +1 yields a wrong date.",
+      "range": {
+        "startLine": 24,
+        "startChar": 77,
+        "endLine": 24,
+        "endChar": 81
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_427395e8",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "The standard format here is a constant value, move the call outside of the loop as well.\nBtw, the return type is sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 744,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 100
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_824abd7d",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 771,
+        "startChar": 16,
+        "endLine": 771,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_625fb941",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 795,
+        "startChar": 16,
+        "endLine": 795,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_425cb54a",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 855,
+        "startChar": 16,
+        "endLine": 855,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_0256ad2a",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 878,
+        "startChar": 16,
+        "endLine": 878,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_e230690a",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 981,
+        "startChar": 16,
+        "endLine": 981,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c23565f9",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 1037,
+        "startChar": 16,
+        "endLine": 1037,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a23a61e4",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-27T08:28:08Z",
+      "side": 1,
+      "message": "sal_uInt32 instead of sal_uLong.",
+      "range": {
+        "startLine": 1096,
+        "startChar": 16,
+        "endLine": 1096,
+        "endChar": 25
+      },
+      "revId": "67f163ffbd747b324578bc0c197dff0b6a2c5879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
