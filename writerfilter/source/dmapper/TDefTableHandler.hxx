@@ -64,7 +64,7 @@ public:
     TDefTableHandler();
     virtual ~TDefTableHandler() override;
 
-    void fillCellProperties( size_t nCell, const ::tools::SvRef< TablePropertyMap >& pCellProperties) const;
+    void fillCellProperties( const ::tools::SvRef< TablePropertyMap >& pCellProperties) const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);

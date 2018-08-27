@@ -243,7 +243,7 @@ namespace dmapper {
                     if (m_pCurrentInteropGrabBag)
                         m_pCurrentInteropGrabBag->push_back(pTDefTableHandler->getInteropGrabBag());
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
-                    pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
+                    pTDefTableHandler->fillCellProperties( pCellPropMap );
                     cellProps( pCellPropMap );
                 }
             }

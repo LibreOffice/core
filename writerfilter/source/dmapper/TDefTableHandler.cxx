@@ -413,21 +413,20 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
-void TDefTableHandler::fillCellProperties(
-            size_t nCell, const ::tools::SvRef< TablePropertyMap >& pCellProperties ) const
+void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMap >& pCellProperties ) const
 {
-    if( m_aTopBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[nCell] ) );
-    if( m_aLeftBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_LEFT_BORDER, uno::makeAny( m_aLeftBorderLines[nCell] ) );
-    if( m_aBottomBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_BOTTOM_BORDER, uno::makeAny( m_aBottomBorderLines[nCell] ) );
-    if( m_aRightBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_RIGHT_BORDER, uno::makeAny( m_aRightBorderLines[nCell] ) );
-    if( m_aInsideHBorderLines.size() > nCell )
-        pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, uno::makeAny( m_aInsideHBorderLines[nCell] ) );
-    if( m_aInsideVBorderLines.size() > nCell )
-        pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
+    if( m_aTopBorderLines.size() )
+        pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[0] ) );
+    if( m_aLeftBorderLines.size() )
+        pCellProperties->Insert( PROP_LEFT_BORDER, uno::makeAny( m_aLeftBorderLines[0] ) );
+    if( m_aBottomBorderLines.size() )
+        pCellProperties->Insert( PROP_BOTTOM_BORDER, uno::makeAny( m_aBottomBorderLines[0] ) );
+    if( m_aRightBorderLines.size() )
+        pCellProperties->Insert( PROP_RIGHT_BORDER, uno::makeAny( m_aRightBorderLines[0] ) );
+    if( m_aInsideHBorderLines.size() )
+        pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, uno::makeAny( m_aInsideHBorderLines[0] ) );
+    if( m_aInsideVBorderLines.size() )
+        pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::makeAny( m_aInsideVBorderLines[0] ) );
 }
 
 
