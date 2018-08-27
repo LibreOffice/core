@@ -66,6 +66,7 @@ OConnection::OConnection(MysqlCDriver& _rDriver)
     : OMetaConnection_BASE(m_aMutex)
     , m_xMetaData(nullptr)
     , m_xDriver(&_rDriver)
+    , m_mysql{ 0 }
 {
 }
 
