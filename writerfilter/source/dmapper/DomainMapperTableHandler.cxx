@@ -669,6 +669,10 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             //aCellIterator points to a PropertyMapPtr;
             if( *aCellIterator )
             {
+                // remove directly applied insideV/H borders since they are meaningless without a context (tdf#82177)
+                (*aCellIterator)->Erase(META_PROP_VERTICAL_BORDER);
+                (*aCellIterator)->Erase(META_PROP_HORIZONTAL_BORDER);
+
                 pAllCellProps->InsertProps(rInfo.pTableDefaults);
 
                 sal_Int32 nCellStyleMask = 0;
