@@ -201,180 +201,180 @@ public:
 
 class SW_DLLPUBLIC SwModuleOptions
 {
-    SwRevisionConfig                aRevisionConfig;
-    SwInsertConfig                  aInsertConfig;
-    SwInsertConfig                  aWebInsertConfig;
+    SwRevisionConfig                m_aRevisionConfig;
+    SwInsertConfig                  m_aInsertConfig;
+    SwInsertConfig                  m_aWebInsertConfig;
 
-    SwTableConfig                   aTableConfig;
-    SwTableConfig                   aWebTableConfig;
+    SwTableConfig                   m_aTableConfig;
+    SwTableConfig                   m_aWebTableConfig;
 
-    SwMiscConfig                    aMiscConfig;
+    SwMiscConfig                    m_aMiscConfig;
 
-    SwCompareConfig                 aCompareConfig;
+    SwCompareConfig                 m_aCompareConfig;
 
     //fiscus: don't show tips of text fields - it's not part of the configuration!
-    bool        bHideFieldTips : 1;
+    bool        m_bHideFieldTips : 1;
 
 public:
     SwModuleOptions();
 
-    TableChgMode  GetTableMode() const { return aTableConfig.eTableChgMode;}
-    void        SetTableMode( TableChgMode  eSet ) { aTableConfig.eTableChgMode = eSet;
-                                                aTableConfig.SetModified();}
+    TableChgMode  GetTableMode() const { return m_aTableConfig.eTableChgMode;}
+    void        SetTableMode( TableChgMode  eSet ) { m_aTableConfig.eTableChgMode = eSet;
+                                                m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableHMove() const { return aTableConfig.nTableHMove;}
-    void        SetTableHMove( sal_uInt16 nSet ) {    aTableConfig.nTableHMove = nSet;
-                                                aTableConfig.SetModified();}
+    sal_uInt16      GetTableHMove() const { return m_aTableConfig.nTableHMove;}
+    void        SetTableHMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableHMove = nSet;
+                                                m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableVMove() const { return aTableConfig.nTableVMove;}
-    void        SetTableVMove( sal_uInt16 nSet ) {    aTableConfig.nTableVMove = nSet;
-                                                aTableConfig.SetModified();}
+    sal_uInt16      GetTableVMove() const { return m_aTableConfig.nTableVMove;}
+    void        SetTableVMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableVMove = nSet;
+                                                m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableHInsert() const {return aTableConfig.nTableHInsert;}
-    void        SetTableHInsert( sal_uInt16 nSet ) {  aTableConfig.nTableHInsert = nSet;
-                                                aTableConfig.SetModified();}
+    sal_uInt16      GetTableHInsert() const {return m_aTableConfig.nTableHInsert;}
+    void        SetTableHInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableHInsert = nSet;
+                                                m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableVInsert() const {return aTableConfig.nTableVInsert;}
-    void        SetTableVInsert( sal_uInt16 nSet ) {  aTableConfig.nTableVInsert = nSet;
-                                                aTableConfig.SetModified();}
+    sal_uInt16      GetTableVInsert() const {return m_aTableConfig.nTableVInsert;}
+    void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableVInsert = nSet;
+                                                m_aTableConfig.SetModified();}
 
-    const AuthorCharAttr    &GetInsertAuthorAttr() const { return aRevisionConfig.aInsertAttr; }
-    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  aRevisionConfig.aInsertAttr = rAttr;
-                                                                     aRevisionConfig.SetModified();}
+    const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.aInsertAttr; }
+    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.aInsertAttr = rAttr;
+                                                                     m_aRevisionConfig.SetModified();}
 
-    const AuthorCharAttr    &GetDeletedAuthorAttr() const { return aRevisionConfig.aDeletedAttr; }
-    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { aRevisionConfig.aDeletedAttr = rAttr;
-                                                                      aRevisionConfig.SetModified();}
+    const AuthorCharAttr    &GetDeletedAuthorAttr() const { return m_aRevisionConfig.aDeletedAttr; }
+    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { m_aRevisionConfig.aDeletedAttr = rAttr;
+                                                                      m_aRevisionConfig.SetModified();}
 
-    const AuthorCharAttr    &GetFormatAuthorAttr() const { return aRevisionConfig.aFormatAttr; }
-    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  aRevisionConfig.aFormatAttr = rAttr;
-                                                                      aRevisionConfig.SetModified();}
+    const AuthorCharAttr    &GetFormatAuthorAttr() const { return m_aRevisionConfig.aFormatAttr; }
+    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.aFormatAttr = rAttr;
+                                                                      m_aRevisionConfig.SetModified();}
 
-    sal_uInt16          GetMarkAlignMode()  const               { return aRevisionConfig.nMarkAlign; }
-    void            SetMarkAlignMode(sal_uInt16 nMode)          { aRevisionConfig.nMarkAlign = nMode;
-                                                              aRevisionConfig.SetModified();}
+    sal_uInt16          GetMarkAlignMode()  const               { return m_aRevisionConfig.nMarkAlign; }
+    void            SetMarkAlignMode(sal_uInt16 nMode)          { m_aRevisionConfig.nMarkAlign = nMode;
+                                                              m_aRevisionConfig.SetModified();}
 
-    const Color&    GetMarkAlignColor() const               { return aRevisionConfig.aMarkColor; }
-    void            SetMarkAlignColor(const Color &rColor)  { aRevisionConfig.aMarkColor = rColor;
-                                                              aRevisionConfig.SetModified();}
+    const Color&    GetMarkAlignColor() const               { return m_aRevisionConfig.aMarkColor; }
+    void            SetMarkAlignColor(const Color &rColor)  { m_aRevisionConfig.aMarkColor = rColor;
+                                                              m_aRevisionConfig.SetModified();}
 
     bool        IsInsWithCaption(bool bHTML) const
-                        { return !bHTML && aInsertConfig.m_bInsWithCaption; }
+                        { return !bHTML && m_aInsertConfig.m_bInsWithCaption; }
     void        SetInsWithCaption( bool bHTML, bool b )
                     {   if(!bHTML)
-                            aInsertConfig.m_bInsWithCaption = b;
-                        aInsertConfig.SetModified();}
+                            m_aInsertConfig.m_bInsWithCaption = b;
+                        m_aInsertConfig.SetModified();}
 
-    bool    IsCaptionOrderNumberingFirst() const { return aInsertConfig.m_bCaptionOrderNumberingFirst; }
+    bool    IsCaptionOrderNumberingFirst() const { return m_aInsertConfig.m_bCaptionOrderNumberingFirst; }
     void        SetCaptionOrderNumberingFirst( bool bSet )
                 {
-                    if(aInsertConfig.m_bCaptionOrderNumberingFirst != bSet)
+                    if(m_aInsertConfig.m_bCaptionOrderNumberingFirst != bSet)
                     {
-                        aInsertConfig.m_bCaptionOrderNumberingFirst = bSet;
-                        aInsertConfig.SetModified();
+                        m_aInsertConfig.m_bCaptionOrderNumberingFirst = bSet;
+                        m_aInsertConfig.SetModified();
                     }
                 }
 
     bool        IsInsTableFormatNum(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTableFormatNum : aTableConfig.bInsTableFormatNum; }
+                    { return bHTML ? m_aWebTableConfig.bInsTableFormatNum : m_aTableConfig.bInsTableFormatNum; }
     void        SetInsTableFormatNum( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTableFormatNum = b) : (aTableConfig.bInsTableFormatNum = b);
-                      bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
+                    { bHTML ? (m_aWebTableConfig.bInsTableFormatNum = b) : (m_aTableConfig.bInsTableFormatNum = b);
+                      bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
 
     bool        IsInsTableChangeNumFormat(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTableChangeNumFormat : aTableConfig.bInsTableChangeNumFormat; }
+                    { return bHTML ? m_aWebTableConfig.bInsTableChangeNumFormat : m_aTableConfig.bInsTableChangeNumFormat; }
     void        SetInsTableChangeNumFormat( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTableChangeNumFormat = b) : (aTableConfig.bInsTableChangeNumFormat = b);
-                      bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
+                    { bHTML ? (m_aWebTableConfig.bInsTableChangeNumFormat = b) : (m_aTableConfig.bInsTableChangeNumFormat = b);
+                      bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
 
     bool        IsInsTableAlignNum(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTableAlignNum : aTableConfig.bInsTableAlignNum; }
+                    { return bHTML ? m_aWebTableConfig.bInsTableAlignNum : m_aTableConfig.bInsTableAlignNum; }
     void        SetInsTableAlignNum( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTableAlignNum = b) : (aTableConfig.bInsTableAlignNum = b);
-                        bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
+                    { bHTML ? (m_aWebTableConfig.bInsTableAlignNum = b) : (m_aTableConfig.bInsTableAlignNum = b);
+                        bHTML ? m_aWebTableConfig.SetModified() : m_aTableConfig.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const
-                    { return bHTML ? aWebInsertConfig.m_aInsTableOpts : aInsertConfig.m_aInsTableOpts;}
+                    { return bHTML ? m_aWebInsertConfig.m_aInsTableOpts : m_aInsertConfig.m_aInsTableOpts;}
     void        SetInsTableFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
-                    bHTML ? (aWebInsertConfig.m_aInsTableOpts = rOpts) : (aInsertConfig.m_aInsTableOpts = rOpts);
-                    bHTML ? aWebInsertConfig.SetModified() : aInsertConfig.SetModified();}
+                    bHTML ? (m_aWebInsertConfig.m_aInsTableOpts = rOpts) : (m_aInsertConfig.m_aInsTableOpts = rOpts);
+                    bHTML ? m_aWebInsertConfig.SetModified() : m_aInsertConfig.SetModified();}
 
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
     bool        SetCapOption(bool bHTML, const InsCaptionOpt* pOpt);
 
-    bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.m_bGrfToGalleryAsLnk; }
-    void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.m_bGrfToGalleryAsLnk = b;
-                                                  aMiscConfig.SetModified();}
+    bool        IsGrfToGalleryAsLnk() const     { return m_aMiscConfig.m_bGrfToGalleryAsLnk; }
+    void        SetGrfToGalleryAsLnk( bool b )  { m_aMiscConfig.m_bGrfToGalleryAsLnk = b;
+                                                  m_aMiscConfig.SetModified();}
 
-    MailTextFormats GetMailingFormats() const               { return aMiscConfig.m_nMailingFormats;}
-    void           SetMailingFormats( MailTextFormats nSet ) { aMiscConfig.m_nMailingFormats = nSet;
-                                                            aMiscConfig.SetModified();}
+    MailTextFormats GetMailingFormats() const               { return m_aMiscConfig.m_nMailingFormats;}
+    void           SetMailingFormats( MailTextFormats nSet ) { m_aMiscConfig.m_nMailingFormats = nSet;
+                                                            m_aMiscConfig.SetModified();}
 
-    void        SetSinglePrintJob( bool b )     { aMiscConfig.m_bSinglePrintJob = b;
-                                                  aMiscConfig.SetModified();}
+    void        SetSinglePrintJob( bool b )     { m_aMiscConfig.m_bSinglePrintJob = b;
+                                                  m_aMiscConfig.SetModified();}
 
-    bool        IsNameFromColumn() const        { return aMiscConfig.m_bIsNameFromColumn; }
+    bool        IsNameFromColumn() const        { return m_aMiscConfig.m_bIsNameFromColumn; }
     void        SetIsNameFromColumn( bool bSet )
                         {
-                            aMiscConfig.SetModified();
-                            aMiscConfig.m_bIsNameFromColumn = bSet;
+                            m_aMiscConfig.SetModified();
+                            m_aMiscConfig.m_bIsNameFromColumn = bSet;
                         }
 
-    bool        IsAskForMailMerge() const       { return aMiscConfig.m_bAskForMailMergeInPrint;}
+    bool        IsAskForMailMerge() const       { return m_aMiscConfig.m_bAskForMailMergeInPrint;}
 
-    const OUString& GetNameFromColumn() const       { return aMiscConfig.m_sNameFromColumn; }
-    void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.m_sNameFromColumn = rSet;
-                                                                  aMiscConfig.SetModified();}
+    const OUString& GetNameFromColumn() const       { return m_aMiscConfig.m_sNameFromColumn; }
+    void        SetNameFromColumn( const OUString& rSet )       { m_aMiscConfig.m_sNameFromColumn = rSet;
+                                                                  m_aMiscConfig.SetModified();}
 
-    const OUString& GetMailingPath() const          { return aMiscConfig.m_sMailingPath; }
-    void        SetMailingPath(const OUString& sPath) { aMiscConfig.m_sMailingPath = sPath;
-                                                      aMiscConfig.SetModified();}
+    const OUString& GetMailingPath() const          { return m_aMiscConfig.m_sMailingPath; }
+    void        SetMailingPath(const OUString& sPath) { m_aMiscConfig.m_sMailingPath = sPath;
+                                                      m_aMiscConfig.SetModified();}
 
-    const OUString& GetWordDelimiter() const        { return aMiscConfig.m_sWordDelimiter; }
-    void        SetWordDelimiter(const OUString& sDelim)  { aMiscConfig.m_sWordDelimiter = sDelim;
-                                                          aMiscConfig.SetModified();}
+    const OUString& GetWordDelimiter() const        { return m_aMiscConfig.m_sWordDelimiter; }
+    void        SetWordDelimiter(const OUString& sDelim)  { m_aMiscConfig.m_sWordDelimiter = sDelim;
+                                                          m_aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
     static OUString ConvertWordDelimiter(const OUString& rDelim, bool bFromUI);
 
-    bool    IsShowIndexPreview() const {return  aMiscConfig.m_bShowIndexPreview;}
+    bool    IsShowIndexPreview() const {return  m_aMiscConfig.m_bShowIndexPreview;}
     void        SetShowIndexPreview(bool bSet)
-                    {aMiscConfig.m_bShowIndexPreview = bSet;
-                    aMiscConfig.SetModified();}
+                    {m_aMiscConfig.m_bShowIndexPreview = bSet;
+                    m_aMiscConfig.SetModified();}
 
     void        SetDefaultFontInCurrDocOnly(bool bSet)
                     {
-                        aMiscConfig.m_bDefaultFontsInCurrDocOnly = bSet;
-                        aMiscConfig.SetModified();
+                        m_aMiscConfig.m_bDefaultFontsInCurrDocOnly = bSet;
+                        m_aMiscConfig.SetModified();
                     }
 
-    bool    IsHideFieldTips() const {return bHideFieldTips;}
-    void        SetHideFieldTips(bool bSet) {bHideFieldTips = bSet;}
+    bool    IsHideFieldTips() const {return m_bHideFieldTips;}
+    void        SetHideFieldTips(bool bSet) {m_bHideFieldTips = bSet;}
 
-    SwCompareMode  GetCompareMode() const { return aCompareConfig.m_eCmpMode; }
-    void            SetCompareMode( SwCompareMode eMode ) { aCompareConfig.m_eCmpMode = eMode;
-                                                             aCompareConfig.SetModified(); }
+    SwCompareMode  GetCompareMode() const { return m_aCompareConfig.m_eCmpMode; }
+    void            SetCompareMode( SwCompareMode eMode ) { m_aCompareConfig.m_eCmpMode = eMode;
+                                                             m_aCompareConfig.SetModified(); }
 
-    bool    IsUseRsid() const { return aCompareConfig.m_bUseRsid; }
-    void        SetUseRsid( bool b ) { aCompareConfig.m_bUseRsid = b;
-                                                            aCompareConfig.SetModified(); }
+    bool    IsUseRsid() const { return m_aCompareConfig.m_bUseRsid; }
+    void        SetUseRsid( bool b ) { m_aCompareConfig.m_bUseRsid = b;
+                                                            m_aCompareConfig.SetModified(); }
 
-    bool    IsIgnorePieces() const { return aCompareConfig.m_bIgnorePieces; }
-    void        SetIgnorePieces( bool b ) { aCompareConfig.m_bIgnorePieces = b;
-                                                aCompareConfig.SetModified(); }
+    bool    IsIgnorePieces() const { return m_aCompareConfig.m_bIgnorePieces; }
+    void        SetIgnorePieces( bool b ) { m_aCompareConfig.m_bIgnorePieces = b;
+                                                m_aCompareConfig.SetModified(); }
 
-    sal_uInt16  GetPieceLen() const { return aCompareConfig.m_nPieceLen; }
-    void        SetPieceLen( sal_uInt16 nLen ) { aCompareConfig.m_nPieceLen = nLen;
-                                                 aCompareConfig.SetModified(); }
+    sal_uInt16  GetPieceLen() const { return m_aCompareConfig.m_nPieceLen; }
+    void        SetPieceLen( sal_uInt16 nLen ) { m_aCompareConfig.m_nPieceLen = nLen;
+                                                 m_aCompareConfig.SetModified(); }
 
     bool IsStoreRsid() const
     {
-        return aCompareConfig.m_bStoreRsid;
+        return m_aCompareConfig.m_bStoreRsid;
     }
     void SetStoreRsid(bool bStoreRsid)
     {
-        aCompareConfig.m_bStoreRsid = bStoreRsid;
-        aCompareConfig.SetModified();
+        m_aCompareConfig.m_bStoreRsid = bStoreRsid;
+        m_aCompareConfig.SetModified();
     }
 
 };
