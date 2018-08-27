@@ -52,12 +52,6 @@ en-US = "LanguageTool Open Source language checker"
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_LANGUAGETOOL]
 en-US = "LanguageTool Open Source language checker"
 
-[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MARIADBC]
-en-US = "MySQL Connector"
-
-[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MARIADBC]
-en-US = "MySQL Connector"
-
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL]
 en-US = "Script provider for BeanShell"
 

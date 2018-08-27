@@ -110,21 +110,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Extensions_MySQLConnector"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-mysql-connector"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-mysql-connector"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-linuxpatchrequires = ""
-copyright = "2018 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "MySQL Connector extension for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Extensions_Script_Provider_For_BS"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-beanshell-script-provider"
 solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"

@@ -8332,9 +8332,6 @@ AC_SUBST(MARIADBC_MINOR)
 AC_SUBST(MARIADBC_MICRO)
 
 if test "$ENABLE_MARIADBC" = "TRUE"; then
-
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MARIADBC"
-
     dnl ===================================================================
     dnl Check for system MariaDB
     dnl ===================================================================
