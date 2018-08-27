@@ -50,7 +50,8 @@ class DeckTitleBar;
 class FocusManager
 {
 public:
-    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor);
+    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor,
+                 const std::function<bool(const sal_Int32)> &rIsDeckOpenFunctor);
     ~FocusManager();
 
     /** Forget all panels and buttons.  Remove all window listeners.
@@ -63,6 +64,7 @@ public:
     */
     void GrabFocus();
     void GrabFocusPanel();
+    void GrabFocusButton(const sal_Int32 nIndex);
 
     void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
@@ -73,6 +75,7 @@ private:
     std::vector<VclPtr<Panel> > maPanels;
     std::vector<VclPtr<Button> > maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
+    const std::function<bool(const sal_Int32)> mbIsDeckOpenFunctor;
     bool mbObservingContentControlFocus;
     VclPtr<vcl::Window> mpFirstFocusedContentControl;
     VclPtr<vcl::Window> mpLastFocusedWindow;
