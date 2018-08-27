@@ -126,7 +126,7 @@ void ShadowPropertyPanel::Initialize()
     mpLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
     mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
     mpShadowDistance->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
-    mpShadowTransSlider->SetRange(Range(0,100));
+    mpShadowTransSlider->SetRange(Range(1,100));
     mpShadowTransSlider->SetUpdateMode(true);
     mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
     for(sal_uInt16 i = 0; i <= 20 ; i++)
@@ -293,11 +293,11 @@ void ShadowPropertyPanel::NotifyItemUpdate(
                 const SdrPercentItem* pTransparencyItem = dynamic_cast< const SdrPercentItem* >(pState);
                 if(pTransparencyItem)
                 {
-                    const sal_uInt16 nVal = pTransparencyItem->GetValue();
+                    sal_uInt16 nVal = pTransparencyItem->GetValue();
                     SetTransparencyValue(nVal);
                 }
                 else
-                    SetTransparencyValue(0);
+                    SetTransparencyValue(1);
             }
         }
         break;

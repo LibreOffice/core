@@ -563,6 +563,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
+    if (nSId == SID_ATTR_FILL_SHADOW) {
+        // TOSCA#24347
+        SfxItemSet totoSet( GetPool(), SDRATTR_SHADOWTRANSPARENCE, SDRATTR_SHADOWTRANSPARENCE);
+        totoSet.Put( SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, 1 ) );
+        mpDrawView->SetAttributes( totoSet );
+    }
+
     switch ( nSId )
     {
         case SID_OUTLINE_TEXT_AUTOFIT:
