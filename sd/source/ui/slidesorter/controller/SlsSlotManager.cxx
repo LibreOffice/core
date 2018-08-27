@@ -181,6 +181,17 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
         }
 
+        case SID_MASTER_SLIDES_PANEL:
+        {
+            // First make sure that the sidebar is visible
+            pShell->GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                "SdAllMasterPagesPanel",
+                pShell->GetViewFrame()->GetFrame().GetFrameInterface());
+            rRequest.Ignore ();
+            break;
+        }
+
         case SID_PRESENTATION_DLG:
             FuSlideShowDlg::Create (
                 pShell,
