@@ -247,11 +247,21 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         }
         break;
         case ControlType::ListNode:
-            break;
+        {
+            aParameters.eButtonValue = rValue.getTristateVal();
+            bOK = s_pWidgetImplementation->drawListNode(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::ListNet:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawListNet(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::ListHeader:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawListHeader(aParameters, nWidth, nHeight);
+        }
+        break;
     }
 
     basegfx::B2DRange aExtents(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.Right(),
