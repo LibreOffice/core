@@ -125,7 +125,7 @@ public:
 
     /** Show only the tab bar, not the deck.
     */
-    void RequestCloseDeck();
+    void RequestCloseDeck(bool bFocusMenuTab = false);
 
     /** Open the deck area and restore the parent window to its old width.
     */
@@ -134,6 +134,8 @@ public:
     /** Returns true when the given deck is the currently visible deck
      */
     bool IsDeckVisible(const OUString& rsDeckId);
+
+    bool IsDeckOpen(const sal_Int32 nIndex = -1);
 
     FocusManager& GetFocusManager() { return maFocusManager;}
 
