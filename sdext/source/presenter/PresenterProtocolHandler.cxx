@@ -27,14 +27,17 @@
 #include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+#include "PresenterSlideSorter.hxx"
 #include <com/sun/star/drawing/SlideSorter.hpp>
 #include <com/sun/star/drawing/framework/Configuration.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+#include <com/sun/star/awt/Key.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,6 +86,7 @@ namespace {
         explicit GotoNextEffectCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual void Execute() override;
+        virtual bool IsEnabled() const override;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -538,6 +542,18 @@ void GotoNextEffectCommand::Execute()
     mpPresenterController->GetSlideShowController()->gotoNextEffect();
 }
 
+bool GotoNextEffectCommand::IsEnabled() const
+{
+    if ( ! mpPresenterController.is())
+        return false;
+
+    if ( ! mpPresenterController->GetSlideShowController().is())
+        return false;
+
+   return ( mpPresenterController->GetSlideShowController()->getNextSlideIndex() < mpPresenterController->GetSlideShowController()->getSlideCount() );
+
+}
+
 //===== GotoNextSlide =========================================================
 
 GotoNextSlideCommand::GotoNextSlideCommand (
@@ -556,6 +572,7 @@ void GotoNextSlideCommand::Execute()
 
     mpPresenterController->GetSlideShowController()->gotoNextSlide();
 }
+
 
 //===== SwitchMonitorCommand ==============================================
 
