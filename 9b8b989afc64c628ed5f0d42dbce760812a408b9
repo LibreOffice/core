@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_622459c7",
+        "filename": "sd/IwyuFilter_sd.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T08:23:36Z",
+      "side": 1,
+      "message": "Nit: you probably mean \"typedefs can\u0027t be forward-declared\". The typedef is fine with an incomplete type.",
+      "revId": "9b8b989afc64c628ed5f0d42dbce760812a408b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
