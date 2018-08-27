@@ -783,7 +783,6 @@ void SidebarController::SwitchToDeck (
         nDeckX = 0;
     }
 
-
     // Activate the deck and the new set of panels.
     mpCurrentDeck->setPosSizePixel(
         nDeckX,
