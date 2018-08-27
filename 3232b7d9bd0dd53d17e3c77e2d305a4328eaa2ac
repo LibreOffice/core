@@ -22,6 +22,98 @@
       "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9dffc066",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T13:52:57Z",
+      "side": 1,
+      "message": "After you fix up the tokenizer, you should be able to say mpValue.get()-\u003egetInt() \u003d\u003d NS_ooxml::LN_Value_ST_Direction_rtl here. No expensive and error-prone string compare.",
+      "parentUuid": "dfeb2761_3de31408",
+      "range": {
+        "startLine": 1239,
+        "startChar": 4,
+        "endLine": 1239,
+        "endChar": 75
+      },
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3dcd545d",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 13957,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T13:52:57Z",
+      "side": 1,
+      "message": "Just val",
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9de6a0e8",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 13958,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T13:52:57Z",
+      "side": 1,
+      "message": "\u003cref name\u003d",
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_fdd6ccf1",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 13961,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T13:52:57Z",
+      "side": 1,
+      "message": "You need to add a matching \u003cresource name\u003d\"ST_Direction\" resource\u003d\"List\"\u003e.",
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_bd0a8487",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 18163,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-27T13:52:57Z",
+      "side": 1,
+      "message": "Just val.",
+      "revId": "3232b7d9bd0dd53d17e3c77e2d305a4328eaa2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
