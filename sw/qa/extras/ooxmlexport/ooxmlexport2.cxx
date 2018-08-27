@@ -345,17 +345,6 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 {
-    // Validation test: order of elements were wrong.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // Order was: insideH, end, insideV.
-    int nEnd = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "end");
-    int nInsideH = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "insideH");
-    int nInsideV = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "insideV");
-    CPPUNIT_ASSERT(nEnd < nInsideH);
-    CPPUNIT_ASSERT(nInsideH < nInsideV);
-
     // Make sure we write qFormat for well-known style names.
     assertXPath(parseExport("word/styles.xml"), "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
