@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <condformatbuffer.hxx>
+#include <formulaparser.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <rtl/ustrbuf.hxx>

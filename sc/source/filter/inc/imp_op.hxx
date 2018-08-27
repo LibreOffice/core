@@ -23,13 +23,6 @@
 #include <sal/types.h>
 #include "xiroot.hxx"
 #include "xistream.hxx"
-#include "xistyle.hxx"
-#include "flttypes.hxx"
-#include "root.hxx"
-#include "otlnbuff.hxx"
-#include "colrowst.hxx"
-#include "excdefs.hxx"
-#include <rtl/ref.hxx>
 
 #include <vector>
 #include <memory>
@@ -41,6 +34,8 @@ class ScFormulaCell;
 class ScDocument;
 
 class ExcelToSc;
+class XclImpOutlineBuffer;
+class XclImpColRowSettings;
 
 class ImportTyp
 {

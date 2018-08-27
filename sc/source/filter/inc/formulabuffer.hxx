@@ -10,16 +10,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_FORMULABUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_FORMULABUFFER_HXX
 
-#include <utility>
-#include <oox/helper/refmap.hxx>
-#include <oox/helper/refvector.hxx>
-#include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
 #include "workbookhelper.hxx"
-#include <map>
 #include <vector>
-#include "worksheethelper.hxx"
-#include "sheetdatabuffer.hxx"
 
 namespace oox { namespace xls {
 

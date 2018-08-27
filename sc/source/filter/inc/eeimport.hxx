@@ -20,10 +20,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EEIMPORT_HXX
 
 #include <memory>
-#include <global.hxx>
 #include <address.hxx>
 #include <filter.hxx>
-#include <scdllapi.h>
 #include <map>
 
 class ScDocument;

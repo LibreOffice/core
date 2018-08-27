@@ -83,6 +83,7 @@
 #include <xilink.hxx>
 #include <xiescher.hxx>
 #include <xipivot.hxx>
+#include <xistyle.hxx>
 
 #include <excform.hxx>
 #include <scextopt.hxx>

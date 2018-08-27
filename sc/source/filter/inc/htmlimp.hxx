@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLIMP_HXX
 
 #include "eeimport.hxx"
-#include "htmlpars.hxx"
 
 class ScHTMLImport : public ScEEImport
 {
