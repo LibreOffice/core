@@ -98,6 +98,7 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     : OResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OResultSet_BASE::rBHelper)
     , m_rConnection(rConn)
+    , m_aRow(nullptr)
     , m_pMysql(rConn.getMysqlConnection())
     , m_aStatement(static_cast<OWeakObject*>(pStmt))
     , m_xMetaData(nullptr)
