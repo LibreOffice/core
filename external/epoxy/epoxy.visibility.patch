@@ -1,0 +1,5 @@
+--- src/config.h	2018-08-28 13:19:40.699141662 +0100
++++ src/config.h	2018-08-28 13:21:51.942139881 +0100
+@@ -0,0 +1,2 @@
++#include <sal/types.h>
++#define EPOXY_PUBLIC SAL_DLLPUBLIC_EXPORT extern
