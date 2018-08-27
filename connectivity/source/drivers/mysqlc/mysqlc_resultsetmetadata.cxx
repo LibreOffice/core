@@ -63,7 +63,9 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     Reference<XResultSet> rs = stmt->executeQuery(sql.makeStringAndClear());
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
 
-    rs->next(); // fetch first and only row
+    if (!rs->next()) // fetch first and only row
+        return false;
+
     rtl::OUString sColName = xRow->getString(1); // first column is Collation name
 
     return !sColName.isEmpty() && !sColName.endsWith("_ci");
