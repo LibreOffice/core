@@ -1997,6 +1997,30 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
 }
 
 // MAILMERGE Add conditional to expand / collapse bookmarks
+DECLARE_ODFEXPORT_TEST(tdf101856_overlapped, "tdf101856_overlapped.odt")
+{
+    // get bookmark interface
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+
+    // check: we have 2 bookmarks
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkNonHidden"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHidden"));
+
+    // <text:bookmark-start text:name="BookmarkNonHidden"/>
+    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName("BookmarkNonHidden"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark1, UNO_NAME_BOOKMARK_HIDDEN));
+
+    // <text:bookmark-start text:name="BookmarkHidden"/>
+    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName("BookmarkHidden"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark2, UNO_NAME_BOOKMARK_HIDDEN));
+}
+
+// MAILMERGE Add conditional to expand / collapse bookmarks
 DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
 {
     // get bookmark interface

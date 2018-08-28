@@ -712,9 +712,9 @@ public:
     void AddCrossRefHeadingMapping(OUString const& rFrom, OUString const& rTo);
     void MapCrossRefHeadingFieldsHorribly();
 
-    void setBookmarkAttributes(bool hidden, OUString const& condition);
-    bool getBookmarkHidden();
-    const OUString& getBookmarkCondition();
+    void setBookmarkAttributes(OUString const& bookmark, bool hidden, OUString const& condition);
+    bool getBookmarkHidden(OUString const& bookmark) const;
+    const OUString& getBookmarkCondition(OUString const& bookmark) const;
 
 };
 

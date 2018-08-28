@@ -548,8 +548,8 @@ struct XMLTextImportHelper::Impl
     // Used for frame deduplication, the name of the last frame imported directly before the current one
     OUString msLastImportedFrameName;
 
-    bool m_bBookmarkHidden;
-    OUString m_sBookmarkCondition;
+    std::map< OUString, bool > m_bBookmarkHidden;
+    std::map< OUString, OUString > m_sBookmarkCondition;
 
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
@@ -596,7 +596,6 @@ struct XMLTextImportHelper::Impl
                 bool const bProgress, bool const bBlockMode,
                 bool const bOrganizerMode)
         :   m_xTextListsHelper( new XMLTextListsHelper() )
-        ,   m_bBookmarkHidden( false )
         // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
         ,   m_xServiceFactory( rModel, UNO_QUERY )
         ,   m_rSvXMLImport( rImport )
@@ -2952,20 +2951,20 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
     }
 }
 
-void XMLTextImportHelper::setBookmarkAttributes(bool hidden, OUString const& condition)
+void XMLTextImportHelper::setBookmarkAttributes(OUString const& bookmark, bool hidden, OUString const& condition)
 {
-    m_xImpl->m_bBookmarkHidden = hidden;
-    m_xImpl->m_sBookmarkCondition = condition;
+    m_xImpl->m_bBookmarkHidden[bookmark] = hidden;
+    m_xImpl->m_sBookmarkCondition[bookmark] = condition;
 }
 
-bool XMLTextImportHelper::getBookmarkHidden()
+bool XMLTextImportHelper::getBookmarkHidden(OUString const& bookmark) const
 {
-    return m_xImpl->m_bBookmarkHidden;
+    return m_xImpl->m_bBookmarkHidden[bookmark];
 }
 
-const OUString& XMLTextImportHelper::getBookmarkCondition()
+const OUString& XMLTextImportHelper::getBookmarkCondition(OUString const& bookmark) const
 {
-    return m_xImpl->m_sBookmarkCondition;
+    return m_xImpl->m_sBookmarkCondition[bookmark];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
