@@ -70,8 +70,8 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     m_aTimeout.tv_usec      = 0;
     m_nTimeoutMS            = 0;
 
-#ifndef IOS
     m_MainThread = osl::Thread::getCurrentIdentifier();
+#ifndef IOS
     CreateWakeupPipe(true);
 #endif
     if( s_pDefaultInstance == nullptr )
