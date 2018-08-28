@@ -1680,7 +1680,20 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 pNewRedl = nullptr;
             }
             else
+            {
+                if (pStt->nContent == 0)
+                {
+                    // tdf#54819 to keep the style of the paragraph
+                    // after the fully deleted paragraphs (normal behaviour
+                    // of editing without change tracking), we copy its style
+                    // to the first removed paragraph.
+                    SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
+                    SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
+                    if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
+                        pTextNode->CopyCollFormat( *pDelNode );
+                }
                 mpRedlineTable->Insert( pNewRedl );
+            }
         }
 
         if( bCompress )
