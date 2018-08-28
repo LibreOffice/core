@@ -71,6 +71,11 @@ bool MediaItem::PutValue( const css::uno::Any&, sal_uInt8 )
   return false;
 }
 
+AVMediaSetMask MediaItem::getMaskSet() const
+{
+    return AVMediaSetMask::NONE;
+}
+
 SfxPoolItem* MediaItem::CreateDefault()
 {
     return new MediaItem;
