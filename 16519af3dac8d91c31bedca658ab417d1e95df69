@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e05bc084",
+        "filename": "include/test/table/xcellcursor.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-28T16:43:38Z",
+      "side": 1,
+      "message": "This line should be changed to \n\nvirtual css::uno::Reference\u003ccss::uno::XInterface\u003e getXSpreadsheet() \u003d 0;",
+      "revId": "16519af3dac8d91c31bedca658ab417d1e95df69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c060bc35",
+        "filename": "sc/qa/extras/sccellcursorobj.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-28T16:43:38Z",
+      "side": 1,
+      "message": "This is the method I\u0027m talking about.",
+      "revId": "16519af3dac8d91c31bedca658ab417d1e95df69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_8052b466",
+        "filename": "test/source/table/xcellcursor.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-08-28T16:43:38Z",
+      "side": 1,
+      "message": "Replace ScCellCursorObj::getSpreadsheet with getXSpreadsheet().",
+      "revId": "16519af3dac8d91c31bedca658ab417d1e95df69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
