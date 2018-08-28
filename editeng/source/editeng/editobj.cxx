@@ -953,11 +953,9 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             {
                 editeng::Section& rSecAttr = *itCurAttr;
                 // serious bug: will cause duplicate attributes to be exported
-                auto iter(std::find_if(
-                    rSecAttr.maAttributes.begin(), rSecAttr.maAttributes.end(),
+                if (std::none_of(rSecAttr.maAttributes.begin(), rSecAttr.maAttributes.end(),
                     [&pItem](SfxPoolItem const*const pIt)
-                        { return pIt->Which() == pItem->Which(); }));
-                if (rSecAttr.maAttributes.end() == iter)
+                        { return pIt->Which() == pItem->Which(); }))
                 {
                     rSecAttr.maAttributes.push_back(pItem);
                 }

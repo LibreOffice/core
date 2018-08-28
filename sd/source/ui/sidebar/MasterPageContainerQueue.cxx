@@ -239,11 +239,10 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
 
 bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) const
 {
-    RequestQueue::iterator iRequest (::std::find_if(
+    return std::any_of(
         mpRequestQueue->begin(),
         mpRequestQueue->end(),
-        PreviewCreationRequest::CompareToken(aToken)));
-    return (iRequest != mpRequestQueue->end());
+        PreviewCreationRequest::CompareToken(aToken));
 }
 
 bool MasterPageContainerQueue::IsEmpty() const

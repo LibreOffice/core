@@ -222,10 +222,9 @@ void SwLayoutWriter::testTdf118672()
         = linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
     uno::Sequence<lang::Locale> aLocales
         = xLinguServiceManager->getAvailableLocales("com.sun.star.linguistic2.Hyphenator");
-    auto it = std::find_if(aLocales.begin(), aLocales.end(), [](const lang::Locale& rLocale) {
-        return rLocale.Language == "en" && rLocale.Country == "US";
-    });
-    if (it == aLocales.end())
+    if (std::none_of(aLocales.begin(), aLocales.end(), [](const lang::Locale& rLocale) {
+            return rLocale.Language == "en" && rLocale.Country == "US";
+        }))
         return;
 
     OUString aLine1("He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "

@@ -350,7 +350,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
     {
         const uno::Sequence<beans::StringPair>& rRelation = aRelationsInfo[i];
         auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
-        if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureType) != aRelation.end())
+        if (std::any_of(aRelation.begin(), aRelation.end(), lcl_isSignatureType))
         {
             std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
             if (it != aRelation.end())
@@ -442,7 +442,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     for (const uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
     {
         auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
-        if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType) != aRelation.end())
+        if (std::any_of(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType))
         {
             bHaveRelation = true;
             break;
@@ -465,7 +465,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
         for (std::vector< uno::Sequence<beans::StringPair> >::iterator it = aRelationsInfo.begin(); it != aRelationsInfo.end();)
         {
             auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(*it);
-            if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType) != aRelation.end())
+            if (std::any_of(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType))
                 it = aRelationsInfo.erase(it);
             else
                 ++it;
@@ -525,18 +525,10 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     // Append rels and sigs to defaults, if it's not there already.
     uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
     auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
-    auto it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
-    {
-        return rPair.First == "rels";
-    });
-    if (it == rDefaults.end())
+    if (std::none_of(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair) { return rPair.First == "rels"; }))
         aDefaults.emplace_back("rels", "application/vnd.openxmlformats-package.relationships+xml");
 
-    it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
-    {
-        return rPair.First == "sigs";
-    });
-    if (it == rDefaults.end())
+    if (std::none_of(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair) { return rPair.First == "sigs"; }))
         aDefaults.emplace_back("sigs", "application/vnd.openxmlformats-package.digital-signature-origin");
     rDefaults = comphelper::containerToSequence(aDefaults);
 

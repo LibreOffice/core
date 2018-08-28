@@ -98,10 +98,8 @@ namespace /* private */ {
 
         bool has_group(const string_t& name) const
         {
-            auto iter_end = groups_.cend();
             return (has_groups() &&
-                    iter_end != std::find_if(
-                        groups_.cbegin(), iter_end,
+                    std::any_of(groups_.cbegin(), groups_.cend(),
                         [&name](const string_t& s)
                         { return (0 == strcasecmp(s.c_str(), name.c_str())); })
                         // compare two string_t's case insensitive

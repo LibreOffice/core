@@ -515,9 +515,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                 {
                     // See if the header value is already in the list.
                     std::vector<ScTypedStrData>::iterator itBeg = pList->maFilterEntries.begin(), itEnd = pList->maFilterEntries.end();
-                    std::vector<ScTypedStrData>::iterator it = std::find_if(
-                        itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
-                    if (it == itEnd)
+                    if (std::none_of(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens)))
                     {
                         // Not in the list. Insert it.
                         pList->maFilterEntries.push_back(aHdrColl.front());
@@ -529,7 +527,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                         // Record its position.
                         itBeg = pList->maFilterEntries.begin();
                         itEnd = pList->maFilterEntries.end();
-                        it = std::find_if(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
+                        auto it = std::find_if(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
                         pList->mnHeaderPos = std::distance(itBeg, it);
                     }
                 }

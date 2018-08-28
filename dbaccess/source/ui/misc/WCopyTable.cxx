@@ -866,9 +866,9 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
                 {
                     if ( supportsPrimaryKey() )
                     {
-                        ODatabaseExport::TColumns::const_iterator aFind = std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
+                        bool noPrimaryKey = std::none_of(m_vDestColumns.begin(),m_vDestColumns.end(),
                             [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
-                        if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
+                        if ( noPrimaryKey && m_xInteractionHandler.is() )
                         {
 
                             OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));

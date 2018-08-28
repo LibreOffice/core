@@ -186,7 +186,7 @@ sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer
     const std::vector<css::datatransfer::DataFlavor> aAll =
         getTransferDataFlavorsAsVector();
 
-    return std::find_if(aAll.begin(), aAll.end(), DataFlavorEq(rFlavor)) != aAll.end();
+    return std::any_of(aAll.begin(), aAll.end(), DataFlavorEq(rFlavor));
 }
 
 class GtkClipboardTransferable : public GtkTransferable

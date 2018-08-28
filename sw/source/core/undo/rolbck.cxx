@@ -1304,13 +1304,13 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
                 continue; // special case, may get set on text node itself
                           // tdf#105077 even worse, node's set could cause
                           // nothing at all to be inserted
-            assert(std::find_if(
+            assert(std::any_of(
                 m_pHistory->m_SwpHstry.begin(), m_pHistory->m_SwpHstry.end(),
                 [nExpected](std::unique_ptr<SwHistoryHint> const& pHint) -> bool {
                     SwHistoryResetText const*const pReset(
                             dynamic_cast<SwHistoryResetText const*>(pHint.get()));
                     return pReset && (pReset->GetWhich() == nExpected);
-                }) != m_pHistory->m_SwpHstry.end());
+                }));
         }
     }
 #endif

@@ -671,10 +671,7 @@ namespace sfx2
                 // -> append the wildcard
                 aExtendWildcard( *aBelongsToLocal );
 
-                MapGroupEntry2GroupEntry::iterator aThisGroupFinalPos =
-                    ::std::find_if( aLocalFinalPositions.begin(), aLocalFinalPositions.end(), FindGroupEntry( aBelongsToLocal->second ) );
-
-                if ( aLocalFinalPositions.end() == aThisGroupFinalPos )
+                if ( std::none_of( aLocalFinalPositions.begin(), aLocalFinalPositions.end(), FindGroupEntry( aBelongsToLocal->second ) ) )
                 {   // the position within aCollectedLocals has not been mapped to a final position
                     // within the "real" group (aCollectedLocals is only temporary)
                     // -> do this now (as we just encountered the first filter belonging to this local class

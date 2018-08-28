@@ -58,9 +58,8 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxProperty
 
 bool containsProperty(uno::Sequence<beans::Property> const& rProperties, OUString const& rName)
 {
-    return std::find_if(rProperties.begin(), rProperties.end(),
-                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; })
-           != rProperties.end();
+    return std::any_of(rProperties.begin(), rProperties.end(),
+                       [&](const beans::Property& rProperty) { return rProperty.Name == rName; });
 }
 
 void removeAllProperties(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer)

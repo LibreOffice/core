@@ -154,12 +154,11 @@ bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) co
     // i.e. registered and revoked even though the XPropertySet has already been
     // accessed, a vector is not really the best data structure anymore ...
 
-    ConstPropertiesIterator pos = std::find_if(
+    return std::any_of(
         m_aProperties.begin(),
         m_aProperties.end(),
         PropertyDescriptionNameMatch( _rName )
     );
-    return pos != m_aProperties.end();
 }
 
 

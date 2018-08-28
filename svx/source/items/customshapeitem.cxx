@@ -141,7 +141,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
     }
     else
     {   // it's a new property
-        assert(aPropSeq.end() == std::find_if(aPropSeq.begin(), aPropSeq.end(),
+        assert(std::none_of(aPropSeq.begin(), aPropSeq.end(),
             [&rPropVal](beans::PropertyValue const& rVal)
                 { return rVal.Name == rPropVal.Name; } ));
         sal_uInt32 nIndex = aPropSeq.getLength();
@@ -167,7 +167,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             aValue.Name = rSequenceName;
             aValue.Value <<= aSeq;
 
-            assert(aPropSeq.end() == std::find_if(aPropSeq.begin(), aPropSeq.end(),
+            assert(std::none_of(aPropSeq.begin(), aPropSeq.end(),
                 [&rSequenceName](beans::PropertyValue const& rV)
                     { return rV.Name == rSequenceName; } ));
             sal_uInt32 nIndex = aPropSeq.getLength();

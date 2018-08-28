@@ -485,11 +485,9 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
     Sequence<Reference<chart2::data::XLabeledDataSequence> > aSequencesOfDeleted = xSourceOfDeleted->getDataSequences();
     for (sal_Int32 i = 0; i < aSequencesOfDeleted.getLength(); ++i)
     {
-        std::vector<Reference<chart2::data::XLabeledDataSequence> >::const_iterator aHitIt(
-            std::find_if( aAllDataSeqs.begin(), aAllDataSeqs.end(),
-                lcl_RepresentationsOfLSeqMatch( aSequencesOfDeleted[i] )));
         // if not used by the remaining series this sequence can be deleted
-        if( aHitIt == aAllDataSeqs.end() )
+        if( std::none_of( aAllDataSeqs.begin(), aAllDataSeqs.end(),
+                         lcl_RepresentationsOfLSeqMatch( aSequencesOfDeleted[i] )) )
             aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeleted[i] ) );
     }
 
@@ -873,8 +871,8 @@ void DataBrowserModel::updateFromModel()
                             else if( aRole == "values-x" )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
 
-                            if( std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
-                                             lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
+                            if( std::none_of( aSharedSequences.begin(), aSharedSequences.end(),
+                                             lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) )
                             {
                                 // no shared sequence
                                 m_aColumns.emplace_back(

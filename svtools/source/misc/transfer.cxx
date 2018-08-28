@@ -614,8 +614,8 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 bool TransferableHelper::HasFormat( SotClipboardFormatId nFormat )
 {
-    return (std::find_if(maFormats.begin(), maFormats.end(),
-              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
+    return std::any_of(maFormats.begin(), maFormats.end(),
+              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; });
 }
 
 
@@ -1303,8 +1303,8 @@ void TransferableDataHelper::InitFormats()
 bool TransferableDataHelper::HasFormat( SotClipboardFormatId nFormat ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-    return (std::find_if(maFormats.begin(), maFormats.end(),
-              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
+    return std::any_of(maFormats.begin(), maFormats.end(),
+              [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; });
 }
 
 bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const

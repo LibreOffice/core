@@ -966,12 +966,12 @@ namespace pcr
                 aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
                 for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
                 {
-                    std::vector< Property >::const_iterator previous = std::find_if(
+                    auto noPrevious = std::none_of(
                         aProperties.begin(),
                         aProperties.end(),
                         FindPropertyByName( aThisHandlersPropertie.Name )
                     );
-                    if ( previous == aProperties.end() )
+                    if ( noPrevious )
                     {
                         aProperties.push_back( aThisHandlersPropertie );
                         continue;
