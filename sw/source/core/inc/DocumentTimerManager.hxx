@@ -67,6 +67,7 @@ private:
     SwDoc& m_rDoc;
 
     sal_uInt32 m_nIdleBlockCount; ///< Don't run the Idle, if > 0
+    bool m_bStartOnUnblock; ///< true, if the last unblock should start the timer
     SwDocIdle m_aDocIdle;
 };
 
