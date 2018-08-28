@@ -21,56 +21,21 @@
 
 namespace comphelper
 {
-css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst)
+sal_Int32 findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue)
 {
     sal_Int32 nLength = _rList.getLength();
 
-    if( _bOnlyFirst )
+    // at which position do I find the value?
+    const OUString* pTArray = _rList.getConstArray();
+    for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
     {
-        // at which position do I find the value?
-        sal_Int32 nPos = -1;
-        const OUString* pTArray = _rList.getConstArray();
-        for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
+        if( *pTArray == _rValue )
         {
-            if( *pTArray == _rValue )
-            {
-                nPos = i;
-                break;
-            }
+            return i;
         }
-
-        // fill sequence
-        if( nPos>-1 )
-        {
-            css::uno::Sequence<sal_Int16> aRetSeq( 1 );
-            aRetSeq.getArray()[0] = static_cast<sal_Int16>(nPos);
-
-            return aRetSeq;
-        }
-
-        return css::uno::Sequence<sal_Int16>();
-
     }
-    else
-    {
-        css::uno::Sequence<sal_Int16> aRetSeq( nLength );
-        sal_Int16* pReturn = aRetSeq.getArray();
 
-        // how often does the value occur?
-        const OUString* pTArray = _rList.getConstArray();
-        for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
-        {
-            if( *pTArray == _rValue )
-            {
-                *pReturn = static_cast<sal_Int16>(i);
-                ++pReturn;
-            }
-        }
-
-        aRetSeq.realloc(pReturn - aRetSeq.getArray());
-
-        return aRetSeq;
-    }
+    return -1;
 }
 }   // namespace comphelper
 

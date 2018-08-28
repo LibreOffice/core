@@ -2160,8 +2160,8 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // class SvxNoHyphenItem -------------------------------------------------
 
-SvxNoHyphenItem::SvxNoHyphenItem( const bool bHyphen, const sal_uInt16 nId ) :
-    SfxBoolItem( nId , bHyphen )
+SvxNoHyphenItem::SvxNoHyphenItem( const sal_uInt16 nId ) :
+    SfxBoolItem( nId , true )
 {
 }
 

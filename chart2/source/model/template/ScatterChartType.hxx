@@ -28,10 +28,7 @@ namespace chart
 class ScatterChartType final : public ChartType
 {
 public:
-    ScatterChartType(
-        css::chart2::CurveStyle eCurveStyle =  css::chart2::CurveStyle_LINES,
-        sal_Int32 nResolution = 20,
-        sal_Int32 nOrder = 3 );
+    ScatterChartType();
     virtual ~ScatterChartType() override;
 
     virtual OUString SAL_CALL

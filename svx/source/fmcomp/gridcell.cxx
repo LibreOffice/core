@@ -2602,9 +2602,9 @@ OUString DbListBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField
             sText = _rxField->getString();
             if ( m_bBound )
             {
-                Sequence< sal_Int16 > aPosSeq = ::comphelper::findValue( m_aValueList, sText, true );
-                if ( aPosSeq.getLength() )
-                    sText = static_cast<ListBox*>(m_pWindow.get())->GetEntry(aPosSeq.getConstArray()[0]);
+                sal_Int32 nPos = ::comphelper::findValue( m_aValueList, sText );
+                if ( nPos != -1 )
+                    sText = static_cast<ListBox*>(m_pWindow.get())->GetEntry(nPos);
                 else
                     sText.clear();
             }
@@ -2952,9 +2952,9 @@ void DbFilterField::SetText(const OUString& rText)
         }   break;
         case css::form::FormComponentType::LISTBOX:
         {
-            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, true);
-            if (aPosSeq.getLength())
-                static_cast<ListBox*>(m_pWindow.get())->SelectEntryPos(aPosSeq.getConstArray()[0]);
+            sal_Int32 nPos = ::comphelper::findValue(m_aValueList, m_aText);
+            if (nPos != -1)
+                static_cast<ListBox*>(m_pWindow.get())->SelectEntryPos(nPos);
             else
                 static_cast<ListBox*>(m_pWindow.get())->SetNoSelection();
         }   break;

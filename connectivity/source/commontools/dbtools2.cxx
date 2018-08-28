@@ -997,10 +997,10 @@ bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, 
     if (xColumnsSupplier.is())
         xCols = xColumnsSupplier->getColumns();
 
-    return isAggregateColumn(xCols, sName, false/*whenNotFound*/);
+    return isAggregateColumn(xCols, sName);
 }
 
-bool isAggregateColumn(const Reference< XNameAccess > &_xColumns, const OUString &_sName, bool whenNotFound)
+bool isAggregateColumn(const Reference< XNameAccess > &_xColumns, const OUString &_sName)
 {
     if ( _xColumns.is() && _xColumns->hasByName(_sName) )
     {
@@ -1008,7 +1008,7 @@ bool isAggregateColumn(const Reference< XNameAccess > &_xColumns, const OUString
         assert(xProp.is());
         return isAggregateColumn( xProp );
     }
-    return  whenNotFound;
+    return false;
 }
 
 bool isAggregateColumn( const Reference< XPropertySet > &_xColumn )

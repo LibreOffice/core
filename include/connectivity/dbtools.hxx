@@ -796,13 +796,10 @@ namespace dbtools
             look for column sName in there
         @param _sName
             name of the column
-        @param whenNotFound
-            value returned when _sName is not in _xColumns
     */
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
             const css::uno::Reference< css::container::XNameAccess > &_xColumns,
-            const OUString &_sName,
-            bool whenNotFound
+            const OUString &_sName
         );
 
     /** is this column an aggregate?

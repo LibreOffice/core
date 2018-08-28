@@ -703,7 +703,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames( 
         aSupported = m_aProps->m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
-    if ( 0 == ::comphelper::findValue( aSupported, SERVICE_REPORTDEFINITION, true ).getLength() )
+    if ( ::comphelper::findValue( aSupported, SERVICE_REPORTDEFINITION ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );
