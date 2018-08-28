@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_40fa6c42",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4402,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-28T17:06:29Z",
+      "side": 1,
+      "message": "this should probably be renamed to PostNotify/QueueNotify/etc that indicates that the action is delayed",
+      "revId": "838678aaa1bfd0d1a8d70e9f1f73c6c32be41c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_209528e5",
+        "filename": "include/editeng/editdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-28T17:06:29Z",
+      "side": 1,
+      "message": "some comment here would be nice",
+      "revId": "838678aaa1bfd0d1a8d70e9f1f73c6c32be41c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
