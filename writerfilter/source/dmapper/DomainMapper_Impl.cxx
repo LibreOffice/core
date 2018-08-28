@@ -1236,6 +1236,25 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
 
+    // apply AutoSpacing: it has priority over all other margin settings
+    // (note that numbering with autoSpacing is handled separately later on)
+    sal_Int32 nBeforeAutospacing = -1;
+    GetAnyProperty(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, pPropertyMap) >>= nBeforeAutospacing;
+    if ( nBeforeAutospacing > -1 && pParaContext )
+    {
+        if ( !GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing() )
+        {
+            if ( GetIsFirstParagraphInShape() ||
+                 (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
+                 (m_bFirstParagraphInCell && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
+            {
+                nBeforeAutospacing = 0;
+                // export requires grabbag to match top_margin, so keep them in sync
+                pParaContext->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( sal_Int32(0) ),true, PARA_GRAB_BAG );
+            }
+        }
+        pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(nBeforeAutospacing));
+    }
 
     if (xTextAppend.is() && pParaContext && hasTableManager() && !getTableManager().isIgnore())
     {
@@ -1310,7 +1329,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                     }
                 }
-
             }
             else
             {
@@ -1322,6 +1340,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                 }
             }
+
             std::vector<beans::PropertyValue> aProperties;
             if (pPropertyMap.get())
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
@@ -1447,31 +1466,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     xCur->goLeft( 1 , true );
                     uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                     CheckParaMarkerRedline( xParaEnd );
-                }
-
-                // set top margin of the previous auto paragraph in cells, keeping zero bottom margin only at the first one
-                if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
-                {
-                    bool bParaChangedTopMargin = std::any_of(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
-                    {
-                        return rValue.Name == "ParaTopMargin";
-                    });
-
-                    uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
-                    m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
-                    auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                    bool bPrevParaAutoBefore = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
-                    {
-                        return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
-                    });
-
-                    if ((bPrevParaAutoBefore && !bParaChangedTopMargin) || (bParaChangedTopMargin && m_bParaAutoBefore))
-                    {
-                        sal_Int32 nSize = m_bFirstParagraphInCell ? 0 : 280;
-                        // Previous before spacing is set to auto, set previous before space to 280, except in the first paragraph.
-                        m_xPreviousParagraph->setPropertyValue("ParaTopMargin",
-                                 uno::makeAny( ConversionHelper::convertTwipToMM100(nSize)));
-                    }
                 }
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
