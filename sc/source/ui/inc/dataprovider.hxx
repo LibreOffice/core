@@ -135,7 +135,7 @@ class ScDBDataManager
     ScDocument* mpDoc;
 
 public:
-    ScDBDataManager(const OUString& rDBName, bool bAllowResize, ScDocument* pDoc);
+    ScDBDataManager(const OUString& rDBName, ScDocument* pDoc);
     ~ScDBDataManager();
 
     void SetDatabase(const OUString& rDBName);

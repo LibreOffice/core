@@ -634,7 +634,7 @@ void SfxTabDialog::Start_Impl()
 
 void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText )
 {
-    AddTabPage( nId, rRiderText, nullptr, nullptr );
+    AddTabPage( nId, rRiderText, nullptr );
 }
 
 /*
@@ -686,14 +686,13 @@ void SfxTabDialog::AddTabPage
     sal_uInt16 nId,
     const OUString& rRiderText,
     CreateTabPage pCreateFunc,
-    GetTabPageRanges pRangesFunc,
     sal_uInt16 nPos
 )
 {
     DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
                 "Double Page-Ids in the Tabpage" );
     m_pTabCtrl->InsertPage( nId, rRiderText, nPos );
-    m_pImpl->aData.push_back( new Data_Impl(nId, "", pCreateFunc, pRangesFunc ) );
+    m_pImpl->aData.push_back( new Data_Impl(nId, "", pCreateFunc, nullptr ) );
 }
 
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )

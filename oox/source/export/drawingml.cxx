@@ -2568,7 +2568,7 @@ std::map< OString, std::vector<OString> > lcl_getAdjNames()
     return aRet;
 }
 
-void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
+void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const PropertyValue& rProp )
 {
     static std::map< OString, std::vector<OString> > aAdjMap = lcl_getAdjNames();
     // If there are predefined adj names for this shape type, look them up now.
@@ -2589,6 +2589,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
         )
     {
         SAL_INFO("oox.shape", "adj seq len: " << aAdjustmentSeq.getLength());
+        sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 

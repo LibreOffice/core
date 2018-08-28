@@ -153,7 +153,6 @@ public:
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_uInt16 nPos = TAB_APPEND);
 
     void                AddTabPage( sal_uInt16 nId,

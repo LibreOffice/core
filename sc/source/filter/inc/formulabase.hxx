@@ -297,7 +297,7 @@ private:
 class ApiTokenIterator
 {
 public:
-    explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces );
+    explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode );
     bool         is() const { return mpToken != mpTokenEnd; }
     const ApiToken* operator->() const { return mpToken; }
 
@@ -310,7 +310,6 @@ private:
     const ApiToken*     mpToken;            /// Pointer to current token of the token sequence.
     const ApiToken*     mpTokenEnd;         /// Pointer behind last token of the token sequence.
     const sal_Int32     mnSpacesOpCode;     /// Op-code for whitespace tokens.
-    const bool          mbSkipSpaces;       /// true = Skip whitespace tokens.
 };
 
 // List of API op-codes =======================================================

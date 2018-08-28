@@ -205,7 +205,7 @@ namespace XSLT
         std::unique_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater(sal_Int32(3), false));
         compresser->setInputSegment(oledata);
         compresser->finish();
-        int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());
+        int compressedDataLength = compresser->doDeflateSegment(output, oledata.getLength());
         compresser.reset();
         //realloc the data length
         Sequence<sal_Int8> compressed(compressedDataLength);

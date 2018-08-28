@@ -139,11 +139,10 @@ ApiTokenSequence ApiTokenVector::toSequence() const
 
 // token sequence iterator ====================================================
 
-ApiTokenIterator::ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces ) :
+ApiTokenIterator::ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode ) :
     mpToken( rTokens.getConstArray() ),
     mpTokenEnd( rTokens.getConstArray() + rTokens.getLength() ),
-    mnSpacesOpCode( nSpacesOpCode ),
-    mbSkipSpaces( bSkipSpaces )
+    mnSpacesOpCode( nSpacesOpCode )
 {
     skipSpaces();
 }
@@ -160,9 +159,8 @@ ApiTokenIterator& ApiTokenIterator::operator++()
 
 void ApiTokenIterator::skipSpaces()
 {
-    if( mbSkipSpaces )
-        while( is() && (mpToken->OpCode == mnSpacesOpCode) )
-            ++mpToken;
+    while( is() && (mpToken->OpCode == mnSpacesOpCode) )
+        ++mpToken;
 }
 
 // function data ==============================================================
@@ -1593,7 +1591,7 @@ OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
 
 Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) const
 {
-    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
+    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES );
     if( aTokenIt.is() && (aTokenIt->OpCode == OPCODE_PUSH) )
     {
         Any aRefAny = aTokenIt->Data;
@@ -1622,7 +1620,7 @@ void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
     orRanges.RemoveAll();
     TokenToRangeListState eState = STATE_OPEN;
     sal_Int32 nParenLevel = 0;
-    for( ApiTokenIterator aIt( rTokens, OPCODE_SPACES, true ); aIt.is() && (eState != STATE_ERROR); ++aIt )
+    for( ApiTokenIterator aIt( rTokens, OPCODE_SPACES ); aIt.is() && (eState != STATE_ERROR); ++aIt )
     {
         sal_Int32 nOpCode = aIt->OpCode;
         switch( eState )
@@ -1668,13 +1666,13 @@ void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
 
 bool FormulaProcessorBase::extractString( OUString& orString, const ApiTokenSequence& rTokens ) const
 {
-    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
+    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES );
     return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_PUSH) && (aTokenIt->Data >>= orString) && !(++aTokenIt).is();
 }
 
 bool FormulaProcessorBase::extractSpecialTokenInfo( ApiSpecialTokenInfo& orTokenInfo, const ApiTokenSequence& rTokens ) const
 {
-    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
+    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES );
     return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_BAD) && (aTokenIt->Data >>= orTokenInfo);
 }
 
