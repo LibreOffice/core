@@ -2117,18 +2117,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 // First paragraph in shape: see if we need to disable
                 // paragraph top margin from style.
-                StyleSheetEntryPtr pEntry
-                    = m_pImpl->GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
-                        sConvertedStyleName);
-                if (pEntry)
-                {
-                    boost::optional<PropertyMap::Property> pParaAutoBefore
-                        = pEntry->pProperties->getProperty(
-                            PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
-                    if (pParaAutoBefore)
-                        m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN,
-                                                         uno::makeAny(static_cast<sal_Int32>(0)));
-                }
+                sal_Int32 nBeforeAutospacing = -1;
+                m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING) >>= nBeforeAutospacing;
+                if ( nBeforeAutospacing > -1 )
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(static_cast<sal_Int32>(0)));
             }
         }
     }
