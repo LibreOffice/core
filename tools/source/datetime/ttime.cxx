@@ -39,6 +39,7 @@
 #endif
 
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
 
@@ -267,6 +268,56 @@ double tools::Time::GetTimeInDays() const
     double nNanoSec   = GetNanoSec();
 
     return (nHour + (nMin / 60) + (nSec / (minInHour * secInMin)) + (nNanoSec / (minInHour * secInMin * nanoSecInSec))) / 24 * nSign;
+}
+
+// static
+void tools::Time::GetClock( double fTimeInDays,
+                            sal_uInt16& nHour, sal_uInt16& nMinute, sal_uInt16& nSecond,
+                            double& fFractionOfSecond, int nFractionDecimals )
+{
+    const double fTime = fTimeInDays - rtl::math::approxFloor(fTimeInDays); // date part absent
+
+    // If 0 then full day (or no day), shortcut.
+    // If < 0 then approxFloor() effectively returned the ceiling (note this
+    // also holds for negative fTimeInDays values) because of a near identical
+    // value, shortcut this to a full day as well.
+    // If >= 1.0 (actually == 1.0) then fTimeInDays is a negative small value
+    // not significant for a representable time and approxFloor() returned -1,
+    // shortcut to 0:0:0, otherwise it would become 24:0:0.
+    if (fTime <= 0.0 || fTime >= 1.0)
+    {
+        nHour = nMinute = nSecond = 0;
+        return;
+    }
+
+    // In seconds, including milli and nano.
+    const double fRawSeconds = fTime * tools::Time::secondPerDay;
+
+    // Round to nanoseconds, which is the highest resolution this could be
+    // influenced by.
+    double fSeconds = rtl::math::round( fRawSeconds, 9);
+
+    // If this ended up as a full day the original value was very very close
+    // but not quite. Take that.
+    if (fSeconds >= tools::Time::secondPerDay)
+        fSeconds = fRawSeconds;
+
+    // Now do not round values (specifically not up), but truncate to the next
+    // magnitude, so 23:59:59.99 is still 23:59:59 and not 24:00:00 (or even
+    // 00:00:00 which Excel does).
+    nHour = fSeconds / tools::Time::secondPerHour;
+    fSeconds -= nHour * tools::Time::secondPerHour;
+    nMinute = fSeconds / tools::Time::secondPerMinute;
+    fSeconds -= nMinute * tools::Time::secondPerMinute;
+    nSecond = fSeconds;
+    fSeconds -= nSecond;
+
+    // Do not round the fraction, otherwise .999 would end up as .00 again.
+    if (nFractionDecimals > 0)
+        fFractionOfSecond = rtl::math::pow10Exp( std::trunc(
+                    rtl::math::pow10Exp( fSeconds, nFractionDecimals)), -nFractionDecimals);
+    else
+        fFractionOfSecond = fSeconds;
 }
 
 Time& tools::Time::operator =( const tools::Time& rTime )
