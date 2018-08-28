@@ -232,16 +232,16 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
         }
     }
 
-    if( aMatches.size() > 1 )
-    {
-        std::sort( aMatches.begin(), aMatches.end(), OrdNumSorter() );
-    }
-
     if( nIndex > 0 )
         nIndex--;
 
     if( (nIndex >= 0) && ( aMatches.size() > static_cast<unsigned int>(nIndex)) )
+    {
+        if( aMatches.size() > 1 )
+            std::nth_element( aMatches.begin(), aMatches.begin() + nIndex, aMatches.end(),
+                              OrdNumSorter() );
         return aMatches[nIndex];
+    }
 
     return nullptr;
 }
