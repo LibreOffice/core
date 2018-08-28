@@ -18,7 +18,7 @@ ifeq ($(OS)-$(SYSTEM_MARIADB_CONNECTOR_C),MACOSX-)
 $(eval $(call gb_Library_use_external,mysqlc,iconv))
 endif
 
-$(eval $(call gb_Library_set_include,firebird_sdbc,\
+$(eval $(call gb_Library_set_include,mysqlc,\
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
