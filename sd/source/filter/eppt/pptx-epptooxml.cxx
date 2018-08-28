@@ -61,6 +61,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include "pptexanimations.hxx"
+#include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -1108,7 +1109,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     pFS->endElementNS(XML_p, XML_cSld);
 
     WriteTransition(pFS);
-    WriteAnimations(pFS);
+    WriteAnimations(pFS, mXDrawPage, *this);
 
     pFS->endElementNS(XML_p, XML_sld);
 
@@ -1927,6 +1928,16 @@ void PowerPointExport::WriteNotesMaster()
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
+}
+
+sal_Int32 PowerPointExport::GetShapeID(const Reference<XShape>& rXShape)
+{
+    return ShapeExport::GetShapeID(rXShape, &maShapeMap);
+}
+
+sal_Int32 PowerPointExport::GetNextAnimationNodeID()
+{
+    return mnAnimationNodeIdMax++;
 }
 
 bool PowerPointExport::ImplCreateMainNotes()
