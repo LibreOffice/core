@@ -135,7 +135,7 @@ void Tables::refresh()
             {
                 m_values.push_back( makeAny( prop ) );
                 OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
-                buf.append( schema + "." + name );
+                buf.append( schema ).append( "." ).append( name );
                 map[ buf.makeStringAndClear() ] = tableIndex;
                 ++tableIndex;
             }

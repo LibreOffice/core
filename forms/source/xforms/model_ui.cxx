@@ -286,7 +286,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
             OUString sContent = xNode->getNodeValue();
             if( bDetail || ! lcl_isWhitespace( sContent ) )
             {
-                aBuffer.append("\"" + Convert::collapseWhitespace( sContent ) + "\"");
+                aBuffer.append("\"").append(Convert::collapseWhitespace( sContent )).append("\"");
             }
         }
         break;

@@ -57,21 +57,21 @@ void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence<
             {
                 sal_Int32 nValue = 0;
                 rProp.Value >>= nValue;
-                aBuffer.append("\"" + rProp.Name + "\": ");
-                aBuffer.append(OUString::number(nValue) + ", ");
+                aBuffer.append("\"").append(rProp.Name).append("\": ");
+                aBuffer.append(OUString::number(nValue)).append(", ");
             }
             else if (aTypeName == "unsigned long")
             {
                 sal_uInt32 nValue = 0;
                 rProp.Value >>= nValue;
-                aBuffer.append("\"" + rProp.Name + "\": ");
-                aBuffer.append(OUString::number(nValue) + ", ");
+                aBuffer.append("\"").append(rProp.Name).append("\": ");
+                aBuffer.append(OUString::number(nValue)).append(", ");
             }
             else if (aTypeName == "boolean")
             {
                 bool bValue = false;
                 rProp.Value >>= bValue;
-                aBuffer.append("\"" + rProp.Name + "\": ");
+                aBuffer.append("\"").append(rProp.Name).append("\": ");
                 if (bValue)
                     aBuffer.append("True, ");
                 else
@@ -231,7 +231,7 @@ OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
     {
         if (itr != rParameters.begin())
             aParameterString.append(", ");
-        aParameterString.append("\"" + itr->first + "\": \"" + itr->second + "\"");
+        aParameterString.append("\"").append(itr->first).append("\": \"").append(itr->second).append("\"");
     }
 
     aParameterString.append("}");

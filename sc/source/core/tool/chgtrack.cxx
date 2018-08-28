@@ -437,7 +437,7 @@ void ScChangeAction::GetDescription(
     if (GetType() == SC_CAT_MOVE)
     {
         aBuf.append(
-            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ");
+            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING)).append(" ");
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -445,7 +445,7 @@ void ScChangeAction::GetDescription(
     if (IsInsertType())
     {
         aBuf.append(
-            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ");
+            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING)).append(" ");
         rStr = aBuf.makeStringAndClear();
         return;
     }

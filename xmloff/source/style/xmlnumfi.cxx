@@ -2044,7 +2044,7 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
         if ( nLang != LANGUAGE_SYSTEM )
         {
             //  '-' sign and language code in hex:
-            aFormatCode.append("-" + OUString::number(sal_uInt16(nLang), 16).toAsciiUpperCase());
+            aFormatCode.append("-").append(OUString::number(sal_uInt16(nLang), 16).toAsciiUpperCase());
         }
 
         aFormatCode.append( ']' );    // end of "new" currency symbol
@@ -2075,7 +2075,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         if ( !bTruncate && !bHasDateTime )
         {
             //  with truncate-on-overflow = false, add "[]" to first time part
-            aFormatCode.append("[" + sKeyword + "]");
+            aFormatCode.append("[").append(sKeyword).append("]");
         }
         else
         {
@@ -2200,7 +2200,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
                     sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
                 }
             }
-            aConditions.append("[" + sRealCond + "]");
+            aConditions.append("[").append(sRealCond).append("]");
         }
 
         const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);

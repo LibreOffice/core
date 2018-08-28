@@ -179,13 +179,13 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         // if nValueLength not calculated then nullptr
     sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
     if ( m_fSign < 0.0 )
-        aTmpBuf.append( OUStringLiteral1(aMinusSign) + " " );
+        aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
     if ( bHasIntercept )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept, pValueLength );
         if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
         {
-            aTmpBuf.append( aValueString + " " );
+            aTmpBuf.append( aValueString ).append( " " );
             addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
             aTmpBuf.truncate();
         }
@@ -199,21 +199,21 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, pValueLength );
             if ( aValueString != "0" )  // aValueString may be rounded to 0 if nValueLength is small
             {
-                aTmpBuf.append( aValueString + ( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + ") ) );
+                aTmpBuf.append( aValueString ).append( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + ") );
             }
         }
     }
     if ( m_fLogSlope < 0.0 )
-        aTmpBuf.append( OUStringLiteral1(aMinusSign) + " " );
+        aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
     if ( bHasLogSlope )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), pValueLength );
         if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
         {
-            aTmpBuf.append( aValueString + " " );
+            aTmpBuf.append( aValueString ).append( " " );
         }
     }
-    aTmpBuf.append( mXName + " )");
+    aTmpBuf.append( mXName ).append(" )");
     addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
 
     return aBuf.makeStringAndClear();

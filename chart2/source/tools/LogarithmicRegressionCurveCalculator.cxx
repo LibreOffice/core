@@ -156,17 +156,17 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     {
         if( m_fSlope < 0.0 )
         {
-            aTmpBuf.append( OUStringLiteral1(aMinusSign) + " " );
+            aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
         }
         if( bHasSlope )
         {
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fSlope), pValueLength );
             if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
             {
-                aTmpBuf.append( aValueString + " " );
+                aTmpBuf.append( aValueString ).append( " " );
             }
         }
-        aTmpBuf.append( "ln(" + mXName + ") " );
+        aTmpBuf.append( "ln(" ).append( mXName ).append( ") " );
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
         aTmpBuf.truncate();
 
@@ -175,7 +175,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     }
              // add intercept value
     if( m_fIntercept < 0.0 )
-        aTmpBuf.append( OUStringLiteral1(aMinusSign)+" " );
+        aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
     OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fIntercept), pValueLength );
     if ( aValueString != "0" )  // aValueString may be rounded to 0 if nValueLength is small
     {

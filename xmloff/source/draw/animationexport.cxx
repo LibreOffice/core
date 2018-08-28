@@ -1235,7 +1235,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     if( !sTmp.isEmpty() )
                         sTmp.append( ';' );
 
-                    sTmp.append( OUString::number(p->Time) + "," + OUString::number(p->Progress) );
+                    sTmp.append( OUString::number(p->Time) ).append( "," ).append( OUString::number(p->Progress) );
 
                     p++;
                 }

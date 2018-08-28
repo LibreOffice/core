@@ -382,8 +382,8 @@ namespace dbmm
             OUString sBackedUp( DBA_RES( STR_SAVED_COPY_TO ) );
             sBackedUp = sBackedUp.replaceAll( "$location$", m_pData->sBackupLocation );
 
-            aBuffer.append( "=== " + DBA_RES( STR_DATABASE_DOCUMENT )
-                    + " ===\n" + sBackedUp + "\n\n");
+            aBuffer.append( "=== " ).append( DBA_RES( STR_DATABASE_DOCUMENT ) )
+                   .append( " ===\n" ).append( sBackedUp ).append("\n\n");
         }
 
         if ( !m_pData->aFailures.empty() )
@@ -405,7 +405,7 @@ namespace dbmm
                 OUString sDocTitle( DBA_RES( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
                 sDocTitle = sDocTitle.replaceAll( "$name$", rDoc.sName );
 
-                aBuffer.append( "=== " + sDocTitle + " ===\n" );
+                aBuffer.append( "=== " ).append( sDocTitle ).append( " ===\n" );
 
                 for (auto const& elem : rDoc.aMovedLibraries)
                 {
@@ -414,7 +414,7 @@ namespace dbmm
                     sMovedLib = sMovedLib.replaceAll( "$old$", elem.sOldName );
                     sMovedLib = sMovedLib.replaceAll( "$new$", elem.sNewName );
 
-                    aBuffer.append( sMovedLib + "\n" );
+                    aBuffer.append( sMovedLib ).append( "\n" );
                 }
 
                 aBuffer.append( '\n' );

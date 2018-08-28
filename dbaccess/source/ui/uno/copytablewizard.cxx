@@ -1436,7 +1436,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
         {
             if ( !sColumns.isEmpty() )
                 sColumns.append(",");
-            sColumns.append(sQuote + aDestColumnNames[rColumnPositionPair.second - 1] + sQuote);
+            sColumns.append(sQuote).append(aDestColumnNames[rColumnPositionPair.second - 1]).append(sQuote);
         }
     }
     const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::EComposeRule::InDataManipulation, true );

@@ -82,46 +82,46 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         OUStringBuffer sURL;
         if  ( sType == "sdbc:mysql:jdbc" || sType == "sdbc:mysqlc" || sType == "sdbc:mysql:mysqlc" )
         {
-            sURL.append( sType + ":" + sHostName);
+            sURL.append( sType ).append( ":" ).append(sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.append(":" + sPortNumber);
+                sURL.append(":").append(sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.append("/" + sDatabaseName);
+                sURL.append("/").append(sDatabaseName);
             }
         }
         else if ( sType == "jdbc:oracle:thin" )
         {
-            sURL.append("jdbc:oracle:thin:@" + sHostName);
+            sURL.append("jdbc:oracle:thin:@").append(sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.append(":" + sPortNumber);
+                sURL.append(":").append(sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.append(":" + sDatabaseName);
+                sURL.append(":").append(sDatabaseName);
             }
         }
         else if ( sType == "sdbc:address:ldap" )
         {
-            sURL.append("sdbc:address:ldap:" + sHostName);
+            sURL.append("sdbc:address:ldap:").append(sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.append(":" + sPortNumber);
+                sURL.append(":").append(sPortNumber);
             }
         }
         else
         {
-            sURL.append(sType + ":" + sHostName);
+            sURL.append(sType).append(":").append(sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.append(":" + sPortNumber);
+                sURL.append(":").append(sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.append(":" + sDatabaseName);
+                sURL.append(":").append(sDatabaseName);
             }
         }
         try

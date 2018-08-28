@@ -1097,11 +1097,11 @@ bool LanguageTagImpl::canonicalize()
                                 1 + aCountry.getLength() + 1 + aVariants.getLength());
                         aBuf.append( aLanguage);
                         if (!aScript.isEmpty())
-                            aBuf.append("-" + aScript);
+                            aBuf.append("-").append(aScript);
                         if (!aCountry.isEmpty())
-                            aBuf.append("-" + aCountry);
+                            aBuf.append("-").append(aCountry);
                         if (!aVariants.isEmpty())
-                            aBuf.append("-" + aVariants);
+                            aBuf.append("-").append(aVariants);
                         OUString aStr( aBuf.makeStringAndClear());
 
                         if (maBcp47 != aStr)
