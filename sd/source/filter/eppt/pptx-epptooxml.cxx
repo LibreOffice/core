@@ -99,11 +99,12 @@ using namespace oox::core;
 #if OSL_DEBUG_LEVEL > 1
 void dump_pset(Reference< XPropertySet > const& rXPropSet);
 #endif
-
 namespace oox
 {
 namespace core
 {
+
+void WriteAnimations(const FSHelperPtr& pFS, const Reference<XDrawPage>& rXDrawPage, PowerPointExport& rExport);
 
 class PowerPointShapeExport : public ShapeExport
 {
@@ -1108,7 +1109,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     pFS->endElementNS(XML_p, XML_cSld);
 
     WriteTransition(pFS);
-    WriteAnimations(pFS);
+    WriteAnimations(pFS, mXDrawPage, *this);
 
     pFS->endElementNS(XML_p, XML_sld);
 
@@ -1927,6 +1928,16 @@ void PowerPointExport::WriteNotesMaster()
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
+}
+
+sal_Int32 PowerPointExport::GetShapeID(const css::uno::Reference<XShape>& rXShape)
+{
+    return ShapeExport::GetShapeID(rXShape, &maShapeMap);
+}
+
+sal_Int32 PowerPointExport::GetNextAnimationNodeID()
+{
+    return mnAnimationNodeIdMax++;
 }
 
 bool PowerPointExport::ImplCreateMainNotes()
