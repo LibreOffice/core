@@ -1002,7 +1002,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         if( nAdjustmentValuesIndex != -1 )
         {
             WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
-                              0/*nAdjustmentsWhichNeedsToBeConverted*/, aGeometrySeq[ nAdjustmentValuesIndex ] );
+                              aGeometrySeq[ nAdjustmentValuesIndex ] );
         }
         else
             WritePresetShape( sPresetShape );

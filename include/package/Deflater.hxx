@@ -48,7 +48,7 @@ public:
     bool needsInput(  );
     void finish(  );
     bool finished(  ) { return bFinished;}
-    sal_Int32 doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int32 doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength );
     sal_Int64 getTotalIn(  );
     sal_Int64 getTotalOut(  );
     void reset(  );

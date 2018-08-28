@@ -3064,8 +3064,7 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxIte
         pDlg->AddFontTabPage();
         pDlg->AddTabPage( 42,
             ScResId( STR_DOC_STAT ),
-            ScDocStatPageCreate,
-            nullptr);
+            ScDocStatPageCreate);
     }
     return pDlg;
 }
