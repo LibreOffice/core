@@ -183,7 +183,7 @@ void AquaSalVirtualDevice::Destroy()
     if( mxBitmapContext )
     {
         void* pRawData = CGBitmapContextGetData( mxBitmapContext );
-        rtl_freeMemory( pRawData );
+        std::free( pRawData );
         SAL_INFO( "vcl.cg",  "CGContextRelease(" << mxBitmapContext << ")" );
         CGContextRelease( mxBitmapContext );
         mxBitmapContext = nullptr;
@@ -236,7 +236,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
-        void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+        void* pRawData = std::malloc( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
         for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
         {
@@ -279,7 +279,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 mnBitmapDepth = 32;
 
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
-                void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+                void* pRawData = std::malloc( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
                 for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
                 {
@@ -296,7 +296,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         mnBitmapDepth = 32;
 
         const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
-        void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+        void* pRawData = std::malloc( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
         for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
         {

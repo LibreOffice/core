@@ -58,9 +58,7 @@ MemRingBuffer::MemRingBuffer()
 
 MemRingBuffer::~MemRingBuffer()
 {
-    if( m_p ) {
-        rtl_freeMemory( m_p );
-    }
+    std::free( m_p );
 }
 
 void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
@@ -77,7 +75,7 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
     }
 
     if( nNewLen != m_nBufferLen ) {
-        m_p = static_cast<sal_Int8 *>(rtl_reallocateMemory( m_p , nNewLen ));
+        m_p = static_cast<sal_Int8 *>(std::realloc( m_p , nNewLen ));
         if( !m_p ) {
             throw css::io::BufferSizeExceededException(
                 "MemRingBuffer::resizeBuffer BufferSizeExceededException");

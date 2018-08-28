@@ -23,6 +23,7 @@
 #include <rtllifecycle.h>
 
 #include <cassert>
+#include <cstdlib>
 #include <string.h>
 #include <stdio.h>
 
@@ -144,13 +145,13 @@ void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
     if (!cache)
         return nullptr;
 
-    obj = rtl_allocateMemory(cache->m_type_size);
+    obj = std::malloc(cache->m_type_size);
     if (obj && cache->m_constructor)
     {
         if (!(cache->m_constructor)(obj, cache->m_userarg))
         {
             /* construction failure */
-            rtl_freeMemory(obj);
+            std::free(obj);
             obj = nullptr;
         }
     }
@@ -169,7 +170,7 @@ void SAL_CALL rtl_cache_free(
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
         }
-        rtl_freeMemory(obj);
+        std::free(obj);
     }
 }
 

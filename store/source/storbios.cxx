@@ -170,11 +170,11 @@ struct SuperBlockPage
      */
     static void * operator new (size_t n)
     {
-        return rtl_allocateMemory (sal::static_int_cast<sal_Size>(n));
+        return std::malloc(sal::static_int_cast<sal_Size>(n));
     }
     static void operator delete (void * p)
     {
-        rtl_freeMemory (p);
+        std::free (p);
     }
 
     static void * operator new (SAL_UNUSED_PARAMETER size_t, sal_uInt16 nPageSize)
@@ -183,7 +183,7 @@ struct SuperBlockPage
     }
     static void operator delete (void * p, SAL_UNUSED_PARAMETER sal_uInt16)
     {
-        rtl_freeMemory (p);
+        std::free (p);
     }
 
     /** Construction.

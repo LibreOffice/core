@@ -132,7 +132,7 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
     {
         // insert new type_info
         OString aRawName( OUStringToOString( toRTTIname( rUNOname ), RTL_TEXTENCODING_ASCII_US ) );
-        __type_info * pRTTI = new( ::rtl_allocateMemory( sizeof(__type_info) + aRawName.getLength() ) )
+        __type_info * pRTTI = new( std::malloc( sizeof(__type_info) + aRawName.getLength() ) )
             __type_info( NULL, aRawName.getStr() );
 
         // put into map
@@ -162,7 +162,7 @@ RTTInfos::~RTTInfos() throw ()
     {
         __type_info * pType = reinterpret_cast<__type_info*>(iPos->second);
         pType->~__type_info(); // obsolete, but good style...
-        ::rtl_freeMemory( pType );
+        std::free( pType );
     }
 }
 
@@ -184,7 +184,7 @@ struct ObjectFunction
 
 inline void * ObjectFunction::operator new ( size_t nSize )
 {
-    void * pMem = rtl_allocateMemory( nSize );
+    void * pMem = std::malloc( nSize );
     if (pMem != 0)
     {
         DWORD old_protect;
@@ -198,7 +198,7 @@ inline void * ObjectFunction::operator new ( size_t nSize )
 
 inline void ObjectFunction::operator delete ( void * pMem )
 {
-    rtl_freeMemory( pMem );
+    std::free( pMem );
 }
 
 
@@ -329,7 +329,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     }
 
     // info count accompanied by type info ptrs: type, base type, base base type, ...
-    _types = ::rtl_allocateMemory( sizeof(sal_Int32) + (sizeof(ExceptionType *) * nLen) );
+    _types = std::malloc( sizeof(sal_Int32) + (sizeof(ExceptionType *) * nLen) );
     *(sal_Int32 *)_types = nLen;
 
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
@@ -349,7 +349,7 @@ RaiseInfo::~RaiseInfo() throw ()
     {
         delete ppTypes[nTypes];
     }
-    ::rtl_freeMemory( _types );
+    std::free( _types );
 
     delete _pDtor;
 }

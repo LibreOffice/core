@@ -79,19 +79,19 @@ inline void _destructAny(
     case typelib_TypeClass_UNSIGNED_HYPER:
         if (sizeof(void *) < sizeof(sal_Int64))
         {
-            ::rtl_freeMemory( pAny->pData );
+            std::free( pAny->pData );
         }
         break;
     case typelib_TypeClass_FLOAT:
         if (sizeof(void *) < sizeof(float))
         {
-            ::rtl_freeMemory( pAny->pData );
+            std::free( pAny->pData );
         }
         break;
     case typelib_TypeClass_DOUBLE:
         if (sizeof(void *) < sizeof(double))
         {
-            ::rtl_freeMemory( pAny->pData );
+            std::free( pAny->pData );
         }
         break;
     case typelib_TypeClass_STRING:
@@ -104,7 +104,7 @@ inline void _destructAny(
     case typelib_TypeClass_ANY:
         OSL_FAIL( "### unexpected nested any!" );
         ::uno_any_destruct( static_cast<uno_Any *>(pAny->pData), release );
-        ::rtl_freeMemory( pAny->pData );
+        std::free( pAny->pData );
         break;
     case typelib_TypeClass_TYPEDEF:
         OSL_FAIL( "### unexpected typedef!" );
@@ -116,7 +116,7 @@ inline void _destructAny(
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
         _destructStruct( pAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr), release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
-        ::rtl_freeMemory( pAny->pData );
+        std::free( pAny->pData );
         break;
     }
     case typelib_TypeClass_SEQUENCE:
@@ -285,7 +285,7 @@ inline void idestroySequence(
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
     }
-    ::rtl_freeMemory( pSeq );
+    std::free( pSeq );
 }
 
 inline void idestructSequence(

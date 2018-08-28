@@ -158,7 +158,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     EnumPrintersW( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 4, nullptr, 0, &nBytes, &nInfoPrn4 );
     if ( nBytes )
     {
-        PRINTER_INFO_4W* pWinInfo4 = static_cast<PRINTER_INFO_4W*>(rtl_allocateMemory( nBytes ));
+        PRINTER_INFO_4W* pWinInfo4 = static_cast<PRINTER_INFO_4W*>(std::malloc( nBytes ));
         if ( EnumPrintersW( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 4, reinterpret_cast<LPBYTE>(pWinInfo4), nBytes, &nBytes, &nInfoPrn4 ) )
         {
             for ( i = 0; i < nInfoPrn4; i++ )
@@ -170,7 +170,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
                 pList->Add( pInfo );
             }
         }
-        rtl_freeMemory( pWinInfo4 );
+        std::free( pWinInfo4 );
     }
 }
 
@@ -184,7 +184,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
         GetPrinterW( hPrinter, 2, nullptr, 0, &nBytes );
         if( nBytes )
         {
-            PRINTER_INFO_2W* pWinInfo2 = static_cast<PRINTER_INFO_2W*>(rtl_allocateMemory(nBytes));
+            PRINTER_INFO_2W* pWinInfo2 = static_cast<PRINTER_INFO_2W*>(std::malloc(nBytes));
             if( GetPrinterW( hPrinter, 2, reinterpret_cast<LPBYTE>(pWinInfo2), nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
@@ -205,7 +205,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
                 if( ! pInfo->mpPortName )
                     pInfo->mpPortName.reset(new OUString(aPortName));
             }
-            rtl_freeMemory(pWinInfo2);
+            std::free(pWinInfo2);
         }
         ClosePrinter( hPrinter );
     }
@@ -222,13 +222,13 @@ OUString WinSalInstance::GetDefaultPrinter()
     GetDefaultPrinterW( nullptr, &nChars );
     if( nChars )
     {
-        LPWSTR  pStr = static_cast<LPWSTR>(rtl_allocateMemory(nChars*sizeof(WCHAR)));
+        LPWSTR  pStr = static_cast<LPWSTR>(std::malloc(nChars*sizeof(WCHAR)));
         OUString aDefPrt;
         if( GetDefaultPrinterW( pStr, &nChars ) )
         {
             aDefPrt = o3tl::toU(pStr);
         }
-        rtl_freeMemory( pStr );
+        std::free( pStr );
         if( !aDefPrt.isEmpty() )
             return aDefPrt;
     }
@@ -337,7 +337,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         }
         if ( bDelete )
         {
-            rtl_freeMemory( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
+            std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
             pSetupData->SetDriverData( nullptr );
             pSetupData->SetDriverDataLen( 0 );
         }
@@ -411,7 +411,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
 
     if( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
     {
-        rtl_freeMemory( pOutBuffer );
+        std::free( pOutBuffer );
         return FALSE;
     }
 
@@ -431,7 +431,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
 
     // update data
     if ( pSetupData->GetDriverData() )
-        rtl_freeMemory( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
+        std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
     pSetupData->SetDriverDataLen( nDriverDataLen );
     pSetupData->SetDriverData(reinterpret_cast<BYTE*>(pOutBuffer));
     pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
@@ -478,7 +478,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
                 }
             }
 
-            rtl_freeMemory( pBins );
+            std::free( pBins );
         }
     }
 
@@ -519,9 +519,9 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
                 }
             }
             if( pPapers )
-                rtl_freeMemory( pPapers );
+                std::free( pPapers );
             if( pPaperSizes )
-                rtl_freeMemory( pPaperSizes );
+                std::free( pPaperSizes );
         }
         switch( pDevModeW->dmPaperSize )
         {
@@ -737,7 +737,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
             ImplDeviceCaps( pPrinter, DC_BINS, reinterpret_cast<BYTE*>(pBins), pSetupData );
             pDevModeW->dmFields |= DM_DEFAULTSOURCE;
             pDevModeW->dmDefaultSource = pBins[ pSetupData->GetPaperBin() ];
-            rtl_freeMemory( pBins );
+            std::free( pBins );
         }
     }
 
@@ -961,9 +961,9 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
                 }
 
                 if ( pPapers )
-                    rtl_freeMemory(pPapers);
+                    std::free(pPapers);
                 if ( pPaperSizes )
-                    rtl_freeMemory(pPaperSizes);
+                    std::free(pPaperSizes);
 
                 break;
             }
@@ -1122,15 +1122,15 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
         POINT* pPaperSizes = static_cast<POINT*>(rtl_allocateZeroMemory(nCount*sizeof(POINT)));
         ImplDeviceCaps( this, DC_PAPERSIZE, reinterpret_cast<BYTE*>(pPaperSizes), pSetupData );
 
-        sal_Unicode* pNamesBuffer = static_cast<sal_Unicode*>(rtl_allocateMemory(nCount*64*sizeof(sal_Unicode)));
+        sal_Unicode* pNamesBuffer = static_cast<sal_Unicode*>(std::malloc(nCount*64*sizeof(sal_Unicode)));
         ImplDeviceCaps( this, DC_PAPERNAMES, reinterpret_cast<BYTE*>(pNamesBuffer), pSetupData );
         for( DWORD i = 0; i < nCount; ++i )
         {
             PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
             m_aPaperFormats.push_back( aInfo );
         }
-        rtl_freeMemory( pNamesBuffer );
-        rtl_freeMemory( pPaperSizes );
+        std::free( pNamesBuffer );
+        std::free( pPaperSizes );
     }
 
     m_bPapersInit = true;
@@ -1320,7 +1320,7 @@ static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uLong n
         if ( nCopies > 32765 )
             nCopies = 32765;
         sal_uLong nDevSize = pDevMode->dmSize+pDevMode->dmDriverExtra;
-        LPDEVMODEW pNewDevMode = static_cast<LPDEVMODEW>(rtl_allocateMemory( nDevSize ));
+        LPDEVMODEW pNewDevMode = static_cast<LPDEVMODEW>(std::malloc( nDevSize ));
         memcpy( pNewDevMode, pDevMode, nDevSize );
         pNewDevMode->dmFields |= DM_COPIES;
         pNewDevMode->dmCopies  = static_cast<short>(static_cast<sal_uInt16>(nCopies));
@@ -1436,7 +1436,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
                      pDevModeW );
 
     if ( pDevModeW != pOrgDevModeW )
-        rtl_freeMemory( const_cast<DEVMODEW *>(pDevModeW) );
+        std::free( const_cast<DEVMODEW *>(pDevModeW) );
 
     if ( !hDC )
     {
@@ -1565,7 +1565,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
         pDevModeW = ImplSalSetCopies( pOrgDevModeW, mnCopies, mbCollate );
         ResetDCW( hDC, pDevModeW );
         if ( pDevModeW != pOrgDevModeW )
-            rtl_freeMemory( const_cast<DEVMODEW *>(pDevModeW) );
+            std::free( const_cast<DEVMODEW *>(pDevModeW) );
     }
     volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;

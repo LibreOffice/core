@@ -481,7 +481,7 @@ void ComponentContext::disposing()
             assert(envs[i]->dispose != nullptr);
             (*envs[i]->dispose)(envs[i]);
         }
-        rtl_freeMemory(envs);
+        std::free(envs);
     }
 }
 

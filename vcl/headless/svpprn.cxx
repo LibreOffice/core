@@ -139,7 +139,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     // copy the whole context
     if( pJobSetup->GetDriverData() )
-        rtl_freeMemory( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
+        std::free( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
 
     sal_uInt32 nBytes;
     void* pBuffer = nullptr;

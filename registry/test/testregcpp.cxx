@@ -133,7 +133,7 @@ void test_coreReflection()
 
         REG_ENSURE(!key2.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9");
 
-        sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
+        sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key2.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9a");
 
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
@@ -248,7 +248,7 @@ void test_coreReflection()
 
         REG_ENSURE(!key5.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9c");
 
-        sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
+        sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key5.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9c1");
 
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
@@ -313,7 +313,7 @@ void test_coreReflection()
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
         REG_ENSURE(!key7.setValue(OUString(), RegValueType::BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9e");
-        sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
+        sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key7.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9e2");
 
         RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
@@ -499,13 +499,13 @@ void test_registry_CppApi()
     sal_Char*           readValue;
     REG_ENSURE(!rootKey.getValueInfo(OUString("mySecondKey"), &valueType, &valueSize), "test_registry_CppApi error 9a");
 
-    readValue = (sal_Char*)rtl_allocateMemory(valueSize);
+    readValue = (sal_Char*)std::malloc(valueSize);
     REG_ENSURE(!key2.getValue(OUString(), readValue), "test_registry_CppApi error 10");
 
     REG_ENSURE(valueType == RegValueType::STRING, "test_registry_CppApi error 11");
     REG_ENSURE(valueSize == 18, "test_registry_CppApi error 12");
     REG_ENSURE(strcmp(readValue, Value) == 0, "test_registry_CppApi error 13");
-    rtl_freeMemory(readValue);
+    std::free(readValue);
 
     const sal_Char* pList[3];
     const sal_Char* n1= "Hello";
@@ -550,7 +550,7 @@ void test_registry_CppApi()
                 (rtl_ustr_getLength(wTestValue)+1)*sizeof(sal_Unicode)), "test_registry_CppApi error 13j1");
 
     REG_ENSURE(!rootKey.getValueInfo(OUString("mySixthKey"), &valueType, &valueSize), "test_registry_CppApi error 13j2");
-    sal_Unicode* pTmpValue = (sal_Unicode*)rtl_allocateMemory(valueSize);
+    sal_Unicode* pTmpValue = (sal_Unicode*)std::malloc(valueSize);
     REG_ENSURE(!rootKey.getValue(OUString("mySixthKey"), pTmpValue), "test_registry_CppApi error 13j3");
     REG_ENSURE(rtl_ustr_getLength(wTestValue) == rtl_ustr_getLength(pTmpValue), "test_registry_CppApi error 13j4");
     REG_ENSURE(rtl_ustr_compare(wTestValue, pTmpValue) == 0, "test_registry_CppApi error 13j4");

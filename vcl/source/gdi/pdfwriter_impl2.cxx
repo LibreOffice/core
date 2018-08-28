@@ -1154,9 +1154,8 @@ bool PDFWriterImpl::checkEncryptionBufferSize( sal_Int32 newSize )
 {
     if( m_nEncryptionBufferSize < newSize )
     {
-        /* reallocate the buffer, the used function allocate as rtl_allocateMemory
-        if the pointer parameter is NULL */
-        m_pEncryptionBuffer = static_cast<sal_uInt8*>(rtl_reallocateMemory( m_pEncryptionBuffer, newSize ));
+        /* reallocate the buffer */
+        m_pEncryptionBuffer = static_cast<sal_uInt8*>(std::realloc( m_pEncryptionBuffer, newSize ));
         if( m_pEncryptionBuffer )
             m_nEncryptionBufferSize = newSize;
         else
@@ -2014,7 +2013,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
         aBitState.flush();
     }
 
-    rtl_freeMemory( pFirstRefLine );
+    std::free( pFirstRefLine );
 }
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {

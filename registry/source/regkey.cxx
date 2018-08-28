@@ -154,7 +154,7 @@ RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
     {
         (void) pReg->closeKey(phSubKeys[i]);
     }
-    rtl_freeMemory(phSubKeys);
+    std::free(phSubKeys);
 
     return RegError::NO_ERROR;
 }
@@ -576,7 +576,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
     {
         case RegValueType::LONGLIST:
             {
-                rtl_freeMemory(pValueList);
+                std::free(pValueList);
             }
             break;
         case RegValueType::STRINGLIST:
@@ -584,10 +584,10 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
                 sal_Char** pVList = static_cast<sal_Char**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
                 {
-                    rtl_freeMemory(pVList[i]);
+                    std::free(pVList[i]);
                 }
 
-                rtl_freeMemory(pVList);
+                std::free(pVList);
             }
             break;
         case RegValueType::UNICODELIST:
@@ -595,10 +595,10 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
                 sal_Unicode** pVList = static_cast<sal_Unicode**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
                 {
-                    rtl_freeMemory(pVList[i]);
+                    std::free(pVList[i]);
                 }
 
-                rtl_freeMemory(pVList);
+                std::free(pVList);
             }
             break;
         default:
@@ -660,7 +660,7 @@ RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString** pKeyNames,
         rtl_uString_release(pKeyNames[i]);
     }
 
-    rtl_freeMemory(pKeyNames);
+    std::free(pKeyNames);
 
     return RegError::NO_ERROR;
 }

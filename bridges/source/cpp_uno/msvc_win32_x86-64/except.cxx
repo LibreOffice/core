@@ -371,7 +371,7 @@ type_info_descriptor * RTTInfos::insert_new_type_info_descriptor(OUString const 
 
     // insert new type_info
     OString aRawName(OUStringToOString(toRTTIname(rUNOname), RTL_TEXTENCODING_ASCII_US));
-    type_info_descriptor * pRTTI = new(::rtl_allocateMemory(sizeof(type_info_descriptor) + aRawName.getLength()))
+    type_info_descriptor * pRTTI = new(std::malloc(sizeof(type_info_descriptor) + aRawName.getLength()))
         type_info_descriptor(nullptr, aRawName.getStr());
 
     // put into map
@@ -621,7 +621,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     // 32 bit offsets
     const int totalSize = codeSize + typeInfoArraySize + excTypeAddLen;
     unsigned char * pCode = _code =
-        static_cast<unsigned char *>(::rtl_allocateMemory(totalSize));
+        static_cast<unsigned char *>(std::malloc(totalSize));
     int pCodeOffset = 0;
 
     // New base of types array, starts after Trampoline D-Tor / C-Tors

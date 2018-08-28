@@ -38,7 +38,7 @@ inline uno_Sequence * allocSeq(
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
     {
-        pSeq = static_cast<uno_Sequence *>(rtl_allocateMemory( nSize ));
+        pSeq = static_cast<uno_Sequence *>(std::malloc( nSize ));
         if (pSeq != nullptr)
         {
             // header init
@@ -137,21 +137,21 @@ inline void _copyConstructAnyFromData(
         if (sizeof(void *) >= sizeof(sal_Int64))
             pDestAny->pData = &pDestAny->pReserved;
         else
-            pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
+            pDestAny->pData = std::malloc( sizeof(sal_Int64) );
         *static_cast<sal_Int64 *>(pDestAny->pData) = *static_cast<sal_Int64 *>(pSource);
         break;
     case typelib_TypeClass_FLOAT:
         if (sizeof(void *) >= sizeof(float))
             pDestAny->pData = &pDestAny->pReserved;
         else
-            pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
+            pDestAny->pData = std::malloc( sizeof(float) );
         *static_cast<float *>(pDestAny->pData) = *static_cast<float *>(pSource);
         break;
     case typelib_TypeClass_DOUBLE:
         if (sizeof(void *) >= sizeof(double))
             pDestAny->pData = &pDestAny->pReserved;
         else
-            pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
+            pDestAny->pData = std::malloc( sizeof(double) );
         *static_cast<double *>(pDestAny->pData) = *static_cast<double *>(pSource);
         break;
     case typelib_TypeClass_STRING:
@@ -176,7 +176,7 @@ inline void _copyConstructAnyFromData(
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
         {
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
+            pDestAny->pData = std::malloc( pTypeDescr->nSize );
             _copyConstructStruct(
                 pDestAny->pData, pSource,
                 reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
@@ -185,7 +185,7 @@ inline void _copyConstructAnyFromData(
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
+            pDestAny->pData = std::malloc( pTypeDescr->nSize );
             _copyConstructStruct(
                 pDestAny->pData, pSource,
                 reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
@@ -296,21 +296,21 @@ inline void _copyConstructAny(
                 if (sizeof(void *) >= sizeof(sal_Int64))
                     pDestAny->pData = &pDestAny->pReserved;
                 else
-                    pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
+                    pDestAny->pData = std::malloc( sizeof(sal_Int64) );
                 *static_cast<sal_Int64 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_FLOAT:
                 if (sizeof(void *) >= sizeof(float))
                     pDestAny->pData = &pDestAny->pReserved;
                 else
-                    pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
+                    pDestAny->pData = std::malloc( sizeof(float) );
                 *static_cast<float *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_DOUBLE:
                 if (sizeof(void *) >= sizeof(double))
                     pDestAny->pData = &pDestAny->pReserved;
                 else
-                    pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
+                    pDestAny->pData = std::malloc( sizeof(double) );
                 *static_cast<double *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_STRING:
@@ -339,14 +339,14 @@ inline void _copyConstructAny(
             case typelib_TypeClass_EXCEPTION:
                 if (pTypeDescr)
                 {
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
+                    pDestAny->pData = std::malloc( pTypeDescr->nSize );
                     _defaultConstructStruct(
                         pDestAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
+                    pDestAny->pData = std::malloc( pTypeDescr->nSize );
                     _defaultConstructStruct(
                         pDestAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
                     TYPELIB_DANGER_RELEASE( pTypeDescr );

@@ -81,7 +81,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
  {
     if ( rJobSetup.GetDriverData() )
     {
-        mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( mnDriverDataLen ));
+        mpDriverData = static_cast<sal_uInt8*>(std::malloc( mnDriverDataLen ));
         memcpy( mpDriverData, rJobSetup.GetDriverData(), mnDriverDataLen );
     }
     else
@@ -90,7 +90,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
 
 ImplJobSetup::~ImplJobSetup()
 {
-    rtl_freeMemory( mpDriverData );
+    std::free( mpDriverData );
 }
 
 void ImplJobSetup::SetSystem(sal_uInt16 nSystem)
@@ -283,7 +283,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                     else
                     {
                         sal_uInt8* pNewDriverData = static_cast<sal_uInt8*>(
-                            rtl_allocateMemory( rJobData.GetDriverDataLen() ));
+                            std::malloc( rJobData.GetDriverDataLen() ));
                         memcpy( pNewDriverData, pDriverData, rJobData.GetDriverDataLen() );
                         rJobData.SetDriverData( pNewDriverData );
                     }

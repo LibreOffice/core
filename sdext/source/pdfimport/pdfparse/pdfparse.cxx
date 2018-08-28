@@ -616,12 +616,12 @@ PDFEntry* PDFReader::read( const char* pFileName )
         fseek( fp, 0, SEEK_END );
         unsigned int nLen = static_cast<unsigned int>(ftell( fp ));
         fseek( fp, 0, SEEK_SET );
-        char* pBuf = static_cast<char*>(rtl_allocateMemory( nLen ));
+        char* pBuf = static_cast<char*>(std::malloc( nLen ));
         if( pBuf )
         {
             fread( pBuf, 1, nLen, fp );
             pRet = read( pBuf, nLen );
-            rtl_freeMemory( pBuf );
+            std::free( pBuf );
         }
         fclose( fp );
     }

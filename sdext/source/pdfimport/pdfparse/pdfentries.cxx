@@ -658,11 +658,11 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         )
     {
         unsigned int nOuterStreamLen = m_pStream->m_nEndOffset - m_pStream->m_nBeginOffset;
-        *ppStream = static_cast<char*>(rtl_allocateMemory( nOuterStreamLen ));
+        *ppStream = static_cast<char*>(std::malloc( nOuterStreamLen ));
         unsigned int nRead = rContext.readOrigBytes( m_pStream->m_nBeginOffset, nOuterStreamLen, *ppStream );
         if( nRead != nOuterStreamLen )
         {
-            rtl_freeMemory( *ppStream );
+            std::free( *ppStream );
             *ppStream = nullptr;
             *pBytes = 0;
             return false;
@@ -732,7 +732,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
 
     const unsigned int buf_increment_size = 16384;
 
-    *pOutBuf = static_cast<sal_uInt8*>(rtl_reallocateMemory( *pOutBuf, buf_increment_size ));
+    *pOutBuf = static_cast<sal_uInt8*>(std::realloc( *pOutBuf, buf_increment_size ));
     aZStr.next_out      = reinterpret_cast<Bytef*>(*pOutBuf);
     aZStr.avail_out     = buf_increment_size;
     *pOutLen = buf_increment_size;
@@ -744,7 +744,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
             if( err != Z_STREAM_END )
             {
                 const int nNewAlloc = *pOutLen + buf_increment_size;
-                *pOutBuf = static_cast<sal_uInt8*>(rtl_reallocateMemory( *pOutBuf, nNewAlloc ));
+                *pOutBuf = static_cast<sal_uInt8*>(std::realloc( *pOutBuf, nNewAlloc ));
                 aZStr.next_out = reinterpret_cast<Bytef*>(*pOutBuf + *pOutLen);
                 aZStr.avail_out = buf_increment_size;
                 *pOutLen = nNewAlloc;
@@ -759,7 +759,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
     inflateEnd(&aZStr);
     if( err < Z_OK )
     {
-        rtl_freeMemory( *pOutBuf );
+        std::free( *pOutBuf );
         *pOutBuf = nullptr;
         *pOutLen = 0;
     }
@@ -777,11 +777,11 @@ void PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedF
             sal_uInt32 nOutBytes = 0;
             unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
             rWriteContext.write( pOutBytes, nOutBytes );
-            rtl_freeMemory( pOutBytes );
+            std::free( pOutBytes );
         }
         else if( pStream && nBytes )
             rWriteContext.write( pStream, nBytes );
-        rtl_freeMemory( pStream );
+        std::free( pStream );
     }
 }
 
@@ -874,15 +874,15 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( bRet )
                     bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
                 if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
-                    rtl_freeMemory( pOutBytes );
-                rtl_freeMemory( pStream );
+                    std::free( pOutBytes );
+                std::free( pStream );
                 pEData->setDecryptObject( 0, 0 );
                 return bRet;
             }
             if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
-                rtl_freeMemory( pOutBytes );
+                std::free( pOutBytes );
         }
-        rtl_freeMemory( pStream );
+        std::free( pStream );
     }
 
     bool bRet = emitSubElements( rWriteContext ) &&

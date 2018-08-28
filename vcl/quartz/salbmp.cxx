@@ -870,7 +870,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
 
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {
-    rtl_freeMemory( const_cast<void*>(data) );
+    std::free( const_cast<void*>(data) );
 }
 
 CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
@@ -894,7 +894,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         // create the alpha mask image fitting our image
         // TODO: is caching the full mask or the subimage mask worth it?
         int nMaskBytesPerRow = ((nWidth + 3) & ~3);
-        void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nHeight );
+        void* pMaskMem = std::malloc( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
             nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
         SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8," << nMaskBytesPerRow << ") = " << xMaskContext );
@@ -937,7 +937,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
     if (m_pUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
-        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( rtl_allocateMemory( nHeight * nDestBytesPerRow ) );
+        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( std::malloc( nHeight * nDestBytesPerRow ) );
         sal_uInt32* pDest = pMaskBuffer;
 
         ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );

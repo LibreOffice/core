@@ -460,7 +460,7 @@ void SvDataPipe_Impl::remove(Page * pPage)
 
     pPage->m_pPrev->m_pNext = pPage->m_pNext;
     pPage->m_pNext->m_pPrev = pPage->m_pPrev;
-    rtl_freeMemory(pPage);
+    std::free(pPage);
     --m_nPages;
 }
 
@@ -470,7 +470,7 @@ SvDataPipe_Impl::~SvDataPipe_Impl()
         for (Page * pPage = m_pFirstPage;;)
         {
             Page * pNext = pPage->m_pNext;
-            rtl_freeMemory(pPage);
+            std::free(pPage);
             if (pNext == m_pFirstPage)
                 break;
             pPage = pNext;
@@ -523,9 +523,9 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
     if (m_pWritePage == nullptr)
     {
         m_pFirstPage
-            = static_cast< Page * >(rtl_allocateMemory(sizeof (Page)
-                                                           + m_nPageSize
-                                                           - 1));
+            = static_cast< Page * >(std::malloc(sizeof (Page)
+                                           + m_nPageSize
+                                           - 1));
         m_pFirstPage->m_pPrev = m_pFirstPage;
         m_pFirstPage->m_pNext = m_pFirstPage;
         m_pFirstPage->m_pStart = m_pFirstPage->m_aBuffer;
@@ -593,7 +593,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
                 break;
 
             Page * pNew
-                = static_cast< Page * >(rtl_allocateMemory(
+                = static_cast< Page * >(std::malloc(
                                             sizeof (Page) + m_nPageSize
                                                 - 1));
             pNew->m_pPrev = m_pWritePage;

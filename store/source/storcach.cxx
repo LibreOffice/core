@@ -208,7 +208,7 @@ PageCache::~PageCache()
 
     if (m_hash_table != m_hash_table_0)
     {
-        rtl_freeMemory (m_hash_table);
+        std::free (m_hash_table);
         m_hash_table = m_hash_table_0;
         m_hash_size  = theTableSize;
         m_hash_shift = highbit(m_hash_size) - 1;
@@ -219,7 +219,7 @@ PageCache::~PageCache()
 void PageCache::rescale_Impl (std::size_t new_size)
 {
     std::size_t new_bytes = new_size * sizeof(Entry*);
-    Entry ** new_table = static_cast<Entry**>(rtl_allocateMemory(new_bytes));
+    Entry ** new_table = static_cast<Entry**>(std::malloc(new_bytes));
 
     if (new_table != nullptr)
     {
@@ -255,7 +255,7 @@ void PageCache::rescale_Impl (std::size_t new_size)
         if (old_table != m_hash_table_0)
         {
 
-            rtl_freeMemory (old_table);
+            std::free (old_table);
         }
     }
 }
