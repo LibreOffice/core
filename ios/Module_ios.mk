@@ -12,12 +12,14 @@ ifeq ($(OS),IOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
 	CustomTarget_iOS_setup \
+))
+
+ifneq ($(ENABLE_IOS_LIBREOFFICELIGHT),)
+$(eval $(call gb_Module_add_targets,ios,\
 	CustomTarget_iOS_link \
 ))
 
-
-
-
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
