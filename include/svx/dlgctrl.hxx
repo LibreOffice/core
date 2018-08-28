@@ -478,6 +478,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC XRectPreview : public PreviewBase
 private:
     SdrObject* mpRectangleObject;
 
+    tools::Rectangle GetPreviewSize() const;
 public:
     XRectPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

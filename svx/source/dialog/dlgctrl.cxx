@@ -2270,27 +2270,36 @@ XRectPreview::XRectPreview()
 {
 }
 
+// expand to avoid 1 pixel band to the right and bottom of previews
+// in color/gradient/bitmap/pattern/hatch subpages of area tab
+// in e.g. page dialog
+tools::Rectangle XRectPreview::GetPreviewSize() const
+{
+    tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
+    aObjectSize.AdjustRight(1);
+    aObjectSize.AdjustBottom(1);
+    return aObjectSize;
+}
+
 void XRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     PreviewBase::SetDrawingArea(pDrawingArea);
     InitSettings();
 
     // create RectangleObject
-    const tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
     mpRectangleObject = new SdrRectObj(
         getModel(),
-        aObjectSize);
+        GetPreviewSize());
 }
 
 void XRectPreview::Resize()
 {
-    const tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
     SdrObject *pOrigObject = mpRectangleObject;
     if (pOrigObject)
     {
         mpRectangleObject = new SdrRectObj(
             getModel(),
-            aObjectSize);
+            GetPreviewSize());
         SetAttributes(pOrigObject->GetMergedItemSet());
         SdrObject::Free(pOrigObject);
     }
