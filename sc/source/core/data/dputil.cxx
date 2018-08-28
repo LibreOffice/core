@@ -314,21 +314,22 @@ sal_Int32 ScDPUtil::getDatePartValue(
         nDatePart == sheet::DataPilotFieldGroupBy::SECONDS)
     {
         // handle time
-        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+        // (do as in the cell functions, ScInterpreter::ScGetHour() etc.)
 
-        double fTime = fValue - rtl::math::approxFloor(fValue);
-        long nSeconds = static_cast<long>(rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5));
+        sal_uInt16 nHour, nMinute, nSecond;
+        double fFractionOfSecond;
+        tools::Time::GetClock( fValue, nHour, nMinute, nSecond, fFractionOfSecond, 0);
 
         switch (nDatePart)
         {
             case sheet::DataPilotFieldGroupBy::HOURS:
-                nResult = nSeconds / 3600;
+                nResult = nHour;
                 break;
             case sheet::DataPilotFieldGroupBy::MINUTES:
-                nResult = ( nSeconds % 3600 ) / 60;
+                nResult = nMinute;
                 break;
             case sheet::DataPilotFieldGroupBy::SECONDS:
-                nResult = nSeconds % 60;
+                nResult = nSecond;
                 break;
         }
     }
