@@ -45,6 +45,52 @@
       "revId": "2a915990ad22294eb896df537614c4da01475d40",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1db84fc6",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-28T09:00:15Z",
+      "side": 1,
+      "message": "This is really confusing, because aProperties is (in theory) exactly the same as aPrevProperties, and m_xPreviousParagraph is actually the current paragraph (just that it has been created in sw, and has already been marked as the PrevousParagraph).\n\nSolution?  1.) Make a note indicating that m_xPreviousParagraph is the current one we are finishing. 2.) use the aPrevProperties from below for ParaTopMargin as well (but change the name from PrevProperties...)",
+      "range": {
+        "startLine": 1394,
+        "startChar": 77,
+        "endLine": 1394,
+        "endChar": 88
+      },
+      "revId": "2a915990ad22294eb896df537614c4da01475d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_bda3a34f",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-08-28T09:00:15Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right, because even if AutoBefore\u003d\"0\" (disabled), then it is still entered as a property. I\u0027m going to try to hand-craft an example where this causes the wrong response.",
+      "range": {
+        "startLine": 1410,
+        "startChar": 25,
+        "endLine": 1410,
+        "endChar": 71
+      },
+      "revId": "2a915990ad22294eb896df537614c4da01475d40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
