@@ -152,7 +152,10 @@ static void lcl_getHourMinuteSecond( double fTimeInDays, sal_Int32& nHour, sal_I
     // If < 0 then approxFloor() effectively returned the ceiling (note this
     // also holds for negative fTimeInDays values) because of a near identical
     // value, shortcut this to a full day as well.
-    if (fTime <= 0.0)
+    // If >= 1.0 (actually == 1.0) then fTimeInDays is a negative small value
+    // not significant for a representable time and approxFloor() returned -1,
+    // shortcut to 0:0:0, otherwise it would become 24:0:0.
+    if (fTime <= 0.0 || fTime >= 1.0)
     {
         nHour = nMinute = nSecond = 0;
         return;
