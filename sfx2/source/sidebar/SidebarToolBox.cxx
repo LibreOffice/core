@@ -137,6 +137,12 @@ bool SidebarToolBox::EventNotify (NotifyEvent& rEvent)
     return ToolBox::EventNotify(rEvent);
 }
 
+void SidebarToolBox::KeyInput(const KeyEvent& rKEvt)
+{
+    if (KEY_ESCAPE != rKEvt.GetKeyCode().GetCode())
+        ToolBox::KeyInput(rKEvt);
+}
+
 void SidebarToolBox::CreateController (
     const sal_uInt16 nItemId,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
