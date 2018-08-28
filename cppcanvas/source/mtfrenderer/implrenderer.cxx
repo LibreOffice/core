@@ -1568,7 +1568,7 @@ namespace cppcanvas
                         // #i44110# correct null-sized output - there
                         // are metafiles which have zero size in at
                         // least one dimension
-                      
+
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
                         const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
                                                 std::max( aMtfSizePixPre.Height(), 1L ) );
