@@ -1692,6 +1692,28 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
                         pTextNode->CopyCollFormat( *pDelNode );
                 }
+                else
+                {
+                    // tdf#119571 update the style of the joined paragraph
+                    // after a partially deleted paragraph to show its correct style
+                    // in "Show changes" mode, too. All removed paragraphs
+                    // get the style of the first (partially deleted) paragraph
+                    // to avoid text insertion with bad style in the deleted
+                    // area later.
+                    SwContentNode* pDelNd = pStt->nNode.GetNode().GetContentNode();
+                    SwContentNode* pTextNd = pEnd->nNode.GetNode().GetContentNode();
+                    SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
+                    SwTextNode* pTextNode;
+                    SwNodeIndex aIdx( pEnd->nNode.GetNode() );
+
+                    while (pDelNode != nullptr && pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
+                    {
+                        pTextNode = pTextNd->GetTextNode();
+                        if (pTextNode && pDelNode != pTextNode )
+                            pDelNode->CopyCollFormat( *pTextNode );
+                        pTextNd = SwNodes::GoPrevious( &aIdx );
+                    }
+                }
                 mpRedlineTable->Insert( pNewRedl );
             }
         }
