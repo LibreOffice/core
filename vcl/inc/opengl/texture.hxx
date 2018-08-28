@@ -76,7 +76,7 @@ private:
     std::shared_ptr<ImplOpenGLTexture> mpImpl;
     int mnSlotNumber;
 
-    inline void GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
+    inline void GetTextureRect(const SalTwoRect& rPosAry, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
 
     bool IsValid() const
     {
