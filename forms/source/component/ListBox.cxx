@@ -467,11 +467,11 @@ namespace frm
             _rPropertyNames.begin(), _rPropertyNames.end(),
              [](OUString const & s) { return s == PROPERTY_SELECT_SEQ; }
         );
-        const OUString* pStringItemListPos = ::std::find_if(
+        auto aStringItemListExists = std::any_of(
             _rPropertyNames.begin(), _rPropertyNames.end(),
              [](OUString const & s) { return s == PROPERTY_STRINGITEMLIST; }
         );
-        if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && ( pStringItemListPos != _rPropertyNames.end() ) )
+        if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && aStringItemListExists )
         {
             // both properties are present
             // -> remember the value for the select sequence

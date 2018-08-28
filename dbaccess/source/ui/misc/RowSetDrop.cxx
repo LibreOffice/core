@@ -100,8 +100,8 @@ bool ORowSetImportExport::Write()
 bool ORowSetImportExport::Read()
 {
     // check if there is any column to copy
-    if(std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
-                        [](sal_Int32 n) { return n > 0; }) == m_aColumnMapping.end())
+    if(std::none_of(m_aColumnMapping.begin(),m_aColumnMapping.end(),
+                        [](sal_Int32 n) { return n > 0; }))
         return false;
     bool bContinue = true;
     if(m_aSelection.getLength())

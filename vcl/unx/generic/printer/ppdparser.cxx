@@ -573,10 +573,10 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     {
         // this may actually be the SGENPRT parser,
         // so ensure uniqueness here (but don't remove last we delete us!)
-        if (std::find_if(
+        if (std::none_of(
                     rPPDCache.aAllParsers.begin(),
                     rPPDCache.aAllParsers.end(),
-                    [pNewParser] (std::unique_ptr<PPDParser> const & x) { return x.get() == pNewParser; } ) == rPPDCache.aAllParsers.end())
+                    [pNewParser] (std::unique_ptr<PPDParser> const & x) { return x.get() == pNewParser; } ))
         {
             // insert new parser to vector
             rPPDCache.aAllParsers.emplace_back(pNewParser);

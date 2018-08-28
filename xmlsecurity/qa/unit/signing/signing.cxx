@@ -523,7 +523,7 @@ void SigningTest::testOOXMLRemoveAll()
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);
     uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
-    CPPUNIT_ASSERT_EQUAL(rOverrides.end(), std::find_if(rOverrides.begin(), rOverrides.end(), [](const beans::StringPair& rPair)
+    CPPUNIT_ASSERT(std::none_of(rOverrides.begin(), rOverrides.end(), [](const beans::StringPair& rPair)
     {
         return rPair.First.startsWith("/_xmlsignatures/sig");
     }));

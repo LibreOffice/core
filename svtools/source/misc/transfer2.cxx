@@ -296,8 +296,8 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 {
-    return (std::find_if(maFormats.begin(), maFormats.end(),
-           [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; }) != maFormats.end());
+    return std::any_of(maFormats.begin(), maFormats.end(),
+           [&](const DataFlavorEx& data) { return data.mnSotId == nFormat; });
 }
 
 

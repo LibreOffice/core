@@ -63,11 +63,10 @@ int SetNode::getMandatory() const {
 
 bool SetNode::isValidTemplate(OUString const & templateName) const {
     return Data::equalTemplateNames(templateName, defaultTemplateName_) ||
-        (std::find_if(
+        std::any_of(
             additionalTemplateNames_.begin(),
             additionalTemplateNames_.end(),
-            [&templateName](OUString const & longName) { return Data::equalTemplateNames(templateName, longName); } ) !=
-         additionalTemplateNames_.end());
+            [&templateName](OUString const & longName) { return Data::equalTemplateNames(templateName, longName); } );
 }
 
 SetNode::SetNode(SetNode const & other, bool keepTemplateName):

@@ -74,10 +74,10 @@ uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDat
 sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<datatransfer::DataFlavor> aFlavors = getTransferDataFlavorsAsVector();
-    return std::find_if(aFlavors.begin(), aFlavors.end(), [&rFlavor](const datatransfer::DataFlavor& i)
+    return std::any_of(aFlavors.begin(), aFlavors.end(), [&rFlavor](const datatransfer::DataFlavor& i)
     {
         return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
-    }) != aFlavors.end();
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

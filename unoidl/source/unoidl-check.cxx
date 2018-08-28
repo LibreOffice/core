@@ -728,11 +728,10 @@ void checkMap(
                         std::exit(EXIT_FAILURE);
                     }
                     for (auto & i: ent2A->getDirectOptionalBaseServices()) {
-                        if (std::find_if(
+                        if (std::none_of(
                                 ent2B->getDirectOptionalBaseServices().begin(),
                                 ent2B->getDirectOptionalBaseServices().end(),
-                                EqualsAnnotation(i.name))
-                            == ent2B->getDirectOptionalBaseServices().end())
+                                EqualsAnnotation(i.name)))
                         {
                             std::cerr
                                 << "accumulation-based service " << name
@@ -789,12 +788,11 @@ void checkMap(
                         std::exit(EXIT_FAILURE);
                     }
                     for (auto & i: ent2A->getDirectOptionalBaseInterfaces()) {
-                        if (std::find_if(
+                        if (std::none_of(
                                 (ent2B->getDirectOptionalBaseInterfaces()
                                  .begin()),
                                 ent2B->getDirectOptionalBaseInterfaces().end(),
-                                EqualsAnnotation(i.name))
-                            == ent2B->getDirectOptionalBaseInterfaces().end())
+                                EqualsAnnotation(i.name)))
                         {
                             std::cerr
                                 << "accumulation-based service " << name

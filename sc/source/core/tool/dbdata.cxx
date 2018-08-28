@@ -763,8 +763,8 @@ void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUS
             aStr = rName;
             ++nCount;
         }
-        auto it( ::std::find_if( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)));
-        if (it == rVec.end())
+
+        if (std::none_of( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)))
         {
             rVec[nIndex] = aStr;
             break;  // do while
@@ -1263,7 +1263,7 @@ bool ScDBCollection::AnonDBs::empty() const
 
 bool ScDBCollection::AnonDBs::has( const ScDBData* p ) const
 {
-    return find_if(m_DBs.begin(), m_DBs.end(), FindByPointer(p)) != m_DBs.end();
+    return any_of(m_DBs.begin(), m_DBs.end(), FindByPointer(p));
 }
 
 bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const

@@ -455,12 +455,12 @@ namespace dbaui
         if ( !_rName.isEmpty() )
         {
             // check there does not already exist such a component
-            SubComponents::const_iterator existentPos = std::find_if(
+            auto subComponentNotExists = std::none_of(
                 m_pData->m_aComponents.begin(),
                 m_pData->m_aComponents.end(),
                 SubComponentMatch( _rName, _nComponentType, _eOpenMode )
             );
-            OSL_ENSURE( existentPos == m_pData->m_aComponents.end(), "already existent!" );
+            OSL_ENSURE( subComponentNotExists, "already existent!" );
         }
 #endif
         SubComponentDescriptor aElement( _rName, _nComponentType, _eOpenMode, _rxComponent );

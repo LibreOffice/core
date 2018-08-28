@@ -484,9 +484,8 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
 sal_Bool SwXStyleFamilies::hasByName(const OUString& Name)
 {
     auto pEntries(lcl_GetStyleFamilyEntries());
-    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
+    return std::any_of(pEntries->begin(), pEntries->end(),
         [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
-    return pEntry != pEntries->end();
 }
 
 sal_Int32 SwXStyleFamilies::getCount()
@@ -1113,7 +1112,7 @@ public:
 
     bool AllowsKey(const OUString& rName)
     {
-        return aPropertyEntries.end() != std::find_if(aPropertyEntries.begin(), aPropertyEntries.end(),
+        return std::any_of(aPropertyEntries.begin(), aPropertyEntries.end(),
             [rName] (const SfxItemPropertyNamedEntry& rEntry) {return rName == rEntry.sName;} );
     }
     bool SetProperty(const OUString& rName, const uno::Any& rValue)

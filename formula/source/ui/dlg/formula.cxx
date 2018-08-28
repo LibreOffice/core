@@ -498,10 +498,9 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 bFlag = false;
                 nFuncPos = nPrevFuncPos;
             }
-            bool bIsFunction = ::std::find_if( m_aFunctionOpCodes.getConstArray(),
+            bool bIsFunction = std::any_of( m_aFunctionOpCodes.getConstArray(),
                     m_pFunctionOpCodesEnd,
-                    [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; })
-                != m_pFunctionOpCodesEnd;
+                    [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; });
 
             if ( bIsFunction && m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode != eOp )
             {

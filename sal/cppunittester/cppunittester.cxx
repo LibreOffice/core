@@ -206,7 +206,7 @@ bool addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test
     {
         CppUnit::Test* pNewTest = pTest->getChildTestAt(i);
         ret |= addRecursiveTests(test_names, pNewTest, rRunner);
-        if (std::find_if(test_names.begin(), test_names.end(), test_name_compare(pNewTest->getName())) != test_names.end())
+        if (std::any_of(test_names.begin(), test_names.end(), test_name_compare(pNewTest->getName())))
         {
             rRunner.addTest(pNewTest);
             ret = true;

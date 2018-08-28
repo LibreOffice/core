@@ -143,14 +143,13 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
                 aName = SvPasteObjectHelper::GetSotFormatUIName( nFormat );
 
             // Show RICHTEXT only in case RTF is not present.
-            if (nFormat == SotClipboardFormatId::RICHTEXT)
+            if (nFormat == SotClipboardFormatId::RICHTEXT &&
+                std::any_of(pFormats->begin(), pFormats->end(),
+                            [](const DataFlavorEx& rFlavor) {
+                                return rFlavor.mnSotId == SotClipboardFormatId::RTF;
+                            }))
             {
-                auto it = std::find_if(pFormats->begin(), pFormats->end(),
-                                       [](const DataFlavorEx& rFlavor) {
-                                           return rFlavor.mnSotId == SotClipboardFormatId::RTF;
-                                       });
-                if (it != pFormats->end())
-                    continue;
+                continue;
             }
 
             if (ObjectLB().find_text(aName) == -1)

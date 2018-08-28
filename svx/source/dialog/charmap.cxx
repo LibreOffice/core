@@ -204,19 +204,16 @@ void SvxShowCharSet::getFavCharacterList()
 
 bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find_if(maFavCharList.begin(),
+    auto isFavCharTitleExists = std::any_of(maFavCharList.begin(),
          maFavCharList.end(),
          [sTitle] (const OUString & a) { return a == sTitle; });
 
-    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+    auto isFavCharFontExists = std::any_of(maFavCharFontList.begin(),
          maFavCharFontList.end(),
          [rFont] (const OUString & a) { return a == rFont; });
 
     // if Fav char to be added is already in list, return true
-    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
-        return true;
-    else
-        return false;
+    return isFavCharTitleExists && isFavCharFontExists;
 }
 
 void SvxShowCharSet::createContextMenu()
