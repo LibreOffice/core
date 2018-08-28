@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a0f818c4",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-28T14:38:58Z",
+      "side": 1,
+      "message": "These methods have rounding problems. I just committed 7f3c6efd859050c8f376b6820710e91fa9077ac4 that introduces a static tools::Time::GetClock() function to obtain time particles (which also the spreadsheet functions HOUR(), MINUTE() and SECOND() use now). Please use that instead. Sorry for the inconvenience.",
+      "revId": "b672fac7a2727bec44e5143e354f228f6d74a2b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_80f514ce",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-28T14:38:58Z",
+      "side": 1,
+      "message": "Same here, please use tools::Time::GetClock() instead.",
+      "revId": "b672fac7a2727bec44e5143e354f228f6d74a2b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_600210b7",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-28T14:38:58Z",
+      "side": 1,
+      "message": "Same here, please use tools::Time::GetClock() instead.",
+      "revId": "b672fac7a2727bec44e5143e354f228f6d74a2b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
