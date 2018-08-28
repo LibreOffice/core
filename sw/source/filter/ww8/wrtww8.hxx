@@ -1505,7 +1505,7 @@ public:
 
     void NextPos() { if ( nCurrentSwPos < SAL_MAX_INT32 ) nCurrentSwPos = SearchNext( nCurrentSwPos + 1 ); }
 
-    void OutAttr( sal_Int32 nSwPos, bool bRuby = false, bool bWriteCombinedChars = false );
+    void OutAttr( sal_Int32 nSwPos, bool bWriteCombinedChars );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
     int OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos);

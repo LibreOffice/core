@@ -512,9 +512,9 @@ public:
     // false: which is visible at the upper margin.
     void GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
                      bool bAtCursorPos = true, const bool bCalcFrame = true );
-    // Returns current page's sequential number (1-based), ignoring autoinserted empty pages
+    // Returns current page's sequential number (1-based),in which cursor is located, ignoring autoinserted empty pages.
     // Returns 0 on error
-    sal_uInt16 GetPageNumSeqNonEmpty(bool bAtCursorPos, bool bCalcFrame);
+    sal_uInt16 GetPageNumSeqNonEmpty();
     // Determine how "empty pages" are handled
     // (used in PhyPage).
     sal_uInt16 GetNextPrevPageNum( bool bNext = true );
