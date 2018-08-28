@@ -39,6 +39,7 @@ namespace sw
 
 DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                 m_nIdleBlockCount( 0 ),
+                                                                m_bStartOnUnblock( false ),
                                                                 m_aDocIdle( i_rSwdoc )
 {
     m_aDocIdle.SetPriority(TaskPriority::LOWEST);
@@ -48,18 +49,26 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    if (!m_aDocIdle.IsActive())
+    if (m_nIdleBlockCount > 0)
+        m_bStartOnUnblock = true;
+    else if (!m_aDocIdle.IsActive())
         m_aDocIdle.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
+    m_bStartOnUnblock = false;
     m_aDocIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
     assert(SAL_MAX_UINT32 != m_nIdleBlockCount);
+    if (0 == m_nIdleBlockCount)
+    {
+        assert(!m_bStartOnUnblock);
+        m_bStartOnUnblock = false;
+    }
     ++m_nIdleBlockCount;
 }
 
@@ -68,9 +77,13 @@ void DocumentTimerManager::UnblockIdling()
     assert(0 != m_nIdleBlockCount);
     --m_nIdleBlockCount;
 
-    // kick the active idle, if it's not anymore blocked by IsDocIdle()
-    if (m_aDocIdle.IsActive() && IsDocIdle())
-        m_aDocIdle.Start();
+    if ((0 == m_nIdleBlockCount) && m_bStartOnUnblock)
+    {
+        m_bStartOnUnblock = false;
+        // kick the active idle, if it's not anymore blocked by IsDocIdle()
+        if (IsDocIdle())
+            m_aDocIdle.Start();
+    }
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
