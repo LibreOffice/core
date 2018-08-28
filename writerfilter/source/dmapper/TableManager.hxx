@@ -273,6 +273,8 @@ private:
     /// If this is a nested table, does it start at cell start?
     bool m_bTableStartsAtCellStart;
 
+    bool m_bCellLastParaAfterAutospacing;
+
     /**
        handler for resolveCurrentTable
      */
@@ -473,6 +475,8 @@ public:
 
 
     void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
+    void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);
+    bool isCellLastParaAfterAutospacing() {return m_bCellLastParaAfterAutospacing;}
 };
 
 }
