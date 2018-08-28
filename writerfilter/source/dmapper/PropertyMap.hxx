@@ -306,6 +306,8 @@ public:
 
     explicit SectionPropertyMap( bool bIsFirstSection );
 
+    bool IsFirstSection() { return m_bIsFirstSection; }
+
     void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange ) { m_xStartingRange = xRange; }
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
