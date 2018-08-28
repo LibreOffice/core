@@ -50,6 +50,7 @@ public:
             ImplToolItems::size_type nPos = APPEND) override;
 
     virtual bool EventNotify(NotifyEvent& rEvent) override;
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     void SetController(const sal_uInt16 nItemId,
                        const css::uno::Reference<css::frame::XToolbarController>& rxController);
