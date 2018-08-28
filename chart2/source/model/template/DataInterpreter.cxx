@@ -286,8 +286,8 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
                 Reference< data::XLabeledDataSequence > xAdd( aSeq[nSeqIdx] );
 
                 // only add if sequence is not yet in the result
-                if( find_if( aResultVec.begin(), aResultVec.end(),
-                             lcl_LabeledSequenceEquals( xAdd )) == aResultVec.end())
+                if( none_of( aResultVec.begin(), aResultVec.end(),
+                             lcl_LabeledSequenceEquals( xAdd )) )
                 {
                     aResultVec.push_back( xAdd );
                 }

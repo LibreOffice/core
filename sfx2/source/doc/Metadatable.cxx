@@ -575,7 +575,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
             // this is only called from TryRegister now, so check
             // if all elements in the list are deleted (in undo) or
             // placeholders, then "steal" the id from them
-            if ( pList->end() == ::std::find_if(pList->begin(), pList->end(),
+            if ( std::none_of(pList->begin(), pList->end(),
                 [](Metadatable* item)->bool {
                     return !(item->IsInUndo() || item->IsInClipboard());
                     } ) )

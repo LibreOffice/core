@@ -535,10 +535,8 @@ bool ZipFile::HasContent(const std::string &ContentName) const
     //case in-sensitive as it is not defined that such
     //names must be handled case sensitive
     DirectoryPtr_t dir = GetDirectory();
-    Directory_t::iterator iter =
-        std::find_if(dir->begin(), dir->end(), internal::stricmp(ContentName));
 
-    return (iter != dir->end());
+    return std::any_of(dir->begin(), dir->end(), internal::stricmp(ContentName));
 }
 
 

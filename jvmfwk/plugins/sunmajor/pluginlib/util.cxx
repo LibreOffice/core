@@ -128,10 +128,7 @@ bool addJREInfo(
     rtl::Reference<VendorBase> const & info,
     std::vector<rtl::Reference<VendorBase>> & infos)
 {
-    auto i(
-        std::find_if(
-            infos.begin(), infos.end(), InfoFindSame(info->getHome())));
-    if (i == infos.end()) {
+    if (std::none_of(infos.begin(), infos.end(), InfoFindSame(info->getHome()))) {
         infos.push_back(info);
         return true;
     } else {

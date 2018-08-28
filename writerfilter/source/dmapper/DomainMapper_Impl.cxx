@@ -1397,11 +1397,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
                             auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                            auto itPrevParaAutoAfter = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                            bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
                                 return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
                             });
-                            bool bPrevParaAutoAfter = itPrevParaAutoAfter != aPrevProperties.end();
                             if (bPrevParaAutoAfter)
                             {
                                 // Previous after spacing is set to auto, set previous after space to 0.
@@ -1453,22 +1452,18 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // set top margin of the previous auto paragraph in cells, keeping zero bottom margin only at the first one
                 if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && m_xPreviousParagraph.is())
                 {
-                    bool bParaChangedTopMargin = false;
-                    auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
+                    bool bParaChangedTopMargin = std::any_of(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
                     {
                         return rValue.Name == "ParaTopMargin";
                     });
-                    if (itParaTopMargin != aProperties.end())
-                        bParaChangedTopMargin = true;
 
                     uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                     m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
                     auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                    auto itPrevParaAutoBefore = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                    bool bPrevParaAutoBefore = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
                     {
                         return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
                     });
-                    bool bPrevParaAutoBefore = itPrevParaAutoBefore != aPrevProperties.end();
 
                     if ((bPrevParaAutoBefore && !bParaChangedTopMargin) || (bParaChangedTopMargin && m_bParaAutoBefore))
                     {
@@ -2517,11 +2512,10 @@ void DomainMapper_Impl::ClearPreviousParagraph()
         uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
         m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
         auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-        auto itPrevParaAutoAfter = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+        bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
         {
             return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
         });
-        bool bPrevParaAutoAfter = itPrevParaAutoAfter != aPrevProperties.end();
 
         bool bPrevNumberingRules = false;
         uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);

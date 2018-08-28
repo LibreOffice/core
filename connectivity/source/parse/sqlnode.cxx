@@ -1690,9 +1690,8 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
     OSL_ENSURE(pNewNode != nullptr, "OSQLParseNode: invalid NewSubTree");
     OSL_ENSURE(pNewNode->getParent() == nullptr, "OSQLParseNode: Node is not an orphan");
-    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
-                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewNode; })
-               == m_aChildren.end(),
+    OSL_ENSURE(std::none_of(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewNode; }),
                "OSQLParseNode::append() Node already element of parent");
 
     // Create connection to getParent
@@ -2394,13 +2393,11 @@ OSQLParseNode* OSQLParseNode::replace(OSQLParseNode* pOldSubNode, OSQLParseNode*
 {
     OSL_ENSURE(pOldSubNode != nullptr && pNewSubNode != nullptr, "OSQLParseNode: invalid nodes");
     OSL_ENSURE(pNewSubNode->getParent() == nullptr, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
-                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; })
-                != m_aChildren.end(),
+    OSL_ENSURE(std::any_of(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; }),
                "OSQLParseNode::Replace() Node not element of parent");
-    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
-                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewSubNode; })
-                == m_aChildren.end(),
+    OSL_ENSURE(std::none_of(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewSubNode; }),
                "OSQLParseNode::Replace() Node already element of parent");
 
     pOldSubNode->setParent( nullptr );

@@ -602,13 +602,7 @@
         // look if this id is one we recognized as duplicate
         IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ m_nPropertyMapId ];
 
-        IntArrayArray::value_type::const_iterator aPos = ::std::find_if(
-            rDuplicateIds.begin(),
-            rDuplicateIds.end(),
-            Int32Equal( _nHandle )
-        );
-
-        if ( rDuplicateIds.end() != aPos )
+        if ( std::any_of(rDuplicateIds.begin(), rDuplicateIds.end(), Int32Equal( _nHandle )) )
         {
             // yes, it is such a property
             OUString sPropName;

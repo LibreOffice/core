@@ -518,11 +518,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     ::osl::MutexGuard aGuard (maMutex);
 
     // Check that the given view shell is active.
-    ActiveShellList::iterator iShell (::std::find_if (
-        maActiveViewShells.begin(),
-        maActiveViewShells.end(),
-        IsShell(&rParentShell)));
-    if (iShell == maActiveViewShells.end())
+    if (std::none_of (maActiveViewShells.begin(), maActiveViewShells.end(), IsShell(&rParentShell)))
         return;
 
     // Create the sub shell list if it does not yet exist.
@@ -533,7 +529,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Do not activate an object bar that is already active.  Requesting
     // this is not exactly an error but may be an indication of one.
     SubShellSubList& rList (iList->second);
-    if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
+    if (std::any_of(rList.begin(),rList.end(), IsId(nId)))
         return;
 
     // Add just the id of the sub shell. The actual shell is created

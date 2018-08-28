@@ -86,10 +86,10 @@ bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
         "/_xmlsignatures"
     };
     // Just check the prefix, as we don't care about the content type part of the stream name.
-    return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral)
+    return std::any_of(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral)
     {
         return rStreamName.startsWith(rLiteral);
-    }) != vBlacklist.end();
+    });
 }
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(const OUString& rRelationName)

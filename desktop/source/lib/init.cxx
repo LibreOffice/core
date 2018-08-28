@@ -1100,7 +1100,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     {
                         // if we have to invalidate all of the window, ignore
                         // any part invalidation message
-                        const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                        auto invAllExist = std::any_of(m_queue.rbegin(), m_queue.rend(),
                                                        [&nLOKWindowId] (const queue_type::value_type& elem)
                                                        {
                                                            if (elem.first != LOK_CALLBACK_WINDOW)
@@ -1120,7 +1120,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                                        });
 
                         // we found a invalidate-all window callback
-                        if (pos != m_queue.rend())
+                        if (invAllExist)
                         {
                             SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole window needs to be invalidated.");
                             return;

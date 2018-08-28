@@ -118,13 +118,12 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 // for the vendors for which there is a javaSelection/plugins/
                 // library entry in the javavendors.xml; jfw_getJavaInfoByPath
                 // can return a JavaInfo of any vendor:
-                if ((std::find_if(
+                if ((std::none_of(
                          vecInfo.begin(), vecInfo.end(),
                          [&aInfo](std::unique_ptr<JavaInfo> const & info) {
                              return areEqualJavaInfo(
                                  info.get(), aInfo.get());
-                         })
-                     == vecInfo.end())
+                         }))
                     && (std::find(
                             vecVendors.begin(), vecVendors.end(),
                             aInfo->sVendor)
