@@ -33,6 +33,7 @@
 #include <docsh.hxx>
 #include <docfld.hxx>
 #include <fldbas.hxx>
+#include <vcl/scheduler.hxx>
 
 namespace sw
 {
@@ -49,10 +50,14 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 
 void DocumentTimerManager::StartIdling()
 {
-    if (m_nIdleBlockCount > 0)
-        m_bStartOnUnblock = true;
-    else if (!m_aDocIdle.IsActive())
-        m_aDocIdle.Start();
+    m_bStartOnUnblock = true;
+    if (0 == m_nIdleBlockCount)
+    {
+        if (!m_aDocIdle.IsActive())
+            m_aDocIdle.Start();
+        else
+            Scheduler::Wakeup();
+    }
 }
 
 void DocumentTimerManager::StopIdling()
@@ -64,11 +69,6 @@ void DocumentTimerManager::StopIdling()
 void DocumentTimerManager::BlockIdling()
 {
     assert(SAL_MAX_UINT32 != m_nIdleBlockCount);
-    if (0 == m_nIdleBlockCount)
-    {
-        assert(!m_bStartOnUnblock);
-        m_bStartOnUnblock = false;
-    }
     ++m_nIdleBlockCount;
 }
 
@@ -79,10 +79,10 @@ void DocumentTimerManager::UnblockIdling()
 
     if ((0 == m_nIdleBlockCount) && m_bStartOnUnblock)
     {
-        m_bStartOnUnblock = false;
-        // kick the active idle, if it's not anymore blocked by IsDocIdle()
-        if (IsDocIdle())
+        if (!m_aDocIdle.IsActive())
             m_aDocIdle.Start();
+        else
+            Scheduler::Wakeup();
     }
 }
 
@@ -137,6 +137,7 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
     BlockIdling();
+    StopIdling();
 
     IdleJob eJob = GetNextIdleJob();
 
