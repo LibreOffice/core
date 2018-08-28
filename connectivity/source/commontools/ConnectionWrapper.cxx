@@ -120,7 +120,7 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
 
     // append our own service, if necessary
     OUString sConnectionService( "com.sun.star.sdbc.Connection" );
-    if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, true ).getLength() )
+    if ( ::comphelper::findValue( aSupported, sConnectionService ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );

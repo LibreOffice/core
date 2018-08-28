@@ -89,7 +89,7 @@ Sequence< OUString > OConnection::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSupported = OConnectionWrapper::getSupportedServiceNames();
 
-    if ( 0 == findValue( aSupported, SERVICE_SDB_CONNECTION, true ).getLength() )
+    if ( comphelper::findValue( aSupported, SERVICE_SDB_CONNECTION ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );

@@ -150,9 +150,9 @@ namespace
             xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN) >>= sRelatedColumn;
 
             {
-                Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),rElement,true));
-                if(aFind.getLength())
-                    pNewConnData->SetFieldIndex(JTCS_FROM,aFind[0]+1);
+                sal_Int32 nFindIndex = ::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),rElement);
+                if(nFindIndex != -1)
+                    pNewConnData->SetFieldIndex(JTCS_FROM,nFindIndex+1);
                 else
                     OSL_FAIL("Column not found!");
             }
@@ -160,9 +160,9 @@ namespace
             Reference<XNameAccess> xRefColumns = _rDest.GetOriginalColumns();
             if(xRefColumns.is())
             {
-                Sequence< sal_Int16> aFind(::comphelper::findValue(xRefColumns->getElementNames(),sRelatedColumn,true));
-                if(aFind.getLength())
-                    pNewConnData->SetFieldIndex(JTCS_TO,aFind[0]+1);
+                sal_Int32 nFindIndex = ::comphelper::findValue(xRefColumns->getElementNames(),sRelatedColumn);
+                if(nFindIndex != -1)
+                    pNewConnData->SetFieldIndex(JTCS_TO,nFindIndex+1);
                 else
                     OSL_FAIL("Column not found!");
             }

@@ -136,20 +136,8 @@ struct StaticScatterChartTypeInfo : public rtl::StaticAggregate< uno::Reference<
 namespace chart
 {
 
-ScatterChartType::ScatterChartType(
-    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ,
-    sal_Int32 nResolution /* = 20 */,
-    sal_Int32 nOrder /* = 3 */ )
+ScatterChartType::ScatterChartType()
 {
-    if( eCurveStyle != chart2::CurveStyle_LINES )
-        setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_STYLE,
-                                          uno::Any( eCurveStyle ));
-    if( nResolution != 20 )
-        setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION,
-                                          uno::Any( nResolution ));
-    if( nOrder != 3 )
-        setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_SPLINE_ORDER,
-                                          uno::Any( nOrder ));
 }
 
 ScatterChartType::ScatterChartType( const ScatterChartType & rOther ) :

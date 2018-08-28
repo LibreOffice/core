@@ -470,7 +470,7 @@ void InitCore()
     aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( false, RES_CHRATR_WORDLINEMODE );
     aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN );
     aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( false, RES_CHRATR_BLINK );
-    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( true, RES_CHRATR_NOHYPHEN );
+    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( RES_CHRATR_NOHYPHEN );
     aAttrTab[ RES_CHRATR_UNUSED2- POOLATTR_BEGIN ] =        new SfxVoidItem( RES_CHRATR_UNUSED2 );
     aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ] =    new SvxBrushItem( RES_CHRATR_BACKGROUND );
 
