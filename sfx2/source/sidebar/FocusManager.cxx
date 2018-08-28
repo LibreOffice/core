@@ -507,10 +507,12 @@ void FocusManager::HandleKeyEvent (
                     // Go to next tab bar item.
                     if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
                         FocusButton(aLocation.mnIndex + 1);
-                    else if (IsDeckTitleVisible())
-                        FocusDeckTitle();
                     else
+                    {
                         FocusPanel(0, true);
+                        if (IsDeckTitleVisible())
+                            FocusDeckTitle();
+                    }
                     break;
 
                 default:

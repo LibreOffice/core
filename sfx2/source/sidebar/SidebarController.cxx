@@ -1334,7 +1334,11 @@ void SidebarController::UpdateTitleBarIcons()
 void SidebarController::ShowPanel (const Panel& rPanel)
 {
     if (mpCurrentDeck)
+    {
+        if (!IsDeckOpen())
+            RequestOpenDeck();
         mpCurrentDeck->ShowPanel(rPanel);
+    }
 }
 
 ResourceManager::DeckContextDescriptorContainer SidebarController::GetMatchingDecks()
