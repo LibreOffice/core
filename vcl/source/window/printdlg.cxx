@@ -724,6 +724,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
     // set a select handler
     maJobPage.mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    mpTabCtrl->SetActivatePageHdl( LINK( this, PrintDialog, ActivatePageHdl ) );
 
     // setup sizes for N-Up
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
@@ -1749,6 +1750,14 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit&, rEdit, void )
                                makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
         maPController->setValue( "Collate",
                                makeAny( isCollate() ) );
+    }
+}
+
+IMPL_LINK( PrintDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
+{
+    const sal_uInt16 id = pTabCtrl->GetCurPageId();
+    if (pTabCtrl->GetPageName(id) == "optionstab" ) {
+        maOptionsPage.mpPapersizeFromSetup->Check( maPController->getPapersizeFromSetup() );
     }
 }
 

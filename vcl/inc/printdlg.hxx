@@ -233,6 +233,7 @@ namespace vcl
         DECL_LINK( ToggleHdl, CheckBox&, void );
         DECL_LINK( ToggleRadioHdl, RadioButton&, void );
         DECL_LINK( ModifyHdl, Edit&, void );
+        DECL_LINK( ActivatePageHdl, TabControl *, void);
 
         DECL_LINK( UIOption_CheckHdl, CheckBox&, void );
         DECL_LINK( UIOption_RadioHdl, RadioButton&, void );
