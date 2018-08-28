@@ -480,7 +480,7 @@ int documentStartPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bo
     if (!bIgnoreEmpty)
         shell.GetPageNum(page, o3tl::temporary(sal_uInt16()));
     else
-        page = shell.GetPageNumSeqNonEmpty(true, true);
+        page = shell.GetPageNumSeqNonEmpty();
     shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;
 }
@@ -506,7 +506,7 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool
     if (!bIgnoreEmpty)
         shell.GetPageNum(page, o3tl::temporary(sal_uInt16()));
     else
-        page = shell.GetPageNumSeqNonEmpty(true, true);
+        page = shell.GetPageNumSeqNonEmpty();
     shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;
 }

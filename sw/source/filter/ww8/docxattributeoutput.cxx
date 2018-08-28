@@ -1900,7 +1900,7 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
         // 3. output all other character properties
         SwWW8AttrIter aAttrIt( m_rExport, *pNode );
-        aAttrIt.OutAttr( nPos, false, bWriteCombChars );
+        aAttrIt.OutAttr( nPos, bWriteCombChars );
 
         // 4. explicitly write the font-properties, to ensure all runs in the field have them
         // see tdf#66401
