@@ -21,6 +21,7 @@
 #include <utility>
 
 #include <comphelper/lok.hxx>
+#include <config_global.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
@@ -2650,7 +2651,11 @@ vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScri
 {
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );
+#if HAVE_GCC_BUG_87150
+    return aFont;
+#else
     return std::move(aFont);
+#endif
 }
 
 SvxFont EditEngine::CreateSvxFontFromItemSet( const SfxItemSet& rItemSet )

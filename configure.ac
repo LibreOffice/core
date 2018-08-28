@@ -6445,6 +6445,21 @@ CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 AC_SUBST([HAVE_CXX_CWG1579_FIX])
 
+AC_MSG_CHECKING([whether $CXX has GCC bug 87150])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        struct S1 { S1(S1 &&); };
+        struct S2: S1 {};
+        S1 f(S2 s) { return s; }
+    ])], [
+        AC_DEFINE([HAVE_GCC_BUG_87150],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
