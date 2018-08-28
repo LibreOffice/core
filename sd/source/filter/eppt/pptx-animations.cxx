@@ -405,6 +405,48 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
 }
+
+/// convert animation node type to corresponding ooxml element.
+sal_Int32 convertNodeType(sal_Int16 nType)
+{
+    sal_Int32 xmlNodeType = -1;
+    switch (nType)
+    {
+        case AnimationNodeType::ITERATE:
+        case AnimationNodeType::PAR:
+            xmlNodeType = XML_par;
+            break;
+        case AnimationNodeType::SEQ:
+            xmlNodeType = XML_seq;
+            break;
+        case AnimationNodeType::ANIMATE:
+            xmlNodeType = XML_anim;
+            break;
+        case AnimationNodeType::ANIMATEMOTION:
+            xmlNodeType = XML_animMotion;
+            break;
+        case AnimationNodeType::ANIMATETRANSFORM:
+            // could be XML_animScale or XML_animRot based on xTransform->getTransformType()
+            xmlNodeType = -1;
+            break;
+        case AnimationNodeType::ANIMATECOLOR:
+            xmlNodeType = XML_animClr;
+            break;
+        case AnimationNodeType::SET:
+            xmlNodeType = XML_set;
+            break;
+        case AnimationNodeType::TRANSITIONFILTER:
+            xmlNodeType = XML_animEffect;
+            break;
+        case AnimationNodeType::COMMAND:
+            xmlNodeType = XML_cmd;
+            break;
+        default:
+            SAL_WARN("sd.eppt", "unhandled animation node: " << nType);
+            break;
+    }
+    return xmlNodeType;
+}
 }
 
 void PowerPointExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& rTarget)
@@ -965,27 +1007,18 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS,
                                           bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
-    sal_Int32 xmlNodeType = -1;
-    typedef void (PowerPointExport::*AnimationNodeWriteMethod)(
-        const FSHelperPtr&, const Reference<XAnimationNode>&, sal_Int32, bool);
-    AnimationNodeWriteMethod pMethod = nullptr;
+    sal_Int32 xmlNodeType = convertNodeType(rXNode->getType());
 
     switch (rXNode->getType())
     {
         case AnimationNodeType::ITERATE:
         case AnimationNodeType::PAR:
-            xmlNodeType = XML_par;
+            pFS->startElementNS(XML_p, xmlNodeType, FSEND);
+            WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
+            pFS->endElementNS(XML_p, xmlNodeType);
             break;
         case AnimationNodeType::SEQ:
-            pMethod = &PowerPointExport::WriteAnimationNodeSeq;
-            break;
-        case AnimationNodeType::ANIMATE:
-            xmlNodeType = XML_anim;
-            pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
-            break;
-        case AnimationNodeType::ANIMATEMOTION:
-            xmlNodeType = XML_animMotion;
-            pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
+            WriteAnimationNodeSeq(pFS, rXNode, xmlNodeType, bMainSeqChild);
             break;
         case AnimationNodeType::ANIMATETRANSFORM:
         {
@@ -993,53 +1026,33 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS,
             if (xTransform.is())
             {
                 if (xTransform->getTransformType() == AnimationTransformType::SCALE)
-                {
                     xmlNodeType = XML_animScale;
-                    pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
-                }
                 else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
-                {
                     xmlNodeType = XML_animRot;
-                    pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
-                }
+
+                WriteAnimationNodeAnimate(pFS, rXNode, xmlNodeType, bMainSeqChild);
             }
+            else
+                SAL_WARN("sd.eppt",
+                         "XAnimateTransform not handled: " << xTransform->getTransformType());
         }
         break;
+        case AnimationNodeType::ANIMATE:
+        case AnimationNodeType::ANIMATEMOTION:
         case AnimationNodeType::ANIMATECOLOR:
-            xmlNodeType = XML_animClr;
-            pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
-            break;
         case AnimationNodeType::SET:
-            xmlNodeType = XML_set;
-            pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
+            WriteAnimationNodeAnimate(pFS, rXNode, xmlNodeType, bMainSeqChild);
             break;
         case AnimationNodeType::TRANSITIONFILTER:
-            xmlNodeType = XML_animEffect;
-            pMethod = &PowerPointExport::WriteAnimationNodeEffect;
+            WriteAnimationNodeEffect(pFS, rXNode, xmlNodeType, bMainSeqChild);
             break;
         case AnimationNodeType::COMMAND:
-            xmlNodeType = XML_cmd;
-            pMethod = &PowerPointExport::WriteAnimationNodeCommand;
+            WriteAnimationNodeCommand(pFS, rXNode, xmlNodeType, bMainSeqChild);
             break;
         default:
             SAL_WARN("sd.eppt", "unhandled animation node: " << rXNode->getType());
             break;
     }
-
-    if (pMethod)
-    {
-        (this->*pMethod)(pFS, rXNode, xmlNodeType, bMainSeqChild);
-        return;
-    }
-
-    if (xmlNodeType == -1)
-        return;
-
-    pFS->startElementNS(XML_p, xmlNodeType, FSEND);
-
-    WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
-
-    pFS->endElementNS(XML_p, xmlNodeType);
 }
 
 void PowerPointExport::WriteAnimations(const FSHelperPtr& pFS)
