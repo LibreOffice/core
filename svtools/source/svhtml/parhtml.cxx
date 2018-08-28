@@ -1120,10 +1120,11 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             // and there is an off token, return off token instead
                             nRet = static_cast<HtmlTokenId>(static_cast<int>(nRet) + 1);
                          }
-                         else if( HtmlTokenId::LINEBREAK!=nRet )
+                         else if( HtmlTokenId::LINEBREAK!=nRet || !maNamespace.isEmpty())
                          {
                             // and there is no off token, return unknown token.
                             // (except for </BR>, that is treated like <BR>)
+                            // No exception for XHTML, though.
                             nRet = HtmlTokenId::UNKNOWNCONTROL_OFF;
                          }
                     }
