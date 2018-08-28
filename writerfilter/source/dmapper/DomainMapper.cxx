@@ -667,23 +667,17 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
         {
-            sal_Int32 default_spacing = 100;
-
-            if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+            sal_Int32 default_spacing = -1;
+            if  (nIntValue)
             {
-                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
-                    default_spacing = 49;
-                else
-                    default_spacing = 280;
-            }
-            if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
-            {
-                m_pImpl->SetParaAutoAfter(true);
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
-            }
-            else
-            {
-                default_spacing = -1;
+                default_spacing = 100;
+                if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+                {
+                    if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
+                        default_spacing = 49;
+                    else
+                        default_spacing = 280;
+                }
             }
             m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
         }

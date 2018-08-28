@@ -463,6 +463,11 @@ void TableManager::setTableStartsAtCellStart(bool bTableStartsAtCellStart)
     m_bTableStartsAtCellStart = bTableStartsAtCellStart;
 }
 
+void TableManager::setLastCellParaAfterAutospacing(bool bLastCellParaAfterAutospacing)
+{
+    m_bLastCellParaAfterAutospacing = bLastCellParaAfterAutospacing;
+}
+
 TableManager::TableManager()
     : mnTableDepthNew(0), mnTableDepth(0), mbKeepUnfinishedRow(false),
       m_bTableStartsAtCellStart(false)
@@ -470,6 +475,7 @@ TableManager::TableManager()
     setRowEnd(false);
     setInCell(false);
     setCellEnd(false);
+    m_bLastCellParaAfterAutospacing = false;
 }
 
 }
