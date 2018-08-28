@@ -1517,10 +1517,10 @@
                   </packing>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel" id="label20">
+                  <object class="GtkLabel" id="optionstab">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="printdialog|label20">Options</property>
+                    <property name="label" translatable="yes" context="printdialog|optionstab">Options</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
