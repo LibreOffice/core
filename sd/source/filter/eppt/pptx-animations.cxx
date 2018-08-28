@@ -54,11 +54,13 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include "pptexanimations.hxx"
+#include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
 
 using namespace ::com::sun::star::animations;
@@ -71,6 +73,7 @@ using namespace oox::core;
 using namespace oox;
 
 using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::text::XSimpleText;
 using ::sax_fastparser::FSHelperPtr;
@@ -447,9 +450,54 @@ sal_Int32 convertNodeType(sal_Int16 nType)
     }
     return xmlNodeType;
 }
+
+class PPTXAnimationExport
+{
+    void WriteAnimationNode(const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode,
+                            bool bMainSeqChild);
+    void WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode,
+                                   sal_Int32 nXmlNodeType, bool bMainSeqChild);
+    void WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
+                                         const Reference<XAnimationNode>& rXNode,
+                                         bool bMainSeqChild, bool bSimple, bool bWriteTo = true);
+    void WriteAnimationNodeSeq(const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode,
+                               sal_Int32 nXmlNodeType, bool bMainSeqChild);
+    void WriteAnimationNodeEffect(const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode,
+                                  sal_Int32 nXmlNodeType, bool bMainSeqChild);
+    void WriteAnimationNodeCommand(const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode,
+                                   sal_Int32 nXmlNodeType, bool bMainSeqChild);
+    void WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS,
+                                            const Reference<XAnimationNode>& rXNode, bool bSingle,
+                                            bool bMainSeqChild);
+    void WriteAnimationTarget(const FSHelperPtr& pFS, const Any& rTarget);
+
+    PowerPointExport& mrPowerPointExport;
+
+public:
+    PPTXAnimationExport(PowerPointExport& rExport);
+    void WriteAnimations(const FSHelperPtr& pFS, const Reference<XDrawPage>& rXDrawPage);
+};
 }
 
-void PowerPointExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& rTarget)
+namespace oox
+{
+namespace core
+{
+void WriteAnimations(const FSHelperPtr& pFS, const Reference<XDrawPage>& rXDrawPage,
+                     PowerPointExport& rExport)
+{
+    PPTXAnimationExport aAnimationExport(rExport);
+    aAnimationExport.WriteAnimations(pFS, rXDrawPage);
+}
+}
+}
+
+PPTXAnimationExport::PPTXAnimationExport(PowerPointExport& rExport)
+    : mrPowerPointExport(rExport)
+{
+}
+
+void PPTXAnimationExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& rTarget)
 {
     sal_Int32 nParagraph = -1;
     bool bParagraphTarget = false;
@@ -475,9 +523,10 @@ void PowerPointExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& r
 
     if (rXShape.is())
     {
+        sal_Int32 nShapeID = mrPowerPointExport.GetShapeID(rXShape);
+
         pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-        pFS->startElementNS(XML_p, XML_spTgt, XML_spid,
-                            I32S(ShapeExport::GetShapeID(rXShape, &maShapeMap)), FSEND);
+        pFS->startElementNS(XML_p, XML_spTgt, XML_spid, I32S(nShapeID), FSEND);
         if (bParagraphTarget)
         {
             pFS->startElementNS(XML_p, XML_txEl, FSEND);
@@ -490,9 +539,9 @@ void PowerPointExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& r
     }
 }
 
-void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS,
-                                                 const Reference<XAnimationNode>& rXNode,
-                                                 sal_Int32 nXmlNodeType, bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS,
+                                                    const Reference<XAnimationNode>& rXNode,
+                                                    sal_Int32 nXmlNodeType, bool bMainSeqChild)
 {
     Reference<XAnimate> rXAnimate(rXNode, UNO_QUERY);
     if (!rXAnimate.is())
@@ -617,10 +666,10 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS,
     pFS->endElementNS(XML_p, nXmlNodeType);
 }
 
-void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
-                                                       const Reference<XAnimationNode>& rXNode,
-                                                       bool bMainSeqChild, bool bSimple,
-                                                       bool bWriteTo)
+void PPTXAnimationExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
+                                                          const Reference<XAnimationNode>& rXNode,
+                                                          bool bMainSeqChild, bool bSimple,
+                                                          bool bWriteTo)
 {
     Reference<XAnimate> rXAnimate(rXNode, UNO_QUERY);
     if (!rXAnimate.is())
@@ -686,9 +735,9 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
         WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
-void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS,
-                                                          const Reference<XAnimationNode>& rXNode,
-                                                          bool bSingle, bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart(
+    const FSHelperPtr& pFS, const Reference<XAnimationNode>& rXNode, bool bSingle,
+    bool bMainSeqChild)
 {
     const char* pDuration = nullptr;
     const char* pRestart = nullptr;
@@ -835,7 +884,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
     bool bAutoReverse = rXNode->getAutoReverse();
 
     pFS->startElementNS(
-        XML_p, XML_cTn, XML_id, I64S(mnAnimationNodeIdMax++), XML_dur,
+        XML_p, XML_cTn, XML_id, I64S(mrPowerPointExport.GetNextAnimationNodeID()), XML_dur,
         fDuration != 0 ? I32S(static_cast<sal_Int32>(fDuration * 1000.0)) : pDuration, XML_autoRev,
         bAutoReverse ? "1" : nullptr, XML_restart, pRestart, XML_nodeType, pNodeType, XML_fill,
         pFill, XML_presetClass, pPresetClass, XML_presetID, bPresetId ? I64S(nPresetId) : nullptr,
@@ -924,9 +973,9 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
         pFS->endElementNS(XML_p, XML_cTn);
 }
 
-void PowerPointExport::WriteAnimationNodeSeq(const FSHelperPtr& pFS,
-                                             const Reference<XAnimationNode>& rXNode, sal_Int32,
-                                             bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeSeq(const FSHelperPtr& pFS,
+                                                const Reference<XAnimationNode>& rXNode, sal_Int32,
+                                                bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "write animation node SEQ");
 
@@ -940,9 +989,9 @@ void PowerPointExport::WriteAnimationNodeSeq(const FSHelperPtr& pFS,
     pFS->endElementNS(XML_p, XML_seq);
 }
 
-void PowerPointExport::WriteAnimationNodeEffect(const FSHelperPtr& pFS,
-                                                const Reference<XAnimationNode>& rXNode, sal_Int32,
-                                                bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeEffect(const FSHelperPtr& pFS,
+                                                   const Reference<XAnimationNode>& rXNode,
+                                                   sal_Int32, bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "write animation node FILTER");
     Reference<XTransitionFilter> xFilter(rXNode, UNO_QUERY);
@@ -960,9 +1009,9 @@ void PowerPointExport::WriteAnimationNodeEffect(const FSHelperPtr& pFS,
     }
 }
 
-void PowerPointExport::WriteAnimationNodeCommand(const FSHelperPtr& pFS,
-                                                 const Reference<XAnimationNode>& rXNode, sal_Int32,
-                                                 bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeCommand(const FSHelperPtr& pFS,
+                                                    const Reference<XAnimationNode>& rXNode,
+                                                    sal_Int32, bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "write animation node COMMAND");
     Reference<XCommand> xCommand(rXNode, UNO_QUERY);
@@ -1002,9 +1051,9 @@ void PowerPointExport::WriteAnimationNodeCommand(const FSHelperPtr& pFS,
     }
 }
 
-void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS,
-                                          const Reference<XAnimationNode>& rXNode,
-                                          bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNode(const FSHelperPtr& pFS,
+                                             const Reference<XAnimationNode>& rXNode,
+                                             bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
     sal_Int32 xmlNodeType = convertNodeType(rXNode->getType());
@@ -1055,9 +1104,10 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS,
     }
 }
 
-void PowerPointExport::WriteAnimations(const FSHelperPtr& pFS)
+void PPTXAnimationExport::WriteAnimations(const FSHelperPtr& pFS,
+                                          const Reference<XDrawPage>& rXDrawPage)
 {
-    Reference<XAnimationNodeSupplier> xNodeSupplier(mXDrawPage, UNO_QUERY);
+    Reference<XAnimationNodeSupplier> xNodeSupplier(rXDrawPage, UNO_QUERY);
     if (xNodeSupplier.is())
     {
         const Reference<XAnimationNode> xNode(xNodeSupplier->getAnimationNode());
