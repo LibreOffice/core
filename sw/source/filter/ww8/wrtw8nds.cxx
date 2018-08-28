@@ -381,14 +381,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     return nMinPos;
 }
 
-static bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
-{
-    return ( rItem.Which( ) == RES_CHRATR_FONTSIZE ||
-            rItem.Which( ) == RES_CHRATR_CJK_FONTSIZE ||
-            rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
-}
-
-void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars)
+void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
 {
     m_rExport.AttrOutput().RTLAndCJKState( mbCharIsRTL, GetScript() );
 
@@ -498,8 +491,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars
 
     for ( const auto& aRangeItem : aRangeItems )
     {
-        if ( !bRuby || !lcl_isFontsizeItem( *(aRangeItem.second) ) )
-            aExportItems[aRangeItem.first] = aRangeItem.second;
+        aExportItems[aRangeItem.first] = aRangeItem.second;
     }
 
     if ( !aExportItems.empty() )
@@ -2471,7 +2463,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nCurrentPos );
+                aAttrIter.OutAttr( nCurrentPos, false );
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
@@ -2514,7 +2506,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // do it after WriteCR for an empty paragraph (otherwise
                 // WW8_WrFkp::Append throws SPRMs away...)
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nCurrentPos );
+                aAttrIter.OutAttr( nCurrentPos, false );
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
@@ -2583,7 +2575,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if (0 != nEnd)
                 {
                     AttrOutput().StartRunProperties();
-                    aAttrIter.OutAttr( nCurrentPos );
+                    aAttrIter.OutAttr( nCurrentPos, false );
                     AttrOutput().EndRunProperties( pRedlineData );
                 }
                 AttrOutput().RunText( aSavedSnippet, eChrSet );

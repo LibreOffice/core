@@ -160,7 +160,7 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItem
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             pDlg->AddFontTabPage();
-            pDlg->AddTabPage(RID_SW_TP_DOC_STAT, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT), nullptr);
+            pDlg->AddTabPage(RID_SW_TP_DOC_STAT, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
         }
     }
     return pDlg;

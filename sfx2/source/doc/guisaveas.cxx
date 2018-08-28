@@ -1654,7 +1654,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
 
             if ( nStoreMode & EXPORT_REQUESTED )
             {
-                SfxStoringHelper::SetDocInfoState(aModel.GetModel(), xOldDocProps, true);
+                SfxStoringHelper::SetDocInfoState(aModel.GetModel(), xOldDocProps);
             }
         };
 
@@ -1728,8 +1728,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
 // static
 void SfxStoringHelper::SetDocInfoState(
         const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< document::XDocumentProperties>& i_xOldDocProps,
-        bool bNoModify )
+        const uno::Reference< document::XDocumentProperties>& i_xOldDocProps )
 {
     uno::Reference<document::XDocumentPropertiesSupplier> const
         xModelDocPropsSupplier(xModel, uno::UNO_QUERY_THROW);
@@ -1739,10 +1738,10 @@ void SfxStoringHelper::SetDocInfoState(
             i_xOldDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
 
     uno::Reference< util::XModifiable > xModifiable( xModel, uno::UNO_QUERY );
-    if ( bNoModify && !xModifiable.is() )
+    if ( !xModifiable.is() )
         throw uno::RuntimeException();
 
-    bool bIsModified = bNoModify && xModifiable->isModified();
+    bool bIsModified = xModifiable->isModified();
 
     try
     {
@@ -1799,7 +1798,7 @@ void SfxStoringHelper::SetDocInfoState(
     }
 
     // set the modified flag back if required
-    if ( (bNoModify && bIsModified) != bool(xModifiable->isModified()) )
+    if ( bIsModified != bool(xModifiable->isModified()) )
         xModifiable->setModified( bIsModified );
 }
 

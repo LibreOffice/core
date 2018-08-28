@@ -1213,16 +1213,13 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bL
     return pBuf;
 }
 
-static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber, bool bLeading )
+static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber )
 {
     DBG_ASSERT( nNumber < 1000000000, "ImplAdd9UNum() - Number >= 1000000000" );
 
     std::ostringstream ostr;
-    if (bLeading)
-    {
-        ostr.fill('0');
-        ostr.width(9);
-    }
+    ostr.fill('0');
+    ostr.width(9);
     ostr << nNumber;
     std::string aStr = ostr.str();
     for(const char *pAB= aStr.c_str(); *pAB != '\0'; ++pAB, ++pBuf)
@@ -1436,7 +1433,7 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec(), true );
+            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec() );
         }
     }
 
@@ -1508,7 +1505,7 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec(), true );
+            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec() );
         }
     }
 
