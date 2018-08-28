@@ -234,7 +234,7 @@ public:
 
     void WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     void WritePresetShape( const char* pShape );
-    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
+    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const css::beans::PropertyValue& rProp );
     bool WriteCustomGeometry(
         const css::uno::Reference<css::drawing::XShape>& rXShape,
         const SdrObjCustomShape& rSdrObjCustomShape);

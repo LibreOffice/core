@@ -192,7 +192,7 @@ void ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer )
 
 void ZipOutputEntry::doDeflate()
 {
-    sal_Int32 nLength = m_aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
+    sal_Int32 nLength = m_aDeflater.doDeflateSegment(m_aDeflateBuffer, m_aDeflateBuffer.getLength());
 
     if ( nLength > 0 )
     {

@@ -129,14 +129,12 @@ void lclAppendString32( OUString& rString, XclImpStream& rStrm, bool b16Bit )
     lclAppendString32( rString, rStrm, rStrm.ReaduInt32(), b16Bit );
 }
 
-/** Reads 32-bit string length and ignores following character array.
-    @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
+/** Reads 32-bit string length and ignores following 16-bit character array. */
+void lclIgnoreString32( XclImpStream& rStrm )
 {
     sal_uInt32 nChars(0);
     nChars = rStrm.ReaduInt32();
-    if( b16Bit )
-        nChars *= 2;
+    nChars *= 2;
     rStrm.Ignore( nChars );
 }
 
@@ -262,10 +260,10 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
-        lclIgnoreString32( rStrm, true );
+        lclIgnoreString32( rStrm );
     // target frame (ignore) !! DESCR/FRAME - is this the right order? (never seen them together)
     if( ::get_flag( nFlags, EXC_HLINK_FRAME ) )
-        lclIgnoreString32( rStrm, true );
+        lclIgnoreString32( rStrm );
 
     // URL fields are zero-terminated - do not let the stream replace them
     // in the lclAppendString32() with the '?' character.

@@ -125,7 +125,7 @@ void ExternalDataSource::setDBData(const OUString& rDBName)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager.reset(new ScDBDataManager(rDBName, false, mpDoc));
+        mpDBDataManager.reset(new ScDBDataManager(rDBName, mpDoc));
     }
     else
     {
@@ -246,9 +246,8 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
         pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
-ScDBDataManager::ScDBDataManager(const OUString& rDBName,  bool /*bAllowResize*/, ScDocument* pDoc):
+ScDBDataManager::ScDBDataManager(const OUString& rDBName, ScDocument* pDoc):
     maDBName(rDBName),
-    //mbAllowResize(bAllowResize),
     mpDoc(pDoc)
 {
 }
