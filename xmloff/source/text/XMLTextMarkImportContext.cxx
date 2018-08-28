@@ -174,9 +174,9 @@ void XMLTextMarkImportContext::StartElement(
 
     if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
     {
-        OUString sHidden = xAttrList->getValueByName("loext:hidden");
-        OUString sCondition = xAttrList->getValueByName("loext:condition");
-        m_rHelper.setBookmarkAttributes(sHidden == "true", sCondition);
+        const OUString sHidden    = xAttrList->getValueByName("loext:hidden");
+        const OUString sCondition = xAttrList->getValueByName("loext:condition");
+        m_rHelper.setBookmarkAttributes(m_sBookmarkName, sHidden == "true", sCondition);
     }
 }
 
@@ -357,8 +357,8 @@ void XMLTextMarkImportContext::EndElement()
                                 const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
                                 if (xPropertySet.is())
                                 {
-                                    xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden()));
-                                    xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition()));
+                                    xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
+                                    xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
                                 }
                             }
 
