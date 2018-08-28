@@ -182,10 +182,9 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
 
             public:
 
-                InteractionInfo(const css::uno::Type& aInteraction,
-                                      sal_Int32       nMaxCount   )
+                InteractionInfo(const css::uno::Type& aInteraction)
                     : m_aInteraction(aInteraction)
-                    , m_nMaxCount   (nMaxCount   )
+                    , m_nMaxCount   (1   )
                     , m_nCallCount  (0           )
                 {}
         };

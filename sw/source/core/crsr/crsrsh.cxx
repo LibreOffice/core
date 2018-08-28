@@ -1126,14 +1126,14 @@ void SwCursorShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
     rnVirtNum = pPg? pPg->GetVirtPageNum() : 1;
 }
 
-sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty(bool bAtCursorPos, bool bCalcFrame)
+sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty()
 {
     SET_CURR_SHELL(this);
     // page number: first visible page or the one at the cursor
-    const SwContentFrame* pCFrame = GetCurrFrame(bCalcFrame);
+    const SwContentFrame* pCFrame = GetCurrFrame(/*bCalcFrame*/true);
     const SwPageFrame* pPg = nullptr;
 
-    if (!bAtCursorPos || !pCFrame || nullptr == (pPg = pCFrame->FindPageFrame()))
+    if (!pCFrame || nullptr == (pPg = pCFrame->FindPageFrame()))
     {
         pPg = Imp()->GetFirstVisPage(GetOut());
         while (pPg && pPg->IsEmptyPage())

@@ -24,7 +24,7 @@
 
 class SdrMoveXItem: public SdrMetricItem {
 public:
-    SdrMoveXItem(long n=0): SdrMetricItem(SDRATTR_MOVEX,n)        {}
+    SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX,0)        {}
     SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrMoveXItem(*this);
@@ -33,7 +33,7 @@ public:
 
 class SdrMoveYItem: public SdrMetricItem {
 public:
-    SdrMoveYItem(long n=0): SdrMetricItem(SDRATTR_MOVEY,n)        {}
+    SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY,0)        {}
     SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrMoveYItem(*this);

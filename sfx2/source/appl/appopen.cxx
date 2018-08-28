@@ -686,7 +686,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             // define rules for this handler
             css::uno::Type                                            aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
-            ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
+            ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule(aInteraction);
             pHandler->addInteractionRule(aRule);
 
             if (!aDocService.isEmpty())

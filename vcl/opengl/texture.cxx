@@ -380,7 +380,7 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
     }
 }
 
-void OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const
+void OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const
 {
     if (IsValid())
     {
@@ -390,16 +390,8 @@ void OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GL
         x1 = (maRect.Left() + rPosAry.mnSrcX) / fTextureWidth;
         x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / fTextureWidth;
 
-        if (bInverted)
-        {
-            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
-            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
-        }
-        else
-        {
-            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
-            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
-        }
+        y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
+        y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
     }
 }
 
@@ -411,7 +403,7 @@ void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rCoords, c
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    GetTextureRect(rPosAry, false/*bInverted*/, x1, x2, y1, y2);
+    GetTextureRect(rPosAry, x1, x2, y1, y2);
 
     rCoords.insert(rCoords.end(), {
         x1, y2, x1, y1,
@@ -427,7 +419,7 @@ void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& rCoords, cons
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    GetTextureRect(rPosAry, false/*bInverted*/, x1, x2, y1, y2);
+    GetTextureRect(rPosAry, x1, x2, y1, y2);
 
     rCoords.insert(rCoords.end(), {
         x1, y1, x2, y1, x1, y2,
