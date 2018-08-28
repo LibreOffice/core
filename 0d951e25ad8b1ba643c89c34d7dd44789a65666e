@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_fd500b35",
+        "filename": "writerfilter/source/ooxml/OOXMLFactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-28T10:14:32Z",
+      "side": 1,
+      "message": "Maybe join the two cases (SignedTwipsMeasure and TwipsMeasure) together, and use (pAttr-\u003em_nResource \u003d\u003d SignedTwipsMeasure) as argument to bAllowNegative?\n\nI\u0027d like to go without default value for bAllowNegative actually if possible.",
+      "range": {
+        "startLine": 116,
+        "startChar": 80,
+        "endLine": 116,
+        "endChar": 104
+      },
+      "revId": "0d951e25ad8b1ba643c89c34d7dd44789a65666e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
