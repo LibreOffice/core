@@ -128,9 +128,9 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
         Statics & st = getStatics();
 
         OUStringBuffer buf( 128 );
-        buf.append( "User::getPrivileges[" + extractStringProperty( this, st.NAME ) +
-                    "] got called for " + objName + "(type=" +
-                    OUString::number(objType) + ")");
+        buf.append( "User::getPrivileges[" ).append( extractStringProperty( this, st.NAME ) )
+                    .append( "] got called for " ).append( objName ).append( "(type=" )
+                    .append( OUString::number(objType) ).append(")");
         log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
     // all privileges

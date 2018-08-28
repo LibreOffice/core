@@ -335,9 +335,9 @@ OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUString& aStyle)
 {
     if (aStyle.isEmpty())
-        aBuffer.append("<" + aTag + ">");
+        aBuffer.append("<").append(aTag).append(">");
     else
-        aBuffer.append("<" + aTag + " style=\"" + aStyle + "\">");
+        aBuffer.append("<").append(aTag).append(" style=\"").append(aStyle).append("\">");
 }
 
 } // anonymous namespace
@@ -1348,7 +1348,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
             lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
 
             aStr.append(aParaText);
-            aStr.append("</" + aTag + ">\r\n");
+            aStr.append("</").append(aTag).append(">\r\n");
         }
         else
         {
@@ -1594,7 +1594,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         // HTML Head
         OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
-        aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
+        aStr.append("  <title>" ).append( StringToHTMLString(maPageNames[nSdPage]) ).append("</title>\r\n");
 
         // insert timing information
         pPage = maPages[ nSdPage ];
@@ -2807,12 +2807,12 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 
             aPnt.setX( static_cast<long>(aPnt.X() * fFactor) );
             aPnt.setY( static_cast<long>(aPnt.Y() * fFactor) );
-            aStr.append(OUString::number(aPnt.X()) + "," + OUString::number(aPnt.Y()));
+            aStr.append(OUString::number(aPnt.X())).append(",").append(OUString::number(aPnt.Y()));
 
             if (nPoint < nNoOfPoints - 1)
                 aStr.append(',');
         }
-        aStr.append("\" href=\"" + rHRef + "\">\n");
+        aStr.append("\" href=\"").append(rHRef).append("\">\n");
     }
 
     return aStr.makeStringAndClear();

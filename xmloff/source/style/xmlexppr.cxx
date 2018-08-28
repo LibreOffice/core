@@ -949,7 +949,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 pNamespaceMap = pNewNamespaceMap;
                             }
                             pNewNamespaceMap->Add( sPrefix, sNamespace );
-                            sNameBuffer.append( GetXMLToken(XML_XMLNS) + ":" + sPrefix );
+                            sNameBuffer.append( GetXMLToken(XML_XMLNS) ).append( ":" ).append( sPrefix );
                             rAttrList.AddAttribute( sNameBuffer.makeStringAndClear(),
                                                     sNamespace );
                         }

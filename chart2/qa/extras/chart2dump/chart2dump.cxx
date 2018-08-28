@@ -230,7 +230,7 @@ protected:
         OUStringBuffer aBufer;
         for (const OUString& seqItem : rSeq)
         {
-            aBufer.append(seqItem + ";");
+            aBufer.append(seqItem).append(";");
         }
         return aBufer.makeStringAndClear();
     }
@@ -240,7 +240,7 @@ protected:
         OUStringBuffer aBufer;
         for (const double& vectorItem : rVector)
         {
-            aBufer.append(OUString::number(vectorItem) + ";");
+            aBufer.append(OUString::number(vectorItem)).append(";");
         }
         return aBufer.makeStringAndClear();
     }

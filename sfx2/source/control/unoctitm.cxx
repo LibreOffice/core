@@ -1154,7 +1154,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
         {
-            aBuffer.append(OUString::number(aPoint.X) + " / " + OUString::number(aPoint.Y));
+            aBuffer.append(OUString::number(aPoint.X)).append(" / ").append(OUString::number(aPoint.Y));
         }
     }
     else if (aEvent.FeatureURL.Path == "Size")
@@ -1163,7 +1163,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aSize))
         {
-            aBuffer.append(OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height));
+            aBuffer.append(OUString::number(aSize.Width)).append(" x ").append(OUString::number(aSize.Height));
         }
     }
     else if (aEvent.FeatureURL.Path == "LanguageStatus")
@@ -1194,7 +1194,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
                 aBuffer.append(u'{');
                 for (sal_Int32 itSeq = 0; itSeq < aSeq.getLength(); itSeq++)
                 {
-                    aBuffer.append("\"" + aSeq[itSeq]);
+                    aBuffer.append("\"").append(aSeq[itSeq]);
                     if (itSeq != aSeq.getLength() - 1)
                         aBuffer.append("\":true,");
                     else

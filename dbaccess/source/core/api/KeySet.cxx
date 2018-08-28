@@ -223,11 +223,11 @@ namespace
             fullName = tblName + "." + colName;
         if ( _rValue.isNull() )
         {
-            o_buf.append(fullName + " IS NULL ");
+            o_buf.append(fullName).append(" IS NULL ");
         }
         else
         {
-            o_buf.append(fullName + " = ? ");
+            o_buf.append(fullName).append(" = ? ");
         }
     }
 }
@@ -503,7 +503,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         }
         if((_rInsertRow->get())[columnName.second.nPosition].isModified())
         {
-            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + aPara);
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName)).append(aPara);
         }
         ++i;
     }
@@ -520,7 +520,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         aSql.append(" WHERE ");
         if(!sKeyCondition.isEmpty() && !sIndexCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear());
+            aSql.append(sKeyCondition.makeStringAndClear()).append(sIndexCondition.makeStringAndClear());
         }
         else if(!sKeyCondition.isEmpty())
         {
@@ -618,7 +618,7 @@ void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLT
             {
                 bRefetch = std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),columnName.second.sRealName) == m_aFilterColumns.end();
             }
-            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + ",");
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName)).append(",");
             aValues.append("?,");
             bModified = true;
         }

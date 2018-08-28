@@ -91,7 +91,7 @@ namespace XmlSec
                 s2.append('\n');
             }
             s1.append(i->second);
-            s2.append(i->first + " = " + i->second);
+            s2.append(i->first).append(" = ").append(i->second);
         }
         return make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
     }

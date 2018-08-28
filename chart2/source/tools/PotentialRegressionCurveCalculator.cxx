@@ -170,18 +170,18 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         // if nValueLength not calculated then nullptr
         sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
         if ( m_fIntercept < 0.0 )    // add intercept value
-             aTmpBuf.append( OUStringLiteral1(aMinusSign)+" " );
+             aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
         if( bHasIntercept )
         {
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fIntercept), pValueLength );
             if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
             {
-                aTmpBuf.append( aValueString + " " );
+                aTmpBuf.append( aValueString ).append( " " );
             }
         }
         if( m_fSlope != 0.0 )  // add slope value
         {
-            aTmpBuf.append( mXName + "^" );
+            aTmpBuf.append( mXName ).append( "^" );
             aTmpBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope, pValueLength ));
         }
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );

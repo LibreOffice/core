@@ -3758,7 +3758,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::EnhancedCu
         {
             case css::drawing::EnhancedCustomShapeParameterType::EQUATION :
             {
-                rStrBuffer.append( "?f" + OUString::number( nValue ) );
+                rStrBuffer.append( "?f" ).append(OUString::number( nValue ) );
             }
             break;
 
