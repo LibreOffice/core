@@ -108,10 +108,10 @@ void Deflater::finish(  )
 {
     bFinish = true;
 }
-sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength )
 {
-    OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
-    return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
+    OSL_ASSERT( !(nNewLength < 0 || nNewLength > rBuffer.getLength()));
+    return doDeflateBytes(rBuffer, /*nNewOffset*/0, nNewLength);
 }
 sal_Int64 Deflater::getTotalIn(  )
 {
