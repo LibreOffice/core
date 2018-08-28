@@ -53,7 +53,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
-
+#include <com/sun/star/drawing/XShape.hpp>
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -61,19 +61,19 @@
 #include "pptexanimations.hxx"
 #include "../ppt/pptanimations.hxx"
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::ppt;
-using ::sax_fastparser::FSHelperPtr;
 using namespace oox::drawingml;
 using namespace oox::core;
 using namespace oox;
+
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::text::XSimpleText;
+using ::sax_fastparser::FSHelperPtr;
 
 namespace
 {
@@ -104,7 +104,7 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     sal_uInt32 nRgb;
     double fDouble;
 
-    uno::TypeClass aClass = rAny.getValueType().getTypeClass();
+    TypeClass aClass = rAny.getValueType().getTypeClass();
     bool bWriteToken
         = nToken
           && (aClass == TypeClass_LONG || aClass == TypeClass_DOUBLE || aClass == TypeClass_STRING);
