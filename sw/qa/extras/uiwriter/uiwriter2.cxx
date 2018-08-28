@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
+#include <redline.hxx>
 
 namespace
 {
@@ -22,9 +23,11 @@ class SwUiWriterTest2 : public SwModelTestBase
 {
 public:
     void testTdf101534();
+    void testTdf54819();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
+    CPPUNIT_TEST(testTdf54819);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -53,6 +56,39 @@ void SwUiWriterTest2::testTdf101534()
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+}
+
+void SwUiWriterTest2::testTdf54819()
+{
+    load(DATA_DIRECTORY, "tdf54819.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+
+    //turn on red-lining and hide changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines shouldn't be visible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // remove first paragraph with paragraph break
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // remaining paragraph keeps its original style
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
