@@ -205,9 +205,9 @@ inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 struct rtl_mem
 {
     static void * operator new ( size_t nSize )
-        { return rtl_allocateMemory( nSize ); }
+        { return std::malloc( nSize ); }
     static void operator delete ( void * mem )
-        { if (mem) rtl_freeMemory( mem ); }
+        { std::free( mem ); }
     static void * operator new ( size_t, void * mem )
         { return mem; }
     static void operator delete ( void *, void * )
@@ -218,7 +218,7 @@ struct rtl_mem
 
 inline rtl_mem * rtl_mem::allocate( std::size_t bytes )
 {
-    void * p = rtl_allocateMemory( bytes );
+    void * p = std::malloc( bytes );
     if (nullptr == p)
         throw BridgeRuntimeError( "out of memory!" );
     return static_cast<rtl_mem *>(p);

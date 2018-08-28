@@ -71,8 +71,8 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics = new AquaSalGraphics();
 
     const int nWidth = 100, nHeight = 100;
-    mpContextMemory.reset(static_cast<sal_uInt8*>(rtl_allocateMemory(nWidth * 4 * nHeight)),
-                          &rtl_freeMemory);
+    mpContextMemory.reset(static_cast<sal_uInt8*>(std::malloc(nWidth * 4 * nHeight)),
+                          &std::free);
 
     if (mpContextMemory)
     {
@@ -188,7 +188,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         io_pSetupData->SetOrientation( mePageOrientation );
 
         io_pSetupData->SetPaperBin( 0 );
-        io_pSetupData->SetDriverData( static_cast<sal_uInt8*>(rtl_allocateMemory( 4 )) );
+        io_pSetupData->SetDriverData( static_cast<sal_uInt8*>(std::malloc( 4 )) );
         io_pSetupData->SetDriverDataLen( 4 );
     }
     else

@@ -273,7 +273,7 @@ struct PDFObject : public PDFContainer
 private:
     // returns true if stream is deflated
     // fills *ppStream and *pBytes with start of stream and count of bytes
-    // memory returned in *ppStream must be freed with rtl_freeMemory afterwards
+    // memory returned in *ppStream must be freed with std::free afterwards
     // fills in NULL and 0 in case of error
     bool getDeflatedStream( char** ppStream, unsigned int* pBytes, const PDFContainer* pObjectContainer, EmitContext& rContext ) const;
 };

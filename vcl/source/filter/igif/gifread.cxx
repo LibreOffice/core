@@ -530,7 +530,7 @@ sal_uLong GIFReader::ReadNextBlock()
                     if( nRead && !bOverreadBlock )
                         FillImages( pTarget, nRead );
 
-                    rtl_freeMemory( pTarget );
+                    std::free( pTarget );
                 }
             }
         }

@@ -55,7 +55,7 @@ namespace binaryurp {
 namespace {
 
 void * allocate(sal_Size size) {
-    void * p = rtl_allocateMemory(size);
+    void * p = std::malloc(size);
     if (p == nullptr) {
         throw std::bad_alloc();
     }

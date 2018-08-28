@@ -3082,7 +3082,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         if (m_pStrm->GetError())
         {
             rPos = WW8_CP_MAX-10; // -> eof or other error
-            rtl_freeMemory(pStr);
+            std::free(pStr);
             delete [] p8Bits;
             return true;
         }

@@ -352,7 +352,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
 
 void x11::X11_freeBmp( sal_uInt8* pBmp )
 {
-    rtl_freeMemory( pBmp );
+    std::free( pBmp );
 }
 
 /*
@@ -692,7 +692,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         aImage.obdata           = nullptr;
 
         XInitImage( &aImage );
-        aImage.data = static_cast<char*>(rtl_allocateMemory( nHeight*aImage.bytes_per_line ));
+        aImage.data = static_cast<char*>(std::malloc( nHeight*aImage.bytes_per_line ));
 
         if( readLE32( pData+14 ) == 24 )
         {
@@ -714,7 +714,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
                    nWidth, nHeight );
 
         // clean up
-        rtl_freeMemory( aImage.data );
+        std::free( aImage.data );
 
         // prepare bitmap (mask)
         m_aBitmap = limitXCreatePixmap( m_pDisplay,

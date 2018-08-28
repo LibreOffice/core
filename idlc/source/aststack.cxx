@@ -38,7 +38,7 @@ AstStack::~AstStack()
             delete m_stack[i];
     }
 
-    rtl_freeMemory(m_stack);
+    std::free(m_stack);
 }
 
 
@@ -97,7 +97,7 @@ AstStack* AstStack::push(AstScope* pScope)
         for(i=0; i < m_size; i++)
             tmp[i] = m_stack[i];
 
-        rtl_freeMemory(m_stack);
+        std::free(m_stack);
         m_stack = tmp;
     }
 

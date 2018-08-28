@@ -1369,14 +1369,14 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case RegValueType::STRING:
             {
-                sal_Char* value = static_cast<sal_Char*>(rtl_allocateMemory(valueSize));
+                sal_Char* value = static_cast<sal_Char*>(std::malloc(valueSize));
                 readUtf8(aBuffer.data(), value, valueSize);
                 fprintf(stdout, "%sValue: Type = RegValueType::STRING\n", indent);
                 fprintf(
                     stdout, "%s       Size = %lu\n", indent,
                     sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = \"%s\"\n", indent, value);
-                rtl_freeMemory(value);
+                std::free(value);
             }
             break;
         case RegValueType::UNICODE:
@@ -1462,7 +1462,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                     offset += 4; // 4 bytes (sal_uInt32) for the string size
 
-                    sal_Char *pValue = static_cast<sal_Char*>(rtl_allocateMemory(sLen));
+                    sal_Char *pValue = static_cast<sal_Char*>(std::malloc(sLen));
                     readUtf8(aBuffer.data() + offset, pValue, sLen);
 
                     if (offset > 8)
@@ -1471,7 +1471,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     fprintf(
                         stdout, "%lu = \"%s\"\n",
                         sal::static_int_cast< unsigned long >(i), pValue);
-                    rtl_freeMemory(pValue);
+                    std::free(pValue);
                     offset += sLen;
                 }
             }
@@ -1500,7 +1500,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                     offset += 4; // 4 bytes (sal_uInt32) for the string size
 
-                    sal_Unicode *pValue = static_cast<sal_Unicode*>(rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode)));
+                    sal_Unicode *pValue = static_cast<sal_Unicode*>(std::malloc((sLen / 2) * sizeof(sal_Unicode)));
                     readString(aBuffer.data() + offset, pValue, sLen);
 
                     if (offset > 8)
@@ -1514,7 +1514,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                     offset += sLen;
 
-                    rtl_freeMemory(pValue);
+                    std::free(pValue);
                 }
             }
             break;

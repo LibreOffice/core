@@ -117,7 +117,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
             {
                 *phOpenSubKeys = nullptr;
                 *pnSubKeys = 0;
-                rtl_freeMemory(pSubKeys); // @@@ leaking 'pSubKeys[0...nSubkeys-1]'
+                std::free(pSubKeys); // @@@ leaking 'pSubKeys[0...nSubkeys-1]'
                 return _ret;              // @@@ leaking 'pKey'
             }
 
@@ -238,17 +238,17 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
 
     sal_uInt32  readBytes;
     if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -264,8 +264,8 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 //    {
         if (*pValueType > RegValueType::BINARY)
         {
-            rtl_freeMemory(pBuffer);
-            pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(4));
+            std::free(pBuffer);
+            pBuffer = static_cast<sal_uInt8*>(std::malloc(4));
             rValue.readAt(VALUE_HEADEROFFSET, pBuffer, 4, readBytes);
 
             readUINT32(pBuffer, size);
@@ -274,7 +274,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         *pValueSize = size;
 //    }
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -309,7 +309,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     sal_uInt32 size = vSize;
 
     sal_uInt8 type = static_cast<sal_uInt8>(vType);
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
@@ -339,17 +339,17 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     sal_uInt32  writenBytes;
     if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -381,7 +381,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
     size += len * 4;
 
     sal_uInt8 type = sal_uInt8(RegValueType::LONGLIST);
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
@@ -398,17 +398,17 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
     sal_uInt32  writenBytes;
     if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADEROFFSET+size))
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -444,7 +444,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     }
 
     sal_uInt8 type = sal_uInt8(RegValueType::STRINGLIST);
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
@@ -466,17 +466,17 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     sal_uInt32  writenBytes;
     if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -512,7 +512,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     }
 
     sal_uInt8 type = sal_uInt8(RegValueType::UNICODELIST);
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE + size));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
     memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
@@ -534,17 +534,17 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     sal_uInt32  writenBytes;
     if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -574,17 +574,17 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
 
     sal_uInt32  readBytes;
     if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -592,23 +592,23 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     valueType = static_cast<RegValueType>(type);
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
 
     if (valueType > RegValueType::BINARY)
     {
         return RegError::INVALID_VALUE;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
 
     if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -638,7 +638,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     }
 
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -670,21 +670,21 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
 
     sal_uInt32  readBytes;
     if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -695,13 +695,13 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
 
     /* check for 'reasonable' value */
     /* surely 10 millions entry in a registry list should be enough */
@@ -709,23 +709,23 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
 
     if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -737,7 +737,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     *pLen = len;
@@ -752,7 +752,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     }
 
     *pValueList = pVList;
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -784,21 +784,21 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
 
     sal_uInt32  readBytes;
     if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -809,28 +809,28 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
 
     if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -850,7 +850,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
 
         offset += 4;
 
-        pValue = static_cast<sal_Char*>(rtl_allocateMemory(sLen));
+        pValue = static_cast<sal_Char*>(std::malloc(sLen));
         readUtf8(pBuffer+offset, pValue, sLen);
         pVList[i] = pValue;
 
@@ -858,7 +858,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     }
 
     *pValueList = pVList;
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -890,21 +890,21 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(VALUE_HEADERSIZE));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
 
     sal_uInt32  readBytes;
     if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -915,28 +915,28 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory(valueSize));
+    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
 
     if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        rtl_freeMemory(pBuffer);
+        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
@@ -956,7 +956,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 
         offset += 4;
 
-        pValue = static_cast<sal_Unicode*>(rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode)));
+        pValue = static_cast<sal_Unicode*>(std::malloc((sLen / 2) * sizeof(sal_Unicode)));
         readString(pBuffer+offset, pValue, sLen);
         pVList[i] = pValue;
 
@@ -964,7 +964,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     }
 
     *pValueList = pVList;
-    rtl_freeMemory(pBuffer);
+    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 

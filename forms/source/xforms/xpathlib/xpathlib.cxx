@@ -374,7 +374,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
 {
     bool bTime = false; // in part after T
     sal_Int32 nLength = strlen(reinterpret_cast<char const *>(aString))+1;
-    char *pString = static_cast<char*>(rtl_allocateMemory(nLength));
+    char *pString = static_cast<char*>(std::malloc(nLength));
     char *pString0 = pString;
     strncpy(pString, reinterpret_cast<char const *>(aString), nLength);
 
@@ -385,7 +385,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
 
     if (pString[0] != 'P')
     {
-        rtl_freeMemory(pString0);
+        std::free(pString0);
         return false;
     }
 
@@ -430,7 +430,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
             pToken++;
         }
     }
-    rtl_freeMemory(pString0);
+    std::free(pString0);
     return true;
 }
 

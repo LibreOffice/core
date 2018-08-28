@@ -643,7 +643,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         if ( rData.GetPrinterName() != pInfo->maPrinterName ||
              rData.GetDriver() != pInfo->maDriver )
         {
-            rtl_freeMemory( const_cast<sal_uInt8*>(rData.GetDriverData()) );
+            std::free( const_cast<sal_uInt8*>(rData.GetDriverData()) );
             rData.SetDriverData(nullptr);
             rData.SetDriverDataLen(0);
         }

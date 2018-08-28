@@ -178,7 +178,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
         fprintf( stderr, "could not seek to offset %u\n", nOrigOffset );
         return false;
     }
-    void* pBuf = rtl_allocateMemory( nLen );
+    void* pBuf = std::malloc( nLen );
     if( ! pBuf )
         return false;
     sal_uInt64 nBytesRead = 0;
@@ -186,11 +186,11 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
         || nBytesRead != static_cast<sal_uInt64>(nLen) )
     {
         fprintf( stderr, "could not read %u bytes\n", nLen );
-        rtl_freeMemory( pBuf );
+        std::free( pBuf );
         return false;
     }
     bool bRet = write( pBuf, nLen );
-    rtl_freeMemory( pBuf );
+    std::free( pBuf );
     return bRet;
 }
 

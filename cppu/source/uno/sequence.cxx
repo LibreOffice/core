@@ -51,11 +51,11 @@ static inline uno_Sequence * reallocSeq(
     {
         if (pReallocate == nullptr)
         {
-            pNew = static_cast<uno_Sequence *>(rtl_allocateMemory( nSize ));
+            pNew = static_cast<uno_Sequence *>(std::malloc( nSize ));
         }
         else
         {
-            pNew = static_cast<uno_Sequence *>(rtl_reallocateMemory( pReallocate, nSize ));
+            pNew = static_cast<uno_Sequence *>(std::realloc( pReallocate, nSize ));
         }
         if (pNew != nullptr)
         {
@@ -618,7 +618,7 @@ static inline bool ireallocSequence(
                         pSeq->elements, pElementType,
                         0, nElements, release );
                 }
-                rtl_freeMemory( pSeq );
+                std::free( pSeq );
             }
             *ppSequence = pNew;
         }
@@ -818,7 +818,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
             {
                 // easy destruction of empty sequence:
                 if (osl_atomic_decrement( &pSequence->nRefCount ) == 0)
-                    rtl_freeMemory( pSequence );
+                    std::free( pSequence );
                 *ppSequence = pNew;
             }
         }
@@ -861,7 +861,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
             {
                 // easy destruction of empty sequence:
                 if (osl_atomic_decrement( &pSequence->nRefCount ) == 0)
-                    rtl_freeMemory( pSequence );
+                    std::free( pSequence );
                 *ppSequence = pNew;
             }
         }

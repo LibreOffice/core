@@ -529,11 +529,11 @@ public:
      */
     static void * operator new (size_t n)
     {
-        return rtl_allocateMemory (sal_uInt32(n));
+        return std::malloc(sal_uInt32(n));
     }
     static void operator delete (void * p)
     {
-        rtl_freeMemory (p);
+        std::free (p);
     }
 
     /** State.

@@ -344,11 +344,11 @@ sal_Int32 compileFile(const OString * pathname)
                     pathname == nullptr ? "" : "file ", fileName.getStr());
 
         osl_freeProcessHandle(hProcess);
-        rtl_freeMemory(pCmdArgs);
+        std::free(pCmdArgs);
         exit(hInfo.Code ? hInfo.Code : 99);
     }
     osl_freeProcessHandle(hProcess);
-    rtl_freeMemory(pCmdArgs);
+    std::free(pCmdArgs);
 
     if (unlink(tmpFile.getStr()) != 0)
     {

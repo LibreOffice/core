@@ -1822,7 +1822,7 @@ PDFWriterImpl::~PDFWriterImpl()
     if( m_aCipher )
         rtl_cipher_destroyARCFOUR( m_aCipher );
 
-    rtl_freeMemory( m_pEncryptionBuffer );
+    std::free( m_pEncryptionBuffer );
 }
 
 void PDFWriterImpl::setupDocInfo()

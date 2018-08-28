@@ -180,7 +180,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     // success
     bytes = static_cast<sal_uInt32>(aStream.Tell());
-    pData = rtl_allocateMemory( bytes );
+    pData = std::malloc( bytes );
     memcpy( pData, aStream.GetData(), bytes );
     return true;
 }
