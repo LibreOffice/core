@@ -390,6 +390,7 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelTitle:
                     // Toggle panel between expanded and collapsed.
                     maPanels[aLocation.mnIndex]->SetExpanded( ! maPanels[aLocation.mnIndex]->IsExpanded());
+                    maPanels[aLocation.mnIndex]->GetTitleBar().get()->Invalidate();
                     break;
 
                 default:
