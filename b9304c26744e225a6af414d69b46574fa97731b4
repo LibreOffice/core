@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_fd992b1f",
+        "filename": "sal/rtl/alloc_cache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-28T08:58:39Z",
+      "side": 1,
+      "message": "it is guaranteed that \u003ccstdlib\u003e declares std::malloc, but not that it declares malloc (and I\u0027d go with the std:: forms, anyway)",
+      "revId": "b9304c26744e225a6af414d69b46574fa97731b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
