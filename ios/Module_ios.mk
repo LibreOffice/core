@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,ios,\
 	CustomTarget_iOS_setup \
 ))
 
-ifneq ($(ENABLE_IOS_LIBREOFFICELIGHT),)
+ifneq ($(ENABLE_IOS_LIBREOFFICELIGHT_APP),)
 $(eval $(call gb_Module_add_targets,ios,\
 	CustomTarget_iOS_link \
 ))
