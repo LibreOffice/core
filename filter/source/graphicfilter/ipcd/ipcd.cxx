@@ -197,26 +197,26 @@ void PCDReader::ReadImage()
     nW2=nWidth>>1;
     nH2=nHeight>>1;
 
-    pL0 =static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
-    pL1 =static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
-    pCb =static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
-    pCr =static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
-    pL0N=static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
-    pL1N=static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
-    pCbN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
-    pCrN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
+    pL0 =static_cast<sal_uInt8*>(malloc( nWidth ));
+    pL1 =static_cast<sal_uInt8*>(malloc( nWidth ));
+    pCb =static_cast<sal_uInt8*>(malloc( nW2+1 ));
+    pCr =static_cast<sal_uInt8*>(malloc( nW2+1 ));
+    pL0N=static_cast<sal_uInt8*>(malloc( nWidth ));
+    pL1N=static_cast<sal_uInt8*>(malloc( nWidth ));
+    pCbN=static_cast<sal_uInt8*>(malloc( nW2+1 ));
+    pCrN=static_cast<sal_uInt8*>(malloc( nW2+1 ));
 
     if ( pL0 == nullptr || pL1 == nullptr || pCb == nullptr || pCr == nullptr ||
         pL0N == nullptr || pL1N == nullptr || pCbN == nullptr || pCrN == nullptr)
     {
-        rtl_freeMemory(static_cast<void*>(pL0) );
-        rtl_freeMemory(static_cast<void*>(pL1) );
-        rtl_freeMemory(static_cast<void*>(pCb) );
-        rtl_freeMemory(static_cast<void*>(pCr) );
-        rtl_freeMemory(static_cast<void*>(pL0N));
-        rtl_freeMemory(static_cast<void*>(pL1N));
-        rtl_freeMemory(static_cast<void*>(pCbN));
-        rtl_freeMemory(static_cast<void*>(pCrN));
+        free(static_cast<void*>(pL0) );
+        free(static_cast<void*>(pL1) );
+        free(static_cast<void*>(pCb) );
+        free(static_cast<void*>(pCr) );
+        free(static_cast<void*>(pL0N));
+        free(static_cast<void*>(pL1N));
+        free(static_cast<void*>(pCbN));
+        free(static_cast<void*>(pCrN));
         bStatus = false;
         return;
     }
@@ -340,14 +340,14 @@ void PCDReader::ReadImage()
         if ( !bStatus )
             break;
     }
-    rtl_freeMemory(static_cast<void*>(pL0) );
-    rtl_freeMemory(static_cast<void*>(pL1) );
-    rtl_freeMemory(static_cast<void*>(pCb) );
-    rtl_freeMemory(static_cast<void*>(pCr) );
-    rtl_freeMemory(static_cast<void*>(pL0N));
-    rtl_freeMemory(static_cast<void*>(pL1N));
-    rtl_freeMemory(static_cast<void*>(pCbN));
-    rtl_freeMemory(static_cast<void*>(pCrN));
+    free(static_cast<void*>(pL0) );
+    free(static_cast<void*>(pL1) );
+    free(static_cast<void*>(pCb) );
+    free(static_cast<void*>(pCr) );
+    free(static_cast<void*>(pL0N));
+    free(static_cast<void*>(pL1N));
+    free(static_cast<void*>(pCbN));
+    free(static_cast<void*>(pCrN));
 }
 
 //================== GraphicImport - the exported Function ================

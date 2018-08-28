@@ -206,7 +206,7 @@ public:
 
 ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
     mpBuf ( static_cast<Scanline>(rtl_allocateZeroMemory(nWidth * nHeight)) ),
-    mpScan ( static_cast<Scanline*>(rtl_allocateMemory(nHeight * sizeof(Scanline))) ),
+    mpScan ( static_cast<Scanline*>(malloc(nHeight * sizeof(Scanline))) ),
     mnWidth ( nWidth ),
     mnHeight( nHeight )
 {
@@ -219,8 +219,8 @@ ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
 
 ImplVectMap::~ImplVectMap()
 {
-    rtl_freeMemory( mpBuf );
-    rtl_freeMemory( mpScan );
+    free( mpBuf );
+    free( mpScan );
 }
 
 inline void ImplVectMap::Set( long nY, long nX, sal_uInt8 cVal )

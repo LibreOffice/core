@@ -282,8 +282,8 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
 
 InverseColorMap::~InverseColorMap()
 {
-    rtl_freeMemory( pBuffer );
-    rtl_freeMemory( pMap );
+    free( pBuffer );
+    free( pMap );
 }
 
 void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
@@ -291,10 +291,10 @@ void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
     const sal_uLong nCount = nMax * nMax * nMax;
     const sal_uLong nSize = nCount * sizeof( sal_uLong );
 
-    pMap = static_cast<sal_uInt8*>(rtl_allocateMemory( nCount ));
+    pMap = static_cast<sal_uInt8*>(malloc( nCount ));
     memset( pMap, 0x00, nCount );
 
-    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory( nSize ));
+    pBuffer = static_cast<sal_uInt8*>(malloc( nSize ));
     memset( pBuffer, 0xff, nSize );
 }
 
