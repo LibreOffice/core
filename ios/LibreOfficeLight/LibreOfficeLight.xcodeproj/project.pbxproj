@@ -20,7 +20,7 @@
 		3941EF1D204B4C8A00082486 /* filter in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF0E204B4C8900082486 /* filter */; };
 		3941EF1E204B4C8A00082486 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF0F204B4C8900082486 /* rc */; };
 		3941EF1F204B4C8A00082486 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF10204B4C8900082486 /* udkapi.rdb */; };
-		3941EF20204B4C8A00082486 /* icudt60l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF11204B4C8900082486 /* icudt60l.dat */; };
+		3941EF20204B4C8A00082486 /* icudt62l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF11204B4C8900082486 /* icudt62l.dat */; };
 		3941EF21204B4C8A00082486 /* welcome.odt in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF12204B4C8900082486 /* welcome.odt */; };
 		3941EF22204B4C8A00082486 /* config in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF13204B4C8900082486 /* config */; };
 		3941EF23204B4C8A00082486 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF14204B4C8900082486 /* share */; };
@@ -77,7 +77,7 @@
 		3941EF0E204B4C8900082486 /* filter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = filter; path = ../generated/resources/filter; sourceTree = "<group>"; };
 		3941EF0F204B4C8900082486 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = ../generated/resources/rc; sourceTree = "<group>"; };
 		3941EF10204B4C8900082486 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../generated/resources/udkapi.rdb; sourceTree = "<group>"; };
-		3941EF11204B4C8900082486 /* icudt60l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt60l.dat; path = ../generated/resources/icudt60l.dat; sourceTree = "<group>"; };
+		3941EF11204B4C8900082486 /* icudt62l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt62l.dat; path = ../generated/resources/icudt62l.dat; sourceTree = "<group>"; };
 		3941EF12204B4C8900082486 /* welcome.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = welcome.odt; path = ../generated/resources/welcome.odt; sourceTree = "<group>"; };
 		3941EF13204B4C8900082486 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; name = config; path = ../generated/resources/config; sourceTree = "<group>"; };
 		3941EF14204B4C8900082486 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
@@ -211,7 +211,7 @@
 				3941EF13204B4C8900082486 /* config */,
 				3941EF0E204B4C8900082486 /* filter */,
 				3941EF07204B4C8900082486 /* fundamentalrc */,
-				3941EF11204B4C8900082486 /* icudt60l.dat */,
+				3941EF11204B4C8900082486 /* icudt62l.dat */,
 				3941EF0D204B4C8900082486 /* offapi.rdb */,
 				3941EF0A204B4C8900082486 /* oovbaapi.rdb */,
 				3941EF08204B4C8900082486 /* program */,
@@ -330,7 +330,7 @@
 				3941EF1B204B4C8A00082486 /* services in Resources */,
 				3941EF21204B4C8A00082486 /* welcome.odt in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
-				3941EF20204B4C8A00082486 /* icudt60l.dat in Resources */,
+				3941EF20204B4C8A00082486 /* icudt62l.dat in Resources */,
 				3941EF16204B4C8A00082486 /* fundamentalrc in Resources */,
 				39514E082057E4A8005599D0 /* inc in Resources */,
 				3941EF1F204B4C8A00082486 /* udkapi.rdb in Resources */,
