@@ -24,7 +24,9 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <systools/win32/uwinapi.h>
+#include <sddl.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include "secimpl.hxx"
 
@@ -305,60 +307,26 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             if (pInfoBuffer)
             {
                 PSID pSid = reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid;
-                PSID_IDENTIFIER_AUTHORITY psia;
-                DWORD dwSubAuthorities;
-                DWORD dwCounter;
-                DWORD dwSidSize;
-                PUCHAR pSSACount;
 
-                /* obtain SidIdentifierAuthority */
-                psia=GetSidIdentifierAuthority(pSid);
-
-                /* obtain sidsubauthority count */
-                pSSACount = GetSidSubAuthorityCount(pSid);
-                dwSubAuthorities = (*pSSACount < 5) ? *pSSACount : 5;
-
-                /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
-                sal_Unicode *Ident=static_cast<sal_Unicode *>(malloc(88*sizeof(sal_Unicode)));
-
-                /* prepare S-SID_REVISION- */
-                dwSidSize=wsprintfW(o3tl::toW(Ident), L"S-%lu-", SID_REVISION);
-
-                /* prepare SidIdentifierAuthority */
-                if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
+                LPWSTR pSidStr = nullptr;
+                BOOL bResult = ConvertSidToStringSidW(pSid, &pSidStr);
+                if (bResult)
                 {
-                    dwSidSize+=wsprintfW(o3tl::toW(Ident) + wcslen(o3tl::toW(Ident)),
-                                L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
-                                static_cast<USHORT>(psia->Value[0]),
-                                static_cast<USHORT>(psia->Value[1]),
-                                static_cast<USHORT>(psia->Value[2]),
-                                static_cast<USHORT>(psia->Value[3]),
-                                static_cast<USHORT>(psia->Value[4]),
-                                static_cast<USHORT>(psia->Value[5]));
+                    rtl_uString_newFromStr(strIdent, o3tl::toU(pSidStr));
+                    LocalFree(pSidStr);
                 }
                 else
                 {
-                    dwSidSize+=wsprintfW(o3tl::toW(Ident) + wcslen(o3tl::toW(Ident)),
-                                L"%lu",
-                                static_cast<ULONG>(psia->Value[5]      )   +
-                                static_cast<ULONG>(psia->Value[4] <<  8)   +
-                                static_cast<ULONG>(psia->Value[3] << 16)   +
-                                static_cast<ULONG>(psia->Value[2] << 24)   );
+                    const DWORD dwError = GetLastError();
+                    char sBuf[100];
+                    sprintf(sBuf, "ConvertSidToStringSidW failed. GetLastError returned: %d",
+                            dwError);
+                    SAL_WARN("sal.osl", sBuf);
                 }
-
-                /* loop through SidSubAuthorities */
-                for (dwCounter=0; dwCounter < dwSubAuthorities; dwCounter++)
-                {
-                    dwSidSize+=wsprintfW(o3tl::toW(Ident) + dwSidSize, L"-%lu",
-                                *GetSidSubAuthority(pSid, dwCounter) );
-                }
-
-                rtl_uString_newFromStr( strIdent, Ident );
 
                 free(pInfoBuffer);
-                free(Ident);
 
-                return true;
+                return bResult;
             }
         }
         else

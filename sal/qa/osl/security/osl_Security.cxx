@@ -23,6 +23,7 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <sddl.h>
 #undef min
 #endif
 #include "osl_Security_Const.h"
@@ -477,58 +478,17 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         }
     }
 
-    // now got SID successfully, only need to compare SID, so I copied the rest lines from source to convert SID to OUString.
-    PSID_IDENTIFIER_AUTHORITY psia;
-    DWORD dwSubAuthorities;
-    DWORD dwSidRev=SID_REVISION;
-    DWORD dwCounter;
-    DWORD dwSidSize;
-    wchar_t *Ident;
-
-    /* obtain SidIdentifierAuthority */
-    psia=GetSidIdentifierAuthority(pSid);
-
-    /* obtain sidsubauthority count */
-    dwSubAuthorities=std::min(static_cast<int>(*GetSidSubAuthorityCount(pSid)), 5);
-
-    /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
-    Ident=static_cast<wchar_t *>(malloc(88*sizeof(wchar_t)));
-
-    /* prepare S-SID_REVISION- */
-    dwSidSize=wsprintfW(Ident, L"S-%lu-", dwSidRev);
-
-    /* prepare SidIdentifierAuthority */
-    if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
+    LPWSTR pSidStr = nullptr;
+    if (ConvertSidToStringSidW(pSid, &pSidStr))
     {
-        dwSidSize+=wsprintfW(Ident + wcslen(Ident),
-                    L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
-                    static_cast<sal_uInt16>(psia->Value[0]),
-                    static_cast<sal_uInt16>(psia->Value[1]),
-                    static_cast<sal_uInt16>(psia->Value[2]),
-                    static_cast<sal_uInt16>(psia->Value[3]),
-                    static_cast<sal_uInt16>(psia->Value[4]),
-                    static_cast<sal_uInt16>(psia->Value[5]));
+        strUserID = o3tl::toU(pSidStr);
+        LocalFree(pSidStr);
     }
     else
     {
-        dwSidSize+=wsprintfW(Ident + wcslen(Ident),
-                    L"%lu",
-                    static_cast<sal_uInt32>(psia->Value[5]      )   +
-                    static_cast<sal_uInt32>(psia->Value[4] <<  8)   +
-                    static_cast<sal_uInt32>(psia->Value[3] << 16)   +
-                    static_cast<sal_uInt32>(psia->Value[2] << 24)   );
+        wprintf(L"# ConvertSidToStringSidW failed. GetLastError returned: %d\n", GetLastError());
     }
 
-    /* loop through SidSubAuthorities */
-    for (dwCounter=0; dwCounter < dwSubAuthorities; dwCounter++)
-    {
-        dwSidSize+=wsprintfW(Ident + dwSidSize, L"-%lu",
-                    *GetSidSubAuthority(pSid, dwCounter) );
-    }
-
-    strUserID = o3tl::toU(Ident);
-
-    free(Ident);
     delete [] static_cast<BYTE*>(pSid);
     delete [] wszDomainName;
 
