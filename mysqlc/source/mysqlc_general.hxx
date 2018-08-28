@@ -25,6 +25,9 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <osl/diagnose.h>
+#include <mysql.h>
+
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
@@ -36,6 +39,61 @@
 
 namespace mysqlc_sdbc_driver
 {
+    template<typename T>
+    void resetSqlVar(void** target, T* pValue, enum_field_types type, sal_Int32 nSize = 0)
+    {
+        if(*target)
+        {
+            free(*target);
+            *target = nullptr;
+        }
+        constexpr auto nUnitSize = sizeof(T);
+        switch(type)
+        {
+            case MYSQL_TYPE_INT24:
+            case MYSQL_TYPE_YEAR:
+            case MYSQL_TYPE_NEWDATE:
+            case MYSQL_TYPE_BIT:
+            case MYSQL_TYPE_GEOMETRY:
+            case MYSQL_TYPE_LONG:
+            case MYSQL_TYPE_SHORT:
+            case MYSQL_TYPE_TINY:
+            case MYSQL_TYPE_LONGLONG:
+            case MYSQL_TYPE_FLOAT:
+            case MYSQL_TYPE_DOUBLE:
+            case MYSQL_TYPE_TIME:
+            case MYSQL_TYPE_DATE:
+            case MYSQL_TYPE_DATETIME:
+            case MYSQL_TYPE_TIMESTAMP:
+                *target = malloc(nUnitSize);
+                memcpy(*target, pValue, nUnitSize);
+                break;
+            case MYSQL_TYPE_STRING:
+            case MYSQL_TYPE_BLOB:
+            case MYSQL_TYPE_DECIMAL:
+            case MYSQL_TYPE_VARCHAR:
+            case MYSQL_TYPE_NEWDECIMAL:
+            case MYSQL_TYPE_ENUM:
+            case MYSQL_TYPE_SET:
+            case MYSQL_TYPE_VAR_STRING:
+            case MYSQL_TYPE_TINY_BLOB:
+            case MYSQL_TYPE_MEDIUM_BLOB:
+            case MYSQL_TYPE_LONG_BLOB:
+                *target = malloc(nUnitSize*nSize);
+                memcpy(*target, pValue, nUnitSize*nSize);
+                break;
+            case MYSQL_TYPE_NULL:
+                // nothing I guess
+                break;
+            default:
+                OSL_FAIL("resetSqlVar: unknown enum_field_type");
+        }
+    }
+
+    void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize = 0);
+
+    rtl::OString escapeSql(const rtl::OString& from);
+
     rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
 
     /// @throws css::sdbc::SQLException
@@ -52,8 +110,13 @@ namespace mysqlc_sdbc_driver
 
     void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 
-    int mysqlToOOOType(int mysqlType) throw ();
+    void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 
+    int mysqlToOOOType(int eType, int charsetnr) noexcept;
+
+    rtl::OUString mysqlTypeToStr(MYSQL_FIELD* pField);
+
+    int mysqlStrToOOOType(const rtl::OUString& sType);
 
     rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 

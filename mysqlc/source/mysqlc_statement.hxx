@@ -73,7 +73,11 @@ namespace connectivity
         protected:
             rtl::Reference<OConnection> m_xConnection;  // The owning Connection object
 
-            sql::Statement          *cppStatement;
+            css::uno::Reference<css::sdbc::XResultSet> m_xResultSet;
+            MYSQL_RES* m_pMysqlResult = nullptr;
+
+            // number of rows affected by an UPDATE, DELETE or INSERT statement.
+            sal_Int32 m_nAffectedRows = 0;
 
         protected:
             void disposeResultSet();
@@ -92,7 +96,7 @@ namespace connectivity
             virtual ~OCommonStatement();
 
         protected:
-            OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement);
+            OCommonStatement(OConnection* _pConnection);
 
         public:
             using OCommonStatement_IBase::rBHelper;
@@ -159,8 +163,8 @@ namespace connectivity
 
         public:
             // A constructor which is required for the return of the objects
-            OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) :
-                OCommonStatement(_pConnection, _cppStatement) {}
+            OStatement(OConnection* _pConnection) :
+                OCommonStatement(_pConnection) {}
 
             virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
 

@@ -23,15 +23,19 @@
 #include "mysqlc_connection.hxx"
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppconn/resultset_metadata.h>
+#include <mysql.h>
 
 namespace connectivity
 {
     namespace mysqlc
     {
         using ::com::sun::star::sdbc::SQLException;
+        using ::com::sun::star::uno::RuntimeException;
         using ::com::sun::star::uno::RuntimeException;
 
         //************ Class: ResultSetMetaData
@@ -40,13 +44,18 @@ namespace connectivity
 
         class OResultSetMetaData final : public OResultSetMetaData_BASE
         {
-            sql::ResultSetMetaData * meta;
+        private:
+            OConnection& m_rConnection;
+            MYSQL_RES * m_pRes;
             rtl_TextEncoding        m_encoding;
 
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() = default;
+            MYSQL_FIELD* getField(sal_Int32 column) const;
         public:
-            OResultSetMetaData( sql::ResultSetMetaData * _meta, rtl_TextEncoding _encoding )
-                :meta(_meta)
+            OResultSetMetaData(OConnection& rConn,
+                    MYSQL_RES * pResult, rtl_TextEncoding _encoding )
+                :m_rConnection(rConn)
+                ,m_pRes(pResult)
                 ,m_encoding( _encoding )
             {
             }
