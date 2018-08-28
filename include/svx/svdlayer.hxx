@@ -160,7 +160,7 @@ public:
     const OUString&    GetControlLayerName() const { return maControlLayerName; }
 
     // Removes all elements in rOutSet and then adds all IDs of layers from member aLayer
-    // that fullfill the criterion visible, printable, or locked respectively.
+    // that fulfill the criterion visible, printable, or locked respectively.
     void               getVisibleLayersODF( SdrLayerIDSet& rOutSet) const;
     void               getPrintableLayersODF( SdrLayerIDSet& rOutSet) const;
     void               getLockedLayersODF( SdrLayerIDSet& rOutSet) const;
