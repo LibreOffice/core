@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_208ac81a",
+        "filename": "desktop/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-28T15:12:22Z",
+      "side": 1,
+      "message": "don\u0027t these changes have negative impact on translations (where translators will see new items that will need translation, instead of the existing translation automatically being moved to the new \"key\")?",
+      "revId": "b57ed76361da672697eccd219b09bd358a967e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
