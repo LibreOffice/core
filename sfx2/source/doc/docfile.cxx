@@ -180,8 +180,10 @@ sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
     if (!comphelper::isFileUrl(rURL))
         return nRet;
 
+    // Make sure the file exists (and create it if not).
     osl::File aFile(rURL);
-    if (aFile.open(osl_File_OpenFlag_Create) != osl::File::E_None)
+    osl::File::RC nRes = aFile.open(osl_File_OpenFlag_Create);
+    if (nRes != osl::File::E_None && nRes != osl::File::E_EXIST)
         return nRet;
 
     aFile.close();

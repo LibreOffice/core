@@ -146,6 +146,14 @@ void MiscTest::testNoThumbnail()
     // umask requested so:
     CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_GrpRead);
     CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_OthRead);
+
+    // Now "save as" again to trigger the "overwrite" case.
+    xStorable->storeToURL(aTempFile.GetURL(), {});
+    CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None, aItem.getFileStatus(aStatus));
+    // The following check used to fail in the past, result had temp file
+    // permissions.
+    CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_GrpRead);
+
     umask(nMask);
 #endif
 
