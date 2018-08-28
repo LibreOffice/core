@@ -16,6 +16,24 @@
       "revId": "b9304c26744e225a6af414d69b46574fa97731b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_e0562007",
+        "filename": "sal/rtl/alloc_cache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-28T12:15:33Z",
+      "side": 1,
+      "message": "(and that\u0027s of course not just malloc, but all the functions from cstdlib, including realloc and free)",
+      "parentUuid": "dfeb2761_fd992b1f",
+      "revId": "b9304c26744e225a6af414d69b46574fa97731b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
