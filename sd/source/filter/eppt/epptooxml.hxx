@@ -83,6 +83,8 @@ public:
     static const char* Get8Direction( sal_uInt8 nDirection );
     static       int   GetPPTXLayoutId( int nOffset );
 
+    sal_Int32 GetShapeID(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    sal_Int32 GetNextAnimationNodeID();
 private:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
@@ -99,16 +101,6 @@ private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     void WriteNotesMaster();
 
-    void WriteAnimations( const ::sax_fastparser::FSHelperPtr& pFS );
-    void WriteAnimationNode( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bMainSeqChild );
-    void WriteAnimationNodeAnimate( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
-    void WriteAnimationNodeAnimateInside( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple, bool bWriteTo = true );
-    void WriteAnimationNodeSeq( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
-    void WriteAnimationNodeEffect( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
-    void WriteAnimationNodeCommand(const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
-    void WriteAnimationNodeCommonPropsStart( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild );
-
-    void WriteAnimationTarget( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rTarget );
     bool WriteComments( sal_uInt32 nPageNum );
     void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
     void WriteTransition( const ::sax_fastparser::FSHelperPtr& pFS );
