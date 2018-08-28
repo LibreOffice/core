@@ -73,9 +73,11 @@ using namespace ::ppt;
 using ::sax_fastparser::FSHelperPtr;
 using namespace oox::drawingml;
 using namespace oox::core;
+using namespace oox;
 
-void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny,
-                                              sal_Int32 nToken)
+namespace
+{
+void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 nToken = 0)
 {
     if (!rAny.hasValue())
         return;
@@ -132,8 +134,64 @@ void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any&
         pFS->endElementNS(XML_p, nToken);
 }
 
-void PowerPointExport::WriteAnimateValues(const FSHelperPtr& pFS,
-                                          const Reference<XAnimate>& rXAnimate)
+void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 nToken)
+{
+    if (!rAny.hasValue())
+        return;
+
+    sal_Int32 nColor = 0;
+    if (rAny >>= nColor)
+    {
+        pFS->startElementNS(XML_p, nToken, FSEND);
+
+        if (nToken == XML_by)
+        {
+            // CT_TLByRgbColorTransform
+            SAL_WARN("sd.eppt", "Export p:rgb in p:by of animClr isn't implemented yet.");
+        }
+        else
+        {
+            // CT_Color
+            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
+        }
+
+        pFS->endElementNS(XML_p, nToken);
+    }
+
+    Sequence<double> aHSL(3);
+    if (rAny >>= aHSL)
+    {
+        pFS->startElementNS(XML_p, nToken, FSEND);
+
+        if (nToken == XML_by)
+        {
+            // CT_TLByHslColorTransform
+            pFS->singleElementNS(XML_p, XML_hsl, XML_h, I32S(aHSL[0] * 60000), // ST_Angel
+                                 XML_s, I32S(aHSL[1] * 100000), XML_l, I32S(aHSL[2] * 100000),
+                                 FSEND);
+        }
+        else
+        {
+            // CT_Color
+            SAL_WARN("sd.eppt", "Export p:hsl in p:from or p:to of animClr isn't implemented yet.");
+        }
+
+        pFS->endElementNS(XML_p, nToken);
+    }
+}
+
+void WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue, const OUString& rAttributeName)
+{
+    if (!rValue.hasValue())
+        return;
+
+    SAL_INFO("sd.eppt", "to attribute name: " << USS(rAttributeName));
+
+    WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName),
+                           XML_to);
+}
+
+void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAnimate)
 {
     const Sequence<double> aKeyTimes = rXAnimate->getKeyTimes();
     if (aKeyTimes.getLength() <= 0)
@@ -175,20 +233,130 @@ void PowerPointExport::WriteAnimateValues(const FSHelperPtr& pFS,
     pFS->endElementNS(XML_p, XML_tavLst);
 }
 
-void PowerPointExport::WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue,
-                                      const OUString& rAttributeName)
+void WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay, const char* pEvent,
+                             double fDelay, bool bHasFDelay, sal_Int32 nToken)
 {
-    if (!rValue.hasValue())
-        return;
+    if (bHasFDelay || pDelay || pEvent)
+    {
+        pFS->startElementNS(XML_p, nToken, FSEND);
 
-    SAL_INFO("sd.eppt", "to attribute name: " << USS(rAttributeName));
+        if (!pEvent)
+            pFS->singleElementNS(
+                XML_p, XML_cond, XML_delay,
+                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0)) : pDelay, FSEND);
+        else
+        {
+            pFS->startElementNS(XML_p, XML_cond, XML_delay,
+                                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0))
+                                           : pDelay,
+                                XML_evt, pEvent, FSEND);
 
-    WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName),
-                           XML_to);
+            pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
+            pFS->singleElementNS(XML_p, XML_sldTgt, FSEND);
+            pFS->endElementNS(XML_p, XML_tgtEl);
+
+            pFS->endElementNS(XML_p, XML_cond);
+        }
+
+        pFS->endElementNS(XML_p, nToken);
+    }
 }
 
-void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS,
-                                                   const OUString& rAttributeName)
+void WriteAnimationCondition(const FSHelperPtr& pFS, Any const& rAny, bool bWriteEvent,
+                             bool bMainSeqChild, sal_Int32 nToken)
+{
+    bool bHasFDelay = false;
+    double fDelay = 0;
+    Timing eTiming;
+    Event aEvent;
+    Reference<XShape> xShape;
+    const char* pDelay = nullptr;
+    const char* pEvent = nullptr;
+
+    if (rAny >>= fDelay)
+        bHasFDelay = true;
+    else if (rAny >>= eTiming)
+    {
+        if (eTiming == Timing_INDEFINITE)
+            pDelay = "indefinite";
+    }
+    else if (rAny >>= aEvent)
+    {
+        // TODO
+
+        SAL_INFO("sd.eppt", "animation condition event: TODO");
+        SAL_INFO("sd.eppt", "event offset has value: "
+                                << aEvent.Offset.hasValue() << " trigger: " << aEvent.Trigger
+                                << " source has value: " << aEvent.Source.hasValue());
+        if (!bWriteEvent && aEvent.Trigger == EventTrigger::ON_NEXT && bMainSeqChild)
+            pDelay = "indefinite";
+        else if (bWriteEvent)
+        {
+            switch (aEvent.Trigger)
+            {
+                case EventTrigger::ON_NEXT:
+                    pEvent = "onNext";
+                    break;
+                case EventTrigger::ON_PREV:
+                    pEvent = "onPrev";
+                    break;
+                case EventTrigger::BEGIN_EVENT:
+                    pEvent = "begin";
+                    break;
+                case EventTrigger::END_EVENT:
+                    pEvent = "end";
+                    break;
+                case EventTrigger::ON_BEGIN:
+                    pEvent = "onBegin";
+                    break;
+                case EventTrigger::ON_END:
+                    pEvent = "onEnd";
+                    break;
+                case EventTrigger::ON_CLICK:
+                    pEvent = "onClick";
+                    break;
+                case EventTrigger::ON_DBL_CLICK:
+                    pEvent = "onDblClick";
+                    break;
+                case EventTrigger::ON_STOP_AUDIO:
+                    pEvent = "onStopAudio";
+                    break;
+                case EventTrigger::ON_MOUSE_ENTER:
+                    pEvent = "onMouseOver"; // not exact?
+                    break;
+                case EventTrigger::ON_MOUSE_LEAVE:
+                    pEvent = "onMouseOut";
+                    break;
+            }
+        }
+
+        if (aEvent.Offset >>= fDelay)
+        {
+            bHasFDelay = true;
+            SAL_INFO("sd.eppt", "event offset: " << fDelay);
+        }
+        else if (aEvent.Offset >>= eTiming)
+        {
+            if (eTiming == Timing_INDEFINITE)
+                pDelay = "indefinite";
+            SAL_INFO("sd.eppt", "event offset timing: " << static_cast<int>(eTiming));
+        }
+    }
+    else if (rAny >>= xShape)
+    {
+        SAL_INFO("sd.eppt", "Got the xShape: " << xShape->getShapeType());
+        if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape"
+            || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
+        {
+            // write the default
+            bHasFDelay = true;
+        }
+    }
+
+    WriteAnimationCondition(pFS, pDelay, pEvent, fDelay, bHasFDelay, nToken);
+}
+
+void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttributeName)
 {
     if (rAttributeName.isEmpty())
         return;
@@ -236,6 +404,7 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS,
     }
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
+}
 }
 
 void PowerPointExport::WriteAnimationTarget(const FSHelperPtr& pFS, const Any& rTarget)
@@ -406,53 +575,6 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS,
     pFS->endElementNS(XML_p, nXmlNodeType);
 }
 
-void PowerPointExport::WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny,
-                                              sal_Int32 nToken)
-{
-    if (!rAny.hasValue())
-        return;
-
-    sal_Int32 nColor = 0;
-    if (rAny >>= nColor)
-    {
-        pFS->startElementNS(XML_p, nToken, FSEND);
-
-        if (nToken == XML_by)
-        {
-            // CT_TLByRgbColorTransform
-            SAL_WARN("sd.eppt", "Export p:rgb in p:by of animClr isn't implemented yet.");
-        }
-        else
-        {
-            // CT_Color
-            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
-        }
-
-        pFS->endElementNS(XML_p, nToken);
-    }
-
-    Sequence<double> aHSL(3);
-    if (rAny >>= aHSL)
-    {
-        pFS->startElementNS(XML_p, nToken, FSEND);
-
-        if (nToken == XML_by)
-        {
-            // CT_TLByHslColorTransform
-            pFS->singleElementNS(XML_p, XML_hsl, XML_h, I32S(aHSL[0] * 60000), // ST_Angel
-                                 XML_s, I32S(aHSL[1] * 100000), XML_l, I32S(aHSL[2] * 100000),
-                                 FSEND);
-        }
-        else
-        {
-            // CT_Color
-            SAL_WARN("sd.eppt", "Export p:hsl in p:from or p:to of animClr isn't implemented yet.");
-        }
-
-        pFS->endElementNS(XML_p, nToken);
-    }
-}
-
 void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
                                                        const Reference<XAnimationNode>& rXNode,
                                                        bool bMainSeqChild, bool bSimple,
@@ -520,131 +642,6 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS,
     }
     else if (bWriteTo)
         WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
-}
-
-void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay,
-                                               const char* pEvent, double fDelay, bool bHasFDelay,
-                                               sal_Int32 nToken)
-{
-    if (bHasFDelay || pDelay || pEvent)
-    {
-        pFS->startElementNS(XML_p, nToken, FSEND);
-
-        if (!pEvent)
-            pFS->singleElementNS(
-                XML_p, XML_cond, XML_delay,
-                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0)) : pDelay, FSEND);
-        else
-        {
-            pFS->startElementNS(XML_p, XML_cond, XML_delay,
-                                bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay * 1000.0))
-                                           : pDelay,
-                                XML_evt, pEvent, FSEND);
-
-            pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-            pFS->singleElementNS(XML_p, XML_sldTgt, FSEND);
-            pFS->endElementNS(XML_p, XML_tgtEl);
-
-            pFS->endElementNS(XML_p, XML_cond);
-        }
-
-        pFS->endElementNS(XML_p, nToken);
-    }
-}
-
-void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const& rAny,
-                                               bool bWriteEvent, bool bMainSeqChild,
-                                               sal_Int32 nToken)
-{
-    bool bHasFDelay = false;
-    double fDelay = 0;
-    Timing eTiming;
-    Event aEvent;
-    Reference<XShape> xShape;
-    const char* pDelay = nullptr;
-    const char* pEvent = nullptr;
-
-    if (rAny >>= fDelay)
-        bHasFDelay = true;
-    else if (rAny >>= eTiming)
-    {
-        if (eTiming == Timing_INDEFINITE)
-            pDelay = "indefinite";
-    }
-    else if (rAny >>= aEvent)
-    {
-        // TODO
-
-        SAL_INFO("sd.eppt", "animation condition event: TODO");
-        SAL_INFO("sd.eppt", "event offset has value: "
-                                << aEvent.Offset.hasValue() << " trigger: " << aEvent.Trigger
-                                << " source has value: " << aEvent.Source.hasValue());
-        if (!bWriteEvent && aEvent.Trigger == EventTrigger::ON_NEXT && bMainSeqChild)
-            pDelay = "indefinite";
-        else if (bWriteEvent)
-        {
-            switch (aEvent.Trigger)
-            {
-                case EventTrigger::ON_NEXT:
-                    pEvent = "onNext";
-                    break;
-                case EventTrigger::ON_PREV:
-                    pEvent = "onPrev";
-                    break;
-                case EventTrigger::BEGIN_EVENT:
-                    pEvent = "begin";
-                    break;
-                case EventTrigger::END_EVENT:
-                    pEvent = "end";
-                    break;
-                case EventTrigger::ON_BEGIN:
-                    pEvent = "onBegin";
-                    break;
-                case EventTrigger::ON_END:
-                    pEvent = "onEnd";
-                    break;
-                case EventTrigger::ON_CLICK:
-                    pEvent = "onClick";
-                    break;
-                case EventTrigger::ON_DBL_CLICK:
-                    pEvent = "onDblClick";
-                    break;
-                case EventTrigger::ON_STOP_AUDIO:
-                    pEvent = "onStopAudio";
-                    break;
-                case EventTrigger::ON_MOUSE_ENTER:
-                    pEvent = "onMouseOver"; // not exact?
-                    break;
-                case EventTrigger::ON_MOUSE_LEAVE:
-                    pEvent = "onMouseOut";
-                    break;
-            }
-        }
-
-        if (aEvent.Offset >>= fDelay)
-        {
-            bHasFDelay = true;
-            SAL_INFO("sd.eppt", "event offset: " << fDelay);
-        }
-        else if (aEvent.Offset >>= eTiming)
-        {
-            if (eTiming == Timing_INDEFINITE)
-                pDelay = "indefinite";
-            SAL_INFO("sd.eppt", "event offset timing: " << static_cast<int>(eTiming));
-        }
-    }
-    else if (rAny >>= xShape)
-    {
-        SAL_INFO("sd.eppt", "Got the xShape: " << xShape->getShapeType());
-        if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape"
-            || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
-        {
-            // write the default
-            bHasFDelay = true;
-        }
-    }
-
-    WriteAnimationCondition(pFS, pDelay, pEvent, fDelay, bHasFDelay, nToken);
 }
 
 void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS,
