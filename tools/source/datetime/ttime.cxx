@@ -287,6 +287,7 @@ void tools::Time::GetClock( double fTimeInDays,
     if (fTime <= 0.0 || fTime >= 1.0)
     {
         nHour = nMinute = nSecond = 0;
+        fFractionOfSecond = 0.0;
         return;
     }
 
