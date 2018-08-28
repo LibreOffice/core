@@ -190,7 +190,7 @@ namespace drawinglayer
                 pNew->append(*i);
             }
 
-            return pNew;
+            return std::move(pNew);
         }
 
         bool AnimationEntryList::operator==(const AnimationEntry& rCandidate) const
@@ -283,7 +283,7 @@ namespace drawinglayer
                 pNew->append(*i);
             }
 
-            return pNew;
+            return std::move(pNew);
         }
 
         bool AnimationEntryLoop::operator==(const AnimationEntry& rCandidate) const
