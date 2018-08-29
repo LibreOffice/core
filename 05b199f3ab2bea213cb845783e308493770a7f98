@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_63e45aad",
+        "filename": "sw/qa/extras/odfexport/data/tdf101856_overlapped.odt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-29T08:56:30Z",
+      "side": 1,
+      "message": "Hmm, file mode is 755 -\u003e no need to make that executable I guess",
+      "revId": "05b199f3ab2bea213cb845783e308493770a7f98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
