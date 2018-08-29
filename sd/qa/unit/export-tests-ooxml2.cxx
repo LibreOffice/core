@@ -1355,7 +1355,10 @@ void SdOOXMLExportTest2::testSmartartRotation2()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:p/a:r/a:t", "Text");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "2276280");
+    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x").toDouble();
+    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "y").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 2276280.0, dX, dX * .001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 3158280.0, dY, dY * .001);
 }
 
 void SdOOXMLExportTest2::testTdf91999_rotateShape()
@@ -1368,8 +1371,10 @@ void SdOOXMLExportTest2::testTdf91999_rotateShape()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:cNvPr", "name", "CustomShape 2");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm", "rot", "10800000");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "x", "2960640");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "y", "1449000");
+    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "x").toDouble();
+    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:xfrm/a:off", "y").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 2960640.0, dX, dX * .001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 1449000.0, dY, dY * .001);
 }
 
 void SdOOXMLExportTest2::testTdf114845_rotateShape()
@@ -1382,8 +1387,10 @@ void SdOOXMLExportTest2::testTdf114845_rotateShape()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name", "CustomShape 5");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm", "flipV", "1");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "x", "4059000");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "y", "3287520");
+    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "x").toDouble();
+    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "y").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 4059000.0, dX, dX * .001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 3287520.0, dY, dY * .001);
 }
 
 void SdOOXMLExportTest2::testGroupsPosition()
