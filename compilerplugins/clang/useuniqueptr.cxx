@@ -690,7 +690,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
     // NodeArrayDeleter
     if (fn == SRCDIR "/unoxml/source/rdf/librdf_repository.cxx")
         return true;
-    // SmCursor::LineToList ran out of enthusiam to rework the node handling
+    // SmCursor::LineToList ran out of enthusiasm to rework the node handling
     if (fn == SRCDIR "/starmath/source/cursor.cxx")
         return true;
     // XMLEventOASISTransformerContext::FlushEventMap

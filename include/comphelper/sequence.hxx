@@ -29,7 +29,7 @@
 
 namespace comphelper
 {
-    /** Search the given string within the given sequence, return the position of the first occurence.
+    /** Search the given string within the given sequence, return the position of the first occurrence.
         Returns -1 if nothing found.
     */
     COMPHELPER_DLLPUBLIC sal_Int32 findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue);
