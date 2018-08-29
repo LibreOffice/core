@@ -36,8 +36,9 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include "xpathlib.hxx"
+#include <boost/lexical_cast.hpp>
 
+#include "xpathlib.hxx"
 #include "extension.hxx"
 
 // C interface
@@ -373,10 +374,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
                               sal_Int32& nHours, sal_Int32& nMinutes, sal_Int32& nSeconds)
 {
     bool bTime = false; // in part after T
-    sal_Int32 nLength = strlen(reinterpret_cast<char const *>(aString))+1;
-    char *pString = static_cast<char*>(std::malloc(nLength));
-    char *pString0 = pString;
-    strncpy(pString, reinterpret_cast<char const *>(aString), nLength);
+    const xmlChar *pString = aString;
 
     if (pString[0] == '-') {
         bNegative = true;
@@ -385,41 +383,35 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
 
     if (pString[0] != 'P')
     {
-        std::free(pString0);
         return false;
     }
 
     pString++;
-    char* pToken = pString;
+    const xmlChar* pToken = pString;
     while(pToken[0] != 0)
     {
         switch(pToken[0]) {
         case 'Y':
-            pToken[0] = 0;
-            nYears = atoi(pString);
+            nYears = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             pString = ++pToken;
             break;
         case 'M':
-            pToken[0] = 0;
             if (!bTime)
-                nMonth = atoi(pString);
+                nMonth = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             else
-                nMinutes = atoi(pString);
+                nMinutes = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             pString = ++pToken;
             break;
         case 'D':
-            pToken[0] = 0;
-            nDays = atoi(pString);
+            nDays = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             pString = ++pToken;
             break;
         case 'H':
-            pToken[0] = 0;
-            nHours = atoi(pString);
+            nHours = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             pString = ++pToken;
             break;
         case 'S':
-            pToken[0] = 0;
-            nSeconds = atoi(pString);
+            nSeconds = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
             pString = ++pToken;
             break;
         case 'T':
@@ -430,7 +422,6 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
             pToken++;
         }
     }
-    std::free(pString0);
     return true;
 }
 
