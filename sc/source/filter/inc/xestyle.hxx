@@ -698,8 +698,9 @@ private:
 class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
+    XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> pAlign, std::unique_ptr<XclExpCellBorder> pBorder,
+            std::unique_ptr<XclExpDxfFont> pFont, std::unique_ptr<XclExpNumFmt> pNumberFmt,
+            std::unique_ptr<XclExpCellProt> pProt, std::unique_ptr<XclExpColor> pColor);
     virtual ~XclExpDxf() override;
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;

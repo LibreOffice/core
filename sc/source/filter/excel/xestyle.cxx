@@ -3040,46 +3040,43 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         SfxItemSet& rSet = pStyle->GetItemSet();
 
-                        XclExpCellBorder* pBorder = new XclExpCellBorder;
+                        std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
                         if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
                         {
-                            delete pBorder;
-                            pBorder = nullptr;
+                            pBorder.reset();
                         }
 
-                        XclExpCellAlign* pAlign = new XclExpCellAlign;
+                        std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
                         if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
                         {
-                            delete pAlign;
-                            pAlign = nullptr;
+                            pAlign.reset();
                         }
 
-                        XclExpCellProt* pCellProt = new XclExpCellProt;
+                        std::unique_ptr<XclExpCellProt> pCellProt(new XclExpCellProt);
                         if (!pCellProt->FillFromItemSet( rSet ))
                         {
-                            delete pCellProt;
-                            pCellProt = nullptr;
+                            pCellProt.reset();
                         }
 
-                        XclExpColor* pColor = new XclExpColor;
+                        std::unique_ptr<XclExpColor> pColor(new XclExpColor);
                         if(!pColor->FillFromItemSet( rSet ))
                         {
-                            delete pColor;
-                            pColor = nullptr;
+                            pColor.reset();
                         }
 
-                        XclExpDxfFont* pFont = new XclExpDxfFont(rRoot, rSet);
+                        std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(rRoot, rSet));
 
-                        XclExpNumFmt* pNumFormat = nullptr;
+                        std::unique_ptr<XclExpNumFmt> pNumFormat;
                         const SfxPoolItem *pPoolItem = nullptr;
                         if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
                         {
                             sal_uInt32 nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
-                            pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, xFormatter.get(), mpKeywordTable.get() ));
+                            pNumFormat.reset(new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, xFormatter.get(), mpKeywordTable.get() )));
                         }
 
-                        maDxf.push_back(o3tl::make_unique<XclExpDxf>( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
+                        maDxf.push_back(o3tl::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
+                                std::move(pFont), std::move(pNumFormat), std::move(pCellProt), std::move(pColor) ));
                         ++nIndex;
                     }
 
@@ -3115,15 +3112,16 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxfs );
 }
 
-XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
+XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> pAlign, std::unique_ptr<XclExpCellBorder> pBorder,
+            std::unique_ptr<XclExpDxfFont> pFont, std::unique_ptr<XclExpNumFmt> pNumberFmt, std::unique_ptr<XclExpCellProt> pProt,
+            std::unique_ptr<XclExpColor> pColor)
     : XclExpRoot( rRoot ),
-    mpAlign(pAlign),
-    mpBorder(pBorder),
-    mpFont(pFont),
-    mpNumberFmt(pNumberFmt),
-    mpProt(pProt),
-    mpColor(pColor)
+    mpAlign(std::move(pAlign)),
+    mpBorder(std::move(pBorder)),
+    mpFont(std::move(pFont)),
+    mpNumberFmt(std::move(pNumberFmt)),
+    mpProt(std::move(pProt)),
+    mpColor(std::move(pColor))
 {
 }
 
