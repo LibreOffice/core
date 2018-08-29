@@ -313,10 +313,18 @@ void tools::Time::GetClock( double fTimeInDays,
     nSecond = fSeconds;
     fSeconds -= nSecond;
 
-    // Do not round the fraction, otherwise .999 would end up as .00 again.
+    assert(fSeconds < 1.0);     // or back to the drawing board..
+
     if (nFractionDecimals > 0)
-        fFractionOfSecond = rtl::math::pow10Exp( std::trunc(
-                    rtl::math::pow10Exp( fSeconds, nFractionDecimals)), -nFractionDecimals);
+    {
+        // Do not simply round the fraction, otherwise .999 would end up as .00
+        // again. Truncate instead if rounding would round up into an integer
+        // value.
+        fFractionOfSecond = rtl::math::round( fSeconds, nFractionDecimals);
+        if (fFractionOfSecond >= 1.0)
+            fFractionOfSecond = rtl::math::pow10Exp( std::trunc(
+                        rtl::math::pow10Exp( fSeconds, nFractionDecimals)), -nFractionDecimals);
+    }
     else
         fFractionOfSecond = fSeconds;
 }

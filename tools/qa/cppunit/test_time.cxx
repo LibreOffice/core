@@ -96,24 +96,42 @@ void TimeTest::testClockValues()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hour value.", sal_uInt16(0), nHour);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Minute value.", sal_uInt16(0), nMinute);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second value.", sal_uInt16(0), nSecond);
-    // Last digit may differ.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.999, fFractionOfSecond, 1.1e-3);
+    // Expect this to be a truncated 0.999999
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.999, fFractionOfSecond, 0.0);
 
     fTime = 0.524268391203704;
     Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 3);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hour value.", sal_uInt16(12), nHour);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Minute value.", sal_uInt16(34), nMinute);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second value.", sal_uInt16(56), nSecond);
-    // Last digit may differ.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.789, fFractionOfSecond, 1.1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.789, fFractionOfSecond, 0.0);
 
     fTime = -0.000001;
-    Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 9);
+    Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 13);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hour value.", sal_uInt16(23), nHour);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Minute value.", sal_uInt16(59), nMinute);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second value.", sal_uInt16(59), nSecond);
     // Expect this to be exact within floating point accuracy.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.913599999, fFractionOfSecond, 1e-15);
+    // This is a hairy rounding condition, if it yields problems on any
+    // platform feel free to disable the test for that platform.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.9135999999999, fFractionOfSecond,
+                                         1e-14);
+
+    fTime = -0.000001;
+    Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Hour value.", sal_uInt16(23), nHour);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Minute value.", sal_uInt16(59), nMinute);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second value.", sal_uInt16(59), nSecond);
+    // Expect this to be rounded.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.9136, fFractionOfSecond, 0.0);
+
+    fTime = -0.00000000001;
+    Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Hour value.", sal_uInt16(23), nHour);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Minute value.", sal_uInt16(59), nMinute);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second value.", sal_uInt16(59), nSecond);
+    // Expect this to be a truncated 0.999999
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Fraction value.", 0.9999, fFractionOfSecond, 0.0);
 
     fTime = -1e-24; // value insignificant for time
     Time::GetClock(fTime, nHour, nMinute, nSecond, fFractionOfSecond, 0);
