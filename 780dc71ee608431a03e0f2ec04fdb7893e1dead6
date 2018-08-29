@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_664a2856",
+        "filename": "sdext/source/minimizer/errordialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-08-29T11:11:45Z",
+      "side": 1,
+      "message": "can be default, no?",
+      "revId": "780dc71ee608431a03e0f2ec04fdb7893e1dead6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
