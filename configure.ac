@@ -1742,11 +1742,6 @@ AC_ARG_ENABLE(bundle-mariadb,
         [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice.])
 )
 
-AC_ARG_WITH(system-mysql-cppconn,
-    AS_HELP_STRING([--with-system-mysql-cppconn],
-        [Use MySQL C++ Connector libraries already on system.]),,
-    [with_system_mysql_cppconn="$with_system_libs"])
-
 AC_ARG_WITH(system-postgresql,
     AS_HELP_STRING([--with-system-postgresql],
         [Use PostgreSQL libraries already on system, for building the PostgreSQL-SDBC
@@ -3814,11 +3809,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
         AC_MSG_ERROR([--with-system-graphite conflicts with --enable-dbgutil])
     else
         with_system_graphite=no
-    fi
-    if test "$with_system_mysql_cppconn" = "yes"; then
-        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with --enable-dbgutil])
-    else
-        with_system_mysql_cppconn=no
     fi
     if test "$with_system_orcus" = "yes"; then
         AC_MSG_ERROR([--with-system-orcus conflicts with --enable-dbgutil])
