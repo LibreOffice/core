@@ -119,8 +119,8 @@ class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg
 {
     std::unique_ptr<ScColRowLabelDlg> m_xDlg;
 public:
-    explicit AbstractScColRowLabelDlg_Impl(ScColRowLabelDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScColRowLabelDlg_Impl(std::unique_ptr<ScColRowLabelDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -145,8 +145,8 @@ class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDl
 {
     std::unique_ptr<ScDataPilotDatabaseDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotDatabaseDlg_Impl(ScDataPilotDatabaseDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDataPilotDatabaseDlg_Impl(std::unique_ptr<ScDataPilotDatabaseDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -157,8 +157,8 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
 {
     std::unique_ptr<ScDataPilotSourceTypeDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotSourceTypeDlg_Impl(ScDataPilotSourceTypeDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDataPilotSourceTypeDlg_Impl(std::unique_ptr<ScDataPilotSourceTypeDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -173,8 +173,8 @@ class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 {
     std::unique_ptr<ScDataPilotServiceDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotServiceDlg_Impl(ScDataPilotServiceDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDataPilotServiceDlg_Impl(std::unique_ptr<ScDataPilotServiceDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short     Execute() override;
@@ -189,8 +189,8 @@ class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg
 {
     std::unique_ptr<ScDeleteCellDlg> m_xDlg;
 public:
-    explicit AbstractScDeleteCellDlg_Impl(ScDeleteCellDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDeleteCellDlg_Impl(std::unique_ptr<ScDeleteCellDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
@@ -207,8 +207,8 @@ class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
 {
     std::unique_ptr<ScDeleteContentsDlg> m_xDlg;
 public:
-    explicit AbstractScDeleteContentsDlg_Impl(ScDeleteContentsDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDeleteContentsDlg_Impl(std::unique_ptr<ScDeleteContentsDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short   Execute() override;
@@ -220,8 +220,8 @@ class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
 {
     std::unique_ptr<ScFillSeriesDlg> m_xDlg;
 public:
-    explicit AbstractScFillSeriesDlg_Impl(ScFillSeriesDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScFillSeriesDlg_Impl(std::unique_ptr<ScFillSeriesDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short       Execute() override;
@@ -239,8 +239,8 @@ class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
 {
     std::unique_ptr<ScGroupDlg> m_xDlg;
 public:
-    explicit AbstractScGroupDlg_Impl(ScGroupDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScGroupDlg_Impl(std::unique_ptr<ScGroupDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -251,8 +251,8 @@ class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg
 {
     std::unique_ptr<ScInsertCellDlg> m_xDlg;
 public:
-    explicit AbstractScInsertCellDlg_Impl(ScInsertCellDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScInsertCellDlg_Impl(std::unique_ptr<ScInsertCellDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
@@ -263,8 +263,8 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
 {
     std::unique_ptr<ScInsertContentsDlg> m_xDlg;
 public:
-    explicit AbstractScInsertContentsDlg_Impl(ScInsertContentsDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScInsertContentsDlg_Impl(std::unique_ptr<ScInsertContentsDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
@@ -284,8 +284,8 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
 {
     std::unique_ptr<ScInsertTableDlg> m_xDlg;
 public:
-    explicit AbstractScInsertTableDlg_Impl(ScInsertTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScInsertTableDlg_Impl(std::unique_ptr<ScInsertTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
@@ -303,8 +303,8 @@ class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 {
     std::unique_ptr<ScSelEntryDlg> m_xDlg;
 public:
-    explicit AbstractScSelEntryDlg_Impl(ScSelEntryDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScSelEntryDlg_Impl(std::unique_ptr<ScSelEntryDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short    Execute() override;
@@ -315,8 +315,8 @@ class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 {
     std::unique_ptr<ScLinkedAreaDlg> m_xDlg;
 public:
-    explicit AbstractScLinkedAreaDlg_Impl(ScLinkedAreaDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScLinkedAreaDlg_Impl(std::unique_ptr<ScLinkedAreaDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual                 ~AbstractScLinkedAreaDlg_Impl() override;
@@ -335,8 +335,8 @@ class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg
 {
     std::unique_ptr<ScMetricInputDlg> m_xDlg;
 public:
-    explicit AbstractScMetricInputDlg_Impl(ScMetricInputDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScMetricInputDlg_Impl(std::unique_ptr<ScMetricInputDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -347,8 +347,8 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
 {
     std::unique_ptr<ScMoveTableDlg> m_xDlg;
 public:
-    explicit AbstractScMoveTableDlg_Impl(ScMoveTableDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScMoveTableDlg_Impl(std::unique_ptr<ScMoveTableDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -365,8 +365,8 @@ class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg
 {
     std::unique_ptr<ScNameCreateDlg> m_xDlg;
 public:
-    explicit AbstractScNameCreateDlg_Impl(ScNameCreateDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScNameCreateDlg_Impl(std::unique_ptr<ScNameCreateDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
@@ -457,8 +457,8 @@ class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
 protected:
     std::unique_ptr<ScSortWarningDlg> m_xDlg;
 public:
-    explicit AbstractScSortWarningDlg_Impl(ScSortWarningDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScSortWarningDlg_Impl(std::unique_ptr<ScSortWarningDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -469,8 +469,8 @@ class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
 protected:
     std::unique_ptr<ScStringInputDlg> m_xDlg;
 public:
-    explicit AbstractScStringInputDlg_Impl(ScStringInputDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScStringInputDlg_Impl(std::unique_ptr<ScStringInputDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -482,8 +482,8 @@ class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
 protected:
     std::unique_ptr<ScTabBgColorDlg> m_xDlg;
 public:
-    explicit AbstractScTabBgColorDlg_Impl(ScTabBgColorDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScTabBgColorDlg_Impl(std::unique_ptr<ScTabBgColorDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
