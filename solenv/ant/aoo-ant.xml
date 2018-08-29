@@ -35,11 +35,20 @@
     <property file="${aoo-ant.basedir}/../inc/minor.mk"/>
 
     <property name="build.base.dir" location="${WORKDIR}/Ant/${ant.project.name}"/>
+
     <property name="main.src.dir" location="src/main/java"/>
-    <property name="main.build.dir" location="${build.base.dir}/main"/>
+    <property name="idl.src.dir" location="src/main/idl"/>
     <property name="test.src.dir" location="src/test/java"/>
+    <property name="test-idl.src.dir" location="src/test/idl"/>
+
+    <property name="main.build.dir" location="${build.base.dir}/main"/>
+    <property name="idl.build.dir" location="${build.base.dir}/idl"/>
+    <property name="idl.build.classes.dir" location="${build.base.dir}/idl/classes"/>
     <property name="test.build.dir" location="${build.base.dir}/test"/>
+    <property name="test-idl.build.dir" location="${build.base.dir}/test-idl"/>
+    <property name="test-idl.classes.build.dir" location="${build.base.dir}/test-idl/classes"/>
     <property name="test.reports.dir" location="${build.base.dir}/test-reports"/>
+
     <property name="java.baseline.version" value="1.7"/>
     <property name="jar.dir" location="${WORKDIR}/Ant"/>
 
@@ -63,7 +72,10 @@
         <condition property="has.main.classpath">
             <isreference refid="main.classpath"/>
         </condition>
-        <path id="main.classpath" unless:set="has.main.classpath"/>
+        <path id="internal.main.classpath">
+            <path refid="main.classpath" if:set="has.main.classpath"/>
+            <pathelement location="${idl.classes.build.dir}"/>
+        </path>
 
         <local name="has.test.classpath"/>
         <condition property="has.test.classpath">
@@ -71,19 +83,14 @@
         </condition>
         <path id="internal.test.classpath">
             <pathelement location="${main.build.dir}"/>
+            <pathelement location="${idl.classes.build.dir}"/>
             <pathelement location="${test.build.dir}"/>
+            <pathelement location="${test-idl.classes.build.dir}"/>
             <path refid="main.classpath"/>
             <path refid="test.classpath" if:set="has.test.classpath"/>
-            <pathelement location="${idl.classes.build.dir}"/>
             <pathelement location="${OOO_JUNIT_JAR}"/>
             <pathelement location="${HAMCREST_CORE_JAR}" if:set="HAMCREST_CORE_JAR"/>
         </path>
-
-        <local name="has.idl.files"/>
-        <condition property="has.idl.files">
-            <isreference refid="idl.files"/>
-        </condition>
-        <filelist id="idl.files" unless:set="has.idl.files"/>
     </target>
 
     <target name="res" depends="prepare">
@@ -109,7 +116,14 @@
 
     <extension-point name="pre-compile" depends="prepare,res"/>
 
-    <target name="compile" depends="pre-compile">
+    <target name="idl" depends="pre-compile">
+        <fileset id="idl.files" dir="${idl.src.dir}" includes="**/*.idl" erroronmissingdir="false"/>
+        <idl-javamaker
+            idlFiles="idl.files"
+            idlBuildDir="${idl.build.dir}"/>
+    </target>
+
+    <target name="compile" depends="idl">
         <mkdir dir="${main.build.dir}"/>
         <javac srcdir="${main.src.dir}"
                destdir="${main.build.dir}"
@@ -118,7 +132,7 @@
                debug="${main.debug}"
                debuglevel="lines,vars,source"
                deprecation="${main.deprecation}"
-               classpathref="main.classpath"
+               classpathref="internal.main.classpath"
                includeantruntime="false"/>
     </target>
 
@@ -146,7 +160,14 @@
         </sequential>
     </macrodef>
 
-    <target name="test-compile" depends="compile,idl">
+    <target name="test-idl" depends="pre-compile">
+        <fileset id="test-idl.files" dir="${test-idl.src.dir}" includes="**/*.idl" erroronmissingdir="false"/>
+        <idl-javamaker
+            idlFiles="test-idl.files"
+            idlBuildDir="${test-idl.build.dir}"/>
+    </target>
+
+    <target name="test-compile" depends="compile,test-idl">
         <check-test/>
         <mkdir dir="${test.build.dir}" unless:set="test.skip"/>
         <javac srcdir="${test.src.dir}"
@@ -178,12 +199,15 @@
 
     <target name="jar" depends="compile" if="${jar.enabled}">
         <jar destfile="${jar.dir}/${jar.name}.jar"
-             basedir="${main.build.dir}"
-             manifest="${jar.manifest}">
+             manifest="${jar.manifest}"
+             duplicate="fail">
             <manifest>
                 <attribute name="Class-Path" value="${jar.classpath}" unless:blank="${jar.classpath}"/>
                 <attribute name="Solar-Version" value="${RSCREVISION}"/>
             </manifest>
+            <fileset dir="${main.build.dir}"/>
+<!-- Breaks trunk/test/smoketestdoc by packaging different classes with the same name: -->
+<!--            <fileset dir="${idl.build.classes.dir}" erroronmissingdir="false"/> -->
             <include name="**/*.class"/>
             <include name="**/*.properties"/>
             <include name="**/*.css"/>

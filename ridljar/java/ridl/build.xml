@@ -44,8 +44,8 @@
     <target name="javamaker-udkapi" depends="check-javamaker-udkapi" extensionOf="pre-compile" unless="${javamaker.udkapi.skip}">
         <mkdir dir="${main.build.dir}"/>
         <javamaker
-            inputRdb="${OUTDIR}/bin/udkapi.rdb"
-            outputDirectory="${main.build.dir}"/>
+            rdbFile="${OUTDIR}/bin/udkapi.rdb"
+            outputDir="${main.build.dir}"/>
         <touch file="${javamaker.udkapi.flag}"/>
     </target>
 
