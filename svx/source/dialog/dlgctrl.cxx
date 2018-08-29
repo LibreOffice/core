@@ -2213,13 +2213,8 @@ void PreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
 {
     // init BufferDevice
     if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
-    {
-        mpBufferDevice->SetDrawMode(rRenderContext.GetDrawMode());
-        mpBufferDevice->SetSettings(rRenderContext.GetSettings());
-        mpBufferDevice->SetAntialiasing(rRenderContext.GetAntialiasing());
         mpBufferDevice->SetOutputSizePixel(GetOutputSizePixel());
-        mpBufferDevice->SetMapMode(rRenderContext.GetMapMode());
-    }
+    mpBufferDevice->SetAntialiasing(rRenderContext.GetAntialiasing());
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -2275,9 +2270,7 @@ XRectPreview::XRectPreview()
 // in e.g. page dialog
 tools::Rectangle XRectPreview::GetPreviewSize() const
 {
-    tools::Rectangle aObjectSize(Point(), GetOutputSizePixel());
-    aObjectSize.AdjustRight(1);
-    aObjectSize.AdjustBottom(1);
+    tools::Rectangle aObjectSize(Point(), getBufferDevice().PixelToLogic(GetOutputSizePixel()));
     return aObjectSize;
 }
 
@@ -2287,9 +2280,7 @@ void XRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     InitSettings();
 
     // create RectangleObject
-    mpRectangleObject = new SdrRectObj(
-        getModel(),
-        GetPreviewSize());
+    mpRectangleObject = new SdrRectObj(getModel(), GetPreviewSize());
 }
 
 void XRectPreview::Resize()
@@ -2297,9 +2288,7 @@ void XRectPreview::Resize()
     SdrObject *pOrigObject = mpRectangleObject;
     if (pOrigObject)
     {
-        mpRectangleObject = new SdrRectObj(
-            getModel(),
-            GetPreviewSize());
+        mpRectangleObject = new SdrRectObj(getModel(), GetPreviewSize());
         SetAttributes(pOrigObject->GetMergedItemSet());
         SdrObject::Free(pOrigObject);
     }
@@ -2319,6 +2308,8 @@ void XRectPreview::SetAttributes(const SfxItemSet& rItemSet)
 
 void XRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
+    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
     LocalPrePaint(rRenderContext);
 
     sdr::contact::SdrObjectVector aObjectVector;
@@ -2331,6 +2322,7 @@ void XRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aPainter.ProcessDisplay(aDisplayInfo);
 
     LocalPostPaint(rRenderContext);
+    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
