@@ -327,7 +327,7 @@ void ScSelectionTransferObj::CreateDrawData()
             }
 
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
-            SdrModel* pModel = pDrawView->GetMarkedObjModel();
+            std::unique_ptr<SdrModel> pModel(pDrawView->GetMarkedObjModel());
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             ScViewData& rViewData = pView->GetViewData();
@@ -338,7 +338,7 @@ void ScSelectionTransferObj::CreateDrawData()
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
 
             SfxObjectShellRef aPersistRef( aDragShellRef.get() );
             pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive

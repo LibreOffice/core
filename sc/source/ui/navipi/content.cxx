@@ -1253,14 +1253,14 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 
-            SdrModel* pDragModel = aEditView.GetMarkedObjModel();
+            std::unique_ptr<SdrModel> pDragModel(aEditView.GetMarkedObjModel());
 
             TransferableObjectDescriptor aObjDesc;
             pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pDragModel, pSrcShell, aObjDesc );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pDragModel), pSrcShell, aObjDesc );
 
             pTransferObj->SetDragSourceObj( *pObject, nTab );
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
