@@ -72,9 +72,9 @@ constexpr sal_uInt32 SCDRAWTRANS_TYPE_EMBOBJ    = 1;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DRAWMODEL = 2;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DOCUMENT  = 3;
 
-ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
+ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :
-    m_pModel( pClipModel ),
+    m_pModel( std::move(pClipModel) ),
     m_aObjDesc( rDesc ),
     m_pBookmark( nullptr ),
     m_bGraphic( false ),

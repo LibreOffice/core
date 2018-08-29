@@ -80,7 +80,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
             aDragShellRef->DoInitNew();
         }
         ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
-        SdrModel* pModel = GetMarkedObjModel();
+        std::unique_ptr<SdrModel> pModel(GetMarkedObjModel());
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
         //  Charts now always copy their data in addition to the source reference, so
@@ -95,7 +95,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScDrawTransferObj ctor
 
-        rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+        rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
 
         pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
         pTransferObj->SetDragSource( this );               // copies selection
@@ -358,7 +358,7 @@ void ScDrawView::DoCopy()
         ScDocument& rClipDoc = xDocSh->GetDocument();
         copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
     }
-    SdrModel* pModel = GetMarkedObjModel();
+    std::unique_ptr<SdrModel> pModel(GetMarkedObjModel());
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so
@@ -373,7 +373,7 @@ void ScDrawView::DoCopy()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
     uno::Reference<css::datatransfer::XTransferable2> xTransferObj = pTransferObj;
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
@@ -392,7 +392,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-    SdrModel* pModel = GetMarkedObjModel();
+    std::unique_ptr<SdrModel> pModel( GetMarkedObjModel() );
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so
@@ -408,7 +408,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
