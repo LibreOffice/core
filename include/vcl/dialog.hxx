@@ -164,7 +164,7 @@ public:
     // Dialog::Execute replacement API
 
 
-    void            EndDialog( long nResult = 0 );
+    void            EndDialog( long nResult = RET_CANCEL );
     static void     EndAllDialogs( vcl::Window const * pParent );
 
     // returns the most recent of the currently executing modal dialogs
