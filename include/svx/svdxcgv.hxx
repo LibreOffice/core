@@ -70,7 +70,7 @@ public:
     // the page-local layer is merged. If there's no more room left for
     // additional page-local layers, the corresponding objects are assigned
     // the default layer (layer 0, document-global standard layer).
-    virtual SdrModel*   GetMarkedObjModel() const;
+    virtual std::unique_ptr<SdrModel> CreateMarkedObjModel() const;
 
     Graphic         GetAllMarkedGraphic() const;
 

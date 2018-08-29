@@ -191,7 +191,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     // and then the object connections are made.
     // Similar implementation are setup as the following:
     //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
-    //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
+    //    SdrModel* SdrExchangeView::CreateMarkedObjModel() const
     //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {

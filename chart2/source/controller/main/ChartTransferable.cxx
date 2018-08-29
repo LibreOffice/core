@@ -63,7 +63,7 @@ ChartTransferable::ChartTransferable(
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
-        m_pMarkedObjModel = pExchgView->GetMarkedObjModel();
+        m_pMarkedObjModel = pExchgView->CreateMarkedObjModel().release();
     }
 }
 
