@@ -21,7 +21,7 @@
 
 #include "prim.hxx"
 #include "constr.hxx"
-
+#include <cstdlib>
 
 namespace cppu
 {
