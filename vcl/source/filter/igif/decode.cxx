@@ -79,13 +79,10 @@ Scanline GIFLZWDecompressor::DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSiz
         {
             sal_uLong   nNewSize = nTargetSize << 1;
             sal_uLong   nOffset = pTmpTarget - pTarget;
-            sal_uInt8*  pTmp = static_cast<sal_uInt8*>(std::malloc( nNewSize ));
-
-            memcpy( pTmp, pTarget, nTargetSize );
-            std::free( pTarget );
+            pTarget = static_cast<sal_uInt8*>(std::realloc( pTarget, nNewSize ));
 
             nTargetSize = nNewSize;
-            pTmpTarget = ( pTarget = pTmp ) + nOffset;
+            pTmpTarget = pTarget + nOffset;
         }
 
         memcpy( pTmpTarget, pOutBufData, nOutBufDataLen );
