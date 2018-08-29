@@ -650,7 +650,7 @@ PDFObject::~PDFObject()
 {
 }
 
-bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const PDFContainer* pObjectContainer, EmitContext& rContext ) const
+bool PDFObject::getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned int* pBytes, const PDFContainer* pObjectContainer, EmitContext& rContext ) const
 {
     bool bIsDeflated = false;
     if( m_pStream && m_pStream->m_pDict &&
@@ -658,12 +658,11 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         )
     {
         unsigned int nOuterStreamLen = m_pStream->m_nEndOffset - m_pStream->m_nBeginOffset;
-        *ppStream = static_cast<char*>(std::malloc( nOuterStreamLen ));
-        unsigned int nRead = rContext.readOrigBytes( m_pStream->m_nBeginOffset, nOuterStreamLen, *ppStream );
+        rpStream.reset(new char[ nOuterStreamLen ]);
+        unsigned int nRead = rContext.readOrigBytes( m_pStream->m_nBeginOffset, nOuterStreamLen, rpStream.get() );
         if( nRead != nOuterStreamLen )
         {
-            std::free( *ppStream );
-            *ppStream = nullptr;
+            rpStream.reset();
             *pBytes = 0;
             return false;
         }
@@ -689,7 +688,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             }
         }
         // prepare compressed data section
-        char* pStream = *ppStream;
+        char* pStream = rpStream.get();
         if( pStream[0] == 's' )
             pStream += 6; // skip "stream"
         // skip line end after "stream"
@@ -697,14 +696,14 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             pStream++;
         // get the compressed length
         *pBytes = m_pStream->getDictLength( pObjectContainer );
-        if( pStream != *ppStream )
-            memmove( *ppStream, pStream, *pBytes );
+        if( pStream != rpStream.get() )
+            memmove( rpStream.get(), pStream, *pBytes );
         if( rContext.m_bDecrypt )
         {
             EmitImplData* pEData = getEmitData( rContext );
-            pEData->decrypt( reinterpret_cast<const sal_uInt8*>(*ppStream),
+            pEData->decrypt( reinterpret_cast<const sal_uInt8*>(rpStream.get()),
                              *pBytes,
-                             reinterpret_cast<sal_uInt8*>(*ppStream),
+                             reinterpret_cast<sal_uInt8*>(rpStream.get()),
                              m_nNumber,
                              m_nGeneration
                              ); // decrypt inplace
@@ -712,7 +711,6 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
     }
     else
     {
-        *ppStream = nullptr;
         *pBytes = 0;
     }
     return bIsDeflated;
@@ -769,19 +767,18 @@ void PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedF
 {
     if( m_pStream )
     {
-        char* pStream = nullptr;
+        std::unique_ptr<char[]> pStream;
         unsigned int nBytes = 0;
-        if( getDeflatedStream( &pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
+        if( getDeflatedStream( pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
         {
             sal_uInt8* pOutBytes = nullptr;
             sal_uInt32 nOutBytes = 0;
-            unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
+            unzipToBuffer( pStream.get(), nBytes, &pOutBytes, &nOutBytes );
             rWriteContext.write( pOutBytes, nOutBytes );
             std::free( pOutBytes );
         }
         else if( pStream && nBytes )
-            rWriteContext.write( pStream, nBytes );
-        std::free( pStream );
+            rWriteContext.write( pStream.get(), nBytes );
     }
 }
 
@@ -806,20 +803,20 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
         pEData->setDecryptObject( m_nNumber, m_nGeneration );
     if( (rWriteContext.m_bDeflate || rWriteContext.m_bDecrypt) && pEData )
     {
-        char* pStream = nullptr;
+        std::unique_ptr<char[]> pStream;
         unsigned int nBytes = 0;
-        bool bDeflate = getDeflatedStream( &pStream, &nBytes, pEData->m_pObjectContainer, rWriteContext );
+        bool bDeflate = getDeflatedStream( pStream, &nBytes, pEData->m_pObjectContainer, rWriteContext );
         if( pStream && nBytes )
         {
             // unzip the stream
             sal_uInt8* pOutBytes = nullptr;
             sal_uInt32 nOutBytes = 0;
             if( bDeflate && rWriteContext.m_bDeflate )
-                unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
+                unzipToBuffer( pStream.get(), nBytes, &pOutBytes, &nOutBytes );
             else
             {
                 // nothing to deflate, but decryption has happened
-                pOutBytes = reinterpret_cast<sal_uInt8*>(pStream);
+                pOutBytes = reinterpret_cast<sal_uInt8*>(pStream.get());
                 nOutBytes = static_cast<sal_uInt32>(nBytes);
             }
 
@@ -873,16 +870,14 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                     bRet = rWriteContext.write( pOutBytes, nOutBytes );
                 if( bRet )
                     bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
-                if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
+                if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream.get()) )
                     std::free( pOutBytes );
-                std::free( pStream );
                 pEData->setDecryptObject( 0, 0 );
                 return bRet;
             }
-            if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
+            if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream.get()) )
                 std::free( pOutBytes );
         }
-        std::free( pStream );
     }
 
     bool bRet = emitSubElements( rWriteContext ) &&
