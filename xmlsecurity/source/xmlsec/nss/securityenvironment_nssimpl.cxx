@@ -40,6 +40,7 @@
 #include <vector>
 #include <memory>
 #include <osl/thread.h>
+#include <comphelper/sequence.hxx>
 
 #include "secerror.hxx"
 
@@ -438,15 +439,10 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     }
 
     if( certChain != nullptr ) {
-        X509Certificate_NssImpl* pCert ;
-        CERTCertListNode* node ;
-        int len ;
+        std::vector<uno::Reference<security::XCertificate>> aCertChain;
 
-        for( len = 0, node = CERT_LIST_HEAD( certChain ); !CERT_LIST_END( node, certChain ); node = CERT_LIST_NEXT( node ), len ++ ) ;
-        Sequence< Reference< XCertificate > > xCertChain( len ) ;
-
-        for( len = 0, node = CERT_LIST_HEAD( certChain ); !CERT_LIST_END( node, certChain ); node = CERT_LIST_NEXT( node ), len ++ ) {
-            pCert = new X509Certificate_NssImpl() ;
+        for (CERTCertListNode* node = CERT_LIST_HEAD(certChain); !CERT_LIST_END(node, certChain); node = CERT_LIST_NEXT(node)) {
+            X509Certificate_NssImpl* pCert = new X509Certificate_NssImpl();
             if( pCert == nullptr ) {
                 CERT_DestroyCertList( certChain ) ;
                 throw RuntimeException() ;
@@ -454,12 +450,12 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
 
             pCert->setCert( node->cert ) ;
 
-            xCertChain[len] = pCert ;
+            aCertChain.push_back(pCert);
         }
 
         CERT_DestroyCertList( certChain ) ;
 
-        return xCertChain ;
+        return comphelper::containerToSequence(aCertChain);
     }
 
     return Sequence< Reference < XCertificate > >();
