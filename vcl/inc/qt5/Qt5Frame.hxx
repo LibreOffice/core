@@ -82,6 +82,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
     bool isWindow();
     QWindow* windowHandle();
     QScreen* screen();
+    bool isMinimized();
 
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);

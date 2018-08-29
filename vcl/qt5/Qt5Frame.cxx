@@ -35,6 +35,7 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
@@ -118,7 +119,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if (m_bDefaultPos || m_bDefaultSize)
     {
-        Size aDefSize = Size(0, 0); // CalcDefaultSize();
+        Size aDefSize = CalcDefaultSize();
         maGeometry.nX = -1;
         maGeometry.nY = -1;
         maGeometry.nWidth = aDefSize.Width();
@@ -161,8 +162,8 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
 
 void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
 {
-    int width = 100;
-    int height = 100;
+    int width = 640;
+    int height = 480;
     m_pSvpGraphics = pSvpSalGraphics;
     m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
@@ -235,10 +236,25 @@ QWindow* Qt5Frame::windowHandle()
 
 QScreen* Qt5Frame::screen()
 {
+    QWindow* winHandle = nullptr;
+
     if (m_pTopLevel)
-        return m_pTopLevel->windowHandle()->screen();
+        winHandle = m_pTopLevel->windowHandle();
     else
-        return m_pQWidget->windowHandle()->screen();
+        winHandle = m_pQWidget->windowHandle();
+
+    if (winHandle)
+        return winHandle->screen();
+
+    return nullptr;
+}
+
+bool Qt5Frame::isMinimized()
+{
+    if (m_pTopLevel)
+        return m_pTopLevel->isMinimized();
+    else
+        return m_pQWidget->isMinimized();
 }
 
 void Qt5Frame::SetTitle(const OUString& rTitle)
@@ -316,10 +332,14 @@ void Qt5Frame::Center()
 Size Qt5Frame::CalcDefaultSize()
 {
     assert(isWindow());
+    QSize qSize(0, 0);
     QScreen* pScreen = screen();
-    if (!pScreen)
-        return Size();
-    return bestmaxFrameSizeForScreenSize(toSize(pScreen->size()));
+    if (pScreen)
+        qSize = pScreen->size();
+    else
+        qSize = QApplication::desktop()->screenGeometry(0).size();
+
+    return bestmaxFrameSizeForScreenSize(toSize(qSize));
 }
 
 void Qt5Frame::SetDefaultSize()
@@ -414,6 +434,9 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
+    if (isWindow() && m_pTopLevel && !m_pTopLevel->testAttribute(Qt::WA_WState_Created))
+        m_pTopLevel->setVisible(true);
+
     const WindowStateMask nMaxGeometryMask
         = WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width | WindowStateMask::Height
           | WindowStateMask::MaximizedX | WindowStateMask::MaximizedY
@@ -460,7 +483,7 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
 {
     pState->mnState = WindowStateState::Normal;
     pState->mnMask = WindowStateMask::State;
-    if (m_pQWidget->isMinimized() || !m_pQWidget->windowHandle())
+    if (isMinimized() /*|| !windowHandle()*/)
         pState->mnState |= WindowStateState::Minimized;
     else if (m_pQWidget->isMaximized())
     {
