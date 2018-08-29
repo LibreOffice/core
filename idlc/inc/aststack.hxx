@@ -20,6 +20,7 @@
 #define INCLUDED_IDLC_INC_ASTSTACK_HXX
 
 #include <sal/types.h>
+#include <vector>
 
 class AstScope;
 
@@ -29,7 +30,7 @@ public:
     AstStack();
     ~AstStack();
 
-    sal_uInt32 depth() const { return m_top;}
+    sal_uInt32 depth() const { return m_stack.size();}
     AstScope* top();
     AstScope* bottom();
     AstScope* nextToTop();
@@ -39,9 +40,7 @@ public:
     void clear();
 
 private:
-    AstScope**  m_stack;
-    sal_uInt32  m_size;
-    sal_uInt32  m_top;
+    std::vector<AstScope*>  m_stack;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTSTACK_HXX
