@@ -131,7 +131,89 @@ IMPL_LINK_NOARG( SfxStyleDialog, CancelHdl, Button *, void )
     EndDialog();
 }
 
-OUString SfxStyleDialog::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
+/*  [Description]
+
+    Constructor: Add Manage TabPage, set ExampleSet from style.
+*/
+SfxStyleDialogController::SfxStyleDialogController
+(
+    weld::Window* pParent,           // Parent
+    const OUString& rUIXMLDescription, const OString& rID,
+    SfxStyleSheetBase& rStyle  // stylesheet to be processed
+)
+    : SfxTabDialogController(pParent, rUIXMLDescription, rID, &rStyle.GetItemSet(), true)
+    , m_rStyle(rStyle)
+{
+    // without ParentSupport suppress the standardButton
+    if (!rStyle.HasParentSupport())
+        RemoveStandardButton();
+
+    AddTabPage("organizer", SfxManageStyleSheetPage::Create, nullptr);
+
+    // With new template always set the management page as the current page
+    if (rStyle.GetName().isEmpty())
+        SetCurPageId("organizer");
+    else
+    {
+        OUString sTxt = m_xDialog->get_title() + ": " + rStyle.GetName();
+        m_xDialog->set_title(sTxt);
+    }
+    m_xExampleSet.reset(&m_rStyle.GetItemSet()); // in SfxTabDialog::Ctor() already created, reset will delete it
+
+    GetCancelButton().connect_clicked(LINK(this, SfxStyleDialogController, CancelHdl));
+}
+
+/*  [Description]
+
+    Destructor: set ExampleSet to NULL, so that SfxTabDialog does not delete
+    the Set from Style.
+*/
+SfxStyleDialogController::~SfxStyleDialogController()
+{
+    m_xExampleSet.release();
+}
+
+/*  [Description]
+
+    Override so that always RET_OK is returned.
+*/
+short SfxStyleDialogController::Ok()
+{
+    SfxTabDialogController::Ok();
+    return RET_OK;
+}
+
+/*  [Description]
+
+    If the dialogue was canceled, then all selected attributes must be reset
+    again.
+*/
+IMPL_LINK_NOARG(SfxStyleDialogController, CancelHdl, weld::Button&, void)
+{
+    SfxTabPage* pPage = GetTabPage("organizer");
+
+    const SfxItemSet* pInSet = GetInputSetImpl();
+    SfxWhichIter aIter(*pInSet);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+
+    while (nWhich)
+    {
+        SfxItemState eState = pInSet->GetItemState(nWhich, false);
+
+        if (SfxItemState::DEFAULT == eState)
+            m_xExampleSet->ClearItem(nWhich);
+        else
+            m_xExampleSet->Put(pInSet->Get(nWhich));
+        nWhich = aIter.NextWhich();
+    }
+
+    if (pPage)
+        pPage->Reset(GetInputSetImpl());
+
+    m_xDialog->response(RET_CANCEL);
+}
+
+OUString SfxStyleDialogController::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
 {
     OUString aNo(SfxResId(STR_NONAME));
     sal_uInt16 i = 1;

@@ -1448,8 +1448,9 @@ SfxTabDialogController::SfxTabDialogController
 (
     weld::Window* pParent,              // Parent Window
     const OUString& rUIXMLDescription, const OString& rID, // Dialog .ui path, Dialog Name
-    const SfxItemSet* pItemSet    // Itemset with the data;
+    const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
+    bool bEditFmt                 // when yes -> additional Button for standard
 )
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
@@ -1458,7 +1459,9 @@ SfxTabDialogController::SfxTabDialogController
     , m_xUserBtn(m_xBuilder->weld_button("user"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
+    , m_xBaseFmtBtn(m_xBuilder->weld_button("standard"))
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
+    , m_bStandardPushed(false)
 {
     m_pImpl.reset(new TabDlg_Impl(m_xTabCtrl->get_n_pages()));
     m_pImpl->bHideResetBtn = !m_xResetBtn->get_visible();
@@ -1469,6 +1472,14 @@ SfxTabDialogController::SfxTabDialogController
     m_xTabCtrl->connect_enter_page(LINK(this, SfxTabDialogController, ActivatePageHdl));
     m_xTabCtrl->connect_leave_page(LINK(this, SfxTabDialogController, DeactivatePageHdl));
     m_xResetBtn->set_help_id(HID_TABDLG_RESET_BTN);
+
+    if (bEditFmt)
+    {
+        m_xBaseFmtBtn->set_label(SfxResId(STR_STANDARD_SHORTCUT));
+        m_xBaseFmtBtn->connect_clicked(LINK(this, SfxTabDialogController, BaseFmtHdl));
+        m_xBaseFmtBtn->set_help_id(HID_TABDLG_STANDARD_BTN);
+        m_xBaseFmtBtn->show();
+    }
 
     if (m_xUserBtn)
         m_xUserBtn->connect_clicked(LINK(this, SfxTabDialogController, UserHdl));
@@ -1532,11 +1543,10 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
 */
 
 {
-    const OString sId = m_xTabCtrl->get_current_page_ident();
-    Data_Impl* pDataObject = Find( m_pImpl->aData, sId );
-    DBG_ASSERT( pDataObject, "Id not known" );
+    Data_Impl* pDataObject = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    assert(pDataObject && "Id not known");
 
-    pDataObject->pTabPage->Reset( m_pSet.get() );
+    pDataObject->pTabPage->Reset(m_pSet.get());
     // Also reset relevant items of ExampleSet and OutSet to initial state
     if (pDataObject->fnGetRanges)
     {
@@ -1580,6 +1590,63 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
             // Go to the next pair
             pTmpRanges += 2;
         }
+    }
+}
+
+/*  [Description]
+
+    Handler behind the Standard-Button.
+    This button is available when editing style sheets. All the set attributes
+    in the edited stylesheet are deleted.
+*/
+IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
+{
+    m_bStandardPushed = true;
+
+    Data_Impl* pDataObject = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    assert(pDataObject && "Id not known");
+
+    if (pDataObject->fnGetRanges)
+    {
+        if (!m_xExampleSet)
+            m_xExampleSet.reset(new SfxItemSet(*m_pSet));
+
+        const SfxItemPool* pPool = m_pSet->GetPool();
+        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+        SfxItemSet aTmpSet(*m_xExampleSet);
+
+        while (*pTmpRanges)
+        {
+            const sal_uInt16* pU = pTmpRanges + 1;
+
+            // Correct Range with multiple values
+            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+            DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
+
+            if ( nTmp > nTmpEnd )
+            {
+                // If really sorted wrongly, then set new
+                std::swap(nTmp, nTmpEnd);
+            }
+
+            while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
+            {
+                // Iterate over the Range and set the Items
+                sal_uInt16 nWh = pPool->GetWhich(nTmp);
+                m_xExampleSet->ClearItem(nWh);
+                aTmpSet.ClearItem(nWh);
+                // At the Outset of InvalidateItem,
+                // so that the change takes effect
+                m_pOutSet->InvalidateItem(nWh);
+                nTmp++;
+            }
+            // Go to the next pair
+            pTmpRanges += 2;
+        }
+        // Set all Items as new  -> the call the current Page Reset()
+        assert(pDataObject->pTabPage && "the Page is gone");
+        pDataObject->pTabPage->Reset( &aTmpSet );
+        pDataObject->pTabPage->pImpl->mbStandard = true;
     }
 }
 
@@ -1869,7 +1936,10 @@ short SfxTabDialogController::Ok()
         }
     }
 
-    if ( m_pOutSet && m_pOutSet->Count() > 0 )
+    if (m_pOutSet && m_pOutSet->Count() > 0)
+        bModified = true;
+
+    if (m_bStandardPushed)
         bModified = true;
 
     return bModified ? RET_OK : RET_CANCEL;
@@ -2096,6 +2166,12 @@ SfxItemSet* SfxTabDialogController::GetInputSetImpl()
 void SfxTabDialogController::RemoveResetButton()
 {
     m_xResetBtn->hide();
+    m_pImpl->bHideResetBtn = true;
+}
+
+void SfxTabDialogController::RemoveStandardButton()
+{
+    m_xBaseFmtBtn->hide();
     m_pImpl->bHideResetBtn = true;
 }
 

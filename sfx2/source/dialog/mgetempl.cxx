@@ -111,7 +111,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
-        OUString aNoName(SfxStyleDialog::GenerateUnusedName(*pPool));
+        OUString aNoName(SfxStyleDialogController::GenerateUnusedName(*pPool));
         pStyle->SetName( aNoName );
         aName = aNoName;
         aFollow = pStyle->GetFollow();

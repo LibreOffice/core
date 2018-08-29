@@ -64,6 +64,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xNameFt;
 
 friend class SfxStyleDialog;
+friend class SfxStyleDialogController;
 
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
     DECL_LINK(LoseFocusHdl, weld::Widget&, void);
