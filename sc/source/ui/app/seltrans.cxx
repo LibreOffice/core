@@ -327,7 +327,7 @@ void ScSelectionTransferObj::CreateDrawData()
             }
 
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
-            std::unique_ptr<SdrModel> pModel(pDrawView->GetMarkedObjModel());
+            std::unique_ptr<SdrModel> pModel(pDrawView->CreateMarkedObjModel());
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             ScViewData& rViewData = pView->GetViewData();

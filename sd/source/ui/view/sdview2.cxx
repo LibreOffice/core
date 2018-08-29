@@ -92,7 +92,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     SD_MOD()->pTransferClip = pTransferable;
 
     mrDoc.CreatingDataObj( pTransferable );
-    pTransferable->SetWorkDocument( static_cast<SdDrawDocument*>(GetMarkedObjModel()) );
+    pTransferable->SetWorkDocument( static_cast<SdDrawDocument*>(CreateMarkedObjModel().release()) );
     mrDoc.CreatingDataObj( nullptr );
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
