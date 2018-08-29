@@ -29,6 +29,7 @@ cmd/32/autofilter.png cmd/32/datafilterautofilter.png
 cmd/32/autopilotmenu.png cmd/32/autoformat.png
 cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
 cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
+cmd/32/break.png cmd/32/polygon_unfilled.png
 cmd/32/browsebackward.png cmd/32/navigateback.png
 cmd/32/browseforward.png cmd/32/navigateforward.png
 cmd/32/bulletliststyle.png cmd/32/defaultbullet.png
@@ -54,6 +55,7 @@ cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
 cmd/32/commontaskbarvisible.png cmd/32/autoformat.png
 cmd/32/config.png cmd/32/choosecontrols.png
+cmd/32/connect.png cmd/32/polygon.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
@@ -179,6 +181,7 @@ cmd/32/mailmergelastentry.png cmd/32/lastrecord.png
 cmd/32/mailmergenextentry.png cmd/32/nextrecord.png
 cmd/32/mailmergepreventry.png cmd/32/prevrecord.png
 cmd/32/mailmergewizard.png cmd/32/dsbformletter.png
+cmd/32/measureattributes.png cmd/32/measureline.png
 cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
 cmd/32/mirrorvert.png cmd/32/flipvertical.png
@@ -343,6 +346,7 @@ cmd/lc_autofilter.png cmd/lc_datafilterautofilter.png
 cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
+cmd/lc_break.png cmd/lc_polygon_unfilled.png
 cmd/lc_browsebackward.png cmd/lc_navigateback.png
 cmd/lc_browseforward.png cmd/lc_navigateforward.png
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
@@ -367,6 +371,7 @@ cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
 cmd/lc_config.png cmd/lc_choosecontrols.png
+cmd/lc_connect.png cmd/lc_polygon.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
@@ -481,6 +486,7 @@ cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
 cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
+cmd/lc_measureattributes.png cmd/lc_measureline.png
 cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_mirrorhorz.png cmd/lc_fliphorizontal.png
 cmd/lc_mirrorvert.png cmd/lc_flipvertical.png
@@ -605,6 +611,7 @@ cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
 cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
+cmd/sc_break.png cmd/sc_polygon_unfilled.png
 cmd/sc_browsebackward.png cmd/sc_navigateback.png
 cmd/sc_browseforward.png cmd/sc_navigateforward.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
@@ -629,6 +636,7 @@ cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
 cmd/sc_config.png cmd/sc_choosecontrols.png
+cmd/sc_connect.png cmd/sc_polygon.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
@@ -743,6 +751,7 @@ cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
 cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
 cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
