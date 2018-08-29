@@ -75,43 +75,4 @@ void SimpleReferenceComponent::disposing()
 {
 }
 
-void * SimpleReferenceComponent::operator new(std::size_t nSize)
-{
-    return ::operator new(nSize);
-}
-
-void * SimpleReferenceComponent::operator new(std::size_t nSize,
-                                           std::nothrow_t const &
-#ifndef _WIN32
-                                           rNothrow
-#endif
-                                           )
-{
-#if defined(_WIN32)
-    return ::operator new(nSize);
-        // WNT lacks a global nothrow operator new...
-#else // WNT
-    return ::operator new(nSize, rNothrow);
-#endif // WNT
-}
-
-void SimpleReferenceComponent::operator delete(void * pPtr)
-{
-    ::operator delete(pPtr);
-}
-
-void SimpleReferenceComponent::operator delete(void * pPtr,
-                                            std::nothrow_t const &
-#ifndef _WIN32
-                                            rNothrow
-#endif
-)
-{
-#if defined(_WIN32)
-    ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
-#else // WNT
-    ::operator delete(pPtr, rNothrow);
-#endif // WNT
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
