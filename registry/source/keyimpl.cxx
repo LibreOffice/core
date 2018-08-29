@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <memory>
 
 using namespace store;
 
@@ -218,7 +219,7 @@ RegError ORegKey::deleteKey(const OUString& keyName)
 RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueType, sal_uInt32* pValueSize) const
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
@@ -238,23 +239,21 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE]);
 
     sal_uInt32  readBytes;
-    if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
+    if ( rValue.readAt(0, pBuffer.get(), VALUE_HEADERSIZE, readBytes) )
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     sal_uInt32  size;
-    sal_uInt8   type = *pBuffer;
-    readUINT32(pBuffer+VALUE_TYPEOFFSET, size);
+    sal_uInt8   type = pBuffer[0];
+    readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
 
     *pValueType = static_cast<RegValueType>(type);
 //    if (*pValueType == RegValueType::UNICODE)
@@ -264,17 +263,15 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 //    {
         if (*pValueType > RegValueType::BINARY)
         {
-            std::free(pBuffer);
-            pBuffer = static_cast<sal_uInt8*>(std::malloc(4));
-            rValue.readAt(VALUE_HEADEROFFSET, pBuffer, 4, readBytes);
+            pBuffer.reset(new sal_uInt8[4]);
+            rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), 4, readBytes);
 
-            readUINT32(pBuffer, size);
+            readUINT32(pBuffer.get(), size);
         }
 
         *pValueSize = size;
 //    }
 
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -284,7 +281,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegValue value, sal_uInt32 vSize)
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
 
     if (m_pRegistry->isReadOnly())
     {
@@ -309,27 +306,27 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     sal_uInt32 size = vSize;
 
     sal_uInt8 type = static_cast<sal_uInt8>(vType);
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
-    memcpy(pBuffer, &type, 1);
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE + size]);
+    memcpy(pBuffer.get(), &type, 1);
 
-    writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
+    writeUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
 
     switch (vType)
     {
         case RegValueType::NOT_DEFINED:
-            memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
+            memcpy(pBuffer.get()+VALUE_HEADEROFFSET, value, size);
             break;
         case RegValueType::LONG:
-            writeINT32(pBuffer+VALUE_HEADEROFFSET, *static_cast<sal_Int32*>(value));
+            writeINT32(pBuffer.get()+VALUE_HEADEROFFSET, *static_cast<sal_Int32*>(value));
             break;
         case RegValueType::STRING:
-            writeUtf8(pBuffer+VALUE_HEADEROFFSET, static_cast<const sal_Char*>(value));
+            writeUtf8(pBuffer.get()+VALUE_HEADEROFFSET, static_cast<const sal_Char*>(value));
             break;
         case RegValueType::UNICODE:
-            writeString(pBuffer+VALUE_HEADEROFFSET, static_cast<const sal_Unicode*>(value));
+            writeString(pBuffer.get()+VALUE_HEADEROFFSET, static_cast<const sal_Unicode*>(value));
             break;
         case RegValueType::BINARY:
-            memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
+            memcpy(pBuffer.get()+VALUE_HEADEROFFSET, value, size);
             break;
         default:
             OSL_ASSERT(false);
@@ -337,19 +334,16 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     }
 
     sal_uInt32  writenBytes;
-    if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
+    if ( rValue.writeAt(0, pBuffer.get(), VALUE_HEADERSIZE+size, writenBytes) )
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -359,7 +353,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
 
     if (m_pRegistry->isReadOnly())
     {
@@ -381,34 +375,31 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
     size += len * 4;
 
     sal_uInt8 type = sal_uInt8(RegValueType::LONGLIST);
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
-    memcpy(pBuffer, &type, 1);
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE + size]);
+    memcpy(pBuffer.get(), &type, 1);
 
-    writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
-    writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
+    writeUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
+    writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET, len);
 
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
 
     for (sal_uInt32 i=0; i < len; i++)
     {
-        writeINT32(pBuffer+VALUE_HEADEROFFSET+offset, pValueList[i]);
+        writeINT32(pBuffer.get()+VALUE_HEADEROFFSET+offset, pValueList[i]);
         offset += 4;
     }
 
     sal_uInt32  writenBytes;
-    if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
+    if ( rValue.writeAt(0, pBuffer.get(), VALUE_HEADERSIZE+size, writenBytes) )
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADEROFFSET+size))
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -418,7 +409,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
 RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
 
     if (m_pRegistry->isReadOnly())
     {
@@ -444,11 +435,11 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     }
 
     sal_uInt8 type = sal_uInt8(RegValueType::STRINGLIST);
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
-    memcpy(pBuffer, &type, 1);
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE + size]);
+    memcpy(pBuffer.get(), &type, 1);
 
-    writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
-    writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
+    writeUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
+    writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET, len);
 
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
@@ -456,27 +447,24 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     for (i=0; i < len; i++)
     {
         sLen = strlen(pValueList[i]) + 1;
-        writeUINT32(pBuffer+VALUE_HEADEROFFSET+offset, sLen);
+        writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET+offset, sLen);
 
         offset += 4;
-        writeUtf8(pBuffer+VALUE_HEADEROFFSET+offset, pValueList[i]);
+        writeUtf8(pBuffer.get()+VALUE_HEADEROFFSET+offset, pValueList[i]);
         offset += sLen;
     }
 
     sal_uInt32  writenBytes;
-    if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
+    if ( rValue.writeAt(0, pBuffer.get(), VALUE_HEADERSIZE+size, writenBytes) )
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -486,7 +474,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
 
     if (m_pRegistry->isReadOnly())
     {
@@ -512,11 +500,11 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     }
 
     sal_uInt8 type = sal_uInt8(RegValueType::UNICODELIST);
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE + size));
-    memcpy(pBuffer, &type, 1);
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE + size]);
+    memcpy(pBuffer.get(), &type, 1);
 
-    writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
-    writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
+    writeUINT32(pBuffer.get()+VALUE_TYPEOFFSET, size);
+    writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET, len);
 
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
@@ -524,27 +512,24 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     for (i=0; i < len; i++)
     {
         sLen = (rtl_ustr_getLength(pValueList[i]) + 1) * 2;
-        writeUINT32(pBuffer+VALUE_HEADEROFFSET+offset, sLen);
+        writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET+offset, sLen);
 
         offset += 4;
-        writeString(pBuffer+VALUE_HEADEROFFSET+offset, pValueList[i]);
+        writeString(pBuffer.get()+VALUE_HEADEROFFSET+offset, pValueList[i]);
         offset += sLen;
     }
 
     sal_uInt32  writenBytes;
-    if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
+    if ( rValue.writeAt(0, pBuffer.get(), VALUE_HEADERSIZE+size, writenBytes) )
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     if (writenBytes != (VALUE_HEADERSIZE+size))
     {
-        std::free(pBuffer);
         return RegError::SET_VALUE_FAILED;
     }
     setModified();
 
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -554,7 +539,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
@@ -574,71 +559,63 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE]);
 
     sal_uInt32  readBytes;
-    if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
+    if ( rValue.readAt(0, pBuffer.get(), VALUE_HEADERSIZE, readBytes) )
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *pBuffer;
+    sal_uInt8   type = pBuffer[0];
     valueType = static_cast<RegValueType>(type);
-    readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
-
-    std::free(pBuffer);
+    readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, valueSize);
 
     if (valueType > RegValueType::BINARY)
     {
         return RegError::INVALID_VALUE;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
+    pBuffer.reset(new sal_uInt8[valueSize]);
 
-    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
+    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), valueSize, readBytes) )
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     switch (valueType)
     {
         case RegValueType::NOT_DEFINED:
-            memcpy(value, pBuffer, valueSize);
+            memcpy(value, pBuffer.get(), valueSize);
             break;
         case RegValueType::LONG:
-            readINT32(pBuffer, *static_cast<sal_Int32*>(value));
+            readINT32(pBuffer.get(), *static_cast<sal_Int32*>(value));
             break;
         case RegValueType::STRING:
-            readUtf8(pBuffer, static_cast<sal_Char*>(value), valueSize);
+            readUtf8(pBuffer.get(), static_cast<sal_Char*>(value), valueSize);
             break;
         case RegValueType::UNICODE:
-            readString(pBuffer, static_cast<sal_Unicode*>(value), valueSize);
+            readString(pBuffer.get(), static_cast<sal_Unicode*>(value), valueSize);
             break;
         case RegValueType::BINARY:
-            memcpy(value, pBuffer, valueSize);
+            memcpy(value, pBuffer.get(), valueSize);
             break;
         // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
         case RegValueType::LONGLIST:
         case RegValueType::STRINGLIST:
         case RegValueType::UNICODELIST:
-            memcpy(value, pBuffer, valueSize);
+            memcpy(value, pBuffer.get(), valueSize);
             break;
     }
 
-
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -648,7 +625,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
@@ -670,38 +647,33 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE]);
 
     sal_uInt32  readBytes;
-    if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
+    if ( rValue.readAt(0, pBuffer.get(), VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *pBuffer;
+    sal_uInt8   type = pBuffer[0];
     valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::LONGLIST)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
-
-    std::free(pBuffer);
+    readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, valueSize);
 
     /* check for 'reasonable' value */
     /* surely 10 millions entry in a registry list should be enough */
@@ -709,35 +681,31 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
+    pBuffer.reset(new sal_uInt8[valueSize]);
 
-    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
+    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     sal_uInt32 len = 0;
-    readUINT32(pBuffer, len);
+    readUINT32(pBuffer.get(), len);
 
     /* make sure the declared size of the arry is consistent with the amount of data we have read */
     if(len > (valueSize - 4) / 4)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     *pLen = len;
@@ -747,12 +715,11 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
     for (sal_uInt32 i = 0; i < len; i++)
     {
-        readINT32(pBuffer+offset, pVList[i]);
+        readINT32(pBuffer.get()+offset, pVList[i]);
         offset += 4;
     }
 
     *pValueList = pVList;
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -762,7 +729,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
@@ -784,58 +751,51 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE]);
 
     sal_uInt32  readBytes;
-    if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
+    if ( rValue.readAt(0, pBuffer.get(), VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *pBuffer;
+    sal_uInt8   type = pBuffer[0];
     valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::STRINGLIST)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
+    readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, valueSize);
 
-    std::free(pBuffer);
+    pBuffer.reset(new sal_uInt8[valueSize]);
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
-
-    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
+    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     sal_uInt32 len = 0;
-    readUINT32(pBuffer, len);
+    readUINT32(pBuffer.get(), len);
 
     *pLen = len;
     sal_Char** pVList = static_cast<sal_Char**>(rtl_allocateZeroMemory(len * sizeof(sal_Char*)));
@@ -846,19 +806,18 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     sal_Char *pValue;
     for (sal_uInt32 i=0; i < len; i++)
     {
-        readUINT32(pBuffer+offset, sLen);
+        readUINT32(pBuffer.get()+offset, sLen);
 
         offset += 4;
 
         pValue = static_cast<sal_Char*>(std::malloc(sLen));
-        readUtf8(pBuffer+offset, pValue, sLen);
+        readUtf8(pBuffer.get()+offset, pValue, sLen);
         pVList[i] = pValue;
 
         offset += sLen;
     }
 
     *pValueList = pVList;
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
@@ -868,7 +827,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
 RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
-    sal_uInt8*      pBuffer;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
@@ -890,58 +849,51 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
         return RegError::VALUE_NOT_EXISTS;
     }
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(VALUE_HEADERSIZE));
+    pBuffer.reset(new sal_uInt8[VALUE_HEADERSIZE]);
 
     sal_uInt32  readBytes;
-    if ( rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, readBytes) )
+    if ( rValue.readAt(0, pBuffer.get(), VALUE_HEADERSIZE, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != VALUE_HEADERSIZE)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *pBuffer;
+    sal_uInt8   type = pBuffer[0];
     valueType = static_cast<RegValueType>(type);
 
     if (valueType != RegValueType::UNICODELIST)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
-    readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
+    readUINT32(pBuffer.get()+VALUE_TYPEOFFSET, valueSize);
 
-    std::free(pBuffer);
+    pBuffer.reset(new sal_uInt8[valueSize]);
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc(valueSize));
-
-    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
+    if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer.get(), valueSize, readBytes) )
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
     if (readBytes != valueSize)
     {
         pValueList = nullptr;
         *pLen = 0;
-        std::free(pBuffer);
         return RegError::INVALID_VALUE;
     }
 
     sal_uInt32 len = 0;
-    readUINT32(pBuffer, len);
+    readUINT32(pBuffer.get(), len);
 
     *pLen = len;
     sal_Unicode** pVList = static_cast<sal_Unicode**>(rtl_allocateZeroMemory(len * sizeof(sal_Unicode*)));
@@ -952,19 +904,18 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     sal_Unicode *pValue;
     for (sal_uInt32 i=0; i < len; i++)
     {
-        readUINT32(pBuffer+offset, sLen);
+        readUINT32(pBuffer.get()+offset, sLen);
 
         offset += 4;
 
         pValue = static_cast<sal_Unicode*>(std::malloc((sLen / 2) * sizeof(sal_Unicode)));
-        readString(pBuffer+offset, pValue, sLen);
+        readString(pBuffer.get()+offset, pValue, sLen);
         pVList[i] = pValue;
 
         offset += sLen;
     }
 
     *pValueList = pVList;
-    std::free(pBuffer);
     return RegError::NO_ERROR;
 }
 
