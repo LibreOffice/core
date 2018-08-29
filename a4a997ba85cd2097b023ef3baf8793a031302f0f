@@ -16,6 +16,24 @@
       "revId": "a4a997ba85cd2097b023ef3baf8793a031302f0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_0368eef2",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-08-29T09:27:43Z",
+      "side": 1,
+      "message": "No, this patch is for std::find_if only.\nI consider dealing with std::find in separate change. Otherwise patch would be too big.",
+      "parentUuid": "dfeb2761_e3ff4a65",
+      "revId": "a4a997ba85cd2097b023ef3baf8793a031302f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
