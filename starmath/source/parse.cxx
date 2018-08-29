@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <config_global.h>
 #include <i18nlangtag/lang.h>
 #include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
@@ -995,7 +996,11 @@ std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
     if (xSNode)
     {
         xSNode->SetSubNode(0, pNode.release());
-        return std::move(xSNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+        return xSNode;
+#else
+        return std::move(xSNode);
+#endif
     }
     return pNode;
 }
@@ -1030,7 +1035,11 @@ std::unique_ptr<SmNode> SmParser::DoLine()
 
     auto xSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
     xSNode->SetSubNodes(buildNodeArray(ExpressionArray));
-    return std::move(xSNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+    return xSNode;
+#else
+    return std::move(xSNode);
+#endif
 }
 
 std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
@@ -1049,9 +1058,11 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
         std::unique_ptr<SmExpressionNode> xSNode(new SmExpressionNode(m_aCurToken));
         xSNode->SetSubNodes(buildNodeArray(RelationArray));
         xSNode->SetUseExtraSpaces(bUseExtraSpaces);
-        // the following explicit move can be omitted since C++14:
-        // https://stackoverflow.com/questions/22018115/converting-stdunique-ptrderived-to-stdunique-ptrbase
+#if HAVE_CXX_CWG1579_FIX
+        return xSNode;
+#else
         return std::move(xSNode);
+#endif
     }
     else
     {
@@ -1256,7 +1267,11 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     }
 
     pNode->SetSubNodes(buildNodeArray(aSubNodes));
-    return std::move(pNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+    return pNode;
+#else
+    return std::move(pNode);
+#endif
 }
 
 std::unique_ptr<SmNode> SmParser::DoOpSubSup()
@@ -1272,7 +1287,11 @@ std::unique_ptr<SmNode> SmParser::DoOpSubSup()
     // get sub- supscripts if any
     if (m_aCurToken.nGroup == TG::Power)
         return DoSubSup(TG::Power, pNode.release());
-    return std::move(pNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+    return pNode;
+#else
+    return std::move(pNode);
+#endif
 }
 
 std::unique_ptr<SmNode> SmParser::DoPower()
@@ -1776,7 +1795,11 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
 
     xSNode->SetSubNodes(xAttr.release(), nullptr); // the body will be filled later
     xSNode->SetScaleMode(eScaleMode);
-    return std::move(xSNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+    return xSNode;
+#else
+    return std::move(xSNode);
+#endif
 }
 
 std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
@@ -1797,7 +1820,11 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
             {
                 auto pNode = o3tl::make_unique<SmFontNode>(m_aCurToken);
                 NextToken();
-                return std::move(pNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+                return pNode;
+#else
+                return std::move(pNode);
+#endif
             }
 
         case TSIZE :
@@ -1959,7 +1986,11 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
     NextToken();
 
     pFontNode->SetSizeParameter(aValue, Type);
-    return std::move(pFontNode); // this explicit move can be omitted since C++14
+#if HAVE_CXX_CWG1579_FIX
+    return pFontNode;
+#else
+    return std::move(pFontNode);
+#endif
 }
 
 SmStructureNode *SmParser::DoBrace()
