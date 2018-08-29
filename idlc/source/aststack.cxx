@@ -21,102 +21,65 @@
 #include <aststack.hxx>
 #include <astscope.hxx>
 
-#define STACKSIZE_INCREMENT 64
-
 AstStack::AstStack()
-    : m_stack(static_cast<AstScope**>(rtl_allocateZeroMemory(sizeof(AstScope*) * STACKSIZE_INCREMENT)))
-    , m_size(STACKSIZE_INCREMENT)
-    , m_top(0)
 {
 }
 
 AstStack::~AstStack()
 {
-    for(sal_uInt32 i=0; i < m_top; i++)
-    {
-        if (m_stack[i])
-            delete m_stack[i];
-    }
-
-    std::free(m_stack);
+    for (AstScope* p : m_stack)
+        delete p;
 }
 
 
 AstScope* AstStack::top()
 {
-    if (m_top < 1)
+    if (m_stack.empty())
         return nullptr;
-    return m_stack[m_top - 1];
+    return m_stack.back();
 }
 
 AstScope* AstStack::bottom()
 {
-    if (m_top == 0)
+    if (m_stack.empty())
         return nullptr;
-    return m_stack[0];
+    return m_stack.front();
 }
 
 AstScope* AstStack::nextToTop()
 {
-    AstScope *tmp, *retval;
-
-    if (depth() < 2)
+    if (m_stack.size() < 2)
         return nullptr;
 
-    tmp = top();        // Save top
-    pop();              // Pop it
-    retval = top();     // Get next one down
-    (void) push(tmp);   // Push top back
-    return retval;      // Return next one down
+    return m_stack[m_stack.size() - 2];
 }
 
 AstScope* AstStack::topNonNull()
 {
-    for (sal_uInt32 i = m_top; i > 0; i--)
+    for (sal_uInt32 i = m_stack.size(); i > 0; i--)
     {
         if ( m_stack[i - 1] )
             return m_stack[i - 1];
-      }
+    }
     return nullptr;
 }
 
 AstStack* AstStack::push(AstScope* pScope)
 {
-    AstScope        **tmp;
-//  AstDeclaration  *pDecl = ScopeAsDecl(pScope);
-    sal_uInt32  newSize;
-    sal_uInt32  i;
-
-    // Make sure there's space for one more
-    if (m_size == m_top)
-    {
-        newSize = m_size;
-        newSize += STACKSIZE_INCREMENT;
-        tmp = static_cast<AstScope**>(rtl_allocateZeroMemory(sizeof(AstScope*) * newSize));
-
-        for(i=0; i < m_size; i++)
-            tmp[i] = m_stack[i];
-
-        std::free(m_stack);
-        m_stack = tmp;
-    }
-
-    // Insert new scope
-    m_stack[m_top++] = pScope;
-
+    m_stack.push_back(pScope);
     return this;
 }
 
 void AstStack::pop()
 {
-    if (m_top < 1)
+    if (m_stack.empty())
         return;
-    --m_top;
+    m_stack.pop_back();
 }
 
 void AstStack::clear()
 {
-    m_top = 0;
+   m_stack.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
