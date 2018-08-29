@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string>
 #include <sstream>
+#include <cstdlib>
 
 namespace std
 {
