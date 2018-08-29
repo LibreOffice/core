@@ -2426,6 +2426,12 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             GET(bTextAutoGrowHeight, TextAutoGrowHeight);
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
         }
+        if (GetDocumentType() == DOCUMENT_XLSX)
+        {
+            bool bTextAutoGrowHeight = false;
+            GET(bTextAutoGrowHeight, TextAutoGrowHeight);
+            mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
+        }
         if (GetDocumentType() == DOCUMENT_PPTX)
         {
             TextFitToSizeType eFit = TextFitToSizeType_NONE;
