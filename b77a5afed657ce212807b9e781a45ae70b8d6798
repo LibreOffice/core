@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_f1083429",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-08-29T21:59:54Z",
+      "side": 1,
+      "message": "Please don\u0027t duplicate the code. You can use this as condition:\nif (GetDocumentType() \u003d\u003d DOCUMENT_DOCX || GetDocumentType() \u003d\u003d DOCUMENT_XLSX)",
+      "range": {
+        "startLine": 2429,
+        "startChar": 12,
+        "endLine": 2429,
+        "endChar": 27
+      },
+      "revId": "b77a5afed657ce212807b9e781a45ae70b8d6798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
