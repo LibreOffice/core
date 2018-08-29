@@ -390,7 +390,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
-	numbertext \
 	odbc \
 	odfflatxml \
 	offacc \
