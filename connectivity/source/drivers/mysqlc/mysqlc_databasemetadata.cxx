@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbc/ColumnType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "mysqlc_general.hxx"
 #include "mysqlc_statement.hxx"
@@ -101,6 +102,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength() { return 64; }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections()
 {
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     // TODO
     // SELECT @@max_connections
     return 100;
@@ -110,6 +112,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable() { return 512; }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength()
 {
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     // TODO
     // "SHOW VARIABLES LIKE 'max_allowed_packet'"
     return 32767;
@@ -123,18 +126,21 @@ sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs() { return true;
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers()
 {
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     // TODO
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers()
 {
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     //TODO;
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers()
 {
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     // TODO
     return false;
 }
@@ -142,18 +148,21 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers()
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers()
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers()
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return false;
 }
 
@@ -262,6 +271,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames() { return tr
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /*fromType*/, sal_Int32 /*toType*/)
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return false;
 }
 
@@ -291,17 +301,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll()
     return m_rConnection.getMysqlVersion() >= 40000;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers()
-{
-    // TODO
-    return false;
-}
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers() { return false; }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
-{
-    // TODO
-    return false;
-}
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers() { return false; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd() { return false; }
 
@@ -363,6 +365,7 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getURL()
 rtl::OUString SAL_CALL ODatabaseMetaData::getUserName()
 {
     // TODO execute "SELECT USER()"
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return rtl::OUString();
 }
 
@@ -391,6 +394,7 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm() { return rtl::OUString
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return MARIADBC_VERSION_MAJOR;
 }
 
@@ -403,6 +407,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
 {
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     return MARIADBC_VERSION_MINOR;
 }
 
@@ -859,6 +864,7 @@ Reference<XResultSet>
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO IMPL
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 7, rRows);
     return xResultSet;
 }
@@ -883,6 +889,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getExportedKeys(const Any& /*c
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO implement
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 8, rRows);
     return xResultSet;
 }
@@ -896,6 +903,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO implement
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 9, rRows);
     return xResultSet;
 }
@@ -933,6 +941,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getIndexInfo(const Any& /*cata
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 11, rRows);
     return xResultSet;
 }
@@ -946,6 +955,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 15, rRows);
     return xResultSet;
 }
@@ -960,6 +970,7 @@ Reference<XResultSet>
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 12, rRows);
     return xResultSet;
 }
@@ -974,6 +985,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
     // TODO
+    SAL_WARN("connectivity.mysqlc", "method not implemented");
     lcl_setRows_throw(xResultSet, 13, rRows);
     return xResultSet;
 }
