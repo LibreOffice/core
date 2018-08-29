@@ -80,7 +80,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
             aDragShellRef->DoInitNew();
         }
         ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
-        std::unique_ptr<SdrModel> pModel(GetMarkedObjModel());
+        std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
         //  Charts now always copy their data in addition to the source reference, so
@@ -353,12 +353,12 @@ void ScDrawView::DoCopy()
     if (ScGlobal::xDrawClipDocShellRef.is() && !aRanges.empty())
     {
         // Copy data referenced by the chart objects to the draw clip
-        // document. We need to do this before GetMarkedObjModel() below.
+        // document. We need to do this before CreateMarkedObjModel() below.
         ScDocShellRef xDocSh = ScGlobal::xDrawClipDocShellRef;
         ScDocument& rClipDoc = xDocSh->GetDocument();
         copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
     }
-    std::unique_ptr<SdrModel> pModel(GetMarkedObjModel());
+    std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so
@@ -392,7 +392,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-    std::unique_ptr<SdrModel> pModel( GetMarkedObjModel() );
+    std::unique_ptr<SdrModel> pModel( CreateMarkedObjModel() );
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so

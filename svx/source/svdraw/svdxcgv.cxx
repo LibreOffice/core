@@ -709,12 +709,12 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
     }
 }
 
-SdrModel* SdrExchangeView::GetMarkedObjModel() const
+std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 {
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
     SortMarkedObjects();
-    SdrModel* pNewModel(mpModel->AllocModel());
+    std::unique_ptr<SdrModel> pNewModel(mpModel->AllocModel());
     SdrPage* pNewPage(pNewModel->AllocPage(false));
     pNewModel->InsertPage(pNewPage);
     ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
