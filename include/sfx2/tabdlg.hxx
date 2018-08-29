@@ -230,6 +230,7 @@ protected:
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(ResetHdl, weld::Button&, void);
+    DECL_LINK(BaseFmtHdl, weld::Button&, void);
     DECL_LINK(UserHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
 private:
@@ -238,6 +239,7 @@ private:
     std::unique_ptr<weld::Button> m_xUserBtn;
     std::unique_ptr<weld::Button> m_xCancelBtn;
     std::unique_ptr<weld::Button> m_xResetBtn;
+    std::unique_ptr<weld::Button> m_xBaseFmtBtn;
     std::unique_ptr<weld::SizeGroup> m_xSizeGroup;
 
     std::unique_ptr<SfxItemSet>           m_pSet;
@@ -245,6 +247,7 @@ private:
     std::unique_ptr<TabDlg_Impl>          m_pImpl;
     std::unique_ptr<sal_uInt16[]>         m_pRanges;
     OString             m_sAppPageId;
+    bool                m_bStandardPushed;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
@@ -273,7 +276,7 @@ protected:
     void Start_Impl();
 public:
     SfxTabDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
-                           const SfxItemSet * = nullptr);
+                           const SfxItemSet * = nullptr, bool bEditFmt = false);
     virtual ~SfxTabDialogController() override;
 
     void                AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
@@ -298,6 +301,7 @@ public:
     const weld::Button* GetUserButton() const { return m_xUserBtn.get(); }
     weld::Button*       GetUserButton() { return m_xUserBtn.get(); }
     void                RemoveResetButton();
+    void                RemoveStandardButton();
 
     short               execute();
     static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
