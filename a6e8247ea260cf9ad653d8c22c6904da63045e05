@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a63ef026",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-08-29T16:13:42Z",
+      "side": 1,
+      "message": "can\u0027t change this, cause it has to match string in test document",
+      "revId": "a6e8247ea260cf9ad653d8c22c6904da63045e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_863bec36",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-08-29T16:13:42Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "a6e8247ea260cf9ad653d8c22c6904da63045e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c639f441",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-08-29T16:13:42Z",
+      "side": 1,
+      "message": "can\u0027t change this one, cause it has to match the string inside the test document",
+      "revId": "a6e8247ea260cf9ad653d8c22c6904da63045e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
