@@ -262,8 +262,8 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
         const long cginc = ( xsqr - ( cGreen << nBits ) ) << 1;
         const long cbinc = ( xsqr - ( cBlue << nBits ) ) << 1;
 
-        sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer);
-        sal_uInt8* crgbp = pMap;
+        sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer.get());
+        sal_uInt8* crgbp = pMap.get();
 
         for( r = 0, rxx = crinc; r < nColorMax; rdist += rxx, r++, rxx += xsqr2 )
         {
@@ -282,8 +282,6 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
 
 InverseColorMap::~InverseColorMap()
 {
-    std::free( pBuffer );
-    std::free( pMap );
 }
 
 void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
@@ -291,11 +289,11 @@ void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
     const sal_uLong nCount = nMax * nMax * nMax;
     const sal_uLong nSize = nCount * sizeof( sal_uLong );
 
-    pMap = static_cast<sal_uInt8*>(std::malloc( nCount ));
-    memset( pMap, 0x00, nCount );
+    pMap.reset(new sal_uInt8[ nCount ]);
+    memset( pMap.get(), 0x00, nCount );
 
-    pBuffer = static_cast<sal_uInt8*>(std::malloc( nSize ));
-    memset( pBuffer, 0xff, nSize );
+    pBuffer.reset(new sal_uInt8[ nSize ]);
+    memset( pBuffer.get(), 0xff, nSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
