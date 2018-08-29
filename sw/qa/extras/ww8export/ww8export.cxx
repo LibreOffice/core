@@ -675,8 +675,7 @@ DECLARE_WW8EXPORT_TEST(testTdf59896, "tdf59896.doc")
 DECLARE_WW8EXPORT_TEST(testTdf102334, "tdf102334.doc")
 {
     // This was false, i.e. the first run wasn't hidden, when it should have been
-    // But this looks different (less hidden) in MSWord
-    // CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
