@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_e3ff4a65",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-29T09:14:22Z",
+      "side": 1,
+      "message": "missed one?",
+      "revId": "a4a997ba85cd2097b023ef3baf8793a031302f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
