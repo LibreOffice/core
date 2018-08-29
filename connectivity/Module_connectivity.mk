@@ -83,6 +83,7 @@ ifeq ($(ENABLE_MARIADBC),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mysql \
 	Library_mysqlc \
+	Library_mysql \
 ))
 endif
 
