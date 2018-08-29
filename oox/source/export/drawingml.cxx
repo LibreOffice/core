@@ -2427,7 +2427,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8().getStr(),
                 FSEND );
         }
-        if (GetDocumentType() == DOCUMENT_DOCX)
+        if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
         {
             bool bTextAutoGrowHeight = false;
             GET(bTextAutoGrowHeight, TextAutoGrowHeight);
