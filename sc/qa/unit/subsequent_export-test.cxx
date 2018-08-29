@@ -186,6 +186,7 @@ public:
     void testSheetRunParagraphPropertyXLSX();
     void testHiddenShapeXLS();
     void testHiddenShapeXLSX();
+    void testShapeAutofitXLSX();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapesODS();
     void testMatrixMultiplicationXLSX();
@@ -296,6 +297,7 @@ public:
     CPPUNIT_TEST(testSheetRunParagraphPropertyXLSX);
     CPPUNIT_TEST(testHiddenShapeXLS);
     CPPUNIT_TEST(testHiddenShapeXLSX);
+    CPPUNIT_TEST(testShapeAutofitXLSX);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
@@ -3545,6 +3547,20 @@ void ScExportTest::testHiddenShapeXLSX()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
     xDocSh->DoClose();
+}
+
+void ScExportTest::testShapeAutofitXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("testShapeAutofit.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> true
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp/xdr:txBody/a:bodyPr/a:spAutoFit", 1);
+    // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> false
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp/xdr:txBody/a:bodyPr/a:noAutofit", 1);
 }
 
 void ScExportTest::testHyperlinkXLSX()
