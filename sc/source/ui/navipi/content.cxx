@@ -1253,7 +1253,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 
-            std::unique_ptr<SdrModel> pDragModel(aEditView.GetMarkedObjModel());
+            std::unique_ptr<SdrModel> pDragModel(aEditView.CreateMarkedObjModel());
 
             TransferableObjectDescriptor aObjDesc;
             pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
