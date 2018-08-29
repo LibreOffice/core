@@ -93,8 +93,8 @@ class VCL_PLUGIN_PUBLIC InverseColorMap
 {
 private:
 
-    sal_uInt8*                  pBuffer;
-    sal_uInt8*                  pMap;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
+    std::unique_ptr<sal_uInt8[]> pMap;
     const sal_uLong             nBits;
 
     SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uLong nMax );
