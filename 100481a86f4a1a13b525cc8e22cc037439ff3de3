@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c6a9f4df",
+        "filename": "sd/source/filter/eppt/pptx-animations.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-08-29T11:57:50Z",
+      "side": 1,
+      "message": "I\u0027d put this all to anonymous namespace, not here, to minimize exposure...",
+      "range": {
+        "startLine": 458,
+        "startChar": 0,
+        "endLine": 483,
+        "endChar": 2
+      },
+      "revId": "100481a86f4a1a13b525cc8e22cc037439ff3de3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
