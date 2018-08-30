@@ -101,7 +101,7 @@ function check_cmd {
       echo "$error_msg" >&2
       exit 1
   fi
-  alias "${cmds_needed%% *}"=$cmd
+  export "${cmds_needed%% *}"=$cmd
 }
 
 function setup {
@@ -120,7 +120,7 @@ function setup {
 # binaries that we need
 check_cmd doxygen "You need doxygen for doc generation"
 check_cmd dot "You need the graphviz tools to create the nice inheritance graphs"
-check_cmd "markdown markdown2" "You need either markdown or markdown2 in order to convert README.md into html"
+check_cmd "markdown markdown2 markdown2-3" "You need either markdown or markdown2 in order to convert README.md into html"
 
 # suck setup
 setup "SOLARINC"
@@ -253,7 +253,7 @@ for module_name in *; do
 
       if [ ${cur_file: -3} == ".md" ]; then
         # This is a markdown file.
-        text="$(markdown $cur_file | proc_text_markdown)"
+        text="$(${markdown} $cur_file | proc_text_markdown)"
         echo $text >> "$BASE_OUTPUT/${module_name}.html"
       else
         proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
