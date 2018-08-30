@@ -43,6 +43,7 @@
 #include <scitems.hxx>
 #include <drawview.hxx>
 #include <undocell.hxx>
+#include <detdata.hxx>
 
 //  Editing of Note-Key-Objects has to be stopped always via StopEditMode,
 //  so that changes are taken over into the document!

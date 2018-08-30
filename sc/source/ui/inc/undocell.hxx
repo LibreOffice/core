@@ -352,7 +352,7 @@ class ScUndoDetective: public ScSimpleUndo
 public:
                     ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
-                                    ScDetOpList* pUndoList = nullptr );
+                                    std::unique_ptr<ScDetOpList> pUndoList = nullptr );
     virtual         ~ScUndoDetective() override;
 
     virtual void    Undo() override;
@@ -375,7 +375,7 @@ class ScUndoRangeNames: public ScSimpleUndo
 public:
                     //use nTab = -1 for global range names
                     ScUndoRangeNames( ScDocShell* pNewDocShell,
-                                      ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab);
+                                      std::unique_ptr<ScRangeName> pOld, std::unique_ptr<ScRangeName> pNew , SCTAB nTab);
     virtual         ~ScUndoRangeNames() override;
 
     virtual void    Undo() override;
