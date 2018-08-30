@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2c375fb3",
+        "filename": "include/rtl/stringutils.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-30T15:54:41Z",
+      "side": 1,
+      "message": "that constexpr doesn\u0027t need to be conditional on HAVE_CXX14_CONSTEXPR",
+      "revId": "ab95718e017c89c9b479c52c0a1b2dfc32d818c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
