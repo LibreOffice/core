@@ -58,7 +58,7 @@
 #include <memory>
 #include <vector>
 
-#include <boost/optional.hpp>
+namespace boost { template <class T> class optional; }
 
 class ImageHelper
 {

@@ -34,7 +34,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <stdio.h>
-
+#include <boost/optional.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

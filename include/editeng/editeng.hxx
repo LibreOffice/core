@@ -41,8 +41,9 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
 #include <vcl/errcode.hxx>
-#include <boost/optional.hpp>
 #include <functional>
+
+namespace boost { template <class T> class optional; }
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {

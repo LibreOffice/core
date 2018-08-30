@@ -37,6 +37,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/optional.hpp>
 
 using namespace ::std;
 using namespace ::utl;

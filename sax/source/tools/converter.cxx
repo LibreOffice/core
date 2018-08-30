@@ -27,6 +27,7 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <boost/optional.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>

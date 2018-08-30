@@ -25,7 +25,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppu/unotype.hxx>
-#include <boost/optional.hpp>
+
+namespace boost { template <class T> class optional; }
 
 namespace comphelper {
 
