@@ -1799,7 +1799,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important due to TrackFormulas at UpdateReference
 
     ScDocumentUniquePtr pRefUndoDoc;
-    ScRefUndoData* pUndoData = nullptr;
+    std::unique_ptr<ScRefUndoData> pUndoData;
     if ( bRecord )
     {
         pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -1807,7 +1807,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         // pRefUndoDoc is filled in InsertCol / InsertRow
 
-        pUndoData = new ScRefUndoData( &rDoc );
+        pUndoData.reset(new ScRefUndoData( &rDoc ));
 
         rDoc.BeginDrawUndo();
     }
@@ -1849,7 +1849,6 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 if (!bApi)
                     rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0);
                 rDocShell.GetUndoManager()->LeaveListAction();
-                delete pUndoData;
                 return false;
             }
 
@@ -1954,7 +1953,6 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 if (!bApi)
                     rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0);
                 rDocShell.GetUndoManager()->LeaveListAction();
-                delete pUndoData;
                 return false;
             }
         }
@@ -2025,7 +2023,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
             rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertCells(
                 &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),
-                nUndoPos, pTabs, pScenarios, eCmd, std::move(pRefUndoDoc), pUndoData, bPartOfPaste ) );
+                nUndoPos, pTabs, pScenarios, eCmd, std::move(pRefUndoDoc), std::move(pUndoData), bPartOfPaste ) );
         }
 
         // #i8302 : we remerge growing ranges, with the new part inserted
@@ -2122,7 +2120,6 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         rDocShell.GetUndoManager()->RemoveLastUndoAction();
 
         pRefUndoDoc.reset();
-        delete pUndoData;
         if (!bApi)
             rDocShell.ErrorMessage(STR_INSERT_FULL);        // column/row full
     }
@@ -2453,7 +2450,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     ScDocumentUniquePtr pUndoDoc;
     ScDocument* pRefUndoDoc = nullptr;
-    ScRefUndoData* pUndoData = nullptr;
+    std::unique_ptr<ScRefUndoData> pUndoData;
     if ( bRecord )
     {
         // With the fix for #101329#, UpdateRef always puts cells into pRefUndoDoc at their old position,
@@ -2476,7 +2473,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1 );
 
-        pUndoData = new ScRefUndoData( &rDoc );
+        pUndoData.reset(new ScRefUndoData( &rDoc ));
 
         rDoc.BeginDrawUndo();
     }
@@ -2558,7 +2555,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDeleteCells(
             &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),nUndoPos, pTabs, pScenarios,
-            eCmd, std::move(pUndoDoc), pUndoData ) );
+            eCmd, std::move(pUndoDoc), std::move(pUndoData) ) );
     }
 
     // #i8302 want to be able to insert into the middle of merged cells
@@ -3181,7 +3178,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         bRecord = false;
     bool bWasLinked = rDoc.IsLinked(nTab);
     ScDocumentUniquePtr pUndoDoc;
-    ScRefUndoData* pUndoData = nullptr;
+    std::unique_ptr<ScRefUndoData> pUndoData;
     if (bRecord)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -3219,7 +3216,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         //  Drawing-Layer has to take care of its own undo!!!
         rDoc.BeginDrawUndo();                          //  DeleteTab generates SdrUndoDelPage
 
-        pUndoData = new ScRefUndoData( &rDoc );
+        pUndoData.reset(new ScRefUndoData( &rDoc ));
     }
 
     if (rDoc.DeleteTab(nTab))
@@ -3229,7 +3226,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
             vector<SCTAB> theTabs;
             theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDeleteTab( &rDocShell, theTabs, std::move(pUndoDoc), pUndoData ));
+                        new ScUndoDeleteTab( &rDocShell, theTabs, std::move(pUndoDoc), std::move(pUndoData) ));
         }
         //  Update views:
         if( bVbaEnabled )
@@ -3259,10 +3256,6 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
         bSuccess = true;
-    }
-    else
-    {
-        delete pUndoData;
     }
     return bSuccess;
 }

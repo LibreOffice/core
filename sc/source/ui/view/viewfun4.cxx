@@ -70,6 +70,7 @@
 #include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
 #include <gridwin.hxx>
+#include <refundo.hxx>
 
 using namespace com::sun::star;
 

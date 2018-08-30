@@ -431,7 +431,7 @@ public:
                    SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                    const ScMarkData& rMark,
                    ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                   ScRefUndoData* pRefData);
+                   std::unique_ptr<ScRefUndoData> pRefData);
     virtual void    Undo() override;
     virtual void    Redo() override;
     virtual void    Repeat(SfxRepeatTarget& rTarget) override;

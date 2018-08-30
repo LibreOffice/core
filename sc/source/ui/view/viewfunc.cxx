@@ -1821,7 +1821,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
 
     ScDocumentUniquePtr pUndoDoc;
-    ScRefUndoData* pUndoData = nullptr;
+    std::unique_ptr<ScRefUndoData> pUndoData;
     if (bRecord)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -1844,7 +1844,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
         rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA,false,*pUndoDoc );
 
-        pUndoData = new ScRefUndoData( &rDoc );
+        pUndoData.reset(new ScRefUndoData( &rDoc ));
 
         rDoc.BeginDrawUndo();
     }
@@ -1877,7 +1877,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoDeleteMulti(
-                pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), pUndoData));
+                pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), std::move(pUndoData)));
     }
 
     if (!AdjustRowHeight(0, MAXROW))

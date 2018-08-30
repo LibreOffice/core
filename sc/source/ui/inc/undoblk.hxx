@@ -44,7 +44,7 @@ class ScUndoInsertCells: public ScMoveUndo
 public:
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                       InsCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData,
+                                       InsCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData,
                                        bool bNewPartOfPaste );
     virtual         ~ScUndoInsertCells() override;
 
@@ -79,7 +79,7 @@ class ScUndoDeleteCells: public ScMoveUndo
 public:
                     ScUndoDeleteCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
-                                       DelCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData );
+                                       DelCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData );
     virtual         ~ScUndoDeleteCells() override;
 
     virtual void    Undo() override;
@@ -111,7 +111,7 @@ public:
     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
                        bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
                        const std::vector<sc::ColRowSpan>& rSpans,
-                       ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData );
+                       ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData );
 
     virtual         ~ScUndoDeleteMulti() override;
 
@@ -187,7 +187,7 @@ public:
                 const ScMarkData& rMark,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,
-                ScRefUndoData* pRefData,
+                std::unique_ptr<ScRefUndoData> pRefData,
                 bool bRedoIsFilled = true,
                 const ScUndoPasteOptions* pOptions = nullptr);
     virtual ~ScUndoPaste() override;

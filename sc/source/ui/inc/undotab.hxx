@@ -98,7 +98,7 @@ public:
                             ScDocShell* pNewDocShell,
                             const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
                             ScDocumentUniquePtr pUndoDocument,
-                            ScRefUndoData* pRefData );
+                            std::unique_ptr<ScRefUndoData> pRefData );
     virtual         ~ScUndoDeleteTab() override;
 
     virtual void    Undo() override;

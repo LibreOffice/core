@@ -134,6 +134,7 @@
 #include <condformatuno.hxx>
 #include <TablePivotCharts.hxx>
 #include <table.hxx>
+#include <refundo.hxx>
 
 #include <list>
 #include <memory>
