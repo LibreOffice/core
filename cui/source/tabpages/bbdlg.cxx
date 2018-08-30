@@ -23,39 +23,36 @@
 #include <svx/svxids.hrc>
 #include <cuitabarea.hxx>
 
-SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
+SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
     const SfxItemSet& rCoreSet,
     bool bEnableSelector,
     bool bEnableDrawingLayerFillStyles)
-    : SfxTabDialog(pParent,
-        bEnableDrawingLayerFillStyles
-            ? OUString("BorderAreaTransparencyDialog")
-            : OUString("BorderBackgroundDialog"),
+    : SfxTabDialogController(pParent,
         bEnableDrawingLayerFillStyles
             ? OUString("cui/ui/borderareatransparencydialog.ui")
             : OUString("cui/ui/borderbackgrounddialog.ui"),
+        bEnableDrawingLayerFillStyles
+            ? OString("BorderAreaTransparencyDialog")
+            : OString("BorderBackgroundDialog"),
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
-    , m_nBackgroundPageId(0)
-    , m_nAreaPageId(0)
-    , m_nTransparencePageId(0)
 {
     AddTabPage("borders", SvxBorderTabPage::Create, nullptr );
     if (bEnableDrawingLayerFillStyles)
     {
         // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
-        m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, nullptr);
-        m_nTransparencePageId = AddTabPage("transparence", SvxTransparenceTabPage::Create, nullptr);
+        AddTabPage("area", SvxAreaTabPage::Create, nullptr);
+        AddTabPage("transparence", SvxTransparenceTabPage::Create, nullptr);
     }
     else
     {
-        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
+        AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
     }
 }
 
-void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
+void SvxBorderBackgroundDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 {
-    if (nPageId == m_nBackgroundPageId)
+    if (rPageId == "background")
     {
         // allow switching between Color/graphic
         if(mbEnableBackgroundSelector)
@@ -69,7 +66,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
     // these pages find the needed attributes for fill style suggestions.
     // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
     // demand, but could also be directly added from the DrawModel.
-    else if (nPageId == m_nAreaPageId)
+    else if (rPageId == "area")
     {
         SfxItemSet aNew(
             *GetInputSetImpl()->GetPool(),
@@ -83,7 +80,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
 
         rTabPage.PageCreated(aNew);
     }
-    else if (nPageId == m_nTransparencePageId)
+    else if (rPageId == "transparence")
     {
         rTabPage.PageCreated(*GetInputSetImpl());
     }

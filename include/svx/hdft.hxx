@@ -34,7 +34,7 @@
 
 namespace svx
 {
-    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet );
+    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg(weld::Window* pParent, SfxItemSet* pBBSet);
 }
 
 class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
