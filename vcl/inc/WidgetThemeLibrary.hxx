@@ -42,6 +42,10 @@ public:
     virtual ~WidgetThemeLibrary();
 
     virtual bool isNativeControlSupported(ControlType eType, ControlPart ePart);
+    virtual bool getRegion(ControlType eType, ControlPart ePart, ControlState eState,
+                           const tools::Rectangle& rBoundingControlRegion,
+                           tools::Rectangle& rNativeBoundingRegion,
+                           tools::Rectangle& rNativeContentRegion);
 
     virtual bool drawPushButton(ControlDrawParameters const& rParameters, long nWidth,
                                 long nHeight);
