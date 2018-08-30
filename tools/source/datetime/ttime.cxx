@@ -294,9 +294,22 @@ void tools::Time::GetClock( double fTimeInDays,
     // In seconds, including milli and nano.
     const double fRawSeconds = fTime * tools::Time::secondPerDay;
 
-    // Round to nanoseconds, which is the highest resolution this could be
-    // influenced by.
-    double fSeconds = rtl::math::round( fRawSeconds, 9);
+    // Round to nanoseconds most, which is the highest resolution this could be
+    // influenced by, but if the original value included a date round to at
+    // most 14 significant digits (including adding 4 for *86400), otherwise we
+    // might end up with a fake precision of h:m:s.999999986 which in fact
+    // should had been h:m:s+1
+    // BUT, leave at least 2 decimals to round. Which shouldn't be a problem in
+    // practice because class Date can calculate only 8-digit days for it's
+    // sal_Int16 year range, which exactly leaves us with 14-4-8=2.
+    int nDec = 9;
+    const double fAbsTimeInDays = fabs( fTimeInDays);
+    if (fAbsTimeInDays >= 1.0)
+    {
+        const int nDig = static_cast<int>(ceil( log10( fAbsTimeInDays)));
+        nDec = std::max( std::min( nDig, 9), 2);
+    }
+    double fSeconds = rtl::math::round( fRawSeconds, nDec);
 
     // If this ended up as a full day the original value was very very close
     // but not quite. Take that.
