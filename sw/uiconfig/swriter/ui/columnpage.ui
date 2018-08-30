@@ -66,6 +66,7 @@
   <object class="GtkGrid" id="ColumnPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="valign">start</property>
     <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
@@ -555,7 +556,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="column_spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame2">

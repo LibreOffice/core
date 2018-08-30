@@ -118,7 +118,7 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
 
     SetExchangeSupport();
 
-    TabPageParent aFillTab(m_xFillTab.get());
+    TabPageParent aFillTab(TabPageParent(m_xFillTab.get(), pParent.pController));
 
     // Calculate optimal size of all pages..
     m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
@@ -346,9 +346,12 @@ IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, 
     {
         maBox.SelectButton(&rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
-        m_pFillTabPage.disposeAndReset(lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), m_rXFSet));
+        m_pFillTabPage.disposeAndReset(lcl_CreateFillStyleTabPage(eFillType, TabPageParent(m_xFillTab.get(), GetDialogController()), m_rXFSet));
         if (m_pFillTabPage)
+        {
             m_pFillTabPage->SetTabDialog(GetTabDialog());
+            m_pFillTabPage->SetDialogController(GetDialogController());
+        }
         CreatePage( eFillType , m_pFillTabPage);
     }
 }

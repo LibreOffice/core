@@ -164,9 +164,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
         pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 10,
                                        pDrawingArea->get_text_height() * 2);
-        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     void SetColor(const Color& rCol)
@@ -202,9 +202,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
         pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 40,
                                        pDrawingArea->get_text_height() * 10);
-        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     virtual ~ColorFieldControl() override
@@ -548,8 +548,8 @@ ColorSliderControl::ColorSliderControl()
 
 void ColorSliderControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 3, -1);
     CustomWidgetController::SetDrawingArea(pDrawingArea);
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 3, -1);
 }
 
 ColorSliderControl::~ColorSliderControl()

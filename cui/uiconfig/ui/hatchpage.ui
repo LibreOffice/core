@@ -45,7 +45,6 @@
                   <object class="GtkScrolledWindow" id="hatchpresetlistwin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
@@ -58,7 +57,7 @@
                           <object class="GtkDrawingArea" id="hatchpresetlist">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
+                            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                             <property name="vexpand">True</property>
                           </object>
                         </child>
@@ -154,6 +153,8 @@
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -285,7 +286,7 @@
                 <child>
                   <object class="GtkMenuButton" id="linecolorlb">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
@@ -322,7 +323,7 @@
                 <child>
                   <object class="GtkMenuButton" id="backgroundcolorlb">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
@@ -356,7 +357,7 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
@@ -365,7 +366,7 @@
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">start</property>
+        <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
@@ -373,23 +374,18 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
+            <property name="halign">end</property>
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="can_focus">False</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
@@ -401,8 +397,6 @@
                           <object class="GtkDrawingArea" id="previewctl">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="previewctl-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="hatchpage|previewctl-atkobject">Example</property>
@@ -436,7 +430,8 @@
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">True</property>
+        <property name="fill">False</property>
+        <property name="pack_type">end</property>
         <property name="position">2</property>
       </packing>
     </child>

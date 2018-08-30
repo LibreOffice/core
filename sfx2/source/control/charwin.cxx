@@ -38,6 +38,7 @@ SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
 
 void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetLabelFont();
     const Size aFontSize = aFont.GetFontSize();
@@ -47,7 +48,6 @@ void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
                                    mxVirDev->GetTextHeight());
     mxVirDev->Pop();
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void SvxCharView::GetFocus()

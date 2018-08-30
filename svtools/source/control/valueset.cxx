@@ -2322,9 +2322,9 @@ SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
 
 void SvtValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     // #106446#, #106601# force mirroring of virtual device
     maVirDev->EnableRTL(pDrawingArea->get_direction());
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 Reference<XAccessible> SvtValueSet::CreateAccessible()

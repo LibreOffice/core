@@ -729,9 +729,9 @@ SwFrameExample::SwFrameExample()
 
 void SwFrameExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 16,
                                    pDrawingArea->get_text_height() * 12);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void SwFrameExample::InitColors_Impl()

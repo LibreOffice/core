@@ -227,13 +227,14 @@ class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
 class AbstractTabController_Impl : virtual public SfxAbstractTabDialog
 {
 protected:
-    std::unique_ptr<SfxTabDialogController> m_xDlg;
+    std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
     explicit AbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
@@ -250,6 +251,19 @@ public:
     {
     }
     DECL_LINK(ApplyHdl, Button*, void);
+private:
+    Link<LinkParamNone*,void> m_aHandler;
+    virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;
+};
+
+class AbstractApplyTabController_Impl : public AbstractTabController_Impl, virtual public SfxAbstractApplyTabDialog
+{
+public:
+    explicit AbstractApplyTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+        : AbstractTabController_Impl(std::move(p))
+    {
+    }
+    DECL_LINK(ApplyHdl, weld::Button&, void);
 private:
     Link<LinkParamNone*,void> m_aHandler;
     virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;

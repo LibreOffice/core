@@ -90,13 +90,13 @@ SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rI
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_aCtlPixel(this)
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), GetFrameWeld()))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), GetFrameWeld()))
+    , m_xCtlPixel(new SvxPixelCtl(this))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pParent.GetFrameWeld()))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), pParent.GetFrameWeld()))
     , m_xPatternLB(new PresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
     , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
-    , m_xCtlPixel(new weld::CustomWeld(*m_xBuilder, "CTL_PIXEL", m_aCtlPixel))
+    , m_xCtlPixelWin(new weld::CustomWeld(*m_xBuilder, "CTL_PIXEL", *m_xCtlPixel))
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
     , m_xPatternLBWin(new weld::CustomWeld(*m_xBuilder, "patternpresetlist", *m_xPatternLB))
 {
@@ -133,10 +133,11 @@ void SvxPatternTabPage::dispose()
 {
     m_xPatternLBWin.reset();
     m_xCtlPreview.reset();
-    m_xCtlPixel.reset();
+    m_xCtlPixelWin.reset();
     m_xPatternLB.reset();
     m_xLbBackgroundColor.reset();
     m_xLbColor.reset();
+    m_xCtlPixel.reset();
     SvxTabPage::dispose();
 }
 
@@ -219,7 +220,7 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
 {
     m_xBitmapCtl->SetPixelColor( m_xLbColor->GetSelectEntryColor() );
     m_xBitmapCtl->SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
-    m_xBitmapCtl->SetBmpArray( m_aCtlPixel.GetBitmapPixelPtr() );
+    m_xBitmapCtl->SetBmpArray( m_xCtlPixel->GetBitmapPixelPtr() );
 
     // get bitmap and display it
     const XFillBitmapItem aBmpItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx()));
@@ -294,13 +295,13 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
 
         if(bIs8x8)
         {
-            m_aCtlPixel.SetPaintable( true );
+            m_xCtlPixel->SetPaintable( true );
             m_xBtnModify->set_sensitive(true);
             m_xBtnAdd->set_sensitive(true);
 
             // setting the pixel control
 
-            m_aCtlPixel.SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
+            m_xCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
 
             Color aPixelColor = aFront.GetColor();
             Color aBackColor = aBack.GetColor();
@@ -319,13 +320,13 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
         }
         else
         {
-            m_aCtlPixel.Reset();
-            m_aCtlPixel.SetPaintable( false );
+            m_xCtlPixel->Reset();
+            m_xCtlPixel->SetPaintable( false );
             m_xBtnModify->set_sensitive(false);
             m_xBtnAdd->set_sensitive(false);
         }
 
-        m_aCtlPixel.Invalidate();
+        m_xCtlPixel->Invalidate();
     }
 }
 
@@ -347,7 +348,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aName, aDesc));
     sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
@@ -361,7 +362,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
         std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
         if (xWarnBox->run() != RET_OK)
             break;
@@ -372,7 +373,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     if( !nError )
     {
         std::unique_ptr<XBitmapEntry> pEntry;
-        if( m_aCtlPixel.IsEnabled() )
+        if( m_xCtlPixel->IsEnabled() )
         {
             const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
 
@@ -447,7 +448,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, PresetListBox*, void)
         OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aName, aDesc));
 
         bool bLoop = true;
 
@@ -470,7 +471,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, PresetListBox*, void)
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 xWarnBox->run();
             }
@@ -485,7 +486,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
         if (xQueryBox->run() == RET_YES)
         {
@@ -496,7 +497,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
             m_xPatternLB->Resize();
 
             m_aCtlPreview.Invalidate();
-            m_aCtlPixel.Invalidate();
+            m_xCtlPixel->Invalidate();
 
             ChangePatternHdl_Impl(m_xPatternLB.get());
 
@@ -518,9 +519,9 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangeColorHdl_Impl, ColorListBox&, void)
 
 void SvxPatternTabPage::ChangeColor_Impl()
 {
-    m_aCtlPixel.SetPixelColor( m_xLbColor->GetSelectEntryColor() );
-    m_aCtlPixel.SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
-    m_aCtlPixel.Invalidate();
+    m_xCtlPixel->SetPixelColor( m_xLbColor->GetSelectEntryColor() );
+    m_xCtlPixel->SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
+    m_xCtlPixel->Invalidate();
 
     m_xBitmapCtl->SetPixelColor( m_xLbColor->GetSelectEntryColor() );
     m_xBitmapCtl->SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
@@ -538,9 +539,9 @@ void SvxPatternTabPage::PointChanged( vcl::Window*, RectPoint )
 
 void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
 {
-    if (pDrawingArea == m_aCtlPixel.GetDrawingArea())
+    if (pDrawingArea == m_xCtlPixel->GetDrawingArea())
     {
-        m_xBitmapCtl->SetBmpArray(m_aCtlPixel.GetBitmapPixelPtr());
+        m_xBitmapCtl->SetBmpArray(m_xCtlPixel->GetBitmapPixelPtr());
 
         // get bitmap and display it
         m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
