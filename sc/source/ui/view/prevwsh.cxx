@@ -514,12 +514,12 @@ bool ScPreviewShell::HasPrintOptionsPage() const
     return true;
 }
 
-VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage(weld::Container* pPage, const SfxItemSet &rOptions)
+VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage(TabPageParent pParent, const SfxItemSet &rOptions)
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
     if ( ScTpPrintOptionsCreate )
-        return ScTpPrintOptionsCreate(pPage, &rOptions);
+        return ScTpPrintOptionsCreate(pParent, &rOptions);
     return VclPtr<SfxTabPage>();
 }
 

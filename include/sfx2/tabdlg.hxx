@@ -45,15 +45,18 @@ struct TabPageParent
     TabPageParent(vcl::Window* _pParent)
         : pParent(_pParent)
         , pPage(nullptr)
+        , pController(nullptr)
     {
     }
-    TabPageParent(weld::Container* _pPage)
+    TabPageParent(weld::Container* _pPage, weld::DialogController* _pController)
         : pParent(nullptr)
         , pPage(_pPage)
+        , pController(_pController)
     {
     }
     VclPtr<vcl::Window> pParent;
     weld::Container* pPage;
+    weld::DialogController* pController;
 };
 
 typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
@@ -256,7 +259,7 @@ private:
 
 protected:
     virtual short               Ok();
-    void                        RefreshInputSet();
+    virtual void                RefreshInputSet();
     virtual void                PageCreated(const OString &rName, SfxTabPage &rPage);
 
     std::unique_ptr<SfxItemSet> m_xExampleSet;
@@ -308,6 +311,11 @@ public:
                          const std::function<void(sal_Int32)>&);
 
     const SfxItemSet*   GetExampleSet() const { return m_xExampleSet.get(); }
+
+    void                SetApplyHandler(const Link<weld::Button&,void>& _rHdl);
+
+    //calls Ok without closing dialog
+    bool Apply();
 };
 
 namespace sfx { class ItemConnectionBase; }

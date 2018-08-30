@@ -2003,7 +2003,8 @@ void SfxTabDialogController::CreatePages()
         if (pDataObject->pTabPage)
            continue;
         weld::Container* pPage = m_xTabCtrl->get_page(pDataObject->sId);
-        pDataObject->pTabPage = (pDataObject->fnCreatePage)(pPage, m_pSet.get());
+        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
+        pDataObject->pTabPage = (pDataObject->fnCreatePage)(TabPageParent(pPage, this), m_pSet.get());
         pDataObject->pTabPage->SetDialogController(this);
 
         OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
@@ -2187,6 +2188,31 @@ SfxTabPage* SfxTabDialogController::GetTabPage(const OString& rPageId) const
     if (pDataObject)
         return pDataObject->pTabPage;
     return nullptr;
+}
+
+void SfxTabDialogController::SetApplyHandler(const Link<weld::Button&, void>& _rHdl)
+{
+    DBG_ASSERT( m_xApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
+    if (m_xApplyBtn)
+        m_xApplyBtn->connect_clicked(_rHdl);
+}
+
+bool SfxTabDialogController::Apply()
+{
+    bool bApplied = false;
+    if (PrepareLeaveCurrentPage())
+    {
+        bApplied = (Ok() == RET_OK);
+        //let the pages update their saved values
+        GetInputSetImpl()->Put(*GetOutputItemSet());
+        for (auto pDataObject : m_pImpl->aData)
+        {
+            if (!pDataObject->pTabPage)
+                continue;
+            pDataObject->pTabPage->ChangesApplied();
+        }
+    }
+    return bApplied;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
