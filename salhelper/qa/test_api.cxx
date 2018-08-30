@@ -220,15 +220,14 @@ void Test::testSimpleReferenceObject() {
 
 void Test::testDerivedCondition() {
     osl::Mutex mutex;
+    // Next line tests that new doesn't throw
     std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
-    CPPUNIT_ASSERT(dynamic_cast< DerivedCondition * >(p.get()) != nullptr);
 }
 
 void Test::testDerivedConditionWaiterTimedout() {
+    // Next line tests that new doesn't throw
     std::unique_ptr< salhelper::ConditionWaiter::timedout > p(
         new DerivedConditionWaiterTimedout);
-    CPPUNIT_ASSERT(
-        dynamic_cast< DerivedConditionWaiterTimedout * >(p.get()) != nullptr);
     try {
         throw DerivedConditionWaiterTimedout();
     } catch (salhelper::ConditionWaiter::timedout &) {

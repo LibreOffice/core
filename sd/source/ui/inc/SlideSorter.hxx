@@ -198,12 +198,6 @@ private:
     */
     model::SlideSorterModel* CreateModel();
 
-    /** Create the controller for the view shell.  When called from the default
-        implementation of CreateModelViewController() then both the view and
-        the controller do exist.  Test their pointers when in doubt.
-    */
-    controller::SlideSorterController* CreateController();
-
     bool mbIsValid;
 
     std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
