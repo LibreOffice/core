@@ -1032,9 +1032,9 @@ OUString ScUndoShowHideNote::GetComment() const
 
 ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
-                                    ScDetOpList* pUndoList ) :
+                                    std::unique_ptr<ScDetOpList> pUndoList ) :
     ScSimpleUndo( pNewDocShell ),
-    pOldList    ( pUndoList ),
+    pOldList    ( std::move(pUndoList) ),
     nAction     ( 0 ),
     pDrawUndo   ( pDraw )
 {
@@ -1136,10 +1136,10 @@ bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
-                                    ScRangeName* pOld, ScRangeName* pNew, SCTAB nTab ) :
+                                    std::unique_ptr<ScRangeName> pOld, std::unique_ptr<ScRangeName> pNew, SCTAB nTab ) :
     ScSimpleUndo( pNewDocShell ),
-    pOldRanges  ( pOld ),
-    pNewRanges  ( pNew ),
+    pOldRanges  ( std::move(pOld) ),
+    pNewRanges  ( std::move(pNew) ),
     mnTab       ( nTab )
 {
 }
