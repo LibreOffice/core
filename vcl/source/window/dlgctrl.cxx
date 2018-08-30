@@ -68,6 +68,30 @@ static vcl::Window* ImplGetTopParentOfTabHierarchy( vcl::Window* pParent )
     return pResult;
 }
 
+static vcl::Window* ImplGetCurTabWindow(const vcl::Window* pWindow)
+{
+    assert(pWindow->GetType() == WindowType::TABCONTROL);
+    const TabControl* pTabControl = static_cast<const TabControl*>(pWindow);
+    // Check if the TabPage is a Child of the TabControl and still exists (by
+    // walking all child windows); because it could be that the TabPage has been
+    // destroyed already by a Dialog-Dtor, event that the TabControl still exists.
+    const TabPage* pTempTabPage = pTabControl->GetTabPage(pTabControl->GetCurPageId());
+    if (pTempTabPage)
+    {
+        vcl::Window* pTempWindow = pTabControl->GetWindow(GetWindowType::FirstChild);
+        while (pTempWindow)
+        {
+            if (pTempWindow->ImplGetWindow() == pTempTabPage)
+            {
+                return const_cast<TabPage*>(pTempTabPage);
+            }
+            pTempWindow = nextLogicalChildOfParent(pTabControl, pTempWindow);
+        }
+    }
+
+    return nullptr;
+}
+
 static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
     vcl::Window*     pTabPage = nullptr;
@@ -91,31 +115,10 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
             else
             {
                 pFoundWindow = pWindow;
-
                 // for a TabControl, remember the current TabPage for later use
                 if ( pWindow->GetType() == WindowType::TABCONTROL )
-                {
-                    TabControl* pTabControl = static_cast<TabControl*>(pWindow);
-                    // Check if the TabPage is a Child of the TabControl and still exists (by
-                    // walking all child windows); because it could be that the TabPage has been
-                    // destroyed already by a Dialog-Dtor, event that the TabControl still exists.
-                    TabPage* pTempTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
-                    if ( pTempTabPage )
-                    {
-                        vcl::Window* pTempWindow = pTabControl->GetWindow( GetWindowType::FirstChild );
-                        while ( pTempWindow )
-                        {
-                            if ( pTempWindow->ImplGetWindow() == pTempTabPage )
-                            {
-                                pTabPage = pTempTabPage;
-                                break;
-                            }
-                            pTempWindow = nextLogicalChildOfParent(pTabControl, pTempWindow);
-                        }
-                    }
-                }
-                else if ( ( pWindow->GetStyle() & WB_DIALOGCONTROL )
-                       || ( pWindow->GetStyle() & WB_CHILDDLGCTRL ) )
+                    pTabPage = ImplGetCurTabWindow(pWindow);
+                else if (pWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL))
                     pFoundWindow = ImplGetSubChildWindow( pWindow, n, nIndex );
             }
 
