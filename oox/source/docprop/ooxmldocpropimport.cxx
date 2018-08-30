@@ -33,6 +33,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace docprop {
 
@@ -43,22 +45,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-
-OUString DocumentPropertiesImport_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
-}
-
-Sequence< OUString > DocumentPropertiesImport_getSupportedServiceNames()
-{
-    Sequence<OUString> aServices { "com.sun.star.document.OOXMLDocumentPropertiesImporter" };
-    return aServices;
-}
-
-Reference< XInterface > DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext )
-{
-    return static_cast< ::cppu::OWeakObject* >( new DocumentPropertiesImport( rxContext ) );
-}
 
 namespace {
 
@@ -113,7 +99,7 @@ DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentC
 // XServiceInfo
 OUString SAL_CALL DocumentPropertiesImport::getImplementationName()
 {
-    return DocumentPropertiesImport_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
 }
 
 sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName )
@@ -123,7 +109,8 @@ sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rSe
 
 Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames()
 {
-    return DocumentPropertiesImport_getSupportedServiceNames();
+    Sequence<OUString> aServices { "com.sun.star.document.OOXMLDocumentPropertiesImporter" };
+    return aServices;
 }
 
 // XOOXMLDocumentPropertiesImporter
@@ -178,5 +165,12 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
 
 } // namespace docprop
 } // namespace oox
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::docprop::DocumentPropertiesImport(pCtx));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

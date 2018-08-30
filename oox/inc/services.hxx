@@ -23,13 +23,6 @@
 #include <sal/config.h>
 
 namespace oox {
-    namespace docprop {
-        extern OUString DocumentPropertiesImport_getImplementationName();
-        extern css::uno::Sequence< OUString > DocumentPropertiesImport_getSupportedServiceNames();
-        /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > DocumentPropertiesImport_createInstance(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    }
     namespace ppt {
         extern OUString PowerPointImport_getImplementationName();
         extern css::uno::Sequence< OUString > PowerPointImport_getSupportedServiceNames();
