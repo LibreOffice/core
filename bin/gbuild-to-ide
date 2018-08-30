@@ -744,7 +744,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         }
 
     def retrieve_toolset(self, ide):
-        ide_toolset_map = {'vs2015': 'v140'}
+        ide_toolset_map = {'vs2017': 'v141'}
         return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
@@ -879,7 +879,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             # Type of project used by the MSBuild to determine build process, see Microsoft.Makefile.targets
             conf_type_node = ET.SubElement(conf_node, '{%s}ConfigurationType' % ns)
             conf_type_node.text = 'Makefile'
-            # VS2012: I need to have this otherwise the names of projects will contain text Visual Studio 2010 in the Solution Explorer
+            # This defines the version of Visual Studio which can show next to project names in the Solution Explorer
             platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
             platform_toolset_node.text = self.toolset
 
@@ -1651,7 +1651,7 @@ if __name__ == '__main__':
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
-        'vs2015': VisualStudioIntegrationGenerator,
+        'vs2017': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
