@@ -27,7 +27,8 @@
     constructor="com_sun_star_comp_oox_FormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.docprop.DocumentPropertiesImporter">
+  <implementation name="com.sun.star.comp.oox.docprop.DocumentPropertiesImporter"
+    constructor="com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation">
     <service name="com.sun.star.document.OOXMLDocumentPropertiesImporter"/>
   </implementation>
   <implementation name="com.sun.star.comp.oox.ppt.PowerPointImport">

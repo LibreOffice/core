@@ -35,7 +35,6 @@ namespace {
 // Impress" would actually want to make use of them:
 static ::cppu::ImplementationEntry const spServices[] =
 {
-    IMPLEMENTATION_ENTRY( ::oox::docprop::DocumentPropertiesImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::PowerPointImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingLayout ),

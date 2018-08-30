@@ -255,6 +255,7 @@ core_constructor_list = [
 # oox/util/oox.component
     "com_sun_star_comp_oox_core_FastTokenHandler_get_implementation",
     "com_sun_star_comp_oox_FormatDetector_get_implementation",
+    "com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation",
     ]
 
 # edit group for apps, where you can edit documents
