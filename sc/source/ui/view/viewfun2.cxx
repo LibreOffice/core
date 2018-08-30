@@ -2331,7 +2331,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
     bool bWasLinked = false;
     ScDocumentUniquePtr pUndoDoc;
-    ScRefUndoData* pUndoData = nullptr;
+    std::unique_ptr<ScRefUndoData> pUndoData;
     if (bRecord)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -2385,7 +2385,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
         rDoc.BeginDrawUndo();                          //  DeleteTab creates a SdrUndoDelPage
 
-        pUndoData = new ScRefUndoData( &rDoc );
+        pUndoData.reset(new ScRefUndoData( &rDoc ));
     }
 
     bool bDelDone = false;
@@ -2411,7 +2411,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoDeleteTab( GetViewData().GetDocShell(), TheTabs,
-                                            std::move(pUndoDoc), pUndoData ));
+                                            std::move(pUndoDoc), std::move(pUndoData) ));
     }
 
     if (bDelDone)
@@ -2434,10 +2434,6 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
-    }
-    else
-    {
-        delete pUndoData;
     }
     return bDelDone;
 }

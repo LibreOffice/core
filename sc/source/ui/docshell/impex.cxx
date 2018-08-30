@@ -52,6 +52,7 @@
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
 #include <documentimport.hxx>
+#include <refundo.hxx>
 
 #include <globstr.hrc>
 #include <scresid.hxx>

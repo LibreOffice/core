@@ -40,6 +40,7 @@
 #include <viewdata.hxx>
 #include <progress.hxx>
 #include <markdata.hxx>
+#include <refundo.hxx>
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
@@ -247,8 +248,8 @@ bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab,
-                                    ScDocumentUniquePtr pUndoDocument, ScRefUndoData* pRefData ) :
-    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), pRefData, SC_UNDO_REFLAST )
+                                    ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData ) :
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), std::move(pRefData), SC_UNDO_REFLAST )
 {
     theTabs.insert(theTabs.end(), aTab.begin(), aTab.end() );
     SetChangeTrack();

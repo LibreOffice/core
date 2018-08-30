@@ -1733,12 +1733,12 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                ScRefUndoData* pRefData )
+                                std::unique_ptr<ScRefUndoData> pRefData )
     : ScBlockUndo(pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE)
     , mxMarkData(new ScMarkData(rMark))
     , xUndoDoc(pNewUndoDoc)
     , xRedoDoc(pNewRedoDoc)
-    , xRefUndoData(pRefData)
+    , xRefUndoData(std::move(pRefData))
     , bRedoFilled(false)
 {
     //      pFill1,pFill2,pFill3 are there so the ctor calls for simple paste (without cutting)
