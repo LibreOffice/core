@@ -28,6 +28,9 @@
             <property name="label" translatable="yes" context="optionvaluespage|label1">When you select an option, the option group is given a specific value.</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">40</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -44,6 +47,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="optionvaluespage|label2">Which _value do you want to assign to each option?</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">optionvalue</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">40</property>
           </object>

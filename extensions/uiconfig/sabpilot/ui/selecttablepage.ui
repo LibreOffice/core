@@ -17,6 +17,9 @@
 Please select the one you mainly want to work with:</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>

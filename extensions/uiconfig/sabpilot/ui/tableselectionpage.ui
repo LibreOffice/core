@@ -45,6 +45,9 @@ Please choose a data source and a table.
 
 
 Please note that the settings made on this page will take effect immediately upon leaving the page.</property>
+                    <accessibility>
+                      <role type="static"/>
+                    </accessibility>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">45</property>
                     <property name="xalign">0</property>

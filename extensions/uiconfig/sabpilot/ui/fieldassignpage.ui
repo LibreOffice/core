@@ -20,6 +20,9 @@ For instance, you could have stored the e-mail addresses in a field named "email
 Click the button below to open another dialog where you can enter the settings for your data source.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -53,6 +56,9 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="yalign">0</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>

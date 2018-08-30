@@ -19,6 +19,9 @@
 Now, just enter the name under which you want to register the data source in %PRODUCTNAME.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -154,7 +157,7 @@ Now, just enter the name under which you want to register the data source in %PR
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="datasourcepage|nameft">Address book name</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">location</property>
+                        <property name="mnemonic_widget">name</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -193,6 +196,9 @@ Now, just enter the name under which you want to register the data source in %PR
                     <property name="label" translatable="yes" context="datasourcepage|warning">Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">90</property>
+                    <accessibility>
+                      <role type="static"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
