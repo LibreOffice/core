@@ -1150,17 +1150,15 @@ VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxS
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
-    vcl::Window* pParent,
+    weld::Window* pParent,
     const SfxItemSet& rCoreSet,
     bool bEnableDrawingLayerFillStyles)
 {
-    VclPtrInstance<SvxBorderBackgroundDlg> pDlg(
+    return VclPtr<CuiAbstractTabController_Impl>::Create(o3tl::make_unique<SvxBorderBackgroundDlg>(
         pParent,
         rCoreSet,
         /*bEnableSelector*/true,
-        bEnableDrawingLayerFillStyles);
-
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create(pDlg);
+        bEnableDrawingLayerFillStyles));
 }
 
 VclPtr<AbstractSvxTransformTabDialog> AbstractDialogFactory_Impl::CreateSvxTransformTabDialog(weld::Window* pParent,

@@ -240,6 +240,11 @@ void AbstractTabController_Impl::SetInputSet( const SfxItemSet* pInSet )
      m_xDlg->SetInputSet( pInSet );
 }
 
+bool AbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 //From class Window.
 void AbstractTabController_Impl::SetText( const OUString& rStr )
 {
@@ -256,6 +261,18 @@ void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& 
 {
     m_aHandler = rLink;
     pDlg->SetApplyHandler(LINK(this, AbstractApplyTabDialog_Impl, ApplyHdl));
+}
+
+IMPL_LINK_NOARG(AbstractApplyTabController_Impl, ApplyHdl, weld::Button&, void)
+{
+    if (m_xDlg->Apply())
+        m_aHandler.Call(nullptr);
+}
+
+void AbstractApplyTabController_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& rLink )
+{
+    m_aHandler = rLink;
+    m_xDlg->SetApplyHandler(LINK(this, AbstractApplyTabController_Impl, ApplyHdl));
 }
 
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetLevel() const
@@ -930,6 +947,10 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
+    if (nRegion == SfxStyleFamily::Page)
+    {
+        return VclPtr<AbstractApplyTabController_Impl>::Create(o3tl::make_unique<SwTemplateDlgController>(pParent ? pParent->GetFrameWeld() : nullptr, rBase, nRegion, sPage, pActShell, bNew));
+    }
     VclPtr<SfxTabDialog> pDlg = VclPtr<SwTemplateDlg>::Create(pParent, rBase, nRegion, sPage, pActShell, bNew);
     return VclPtr<AbstractApplyTabDialog_Impl>::Create(pDlg);
 }
