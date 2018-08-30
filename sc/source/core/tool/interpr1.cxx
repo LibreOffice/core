@@ -2118,6 +2118,10 @@ void ScInterpreter::ScType()
                             nType = 1;
                     }
                     break;
+                    case CELLTYPE_NONE:
+                        // always 1, s. tdf#73078
+                        nType = 1;
+                        break;
                     case CELLTYPE_FORMULA :
                         nType = 8;
                         break;
