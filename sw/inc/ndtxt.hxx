@@ -704,8 +704,10 @@ public:
     bool IsHiddenByParaField() const
         { return m_pSwpHints && m_pSwpHints->IsHiddenByParaField(); }
 
-    bool FieldCanHidePara(SwFieldIds eFieldId) const
-        { return GetDoc()->FieldCanHidePara(eFieldId); }
+    int FieldCanHideParaWeight(SwFieldIds eFieldId) const
+        {
+            return GetDoc()->FieldCanHideParaWeight(eFieldId);
+        }
     bool FieldHidesPara(const SwField& rField) const
         { return GetDoc()->FieldHidesPara(rField); }
 
