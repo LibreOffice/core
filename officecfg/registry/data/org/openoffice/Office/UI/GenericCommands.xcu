@@ -3393,6 +3393,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Open Template...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:OpenUrl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -4057,6 +4060,9 @@
       <node oor:name=".uno:PasteUnformatted" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Paste Unformatted Text</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Unformatted Text</value>
