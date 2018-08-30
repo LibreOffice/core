@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "epptooxml.hxx"
@@ -451,9 +452,24 @@ sal_Int32 convertNodeType(sal_Int16 nType)
     return xmlNodeType;
 }
 
+class NodeContext;
+
+typedef std::unique_ptr<NodeContext> NodeContextPtr;
+
+class NodeContext
+{
+    const Reference<XAnimationNode>& mxNode;
+    const bool mbMainSeqChild;
+
+public:
+    NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild);
+    const Reference<XAnimationNode>& getNode() const { return mxNode; }
+    bool isMainSeqChild() const { return mbMainSeqChild; }
+};
+
 class PPTXAnimationExport
 {
-    void WriteAnimationNode(const Reference<XAnimationNode>& rXNode, bool bMainSeqChild);
+    void WriteAnimationNode(const NodeContextPtr& pContext);
     void WriteAnimationNodeAnimate(const Reference<XAnimationNode>& rXNode, sal_Int32 nXmlNodeType,
                                    bool bMainSeqChild);
     void WriteAnimationNodeAnimateInside(const Reference<XAnimationNode>& rXNode,
@@ -464,9 +480,12 @@ class PPTXAnimationExport
     void WriteAnimationNodeCommonPropsStart(const Reference<XAnimationNode>& rXNode,
                                             bool bMainSeqChild);
     void WriteAnimationTarget(const Any& rTarget);
+    bool isMainSeqChild();
+    const Reference<XAnimationNode>& getCurrentNode();
 
     PowerPointExport& mrPowerPointExport;
     const FSHelperPtr& mpFS;
+    const NodeContext* mpContext;
 
 public:
     PPTXAnimationExport(PowerPointExport& rExport, const FSHelperPtr& pFS);
@@ -490,7 +509,20 @@ void WriteAnimations(const FSHelperPtr& pFS, const Reference<XDrawPage>& rXDrawP
 PPTXAnimationExport::PPTXAnimationExport(PowerPointExport& rExport, const FSHelperPtr& pFS)
     : mrPowerPointExport(rExport)
     , mpFS(pFS)
+    , mpContext(nullptr)
 {
+}
+
+bool PPTXAnimationExport::isMainSeqChild()
+{
+    assert(mpContext);
+    return mpContext->isMainSeqChild();
+}
+
+const Reference<XAnimationNode>& PPTXAnimationExport::getCurrentNode()
+{
+    assert(mpContext);
+    return mpContext->getNode();
 }
 
 void PPTXAnimationExport::WriteAnimationTarget(const Any& rTarget)
@@ -953,7 +985,10 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart(
                 {
                     Reference<XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
                     if (xChildNode.is())
-                        WriteAnimationNode(xChildNode, nType == EffectNodeType::MAIN_SEQUENCE);
+                    {
+                        WriteAnimationNode(o3tl::make_unique<NodeContext>(
+                            xChildNode, nType == EffectNodeType::MAIN_SEQUENCE));
+                    }
                 } while (xEnumeration->hasMoreElements());
 
                 mpFS->endElementNS(XML_p, XML_childTnLst);
@@ -1040,9 +1075,14 @@ void PPTXAnimationExport::WriteAnimationNodeCommand(const Reference<XAnimationNo
     }
 }
 
-void PPTXAnimationExport::WriteAnimationNode(const Reference<XAnimationNode>& rXNode,
-                                             bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
 {
+    const NodeContext* pSavedContext = mpContext;
+    mpContext = pContext.get();
+
+    const Reference<XAnimationNode>& rXNode = getCurrentNode();
+    bool bMainSeqChild = isMainSeqChild();
+
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
     sal_Int32 xmlNodeType = convertNodeType(rXNode->getType());
 
@@ -1090,6 +1130,8 @@ void PPTXAnimationExport::WriteAnimationNode(const Reference<XAnimationNode>& rX
             SAL_WARN("sd.eppt", "unhandled animation node: " << rXNode->getType());
             break;
     }
+
+    mpContext = pSavedContext;
 }
 
 void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage)
@@ -1110,7 +1152,7 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
                     mpFS->startElementNS(XML_p, XML_timing, FSEND);
                     mpFS->startElementNS(XML_p, XML_tnLst, FSEND);
 
-                    WriteAnimationNode(xNode, false);
+                    WriteAnimationNode(o3tl::make_unique<NodeContext>(xNode, false));
 
                     mpFS->endElementNS(XML_p, XML_tnLst);
                     mpFS->endElementNS(XML_p, XML_timing);
@@ -1120,4 +1162,9 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     }
 }
 
+NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild)
+    : mxNode(xNode)
+    , mbMainSeqChild(bMainSeqChild)
+{
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
