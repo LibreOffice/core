@@ -404,9 +404,9 @@ void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
     DBG_ASSERT( mpImpl->mpUndoManager == nullptr, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
     if( IsUndoEnabled() )
     {
-        if (aUndoLink.IsSet())
+        if (aUndoLink)
         {
-            aUndoLink.Call(pUndo.release());
+            aUndoLink(std::move(pUndo));
         }
         else
         {

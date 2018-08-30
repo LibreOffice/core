@@ -500,7 +500,7 @@ public:
     IDocumentState & getIDocumentState();
 
     // IDocumentDrawModelAccess
-    DECL_LINK( AddDrawUndo, SdrUndoAction *, void );
+    void AddDrawUndo( std::unique_ptr<SdrUndoAction> );
     IDocumentDrawModelAccess const & getIDocumentDrawModelAccess() const;
     IDocumentDrawModelAccess & getIDocumentDrawModelAccess();
 

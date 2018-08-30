@@ -1411,20 +1411,20 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
 
-        SfxUndoAction* pUndo = new ScUndoPaste(
+        std::unique_ptr<SfxUndoAction> pUndo(new ScUndoPaste(
             pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
             aFilteredMark, std::move(pUndoDoc), std::move(pRedoDoc), nFlags | nUndoFlags, std::move(pUndoData),
-            false, &aOptions );     // false = Redo data not yet copied
+            false, &aOptions ));     // false = Redo data not yet copied
 
         if ( bInsertCells )
         {
             //  Merge the paste undo action into the insert action.
             //  Use ScUndoWrapper so the ScUndoPaste pointer can be stored in the insert action.
 
-            pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
+            pUndoMgr->AddUndoAction( new ScUndoWrapper( std::move(pUndo) ), true );
         }
         else
-            pUndoMgr->AddUndoAction( pUndo );
+            pUndoMgr->AddUndoAction( pUndo.release() );
         pUndoMgr->LeaveListAction();
     }
 
@@ -1610,13 +1610,13 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
 
-        ScUndoPaste* pUndo = new ScUndoPaste(pDocSh,
-            aMarkedRange, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions);
+        std::unique_ptr<ScUndoPaste> pUndo(new ScUndoPaste(pDocSh,
+            aMarkedRange, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
 
         if (bInsertCells)
-            pUndoMgr->AddUndoAction(new ScUndoWrapper(pUndo), true);
+            pUndoMgr->AddUndoAction(new ScUndoWrapper(std::move(pUndo)), true);
         else
-            pUndoMgr->AddUndoAction(pUndo);
+            pUndoMgr->AddUndoAction(pUndo.release());
 
         pUndoMgr->LeaveListAction();
     }
@@ -1994,12 +1994,12 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
             }
         }
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
-        SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
+        std::unique_ptr<SfxUndoAction> pUndo( new ScUndoDataForm( pDocSh,
                                                    nStartCol, nCurrentRow, nStartTab,
                                                    nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                                    std::move(pUndoDoc), std::move(pRedoDoc),
-                                                   std::move(pUndoData) );
-        pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
+                                                   std::move(pUndoData) ) );
+        pUndoMgr->AddUndoAction( new ScUndoWrapper( std::move(pUndo) ), true );
 
         PaintPartFlags nPaint = PaintPartFlags::Grid;
         if (bColInfo)

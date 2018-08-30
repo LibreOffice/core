@@ -36,6 +36,7 @@
 #include <docfunc.hxx>
 #include <sc.hrc>
 #include <filter.hxx>
+#include <functional>
 
 using namespace com::sun::star;
 
@@ -108,7 +109,7 @@ void ScDocShell::InitItems()
         PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
         // Other modifications after creation of the DrawLayer
-        pDrawLayer->SetNotifyUndoActionHdl( LINK( m_pDocFunc.get(), ScDocFunc, NotifyDrawUndo ) );
+        pDrawLayer->SetNotifyUndoActionHdl( std::bind( &ScDocFunc::NotifyDrawUndo, m_pDocFunc.get(), std::placeholders::_1 ) );
     }
     else if (!utl::ConfigManager::IsFuzzing())
     {
