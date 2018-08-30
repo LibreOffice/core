@@ -726,6 +726,21 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     return false;
 }
 
+namespace
+{
+    // tdf#119579 skip floating windows as potential parent for missing help dialog
+    const vcl::Window* GetBestParent(const vcl::Window* pWindow)
+    {
+        while (pWindow)
+        {
+            if (pWindow->IsSystemWindow() && pWindow->GetType() != WindowType::FLOATINGWINDOW)
+                break;
+            pWindow = pWindow->GetParent();
+        }
+        return pWindow;
+    }
+}
+
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
@@ -830,6 +845,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         {
             SvtHelpOptions aHelpOptions;
             bool bShowOfflineHelpPopUp = aHelpOptions.IsOfflineHelpPopUp();
+
+            pWindow = GetBestParent(pWindow);
 
             if(bShowOfflineHelpPopUp)
             {
