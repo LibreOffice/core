@@ -23,6 +23,8 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
+#include <type_traits>
+#include <utility>
 
 #define DECL_LINK(Member, ArgType, RetType) \
     static RetType LinkStub##Member(void *, ArgType); \
@@ -72,6 +74,7 @@
 
 template<typename Arg, typename Ret>
 class SAL_WARN_UNUSED Link {
+    struct Invalid;
 public:
     typedef Ret Stub(void *, Arg);
 
@@ -80,8 +83,13 @@ public:
     Link(void * instance, Stub * function):
         function_(function), instance_(instance) {}
 
-    Ret Call(Arg data) const
+    Ret Call(
+        typename std::conditional<std::is_copy_constructible<Arg>::value, Arg, Invalid>::type data)
+        const
     { return function_ == nullptr ? Ret() : (*function_)(instance_, data); }
+
+    template<typename Arg_> Ret Call(Arg_ && data) const
+    { return function_ == nullptr ? Ret() : (*function_)(instance_, std::forward<Arg_>(data)); }
 
     bool IsSet() const { return function_ != nullptr; }
 

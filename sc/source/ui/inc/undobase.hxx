@@ -167,7 +167,7 @@ class ScUndoWrapper: public SfxUndoAction           // for manual merging of act
     ViewShellId                     mnViewShellId;
 
 public:
-                            ScUndoWrapper( SfxUndoAction* pUndo );
+                            ScUndoWrapper( std::unique_ptr<SfxUndoAction> pUndo );
     virtual                 ~ScUndoWrapper() override;
 
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo.get(); }

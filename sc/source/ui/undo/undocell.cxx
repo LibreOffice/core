@@ -885,7 +885,7 @@ OUString ScUndoNewSdrCaptionObj::GetComment() const
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
-        const ScNoteData& rNoteData, bool bInsert, SdrUndoAction* pDrawUndo ) :
+        const ScNoteData& rNoteData, bool bInsert, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
     mpDrawUndo( pDrawUndo )
@@ -902,7 +902,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
-        const ScNoteData& rOldData, const ScNoteData& rNewData, SdrUndoAction* pDrawUndo ) :
+        const ScNoteData& rOldData, const ScNoteData& rNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
     maOldData( rOldData ),
@@ -1031,7 +1031,7 @@ OUString ScUndoShowHideNote::GetComment() const
 }
 
 ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
-                                    SdrUndoAction* pDraw, const ScDetOpData* pOperation,
+                                    std::unique_ptr<SdrUndoAction> pDraw, const ScDetOpData* pOperation,
                                     std::unique_ptr<ScDetOpList> pUndoList ) :
     ScSimpleUndo( pNewDocShell ),
     pOldList    ( std::move(pUndoList) ),
