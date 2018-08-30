@@ -24,8 +24,8 @@
 #include <tabvwsh.hxx>
 
 
-ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
-    pDrawUndo( pUndo ),
+ScUndoDraw::ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh ) :
+    pDrawUndo( std::move(pUndo) ),
     pDocShell( pDocSh ),
     mnViewShellId( -1 )
 {
