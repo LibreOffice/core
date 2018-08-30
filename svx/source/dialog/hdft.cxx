@@ -108,25 +108,21 @@ namespace svx {
 
 VclPtr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHeaderPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
 }
 
 VclPtr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxFooterPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
 }
 
-SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
-
-    SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
-
+SvxHeaderPage::SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rAttr)
+    : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
 {
 }
 
-SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
-
-    SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
-
+SvxFooterPage::SvxFooterPage(TabPageParent pParent, const SfxItemSet& rAttr)
+    : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
 {
 }
 
