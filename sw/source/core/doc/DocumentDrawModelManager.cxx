@@ -30,6 +30,7 @@
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
 #include <svl/hint.hxx>
+#include <svx/svdundo.hxx>
 #include <viewsh.hxx>
 #include <view.hxx>
 #include <drawdoc.hxx>
@@ -131,7 +132,7 @@ void DocumentDrawModelManager::InitDrawModel()
     if ( pRefDev )
         mpDrawModel->SetRefDevice( pRefDev );
 
-    mpDrawModel->SetNotifyUndoActionHdl( LINK( &m_rDoc, SwDoc, AddDrawUndo ));
+    mpDrawModel->SetNotifyUndoActionHdl( std::bind( &SwDoc::AddDrawUndo, &m_rDoc, std::placeholders::_1 ));
     SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh )
     {
@@ -350,7 +351,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
 
 void DocumentDrawModelManager::DrawNotifyUndoHdl()
 {
-    mpDrawModel->SetNotifyUndoActionHdl( Link<SdrUndoAction*,void>() );
+    mpDrawModel->SetNotifyUndoActionHdl( nullptr );
 }
 
 }

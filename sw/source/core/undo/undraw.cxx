@@ -55,7 +55,7 @@ struct SwUndoGroupObjImpl
 
 // Draw-Objecte
 
-IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
+void SwDoc::AddDrawUndo( std::unique_ptr<SdrUndoAction> pUndo )
 {
     if (GetIDocumentUndoRedo().DoesUndo() &&
         GetIDocumentUndoRedo().DoesDrawUndo())
@@ -65,10 +65,8 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(std::unique_ptr<SdrUndoAction>(pUndo), pMarkList, this) );
+        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(std::move(pUndo), pMarkList, this) );
     }
-    else
-        delete pUndo;
 }
 
 SwSdrUndo::SwSdrUndo( std::unique_ptr<SdrUndoAction> pUndo, const SdrMarkList* pMrkLst, const SwDoc* pDoc )

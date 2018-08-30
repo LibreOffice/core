@@ -552,8 +552,8 @@ void ScDBFuncUndo::EndRedo()
     ScSimpleUndo::EndRedo();
 }
 
-ScUndoWrapper::ScUndoWrapper( SfxUndoAction* pUndo ) :
-    pWrappedUndo( pUndo ),
+ScUndoWrapper::ScUndoWrapper( std::unique_ptr<SfxUndoAction> pUndo ) :
+    pWrappedUndo( std::move(pUndo) ),
     mnViewShellId( -1 )
 {
     if (pWrappedUndo)
