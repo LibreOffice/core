@@ -519,8 +519,8 @@ public:
         SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
         assert(pVclWidget);
         SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
-        assert(pNewVclParent);
-        pVclWidget->getWidget()->SetParent(pNewVclParent->getWidget());
+        assert(!pNewParent || pNewVclParent);
+        pVclWidget->getWidget()->SetParent(pNewVclParent ? pNewVclParent->getWidget() : nullptr);
     }
 };
 

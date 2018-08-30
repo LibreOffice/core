@@ -634,9 +634,9 @@ RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
 
 void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 25,
                                    pDrawingArea->get_text_height() * 5);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
@@ -1200,9 +1200,9 @@ void SvxPixelCtl::Resize()
 
 void SvxPixelCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 25,
                                    pDrawingArea->get_text_height() * 10);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 SvxPixelCtl::~SvxPixelCtl()

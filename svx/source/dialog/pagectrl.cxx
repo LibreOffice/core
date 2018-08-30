@@ -395,13 +395,14 @@ void SvxPageWindow::ResetBackground()
 
 void SvxPageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+
     OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
     // Count in Twips by default
     rRefDevice.Push(PushFlags::MAPMODE);
     rRefDevice.SetMapMode(MapMode(MapUnit::MapTwip));
     aWinSize = rRefDevice.LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aWinSize.Width(), aWinSize.Height());
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 
     aWinSize.AdjustHeight( -4 );
     aWinSize.AdjustWidth( -4 );

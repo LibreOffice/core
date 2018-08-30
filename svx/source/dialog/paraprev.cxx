@@ -128,9 +128,9 @@ ParaPrevWindow::ParaPrevWindow() :
 
 void ParaPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aOptimalSize(getParagraphPreviewOptimalSize(pDrawingArea->get_ref_device()));
     pDrawingArea->set_size_request(aOptimalSize.Width(), aOptimalSize.Height());
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void ParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)

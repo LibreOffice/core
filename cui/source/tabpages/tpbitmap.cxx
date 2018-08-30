@@ -522,7 +522,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, PresetListBox*, void)
         OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aName, aDesc));
 
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, PresetListBox*, void)
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 xBox->run();
             }
@@ -558,7 +558,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, PresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
 
         if (xQueryBox->run() == RET_YES)
@@ -708,7 +708,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", GetTabDialog()->GetFrameWeld());
+    SvxOpenGraphicDialog aDlg("Import", GetDialogFrameWeld());
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
 
@@ -728,7 +728,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
             OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aURL.GetName().getToken(0, '.'), aDesc));
+            ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aURL.GetName().getToken(0, '.'), aDesc));
             nError = ErrCode(1);
 
             while( pDlg->Execute() == RET_OK )
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
                     break;
                 }
 
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 if (xBox->run() != RET_OK)
                     break;
@@ -771,7 +771,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         else
         {
             // graphic couldn't be loaded
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
             xBox->run();
         }

@@ -66,9 +66,9 @@ void SwDropCapsPict::SetText( const OUString& rT )
 
 void SwDropCapsPict::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aPrefSize(getParagraphPreviewOptimalSize(pDrawingArea->get_ref_device()));
     pDrawingArea->set_size_request(aPrefSize.Width(), aPrefSize.Height());
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void SwDropCapsPict::Resize()

@@ -668,7 +668,7 @@ public:
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) override;
    // add for SvxBorderBackgroundDlg
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
-       vcl::Window* pParent,
+       weld::Window* pParent,
        const SfxItemSet& rCoreSet,
        bool bEnableDrawingLayerFillStyles) override;
 

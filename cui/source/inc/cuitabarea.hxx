@@ -609,14 +609,14 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    SvxPixelCtl m_aCtlPixel;
     XRectPreview m_aCtlPreview;
+    std::unique_ptr<SvxPixelCtl> m_xCtlPixel;
     std::unique_ptr<ColorListBox> m_xLbColor;
     std::unique_ptr<ColorListBox> m_xLbBackgroundColor;
     std::unique_ptr<PresetListBox> m_xPatternLB;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnModify;
-    std::unique_ptr<weld::CustomWeld> m_xCtlPixel;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPixelWin;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
     std::unique_ptr<weld::CustomWeld> m_xPatternLBWin;
     std::unique_ptr<SvxBitmapCtl> m_xBitmapCtl;

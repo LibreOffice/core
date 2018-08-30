@@ -84,11 +84,11 @@ const sal_uInt16 SvxHFPage::pRanges[] =
 
 namespace svx {
 
-    bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet )
+    bool ShowBorderBackgroundDlg(weld::Window* pParent, SfxItemSet* pBBSet)
     {
         bool bRes = false;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, false/*bEnableDrawingLayerFillStyles*/ ));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(pParent, *pBBSet, false /*bEnableDrawingLayerFillStyles*/));
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
             SfxItemIter aIter( *pDlg->GetOutputItemSet() );
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
-        this,
+        GetDialogFrameWeld(),
         *pBBSet,
         mbEnableDrawingLayerFillStyles));
 
