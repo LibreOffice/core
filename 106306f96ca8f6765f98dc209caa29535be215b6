@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_8c0f8b2d",
+        "filename": "include/tools/link.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-30T14:17:30Z",
+      "side": 1,
+      "message": "...and with this overload in place, code like\n\n\u003e         aParaRemovingHdl.Call( { this, pPara } );\n\n(Outliner::ParagraphDeleted, editeng/source/outliner/outliner.cxx) still works",
+      "revId": "106306f96ca8f6765f98dc209caa29535be215b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
