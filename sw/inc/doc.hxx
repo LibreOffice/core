@@ -511,7 +511,9 @@ public:
 
     ::sw::DocumentFieldsManager & GetDocumentFieldsManager();
 
-    bool FieldCanHidePara(SwFieldIds eFieldId) const;
+    // Returns 0 if the field cannot hide para, or a positive integer indicating the field type
+    // "weight" when several hiding fields' FieldHidesPara() give conflicting results
+    int FieldCanHideParaWeight(SwFieldIds eFieldId) const;
     bool FieldHidesPara(const SwField& rField) const;
 
     // IDocumentContentOperations

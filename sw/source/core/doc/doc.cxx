@@ -1358,17 +1358,20 @@ bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
 }
 }
 
-bool SwDoc::FieldCanHidePara(SwFieldIds eFieldId) const
+// The greater the returned value, the more weight has this field type on deciding the final
+// paragraph state
+int SwDoc::FieldCanHideParaWeight(SwFieldIds eFieldId) const
 {
     switch (eFieldId)
     {
         case SwFieldIds::HiddenPara:
-            return true;
+            return 20;
         case SwFieldIds::Database:
-            return GetDocumentSettingManager().get(
-                DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA);
+            return GetDocumentSettingManager().get(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA)
+                       ? 10
+                       : 0;
         default:
-            return false;
+            return 0;
     }
 }
 
@@ -1379,7 +1382,8 @@ bool SwDoc::FieldHidesPara(const SwField& rField) const
         case SwFieldIds::HiddenPara:
             return static_cast<const SwHiddenParaField&>(rField).IsHidden();
         case SwFieldIds::Database:
-            return FieldCanHidePara(SwFieldIds::Database) && rField.ExpandField(true).isEmpty();
+            return FieldCanHideParaWeight(SwFieldIds::Database)
+                   && rField.ExpandField(true).isEmpty();
         default:
             return false;
     }
@@ -1411,7 +1415,7 @@ bool SwDoc::RemoveInvisibleContent()
         std::vector<std::unique_ptr<FieldTypeGuard>> aHidingFieldTypes;
         for (SwFieldType* pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
-            if (FieldCanHidePara(pType->Which()))
+            if (FieldCanHideParaWeight(pType->Which()))
                 aHidingFieldTypes.push_back(o3tl::make_unique<FieldTypeGuard>(pType));
         }
         for (const auto& pTypeGuard : aHidingFieldTypes)
