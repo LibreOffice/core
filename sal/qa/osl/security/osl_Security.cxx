@@ -418,11 +418,9 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     // Create buffers for the SID and the domain name.
     PSID pSid = static_cast<PSID>(new BYTE[dwSidBufferSize]);
-    CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= nullptr );
     memset( pSid, 0, dwSidBufferSize);
 
     wszDomainName = new WCHAR[dwDomainBufferSize];
-    CPPUNIT_ASSERT_MESSAGE("# creating Domain name buffer failed.\n", wszDomainName != nullptr );
     memset(wszDomainName, 0, dwDomainBufferSize*sizeof(WCHAR));
 
     // Obtain the SID for the account name passed.
@@ -454,9 +452,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
             {
                 // Reallocate memory for the SID buffer.
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
-                FreeSid( pSid);
+                delete[] static_cast<BYTE*>(pSid);
                 pSid = static_cast<PSID>(new BYTE[cbSid]);
-                CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= nullptr );
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
             }
@@ -466,7 +463,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                 wprintf(L"# The domain name buffer was too small. It will be reallocated.\n");
                 delete [] wszDomainName;
                 wszDomainName = new WCHAR[cchDomainName];
-                CPPUNIT_ASSERT_MESSAGE("# re-creating domain name buffer failed.\n", wszDomainName!= nullptr );
                 memset(wszDomainName, 0, cchDomainName*sizeof(WCHAR));
                 dwDomainBufferSize = cchDomainName;
             }
