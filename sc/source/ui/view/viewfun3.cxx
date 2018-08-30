@@ -1957,8 +1957,8 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     if ( pDoc )
     {
         const bool bRecord( pDoc->IsUndoEnabled());
-        ScDocument* pUndoDoc = nullptr;
-        ScDocument* pRedoDoc = nullptr;
+        ScDocumentUniquePtr pUndoDoc;
+        ScDocumentUniquePtr pRedoDoc;
         std::unique_ptr<ScRefUndoData> pUndoData;
         SCTAB nTab = GetViewData().GetTabNo();
         SCTAB nStartTab = nTab;
@@ -1977,7 +1977,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 
         if ( bRecord )
         {
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
             pDoc->CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false, *pUndoDoc );
         }
@@ -1997,7 +1997,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
                                                    nStartCol, nCurrentRow, nStartTab,
                                                    nUndoEndCol, nUndoEndRow, nEndTab, rMark,
-                                                   pUndoDoc, pRedoDoc,
+                                                   std::move(pUndoDoc), std::move(pRedoDoc),
                                                    std::move(pUndoData) );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 

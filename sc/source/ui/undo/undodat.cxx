@@ -1523,12 +1523,12 @@ bool ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoConsolidate::ScUndoConsolidate( ScDocShell* pNewDocShell, const ScArea& rArea,
-                    const ScConsolidateParam& rPar, ScDocument* pNewUndoDoc,
+                    const ScConsolidateParam& rPar, ScDocumentUniquePtr pNewUndoDoc,
                     bool bReference, SCROW nInsCount, ScOutlineTable* pTab,
                     ScDBData* pData )
     : ScSimpleUndo(pNewDocShell)
     , aDestArea(rArea)
-    , xUndoDoc(pNewUndoDoc)
+    , xUndoDoc(std::move(pNewUndoDoc))
     , aParam(rPar)
     , bInsRef(bReference)
     , nInsertCount(nInsCount)
@@ -1732,12 +1732,12 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
-                                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                                ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                                 std::unique_ptr<ScRefUndoData> pRefData )
     : ScBlockUndo(pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE)
     , mxMarkData(new ScMarkData(rMark))
-    , xUndoDoc(pNewUndoDoc)
-    , xRedoDoc(pNewRedoDoc)
+    , xUndoDoc(std::move(pNewUndoDoc))
+    , xRedoDoc(std::move(pNewRedoDoc))
     , xRefUndoData(std::move(pRefData))
     , bRedoFilled(false)
 {
