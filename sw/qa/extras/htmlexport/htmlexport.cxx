@@ -646,6 +646,17 @@ DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
     CPPUNIT_ASSERT(!aSource.isEmpty());
 }
 
+DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
+{
+    SvMemoryStream aStream;
+    wrapFragment(aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Make sure that xml:lang is not written in ReqIF mode.
+    assertXPathNoAttribute(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:h1", "lang");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
