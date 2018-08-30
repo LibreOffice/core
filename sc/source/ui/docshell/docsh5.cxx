@@ -560,7 +560,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     aData.GetSize( nColSize, nRowSize );
     if (bRecord && nColSize > 0 && nRowSize > 0)
     {
-        ScDBData* pUndoData = pDestData ? new ScDBData(*pDestData) : nullptr;
+        std::unique_ptr<ScDBData> pUndoData(pDestData ? new ScDBData(*pDestData) : nullptr);
 
         SCTAB nDestTab = rParam.nTab;
         ScArea aDestArea( rParam.nTab, rParam.nCol, rParam.nRow,
@@ -575,7 +575,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             // old outlines
             ScOutlineTable* pTable = m_aDocument.GetOutlineTable( nDestTab );
-            ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : nullptr;
+            std::unique_ptr<ScOutlineTable> pUndoTab(pTable ? new ScOutlineTable( *pTable ) : nullptr);
 
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &m_aDocument, 0, nTabCount-1, false, true );
@@ -599,7 +599,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, std::move(pUndoDoc),
-                                            true, nInsertCount, pUndoTab, pUndoData ) );
+                                            true, nInsertCount, std::move(pUndoTab), std::move(pUndoData) ) );
         }
         else
         {
@@ -616,7 +616,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, std::move(pUndoDoc),
-                                            false, 0, nullptr, pUndoData ) );
+                                            false, 0, nullptr, std::move(pUndoData) ) );
         }
     }
 

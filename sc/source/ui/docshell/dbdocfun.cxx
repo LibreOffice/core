@@ -343,8 +343,8 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
 
             ScDocumentUniquePtr pUndoDoc;
             ScOutlineTable* pUndoTab = nullptr;
-            ScRangeName* pUndoRange = nullptr;
-            ScDBCollection* pUndoDB = nullptr;
+            std::unique_ptr<ScRangeName> pUndoRange;
+            std::unique_ptr<ScDBCollection> pUndoDB;
 
             if (bRecord)
             {
@@ -381,10 +381,10 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                 //  ranges of DB and other
                 ScRangeName* pDocRange = rDoc.GetRangeName();
                 if (!pDocRange->empty())
-                    pUndoRange = new ScRangeName( *pDocRange );
+                    pUndoRange.reset(new ScRangeName( *pDocRange ));
                 ScDBCollection* pDocDB = rDoc.GetDBCollection();
                 if (!pDocDB->empty())
-                    pUndoDB = new ScDBCollection( *pDocDB );
+                    pUndoDB.reset(new ScDBCollection( *pDocDB ));
             }
 
             if (bSort && bSubTotal)
@@ -449,7 +449,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                                             //nCurX, nCurY,
                                             nStartCol, nStartRow,
                                             std::move(pUndoDoc), pUndoTab,
-                                            pUndoRange, pUndoDB,
+                                            std::move(pUndoRange), std::move(pUndoDB),
                                             pOld, pNew ) );
             }
 
@@ -737,7 +737,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     ScDocumentUniquePtr pUndoDoc;
-    ScDBCollection* pUndoDB = nullptr;
+    std::unique_ptr<ScDBCollection> pUndoDB;
     const ScRange* pOld = nullptr;
 
     if ( bRecord )
@@ -766,7 +766,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
-            pUndoDB = new ScDBCollection( *pDocDB );
+            pUndoDB.reset(new ScDBCollection( *pDocDB ));
 
         rDoc.BeginDrawUndo();
     }
@@ -930,7 +930,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     {
         // create undo action after executing, because of drawing layer undo
         rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoQuery( &rDocShell, nTab, rQueryParam, std::move(pUndoDoc), pUndoDB,
+                    new ScUndoQuery( &rDocShell, nTab, rQueryParam, std::move(pUndoDoc), std::move(pUndoDB),
                                         pOld, bDoSize, pAdvSource ) );
     }
 
@@ -1029,8 +1029,8 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         ScSubTotalParam aNewParam( rParam );        // end of range is being changed
         ScDocumentUniquePtr pUndoDoc;
         std::unique_ptr<ScOutlineTable> pUndoTab;
-        ScRangeName*    pUndoRange = nullptr;
-        ScDBCollection* pUndoDB = nullptr;
+        std::unique_ptr<ScRangeName> pUndoRange;
+        std::unique_ptr<ScDBCollection> pUndoDB;
 
         if (bRecord)                                        // secure old data
         {
@@ -1067,10 +1067,10 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             //  ranges of DB and other
             ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
-                pUndoRange = new ScRangeName( *pDocRange );
+                pUndoRange.reset(new ScRangeName( *pDocRange ));
             ScDBCollection* pDocDB = rDoc.GetDBCollection();
             if (!pDocDB->empty())
-                pUndoDB = new ScDBCollection( *pDocDB );
+                pUndoDB.reset(new ScDBCollection( *pDocDB ));
         }
 
 //      rDoc.SetOutlineTable( nTab, NULL );
@@ -1111,7 +1111,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 new ScUndoSubTotals( &rDocShell, nTab,
                                         rParam, aNewParam.nRow2,
                                         std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
-                                        pUndoRange, pUndoDB ) );
+                                        std::move(pUndoRange), std::move(pUndoDB) ) );
         }
 
         if (!bSuccess)

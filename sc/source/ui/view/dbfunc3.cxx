@@ -439,8 +439,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         ScSubTotalParam aNewParam( rParam );        // change end of range
         ScDocumentUniquePtr pUndoDoc;
         std::unique_ptr<ScOutlineTable> pUndoTab;
-        ScRangeName*    pUndoRange = nullptr;
-        ScDBCollection* pUndoDB = nullptr;
+        std::unique_ptr<ScRangeName> pUndoRange;
+        std::unique_ptr<ScDBCollection> pUndoDB;
 
         if (bRecord)                                        // record old data
         {
@@ -477,10 +477,10 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             // database and other ranges
             ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
-                pUndoRange = new ScRangeName( *pDocRange );
+                pUndoRange.reset(new ScRangeName( *pDocRange ));
             ScDBCollection* pDocDB = rDoc.GetDBCollection();
             if (!pDocDB->empty())
-                pUndoDB = new ScDBCollection( *pDocDB );
+                pUndoDB.reset(new ScDBCollection( *pDocDB ));
         }
 
         ScOutlineTable* pOut = rDoc.GetOutlineTable( nTab );
@@ -527,7 +527,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                 new ScUndoSubTotals( pDocSh, nTab,
                                         rParam, aNewParam.nRow2,
                                         std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
-                                        pUndoRange, pUndoDB ) );
+                                        std::move(pUndoRange), std::move(pUndoDB) ) );
         }
 
         if (!bSuccess)
@@ -2132,8 +2132,8 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         ScDocumentUniquePtr pUndoDoc;
         ScOutlineTable* pUndoTab = nullptr;
-        ScRangeName* pUndoRange = nullptr;
-        ScDBCollection* pUndoDB = nullptr;
+        std::unique_ptr<ScRangeName> pUndoRange;
+        std::unique_ptr<ScDBCollection> pUndoDB;
 
         if (bRecord)
         {
@@ -2167,10 +2167,10 @@ void ScDBFunc::RepeatDB( bool bRecord )
             // data base and other ranges
             ScRangeName* pDocRange = pDoc->GetRangeName();
             if (!pDocRange->empty())
-                pUndoRange = new ScRangeName( *pDocRange );
+                pUndoRange.reset(new ScRangeName( *pDocRange ));
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
             if (!pDocDB->empty())
-                pUndoDB = new ScDBCollection( *pDocDB );
+                pUndoDB.reset(new ScDBCollection( *pDocDB ));
         }
 
         if (bSort && bSubTotal)
@@ -2236,7 +2236,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
                                         nNewEndRow,
                                         nCurX, nCurY,
                                         std::move(pUndoDoc), pUndoTab,
-                                        pUndoRange, pUndoDB,
+                                        std::move(pUndoRange), std::move(pUndoDB),
                                         pOld, pNew ) );
         }
 
