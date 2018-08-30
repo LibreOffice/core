@@ -44,7 +44,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <unotools/tempfile.hxx>
-
+#include <boost/optional.hpp>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;

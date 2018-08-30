@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 
-#include <boost/optional.hpp>
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -28,6 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace boost { template <class T> class optional; }
 
 // The method GetList() returns a list of property values.
 // Use follow defines to separate values by names.

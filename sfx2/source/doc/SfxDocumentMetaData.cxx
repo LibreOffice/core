@@ -78,6 +78,7 @@
 #include <sfx2/docfile.hxx>
 #include <sax/tools/converter.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <boost/optional.hpp>
 
 #include <utility>
 #include <vector>
