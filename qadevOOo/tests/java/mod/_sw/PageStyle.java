@@ -127,13 +127,13 @@ public class PageStyle extends TestCase {
 
         short exclude = PropertyAttribute.READONLY;
 
-        String[] skipPropetiesNamed = {
+        String[] skipPropertiesNamed = {
             "BackGraphicURL", "HeaderBackGraphicURL", "FooterBackGraphicURL"
         };
 
-        String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude, skipPropetiesNamed);
+        String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude, skipPropertiesNamed);
         tEnv.addObjRelation("PropertyNames", names);
-        tEnv.addObjRelation("SkipProperties", skipPropetiesNamed);
+        tEnv.addObjRelation("SkipProperties", skipPropertiesNamed);
 
         return tEnv;
     }
