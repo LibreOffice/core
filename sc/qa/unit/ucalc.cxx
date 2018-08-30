@@ -5540,6 +5540,28 @@ void Test::testNoteCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#112454
+void Test::testNoteContainsNotesInRange() {
+    m_pDoc->InsertTab(0, "PostIts");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
+    ScAddress aAddr(2, 2, 0); // cell C3
+
+    CPPUNIT_ASSERT_MESSAGE("Claiming there's notes in a document that doesn't have any.",
+                           !m_pDoc->ContainsNotesInRange((ScRange(ScAddress(0, 0, 0), aAddr))));
+
+    m_pDoc->GetOrCreateNote(aAddr);
+
+    CPPUNIT_ASSERT_MESSAGE("Claiming there's notes in range that doesn't have any.",
+                           !m_pDoc->ContainsNotesInRange(ScRange(ScAddress(0, 0, 0), ScAddress(0, 1, 0))));
+    CPPUNIT_ASSERT_MESSAGE("Note not detected that lies on border of range.",
+                           m_pDoc->ContainsNotesInRange((ScRange(ScAddress(0, 0, 0), aAddr))));
+    CPPUNIT_ASSERT_MESSAGE("Note not detected that lies in inner area of range.",
+                           m_pDoc->ContainsNotesInRange((ScRange(ScAddress(0, 0, 0), ScAddress(3, 3, 0)))));
+}
+
 void Test::testAreasWithNotes()
 {
     ScDocument& rDoc = getDocShell().GetDocument();
