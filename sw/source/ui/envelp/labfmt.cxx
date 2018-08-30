@@ -122,6 +122,8 @@ SwLabPreview::SwLabPreview()
 
 void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
 {
+    CustomWidgetController::SetDrawingArea(pWidget);
+
     pWidget->set_size_request(pWidget->get_approximate_digit_width() * 54,
                               pWidget->get_text_height() * 15);
 
@@ -133,8 +135,6 @@ void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
     m_lColsWidth   = pWidget->get_pixel_size(m_aColsStr).Width();
     m_lXWidth  = pWidget->get_pixel_size(OUString('X')).Width();
     m_lXHeight = pWidget->get_text_height();
-
-    CustomWidgetController::SetDrawingArea(pWidget);
 }
 
 void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)

@@ -242,7 +242,8 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
         if (   !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/window/window.cxx"))
             && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
-            && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx")) )
+            && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx"))
+            && !(loplugin::isSamePathname(filename, SRCDIR "/sfx2/source/dialog/tabdlg.cxx")) )
         {
             report(
                 DiagnosticsEngine::Warning,

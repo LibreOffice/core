@@ -37,40 +37,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststoreTYPE">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Linear</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Axial</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Radial</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Ellipsoid</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Square</col>
-        <col id="1">0</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkFrame" id="TransparencyTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -264,10 +230,17 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="LB_TRGR_GRADIENT_TYPES">
+                      <object class="GtkComboBoxText" id="LB_TRGR_GRADIENT_TYPES">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststoreTYPE</property>
+                        <items>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Linear</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Axial</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Radial</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Ellipsoid</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Square</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
