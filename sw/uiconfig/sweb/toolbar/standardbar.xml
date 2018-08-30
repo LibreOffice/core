@@ -53,7 +53,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:Config"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
