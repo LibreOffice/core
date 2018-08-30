@@ -143,6 +143,10 @@ cmd/32/insertnumericfield.png cmd/32/numericfield.png
 cmd/32/insertobjctrl.png cmd/32/insertobject.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
+cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
+cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertplugin.png cmd/32/addons.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -456,6 +460,10 @@ cmd/lc_insertnumericfield.png cmd/lc_numericfield.png
 cmd/lc_insertobjctrl.png cmd/lc_insertobject.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
+cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertplugin.png cmd/lc_addons.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -721,6 +729,10 @@ cmd/sc_insertnumericfield.png cmd/sc_numericfield.png
 cmd/sc_insertobjctrl.png cmd/sc_insertobject.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
+cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertplugin.png cmd/sc_addons.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png

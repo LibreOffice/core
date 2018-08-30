@@ -520,6 +520,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page Number</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertSlideField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -536,6 +539,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page Tit~le</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertSlideTitleField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -551,6 +557,9 @@
       <node oor:name=".uno:InsertPagesField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page ~Count</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertSlidesField" oor:op="replace">
@@ -936,6 +945,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Normal</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:LayerMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -945,6 +957,9 @@
       <node oor:name=".uno:MasterPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Master</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DiaEffect" oor:op="replace">
@@ -1734,6 +1749,9 @@
       <node oor:name=".uno:InsertPageNumber" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">P~age Number...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertSlideNumber" oor:op="replace">
