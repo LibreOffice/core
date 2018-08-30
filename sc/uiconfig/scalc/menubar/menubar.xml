@@ -629,6 +629,7 @@
             <menu:menuitem menu:id=".uno:DataSubTotals"/>
             <menu:menuitem menu:id=".uno:DataForm"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:InsertExternalDataSource"/>
             <menu:menuitem menu:id=".uno:DataStreams"/>
             <menu:menuitem menu:id=".uno:ManageXMLSource"/>
             <menu:menuitem menu:id=".uno:DataProvider"/>
