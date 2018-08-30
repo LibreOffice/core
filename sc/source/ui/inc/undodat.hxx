@@ -370,7 +370,7 @@ class ScUndoConsolidate: public ScSimpleUndo
 public:
     ScUndoConsolidate(ScDocShell* pNewDocShell,
                       const ScArea& rArea, const ScConsolidateParam& rPar,
-                      ScDocument* pNewUndoDoc, bool bReference,
+                      ScDocumentUniquePtr pNewUndoDoc, bool bReference,
                       SCROW nInsCount, ScOutlineTable* pTab,
                       ScDBData* pData);
 
@@ -430,7 +430,7 @@ public:
                    SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                    SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                    const ScMarkData& rMark,
-                   ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                   ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                    std::unique_ptr<ScRefUndoData> pRefData);
     virtual void    Undo() override;
     virtual void    Redo() override;

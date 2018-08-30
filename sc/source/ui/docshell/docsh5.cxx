@@ -577,7 +577,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
             ScOutlineTable* pTable = m_aDocument.GetOutlineTable( nDestTab );
             ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : nullptr;
 
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &m_aDocument, 0, nTabCount-1, false, true );
 
             // row state
@@ -598,12 +598,12 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
                 m_aDocument.CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
-                    new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
+                    new ScUndoConsolidate( this, aDestArea, rParam, std::move(pUndoDoc),
                                             true, nInsertCount, pUndoTab, pUndoData ) );
         }
         else
         {
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &m_aDocument, aDestArea.nTab, aDestArea.nTab );
 
             m_aDocument.CopyToDocument(aDestArea.nColStart, aDestArea.nRowStart, aDestArea.nTab,
@@ -615,7 +615,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
                 m_aDocument.CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
-                    new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
+                    new ScUndoConsolidate( this, aDestArea, rParam, std::move(pUndoDoc),
                                             false, 0, nullptr, pUndoData ) );
         }
     }
