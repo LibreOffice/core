@@ -73,6 +73,7 @@
 
 #include <sal/log.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
+#include <svx/svdundo.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -1433,7 +1434,7 @@ void SAL_CALL ChartController::modified(
     //todo? update menu states ?
 }
 
-IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction, void )
+void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoAction )
 {
     ENSURE_OR_RETURN_VOID( pUndoAction, "invalid Undo action" );
 
@@ -1463,7 +1464,8 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
         if ( m_pDrawModelWrapper.get() )
         {
-            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl( LINK( this, ChartController, NotifyUndoActionHdl ) );
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl(
+                std::bind(&ChartController::NotifyUndoActionHdl, this, std::placeholders::_1) );
         }
     }
     return m_pDrawModelWrapper.get();
