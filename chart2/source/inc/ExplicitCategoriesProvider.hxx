@@ -89,7 +89,10 @@ public:
     bool isDateAxis();
     const std::vector< double >&  getDateCategories();
 
-private: //member
+private:
+    ExplicitCategoriesProvider(ExplicitCategoriesProvider &) = delete;
+    void operator =(ExplicitCategoriesProvider) = delete;
+
     bool volatile m_bDirty;
     css::uno::WeakReference< css::chart2::XCoordinateSystem >   m_xCooSysModel;
     ChartModel& mrModel;
