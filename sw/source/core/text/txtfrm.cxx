@@ -1045,18 +1045,25 @@ bool SwTextFrame::IsHiddenNow() const
         }
         sw::MergedAttrIter iter(*this);
         SwTextNode const* pNode(nullptr);
+        int nNewResultLevel = 0;
         for (SwTextAttr const* pHint = iter.NextAttr(&pNode); pHint; pHint = iter.NextAttr(&pNode))
         {
             if (pHint->Which() == RES_TXTATR_FIELD)
             {
+                // see also SwpHints::CalcHiddenParaField()
                 const SwFormatField& rField = pHint->GetFormatField();
-                if (pNode->FieldCanHidePara(rField.GetField()->GetTyp()->Which()))
+                int nCurLevel = pNode->FieldCanHideParaLevel(rField.GetField()->GetTyp()->Which());
+                if (nCurLevel > nNewResultLevel)
                 {
+                    nNewResultLevel = nCurLevel;
                     bHiddenParaField = pNode->FieldHidesPara(*rField.GetField());
-                    if (!bHiddenParaField)
-                    {
-                        break; // not hidden, see CalcHiddenParaField()
-                    }
+                }
+                else if (nCurLevel == nNewResultLevel && bHiddenParaField)
+                {
+                    // Currently, for both supported hiding types (HiddenPara, Database), "Don't hide"
+                    // takes precedence - i.e., if there's a "Don't hide" field of that level, we only
+                    // care about fields of higher level.
+                    bHiddenParaField = pNode->FieldHidesPara(*rField.GetField());
                 }
             }
         }
