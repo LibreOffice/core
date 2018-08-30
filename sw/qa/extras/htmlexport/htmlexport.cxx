@@ -35,6 +35,20 @@ public:
         m_eUnit(FUNIT_NONE)
     {}
 
+    /**
+     * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
+     * parse it.
+     */
+    void wrapFragment(SvMemoryStream& rStream)
+    {
+        rStream.WriteCharPtr(
+            "<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+        SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+        rStream.WriteStream(aFileStream);
+        rStream.WriteCharPtr("</reqif-xhtml:html>\n");
+        rStream.Seek(0);
+    }
+
 private:
     bool mustCalcLayoutOf(const char* filename) override
     {
@@ -603,11 +617,7 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
 DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
 {
     SvMemoryStream aStream;
-    aStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
-    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
-    aStream.WriteStream(aFileStream);
-    aStream.WriteCharPtr("</reqif-xhtml:html>\n");
-    aStream.Seek(0);
+    wrapFragment(aStream);
     xmlDocPtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
@@ -618,6 +628,22 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
     OUString aMessage = "src attribute is: " + aSource;
     // This was GIF, when the intention was to force PNG.
     CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".png"));
+}
+
+DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
+{
+    // This failed, io::IOException was thrown during the filter() call.
+    SvMemoryStream aStream;
+    wrapFragment(aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Make sure the native <object> element has the required data attribute.
+    OUString aSource = getXPath(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object/reqif-xhtml:object",
+        "data");
+    CPPUNIT_ASSERT(!aSource.isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
