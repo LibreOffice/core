@@ -637,12 +637,12 @@ bool ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoMerge::ScUndoMerge(ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
-                         bool bMergeContents, ScDocumentUniquePtr pUndoDoc, SdrUndoAction* pDrawUndo)
+                         bool bMergeContents, ScDocumentUniquePtr pUndoDoc, std::unique_ptr<SdrUndoAction> pDrawUndo)
     : ScSimpleUndo(pNewDocShell)
     , maOption(rOption)
     , mbMergeContents(bMergeContents)
     , mxUndoDoc(std::move(pUndoDoc))
-    , mpDrawUndo(pDrawUndo)
+    , mpDrawUndo(std::move(pDrawUndo))
 {
 }
 

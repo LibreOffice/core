@@ -332,7 +332,7 @@ public:
     void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
     void StartTextEdit( const Point* pMousePixel = nullptr );
 
-    DECL_LINK( NotifyUndoActionHdl, SdrUndoAction*, void );
+    void NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
 
     css::uno::Reference<css::uno::XInterface> const & getChartView();
 

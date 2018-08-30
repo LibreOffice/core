@@ -34,7 +34,7 @@ class ScUndoDraw: public SfxUndoAction
     void            UpdateSubShell();
 
 public:
-                            ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
+                            ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh );
     virtual                 ~ScUndoDraw() override;
 
     SfxUndoAction*          ReleaseDrawUndo()   { return pDrawUndo.release(); }

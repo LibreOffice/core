@@ -134,7 +134,7 @@ public:
     void            BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager);
     std::unique_ptr<SdrUndoGroup> GetCalcUndo();
     bool            IsRecording() const         { return bRecording; }
-    void            AddCalcUndo( SdrUndoAction* pUndo );
+    void            AddCalcUndo( std::unique_ptr<SdrUndoAction> pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );

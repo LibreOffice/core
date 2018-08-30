@@ -40,6 +40,7 @@
 #include <sfx2/printer.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/pathoptions.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <docoptio.hxx>
@@ -90,7 +91,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
                 pNewPage->InsertObject( pNewObject );
 
                 if (mpDrawLayer->IsRecording())
-                    mpDrawLayer->AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+                    mpDrawLayer->AddCalcUndo( o3tl::make_unique<SdrUndoInsertObj>( *pNewObject ) );
 
                 pOldObject = aIter.Next();
             }

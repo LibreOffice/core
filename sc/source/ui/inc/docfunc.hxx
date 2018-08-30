@@ -69,7 +69,7 @@ protected:
 public:
     virtual         ~ScDocFunc() {}
 
-    DECL_LINK( NotifyDrawUndo, SdrUndoAction*, void );
+    void            NotifyDrawUndo(std::unique_ptr<SdrUndoAction>);
 
     // for grouping multiple operations into one with a new name
     void            EnterListAction(const char* pNameResId);

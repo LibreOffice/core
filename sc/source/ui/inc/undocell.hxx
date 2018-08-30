@@ -299,7 +299,7 @@ public:
                         const ScAddress& rPos,
                         const ScNoteData& rNoteData,
                         bool bInsert,
-                        SdrUndoAction* pDrawUndo );
+                        std::unique_ptr<SdrUndoAction> pDrawUndo );
 
     /** Constructs an undo action for replacing a cell note with another. */
                     ScUndoReplaceNote(
@@ -307,7 +307,7 @@ public:
                         const ScAddress& rPos,
                         const ScNoteData& rOldData,
                         const ScNoteData& rNewData,
-                        SdrUndoAction* pDrawUndo );
+                        std::unique_ptr<SdrUndoAction> pDrawUndo );
 
     virtual         ~ScUndoReplaceNote() override;
 
@@ -352,7 +352,7 @@ class ScUndoDetective: public ScSimpleUndo
 {
 public:
                     ScUndoDetective( ScDocShell* pNewDocShell,
-                                    SdrUndoAction* pDraw, const ScDetOpData* pOperation,
+                                    std::unique_ptr<SdrUndoAction> pDraw, const ScDetOpData* pOperation,
                                     std::unique_ptr<ScDetOpList> pUndoList = nullptr );
     virtual         ~ScUndoDetective() override;
 

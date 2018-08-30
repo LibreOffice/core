@@ -72,7 +72,7 @@ protected:
     virtual void        Command( const CommandEvent& rCEvt ) override;
     virtual void        LoseFocus() override;
 
-    DECL_STATIC_LINK( DialogWindow, NotifyUndoActionHdl, SdrUndoAction *, void );
+    static void         NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
     virtual void        DoInit() override;
     virtual void        DoScroll( ScrollBar* pCurScrollBar ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
