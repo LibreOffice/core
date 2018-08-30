@@ -42,7 +42,7 @@ void XCellCursor::testGoToNext()
     aCellRangeAddr = xCellRangeAddressable->getRangeAddress();
     const sal_Int32 startCol2 = aCellRangeAddr.StartColumn;
 
-    CPPUNIT_ASSERT_MESSAGE("Sucessfully able to go to Next", startCol != startCol2);
+    CPPUNIT_ASSERT_MESSAGE("Successfully able to go to Next", startCol != startCol2);
 }
 
 void XCellCursor::testGoToOffset()
