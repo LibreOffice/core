@@ -225,12 +225,12 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
 
 IMPL_LINK(SwEnvFormatPage, AddrEditHdl, const OString&, rIdent, void)
 {
-    Edit(rIdent, true);
+    Edit(rIdent, false);
 }
 
 IMPL_LINK(SwEnvFormatPage, SendEditHdl, const OString&, rIdent, void)
 {
-    Edit(rIdent, false);
+    Edit(rIdent, true);
 }
 
 void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
