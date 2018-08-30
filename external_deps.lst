@@ -152,9 +152,9 @@ if (SOLAR_JAVA==TRUE)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
-    MD5 = 9392e65072ce4b614c1392eefc1f23d0
-    name = openssl-1.0.2h.tar.gz
-    URL1 = http://www.openssl.org/source/openssl-1.0.2h.tar.gz
+    MD5 = ac5eb30bf5798aa14b1ae6d0e7da58df
+    name = openssl-1.0.2p.tar.gz
+    URL1 = http://www.openssl.org/source/openssl-1.0.2p.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )

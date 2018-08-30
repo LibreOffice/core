@@ -1,7 +1,7 @@
-diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
---- misc/openssl-1.0.2h/Configure	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/Configure	2016-08-14 23:51:42.672229000 -0700
-@@ -475,19 +475,20 @@
+diff -ur misc/openssl-1.0.2p/Configure misc/build/openssl-1.0.2p/Configure
+--- misc/openssl-1.0.2p/Configure	2018-08-14 05:49:04.000000000 -0700
++++ misc/build/openssl-1.0.2p/Configure	2018-08-26 14:51:25.397910000 -0700
+@@ -477,19 +477,20 @@
  "android-mips","gcc:-mandroid -I\$(ANDROID_DEV)/include -B\$(ANDROID_DEV)/lib -O3 -Wall::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_INT DES_UNROLL BF_PTR:${mips32_asm}:o32:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
  
  #### *BSD [do see comment about ${BSDthreads} above!]
@@ -31,7 +31,19 @@ diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
  
  "bsdi-elf-gcc",     "gcc:-DPERL5 -DL_ENDIAN -fomit-frame-pointer -O3 -march=i486 -Wall::(unknown)::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
  
-@@ -2031,10 +2032,12 @@
+@@ -592,9 +593,9 @@
+ "debug-VC-WIN64A","cl:-W3 -Gs0 -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE:::WIN64A::SIXTY_FOUR_BIT RC4_CHUNK_LL DES_INT EXPORT_VAR_AS_FN:".eval{my $asm=$x86_64_asm;$asm=~s/x86_64-gcc\.o/bn_asm.o/;$asm}.":auto:win32",
+ # x86 Win32 target defaults to ANSI API, if you want UNICODE, complement
+ # 'perl Configure VC-WIN32' with '-DUNICODE -D_UNICODE'
+-"VC-WIN32","cl:-W3 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -D_CRT_SECURE_NO_DEPRECATE -D_WINSOCK_DEPRECATED_NO_WARNINGS:::WIN32::BN_LLONG RC4_INDEX EXPORT_VAR_AS_FN ${x86_gcc_opts}:${x86_asm}:win32n:win32",
++"VC-WIN32","cl:-W3 -w44129 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -D_CRT_SECURE_NO_DEPRECATE -D_WINSOCK_DEPRECATED_NO_WARNINGS:::WIN32::BN_LLONG RC4_INDEX EXPORT_VAR_AS_FN ${x86_gcc_opts}:${x86_asm}:win32n:win32",
+ # Unified CE target
+-"debug-VC-WIN32","cl:-W3 -WX -Gs0 -GF -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -D_CRT_SECURE_NO_DEPRECATE -D_WINSOCK_DEPRECATED_NO_WARNINGS:::WIN32::BN_LLONG RC4_INDEX EXPORT_VAR_AS_FN ${x86_gcc_opts}:${x86_asm}:win32n:win32",
++"debug-VC-WIN32","cl:-W3 -W44129 -WX -Gs0 -GF -Gy -Zi -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -D_CRT_SECURE_NO_DEPRECATE -D_WINSOCK_DEPRECATED_NO_WARNINGS:::WIN32::BN_LLONG RC4_INDEX EXPORT_VAR_AS_FN ${x86_gcc_opts}:${x86_asm}:win32n:win32",
+ "VC-CE","cl::::WINCE::BN_LLONG RC4_INDEX EXPORT_VAR_AS_FN ${x86_gcc_opts}:${no_asm}:win32",
+ 
+ # Borland C++ 4.5
+@@ -2065,10 +2066,12 @@
  	if ( $perl =~ m@^/@) {
  	    &dofile("tools/c_rehash",$perl,'^#!/', '#!%s','^my \$dir;$', 'my $dir = "' . $openssldir . '";', '^my \$prefix;$', 'my $prefix = "' . $prefix . '";');
  	    &dofile("apps/CA.pl",$perl,'^#!/', '#!%s');
@@ -43,11 +55,11 @@ diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
 +	    &dofile("apps/tsget",'/usr/local/bin/perl',,'^#!/', '#!%s');
  	}
  	if ($depflags ne $default_depflags && !$make_depend) {
-             $warn_make_depend++;
-diff -ur misc/openssl-1.0.2h/config misc/build/openssl-1.0.2h/config
---- misc/openssl-1.0.2h/config	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/config	2016-08-15 00:25:50.870874000 -0700
-@@ -753,14 +753,8 @@
+ 	    $warn_make_depend++;
+diff -ur misc/openssl-1.0.2p/config misc/build/openssl-1.0.2p/config
+--- misc/openssl-1.0.2p/config	2018-08-14 05:48:56.000000000 -0700
++++ misc/build/openssl-1.0.2p/config	2018-08-26 14:49:34.431584000 -0700
+@@ -762,14 +762,8 @@
    sparc64-*-*bsd*)	OUT="BSD-sparc64" ;;
    ia64-*-*bsd*)		OUT="BSD-ia64" ;;
    amd64-*-*bsd*)	OUT="BSD-x86_64" ;;
@@ -64,9 +76,9 @@ diff -ur misc/openssl-1.0.2h/config misc/build/openssl-1.0.2h/config
  			*ELF*)	OUT="BSD-x86-elf" ;;
  			*)	OUT="BSD-x86"; options="$options no-sse2" ;;
  			esac ;;
-diff -ur misc/openssl-1.0.2h/ms/do_ms.bat misc/build/openssl-1.0.2h/ms/do_ms.bat
---- misc/openssl-1.0.2h/ms/do_ms.bat	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/ms/do_ms.bat	2016-08-14 23:49:39.418111000 -0700
+diff -ur misc/openssl-1.0.2p/ms/do_ms.bat misc/build/openssl-1.0.2p/ms/do_ms.bat
+--- misc/openssl-1.0.2p/ms/do_ms.bat	2018-08-14 05:48:59.000000000 -0700
++++ misc/build/openssl-1.0.2p/ms/do_ms.bat	2018-08-26 14:49:34.432106000 -0700
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
@@ -86,45 +98,9 @@ diff -ur misc/openssl-1.0.2h/ms/do_ms.bat misc/build/openssl-1.0.2h/ms/do_ms.bat
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
-diff -ur misc/openssl-1.0.2h/util/mk1mf.pl misc/build/openssl-1.0.2h/util/mk1mf.pl
---- misc/openssl-1.0.2h/util/mk1mf.pl	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/util/mk1mf.pl	2016-08-14 23:49:39.419397000 -0700
-@@ -163,7 +163,7 @@
- $inc_def="outinc";
- $tmp_def="tmp";
- 
--$perl="perl" unless defined $perl;
-+$perl="$ENV{PERL}" unless defined $perl;
- $mkdir="-mkdir" unless defined $mkdir;
- 
- ($ssl,$crypto)=("ssl","crypto");
-@@ -345,6 +345,11 @@
- 	s/\s*$//; # was chop, didn't work in mixture of perls for Windows...
- 
- 	($key,$val)=/^([^=]+)=(.*)/;
-+
-+	# On some Windows machines, $val has linefeeds at the end, which confuses
-+	# subsequent code in this file. So we strip all whitespace at the end.
-+	$val =~ s/\s+$//;
-+
- 	if ($key eq "RELATIVE_DIRECTORY")
- 		{
- 		if ($lib ne "")
-diff -ur misc/openssl-1.0.2h/util/pl/VC-32.pl misc/build/openssl-1.0.2h/util/pl/VC-32.pl
---- misc/openssl-1.0.2h/util/pl/VC-32.pl	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/util/pl/VC-32.pl	2016-08-14 23:49:39.420331000 -0700
-@@ -30,7 +30,7 @@
- my $ff = "";
- 
- # C compiler stuff
--$cc='cl';
-+$cc=$ENV{'CC'};
- if ($FLAVOR =~ /WIN64/)
-     {
-     # Note that we currently don't have /WX on Win64! There is a lot of
-diff -Nur misc/build/openssl-1.0.2h/ms/do_win64a.bat misc/build/openssl-1.0.2h/ms/do_win64a.bat
---- misc/build/openssl-1.0.2h/ms/do_win64a.bat	2016-05-03 15:44:42.000000000 +0200
-+++ misc/build/openssl-1.0.2h/ms/do_win64a.bat	2018-03-07 07:59:41.870638000 +0200
+diff -ur misc/openssl-1.0.2p/ms/do_win64a.bat misc/build/openssl-1.0.2p/ms/do_win64a.bat
+--- misc/openssl-1.0.2p/ms/do_win64a.bat	2018-08-14 05:48:59.000000000 -0700
++++ misc/build/openssl-1.0.2p/ms/do_win64a.bat	2018-08-26 14:49:34.432647000 -0700
 @@ -1,19 +1,19 @@
 -perl util\mkfiles.pl >MINFO
 +%1 util\mkfiles.pl >MINFO
@@ -152,3 +128,39 @@ diff -Nur misc/build/openssl-1.0.2h/ms/do_win64a.bat misc/build/openssl-1.0.2h/m
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
+diff -ur misc/openssl-1.0.2p/util/mk1mf.pl misc/build/openssl-1.0.2p/util/mk1mf.pl
+--- misc/openssl-1.0.2p/util/mk1mf.pl	2018-08-14 05:48:59.000000000 -0700
++++ misc/build/openssl-1.0.2p/util/mk1mf.pl	2018-08-26 14:49:34.433421000 -0700
+@@ -163,7 +163,7 @@
+ $inc_def="outinc";
+ $tmp_def="tmp";
+ 
+-$perl="perl" unless defined $perl;
++$perl="$ENV{PERL}" unless defined $perl;
+ $mkdir="-mkdir" unless defined $mkdir;
+ 
+ ($ssl,$crypto)=("ssl","crypto");
+@@ -346,6 +346,11 @@
+ 	s/\s*$//; # was chop, didn't work in mixture of perls for Windows...
+ 
+ 	($key,$val)=/^([^=]+)=(.*)/;
++
++	# On some Windows machines, $val has linefeeds at the end, which confuses
++	# subsequent code in this file. So we strip all whitespace at the end.
++	$val =~ s/\s+$//;
++
+ 	if ($key eq "RELATIVE_DIRECTORY")
+ 		{
+ 		if ($lib ne "")
+diff -ur misc/openssl-1.0.2p/util/pl/VC-32.pl misc/build/openssl-1.0.2p/util/pl/VC-32.pl
+--- misc/openssl-1.0.2p/util/pl/VC-32.pl	2018-08-14 05:48:59.000000000 -0700
++++ misc/build/openssl-1.0.2p/util/pl/VC-32.pl	2018-08-26 14:49:57.553776000 -0700
+@@ -30,7 +30,7 @@
+ my $ff = "";
+ 
+ # C compiler stuff
+-$cc='cl';
++$cc=$ENV{'CC'};
+ if ($FLAVOR =~ /WIN64/)
+     {
+     # Note that we currently don't have /WX on Win64! There is a lot of

@@ -1,7 +1,7 @@
-diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
---- misc/openssl-1.0.2h/Configure	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/Configure	2016-08-14 22:07:21.328189000 -0700
-@@ -491,6 +491,9 @@
+diff -ur misc/openssl-1.0.2p/Configure misc/build/openssl-1.0.2p/Configure
+--- misc/openssl-1.0.2p/Configure	2018-08-14 05:49:04.000000000 -0700
++++ misc/build/openssl-1.0.2p/Configure	2018-08-26 13:35:54.485021000 -0700
+@@ -493,6 +493,9 @@
  
  "bsdi-elf-gcc",     "gcc:-DPERL5 -DL_ENDIAN -fomit-frame-pointer -O3 -march=i486 -Wall::(unknown)::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
  
@@ -11,15 +11,15 @@ diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
  "nextstep",	"cc:-O -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  "nextstep3.3",	"cc:-O3 -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  
-diff -ur misc/openssl-1.0.2h/Makefile.org misc/build/openssl-1.0.2h/Makefile.org
---- misc/openssl-1.0.2h/Makefile.org	2016-05-03 06:44:42.000000000 -0700
-+++ misc/build/openssl-1.0.2h/Makefile.org	2016-08-14 22:09:02.144742000 -0700
-@@ -206,7 +206,7 @@
+diff -ur misc/openssl-1.0.2p/Makefile.org misc/build/openssl-1.0.2p/Makefile.org
+--- misc/openssl-1.0.2p/Makefile.org	2018-08-14 05:48:56.000000000 -0700
++++ misc/build/openssl-1.0.2p/Makefile.org	2018-08-26 13:35:54.485813000 -0700
+@@ -208,7 +208,7 @@
  # same language for uniform treatment.
  BUILDENV=	LC_ALL=C PLATFORM='$(PLATFORM)' PROCESSOR='$(PROCESSOR)'\
  		CC='$(CC)' CFLAG='$(CFLAG)' 			\
 -		AS='$(CC)' ASFLAG='$(CFLAG) -c'			\
 +		AS='$(CC)' ASFLAG='$(CFLAG) -c -Wa,--noexecstack'	\
  		AR='$(AR)' NM='$(NM)' RANLIB='$(RANLIB)'	\
+ 		RC='$(RC)'              			\
  		CROSS_COMPILE='$(CROSS_COMPILE)'	\
- 		PERL='$(PERL)' ENGDIRS='$(ENGDIRS)'		\
