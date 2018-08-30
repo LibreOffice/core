@@ -83,7 +83,7 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
             *mem = nullptr;
             break;
         default:
-            SAL_WARN("mysqlc", "unknown enum_field_type");
+            SAL_WARN("connectivity.mysqlc", "unknown enum_field_type");
     }
 }
 
