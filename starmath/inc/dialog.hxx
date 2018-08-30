@@ -284,9 +284,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
         pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 27,
                                        pDrawingArea->get_text_height() * 9);
-        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     void calccols(vcl::RenderContext& rRenderContext);
@@ -315,9 +315,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
         pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 27,
                                        pDrawingArea->get_text_height() * 9);
-        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     void SetText(const OUString& rText) { m_aText = rText; }
@@ -386,9 +386,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
         pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 7,
                                        pDrawingArea->get_text_height() * 3);
-        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     void SetSymbol(const SmSym *pSym);

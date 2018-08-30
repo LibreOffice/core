@@ -81,9 +81,9 @@ SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWi
 
 void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     mxScrollArea->set_size_request(COLUMN_COUNT * pDrawingArea->get_approximate_digit_width() * 4,
                                    ROW_COUNT * pDrawingArea->get_text_height() * 2);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void SvxShowCharSet::init()

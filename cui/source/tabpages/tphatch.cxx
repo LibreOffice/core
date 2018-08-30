@@ -60,9 +60,9 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FUNIT_DEGREE))
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xLbLineType(m_xBuilder->weld_combo_box_text("linetypelb"))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), GetFrameWeld()))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
     , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), GetFrameWeld()))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pParent.GetFrameWeld()))
     , m_xHatchLB(new PresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnModify(m_xBuilder->weld_button("modify"))
@@ -425,7 +425,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aName, aDesc));
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
             break;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
         std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
         if (xWarnBox->run() != RET_OK)
             break;
@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
         if (xQueryBox->run() == RET_YES)
         {
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, PresetListBox*, void )
         OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetTabDialog()->GetFrameWeld(), aName, aDesc));
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetDialogFrameWeld(), aName, aDesc));
 
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
@@ -558,7 +558,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, PresetListBox*, void )
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetTabDialog()->GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 xBox->run();
             }

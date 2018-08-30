@@ -74,6 +74,30 @@ public:
     virtual short Ok() override;
 };
 
+// the tab dialog carrier of TabPages
+class SwTemplateDlgController : public SfxStyleDialogController
+{
+
+    SfxStyleFamily  nType;
+    sal_uInt16      nHtmlMode;
+    SwWrtShell*     pWrtShell;
+
+public:
+    /// @param sPage
+    /// Identifies name of page to open at by default
+    SwTemplateDlgController(weld::Window* pParent,
+                    SfxStyleSheetBase&  rBase,
+                    SfxStyleFamily      nRegion,
+                    const OString&      sPage,
+                    SwWrtShell*         pActShell,
+                    bool                bNew);
+
+    virtual void RefreshInputSet() override;
+
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual short Ok() override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

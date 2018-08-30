@@ -1136,6 +1136,7 @@ SvxShowText::SvxShowText(const VclPtr<VirtualDevice>& rVirDev)
 
 void SvxShowText::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     vcl::Font aFont = m_xVirDev->GetFont();
     Size aFontSize(aFont.GetFontSize().Width() * 5, aFont.GetFontSize().Height() * 5);
     aFont.SetFontSize(aFontSize);
@@ -1143,7 +1144,6 @@ void SvxShowText::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     m_xVirDev->SetFont(aFont);
     pDrawingArea->set_size_request(m_xVirDev->approximate_digit_width() + 2 * 12,
                                    m_xVirDev->LogicToPixel(aFontSize).Height() * 2);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
     m_xVirDev->Pop();
 }
 

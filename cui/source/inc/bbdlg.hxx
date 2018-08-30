@@ -25,21 +25,18 @@
     Description:   bunch the border background pages
  --------------------------------------------------------------------*/
 
-class SvxBorderBackgroundDlg: public SfxTabDialog
+class SvxBorderBackgroundDlg: public SfxTabDialogController
 {
 public:
-    SvxBorderBackgroundDlg(vcl::Window *pParent,
+    SvxBorderBackgroundDlg(weld::Window *pParent,
         const SfxItemSet& rCoreSet,
         bool bEnableSelector,
         bool bEnableDrawingLayerFillStyles);
 protected:
-    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
+    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
 
 private:
     bool        mbEnableBackgroundSelector : 1;         ///< for Border/Background
-    sal_uInt16  m_nBackgroundPageId;
-    sal_uInt16  m_nAreaPageId;
-    sal_uInt16  m_nTransparencePageId;
 };
 
 #endif

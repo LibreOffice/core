@@ -51,9 +51,9 @@ SwEnvPreview::SwEnvPreview()
 
 void SwEnvPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 20,
                                    pDrawingArea->get_text_height() * 8);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)

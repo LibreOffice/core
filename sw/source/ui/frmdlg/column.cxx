@@ -164,7 +164,7 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    m_pTabPage = static_cast<SwColumnPage*>(SwColumnPage::Create(m_xContentArea.get(), pColPgSet).get());
+    m_pTabPage = static_cast<SwColumnPage*>(SwColumnPage::Create(TabPageParent(m_xContentArea.get(), this), pColPgSet).get());
     m_pTabPage->GetApplyLabel()->show();
     weld::ComboBoxText* pApplyToLB = m_pTabPage->GetApplyComboBox();
     pApplyToLB->show();
