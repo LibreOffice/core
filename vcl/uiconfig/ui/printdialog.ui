@@ -330,6 +330,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|label7">Status:</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -342,6 +345,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|label8">Location:</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -354,6 +360,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|label9">Comment:</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -366,6 +375,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|status">Default printer</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -378,6 +390,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|location">Place</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -390,6 +405,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|comment">Long printer name</property>
                                             <property name="xalign">0</property>
+                                            <accessibility>
+                                              <role type="static"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
