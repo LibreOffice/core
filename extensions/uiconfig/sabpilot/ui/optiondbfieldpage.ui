@@ -20,6 +20,9 @@
         <property name="xalign">0</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">82</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -33,6 +36,9 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes" context="optiondbfieldpage|label1">Do you want to save the value in a database field?</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">False</property>

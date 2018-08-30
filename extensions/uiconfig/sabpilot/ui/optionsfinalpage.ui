@@ -45,6 +45,9 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="label" translatable="yes" context="optionsfinalpage|label2">These were all details needed to create the option group.</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">True</property>

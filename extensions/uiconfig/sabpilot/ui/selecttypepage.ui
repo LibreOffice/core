@@ -18,6 +18,9 @@ This wizard helps you create the data source.</property>
         <property name="max_width_chars">90</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -163,6 +166,9 @@ This wizard helps you create the data source.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="selecttypepage|label1">Select the type of your external address book:</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left_attach">0</property>

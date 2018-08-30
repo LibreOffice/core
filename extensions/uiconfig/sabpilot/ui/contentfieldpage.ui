@@ -111,6 +111,9 @@
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
                 <property name="wrap">True</property>
+                <accessibility>
+                  <role type="static"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -16,6 +16,9 @@
         <property name="label" translatable="yes" context="invokeadminpage|label2">To set up the new data source, additional information is required.
 
 Click the following button to open another dialog in which you then enter the necessary information.</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
       </object>
@@ -51,6 +54,9 @@ Click the following button to open another dialog in which you then enter the ne
 Before you proceed, please check the settings made, or (on the previous page) choose another address data source type.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>

@@ -17,6 +17,9 @@
         <property name="halign">start</property>
         <property name="label" translatable="yes" context="defaultfieldselectionpage|label1">Should one option field be selected as a default?</property>
         <property name="wrap">True</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">False</property>
