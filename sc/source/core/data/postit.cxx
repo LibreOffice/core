@@ -49,6 +49,7 @@
 #include <userdat.hxx>
 #include <detfunc.hxx>
 #include <editutil.hxx>
+#include <detdata.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <utility>

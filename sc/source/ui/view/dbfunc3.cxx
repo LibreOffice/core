@@ -2131,7 +2131,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         //! undo only needed data ?
 
         ScDocumentUniquePtr pUndoDoc;
-        ScOutlineTable* pUndoTab = nullptr;
+        std::unique_ptr<ScOutlineTable> pUndoTab;
         std::unique_ptr<ScRangeName> pUndoRange;
         std::unique_ptr<ScDBCollection> pUndoDB;
 
@@ -2142,7 +2142,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
             if (pTable)
             {
-                pUndoTab = new ScOutlineTable( *pTable );
+                pUndoTab.reset(new ScOutlineTable( *pTable ));
 
                 SCCOLROW nOutStartCol;                          // row/column status
                 SCCOLROW nOutStartRow;
@@ -2235,7 +2235,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
                                         nStartCol, nStartRow, nEndCol, nEndRow,
                                         nNewEndRow,
                                         nCurX, nCurY,
-                                        std::move(pUndoDoc), pUndoTab,
+                                        std::move(pUndoDoc), std::move(pUndoTab),
                                         std::move(pUndoRange), std::move(pUndoDB),
                                         pOld, pNew ) );
         }

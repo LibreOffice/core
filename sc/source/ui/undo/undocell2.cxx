@@ -11,6 +11,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <cellvalues.hxx>
+#include <detdata.hxx>
 
 namespace sc {
 
