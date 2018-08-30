@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0c193bd6",
+        "filename": "registry/source/regimpl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2018-08-30T20:44:17Z",
+      "side": 1,
+      "message": "Had to remove this conditional preprocess directive to stop undefined reference to `ORegistry::ROOT\u0027 using cpp (Ubuntu 5.4.0-6ubuntu1~16.04.10) 5.4.0 20160609",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 25
+      },
+      "revId": "60bc26354763fa3461db49a3e827da552484150d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
