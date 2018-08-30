@@ -161,7 +161,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @since LibreOffice 3.5
 */
-#ifdef _LIBCPP_VERSION
+#if defined _LIBCPP_VERSION || (defined _MSC_VER && _MSC_VER >= 1915)
 #define SAL_STREAM(stream) \
     (::std::ostringstream() << stream).str()
 #else
