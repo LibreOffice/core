@@ -275,15 +275,16 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
     return bOK;
 }
 
-bool CustomWidgetDraw::getNativeControlRegion(ControlType /*eType*/, ControlPart /*ePart*/,
-                                              const tools::Rectangle& /*rBoundingControlRegion*/,
-                                              ControlState /*eState*/,
-                                              const ImplControlValue& /*aValue*/,
-                                              const OUString& /*aCaption*/,
-                                              tools::Rectangle& /*rNativeBoundingRegion*/,
-                                              tools::Rectangle& /*rNativeContentRegion*/)
+bool CustomWidgetDraw::getNativeControlRegion(
+    ControlType eType, ControlPart ePart, const tools::Rectangle& rBoundingControlRegion,
+    ControlState eState, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
+    tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
-    return false;
+    if (s_pWidgetImplementation == nullptr)
+        return false;
+
+    return s_pWidgetImplementation->getRegion(eType, ePart, eState, rBoundingControlRegion,
+                                              rNativeBoundingRegion, rNativeContentRegion);
 }
 
 } // end vcl namespace
