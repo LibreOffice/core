@@ -1469,10 +1469,9 @@ void FontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aPrefSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
     pDrawingArea->set_size_request(aPrefSize.Width(), aPrefSize.Height());
-
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
 
     pImpl.reset(new FontPrevWin_Impl);
     SfxViewShell* pSh = SfxViewShell::Current();

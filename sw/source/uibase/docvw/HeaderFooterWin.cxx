@@ -438,7 +438,7 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
         aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
         aSet.Put( aBoxInfo );
 
-        if ( svx::ShowBorderBackgroundDlg( this, &aSet ) )
+        if (svx::ShowBorderBackgroundDlg(GetFrameWeld(), &aSet))
         {
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {

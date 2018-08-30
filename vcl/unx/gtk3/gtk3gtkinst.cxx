@@ -1837,12 +1837,14 @@ public:
     {
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
         assert(pGtkWidget);
-        GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
-        assert(pNewGtkParent);
         GtkWidget* pChild = pGtkWidget->getWidget();
         g_object_ref(pChild);
         gtk_container_remove(getContainer(), pChild);
-        gtk_container_add(pNewGtkParent->getContainer(), pChild);
+
+        GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
+        assert(!pNewParent || pNewGtkParent);
+        if (pNewGtkParent)
+            gtk_container_add(pNewGtkParent->getContainer(), pChild);
         g_object_unref(pChild);
     }
 };
