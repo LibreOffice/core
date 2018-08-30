@@ -148,8 +148,20 @@ namespace basegfx
 
     B2DHomMatrix& B2DHomMatrix::operator*=(const B2DHomMatrix& rMat)
     {
-        if(!rMat.isIdentity())
+        if(rMat.isIdentity())
+        {
+            // multiply with identity, no change -> nothing to do
+        }
+        else if(isIdentity())
+        {
+            // we are identity, result will be rMat -> assign
+            *this = rMat;
+        }
+        else
+        {
+            // multiply
             mpImpl->doMulMatrix(*rMat.mpImpl);
+        }
 
         return *this;
     }
