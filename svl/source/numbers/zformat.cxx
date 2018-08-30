@@ -2945,7 +2945,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     bool bInputLine;
     sal_Int32 nCntPost;
-    if ( rScan.GetStandardPrec() == 300 &&
+    if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
          0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
     {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
         bInputLine = true;
@@ -3807,7 +3807,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
     sal_Int32 nCntPost;
-    if ( rScan.GetStandardPrec() == 300 &&
+    if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
          0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
     {
         // round at 7 decimals (+5 of 86400 == 12 significant digits)
