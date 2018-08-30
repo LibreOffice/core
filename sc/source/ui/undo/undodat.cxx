@@ -1223,7 +1223,7 @@ bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                                 SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
-                                ScDocumentUniquePtr pNewUndoDoc, ScOutlineTable* pNewUndoTab,
+                                ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                                 std::unique_ptr<ScRangeName> pNewUndoRange, std::unique_ptr<ScDBCollection> pNewUndoDB,
                                 const ScRange* pOldQ, const ScRange* pNewQ ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1232,7 +1232,7 @@ ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
     nNewEndRow( nResultEndRow ),
     aCursorPos( nCurX,nCurY,nNewTab ),
     xUndoDoc(std::move(pNewUndoDoc)),
-    xUndoTable(pNewUndoTab),
+    xUndoTable(std::move(pNewUndoTab)),
     xUndoRange(std::move(pNewUndoRange)),
     xUndoDB(std::move(pNewUndoDB)),
     bQuerySize( false )
