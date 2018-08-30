@@ -63,6 +63,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/XEmbedPersist2.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -74,6 +75,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <comphelper/fileurl.hxx>
+#include <osl/file.hxx>
 
 using namespace com::sun::star;
 
@@ -129,6 +131,33 @@ const HtmlFrmOpts HTML_FRMOPTS_IFRAME         =
 const HtmlFrmOpts HTML_FRMOPTS_OLE_CSS1       =
     HtmlFrmOpts::SAlign |
     HtmlFrmOpts::SSpace;
+
+namespace
+{
+/**
+ * Calculates a filename for an image, provided the HTML file name, the image
+ * itself and a wanted extension.
+ */
+OUString lcl_CalculateFileName(const OUString* pOrigFileName, const Graphic& rGraphic,
+                               const OUString& rExtension)
+{
+    OUString aFileName;
+
+    if (pOrigFileName)
+        aFileName = *pOrigFileName;
+    INetURLObject aURL(aFileName);
+    OUString aName(aURL.getBase());
+    aName += "_";
+    aName += aURL.getExtension();
+    aName += "_";
+    aName += OUString::number(rGraphic.GetChecksum(), 16);
+    aURL.setBase(aName);
+    aURL.setExtension(rExtension);
+    aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+    return aFileName;
+}
+}
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
@@ -1465,18 +1494,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
         // Calculate the file name, which is meant to be the same as the
         // replacement image, just with a .ole extension.
-        OUString aFileName;
-        if (rHTMLWrt.GetOrigFileName())
-            aFileName = *rHTMLWrt.GetOrigFileName();
-        INetURLObject aURL(aFileName);
-        OUString aName(aURL.getBase());
-        aName += "_";
-        aName += aURL.getExtension();
-        aName += "_";
-        aName += OUString::number(aGraphic.GetChecksum(), 16);
-        aURL.setBase(aName);
-        aURL.setExtension("ole");
-        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString aFileName = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, "ole");
 
         // Write the data.
         SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
@@ -1527,11 +1545,22 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             // Otherwise the native data is just a grab-bag: ODummyEmbeddedObject.
             OUString aStreamName = rOLEObj.GetCurrentPersistName();
             uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
-            uno::Reference<io::XStream> xInStream
-                = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
-            uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
-            comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
-                                                          xOutStream->getOutputStream());
+            uno::Reference<io::XStream> xInStream;
+            try
+            {
+                // Even the native data may be missing.
+                xInStream = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
+            } catch (const uno::Exception& rException)
+            {
+                SAL_WARN("sw.html", "OutHTML_FrameFormatOLENodeGrf: failed to open stream element: " << rException);
+            }
+            if (xInStream.is())
+            {
+                uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+                comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
+                                                              xOutStream->getOutputStream());
+            }
+
             uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
             if (xOutStreamProps.is())
                 xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
@@ -1566,6 +1595,15 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             aFilterName = "PNG";
             nFlags = XOutFlags::NONE;
             aMimeType = "image/png";
+
+            if (aGraphic.GetType() == GraphicType::NONE)
+            {
+                // The OLE Object has no replacement image, write a stub.
+                aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, "png");
+                osl::File aFile(aGraphicURL);
+                aFile.open(osl_File_OpenFlag_Create);
+                aFile.close();
+            }
         }
 
         ErrCode nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
