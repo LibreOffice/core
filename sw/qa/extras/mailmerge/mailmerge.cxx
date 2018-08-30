@@ -860,5 +860,45 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-with
     }
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabelle1")
+{
+    executeMailMerge();
+
+    // Both male and female greetings were shown, thus each page had 3 paragraphs
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), nPhysPages); // 4 pages, each odd, and 3 blanks
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxMMComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs(xTextDocument->getText()));
+
+    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(1, xTextDocument->getText()),
+                                                uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann1,"), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(2, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(3, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann2,"), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(4, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(5, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann3,"), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(6, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(7, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann4,"), xParagraph->getString());
+
+    xParagraph.set(getParagraphOrTable(8, xTextDocument->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
