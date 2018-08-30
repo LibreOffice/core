@@ -606,7 +606,6 @@ certain functionality.
 @li @c lingucomponent
 @li @c linguistic
 @li @c lwp - lotuswordpro
-@li @c mysqlc
 @li @c opencl
 @li @c opencl.device
 @li @c opencl.file
