@@ -1339,7 +1339,8 @@ sal_uInt16 SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
 
 void SwHTMLWriter::OutLanguage( LanguageType nLang )
 {
-    if( LANGUAGE_DONTKNOW != nLang )
+    // ReqIF mode: consumers would ignore language anyway.
+    if (LANGUAGE_DONTKNOW != nLang && !mbReqIF)
     {
         OStringBuffer sOut;
         sOut.append(' ');
