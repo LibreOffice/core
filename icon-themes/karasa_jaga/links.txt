@@ -28,6 +28,7 @@ cmd/32/arrowstoolbox.png cmd/32/linearrowend.png
 cmd/32/autofilter.png cmd/32/datafilterautofilter.png
 cmd/32/autopilotmenu.png cmd/32/autoformat.png
 cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
+cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
 cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
 cmd/32/break.png cmd/32/polygon_unfilled.png
 cmd/32/browsebackward.png cmd/32/navigateback.png
@@ -46,7 +47,6 @@ cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
 cmd/32/circle.png cmd/32/basicshapes.circle.png
 cmd/32/circlepie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/closedocs.png cmd/32/closedoc.png
-cmd/32/closemasterview.png cmd/32/quit.png
 cmd/32/closepreview.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
@@ -59,7 +59,6 @@ cmd/32/connect.png cmd/32/polygon.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
 cmd/32/datafilterhideautofilter.png cmd/32/removefiltersort.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
-cmd/32/dataproviderrefresh.png cmd/32/calculate.png
 cmd/32/dbviewfunctions.png cmd/32/insertformula.png
 cmd/32/defaultparastyle.png cmd/32/controlcodes.png
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
@@ -76,6 +75,10 @@ cmd/32/exitsearch.png cmd/32/closedoc.png
 cmd/32/fieldmenu.png cmd/32/insertfield.png
 cmd/32/fieldnames.png cmd/32/fields.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
+cmd/32/fillmoderemovepredescessor.png cmd/32/cleararrowprecedents.png
+cmd/32/fillmoderemovesuccessor.png cmd/32/cleararrowdependents.png
+cmd/32/fillmodetracepredescessor.png cmd/32/showprecedents.png
+cmd/32/fillmodetracesuccessor.png cmd/32/showdependents.png
 cmd/32/flowchartshapes.png cmd/32/flowchartshapes.flowchart-internal-storage.png
 cmd/32/flowchartshapes.flowchart-alternate-process.png cmd/32/basicshapes.round-quadrat.png
 cmd/32/flowchartshapes.flowchart-connector.png cmd/32/basicshapes.circle.png
@@ -107,7 +110,6 @@ cmd/32/hyperlinkdialog.png cmd/32/inserthyperlink.png
 cmd/32/hu/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/importfromfile.png cmd/32/importdialog.png
 cmd/32/indexesmenu.png cmd/32/insertindexesentry.png
-cmd/32/inputlinevisible.png cmd/32/insertformula.png
 cmd/32/insertavmedia.png cmd/32/avmediaplayer.png
 cmd/32/insertcell.png cmd/32/insertcellsright.png
 cmd/32/insertcolumndialog.png cmd/32/insertcolumns.png
@@ -143,6 +145,10 @@ cmd/32/insertnumericfield.png cmd/32/numericfield.png
 cmd/32/insertobjctrl.png cmd/32/insertobject.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
+cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
+cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertplugin.png cmd/32/addons.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -151,10 +157,7 @@ cmd/32/insertrowdialog.png cmd/32/insertrows.png
 cmd/32/insertrowsbefore.png cmd/32/insertrows.png
 cmd/32/insertrowsmenu.png cmd/32/insertrows.png
 cmd/32/insertsignatureline.png cmd/32/signaturelinedialog.png
-cmd/32/insertslidefield.png cmd/32/insertpagenumberfield.png
-cmd/32/insertslidenumber.png cmd/32/insertpagenumberfield.png
-cmd/32/insertslidesfield.png cmd/32/insertpagecountfield.png
-cmd/32/insertslidetitlefield.png cmd/32/inserttitlefield.png
+cmd/32/insertslidefield.png cmd/32/insertslidenumber.png
 cmd/32/inserttimefield.png cmd/32/timefield.png
 cmd/32/inserttimefieldfix.png cmd/32/timefield.png
 cmd/32/inserttimefieldvar.png cmd/32/timefield.png
@@ -175,6 +178,7 @@ cmd/32/linespacing.png cmd/32/spacepara15.png
 cmd/32/linestyle.png cmd/32/borderdialog.png
 cmd/32/linetoolbox.png cmd/32/freeline.png
 cmd/32/loadstyles.png cmd/32/open.png
+cmd/32/macroorganizer.png cmd/32/formproperties.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/mailmergefirstentry.png cmd/32/firstrecord.png
 cmd/32/mailmergelastentry.png cmd/32/lastrecord.png
@@ -250,6 +254,7 @@ cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.rectangle.png
 cmd/32/sheetcommentmenu.png cmd/32/insertannotation.png
 cmd/32/showgraphics.png cmd/32/graphic.png
+cmd/32/shownote.png cmd/32/showannotations.png
 cmd/32/showpropbrowser.png cmd/32/showbrowser.png
 cmd/32/showruler.png cmd/32/ruler.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
@@ -273,6 +278,7 @@ cmd/32/templatemenu.png cmd/32/newdoc.png
 cmd/32/textalign.png cmd/32/alignblock.png
 cmd/32/texttoolbox.png cmd/32/text.png
 cmd/32/thesaurusdialog.png cmd/32/thesaurus.png
+cmd/32/toggleformula.png cmd/32/insertformula.png
 cmd/32/togglemergecells.png cmd/32/mergecells.png
 cmd/32/tr/underlinesimple.png cmd/32/tr/underline.png
 cmd/32/tracechangemode.png cmd/32/trackchanges.png
@@ -345,6 +351,7 @@ cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/lc_autofilter.png cmd/lc_datafilterautofilter.png
 cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
+cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_break.png cmd/lc_polygon_unfilled.png
 cmd/lc_browsebackward.png cmd/lc_navigateback.png
@@ -362,7 +369,6 @@ cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_closedocs.png cmd/lc_closedoc.png
-cmd/lc_closemasterview.png cmd/lc_quit.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
@@ -375,7 +381,6 @@ cmd/lc_connect.png cmd/lc_polygon.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
-cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
 cmd/lc_dbviewfunctions.png cmd/lc_insertformula.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
@@ -391,6 +396,10 @@ cmd/lc_exitsearch.png cmd/lc_closedoc.png
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_fieldnames.png cmd/lc_fields.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
+cmd/lc_fillmoderemovepredescessor.png cmd/lc_cleararrowprecedents.png
+cmd/lc_fillmoderemovesuccessor.png cmd/lc_cleararrowdependents.png
+cmd/lc_fillmodetracepredescessor.png cmd/lc_showprecedents.png
+cmd/lc_fillmodetracesuccessor.png cmd/lc_showdependents.png
 cmd/lc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-internal-storage.png
 cmd/lc_flowchartshapes.flowchart-alternate-process.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_basicshapes.circle.png
@@ -420,7 +429,6 @@ cmd/lc_hscroll.png cmd/lc_hscrollbar.png
 cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
 cmd/lc_importfromfile.png cmd/lc_importdialog.png
 cmd/lc_indexesmenu.png cmd/lc_insertindexesentry.png
-cmd/lc_inputlinevisible.png cmd/lc_insertformula.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/lc_insertcell.png cmd/lc_insertcellsright.png
 cmd/lc_insertcolumndialog.png cmd/lc_insertcolumns.png
@@ -456,6 +464,10 @@ cmd/lc_insertnumericfield.png cmd/lc_numericfield.png
 cmd/lc_insertobjctrl.png cmd/lc_insertobject.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
+cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertplugin.png cmd/lc_addons.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -464,10 +476,7 @@ cmd/lc_insertrowdialog.png cmd/lc_insertrows.png
 cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertrowsmenu.png cmd/lc_insertrows.png
 cmd/lc_insertsignatureline.png cmd/lc_signaturelinedialog.png
-cmd/lc_insertslidefield.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertslidenumber.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertslidesfield.png cmd/lc_insertpagecountfield.png
-cmd/lc_insertslidetitlefield.png cmd/lc_inserttitlefield.png
+cmd/lc_insertslidefield.png cmd/lc_insertslidenumber.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldvar.png cmd/lc_timefield.png
@@ -480,6 +489,7 @@ cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/lc_linestyle.png cmd/lc_borderdialog.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/lc_macroorganizer.png cmd/lc_formproperties.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
 cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
@@ -551,6 +561,7 @@ cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_sheetcommentmenu.png cmd/lc_insertannotation.png
 cmd/lc_showgraphics.png cmd/lc_graphic.png
+cmd/lc_shownote.png cmd/lc_showannotations.png
 cmd/lc_showpropbrowser.png cmd/lc_showbrowser.png
 cmd/lc_showruler.png cmd/lc_ruler.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
@@ -573,6 +584,7 @@ cmd/lc_templatemenu.png cmd/lc_newdoc.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
+cmd/lc_toggleformula.png cmd/lc_insertformula.png
 cmd/lc_togglemergecells.png cmd/lc_mergecells.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 cmd/lc_underlinesimple.png cmd/lc_underline.png
@@ -610,6 +622,7 @@ cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
 cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
 cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
+cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
 cmd/sc_break.png cmd/sc_polygon_unfilled.png
 cmd/sc_browsebackward.png cmd/sc_navigateback.png
@@ -627,7 +640,6 @@ cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
-cmd/sc_closemasterview.png cmd/sc_quit.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
@@ -640,7 +652,6 @@ cmd/sc_connect.png cmd/sc_polygon.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
-cmd/sc_dataproviderrefresh.png cmd/sc_calculate.png
 cmd/sc_dbviewfunctions.png cmd/sc_insertformula.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
@@ -656,6 +667,10 @@ cmd/sc_exitsearch.png cmd/sc_closedoc.png
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_fieldnames.png cmd/sc_fields.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
+cmd/sc_fillmoderemovepredescessor.png cmd/sc_cleararrowprecedents.png
+cmd/sc_fillmoderemovesuccessor.png cmd/sc_cleararrowdependents.png
+cmd/sc_fillmodetracepredescessor.png cmd/sc_showprecedents.png
+cmd/sc_fillmodetracesuccessor.png cmd/sc_showdependents.png
 cmd/sc_flowchartshapes.png cmd/sc_flowchartshapes.flowchart-internal-storage.png
 cmd/sc_flowchartshapes.flowchart-alternate-process.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_flowchartshapes.flowchart-connector.png cmd/sc_basicshapes.circle.png
@@ -685,7 +700,6 @@ cmd/sc_hscroll.png cmd/sc_hscrollbar.png
 cmd/sc_hyperlinkdialog.png cmd/sc_inserthyperlink.png
 cmd/sc_importfromfile.png cmd/sc_importdialog.png
 cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
-cmd/sc_inputlinevisible.png cmd/sc_insertformula.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
@@ -721,6 +735,10 @@ cmd/sc_insertnumericfield.png cmd/sc_numericfield.png
 cmd/sc_insertobjctrl.png cmd/sc_insertobject.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
+cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertplugin.png cmd/sc_addons.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
@@ -729,10 +747,7 @@ cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertsignatureline.png cmd/sc_signaturelinedialog.png
-cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
-cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertslidefield.png cmd/sc_insertslidenumber.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
@@ -745,6 +760,7 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/sc_linestyle.png cmd/sc_borderdialog.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_loadstyles.png cmd/sc_open.png
+cmd/sc_macroorganizer.png cmd/sc_formproperties.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
 cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
@@ -816,6 +832,7 @@ cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
+cmd/sc_shownote.png cmd/sc_showannotations.png
 cmd/sc_showpropbrowser.png cmd/sc_showbrowser.png
 cmd/sc_showruler.png cmd/sc_ruler.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
@@ -838,6 +855,7 @@ cmd/sc_templatemenu.png cmd/sc_newdoc.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
+cmd/sc_toggleformula.png cmd/sc_insertformula.png
 cmd/sc_togglemergecells.png cmd/sc_mergecells.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
@@ -1059,6 +1077,7 @@ sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
 sc/res/na05.png cmd/sc_upsearch.png
 sc/res/na06.png cmd/sc_downsearch.png
+sc/res/nc02.png cmd/sc_addname.png
 sc/res/nc04.png cmd/sc_graphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc08.png cmd/sc_graphic.png
