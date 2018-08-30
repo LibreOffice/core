@@ -20,7 +20,7 @@
 #include <dispatch/interceptionhelper.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -74,7 +74,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     // c) No registered interceptor => use our direct slave.
     //    This helper exist by design and must be valid everytimes ...
     //    But to be more feature proof - we should check that .-)
-    if (!xInterceptor.is() && m_xSlave.is())
+    //if (!xInterceptor.is() && m_xSlave.is())
         xInterceptor = m_xSlave;
 
     aReadLock.clear();
@@ -103,6 +103,19 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Inte
 void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw(css::uno::RuntimeException, std::exception)
 {
+    // testrun
+    {
+        css::uno::Reference<css::frame::XFrame> xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+        css::util::URL aTargetURL(".uno:Save", ".uno:Save", ".uno:", "", "", "", 0, "Save", "", "",
+                                  "");
+        /*aTargetURL.Complete = ".uno:Save";
+        css::uno::Reference<css::util::XURLTransformer> m_xUrlTransformer
+            = css::util::URLTransformer::create(xOwner);
+        if (m_xUrlTransformer.is())
+            m_xUrlTransformer->parseStrict(aTargetURL);*/
+        xInterceptor->queryDispatch(aTargetURL, OUString(), 0);
+    }
+
     // reject incorrect calls of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
