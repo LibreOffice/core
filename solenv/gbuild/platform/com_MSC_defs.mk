@@ -167,7 +167,7 @@ endif
 
 gb_CXXFLAGS := \
 	-utf-8 \
-	-std:c++17 \
+	$(CXXFLAGS_CXX11) \
 	-Gd \
 	-GR \
 	-Gs \

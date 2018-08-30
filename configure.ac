@@ -6174,7 +6174,7 @@ CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     AC_MSG_CHECKING([whether $CXX supports C++11])
     AC_MSG_RESULT(yes)
-    # MSVC supports (a subset of) CXX11 without any switch
+    CXXFLAGS_CXX11=-std:c++17
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     HAVE_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
@@ -6407,14 +6407,18 @@ AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #if !defined __cpp_guaranteed_copy_elision
+        // At least VS 2017 15.8.1 defines __cpp_guaranteed_copy_elision as 201606L without actually
+        // supporting it:
+        #if !defined __cpp_guaranteed_copy_elision || (defined _MSC_VER && !defined __clang__)
         struct S {
         private:
             S(S const &);
         public:
-            S copy() const { return *this; }
+            S();
+            ~S();
         };
-        void f(S & s) { S c(s.copy()); }
+        S copy();
+        void f() { S c(copy()); }
         #endif
     ])], [
         AC_DEFINE([HAVE_CPP_GUARANTEED_COPY_ELISION],[1])
