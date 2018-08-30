@@ -7900,12 +7900,20 @@ void ScInterpreter::ScIndirect()
         // either CONV_A1_XL_A1 was explicitly configured, or it wasn't possible
         // to determine which syntax to use during doc import
         bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1);
-
-        if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
+        if (nParamCount == 2)
         {
-            // Overwrite the config and try Excel R1C1.
-            eConv = FormulaGrammar::CONV_XL_R1C1;
-            bTryXlA1 = false;
+            const FormulaToken* p = pStack[nParamCount-1];
+            if (p->GetType() == svMissing)
+            {
+                Pop();
+            }
+            else
+            if (0.0 == ::rtl::math::approxFloor(GetDouble()))
+            {
+                // Overwrite the config and try Excel R1C1.
+                eConv = FormulaGrammar::CONV_XL_R1C1;
+                bTryXlA1 = false;
+            }
         }
 
 
