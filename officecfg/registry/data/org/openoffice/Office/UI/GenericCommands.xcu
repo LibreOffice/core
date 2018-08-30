@@ -1697,6 +1697,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Edit Macros</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:LibSelector" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3393,6 +3396,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Open Template...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:OpenUrl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -4060,6 +4066,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Unformatted Text</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Delete" oor:op="replace">
@@ -5176,6 +5185,9 @@
       <node oor:name=".uno:MacroOrganizer?TabId:short=1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Organize ~Dialogs...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ScriptOrganizer" oor:op="replace">
