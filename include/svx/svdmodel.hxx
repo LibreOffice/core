@@ -183,7 +183,7 @@ private:
 protected:
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
-    Link<SdrUndoAction*,void>  aUndoLink;  // link to a NotifyUndo-Handler
+    Link<std::unique_ptr<SdrUndoAction>,void>  aUndoLink;  // link to a NotifyUndo-Handler
     Size           aMaxObjSize; // e.g. for auto-growing text
     Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
     MapUnit        eObjUnit;   // see above
@@ -522,7 +522,7 @@ public:
     //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // When calling the handler ownership is transferred;
     // The UndoAction belongs to the Handler, not the SdrModel.
-    void        SetNotifyUndoActionHdl(const Link<SdrUndoAction*,void>& rLink)  { aUndoLink=rLink; }
+    void        SetNotifyUndoActionHdl(const Link<std::unique_ptr<SdrUndoAction>,void>& rLink)  { aUndoLink=rLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routed to this interface if given */

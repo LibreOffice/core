@@ -406,7 +406,7 @@ void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
     {
         if (aUndoLink.IsSet())
         {
-            aUndoLink.Call(pUndo.release());
+            aUndoLink.Call(std::move(pUndo));
         }
         else
         {

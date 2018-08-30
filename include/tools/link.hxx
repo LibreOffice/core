@@ -21,8 +21,9 @@
 #define INCLUDED_TOOLS_LINK_HXX
 
 #include <sal/config.h>
-
 #include <sal/types.h>
+#include <type_traits>
+#include <utility>
 
 #define DECL_LINK(Member, ArgType, RetType) \
     static RetType LinkStub##Member(void *, ArgType); \
@@ -70,7 +71,7 @@
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member)
 
-template<typename Arg, typename Ret>
+template<typename Arg, typename Ret, class Enable = void>
 class SAL_WARN_UNUSED Link {
 public:
     typedef Ret Stub(void *, Arg);
@@ -82,6 +83,47 @@ public:
 
     Ret Call(Arg data) const
     { return function_ == nullptr ? Ret() : (*function_)(instance_, data); }
+
+    bool IsSet() const { return function_ != nullptr; }
+
+    bool operator !() const { return !IsSet(); }
+
+    bool operator <(Link const & other) const {
+        char* ptr1 = reinterpret_cast<char*>(function_);
+        char* ptr2 = reinterpret_cast<char*>(other.function_);
+        if (ptr1 < ptr2)
+            return true;
+        else if (ptr1 > ptr2)
+            return false;
+        else
+            return instance_ < other.instance_;
+    };
+
+    bool operator ==(Link const & other) const
+    { return function_ == other.function_ && instance_ == other.instance_; };
+
+    void *GetInstance() const { return instance_; }
+
+private:
+    Stub * function_;
+    void * instance_;
+};
+
+/**
+  Specialisation for non-reference types like std::unique_ptr, which need a std::move in Call.
+*/
+template<typename Arg, typename Ret>
+class SAL_WARN_UNUSED Link<Arg, Ret, typename std::enable_if<!std::is_reference<Arg>::value>::type> {
+public:
+    typedef Ret Stub(void *, Arg);
+
+    Link(): function_(nullptr), instance_(nullptr) {}
+
+    Link(void * instance, Stub * function):
+        function_(function), instance_(instance) {}
+
+    Ret Call(Arg data) const
+    { return function_ == nullptr ? Ret() : (*function_)(instance_, std::move(data)); }
 
     bool IsSet() const { return function_ != nullptr; }
 
