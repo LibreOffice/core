@@ -200,7 +200,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
     , m_xContainer(m_xDialog->weld_content_area())
 {
     // Insert TabPage
-    pPage.reset(pViewShell->CreatePrintOptionsPage(m_xContainer.get(), *pOptions));
+    pPage.reset(pViewShell->CreatePrintOptionsPage(TabPageParent(m_xContainer.get(), this), *pOptions));
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {

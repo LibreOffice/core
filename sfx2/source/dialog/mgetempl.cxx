@@ -47,7 +47,7 @@
  */
 SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "sfx/ui/managestylepage.ui", "ManageStylePage", &rAttrSet)
-    , pStyle(&static_cast<SfxStyleDialog*>(GetParentDialog())->GetStyleSheet())
+    , pStyle(pParent.pPage ? &static_cast<SfxStyleDialogController*>(pParent.pController)->GetStyleSheet() : &static_cast<SfxStyleDialog*>(GetParentDialog())->GetStyleSheet())
     , pItem(nullptr)
     , bModified(false)
     , aName(pStyle->GetName())
