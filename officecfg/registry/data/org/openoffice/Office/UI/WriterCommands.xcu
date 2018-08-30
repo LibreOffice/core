@@ -42,10 +42,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Header</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertFooter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Footer</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ExpandGlossary" oor:op="replace">
@@ -91,10 +97,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">He~ader</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertPageFooter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Foote~r</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:PreviewZoom" oor:op="replace">
@@ -459,6 +471,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Column Break</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -514,6 +529,9 @@
       <node oor:name=".uno:InsertLinebreak" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Manual Row Break</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertObjectDialog" oor:op="replace">
@@ -1192,6 +1210,9 @@
       <node oor:name=".uno:FootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Footnotes and Endnotes...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:CurrentFootnoteDialog" oor:op="replace">
