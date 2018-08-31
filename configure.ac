@@ -4639,7 +4639,14 @@ AC_SUBST(ENABLE_WERROR)
 dnl Check for --enable-assert-always-abort, set ASSERT_ALWAYS_ABORT
 dnl ===================================================================
 AC_MSG_CHECKING([whether to have assert() failures abort even without --enable-debug])
-if test -n "$enable_assert_always_abort" -a "$enable_assert_always_abort" = "yes"; then
+if test -z "$enable_assert_always_abort"; then
+   if test "$ENABLE_DEBUG" = TRUE; then
+       enable_assert_always_abort=yes
+   else
+       enable_assert_always_abort=no
+   fi
+fi
+if test "$enable_assert_always_abort" = "yes"; then
     ASSERT_ALWAYS_ABORT="TRUE"
     AC_MSG_RESULT([yes])
 else

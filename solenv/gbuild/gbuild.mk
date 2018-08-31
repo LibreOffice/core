@@ -204,12 +204,12 @@ gb_GLOBALDEFS += -DTIMELOG \
 
 endif
 
-ifeq ($(gb_DEBUGLEVEL),0)
-
 ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),FALSE)
 gb_GLOBALDEFS += -DNDEBUG \
 
 endif
+
+ifeq ($(gb_DEBUGLEVEL),0)
 
 ifeq ($(ENABLE_SAL_LOG),TRUE)
 gb_GLOBALDEFS += -DSAL_LOG_INFO \
