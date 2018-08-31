@@ -700,6 +700,15 @@ private:
         return OUString::number(nVal);
     }
 
+    // Obtain the string of the fraction of second, without leading "0.",
+    // rounded to nFractionDecimals (or nFractionDecimals+1 if
+    // bAddOneRoundingDecimal==true but then truncated at nFractionDecimals,
+    // for use with the result of tools::Time::GetClock()) with the length of
+    // nFractionDecimals, unless nMinimumInputLineDecimals>0 is given for input
+    // line string where extra trailing "0" are discarded.
+    SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
+            int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals );
+
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
     SVL_DLLPRIVATE void impTransliterateImpl(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const;
