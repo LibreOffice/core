@@ -36,6 +36,7 @@
 #include <test/sheet/xspreadsheet.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/table/xcolumnrowrange.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
@@ -60,6 +61,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellRangeMovement,
                                                public apitest::XCellSeries,
+                                               public apitest::XColumnRowRange,
                                                public apitest::XDataPilotTablesSupplier,
                                                public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
@@ -135,6 +137,10 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XColumnRowRange
+    CPPUNIT_TEST(testGetColumns);
+    CPPUNIT_TEST(testGetRows);
 
     // XDataPilotTablesSupplier
     CPPUNIT_TEST(testGetDataPilotTables);

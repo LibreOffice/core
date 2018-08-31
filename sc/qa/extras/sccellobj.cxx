@@ -12,6 +12,7 @@
 #include <test/sheet/xcelladdressable.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
+#include <test/table/xcolumnrowrange.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
@@ -30,6 +31,7 @@ namespace sc_apitest {
 
 class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XCellAddressable,
+                                         public apitest::XColumnRowRange,
                                          public apitest::XFormulaQuery,
                                          public apitest::XSheetAnnotationAnchor
 {
@@ -48,6 +50,10 @@ public:
 
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);
+
+    // XColumnRowRange
+    CPPUNIT_TEST(testGetColumns);
+    CPPUNIT_TEST(testGetRows);
 
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
