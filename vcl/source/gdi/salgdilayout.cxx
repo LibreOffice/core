@@ -66,19 +66,6 @@ SalGraphics::~SalGraphics()
 {
 }
 
-#if HAVE_FEATURE_OPENGL
-
-namespace
-{
-    void disableOpenGLAndTerminateForRestart()
-    {
-        OpenGLZone::hardDisable();
-#ifdef _WIN32
-        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
-#endif
-    }
-}
-
 basegfx::SystemDependentDataManager& SalGraphics::getSystemDependentDataManager()
 {
     typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
@@ -204,6 +191,19 @@ basegfx::SystemDependentDataManager& SalGraphics::getSystemDependentDataManager(
     return *aSystemDependentDataBuffer.get();
 }
 
+#if HAVE_FEATURE_OPENGL
+
+namespace
+{
+    void disableOpenGLAndTerminateForRestart()
+    {
+        OpenGLZone::hardDisable();
+#ifdef _WIN32
+        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
+#endif
+    }
+}
+
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
@@ -223,6 +223,7 @@ rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
     }
     return nullptr;
 }
+
 #endif
 
 bool SalGraphics::drawTransformedBitmap(
