@@ -2056,7 +2056,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if( FN_UNO_GRAPHIC_URL == pEntry->nWID )
         {
-            throw uno::RuntimeException("Getting from this property is not unsupported");
+            throw uno::RuntimeException("Getting from this property is not supported");
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
         {

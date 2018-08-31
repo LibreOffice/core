@@ -1450,7 +1450,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_GRAPHIC_URL:
     {
-        throw uno::RuntimeException("Getting from this property is not unsupported");
+        throw uno::RuntimeException("Getting from this property is not supported");
         break;
     }
 
