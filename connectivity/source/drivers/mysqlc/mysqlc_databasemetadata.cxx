@@ -895,16 +895,68 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getExportedKeys(const Any& /*c
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*catalog*/,
-                                                                  const rtl::OUString& /*schema*/,
-                                                                  const rtl::OUString& /*table*/)
+                                                                  const rtl::OUString& schema,
+                                                                  const rtl::OUString& table)
 {
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
                                      UNO_QUERY);
-    std::vector<std::vector<Any>> rRows;
-    // TODO implement
-    SAL_WARN("connectivity.mysqlc", "method not implemented");
-    lcl_setRows_throw(xResultSet, 9, rRows);
+
+    rtl::OUString query(
+        "SELECT refi.CONSTRAINT_CATALOG, k.COLUMN_NAME, "
+        " refi.UNIQUE_CONSTRAINT_CATALOG, "
+        " refi.UNIQUE_CONSTRAINT_SCHEMA, refi.REFERENCED_TABLE_NAME, k.REFERENCED_COLUMN_NAME, "
+        " refi.UPDATE_RULE, refi.DELETE_RULE, refi.CONSTRAINT_NAME "
+        " FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS as refi"
+        " INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as k ON k.CONSTRAINT_NAME = "
+        "refi.CONSTRAINT_NAME "
+        " and k.TABLE_NAME = refi.TABLE_NAME "
+        " WHERE refi.CONSTRAINT_SCHEMA LIKE "
+        "'?' AND refi.TABLE_NAME='?'"); // TODO
+    query = query.replaceFirst("?", schema);
+    query = query.replaceFirst("?", table);
+
+    std::vector<std::vector<Any>> aRows;
+    Reference<XStatement> statement = m_rConnection.createStatement();
+    Reference<XResultSet> rs = statement->executeQuery(query.getStr());
+    Reference<XRow> xRow(rs, UNO_QUERY_THROW);
+
+    while (rs->next())
+    {
+        std::vector<Any> aRow{ Any() }; // 0. element is unused
+
+        // primary key catalog
+        aRow.push_back(makeAny(xRow->getString(1)));
+        // primary key schema
+        aRow.push_back(makeAny(schema));
+        // primary key table
+        aRow.push_back(makeAny(table));
+        // primary column name
+        aRow.push_back(makeAny(xRow->getString(2)));
+
+        // fk table catalog
+        aRow.push_back(makeAny(xRow->getString(3)));
+        // fk schema
+        aRow.push_back(makeAny(xRow->getString(4)));
+        // fk table
+        aRow.push_back(makeAny(xRow->getString(5)));
+        // fk column name
+        aRow.push_back(makeAny(xRow->getString(6)));
+        // KEY_SEQ
+        aRow.push_back(makeAny(sal_Int32{ 0 })); // TODO
+        // update rule
+        aRow.push_back(makeAny(xRow->getShort(7)));
+        // delete rule
+        aRow.push_back(makeAny(xRow->getShort(8)));
+        // foreign key name
+        aRow.push_back(makeAny(xRow->getShort(9)));
+        // primary key name
+        aRow.push_back(makeAny(OUString{})); // TODO
+        // deferrability
+        aRow.push_back(makeAny(Deferrability::NONE));
+        aRows.push_back(aRow);
+    }
+    lcl_setRows_throw(xResultSet, 1, aRows);
     return xResultSet;
 }
 
