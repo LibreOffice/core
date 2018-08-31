@@ -6429,6 +6429,25 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX supports inline variables])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+        #if !defined __cpp_inline_variables
+        // This tests for one specific aspect of inline variables that is actually used by by
+        // ORegistry::ROOT (registry/source/regimpl.cxx):
+        struct S { constexpr S() {} };
+        struct T { static constexpr S s{}; };
+        S const * f() { return &T::s; }
+        #endif
+    ]])], [
+        AC_DEFINE([HAVE_CPP_INLINE_VARIABLES],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX has a fix for CWG1579])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS

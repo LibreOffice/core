@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <config_global.h>
 #include <o3tl/numeric.hxx>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
@@ -1226,7 +1227,7 @@ public:
     }
 };
 
-#if __cplusplus <= 201402 || (defined __GNUC__ && __GNUC__ <= 6 && !defined __clang__)
+#if !HAVE_CPP_INLINE_VARIABLES
 constexpr sal_Int32 SwXMLTableContext::MAX_WIDTH;
 #endif
 
