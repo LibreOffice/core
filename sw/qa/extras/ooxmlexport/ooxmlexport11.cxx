@@ -390,6 +390,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354, "tdf104354.docx")
                          getProperty<sal_Int32>(xShape->getEnd(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaInSection.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494),
+                         getProperty<sal_Int32>(getParagraphOfText(1, xText), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
 {
     // Select the second run containing the page number field
