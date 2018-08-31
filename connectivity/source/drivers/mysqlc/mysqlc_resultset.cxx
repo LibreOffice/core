@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const rtl::OUString& columnName)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    MYSQL_FIELD* pFields = mysql_fetch_field(m_pResult);
+    MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
     for (unsigned int i = 0; i < fieldCount; ++i)
     {
         if (columnName.equalsIgnoreAsciiCaseAscii(pFields[i].name))
@@ -541,8 +541,7 @@ void SAL_CALL OResultSet::beforeFirst()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::beforeFirst", *this);
+    mysql_data_seek(m_pResult, 0);
 }
 
 void SAL_CALL OResultSet::afterLast()
