@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_774f74bd",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T11:35:13Z",
+      "side": 1,
+      "message": "Hint: instead of the std::find it should be possible to use\n\n if (std::none_of( aCondFormatData.begin(), aCondFormatData.end(), nIndex))\n\nI didn\u0027t try though.",
+      "revId": "2589bd97636e987d4e6ba86e5be4573db8ee5fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
