@@ -20,8 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 
+#include <map>
+
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vcllayout.hxx>
 #include <swtypes.hxx>
 #include "swcache.hxx"
 #include "TextFrameIndex.hxx"
@@ -54,6 +57,20 @@ extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 extern sal_uInt8 *pMagicNo;
 
+/**
+ * Defines a substring on a given output device, to be used as an std::map<>
+ * key.
+ */
+struct SwTextGlyphsKey
+{
+    VclPtr<OutputDevice> m_pOutputDevice;
+    OUString m_aText;
+    sal_Int32 m_nIndex;
+    sal_Int32 m_nLength;
+
+};
+bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r);
+
 class SwFntObj : public SwCacheObj
 {
     friend class SwFntAccess;
@@ -74,6 +91,9 @@ class SwFntObj : public SwCacheObj
     sal_uInt16 m_nZoom;
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
+
+    /// Cache of already calculated layout glyphs.
+    std::map<SwTextGlyphsKey, SalLayoutGlyphs> m_aTextGlyphs;
 
     static long nPixWidth;
     static MapMode *pPixMap;
