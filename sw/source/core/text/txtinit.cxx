@@ -57,7 +57,6 @@ void TextInit_()
 #endif
     );
     SwTextFrame::SetTextCache( pTextCache );
-    pWaveCol = new Color(COL_GRAY);
     PROTOCOL_INIT
 }
 
@@ -68,7 +67,6 @@ void TextFinit()
     delete pSwFontCache;
     delete pFntCache;
     delete pBlink;
-    delete pWaveCol;
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();
 }
