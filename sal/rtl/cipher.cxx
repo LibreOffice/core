@@ -715,6 +715,7 @@ static rtlCipherError BF_update(
     /* Update. */
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
     assert(eMode == rtl_Cipher_ModeStream);
+    (void) eMode;
     (void) eDirection;
     while (nDatLen > std::numeric_limits<int>::max()) {
         int outl;
