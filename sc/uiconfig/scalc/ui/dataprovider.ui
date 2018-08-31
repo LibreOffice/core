@@ -105,6 +105,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="dataprovider|label6">URL:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">url</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -163,6 +165,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="dataprovider|label_db">Database Range:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">combobox_db</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -197,6 +201,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="dataprovider|label_provider">Data Provider:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">combobox_provider</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -232,6 +238,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="dataprovider|label_search">Search String:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">edit_id</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
