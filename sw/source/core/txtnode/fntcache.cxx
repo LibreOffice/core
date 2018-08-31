@@ -69,7 +69,7 @@ SwFntObj *pLastFont = nullptr;
 // "MagicNumber" used to identify Fonts
 sal_uInt8* pMagicNo = nullptr;
 
-Color *pWaveCol = nullptr;
+static constexpr Color gWaveCol(COL_GRAY);
 
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = nullptr;
@@ -1682,9 +1682,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             rInf.GetOut().Push();
 
                         Color aCol( rInf.GetOut().GetLineColor() );
-                        bool bColSave = aCol != *pWaveCol;
+                        bool bColSave = aCol != gWaveCol;
                         if ( bColSave )
-                            rInf.GetOut().SetLineColor( *pWaveCol );
+                            rInf.GetOut().SetLineColor( gWaveCol );
 
                         Point aEnd;
                         long nKernVal = pKernArray[sal_Int32(rInf.GetLen()) - 1];

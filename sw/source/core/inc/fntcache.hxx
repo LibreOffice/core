@@ -53,7 +53,6 @@ public:
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 extern sal_uInt8 *pMagicNo;
-extern Color *pWaveCol;
 
 class SwFntObj : public SwCacheObj
 {
