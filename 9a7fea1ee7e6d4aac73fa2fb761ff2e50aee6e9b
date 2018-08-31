@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_773534da",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 6410,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T06:45:09Z",
+      "side": 1,
+      "message": "acutally -\u003e actually",
+      "revId": "9a7fea1ee7e6d4aac73fa2fb761ff2e50aee6e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
