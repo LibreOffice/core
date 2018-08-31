@@ -29,6 +29,8 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
 
 static void AddPolygonToPath(QPainterPath& rPath, const basegfx::B2DPolygon& rPolygon,
