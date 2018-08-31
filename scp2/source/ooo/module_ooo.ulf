@@ -190,6 +190,12 @@ en-US = "Croatian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HR]
 en-US = "Croatian spelling dictionary, and hyphenation rules"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_ID]
+en-US = "Indonesian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_ID]
+en-US = "Indonesian spelling dictionary, hyphenation rules, and thesaurus"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_IS]
 en-US = "Icelandic"
 
