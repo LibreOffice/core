@@ -98,23 +98,23 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
 }
 
 /**
- * Pre-calculates glyph items for the rendered subset of rInf's text, assuming
+ * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
  */
-SalLayoutGlyphs* lcl_CreateLayout(SwDrawTextInfo& rInf, const OUString& rText, sal_Int32 nIdx,
-                                  sal_Int32 nLen, SalLayoutGlyphs& rTextGlyphs)
+SalLayoutGlyphs* lcl_CreateLayout(SwTextGlyphsKey& rKey, SalLayoutGlyphs& rTextGlyphs)
 {
-    // Not the string we want to pre-calculate.
-    if (rText != rInf.GetText() || nIdx != rInf.GetIdx() || nLen != rInf.GetLen())
-        return nullptr;
-
     // Use pre-calculated result.
     if (!rTextGlyphs.empty())
         return &rTextGlyphs;
 
+    if (rKey.m_nIndex >= rKey.m_aText.getLength())
+        // Same as in OutputDevice::GetTextArray().
+        return nullptr;
+
     // Calculate glyph items.
-    std::unique_ptr<SalLayout> pLayout = rInf.GetOut().ImplLayout(
-        rText, nIdx, nLen, Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    std::unique_ptr<SalLayout> pLayout
+        = rKey.m_pOutputDevice->ImplLayout(rKey.m_aText, rKey.m_nIndex, rKey.m_nLength, Point(0, 0), 0,
+                                         nullptr, SalLayoutFlags::GlyphItemsOnly);
     if (!pLayout)
         return nullptr;
 
@@ -128,6 +128,27 @@ SalLayoutGlyphs* lcl_CreateLayout(SwDrawTextInfo& rInf, const OUString& rText, s
     return &rTextGlyphs;
 }
 }
+
+bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r)
+{
+    if (l.m_pOutputDevice.get() < r.m_pOutputDevice.get())
+        return true;
+    if (l.m_pOutputDevice.get() > r.m_pOutputDevice.get())
+        return false;
+    if (l.m_aText < r.m_aText)
+        return true;
+    if (l.m_aText > r.m_aText)
+        return false;
+    if (l.m_nIndex < r.m_nIndex)
+        return true;
+    if (l.m_nIndex > r.m_nIndex)
+        return false;
+    if (l.m_nLength < r.m_nLength)
+        return true;
+    if (l.m_nLength > r.m_nLength)
+        return false;
+    return false;
+};
 
 void SwFntCache::Flush( )
 {
@@ -810,8 +831,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     vcl::Font* pTmpFont = bUseScrFont ? m_pScrFont : m_pPrtFont;
 
-    SalLayoutGlyphs aTextGlyphs;
-
     //  bDirectPrint and bUseScrFont should have these values:
 
     //  Outdev / RefDef  | Printer | VirtPrinter | Window
@@ -1426,8 +1445,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         // get screen array
         std::unique_ptr<long[]> pScrArray(new long[sal_Int32(rInf.GetLen())]);
-        SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(rInf, rInf.GetText(), sal_Int32(rInf.GetIdx()),
-                                                    sal_Int32(rInf.GetLen()), aTextGlyphs);
+        SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+        SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray.get(),
                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
 
@@ -1441,8 +1460,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
                     m_pPrinter->SetFont( *m_pPrtFont );
             }
+            aGlyphsKey = SwTextGlyphsKey{ m_pPrinter, rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+            pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
             m_pPrinter->GetTextArray(rInf.GetText(), pKernArray.get(),
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
         }
         else
         {
@@ -1778,7 +1799,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
-                pGlyphs = lcl_CreateLayout(rInf, *pStr, nTmpIdx, nLen, aTextGlyphs);
+                aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
+                pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, nullptr, pGlyphs );
                 if (bBullet)
@@ -2012,9 +2034,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
         else
         {
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), rInf.GetIdx(), nLn };
+            SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
             aTextSize.setWidth( rInf.GetOut().GetTextWidth( rInf.GetText(),
                                    sal_Int32(rInf.GetIdx()), sal_Int32(nLn),
-                                                           rInf.GetVclCache()) );
+                                                           rInf.GetVclCache(), pGlyphs) );
             rInf.SetKanaDiff( 0 );
         }
 
