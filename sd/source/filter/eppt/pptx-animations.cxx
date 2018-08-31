@@ -452,6 +452,123 @@ sal_Int32 convertNodeType(sal_Int16 nType)
     return xmlNodeType;
 }
 
+/// Convert AnimationRestart to ST_TLTimeNodeRestartType value.
+const char* convertAnimationRestart(sal_Int16 nRestart)
+{
+    const char* pRestart = nullptr;
+    switch (nRestart)
+    {
+        case AnimationRestart::ALWAYS:
+            pRestart = "always";
+            break;
+        case AnimationRestart::WHEN_NOT_ACTIVE:
+            pRestart = "whenNotActive";
+            break;
+        case AnimationRestart::NEVER:
+            pRestart = "never";
+            break;
+    }
+    return pRestart;
+}
+
+/// Convert EffectNodeType to ST_TLTimeNodeType
+const char* convertEffectNodeType(sal_Int16 nType)
+{
+    const char* pNodeType = nullptr;
+    switch (nType)
+    {
+        case EffectNodeType::TIMING_ROOT:
+            pNodeType = "tmRoot";
+            break;
+        case EffectNodeType::MAIN_SEQUENCE:
+            pNodeType = "mainSeq";
+            break;
+        case EffectNodeType::ON_CLICK:
+            pNodeType = "clickEffect";
+            break;
+        case EffectNodeType::AFTER_PREVIOUS:
+            pNodeType = "afterEffect";
+            break;
+        case EffectNodeType::WITH_PREVIOUS:
+            pNodeType = "withEffect";
+            break;
+        case EffectNodeType::INTERACTIVE_SEQUENCE:
+            pNodeType = "interactiveSeq";
+            break;
+    }
+    return pNodeType;
+}
+
+/// Convert EffectPresetClass to ST_TLTimeNodePresetClassType
+const char* convertEffectPresetClass(sal_Int16 nPresetClass)
+{
+    const char* pPresetClass = nullptr;
+    switch (nPresetClass)
+    {
+        case EffectPresetClass::ENTRANCE:
+            pPresetClass = "entr";
+            break;
+        case EffectPresetClass::EXIT:
+            pPresetClass = "exit";
+            break;
+        case EffectPresetClass::EMPHASIS:
+            pPresetClass = "emph";
+            break;
+        case EffectPresetClass::MOTIONPATH:
+            pPresetClass = "path";
+            break;
+        case EffectPresetClass::OLEACTION:
+            pPresetClass = "verb"; // ?
+            break;
+        case EffectPresetClass::MEDIACALL:
+            pPresetClass = "mediacall";
+            break;
+    }
+    return pPresetClass;
+}
+
+/// convert AnimationFill to ST_TLTimeNodeFillType.
+const char* convertAnimationFill(sal_Int16 nFill)
+{
+    const char* pFill = nullptr;
+    switch (nFill)
+    {
+        case AnimationFill::FREEZE:
+            pFill = "hold";
+            break;
+        case AnimationFill::HOLD:
+            pFill = "hold";
+            break;
+        case AnimationFill::REMOVE:
+            pFill = "remove";
+            break;
+        case AnimationFill::TRANSITION:
+            pFill = "transition";
+            break;
+    }
+    return pFill;
+}
+
+/// Convert TextAnimationType to ST_IterateType.
+const char* convertTextAnimationType(sal_Int16 nType)
+{
+    const char* sType = nullptr;
+    switch (nType)
+    {
+        case TextAnimationType::BY_PARAGRAPH:
+            sType = "el";
+            break;
+        case TextAnimationType::BY_LETTER:
+            sType = "lt";
+            break;
+        case TextAnimationType::BY_WORD:
+        default:
+            sType = "wd";
+            break;
+    }
+    return sType;
+}
+
 class NodeContext;
 
 typedef std::unique_ptr<NodeContext> NodeContextPtr;
@@ -783,18 +900,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
             aAny >>= fDuration;
     }
 
-    switch (rXNode->getRestart())
-    {
-        case AnimationRestart::ALWAYS:
-            pRestart = "always";
-            break;
-        case AnimationRestart::WHEN_NOT_ACTIVE:
-            pRestart = "whenNotActive";
-            break;
-        case AnimationRestart::NEVER:
-            pRestart = "never";
-            break;
-    }
+    pRestart = convertAnimationRestart(rXNode->getRestart());
 
     const Sequence<NamedValue> aUserData = rXNode->getUserData();
     const Any* pAny[DFF_ANIM_PROPERTY_ID_COUNT];
@@ -803,31 +909,17 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     sal_Int16 nType = 0;
     if (pAny[DFF_ANIM_NODE_TYPE] && (*pAny[DFF_ANIM_NODE_TYPE] >>= nType))
     {
-        switch (nType)
+        pNodeType = convertEffectNodeType(nType);
+        if (nType == EffectNodeType::TIMING_ROOT)
         {
-            case EffectNodeType::TIMING_ROOT:
-                pNodeType = "tmRoot";
-                if (!pDuration)
-                    pDuration = "indefinite";
-                if (!pRestart)
-                    pRestart = "never";
-                break;
-            case EffectNodeType::MAIN_SEQUENCE:
-                pNodeType = "mainSeq";
+            if (!pDuration)
                 pDuration = "indefinite";
-                break;
-            case EffectNodeType::ON_CLICK:
-                pNodeType = "clickEffect";
-                break;
-            case EffectNodeType::AFTER_PREVIOUS:
-                pNodeType = "afterEffect";
-                break;
-            case EffectNodeType::WITH_PREVIOUS:
-                pNodeType = "withEffect";
-                break;
-            case EffectNodeType::INTERACTIVE_SEQUENCE:
-                pNodeType = "interactiveSeq";
-                break;
+            if (!pRestart)
+                pRestart = "never";
+        }
+        else if (nType == EffectNodeType::MAIN_SEQUENCE)
+        {
+            pDuration = "indefinite";
         }
     }
 
@@ -836,27 +928,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     {
         if (*pAny[DFF_ANIM_PRESET_CLASS] >>= nPresetClass)
         {
-            switch (nPresetClass)
-            {
-                case EffectPresetClass::ENTRANCE:
-                    pPresetClass = "entr";
-                    break;
-                case EffectPresetClass::EXIT:
-                    pPresetClass = "exit";
-                    break;
-                case EffectPresetClass::EMPHASIS:
-                    pPresetClass = "emph";
-                    break;
-                case EffectPresetClass::MOTIONPATH:
-                    pPresetClass = "path";
-                    break;
-                case EffectPresetClass::OLEACTION:
-                    pPresetClass = "verb"; // ?
-                    break;
-                case EffectPresetClass::MEDIACALL:
-                    pPresetClass = "mediacall";
-                    break;
-            }
+            pPresetClass = convertEffectPresetClass(nPresetClass);
         }
     }
 
@@ -886,21 +958,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     {
         // it doesn't seem to work right on root and mainseq nodes
         sal_Int16 nFill = AnimationExporter::GetFillMode(rXNode, AnimationFill::AUTO);
-        switch (nFill)
-        {
-            case AnimationFill::FREEZE:
-                pFill = "hold";
-                break;
-            case AnimationFill::HOLD:
-                pFill = "hold";
-                break;
-            case AnimationFill::REMOVE:
-                pFill = "remove";
-                break;
-            case AnimationFill::TRANSITION:
-                pFill = "transition";
-                break;
-        }
+        pFill = convertAnimationFill(nFill);
     }
 
     bool bAutoReverse = rXNode->getAutoReverse();
@@ -945,20 +1003,8 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         Reference<XIterateContainer> xIterate(rXNode, UNO_QUERY);
         if (xIterate.is())
         {
-            const char* sType = nullptr;
-            switch (xIterate->getIterateType())
-            {
-                case TextAnimationType::BY_PARAGRAPH:
-                    sType = "el";
-                    break;
-                case TextAnimationType::BY_LETTER:
-                    sType = "lt";
-                    break;
-                case TextAnimationType::BY_WORD:
-                default:
-                    sType = "wd";
-                    break;
-            }
+            const char* sType = convertTextAnimationType(xIterate->getIterateType());
+
             mpFS->startElementNS(XML_p, XML_iterate, XML_type, sType, FSEND);
             mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val,
                                   I32S(xIterate->getIterateInterval() * 1000), FSEND);
