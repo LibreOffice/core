@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -266,6 +266,8 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes" context="databaroptions|label10">Fill:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">fill_type</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -511,8 +513,8 @@
             <child>
               <object class="GtkLabel" id="str_same_value">
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="databaroptions|str_same_value">The minimum value must be less than the maximum value.</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
