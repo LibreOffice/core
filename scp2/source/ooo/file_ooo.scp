@@ -491,6 +491,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Id
+        Dir = FILELIST_DIR;
+        Name = "Dictionary/dict-id.filelist";
+        Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+        TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Is
         Dir = FILELIST_DIR;
         Name = "Dictionary/dict-is.filelist";
