@@ -1285,12 +1285,12 @@ void Test::testUserDefinedNumberFormats()
     }
     {  // tdf#95339: detect SSMM as second minute
         sCode =     "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
-        sExpected = "54:23:03 02/01/00";
+        sExpected = "53:23:03 02/01/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#101147: detect SSMM as second month
         sCode =     "HH:MM:SS MM/DD";
-        sExpected = "03:23:54 01/02";
+        sExpected = "03:23:53 01/02";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#101096: different detection of month/minute with Excel
@@ -1301,7 +1301,7 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "03:23 03 02/01";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "SS:DD-MM-YY SS:MM"; // 1st is month, because of previous DD; 2nd is minute as SS has not minute
-        sExpected = "54:02-01-00 54:23";
+        sExpected = "53:02-01-00 53:23";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#99996: better algorithm for fraction representation
@@ -1475,49 +1475,49 @@ void Test::testUserDefinedNumberFormats()
     }
     {   // tdf#33689 use English NfKeywords in non-English language
         eLang = LANGUAGE_DUTCH;
-        sExpected = "Dutch: 1900/01/02 03:23:54";
+        sExpected = "Dutch: 1900/01/02 03:23:53";
         sCode =     "\"Dutch:\" JJJJ/MM/DD UU:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Dutch: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_GERMAN;
-        sExpected = "German: 1900/01/02 03:23:54";
+        sExpected = "German: 1900/01/02 03:23:53";
         sCode =     "\"German: \"JJJJ/MM/TT HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"German: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FRENCH;
-        sExpected = "French: 1900/01/02 03:23:54";
+        sExpected = "French: 1900/01/02 03:23:53";
         sCode =     "\"French: \"AAAA/MM/JJ HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"French: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_ITALIAN;
-        sExpected = "Italian: 1900/01/02 03:23:54";
+        sExpected = "Italian: 1900/01/02 03:23:53";
         sCode =     "\"Italian: \"AAAA/MM/GG HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Italian: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_PORTUGUESE;
-        sExpected = "Portuguese: 1900/01/02 03:23:54";
+        sExpected = "Portuguese: 1900/01/02 03:23:53";
         sCode =     "\"Portuguese: \"AAAA/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Portuguese: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_SPANISH_MODERN;
-        sExpected = "Spanish: 1900/01/02 03:23:54";
+        sExpected = "Spanish: 1900/01/02 03:23:53";
         sCode =     "\"Spanish: \"AAAA/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Spanish: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_DANISH;
-        sExpected = "Danish: 1900/01/02 03:23:54";
+        sExpected = "Danish: 1900/01/02 03:23:53";
         sCode =     "\"Danish: \"YYYY/MM/DD TT:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Danish: \"YYYY/MM/DD HH:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FINNISH;
-        sExpected = "Finnish: 1900/01/02 03:23:54";
+        sExpected = "Finnish: 1900/01/02 03:23:53";
         sCode =     "\"Finnish: \"VVVV/KK/PP TT:MM:SS";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         sCode =     "\"Finnish: \"YYYY/MM/DD HH:MM:SS";
