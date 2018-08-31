@@ -18,6 +18,7 @@
 #include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellrangemovement.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/table/xcolumnrowrange.hxx>
 #include <test/sheet/xdatapilottablessupplier.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
@@ -60,6 +61,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellRangeMovement,
                                                public apitest::XCellSeries,
+                                               public apitest::XColumnRowRange,
                                                public apitest::XDataPilotTablesSupplier,
                                                public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
@@ -135,6 +137,10 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XColumnRowRange
+    CPPUNIT_TEST(testGetColumns);
+    CPPUNIT_TEST(testGetRows);
 
     // XDataPilotTablesSupplier
     CPPUNIT_TEST(testGetDataPilotTables);

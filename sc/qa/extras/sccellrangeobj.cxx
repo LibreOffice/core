@@ -17,6 +17,7 @@
 #include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/table/xcolumnrowrange.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
@@ -59,6 +60,7 @@ class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellRangeFormula,
                                               public apitest::XCellRangesQuery,
                                               public apitest::XCellSeries,
+                                              public apitest::XColumnRowRange,
                                               public apitest::XFormulaQuery,
                                               public apitest::XMultipleOperation,
                                               public apitest::XReplaceable,
@@ -117,6 +119,10 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XColumnRowRange
+    CPPUNIT_TEST(testGetColumns);
+    CPPUNIT_TEST(testGetRows);
 
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
