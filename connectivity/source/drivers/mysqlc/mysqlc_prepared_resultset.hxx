@@ -62,8 +62,12 @@ class OPreparedResultSet final : public OBase_Mutex,
     OConnection& m_rConnection;
     css::uno::WeakReferenceHelper m_aStatement;
     css::uno::Reference<css::sdbc::XResultSetMetaData> m_xMetaData;
+
+    // non-owning pointers
     MYSQL_RES* m_pResult;
     MYSQL_STMT* m_pStmt;
+    MYSQL_FIELD* m_aFields;
+
     rtl_TextEncoding m_encoding;
     sal_Int32 m_nCurrentField = 0;
     sal_Int32 m_nFieldCount;
@@ -71,7 +75,6 @@ class OPreparedResultSet final : public OBase_Mutex,
     // Use c style arrays, because we have to work with pointers
     // on these.
     std::unique_ptr<MYSQL_BIND[]> m_aData;
-    std::unique_ptr<MYSQL_FIELD[]> m_aFields;
     std::unique_ptr<BindMetaData[]> m_aMetaData;
 
     bool m_bWasNull = false;
@@ -90,7 +93,7 @@ class OPreparedResultSet final : public OBase_Mutex,
     void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
 
     // you can't delete objects of this type
-    virtual ~OPreparedResultSet() override;
+    virtual ~OPreparedResultSet() override = default;
 
 public:
     virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
