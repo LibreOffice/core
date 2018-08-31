@@ -81,10 +81,8 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
 {
     m_nFieldCount = mysql_stmt_field_count(pStmt);
     m_pResult = mysql_stmt_result_metadata(m_pStmt);
-    m_aFields.reset(mysql_fetch_fields(m_pResult));
+    m_aFields = mysql_fetch_fields(m_pResult);
 }
-
-OPreparedResultSet::~OPreparedResultSet() {}
 
 void OPreparedResultSet::disposing()
 {
