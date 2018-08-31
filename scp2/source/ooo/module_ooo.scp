@@ -401,6 +401,17 @@ Module gid_Module_Root_Extension_Dictionary_Hr
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Id
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_ID );
+    Files = (gid_File_Extension_Dictionary_Id);
+    InstallOrder = "2000";
+    Sortkey = "607";
+    Spellcheckerlanguage = "id";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Is
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_IS );
     Files = (gid_File_Extension_Dictionary_Is);
