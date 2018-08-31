@@ -274,18 +274,8 @@ void TransformableSwFrame::restoreFrameAreas()
 // transform by given B2DHomMatrix
 void TransformableSwFrame::transform(const basegfx::B2DHomMatrix aTransform)
 {
-    if(!aTransform.isIdentity())
-    {
-        if(!maFrameAreaTransformation.isIdentity())
-        {
-            maFrameAreaTransformation *= aTransform;
-        }
-
-        if(!maFramePrintAreaTransformation.isIdentity())
-        {
-            maFramePrintAreaTransformation *= aTransform;
-        }
-    }
+    maFrameAreaTransformation *= aTransform;
+    maFramePrintAreaTransformation *= aTransform;
 }
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )

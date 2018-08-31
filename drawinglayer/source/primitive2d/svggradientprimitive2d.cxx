@@ -404,14 +404,11 @@ namespace drawinglayer
                     aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
                     aUnitGradientToObject.translate(getStart().getX(), getStart().getY());
 
-                    if(!getGradientTransform().isIdentity())
-                    {
-                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
-                    }
+                    aUnitGradientToObject *= getGradientTransform();
 
                     // create full transform from unit gradient coordinates to object coordinates
                     // including the SvgGradient transformation
-                    aUnitGradientToObject = aObjectTransform * aUnitGradientToObject;
+                    aUnitGradientToObject *= aObjectTransform;
                 }
                 else
                 {
@@ -424,10 +421,7 @@ namespace drawinglayer
                     aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
 
-                    if(!getGradientTransform().isIdentity())
-                    {
-                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
-                    }
+                    aUnitGradientToObject *= getGradientTransform();
                 }
 
                 // create inverse from it
@@ -757,10 +751,7 @@ namespace drawinglayer
                     aUnitGradientToObject.scale(fRadius, fRadius);
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
 
-                    if(!getGradientTransform().isIdentity())
-                    {
-                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
-                    }
+                    aUnitGradientToObject *= getGradientTransform();
                 }
 
                 // create inverse from it
