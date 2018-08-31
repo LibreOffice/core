@@ -935,7 +935,7 @@ bool SvpSalGraphics::drawPolyLine(
         return true;
     }
 
-    // Wrap call to static verion of ::drawPolyLine by
+    // Wrap call to static version of ::drawPolyLine by
     // preparing/getting some local data and parameters
     // due to usage in vcl/unx/generic/gdi/salgdi.cxx.
     // This is mainly about extended handling of extents
@@ -1185,7 +1185,7 @@ bool SvpSalGraphics::drawPolyLine(
 
     if(nullptr != pExtents && !pExtents->isEmpty() && !bObjectToDeviceIsIdentity)
     {
-        // transform extents to DeviceCoordiinates if used. These
+        // transform extents to DeviceCoordinates if used. These
         // were calculated with ObjectToDevice transformation actively set,
         // but use DeviceCoordinates locally
         pExtents->transform(rObjectToDevice);
