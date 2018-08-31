@@ -3514,7 +3514,7 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "            current_count += count_buf[0];\n";
             ss << "        }\n";
              //  ss << "if(writePos == 14 && lidx ==0)\n";
-            //ss <<"printf(\"\\n********************sum is  is %f, count is%d\",current_sum,current_count);\n";
+            //ss <<"printf(\"\\n********************sum is %f, count is%d\",current_sum,current_count);\n";
             ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    }\n";
         }else
