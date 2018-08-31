@@ -36,7 +36,7 @@ SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( pOwn ),
     m_aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
 {
-    m_aSwFont.GoMagic( pSh, m_aSwFont.GetActual() );
+    m_aSwFont.AllocFontCacheId( pSh, m_aSwFont.GetActual() );
     const SwAttrSet& rAttrSet = static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet();
     for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         m_pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );

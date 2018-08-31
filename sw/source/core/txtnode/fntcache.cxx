@@ -67,7 +67,7 @@ SwFntCache *pFntCache = nullptr;
 // last Font set by ChgFntCache
 SwFntObj *pLastFont = nullptr;
 // "MagicNumber" used to identify Fonts
-sal_uInt8* pMagicNo = nullptr;
+sal_uInt8* mnFontCacheIdCounter = nullptr;
 
 static constexpr Color gWaveCol(COL_GRAY);
 
@@ -160,8 +160,8 @@ void SwFntCache::Flush( )
     SwCache::Flush( );
 }
 
-SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell const *pSh)
-    : SwCacheObj(pOwn)
+SwFntObj::SwFntObj(const SwSubFont &rFont, const void* nFontCacheId, SwViewShell const *pSh)
+    : SwCacheObj(nFontCacheId)
     , m_aFont(rFont)
     , m_pScrFont(nullptr)
     , m_pPrtFont(&m_aFont)
@@ -2240,16 +2240,16 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
     return nCnt;
 }
 
-SwFntAccess::SwFntAccess( const void* &rMagic,
+SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
                 sal_uInt16 &rIndex, const void *pOwn, SwViewShell const *pSh,
                 bool bCheck ) :
-  SwCacheAccess( *pFntCache, rMagic, rIndex ),
+  SwCacheAccess( *pFntCache, rnFontCacheId, rIndex ),
   pShell( pSh )
 {
-    // the used ctor of SwCacheAccess searches for rMagic+rIndex in the cache
+    // the used ctor of SwCacheAccess searches for rnFontCacheId+rIndex in the cache
     if ( IsAvail() )
     {
-        // fast case: known Font (rMagic), no need to check printer and zoom
+        // fast case: known Font (rnFontCacheId), no need to check printer and zoom
         if ( !bCheck )
             return;
 
@@ -2338,8 +2338,8 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         // no matter if new or found, now the Owner of the Object is a
         // MagicNumber, and will be given to the SwFont, as well as the Index
         // for later direct access
-        rMagic = pFntObj->GetOwner();
-        SwCacheAccess::m_pOwner = rMagic;
+        rnFontCacheId = reinterpret_cast<void*>(reinterpret_cast<sal_IntPtr>(pFntObj->GetOwner()));
+        SwCacheAccess::m_pOwner = pFntObj->GetOwner();
         rIndex = pFntObj->GetCachePos();
     }
 }
@@ -2347,7 +2347,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // a new Font, a new "MagicNumber".
-    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++pMagicNo, pShell );
+    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++mnFontCacheIdCounter, pShell );
 }
 
 TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth)

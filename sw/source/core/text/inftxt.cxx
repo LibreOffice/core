@@ -1846,7 +1846,7 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
         // 1. the fonts have a different magic number
         // 2. they have different script types
         // 3. their background colors differ (this is not covered by 1.)
-        if( pFnt->DifferentMagic( pNew, pFnt->GetActual() ) ||
+        if( pFnt->DifferentFontCacheId( pNew, pFnt->GetActual() ) ||
             pNew->GetActual() != pFnt->GetActual() ||
             ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
             ( pNew->GetBackColor() && ! pFnt->GetBackColor() ) ||

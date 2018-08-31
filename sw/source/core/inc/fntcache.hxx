@@ -55,7 +55,7 @@ public:
 // Font cache, global variable, created/destroyed in txtinit.cxx
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
-extern sal_uInt8 *pMagicNo;
+extern sal_uInt8* mnFontCacheIdCounter;
 
 /**
  * Defines a substring on a given output device, to be used as an std::map<>
@@ -99,7 +99,7 @@ class SwFntObj : public SwCacheObj
     static MapMode *pPixMap;
 
 public:
-    SwFntObj( const SwSubFont &rFont, const void* pOwner,
+    SwFntObj( const SwSubFont &rFont, const void* nFontCacheId,
               SwViewShell const *pSh );
 
     virtual ~SwFntObj() override;
@@ -149,7 +149,7 @@ protected:
     virtual SwCacheObj *NewObj( ) override;
 
 public:
-    SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
+    SwFntAccess( const void*& rnFontCacheId, sal_uInt16 &rIndex, const void *pOwner,
                  SwViewShell const *pShell,
                  bool bCheck = false  );
     SwFntObj* Get() { return static_cast<SwFntObj*>( SwCacheAccess::Get() ); }

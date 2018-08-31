@@ -300,13 +300,13 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         pHyphPor = new SwHyphPortion;
         pHyphPor->SetLen(TextFrameIndex(1));
 
-        static const void* pLastMagicNo = nullptr;
+        static const void* nLastFontCacheId = nullptr;
         static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
-        const void* pTmpMagic;
+        const void* nTmpFontCacheId;
         sal_uInt16 nFntIdx;
-        rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
-        if( !pLastMagicNo || pLastMagicNo != pTmpMagic ) {
-            pLastMagicNo = pTmpMagic;
+        rInf.GetFont()->GetFontCacheId( nTmpFontCacheId, nFntIdx, rInf.GetFont()->GetActual() );
+        if( !nLastFontCacheId || nLastFontCacheId != nTmpFontCacheId ) {
+            nLastFontCacheId = nTmpFontCacheId;
             static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
             aMiniCacheH = pHyphPor->Height();
             aMiniCacheW = pHyphPor->Width();

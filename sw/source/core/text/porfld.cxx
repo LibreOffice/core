@@ -317,7 +317,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
              rInf.SetUnderScorePos( rInf.GetIdx() );
 
         if( m_pFont )
-            m_pFont->GoMagic( rInf.GetVsh(), m_pFont->GetActual() );
+            m_pFont->AllocFontCacheId( rInf.GetVsh(), m_pFont->GetActual() );
 
         SwFontSave aSave( rInf, m_pFont.get() );
 
