@@ -909,7 +909,7 @@ if ($platform =~ m/cygwin/)
 }
 
 #
-# E. Determining the envionment values based on the information
+# E. Determining the environment values based on the information
 #    that was gathered earlier on.
 #
 print "Setting the environment variables... ";
