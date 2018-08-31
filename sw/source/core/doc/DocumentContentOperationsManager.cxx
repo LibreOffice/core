@@ -1762,6 +1762,12 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
     lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
+
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
+    }
 }
 
 bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
@@ -3666,6 +3672,12 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
         ::sw_JoinText( rPam, bJoinPrev );
     }
 
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
+    }
+
     return true;
 }
 
@@ -3858,8 +3870,6 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
     } while( false );
 
-    if( !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
-        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
     m_rDoc.getIDocumentState().SetModified();
 
     return true;
