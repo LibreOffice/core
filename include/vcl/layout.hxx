@@ -767,21 +767,21 @@ public:
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::FirstChild);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(vcl::Window *pTopLevel);
+VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(const vcl::Window *pTopLevel);
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::Next);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);
+VCL_DLLPUBLIC vcl::Window* nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
 
 //Get previous window before pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::Prev);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC vcl::Window* prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);
+VCL_DLLPUBLIC vcl::Window* prevLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild);
 
 //Returns true is the Window has a single child which is a container
 VCL_DLLPUBLIC bool isLayoutEnabled(const vcl::Window *pWindow);
