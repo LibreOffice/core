@@ -42,7 +42,7 @@ namespace basegfx
         virtual void endUsage(basegfx::SystemDependentData_SharedPtr& rData) = 0;
         virtual void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) = 0;
 
-        // flush all buffred data (e.g. cleanup/shutdown)
+        // flush all buffered data (e.g. cleanup/shutdown)
         virtual void flushAll() = 0;
     };
 } // end of namespace basegfx
@@ -58,7 +58,7 @@ namespace basegfx
         // is deleted, the corresponding SystemDependentData_WeakPtr will get void.
         // To make this work, a minimal SystemDependentDataManager *has* to hold at
         // least that one SystemDependentData_SharedPtr.
-        // That SystemDependentData_SharedPtr may be (e.g. Timer-based or ressource-based)
+        // That SystemDependentData_SharedPtr may be (e.g. Timer-based or resource-based)
         // be freed then. This minimal implementation does never free it, so all stay valid.
         // The instances may still be removed by endUsage calls, but there is no
         // caching/buffering mechanism involved here at all. It's an example, but
