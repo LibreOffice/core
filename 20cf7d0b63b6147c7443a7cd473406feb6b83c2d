@@ -22,6 +22,30 @@
       "revId": "20cf7d0b63b6147c7443a7cd473406feb6b83c2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_32d21a5e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-08-31T15:54:47Z",
+      "side": 1,
+      "message": "FWIW the CharBackColor is sal_Int32, and transparent/auto would be -1. Perhaps your sal_uInt32 usage causes the problem here?",
+      "parentUuid": "dfeb2761_4424cac6",
+      "range": {
+        "startLine": 64,
+        "startChar": 75,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "20cf7d0b63b6147c7443a7cd473406feb6b83c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
