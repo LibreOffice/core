@@ -1374,7 +1374,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
     {
         SwFontAccess aFontAccess( pColl, pSh );
         pFnt = new SwFont( aFontAccess.Get()->GetFont() );
-        pFnt->ChkMagic( pSh, pFnt->GetActual() );
+        pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();
     if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
