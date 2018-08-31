@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_f73a64e5",
+        "filename": "sc/source/core/data/dpshttab.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T13:54:43Z",
+      "side": 1,
+      "message": "So with the \u0027.\u0027 dot separator this should be\n\n ScGlobal::FindUnquoted( maRangeName, \u0027.\u0027)\n\nBtw, I\u0027d rather rename nBeforeSheetName to nAfterSheetName ;-)",
+      "range": {
+        "startLine": 241,
+        "startChar": 37,
+        "endLine": 241,
+        "endChar": 78
+      },
+      "revId": "85e339b3866c1a3ba419ac654cfe36e6e8cbf348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_7707741e",
+        "filename": "sc/source/core/data/dpshttab.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T13:54:43Z",
+      "side": 1,
+      "message": "The count to copy doesn\u0027t need to be calculated, there\u0027s OUString::copy() that takes only one parameter and copies from that position to the end.\n\nAlso, calculating -2 for the quotes removal is wrong if the sheet name contained embedded quotes that again were quoted by doubling them, e.g. the name Sheet\u0027s_Name is enquoted to \u0027Sheet\u0027\u0027s_Name\u0027.\n\nSo, simply use\n\n copy(nAfterSheetName+1)",
+      "range": {
+        "startLine": 253,
+        "startChar": 75,
+        "endLine": 253,
+        "endChar": 130
+      },
+      "revId": "85e339b3866c1a3ba419ac654cfe36e6e8cbf348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d20d2e38",
+        "filename": "sc/source/core/data/dpshttab.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T13:54:43Z",
+      "side": 1,
+      "message": "Creating the temporary rangeNameSheet just to assign it to searchRangeName is unnecessary. Just do\n\n searchRangeName \u003d maRangeName.copy(nAfterSheetName+1);",
+      "range": {
+        "startLine": 254,
+        "startChar": 12,
+        "endLine": 254,
+        "endChar": 44
+      },
+      "revId": "85e339b3866c1a3ba419ac654cfe36e6e8cbf348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_f745c471",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T13:54:43Z",
+      "side": 1,
+      "message": "Instead of constructing an empty aScope and then asking aScope.isEmpty(), the condition can directly use\n\n if (elemRangeMap.first \u003d\u003d STR_GLOBAL_RANGE_NAME)",
+      "revId": "85e339b3866c1a3ba419ac654cfe36e6e8cbf348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1736e804",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2819,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-08-31T13:54:43Z",
+      "side": 1,
+      "message": "Argh.. I wasn\u0027t attentive earlier, but the formula syntax uses the usual \u0027.\u0027 dot as separator for sheet-local names (like in \u003dSUM(Sheet1.localname)) so we should do the same here to be consistent (and a range name can\u0027t contain a dot either). So\n\n aScope + \".\" + elem.second-\u003eGetName()",
+      "range": {
+        "startLine": 2819,
+        "startChar": 60,
+        "endLine": 2819,
+        "endChar": 63
+      },
+      "revId": "85e339b3866c1a3ba419ac654cfe36e6e8cbf348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
