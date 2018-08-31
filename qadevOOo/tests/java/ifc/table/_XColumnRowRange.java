@@ -54,4 +54,3 @@ public class _XColumnRowRange extends MultiMethodTest {
     } // getRows()
 
 } // finish class _XColumnRowRange
-
