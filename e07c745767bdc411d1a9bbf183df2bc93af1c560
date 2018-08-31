@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_32ffba02",
+        "filename": "basegfx/source/matrix/b2dhommatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T13:49:51Z",
+      "side": 1,
+      "message": "indentity -\u003e identity\nnoting -\u003e nothing\n\n:-)",
+      "revId": "e07c745767bdc411d1a9bbf183df2bc93af1c560",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_57047017",
+        "filename": "vcl/source/gdi/salgdilayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T13:49:51Z",
+      "side": 1,
+      "message": "no need to hold a copy here, can be:\n\n    const basegfx::B2DHomMatrix \u0026 aMirror(getMirror(pOutDev));",
+      "revId": "e07c745767bdc411d1a9bbf183df2bc93af1c560",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
