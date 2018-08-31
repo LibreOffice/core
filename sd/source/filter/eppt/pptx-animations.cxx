@@ -470,15 +470,12 @@ public:
 class PPTXAnimationExport
 {
     void WriteAnimationNode(const NodeContextPtr& pContext);
-    void WriteAnimationNodeAnimate(const Reference<XAnimationNode>& rXNode, sal_Int32 nXmlNodeType,
-                                   bool bMainSeqChild);
-    void WriteAnimationNodeAnimateInside(const Reference<XAnimationNode>& rXNode,
-                                         bool bMainSeqChild, bool bSimple, bool bWriteTo = true);
-    void WriteAnimationNodeSeq(const Reference<XAnimationNode>& rXNode, bool bMainSeqChild);
-    void WriteAnimationNodeEffect(const Reference<XAnimationNode>& rXNode, bool bMainSeqChild);
-    void WriteAnimationNodeCommand(const Reference<XAnimationNode>& rXNode, bool bMainSeqChild);
-    void WriteAnimationNodeCommonPropsStart(const Reference<XAnimationNode>& rXNode,
-                                            bool bMainSeqChild);
+    void WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType);
+    void WriteAnimationNodeAnimateInside(bool bSimple, bool bWriteTo = true);
+    void WriteAnimationNodeSeq();
+    void WriteAnimationNodeEffect();
+    void WriteAnimationNodeCommand();
+    void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
     bool isMainSeqChild();
     const Reference<XAnimationNode>& getCurrentNode();
@@ -567,9 +564,9 @@ void PPTXAnimationExport::WriteAnimationTarget(const Any& rTarget)
     }
 }
 
-void PPTXAnimationExport::WriteAnimationNodeAnimate(const Reference<XAnimationNode>& rXNode,
-                                                    sal_Int32 nXmlNodeType, bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
 {
+    const Reference<XAnimationNode>& rXNode = getCurrentNode();
     Reference<XAnimate> rXAnimate(rXNode, UNO_QUERY);
     if (!rXAnimate.is())
         return;
@@ -689,14 +686,13 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(const Reference<XAnimationNo
         bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
-    WriteAnimationNodeAnimateInside(rXNode, bMainSeqChild, bSimple, bTo);
+    WriteAnimationNodeAnimateInside(bSimple, bTo);
     mpFS->endElementNS(XML_p, nXmlNodeType);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeAnimateInside(const Reference<XAnimationNode>& rXNode,
-                                                          bool bMainSeqChild, bool bSimple,
-                                                          bool bWriteTo)
+void PPTXAnimationExport::WriteAnimationNodeAnimateInside(bool bSimple, bool bWriteTo)
 {
+    const Reference<XAnimationNode>& rXNode = getCurrentNode();
     Reference<XAnimate> rXAnimate(rXNode, UNO_QUERY);
     if (!rXAnimate.is())
         return;
@@ -726,7 +722,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimateInside(const Reference<XAnima
     }
 
     mpFS->startElementNS(XML_p, XML_cBhvr, XML_additive, pAdditive, FSEND);
-    WriteAnimationNodeCommonPropsStart(rXNode, bMainSeqChild);
+    WriteAnimationNodeCommonPropsStart();
 
     Reference<XIterateContainer> xIterate(rXNode->getParent(), UNO_QUERY);
     WriteAnimationTarget(xIterate.is() ? xIterate->getTarget() : rXAnimate->getTarget());
@@ -761,9 +757,10 @@ void PPTXAnimationExport::WriteAnimationNodeAnimateInside(const Reference<XAnima
         WriteAnimateTo(mpFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
-void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart(
-    const Reference<XAnimationNode>& rXNode, bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
 {
+    const Reference<XAnimationNode>& rXNode = getCurrentNode();
+    bool bMainSeqChild = isMainSeqChild();
     const char* pDuration = nullptr;
     const char* pRestart = nullptr;
     const char* pNodeType = nullptr;
@@ -1000,14 +997,13 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart(
     mpFS->endElementNS(XML_p, XML_cTn);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeSeq(const Reference<XAnimationNode>& rXNode,
-                                                bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeSeq()
 {
     SAL_INFO("sd.eppt", "write animation node SEQ");
 
     mpFS->startElementNS(XML_p, XML_seq, FSEND);
 
-    WriteAnimationNodeCommonPropsStart(rXNode, bMainSeqChild);
+    WriteAnimationNodeCommonPropsStart();
 
     WriteAnimationCondition(mpFS, nullptr, "onPrev", 0, true, XML_prevCondLst);
     WriteAnimationCondition(mpFS, nullptr, "onNext", 0, true, XML_nextCondLst);
@@ -1015,11 +1011,10 @@ void PPTXAnimationExport::WriteAnimationNodeSeq(const Reference<XAnimationNode>&
     mpFS->endElementNS(XML_p, XML_seq);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeEffect(const Reference<XAnimationNode>& rXNode,
-                                                   bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeEffect()
 {
     SAL_INFO("sd.eppt", "write animation node FILTER");
-    Reference<XTransitionFilter> xFilter(rXNode, UNO_QUERY);
+    Reference<XTransitionFilter> xFilter(getCurrentNode(), UNO_QUERY);
     if (xFilter.is())
     {
         const char* pFilter = ::ppt::AnimationExporter::FindTransitionName(
@@ -1028,17 +1023,16 @@ void PPTXAnimationExport::WriteAnimationNodeEffect(const Reference<XAnimationNod
         mpFS->startElementNS(XML_p, XML_animEffect, XML_filter, pFilter, XML_transition, pMode,
                              FSEND);
 
-        WriteAnimationNodeAnimateInside(rXNode, bMainSeqChild, false);
+        WriteAnimationNodeAnimateInside(false);
 
         mpFS->endElementNS(XML_p, XML_animEffect);
     }
 }
 
-void PPTXAnimationExport::WriteAnimationNodeCommand(const Reference<XAnimationNode>& rXNode,
-                                                    bool bMainSeqChild)
+void PPTXAnimationExport::WriteAnimationNodeCommand()
 {
     SAL_INFO("sd.eppt", "write animation node COMMAND");
-    Reference<XCommand> xCommand(rXNode, UNO_QUERY);
+    Reference<XCommand> xCommand(getCurrentNode(), UNO_QUERY);
     if (xCommand.is())
     {
         const char* pType = "call";
@@ -1065,9 +1059,9 @@ void PPTXAnimationExport::WriteAnimationNodeCommand(const Reference<XAnimationNo
 
         mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand, FSEND);
 
-        WriteAnimationNodeAnimateInside(rXNode, bMainSeqChild, false);
+        WriteAnimationNodeAnimateInside(false);
         mpFS->startElementNS(XML_p, XML_cBhvr, FSEND);
-        WriteAnimationNodeCommonPropsStart(rXNode, bMainSeqChild);
+        WriteAnimationNodeCommonPropsStart();
         WriteAnimationTarget(xCommand->getTarget());
         mpFS->endElementNS(XML_p, XML_cBhvr);
 
@@ -1081,7 +1075,6 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
     mpContext = pContext.get();
 
     const Reference<XAnimationNode>& rXNode = getCurrentNode();
-    bool bMainSeqChild = isMainSeqChild();
 
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
     sal_Int32 xmlNodeType = convertNodeType(rXNode->getType());
@@ -1091,11 +1084,11 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
         case AnimationNodeType::ITERATE:
         case AnimationNodeType::PAR:
             mpFS->startElementNS(XML_p, xmlNodeType, FSEND);
-            WriteAnimationNodeCommonPropsStart(rXNode, bMainSeqChild);
+            WriteAnimationNodeCommonPropsStart();
             mpFS->endElementNS(XML_p, xmlNodeType);
             break;
         case AnimationNodeType::SEQ:
-            WriteAnimationNodeSeq(rXNode, bMainSeqChild);
+            WriteAnimationNodeSeq();
             break;
         case AnimationNodeType::ANIMATETRANSFORM:
         {
@@ -1107,7 +1100,7 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
                 else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
                     xmlNodeType = XML_animRot;
 
-                WriteAnimationNodeAnimate(rXNode, xmlNodeType, bMainSeqChild);
+                WriteAnimationNodeAnimate(xmlNodeType);
             }
             else
                 SAL_WARN("sd.eppt",
@@ -1118,13 +1111,13 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
         case AnimationNodeType::ANIMATEMOTION:
         case AnimationNodeType::ANIMATECOLOR:
         case AnimationNodeType::SET:
-            WriteAnimationNodeAnimate(rXNode, xmlNodeType, bMainSeqChild);
+            WriteAnimationNodeAnimate(xmlNodeType);
             break;
         case AnimationNodeType::TRANSITIONFILTER:
-            WriteAnimationNodeEffect(rXNode, bMainSeqChild);
+            WriteAnimationNodeEffect();
             break;
         case AnimationNodeType::COMMAND:
-            WriteAnimationNodeCommand(rXNode, bMainSeqChild);
+            WriteAnimationNodeCommand();
             break;
         default:
             SAL_WARN("sd.eppt", "unhandled animation node: " << rXNode->getType());
