@@ -26,6 +26,7 @@
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/sheet/xusedareacursor.hxx>
 #include <test/table/xcellcursor.hxx>
+#include <test/table/xcolumnrowrange.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -44,6 +45,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XCellRangeData,
                                                public apitest::XCellRangeFormula,
                                                public apitest::XCellSeries,
+                                               public apitest::XColumnRowRange,
                                                public apitest::XFormulaQuery,
                                                public apitest::XMultipleOperation,
                                                public apitest::XSheetCellCursor,
@@ -95,6 +97,10 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XColumnRowRange
+    CPPUNIT_TEST(testGetColumns);
+    CPPUNIT_TEST(testGetRows);
 
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);

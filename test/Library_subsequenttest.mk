@@ -148,6 +148,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsubtotaldescriptor \
 	test/source/table/xcell \
 	test/source/table/xcellcursor \
+	test/source/table/xcolumnrowrange \
 	test/source/text/xtext \
 	test/source/text/xtextfield \
 	test/source/text/xtextcontent \
