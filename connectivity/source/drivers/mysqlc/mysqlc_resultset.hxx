@@ -87,7 +87,7 @@ class OResultSet final : public OBase_Mutex,
     void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
 
     // you can't delete objects of this type
-    virtual ~OResultSet() override;
+    virtual ~OResultSet() override = default;
 
 public:
     virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;

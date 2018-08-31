@@ -108,8 +108,6 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     fieldCount = mysql_num_fields(pResult);
 }
 
-OResultSet::~OResultSet() {}
-
 void OResultSet::disposing()
 {
     OPropertySetHelper::disposing();
