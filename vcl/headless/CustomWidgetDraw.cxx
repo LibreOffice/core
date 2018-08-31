@@ -62,7 +62,10 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
     if (s_pWidgetImplementation == nullptr)
         return false;
 
-    cairo_t* pCairoContext = m_rGraphics.getCairoContext(true);
+    bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
+    m_rGraphics.setAntiAliasB2DDraw(true);
+
+    cairo_t* pCairoContext = m_rGraphics.getCairoContext(false);
     m_rGraphics.clipRegion(pCairoContext);
 
     cairo_translate(pCairoContext, rControlRegion.Left(), rControlRegion.Top());
@@ -271,6 +274,8 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                rControlRegion.Bottom());
 
     m_rGraphics.releaseCairoContext(pCairoContext, true, aExtents);
+
+    m_rGraphics.setAntiAliasB2DDraw(bOldAA);
 
     return bOK;
 }
