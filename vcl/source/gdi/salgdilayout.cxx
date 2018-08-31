@@ -477,7 +477,7 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
                 //      // mirror this window back
                 //      double devX = w-i_pOutDev->GetOutputWidthPixel()-i_pOutDev->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 //      aRet.setX( devX + (i_rPoint.getX() - i_pOutDev->GetOutOffXPixel()) );
-                // I do not reaaly understand the comment 'mirror this window back', so cannot guarantee
+                // I do not really understand the comment 'mirror this window back', so cannot guarantee
                 // that this works as before, but I have reduced this (by re-placing and re-formatting) to
                 // a simple translation:
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createTranslateB2DHomMatrix(
@@ -513,7 +513,7 @@ basegfx::B2DHomMatrix SalGraphics::mirror( const basegfx::B2DHomMatrix& i_rMatri
     const basegfx::B2DHomMatrix& rMirror(getMirror(pOutDev));
 
     // Apply mirror to given matrix by multiply from left ('after' i_rMatrix).
-    // Identity chechs and fast-paths are in the operator
+    // Identity checks and fast-paths are in the operator
     return rMirror * i_rMatrix;
 }
 
