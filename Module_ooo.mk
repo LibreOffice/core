@@ -72,6 +72,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     remotebridges \
     reportdesign \
     ridljar \
+    rsc \
     sane \
     sax \
     sc \

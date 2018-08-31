@@ -598,6 +598,33 @@ $(call gb_LinkTarget_get_clean_target,$(1)) :
 
 endef
 
+gb_BisonTarget_get_source = $(SRCDIR)/$(1).y
+
+# Bison-generated .cxx files are always #include'd into in-module files,
+# and aren't compiled, so they effectively act as generated headers, not generated .cxx.
+
+define gb_LinkTarget_add_bison_file
+
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$(call gb_BisonTarget_get_target,$(1),$(2))
+
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(dir $(call gb_BisonTarget_get_target,$(1),$(2)))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(dir $(call gb_BisonTarget_get_target,$(1),$(2)))
+endif
+
+$(call gb_BisonTarget_get_target,$(1),$(2)) : $(call gb_BisonTarget_get_source,$(2))
+	mkdir -p $(dir $(call gb_BisonTarget_get_target,$(1),$(2))) && \
+	bison -d -o $(call gb_BisonTarget_get_target,$(1),$(2)) $(call gb_BisonTarget_get_source,$(2)) 
+
+endef
+
+define gb_LinkTarget_add_bison_files
+$(foreach bisonfile,$(2),$(call gb_LinkTarget_add_bison_file,$(1),$(bisonfile)))
+
+endef
+
 define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
 endef

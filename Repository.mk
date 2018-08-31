@@ -32,7 +32,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rdbedit \
     rdbmaker \
+    rsc \
+    rsc2 \
     rscdep \
+    rscpp \
     so_checksum \
     srvdepy \
     svidl \
