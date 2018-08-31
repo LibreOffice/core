@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_771c146a",
+        "filename": "vcl/source/gdi/salgdilayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T06:43:09Z",
+      "side": 1,
+      "message": "could return this by const \u0026",
+      "revId": "02de7b856c40ff948867a4f5d6e96b10190df6da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_172dc894",
+        "filename": "vcl/source/gdi/salgdilayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T06:43:09Z",
+      "side": 1,
+      "message": "could take i_rMatrix by const\u0026 ?",
+      "revId": "02de7b856c40ff948867a4f5d6e96b10190df6da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_d72640b8",
+        "filename": "vcl/source/gdi/salgdilayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-08-31T06:43:09Z",
+      "side": 1,
+      "message": "doesn\u0027t the operator* already do the identity checks? If not, why not?",
+      "revId": "02de7b856c40ff948867a4f5d6e96b10190df6da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
