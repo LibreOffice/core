@@ -200,7 +200,7 @@ protected:
     inline SwCacheObj *Get();
 
     inline SwCacheAccess( SwCache &rCache, const void *pOwner, bool bSeek );
-    inline SwCacheAccess( SwCache &rCache, const void *pOwner, const sal_uInt16 nIndex );
+    inline SwCacheAccess( SwCache &rCache, const void* nCacheId, const sal_uInt16 nIndex );
 
 public:
     virtual ~SwCacheAccess();
@@ -233,11 +233,11 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, bool bSeek )
         m_pObj->Lock();
 }
 
-inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
+inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void* nCacheId,
                               const sal_uInt16 nIndex ) :
     m_rCache( rC ),
     m_pObj( nullptr ),
-    m_pOwner( pOwn )
+    m_pOwner( nCacheId )
 {
     if ( m_pOwner && nullptr != (m_pObj = m_rCache.Get( m_pOwner, nIndex )) )
         m_pObj->Lock();

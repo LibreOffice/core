@@ -82,7 +82,7 @@ SwAttrIter::SwAttrIter(SwTextNode const * pTextNode)
     , m_pTextNode(pTextNode)
     , m_pMergedPara(nullptr)
 {
-    m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
+    m_aFontCacheIds[SwFontScript::Latin] = m_aFontCacheIds[SwFontScript::CJK] = m_aFontCacheIds[SwFontScript::CTL] = nullptr;
 }
 
 SwAttrIter::SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame)
@@ -169,9 +169,9 @@ bool SwAttrIter::SeekAndChgAttrIter(TextFrameIndex const nNewPos, OutputDevice* 
     }
     if( bChg )
     {
-        // if the change counter is zero, we know the MagicNo of the wanted font
+        // if the change counter is zero, we know the cache id of the wanted font
         if ( !m_nChgCnt && !m_nPropFont )
-            m_pFont->SetMagic( m_aMagicNo[ m_pFont->GetActual() ],
+            m_pFont->SetFontCacheId( m_aFontCacheIds[ m_pFont->GetActual() ],
                 m_aFontIdx[ m_pFont->GetActual() ], m_pFont->GetActual() );
         m_pFont->ChgPhysFnt( m_pViewShell, *pOut );
     }
@@ -183,7 +183,7 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
 {
     Seek( nNewPos );
     if ( !m_nChgCnt && !m_nPropFont )
-        m_pFont->SetMagic( m_aMagicNo[ m_pFont->GetActual() ],
+        m_pFont->SetFontCacheId( m_aFontCacheIds[ m_pFont->GetActual() ],
             m_aFontIdx[ m_pFont->GetActual() ], m_pFont->GetActual() );
     return m_pFont->IsSymbol( m_pViewShell );
 }
@@ -243,9 +243,9 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     }
     if( bChg )
     {
-        // if the application counter is zero, we know the MagicNo of the wanted font
+        // if the application counter is zero, we know the cache id of the wanted font
         if ( !m_nChgCnt && !m_nPropFont )
-            m_pFont->SetMagic( m_aMagicNo[ m_pFont->GetActual() ],
+            m_pFont->SetFontCacheId( m_aFontCacheIds[ m_pFont->GetActual() ],
                 m_aFontIdx[ m_pFont->GetActual() ], m_pFont->GetActual() );
         m_pFont->ChgPhysFnt( m_pViewShell, *pOut );
     }

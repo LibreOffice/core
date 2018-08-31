@@ -154,7 +154,7 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
            *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
            pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout() );
 
-    m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
+    m_aFontCacheIds[SwFontScript::Latin] = m_aFontCacheIds[SwFontScript::CJK] = m_aFontCacheIds[SwFontScript::CTL] = nullptr;
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
@@ -171,18 +171,18 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
         SwFontScript nTmp = SW_SCRIPTS;
         switch ( m_pScriptInfo->GetScriptType( nCnt++ ) ) {
             case i18n::ScriptType::ASIAN :
-                if( !m_aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
+                if( !m_aFontCacheIds[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
                 break;
             case i18n::ScriptType::COMPLEX :
-                if( !m_aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
+                if( !m_aFontCacheIds[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
                 break;
             default:
-                if( !m_aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
+                if( !m_aFontCacheIds[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
         }
         if( nTmp < SW_SCRIPTS )
         {
-            m_pFont->ChkMagic( m_pViewShell, nTmp );
-            m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
+            m_pFont->CheckFontCacheId( m_pViewShell, nTmp );
+            m_pFont->GetFontCacheId( m_aFontCacheIds[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
         }
     }
     while (nChg < TextFrameIndex(rText.getLength()));

@@ -700,7 +700,7 @@ void SwTextPainter::PaintDropPortion()
 
 class SwDropCapCache
 {
-    long aMagicNo[ DROP_CACHE_SIZE ];
+    const void* aFontCacheId[ DROP_CACHE_SIZE ];
     OUString aText[ DROP_CACHE_SIZE ];
     sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
     sal_uInt16 aWishedHeight[ DROP_CACHE_SIZE ];
@@ -714,7 +714,7 @@ public:
 // SwDropCapCache Ctor / Dtor
 SwDropCapCache::SwDropCapCache() : nIndex( 0 )
 {
-    memset( &aMagicNo, 0, sizeof(aMagicNo) );
+    memset( &aFontCacheId, 0, sizeof(aFontCacheId) );
     memset( &aWishedHeight, 0, sizeof(aWishedHeight) );
 }
 
@@ -725,7 +725,7 @@ void SwDropPortion::DeleteDropCapCache()
 
 void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf )
 {
-    const void* pFntNo = nullptr;
+    const void* nFntCacheId = nullptr;
     sal_uInt16 nTmpIdx = 0;
 
     OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
@@ -741,13 +741,13 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
     if ( bUseCache )
     {
         SwFont& rFnt = pCurrPart->GetFont();
-        rFnt.ChkMagic( rInf.GetVsh(), rFnt.GetActual() );
-        rFnt.GetMagic( pFntNo, nTmpIdx, rFnt.GetActual() );
+        rFnt.CheckFontCacheId( rInf.GetVsh(), rFnt.GetActual() );
+        rFnt.GetFontCacheId( nFntCacheId, nTmpIdx, rFnt.GetActual() );
 
         nTmpIdx = 0;
 
         while( nTmpIdx < DROP_CACHE_SIZE &&
-            ( aText[ nTmpIdx ] != aStr || aMagicNo[ nTmpIdx ] != sal_IntPtr(pFntNo) ||
+            ( aText[ nTmpIdx ] != aStr || aFontCacheId[ nTmpIdx ] != nFntCacheId ||
             aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
             ++nTmpIdx;
     }
@@ -782,7 +782,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         if ( bUseCache )
         {
             // save keys for cache
-            aMagicNo[ nTmpIdx ] = sal_IntPtr(pFntNo);
+            aFontCacheId[ nTmpIdx ] = nFntCacheId;
             aText[ nTmpIdx ] = aStr;
             aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
             // save initial scaling factor

@@ -57,7 +57,7 @@ private:
     /// current iteration index in text node
     sal_Int32 m_nPosition;
     sal_uInt8 m_nPropFont;
-    o3tl::enumarray<SwFontScript, const void*> m_aMagicNo;
+    o3tl::enumarray<SwFontScript, const void*> m_aFontCacheIds;
     o3tl::enumarray<SwFontScript, sal_uInt16> m_aFontIdx;
     /// input: the current text node
     const SwTextNode* m_pTextNode;
