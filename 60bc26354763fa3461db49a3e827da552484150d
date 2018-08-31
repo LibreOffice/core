@@ -46,6 +46,30 @@
       "revId": "60bc26354763fa3461db49a3e827da552484150d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_5247de4c",
+        "filename": "registry/source/regimpl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-31T14:16:10Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/59873\u003e \"GCC only supports inline variables since GCC 7\" should fix that",
+      "parentUuid": "dfeb2761_d713e00c",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 25
+      },
+      "revId": "60bc26354763fa3461db49a3e827da552484150d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
