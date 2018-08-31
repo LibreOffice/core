@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const rtl::OUString& columnNam
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    MYSQL_FIELD* pFields = mysql_fetch_field(m_pResult);
+    MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
     for (sal_Int32 i = 0; i < m_nFieldCount; ++i)
     {
         if (columnName.equalsIgnoreAsciiCaseAscii(pFields[i].name))
