@@ -3267,12 +3267,12 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         if (nIndex > 0)
         {
             GetUpperCellString(nCol1, nRow, aCellStr);
-            if ( aCellStr == ScResId(STR_TABLE_UND) )
+            if ( aCellStr == ScResId(STR_TABLE_AND) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr == ScResId(STR_TABLE_ODER) )
+            else if ( aCellStr == ScResId(STR_TABLE_OR) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;
