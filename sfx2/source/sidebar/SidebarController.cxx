@@ -1079,6 +1079,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
                 {
                     RequestOpenDeck();
                     SwitchToDeck(mpTabBar->GetDeckIdForIndex(nIndex - MID_FIRST_PANEL));
+                    maFocusManager.GrabFocusButton(nIndex - MID_FIRST_PANEL + 1);
                 }
                 else if (nIndex >=MID_FIRST_HIDE)
                     if (pMenu->GetItemBits(nIndex) == MenuItemBits::CHECKABLE)
@@ -1094,6 +1095,9 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
                                                     mxFrame->getController());
                         // Notify the tab bar about the updated set of decks.
                         mpTabBar->SetDecks(aDecks);
+                        mpTabBar->UpdateFocusManager(maFocusManager);
+                        mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
+                        maFocusManager.GrabFocusButton(0);
                     }
             }
             catch (RuntimeException&)
