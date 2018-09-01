@@ -943,6 +943,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     if (rPresetId.getLength() > 0)
     {
         nPresetId = AnimationExporter::GetPresetID(rPresetId, nPresetClass, bPresetId);
+        bPresetId = true;
     }
 
     sal_uInt32 nPresetSubType = 0;
