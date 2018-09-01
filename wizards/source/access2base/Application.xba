@@ -1222,6 +1222,7 @@ Const cstThisSub = &quot;OpenConnection&quot;
 				Set .Document = oComponent
 				.Title = oComponent.Title
 				.URL = vDocContainer.URL
+				.Location = oComponent.Location
 				ReDim vDbContainers(0 To 0)
 				Set vDbContainers(0) = vDbContainer
 				TraceLog(TRACEANY, .Version, False)
@@ -1339,6 +1340,7 @@ Const cstThisSub = &quot;OpenDatabase&quot;
 		If UCase(Right(sDatabaseURL, 4)) &lt;&gt; &quot;.ODB&quot; Then Goto Trace_Error
 		If Not FileExists(sDatabaseURL) Then Goto Trace_Error
 		Set oBaseSource = oBaseContext.getByName(sDatabaseURL)
+		odbDatabase.Location = sDatabaseURL
 	End If
 
 	Set odbDatabase.Connection = oBaseSource.getConnection(pvUser, pvPassword)
