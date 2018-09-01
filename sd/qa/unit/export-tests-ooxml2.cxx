@@ -193,6 +193,7 @@ public:
     void testTdf116350TextEffects();
     void testTdf118825();
     void testTdf119118();
+    void testTdf99213();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testTdf116350TextEffects);
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTdf119118);
+    CPPUNIT_TEST(testTdf99213);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1984,6 +1986,19 @@ void SdOOXMLExportTest2::testTdf119118()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "//p:iterate", "type", "lt");
     assertXPath(pXmlDocContent, "//p:tmAbs", "val", "200");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf99213()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc( "sd/qa/unit/data/odp/tdf99213-target-missing.odp" ), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    // Number of nodes with p:attrNameLst was 3, including one that missed tgtEl
+    assertXPath(pXmlDocContent, "//p:attrNameLst", 2);
+    // Timenode that miss its target element should be filtered.
+    assertXPath(pXmlDocContent, "//p:attrNameLst/preceding-sibling::p:tgtEl", 2);
     xDocShRef->DoClose();
 }
 
