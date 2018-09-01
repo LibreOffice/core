@@ -1097,6 +1097,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
                         // Notify the tab bar about the updated set of decks.
                         mpTabBar->SetDecks(aDecks);
                         mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
+                        mpTabBar->UpdateFocusManager(maFocusManager);
                     }
                 mpParentWindow->GrabFocusToDocument();
             }

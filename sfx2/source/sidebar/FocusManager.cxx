@@ -453,21 +453,34 @@ void FocusManager::HandleKeyEvent (
                     else if (IsDeckTitleVisible())
                         FocusDeckTitle();
                     else
-                        FocusButton(maButtons.size()-1);
+                    {
+                        // Focus the last button.
+                        sal_Int32 nIndex(maButtons.size()-1);
+                        while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                        FocusButton(nIndex);
+                    }
                     break;
 
                 case PC_DeckTitle:
                 case PC_DeckToolBox:
+                {
                     // Focus the last button.
-                    FocusButton(maButtons.size()-1);
+                    sal_Int32 nIndex(maButtons.size()-1);
+                    while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                    FocusButton(nIndex);
                     break;
+                }
 
                 case PC_TabBar:
                     // Go to previous tab bar item.
                     if (aLocation.mnIndex == 0)
                         FocusPanel(maPanels.size()-1, true);
                     else
-                        FocusButton((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
+                    {
+                        sal_Int32 nIndex((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
+                        while(!maButtons[nIndex].get()->IsVisible() && --nIndex > 0);
+                        FocusButton(nIndex);
+                    }
                     break;
 
                 default:
@@ -501,13 +514,19 @@ void FocusManager::HandleKeyEvent (
                 case PC_TabBar:
                     // Go to next tab bar item.
                     if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
-                        FocusButton(aLocation.mnIndex + 1);
-                    else
                     {
-                        FocusPanel(0, true);
-                        if (IsDeckTitleVisible())
-                            FocusDeckTitle();
+                        sal_Int32 nIndex(aLocation.mnIndex + 1);
+                        while(!maButtons[nIndex].get()->IsVisible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
+                        if (nIndex < static_cast<sal_Int32>(maButtons.size()))
+                        {
+                            FocusButton(nIndex);
+                            break;
+                        }
                     }
+                    if (IsDeckTitleVisible())
+                        FocusDeckTitle();
+                    else
+                        FocusPanel(0, true);
                     break;
 
                 default:
