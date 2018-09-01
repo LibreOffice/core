@@ -6435,7 +6435,7 @@ save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #if !defined __cpp_inline_variables
-        // This tests for one specific aspect of inline variables that is actually used by by
+        // This tests for one specific aspect of inline variables that is actually used by
         // ORegistry::ROOT (registry/source/regimpl.cxx):
         struct S { constexpr S() {} };
         struct T { static constexpr S s{}; };
