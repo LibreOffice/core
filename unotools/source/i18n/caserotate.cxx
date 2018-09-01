@@ -35,9 +35,19 @@ TransliterationFlags RotateTransliteration::getNextMode()
             break;
     }
 
+    m_aKeyInputTimer.SetInvokeHandler(LINK(this, RotateTransliteration, KeyInputTimerHandler));
+    m_aKeyInputTimer.SetTimeout( 3000 );
+    m_aKeyInputTimer.Start();
+
     nF3ShiftCounter++;
 
     return nMode;
+}
+
+IMPL_LINK_NOARG(RotateTransliteration, KeyInputTimerHandler, Timer *, void)
+{
+    nF3ShiftCounter = 0;
+    m_aKeyInputTimer.Stop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
