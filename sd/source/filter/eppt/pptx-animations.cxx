@@ -578,10 +578,23 @@ class NodeContext
     const Reference<XAnimationNode>& mxNode;
     const bool mbMainSeqChild;
 
+    // Attributes inialized from mxNode->getUserData().
+    sal_Int16 mnEffectNodeType;
+    sal_Int16 mnEffectPresetClass;
+    OUString msEffectPresetId;
+    OUString msEffectPresetSubType;
+
+    /// constructor helper for initializing user datas.
+    void initUserData();
+
 public:
     NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild);
     const Reference<XAnimationNode>& getNode() const { return mxNode; }
     bool isMainSeqChild() const { return mbMainSeqChild; }
+    sal_Int16 getEffectNodeType() const { return mnEffectNodeType; }
+    sal_Int16 getEffectPresetClass() const { return mnEffectPresetClass; }
+    const OUString& getEffectPresetId() const { return msEffectPresetId; }
+    const OUString& getEffectPresetSubType() const { return msEffectPresetSubType; }
 };
 
 class PPTXAnimationExport
@@ -885,6 +898,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     const char* pFill = nullptr;
     double fDuration = 0;
     Any aAny;
+    assert(mpContext);
 
     aAny = rXNode->getDuration();
     if (aAny.hasValue())
@@ -902,12 +916,8 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
 
     pRestart = convertAnimationRestart(rXNode->getRestart());
 
-    const Sequence<NamedValue> aUserData = rXNode->getUserData();
-    const Any* pAny[DFF_ANIM_PROPERTY_ID_COUNT];
-    AnimationExporter::GetUserData(aUserData, pAny, sizeof(pAny));
-
-    sal_Int16 nType = 0;
-    if (pAny[DFF_ANIM_NODE_TYPE] && (*pAny[DFF_ANIM_NODE_TYPE] >>= nType))
+    sal_Int16 nType = mpContext->getEffectNodeType();
+    if (nType != -1)
     {
         pNodeType = convertEffectNodeType(nType);
         if (nType == EffectNodeType::TIMING_ROOT)
@@ -923,35 +933,26 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         }
     }
 
-    sal_uInt32 nPresetClass = DFF_ANIM_PRESS_CLASS_USER_DEFINED;
-    if (pAny[DFF_ANIM_PRESET_CLASS])
-    {
-        if (*pAny[DFF_ANIM_PRESET_CLASS] >>= nPresetClass)
-        {
-            pPresetClass = convertEffectPresetClass(nPresetClass);
-        }
-    }
+    sal_uInt32 nPresetClass = mpContext->getEffectPresetClass();
+    if (nPresetClass != DFF_ANIM_PRESS_CLASS_USER_DEFINED)
+        pPresetClass = convertEffectPresetClass(nPresetClass);
 
     sal_uInt32 nPresetId = 0;
     bool bPresetId = false;
-    if (pAny[DFF_ANIM_PRESET_ID])
+    const OUString& rPresetId = mpContext->getEffectPresetId();
+    if (rPresetId.getLength() > 0)
     {
-        OUString sPreset;
-        if (*pAny[DFF_ANIM_PRESET_ID] >>= sPreset)
-            nPresetId = AnimationExporter::GetPresetID(sPreset, nPresetClass, bPresetId);
+        nPresetId = AnimationExporter::GetPresetID(rPresetId, nPresetClass, bPresetId);
     }
 
     sal_uInt32 nPresetSubType = 0;
     bool bPresetSubType = false;
-    if (pAny[DFF_ANIM_PRESET_SUB_TYPE])
+    const OUString& sPresetSubType = mpContext->getEffectPresetSubType();
+    if (sPresetSubType.getLength() > 0)
     {
-        OUString sPresetSubType;
-        if (*pAny[DFF_ANIM_PRESET_SUB_TYPE] >>= sPresetSubType)
-        {
-            nPresetSubType = AnimationExporter::TranslatePresetSubType(nPresetClass, nPresetId,
-                                                                       sPresetSubType);
-            bPresetSubType = true;
-        }
+        nPresetSubType
+            = AnimationExporter::TranslatePresetSubType(nPresetClass, nPresetId, sPresetSubType);
+        bPresetSubType = true;
     }
 
     if (nType != EffectNodeType::TIMING_ROOT && nType != EffectNodeType::MAIN_SEQUENCE)
@@ -1204,6 +1205,35 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
 NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild)
     : mxNode(xNode)
     , mbMainSeqChild(bMainSeqChild)
+    , mnEffectNodeType(-1)
+    , mnEffectPresetClass(DFF_ANIM_PRESS_CLASS_USER_DEFINED)
 {
+    initUserData();
 }
+
+void NodeContext::initUserData()
+{
+    assert(mxNode.is());
+
+    Sequence<NamedValue> aUserData = mxNode->getUserData();
+    const Any* aIndexedData[DFF_ANIM_PROPERTY_ID_COUNT];
+    AnimationExporter::GetUserData(aUserData, aIndexedData, sizeof(aIndexedData));
+
+    const Any* pAny = aIndexedData[DFF_ANIM_NODE_TYPE];
+    if (pAny)
+        *pAny >>= mnEffectNodeType;
+
+    pAny = aIndexedData[DFF_ANIM_PRESET_CLASS];
+    if (pAny)
+        *pAny >>= mnEffectPresetClass;
+
+    pAny = aIndexedData[DFF_ANIM_PRESET_ID];
+    if (pAny)
+        *pAny >>= msEffectPresetId;
+
+    pAny = aIndexedData[DFF_ANIM_PRESET_SUB_TYPE];
+    if (pAny)
+        *pAny >>= msEffectPresetSubType;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
