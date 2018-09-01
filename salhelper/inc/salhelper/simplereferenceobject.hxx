@@ -36,6 +36,8 @@
 #define INCLUDED_NEW
 #endif
 
+#include <salhelper/salhelperdllapi.h>
+
 namespace salhelper {
 
 /** A simple base implementation for reference-counted objects.
@@ -64,7 +66,7 @@ namespace salhelper {
     objects are of no use, anyway, it seems best to simply declare and not
     define (private) operators new[] and delete[].
  */
-class SimpleReferenceObject
+class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {
 public:
     inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}

@@ -40,12 +40,18 @@ UDK_3_0_0 { # should have been UDK_3.0
     _ZN9salhelper21SimpleReferenceObjectnwE?; # salhelper::SimpleReferenceObject::operator new (std::size_t)
 
     _ZNK9salhelper18ORealDynamicLoader6getApiEv;
-    # _ZTIN9salhelper18ORealDynamicLoaderE;
-    # _ZTSN9salhelper18ORealDynamicLoaderE;
+    _ZTIN9salhelper18ORealDynamicLoaderE;
+    _ZTSN9salhelper18ORealDynamicLoaderE;
     _ZTVN9salhelper18ORealDynamicLoaderE;
-    # _ZTIN9salhelper21SimpleReferenceObjectE;
-    # _ZTSN9salhelper21SimpleReferenceObjectE;
+    _ZTIN9salhelper21SimpleReferenceObjectE;
+    _ZTSN9salhelper21SimpleReferenceObjectE;
     _ZTVN9salhelper21SimpleReferenceObjectE;
+
+    # Typeinfos that should be UDK_3.1, but were already UDK_3_0_0 prior to the gbuild port:
+    _ZTIN9salhelper15ConditionWaiter8timedoutE;
+    _ZTSN9salhelper15ConditionWaiter8timedoutE;
+    _ZTIN9salhelper9ConditionE;
+    _ZTSN9salhelper9ConditionE;
 
     local:
         *;
@@ -65,8 +71,6 @@ UDK_3.1 {
         _ZN9salhelper9ConditionD0Ev;
         _ZN9salhelper9ConditionD1Ev;
         _ZN9salhelper9ConditionD2Ev;
-        # _ZTIN9salhelper9ConditionE;
-        # _ZTIS9salhelper9ConditionE;
 
         _ZN9salhelper17ConditionModifierC1ERNS_9ConditionE;
         _ZN9salhelper17ConditionModifierC2ERNS_9ConditionE;
@@ -88,6 +92,4 @@ UDK_3.1 {
         _ZN9salhelper15ConditionWaiter8timedoutD0Ev;
         _ZN9salhelper15ConditionWaiter8timedoutD1Ev;
         _ZN9salhelper15ConditionWaiter8timedoutD2Ev;
-        # _ZTIN9salhelper15ConditionWaiter8timedoutE;
-        # _ZTSN9salhelper15ConditionWaiter8timedoutE;
 } UDK_3_0_0;

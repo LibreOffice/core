@@ -28,7 +28,7 @@
 
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
-
+#include <salhelper/salhelperdllapi.h>
 
 namespace salhelper
 {
@@ -36,7 +36,7 @@ namespace salhelper
     class ConditionWaiter;
 
 
-    class Condition
+    class SALHELPER_DLLPUBLIC Condition
     {
         friend class ConditionModifier;
         friend class ConditionWaiter;
@@ -63,7 +63,7 @@ namespace salhelper
 
 
 
-    class ConditionModifier
+    class SALHELPER_DLLPUBLIC ConditionModifier
     {
     public:
 
@@ -81,13 +81,13 @@ namespace salhelper
 
 
 
-    class ConditionWaiter
+    class SALHELPER_DLLPUBLIC ConditionWaiter
     {
     public:
 
         ConditionWaiter(Condition& aCond);
 
-        struct timedout {
+        struct SALHELPER_DLLPUBLIC timedout {
             timedout();
 
             timedout(timedout const &);

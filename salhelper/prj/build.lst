@@ -1,4 +1,2 @@
 shp	salhelper	:	sal NULL
-shp	salhelper		 	usr1	-	all	shp_mkout NULL
-shp	salhelper\source 	nmake	-	all shp_source NULL
-shp	salhelper\qa		nmake	-	all shp_qa shp_source NULL
+shp	salhelper\prj		nmake	-	all shp_prj NULL
