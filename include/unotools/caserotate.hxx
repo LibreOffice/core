@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 #include <unotools/unotoolsdllapi.h>
+//#include <vcl/timer.hxx>
+#include <tools/time.hxx>
 
 enum class TransliterationFlags;
 
@@ -19,8 +21,13 @@ enum class TransliterationFlags;
 
 class UNOTOOLS_DLLPUBLIC RotateTransliteration
 {
+//    Timer m_aKeyInputTimer;
+//    DECL_LINK( KeyInputTimerHandler, Timer *, void );
+
 private:
-    int nF3ShiftCounter;
+    int   nF3ShiftCounter;
+    sal_uInt64 tLastEvent;
+
 public:
     RotateTransliteration() : nF3ShiftCounter(0)
     {
