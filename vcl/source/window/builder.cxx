@@ -15,7 +15,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
-#include <tools/solar.h>
+#include <tools/svlibrary.h>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
