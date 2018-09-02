@@ -44,17 +44,26 @@ interface TextDrawText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_PASTE_SPECIAL  // api:
+    SID_PASTE_UNFORMATTED  // api:
     [
+        ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-        SID_CLIPBOARD_FORMAT_ITEMS  // api:
-        [
-                StateMethod = StateClpbrd ;
-                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        ]
+    SID_PASTE_SPECIAL  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CLIPBOARD_FORMAT_ITEMS  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 
     FN_ESCAPE // api:
     [
