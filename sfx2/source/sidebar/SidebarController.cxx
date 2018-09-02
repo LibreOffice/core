@@ -48,6 +48,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 
@@ -1094,6 +1095,11 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 
 void SidebarController::RequestCloseDeck()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mpCurrentDeck->GetLOKNotifier()->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
+    }
+
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
