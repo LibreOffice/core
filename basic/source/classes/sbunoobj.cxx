@@ -4407,8 +4407,8 @@ struct StarBasicDisposeItem
 
     explicit StarBasicDisposeItem( StarBASIC* pBasic )
         : m_pBasic( pBasic )
+        , m_pRegisteredVariables(new SbxArray())
     {
-        m_pRegisteredVariables = new SbxArray();
     }
 };
 

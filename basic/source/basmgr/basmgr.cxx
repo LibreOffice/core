@@ -384,12 +384,11 @@ public:
 
 
 BasicLibInfo::BasicLibInfo()
+    : aStorageName(szImbedded)
+    , aRelStorageName(szImbedded)
+    , bDoLoad(false)
+    , bReference(false)
 {
-    bReference          = false;
-    bDoLoad             = false;
-    mxScriptCont        = nullptr;
-    aStorageName        = szImbedded;
-    aRelStorageName     = szImbedded;
 }
 
 BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
