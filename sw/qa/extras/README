@@ -47,7 +47,7 @@ import problem in fact -- and once after the export and import.
 
 === Direct XPath assertions
 
-An other alternative is to assert the resulted export document directly.
+Another alternative is to assert the resulted export document directly.
 Currently this is only implemented for DOCX, which is a zipped XML, so it's
 possible to evaluate XPath checks. A check looks like this:
 
