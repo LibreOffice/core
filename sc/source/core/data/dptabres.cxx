@@ -2865,10 +2865,14 @@ void ScDPResultDimension::LateInitFrom(
 {
     if ( rParams.IsEnd( nPos ) )
         return;
-    OSL_ENSURE( nPos <= pItemData.size(), OString::number(pItemData.size()).getStr() );
+    if (nPos >= pItemData.size())
+    {
+        SAL_WARN("sc.core", "pos " << nPos << ", but vector size is " << pItemData.size());
+        return;
+    }
+    SCROW rThisData = pItemData[nPos];
     ScDPDimension* pThisDim = rParams.GetDim( nPos );
     ScDPLevel* pThisLevel = rParams.GetLevel( nPos );
-    SCROW rThisData = pItemData[nPos];
 
     if (!pThisDim || !pThisLevel)
         return;
