@@ -34,9 +34,6 @@ using namespace com::sun::star::uno;
 
 static void load_FixedWidthList(ScCsvSplits &rSplits)
 {
-    OUString sSplits;
-    OUString sFixedWidthLists;
-
     Sequence<Any>aValues;
     const Any *pProperties;
     Sequence<OUString> aNames { FIXED_WIDTH_LIST };
@@ -48,14 +45,23 @@ static void load_FixedWidthList(ScCsvSplits &rSplits)
     if( pProperties[0].hasValue() )
     {
         rSplits.Clear();
+
+        OUString sFixedWidthLists;
         pProperties[0] >>= sFixedWidthLists;
 
-        sSplits = sFixedWidthLists;
-
-        // String ends with a semi-colon so there is no 'int' after the last one.
-        sal_Int32 n = comphelper::string::getTokenCount(sSplits, ';') - 1;
-        for (sal_Int32 i = 0; i < n; ++i)
-            rSplits.Insert( sSplits.getToken(i, ';').toInt32() );
+        sal_Int32 nIdx {0};
+        for(;;)
+        {
+            const sal_Int32 n {sFixedWidthLists.getToken(0, ';', nIdx).toInt32()};
+            if (nIdx<0)
+            {
+                // String ends with a semi-colon so there
+                // is no useful 'int' after the last one.
+                // This also works in case of empty string
+                break;
+            }
+            rSplits.Insert(n);
+        }
     }
 }
 static void save_FixedWidthList(const ScCsvSplits& rSplits)
