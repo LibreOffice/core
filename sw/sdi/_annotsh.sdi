@@ -96,6 +96,13 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_PASTE_UNFORMATTED
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;

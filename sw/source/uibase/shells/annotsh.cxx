@@ -906,6 +906,10 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest const &rReq)
             if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
                 pOLV->PasteSpecial();
             break;
+        case SID_PASTE_UNFORMATTED:
+            if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
+                pOLV->Paste();
+            break;
         case SID_PASTE_SPECIAL:
         {
             if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
@@ -986,6 +990,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                 break;
             }
             case SID_PASTE:
+            case SID_PASTE_UNFORMATTED:
             case SID_PASTE_SPECIAL:
                 {
                     if( !bPastePossible )
