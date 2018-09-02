@@ -95,7 +95,7 @@ void checkSize(uno::Reference<awt::XUnitConversion> const& xConv, awt::Size cons
  * The real test function
  * 2. try to create an empty window
  * 3. try to convert the WindowPeer to an XWindow
- * 4. try to resize and move the window to an other position, so we get a well knowing position and size.
+ * 4. try to resize and move the window to another position, so we get a well knowing position and size.
  * 5. run some more tests
  */
 void ToolkitTest::testXUnitConversion()
