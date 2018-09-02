@@ -904,7 +904,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest const &rReq)
             break;
         case SID_PASTE:
             if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
-                pOLV->Paste();
+                pOLV->PasteSpecial();
             break;
         case SID_PASTE_SPECIAL:
         {
