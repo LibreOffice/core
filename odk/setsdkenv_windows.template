@@ -57,7 +57,7 @@ REM Example: @set "OO_SDK_CPP_HOME=C:\Program Files\Microsoft Visual Studio 9.0\
 @set "CPP_WINDOWS_SDK=<your_input_here>"
 
 REM Directory of the C# and VB.NET compilers.
-REM Example: @set "OO_SDK_CLI_HOME=C:\WINXP\Microsoft.NET\Framework\v1.0.3705"
+REM Example: @set "OO_SDK_CLI_HOME=C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705"
 @set "OO_SDK_CLI_HOME=<your_input_here>"
 
 REM Java SDK installation directory.
@@ -103,7 +103,7 @@ if not defined OO_SDK_SED_HOME (
    goto :error
  )
 
-REM Set library path. 
+REM Set library path.
 @set "LIB=%OO_SDK_HOME%\lib;%LIB%"
 if defined CPP_WINDOWS_SDK (
    @set "LIB=%LIB%;%CPP_WINDOWS_SDK%\lib"
@@ -152,7 +152,7 @@ if defined OO_SDK_JAVA_HOME @set "PATH=%OO_SDK_JAVA_HOME%\bin;%OO_SDK_JAVA_HOME%
 REM Set environment for C++ compiler tools, if necessary.
 if defined OO_SDK_CPP_HOME call "%OO_SDK_CPP_HOME%\VCVARS32.bat"
 
-REM Set tilte to identify the prepared shell.
+REM Set title to identify the prepared shell.
 title Shell prepared for SDK
 
 REM Prepare shell with all necessary environment variables.
