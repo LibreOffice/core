@@ -29,23 +29,24 @@
 
 // Implementation SbxDecimal
 SbxDecimal::SbxDecimal()
+    : mnRefCount(0)
 {
     setInt( 0 );
-    mnRefCount = 0;
 }
 
 SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
+    : mnRefCount(0)
 {
 #ifdef _WIN32
     maDec = rDec.maDec;
 #else
     (void)rDec;
 #endif
-    mnRefCount = 0;
 }
 
 SbxDecimal::SbxDecimal
     ( const css::bridge::oleautomation::Decimal& rAutomationDec )
+    : mnRefCount(0)
 {
 #ifdef _WIN32
     maDec.scale = rAutomationDec.Scale;
@@ -56,7 +57,6 @@ SbxDecimal::SbxDecimal
 #else
     (void)rAutomationDec;
 #endif
-    mnRefCount = 0;
 }
 
 void SbxDecimal::fillAutomationDecimal

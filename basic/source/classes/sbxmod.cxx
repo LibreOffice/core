@@ -1665,10 +1665,10 @@ class ErrorHdlResetter
     Link<StarBASIC*,bool> mErrHandler;
     bool    mbError;
 public:
-    ErrorHdlResetter() : mbError( false )
+    ErrorHdlResetter()
+        : mErrHandler(StarBASIC::GetGlobalErrorHdl()) // save error handler
+        , mbError( false )
     {
-        // save error handler
-        mErrHandler = StarBASIC::GetGlobalErrorHdl();
         // set new error handler
         StarBASIC::SetGlobalErrorHdl( LINK( this, ErrorHdlResetter, BasicErrorHdl ) );
     }
