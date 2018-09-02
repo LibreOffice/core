@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/sheetcell.hxx>
+#include <test/table/xcell.hxx>
 #include <test/sheet/xcelladdressable.hxx>
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
@@ -29,6 +30,7 @@ using namespace css::uno;
 namespace sc_apitest {
 
 class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
+                                         public apitest::XCell,
                                          public apitest::XCellAddressable,
                                          public apitest::XFormulaQuery,
                                          public apitest::XSheetAnnotationAnchor
@@ -45,6 +47,12 @@ public:
 
     // SheetCell
     CPPUNIT_TEST(testSheetCellProperties);
+
+    // XCell
+    CPPUNIT_TEST(testGetError);
+    CPPUNIT_TEST(testGetType);
+    CPPUNIT_TEST(testSetGetFormula);
+    CPPUNIT_TEST(testSetGetValue);
 
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);
