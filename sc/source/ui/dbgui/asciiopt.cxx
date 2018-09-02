@@ -120,8 +120,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if ( nPos >= 0 )
     {
         const OUString aToken = rString.getToken(0, ',', nPos);
-        sal_Int32 nSub = comphelper::string::getTokenCount(aToken, '/');
-        sal_Int32 nInfoCount = nSub / 2;
+        const sal_Int32 nInfoCount = comphelper::string::getTokenCount(aToken, '/')/2;
         mvColStart.resize(nInfoCount);
         mvColFormat.resize(nInfoCount);
         sal_Int32 nP = 0;
