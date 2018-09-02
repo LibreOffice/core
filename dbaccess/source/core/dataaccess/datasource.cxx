@@ -621,8 +621,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             Reference<XStorage> xRootStorage = m_pImpl->getOrCreateRootStorage();
 
             constexpr char BACKUP_XML_NAME[] = "content_before_migration.xml";
-            if(xRootStorage->isStreamElement(BACKUP_XML_NAME))
-                xRootStorage->removeElement(BACKUP_XML_NAME);
+            try
+            {
+                if(xRootStorage->isStreamElement(BACKUP_XML_NAME))
+                    xRootStorage->removeElement(BACKUP_XML_NAME);
+            }
+            catch (NoSuchElementException&)
+            {
+                SAL_INFO("dbaccess", "No file content_before_migration.xml found" );
+            }
             xRootStorage->copyElementTo("content.xml", xRootStorage,
                 BACKUP_XML_NAME);
 
