@@ -274,7 +274,7 @@ public:
 
     void        Cut();
     void        Copy();
-    void        Paste();
+    void        Paste( bool bUseSpecial = false );
     void        PasteSpecial();
 
     const SfxStyleSheet*  GetStyleSheet() const;

@@ -150,7 +150,7 @@ bool SvxDrawOutlinerViewForwarder::Cut()
 
 bool SvxDrawOutlinerViewForwarder::Paste()
 {
-    mrOutlinerView.Paste();
+    mrOutlinerView.PasteSpecial();
     return true;
 }
 

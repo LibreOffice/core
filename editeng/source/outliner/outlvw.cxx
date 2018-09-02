@@ -669,12 +669,12 @@ void OutlinerView::Cut()
     }
 }
 
-void OutlinerView::Paste()
+void OutlinerView::PasteSpecial()
 {
-    PasteSpecial(); // HACK(SD does not call PasteSpecial)
+    Paste( true );
 }
 
-void OutlinerView::PasteSpecial()
+void OutlinerView::Paste( bool bUseSpecial )
 {
     if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) )
     {
@@ -682,7 +682,11 @@ void OutlinerView::PasteSpecial()
 
         pOwner->pEditEngine->SetUpdateMode( false );
         pOwner->bPasting = true;
-        pEditView->PasteSpecial();
+
+        if ( bUseSpecial )
+            pEditView->PasteSpecial();
+        else
+            pEditView->Paste();
 
         if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
         {
