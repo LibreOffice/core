@@ -625,7 +625,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119188_list_margin_in_cell, "tdf119188_list_marg
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
 
-    // lists with auto margings in cells: top margin of the first paragraph is zero,
+    // lists with auto margins in cells: top margin of the first paragraph is zero,
     // but not the bottom margin of the last paragraph, also other list items have got
     // zero margins.
 
