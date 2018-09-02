@@ -1704,6 +1704,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                                  aTemplName, "",
                                  static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
                                  nFilter);
+                    UpdateFamily_Impl();
                 }
                 pStyleSheetPool->SetSearchMask( eFam, nFilter );
             }
