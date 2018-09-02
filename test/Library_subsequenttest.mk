@@ -146,6 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xviewsplitable \
 	test/source/sheet/xsubtotalcalculatable \
 	test/source/sheet/xsubtotaldescriptor \
+	test/source/table/xcell \
 	test/source/table/xcellcursor \
 	test/source/text/xtext \
 	test/source/text/xtextfield \
