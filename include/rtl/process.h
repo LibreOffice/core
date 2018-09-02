@@ -40,7 +40,7 @@ extern "C" {
     in other processes with a very probability.
 
     @param pTargetUUID 16 byte of memory
-    @see rtl_createUiid()
+    @see rtl_createUuid()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
 
@@ -50,11 +50,11 @@ SAL_DLLPUBLIC void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
     given by command args, that means that all arguments starting with "-env:" will be
     ignored by this function.
 
-    @param nArg [in] The number of the argument to return.
-    @param strCommandArg [out] The string receives the nArg-th command-line argument.
-    @return osl_Process_E_None or does not return.
+    @param[in]  nArg          The number of the argument to return.
+    @param[out] strCommandArg The string receives the nArg-th command-line argument.
+    @retval osl_Process_E_None or does not return.
     @see osl_getCommandArg()
-    @see rtl_getCommandArgCount()
+    @see rtl_getAppCommandArgCount()
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
@@ -66,7 +66,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl
 
     @return the number of commandline arguments passed to the main-function of this process.
     @see osl_getCommandArgCount()
-    @see rtl_getCommandArg()
+    @see rtl_getAppCommandArg()
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_getAppCommandArgCount(void);
 
