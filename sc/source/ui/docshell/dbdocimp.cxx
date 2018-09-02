@@ -140,7 +140,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     ScDocShellModificator aModificator( rDocShell );
 
     bool bSuccess = false;
-    bool bApi = false;                      //! pass as argument
     bool bTruncated = false;                // for warning
     const char* pErrStringId = nullptr;
     OUString aErrorMessage;
@@ -602,10 +601,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if (pWaitWin)
             pWaitWin->LeaveWait();
 
-        if ( bTruncated && !bApi )          // show warning
+        if ( bTruncated )          // show warning
             ErrorHandler::HandleError(SCWARN_IMPORT_RANGE_OVERFLOW);
     }
-    else if ( !bApi )
+    else
     {
         if (pWaitWin)
             pWaitWin->LeaveWait();
