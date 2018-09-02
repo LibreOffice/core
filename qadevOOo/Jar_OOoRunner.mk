@@ -587,7 +587,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/table/_TableColumn \
     qadevOOo/tests/java/ifc/table/_TableRow \
     qadevOOo/tests/java/ifc/table/_XAutoFormattable \
-    qadevOOo/tests/java/ifc/table/_XCell \
     qadevOOo/tests/java/ifc/table/_XCellRange \
     qadevOOo/tests/java/ifc/table/_XColumnRowRange \
     qadevOOo/tests/java/ifc/table/_XTableChart \
