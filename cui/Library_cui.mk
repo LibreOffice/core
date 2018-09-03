@@ -183,7 +183,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/autocdlg \
     cui/source/tabpages/backgrnd \
     cui/source/tabpages/bbdlg \
-    cui/source/tabpages/borderconn \
     cui/source/tabpages/border \
     cui/source/tabpages/chardlg \
     cui/source/tabpages/connect \

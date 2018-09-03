@@ -124,6 +124,7 @@ public:
     void SelectEntry(const Color& rColor);
 
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
+    bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
 
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();

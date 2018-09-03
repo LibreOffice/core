@@ -2749,11 +2749,14 @@ public:
         ::set_label(m_pButton, rText);
     }
 
-    virtual void set_image(VirtualDevice& rDevice) override
+    virtual void set_image(VirtualDevice* pDevice) override
     {
         gtk_button_set_always_show_image(m_pButton, true);
         gtk_button_set_image_position(m_pButton, GTK_POS_LEFT);
-        gtk_button_set_image(m_pButton, gtk_image_new_from_surface(get_underlying_cairo_surface(rDevice)));
+        if (pDevice)
+            gtk_button_set_image(m_pButton, gtk_image_new_from_surface(get_underlying_cairo_surface(*pDevice)));
+        else
+            gtk_button_set_image(m_pButton, nullptr);
     }
 
     virtual OUString get_label() const override
@@ -3097,11 +3100,11 @@ public:
         ::set_label(m_pLabel, rText);
     }
 
-    virtual void set_image(VirtualDevice& rDevice) override
+    virtual void set_image(VirtualDevice* pDevice) override
     {
         if (!m_pImage)
         {
-            m_pImage = GTK_IMAGE(gtk_image_new_from_surface(get_underlying_cairo_surface(rDevice)));
+            m_pImage = GTK_IMAGE(gtk_image_new());
             GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
             gint nImageSpacing(0);
             gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
@@ -3109,8 +3112,10 @@ public:
             gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
             gtk_widget_show(GTK_WIDGET(m_pImage));
         }
+        if (pDevice)
+            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
         else
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(rDevice));
+            gtk_image_set_from_surface(m_pImage, nullptr);
     }
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override

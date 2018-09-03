@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include <bitmaps.hlst>
@@ -261,8 +262,6 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 FrameSelectorImpl::~FrameSelectorImpl()
 
 {
-    if( mxAccess.is() )
-        mxAccess->Invalidate();
     for( auto aIt = maChildVec.begin(), aEnd = maChildVec.end(); aIt != aEnd; ++aIt )
         if( aIt->is() )
             (*aIt)->Invalidate();
@@ -290,7 +289,7 @@ void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
 
 void FrameSelectorImpl::InitColors()
 {
-    const StyleSettings& rSettings = mrFrameSel.GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     maBackCol = rSettings.GetFieldColor();
     mbHCMode = rSettings.GetHighContrastMode();
     maArrowCol = rSettings.GetFieldTextColor();
@@ -346,7 +345,7 @@ void FrameSelectorImpl::InitArrowImageList()
 
 void FrameSelectorImpl::InitGlobalGeometry()
 {
-    Size aCtrlSize( mrFrameSel.CalcOutputSize( mrFrameSel.GetSizePixel() ) );
+    Size aCtrlSize(mrFrameSel.GetOutputSizePixel());
     /*  nMinSize is the lower of width and height (control will always be squarish).
         FRAMESEL_GEOM_OUTER is the minimal distance between inner control border
         and any element. */
@@ -513,8 +512,6 @@ void FrameSelectorImpl::sizeChanged()
     InitGlobalGeometry();
     InitBorderGeometry();
 
-    // correct background around the used area
-    mrFrameSel.SetBackground( Wallpaper( maBackCol ) );
     DoInvalidate( true );
 }
 
@@ -709,7 +706,7 @@ void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
     rRenderContext.DrawBitmapEx(maVirDevPos, mpVirDev->GetBitmapEx(Point(0, 0), mpVirDev->GetOutputSizePixel()));
 }
 
-void FrameSelectorImpl::DrawAllTrackingRects()
+void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
 {
     tools::PolyPolygon aPPoly;
     if (mrFrameSel.IsAnyBorderSelected())
@@ -723,8 +720,9 @@ void FrameSelectorImpl::DrawAllTrackingRects()
         aPPoly.Insert( tools::Polygon(tools::Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
+
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
-        mrFrameSel.InvertTracking(aPPoly.GetObject(nIdx), ShowTrackFlags::Small | ShowTrackFlags::TrackWindow);
+        rRenderContext.Invert(aPPoly.GetObject(nIdx), InvertFlags::TrackFrame);
 }
 
 Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
@@ -735,7 +733,7 @@ Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
 void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
 {
     mbFullRepaint |= bFullRepaint;
-    mrFrameSel.Invalidate( InvalidateFlags::NoErase );
+    mrFrameSel.Invalidate();
 }
 
 // frame border state and style
@@ -757,7 +755,7 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
     else
         rBorder.SetState( eState );
     if (pFrameSelector)
-            pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
+        pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
     DoInvalidate( true );
 }
 
@@ -816,22 +814,23 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
     return bEqual;
 }
 
-FrameSelector::FrameSelector(vcl::Window* pParent)
-    : Control(pParent, WB_BORDER|WB_TABSTOP)
+FrameSelector::FrameSelector()
 {
-    // not in c'tor init list (avoid warning about usage of *this)
+}
+
+void FrameSelector::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    Size aPrefSize = pDrawingArea->get_ref_device().LogicToPixel(Size(61, 65), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     mxImpl.reset( new FrameSelectorImpl( *this ) );
     EnableRTL( false ); // #107808# don't mirror the mouse handling
 }
 
 FrameSelector::~FrameSelector()
 {
-    disposeOnce();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxFrameSelector(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    rRet = VclPtr<FrameSelector>::Create(pParent);
+    if( mxAccess.is() )
+        mxAccess->Invalidate();
 }
 
 void FrameSelector::Initialize( FrameSelFlags nFlags )
@@ -1023,9 +1022,9 @@ void FrameSelector::SetColorToSelection( const Color& rColor )
 // accessibility
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
-    if( !mxImpl->mxAccess.is() )
-        mxImpl->mxAccess = new a11y::AccFrameSelector( *this, FrameBorderType::NONE );
-    return mxImpl->mxAccess.get();
+    if( !mxAccess.is() )
+        mxAccess = new a11y::AccFrameSelector(*this);
+    return mxAccess.get();
 }
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBorder )
@@ -1036,7 +1035,7 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBor
     {
         --nVecIdx;
         if( !mxImpl->maChildVec[ nVecIdx ].is() )
-            mxImpl->maChildVec[ nVecIdx ] = new a11y::AccFrameSelector( *this, eBorder );
+            mxImpl->maChildVec[ nVecIdx ] = new a11y::AccFrameSelectorChild( *this, eBorder );
         xRet = mxImpl->maChildVec[ nVecIdx ].get();
     }
     return xRet;
@@ -1078,7 +1077,7 @@ void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 {
     mxImpl->CopyVirDevToControl(rRenderContext);
     if (HasFocus())
-        mxImpl->DrawAllTrackingRects();
+        mxImpl->DrawAllTrackingRects(rRenderContext);
 }
 
 void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
@@ -1167,7 +1166,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void FrameSelector::KeyInput( const KeyEvent& rKEvt )
+bool FrameSelector::KeyInput( const KeyEvent& rKEvt )
 {
     bool bHandled = false;
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -1214,8 +1213,9 @@ void FrameSelector::KeyInput( const KeyEvent& rKEvt )
             break;
         }
     }
-    if( !bHandled )
-        Window::KeyInput(rKEvt);
+    if (bHandled)
+        return true;
+    return CustomWidgetController::KeyInput(rKEvt);
 }
 
 void FrameSelector::GetFocus()
@@ -1225,8 +1225,6 @@ void FrameSelector::GetFocus()
         mxImpl->SelectBorder( *mxImpl->maEnabBorders.front(), true );
 
     mxImpl->DoInvalidate( false );
-    if( mxImpl->mxAccess.is() )
-        mxImpl->mxAccess->NotifyFocusListeners( true );
     if (IsAnyBorderSelected())
     {
         FrameBorderType borderType = FrameBorderType::NONE;
@@ -1250,35 +1248,26 @@ void FrameSelector::GetFocus()
     }
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
             mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
-    Control::GetFocus();
+    CustomWidgetController::GetFocus();
 }
 
 void FrameSelector::LoseFocus()
 {
     mxImpl->DoInvalidate( false );
-    if( mxImpl->mxAccess.is() )
-        mxImpl->mxAccess->NotifyFocusListeners( false );
-    Control::LoseFocus();
+    CustomWidgetController::LoseFocus();
 }
 
-void FrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
+void FrameSelector::StyleUpdated()
 {
-    Control::DataChanged( rDCEvt );
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        mxImpl->InitVirtualDevice();
+    mxImpl->InitVirtualDevice();
+    CustomWidgetController::StyleUpdated();
 }
 
 void FrameSelector::Resize()
 {
-    Control::Resize();
+    CustomWidgetController::Resize();
     mxImpl->sizeChanged();
 }
-
-Size FrameSelector::GetOptimalSize() const
-{
-    return LogicToPixel(Size(61, 65), MapMode(MapUnit::MapAppFont));
-}
-
 
 template< typename Cont, typename Iter, typename Pred >
 FrameBorderIterBase< Cont, Iter, Pred >::FrameBorderIterBase( container_type& rCont ) :
@@ -1294,7 +1283,6 @@ FrameBorderIterBase< Cont, Iter, Pred >& FrameBorderIterBase< Cont, Iter, Pred >
     do { ++maIt; } while( Is() && !maPred( *maIt ) );
     return *this;
 }
-
 
 }
 

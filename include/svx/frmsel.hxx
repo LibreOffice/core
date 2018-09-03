@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/bitmap.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
@@ -79,10 +80,16 @@ enum class FrameBorderState
 };
 
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector : public Control
+namespace a11y
+{
+    class AccFrameSelector;
+}
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector : public weld::CustomWidgetController
 {
 public:
-    FrameSelector(vcl::Window* pParent);
+    FrameSelector();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~FrameSelector() override;
 
     /** Initializes the control, enables/disables frame borders according to flags. */
@@ -156,8 +163,9 @@ public:
 
     // accessibility
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-                        CreateAccessible() override;
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
 
     /** Returns the accessibility child object of the specified frame border (if enabled). */
     css::uno::Reference< css::accessibility::XAccessible >
@@ -174,21 +182,19 @@ public:
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
-
 protected:
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void        StyleUpdated() override;
     virtual void        Resize() override;
-    virtual Size        GetOptimalSize() const override;
 
 private:
+    rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
     std::unique_ptr< FrameSelectorImpl > mxImpl;
 };
-
 
 }
 
