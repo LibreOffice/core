@@ -102,6 +102,7 @@ public:
     void testTdf115394PPT();
     void testBulletsAsImage();
     void testTdf113818();
+    void testTdf119629();
     void testTdf113822();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testBulletsAsImage);
     CPPUNIT_TEST(testTdf113818);
+    CPPUNIT_TEST(testTdf119629);
     CPPUNIT_TEST(testTdf113822);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1137,6 +1139,26 @@ void SdExportTest::testTdf113818()
     xDocShRef->DoClose();
 }
 
+void SdExportTest::testTdf119629()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf119629.ppt"), PPT);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPT);
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    // MSO's effect node type Click parallel node, with group node, after group node
+    // were missing.
+    assertXPath(pXmlDoc, "//draw:page"
+            "/anim:par[@presentation:node-type='timing-root']"
+            "/anim:seq[@presentation:node-type='main-sequence']"
+            "/anim:par[@presentation:node-type='on-click']"
+            "/anim:par[@presentation:node-type='with-previous']"
+            "/anim:par[@presentation:node-type='on-click']"
+            "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
