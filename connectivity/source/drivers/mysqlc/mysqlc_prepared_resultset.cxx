@@ -649,7 +649,7 @@ sal_Bool SAL_CALL OPreparedResultSet::next()
         mysqlc_sdbc_driver::allocateSqlVar(&m_aData[i].buffer, m_aData[i].buffer_type,
                                            m_aFields[i].length);
     }
-    mysql_stmt_bind_result(m_pStmt, m_aData);
+    mysql_stmt_bind_result(m_pStmt, m_aData.get());
     if (bFirstRun)
         mysql_stmt_store_result(m_pStmt);
     int failure = mysql_stmt_fetch(m_pStmt);
