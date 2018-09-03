@@ -113,7 +113,6 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
     Link<weld::MetricSpinButton&, void> aLink( LINK( this, SvxBitmapTabPage, ModifyPositionOffsetHdl ) );
     m_xPositionOffX->connect_value_changed(aLink);
     m_xPositionOffY->connect_value_changed(aLink);
-    m_xTileOffset->set_value(0, FUNIT_PERCENT);
     m_xTileOffset->connect_value_changed( LINK( this, SvxBitmapTabPage, ModifyTileOffsetHdl ) );
     m_xBtnImport->connect_clicked( LINK(this, SvxBitmapTabPage, ClickImportHdl) );
 

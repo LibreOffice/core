@@ -427,6 +427,7 @@ private:
     long            mnUserItemWidth;
     long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
+    sal_uInt16      mnHighItemId;
     sal_uInt16      mnCols;
     sal_uInt16      mnCurCol;
     sal_uInt16      mnUserCols;
@@ -441,7 +442,9 @@ private:
     Link<SvtValueSet*,void>  maSelectHdl;
 
     bool            mbFormat : 1;
+    bool            mbHighlight : 1;
     bool            mbNoSelection : 1;
+    bool            mbDrawSelection : 1;
     bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
@@ -457,6 +460,7 @@ private:
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE SvtValueSetItem*    ImplGetItem( size_t nPos );
@@ -466,7 +470,10 @@ private:
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
+    SVT_DLLPRIVATE void         ImplTracking(const Point& rPos);
     DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
+
+    Size           GetLargestItemSize();
 
     SvtValueSet (const SvtValueSet &) = delete;
     SvtValueSet & operator= (const SvtValueSet &) = delete;
@@ -481,6 +488,7 @@ public:
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;
@@ -495,12 +503,16 @@ public:
     void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }
 
+    void SetOptimalSize();
+
     /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
+    /// Insert an User Drawn item.
+    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -535,6 +547,8 @@ public:
         return mbNoSelection;
     }
 
+    void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
+    Image           GetItemImage( sal_uInt16 nItemId ) const;
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
