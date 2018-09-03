@@ -468,6 +468,8 @@ private:
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
+    Size           GetLargestItemSize();
+
     SvtValueSet (const SvtValueSet &) = delete;
     SvtValueSet & operator= (const SvtValueSet &) = delete;
 
@@ -495,12 +497,16 @@ public:
     void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }
 
+    void SetOptimalSize();
+
     /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
+    /// Insert an User Drawn item.
+    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -535,6 +541,7 @@ public:
         return mbNoSelection;
     }
 
+    void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;

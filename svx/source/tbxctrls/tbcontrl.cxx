@@ -1737,6 +1737,15 @@ bool SvxColorWindow::IsNoSelection() const
     return !mpButtonAutoColor->IsVisible() && !mpButtonNoneColor->IsVisible();
 }
 
+bool ColorWindow::IsNoSelection() const
+{
+    if (!mxColorSet->IsNoSelection())
+        return false;
+    if (!mxRecentColorSet->IsNoSelection())
+        return false;
+    return !mxButtonAutoColor->get_visible() && !mxButtonNoneColor->get_visible();
+}
+
 void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     if (rEvent.FeatureURL.Complete == ".uno:ColorTableState")

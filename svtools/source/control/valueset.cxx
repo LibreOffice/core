@@ -3568,6 +3568,26 @@ void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
     }
 }
 
+void SvtValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    SvtValueSetItem* pItem = mItemList[nPos];
+    pItem->meType  = VALUESETITEM_IMAGE;
+    pItem->maImage = rImage;
+
+    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    {
+        const tools::Rectangle aRect = ImplGetItemRect(nPos);
+        Invalidate(aRect);
+    }
+    else
+        mbFormat = true;
+}
+
 Color SvtValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );
@@ -3658,6 +3678,14 @@ void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
+    ImplInsertItem( pItem, nPos );
+}
+
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
+{
+    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_USERDRAW;
     ImplInsertItem( pItem, nPos );
 }
 
@@ -3840,6 +3868,44 @@ void SvtValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
         SvtValueItemAcc* pValueItemAcc = static_cast<SvtValueItemAcc*>(xAccessible.get());
         pValueItemAcc->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
     }
+}
+
+Size SvtValueSet::GetLargestItemSize()
+{
+    Size aLargestItem;
+
+    for (SvtValueSetItem* pItem : mItemList)
+    {
+        if (!pItem->mbVisible)
+            continue;
+
+        if (pItem->meType != VALUESETITEM_IMAGE &&
+            pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+        {
+            // handle determining an optimal size for this case
+            continue;
+        }
+
+        Size aSize = pItem->maImage.GetSizePixel();
+        if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+        {
+            aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
+                maVirDev->GetTextHeight() );
+            aSize.setWidth( std::max(aSize.Width(),
+                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET) );
+        }
+
+        aLargestItem.setWidth( std::max(aLargestItem.Width(), aSize.Width()) );
+        aLargestItem.setHeight( std::max(aLargestItem.Height(), aSize.Height()) );
+    }
+
+    return aLargestItem;
+}
+
+void SvtValueSet::SetOptimalSize()
+{
+    Size aPrefSize(CalcWindowSizePixel(GetLargestItemSize()));
+    GetDrawingArea()->set_size_request(aPrefSize.Width(), aPrefSize.Height());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

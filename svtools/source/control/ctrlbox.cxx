@@ -22,6 +22,7 @@
 #include <i18nutil/unicode.hxx>
 #include <tools/stream.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
@@ -38,6 +39,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
+#include <svtools/valueset.hxx>
 
 #include <vcl/i18nhelp.hxx>
 #include <vcl/fontcapabilities.hxx>
@@ -1573,6 +1575,253 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
     }
 
     return MetricBox::GetValueFromStringUnit( rStr, eOutUnit );
+}
+
+SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
+{
+    auto nId = m_xLineSet->GetSelectedItemId();
+    if (!nId)
+        return SvxBorderLineStyle::SOLID;
+    return static_cast<SvxBorderLineStyle>(nId);
+}
+
+void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
+                            Color aColor1, Color aColor2, Color aColorDist,
+                            SvxBorderLineStyle nStyle, BitmapEx& rBmp )
+{
+    //TODO, rather than including the " " text to force
+    //the line height, better would be do drop
+    //this calculation and draw a bitmap of height
+    //equal to normal text line and center the
+    //line within that
+    long nMinWidth = m_xControl->get_pixel_size("----------").Width();
+    // TODO Size aSize = CalcSubEditSize();
+    Size aSize;
+    aSize.setWidth( std::max(nMinWidth, aSize.Width()) );
+    aSize.AdjustWidth( -(aTxtSize.Width()) );
+    aSize.AdjustWidth( -6 );
+    aSize.setHeight( aTxtSize.Height() );
+
+    // SourceUnit to Twips
+    if ( eSourceUnit == FUNIT_POINT )
+    {
+        nLine1      /= 5;
+        nLine2      /= 5;
+        nDistance   /= 5;
+    }
+
+    // Paint the lines
+    aSize = aVirDev->PixelToLogic( aSize );
+    long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
+    sal_uInt32 n1 = nLine1;
+    sal_uInt32 n2 = nLine2;
+    long nDist  = nDistance;
+    n1 += nPix-1;
+    n1 -= n1%nPix;
+    if ( n2 )
+    {
+        nDist += nPix-1;
+        nDist -= nDist%nPix;
+        n2    += nPix-1;
+        n2    -= n2%nPix;
+    }
+    long nVirHeight = n1+nDist+n2;
+    if ( nVirHeight > aSize.Height() )
+        aSize.setHeight( nVirHeight );
+    // negative width should not be drawn
+    if ( aSize.Width() <= 0 )
+        return;
+
+    Size aVirSize = aVirDev->LogicToPixel( aSize );
+    if ( aVirDev->GetOutputSizePixel() != aVirSize )
+        aVirDev->SetOutputSizePixel( aVirSize );
+    aVirDev->SetFillColor( aColorDist );
+    aVirDev->DrawRect( tools::Rectangle( Point(), aSize ) );
+
+    aVirDev->SetFillColor( aColor1 );
+
+    double y1 = double( n1 ) / 2;
+    svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
+
+    if ( n2 )
+    {
+        double y2 =  n1 + nDist + double( n2 ) / 2;
+        aVirDev->SetFillColor( aColor2 );
+        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
+    }
+    rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
+}
+
+SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
+    : m_xControl(std::move(pControl))
+    , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/linewindow.ui"))
+    , m_xTopLevel(m_xBuilder->weld_widget("line_popup_window"))
+    , m_xLineSet(new SvtValueSet(nullptr))
+    , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xLineSet))
+    , m_nWidth( 5 )
+    , aVirDev(VclPtr<VirtualDevice>::Create())
+    , aColor(COL_BLACK)
+    , maPaintCol(COL_BLACK)
+{
+    m_xControl->set_popover(m_xTopLevel.get());
+
+    aTxtSize.setWidth(m_xControl->get_pixel_size(" ").Width());
+    aTxtSize.setHeight(m_xControl->get_text_height());
+    eSourceUnit = FUNIT_POINT;
+
+    aVirDev->SetLineColor();
+    aVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
+
+    UpdatePaintLineColor();
+}
+
+SvtLineListBox::~SvtLineListBox()
+{
+}
+
+sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
+{
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    if (!m_sNone.isEmpty())
+        nListPos--;
+
+    sal_Int32 n = 0;
+    size_t i = 0;
+    size_t nCount = m_vLineList.size();
+    while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
+    {
+        if ( nListPos == n )
+            nPos = static_cast<sal_Int32>(i);
+        n++;
+        i++;
+    }
+
+    return nPos;
+}
+
+void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
+{
+    m_xLineSet->SelectItem(static_cast<sal_Int16>(nStyle));
+}
+
+void SvtLineListBox::InsertEntry(
+    const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
+    ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
+{
+    m_vLineList.emplace_back(new ImpLineListData(
+        rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn));
+}
+
+sal_Int32 SvtLineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
+{
+    if(nStyle == SvxBorderLineStyle::NONE && !m_sNone.isEmpty())
+        return 0;
+    for ( size_t i = 0, n = m_vLineList.size(); i < n; ++i ) {
+        auto& pData = m_vLineList[ i ];
+        if ( pData->GetStyle() == nStyle )
+        {
+            size_t nPos = i;
+            if (!m_sNone.isEmpty())
+                nPos ++;
+            return static_cast<sal_Int32>(nPos);
+        }
+    }
+    return LISTBOX_ENTRY_NOTFOUND;
+}
+
+SvxBorderLineStyle SvtLineListBox::GetEntryStyle( sal_Int32 nPos ) const
+{
+    ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;
+    return pData ? pData->GetStyle() : SvxBorderLineStyle::NONE;
+}
+
+void SvtLineListBox::UpdatePaintLineColor()
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    Color aNewCol(rSettings.GetWindowColor().IsDark() ? rSettings.GetLabelTextColor() : aColor);
+
+    bool bRet = aNewCol != maPaintCol;
+
+    if( bRet )
+        maPaintCol = aNewCol;
+}
+
+void SvtLineListBox::UpdateEntries()
+{
+    UpdatePaintLineColor( );
+
+    SvxBorderLineStyle eSelected = GetSelectEntryStyle();
+
+    // Remove the old entries
+    m_xLineSet->Clear();
+
+    // Add the new entries based on the defined width
+    if (!m_sNone.isEmpty())
+        m_xLineSet->InsertItem(static_cast<sal_Int16>(SvxBorderLineStyle::NONE), Image(), m_sNone);
+
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = m_vLineList.size( );
+    while ( n < nCount )
+    {
+        auto& pData = m_vLineList[ n ];
+        BitmapEx aBmp;
+        ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
+                pData->GetLine2ForWidth( m_nWidth ),
+                pData->GetDistForWidth( m_nWidth ),
+                GetColorLine1(m_xLineSet->GetItemCount()),
+                GetColorLine2(m_xLineSet->GetItemCount()),
+                GetColorDist(m_xLineSet->GetItemCount()),
+                pData->GetStyle(), aBmp );
+        m_xLineSet->InsertItem(static_cast<sal_Int16>(pData->GetStyle()), Image(aBmp), "");
+        if (pData->GetStyle() == eSelected)
+            m_xLineSet->SelectItem(static_cast<sal_Int16>(pData->GetStyle()));
+        n++;
+    }
+}
+
+Color SvtLineListBox::GetColorLine1( sal_Int32 nPos )
+{
+    sal_Int32 nStyle = GetStylePos( nPos );
+    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+        return GetPaintColor( );
+    auto& pData = m_vLineList[ nStyle ];
+    return pData->GetColorLine1( GetColor( ) );
+}
+
+Color SvtLineListBox::GetColorLine2( sal_Int32 nPos )
+{
+    sal_Int32 nStyle = GetStylePos(nPos);
+    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+        return GetPaintColor( );
+    auto& pData = m_vLineList[ nStyle ];
+    return pData->GetColorLine2( GetColor( ) );
+}
+
+Color SvtLineListBox::GetColorDist( sal_Int32 nPos )
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    Color rResult = rSettings.GetFieldColor();
+
+    sal_Int32 nStyle = GetStylePos( nPos );
+    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+        return rResult;
+    auto& pData = m_vLineList[ nStyle ];
+    return pData->GetColorDist( GetColor( ), rResult );
+}
+
+IMPL_LINK_NOARG(SvtLineListBox, StyleUpdated, weld::Widget&, void)
+{
+    UpdateEntries();
+}
+
+bool SvtLineListBox::IsNoSelection() const
+{
+    return m_xLineSet->IsNoSelection();
+}
+
+void SvtLineListBox::SetSelectHdl(const Link<SvtValueSet*,void>& rLink)
+{
+    m_xLineSet->SetSelectHdl(rLink);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

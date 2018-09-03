@@ -30,6 +30,7 @@ namespace svx {
 
 namespace a11y {
     class AccFrameSelector;
+    class AccFrameSelectorChild;
 }
 
 class FrameBorder
@@ -138,8 +139,7 @@ struct FrameSelectorImpl
     bool                mbAutoSelect;   /// true = Auto select a frame border, if focus reaches control.
     bool                mbHCMode;       /// true = High contrast mode.
 
-    rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
-    std::vector<rtl::Reference<a11y::AccFrameSelector>>
+    std::vector<rtl::Reference<a11y::AccFrameSelectorChild>>
                         maChildVec;     /// Pointers to accessibility objects for frame borders.
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();

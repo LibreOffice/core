@@ -22,12 +22,14 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <vcl/customweld.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <o3tl/typed_flags_set.hxx>
@@ -279,6 +281,95 @@ inline void LineListBox::SetNone( const OUString& sNone )
 {
     m_sNone = sNone;
 }
+
+class SvtValueSet;
+
+class SVT_DLLPUBLIC SvtLineListBox
+{
+public:
+    typedef Color (*ColorFunc)(Color);
+    typedef Color (*ColorDistFunc)(Color, Color);
+
+    SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl);
+    ~SvtLineListBox();
+
+    /** Set the width in Twips */
+    void SetWidth( long nWidth )
+    {
+        m_nWidth = nWidth;
+        UpdateEntries();
+    }
+
+    void SetNone( const OUString& sNone )
+    {
+        m_sNone = sNone;
+    }
+
+    /** Insert a listbox entry with all widths in Twips. */
+    void            InsertEntry(const BorderWidthImpl& rWidthImpl,
+                        SvxBorderLineStyle nStyle, long nMinWidth = 0,
+                        ColorFunc pColor1Fn = &sameColor,
+                        ColorFunc pColor2Fn = &sameColor,
+                        ColorDistFunc pColorDistFn = &sameDistColor);
+
+    sal_Int32       GetEntryPos( SvxBorderLineStyle nStyle ) const;
+    SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
+
+    void            SelectEntry( SvxBorderLineStyle nStyle );
+    SvxBorderLineStyle GetSelectEntryStyle() const;
+
+    bool            IsNoSelection() const;
+
+    void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
+
+    void            SetColor( const Color& rColor )
+    {
+        aColor = rColor;
+        UpdateEntries();
+    }
+
+    const Color&    GetColor() const { return aColor; }
+
+    void            SetSelectHdl(const Link<SvtValueSet*,void>& rLink);
+
+private:
+
+    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
+                                    Color nColor1, Color nColor2, Color nColorDist,
+                                    SvxBorderLineStyle nStyle, BitmapEx& rBmp );
+
+    void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
+    DECL_LINK(StyleUpdated, weld::Widget&, void);
+
+    void            UpdateEntries();
+    sal_Int32       GetStylePos(sal_Int32 nListPos);
+
+    const Color&    GetPaintColor() const
+    {
+        return maPaintCol;
+    }
+    Color   GetColorLine1( sal_Int32  nPos );
+    Color   GetColorLine2( sal_Int32  nPos );
+    Color   GetColorDist( sal_Int32  nPos );
+
+                    SvtLineListBox( const SvtLineListBox& ) = delete;
+    SvtLineListBox&    operator =( const SvtLineListBox& ) = delete;
+
+    std::unique_ptr<weld::MenuButton> m_xControl;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Widget> m_xTopLevel;
+    std::unique_ptr<SvtValueSet> m_xLineSet;
+    std::unique_ptr<weld::CustomWeld> m_xLineSetWin;
+
+    std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
+    long            m_nWidth;
+    OUString        m_sNone;
+    ScopedVclPtr<VirtualDevice>   aVirDev;
+    Size            aTxtSize;
+    Color           aColor;
+    Color           maPaintCol;
+    FieldUnit       eSourceUnit;
+};
 
 class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.050000000000000003</property>
     <property name="upper">9</property>
@@ -16,6 +15,21 @@
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">0.5</property>
+    <property name="upper">50</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">50</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">50</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">50</property>
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
@@ -54,9 +68,24 @@
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="svxlo-SvxFrameSelector" id="framesel">
+                      <object class="GtkScrolledWindow" id="frameselwin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="framesel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -67,10 +96,10 @@
                       <object class="GtkLabel" id="userdefft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|userdefft">_User-defined:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">framesel</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -81,10 +110,10 @@
                       <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|label14">Pr_esets:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">presets</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -92,10 +121,25 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ValueSet" id="presets">
+                      <object class="GtkScrolledWindow" id="presetswin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="presets">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -106,10 +150,10 @@
                       <object class="GtkLabel" id="rmadjcellbordersft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|rmadjcellbordersft">_Adjacent Cells:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">rmadjcellborders</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -172,10 +216,10 @@
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|label15">St_yle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linestylelb</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -186,10 +230,10 @@
                       <object class="GtkLabel" id="label16">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|label16">_Width:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">linewidthmf:0.00pt</property>
+                        <property name="mnemonic_widget">linewidthmf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -200,10 +244,10 @@
                       <object class="GtkLabel" id="label17">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|label17">_Color:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linecolorlb</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -211,9 +255,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-LineListBox" id="linestylelb">
+                      <object class="GtkMenuButton" id="linestylelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -221,9 +270,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="linewidthmf:0.00pt">
+                      <object class="GtkSpinButton" id="linewidthmf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -233,9 +283,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxColorListBox" id="linecolorlb">
+                      <object class="GtkMenuButton" id="linecolorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -281,9 +336,10 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkSpinButton" id="leftmf:0.00mm">
+                      <object class="GtkSpinButton" id="leftmf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                       </object>
@@ -293,10 +349,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="topmf:0.00mm">
+                      <object class="GtkSpinButton" id="topmf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -305,10 +362,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="rightmf:0.00mm">
+                      <object class="GtkSpinButton" id="rightmf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -317,10 +375,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="bottommf:0.00mm">
+                      <object class="GtkSpinButton" id="bottommf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -332,10 +391,10 @@
                       <object class="GtkLabel" id="leftft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|leftft">_Left:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">leftmf:0.00mm</property>
+                        <property name="mnemonic_widget">leftmf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -346,10 +405,10 @@
                       <object class="GtkLabel" id="rightft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|rightft">Right:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">rightmf:0.00mm</property>
+                        <property name="mnemonic_widget">rightmf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -360,10 +419,10 @@
                       <object class="GtkLabel" id="topft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|topft">_Top:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">topmf:0.00mm</property>
+                        <property name="mnemonic_widget">topmf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -374,10 +433,10 @@
                       <object class="GtkLabel" id="bottomft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="borderpage|bottomft">_Bottom:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">bottommf:0.00mm</property>
+                        <property name="mnemonic_widget">bottommf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -450,10 +509,10 @@
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="borderpage|label22">_Position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">shadows</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -464,10 +523,10 @@
                   <object class="GtkLabel" id="distanceft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">distancemf:0.00mm</property>
+                    <property name="mnemonic_widget">distancemf</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -478,10 +537,10 @@
                   <object class="GtkLabel" id="shadowcolorft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="borderpage|shadowcolorft">C_olor:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">shadowcolorlb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -489,10 +548,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="distancemf:0.00mm">
+                  <object class="GtkSpinButton" id="distancemf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                   </object>
                   <packing>
@@ -501,10 +561,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="shadowcolorlb">
+                  <object class="GtkMenuButton" id="shadowcolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -512,10 +576,25 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-ValueSet" id="shadows">
+                  <object class="GtkScrolledWindow" id="shadowswin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="shadows">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
