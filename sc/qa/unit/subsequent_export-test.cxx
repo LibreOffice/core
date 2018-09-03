@@ -121,6 +121,7 @@ public:
     void testFormatExportODS();
 
     void testCommentExportXLSX();
+    void testCommentExportXLSX_2_XLSX();
 #if HAVE_MORE_FONTS
     void testCustomColumnWidthExportXLSX();
 #endif
@@ -242,8 +243,8 @@ public:
     CPPUNIT_TEST(testCellNoteExportODS);
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
-
     CPPUNIT_TEST(testCommentExportXLSX);
+    CPPUNIT_TEST(testCommentExportXLSX_2_XLSX);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
 #endif
@@ -698,8 +699,10 @@ void ScExportTest::testCommentExportXLSX()
     ScDocShellRef xShell = loadDoc("comment.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    const xmlDocPtr pComments = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    const xmlDocPtr pComments
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
 
     assertXPath(pComments, "/x:comments/x:authors/x:author[1]", "BAKO");
@@ -707,7 +710,8 @@ void ScExportTest::testCommentExportXLSX()
 
     assertXPath(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
 
-    const xmlDocPtr pVmlDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    const xmlDocPtr pVmlDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
     CPPUNIT_ASSERT(pVmlDrawing);
 
     //assertXPath(pVmlDrawing, "/xml/v:shapetype", "coordsize", "21600,21600");
@@ -718,6 +722,37 @@ void ScExportTest::testCommentExportXLSX()
     assertXPath(pVmlDrawing, "/xml/v:shape", "type", sShapeTypeId);
     assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "color", "black");
     assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow", "obscured", "t");
+}
+
+void ScExportTest::testCommentExportXLSX_2_XLSX()
+{
+    //tdf#117287 FILESAVE XLSX: Comments always disappear after opening the exported XLSX file with Excel
+    ScDocShellRef xShell = loadDoc("tdf117287_comment.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScAddress aPosC9(2, 8, 0);
+    ScPostIt *pNote = rDoc.GetNote(aPosC9);
+
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT(!pNote->IsCaptionShown());
+
+    pNote->ShowCaption(aPosC9, true);
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    const xmlDocPtr pComments
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
+    CPPUNIT_ASSERT(pComments);
+
+    assertXPath(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "visible comment");
+
+    const xmlDocPtr pVmlDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    assertXPath(pVmlDrawing, "/xml/v:shape/x:ClientData/x:Visible", 0);
 }
 
 #if HAVE_MORE_FONTS

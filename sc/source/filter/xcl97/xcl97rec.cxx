@@ -537,22 +537,10 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
             if( !rPropOpt.GetOpt( ESCHER_Prop_FitTextToShape, nValue ) )
                 rPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
 
-            if( rPropOpt.GetOpt( ESCHER_Prop_fillColor, nValue ) )
-            {
-                // If the Colour is the same as the 'ToolTip' System colour then
-                // use the default rather than the explicit colour value. This will
-                // be incorrect where user has chosen to use this colour explicitly.
-                Color aColor( static_cast<sal_uInt8>(nValue), static_cast<sal_uInt8>( nValue >> 8 ), static_cast<sal_uInt8>( nValue >> 16 ) );
-                const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-                if( aColor == rSett.GetHelpColor() )
-                {
-                    rPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
-                    rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
-                }
-            }
-            else
-                rPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
-
+            // Maybe the colour is the same as the 'ToolTip' System colour, but the tooltip
+            // colour shouldn't have influence on the fill colour of the exported shape
+            if( !rPropOpt.GetOpt( ESCHER_Prop_fillColor, nValue ) )
+                 rPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
             if( !rPropOpt.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
                 rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
             if( !rPropOpt.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
@@ -682,7 +670,10 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
-    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Column ), sal_Int32( maScPos.Col() ) );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS(XML_x, XML_Column), sal_Int32(maScPos.Col()));
+    if(mbVisible)
+        pVmlDrawing->singleElement( FSNS(XML_x, XML_Visible),
+            FSEND);
     pVmlDrawing->endElement( FSNS( XML_x, XML_ClientData ) );
 
     VMLExport::EndShape( nShapeElement );
