@@ -913,7 +913,6 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
 
 void ImageMap::Write( SvStream& rOStm ) const
 {
-    IMapCompat*             pCompat;
     OUString                aImageName( GetName() );
     SvStreamEndian          nOldFormat = rOStm.GetEndian();
     sal_uInt16              nCount = static_cast<sal_uInt16>(GetIMapObjectCount());
@@ -929,11 +928,11 @@ void ImageMap::Write( SvStream& rOStm ) const
     rOStm.WriteUInt16( nCount );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
 
-    pCompat = new IMapCompat( rOStm, StreamMode::WRITE );
+    std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
 
     // here one can insert in newer versions
 
-    delete pCompat;
+    pCompat.reset();
 
     ImpWriteImageMap( rOStm );
 
