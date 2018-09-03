@@ -19,6 +19,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <frmfmt.hxx>
 #include <rootfrm.hxx>
+#include <txtfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -112,6 +113,74 @@ using namespace com::sun::star;
     #define CHECK_REDLINE( pDoc )
 
 #endif
+
+namespace sw {
+
+void UpdateFramesForAddDeleteRedline(SwPaM const& rPam)
+{
+    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+    for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        if (pFrame->getRootFrame()->IsHideRedlines())
+        {
+            frames.push_back(pFrame);
+        }
+    }
+    for (SwTextFrame * pFrame : frames)
+    {
+        SwTextNode & rFirstNode(pFrame->GetMergedPara()
+            ? *pFrame->GetMergedPara()->pFirstNode
+            : *pStartNode);
+        assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
+        // clear old one first to avoid DelFrames confusing updates & asserts...
+        pFrame->SetMergedPara(nullptr);
+        pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+            *pFrame, rFirstNode, sw::FrameMode::Existing));
+    }
+}
+
+void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
+{
+    if (rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
+    {
+        // first, call CheckParaRedlineMerge on the first paragraph,
+        // to init flag on new merge range (if any) + 1st node post the merge
+        SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+            }
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
+            if (auto const pMergedPara = pFrame->GetMergedPara())
+            {
+                assert(pMergedPara->pFirstNode->GetIndex() <= pStartNode->GetIndex());
+                // clear old one first to avoid DelFrames confusing updates & asserts...
+                SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
+                pFrame->SetMergedPara(nullptr);
+                pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                    *pFrame, rFirstNode, sw::FrameMode::Existing));
+            }
+        }
+        // now start node until end of merge + 1 has proper flags; MakeFrames
+        // should pick up from the next node in need of frames by checking flags
+        if (!frames.empty())
+        {
+            SwNodeIndex const start(*pStartNode, +1);
+            SwNodeIndex const end(rPam.End()->nNode, +1); // end is exclusive
+            ::MakeFrames(&rDoc, start, end);
+        }
+    }
+}
+
+} // namespace sw
 
 namespace
 {
@@ -294,6 +363,7 @@ namespace
     {
         bool bRet = true;
         SwRangeRedline* pRedl = rArr[ rPos ];
+        SwDoc& rDoc = *pRedl->GetDoc();
         SwPosition *pRStt = nullptr, *pREnd = nullptr;
         SwComparePosition eCmp = SwComparePosition::Outside;
         if( pSttRng && pEndRng )
@@ -309,7 +379,6 @@ namespace
         {
         case nsRedlineType_t::REDLINE_INSERT:
             {
-                SwDoc& rDoc = *pRedl->GetDoc();
                 const SwPosition *pDelStt = nullptr, *pDelEnd = nullptr;
                 bool bDelRedl = false;
                 switch( eCmp )
@@ -390,6 +459,8 @@ namespace
             {
                 SwRangeRedline* pNew = nullptr;
                 bool bCheck = false, bReplace = false;
+                SwPaM const updatePaM(pSttRng ? *pSttRng : *pRedl->Start(),
+                                      pEndRng ? *pEndRng : *pRedl->End());
 
                 switch( eCmp )
                 {
@@ -473,6 +544,8 @@ namespace
                     rArr.Remove( pRedl );
                     rArr.Insert( pRedl );
                 }
+
+                sw::UpdateFramesForRemoveDeleteRedline(rDoc, updatePaM);
             }
             break;
 
