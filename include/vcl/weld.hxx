@@ -603,6 +603,7 @@ public:
         m_xSpinButton->connect_input(LINK(this, MetricSpinButton, spin_button_input));
         m_xSpinButton->connect_value_changed(
             LINK(this, MetricSpinButton, spin_button_value_changed));
+        spin_button_output(*m_xSpinButton);
     }
 
     FieldUnit get_unit() const { return m_eSrcUnit; }
@@ -762,6 +763,7 @@ public:
         m_xSpinButton->connect_value_changed(LINK(this, TimeSpinButton, spin_button_value_changed));
         m_xSpinButton->connect_cursor_position(
             LINK(this, TimeSpinButton, spin_button_cursor_position));
+        spin_button_output(*m_xSpinButton);
     }
 
     void set_value(const tools::Time& rTime) { m_xSpinButton->set_value(ConvertValue(rTime)); }
