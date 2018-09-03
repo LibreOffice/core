@@ -1664,6 +1664,75 @@ static void lcl_ModifyOfst(SwTextFrame* pFrame, TextFrameIndex const nPos, TextF
     }
 }
 
+namespace {
+
+void UpdateMergedParaForMove(sw::MergedPara & rMerged,
+        SwTextFrame & rTextFrame,
+        bool & o_rbRecalcFootnoteFlag,
+        SwTextNode const& rDestNode,
+        SwTextNode const& rNode,
+        sal_Int32 const nDestStart,
+        sal_Int32 const nSourceStart,
+        sal_Int32 const nLen)
+{
+    std::vector<std::pair<sal_Int32, sal_Int32>> deleted;
+    sal_Int32 const nSourceEnd(nSourceStart + nLen);
+    sal_Int32 nLastEnd(0);
+    for (auto it = rMerged.extents.begin(); it != rMerged.extents.end(); ++it)
+    {
+        if (it->pNode == &rNode)
+        {
+            sal_Int32 const nStart(std::max(nLastEnd, nSourceStart));
+            sal_Int32 const nEnd(std::min(it->nStart, nSourceEnd));
+            if (nStart < nEnd)
+            {
+                deleted.emplace_back(nStart, nEnd);
+            }
+            nLastEnd = it->nEnd;
+            if (nSourceEnd <= it->nEnd)
+            {
+                break;
+            }
+        }
+        else if (rNode.GetIndex() < it->pNode->GetIndex())
+        {
+            break;
+        }
+    }
+    if (nLastEnd != rNode.Len() + nLen) // add nLen, string was removed already
+    {
+        assert(rNode.Len() == 0 || nLastEnd < nSourceEnd);
+        if (nLastEnd < nSourceEnd)
+        {
+            deleted.emplace_back(std::max(nLastEnd, nSourceStart), nSourceEnd);
+        }
+    }
+    if (!deleted.empty())
+    {
+        o_rbRecalcFootnoteFlag = true;
+        for (auto const& it : deleted)
+        {
+            sal_Int32 const nStart(it.first - nSourceStart + nDestStart);
+            TextFrameIndex const nDeleted = UpdateMergedParaForDelete(rMerged, false,
+                rDestNode, nStart, it.second - it.first);
+//FIXME asserts valid for join - but if called from split, the new node isn't there yet and it will be added later...       assert(nDeleted);
+//            assert(nDeleted == it.second - it.first);
+            if(nDeleted)
+            {
+                // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
+                lcl_SetWrong(rTextFrame, rDestNode, nStart, -nDeleted, false);
+                if (rTextFrame.HasFollow())
+                {
+                    TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
+                    lcl_ModifyOfst(&rTextFrame, nIndex, nDeleted); // FIXME why positive?
+                }
+            }
+        }
+    }
+}
+
+} // namespace
+
 /**
  * Related: fdo#56031 filter out attribute changes that don't matter for
  * humans/a11y to stop flooding the destination mortal with useless noise
@@ -1683,6 +1752,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 {
     SfxPoolItem const* pOld(nullptr);
     SfxPoolItem const* pNew(nullptr);
+    sw::MoveText const* pMoveText(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
@@ -1690,6 +1760,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     {
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
+    }
+    else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
+    {
+        pMoveText = pHt;
     }
     else if (auto const pHynt = dynamic_cast<sw::RedlineDelText const*>(&rHint))
     {
@@ -1811,6 +1885,27 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             bSetFieldsDirty = true;
             if (HasFollow())
                 lcl_ModifyOfst( this, nPos, nLen );
+        }
+    }
+    else if (pMoveText)
+    {
+        if (m_pMergedPara
+            && m_pMergedPara->pFirstNode->GetIndex() <= pMoveText->pDestNode->GetIndex()
+            && pMoveText->pDestNode->GetIndex() <= m_pMergedPara->pLastNode->GetIndex())
+        {   // if it's not 2 nodes in merged frame, assume the target node doesn't have frames at all
+            assert(std::abs(static_cast<long>(rNode.GetIndex()) - static_cast<long>(pMoveText->pDestNode->GetIndex())) == 1);
+            UpdateMergedParaForMove(*m_pMergedPara,
+                    *this,
+                    bRecalcFootnoteFlag,
+                    *pMoveText->pDestNode, rNode,
+                    pMoveText->nDestStart,
+                    pMoveText->nSourceStart,
+                    pMoveText->nLen);
+        }
+        else
+        {
+            // there is a situation where this is okay: from JoinNext, which will then call CheckResetRedlineMergeFlag, which will then create merged from scratch for this frame
+            // assert(!m_pMergedPara || !getRootFrame()->IsHideRedlines() || !pMoveText->pDestNode->getLayoutFrame(getRootFrame()));
         }
     }
     else switch (nWhich)
