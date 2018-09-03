@@ -4865,7 +4865,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     {
         sal_Int32 nGroupProperties( GetPropertyValue( DFF_Prop_fPrint, 0 ) );
         pRet->SetVisible( ( nGroupProperties & 2 ) == 0 );
-        pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
+        // In Excel hidden means not printed, this property isn't used anymore anyway, let's just use visibility for now
+        // previously: pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
+        pRet->SetPrintable( ( nGroupProperties & 2 ) == 0 );
     }
 
     //Import alt text as description

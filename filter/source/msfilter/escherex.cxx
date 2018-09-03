@@ -1263,11 +1263,7 @@ void EscherPropertyContainer::CreateShapeProperties( const uno::Reference<drawin
             if ( !bVal )
                 nShapeAttr |= 0x20002;  // set fHidden = true
         }
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bVal))
-        {
-            if ( !bVal )
-                nShapeAttr |= 0x10000;  // set fPrint = false;
-        }
+        // Excel doesn't seem to be using fPrint anymore, let's stop using it
         if ( nShapeAttr )
             AddOpt( ESCHER_Prop_fPrint, nShapeAttr );
     }
