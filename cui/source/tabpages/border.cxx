@@ -333,6 +333,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
             }
         }
     }
+
     bool bSupportsShadow = !SfxItemPool::IsSlot( GetWhich( nShadowSlot ) );
     if( bSupportsShadow )
         AddItemConnection( svx::CreateShadowConnection( nShadowSlot, rCoreAttrs, *m_pWndShadows, *m_pEdShadowSize, *m_pLbShadowColor ) );
@@ -345,13 +346,10 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, *m_pFrameSel, svx::FrameBorderType::TLBR ) );
     if( m_pFrameSel->IsBorderEnabled( svx::FrameBorderType::BLTR ) )
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, *m_pFrameSel, svx::FrameBorderType::BLTR ) );
-    // #i43593# - item connection doesn't work for Writer,
-    // because the Writer item sets contain these items
+
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, *m_pMergeWithNextCB, ItemConnFlags::NONE ) );
     m_pMergeWithNextCB->Hide();
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
-    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, *m_pMergeAdjacentBordersCB, ItemConnFlags::NONE ) );
     m_pMergeAdjacentBordersCB->Hide();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -437,10 +435,26 @@ bool SvxBorderTabPage::IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) con
     return maUsedBorderStyles.count(nStyle) > 0;
 }
 
-
 void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxTabPage::Reset( rSet );
+
+    SfxItemPool* pPool = rSet->GetPool();
+    sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
+    const SfxBoolItem *pMergeAdjacentBorders = static_cast<const SfxBoolItem*>(rSet->GetItem(nMergeAdjacentBordersId));
+    if (!pMergeAdjacentBorders)
+        m_pMergeAdjacentBordersCB->SetState(TRISTATE_INDET);
+    else
+        m_pMergeAdjacentBordersCB->Check(pMergeAdjacentBorders->GetValue());
+    m_pMergeAdjacentBordersCB->SaveValue();
+
+    sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
+    const SfxBoolItem *pMergeWithNext = static_cast<const SfxBoolItem*>(rSet->GetItem(nMergeWithNextId));
+    if (!pMergeWithNext)
+        m_pMergeWithNextCB->SetState(TRISTATE_INDET);
+    else
+        m_pMergeWithNextCB->Check(pMergeWithNext->GetValue());
+    m_pMergeWithNextCB->SaveValue();
 
     const SvxBoxItem*       pBoxItem;
     const SvxBoxInfoItem*   pBoxInfoItem;
@@ -451,7 +465,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     pBoxInfoItem = GetItem( *rSet, SID_ATTR_BORDER_INNER, false );
 
-    eCoreUnit = rSet->GetPool()->GetMetric( nWhichBox );
+    eCoreUnit = pPool->GetMetric( nWhichBox );
 
     if ( pBoxItem && pBoxInfoItem ) // -> Don't Care
     {
@@ -648,8 +662,9 @@ void SvxBorderTabPage::ChangesApplied()
     m_pRightMF->SaveValue();
     m_pTopMF->SaveValue();
     m_pBottomMF->SaveValue();
+    m_pMergeWithNextCB->SaveValue();
+    m_pMergeAdjacentBordersCB->SaveValue();
 }
-
 
 DeactivateRC SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -659,14 +674,44 @@ DeactivateRC SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-
 bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
+    SfxItemPool* pPool = rCoreAttrs->GetPool();
+    if (m_pMergeAdjacentBordersCB->IsValueChangedFromSaved())
+    {
+        sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
+        auto nState = m_pMergeAdjacentBordersCB->GetState();
+        if (nState == TRISTATE_INDET)
+            rCoreAttrs->ClearItem(nMergeAdjacentBordersId);
+        else
+        {
+            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeAdjacentBordersId).Clone()));
+            xNewItem->SetValue(nState);
+            rCoreAttrs->Put(*xNewItem);
+        }
+        bAttrsChanged = true;
+    }
+
+    if (m_pMergeWithNextCB->IsValueChangedFromSaved())
+    {
+        sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
+        auto nState = m_pMergeWithNextCB->GetState();
+        if (nState == TRISTATE_INDET)
+            rCoreAttrs->ClearItem(nMergeWithNextId);
+        else
+        {
+            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeWithNextId).Clone()));
+            xNewItem->SetValue(nState);
+            rCoreAttrs->Put(*xNewItem);
+        }
+        bAttrsChanged = true;
+    }
+
     bool                  bPut          = true;
     sal_uInt16            nBoxWhich     = GetWhich( mnBoxSlot );
-    sal_uInt16            nBoxInfoWhich = rCoreAttrs->GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
+    sal_uInt16            nBoxInfoWhich = pPool->GetWhich( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
