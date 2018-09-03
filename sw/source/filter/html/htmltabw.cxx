@@ -564,10 +564,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // determine value of RULES
     bool bRowsHaveBorder = false;
     bool bRowsHaveBorderOnly = true;
-    SwWriteTableRow *pRow = m_aRows[0];
+    SwWriteTableRow *pRow = m_aRows[0].get();
     for( SwWriteTableRows::size_type nRow=1; nRow < m_aRows.size(); ++nRow )
     {
-        SwWriteTableRow *pNextRow = m_aRows[nRow];
+        SwWriteTableRow *pNextRow = m_aRows[nRow].get();
         bool bBorder = ( pRow->bBottomBorder || pNextRow->bTopBorder );
         bRowsHaveBorder |= bBorder;
         bRowsHaveBorderOnly &= bBorder;
@@ -808,7 +808,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     for( SwWriteTableRows::size_type nRow = 0; nRow < m_aRows.size(); ++nRow )
     {
-        const SwWriteTableRow *pRow2 = m_aRows[nRow];
+        const SwWriteTableRow *pRow2 = m_aRows[nRow].get();
 
         OutTableCells( rWrt, pRow2->GetCells(), pRow2->GetBackground() );
         if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->bBottomBorder &&
