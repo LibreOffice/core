@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ControlProperties"/>
   <menu:menuitem menu:id=".uno:FormProperties"/>
   <menu:menuitem menu:id=".uno:ChangeControlType"/>
@@ -41,9 +42,10 @@
       <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FormatGroup"/>
+  <menu:menuitem menu:id=".uno:FormatUngroup"/>
+  <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
-  <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:NameGroup"/>
