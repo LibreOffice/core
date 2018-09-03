@@ -184,6 +184,7 @@ public:
     void testSheetCondensedCharacterSpaceXLSX();
     void testTextUnderlineColorXLSX();
     void testSheetRunParagraphPropertyXLSX();
+    void testHiddenShapeXLS();
     void testHiddenShapeXLSX();
     void testHyperlinkXLSX();
     void testMoveCellAnchoredShapesODS();
@@ -293,6 +294,7 @@ public:
     CPPUNIT_TEST(testSheetCondensedCharacterSpaceXLSX);
     CPPUNIT_TEST(testTextUnderlineColorXLSX);
     CPPUNIT_TEST(testSheetRunParagraphPropertyXLSX);
+    CPPUNIT_TEST(testHiddenShapeXLS);
     CPPUNIT_TEST(testHiddenShapeXLSX);
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
@@ -3507,14 +3509,42 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
     xDocSh->DoClose();
 }
 
+void ScExportTest::testHiddenShapeXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(rDoc.GetTableCount() > 0);
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Drawing object should not be visible.", !pObj->IsVisible());
+    CPPUNIT_ASSERT_MESSAGE("Drawing object should not be printable.", !pObj->IsPrintable());
+    xDocSh->DoClose();
+}
+
 void ScExportTest::testHiddenShapeXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(rDoc.GetTableCount() > 0);
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Drawing object should not be visible.", !pObj->IsVisible());
+    CPPUNIT_ASSERT_MESSAGE("Drawing object should not be printable.", !pObj->IsPrintable());
+
     xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testHyperlinkXLSX()

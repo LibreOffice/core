@@ -1223,17 +1223,20 @@ void EscherPropertyContainer::CreateShapeProperties( const css::uno::Reference< 
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
-        bool bVal = false;
+        bool bVisible = false;
+        bool bPrintable = false;
         css::uno::Any aAny;
         sal_uInt32 nShapeAttr = 0;
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Visible", true) && (aAny >>= bVal))
+        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Visible", true) && (aAny >>= bVisible))
         {
-            if ( !bVal )
+            if ( !bVisible )
                 nShapeAttr |= 0x20002;  // set fHidden = true
         }
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bVal))
+        // This property (fPrint) isn't used in Excel anymore, leaving it for legacy reasons
+        // one change, based on XLSX: hidden implies not printed, let's not export the fPrint property in that case
+        if (bVisible && EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bPrintable))
         {
-            if ( !bVal )
+            if ( !bPrintable )
                 nShapeAttr |= 0x10000;  // set fPrint = false;
         }
         if ( nShapeAttr )
