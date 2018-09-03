@@ -183,6 +183,8 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     , m_xPrintRangeQueryText(m_xBuilder->weld_label("labelMsg"))
     , m_xBspWin(new weld::CustomWeld(*m_xBuilder, "drawingareaPageDirection", m_aBspWin))
 {
+    m_xRegisterLB->set_size_request(m_xRegisterLB->get_approximate_digit_width() * 20, -1);
+
     bBorderModified = false;
     m_aBspWin.EnableRTL(false);
 
@@ -1425,8 +1427,10 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
     OSL_ENSURE(!aList.empty(), "Empty string list");
 
     sStandardRegister = aList[0];
+    m_xRegisterLB->freeze();
     for (size_t i = 1; i < aList.size(); ++i)
         m_xRegisterLB->append_text(aList[i]);
+    m_xRegisterLB->thaw();
 
     m_xRegisterCB->show();
     m_xRegisterFT->show();
