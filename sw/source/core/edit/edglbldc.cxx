@@ -67,7 +67,7 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         const SwSection* pSect = rSectFormats[ --n ]->GetGlobalDocSection();
         if( pSect )
         {
-            SwGlblDocContent* pNew;
+            SwGlblDocContent* pNew = nullptr;
             switch( pSect->GetType() )
             {
             case TOX_HEADER_SECTION:
@@ -81,7 +81,7 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 pNew = new SwGlblDocContent( pSect );
                 break;
             }
-            if( !rArr.insert( pNew ).second )
+            if( pNew && !rArr.insert( pNew ).second )
                 delete pNew;
         }
     }
