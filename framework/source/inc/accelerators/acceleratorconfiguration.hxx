@@ -82,7 +82,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
         AcceleratorCache m_aReadCache;
 
         /** used to implement the copy on write pattern! */
-        AcceleratorCache* m_pWriteCache;
+        std::unique_ptr<AcceleratorCache> m_pWriteCache;
 
         // native interface!
 
@@ -216,8 +216,8 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::container::XNameAccess > m_xCfg;
         AcceleratorCache m_aPrimaryReadCache;
         AcceleratorCache m_aSecondaryReadCache;
-        AcceleratorCache* m_pPrimaryWriteCache;
-        AcceleratorCache* m_pSecondaryWriteCache;
+        std::unique_ptr<AcceleratorCache> m_pPrimaryWriteCache;
+        std::unique_ptr<AcceleratorCache> m_pSecondaryWriteCache;
 
         OUString m_sGlobalOrModules;
         OUString m_sModuleCFG;
