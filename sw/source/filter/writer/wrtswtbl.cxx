@@ -367,7 +367,7 @@ long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
     if( nRow==0 )
     {
         nRawHeight -= m_nCellSpacing;
-        pRow = m_aRows[nRow];
+        pRow = m_aRows[nRow].get();
         if( pRow->HasTopBorder() )
             nRawHeight -= m_nBorder;
     }
@@ -376,7 +376,7 @@ long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
     if( nRow+nRowSpan==m_aRows.size() )
     {
         if( !pRow || nRowSpan > 1 )
-            pRow = m_aRows[nRow+nRowSpan-1];
+            pRow = m_aRows[nRow+nRowSpan-1].get();
         if( pRow->HasBottomBorder() )
             nRawHeight -= m_nBorder;
     }
@@ -432,9 +432,8 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
                 nRPos += nLineHeight;
             }
-            SwWriteTableRow *pRow = new SwWriteTableRow( nRPos, m_bUseLayoutHeights);
-            if( !m_aRows.insert( pRow ).second )
-                delete pRow;
+            std::unique_ptr<SwWriteTableRow> pRow(new SwWriteTableRow( nRPos, m_bUseLayoutHeights));
+            m_aRows.insert( std::move(pRow) );
         }
         else
         {
@@ -444,7 +443,9 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             nRPos = nStartRPos + nParentLineHeight;
 #if OSL_DEBUG_LEVEL > 0
             SwWriteTableRow aSrchRow( nRPos, m_bUseLayoutHeights );
-            OSL_ENSURE( m_aRows.find( &aSrchRow ) != m_aRows.end(), "Parent-Row not found" );
+            OSL_ENSURE( std::find_if(m_aRows.begin(), m_aRows.end(),
+                            [&](std::unique_ptr<SwWriteTableRow> const & p)
+                            { return *p == aSrchRow; }) != m_aRows.end(), "Parent-Row not found" );
             SwWriteTableRow aRowCheckPos(nCheckPos,m_bUseLayoutHeights);
             SwWriteTableRow aRowRPos(nRPos,m_bUseLayoutHeights);
             OSL_ENSURE( !m_bUseLayoutHeights ||
@@ -561,7 +562,9 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         // And their index
         sal_uInt16 nOldRow = nRow;
         SwWriteTableRow aSrchRow( nRPos,m_bUseLayoutHeights );
-        SwWriteTableRows::const_iterator it2 = m_aRows.find( &aSrchRow );
+        SwWriteTableRows::const_iterator it2 = std::find_if(m_aRows.begin(), m_aRows.end(),
+                                                 [&](std::unique_ptr<SwWriteTableRow> const &p)
+                                                 { return *p == aSrchRow; });
 
         // coupled methods out of sync ...
         assert( it2 != m_aRows.end() );
@@ -575,8 +578,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                 --nOldRow;
         }
 
-        SwWriteTableRow *pRow = m_aRows[nOldRow];
-        SwWriteTableRow *pEndRow = m_aRows[nRow];
+        SwWriteTableRow *pRow = m_aRows[nOldRow].get();
+        SwWriteTableRow *pEndRow = m_aRows[nRow].get();
         if( nLine+1==nNumOfHeaderRows && nParentLineHeight==0 )
             m_nHeadEndRow = nRow;
 
@@ -798,17 +801,17 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
 
     for( sal_uInt16 nRow=0; nRow<nRows; ++nRow )
     {
-        SwWriteTableRow *pRow =
-            new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, m_bUseLayoutHeights );
+        std::unique_ptr<SwWriteTableRow> pRow(
+            new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, m_bUseLayoutHeights ));
         pRow->nTopBorder = 0;
         pRow->nBottomBorder = 0;
-        m_aRows.insert( pRow );
+        m_aRows.insert( std::move(pRow) );
     }
 
     // And now fill with life
     for( sal_uInt16 nRow=0; nRow<nRows; ++nRow )
     {
-        SwWriteTableRow *pRow = m_aRows[nRow];
+        SwWriteTableRow *pRow = m_aRows[nRow].get();
 
         bool bHeightExported = false;
         for( sal_uInt16 nCol=0; nCol<nCols; nCol++ )
@@ -859,7 +862,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
             if( !(nBorderMask & 1) )
                 pRow->bTopBorder = false;
 
-            SwWriteTableRow *pEndRow = m_aRows[nRow+nRowSpan-1];
+            SwWriteTableRow *pEndRow = m_aRows[nRow+nRowSpan-1].get();
             if( !(nBorderMask & 2) )
                 pEndRow->bBottomBorder = false;
 
