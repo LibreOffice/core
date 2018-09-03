@@ -520,8 +520,8 @@ class ScAbstractTabController_Impl : public SfxAbstractTabDialog
 protected:
     std::unique_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit ScAbstractTabController_Impl(SfxTabDialogController* p)
-        : m_xDlg(p)
+    explicit ScAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;

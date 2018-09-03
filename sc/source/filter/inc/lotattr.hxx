@@ -73,7 +73,7 @@ private:
         std::unique_ptr<ScPatternAttr>  pPattAttr;
         sal_uInt32                      nHash0;
 
-        ENTRY(ScPatternAttr* p);
+        ENTRY(std::unique_ptr<ScPatternAttr> p);
 
         ~ENTRY();
     };

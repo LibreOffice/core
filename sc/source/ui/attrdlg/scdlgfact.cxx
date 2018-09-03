@@ -1053,7 +1053,7 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(new ScSortDlg(pParent, pArgSet));
+    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScSortDlg>(pParent, pArgSet));
 }
 
 //------------------ Factories for TabPages--------------------
