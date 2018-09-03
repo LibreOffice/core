@@ -44,6 +44,8 @@ CustomWidgetDraw::~CustomWidgetDraw() {}
 
 bool CustomWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
 {
+    if (!s_pWidgetImplementation)
+        return false;
     return s_pWidgetImplementation->isNativeControlSupported(eType, ePart);
 }
 
@@ -59,7 +61,7 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                          ControlState eState, const ImplControlValue& rValue,
                                          const OUString& /*aCaptions*/)
 {
-    if (s_pWidgetImplementation == nullptr)
+    if (!s_pWidgetImplementation)
         return false;
 
     bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
@@ -285,7 +287,7 @@ bool CustomWidgetDraw::getNativeControlRegion(
     ControlState eState, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
     tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
-    if (s_pWidgetImplementation == nullptr)
+    if (!s_pWidgetImplementation)
         return false;
 
     return s_pWidgetImplementation->getRegion(eType, ePart, eState, rBoundingControlRegion,
