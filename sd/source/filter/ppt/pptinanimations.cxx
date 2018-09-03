@@ -673,8 +673,11 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int16 nNodeType = css::presentation::EffectNodeType::DEFAULT;
             switch( nPPTNodeType )
             {
+                case DFF_ANIM_NODE_TYPE_CLICK_PARALLEL: SAL_FALLTHROUGH;
                 case DFF_ANIM_NODE_TYPE_ON_CLICK:       nNodeType = css::presentation::EffectNodeType::ON_CLICK;   break;
+                case DFF_ANIM_NODE_TYPE_WITH_GROUP:     SAL_FALLTHROUGH;
                 case DFF_ANIM_NODE_TYPE_WITH_PREVIOUS:  nNodeType = css::presentation::EffectNodeType::WITH_PREVIOUS; break;
+                case DFF_ANIM_NODE_TYPE_AFTER_GROUP:    SAL_FALLTHROUGH;
                 case DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS: nNodeType = css::presentation::EffectNodeType::AFTER_PREVIOUS; break;
                 case DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE:  nNodeType = css::presentation::EffectNodeType::MAIN_SEQUENCE; break;
                 case DFF_ANIM_NODE_TYPE_TIMING_ROOT:    nNodeType = css::presentation::EffectNodeType::TIMING_ROOT; break;
@@ -2151,7 +2154,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                         if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
                         {
                             // Any occurrence of the formula becomes the formula of the whole list.
-                            if (importAttributeValue(pValue, aValue2))
+                            if (importAttributeValue(pValue, aValue2) && aFormula.isEmpty())
                                 aValue2 >>= aFormula;
                         }
                         aValues[nKeyTime] = aValue1;
