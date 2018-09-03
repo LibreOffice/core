@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #if defined(_WIN32)
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
