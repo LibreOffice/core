@@ -79,7 +79,6 @@ namespace framework
 XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext      (xContext                     )
     , m_aPresetHandler(xContext                     )
-    , m_pWriteCache   (nullptr                            )
 {
 }
 
@@ -371,13 +370,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     {
         SolarMutexGuard g;
         xContext = m_xContext;
-        if (m_pWriteCache)
-        {
-            // be aware of reentrance problems - use temp variable for calling delete ... :-)
-            AcceleratorCache* pTemp = m_pWriteCache;
-            m_pWriteCache = nullptr;
-            delete pTemp;
-        }
+        m_pWriteCache.reset();
     }
 
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
@@ -444,10 +437,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     if (bChanged)
     {
         m_aReadCache.takeOver(*m_pWriteCache);
-        // live with reentrance .-)
-        AcceleratorCache* pTemp = m_pWriteCache;
-        m_pWriteCache = nullptr;
-        delete pTemp;
+        m_pWriteCache.reset();
     }
 }
 
@@ -459,7 +449,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAcces
     //not still possible!
     if ( bWriteAccessRequested && !m_pWriteCache )
     {
-        m_pWriteCache = new AcceleratorCache(m_aReadCache);
+        m_pWriteCache.reset(new AcceleratorCache(m_aReadCache));
     }
 
     // in case, we have a writeable cache, we use it for reading too!
@@ -487,8 +477,6 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 
 XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
                                 : m_xContext      (xContext                     )
-                                , m_pPrimaryWriteCache(nullptr                        )
-                                , m_pSecondaryWriteCache(nullptr                      )
 {
     const OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg.set(
@@ -765,25 +753,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
 
     bPreferred = true;
     m_aPrimaryReadCache = AcceleratorCache();
-    if (m_pPrimaryWriteCache)
-    {
-        // be aware of reentrance problems - use temp variable for calling delete ... :-)
-        AcceleratorCache* pTemp = m_pPrimaryWriteCache;
-        m_pPrimaryWriteCache = nullptr;
-        delete pTemp;
-    }
+    m_pPrimaryWriteCache.reset();
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
     impl_ts_load(bPreferred, xAccess); // load the preferred keys
 
     bPreferred = false;
     m_aSecondaryReadCache = AcceleratorCache();
-    if (m_pSecondaryWriteCache)
-    {
-        // be aware of reentrance problems - use temp variable for calling delete ... :-)
-        AcceleratorCache* pTemp = m_pSecondaryWriteCache;
-        m_pSecondaryWriteCache = nullptr;
-        delete pTemp;
-    }
+    m_pSecondaryWriteCache.reset();
     m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
     impl_ts_load(bPreferred, xAccess); // load the secondary keys
 }
@@ -1128,9 +1104,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
         if (m_pPrimaryWriteCache)
         {
             m_aPrimaryReadCache.takeOver(*m_pPrimaryWriteCache);
-            AcceleratorCache* pTemp = m_pPrimaryWriteCache;
-            m_pPrimaryWriteCache = nullptr;
-            delete pTemp;
+            m_pPrimaryWriteCache.reset();
         }
     }
 
@@ -1166,9 +1140,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
         if (m_pSecondaryWriteCache)
         {
             m_aSecondaryReadCache.takeOver(*m_pSecondaryWriteCache);
-            AcceleratorCache* pTemp = m_pSecondaryWriteCache;
-            m_pSecondaryWriteCache = nullptr;
-            delete pTemp;
+            m_pSecondaryWriteCache.reset();
         }
     }
 
@@ -1326,7 +1298,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         //not still possible!
         if ( bWriteAccessRequested && !m_pPrimaryWriteCache )
         {
-            m_pPrimaryWriteCache = new AcceleratorCache(m_aPrimaryReadCache);
+            m_pPrimaryWriteCache.reset(new AcceleratorCache(m_aPrimaryReadCache));
         }
 
         // in case, we have a writeable cache, we use it for reading too!
@@ -1343,7 +1315,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         //not still possible!
         if ( bWriteAccessRequested && !m_pSecondaryWriteCache )
         {
-            m_pSecondaryWriteCache = new AcceleratorCache(m_aSecondaryReadCache);
+            m_pSecondaryWriteCache.reset(new AcceleratorCache(m_aSecondaryReadCache));
         }
 
         // in case, we have a writeable cache, we use it for reading too!
