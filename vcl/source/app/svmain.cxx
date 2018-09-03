@@ -359,12 +359,12 @@ bool InitVCL()
     // convert path to native file format
     OUString aNativeFileName;
     osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
-    pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
+    pSVData->maAppData.mxAppFileName = aNativeFileName;
 
     // Initialize global data
     pSVData->maGDIData.mxScreenFontList.reset(new PhysicalFontCollection);
     pSVData->maGDIData.mxScreenFontCache.reset(new ImplFontCache);
-    pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
+    pSVData->maGDIData.mpGrfConverter = new GraphicConverter;
 
     g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") != nullptr;
     // Set exception handler
@@ -473,29 +473,21 @@ void DeInitVCL()
     pExceptionHandler = nullptr;
 
     // free global data
-    delete pSVData->maGDIData.mpGrfConverter;
-
-    if( pSVData->mpSettingsConfigItem )
+    if (pSVData->maGDIData.mpGrfConverter)
     {
-        delete pSVData->mpSettingsConfigItem;
-        pSVData->mpSettingsConfigItem = nullptr;
+        delete pSVData->maGDIData.mpGrfConverter;
+        pSVData->maGDIData.mpGrfConverter = nullptr;
     }
+
+    pSVData->mpSettingsConfigItem.reset();
 
     Scheduler::ImplDeInitScheduler();
 
     pSVData->maWinData.maMsgBoxImgList.clear();
     pSVData->maCtrlData.maCheckImgList.clear();
     pSVData->maCtrlData.maRadioImgList.clear();
-    if ( pSVData->maCtrlData.mpDisclosurePlus )
-    {
-        delete pSVData->maCtrlData.mpDisclosurePlus;
-        pSVData->maCtrlData.mpDisclosurePlus = nullptr;
-    }
-    if ( pSVData->maCtrlData.mpDisclosureMinus )
-    {
-        delete pSVData->maCtrlData.mpDisclosureMinus;
-        pSVData->maCtrlData.mpDisclosureMinus = nullptr;
-    }
+    pSVData->maCtrlData.mpDisclosurePlus.reset();
+    pSVData->maCtrlData.mpDisclosureMinus.reset();
     pSVData->mpDefaultWin.disposeAndClear();
 
 #ifndef NDEBUG
@@ -540,56 +532,21 @@ void DeInitVCL()
             delete pSVData->maAppData.mpCfgListener;
         }
 
-        delete pSVData->maAppData.mpSettings;
-        pSVData->maAppData.mpSettings = nullptr;
+        pSVData->maAppData.mpSettings.reset();
     }
-    if ( pSVData->maAppData.mpAccelMgr )
+    if (pSVData->maAppData.mpAccelMgr)
     {
         delete pSVData->maAppData.mpAccelMgr;
         pSVData->maAppData.mpAccelMgr = nullptr;
     }
-    if ( pSVData->maAppData.mpAppFileName )
-    {
-        delete pSVData->maAppData.mpAppFileName;
-        pSVData->maAppData.mpAppFileName = nullptr;
-    }
-    if ( pSVData->maAppData.mpAppName )
-    {
-        delete pSVData->maAppData.mpAppName;
-        pSVData->maAppData.mpAppName = nullptr;
-    }
-    if ( pSVData->maAppData.mpDisplayName )
-    {
-        delete pSVData->maAppData.mpDisplayName;
-        pSVData->maAppData.mpDisplayName = nullptr;
-    }
-    if ( pSVData->maAppData.mpToolkitName )
-    {
-        delete pSVData->maAppData.mpToolkitName;
-        pSVData->maAppData.mpToolkitName = nullptr;
-    }
-    if ( pSVData->maAppData.mpEventListeners )
-    {
-        delete pSVData->maAppData.mpEventListeners;
-        pSVData->maAppData.mpEventListeners = nullptr;
-    }
-    if ( pSVData->maAppData.mpKeyListeners )
-    {
-        delete pSVData->maAppData.mpKeyListeners;
-        pSVData->maAppData.mpKeyListeners = nullptr;
-    }
-    if (pSVData->mpBlendFrameCache)
-    {
-        delete pSVData->mpBlendFrameCache;
-        pSVData->mpBlendFrameCache = nullptr;
-    }
+    pSVData->maAppData.maKeyListeners.clear();
+    pSVData->mpBlendFrameCache.reset();
 
     ImplDeletePrnQueueList();
 
     // destroy all Sal interfaces before destroying the instance
     // and thereby unloading the plugin
-    delete pSVData->mpSalSystem;
-    pSVData->mpSalSystem = nullptr;
+    pSVData->mpSalSystem.reset();
     assert( !pSVData->maSchedCtx.mpSalTimer );
     delete pSVData->maSchedCtx.mpSalTimer;
     pSVData->maSchedCtx.mpSalTimer = nullptr;

@@ -40,8 +40,8 @@ SettingsConfigItem* SettingsConfigItem::get()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpSettingsConfigItem )
-        pSVData->mpSettingsConfigItem = new SettingsConfigItem();
-    return pSVData->mpSettingsConfigItem;
+        pSVData->mpSettingsConfigItem.reset( new SettingsConfigItem() );
+    return pSVData->mpSettingsConfigItem.get();
 }
 
 SettingsConfigItem::SettingsConfigItem()

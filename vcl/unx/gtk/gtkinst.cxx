@@ -178,13 +178,12 @@ void GtkInstance::EnsureInit()
     InitAtkBridge();
 
     ImplSVData* pSVData = ImplGetSVData();
-    delete pSVData->maAppData.mpToolkitName;
 #ifdef GTK_TOOLKIT_NAME
-    pSVData->maAppData.mpToolkitName = new OUString(GTK_TOOLKIT_NAME);
+    pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
 #elif GTK_CHECK_VERSION(3,0,0)
-    pSVData->maAppData.mpToolkitName = new OUString("gtk3");
+    pSVData->maAppData.mxToolkitName = OUString("gtk3");
 #else
-    pSVData->maAppData.mpToolkitName = new OUString("gtk2");
+    pSVData->maAppData.mxToolkitName = OUString("gtk2");
 #endif
 
     bNeedsInit = false;

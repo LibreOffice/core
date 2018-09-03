@@ -316,8 +316,8 @@ bool Qt5Data::noNativeControls()
 {
     static const bool bNoNative
         = ((nullptr != getenv("SAL_VCL_QT5_NO_NATIVE")) && (nullptr != ImplGetSVData())
-           && (nullptr != ImplGetSVData()->maAppData.mpToolkitName)
-           && ImplGetSVData()->maAppData.mpToolkitName->match("qt5"));
+           && ImplGetSVData()->maAppData.mxToolkitName
+           && ImplGetSVData()->maAppData.mxToolkitName->match("qt5"));
     return bNoNative;
 }
 

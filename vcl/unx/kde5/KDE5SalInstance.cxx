@@ -43,8 +43,7 @@ KDE5SalInstance::KDE5SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     : Qt5Instance(std::move(pMutex), true)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    delete pSVData->maAppData.mpToolkitName;
-    pSVData->maAppData.mpToolkitName = new OUString("kde5");
+    pSVData->maAppData.mxToolkitName = OUString("kde5");
 
     KDE5SalData::initNWF();
 }

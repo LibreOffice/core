@@ -35,8 +35,7 @@ KDESalInstance::KDESalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     : X11SalInstance(std::move(pMutex))
 {
     ImplSVData* pSVData = ImplGetSVData();
-    delete pSVData->maAppData.mpToolkitName;
-    pSVData->maAppData.mpToolkitName = new OUString("kde4");
+    pSVData->maAppData.mxToolkitName = OUString("kde4");
 }
 
 SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
