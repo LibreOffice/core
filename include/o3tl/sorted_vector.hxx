@@ -13,6 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 namespace o3tl
 {
@@ -41,6 +42,17 @@ public:
     typedef typename std::vector<Value>::size_type size_type;
 
     // MODIFIERS
+
+    std::pair<const_iterator,bool> insert( Value&& x )
+    {
+        std::pair<const_iterator, bool> const ret(Find_t()(m_vector.begin(), m_vector.end(), x));
+        if (!ret.second)
+        {
+            const_iterator const it = m_vector.insert(m_vector.begin() + (ret.first - m_vector.begin()), std::move(x));
+            return std::make_pair(it, true);
+        }
+        return std::make_pair(ret.first, false);
+    }
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
@@ -204,6 +216,14 @@ private:
 template <class T> struct less_ptr_to
 {
     bool operator() ( T* const& lhs, T* const& rhs ) const
+    {
+        return (*lhs) < (*rhs);
+    }
+};
+
+template <class T> struct less_uniqueptr_to
+{
+    bool operator() ( std::unique_ptr<T> const& lhs, std::unique_ptr<T> const& rhs ) const
     {
         return (*lhs) < (*rhs);
     }

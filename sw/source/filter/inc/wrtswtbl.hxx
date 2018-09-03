@@ -151,9 +151,12 @@ inline bool SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
     return nPos < rRow.nPos - (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
-class SwWriteTableRows : public o3tl::sorted_vector<SwWriteTableRow*, o3tl::less_ptr_to<SwWriteTableRow> > {
+class SwWriteTableRows 
+    : public o3tl::sorted_vector< std::unique_ptr<SwWriteTableRow>, o3tl::less_uniqueptr_to<SwWriteTableRow> >
+{
 public:
-    ~SwWriteTableRows() { DeleteAndDestroyAll(); }
+    SwWriteTableRows& operator=(SwWriteTableRows const&) = delete; // MSVC2017 workaround
+    SwWriteTableRows(SwWriteTableRows const&) = delete; // MSVC2017 workaround
 };
 
 class SW_DLLPUBLIC SwWriteTableCol
