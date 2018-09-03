@@ -116,6 +116,9 @@ public:
         // WW8TabBandDesc
         if (fn == SRCDIR "/sw/source/filter/ww8/ww8par2.cxx")
             return;
+        // ZipOutputStream, ownership of ZipEntry is horribly complicated here
+        if (fn == SRCDIR "/package/source/zipapi/ZipOutputStream.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
@@ -410,6 +413,12 @@ void UseUniquePtr::CheckLoopDelete(const CXXMethodDecl* methodDecl, const CXXDel
     if (!memberExpr)
         return;
 
+    std::string fn(handler.getMainFileName());
+    loplugin::normalizeDotDotInFilePath(fn);
+    // OStorage_Impl::Commit very complicated ownership passing going on
+    if (fn == SRCDIR "/package/source/xstor/xstorage.cxx")
+        return;
+
     CheckDeleteExpr(methodDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
 }
 
@@ -431,6 +440,12 @@ void UseUniquePtr::CheckCXXForRangeStmt(const CXXMethodDecl* methodDecl, const C
         return;
     auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
     if (!fieldDecl)
+        return;
+
+    std::string fn(handler.getMainFileName());
+    loplugin::normalizeDotDotInFilePath(fn);
+    // appears to just randomly leak stuff, and it involves some lex/yacc stuff
+    if (fn == SRCDIR "/idlc/source/aststack.cxx")
         return;
 
     CheckDeleteExpr(methodDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
@@ -654,9 +669,6 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
     // SAXEventKeeperImpl::smashBufferNode
     if (fn == SRCDIR "/xmlsecurity/source/framework/saxeventkeeperimpl.cxx")
         return true;
-    // ZipOutputStream, ownership of ZipEntry is horribly complicated here
-    if (fn == SRCDIR "/package/source/zipapi/ZipOutputStream.cxx")
-        return true;
     // SwDoc::DeleteExtTextInput
     if (fn == SRCDIR "/sw/source/core/doc/extinput.cxx")
         return true;
@@ -720,12 +732,22 @@ bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
         return true;
     if (!loplugin::TypeCheck(ctorInit->getMember()->getType()).Class("unique_ptr").StdNamespace())
         return true;
-    auto constructExpr = dyn_cast<CXXConstructExpr>(ctorInit->getInit());
-    if (!constructExpr)
+    auto constructExpr = dyn_cast_or_null<CXXConstructExpr>(ctorInit->getInit());
+    if (!constructExpr || constructExpr->getNumArgs() == 0)
         return true;
     auto init = constructExpr->getArg(0)->IgnoreImpCasts();
     if (!isa<DeclRefExpr>(init))
         return true;
+
+    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
+    // don't feel like fiddling with the yacc parser
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc/"))
+        return true;
+    // cannot change URE
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/helper/purpenv/helper_purpenv_Environment.cxx"))
+        return true;
+
+
     report(
         DiagnosticsEngine::Warning,
         "should be passing via std::unique_ptr param",
