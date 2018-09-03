@@ -5417,6 +5417,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     UpdateFields();
 
+    DELETEZ(m_pWFlyPara);
+    DELETEZ(m_pSFlyPara);
+
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (m_bNewDoc)
       m_rDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
