@@ -186,6 +186,15 @@ void MiscTest::testHardLinks()
     // This failed: hard link count was 1, the hard link broke on store.
     CPPUNIT_ASSERT(buf.st_nlink > 1);
 
+    // Test that symlinks are presreved as well.
+    remove(aNew.getStr());
+    symlink(aOld.getStr(), aNew.getStr());
+    xStorable->storeToURL(aURL + ".2", {});
+    nRet = lstat(aNew.getStr(), &buf);
+    CPPUNIT_ASSERT_EQUAL(0, nRet);
+    // This failed, the hello.odt.2 symlink was replaced with a real file.
+    CPPUNIT_ASSERT(bool(S_ISLNK(buf.st_mode)));
+
     xComponent->dispose();
 #endif
 }
