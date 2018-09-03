@@ -823,7 +823,6 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     tools::Rectangle               aInRect = rRect;
     Color                   aColor;
-    OUString                aText = PushButton::GetText(); // PushButton:: because of MoreButton
     DrawTextFlags           nTextStyle = ImplGetTextStyle( nDrawFlags );
     DrawSymbolFlags         nStyle;
 
@@ -872,7 +871,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     {
         long nSeparatorX = 0;
         tools::Rectangle aSymbolRect = aInRect;
-        if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
+        if (!(ImplGetButtonState() & DrawButtonFlags::NoText))
         {
             // calculate symbol size
             long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;

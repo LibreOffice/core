@@ -366,7 +366,8 @@ protected:
 
 public:
     virtual void set_label(const OUString& rText) = 0;
-    virtual void set_image(VirtualDevice& rDevice) = 0;
+    // pDevice, the image for the button, or nullptr to unset
+    virtual void set_image(VirtualDevice* pDevice) = 0;
     virtual OUString get_label() const = 0;
     void clicked() { signal_clicked(); }
 

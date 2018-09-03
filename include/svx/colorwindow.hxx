@@ -153,6 +153,7 @@ public:
     weld::Container* GetWidget() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;
     void                SetNoSelection();
+    bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);
     void                SelectEntry(const Color& rColor);
     NamedColor          GetSelectEntryColor() const;

@@ -1743,6 +1743,15 @@ bool SvxColorWindow::IsNoSelection() const
     return !mpButtonAutoColor->IsVisible() && !mpButtonNoneColor->IsVisible();
 }
 
+bool ColorWindow::IsNoSelection() const
+{
+    if (!mxColorSet->IsNoSelection())
+        return false;
+    if (!mxRecentColorSet->IsNoSelection())
+        return false;
+    return !mxButtonAutoColor->get_visible() && !mxButtonNoneColor->get_visible();
+}
+
 void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     if (rEvent.FeatureURL.Complete == ".uno:ColorTableState")
@@ -3840,7 +3849,7 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
 
-    m_xButton->set_image(*xDevice);
+    m_xButton->set_image(xDevice.get());
     m_xButton->set_label(rColor.second);
 }
 

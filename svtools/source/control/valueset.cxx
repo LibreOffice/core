@@ -2279,9 +2279,11 @@ void ValueSet::SetEdgeBlending(bool bNew)
 SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : maVirDev( VclPtr<VirtualDevice>::Create())
     , mxScrolledWindow(std::move(pScrolledWindow))
+    , mnHighItemId(0)
     , maColor(COL_TRANSPARENT)
     , mnStyle(0)
     , mbFormat(true)
+    , mbHighlight(false)
 {
     maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
 
@@ -2303,6 +2305,7 @@ SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnSpacing           = 0;
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
+    mbDrawSelection     = true;
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
@@ -2653,6 +2656,25 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
     return true;
 }
 
+void SvtValueSet::ImplTracking(const Point& rPos)
+{
+    SvtValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
+    if ( pItem )
+    {
+        if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
+            mbHighlight = true;
+
+        ImplHighlightItem( pItem->mnId );
+    }
+    else
+    {
+        if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
+            mbHighlight = true;
+
+        ImplHighlightItem( mnSelItemId, false );
+    }
+}
+
 void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     if ( rMouseEvent.IsLeft() )
@@ -2675,6 +2697,14 @@ void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
     }
 
     CustomWidgetController::MouseButtonDown( rMouseEvent );
+}
+
+void SvtValueSet::MouseMove(const MouseEvent& rMouseEvent)
+{
+    // because of SelectionMode
+    if ((GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
+        ImplTracking(rMouseEvent.GetPosPixel());
+    CustomWidgetController::MouseMove(rMouseEvent);
 }
 
 void SvtValueSet::RemoveItem( sal_uInt16 nItemId )
@@ -2778,6 +2808,23 @@ tools::Rectangle SvtValueSet::ImplGetItemRect( size_t nPos ) const
     const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
 
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
+}
+
+void SvtValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
+{
+    if ( mnHighItemId == nItemId )
+        return;
+
+    // remember the old item to delete the previous selection
+    mnHighItemId = nItemId;
+
+    // don't draw the selection if nothing is selected
+    if ( !bIsSelection && mbNoSelection )
+        mbDrawSelection = false;
+
+    // remove the old selection and draw the new one
+    Invalidate();
+    mbDrawSelection = true;
 }
 
 void SvtValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
@@ -2916,6 +2963,7 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
 void SvtValueSet::SetNoSelection()
 {
     mbNoSelection   = true;
+    mbHighlight     = false;
 
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
@@ -3260,13 +3308,19 @@ void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         return;
 
     const bool bFocus = HasFocus();
-    if (!bFocus && mbNoSelection)
+    const bool bDrawSel = !((mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight));
+
+    if (!bFocus && !bDrawSel)
     {
         ImplDrawItemText(rRenderContext, OUString());
         return;
     }
 
-    ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, !mbNoSelection);
+    ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
+    if (mbHighlight)
+    {
+        ImplDrawSelect(rRenderContext, mnHighItemId, bFocus, bDrawSel);
+    }
 }
 
 void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
@@ -3568,6 +3622,26 @@ void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
     }
 }
 
+void SvtValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    SvtValueSetItem* pItem = mItemList[nPos];
+    pItem->meType  = VALUESETITEM_IMAGE;
+    pItem->maImage = rImage;
+
+    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    {
+        const tools::Rectangle aRect = ImplGetItemRect(nPos);
+        Invalidate(aRect);
+    }
+    else
+        mbFormat = true;
+}
+
 Color SvtValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );
@@ -3658,6 +3732,14 @@ void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
+    ImplInsertItem( pItem, nPos );
+}
+
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
+{
+    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_USERDRAW;
     ImplInsertItem( pItem, nPos );
 }
 
@@ -3830,6 +3912,9 @@ void SvtValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
     {
         sal_uInt16 nTempId = mnSelItemId;
 
+        if (mbHighlight)
+            nTempId = mnHighItemId;
+
         if (nTempId == nItemId)
             Invalidate();
     }
@@ -3840,6 +3925,57 @@ void SvtValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
         SvtValueItemAcc* pValueItemAcc = static_cast<SvtValueItemAcc*>(xAccessible.get());
         pValueItemAcc->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
     }
+}
+
+Size SvtValueSet::GetLargestItemSize()
+{
+    Size aLargestItem;
+
+    for (SvtValueSetItem* pItem : mItemList)
+    {
+        if (!pItem->mbVisible)
+            continue;
+
+        if (pItem->meType != VALUESETITEM_IMAGE &&
+            pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+        {
+            // handle determining an optimal size for this case
+            continue;
+        }
+
+        Size aSize = pItem->maImage.GetSizePixel();
+        if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+        {
+            aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
+                maVirDev->GetTextHeight() );
+            aSize.setWidth( std::max(aSize.Width(),
+                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET) );
+        }
+
+        aLargestItem.setWidth( std::max(aLargestItem.Width(), aSize.Width()) );
+        aLargestItem.setHeight( std::max(aLargestItem.Height(), aSize.Height()) );
+    }
+
+    return aLargestItem;
+}
+
+void SvtValueSet::SetOptimalSize()
+{
+    Size aLargestSize(GetLargestItemSize());
+    aLargestSize.setWidth(std::max(aLargestSize.Width(), mnUserItemWidth));
+    aLargestSize.setHeight(std::max(aLargestSize.Height(), mnUserItemHeight));
+    Size aPrefSize(CalcWindowSizePixel(aLargestSize));
+    GetDrawingArea()->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+}
+
+Image SvtValueSet::GetItemImage(sal_uInt16 nItemId) const
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+        return mItemList[nPos]->maImage;
+    else
+        return Image();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

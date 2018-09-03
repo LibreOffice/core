@@ -291,10 +291,11 @@ enum class InvertFlags
     NONE                    = 0x0000,
     Highlight               = 0x0001,
     N50                     = 0x0002,
+    TrackFrame              = 0x0004
 };
 namespace o3tl
 {
-    template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0003> {};
+    template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0007> {};
 }
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };

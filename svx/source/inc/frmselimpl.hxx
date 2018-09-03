@@ -30,6 +30,7 @@ namespace svx {
 
 namespace a11y {
     class AccFrameSelector;
+    class AccFrameSelectorChild;
 }
 
 class FrameBorder
@@ -138,8 +139,7 @@ struct FrameSelectorImpl
     bool                mbAutoSelect;   /// true = Auto select a frame border, if focus reaches control.
     bool                mbHCMode;       /// true = High contrast mode.
 
-    rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
-    std::vector<rtl::Reference<a11y::AccFrameSelector>>
+    std::vector<rtl::Reference<a11y::AccFrameSelectorChild>>
                         maChildVec;     /// Pointers to accessibility objects for frame borders.
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();
@@ -185,7 +185,7 @@ struct FrameSelectorImpl
     void                CopyVirDevToControl(vcl::RenderContext& rRenderContext);
 
     /** Draws tracking rectangles for all selected frame borders. */
-    void                DrawAllTrackingRects();
+    void                DrawAllTrackingRects(vcl::RenderContext& rRenderContext);
 
     /** Converts a mouse position to the virtual device position. */
     Point               GetDevPosFromMousePos( const Point& rMousePos ) const;

@@ -982,11 +982,16 @@ public:
         m_xButton->SetText(rText);
     }
 
-    virtual void set_image(VirtualDevice& rDevice) override
+    virtual void set_image(VirtualDevice* pDevice) override
     {
-        BitmapEx aBitmap(rDevice.GetBitmap(Point(0, 0), rDevice.GetOutputSize()));
         m_xButton->SetImageAlign(ImageAlign::Left);
-        m_xButton->SetModeImage(Image(aBitmap));
+        if (pDevice)
+        {
+            BitmapEx aBitmap(pDevice->GetBitmap(Point(0, 0), pDevice->GetOutputSize()));
+            m_xButton->SetModeImage(Image(aBitmap));
+        }
+        else
+            m_xButton->SetModeImage(Image());
     }
 
     virtual OUString get_label() const override
