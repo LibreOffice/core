@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_a9d0fc51",
+        "filename": "sc/qa/unit/datatransformation_test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-03T12:15:36Z",
+      "side": 1,
+      "message": "Instead of hard coding obscure floating point serial date numbers here and below, rather construct DateTime instances and use the difference aDateTime-NullDate (as obtained from the document\u0027s SvNumberFormatter instance).",
+      "revId": "49e55aba2d8daf94a696f0ec1ec3e3f6daf6cc8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
