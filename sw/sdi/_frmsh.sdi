@@ -330,6 +330,12 @@ interface BaseTextFrame
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_OBJECT_ALIGN
+    [
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_FORMAT_FOOTNOTE_DLG // status()
     [
         ExecMethod = Execute;
