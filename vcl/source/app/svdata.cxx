@@ -79,8 +79,8 @@ SalSystem* ImplGetSalSystem()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpSalSystem )
-        pSVData->mpSalSystem = pSVData->mpDefInst->CreateSalSystem();
-    return pSVData->mpSalSystem;
+        pSVData->mpSalSystem.reset( pSVData->mpDefInst->CreateSalSystem() );
+    return pSVData->mpSalSystem.get();
 }
 
 void ImplDeInitSVData()
@@ -88,33 +88,13 @@ void ImplDeInitSVData()
     ImplSVData* pSVData = ImplGetSVData();
 
     // delete global instance data
-    if( pSVData->mpSettingsConfigItem )
-    {
-        delete pSVData->mpSettingsConfigItem;
-        pSVData->mpSettingsConfigItem = nullptr;
-    }
+    pSVData->mpSettingsConfigItem.reset();
 
-    if( pSVData->mpDockingManager )
-    {
-        delete pSVData->mpDockingManager;
-        pSVData->mpDockingManager = nullptr;
-    }
+    pSVData->mpDockingManager.reset();
 
-    if( pSVData->maCtrlData.mpFieldUnitStrings )
-    {
-        delete pSVData->maCtrlData.mpFieldUnitStrings;
-        pSVData->maCtrlData.mpFieldUnitStrings = nullptr;
-    }
-    if( pSVData->maCtrlData.mpCleanUnitStrings )
-    {
-        delete pSVData->maCtrlData.mpCleanUnitStrings;
-        pSVData->maCtrlData.mpCleanUnitStrings = nullptr;
-    }
-    if( pSVData->mpPaperNames )
-    {
-        delete pSVData->mpPaperNames;
-        pSVData->mpPaperNames = nullptr;
-    }
+    pSVData->maCtrlData.maFieldUnitStrings.clear();
+    pSVData->maCtrlData.maCleanUnitStrings.clear();
+    pSVData->maPaperNames.clear();
 }
 
 /// Returns either the application window, or the default GL context window
@@ -182,60 +162,58 @@ OUString VclResId(const char* pId)
 FieldUnitStringList* ImplGetFieldUnits()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->maCtrlData.mpFieldUnitStrings )
+    if( pSVData->maCtrlData.maFieldUnitStrings.empty() )
     {
         sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
-        pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList;
-        pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
+        pSVData->maCtrlData.maFieldUnitStrings.reserve( nUnits );
         for (sal_uInt32 i = 0; i < nUnits; i++)
         {
             std::pair<OUString, FieldUnit> aElement(VclResId(SV_FUNIT_STRINGS[i].first), SV_FUNIT_STRINGS[i].second);
-            pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
+            pSVData->maCtrlData.maFieldUnitStrings.push_back( aElement );
         }
     }
-    return pSVData->maCtrlData.mpFieldUnitStrings;
+    return &pSVData->maCtrlData.maFieldUnitStrings;
 }
 
 FieldUnitStringList* ImplGetCleanedFieldUnits()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->maCtrlData.mpCleanUnitStrings )
+    if( pSVData->maCtrlData.maCleanUnitStrings.empty() )
     {
         FieldUnitStringList* pUnits = ImplGetFieldUnits();
         if( pUnits )
         {
             size_t nUnits = pUnits->size();
-            pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList;
-            pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
+            pSVData->maCtrlData.maCleanUnitStrings.reserve( nUnits );
             for( size_t i = 0; i < nUnits; ++i )
             {
                 OUString aUnit( (*pUnits)[i].first );
                 aUnit = aUnit.replaceAll(" ", "");
                 aUnit = aUnit.toAsciiLowerCase();
                 std::pair< OUString, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
-                pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );
+                pSVData->maCtrlData.maCleanUnitStrings.push_back( aElement );
             }
         }
     }
-    return pSVData->maCtrlData.mpCleanUnitStrings;
+    return &pSVData->maCtrlData.maCleanUnitStrings;
 }
 
 DockingManager* ImplGetDockingManager()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpDockingManager )
-        pSVData->mpDockingManager = new DockingManager();
+        pSVData->mpDockingManager.reset(new DockingManager());
 
-    return pSVData->mpDockingManager;
+    return pSVData->mpDockingManager.get();
 }
 
 BlendFrameCache* ImplGetBlendFrameCache()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpBlendFrameCache)
-        pSVData->mpBlendFrameCache= new BlendFrameCache();
+        pSVData->mpBlendFrameCache.reset( new BlendFrameCache() );
 
-    return pSVData->mpBlendFrameCache;
+    return pSVData->mpBlendFrameCache.get();
 }
 
 #ifdef _WIN32

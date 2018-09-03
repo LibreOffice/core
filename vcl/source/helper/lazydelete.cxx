@@ -63,9 +63,10 @@ bool LazyDeletor::is_less( vcl::Window const * left, vcl::Window const * right )
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData && pSVData->mpDeinitDeleteList != nullptr )
-        pSVData->mpDeinitDeleteList->erase(std::remove(pSVData->mpDeinitDeleteList->begin(), pSVData->mpDeinitDeleteList->end(), this),
-                                pSVData->mpDeinitDeleteList->end());
+    if( !pSVData )
+        return;
+    auto & rList = pSVData->maDeinitDeleteList;
+    rList.erase(std::remove(rList.begin(), rList.end(), this), rList.end());
 }
 
 void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
@@ -76,23 +77,17 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
     if( pSVData->mbDeInit )
         return;
 
-    if( pSVData->mpDeinitDeleteList == nullptr )
-        pSVData->mpDeinitDeleteList = new std::vector< DeleteOnDeinitBase* >;
-    pSVData->mpDeinitDeleteList->push_back( i_pContainer );
+    pSVData->maDeinitDeleteList.push_back( i_pContainer );
 }
 
 void DeleteOnDeinitBase::ImplDeleteOnDeInit()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpDeinitDeleteList )
+    for (auto const& deinitDelete : pSVData->maDeinitDeleteList)
     {
-        for (auto const& deinitDelete : *(pSVData->mpDeinitDeleteList))
-        {
-            deinitDelete->doCleanup();
-        }
-        delete pSVData->mpDeinitDeleteList;
-        pSVData->mpDeinitDeleteList = nullptr;
+        deinitDelete->doCleanup();
     }
+    pSVData->maDeinitDeleteList.clear();
 }
 
 } // namespace vcl

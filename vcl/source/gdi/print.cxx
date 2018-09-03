@@ -1436,9 +1436,8 @@ int Printer::GetPaperInfoCount() const
 OUString Printer::GetPaperName( Paper ePaper )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mpPaperNames )
+    if( pSVData->maPaperNames.empty() )
     {
-        pSVData->mpPaperNames = new std::unordered_map< int, OUString >;
         static const int PaperIndex[] =
         {
             PAPER_A0, PAPER_A1, PAPER_A2, PAPER_A3, PAPER_A4, PAPER_A5,
@@ -1452,11 +1451,11 @@ OUString Printer::GetPaperName( Paper ePaper )
         };
         assert(SAL_N_ELEMENTS(PaperIndex) == SAL_N_ELEMENTS(RID_STR_PAPERNAMES) && "localized paper name count wrong");
         for (size_t i = 0; i < SAL_N_ELEMENTS(PaperIndex); ++i)
-            (*pSVData->mpPaperNames)[PaperIndex[i]] = VclResId(RID_STR_PAPERNAMES[i]);
+            pSVData->maPaperNames[PaperIndex[i]] = VclResId(RID_STR_PAPERNAMES[i]);
     }
 
-    std::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( static_cast<int>(ePaper) );
-    return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
+    std::unordered_map<int,OUString>::const_iterator it = pSVData->maPaperNames.find( static_cast<int>(ePaper) );
+    return (it != pSVData->maPaperNames.end()) ? it->second : OUString();
 }
 
 OUString Printer::GetPaperName() const

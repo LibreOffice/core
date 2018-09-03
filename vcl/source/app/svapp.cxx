@@ -236,9 +236,9 @@ OUString Application::GetCommandLineParam( sal_uInt16 nParam )
 OUString Application::GetAppFileName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    SAL_WARN_IF( !pSVData->maAppData.mpAppFileName, "vcl", "AppFileName should be set to something after SVMain!" );
-    if ( pSVData->maAppData.mpAppFileName )
-        return *pSVData->maAppData.mpAppFileName;
+    SAL_WARN_IF( !pSVData->maAppData.mxAppFileName, "vcl", "AppFileName should be set to something after SVMain!" );
+    if ( pSVData->maAppData.mxAppFileName )
+        return *pSVData->maAppData.mxAppFileName;
 
     /*
      *  provide a fallback for people without initialized vcl here (like setup
@@ -745,7 +745,7 @@ void InitSettings(ImplSVData* pSVData)
 {
     assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
-    pSVData->maAppData.mpSettings = new AllSettings();
+    pSVData->maAppData.mpSettings.reset(new AllSettings());
     if (!utl::ConfigManager::IsFuzzing())
     {
         pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
@@ -779,49 +779,38 @@ void Application::ImplCallEventListenersApplicationDataChanged( void* pData )
     ImplSVData* pSVData = ImplGetSVData();
     VclWindowEvent aEvent( nullptr, VclEventId::ApplicationDataChanged, pData );
 
-    if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( aEvent );
+    pSVData->maAppData.maEventListeners.Call( aEvent );
 }
 
 void Application::ImplCallEventListeners( VclSimpleEvent& rEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( rEvent );
+    pSVData->maAppData.maEventListeners.Call( rEvent );
 }
 
 void Application::AddEventListener( const Link<VclSimpleEvent&,void>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( !pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners = new VclEventListeners;
-    pSVData->maAppData.mpEventListeners->addListener( rEventListener );
+    pSVData->maAppData.maEventListeners.addListener( rEventListener );
 }
 
 void Application::RemoveEventListener( const Link<VclSimpleEvent&,void>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->removeListener( rEventListener );
+    pSVData->maAppData.maEventListeners.removeListener( rEventListener );
 }
 
 void Application::AddKeyListener( const Link<VclWindowEvent&,bool>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( !pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners = new SVAppKeyListeners;
-    pSVData->maAppData.mpKeyListeners->push_back( rKeyListener );
+    pSVData->maAppData.maKeyListeners.push_back( rKeyListener );
 }
 
 void Application::RemoveKeyListener( const Link<VclWindowEvent&,bool>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->maAppData.mpKeyListeners )
-    {
-        auto pVec = pSVData->maAppData.mpKeyListeners;
-        pVec->erase( std::remove(pVec->begin(), pVec->end(), rKeyListener ), pVec->end() );
-    }
+    auto & rVec = pSVData->maAppData.maKeyListeners;
+    rVec.erase( std::remove(rVec.begin(), rVec.end(), rKeyListener ), rVec.end() );
 }
 
 bool Application::HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
@@ -831,15 +820,12 @@ bool Application::HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKe
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( !pSVData->maAppData.mpKeyListeners )
-        return false;
-
-    if ( pSVData->maAppData.mpKeyListeners->empty() )
+    if ( pSVData->maAppData.maKeyListeners.empty() )
         return false;
 
     bool bProcessed = false;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::vector<Link<VclWindowEvent&,bool>> aCopy( *pSVData->maAppData.mpKeyListeners );
+    std::vector<Link<VclWindowEvent&,bool>> aCopy( pSVData->maAppData.maKeyListeners );
     for ( Link<VclWindowEvent&,bool>& rLink : aCopy )
     {
         if( rLink.Call( aEvent ) )
@@ -1109,19 +1095,14 @@ vcl::Window* Application::GetActiveTopWindow()
 void Application::SetAppName( const OUString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
-
-    // create if does not exist
-    if ( !pSVData->maAppData.mpAppName )
-        pSVData->maAppData.mpAppName = new OUString( rUniqueName );
-    else
-        *(pSVData->maAppData.mpAppName) = rUniqueName;
+    pSVData->maAppData.mxAppName = rUniqueName;
 }
 
 OUString Application::GetAppName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpAppName )
-        return *(pSVData->maAppData.mpAppName);
+    if ( pSVData->maAppData.mxAppName )
+        return *(pSVData->maAppData.mxAppName);
     else
         return OUString();
 }
@@ -1167,19 +1148,14 @@ OUString Application::GetHWOSConfInfo()
 void Application::SetDisplayName( const OUString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
-
-    // create if does not exist
-    if ( !pSVData->maAppData.mpDisplayName )
-        pSVData->maAppData.mpDisplayName = new OUString( rName );
-    else
-        *(pSVData->maAppData.mpDisplayName) = rName;
+    pSVData->maAppData.mxDisplayName = rName;
 }
 
 OUString Application::GetDisplayName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpDisplayName )
-        return *(pSVData->maAppData.mpDisplayName);
+    if ( pSVData->maAppData.mxDisplayName )
+        return *(pSVData->maAppData.mxDisplayName);
     else if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin->GetText();
     else
@@ -1327,8 +1303,8 @@ Help* Application::GetHelp()
 OUString Application::GetToolkitName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpToolkitName )
-        return *(pSVData->maAppData.mpToolkitName);
+    if ( pSVData->maAppData.mxToolkitName )
+        return *(pSVData->maAppData.mxToolkitName);
     else
         return OUString();
 }
