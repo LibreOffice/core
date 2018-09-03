@@ -93,11 +93,11 @@ class FWI_DLLPUBLIC HandlerCache final
     private:
 
         /// list of all registered handler registered by her uno implementation names
-        static HandlerHash* m_pHandler;
+        static std::unique_ptr<HandlerHash> m_pHandler;
         /// maps URL pattern to handler names
-        static PatternHash* m_pPattern;
+        static std::unique_ptr<PatternHash> m_pPattern;
         /// informs about config updates
-        static HandlerCFGAccess* m_pConfig;
+        static std::unique_ptr<HandlerCFGAccess> m_pConfig;
         /// ref count to construct/destruct internal member lists on demand by using singleton mechanism
         static sal_Int32 m_nRefCount;
 
@@ -110,7 +110,7 @@ class FWI_DLLPUBLIC HandlerCache final
         bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
         bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
 
-        void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
+        void takeOver(std::unique_ptr<HandlerHash> pHandler, std::unique_ptr<PatternHash> pPattern);
 };
 
 /**
@@ -137,8 +137,8 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
     /* interface */
     public:
                  HandlerCFGAccess( const OUString& sPackage  );
-        void     read            (       HandlerHash**    ppHandler ,
-                                         PatternHash**    ppPattern );
+        void     read            (       std::unique_ptr<HandlerHash>& ppHandler ,
+                                         std::unique_ptr<PatternHash>& ppPattern );
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
         virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) override;

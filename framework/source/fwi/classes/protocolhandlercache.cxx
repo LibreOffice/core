@@ -73,10 +73,10 @@ PatternHash::const_iterator findPatternKey(PatternHash const * hash, const OUStr
                 That means it use two static member list to hold all necessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
-HandlerHash* HandlerCache::m_pHandler  = nullptr;
-PatternHash* HandlerCache::m_pPattern  = nullptr;
+std::unique_ptr<HandlerHash> HandlerCache::m_pHandler;
+std::unique_ptr<PatternHash> HandlerCache::m_pPattern;
 sal_Int32    HandlerCache::m_nRefCount = 0;
-HandlerCFGAccess* HandlerCache::m_pConfig = nullptr;
+std::unique_ptr<HandlerCFGAccess> HandlerCache::m_pConfig;
 
 /**
     @short      ctor of the cache of all registered protocol handler
@@ -91,10 +91,10 @@ HandlerCache::HandlerCache()
 
     if (m_nRefCount==0)
     {
-        m_pHandler = new HandlerHash;
-        m_pPattern = new PatternHash;
-        m_pConfig  = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
-        m_pConfig->read(&m_pHandler,&m_pPattern);
+        m_pHandler.reset(new HandlerHash);
+        m_pPattern.reset(new PatternHash);
+        m_pConfig.reset(new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER));
+        m_pConfig->read(m_pHandler,m_pPattern);
         m_pConfig->setCache(this);
     }
 
@@ -114,12 +114,9 @@ HandlerCache::~HandlerCache()
     {
         m_pConfig->setCache(nullptr);
 
-        delete m_pConfig;
-        delete m_pHandler;
-        delete m_pPattern;
-        m_pConfig = nullptr;
-        m_pHandler= nullptr;
-        m_pPattern= nullptr;
+        m_pConfig.reset();
+        m_pHandler.reset();
+        m_pPattern.reset();
     }
 
     --m_nRefCount;
@@ -136,7 +133,7 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
 
     SolarMutexGuard aGuard;
 
-    PatternHash::const_iterator pItem = findPatternKey(m_pPattern, sURL);
+    PatternHash::const_iterator pItem = findPatternKey(m_pPattern.get(), sURL);
     if (pItem!=m_pPattern->end())
     {
         *pReturn = (*m_pHandler)[pItem->second];
@@ -157,18 +154,12 @@ bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn 
     return search( aURL.Complete, pReturn );
 }
 
-void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
+void HandlerCache::takeOver(std::unique_ptr<HandlerHash> pHandler, std::unique_ptr<PatternHash> pPattern)
 {
     SolarMutexGuard aGuard;
 
-    HandlerHash* pOldHandler = m_pHandler;
-    PatternHash* pOldPattern = m_pPattern;
-
-    m_pHandler = pHandler;
-    m_pPattern = pPattern;
-
-    delete pOldHandler;
-    delete pOldPattern;
+    m_pHandler = std::move(pHandler);
+    m_pPattern = std::move(pPattern);
 }
 
 /**
@@ -198,8 +189,8 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     @param      pPattern
                 reverse map of handler pattern to her uno names
  */
-void HandlerCFGAccess::read( HandlerHash** ppHandler ,
-                             PatternHash** ppPattern )
+void HandlerCFGAccess::read( std::unique_ptr<HandlerHash>& ppHandler ,
+                             std::unique_ptr<PatternHash>& ppPattern )
 {
     // list of all uno implementation names without encoding
     css::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::ConfigNameFormat::LocalPath );
@@ -243,28 +234,23 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
         // register his pattern into the performance search hash
         for (auto const& item : aHandler.m_lProtocols)
         {
-            (**ppPattern)[item] = lNames[nSource];
+            (*ppPattern)[item] = lNames[nSource];
         }
 
         // insert the handler info into the normal handler cache
-        (**ppHandler)[lNames[nSource]] = aHandler;
+        (*ppHandler)[lNames[nSource]] = aHandler;
         ++nSource;
     }
 }
 
 void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyNames*/)
 {
-    HandlerHash* pHandler = new HandlerHash;
-    PatternHash* pPattern = new PatternHash;
+    std::unique_ptr<HandlerHash> pHandler(new HandlerHash);
+    std::unique_ptr<PatternHash> pPattern(new PatternHash);
 
-    read(&pHandler, &pPattern);
+    read(pHandler, pPattern);
     if (m_pCache)
-        m_pCache->takeOver(pHandler, pPattern);
-    else
-    {
-        delete pHandler;
-        delete pPattern;
-    }
+        m_pCache->takeOver(std::move(pHandler), std::move(pPattern));
 }
 
 void HandlerCFGAccess::ImplCommit()
