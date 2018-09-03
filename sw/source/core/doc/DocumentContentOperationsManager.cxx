@@ -3562,92 +3562,89 @@ DocumentContentOperationsManager::~DocumentContentOperationsManager()
 
 bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
-    OSL_ENSURE( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
+    assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
+    SwUndoRedlineDelete* pUndo = nullptr;
+    RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
+
+    auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
+    std::vector<std::unique_ptr<SwUndo>> MarkUndos;
+    for (auto iter = rDMA.getAnnotationMarksBegin();
+              iter != rDMA.getAnnotationMarksEnd(); )
     {
-        SwUndoRedlineDelete* pUndo = nullptr;
-        RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-        m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
-
-        auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
-        std::vector<std::unique_ptr<SwUndo>> MarkUndos;
-        for (auto iter = rDMA.getAnnotationMarksBegin();
-                  iter != rDMA.getAnnotationMarksEnd(); )
+        // tdf#111524 remove annotation marks that have their field
+        // characters deleted
+        SwPosition const& rEndPos((**iter).GetMarkEnd());
+        if (*rPam.Start() < rEndPos && rEndPos <= *rPam.End())
         {
-            // tdf#111524 remove annotation marks that have their field
-            // characters deleted
-            SwPosition const& rEndPos((**iter).GetMarkEnd());
-            if (*rPam.Start() < rEndPos && rEndPos <= *rPam.End())
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-                {
-                    MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
-                }
-                // iter is into annotation mark vector so must be dereferenced!
-                rDMA.deleteMark(&**iter);
-                // this invalidates iter, have to start over...
-                iter = rDMA.getAnnotationMarksBegin();
+                MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
             }
-            else
-            {   // marks are sorted by start
-                if (*rPam.End() < (**iter).GetMarkStart())
-                {
-                    break;
-                }
-                ++iter;
-            }
+            // iter is into annotation mark vector so must be dereferenced!
+            rDMA.deleteMark(&**iter);
+            // this invalidates iter, have to start over...
+            iter = rDMA.getAnnotationMarksBegin();
         }
-
-        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-        {
-
-            /* please don't translate -- for cultural reasons this comment is protected
-               until the redline implementation is finally fixed some day */
-            //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
-                RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
-            pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
-            const SwRewriter aRewriter = pUndo->GetRewriter();
-            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
-            for (auto& it : MarkUndos)
+        else
+        {   // marks are sorted by start
+            if (*rPam.End() < (**iter).GetMarkStart())
             {
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+                break;
             }
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
+            ++iter;
         }
-
-        if ( *rPam.GetPoint() != *rPam.GetMark() )
-            m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
-        m_rDoc.getIDocumentState().SetModified();
-
-        if ( pUndo )
-        {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
-            // ??? why the hell is the AppendUndo not below the
-            // CanGrouping, so this hideous cleanup wouldn't be necessary?
-            // bah, this is redlining, probably changing this would break it...
-            if ( m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo() )
-            {
-                SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
-                SwUndoRedlineDelete * const pUndoRedlineDel( dynamic_cast< SwUndoRedlineDelete* >( pLastUndo ) );
-                if ( pUndoRedlineDel )
-                {
-                    bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
-                    if ( bMerged )
-                    {
-                        ::sw::UndoGuard const undoGuard( m_rDoc.GetIDocumentUndoRedo() );
-                        SwUndo const* const pDeleted = m_rDoc.GetUndoManager().RemoveLastUndo();
-                        OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
-                            "undo removed is not undo inserted?" );
-                        delete pDeleted;
-                    }
-                }
-            }
-            //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
-        }
-        return true;
     }
+
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {
+        /* please don't translate -- for cultural reasons this comment is protected
+           until the redline implementation is finally fixed some day */
+        //JP 06.01.98: MUSS noch optimiert werden!!!
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
+            RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+        pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
+        const SwRewriter aRewriter = pUndo->GetRewriter();
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
+        for (auto& it : MarkUndos)
+        {
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+        }
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
+    }
+
+    if (*rPam.GetPoint() != *rPam.GetMark())
+        m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
+    m_rDoc.getIDocumentState().SetModified();
+
+    if (pUndo)
+    {
+        m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
+        // ??? why the hell is the AppendUndo not below the
+        // CanGrouping, so this hideous cleanup wouldn't be necessary?
+        // bah, this is redlining, probably changing this would break it...
+        if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
+        {
+            SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
+            SwUndoRedlineDelete *const pUndoRedlineDel( dynamic_cast<SwUndoRedlineDelete*>(pLastUndo) );
+            if (pUndoRedlineDel)
+            {
+                bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
+                if (bMerged)
+                {
+                    ::sw::UndoGuard const undoGuard( m_rDoc.GetIDocumentUndoRedo() );
+                    SwUndo const*const pDeleted = m_rDoc.GetUndoManager().RemoveLastUndo();
+                    OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
+                        "undo removed is not undo inserted?" );
+                    delete pDeleted;
+                }
+            }
+        }
+        //JP 06.01.98: MUSS noch optimiert werden!!!
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
+    }
+    return true;
 }
 
 bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
