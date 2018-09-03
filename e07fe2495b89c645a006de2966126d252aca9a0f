@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2973cc17",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 0,
+      "message": "Please add some comment why was this code dropped, such as \u0027system tooltip colour shouldn\u0027t have influence on the fill colour of exported shape\u0027",
+      "revId": "e07fe2495b89c645a006de2966126d252aca9a0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0962483f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 1,
+      "message": "A good test approximates the scenario from the bug: opens the document, sets hidden comment to shown/visible, saves the document and checks if visibility tag is there",
+      "revId": "4d77122373eaca5563d47737012d73f395c119c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_e9660452",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 1,
+      "message": "So I didn\u0027t check the content of this file, but please make sure the comment is hidden upon opening",
+      "range": {
+        "startLine": 724,
+        "startChar": 36,
+        "endLine": 724,
+        "endChar": 54
+      },
+      "revId": "4d77122373eaca5563d47737012d73f395c119c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_c95b4085",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 1,
+      "message": "I\u0027d like to see some code here that toggles the visibility of the comment here, something like\n\nScPostIt *pNote \u003d m_pDoc-\u003eGetNote($cell_with_note);\npNote-\u003eShowCaption()",
+      "revId": "4d77122373eaca5563d47737012d73f395c119c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_a960fc33",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 1,
+      "message": "... and export again only after this is done",
+      "revId": "4d77122373eaca5563d47737012d73f395c119c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_494f30bd",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-09-03T19:09:04Z",
+      "side": 1,
+      "message": "this is the only assert relevant for the bug scenario at hand -- feel free to drop the others testing comment geometry, properties etc, because this is already done sufficiently in a different test",
+      "revId": "4d77122373eaca5563d47737012d73f395c119c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
