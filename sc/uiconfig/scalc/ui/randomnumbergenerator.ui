@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -176,10 +176,10 @@
                       <object class="GtkLabel" id="cell-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|cell-range-label">Cell range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">cell-range-edit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -258,8 +258,10 @@
                       <object class="GtkLabel" id="distribution-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|distribution-label">Distribution:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">distribution-combo</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -283,10 +285,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|parameter1-label">...</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">parameter1-spin</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -298,10 +300,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|parameter2-label">...</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">parameter2-spin</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -313,7 +315,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="no">0,0000</property>
+                        <property name="text">0,0000</property>
                         <property name="adjustment">parameter2-adjustment</property>
                         <property name="digits">4</property>
                       </object>
@@ -327,7 +329,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="no">1,0000</property>
+                        <property name="text">1,0000</property>
                         <property name="adjustment">parameter1-adjustment</property>
                         <property name="digits">4</property>
                         <property name="value">1</property>
@@ -398,11 +400,11 @@
                       <object class="GtkLabel" id="seed-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|seed-label">Seed:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">seed-spin</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -441,10 +443,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="randomnumbergenerator|decimal-places-label">Decimal places:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">decimal-places-spin</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -456,7 +459,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="no">1</property>
+                        <property name="text">1</property>
                         <property name="adjustment">decimal-places-adjustment</property>
                         <property name="value">1</property>
                       </object>
