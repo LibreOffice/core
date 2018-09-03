@@ -146,7 +146,7 @@ public:
 
     ErrCode const &         GetErrorCode() const { return nUserId; }
 
-    static ErrorInfo*       GetErrorInfo(ErrCode);
+    static std::unique_ptr<ErrorInfo> GetErrorInfo(ErrCode);
 
 private:
     ErrCode                 nUserId;
