@@ -28,29 +28,7 @@
       <DefaultName>South Africa</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE unoid="generic">
-    <Separators>
-      <DateSeparator>/</DateSeparator>
-      <ThousandSeparator> </ThousandSeparator>
-      <DecimalSeparator>,</DecimalSeparator>
-      <TimeSeparator>:</TimeSeparator>
-      <Time100SecSeparator>,</Time100SecSeparator>
-      <ListSeparator>;</ListSeparator>
-      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator> </LongDateDaySeparator>
-      <LongDateMonthSeparator> </LongDateMonthSeparator>
-      <LongDateYearSeparator> </LongDateYearSeparator>
-    </Separators>
-    <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
-    </Markers>
-    <TimeAM>vm.</TimeAM>
-    <TimePM>nm.</TimePM>
-    <MeasurementSystem>metric</MeasurementSystem>
-  </LC_CTYPE>
+  <LC_CTYPE ref="en_ZA"/>
   <LC_FORMAT ref="en_ZA" replaceTo="[$R-436]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
