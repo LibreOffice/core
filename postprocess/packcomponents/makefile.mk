@@ -46,7 +46,6 @@ my_components = \
     reflection \
     stocservices \
     abp \
-    analysis \
     basprov \
     bib \
     calc \
@@ -104,6 +103,8 @@ my_components = \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/vbaobj \
+    component/scaddins/source/analysis/analysis \
+    component/scaddins/source/datefunc/date \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sfx2/util/sfx \

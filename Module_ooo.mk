@@ -76,6 +76,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sane \
     sax \
     sc \
+    scaddins \
     sccomp \
     sd \
     sfx2 \

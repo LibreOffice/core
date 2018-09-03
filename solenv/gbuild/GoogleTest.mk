@@ -69,7 +69,7 @@ $$(eval $$(call gb_Module_register_target,$(call gb_GoogleTest_get_target,$(1)),
 endef
 
 define gb_GoogleTest__forward_to_Linktarget
-gb_GoogleTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_GoogleTest__get_linktargetname,$$(1)),$$(2),$$(3))
+gb_GoogleTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_GoogleTest__get_linktargetname,$$(1)),$$(2),$$(3),$$(4))
 
 endef
 

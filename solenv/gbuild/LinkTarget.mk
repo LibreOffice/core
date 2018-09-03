@@ -542,22 +542,23 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc)
 endif
 
-$(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag): $(2)
+$(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag): $(2) $(3)
 	$(call gb_Output_announce,$@,$(true),PVTIDL,2)
 	-$$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/urd) && \
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/rdb) && \
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) && \
 		$$(gb_UnoApiTarget_IDLCCOMMAND) -I$$(OUTDIR)/idl -O $$(call gb_UnoPrivateApiTarget_get_target,$(1)/urd) \
-			-verbose -cid -we $(2) && \
+			-verbose -cid -we $(3) && \
 		$$(gb_UnoApiTarget_REGMERGECOMMAND) $$(call gb_UnoPrivateApiTarget_get_target,$(1)/rdb/registry.rdb) /UCR \
-			$(patsubst %.idl,%.urd,$$(call gb_UnoPrivateApiTarget_get_target,$(1)/urd)/$(notdir $(2))) && \
+			$(patsubst %.idl,%.urd,$$(call gb_UnoPrivateApiTarget_get_target,$(1)/urd)/$(notdir $(3))) && \
 		$(gb_UnoApiTarget_CPPUMAKERCOMMAND) \
 			-O $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) \
+			$(foreach unotype,$(4),-T$(unotype)) \
 			-BUCR \
 			-C \
 			$$(call gb_UnoPrivateApiTarget_get_target,$(1)/rdb/registry.rdb) \
-			$$(OUTDIR)/bin/udkapi.rdb && \
+			$(2) && \
 		touch $(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag))
 
 $(call gb_LinkTarget_get_clean_target,$(1)) :
@@ -567,33 +568,33 @@ endef
 
 # FIXME: multiple??
 define gb_LinkTarget_set_private_api
-$(foreach api,$(2),$(call gb_LinkTarget_add_private_api,$(1),$(api)))
+$(foreach api,$(3),$(call gb_LinkTarget_add_private_api,$(1),$(2),$(api),$(4)))
 
 endef
 
 define gb_LinkTarget_set_private_extract_of_public_api
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
-	$(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag)
+	$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/idl.cppumaker.flag)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc)
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/inc)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc)
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/inc)
 endif
 
-$(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag): $(2)
+$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/idl.cppumaker.flag): $(2)
 	$(call gb_Output_announce,$@,$(true),PVTUNOTYPES,2)
 	-$$(call gb_Helper_abbreviate_dirs_native,\
-		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) && \
+		mkdir -p $$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/inc) && \
 		$(gb_UnoApiTarget_CPPUMAKERCOMMAND) \
-			-O $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) \
+			-O $$(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/inc) \
 			$(foreach unotype,$(3),-T$(unotype)) \
 			-BUCR \
 			-C \
-			$$(OUTDIR)/bin/udkapi.rdb && \
-		touch $(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag))
+			$(2) && \
+		touch $(call gb_UnoPrivateApiExtractTarget_get_target,$(1)/idl.cppumaker.flag))
 
 $(call gb_LinkTarget_get_clean_target,$(1)) :
-	rm -rf $(call gb_UnoPrivateApiTarget_get_target,$(1))
+	rm -rf $(call gb_UnoPrivateApiExtractTarget_get_target,$(1))
 
 
 endef

@@ -71,7 +71,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(cal
 endef
 
 define gb_StaticLibrary_forward_to_Linktarget
-gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary__get_linktargetname,$$(1)),$$(2),$$(3))
+gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary__get_linktargetname,$$(1)),$$(2),$$(3),$$(4))
 
 endef
 

@@ -71,6 +71,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     adabas \
     adabasui \
     agg \
+    analysis \
     animcore \
     avmedia \
     avmediagst \
@@ -86,6 +87,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cppcanvas \
     ctl \
     cui \
+    date \
     dba \
     dbaxml \
     dbmm \

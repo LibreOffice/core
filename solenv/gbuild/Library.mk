@@ -93,7 +93,7 @@ gb_Library__get_layer_componentprefix = \
 
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library__get_linktargetname,$$(1)),$$(2),$$(3))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library__get_linktargetname,$$(1)),$$(2),$$(3),$$(4))
 
 endef
 
@@ -140,6 +140,8 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	add_precompiled_header \
 	set_versionmap \
+	set_private_api \
+	set_private_extract_of_public_api \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

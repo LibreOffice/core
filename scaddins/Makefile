@@ -1,4 +1,4 @@
-###############################################################
+#**************************************************************
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,30 +17,16 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-###############################################################
+#**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-$(eval $(call gb_GoogleTest_GoogleTest,cppumaker_test))
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_GoogleTest_add_exception_objects,cppumaker_test, \
-	codemaker/test/cppumaker/test_codemaker_cppumaker \
-))
-
-$(eval $(call gb_GoogleTest_set_include,cppumaker_test,\
-        $$(INCLUDE) \
-	-I$(SRCDIR)/codemaker/inc \
-	-I$(SRCDIR)/codemaker/inc/pch \
-))
-
-$(eval $(call gb_GoogleTest_set_private_api,cppumaker_test,$(OUTDIR)/bin/udkapi.rdb,\
-	$(SRCDIR)/codemaker/test/cppumaker/types.idl \
-))
-
-$(eval $(call gb_GoogleTest_add_linked_libs,cppumaker_test, \
-	cppu \
-	sal \
-	stl \
-	$(gb_STDLIBS) \
-))
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
 # vim: set noet sw=4 ts=4:
