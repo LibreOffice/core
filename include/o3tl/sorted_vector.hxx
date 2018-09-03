@@ -13,6 +13,8 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <memory>
+#include <type_traits>
 
 namespace o3tl
 {
@@ -27,8 +29,11 @@ struct find_unique;
     @tpl Compare comparison method
     @tpl Find   look up index of a Value in the array
 */
-template<typename Value, typename Compare = std::less<Value>,
-     template<typename, typename> class Find = find_unique >
+template<
+     typename Value,
+     typename Compare = std::less<Value>,
+     template<typename, typename> class Find = find_unique,
+     bool = std::is_copy_constructible<Value>::value >
 class sorted_vector
 {
 private:
@@ -41,6 +46,17 @@ public:
     typedef typename std::vector<Value>::size_type size_type;
 
     // MODIFIERS
+
+    std::pair<const_iterator,bool> insert( Value&& x )
+    {
+        std::pair<const_iterator, bool> const ret(Find_t()(m_vector.begin(), m_vector.end(), x));
+        if (!ret.second)
+        {
+            const_iterator const it = m_vector.insert(m_vector.begin() + (ret.first - m_vector.begin()), std::move(x));
+            return std::make_pair(it, true);
+        }
+        return std::make_pair(ret.first, false);
+    }
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
@@ -197,6 +213,24 @@ private:
     vector_t m_vector;
 };
 
+/* Specialise the template for cases like Value = std::unique_ptr<T>, where
+   MSVC2017 needs some help
+*/
+template<
+     typename Value,
+     typename Compare,
+     template<typename, typename> class Find >
+class sorted_vector<Value,Compare,Find,false> : public sorted_vector<Value, Compare, Find, true>
+{
+    using sorted_vector<Value, Compare, Find, true>::sorted_vector;
+
+    sorted_vector(sorted_vector const&) = delete;
+
+    sorted_vector(sorted_vector&&) = default;
+    sorted_vector& operator=(sorted_vector&&) = default;
+    sorted_vector& operator=(sorted_vector const&) = default;
+};
+
 
 /** Implements an ordering function over a pointer, where the comparison uses the < operator on the pointed-to types.
     Very useful for the cases where we put pointers to objects inside a sorted_vector.
@@ -204,6 +238,14 @@ private:
 template <class T> struct less_ptr_to
 {
     bool operator() ( T* const& lhs, T* const& rhs ) const
+    {
+        return (*lhs) < (*rhs);
+    }
+};
+
+template <class T> struct less_uniqueptr_to
+{
+    bool operator() ( std::unique_ptr<T> const& lhs, std::unique_ptr<T> const& rhs ) const
     {
         return (*lhs) < (*rhs);
     }

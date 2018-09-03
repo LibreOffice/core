@@ -653,7 +653,7 @@ void RtfAttributeOutput::TableDefinition(
     // The cell-dependent properties
     const double fWidthRatio = m_pTableWrt->GetAbsWidthRatio();
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
-    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
+    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
     SwTwips nSz = 0;
 
     // Not using m_nTableDepth, which is not yet incremented here.
@@ -687,7 +687,7 @@ void RtfAttributeOutput::TableDefaultBorders(
      */
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
-    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
+    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
@@ -742,7 +742,7 @@ void RtfAttributeOutput::TableBackgrounds(
         aColor = pRowColorProp->GetColor();
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
-    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
+    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
@@ -830,7 +830,7 @@ void RtfAttributeOutput::TableVerticalCell(
     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
-    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()];
+    SwWriteTableRow* pRow = aRows[pTableTextNodeInfoInner->getRow()].get();
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
