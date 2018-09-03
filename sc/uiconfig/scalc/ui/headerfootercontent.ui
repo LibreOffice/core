@@ -21,6 +21,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_LEFT">_Left area</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">textviewWND_LEFT</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -36,6 +37,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_CENTER">_Center area</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">textviewWND_CENTER</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -51,6 +53,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_RIGHT">R_ight area</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">textviewWND_RIGHT</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -122,6 +125,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_DEFINED">_Header</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">comboLB_DEFINED</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -136,6 +140,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_DEFINED">_Footer</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">comboLB_DEFINED</property>
               </object>
               <packing>
                 <property name="expand">False</property>
