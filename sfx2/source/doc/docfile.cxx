@@ -199,8 +199,8 @@ sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
     return nRet;
 }
 
-/// Determines if rURL is a non-hard-linked file:// URL.
-bool IsNotHardLinkedFile(const OUString& rURL)
+/// Determines if rURL is a non-linked (symlink or hardlink) file:// URL.
+bool IsNotLinkedFile(const OUString& rURL)
 {
     if (!comphelper::isFileUrl(rURL))
         return false;
@@ -211,10 +211,11 @@ bool IsNotHardLinkedFile(const OUString& rURL)
         return false;
 
     struct stat buf;
-    if (stat(rPath.toUtf8().getStr(), &buf) != 0)
+    if (lstat(rPath.toUtf8().getStr(), &buf) != 0)
         return false;
 
-    if (buf.st_nlink > 1)
+    // Hardlink or symlink: osl::File::move() doesn't play with these nicely.
+    if (buf.st_nlink > 1 || S_ISLNK(buf.st_mode))
         return false;
 #endif
 
@@ -1851,7 +1852,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                 sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
-                if (IsNotHardLinkedFile(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                if (IsNotLinkedFile(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
                 {
                     if (nAttributes)
                         // Adjust attributes, source might be created with
