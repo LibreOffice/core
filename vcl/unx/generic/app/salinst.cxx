@@ -71,8 +71,7 @@ X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     , mpXLib(nullptr)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    delete pSVData->maAppData.mpToolkitName;
-    pSVData->maAppData.mpToolkitName = new OUString("x11");
+    pSVData->maAppData.mxToolkitName = OUString("x11");
 }
 
 X11SalInstance::~X11SalInstance()
