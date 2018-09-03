@@ -214,6 +214,25 @@ namespace slideshow
 
             maCurrentSubsets.insert(maCurrentSubsets.end(), aNodesToAppend.begin(),
                                     aNodesToAppend.end());
+            // Excluding subsets must not leave an absolutely empty maCurrentSubsets, because it
+            // would mean "non-subsetting" mode unconditionally, with whole object added to subsets.
+            // So to indicate a subset with all parts excluded, add two empty subsets (starting and
+            // ending).
+            if (maCurrentSubsets.empty())
+            {
+                if (maSubset.isEmpty())
+                {
+                    maCurrentSubsets.emplace_back(0, 0);
+                    maCurrentSubsets.emplace_back(maActionClassVector.size(),
+                                                  maActionClassVector.size());
+                }
+                else
+                {
+                    maCurrentSubsets.emplace_back(maSubset.getStartIndex(),
+                                                  maSubset.getStartIndex());
+                    maCurrentSubsets.emplace_back(maSubset.getEndIndex(), maSubset.getEndIndex());
+                }
+            }
         }
 
         void DrawShapeSubsetting::updateSubsets()
@@ -276,10 +295,10 @@ namespace slideshow
 
         void DrawShapeSubsetting::initCurrentSubsets()
         {
-            // only add subset to vector, if it's not empty - that's
+            // only add subset to vector, if vector is empty, and subset is not empty - that's
             // because the vector's content is later literally used
             // for e.g. painting.
-            if( !maSubset.isEmpty() )
+            if (maCurrentSubsets.empty() && !maSubset.isEmpty())
                 maCurrentSubsets.push_back( maSubset );
         }
 
