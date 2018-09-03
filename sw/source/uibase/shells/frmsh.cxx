@@ -735,6 +735,12 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     rSet.Put(aSet.Get(GetPool().GetWhich(nWhich)));
                 }
                 break;
+                case SID_OBJECT_ALIGN:
+                {
+                    if ( bProtect )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
                 case SID_OBJECT_ALIGN_LEFT   :
                 case SID_OBJECT_ALIGN_CENTER :
                 case SID_OBJECT_ALIGN_RIGHT  :
