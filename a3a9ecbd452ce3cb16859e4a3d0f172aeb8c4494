@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_49da9017",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1001914
+      },
+      "writtenOn": "2018-09-03T16:30:32Z",
+      "side": 1,
+      "message": "Here the value of nSize is switched to negative for some obscure reasons so I decided to make the array size sal_Int32 instead of sal_uInt32 like the late review in patch 1 said.",
+      "revId": "a3a9ecbd452ce3cb16859e4a3d0f172aeb8c4494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
