@@ -855,6 +855,9 @@ Reference< XShape > const & Shape::createAndInsert(
             SAL_INFO("oox.drawingml", "Shape::createAndInsert: invisible shape with id='" << msId << "'");
             const OUString sVisible( "Visible" );
             xSet->setPropertyValue( sVisible, Any( false ) );
+            // In Excel hidden means not printed, let's use visibility for now until that's handled separately
+            const OUString sPrintable( "Printable" );
+            xSet->setPropertyValue( sPrintable, Any( false ) );
         }
 
         ActionLockGuard const alg(mxShape);
