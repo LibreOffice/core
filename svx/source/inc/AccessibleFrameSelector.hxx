@@ -29,13 +29,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <tools/link.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
+#include <comphelper/accessibleselectionhelper.hxx>
 #include <svx/framebordertype.hxx>
 #include <vcl/vclptr.hxx>
-
-class VclSimpleEvent;
-class VclWindowEvent;
 
 namespace svx {
 
@@ -43,77 +39,100 @@ class FrameSelector;
 
 namespace a11y {
 
+typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
 
-class AccFrameSelector final :
-    public ::cppu::WeakImplHelper<
-                css::accessibility::XAccessible,
-                css::accessibility::XAccessibleContext,
-                css::accessibility::XAccessibleComponent,
-                css::accessibility::XAccessibleEventBroadcaster,
-                css::lang::XServiceInfo
-                >
+class AccFrameSelector final : public ::comphelper::OAccessibleComponentHelper,
+                               public OAccessibleHelper_Base
 {
 public:
-    explicit            AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder );
-
+    explicit            AccFrameSelector(FrameSelector& rFrameSel);
     virtual             ~AccFrameSelector() override;
 
-    //XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
+    DECLARE_XINTERFACE( )
+    DECLARE_XTYPEPROVIDER( )
+
+    //XAccessibleComponent
+    virtual void SAL_CALL grabFocus(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
     //XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    //XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
-    virtual void SAL_CALL grabFocus(  ) override;
+    //XAccessible
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
+
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener ( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener) override;
-    virtual void SAL_CALL removeAccessibleEventListener ( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener) override;
-
-    //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    void NotifyAccessibleEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue)
+    {
+        ::comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
+    }
 
     void    Invalidate();
-    void    NotifyFocusListeners(bool bGetFocus);
-    void    NotifyAccessibleEvent( const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue );
 
 private:
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
+    // OCommonAccessibleComponent
+    /// implements the calculation of the bounding rectangle
+    virtual css::awt::Rectangle implGetBounds(  ) override;
 
     /// @throws css::uno::RuntimeException
     void                IsValid();
-    void                RemoveFrameSelEventListener();
 
-    VclPtr<FrameSelector>  mpFrameSel;
-    ::osl::Mutex        maFocusMutex;
-    ::osl::Mutex        maPropertyMutex;
+    FrameSelector*      mpFrameSel;
+};
+
+class AccFrameSelectorChild final : public ::comphelper::OAccessibleComponentHelper,
+                                    public OAccessibleHelper_Base
+{
+public:
+    explicit            AccFrameSelectorChild( FrameSelector& rFrameSel, FrameBorderType eBorder );
+
+    virtual             ~AccFrameSelectorChild() override;
+
+    DECLARE_XINTERFACE( )
+    DECLARE_XTYPEPROVIDER( )
+
+    //XAccessibleComponent
+    virtual void SAL_CALL grabFocus(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+
+    //XAccessibleContext
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
+
+    //XAccessible
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
+
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+
+    void    Invalidate();
+
+private:
+    // OCommonAccessibleComponent
+    /// implements the calculation of the bounding rectangle
+    virtual css::awt::Rectangle implGetBounds(  ) override;
+
+    /// @throws css::uno::RuntimeException
+    void                IsValid();
+
+    FrameSelector*      mpFrameSel;
 
     FrameBorderType     meBorder;
-
-    ::comphelper::OInterfaceContainerHelper2 maFocusListeners;
-    ::comphelper::OInterfaceContainerHelper2 maPropertyListeners;
-
-    ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };
 
 

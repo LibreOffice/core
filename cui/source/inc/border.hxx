@@ -19,12 +19,15 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_BORDER_HXX
 #define INCLUDED_CUI_SOURCE_INC_BORDER_HXX
 
+#include <editeng/shaditem.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svx/algitem.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/flagsdef.hxx>
@@ -38,6 +41,37 @@ namespace editeng
     class SvxBorderLine;
 }
 
+class ShadowControlsWrapper
+{
+public:
+    explicit ShadowControlsWrapper(SvtValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor);
+
+    SvxShadowItem GetControlValue(const SvxShadowItem& rItem) const;
+    void SetControlValue(const SvxShadowItem& rItem);
+
+private:
+    SvtValueSet&                        mrVsPos;
+    weld::MetricSpinButton&             mrMfSize;
+    ColorListBox&                       mrLbColor;
+};
+
+class MarginControlsWrapper
+{
+public:
+    explicit MarginControlsWrapper(weld::MetricSpinButton& rMfLeft, weld::MetricSpinButton& rMfRight,
+                                   weld::MetricSpinButton& rMfTop, weld::MetricSpinButton& rMfBottom);
+
+    SvxMarginItem GetControlValue(const SvxMarginItem& rItem) const;
+    void SetControlValue(const SvxMarginItem& rItem);
+
+    bool get_value_changed_from_saved() const;
+
+private:
+    weld::MetricSpinButton& mrLeftWrp;
+    weld::MetricSpinButton& mrRightWrp;
+    weld::MetricSpinButton& mrTopWrp;
+    weld::MetricSpinButton& mrBottomWrp;
+};
 
 class SvxBorderTabPage : public SfxTabPage
 {
@@ -65,49 +99,15 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    SvxBorderTabPage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs );
+    SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 
-    // Controls
-    VclPtr<ValueSet>           m_pWndPresets;
-    VclPtr<FixedText>          m_pUserDefFT;
-    VclPtr<svx::FrameSelector> m_pFrameSel;
-
-    VclPtr<LineListBox>        m_pLbLineStyle;
-    VclPtr<SvxColorListBox>    m_pLbLineColor;
-    VclPtr<MetricField>        m_pLineWidthMF;
-
-    VclPtr<VclContainer>       m_pSpacingFrame;
-    VclPtr<FixedText>          m_pLeftFT;
-    VclPtr<MetricField>        m_pLeftMF;
-    VclPtr<FixedText>          m_pRightFT;
-    VclPtr<MetricField>        m_pRightMF;
-    VclPtr<FixedText>          m_pTopFT;
-    VclPtr<MetricField>        m_pTopMF;
-    VclPtr<FixedText>          m_pBottomFT;
-    VclPtr<MetricField>        m_pBottomMF;
-    VclPtr<CheckBox>           m_pSynchronizeCB;
-
-    VclPtr<VclContainer>       m_pShadowFrame;
-    VclPtr<ValueSet>           m_pWndShadows;
-    VclPtr<FixedText>          m_pFtShadowSize;
-    VclPtr<MetricField>        m_pEdShadowSize;
-    VclPtr<FixedText>          m_pFtShadowColor;
-    VclPtr<SvxColorListBox>    m_pLbShadowColor;
-
-
-    VclPtr<VclContainer>       m_pPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
-    VclPtr<CheckBox>           m_pMergeWithNextCB;
-    // #i29550#
-    VclPtr<CheckBox>           m_pMergeAdjacentBordersCB;
-    VclPtr<CheckBox>           m_pRemoveAdjcentCellBordersCB;
-    VclPtr<FixedText>          m_pRemoveAdjcentCellBordersFT;
-
-    std::vector<BitmapEx>      m_aShadowImgVec;
-    std::vector<BitmapEx>      m_aBorderImgVec;
+    std::vector<BitmapEx> m_aShadowImgVec;
+    std::vector<BitmapEx> m_aBorderImgVec;
 
     long                nMinValue;  ///< minimum distance
     SwBorderModes       nSWMode;    ///< table, textframe, paragraph
     sal_uInt16          mnBoxSlot;
+    sal_uInt16          mnShadowSlot;
 
     bool                mbHorEnabled;       ///< true = Inner horizontal border enabled.
     bool                mbVerEnabled;       ///< true = Inner vertical border enabled.
@@ -121,16 +121,55 @@ private:
 
     std::set<SvxBorderLineStyle> maUsedBorderStyles;
 
+    // Controls
+    svx::FrameSelector m_aFrameSel;
+    std::unique_ptr<SvtValueSet> m_xWndPresets;
+    std::unique_ptr<weld::CustomWeld> m_xWndPresetsWin;
+    std::unique_ptr<weld::Label> m_xUserDefFT;
+    std::unique_ptr<weld::CustomWeld> m_xFrameSelWin;
+
+    std::unique_ptr<SvtLineListBox> m_xLbLineStyle;
+    std::unique_ptr<ColorListBox> m_xLbLineColor;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineWidthMF;
+
+    std::unique_ptr<weld::Container> m_xSpacingFrame;
+    std::unique_ptr<weld::Label> m_xLeftFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xLeftMF;
+    std::unique_ptr<weld::Label> m_xRightFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xRightMF;
+    std::unique_ptr<weld::Label> m_xTopFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xTopMF;
+    std::unique_ptr<weld::Label> m_xBottomFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xBottomMF;
+    std::unique_ptr<weld::CheckButton> m_xSynchronizeCB;
+
+    std::unique_ptr<weld::Container> m_xShadowFrame;
+    std::unique_ptr<SvtValueSet> m_xWndShadows;
+    std::unique_ptr<weld::CustomWeld> m_xWndShadowsWin;
+    std::unique_ptr<weld::Label> m_xFtShadowSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xEdShadowSize;
+    std::unique_ptr<weld::Label> m_xFtShadowColor;
+    std::unique_ptr<ColorListBox> m_xLbShadowColor;
+
+    std::unique_ptr<weld::Container> m_xPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
+    std::unique_ptr<weld::CheckButton> m_xMergeWithNextCB;
+    // #i29550#
+    std::unique_ptr<weld::CheckButton> m_xMergeAdjacentBordersCB;
+    std::unique_ptr<weld::CheckButton> m_xRemoveAdjcentCellBordersCB;
+    std::unique_ptr<weld::Label> m_xRemoveAdjcentCellBordersFT;
+    std::unique_ptr<ShadowControlsWrapper> m_xShadowControls;
+    std::unique_ptr<MarginControlsWrapper> m_xMarginControls;
+
     // Handler
-    DECL_LINK( SelStyleHdl_Impl, ListBox&, void );
-    DECL_LINK( SelColHdl_Impl, SvxColorListBox&, void );
-    DECL_LINK( SelPreHdl_Impl, ValueSet*, void );
-    DECL_LINK( SelSdwHdl_Impl, ValueSet*, void );
-    DECL_LINK( LinesChanged_Impl, LinkParamNone*, void );
-    DECL_LINK( ModifyDistanceHdl_Impl, Edit&, void);
-    DECL_LINK( ModifyWidthHdl_Impl, Edit&, void);
-    DECL_LINK( SyncHdl_Impl, Button*, void);
-    DECL_LINK( RemoveAdjacentCellBorderHdl_Impl, Button*, void);
+    DECL_LINK(SelStyleHdl_Impl, SvtLineListBox&, void);
+    DECL_LINK(SelColHdl_Impl, ColorListBox&, void);
+    DECL_LINK(SelPreHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(SelSdwHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
+    DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyWidthHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(SyncHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::ToggleButton&, void);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
     const char*         GetPresetStringId(sal_uInt16 nValueSetIdx) const;

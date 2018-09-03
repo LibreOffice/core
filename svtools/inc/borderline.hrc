@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef INCLUDED_CUI_INC_BORDERLINE_HRC
+#define INCLUDED_CUI_INC_BORDERLINE_HRC
+
+#include <editeng/borderline.hxx>
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const std::pair<const char*, SvxBorderLineStyle> RID_SVXSTR_BORDERLINE[] =
+{
+    { NC_("RID_SVXSTR_BORDERLINE", "None"), SvxBorderLineStyle::NONE },
+    { NC_("RID_SVXSTR_BORDERLINE", "Solid"), SvxBorderLineStyle::SOLID },
+    { NC_("RID_SVXSTR_BORDERLINE", "Dotted"), SvxBorderLineStyle::DOTTED },
+    { NC_("RID_SVXSTR_BORDERLINE", "Dashed"), SvxBorderLineStyle::DASHED },
+    { NC_("RID_SVXSTR_BORDERLINE", "Double"), SvxBorderLineStyle::DOUBLE },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thin Thick, Small Gap"), SvxBorderLineStyle::THINTHICK_SMALLGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thin Thick, Medium Gap"), SvxBorderLineStyle::THINTHICK_MEDIUMGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thin Thick, Large Gap"), SvxBorderLineStyle::THINTHICK_LARGEGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thick Thin, Small Gap"), SvxBorderLineStyle::THICKTHIN_SMALLGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thick Thin, Medium Gap"), SvxBorderLineStyle::THICKTHIN_MEDIUMGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Thick Thin, Large Gap"), SvxBorderLineStyle::THICKTHIN_LARGEGAP },
+    { NC_("RID_SVXSTR_BORDERLINE", "Embossed"), SvxBorderLineStyle::EMBOSSED },
+    { NC_("RID_SVXSTR_BORDERLINE", "Engraved"), SvxBorderLineStyle::ENGRAVED },
+    { NC_("RID_SVXSTR_BORDERLINE", "Outset"), SvxBorderLineStyle::OUTSET },
+    { NC_("RID_SVXSTR_BORDERLINE", "Inset"), SvxBorderLineStyle::INSET },
+    { NC_("RID_SVXSTR_BORDERLINE", "Fine Dashed"), SvxBorderLineStyle::FINE_DASHED },
+    { NC_("RID_SVXSTR_BORDERLINE", "Double Thin"), SvxBorderLineStyle::DOUBLE_THIN },
+    { NC_("RID_SVXSTR_BORDERLINE", "Dash Dot"), SvxBorderLineStyle::DASH_DOT },
+    { NC_("RID_SVXSTR_BORDERLINE", "Dash Dot Dot"), SvxBorderLineStyle::DASH_DOT_DOT }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
