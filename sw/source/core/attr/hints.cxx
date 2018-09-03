@@ -48,6 +48,11 @@ SwDelText::SwDelText( sal_Int32 nS, sal_Int32 nL )
 
 namespace sw {
 
+MoveText::MoveText(SwTextNode *const pD, sal_Int32 const nD, sal_Int32 const nS, sal_Int32 const nL)
+    : pDestNode(pD), nDestStart(nD), nSourceStart(nS), nLen(nL)
+{
+}
+
 RedlineDelText::RedlineDelText(sal_Int32 const nS, sal_Int32 const nL)
     : nStart(nS), nLen(nL)
 {

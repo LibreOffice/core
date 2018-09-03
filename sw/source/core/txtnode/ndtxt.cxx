@@ -2495,6 +2495,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     // want to find their anchor text frame in the follow chain
     SwInsText aInsHint( nDestStart, nLen );
     pDest->ModifyNotification( nullptr, &aInsHint );
+    sw::MoveText const moveHint(pDest, nDestStart, nTextStartIdx, nLen);
+    CallSwClientNotify(moveHint);
     SwDelText aDelHint( nTextStartIdx, nLen );
     ModifyNotification( nullptr, &aDelHint );
 
