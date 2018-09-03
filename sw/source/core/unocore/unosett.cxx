@@ -2295,49 +2295,49 @@ Sequence< OUString > SwXTextColumns::getSupportedServiceNames()
 }
 
 SwXTextColumns::SwXTextColumns() :
-    nReference(0),
-    bIsAutomaticWidth(true),
-    nAutoDistance(0),
+    m_nReference(0),
+    m_bIsAutomaticWidth(true),
+    m_nAutoDistance(0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS)),
-    nSepLineWidth(0),
-    nSepLineColor(0), //black
-    nSepLineHeightRelative(100),//full height
-    nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
-    bSepLineIsOn(false),
-    nSepLineStyle(API_COL_LINE_NONE) // None
+    m_nSepLineWidth(0),
+    m_nSepLineColor(0), //black
+    m_nSepLineHeightRelative(100),//full height
+    m_nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
+    m_bSepLineIsOn(false),
+    m_nSepLineStyle(API_COL_LINE_NONE) // None
 {
 }
 
 SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
-    nReference(0),
-    aTextColumns(rFormatCol.GetNumCols()),
-    bIsAutomaticWidth(rFormatCol.IsOrtho()),
+    m_nReference(0),
+    m_aTextColumns(rFormatCol.GetNumCols()),
+    m_bIsAutomaticWidth(rFormatCol.IsOrtho()),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS))
 {
     const sal_uInt16 nItemGutterWidth = rFormatCol.GetGutterWidth();
-    nAutoDistance = bIsAutomaticWidth ?
+    m_nAutoDistance = m_bIsAutomaticWidth ?
                         USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : static_cast<sal_Int32>(nItemGutterWidth)
                         : 0;
-    nAutoDistance = convertTwipToMm100(nAutoDistance);
+    m_nAutoDistance = convertTwipToMm100(m_nAutoDistance);
 
-    TextColumn* pColumns = aTextColumns.getArray();
+    TextColumn* pColumns = m_aTextColumns.getArray();
     const SwColumns& rCols = rFormatCol.GetColumns();
-    for(sal_Int32 i = 0; i < aTextColumns.getLength(); ++i)
+    for(sal_Int32 i = 0; i < m_aTextColumns.getLength(); ++i)
     {
         const SwColumn* pCol = &rCols[i];
 
         pColumns[i].Width = pCol->GetWishWidth();
-        nReference += pColumns[i].Width;
+        m_nReference += pColumns[i].Width;
         pColumns[i].LeftMargin =    convertTwipToMm100(pCol->GetLeft ());
         pColumns[i].RightMargin =   convertTwipToMm100(pCol->GetRight());
     }
-    if(!aTextColumns.getLength())
-        nReference = USHRT_MAX;
+    if(!m_aTextColumns.getLength())
+        m_nReference = USHRT_MAX;
 
-    nSepLineWidth = rFormatCol.GetLineWidth();
-    nSepLineColor = rFormatCol.GetLineColor();
-    nSepLineHeightRelative = rFormatCol.GetLineHeight();
-    bSepLineIsOn = rFormatCol.GetLineAdj() != COLADJ_NONE;
+    m_nSepLineWidth = rFormatCol.GetLineWidth();
+    m_nSepLineColor = rFormatCol.GetLineColor();
+    m_nSepLineHeightRelative = rFormatCol.GetLineHeight();
+    m_bSepLineIsOn = rFormatCol.GetLineAdj() != COLADJ_NONE;
     sal_Int8 nStyle = API_COL_LINE_NONE;
     switch (rFormatCol.GetLineStyle())
     {
@@ -2346,13 +2346,13 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
         case SvxBorderLineStyle::DASHED: nStyle= API_COL_LINE_DASHED; break;
         default: break;
     }
-    nSepLineStyle = nStyle;
+    m_nSepLineStyle = nStyle;
     switch(rFormatCol.GetLineAdj())
     {
-        case COLADJ_TOP:    nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
-        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;    break;
+        case COLADJ_TOP:    m_nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
+        case COLADJ_BOTTOM: m_nSepLineVertAlign = style::VerticalAlignment_BOTTOM;    break;
         case COLADJ_CENTER:
-        case COLADJ_NONE:   nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
+        case COLADJ_NONE:   m_nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
     }
 }
 
@@ -2363,13 +2363,13 @@ SwXTextColumns::~SwXTextColumns()
 sal_Int32 SwXTextColumns::getReferenceValue()
 {
     SolarMutexGuard aGuard;
-    return nReference;
+    return m_nReference;
 }
 
 sal_Int16 SwXTextColumns::getColumnCount()
 {
     SolarMutexGuard aGuard;
-    return static_cast< sal_Int16>( aTextColumns.getLength() );
+    return static_cast< sal_Int16>( m_aTextColumns.getLength() );
 }
 
 void SwXTextColumns::setColumnCount(sal_Int16 nColumns)
@@ -2377,13 +2377,13 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns)
     SolarMutexGuard aGuard;
     if(nColumns <= 0)
         throw uno::RuntimeException();
-    bIsAutomaticWidth = true;
-    aTextColumns.realloc(nColumns);
-     TextColumn* pCols = aTextColumns.getArray();
-    nReference = USHRT_MAX;
-    sal_Int32 nWidth = nReference / nColumns;
-    sal_Int32 nDiff = nReference - nWidth * nColumns;
-    sal_Int32 nDist = nAutoDistance / 2;
+    m_bIsAutomaticWidth = true;
+    m_aTextColumns.realloc(nColumns);
+     TextColumn* pCols = m_aTextColumns.getArray();
+    m_nReference = USHRT_MAX;
+    sal_Int32 nWidth = m_nReference / nColumns;
+    sal_Int32 nDiff = m_nReference - nWidth * nColumns;
+    sal_Int32 nDist = m_nAutoDistance / 2;
     for(sal_Int16 i = 0; i < nColumns; i++)
     {
         pCols[i].Width = nWidth;
@@ -2396,7 +2396,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns)
 uno::Sequence< TextColumn > SwXTextColumns::getColumns()
 {
     SolarMutexGuard aGuard;
-    return aTextColumns;
+    return m_aTextColumns;
 }
 
 void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
@@ -2408,9 +2408,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
     {
         nReferenceTemp += prCols[i].Width;
     }
-    bIsAutomaticWidth = false;
-    nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
-    aTextColumns = rColumns;
+    m_bIsAutomaticWidth = false;
+    m_nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
+    m_aTextColumns = rColumns;
 }
 
 uno::Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  )
@@ -2435,15 +2435,15 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
             aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
-            nSepLineWidth = convertMm100ToTwip(nTmp);
+            m_nSepLineWidth = convertMm100ToTwip(nTmp);
         }
         break;
         case WID_TXTCOL_LINE_COLOR:
-            aValue >>= nSepLineColor;
+            aValue >>= m_nSepLineColor;
         break;
         case WID_TXTCOL_LINE_STYLE:
         {
-            aValue >>= nSepLineStyle;
+            aValue >>= m_nSepLineStyle;
         }
         break;
         case WID_TXTCOL_LINE_REL_HGT:
@@ -2452,7 +2452,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
             aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
-            nSepLineHeightRelative = nTmp;
+            m_nSepLineHeightRelative = nTmp;
         }
         break;
         case WID_TXTCOL_LINE_ALIGN:
@@ -2463,25 +2463,25 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
                 sal_Int8 nTmp = 0;
                 if (! ( aValue >>= nTmp ) )
                     throw IllegalArgumentException();
-                nSepLineVertAlign = static_cast<style::VerticalAlignment>(nTmp);
+                m_nSepLineVertAlign = static_cast<style::VerticalAlignment>(nTmp);
             }
             else
-                nSepLineVertAlign = eAlign;
+                m_nSepLineVertAlign = eAlign;
         }
         break;
         case WID_TXTCOL_LINE_IS_ON:
-            bSepLineIsOn = *o3tl::doAccess<bool>(aValue);
+            m_bSepLineIsOn = *o3tl::doAccess<bool>(aValue);
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
         {
             sal_Int32 nTmp = 0;
             aValue >>= nTmp;
-            if(nTmp < 0 || nTmp >= nReference)
+            if(nTmp < 0 || nTmp >= m_nReference)
                 throw IllegalArgumentException();
-            nAutoDistance = nTmp;
-            sal_Int32 nColumns = aTextColumns.getLength();
-            TextColumn* pCols = aTextColumns.getArray();
-            sal_Int32 nDist = nAutoDistance / 2;
+            m_nAutoDistance = nTmp;
+            sal_Int32 nColumns = m_aTextColumns.getLength();
+            TextColumn* pCols = m_aTextColumns.getArray();
+            sal_Int32 nDist = m_nAutoDistance / 2;
             for(sal_Int32 i = 0; i < nColumns; i++)
             {
                 pCols[i].LeftMargin = i == 0 ? 0 : nDist;
@@ -2502,28 +2502,28 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
     switch(pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nSepLineWidth));
+            aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(m_nSepLineWidth));
         break;
         case WID_TXTCOL_LINE_COLOR:
-            aRet <<= nSepLineColor;
+            aRet <<= m_nSepLineColor;
         break;
         case WID_TXTCOL_LINE_STYLE:
-            aRet <<= nSepLineStyle;
+            aRet <<= m_nSepLineStyle;
         break;
         case WID_TXTCOL_LINE_REL_HGT:
-            aRet <<= nSepLineHeightRelative;
+            aRet <<= m_nSepLineHeightRelative;
         break;
         case WID_TXTCOL_LINE_ALIGN:
-            aRet <<= nSepLineVertAlign;
+            aRet <<= m_nSepLineVertAlign;
         break;
         case WID_TXTCOL_LINE_IS_ON:
-            aRet <<= bSepLineIsOn;
+            aRet <<= m_bSepLineIsOn;
         break;
         case WID_TXTCOL_IS_AUTOMATIC :
-            aRet <<= bIsAutomaticWidth;
+            aRet <<= m_bIsAutomaticWidth;
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
-            aRet <<= nAutoDistance;
+            aRet <<= m_nAutoDistance;
         break;
     }
     return aRet;

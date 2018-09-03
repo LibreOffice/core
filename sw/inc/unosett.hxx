@@ -246,20 +246,20 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     css::lang::XServiceInfo
 >
 {
-    sal_Int32                   nReference;
-    css::uno::Sequence< css::text::TextColumn>    aTextColumns;
-    bool                        bIsAutomaticWidth;
-    sal_Int32                   nAutoDistance;
+    sal_Int32                   m_nReference;
+    css::uno::Sequence< css::text::TextColumn>    m_aTextColumns;
+    bool                        m_bIsAutomaticWidth;
+    sal_Int32                   m_nAutoDistance;
 
     const SfxItemPropertySet*   m_pPropSet;
 
     //separator line
-    sal_Int32                   nSepLineWidth;
-    Color                       nSepLineColor;
-    sal_Int8                    nSepLineHeightRelative;
-    css::style::VerticalAlignment nSepLineVertAlign;
-    bool                        bSepLineIsOn;
-    sal_Int8                    nSepLineStyle;
+    sal_Int32                   m_nSepLineWidth;
+    Color                       m_nSepLineColor;
+    sal_Int8                    m_nSepLineHeightRelative;
+    css::style::VerticalAlignment m_nSepLineVertAlign;
+    bool                        m_bSepLineIsOn;
+    sal_Int8                    m_nSepLineStyle;
 
 protected:
     virtual ~SwXTextColumns() override;
@@ -293,14 +293,14 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    sal_Int32   GetSepLineWidth() const {return nSepLineWidth;}
-    Color       GetSepLineColor() const {return nSepLineColor;}
-    sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
-    css::style::VerticalAlignment GetSepLineVertAlign() const {return nSepLineVertAlign;}
-    bool        GetSepLineIsOn() const {return  bSepLineIsOn;}
-    sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
+    sal_Int32   GetSepLineWidth() const {return m_nSepLineWidth;}
+    Color       GetSepLineColor() const {return m_nSepLineColor;}
+    sal_Int8    GetSepLineHeightRelative() const {return    m_nSepLineHeightRelative;}
+    css::style::VerticalAlignment GetSepLineVertAlign() const {return m_nSepLineVertAlign;}
+    bool        GetSepLineIsOn() const {return  m_bSepLineIsOn;}
+    sal_Int8    GetSepLineStyle() const {return m_nSepLineStyle;}
 
-    bool        IsAutomaticWidth() const {return bIsAutomaticWidth;}
+    bool        IsAutomaticWidth() const {return m_bIsAutomaticWidth;}
 };
 #endif
 
