@@ -36,8 +36,8 @@
 
 using namespace ::com::sun::star;
 
-LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
-    : pPattAttr(p)
+LotAttrCache::ENTRY::ENTRY (std::unique_ptr<ScPatternAttr> p)
+    : pPattAttr(std::move(p))
     , nHash0(0)
 {
 }
@@ -91,7 +91,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
 
     SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
-    ENTRY *pCurrent = new ENTRY( pNewPatt );
+    ENTRY *pCurrent = new ENTRY( std::unique_ptr<ScPatternAttr>(pNewPatt) );
 
     pCurrent->nHash0 = nRefHash;
 
