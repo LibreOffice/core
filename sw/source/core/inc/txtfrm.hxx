@@ -109,6 +109,9 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
 void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool bRecreateMerged);
 
+void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
+void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an

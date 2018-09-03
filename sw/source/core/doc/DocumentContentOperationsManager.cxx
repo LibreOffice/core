@@ -44,6 +44,7 @@
 #include <fmtcnct.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <redline.hxx>
+#include <txtfrm.hxx>
 #include <unocrsr.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
@@ -3617,6 +3618,11 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     if (*rPam.GetPoint() != *rPam.GetMark())
         m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
     m_rDoc.getIDocumentState().SetModified();
+
+    // sw_redlinehide: 2 reasons why this is needed:
+    // 1. it's the first redline in node => RedlineDelText was sent but ignored
+    // 2. redline spans multiple nodes => must merge text frames
+    sw::UpdateFramesForAddDeleteRedline(rPam);
 
     if (pUndo)
     {

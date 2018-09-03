@@ -25,6 +25,7 @@
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <txtfrm.hxx>
 #include <UndoCore.hxx>
 #include <UndoDelete.hxx>
 #include <strings.hrc>
@@ -106,6 +107,17 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
             nEndNode += nEndExtra;
         }
         SetPaM(rPam, true);
+    }
+
+    // update frames after calling SetSaveData
+    if (dynamic_cast<SwUndoRedlineDelete*>(this))
+    {
+        sw::UpdateFramesForRemoveDeleteRedline(rDoc, rPam);
+    }
+    else if (dynamic_cast<SwUndoAcceptRedline*>(this)
+          || dynamic_cast<SwUndoRejectRedline*>(this))
+    {   // (can't check here if there's a delete redline being accepted)
+        sw::UpdateFramesForAddDeleteRedline(rPam);
     }
 }
 
@@ -192,6 +204,7 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     {
         rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(*mpRedlData, rPam), false );
     }
+    sw::UpdateFramesForAddDeleteRedline(rPam);
 }
 
 bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
