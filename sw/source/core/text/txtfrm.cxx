@@ -1707,7 +1707,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             {
                 InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), m );
             }
-            lcl_SetWrong( *this, rNode, nNPos, m, true );
+            lcl_SetWrong( *this, rNode, nNPos, m, false );
             if (nLen)
             {
                 lcl_SetScriptInval( *this, nPos );
