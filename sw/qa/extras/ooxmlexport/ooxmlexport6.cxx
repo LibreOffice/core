@@ -786,7 +786,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:miter",
             1);
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:custDash",
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash",
             1);
 
     uno::Reference<drawing::XShape> xShape1 = getShape(1);
