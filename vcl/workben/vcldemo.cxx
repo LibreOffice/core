@@ -636,8 +636,8 @@ public:
                 }
 
                 // DX array rendering
-                long *pItems = new long[aText.getLength()+10];
-                rDev.GetTextArray(aText, pItems);
+                std::unique_ptr<long[]> pItems(new long[aText.getLength()+10]);
+                rDev.GetTextArray(aText, pItems.get());
                 for (long j = 0; j < aText.getLength(); ++j)
                 {
                     Point aTop = aTextRect.TopLeft();
@@ -649,7 +649,6 @@ public:
                     rDev.DrawLine(aTop,aBottom);
                     rDev.SetRasterOp(RasterOp::OverPaint);
                 }
-                delete[] pItems;
 
                 aPos.Move(aTextRect.GetWidth() + 16, 0);
             }
