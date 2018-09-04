@@ -2356,8 +2356,12 @@ bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     return bRet;
 }
 
+// Overwrite only uses the point of the PaM, the mark is ignored; characters
+// are replaced from point until the end of the node; at the end of the node,
+// characters are inserted.
 bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUString &rStr )
 {
+    assert(rStr.getLength());
     SwPosition& rPt = *const_cast<SwPosition*>(rRg.GetPoint());
     if( m_rDoc.GetAutoCorrExceptWord() )                  // Add to AutoCorrect
     {
@@ -2381,6 +2385,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
     SwIndex& rIdx = rPt.nContent;
+    sal_Int32 const nActualStart(rIdx.GetIndex());
     sal_Int32 nStart = 0;
 
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
@@ -2442,14 +2447,14 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     if (!m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
-        SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
+        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.nContent.GetIndex());
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, USHRT_MAX );
     }
     else if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // FIXME: this redline is WRONG: there is no DELETE, and the skipped
         // characters are also included in aPam
-        SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
+        SwPaM aPam(rPt.nNode, nActualStart, rPt.nNode, rPt.nContent.GetIndex());
         m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
     }
 
