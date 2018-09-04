@@ -595,6 +595,7 @@ namespace
             // get logic selection
             getOutlinerView().GetSelectionRectangles(aLogicRects);
 
+            aLogicRanges.reserve(aLogicRects.size());
             for (const auto& aRect : aLogicRects)
             {
                 // convert from logic Rectangles to logic Ranges, do not forget to add

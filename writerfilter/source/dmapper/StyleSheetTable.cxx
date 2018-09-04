@@ -375,6 +375,7 @@ void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XS
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
     uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
     std::vector<OUString> aPropertyNames;
+    aPropertyNames.reserve(aProperties.getLength());
     for (sal_Int32 i = 0; i < aProperties.getLength(); ++i)
     {
         aPropertyNames.push_back(aProperties[i].Name);

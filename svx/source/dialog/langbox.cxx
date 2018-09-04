@@ -78,7 +78,8 @@ static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::
     sal_Int32 nCount = rSeq.getLength();
 
     std::vector< LanguageType >   aLangs;
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    aLangs.reserve(nCount);
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
         aLangs.push_back( LanguageTag::convertToLanguageType( pLocale[i] ) );
 

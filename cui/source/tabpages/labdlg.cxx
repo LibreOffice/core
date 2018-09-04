@@ -105,7 +105,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
     ListBox *pLineTypes = get<ListBox>("linetypes");
     assert(pLineTypes->GetEntryCount() == 3);
     std::vector<OUString> aLineTypes;
-    for (int i = 0;  i < 3; ++i)
+    aLineTypes.reserve(3);
+    for (int i = 0; i < 3; ++i)
         aLineTypes.push_back(pLineTypes->GetEntry(i));
 
     get(m_pFT_LENGTHFT, "lengthft");

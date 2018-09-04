@@ -518,8 +518,9 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
-             aList.push_back( rCharFormatLB->GetEntry(j) );
+        aList.reserve(rCharFormatLB->GetEntryCount());
+        for (sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
+            aList.push_back(rCharFormatLB->GetEntry(j));
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);

@@ -723,7 +723,8 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     // data with labels
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;
     const sal_Int32 nCount = (bUseColumns ? m_aInternalData.getColumnCount() : m_aInternalData.getRowCount());
-    for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+    aDataVec.reserve(nCount);
+    for (sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx)
     {
         aDataVec.push_back(
             new LabeledDataSequence(
@@ -1308,7 +1309,8 @@ vector< vector< uno::Any > > lcl_convertComplexStringSequenceToAnyVector( const 
 {
     vector< vector< uno::Any > > aRet;
     sal_Int32 nOuterCount = rIn.getLength();
-    for( sal_Int32 nN=0; nN<nOuterCount; nN++)
+    aRet.reserve(nOuterCount);
+    for (sal_Int32 nN = 0; nN < nOuterCount; nN++)
         aRet.push_back( lcl_StringToAnyVector( rIn[nN] ) );
     return aRet;
 }

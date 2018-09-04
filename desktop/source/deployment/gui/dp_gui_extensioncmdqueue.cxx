@@ -369,8 +369,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= depExc)
     {
         std::vector< OUString > deps;
-        for (sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength();
-             ++i)
+        deps.reserve(depExc.UnsatisfiedDependencies.getLength());
+        for (sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i)
         {
             deps.push_back(
                 dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]) );

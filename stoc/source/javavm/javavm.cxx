@@ -711,7 +711,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                             m_xContext);
         const std::vector<OUString> & props = aJvm.getProperties();
         std::vector<OUString> options;
-        for (auto const & i: props)
+        options.reserve(props.size());
+        for (auto const& i : props)
         {
             options.push_back(i.startsWith("-") ? i : "-D" + i);
         }

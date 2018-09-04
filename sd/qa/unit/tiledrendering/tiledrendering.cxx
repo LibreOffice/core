@@ -701,6 +701,7 @@ std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
     int parts = pDocument->getParts();
     std::vector<OUString> result;
 
+    result.reserve(parts);
     for (int i = 0; i < parts; i++)
     {
         result.push_back(pDocument->getPartName(i));

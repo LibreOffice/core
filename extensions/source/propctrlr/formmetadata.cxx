@@ -526,6 +526,7 @@ namespace pcr
 
         std::vector< OUString > aReturn;
 
+        aReturn.reserve(nElements);
         for (int i = 0; i < nElements; ++i)
         {
             aReturn.push_back(PcrRes(pStringItemsResId[i]));

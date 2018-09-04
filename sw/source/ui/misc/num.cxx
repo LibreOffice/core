@@ -931,8 +931,9 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
         ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
-             aList.push_back( rCharFormatLB->GetEntry(j) );
+        aList.reserve(rCharFormatLB->GetEntryCount());
+        for (sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
+            aList.push_back(rCharFormatLB->GetEntry(j));
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
