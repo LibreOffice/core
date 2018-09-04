@@ -43,6 +43,13 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(SwUndoId::OVERWRITE, pDoc),
       pRedlSaveData( nullptr ), bGroup( false )
 {
+    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    assert(pTextNd);
+    sal_Int32 const nTextNdLen = pTextNd->GetText().getLength();
+
+    nSttNode = rPos.nNode.GetIndex();
+    nSttContent = rPos.nContent.GetIndex();
+
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
@@ -52,16 +59,13 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         {
             pRedlSaveData.reset();
         }
+        if (nSttContent < nTextNdLen)
+        {
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, USHRT_MAX);
+        }
     }
 
-    nSttNode = rPos.nNode.GetIndex();
-    nSttContent = rPos.nContent.GetIndex();
-
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
-
     bInsChar = true;
-    sal_Int32 nTextNdLen = pTextNd->GetText().getLength();
     if( nSttContent < nTextNdLen )     // no pure insert?
     {
         aDelStr += OUStringLiteral1( pTextNd->GetText()[nSttContent] );
