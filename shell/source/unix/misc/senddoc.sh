@@ -389,6 +389,8 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         elif [ -n "$DESKTOP_LAUNCH" ]; then
             # http://lists.freedesktop.org/pipermail/xdg/2004-August/002873.html
             MAILER=${DESKTOP_LAUNCH}
+        elif [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open5 ] ; then
+            MAILER=/usr/bin/kde-open5
         elif [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
             MAILER=/usr/bin/kde-open
         elif [ -x /usr/bin/xdg-open ] ; then
