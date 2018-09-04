@@ -100,7 +100,7 @@ struct SbiGlobals
     OUString        aErrMsg;        // buffer for GetErrorText()
     std::unique_ptr<::utl::TransliterationWrapper> pTransliterationWrapper;    // For StrComp
     bool            bBlockCompilerError;
-    BasicManager*   pAppBasMgr;
+    std::unique_ptr<BasicManager>   pAppBasMgr;
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 
     SbiGlobals();
