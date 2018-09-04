@@ -50,6 +50,24 @@
       "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9c04587d",
+        "filename": "test/source/table/xcell.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001917
+      },
+      "writtenOn": "2018-09-04T11:28:27Z",
+      "side": 1,
+      "message": "what they have done in java, Im not able to do that in cpp, how can I get the enum values of CellContentType to compare, they used directly CellContentType.\u003cvalue\u003e which is not possible in cpp.",
+      "parentUuid": "dfeb2761_3c354cdb",
+      "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
