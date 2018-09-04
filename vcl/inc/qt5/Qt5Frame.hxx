@@ -54,6 +54,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
     // of SvpSalGraphics (which the derived class then owns)
     SvpSalGraphics* m_pSvpGraphics;
     DamageHandler m_aDamageHandler;
+    QRegion m_aRegion;
+    bool m_bNullRegion;
 
     bool m_bGraphicsInUse;
     SalFrameStyleFlags m_nStyle;
@@ -128,8 +130,8 @@ public:
     virtual void SetPointer(PointerStyle ePointerStyle) override;
     virtual void CaptureMouse(bool bMouse) override;
     virtual void SetPointerPos(long nX, long nY) override;
+    using SalFrame::Flush;
     virtual void Flush() override;
-    virtual void Flush(const tools::Rectangle& rRect) override;
     virtual void SetInputContext(SalInputContext* pContext) override;
     virtual void EndExtTextInput(EndExtTextInputFlags nFlags) override;
     virtual OUString GetKeyName(sal_uInt16 nKeyCode) override;

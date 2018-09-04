@@ -43,15 +43,10 @@ public:
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
     virtual void UpdateSettings(AllSettings& rSettings) override;
 
-    virtual void DrawMenuBar() override { return; }
-
     virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
-    virtual void Beep() override { return; }
     virtual const SystemEnvData* GetSystemData() const override { return nullptr; }
     virtual SalPointerState GetPointerState() override { return SalPointerState(); }
     virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
-
-    virtual void SetScreenNumber(unsigned int) override { return; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
