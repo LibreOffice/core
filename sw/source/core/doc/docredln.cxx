@@ -609,26 +609,32 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
-    DeleteAndDestroy(0, size());
+    if (maVector.empty())
+        return;
+    SwDoc *const pDoc = maVector.front()->GetDoc();
+    while (!maVector.empty())
+    {
+        auto const pRedline = maVector.back();
+        maVector.erase(maVector.back());
+        LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+        delete pRedline;
+    }
+    if (pDoc && !pDoc->IsInDtor())
+    {
+        SwViewShell* pSh(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() );
+        if (pSh)
+        {
+            pSh->InvalidateWindows(SwRect(0, 0, SAL_MAX_INT32, SAL_MAX_INT32));
+        }
+    }
 }
 
-void SwRedlineTable::DeleteAndDestroy( size_type nP, size_type nL )
+void SwRedlineTable::DeleteAndDestroy(size_type const nP)
 {
-    SwDoc* pDoc = nullptr;
-    if( !nP && nL && nL == size() )
-        pDoc = maVector.front()->GetDoc();
-
-    for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
-    {
-        LOKRedlineNotification(RedlineNotification::Remove, *it);
-        delete *it;
-    }
-    maVector.erase( maVector.begin() + nP, maVector.begin() + nP + nL );
-
-    SwViewShell* pSh;
-    if( pDoc && !pDoc->IsInDtor() &&
-        nullptr != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
-        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
+    auto const pRedline = maVector[nP];
+    maVector.erase(maVector.begin() + nP);
+    LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+    delete pRedline;
 }
 
 SwRedlineTable::size_type SwRedlineTable::FindNextOfSeqNo( size_type nSttPos ) const
@@ -1887,7 +1893,7 @@ void SwExtraRedlineTable::Insert( SwExtraRedline* p )
     //p->CallDisplayFunc();
 }
 
-void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
+void SwExtraRedlineTable::DeleteAndDestroy(sal_uInt16 const nPos)
 {
     /*
     SwDoc* pDoc = 0;
@@ -1895,10 +1901,8 @@ void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
         pDoc = front()->GetDoc();
     */
 
-    for( std::vector<SwExtraRedline*>::iterator it = m_aExtraRedlines.begin() + nPos; it != m_aExtraRedlines.begin() + nPos + nLen; ++it )
-        delete *it;
-
-    m_aExtraRedlines.erase( m_aExtraRedlines.begin() + nPos, m_aExtraRedlines.begin() + nPos + nLen );
+    delete m_aExtraRedlines[nPos];
+    m_aExtraRedlines.erase(m_aExtraRedlines.begin() + nPos);
 
     /*
     SwViewShell* pSh;
@@ -1910,7 +1914,12 @@ void SwExtraRedlineTable::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
 
 void SwExtraRedlineTable::DeleteAndDestroyAll()
 {
-    DeleteAndDestroy(0, m_aExtraRedlines.size());
+    while (!m_aExtraRedlines.empty())
+    {
+        auto const pRedline = m_aExtraRedlines.back();
+        m_aExtraRedlines.pop_back();
+        delete pRedline;
+    }
 }
 
 SwExtraRedline::~SwExtraRedline()
