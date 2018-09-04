@@ -60,7 +60,6 @@ public:
         mpLayerManager.reset(
             new target::LayerManager(
                 maViews,
-                basegfx::B2DRange(0.0,0.0,100.0,100.0),
                 false ));
     }
 
@@ -73,11 +72,11 @@ public:
     void testLayer()
     {
         target::LayerSharedPtr pBgLayer(
-            target::Layer::createBackgroundLayer( basegfx::B2DRange(0,0,100,100) ) );
+            target::Layer::createBackgroundLayer() );
         pBgLayer->addView( mpTestView );
 
         target::LayerSharedPtr pFgLayer(
-            target::Layer::createLayer( basegfx::B2DRange(0,0,100,100) ) );
+            target::Layer::createLayer() );
         pFgLayer->addView( mpTestView );
 
         CPPUNIT_ASSERT_MESSAGE( "BG layer must confess that!",
@@ -108,7 +107,7 @@ public:
 
     void testBasics()
     {
-        mpLayerManager->activate( false );
+        mpLayerManager->activate();
 
         CPPUNIT_ASSERT_MESSAGE( "Un-added shape must have zero view layers",
                                 mpTestShape->getViewLayers().empty() );
@@ -136,12 +135,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "Added shape must have two view layers",
                                 mpTestShape->getViewLayers().size() == 2 );
 
-        CPPUNIT_ASSERT_MESSAGE( "Removing second View failed",
-                                maViews.removeView( pTestView ) );
-        mpLayerManager->viewRemoved(pTestView);
-        CPPUNIT_ASSERT_MESSAGE( "Added shape must have one view layer",
-                                mpTestShape->getViewLayers().size() == 1 );
-
         mpLayerManager->deactivate();
     }
 
@@ -162,7 +155,7 @@ public:
         mpLayerManager->addShape(pShape3);
         mpLayerManager->addShape(pShape4);
 
-        mpLayerManager->activate( false );
+        mpLayerManager->activate();
 
         // update does the delayed viewAdded call to the shape
         CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager",
@@ -236,12 +229,13 @@ public:
 
         mpLayerManager->addShape(mpTestShape);
         mpLayerManager->addShape(pShape2);
-        mpLayerManager->enterAnimationMode(pShape2);
         mpLayerManager->addShape(pShape3);
         mpLayerManager->addShape(pShape4);
         mpLayerManager->addShape(pShape5);
 
-        mpLayerManager->activate( false );
+        mpLayerManager->activate();
+
+        mpLayerManager->enterAnimationMode(pShape2);
         mpLayerManager->update();
 
         CPPUNIT_ASSERT_MESSAGE( "First shape not rendered",
@@ -273,8 +267,9 @@ public:
         mpLayerManager->leaveAnimationMode(pShape4);
         mpLayerManager->update();
 
+        // first shape is on slide background, *now* gets rendered
         CPPUNIT_ASSERT_MESSAGE( "First shape not rendered #2",
-                                mpTestShape->getNumRenders() == 2 );
+                                mpTestShape->getNumRenders() == 1 );
         CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered #2",
                                 pShape2->getNumRenders() == 2 );
         CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered #2",
@@ -322,7 +317,7 @@ public:
         mpLayerManager->addShape(pShape3);
         mpLayerManager->addShape(pShape4);
 
-        mpLayerManager->activate( false );
+        mpLayerManager->activate();
         mpLayerManager->update();
 
         mpLayerManager->removeShape(mpTestShape);
@@ -338,11 +333,6 @@ public:
                                 pShape3.use_count() == 1 );
         CPPUNIT_ASSERT_MESSAGE( "Shape 4 must have refcount of 1",
                                 pShape4.use_count() == 1 );
-
-        maViews.removeView(mpTestView);
-        mpLayerManager->viewRemoved(mpTestView);
-        CPPUNIT_ASSERT_MESSAGE( "View must have refcount of 1",
-                                mpTestView.use_count() == 1 );
     }
 
     // hook up the test
