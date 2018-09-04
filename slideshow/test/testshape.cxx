@@ -29,7 +29,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-#include "shape.hxx"
+#include <shape.hxx>
 #include "tests.hxx"
 
 namespace target = slideshow::internal;
@@ -64,60 +64,60 @@ public:
 
 private:
     // TestShape
-    virtual std::vector<std::pair<target::ViewLayerSharedPtr,bool> > getViewLayers() const
+    virtual std::vector<std::pair<target::ViewLayerSharedPtr,bool> > getViewLayers() const override
     {
         return maViewLayers;
     }
-    virtual sal_Int32 getNumUpdates() const
+    virtual sal_Int32 getNumUpdates() const override
     {
         return mnNumUpdates;
     }
-    virtual sal_Int32 getNumRenders() const
+    virtual sal_Int32 getNumRenders() const override
     {
         return mnNumRenders;
     }
 
     // XShape
-    virtual OUString SAL_CALL getShapeType(  ) throw (uno::RuntimeException)
+    virtual OUString SAL_CALL getShapeType(  ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::getShapeType: unexpected method call", false );
         return OUString();
     }
 
-    virtual awt::Point SAL_CALL getPosition(  ) throw (uno::RuntimeException)
+    virtual awt::Point SAL_CALL getPosition(  ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::getPosition: unexpected method call", false );
         return awt::Point();
     }
 
-    virtual void SAL_CALL setPosition( const awt::Point& ) throw (uno::RuntimeException)
+    virtual void SAL_CALL setPosition( const awt::Point& ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::setPosition: unexpected method call", false );
     }
 
-    virtual awt::Size SAL_CALL getSize(  ) throw (uno::RuntimeException)
+    virtual awt::Size SAL_CALL getSize(  ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::getSize: unexpected method call", false );
         return awt::Size();
     }
 
-    virtual void SAL_CALL setSize( const awt::Size& /*aSize*/ ) throw (beans::PropertyVetoException, uno::RuntimeException)
+    virtual void SAL_CALL setSize( const awt::Size& /*aSize*/ ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::setSize: unexpected method call", false );
     }
 
 
     // Shape
-    virtual uno::Reference< drawing::XShape > getXShape() const
+    virtual uno::Reference< drawing::XShape > getXShape() const override
     {
         return uno::Reference< drawing::XShape >( const_cast<ImplTestShape*>(this) );
     }
     virtual void addViewLayer( const target::ViewLayerSharedPtr& rNewLayer,
-                               bool                              bRedrawLayer )
+                               bool                              bRedrawLayer ) override
     {
         maViewLayers.push_back( std::make_pair(rNewLayer,bRedrawLayer) );
     }
-    virtual bool removeViewLayer( const target::ViewLayerSharedPtr& rNewLayer )
+    virtual bool removeViewLayer( const target::ViewLayerSharedPtr& rNewLayer ) override
     {
         if( std::none_of(
                 maViewLayers.begin(),
@@ -136,61 +136,64 @@ private:
                 { return cp.first == rNewLayer; } ) );
         return true;
     }
-    virtual bool clearAllViewLayers()
+    virtual void clearAllViewLayers() override
     {
         maViewLayers.clear();
-        return true;
     }
 
-    virtual bool update() const
+    virtual bool update() const override
     {
         ++mnNumUpdates;
         return true;
     }
-    virtual bool render() const
+    virtual bool render() const override
     {
         ++mnNumRenders;
         return true;
     }
-    virtual bool isContentChanged() const
+    virtual bool isContentChanged() const override
     {
         return true;
     }
-    virtual ::basegfx::B2DRectangle getBounds() const
+    virtual ::basegfx::B2DRectangle getBounds() const override
     {
         return maRect;
     }
-    virtual ::basegfx::B2DRectangle getDomBounds() const
+    virtual ::basegfx::B2DRectangle getDomBounds() const override
     {
         return maRect;
     }
-    virtual ::basegfx::B2DRectangle getUpdateArea() const
+    virtual ::basegfx::B2DRectangle getUpdateArea() const override
     {
         return maRect;
     }
 
-    virtual bool isVisible() const
+    virtual bool isVisible() const override
     {
         return true;
     }
-    virtual double getPriority() const
+    virtual double getPriority() const override
     {
         return mnPrio;
     }
-    virtual bool isBackgroundDetached() const
+    virtual bool isBackgroundDetached() const override
     {
         return mnAnimated != 0;
     }
 
     // AnimatableShape
-    virtual void enterAnimationMode()
+    virtual void enterAnimationMode() override
     {
         ++mnAnimated;
     }
 
-    virtual void leaveAnimationMode()
+    virtual void leaveAnimationMode() override
     {
         --mnAnimated;
+    }
+    virtual sal_Int32 getAnimationCount() const override
+    {
+        return mnAnimated;
     }
 };
 

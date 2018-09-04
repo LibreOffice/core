@@ -26,10 +26,10 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
-#include "view.hxx"
-#include "unoview.hxx"
-#include "unoviewcontainer.hxx"
-#include "shape.hxx"
+#include <view.hxx>
+#include <unoview.hxx>
+#include <unoviewcontainer.hxx>
+#include <shape.hxx>
 #include "tests.hxx"
 
 namespace target = slideshow::internal;
