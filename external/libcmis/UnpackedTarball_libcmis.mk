@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 						external/libcmis/libcmis-fix-error-handling.patch \
 						external/libcmis/c++17.patch.0 \
 						external/libcmis/boost-1.68.patch.0 \
+						external/libcmis/xwwwformurlencoded.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
