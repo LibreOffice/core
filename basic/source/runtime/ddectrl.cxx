@@ -22,8 +22,6 @@
 #include "ddectrl.hxx"
 #include <basic/sberrors.hxx>
 
-#define DDE_FREECHANNEL (reinterpret_cast<DdeConnection*>(sal_IntPtr(-1)))
-
 #define DDE_FIRSTERR    0x4000
 #define DDE_LASTERR     0x4011
 
@@ -88,13 +86,13 @@ size_t SbiDdeControl::GetFreeChannel()
 
     for (; nChannel < nListSize; ++nChannel)
     {
-        if (aConvList[nChannel] == DDE_FREECHANNEL)
+        if (!aConvList[nChannel])
         {
             return nChannel+1;
         }
     }
 
-    aConvList.push_back(DDE_FREECHANNEL);
+    aConvList.push_back(nullptr);
     return nChannel+1;
 }
 
@@ -102,17 +100,16 @@ ErrCode SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
                                  size_t& rnHandle )
 {
     ErrCode nErr;
-    DdeConnection* pConv = new DdeConnection( rService, rTopic );
-    nErr = GetLastErr( pConv );
+    std::unique_ptr<DdeConnection> pConv(new DdeConnection( rService, rTopic ));
+    nErr = GetLastErr( pConv.get() );
     if( nErr )
     {
-        delete pConv;
         rnHandle = 0;
     }
     else
     {
         size_t nChannel = GetFreeChannel();
-        aConvList[nChannel-1] = pConv;
+        aConvList[nChannel-1] = std::move(pConv);
         rnHandle = nChannel;
     }
     return ERRCODE_NONE;
@@ -124,30 +121,20 @@ ErrCode SbiDdeControl::Terminate( size_t nChannel )
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
-    DdeConnection* pConv = aConvList[nChannel-1];
+    DdeConnection* pConv = aConvList[nChannel-1].get();
 
-    if( pConv == DDE_FREECHANNEL )
+    if( !pConv )
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
-    delete pConv;
-    aConvList[nChannel-1] = DDE_FREECHANNEL;
+    aConvList[nChannel-1].reset();
 
     return ERRCODE_NONE;
 }
 
 ErrCode SbiDdeControl::TerminateAll()
 {
-    for (DdeConnection* conv : aConvList)
-    {
-        if (conv != DDE_FREECHANNEL)
-        {
-            delete conv;
-        }
-    }
-
     aConvList.clear();
-
     return ERRCODE_NONE;
 }
 
@@ -158,9 +145,9 @@ ErrCode SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
 
-    DdeConnection* pConv = aConvList[nChannel-1];
+    DdeConnection* pConv = aConvList[nChannel-1].get();
 
-    if( pConv == DDE_FREECHANNEL )
+    if( !pConv )
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
@@ -179,9 +166,9 @@ ErrCode SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
 
-    DdeConnection* pConv = aConvList[nChannel-1];
+    DdeConnection* pConv = aConvList[nChannel-1].get();
 
-    if( pConv == DDE_FREECHANNEL )
+    if( !pConv )
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
@@ -196,9 +183,9 @@ ErrCode SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUStr
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
-    DdeConnection* pConv = aConvList[nChannel-1];
+    DdeConnection* pConv = aConvList[nChannel-1].get();
 
-    if( pConv == DDE_FREECHANNEL )
+    if( !pConv )
     {
         return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
