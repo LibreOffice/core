@@ -136,47 +136,6 @@ extern "C"
     typedef int(* XErrorHandler)(Display*,XErrorEvent*);
 }
 
-static int TDEVersion( Display* pDisplay )
-{
-    int nRet = 0;
-
-    Atom nFullSession = XInternAtom( pDisplay, "TDE_FULL_SESSION", True );
-    Atom nTDEVersion  = XInternAtom( pDisplay, "TDE_SESSION_VERSION", True );
-
-    if( nFullSession )
-    {
-        if( !nTDEVersion )
-            return 14;
-
-        Atom                aRealType   = None;
-        int                 nFormat     = 8;
-        unsigned long       nItems      = 0;
-        unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = nullptr;
-        XGetWindowProperty( pDisplay,
-                            DefaultRootWindow( pDisplay ),
-                            nTDEVersion,
-                            0, 1,
-                            False,
-                            AnyPropertyType,
-                            &aRealType,
-                            &nFormat,
-                            &nItems,
-                            &nBytesLeft,
-                            &pProperty );
-        if( !WasXError() && nItems != 0 && pProperty )
-        {
-            nRet = *reinterpret_cast< sal_Int32* >( pProperty );
-        }
-        if( pProperty )
-        {
-            XFree( pProperty );
-            pProperty = nullptr;
-        }
-    }
-    return nRet;
-}
-
 static int KDEVersion( Display* pDisplay )
 {
     int nRet = 0;
@@ -218,39 +177,6 @@ static int KDEVersion( Display* pDisplay )
     return nRet;
 }
 
-static bool is_tde_desktop( Display* pDisplay )
-{
-    if ( nullptr != getenv( "TDE_FULL_SESSION" ) )
-    {
-        return true; // TDE
-    }
-
-    if ( TDEVersion( pDisplay ) >= 14 )
-        return true;
-
-    return false;
-}
-
-static bool is_kde3_desktop( Display* pDisplay )
-{
-    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
-    if ( pFullVersion )
-    {
-        static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
-        if ( !pSessionVersion || pSessionVersion[0] == '0' )
-        {
-            return true; // does not exist => KDE3
-        }
-
-        if ( strcmp(pSessionVersion, "3" ) == 0 )
-        {
-            return true;
-        }
-    }
-
-    return KDEVersion( pDisplay ) == 3;
-}
-
 static bool is_kde4_desktop( Display* pDisplay )
 {
     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
@@ -288,8 +214,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     {
         OString aOver( pOverride );
 
-        if ( aOver.equalsIgnoreAsciiCase( "tde" ) )
-            return DESKTOP_TDE;
         if ( aOver.equalsIgnoreAsciiCase( "kde5" ) )
             return DESKTOP_KDE5;
         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
@@ -304,8 +228,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_XFCE;
         if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
             return DESKTOP_MATE;
-        if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
-            return DESKTOP_KDE3;
         if ( aOver.equalsIgnoreAsciiCase( "none" ) )
             return DESKTOP_UNKNOWN;
     }
@@ -389,10 +311,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             ret = DESKTOP_KDE4;
         else if ( is_gnome_desktop( pDisplay ) )
             ret = DESKTOP_GNOME;
-        else if ( is_kde3_desktop( pDisplay ) )
-            ret = DESKTOP_KDE3;
-        else if ( is_tde_desktop( pDisplay ) )
-            ret = DESKTOP_TDE;
         else
             ret = DESKTOP_UNKNOWN;
 

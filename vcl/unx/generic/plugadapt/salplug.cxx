@@ -197,8 +197,6 @@ static SalInstance* autodetect_plugin()
     else if ( desktop == DESKTOP_GNOME ||
               desktop == DESKTOP_UNITY ||
               desktop == DESKTOP_XFCE  ||
-              desktop == DESKTOP_KDE3 ||
-              desktop == DESKTOP_TDE ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
     else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
@@ -238,7 +236,7 @@ SalInstance *CreateSalInstance()
 
     // fallback, try everything
     static const char* const pPlugin[] = {
-        "gtk3", "gtk", "kde5", "kde4", "kde", "tde", "gen" };
+        "gtk3", "gtk", "kde5", "kde4", "gen" };
 
     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
@@ -297,8 +295,7 @@ const OUString& SalGetDesktopEnvironment()
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "TDE",
-        "KDE", "KDE4", "KDE5" };
+        "XFCE", "MATE", "KDE4", "KDE5" };
     static OUString aRet;
     if( aRet.isEmpty())
     {
