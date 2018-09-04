@@ -2071,8 +2071,10 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
     {
         m_pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
         m_pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
+        SwTextGlyphsKey aGlyphsKey{ m_pPrinter, rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+        SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
         m_pPrinter->GetTextArray( rInf.GetText(), pKernArray.get(),
-                sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
     }
     else
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
