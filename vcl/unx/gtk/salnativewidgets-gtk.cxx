@@ -1853,7 +1853,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
 {
     assert(aValue.getType() == ControlType::Scrollbar);
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(aValue);
-    GdkX11Pixmap*    pixmap = nullptr;
+    std::unique_ptr<GdkX11Pixmap> pixmap;
     tools::Rectangle        pixmapRect, scrollbarRect;
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -2029,7 +2029,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
 
     // as multiple paints are required for the scrollbar
     // painting them directly to the window flickers
-    pixmap = NWGetPixmapFromScreen( pixmapRect );
+    pixmap.reset( NWGetPixmapFromScreen( pixmapRect ) );
     if( ! pixmap )
         return false;
     x = y = 0;
@@ -2158,8 +2158,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
 
-    bool bRet = NWRenderPixmapToScreen( pixmap, nullptr, pixmapRect );
-    delete pixmap;
+    bool bRet = NWRenderPixmapToScreen( pixmap.get(), nullptr, pixmapRect );
 
     return bRet;
 }
