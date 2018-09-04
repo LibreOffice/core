@@ -36,19 +36,6 @@ index 3f400c7..968b84a 100644
  }
  
  FPDF_EXPORT unsigned long FPDF_CALLCONV
-diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
-index 29c8b01..a52e1a9 100644
---- a/pdfium/fpdfsdk/fpdf_editpage.cpp
-+++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -688,7 +688,7 @@ FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
-   int ret_count = byte_str_len / kBytesPerCharacter;
- 
-   ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
--  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
-+  memcpy(result, byte_str.GetBuffer(byte_str_len).data(), byte_str_len);
-   return ret_count;
- }
- 
 -- 
 2.16.3
 

@@ -61,9 +61,9 @@ diff --git a/pdfium/public/fpdf_edit.h b/pdfium/public/fpdf_edit.h
 index ca76954..f249e64 100644
 --- a/pdfium/public/fpdf_edit.h
 +++ b/pdfium/public/fpdf_edit.h
-@@ -1161,6 +1161,24 @@ FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
- FPDF_EXPORT int FPDF_CALLCONV
- FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
+@@ -1190,6 +1190,24 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+ FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
+ FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
  
 +// Get the matrix of a particular form object.
 +//

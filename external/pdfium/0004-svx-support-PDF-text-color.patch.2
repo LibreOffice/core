@@ -25,19 +25,6 @@ index d93ecfc..13362cf 100644
  ByteString CFXByteStringFromFPDFWideString(FPDF_WIDESTRING wide_string);
  
  #ifdef PDF_ENABLE_XFA
-diff --git a/pdfium/fpdfsdk/fpdf_editpage.cpp b/pdfium/fpdfsdk/fpdf_editpage.cpp
-index 3244943..f8e2418 100644
---- a/pdfium/fpdfsdk/fpdf_editpage.cpp
-+++ b/pdfium/fpdfsdk/fpdf_editpage.cpp
-@@ -443,7 +443,7 @@ FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object)
-   if (!text_object)
-     return 0;
- 
--  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
-+  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
-   return pTxtObj->CountChars();
- }
- 
 diff --git a/pdfium/fpdfsdk/fpdf_edittext.cpp b/pdfium/fpdfsdk/fpdf_edittext.cpp
 index c38873faa..aa3287ef4 100644
 --- a/pdfium/fpdfsdk/fpdf_edittext.cpp
