@@ -1040,11 +1040,19 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 {
     const SwPosition aPos(pDoc->GetNodes().GetEndOfContent());
     size_t nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
-    size_t n = comphelper::rng::uniform_size_distribution(0, nNodes);
+    // exclude body start/end node
+    size_t n = comphelper::rng::uniform_size_distribution(1, nNodes - 1);
     SwPaM pam(aPos);
     for (sal_uLong i = 0; i < n; ++i)
     {
         pam.Move(fnMoveBackward, GoInNode);
+    }
+    SwTextNode *const pTextNode(pam.GetPoint()->nNode.GetNode().GetTextNode());
+    assert(pTextNode);
+    int n2 = comphelper::rng::uniform_int_distribution(0, pTextNode->Len());
+    for (sal_Int32 i = 0; i < n2; ++i)
+    {
+        pam.Move(fnMoveBackward, GoInContent);
     }
     return *pam.GetPoint();
 }
