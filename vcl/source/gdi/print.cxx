@@ -743,8 +743,8 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     // do painting
     const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
     long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-    long*           pMapX = new long[ nSrcWidth + 1 ];
-    long*           pMapY = new long[ nSrcHeight + 1 ];
+    std::unique_ptr<long[]> pMapX( new long[ nSrcWidth + 1 ] );
+    std::unique_ptr<long[]> pMapY( new long[ nSrcHeight + 1 ] );
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     const bool      bOldMap = mbMap;
 
@@ -779,11 +779,8 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     }
 
     Pop();
-    delete[] pMapX;
-    delete[] pMapY;
     mbMap = bOldMap;
     mpMetaFile = pOldMetaFile;
-
 }
 
 SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
