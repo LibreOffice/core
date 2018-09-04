@@ -120,6 +120,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         rCC.isLetterNumeric( aInsStr, aInsStr.getLength()-1 ) )
         return false;
 
+    if (!bInsChar && rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
     {
         SwRedlineSaveDatas aTmpSav;
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
