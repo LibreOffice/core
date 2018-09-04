@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_fc75a499",
+        "filename": "chart2/IwyuFilter_chart2.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-09-04T06:45:17Z",
+      "side": 1,
+      "message": "This part is only temporary here. I think I broke the toolchain and should file a bugreport about it :).\nJust wanted this one out the door.",
+      "range": {
+        "startLine": 302,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 51
+      },
+      "revId": "9aa826c2179b253db3c3f0ee71701e3f15374338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
