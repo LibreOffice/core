@@ -718,9 +718,9 @@ void TypeWriter::createBlop()
 {
     //TODO: Fix memory leaks that occur when std::bad_alloc is thrown
 
-    sal_uInt8*  pBlopFields         = nullptr;
-    sal_uInt8*  pBlopMethods        = nullptr;
-    sal_uInt8*  pBlopReferences     = nullptr;
+    std::unique_ptr<sal_uInt8[]>  pBlopFields;
+    std::unique_ptr<sal_uInt8[]>  pBlopMethods;
+    std::unique_ptr<sal_uInt8[]>  pBlopReferences;
     sal_uInt8*  pBuffer             = nullptr;
     sal_uInt32  blopFieldsSize      = 0;
     sal_uInt32  blopMethodsSize     = 0;
@@ -797,8 +797,8 @@ void TypeWriter::createBlop()
 
         blopSize += blopFieldsSize;
 
-        pBlopFields = new sal_uInt8[blopFieldsSize];
-        pBuffer = pBlopFields;
+        pBlopFields.reset(new sal_uInt8[blopFieldsSize]);
+        pBuffer = pBlopFields.get();
 
         pBuffer += writeUINT16(pBuffer, BLOP_FIELD_N_ENTRIES);
 
@@ -878,11 +878,11 @@ void TypeWriter::createBlop()
             blopMethodsSize += pMethodEntrySize[i];
         }
 
-        pBlopMethods = new sal_uInt8[blopMethodsSize];
+        pBlopMethods.reset(new sal_uInt8[blopMethodsSize]);
 
         blopSize += blopMethodsSize;
 
-        pBuffer = pBlopMethods;
+        pBuffer = pBlopMethods.get();
 
         pBuffer += writeUINT16(pBuffer, BLOP_METHOD_N_ENTRIES);
         pBuffer += writeUINT16(pBuffer, BLOP_PARAM_N_ENTRIES );
@@ -981,8 +981,8 @@ void TypeWriter::createBlop()
 
         blopSize += blopReferenceSize;
 
-        pBlopReferences = new sal_uInt8[blopReferenceSize];
-        pBuffer = pBlopReferences;
+        pBlopReferences.reset(new sal_uInt8[blopReferenceSize]);
+        pBuffer = pBlopReferences.get();
 
         pBuffer += writeUINT16(pBuffer, BLOP_REFERENCE_N_ENTRIES);
 
@@ -1088,17 +1088,13 @@ void TypeWriter::createBlop()
     };
 
     // write fields
-    writeList(m_fieldCount, pBlopFields, blopFieldsSize);
+    writeList(m_fieldCount, pBlopFields.get(), blopFieldsSize);
 
     // write methods
-    writeList(m_methodCount, pBlopMethods, blopMethodsSize);
+    writeList(m_methodCount, pBlopMethods.get(), blopMethodsSize);
 
     // write references
-    writeList(m_referenceCount, pBlopReferences, blopReferenceSize);
-
-    delete[] pBlopFields;
-    delete[] pBlopMethods;
-    delete[] pBlopReferences;
+    writeList(m_referenceCount, pBlopReferences.get(), blopReferenceSize);
 
     m_blop.reset( blop );
     m_blopSize = blopSize;
