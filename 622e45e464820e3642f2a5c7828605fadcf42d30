@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_5c3810d2",
+        "filename": "sc/qa/extras/sccellobj.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-04T04:08:25Z",
+      "side": 1,
+      "message": "Just nitpicking, but rather sort it alphabetically.",
+      "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_1c3288f2",
+        "filename": "test/source/table/xcell.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-04T04:08:25Z",
+      "side": 1,
+      "message": "I normally combine the getter and setter test in to one. Less code to write and no unnecessary duplication of the code for testing the getters.",
+      "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3c354cdb",
+        "filename": "test/source/table/xcell.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-04T04:08:25Z",
+      "side": 1,
+      "message": "This has to be the same as the Java code, because with typeid() you\u0027re comparing the type of aType and aType (that will always be the same). But you want to check the value of aTyoe and aType2.\n\nJust as good practice if you use something like typeid(), you should always include the needed header file and don\u0027t assume that it is included somewhere else. If in the future somebody make a change the code won\u0027t compile.",
+      "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
