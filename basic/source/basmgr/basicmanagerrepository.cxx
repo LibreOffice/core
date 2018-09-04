@@ -83,7 +83,7 @@ namespace basic
         BasicManager*   getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel );
         BasicManager*   getOrCreateApplicationBasicManager();
         static BasicManager* getApplicationBasicManager();
-        static void          setApplicationBasicManager( BasicManager* _pBasicManager );
+        static void          setApplicationBasicManager( std::unique_ptr<BasicManager> _pBasicManager );
         void    registerCreationListener( BasicManagerCreationListener& _rListener );
         void    revokeCreationListener( BasicManagerCreationListener& _rListener );
 
@@ -241,7 +241,7 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        BasicManager* pAppManager = GetSbData()->pAppBasMgr;
+        BasicManager* pAppManager = GetSbData()->pAppBasMgr.get();
         if (pAppManager == nullptr)
             pAppManager = impl_createApplicationBasicManager();
         return pAppManager;
@@ -251,17 +251,14 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        return GetSbData()->pAppBasMgr;
+        return GetSbData()->pAppBasMgr.get();
     }
 
-    void ImplRepository::setApplicationBasicManager( BasicManager* _pBasicManager )
+    void ImplRepository::setApplicationBasicManager( std::unique_ptr<BasicManager> _pBasicManager )
     {
         SolarMutexGuard g;
 
-        BasicManager* pPreviousManager = getApplicationBasicManager();
-        delete pPreviousManager;
-
-        GetSbData()->pAppBasMgr = _pBasicManager;
+        GetSbData()->pAppBasMgr = std::move(_pBasicManager);
     }
 
 
@@ -285,7 +282,7 @@ namespace basic
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
-        setApplicationBasicManager( pBasicManager );
+        setApplicationBasicManager( std::unique_ptr<BasicManager>(pBasicManager) );
 
         // The first dir in the path as destination:
         OUString aFileName( aAppBasic.getName() );
