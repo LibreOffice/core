@@ -78,8 +78,6 @@ Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     }
 }
 
-Qt5Font::~Qt5Font() {}
-
 static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];

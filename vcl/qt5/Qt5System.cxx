@@ -15,9 +15,6 @@
 #include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
 
-Qt5System::Qt5System() {}
-Qt5System::~Qt5System() {}
-
 unsigned int Qt5System::GetDisplayScreenCount() { return QApplication::desktop()->screenCount(); }
 
 tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)

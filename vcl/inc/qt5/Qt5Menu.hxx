@@ -67,7 +67,6 @@ class Qt5MenuItem : public SalMenuItem
 {
 public:
     Qt5MenuItem(const SalItemParams*);
-    virtual ~Qt5MenuItem() override;
 
     sal_uInt16 mnId; // Item ID
     MenuItemType mnType; // Item type

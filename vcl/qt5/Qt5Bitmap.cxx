@@ -31,8 +31,6 @@ Qt5Bitmap::Qt5Bitmap() {}
 
 Qt5Bitmap::Qt5Bitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage)); }
 
-Qt5Bitmap::~Qt5Bitmap() {}
-
 bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
     assert((nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24

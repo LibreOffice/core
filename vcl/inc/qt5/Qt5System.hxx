@@ -15,9 +15,6 @@
 class Qt5System : public SalGenericSystem
 {
 public:
-    Qt5System();
-    virtual ~Qt5System() override;
-
     virtual unsigned int GetDisplayScreenCount() override;
     virtual tools::Rectangle GetDisplayScreenPosSizePixel(unsigned int nScreen) override;
     virtual int ShowNativeDialog(const OUString& rTitle, const OUString& rMessage,

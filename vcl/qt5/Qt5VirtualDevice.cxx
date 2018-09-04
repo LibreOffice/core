@@ -30,8 +30,6 @@ Qt5VirtualDevice::Qt5VirtualDevice(DeviceFormat eFormat, double fScale)
 {
 }
 
-Qt5VirtualDevice::~Qt5VirtualDevice() {}
-
 SalGraphics* Qt5VirtualDevice::AcquireGraphics()
 {
     assert(m_pImage);

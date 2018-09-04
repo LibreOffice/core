@@ -19,8 +19,6 @@ Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags 
 {
 }
 
-Qt5MainWindow::~Qt5MainWindow() {}
-
 void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
 {
     bool bRet = false;

@@ -199,6 +199,4 @@ Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
 {
 }
 
-Qt5MenuItem::~Qt5MenuItem() {}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

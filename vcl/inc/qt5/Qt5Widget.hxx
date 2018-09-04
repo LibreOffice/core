@@ -57,7 +57,6 @@ class Qt5Widget : public QWidget
 
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
-    virtual ~Qt5Widget() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
