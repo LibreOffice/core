@@ -331,7 +331,7 @@ public:
 
     void Remove( size_type nPos );
     void Remove( const SwRangeRedline* p );
-    void DeleteAndDestroy( size_type nPos, size_type nLen = 1 );
+    void DeleteAndDestroy(size_type nPos);
     void DeleteAndDestroyAll();
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
@@ -375,7 +375,7 @@ public:
 
     void Insert( SwExtraRedline* p );
 
-    void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
+    void DeleteAndDestroy( sal_uInt16 nPos);
     void DeleteAndDestroyAll();
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
