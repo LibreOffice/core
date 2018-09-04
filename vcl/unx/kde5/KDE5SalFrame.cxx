@@ -24,6 +24,7 @@
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
+#include <QtX11Extras/QX11Info>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -219,6 +220,21 @@ void KDE5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
     (void)pSalGraph;
     assert(pSalGraph == m_pKDE5Graphics.get());
     m_bGraphicsInUse = false;
+}
+
+void KDE5SalFrame::StartPresentation(bool bStart)
+{
+    // disable screensaver for running preso
+    boost::optional<unsigned int> aWindow;
+    boost::optional<Display*> aDisplay;
+    if (QX11Info::isPlatformX11())
+    {
+        aWindow = QX11Info::appRootWindow();
+        aDisplay = QX11Info::display();
+    }
+
+    m_ScreenSaverInhibitor.inhibit(bStart, "presentation", QX11Info::isPlatformX11(), aWindow,
+                                   aDisplay);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
