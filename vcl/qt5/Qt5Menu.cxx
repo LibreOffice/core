@@ -9,6 +9,7 @@
 
 #include <Qt5Frame.hxx>
 #include <Qt5MainWindow.hxx>
+#include <Qt5Bitmap.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
 
@@ -114,6 +115,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
                 {
                     // leaf menu
                     QAction* pAction = pQMenu->addAction(toQString(aText));
+                    pSalMenuItem->mpAction = pAction;
                     pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
 
                     if (itemBits & MenuItemBits::CHECKABLE)
@@ -132,6 +134,9 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
                         pQAG->addAction(pAction);
                     }
 
+                    pAction->setEnabled(pSalMenuItem->mbEnabled);
+                    pAction->setVisible(pSalMenuItem->mbVisible);
+
                     connect(pAction, &QAction::triggered, this,
                             [this, pSalMenuItem] { DispatchCommand(pSalMenuItem); });
                 }
@@ -147,17 +152,68 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
     }
 }
 
-void Qt5Menu::ShowItem(unsigned, bool) {}
+void Qt5Menu::ShowItem(unsigned nPos, bool bShow)
+{
+    if (nPos < maItems.size())
+    {
+        Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
+        if (pSalMenuItem->mpAction)
+            pSalMenuItem->mpAction->setVisible(bShow);
+        pSalMenuItem->mbVisible = bShow;
+    }
+}
 
-void Qt5Menu::CheckItem(unsigned, bool) {}
+void Qt5Menu::CheckItem(unsigned nPos, bool bChecked)
+{
+    if (nPos < maItems.size())
+    {
+        Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
+        if (pSalMenuItem->mpAction)
+            pSalMenuItem->mpAction->setChecked(bChecked);
+    }
+}
 
-void Qt5Menu::EnableItem(unsigned, bool) {}
+void Qt5Menu::EnableItem(unsigned nPos, bool bEnable)
+{
+    if (nPos < maItems.size())
+    {
+        Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
+        if (pSalMenuItem->mpAction)
+            pSalMenuItem->mpAction->setEnabled(bEnable);
+        pSalMenuItem->mbEnabled = bEnable;
+    }
+}
 
-void Qt5Menu::SetItemText(unsigned, SalMenuItem*, const rtl::OUString&) {}
+void Qt5Menu::SetItemText(unsigned, SalMenuItem* pItem, const rtl::OUString& rText)
+{
+    Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
+    if (pSalMenuItem->mpAction)
+        pSalMenuItem->mpAction->setText(toQString(rText));
+}
 
-void Qt5Menu::SetItemImage(unsigned, SalMenuItem*, const Image&) {}
+void Qt5Menu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
+{
+    BitmapEx aBmpEx(rImage.GetBitmapEx());
+    Bitmap aBmp(aBmpEx.GetBitmap());
 
-void Qt5Menu::SetAccelerator(unsigned, SalMenuItem*, const vcl::KeyCode&, const OUString&) {}
+    if (!aBmp || !aBmp.ImplGetSalBitmap())
+        return;
+
+    // simple case, no transparency
+    Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
+    if (pSalMenuItem->mpAction)
+        pSalMenuItem->mpAction->setIcon(QPixmap::fromImage(
+            *static_cast<Qt5Bitmap*>(aBmp.ImplGetSalBitmap().get())->GetQImage()));
+}
+
+void Qt5Menu::SetAccelerator(unsigned, SalMenuItem* pItem, const vcl::KeyCode&,
+                             const OUString& rText)
+{
+    Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
+    if (pSalMenuItem->mpAction)
+        pSalMenuItem->mpAction->setShortcut(
+            QKeySequence(toQString(rText), QKeySequence::PortableText));
+}
 
 void Qt5Menu::GetSystemMenuData(SystemMenuData*) {}
 
@@ -192,10 +248,13 @@ void Qt5Menu::DispatchCommand(Qt5MenuItem* pQItem)
 void Qt5Menu::NativeItemText(OUString& rItemText) { rItemText = rItemText.replace('~', '&'); }
 
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
-    : mnId(pItemData->nId)
-    , mnType(pItemData->eType)
-    , mpParentMenu(nullptr)
+    : mpParentMenu(nullptr)
     , mpSubMenu(nullptr)
+    , mpAction(nullptr)
+    , mnId(pItemData->nId)
+    , mnType(pItemData->eType)
+    , mbVisible(true)
+    , mbEnabled(true)
 {
 }
 
