@@ -678,6 +678,7 @@ css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::ch
     auto xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
 
     std::vector<css::beans::PropertyValue> vec;
+    vec.reserve(aProperties.size());
     for (const auto& pair : aProperties)
     {
         vec.emplace_back(comphelper::makePropertyValue(pair.first, pair.second));

@@ -313,7 +313,9 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
 {
     osl::MutexGuard guard(registry_->mutex_);
     std::vector< sal_Int32 > list;
-    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i) {
+    list.reserve(seqValue.getLength());
+    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i)
+    {
         list.push_back(seqValue[i]);
     }
     RegError err = key_.setLongListValue(
@@ -613,7 +615,9 @@ void Key::setStringListValue(
 {
     osl::MutexGuard guard(registry_->mutex_);
     std::vector< sal_Unicode * > list;
-    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i) {
+    list.reserve(seqValue.getLength());
+    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i)
+    {
         list.push_back(const_cast< sal_Unicode * >(seqValue[i].getStr()));
     }
     RegError err = key_.setUnicodeListValue(

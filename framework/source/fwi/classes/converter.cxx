@@ -45,7 +45,8 @@ std::vector<OUString> Converter::convert_seqOUString2OUStringList( const css::un
     std::vector<OUString> lDestination;
     sal_Int32 nCount = lSource.getLength();
 
-    for (sal_Int32 nItem=0; nItem<nCount; ++nItem )
+    lDestination.reserve(nCount);
+    for (sal_Int32 nItem = 0; nItem < nCount; ++nItem)
     {
         lDestination.push_back(lSource[nItem]);
     }

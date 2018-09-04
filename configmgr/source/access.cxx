@@ -413,6 +413,7 @@ css::uno::Sequence< OUString > Access::getElementNames()
     checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
     std::vector<OUString> names;
+    names.reserve(children.size());
     for (auto const& child : children)
     {
         names.push_back(child->getNameInternal());
@@ -539,6 +540,7 @@ css::uno::Sequence< css::beans::Property > Access::getProperties()
     osl::MutexGuard g(*lock_);
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
     std::vector< css::beans::Property > properties;
+    properties.reserve(children.size());
     for (auto const& child : children)
     {
         properties.push_back(child->asProperty());

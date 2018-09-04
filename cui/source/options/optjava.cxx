@@ -821,6 +821,7 @@ std::vector< OUString > SvxJavaParameterDlg::GetParameters() const
 {
     int nCount = m_xAssignedList->n_children();
     std::vector< OUString > aParamList;
+    aParamList.reserve(nCount);
     for (int i = 0; i < nCount; ++i)
         aParamList.push_back(m_xAssignedList->get_text(i));
     return aParamList;

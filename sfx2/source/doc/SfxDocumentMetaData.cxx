@@ -1138,7 +1138,9 @@ void SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XNodeList> nodes =
             xPath->selectNodeList(m_xParent, "child::" + name);
         std::vector<css::uno::Reference<css::xml::dom::XNode> > v;
-        for (sal_Int32 i = 0; i < nodes->getLength(); ++i) {
+        v.reserve(nodes->getLength());
+        for (sal_Int32 i = 0; i < nodes->getLength(); ++i)
+        {
             v.push_back(nodes->item(i));
         }
         m_metaList[name] = v;

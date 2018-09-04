@@ -267,7 +267,9 @@ void MissingPluginInstallerThread::execute() {
             details.swap(inst.currentDetails_);
         }
         std::vector<char *> args;
-        for (auto const & i: details) {
+        args.reserve(details.size());
+        for (auto const& i : details)
+        {
             args.push_back(const_cast<char *>(i.getStr()));
         }
         args.push_back(nullptr);
