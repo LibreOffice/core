@@ -213,13 +213,13 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     bool bOk(false);
     bool bChange(false);
-    TableRowUndo* pUndo(nullptr);
+    std::unique_ptr<TableRowUndo> pUndo;
     const bool bUndo(rTableObj.IsInserted() && rModel.IsUndoEnabled());
 
     if( bUndo )
     {
         TableRowRef xThis( this );
-        pUndo = new TableRowUndo( xThis );
+        pUndo.reset(new TableRowUndo( xThis ));
     }
 
     switch( nHandle )
@@ -274,13 +274,11 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
             break;
         }
     default:
-        delete pUndo;
         throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 
     if( !bOk )
     {
-        delete pUndo;
         throw IllegalArgumentException();
     }
 
@@ -288,13 +286,10 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     {
         if( pUndo )
         {
-            rModel.AddUndo( pUndo );
-            pUndo = nullptr;
+            rModel.AddUndo( pUndo.release() );
         }
         mxTableModel->setModified(true);
     }
-
-    delete pUndo;
 }
 
 
