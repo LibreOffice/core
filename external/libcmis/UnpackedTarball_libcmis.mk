@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libcmis,$(LIBCMIS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 
+# xwwwformurlencoded.patch.0 sent upstream as <https://github.com/tdf/libcmis/pull/20>
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 						external/libcmis/libcmis-libxml2_compatibility.patch \
 						external/libcmis/libcmis-fix-google-drive.patch \
