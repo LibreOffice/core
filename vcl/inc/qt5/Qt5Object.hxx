@@ -38,7 +38,6 @@ class Qt5Object : public SalObject
 
 public:
     Qt5Object(Qt5Frame* pParent, bool bShow);
-    virtual ~Qt5Object() override;
 
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uLong nRects) override;

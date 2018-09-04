@@ -37,7 +37,6 @@ Q_SIGNALS:
 
 public:
     Qt5Timer();
-    virtual ~Qt5Timer() override;
 
     virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;

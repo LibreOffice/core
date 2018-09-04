@@ -38,7 +38,6 @@ class VCL_DLLPUBLIC Qt5Bitmap : public SalBitmap
 public:
     Qt5Bitmap();
     Qt5Bitmap(const QImage& rQImage);
-    virtual ~Qt5Bitmap() override;
 
     const QImage* GetQImage() const { return m_pImage.get(); }
 
