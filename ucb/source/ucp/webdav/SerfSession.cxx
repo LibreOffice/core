@@ -1120,7 +1120,7 @@ void SerfSession::abort()
 }
 
 
-const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
+ucbhelper::InternetProxyServer SerfSession::getProxySettings() const
 {
     if ( m_aUri.GetScheme() == "http" || m_aUri.GetScheme() == "https" )
     {
