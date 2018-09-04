@@ -69,7 +69,7 @@ WindowsCustomAction gid_Customaction_Regactivexdll2
 	Source = "regactivex.dll";
 	Target = "DeinstallActiveXControl";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "InstallInitialize");
 End
 
 #ifdef HAVE_WINDOWS_SDK
