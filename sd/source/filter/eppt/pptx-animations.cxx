@@ -578,7 +578,7 @@ class NodeContext
     const Reference<XAnimationNode>& mxNode;
     const bool mbMainSeqChild;
 
-    // Attributes inialized from mxNode->getUserData().
+    // Attributes initialized from mxNode->getUserData().
     sal_Int16 mnEffectNodeType;
     sal_Int16 mnEffectPresetClass;
     OUString msEffectPresetId;
