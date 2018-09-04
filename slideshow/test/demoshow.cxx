@@ -37,8 +37,8 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include "com/sun/star/animations/TransitionType.hpp"
-#include "com/sun/star/animations/TransitionSubType.hpp"
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
