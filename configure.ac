@@ -11273,6 +11273,10 @@ then
     KF5_LIBS="-L$kf5_libdir -lKF5CoreAddons -lKF5I18n -lKF5ConfigCore -lKF5WindowSystem -lKF5KIOCore -lKF5KIOWidgets -lKF5KIOFileWidgets -L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network $KF5_XCB_LIBS"
     KF5_CFLAGS=$(printf '%s' "$KF5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
+    if test "$USING_X11" = TRUE; then
+        KF5_LIBS="$KF5_LIBS -lQt5X11Extras"
+    fi
+
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $KF5_CFLAGS"
