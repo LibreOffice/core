@@ -253,11 +253,11 @@ void TreeParser::Merge(
     assert( m_bIsInitialized );
 
     const xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource );
-    MergeDataFile* pMergeDataFile = nullptr;
+    std::unique_ptr<MergeDataFile> pMergeDataFile;
     if( m_sLang != "qtz" && m_sLang != "en-US" )
     {
-        pMergeDataFile = new MergeDataFile(
-            rMergeSrc, static_cast<OString>( m_pSource->name ), false, false );
+        pMergeDataFile.reset(new MergeDataFile(
+            rMergeSrc, static_cast<OString>( m_pSource->name ), false, false ));
         const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
         if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
         {
@@ -266,15 +266,14 @@ void TreeParser::Merge(
                     " Mergedata file: ")
                 << m_sLang << " - "
                 << vLanguages[0] << std::endl;
-            delete pMergeDataFile;
             return;
         }
     }
     lcl_MergeLevel(
         m_pSource, pRootNode, reinterpret_cast<const xmlChar *>("help_section"),
-        pMergeDataFile, m_sLang, rXhpRoot );
+        pMergeDataFile.get(), m_sLang, rXhpRoot );
 
-    delete pMergeDataFile;
+    pMergeDataFile.reset();
     xmlSaveFile( rDestinationFile.getStr(), m_pSource );
     xmlFreeDoc( m_pSource );
     xmlCleanupParser();
