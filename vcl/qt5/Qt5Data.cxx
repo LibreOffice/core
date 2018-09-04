@@ -159,6 +159,7 @@ Qt5Data::Qt5Data(SalInstance* pInstance)
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
 }
 
+// outline dtor b/c of GlyphCache incomplete type
 Qt5Data::~Qt5Data() {}
 
 static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,

@@ -362,6 +362,4 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-Qt5Widget::~Qt5Widget(){};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
