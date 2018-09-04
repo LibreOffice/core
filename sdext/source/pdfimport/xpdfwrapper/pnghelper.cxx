@@ -245,11 +245,11 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     Guchar *p, *pm;
     GfxRGB rgb;
     GfxGray alpha;
-    ImageStream* imgStr =
+    std::unique_ptr<ImageStream> imgStr(
         new ImageStream(str,
                         width,
                         colorMap->getNumPixelComps(),
-                        colorMap->getBits());
+                        colorMap->getBits()));
     imgStr->reset();
 
     // create scan line data buffer
@@ -281,11 +281,11 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     // the other, too. Hence the two passes are imperative !
 
     // initialize mask stream
-    ImageStream* imgStrMask =
+    std::unique_ptr<ImageStream> imgStrMask(
         new ImageStream(maskStr,
                         maskWidth,
                         maskColorMap->getNumPixelComps(),
-                        maskColorMap->getBits());
+                        maskColorMap->getBits()));
 
     imgStrMask->reset();
     for( int y = 0; y < maskHeight; ++y )
@@ -302,8 +302,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
         }
     }
 
-    delete imgStr;
-    delete imgStrMask;
+    imgStr.reset();
+    imgStrMask.reset();
 
     // begind IDAT chunk for scanline data
     size_t nIdx = startChunk( "IDAT", o_rOutputBuf );
@@ -330,11 +330,11 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     // initialize stream
     Guchar *p;
     GfxRGB rgb;
-    ImageStream* imgStr =
+    std::unique_ptr<ImageStream> imgStr(
         new ImageStream(str,
                         width,
                         colorMap->getNumPixelComps(),
-                        colorMap->getBits());
+                        colorMap->getBits()));
     imgStr->reset();
 
     // create scan line data buffer
@@ -366,8 +366,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     // the other, too. Hence the two passes are imperative !
 
     // initialize mask stream
-    ImageStream* imgStrMask =
-        new ImageStream(maskStr, maskWidth, 1, 1);
+    std::unique_ptr<ImageStream> imgStrMask(
+        new ImageStream(maskStr, maskWidth, 1, 1));
 
     imgStrMask->reset();
     for( int y = 0; y < maskHeight; ++y )
@@ -386,8 +386,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
         }
     }
 
-    delete imgStr;
-    delete imgStrMask;
+    imgStr.reset();
+    imgStrMask.reset();
 
     // begind IDAT chunk for scanline data
     size_t nIdx = startChunk( "IDAT", o_rOutputBuf );
