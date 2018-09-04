@@ -1452,6 +1452,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     mxColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
     mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
     mxTopLevel->set_help_id(HID_POPUP_COLOR);
+    mxTopLevel->connect_focus_in(LINK(this, ColorWindow, FocusHdl));
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
     mxPaletteManager->ReloadColorSet(*mxColorSet);
@@ -1464,6 +1465,11 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     mxRecentColorSet->set_size_request(aSize.Width(), aSize.Height());
 
     AddStatusListener( ".uno:ColorTableState" );
+}
+
+IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
+{
+    mxColorSet->GrabFocus();
 }
 
 void SvxColorWindow::ShowNoneButton()
