@@ -658,7 +658,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
         nWinSize = rSize.Height();
     }
 
-    DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
+    std::unique_ptr<DeactivateUpdateMode> pDeactivateUpdateMode(new DeactivateUpdateMode( *this ));
 
     if ( bNewLine || nLine == GetItemCount() )
     {
@@ -728,7 +728,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
         pWorkWin->ShowChildren_Impl();
     }
 
-    delete pDeactivateUpdateMode;
+    pDeactivateUpdateMode.reset();
 
     // workaround insufficiency of <SplitWindow> regarding dock layouting:
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
