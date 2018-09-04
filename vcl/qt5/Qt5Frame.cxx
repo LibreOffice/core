@@ -565,6 +565,7 @@ void Qt5Frame::ToTop(SalFrameToTop nFlags)
 
     if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
         pWidget->raise();
+    pWidget->setFocus();
     pWidget->activateWindow();
 }
 
