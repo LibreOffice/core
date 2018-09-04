@@ -403,9 +403,9 @@ bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
     bool bUpdate = true;
     if ( mpWindowImpl->mpSysObj )
     {
-        vcl::Region* pOldRegion = nullptr;
+        std::unique_ptr<vcl::Region> pOldRegion;
         if ( bSysObjOnlySmaller && !mpWindowImpl->mbInitWinClipRegion )
-            pOldRegion = new vcl::Region( mpWindowImpl->maWinClipRegion );
+            pOldRegion.reset(new vcl::Region( mpWindowImpl->maWinClipRegion ));
 
         mbInitClipRegion = true;
         mpWindowImpl->mbInitWinClipRegion = true;
@@ -418,27 +418,25 @@ bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
 
-        if ( !ImplSysObjClip( pOldRegion ) )
+        if ( !ImplSysObjClip( pOldRegion.get() ) )
         {
             mbInitClipRegion = true;
             mpWindowImpl->mbInitWinClipRegion = true;
             bUpdate = false;
         }
-
-        delete pOldRegion;
     }
     else
     {
-    mbInitClipRegion = true;
-    mpWindowImpl->mbInitWinClipRegion = true;
+        mbInitClipRegion = true;
+        mpWindowImpl->mbInitWinClipRegion = true;
 
-    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
-    while ( pWindow )
-    {
-        if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-            bUpdate = false;
-        pWindow = pWindow->mpWindowImpl->mpNext;
-    }
+        vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
+        while ( pWindow )
+        {
+            if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
+                bUpdate = false;
+            pWindow = pWindow->mpWindowImpl->mpNext;
+        }
     }
     return bUpdate;
 }
