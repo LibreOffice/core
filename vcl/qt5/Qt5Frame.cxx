@@ -58,6 +58,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
     , m_pSvpGraphics(nullptr)
+    , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_bDefaultSize(true)
@@ -236,17 +237,11 @@ QWindow* Qt5Frame::windowHandle()
 
 QScreen* Qt5Frame::screen()
 {
-    QWindow* winHandle = nullptr;
-
-    if (m_pTopLevel)
-        winHandle = m_pTopLevel->windowHandle();
+    QWindow* const pWindow = windowHandle();
+    if (pWindow)
+        return pWindow->screen();
     else
-        winHandle = m_pQWidget->windowHandle();
-
-    if (winHandle)
-        return winHandle->screen();
-
-    return nullptr;
+        return nullptr;
 }
 
 bool Qt5Frame::isMinimized()
@@ -302,9 +297,9 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
 
 void Qt5Frame::SetMenu(SalMenu* pMenu) { m_pSalMenu = static_cast<Qt5Menu*>(pMenu); }
 
-void Qt5Frame::DrawMenuBar() {}
+void Qt5Frame::DrawMenuBar() { /* not needed */}
 
-void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) {}
+void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
@@ -521,13 +516,47 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     return true;
 }
 
-void Qt5Frame::ShowFullScreen(bool /*bFullScreen*/, sal_Int32 /*nDisplay*/) {}
+void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
+{
+    assert(m_pTopLevel);
 
-void Qt5Frame::StartPresentation(bool /*bStart*/) {}
+    if (isWindow())
+    {
+        QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+        pWidget->show();
 
-void Qt5Frame::SetAlwaysOnTop(bool /*bOnTop*/) {}
+        // do that before going fullscreen
+        SetScreenNumber(nScreen);
+        bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
+    }
+}
 
-void Qt5Frame::ToTop(SalFrameToTop /*nFlags*/) {}
+void Qt5Frame::StartPresentation(bool)
+{
+    // meh - so there's no Qt platform independent solution - defer to
+    // KDE5 impl. For everyone else:
+    // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
+}
+
+void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
+{
+    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+    const Qt::WindowFlags flags = pWidget->windowFlags();
+    if (bOnTop)
+        pWidget->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+    else
+        pWidget->setWindowFlags(flags & ~(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint));
+    pWidget->show();
+}
+
+void Qt5Frame::ToTop(SalFrameToTop nFlags)
+{
+    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+
+    if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
+        pWidget->raise();
+    pWidget->activateWindow();
+}
 
 void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
 {
@@ -541,27 +570,62 @@ void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
     pWindow->setCursor(static_cast<Qt5Data*>(GetSalData())->getCursor(ePointerStyle));
 }
 
-void Qt5Frame::CaptureMouse(bool /*bMouse*/) {}
+void Qt5Frame::CaptureMouse(bool bMouse)
+{
+    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+    if (bMouse)
+        pWidget->grabMouse();
+    else
+        pWidget->releaseMouse();
+}
 
-void Qt5Frame::SetPointerPos(long /*nX*/, long /*nY*/) {}
+void Qt5Frame::SetPointerPos(long nX, long nY)
+{
+    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+    QCursor aCursor = pWidget->cursor();
+    aCursor.setPos(pWidget->mapToGlobal(QPoint(nX, nY)));
+    pWidget->setCursor(aCursor);
+}
 
-void Qt5Frame::Flush() {}
+void Qt5Frame::Flush()
+{
+    QGuiApplication::sync();
 
-void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
+    // unclear if we need to also flush cairo surface - gtk3 backend
+    // does not do it. QPainter in Qt5Widget::paintEvent() is
+    // destroyed, so that state should be safely flushed.
+}
 
-void Qt5Frame::SetInputContext(SalInputContext* /*pContext*/) {}
+// do we even need it? void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
 
-void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/) {}
+void Qt5Frame::SetInputContext(SalInputContext* /*pContext*/)
+{
+    // TODO some IM handler setup
+}
 
-OUString Qt5Frame::GetKeyName(sal_uInt16 /*nKeyCode*/) { return OUString(); }
+void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
+{
+    // TODO fwd to IM handler
+}
+
+OUString Qt5Frame::GetKeyName(sal_uInt16 /*nKeyCode*/)
+{
+    // TODO retrieve key cap / modifier names
+    return OUString();
+}
 
 bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode /*aUnicode*/, LanguageType /*aLangType*/,
                                    vcl::KeyCode& /*rKeyCode*/)
 {
+    // not supported yet
     return false;
 }
 
-LanguageType Qt5Frame::GetInputLanguage() { return LANGUAGE_DONTKNOW; }
+LanguageType Qt5Frame::GetInputLanguage()
+{
+    // fallback
+    return LANGUAGE_DONTKNOW;
+}
 
 static Color toColor(const QColor& rColor)
 {
@@ -692,7 +756,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     rSettings.SetStyleSettings(style);
 }
 
-void Qt5Frame::Beep() {}
+void Qt5Frame::Beep() { QApplication::beep(); }
 
 const SystemEnvData* Qt5Frame::GetSystemData() const { return nullptr; }
 
@@ -708,22 +772,46 @@ SalFrame::SalPointerState Qt5Frame::GetPointerState()
 
 KeyIndicatorState Qt5Frame::GetIndicatorState() { return KeyIndicatorState(); }
 
-void Qt5Frame::SimulateKeyPress(sal_uInt16 /*nKeyCode*/) {}
+void Qt5Frame::SimulateKeyPress(sal_uInt16 nKeyCode)
+{
+    SAL_WARN("vcl.kde5", "missing simulate keypress " << nKeyCode);
+}
 
 void Qt5Frame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<Qt5Frame*>(pNewParent); }
 
-bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/) { return false; }
+bool Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
+{
+    //FIXME: no SetPluginParent impl. for kde5
+    return false;
+}
 
-void Qt5Frame::ResetClipRegion() {}
+void Qt5Frame::ResetClipRegion() { m_bNullRegion = true; }
 
-void Qt5Frame::BeginSetClipRegion(sal_uLong /*nRects*/) {}
+void Qt5Frame::BeginSetClipRegion(sal_uLong)
+{
+    m_aRegion = QRegion(QRect(QPoint(0, 0), m_pQWidget->size()));
+}
 
-void Qt5Frame::UnionClipRegion(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/) {}
+void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
+{
+    m_aRegion.united(QRegion(nX, nY, nWidth, nHeight));
+}
 
-void Qt5Frame::EndSetClipRegion() {}
+void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
 
-void Qt5Frame::SetScreenNumber(unsigned int) {}
+void Qt5Frame::SetScreenNumber(unsigned int nScreen)
+{
+    if (isWindow())
+    {
+        QWindow* const pWindow = windowHandle();
+        if (pWindow)
+            pWindow->setScreen(QApplication::screens()[nScreen]);
+    }
+}
 
-void Qt5Frame::SetApplicationID(const OUString&) {}
+void Qt5Frame::SetApplicationID(const OUString&)
+{
+    // So the hope is that QGuiApplication deals with this properly..
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
