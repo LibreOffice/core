@@ -34,8 +34,6 @@ Qt5Timer::Qt5Timer()
     connect(this, SIGNAL(startTimerSignal()), this, SLOT(startTimer()), Qt::QueuedConnection);
 }
 
-Qt5Timer::~Qt5Timer() {}
-
 void Qt5Timer::timeoutActivated()
 {
     SolarMutexGuard aGuard;
