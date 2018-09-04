@@ -65,6 +65,10 @@ namespace salhelper {
     operators new[] and delete[].  But since arrays of reference-counted
     objects are of no use, anyway, it seems best to simply declare and not
     define (private) operators new[] and delete[].
+
+    Note how during the move to gbuild, the delete[] had to be implemented,
+    as missing vector delete errors stopped linking. The small consolation is
+    that is a private method, so it may as well not exist. Right?
  */
 class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {

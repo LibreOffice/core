@@ -68,3 +68,9 @@ void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
     ::operator delete(pPtr, std::nothrow);
 #endif // WNT
 }
+
+void SimpleReferenceObject::operator delete[](void * pPtr)
+    SAL_THROW(())
+{
+    ::operator delete[](pPtr);
+}
