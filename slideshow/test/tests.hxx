@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_TEST_TESTS_HXX
 #define INCLUDED_SLIDESHOW_TEST_TESTS_HXX
 
-#include "animatableshape.hxx"
-#include "unoview.hxx"
+#include <animatableshape.hxx>
+#include <unoview.hxx>
 #include <memory>
 
 namespace basegfx{ class B1DRange; class B2DRange; class B2DVector; }
