@@ -574,15 +574,15 @@ static bool checkWriteability( const OUString& rUniPath )
 bool PrinterInfoManager::writePrinterConfig()
 {
     // find at least one writeable config
-    std::unordered_map< OUString, Config* > files;
+    std::unordered_map< OUString, std::unique_ptr<Config> > files;
     std::unordered_map< OUString, int > rofiles;
-    std::unordered_map< OUString, Config* >::iterator file_it;
+    std::unordered_map< OUString, std::unique_ptr<Config> >::iterator file_it;
 
     for (auto const& watchFile : m_aWatchFiles)
     {
         if( checkWriteability( watchFile.m_aFilePath ) )
         {
-            files[ watchFile.m_aFilePath ] = new Config( watchFile.m_aFilePath );
+            files[ watchFile.m_aFilePath ].reset(new Config( watchFile.m_aFilePath ));
             break;
         }
     }
@@ -590,7 +590,7 @@ bool PrinterInfoManager::writePrinterConfig()
     if( files.empty() )
         return false;
 
-    Config* pGlobal = files.begin()->second;
+    Config* pGlobal = files.begin()->second.get();
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
 
     for (auto & printer : m_aPrinters)
@@ -621,7 +621,7 @@ bool PrinterInfoManager::writePrinterConfig()
                 if( rofiles.find( printer.second.m_aFile ) == rofiles.end() )
                 {
                     if( checkWriteability( printer.second.m_aFile ) )
-                        files[ printer.second.m_aFile ] = new Config( printer.second.m_aFile );
+                        files[ printer.second.m_aFile ].reset( new Config( printer.second.m_aFile ) );
                     else
                         bInsertToNewFile = true;
                 }
@@ -648,7 +648,7 @@ bool PrinterInfoManager::writePrinterConfig()
 
         if( files.find( printer.second.m_aFile ) != files.end() )
         {
-            Config* pConfig = files[ printer.second.m_aFile ];
+            Config* pConfig = files[ printer.second.m_aFile ].get();
             pConfig->DeleteGroup( printer.second.m_aGroup ); // else some old keys may remain
             pConfig->SetGroup( printer.second.m_aGroup );
 
@@ -698,8 +698,7 @@ bool PrinterInfoManager::writePrinterConfig()
     }
 
     // get rid of Config objects. this also writes any changes
-    for (auto const& file : files)
-        delete file.second;
+    files.clear();
 
     return true;
 }
