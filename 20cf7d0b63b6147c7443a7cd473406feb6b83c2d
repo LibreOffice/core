@@ -46,6 +46,30 @@
       "revId": "20cf7d0b63b6147c7443a7cd473406feb6b83c2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_ff1356b7",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-04T19:39:18Z",
+      "side": 1,
+      "message": "It is sal_uInt32 as a private mnColor. Both ways seem equally valid to me, and hard to choose which one to settle on. I\u0027m sure I just got it from a copy/paste of another test.",
+      "parentUuid": "dfeb2761_32d21a5e",
+      "range": {
+        "startLine": 64,
+        "startChar": 75,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "20cf7d0b63b6147c7443a7cd473406feb6b83c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
