@@ -317,13 +317,23 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        m_pQWidget->setMinimumSize(nWidth, nHeight);
+    {
+        if (m_pTopLevel)
+            m_pTopLevel->setMinimumSize(nWidth, nHeight);
+        else
+            m_pQWidget->setMinimumSize(nWidth, nHeight);
+    }
 }
 
 void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        m_pQWidget->setMaximumSize(nWidth, nHeight);
+    {
+        if (m_pTopLevel)
+            m_pTopLevel->setMaximumSize(nWidth, nHeight);
+        else
+            m_pQWidget->setMaximumSize(nWidth, nHeight);
+    }
 }
 
 void Qt5Frame::Center()
@@ -572,19 +582,21 @@ void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
 
 void Qt5Frame::CaptureMouse(bool bMouse)
 {
-    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
+    static const char* pEnv = getenv("SAL_NO_MOUSEGRABS");
+    if (pEnv && *pEnv)
+        return;
+
     if (bMouse)
-        pWidget->grabMouse();
+        m_pQWidget->grabMouse();
     else
-        pWidget->releaseMouse();
+        m_pQWidget->releaseMouse();
 }
 
 void Qt5Frame::SetPointerPos(long nX, long nY)
 {
-    QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
-    QCursor aCursor = pWidget->cursor();
-    aCursor.setPos(pWidget->mapToGlobal(QPoint(nX, nY)));
-    pWidget->setCursor(aCursor);
+    QCursor aCursor = m_pQWidget->cursor();
+    aCursor.setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY)));
+    m_pQWidget->setCursor(aCursor);
 }
 
 void Qt5Frame::Flush()
