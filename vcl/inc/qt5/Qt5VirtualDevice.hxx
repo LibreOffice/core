@@ -40,7 +40,6 @@ class Qt5VirtualDevice : public SalVirtualDevice
 
 public:
     Qt5VirtualDevice(DeviceFormat eFormat, double fScale);
-    virtual ~Qt5VirtualDevice() override;
 
     // SalVirtualDevice
     virtual SalGraphics* AcquireGraphics() override;

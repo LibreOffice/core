@@ -33,8 +33,6 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
         m_pQWidget->show();
 }
 
-Qt5Object::~Qt5Object() {}
-
 void Qt5Object::ResetClipRegion()
 {
     if (m_pQWidget.get())
