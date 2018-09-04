@@ -732,9 +732,6 @@ public:
     // the RefCount is set to 1 to never 'delete' this static incarnation.
     ImplB3DPolygon()
     :   maPoints(0),
-        mpBColors(nullptr),
-        mpNormals(nullptr),
-        mpTextureCoordinates(nullptr),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(false),
         mbPlaneNormalValid(true)
@@ -744,9 +741,6 @@ public:
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
     :   maPoints(rToBeCopied.maPoints),
-        mpBColors(nullptr),
-        mpNormals(nullptr),
-        mpTextureCoordinates(nullptr),
         maPlaneNormal(rToBeCopied.maPlaneNormal),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(rToBeCopied.mbPlaneNormalValid)
@@ -770,9 +764,6 @@ public:
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
-        mpBColors(nullptr),
-        mpNormals(nullptr),
-        mpTextureCoordinates(nullptr),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(false)

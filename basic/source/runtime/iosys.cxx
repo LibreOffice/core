@@ -96,8 +96,7 @@ IMPL_LINK_NOARG( SbiInputDialog, Cancel, weld::Button&, void )
 }
 
 SbiStream::SbiStream()
-    : pStrm(nullptr)
-    , nExpandOnWriteTo(0)
+    : nExpandOnWriteTo(0)
     , nLine(0)
     , nLen(0)
     , nMode(SbiStreamFlags::NONE)
