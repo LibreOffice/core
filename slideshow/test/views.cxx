@@ -26,10 +26,10 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
-#include "view.hxx"
-#include "unoview.hxx"
-#include "unoviewcontainer.hxx"
-#include "shape.hxx"
+#include <view.hxx>
+#include <unoview.hxx>
+#include <unoviewcontainer.hxx>
+#include <shape.hxx>
 #include "tests.hxx"
 
 namespace target = slideshow::internal;
@@ -48,15 +48,17 @@ public:
         TestViewSharedPtr pView = createTestView();
         aContainer.addView( pView );
 
-        CPPUNIT_ASSERT_MESSAGE( "Testing container size",
-                                1 == std::distance( aContainer.begin(),
-                                                    aContainer.end() ));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Testing container size",
+                                      std::ptrdiff_t(1),
+                                      std::distance( aContainer.begin(),
+                                                     aContainer.end() ));
         CPPUNIT_ASSERT_MESSAGE( "Testing disposedness",
                                 pView->paintScreen() );
         aContainer.dispose();
-        CPPUNIT_ASSERT_MESSAGE( "Testing dispose: container must be empty",
-                                0 == std::distance( aContainer.begin(),
-                                                    aContainer.end() ));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Testing dispose: container must be empty",
+                                      std::ptrdiff_t(0),
+                                      std::distance( aContainer.begin(),
+                                                     aContainer.end() ));
         CPPUNIT_ASSERT_MESSAGE( "Testing dispose: all elements must receive dispose",
                                 !pView->paintScreen() );
     }
