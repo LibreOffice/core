@@ -851,11 +851,6 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
     g_BoundRectCache.clear();
     HFONT hNewFont = nullptr;
 
-    HDC hdcScreen = nullptr;
-    if( mbVirDev )
-        // only required for virtual devices, see below for details
-        hdcScreen = GetDC(nullptr);
-
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( getHDC(), i_rFont, i_pFontFace, aLogFont );
 
@@ -878,8 +873,12 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
         aLogFont.lfWidth = +MAXFONTHEIGHT;
         aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
     }
-
     hNewFont = ::CreateFontIndirectW( &aLogFont );
+
+    HDC hdcScreen = nullptr;
+    if( mbVirDev )
+        // only required for virtual devices, see below for details
+        hdcScreen = GetDC(nullptr);
     if( hdcScreen )
     {
         // select font into screen hdc first to get an antialiased font
@@ -934,12 +933,18 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
         return;
     }
 
-    // WinSalGraphics::GetEmbedFontData does not set mpFontInstance
-    // since it is interested in font file data only.
-    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>(pFont);
+    mpWinFontEntry[ nFallbackLevel ] = static_cast<WinFontInstance*>(pFont);
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), pFont->GetFontFace(), mfFontScale[ nFallbackLevel ], hOldFont);
+    HFONT hNewFont = mpWinFontEntry[ nFallbackLevel ]->GetHFONT();
+    if (!hNewFont)
+    {
+        hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), pFont->GetFontFace(), mfFontScale[ nFallbackLevel ], hOldFont);
+        mpWinFontEntry[ nFallbackLevel ]->SetHFONT(hNewFont);
+    }
+    else
+        hOldFont = ::SelectFont( getHDC(), hNewFont );
+
     mfCurrentFontScale = mfFontScale[nFallbackLevel];
 
     if( !mhDefFont )
@@ -962,16 +967,9 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
         }
     }
 
-    // store new font in correct layer
-    if (mpWinFontEntry[nFallbackLevel])
-    {
-        mpWinFontEntry[nFallbackLevel]->SetHFONT(hNewFont);
-        // now the font is live => update font face
-        const WinFontFace* pFontFace = static_cast<const WinFontFace*>(mpWinFontEntry[nFallbackLevel]->GetFontFace());
-        pFontFace->UpdateFromHDC(getHDC());
-    }
-    else
-        mhFonts[ nFallbackLevel ] = hNewFont;
+    // now the font is live => update font face
+    const WinFontFace* pFontFace = static_cast<const WinFontFace*>(mpWinFontEntry[nFallbackLevel]->GetFontFace());
+    pFontFace->UpdateFromHDC(getHDC());
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
