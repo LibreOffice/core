@@ -432,7 +432,7 @@ class SfxSaveGuard
     private:
         Reference< frame::XModel > m_xModel;
         IMPL_SfxBaseModel_DataContainer* m_pData;
-        SfxOwnFramesLocker* m_pFramesLock;
+        std::unique_ptr<SfxOwnFramesLocker> m_pFramesLock;
 
         SfxSaveGuard(SfxSaveGuard &) = delete;
         void operator =(const SfxSaveGuard&) = delete;
@@ -453,14 +453,12 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
         throw lang::DisposedException("Object already disposed.");
 
     m_pData->m_bSaving = true;
-    m_pFramesLock = new SfxOwnFramesLocker( m_pData->m_pObjectShell.get() );
+    m_pFramesLock.reset(new SfxOwnFramesLocker( m_pData->m_pObjectShell.get() ));
 }
 
 SfxSaveGuard::~SfxSaveGuard()
 {
-    SfxOwnFramesLocker* pFramesLock = m_pFramesLock;
-    m_pFramesLock = nullptr;
-    delete pFramesLock;
+    m_pFramesLock.reset();
 
     m_pData->m_bSaving = false;
 

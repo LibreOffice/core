@@ -78,7 +78,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         pCache->Invalidate( true );
     else
     {
-        SfxPoolItem *pItem=nullptr;
+        std::unique_ptr<SfxPoolItem> pItem;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SfxItemState::DISABLED;
         if ( !aStatus.IsEnabled )
@@ -95,25 +95,25 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
             {
                 bool bTemp = false;
                 aAny >>= bTemp ;
-                pItem = new SfxBoolItem( nId, bTemp );
+                pItem.reset( new SfxBoolItem( nId, bTemp ) );
             }
             else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
             {
                 sal_uInt16 nTemp = 0;
                 aAny >>= nTemp ;
-                pItem = new SfxUInt16Item( nId, nTemp );
+                pItem.reset( new SfxUInt16Item( nId, nTemp ) );
             }
             else if ( aType == cppu::UnoType<sal_uInt32>::get() )
             {
                 sal_uInt32 nTemp = 0;
                 aAny >>= nTemp ;
-                pItem = new SfxUInt32Item( nId, nTemp );
+                pItem.reset( new SfxUInt32Item( nId, nTemp ) );
             }
             else if ( aType == cppu::UnoType<OUString>::get() )
             {
                 OUString sTemp ;
                 aAny >>= sTemp ;
-                pItem = new SfxStringItem( nId, sTemp );
+                pItem.reset( new SfxStringItem( nId, sTemp ) );
             }
             else
             {
@@ -125,22 +125,20 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
                     pItem->PutValue( aAny, 0 );
                 }
                 else
-                    pItem = new SfxVoidItem( nId );
+                    pItem.reset( new SfxVoidItem( nId ) );
             }
         }
         else
         {
             // DONTCARE status
-            pItem = new SfxVoidItem(0);
+            pItem.reset( new SfxVoidItem(0) );
             eState = SfxItemState::UNKNOWN;
         }
 
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pItem );
-
-       delete pItem;
+            pCtrl->StateChanged( nId, eState, pItem.get() );
     }
 }
 
