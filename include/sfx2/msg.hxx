@@ -108,8 +108,8 @@ struct SfxType
     SfxTypeAttrib   aAttrib[1]; // variable length
 
     const std::type_info* Type() const{return pType;}
-    SfxPoolItem*    CreateItem() const
-                    { return createSfxPoolItemFunc(); }
+    std::unique_ptr<SfxPoolItem> CreateItem() const
+                    { return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc()); }
 };
 
 struct SfxType0
@@ -175,8 +175,8 @@ struct SfxFormalArgument
     const char*     pName;    // Name of the sParameters
     sal_uInt16      nSlotId;  // Slot-Id for identification of the Parameters
 
-    SfxPoolItem*            CreateItem() const
-                            { return pType->createSfxPoolItemFunc(); }
+    std::unique_ptr<SfxPoolItem> CreateItem() const
+                            { return pType->CreateItem(); }
 };
 
 

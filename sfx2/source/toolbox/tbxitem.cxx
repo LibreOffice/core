@@ -449,7 +449,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
         else
         {
             SfxItemState eState = SfxItemState::DISABLED;
-            SfxPoolItem* pItem = nullptr;
+            std::unique_ptr<SfxPoolItem> pItem;
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
@@ -457,32 +457,32 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
 
                 if ( aType == cppu::UnoType<void>::get() )
                 {
-                    pItem = new SfxVoidItem( nSlotId );
+                    pItem.reset(new SfxVoidItem( nSlotId ));
                     eState = SfxItemState::UNKNOWN;
                 }
                 else if ( aType == cppu::UnoType<bool>::get() )
                 {
                     bool bTemp = false;
                     rEvent.State >>= bTemp ;
-                    pItem = new SfxBoolItem( nSlotId, bTemp );
+                    pItem.reset(new SfxBoolItem( nSlotId, bTemp ));
                 }
                 else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
                 {
                     sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt16Item( nSlotId, nTemp );
+                    pItem.reset(new SfxUInt16Item( nSlotId, nTemp ));
                 }
                 else if ( aType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
-                    pItem = new SfxUInt32Item( nSlotId, nTemp );
+                    pItem.reset(new SfxUInt32Item( nSlotId, nTemp ));
                 }
                 else if ( aType == cppu::UnoType<OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
-                    pItem = new SfxStringItem( nSlotId, sTemp );
+                    pItem.reset(new SfxStringItem( nSlotId, sTemp ));
                 }
                 else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
@@ -495,13 +495,13 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                         tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
                         throw css::uno::RuntimeException("unknown status");
                     eState = tmpState;
-                    pItem = new SfxVoidItem( nSlotId );
+                    pItem.reset(new SfxVoidItem( nSlotId ));
                 }
                 else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
-                    pItem = new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible );
+                    pItem.reset(new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible ));
                 }
                 else
                 {
@@ -513,12 +513,11 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                         pItem->PutValue( rEvent.State, 0 );
                     }
                     else
-                        pItem = new SfxVoidItem( nSlotId );
+                        pItem.reset(new SfxVoidItem( nSlotId ));
                 }
             }
 
-            StateChanged( nSlotId, eState, pItem );
-            delete pItem;
+            StateChanged( nSlotId, eState, pItem.get() );
         }
     }
 }
