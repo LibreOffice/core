@@ -34,6 +34,7 @@
 
 #include <breakit.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
@@ -1066,7 +1067,6 @@ void SwDocTest::randomTest()
         RedlineFlags::NONE,
         RedlineFlags::On | RedlineFlags::ShowMask,
         RedlineFlags::On | RedlineFlags::Ignore,
-        RedlineFlags::On | RedlineFlags::Ignore | RedlineFlags::ShowMask,
         RedlineFlags::On | RedlineFlags::ShowInsert,
         RedlineFlags::On | RedlineFlags::ShowDelete
     };
@@ -1076,6 +1076,7 @@ void SwDocTest::randomTest()
 
     for( size_t rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++ )
     {
+        m_pDoc->GetIDocumentUndoRedo().DoUndo(true);
         m_pDoc->ClearDoc();
 
         // setup redlining
@@ -1084,15 +1085,31 @@ void SwDocTest::randomTest()
 
         for( int i = 0; i < 2000; i++ )
         {
-            SwCursor aCrs(getRandomPosition(m_pDoc, i/20), nullptr);
-            aCrs.SetMark();
+            std::shared_ptr<SwUnoCursor> pCrs(
+                m_pDoc->CreateUnoCursor(getRandomPosition(m_pDoc, i/20)));
 
             switch (getRand (i < 50 ? 3 : 6)) {
             // insert ops first
             case 0: {
-                if (!m_pDoc->getIDocumentContentOperations().InsertString(aCrs, getRandString())) {
-//                    fprintf (stderr, "failed to insert string !\n");
+                OUString const tmp(getRandString());
+                sal_Int32 current(0);
+                sal_Int32 nextBreak(tmp.indexOf('\n'));
+                do
+                {
+                    sal_Int32 const len((nextBreak == -1 ? tmp.getLength() : nextBreak - current));
+                    if (0 < len)
+                    {
+                        m_pDoc->getIDocumentContentOperations().InsertString(
+                            *pCrs, tmp.copy(current, len));
+                    }
+                    if (nextBreak != -1)
+                    {
+                        m_pDoc->getIDocumentContentOperations().SplitNode(*pCrs->GetPoint(), false);
+                        current = nextBreak + 1;
+                        nextBreak = tmp.indexOf('\n', current);
+                    }
                 }
+                while (nextBreak != -1);
                 break;
             }
             case 1:
@@ -1105,19 +1122,27 @@ void SwDocTest::randomTest()
 
             // movement / deletion ops later
             case 3: // deletion
+                pCrs->SetMark();
                 switch (getRand(6)) {
                 case 0:
-                    m_pDoc->getIDocumentContentOperations().DelFullPara(aCrs);
+                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
+                    m_pDoc->getIDocumentContentOperations().DelFullPara(*pCrs);
                     break;
                 case 1:
-                    m_pDoc->getIDocumentContentOperations().DeleteRange(aCrs);
+                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
+                    m_pDoc->getIDocumentContentOperations().DeleteRange(*pCrs);
                     break;
                 case 2:
-                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aCrs, !!getRand(1));
+                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
+                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrs, !!getRand(1));
                     break;
                 case 3:
                 default:
-                    m_pDoc->getIDocumentContentOperations().Overwrite(aCrs, getRandString());
+                    OUString const tmp(getRandString());
+                    if (tmp.getLength())
+                    {
+                        m_pDoc->getIDocumentContentOperations().Overwrite(*pCrs, tmp);
+                    }
                     break;
                 }
                 break;
@@ -1130,7 +1155,7 @@ void SwDocTest::randomTest()
                            SwMoveFlags::REDLINES |
                            SwMoveFlags::NO_DELFRMS;
                 SwPosition aTo(getRandomPosition(m_pDoc, i/10));
-                m_pDoc->getIDocumentContentOperations().MoveRange(aCrs, aTo, nFlags);
+                m_pDoc->getIDocumentContentOperations().MoveRange(*pCrs, aTo, nFlags);
                 break;
             }
 
