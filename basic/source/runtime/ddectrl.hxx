@@ -32,7 +32,7 @@ private:
     DECL_LINK( Data, const DdeData*, void );
     static ErrCode GetLastErr( DdeConnection* );
     size_t GetFreeChannel();
-    std::vector<DdeConnection*> aConvList;
+    std::vector<std::unique_ptr<DdeConnection>> aConvList;
     OUString aData;
 
 public:
