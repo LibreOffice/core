@@ -22,6 +22,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 
 #include <map>
+#include <memory>
 #include <limits>
 
 using namespace ::com::sun::star::uno;
@@ -180,7 +181,7 @@ void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
 void AccessibleEventNotifier::revokeClientNotifyDisposing(
     const TClientId _nClient, const Reference< XInterface >& _rxEventSource )
 {
-    ::comphelper::OInterfaceContainerHelper2* pListeners(nullptr);
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> pListeners;
 
     {
         // rhbz#1001768 drop the mutex before calling disposeAndClear
@@ -192,7 +193,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
             return;
 
         // notify the listeners
-        pListeners = aClientPos->second;
+        pListeners.reset(aClientPos->second);
 
         // we do not need the entry in the clients map anymore
         // (do this before actually notifying, because some client
@@ -208,7 +209,6 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
 
     // now really do the notification
     pListeners->disposeAndClear( aDisposalEvent );
-    delete pListeners;
 }
 
 sal_Int32 AccessibleEventNotifier::addEventListener(
