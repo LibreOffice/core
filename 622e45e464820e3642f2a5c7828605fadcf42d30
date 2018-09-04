@@ -68,6 +68,24 @@
       "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_dfc09253",
+        "filename": "test/source/table/xcell.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-04T16:25:19Z",
+      "side": 1,
+      "message": "The Java syntax similar to the one in C++. You use the enum value by writing your code like this table::CellContentType_\u003cVALUE\u003e (e.g. table::CellContentType_TEXT).\n\nIf I\u0027m unsure how to write something I normally search opengrok.libreoffice.org for that code snippet and use as an example.\nhttps://opengrok.libreoffice.org/xref/core/test/source/sheet/sheetcell.cxx#89",
+      "parentUuid": "dfeb2761_9c04587d",
+      "revId": "622e45e464820e3642f2a5c7828605fadcf42d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
