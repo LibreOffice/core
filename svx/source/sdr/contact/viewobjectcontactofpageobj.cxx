@@ -313,13 +313,11 @@ ViewObjectContactOfPageObj::~ViewObjectContactOfPageObj()
     {
         // remember candidate and reset own pointer to avoid action when createPrimitive2DSequence()
         // would be called for any reason
-        PagePrimitiveExtractor* pCandidate = mpExtractor;
-        mpExtractor = nullptr;
+        std::unique_ptr<PagePrimitiveExtractor> pCandidate = std::move(mpExtractor);
 
         // also reset the StartPage to avoid ActionChanged() forwardings in the
         // PagePrimitiveExtractor::InvalidatePartOfView() implementation
         pCandidate->SetStartPage(nullptr);
-        delete pCandidate;
     }
 }
 

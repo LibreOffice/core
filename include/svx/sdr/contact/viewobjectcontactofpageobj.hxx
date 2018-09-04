@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFPAGEOBJ_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
+#include <memory>
 
 class SdrPage;
 
@@ -32,7 +33,7 @@ class SVX_DLLPUBLIC ViewObjectContactOfPageObj : public ViewObjectContactOfSdrOb
 {
 private:
     // the page painter helper
-    PagePrimitiveExtractor* mpExtractor;
+    std::unique_ptr<PagePrimitiveExtractor> mpExtractor;
 
 protected:
     // This method is responsible for creating the graphical visualisation data which is
