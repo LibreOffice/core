@@ -41,6 +41,9 @@
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
     QPainter p(this);
+    if (!m_pFrame->m_bNullRegion)
+        p.setClipRegion(m_pFrame->m_aRegion);
+
     if (m_pFrame->m_bUseCairo)
     {
         cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
