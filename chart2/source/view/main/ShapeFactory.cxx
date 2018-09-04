@@ -2400,6 +2400,7 @@ uno::Reference< drawing::XShape >
             aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
             aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } ); // sal_Bool
             aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } ); // sal_Bool
+            aValueMap.insert( { "TextMaximumFrameWidth", uno::Any(rSize.Width) } ); // sal_Int32
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
