@@ -1451,6 +1451,7 @@ ColorWindow::ColorWindow(const OUString&            rCommand,
     mxColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
     mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
     mxTopLevel->set_help_id(HID_POPUP_COLOR);
+    mxTopLevel->connect_focus_in(LINK(this, ColorWindow, FocusHdl));
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
     mxPaletteManager->ReloadColorSet(*mxColorSet);
@@ -1469,6 +1470,11 @@ ColorWindow::ColorWindow(const OUString&            rCommand,
         AddStatusListener( ".uno:BorderTLBR" );
         AddStatusListener( ".uno:BorderBLTR" );
     }
+}
+
+IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
+{
+    mxColorSet->GrabFocus();
 }
 
 void SvxColorWindow::ShowNoneButton()
