@@ -82,6 +82,8 @@ using namespace com::sun::star;
             for(SwRangeRedline* j : rTable)
             {
                 // check for empty redlines
+                // note: these can destroy sorting in SwTextNode::Update()
+                // if there's another one wihout mark on the same pos.
                 OSL_ENSURE( ( *(j->GetPoint()) != *(j->GetMark()) ) ||
                             ( j->GetContentIdx() != nullptr ),
                             ERROR_PREFIX "empty redline" );
