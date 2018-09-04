@@ -615,7 +615,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
          ioResources.empty() )
     {
         m_aEnv = DAVRequestEnvironment();
-        throw DAVException( DAVException::DAV_HTTP_ERROR, inPath, (sal_uInt16)APR_EGENERAL );
+        throw DAVException( DAVException::DAV_HTTP_ERROR, inPath, APR_EGENERAL );
     }
     HandleError( aReqProc );
 }
@@ -643,7 +643,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
          ioResInfo.empty() )
     {
         m_aEnv = DAVRequestEnvironment();
-        throw DAVException( DAVException::DAV_HTTP_ERROR, inPath, (sal_uInt16)APR_EGENERAL );
+        throw DAVException( DAVException::DAV_HTTP_ERROR, inPath, APR_EGENERAL );
     }
     HandleError( aReqProc );
 }
