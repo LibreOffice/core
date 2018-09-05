@@ -19,6 +19,10 @@
 
 #include <sal/config.h>
 
+#include <scitems.hxx>
+#include <editeng/eeitem.hxx>
+#include <formdata.hxx>
+
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
@@ -1750,6 +1754,7 @@ ScTabViewShell::~ScTabViewShell()
     pPivotShell.reset();
     pAuditingShell.reset();
     pCurFrameLine.reset();
+    mpFormEditData.reset();
     mpInputHandler.reset();
     pDialogDPObject.reset();
     pNavSettings.reset();
