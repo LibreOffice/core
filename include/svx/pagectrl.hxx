@@ -28,7 +28,7 @@ class SvxBoxItem;
 enum class SvxPageUsage;
 enum class SvxFrameDirection;
 
-class SVX_DLLPUBLIC PageWindow : public weld::CustomWidgetController
+class SVX_DLLPUBLIC SvxPageWindow : public weld::CustomWidgetController
 {
 private:
     Size aWinSize;
@@ -76,9 +76,9 @@ protected:
                             const tools::Rectangle& rPaintRange, const tools::Rectangle& rDefineRange);
 
 public:
-    PageWindow();
+    SvxPageWindow();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~PageWindow() override;
+    virtual ~SvxPageWindow() override;
 
     void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
     {
