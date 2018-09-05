@@ -596,7 +596,7 @@ void Qt5Frame::CaptureMouse(bool bMouse)
 void Qt5Frame::SetPointerPos(long nX, long nY)
 {
     QCursor aCursor = m_pQWidget->cursor();
-    aCursor.setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY)));
+    QCursor::setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY)));
     m_pQWidget->setCursor(aCursor);
 }
 
