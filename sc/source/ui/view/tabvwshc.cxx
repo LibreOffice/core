@@ -59,6 +59,7 @@
 #include <condformatdlg.hxx>
 #include <xmlsourcedlg.hxx>
 #include <condformatdlgitem.hxx>
+#include <formdata.hxx>
 
 #include <RandomNumberGeneratorDialog.hxx>
 #include <SamplingDialog.hxx>
@@ -738,6 +739,16 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
         aFormula = GetAutoSumFormula( aRangeList, rSubTotal, aAddr );
     }
     return aFormula;
+}
+
+void ScTabViewShell::InitFormEditData()
+{
+    mpFormEditData.reset(new ScFormEditData);
+}
+
+void ScTabViewShell::ClearFormEditData()
+{
+    mpFormEditData.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
