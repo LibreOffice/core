@@ -598,7 +598,6 @@ linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde4=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     if test "$enable_fuzzers" != yes; then
@@ -692,7 +691,6 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde4=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -722,7 +720,6 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde4=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -749,7 +746,6 @@ dragonfly*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde4=yes
     test_kde5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
@@ -774,7 +770,6 @@ linux-android*)
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
-    test_kde4=no
     test_kde5=no
     test_gtk3_kde5=no
     test_randr=no
@@ -1254,12 +1249,6 @@ libo_FUZZ_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
 ,test "${enable_gio+set}" = set || enable_gio=yes)
-
-AC_ARG_ENABLE(kde4,
-    AS_HELP_STRING([--enable-kde4],
-        [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
-         KDE4 are available.]),
-,)
 
 AC_ARG_ENABLE(qt5,
     AS_HELP_STRING([--enable-qt5],
@@ -4701,7 +4690,6 @@ if test "$USING_X11" != TRUE; then
     test_gtk=no
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
-    test_kde4=no
     test_kde5=no
     test_qt5=no
     test_gtk3_kde5=no
@@ -10123,14 +10111,6 @@ if test "x$enable_gtk" = "xyes"; then
 fi
 AC_SUBST(ENABLE_GTK)
 
-ENABLE_KDE4=""
-if test "x$enable_kde4" = "xyes"; then
-    ENABLE_KDE4="TRUE"
-    AC_DEFINE(ENABLE_KDE4)
-    R="$R kde4"
-fi
-AC_SUBST(ENABLE_KDE4)
-
 ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
     ENABLE_QT5="TRUE"
@@ -10897,307 +10877,6 @@ fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
-
-# This is only used in KDE3/KDE4 checks to determine if /usr/lib64
-# paths should be added to library search path. So lets put all 64-bit
-# platforms there.
-supports_multilib=
-case "$host_cpu" in
-x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el)
-    if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
-        supports_multilib="yes"
-    fi
-    ;;
-*)
-    ;;
-esac
-
-dnl ===================================================================
-dnl KDE4 Integration
-dnl ===================================================================
-
-KDE4_CFLAGS=""
-KDE4_LIBS=""
-QMAKE4="qmake"
-MOC4="moc"
-KDE4_GLIB_CFLAGS=""
-KDE4_GLIB_LIBS=""
-KDE4_HAVE_GLIB=""
-if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
-    qt4_incdirs="$QT4INC /usr/include/qt4 /usr/include $x_includes"
-    qt4_libdirs="$QT4LIB /usr/lib/qt4 /usr/lib $x_libraries"
-
-    kde4_incdirs="/usr/include /usr/include/kde4 $x_includes"
-    kde4_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
-
-    if test -n "$supports_multilib"; then
-        qt4_libdirs="$qt4_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
-        kde4_libdirs="$kde4_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
-    fi
-
-    if test -n "$QTDIR"; then
-        qt4_incdirs="$QTDIR/include $qt4_incdirs"
-        if test -z "$supports_multilib"; then
-            qt4_libdirs="$QTDIR/lib $qt4_libdirs"
-        else
-            qt4_libdirs="$QTDIR/lib64 $QTDIR/lib $qt4_libdirs"
-        fi
-    fi
-    if test -n "$QT4DIR"; then
-        qt4_incdirs="$QT4DIR/include $qt4_incdirs"
-        if test -z "$supports_multilib"; then
-            qt4_libdirs="$QT4DIR/lib $qt4_libdirs"
-        else
-            qt4_libdirs="$QT4DIR/lib64 $QT4DIR/lib $qt4_libdirs"
-        fi
-    fi
-
-    if test -n "$KDEDIR"; then
-        kde4_incdirs="$KDEDIR/include $kde4_incdirs"
-        if test -z "$supports_multilib"; then
-            kde4_libdirs="$KDEDIR/lib $kde4_libdirs"
-        else
-            kde4_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde4_libdirs"
-        fi
-    fi
-    if test -n "$KDE4DIR"; then
-        kde4_incdirs="$KDE4DIR/include $KDE4DIR/include/kde4 $kde4_incdirs"
-        if test -z "$supports_multilib"; then
-            kde4_libdirs="$KDE4DIR/lib $kde4_libdirs"
-        else
-            kde4_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde4_libdirs"
-        fi
-    fi
-
-    qt4_test_include="Qt/qobject.h"
-    qt4_test_library="libQtNetwork.so"
-    kde4_test_include="kwindowsystem.h"
-    kde4_test_library="libsolid.so"
-
-    AC_MSG_CHECKING([for Qt4 headers])
-    qt4_header_dir="no"
-    for inc_dir in $qt4_incdirs; do
-        if test -r "$inc_dir/$qt4_test_include"; then
-            qt4_header_dir="$inc_dir"
-            break
-        fi
-    done
-
-    AC_MSG_RESULT([$qt4_header_dir])
-    if test "x$qt4_header_dir" = "xno"; then
-        AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
-    fi
-
-    dnl Check for qmake
-    AC_PATH_PROGS( QMAKE4, [qmake-qt4 qmake], no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
-    if test "$QMAKE4" = "no"; then
-        AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
-    else
-        qmake4_test_ver="`$QMAKE4 -v 2>&1 | sed -n -e '/^Using Qt version 4\./p'`"
-        if test -z "$qmake4_test_ver"; then
-            AC_MSG_ERROR([Wrong qmake for Qt4 found. Please specify the root of your Qt installation by exporting QT4DIR before running "configure".])
-        fi
-    fi
-
-    qt4_libdirs="`$QMAKE4 -query QT_INSTALL_LIBS` $qt4_libdirs"
-    AC_MSG_CHECKING([for Qt4 libraries])
-    qt4_lib_dir="no"
-    for lib_dir in $qt4_libdirs; do
-        if test -r "$lib_dir/$qt4_test_library"; then
-            qt4_lib_dir="$lib_dir"
-            PKG_CONFIG_PATH="$qt4_lib_dir"/pkgconfig:$PKG_CONFIG_PATH
-            break
-        fi
-    done
-
-    AC_MSG_RESULT([$qt4_lib_dir])
-
-    if test "x$qt4_lib_dir" = "xno"; then
-        AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
-    fi
-
-    dnl Check for Meta Object Compiler
-
-    AC_PATH_PROG( MOCQT4, moc-qt4, no, [`dirname $qt4_lib_dir`/bin:$QT4DIR/bin:$PATH] )
-    MOC4="$MOCQT4"
-    if test "$MOC4" = "no"; then
-        AC_PATH_PROG( MOC4, moc, no, [`dirname $qt4_lib_dir`/bin:$QT4DIR/bin:$PATH] )
-        if test "$MOC4" = "no"; then
-            AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
-the root of your Qt installation by exporting QT4DIR before running "configure".])
-        fi
-    fi
-
-    dnl Check for KDE4 headers
-    AC_MSG_CHECKING([for KDE4 headers])
-    kde4_incdir="no"
-    for kde4_check in $kde4_incdirs; do
-        if test -r "$kde4_check/$kde4_test_include"; then
-            kde4_incdir="$kde4_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$kde4_incdir])
-    if test "x$kde4_incdir" = "xno"; then
-        AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
-    fi
-    if test "$kde4_incdir" = "/usr/include"; then kde4_incdir=; fi
-
-    dnl Check for KDE4 libraries
-    AC_MSG_CHECKING([for KDE4 libraries])
-    kde4_libdir="no"
-    for kde4_check in $kde4_libdirs; do
-        if test -r "$kde4_check/$kde4_test_library"; then
-            kde4_libdir="$kde4_check"
-            break
-        fi
-    done
-
-    AC_MSG_RESULT([$kde4_libdir])
-    if test "x$kde4_libdir" = "xno"; then
-        AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
-    fi
-
-    PKG_CHECK_MODULES([QT4],[QtNetwork QtGui])
-    if ! test -z "$kde4_incdir"; then
-    	KDE4_CFLAGS="-I$kde4_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    else
-    	KDE4_CFLAGS="$QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    fi
-
-    KDE4_LIBS="-L$kde4_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt4_lib_dir $QT4_LIBS"
-    KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "$KDE4_LIBS"
-    KDE4_LIBS="$filteredlibs"
-
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
-    AC_MSG_CHECKING([whether KDE is >= 4.2])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <kdeversion.h>
-
-int main(int argc, char **argv) {
-       if (KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2) return 0;
-       else return 1;
-}
-]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[AC_MSG_ERROR([KDE support not tested with cross-compilation])])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-
-    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
-    # Sets also KDE4_GLIB_CFLAGS/KDE4_GLIB_LIBS if successful.
-    PKG_CHECK_MODULES(KDE4_GLIB,[glib-2.0 >= 2.4],
-        [
-            KDE4_HAVE_GLIB=TRUE
-            AC_DEFINE(KDE4_HAVE_GLIB,1)
-            KDE4_GLIB_CFLAGS=$(printf '%s' "$KDE4_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-            FilterLibs "${KDE4_GLIB_LIBS}"
-            KDE4_GLIB_LIBS="${filteredlibs}"
-
-            qt4_fix_warning=
-
-            AC_LANG_PUSH([C++])
-            # tst_exclude_socket_notifiers.moc:70:28: runtime error: member access within address 0x60d00000bb20 which does not point to an object of type 'QObjectData'
-            # 0x60d00000bb20: note: object is of type 'QObjectPrivate'
-            #  02 00 80 3a  90 8a 4e d2 3a 00 00 00  f0 b4 b9 a7 ff 7f 00 00  00 00 00 00 00 00 00 00  20 d8 4e d2
-            #               ^~~~~~~~~~~~~~~~~~~~~~~
-            #               vptr for 'QObjectPrivate'
-            # so temporarily ignore here whichever way would be used to make such errors fatal
-            # (-fno-sanitize-recover=... or UBSAN_OPTIONS halt_on_error=1):
-            save_CXX=$CXX
-            CXX=$(printf %s "$CXX" \
-                | sed -e 's/-fno-sanitize-recover\(=[[0-9A-Za-z,_-]]*\)*//')
-            save_UBSAN_OPTIONS=$UBSAN_OPTIONS
-            UBSAN_OPTIONS=$UBSAN_OPTIONS:halt_on_error=0
-            save_CXXFLAGS=$CXXFLAGS
-            CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
-            save_LIBS=$LIBS
-            LIBS="$LIBS $KDE4_LIBS"
-            AC_MSG_CHECKING([whether Qt has fixed ExcludeSocketNotifiers])
-
-            # Prepare meta object data
-            TSTBASE="tst_exclude_socket_notifiers"
-            TSTMOC="${SRC_ROOT}/vcl/unx/kde4/${TSTBASE}"
-            ln -fs "${TSTMOC}.hxx"
-            $MOC4 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
-
-            AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <cstdlib>
-#include "tst_exclude_socket_notifiers.moc"
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-    exit(tst_processEventsExcludeSocket());
-    return 0;
-}
-            ]])],[
-                AC_MSG_RESULT([yes])
-            ],[
-                AC_MSG_RESULT([no])
-                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime])
-                if test -z "$qt4_fix_warning"; then
-                    add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
-                fi
-                qt4_fix_warning=1
-                add_warning "  https://bugreports.qt.io/browse/QTBUG-37380 (needed)"
-                ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
-
-            # Remove meta object data
-            rm -f "${TSTBASE}."*
-
-            AC_MSG_CHECKING([whether Qt avoids QClipboard recursion caused by posted events])
-
-            # Prepare meta object data
-            TSTBASE="tst_exclude_posted_events"
-            TSTMOC="${SRC_ROOT}/vcl/unx/kde4/${TSTBASE}"
-            ln -fs "${TSTMOC}.hxx"
-            $MOC4 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
-
-            AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <cstdlib>
-#include "tst_exclude_posted_events.moc"
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-    exit(tst_excludePostedEvents());
-    return 0;
-}
-            ]])],[
-                AC_MSG_RESULT([yes])
-            ],[
-                AC_MSG_RESULT([no])
-                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime])
-                if test -z "$qt4_fix_warning"; then
-                    add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
-                fi
-                qt4_fix_warning=1
-                add_warning "  https://bugreports.qt.io/browse/QTBUG-34614 (needed)"
-            ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
-
-            # Remove meta object data
-            rm -f "${TSTBASE}."*
-
-            if test -n "$qt4_fix_warning"; then
-                add_warning "  https://bugreports.qt.io/browse/QTBUG-38585 (recommended)"
-            fi
-
-            LIBS=$save_LIBS
-            CXXFLAGS=$save_CXXFLAGS
-            UBSAN_OPTIONS=$save_UBSAN_OPTIONS
-            CXX=$save_CXX
-            AC_LANG_POP([C++])
-        ],
-        AC_MSG_WARN([[No Glib found, KDE4 support will not use native file pickers!]]))
-fi
-AC_SUBST(KDE4_CFLAGS)
-AC_SUBST(KDE4_LIBS)
-AC_SUBST(MOC4)
-AC_SUBST(KDE4_GLIB_CFLAGS)
-AC_SUBST(KDE4_GLIB_LIBS)
-AC_SUBST(KDE4_HAVE_GLIB)
 
 dnl ===================================================================
 dnl QT5 Integration
@@ -12873,7 +12552,6 @@ AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_libnumbertext.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
-AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_qt5.h])
 AC_CONFIG_HEADERS([config_host/config_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_gtk3_kde5.h])
