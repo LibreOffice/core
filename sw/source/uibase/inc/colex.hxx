@@ -29,21 +29,6 @@
 class SwColMgr;
 class SfxItemSet;
 
-class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
-{
-protected:
-    bool            m_bVertical;
-public:
-    SwPageExample(vcl::Window* pPar)
-        : SvxPageWindow(pPar)
-        , m_bVertical(false)
-    {
-        SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
-    }
-
-    void UpdateExample( const SfxItemSet& rSet );
-};
-
 class SW_DLLPUBLIC PageExample : public PageWindow
 {
 protected:
@@ -73,11 +58,11 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwColExample : public SwPageExample
+class SW_DLLPUBLIC SwColExample : public PageExample
 {
     SwColMgr*   pColMgr;
 
-    using SwPageExample::UpdateExample;
+    using PageExample::UpdateExample;
 
 protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
@@ -86,20 +71,19 @@ protected:
                           const bool bEnabled) override;
 
 public:
-    SwColExample(vcl::Window* pPar)
-        : SwPageExample(pPar)
-        , pColMgr(nullptr)
+    SwColExample()
+        : pColMgr(nullptr)
     {
     }
 
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
     {
         pColMgr = pMgr;
-        SwPageExample::UpdateExample(rSet);
+        PageExample::UpdateExample(rSet);
     }
 };
 
-class SW_DLLPUBLIC SwColumnOnlyExample : public vcl::Window
+class SW_DLLPUBLIC SwColumnOnlyExample : public weld::CustomWidgetController
 {
 private:
     Size        m_aWinSize;
@@ -108,14 +92,15 @@ private:
     SwFormatCol    m_aCols;
 
 protected:
+    virtual void Resize() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
-    SwColumnOnlyExample(vcl::Window*);
+    SwColumnOnlyExample();
 
     void        SetColumns(const SwFormatCol& rCol);
 
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_COLEX_HXX

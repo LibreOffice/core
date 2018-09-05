@@ -119,6 +119,10 @@ short AbstractGenericDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
+bool AbstractGenericDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -820,10 +824,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAutoMarkDialog(v
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwColumnDlg>::Create( pParent, rSh );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(o3tl::make_unique<SwColumnDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
