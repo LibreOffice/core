@@ -5252,17 +5252,13 @@ find_winsdk_version()
             reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
             if test -n "$regvalue"; then
                 winsdkbinsubdir="$regvalue".0
+                winsdklibsubdir=$winsdkbinsubdir
+                WINDOWS_SDK_PATH="$winsdktest\\Include\\"
+                WINDOWS_SDK_PATH+="$winsdklibsubdir"
+                # when path is convertable to a short path then path is okay
+                WINDOWS_SDK_PATH=`cygpath -d "$WINDOWS_SDK_PATH"`
             fi
-            winsdklibsubdir=$regvalue
-            if test "$regvalue" = "10.0.14393"; then
-                winsdklibsubdir="10.0.14393.0"
-            elif test "$regvalue" = "10.0.16299"; then
-                winsdklibsubdir="10.0.16299.0"
-            elif test "$regvalue" = "10.0.15063"; then
-                winsdklibsubdir="10.0.15063.0"
-            elif test "$regvalue" = "10.0.17134"; then
-                winsdklibsubdir="$regvalue.0"
-            fi
+
             return
         fi
         ;;
