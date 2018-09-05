@@ -185,7 +185,7 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
             VclPtr<vcl::Window> aOwnedToplevel;
 
             bool bLegacy;
-            if (rUIXMLDescription == "cui/ui/textanimtabpage.ui")
+            if (rUIXMLDescription == "cui/ui/textanimtabpage.ui" || rUIXMLDescription == "cui/ui/areatabpage.ui")
                 bLegacy = false;
             else
                 bLegacy = true;
