@@ -25,11 +25,14 @@
 
 static void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
 {
-    pBuf->mnWidth = pImg->width();
-    pBuf->mnHeight = pImg->height();
-    pBuf->mnBitCount = getFormatBits(pImg->format());
-    pBuf->mpBits = pImg->bits();
-    pBuf->mnScanlineSize = pImg->bytesPerLine();
+    if (pImg->width() != 0 && pImg->height() != 0)
+    {
+        pBuf->mnWidth = pImg->width();
+        pBuf->mnHeight = pImg->height();
+        pBuf->mnBitCount = getFormatBits(pImg->format());
+        pBuf->mpBits = pImg->bits();
+        pBuf->mnScanlineSize = pImg->bytesPerLine();
+    }
 }
 
 KDE5SalGraphics::KDE5SalGraphics()
