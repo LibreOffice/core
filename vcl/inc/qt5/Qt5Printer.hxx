@@ -22,13 +22,6 @@
 #include <unx/genprn.h>
 
 class SalFrame;
-class ImplJobSetup;
-
-class Qt5InfoPrinter : public PspSalInfoPrinter
-{
-public:
-    virtual bool Setup(weld::Window* pFrame, ImplJobSetup* pSetupData) override;
-};
 
 class Qt5Printer : public PspSalPrinter
 {
