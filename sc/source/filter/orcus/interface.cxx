@@ -55,6 +55,7 @@
 #include <sal/log.hxx>
 
 #include <stylesbuffer.hxx>
+#include <iostream>
 
 using namespace com::sun::star;
 
@@ -93,6 +94,7 @@ ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc)
     : mrDoc(rDoc)
     , meCalcGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
     , meOrcusGrammar(os::formula_grammar_t::unknown)
+    , mnTextEncoding(RTL_TEXTENCODING_UTF8)
 {
 }
 
@@ -101,9 +103,56 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
     mrDoc.setOriginDate(year, month, day);
 }
 
-void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t /*cs*/)
+void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
 {
-    // TODO
+    switch (cs)
+    {
+        case orcus::character_set_t::iso_2022_jp:
+        case orcus::character_set_t::iso_2022_jp_2:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_2022_JP;
+            break;
+        case orcus::character_set_t::jis_x0201:
+            mnTextEncoding = RTL_TEXTENCODING_JIS_X_0201;
+            break;
+        case orcus::character_set_t::shift_jis:
+            mnTextEncoding = RTL_TEXTENCODING_SHIFT_JIS;
+            break;
+        case orcus::character_set_t::us_ascii:
+            mnTextEncoding = RTL_TEXTENCODING_ASCII_US;
+            break;
+        case orcus::character_set_t::utf_7:
+            mnTextEncoding = RTL_TEXTENCODING_UTF7;
+            break;
+        case orcus::character_set_t::windows_1250:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1250;
+            break;
+        case orcus::character_set_t::windows_1251:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1251;
+            break;
+        case orcus::character_set_t::windows_1252:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1252;
+            break;
+        case orcus::character_set_t::windows_1253:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1253;
+            break;
+        case orcus::character_set_t::windows_1254:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1254;
+            break;
+        case orcus::character_set_t::windows_1255:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1255;
+            break;
+        case orcus::character_set_t::windows_1256:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1256;
+            break;
+        case orcus::character_set_t::windows_1257:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1257;
+            break;
+        case orcus::character_set_t::windows_1258:
+            mnTextEncoding = RTL_TEXTENCODING_MS_1258;
+            break;
+        default:
+            ; // Add more as needed.
+    }
 }
 
 void ScOrcusGlobalSettings::set_default_formula_grammar(os::formula_grammar_t grammar)
@@ -122,7 +171,7 @@ ScOrcusRefResolver::ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS ) :
 
 os::address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
 {
-    OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
+    OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
     ScAddress aAddr;
     aAddr.Parse(aStr, nullptr,
@@ -144,7 +193,7 @@ os::address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
 
 os::range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
 {
-    OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
+    OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
     ScRange aRange;
     aRange.Parse(aStr, nullptr,
@@ -174,8 +223,8 @@ ScOrcusNamedExpression::ScOrcusNamedExpression(
 
 void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp)
 {
-    OUString aName(p_name, n_name, RTL_TEXTENCODING_UTF8);
-    OUString aExpr(p_exp, n_exp, RTL_TEXTENCODING_UTF8);
+    OUString aName(p_name, n_name, mrGlobalSettings.getTextEncoding());
+    OUString aExpr(p_exp, n_exp, mrGlobalSettings.getTextEncoding());
 
     ScRangeName* pNames = mnTab >= 0 ? mrDoc.getDoc().GetRangeName(mnTab) : mrDoc.getDoc().GetRangeName();
     if (!pNames)
@@ -235,13 +284,13 @@ ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles) :
     maGlobalSettings(maDoc),
     maSharedStrings(*this),
     maNamedExpressions(maDoc, maGlobalSettings),
-    maStyles(rDoc, bSkipDefaultStyles),
+    maStyles(*this, rDoc, bSkipDefaultStyles),
     mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
     orcus::spreadsheet::sheet_t sheet_index, const char* sheet_name, size_t sheet_name_length)
 {
-    OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
+    OUString aTabName(sheet_name, sheet_name_length, maGlobalSettings.getTextEncoding());
 
     if (sheet_index == 0)
     {
@@ -273,7 +322,7 @@ public:
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* sheet_name, size_t sheet_name_length)
 {
-    OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
+    OUString aTabName(sheet_name, sheet_name_length, maGlobalSettings.getTextEncoding());
     SCTAB nTab = maDoc.getSheetIndex(aTabName);
     if (nTab < 0)
         // Sheet by that name not found.
@@ -822,7 +871,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     mnTab(nTab),
     mrFactory(rFactory),
     mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles())),
-    maAutoFilter(),
+    maAutoFilter(rFactory.getGlobalSettings()),
     maProperties(mnTab, mrDoc),
     maConditionalFormat(mnTab, rDoc.getDoc()),
     maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab),
@@ -866,7 +915,7 @@ void ScOrcusFormula::set_position(os::row_t row, os::col_t col)
 
 void ScOrcusFormula::set_formula(os::formula_grammar_t grammar, const char* p, size_t n)
 {
-    maFormula = OUString(p, n, RTL_TEXTENCODING_UTF8);
+    maFormula = OUString(p, n, mrSheet.getFactory().getGlobalSettings().getTextEncoding());
     meGrammar = getCalcGrammarFromOrcus(grammar);
 }
 
@@ -987,7 +1036,7 @@ void ScOrcusArrayFormula::set_range(const os::range_t& range)
 void ScOrcusArrayFormula::set_formula(os::formula_grammar_t grammar, const char* p, size_t n)
 {
     meGrammar = getCalcGrammarFromOrcus(grammar);
-    maFormula = OUString(p, n, RTL_TEXTENCODING_UTF8);
+    maFormula = OUString(p, n, mrSheet.getFactory().getGlobalSettings().getTextEncoding());
 }
 
 void ScOrcusArrayFormula::set_result_value(os::row_t /*row*/, os::col_t /*col*/, double /*value*/)
@@ -1071,7 +1120,7 @@ os::iface::import_array_formula* ScOrcusSheet::get_array_formula()
 
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
 {
-    OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
+    OUString aVal(p, n, mrFactory.getGlobalSettings().getTextEncoding());
     mrFactory.pushCellStoreAutoToken(ScAddress(col, row, mnTab), aVal);
     cellInserted();
 }
@@ -1164,13 +1213,13 @@ ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
 
 size_t ScOrcusSharedStrings::append(const char* s, size_t n)
 {
-    OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aNewString(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     return mrFactory.appendString(aNewString);
 }
 
 size_t ScOrcusSharedStrings::add(const char* s, size_t n)
 {
-    OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aNewString(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     return mrFactory.addString(aNewString);
 }
 
@@ -1209,10 +1258,12 @@ void ScOrcusSharedStrings::append_segment(const char* s, size_t n)
 size_t ScOrcusSharedStrings::commit_segments()
 {
     OString aStr = maCurSegment.makeStringAndClear();
-    return mrFactory.addString(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
+    return mrFactory.addString(
+        OStringToOUString(aStr, mrFactory.getGlobalSettings().getTextEncoding()));
 }
 
-ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc, bool bSkipDefaultStyles):
+ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, ScDocument& rDoc, bool bSkipDefaultStyles ) :
+    mrFactory(rFactory),
     mrDoc(rDoc)
 {
     if (!bSkipDefaultStyles && !mrDoc.GetStyleSheetPool()->HasStandardStyles())
@@ -1519,7 +1570,7 @@ void ScOrcusStyles::set_font_italic(bool b)
 
 void ScOrcusStyles::set_font_name(const char* s, size_t n)
 {
-    OUString aName(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentFont.maName = aName;
     maCurrentFont.mbHasFontAttr = true;
 }
@@ -1894,7 +1945,7 @@ void ScOrcusStyles::set_number_format_identifier(size_t)
 
 void ScOrcusStyles::set_number_format_code(const char* s, size_t n)
 {
-    OUString aCode(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aCode(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentNumberFormat.maCode = aCode;
     maCurrentNumberFormat.mbHasNumberFormatAttr = true;
 }
@@ -2050,7 +2101,7 @@ void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
 
 void ScOrcusStyles::set_cell_style_name(const char* s, size_t n)
 {
-    OUString aName(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentCellStyle.maName = aName;
 }
 
@@ -2067,7 +2118,7 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
 
 void ScOrcusStyles::set_cell_style_parent_name(const char* s, size_t n)
 {
-    OUString aParentName(s, n, RTL_TEXTENCODING_UTF8);
+    OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentCellStyle.maParentName = aParentName;
 }
 
@@ -2100,7 +2151,8 @@ size_t ScOrcusStyles::commit_cell_style()
 
 // auto filter import
 
-ScOrcusAutoFilter::ScOrcusAutoFilter()
+ScOrcusAutoFilter::ScOrcusAutoFilter( const ScOrcusGlobalSettings& rGS ) :
+    mrGlobalSettings(rGS)
 {
 }
 
@@ -2123,7 +2175,7 @@ void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t col)
 
 void ScOrcusAutoFilter::append_column_match_value(const char* p, size_t n)
 {
-    OUString aString(p, n, RTL_TEXTENCODING_UTF8);
+    OUString aString(p, n, mrGlobalSettings.getTextEncoding());
     SAL_INFO("sc.orcus.autofilter", "append_column_match_value: " << aString);
 }
 

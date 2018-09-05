@@ -144,8 +144,9 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
     try
     {
         std::string content = orcus::load_file_content(path);
-        ScOrcusStyles styles(rDoc);
-        orcus::import_ods::read_styles(content.c_str(), content.size(), &styles);
+        ScOrcusFactory aFactory(rDoc);
+        ScOrcusStyles aStyles(aFactory, rDoc);
+        orcus::import_ods::read_styles(content.c_str(), content.size(), &aStyles);
     }
     catch (const std::exception& e)
     {
