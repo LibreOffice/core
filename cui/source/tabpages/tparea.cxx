@@ -82,7 +82,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxAreaTabPage::SvxAreaTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", rInAttrs)
     , m_pFillTabPage(nullptr)
     , m_pColorList(nullptr)
@@ -124,7 +124,7 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
 
     SetExchangeSupport();
 
-    TabPageParent aFillTab(m_xFillTab.get());
+    const TabPageParent& aFillTab(m_xFillTab.get());
 
     // Calculate optimal size of all pages..
     m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
@@ -320,14 +320,14 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-VclPtr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxAreaTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxAreaTabPage>::Create(pParent, *rAttrs);
 }
 
 namespace {
 
-VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, const TabPageParent& pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)

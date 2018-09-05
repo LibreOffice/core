@@ -456,7 +456,7 @@ SwDropCapsDlg::SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet )
     SetTabPage(pNewPage);
 }
 
-SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
+SwDropCapsPage::SwDropCapsPage(const TabPageParent& pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/dropcapspage.ui", "DropCapPage", &rSet)
     , bModified(false)
     , bFormat(true)
@@ -513,7 +513,7 @@ DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent,
+VclPtr<SfxTabPage> SwDropCapsPage::Create(const TabPageParent& pParent,
                                           const SfxItemSet *rSet)
 {
     return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);

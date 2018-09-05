@@ -33,7 +33,7 @@ DataLabelsTabPage::DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rIn
 {
 }
 
-VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pWindow, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> DataLabelsTabPage::Create(const TabPageParent& pWindow, const SfxItemSet* rOutAttrs)
 {
     return VclPtr<DataLabelsTabPage>::Create(pWindow.pParent, *rOutAttrs);
 }

@@ -629,7 +629,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-VclPtr<SfxTabPage> SwColumnPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwColumnPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwColumnPage>::Create(pParent.pParent, *rSet);
 }

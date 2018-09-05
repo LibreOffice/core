@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, weld::MetricSpinButton&
     ELRLoseFocus();
 }
 
-VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxStdParagraphTabPage>::Create(pParent, *rSet);
 }
@@ -668,7 +668,7 @@ DeactivateRC SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const SfxItemSet& rAttr)
+SvxStdParagraphTabPage::SvxStdParagraphTabPage(const TabPageParent& pParent,  const SfxItemSet& rAttr)
     : SfxTabPage(pParent, "cui/ui/paraindentspacing.ui", "ParaIndentSpacing", &rAttr)
     , nAbst(MAX_DURCH)
     , nWidth(11905 /*567 * 50*/)
@@ -990,7 +990,7 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 #define LASTLINECOUNT_OLD       3
 #define LASTLINECOUNT_NEW       4
 
-SvxParaAlignTabPage::SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+SvxParaAlignTabPage::SvxParaAlignTabPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/paragalignpage.ui", "ParaAlignPage", &rSet)
     , m_xLeft(m_xBuilder->weld_radio_button("radioBTN_LEFTALIGN"))
     , m_xRight(m_xBuilder->weld_radio_button("radioBTN_RIGHTALIGN"))
@@ -1058,7 +1058,7 @@ DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxParaAlignTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxParaAlignTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxParaAlignTabPage>::Create(pParent, *rSet);
 }
@@ -1338,7 +1338,7 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
             EnableJustifyExt();
 }
 
-VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxExtParagraphTabPage>::Create(pParent, *rSet);
 }
@@ -1867,7 +1867,7 @@ void SvxExtParagraphTabPage::DisablePageBreak()
     m_xPagenumEdit->set_sensitive(false);
 }
 
-SvxExtParagraphTabPage::SvxExtParagraphTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
+SvxExtParagraphTabPage::SvxExtParagraphTabPage(const TabPageParent& pParent, const SfxItemSet& rAttr)
     : SfxTabPage(pParent, "cui/ui/textflowpage.ui", "TextFlowPage", &rAttr)
     , bPageBreak(true)
     , bHtmlMode(false)
@@ -2129,7 +2129,7 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                     DisablePageBreak();
 }
 
-SvxAsianTabPage::SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+SvxAsianTabPage::SvxAsianTabPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/asiantypography.ui", "AsianTypography", &rSet)
     , m_xForbiddenRulesCB(m_xBuilder->weld_check_button("checkForbidList"))
     , m_xHangingPunctCB(m_xBuilder->weld_check_button("checkHangPunct"))
@@ -2141,7 +2141,7 @@ SvxAsianTabPage::~SvxAsianTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxAsianTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxAsianTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxAsianTabPage>::Create(pParent, *rSet);
 }

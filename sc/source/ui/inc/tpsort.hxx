@@ -46,10 +46,10 @@ struct ScSortParam;
 class ScTabPageSortFields : public SfxTabPage
 {
 public:
-    ScTabPageSortFields(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTabPageSortFields(const TabPageParent& pParent, const SfxItemSet& rArgSet);
     virtual void dispose() override;
     virtual ~ScTabPageSortFields() override;
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent               pParent,
+    static  VclPtr<SfxTabPage> Create      ( const TabPageParent&               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -103,9 +103,9 @@ class CollatorWrapper;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-    ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTabPageSortOptions(const TabPageParent& pParent, const SfxItemSet& rArgSet);
 
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* pArgSet);
+    static  VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* pArgSet);
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 

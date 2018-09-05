@@ -69,7 +69,7 @@ public:
     virtual ~SvxNumberFormatTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>      Create( const TabPageParent& pParent,
                                     const SfxItemSet* rAttrSet );
     // Returns area information.
     static const sal_uInt16* GetRanges() { return pRanges; }

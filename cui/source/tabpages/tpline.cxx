@@ -1480,7 +1480,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 }
 
 
-VclPtr<SfxTabPage> SvxLineTabPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxLineTabPage::Create( const TabPageParent& pWindow,
                                            const SfxItemSet* rAttrs )
 {
     return VclPtr<SvxLineTabPage>::Create( pWindow.pParent, *rAttrs );

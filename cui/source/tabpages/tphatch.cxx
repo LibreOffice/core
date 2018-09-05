@@ -49,7 +49,7 @@
 
 using namespace com::sun::star;
 
-SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxHatchTabPage::SvxHatchTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/hatchpage.ui", "HatchPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnHatchingListState(nullptr)
@@ -277,7 +277,7 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
     m_aCtlPreview.Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxHatchTabPage::Create( const TabPageParent& pWindow,
                                             const SfxItemSet* rSet )
 {
     return VclPtr<SvxHatchTabPage>::Create(pWindow, *rSet);

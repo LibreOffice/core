@@ -29,7 +29,7 @@
 
 #include <bitmaps.hlst>
 
-SwEnvPrtPage::SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
+SwEnvPrtPage::SwEnvPrtPage(const TabPageParent& pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)
     , m_xUpper(m_xBuilder->weld_widget("upper"))
     , m_xLower(m_xBuilder->weld_widget("lower"))
@@ -127,7 +127,7 @@ IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
     }
 }
 
-VclPtr<SfxTabPage> SwEnvPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvPrtPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwEnvPrtPage>::Create(pParent, *rSet);
 }

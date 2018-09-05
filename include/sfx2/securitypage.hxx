@@ -33,8 +33,8 @@ protected:
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
-    SfxSecurityPage(TabPageParent pParent, const SfxItemSet&);
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
+    SfxSecurityPage(const TabPageParent& pParent, const SfxItemSet&);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet*);
     weld::Builder& GetBuilder() const { return *m_xBuilder; }
 };
 
