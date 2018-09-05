@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>

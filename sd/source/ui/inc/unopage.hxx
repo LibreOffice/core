@@ -20,7 +20,6 @@
 #define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPAGE_HXX
 
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -28,11 +27,8 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 
-#include <svl/itemprop.hxx>
-
 #include <svx/unopage.hxx>
 #include <svx/fmdpage.hxx>
-#include <svx/svdpool.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -40,14 +36,9 @@
 #include "unosrch.hxx"
 #include <sdpage.hxx>
 
-class SdPage;
 class SdrObject;
 class SdXImpressDocument;
-struct SfxItemPropertySimpleEntry;
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 class SdGenericDrawPage : public SvxFmDrawPage,
                           public SdUnoSearchReplaceShape,
                           public css::drawing::XShapeCombiner,

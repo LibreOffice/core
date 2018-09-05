@@ -9,16 +9,7 @@
 
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
-
-namespace sd {
-
-class Window;
-class DrawViewShell;
-
-}
-
-class SdrObject;
-class SdrPageView;
+#include "Window.hxx"
 
 class ImpressWindowUIObject : public WindowUIObject
 {

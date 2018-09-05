@@ -20,20 +20,22 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEWTABBAR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEWTABBAR_HXX
 
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vcl/tabctrl.hxx>
 #include <cppuhelper/compbase.hxx>
 #include "MutexOwner.hxx"
 
-#include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace vcl { class Window; }
 
 namespace sd {
     class ViewShellBase;

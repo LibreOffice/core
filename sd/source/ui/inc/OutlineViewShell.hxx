@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEWSHELL_HXX
 
 #include "ViewShell.hxx"
+#include <glob.hxx>
 
 class SdPage;
 class TransferableDataHelper;

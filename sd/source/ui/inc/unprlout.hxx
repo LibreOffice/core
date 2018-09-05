@@ -23,7 +23,6 @@
 #include <xmloff/autolayout.hxx>
 
 #include <sdundo.hxx>
-#include <pres.hxx>
 
 class SdDrawDocument;
 class SdPage;

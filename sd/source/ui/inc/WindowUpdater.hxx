@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_WINDOWUPDATER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_WINDOWUPDATER_HXX
 
-#include <svl/lstner.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/vclptr.hxx>
 #include <sddllapi.h>
@@ -32,8 +31,6 @@ class OutputDevice;
 class SdDrawDocument;
 
 namespace sd {
-
-class ViewShell;
 
 /** The purpose of the <type>WindowUpdater</type> is to update output
     devices to take care of modified global values.  These values are

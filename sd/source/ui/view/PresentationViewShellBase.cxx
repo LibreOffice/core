@@ -22,6 +22,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <framework/PresentationModule.hxx>
 
+#include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
