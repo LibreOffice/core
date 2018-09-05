@@ -21,7 +21,6 @@ $(eval $(call gb_Library_set_precompiled_header,cui,$(SRCDIR)/cui/inc/pch/precom
 
 $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_GTK)),-DENABLE_GTK) \
-    $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,cui,\

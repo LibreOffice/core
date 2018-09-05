@@ -30,12 +30,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 endif
 endif
 
-ifeq ($(ENABLE_KDE4),TRUE)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_kde4be \
-))
-endif
-
 ifeq ($(ENABLE_KDE5),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_kde5be \
