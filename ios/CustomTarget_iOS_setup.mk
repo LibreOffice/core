@@ -9,7 +9,7 @@
 
 
 #- Env ------------------------------------------------------------------------
-IOSGEN  = $(SRCDIR)/ios/generated
+IOSGEN  = $(BUILDDIR)/workdir/CustomTarget/ios
 IOSRES  = $(IOSGEN)/resources
 IOSDIRS = $(IOSGEN) \
 	       $(IOSGEN)/Debug_x86_64 \
@@ -105,7 +105,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	    ) > $(IOSRES)/program/versionrc
 
 	$(SRCDIR)/bin/lo-all-static-libs | sed -e 's/ /\
-/g' >$(WORKDIR)/ios-all-static-libs.list
+/g' >$(IOSGEN)/ios-all-static-libs.list
 
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
