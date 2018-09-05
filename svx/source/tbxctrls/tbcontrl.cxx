@@ -2505,12 +2505,12 @@ struct SvxStyleToolBoxControl::Impl
                 static const std::vector<OUString> aWriterStyles =
                 {
                     "Text body",
-                    "Quotations",
                     "Title",
                     "Subtitle",
                     "Heading 1",
                     "Heading 2",
-                    "Heading 3"
+                    "Heading 3",
+                    "Quotations"
                 };
                 for( const OUString& aStyle: aWriterStyles )
                 {
