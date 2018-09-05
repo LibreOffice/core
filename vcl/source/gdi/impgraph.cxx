@@ -212,8 +212,8 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
 }
 
 ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
-    : maMetaFile(std::move(rImpGraphic.maMetaFile))
-    , maEx(std::move(rImpGraphic.maEx))
+    : maMetaFile(rImpGraphic.maMetaFile)
+    , maEx(rImpGraphic.maEx)
     , maSwapInfo(std::move(rImpGraphic.maSwapInfo))
     , mpAnimation(std::move(rImpGraphic.mpAnimation))
     , mpContext(std::move(rImpGraphic.mpContext))
@@ -226,8 +226,8 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
-    , maLastUsed (std::chrono::high_resolution_clock::now())
-    , mbPrepared (rImpGraphic.mbPrepared)
+    , maLastUsed(std::chrono::high_resolution_clock::now())
+    , mbPrepared(rImpGraphic.mbPrepared)
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     rImpGraphic.ImplClear();
@@ -360,7 +360,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 {
     sal_Int64 aOldSizeBytes = mnSizeBytes;
 
-    maMetaFile = std::move(rImpGraphic.maMetaFile);
+    maMetaFile = rImpGraphic.maMetaFile;
     meType = rImpGraphic.meType;
     mnSizeBytes = rImpGraphic.mnSizeBytes;
     maSwapInfo = std::move(rImpGraphic.maSwapInfo);
@@ -368,7 +368,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     mbDummyContext = rImpGraphic.mbDummyContext;
     mnPageNumber = rImpGraphic.mnPageNumber;
     mpAnimation = std::move(rImpGraphic.mpAnimation);
-    maEx = std::move(rImpGraphic.maEx);
+    maEx = rImpGraphic.maEx;
     mbSwapOut = rImpGraphic.mbSwapOut;
     mpSwapFile = std::move(rImpGraphic.mpSwapFile);
     mpGfxLink = std::move(rImpGraphic.mpGfxLink);

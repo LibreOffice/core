@@ -287,7 +287,7 @@ void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) thr
     if( pForwarder )
     {
         SvxFieldItem aField( std::move(pData), EE_FEATURE_FIELD );
-        pForwarder->QuickInsertField( std::move(aField), maSelection );
+        pForwarder->QuickInsertField(aField, maSelection);
     }
 }
 
