@@ -2881,7 +2881,7 @@ void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
 
-    SfxPoolItem* pCpy = rItem.Clone();
+    std::unique_ptr<SfxPoolItem> pCpy(rItem.Clone());
     if( SvtScriptType::LATIN & nScriptType )
     {
         pCpy->SetWhich( nLatin );
@@ -2897,7 +2897,6 @@ void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
         pCpy->SetWhich( nComplex );
         GetItemSet().Put( *pCpy );
     }
-    delete pCpy;
 }
 
 void SvxScriptSetItem::GetWhichIds( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16& rLatin, sal_uInt16& rAsian, sal_uInt16& rComplex )
