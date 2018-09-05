@@ -493,18 +493,6 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     UpdatePaintLineColor();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeLineListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<LineListBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 LineListBox::~LineListBox()
 {
     disposeOnce();
@@ -1682,9 +1670,14 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
 
     m_xTopLevel->connect_focus_in(LINK(this, SvtLineListBox, FocusHdl));
     m_xControl->set_popover(m_xTopLevel.get());
-    m_xControl->set_label(GetLineStyleName(SvxBorderLineStyle::NONE));
-    // lock to this text height
-    m_xControl->set_size_request(-1, m_xControl->get_preferred_size().Height());
+
+    SelectEntry(SvxBorderLineStyle::NONE);
+    Size aNonePrefSize = m_xControl->get_preferred_size();
+    SelectEntry(SvxBorderLineStyle::SOLID);
+    Size aSolidPrefSize = m_xControl->get_preferred_size();
+    // lock to these maxes height
+    m_xControl->set_size_request(std::max(aNonePrefSize.Width(), aSolidPrefSize.Width()),
+                                 std::max(aNonePrefSize.Height(), aSolidPrefSize.Height()));
 
     eSourceUnit = FUNIT_POINT;
 
