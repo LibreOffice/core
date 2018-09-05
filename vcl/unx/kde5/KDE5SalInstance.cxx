@@ -21,7 +21,6 @@
 
 #include <utility>
 
-//#include "KDE4FilePicker.hxx"
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>

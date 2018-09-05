@@ -68,10 +68,11 @@ namespace
 {
 uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet(3);
+    uno::Sequence<OUString> aRet(4);
     aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
     aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
     aRet[2] = "com.sun.star.ui.dialogs.KDE5FilePicker";
+    aRet[3] = "com.sun.star.ui.dialogs.KDE5FolderPicker";
     return aRet;
 }
 }

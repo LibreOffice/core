@@ -273,7 +273,7 @@ now need O(log(n)) to find the position in the queue of the priority.
 
 Currently Application::Reschedule() processes a single event or "all" events,
 with "all" defined as "100 events" in most backends. This already is ignored
-by the KDE4 backend, as Qt defines its QAbstractEventDispatcher::processEvents
+by the KDE backend, as Qt defines its QAbstractEventDispatcher::processEvents
 processing all pending events (there are ways to skip event classes, but no
 easy way to process just a single event).
 
@@ -342,4 +342,4 @@ priority idle in the event loop.
 A few layers of indirection make this code hard to follow. The SalXLib::Yield
 and SalX11Display::Yield architecture makes it impossible to process just the
 current events. This really needs a refactoring and rearchitecture step, which
-will also affect the Gtk+ and KDE4 backend for the user event handling.
+will also affect the Gtk+ and KDE backend for the user event handling.
