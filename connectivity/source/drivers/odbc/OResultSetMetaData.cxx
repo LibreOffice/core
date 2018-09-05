@@ -37,12 +37,12 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
         column = m_vMapping[_column];
 
     SQLSMALLINT BUFFER_LEN = 128;
-    char *pName = new char[BUFFER_LEN+1];
+    std::unique_ptr<char[]> pName(new char[BUFFER_LEN+1]);
     SQLSMALLINT nRealLen=0;
     SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
                                     static_cast<SQLUSMALLINT>(column),
                                     static_cast<SQLUSMALLINT>(ident),
-                                    static_cast<SQLPOINTER>(pName),
+                                    static_cast<SQLPOINTER>(pName.get()),
                                     BUFFER_LEN,
                                     &nRealLen,
                                     nullptr
@@ -52,24 +52,23 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     {
         if ( nRealLen < 0 )
             nRealLen = BUFFER_LEN;
-        sValue = OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+        sValue = OUString(pName.get(),nRealLen,m_pConnection->getTextEncoding());
     }
-    delete [] pName;
+    pName.reset();
     OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(nRealLen > BUFFER_LEN)
     {
-        pName = new char[nRealLen+1];
+        pName.reset(new char[nRealLen+1]);
         nRet = N3SQLColAttribute(m_aStatementHandle,
                                     static_cast<SQLUSMALLINT>(column),
                                     static_cast<SQLUSMALLINT>(ident),
-                                    static_cast<SQLPOINTER>(pName),
+                                    static_cast<SQLPOINTER>(pName.get()),
                                     nRealLen,
                                     &nRealLen,
                                     nullptr
                                     );
         if ( nRet == SQL_SUCCESS && nRealLen > 0)
-            sValue = OUString(pName,nRealLen,m_pConnection->getTextEncoding());
-        delete [] pName;
+            sValue = OUString(pName.get(),nRealLen,m_pConnection->getTextEncoding());
         OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
 
