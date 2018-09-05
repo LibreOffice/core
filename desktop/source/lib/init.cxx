@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -12,6 +12,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#ifdef IOS
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unicode/udata.h>
+#include <unicode/ucnv.h>
+#include <premac.h>
+#import <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
 
 #include <algorithm>
 #include <memory>
@@ -3870,6 +3880,45 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     OUString aAppURL;
     if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
         return 0;
+
+#ifdef IOS
+    // A LibreOffice-using iOS app should have the ICU data file in the app bundle. Initialize ICU
+    // to use that.
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+
+    int fd = open([[bundlePath stringByAppendingPathComponent:@U_ICUDATA_NAME".dat"] UTF8String], O_RDONLY);
+    if (fd == -1)
+        NSLog(@"Could not open ICU data file %s", [[bundlePath stringByAppendingPathComponent:@U_ICUDATA_NAME".dat"] UTF8String]);
+    else
+    {
+        struct stat st;
+        if (fstat(fd, &st) == -1)
+            NSLog(@"fstat on ICU data file failed: %s", strerror(errno));
+        else
+        {
+            void *icudata = mmap(0, (size_t) st.st_size, PROT_READ, MAP_FILE|MAP_PRIVATE, fd, 0);
+            if (icudata == MAP_FAILED)
+                NSLog(@"mmap failed: %s", strerror(errno));
+            else
+            {
+                UErrorCode icuStatus = U_ZERO_ERROR;
+                udata_setCommonData(icudata, &icuStatus);
+                if (U_FAILURE(icuStatus))
+                    NSLog(@"udata_setCommonData failed");
+                else
+                {
+                    // Quick test that ICU works...
+                    UConverter *cnv = ucnv_open("iso-8859-3", &icuStatus);
+                    NSLog(@"ucnv_open(iso-8859-3)-> %p, err = %s, name=%s",
+                          (void *)cnv, u_errorName(icuStatus), (!cnv)?"?":ucnv_getName(cnv,&icuStatus));
+                    if (U_SUCCESS(icuStatus))
+                        ucnv_close(cnv);
+                }
+            }
+        }
+        close(fd);
+    }
+#endif
 
     try
     {

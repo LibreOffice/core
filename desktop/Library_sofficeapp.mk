@@ -99,9 +99,15 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,sofficeapp,\
 endif
 
 ifeq ($(OS),IOS)
+
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \
 ))
+
+$(eval $(call gb_Library_add_cxxflags,sofficeapp,\
+    $(gb_OBJCXXFLAGS) \
+))
+
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
