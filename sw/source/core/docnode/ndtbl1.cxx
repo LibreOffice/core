@@ -1529,11 +1529,15 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
     // only afterwards.
     // The first column's desired width would be discarded as it would cause
     // the Table's width to exceed the maximum width.
+    const sal_uInt16 nEqualWidth = (aTabCols.GetRight() - aTabCols.GetLeft()) / (aTabCols.Count() + 1);
     for ( int k = 0; k < 2; ++k )
     {
         for ( size_t i = 0; i <= aTabCols.Count(); ++i )
         {
-            int nDiff = aWish[i];
+            // First pass is primarily a shrink pass. Give all columns a chance
+            //    to grow by requesting the maximum width as "balanced".
+            // Second pass is a first-come, first-served chance to max out.
+            int nDiff = k ? aWish[i] : std::min(aWish[i], nEqualWidth);
             if ( nDiff )
             {
                 int nMin = aMins[i];
