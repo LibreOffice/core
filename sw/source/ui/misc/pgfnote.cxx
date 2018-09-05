@@ -20,6 +20,7 @@
 #include <cmdid.h>
 #include <fmtfsize.hxx>
 #include <hintids.hxx>
+#include <svtools/unitconv.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
@@ -52,77 +53,79 @@ const sal_uInt16 SwFootNotePage::aPageRg[] = {
 
 // handler to switch between the different possibilities how the footnote
 // region's height can be set.
-IMPL_LINK_NOARG(SwFootNotePage, HeightPage, Button*, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightPage, weld::ToggleButton&, void)
 {
-    m_pMaxHeightEdit->Enable(false);
+    if (m_xMaxHeightPageBtn->get_active())
+        m_xMaxHeightEdit->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, Button*, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, weld::ToggleButton&, void)
 {
-    m_pMaxHeightEdit->Enable();
-    m_pMaxHeightEdit->GrabFocus();
+    if (m_xMaxHeightBtn->get_active())
+    {
+        m_xMaxHeightEdit->set_sensitive(true);
+        m_xMaxHeightEdit->grab_focus();
+    }
 }
 
 // handler limit values
-IMPL_LINK_NOARG(SwFootNotePage, HeightModify, Control&, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightModify, weld::MetricSpinButton&, void)
 {
-    m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
-            (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)) +
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
+    m_xMaxHeightEdit->set_max(m_xMaxHeightEdit->normalize(lMaxHeight -
+            (m_xDistEdit->denormalize(m_xDistEdit->get_value(FUNIT_TWIP)) +
+            m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FUNIT_TWIP)))),
             FUNIT_TWIP);
-    if(m_pMaxHeightEdit->GetValue() < 0)
-        m_pMaxHeightEdit->SetValue(0);
-    m_pDistEdit->SetMax(m_pDistEdit->Normalize(lMaxHeight -
-            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
+    if (m_xMaxHeightEdit->get_value(FUNIT_NONE) < 0)
+        m_xMaxHeightEdit->set_value(0, FUNIT_NONE);
+    m_xDistEdit->set_max(m_xDistEdit->normalize(lMaxHeight -
+            (m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FUNIT_TWIP)) +
+            m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FUNIT_TWIP)))),
             FUNIT_TWIP);
-    if(m_pDistEdit->GetValue() < 0)
-        m_pDistEdit->SetValue(0);
-    m_pLineDistEdit->SetMax(m_pLineDistEdit->Normalize(lMaxHeight -
-            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
-            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)))),
+    if (m_xDistEdit->get_value(FUNIT_NONE) < 0)
+        m_xDistEdit->set_value(0, FUNIT_NONE);
+    m_xLineDistEdit->set_max(m_xLineDistEdit->normalize(lMaxHeight -
+            (m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FUNIT_TWIP)) +
+            m_xDistEdit->denormalize(m_xDistEdit->get_value(FUNIT_TWIP)))),
             FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, weld::MetricSpinButton&, void)
 {
-    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
-                m_pLineWidthEdit->GetValue( ),
-                m_pLineWidthEdit->GetDecimalDigits( ),
-                m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
-    m_pLineTypeBox->SetWidth( nVal );
+    sal_Int64 nVal = m_xLineWidthEdit->get_value(FUNIT_NONE);
+    nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+                nVal,
+                m_xLineWidthEdit->get_digits(),
+                m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
+    m_xLineTypeBox->SetWidth(nVal);
 }
 
-IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, SvxColorListBox&, rColorBox, void)
+IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void)
 {
-    m_pLineTypeBox->SetColor(rColorBox.GetSelectEntryColor());
+    m_xLineTypeBox->SetColor(rColorBox.GetSelectEntryColor());
 }
 
-SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "FootnoteAreaPage",
-        "modules/swriter/ui/footnoteareapage.ui", &rSet)
+SwFootNotePage::SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
     , lMaxHeight(0)
+    , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
+    , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))
+    , m_xMaxHeightEdit(m_xBuilder->weld_metric_spin_button("maxheightsb", FUNIT_CM))
+    , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spacetotext", FUNIT_CM))
+    , m_xLinePosBox(m_xBuilder->weld_combo_box_text("position"))
+    , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button("style")))
+    , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button("thickness", FUNIT_POINT))
+    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"), GetFrameWeld()))
+    , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button("length", FUNIT_PERCENT))
+    , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button("spacingtocontents", FUNIT_CM))
 {
-    get(m_pMaxHeightPageBtn, "maxheightpage");
-    get(m_pMaxHeightBtn, "maxheight");
-    get(m_pMaxHeightEdit, "maxheightsb");
-    get(m_pDistEdit, "spacetotext");
-
-    get(m_pLinePosBox, "position");
-    get(m_pLineTypeBox, "style");
-    get(m_pLineWidthEdit, "thickness");
-    get(m_pLineColorBox, "color");
-    get(m_pLineLengthEdit, "length");
-    get(m_pLineDistEdit, "spacingtocontents");
-
     SetExchangeSupport();
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*m_pMaxHeightEdit, aMetric);
-    SetMetric(*m_pDistEdit, aMetric);
-    SetMetric(*m_pLineDistEdit, aMetric);
+    ::SetFieldUnit(*m_xMaxHeightEdit, aMetric);
+    ::SetFieldUnit(*m_xDistEdit, aMetric);
+    ::SetFieldUnit(*m_xLineDistEdit, aMetric);
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MeasurementSystem::Metric != eSys ? 1440 : 1134;
-    m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(nHeightValue),FUNIT_TWIP);
+    m_xMaxHeightEdit->set_value(m_xMaxHeightEdit->normalize(nHeightValue),FUNIT_TWIP);
 }
 
 SwFootNotePage::~SwFootNotePage()
@@ -132,22 +135,14 @@ SwFootNotePage::~SwFootNotePage()
 
 void SwFootNotePage::dispose()
 {
-    m_pMaxHeightPageBtn.clear();
-    m_pMaxHeightBtn.clear();
-    m_pMaxHeightEdit.clear();
-    m_pDistEdit.clear();
-    m_pLinePosBox.clear();
-    m_pLineTypeBox.clear();
-    m_pLineWidthEdit.clear();
-    m_pLineColorBox.clear();
-    m_pLineLengthEdit.clear();
-    m_pLineDistEdit.clear();
+    m_xLineColorBox.reset();
+    m_xLineTypeBox.reset();
     SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwFootNotePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFootNotePage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwFootNotePage>::Create(pParent, *rSet);
 }
 
 void SwFootNotePage::Reset(const SfxItemSet *rSet)
@@ -171,62 +166,61 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     SwTwips lHeight = pFootnoteInfo->GetHeight();
     if(lHeight)
     {
-        m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
-        m_pMaxHeightBtn->Check();
+        m_xMaxHeightEdit->set_value(m_xMaxHeightEdit->normalize(lHeight),FUNIT_TWIP);
+        m_xMaxHeightBtn->set_active(true);
     }
     else
     {
-        m_pMaxHeightPageBtn->Check();
-        m_pMaxHeightEdit->Enable(false);
+        m_xMaxHeightPageBtn->set_active(true);
+        m_xMaxHeightEdit->set_sensitive(false);
     }
-    m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
-    m_pMaxHeightBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
-    Link<Control&,void> aLk = LINK(this, SwFootNotePage, HeightModify);
-    m_pMaxHeightEdit->SetLoseFocusHdl( aLk );
-    m_pDistEdit->SetLoseFocusHdl( aLk );
-    m_pLineDistEdit->SetLoseFocusHdl( aLk );
+    m_xMaxHeightPageBtn->connect_toggled(LINK(this,SwFootNotePage,HeightPage));
+    m_xMaxHeightBtn->connect_toggled(LINK(this,SwFootNotePage,HeightMetric));
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwFootNotePage, HeightModify);
+    m_xMaxHeightEdit->connect_value_changed(aLk);
+    m_xDistEdit->connect_value_changed(aLk);
+    m_xLineDistEdit->connect_value_changed(aLk);
 
     // Separator width
-    m_pLineWidthEdit->SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
+    m_xLineWidthEdit->connect_value_changed(LINK(this, SwFootNotePage, LineWidthChanged_Impl));
 
     sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
-            sal_Int64( pFootnoteInfo->GetLineWidth() ), m_pLineWidthEdit->GetDecimalDigits(),
-            MapUnit::MapTwip, m_pLineWidthEdit->GetUnit( ) ));
-    m_pLineWidthEdit->SetValue( nWidthPt );
+            sal_Int64( pFootnoteInfo->GetLineWidth() ), m_xLineWidthEdit->get_digits(),
+            MapUnit::MapTwip, m_xLineWidthEdit->get_unit( ) ));
+    m_xLineWidthEdit->set_value(nWidthPt, FUNIT_NONE);
 
     // Separator style
-    m_pLineTypeBox->SetSourceUnit( FUNIT_TWIP );
+    m_xLineTypeBox->SetSourceUnit( FUNIT_TWIP );
 
-    m_pLineTypeBox->SetNone(SwResId(SW_STR_NONE));
-    m_pLineTypeBox->InsertEntry(
+    m_xLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::SOLID),
         SvxBorderLineStyle::SOLID );
-    m_pLineTypeBox->InsertEntry(
+    m_xLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DOTTED),
         SvxBorderLineStyle::DOTTED );
-    m_pLineTypeBox->InsertEntry(
+    m_xLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DASHED),
         SvxBorderLineStyle::DASHED );
-    m_pLineTypeBox->SetWidth( pFootnoteInfo->GetLineWidth( ) );
-    m_pLineTypeBox->SelectEntry( pFootnoteInfo->GetLineStyle() );
+    m_xLineTypeBox->SetWidth( pFootnoteInfo->GetLineWidth( ) );
+    m_xLineTypeBox->SelectEntry( pFootnoteInfo->GetLineStyle() );
 
     // Separator Color
-    m_pLineColorBox->SelectEntry(pFootnoteInfo->GetLineColor());
-    m_pLineColorBox->SetSelectHdl(LINK(this, SwFootNotePage, LineColorSelected_Impl));
-    m_pLineTypeBox->SetColor(pFootnoteInfo->GetLineColor());
+    m_xLineColorBox->SelectEntry(pFootnoteInfo->GetLineColor());
+    m_xLineColorBox->SetSelectHdl(LINK(this, SwFootNotePage, LineColorSelected_Impl));
+    m_xLineTypeBox->SetColor(pFootnoteInfo->GetLineColor());
 
     // position
-    m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFootnoteInfo->GetAdj()) );
+    m_xLinePosBox->set_active(static_cast<sal_Int32>(pFootnoteInfo->GetAdj()));
 
-        // width
+    // width
     Fraction aTmp( 100, 1 );
     aTmp *= pFootnoteInfo->GetWidth();
-    m_pLineLengthEdit->SetValue( static_cast<long>(aTmp) );
+    m_xLineLengthEdit->set_value(static_cast<long>(aTmp), FUNIT_PERCENT);
 
-        // gap footnote area
-    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFootnoteInfo->GetTopDist()),FUNIT_TWIP);
-    m_pLineDistEdit->SetValue(
-        m_pLineDistEdit->Normalize(pFootnoteInfo->GetBottomDist()), FUNIT_TWIP);
+    // gap footnote area
+    m_xDistEdit->set_value(m_xDistEdit->normalize(pFootnoteInfo->GetTopDist()), FUNIT_TWIP);
+    m_xLineDistEdit->set_value(
+        m_xLineDistEdit->normalize(pFootnoteInfo->GetBottomDist()), FUNIT_TWIP);
     ActivatePage( *rSet );
 }
 
@@ -238,37 +232,38 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     // that's the original
     SwPageFootnoteInfo &rFootnoteInfo = aItem.GetPageFootnoteInfo();
 
-        // footnote area's height
-    if(m_pMaxHeightBtn->IsChecked())
+    // footnote area's height
+    if (m_xMaxHeightBtn->get_active())
         rFootnoteInfo.SetHeight( static_cast< SwTwips >(
-                m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP))));
+                m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FUNIT_TWIP))));
     else
         rFootnoteInfo.SetHeight(0);
 
         // gap footnote area
     rFootnoteInfo.SetTopDist(  static_cast< SwTwips >(
-            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP))));
+            m_xDistEdit->denormalize(m_xDistEdit->get_value(FUNIT_TWIP))));
     rFootnoteInfo.SetBottomDist(  static_cast< SwTwips >(
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
+            m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FUNIT_TWIP))));
 
     // Separator style
-    rFootnoteInfo.SetLineStyle( m_pLineTypeBox->GetSelectEntryStyle() );
+    rFootnoteInfo.SetLineStyle(m_xLineTypeBox->GetSelectEntryStyle());
 
     // Separator width
-    long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
-                   m_pLineWidthEdit->GetValue( ),
-                   m_pLineWidthEdit->GetDecimalDigits( ),
-                   m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
+    sal_Int64 nWidth = m_xLineWidthEdit->get_value(FUNIT_NONE);
+    nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
+                   nWidth,
+                   m_xLineWidthEdit->get_digits(),
+                   m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
     rFootnoteInfo.SetLineWidth( nWidth );
 
     // Separator color
-    rFootnoteInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
+    rFootnoteInfo.SetLineColor(m_xLineColorBox->GetSelectEntryColor());
 
     // Position
-    rFootnoteInfo.SetAdj(static_cast<css::text::HorizontalAdjust>(m_pLinePosBox->GetSelectedEntryPos()));
+    rFootnoteInfo.SetAdj(static_cast<css::text::HorizontalAdjust>(m_xLinePosBox->get_active()));
 
     // Width
-    rFootnoteInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
+    rFootnoteInfo.SetWidth(Fraction(m_xLineLengthEdit->get_value(FUNIT_PERCENT), 100));
 
     const SfxPoolItem* pOldItem;
     if(nullptr == (pOldItem = GetOldItem( *rSet, FN_PARAM_FTN_INFO )) ||
@@ -322,7 +317,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     lMaxHeight /= 10;
 
     // set maximum values
-    HeightModify(*m_pMaxHeightEdit);
+    HeightModify(*m_xMaxHeightEdit);
 }
 
 DeactivateRC SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
