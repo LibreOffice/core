@@ -1623,6 +1623,16 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 {
     ScDocShellModificator aModificator( rDocShell );
 
+    // tdf#119036 Switch left/right in case of RTL
+    const ScViewData* rViewData = rDocShell.GetViewData();
+    if ( rViewData->GetDocument()->IsLayoutRTL( rViewData->GetTabNo() ) ) {
+        if (eCmd == INS_INSCOLS_BEFORE) { // left
+            eCmd = INS_INSCOLS_AFTER;
+        } else if (eCmd == INS_INSCOLS_AFTER) { // right
+            eCmd = INS_INSCOLS_BEFORE;
+        }
+    }
+
     if (rDocShell.GetDocument().GetChangeTrack() &&
             ((eCmd == INS_CELLSDOWN  && (rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL)) ||
              (eCmd == INS_CELLSRIGHT && (rRange.aStart.Row() != 0 || rRange.aEnd.Row() != MAXROW))))
@@ -1759,12 +1769,11 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     ScEditableTester aTester;
 
     switch (eCmd)
-    {
-        case INS_INSCOLS_BEFORE:
+    {   case INS_INSCOLS_BEFORE: // left
             aTester = ScEditableTester(
                 rDoc, sc::ColRowEditAction::InsertColumnsBefore, nMergeTestStartCol, nMergeTestEndCol, aMark);
             break;
-        case INS_INSCOLS_AFTER:
+        case INS_INSCOLS_AFTER: // right
             aTester = ScEditableTester(
                 rDoc, sc::ColRowEditAction::InsertColumnsAfter, nMergeTestStartCol, nMergeTestEndCol, aMark);
             break;
