@@ -1069,7 +1069,8 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
-                                      sal_Int32 nIndex, sal_Int32 nLen ) const
+                                      sal_Int32 nIndex, sal_Int32 nLen,
+                                      const SalLayoutGlyphs* pGlyphs ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1078,7 +1079,8 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, nullptr,
+                                                       SalLayoutFlags::NONE, nullptr, pGlyphs);
     if( !pSalLayout )
         return;
 
@@ -2082,7 +2084,8 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  sal_Int32 nIndex, sal_Int32 nLen,
-                                 DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText )
+                                 DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText,
+                                 const SalLayoutGlyphs* pGlyphs )
 {
     assert(!is_double_buffered_window());
 
@@ -2143,7 +2146,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             }
 
             std::unique_ptr<long[]> const pCaretXArray(new long[2 * nLen]);
-            /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen );
+            /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs(static_cast<int>(lc_x1 - lc_x2));
@@ -2210,7 +2213,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     }
     else
     {
-        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
+        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText, pGlyphs );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
             && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
@@ -2223,7 +2226,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
-long OutputDevice::GetCtrlTextWidth( const OUString& rStr ) const
+long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayoutGlyphs* pGlyphs ) const
 {
     sal_Int32 nLen = rStr.getLength();
     sal_Int32 nIndex = 0;
@@ -2237,7 +2240,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr ) const
         else if ( (nMnemonicPos >= nIndex) && (static_cast<sal_uLong>(nMnemonicPos) < static_cast<sal_uLong>(nIndex+nLen)) )
             nLen--;
     }
-    return GetTextWidth( aStr, nIndex, nLen );
+    return GetTextWidth( aStr, nIndex, nLen, nullptr, pGlyphs );
 }
 
 OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
