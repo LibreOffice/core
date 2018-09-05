@@ -207,9 +207,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_VLC), \
 		avmedia/source/vlc/avmediavlc \
 	) \
-	$(if $(ENABLE_KDE4), \
-		shell/source/backends/kde4be/kde4be1 \
-	) \
 	$(if $(ENABLE_KDE5), \
 		shell/source/backends/kde5be/kde5be1 \
 	) \

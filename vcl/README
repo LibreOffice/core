@@ -38,12 +38,10 @@ unx/
 		+ GTK2 support
 	gtk3/
 		+ GTK3 support
-	kde4/
-		+ KDE4 support
 	kde5/
-		+ KDE5 support (under construction)
+		+ KDE5 support
 	gtk3_kde5/
-		+ GTK3 support with KDE5 file pickers (until kde5 is finished)
+		+ GTK3 support with KDE5 file pickers (alternative to native kde5 one)
 	generic/
 		+ raw X11 support
 

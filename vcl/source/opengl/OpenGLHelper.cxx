@@ -961,7 +961,7 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         return false;
 
     //tdf#106155, disable GL while loading certain bitmaps needed for the initial toplevel windows
-    //under raw X (kde4) vclplug
+    //under raw X (kde) vclplug
     if (bTempOpenGLDisabled)
         return false;
 

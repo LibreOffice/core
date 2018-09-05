@@ -296,20 +296,12 @@ css::uno::Reference< css::uno::XInterface > createInstance(
         current->getValueByName("system.desktop-environment") >>= desktop;
     }
 
-    OUString sTK = Application::GetToolkitName();
-
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
-    if ( desktop == "KDE4" ) {
-        if (!(sTK.startsWith("qt5") || sTK.startsWith("kde5")))
-            backend = createBackend(
-                context,
-                "com.sun.star.configuration.backend.KDE4Backend");
-    } else if ( desktop == "KDE5" ) {
-        if (!(sTK.startsWith("kde4")))
-            backend = createBackend(
-                context,
-                "com.sun.star.configuration.backend.KDE5Backend");
+    if ( desktop == "KDE5" ) {
+        backend = createBackend(
+            context,
+            "com.sun.star.configuration.backend.KDE5Backend");
     }
     return backend.is()
         ? backend : static_cast< cppu::OWeakObject * >(new Default);

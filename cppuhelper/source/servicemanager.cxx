@@ -1876,14 +1876,6 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         if (iterator->second->info->loader == "com.sun.star.loader.SharedLibrary" &&
             iterator->second->status != Data::Implementation::STATUS_LOADED)
         {
-            // Blacklist some components that are known to fail
-            if (iterator->second->info->name == "com.sun.star.comp.configuration.backend.KDE4Backend")
-            {
-                std::cerr << ":skipping";
-                std::cerr.flush();
-                continue;
-            }
-
             // load component library
             osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
 
