@@ -43,6 +43,7 @@
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
 #include <columnspanset.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -305,8 +306,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 sal_uInt16 nId = SID_OPENDLG_FUNCTION;
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-
-                pScMod->SetRefDialog( nId, pWnd == nullptr );
+                bool bVis = comphelper::LibreOfficeKit::isActive() || pWnd == nullptr;
+                pScMod->SetRefDialog( nId, bVis );
                 rReq.Ignore();
             }
             break;
