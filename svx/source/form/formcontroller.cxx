@@ -327,6 +327,7 @@ void ColumnInfoCache::deinitializeControls()
     {
         lcl_resetColumnControlInfo( *col );
     }
+    m_bControlsInitialized = false;
 }
 
 
