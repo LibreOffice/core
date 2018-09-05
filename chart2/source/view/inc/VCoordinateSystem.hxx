@@ -51,7 +51,7 @@ class VCoordinateSystem
 public:
     virtual ~VCoordinateSystem();
 
-    static VCoordinateSystem* createCoordinateSystem( const css::uno::Reference<
+    static std::unique_ptr<VCoordinateSystem> createCoordinateSystem( const css::uno::Reference<
                                 css::chart2::XCoordinateSystem >& xCooSysModel );
 
     /// @throws css::uno::RuntimeException
