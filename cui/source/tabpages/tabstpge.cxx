@@ -259,7 +259,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxTabulatorTabPage>::Create(pParent.pParent, *rSet);
 }

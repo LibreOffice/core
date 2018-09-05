@@ -208,7 +208,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateDbase( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateDbase( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<ODbaseDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -268,7 +268,7 @@ namespace dbaui
 
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateAdo( TabPageParent pParent,   const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateAdo( const TabPageParent& pParent,   const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OAdoDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -292,7 +292,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateODBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateODBC( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OOdbcDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -345,7 +345,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateUser( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateUser( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OUserDriverDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -402,7 +402,7 @@ namespace dbaui
     {
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLODBC( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OMySQLODBCDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -640,17 +640,17 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create( pParent.pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER );
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<MySQLNativePage>::Create( pParent.pParent, *_rAttrSet );
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateOracleJDBC( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OGeneralSpecialJDBCDetailsPage>::Create( pParent.pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
     }
@@ -690,7 +690,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateLDAP( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OLDAPDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -764,7 +764,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateText( TabPageParent pParent,  const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateText( const TabPageParent& pParent,  const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OTextDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
@@ -803,12 +803,12 @@ namespace dbaui
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage( const TabPageParent& _pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<GeneratedValuesPage>::Create( _pParent.pParent, *_rAttrSet );
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage( const TabPageParent& _pParent, const SfxItemSet* _rAttrSet )
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );

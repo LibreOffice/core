@@ -81,7 +81,7 @@ void SvxJSearchOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create( const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxJSearchOptionsPage>::Create( pParent.pParent, *rSet );
 }

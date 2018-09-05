@@ -79,7 +79,7 @@ public:
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
 
     virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
-                                               TabPageParent pParent,
+                                               const TabPageParent& pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 

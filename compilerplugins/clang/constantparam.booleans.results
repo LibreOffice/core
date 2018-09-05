@@ -1011,7 +1011,7 @@ include/sfx2/sidebar/SidebarToolBox.hxx:54
     const unsigned short nItemId
     1
 include/sfx2/tabdlg.hxx:153
-    void SfxTabDialog::AddTabPage(unsigned short,const class rtl::OUString &,class VclPtr<class SfxTabPage> (*)(struct TabPageParent, const class SfxItemSet *),const unsigned short *(*)(void),unsigned short)
+    void SfxTabDialog::AddTabPage(unsigned short,const class rtl::OUString &,class VclPtr<class SfxTabPage> (*)(struct const TabPageParent&, const class SfxItemSet *),const unsigned short *(*)(void),unsigned short)
     const unsigned short *(*)(void) pRangesFunc
     0
 include/sfx2/thumbnailview.hxx:225

@@ -71,7 +71,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+    CharBasePage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -183,7 +183,7 @@ public:
                         virtual ~SvxCharNamePage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -271,7 +271,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -323,7 +323,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xKerningMF;
     std::unique_ptr<weld::CheckButton> m_xPairKerningBtn;
 
-                        SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rSet);
+                        SvxCharPositionPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -347,7 +347,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -372,7 +372,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xStartBracketLB;
     std::unique_ptr<weld::TreeView> m_xEndBracketLB;
 
-    SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxCharTwoLinesPage(const TabPageParent& pParent, const SfxItemSet& rSet);
 
     void                UpdatePreview_Impl();
     void                Initialize();
@@ -391,7 +391,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;

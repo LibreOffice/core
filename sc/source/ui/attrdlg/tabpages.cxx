@@ -70,7 +70,7 @@ void ScTabPageProtection::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScTabPageProtection::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> ScTabPageProtection::Create( const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<ScTabPageProtection>::Create( pParent.pParent, *rAttrSet );
 }

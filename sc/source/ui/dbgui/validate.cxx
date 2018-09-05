@@ -417,7 +417,7 @@ void ScTPValidationValue::Init()
     CheckHdl( nullptr );
 }
 
-VclPtr<SfxTabPage> ScTPValidationValue::Create( TabPageParent pParent, const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTPValidationValue::Create( const TabPageParent& pParent, const SfxItemSet* rArgSet )
 {
     return VclPtr<ScTPValidationValue>::Create( pParent.pParent, *rArgSet );
 }
@@ -720,7 +720,7 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-VclPtr<SfxTabPage> ScTPValidationHelp::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> ScTPValidationHelp::Create( const TabPageParent& pParent,
                                                const SfxItemSet*  rArgSet )
 {
     return VclPtr<ScTPValidationHelp>::Create( pParent.pParent, *rArgSet );
@@ -802,7 +802,7 @@ void ScTPValidationError::Init()
     SelectActionHdl( *m_pLbAction.get() );
 }
 
-VclPtr<SfxTabPage> ScTPValidationError::Create( TabPageParent    pParent,
+VclPtr<SfxTabPage> ScTPValidationError::Create( const TabPageParent&    pParent,
                                                 const SfxItemSet*  rArgSet )
 {
     return VclPtr<ScTPValidationError>::Create( pParent.pParent, *rArgSet );

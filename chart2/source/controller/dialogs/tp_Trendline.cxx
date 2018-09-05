@@ -31,7 +31,7 @@ TrendlineTabPage::TrendlineTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 }
 
 VclPtr<SfxTabPage> TrendlineTabPage::Create(
-    TabPageParent pParent, const SfxItemSet* rOutAttrs )
+    const TabPageParent& pParent, const SfxItemSet* rOutAttrs )
 {
     return VclPtr<TrendlineTabPage>::Create( pParent.pParent, *rOutAttrs );
 }

@@ -206,7 +206,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( const TabPageParent&, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -303,7 +303,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -367,7 +367,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( const TabPageParent&, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

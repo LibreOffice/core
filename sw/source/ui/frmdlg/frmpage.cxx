@@ -867,7 +867,7 @@ void SwFramePage::setOptimalRelWidth()
     m_pHoriRelationLB->Clear();
 }
 
-VclPtr<SfxTabPage> SwFramePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFramePage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFramePage>::Create( pParent.pParent, *rSet );
 }
@@ -2425,7 +2425,7 @@ void SwGrfExtPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwGrfExtPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SwGrfExtPage::Create( const TabPageParent& pParent, const SfxItemSet *rSet )
 {
     return VclPtr<SwGrfExtPage>::Create( pParent.pParent, *rSet );
 }
@@ -2866,7 +2866,7 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFrameURLPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFrameURLPage>::Create( pParent.pParent, *rSet );
 }
@@ -2965,7 +2965,7 @@ void SwFrameAddPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwFrameAddPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SwFrameAddPage>::Create(pParent.pParent, *rSet);
 }

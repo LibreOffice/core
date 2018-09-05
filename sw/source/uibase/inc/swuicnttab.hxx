@@ -230,7 +230,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -434,7 +434,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent,
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
@@ -482,7 +482,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage>  Create( const TabPageParent& pParent,
                                        const SfxItemSet* rAttrSet);
 
 };

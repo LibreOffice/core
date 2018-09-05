@@ -40,7 +40,7 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-struct TabPageParent
+struct TabPageParent final
 {
     TabPageParent(vcl::Window* _pParent)
         : pParent(_pParent)
@@ -56,7 +56,7 @@ struct TabPageParent
     weld::Container* pPage;
 };
 
-typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
+typedef VclPtr<SfxTabPage> (*CreateTabPage)(const TabPageParent& pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -341,7 +341,7 @@ protected:
 
 protected:
     SfxTabPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
-    SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
+    SfxTabPage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }

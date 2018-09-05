@@ -227,7 +227,7 @@ void SvxSingleNumPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create( const TabPageParent& pParent,
                                                     const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxSingleNumPickTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -389,7 +389,7 @@ void SvxBulletPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBulletPickTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxBulletPickTabPage::Create( const TabPageParent& pParent,
                                                  const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxBulletPickTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -584,7 +584,7 @@ void SvxNumPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxNumPickTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxNumPickTabPage::Create( const TabPageParent& pParent,
                                               const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxNumPickTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -832,7 +832,7 @@ void SvxBitmapPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( const TabPageParent& pParent,
                                                  const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxBitmapPickTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -1227,7 +1227,7 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_pHeightMF->SetUnit( eMetric );
 }
 
-VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( const TabPageParent& pParent,
                                                  const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxNumOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -3093,7 +3093,7 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( const TabPageParent& pParent,
                                                   const SfxItemSet* rAttrSet)
 {
     return VclPtr<SvxNumPositionTabPage>::Create(pParent.pParent, *rAttrSet);

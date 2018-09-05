@@ -1283,7 +1283,7 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXSelectTabPage>::Create(pParent.pParent, *rAttrSet);
 }
@@ -2228,7 +2228,7 @@ DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( TabPageParent pParent,     const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( const TabPageParent& pParent,     const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXEntryTabPage>::Create(pParent.pParent, *rAttrSet);
 }
@@ -3734,7 +3734,7 @@ DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( const TabPageParent& pParent,
                                                const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwTOXStylesTabPage>::Create(pParent.pParent, *rAttrSet);
