@@ -74,10 +74,10 @@
 #include <AccessibleEditObject.hxx>
 #include <AccessibleText.hxx>
 #include <svtools/miscopt.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
-#include <comphelper/lok.hxx>
 
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
@@ -318,7 +318,7 @@ void ScInputWindow::Select()
             {
                 //! new method at ScModule to query if function autopilot is open
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
+                if ( pViewFrm && ( comphelper::LibreOfficeKit::isActive() || !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) ) )
                 {
                     pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
                                               SfxCallMode::SYNCHRON | SfxCallMode::RECORD );

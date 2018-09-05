@@ -89,6 +89,7 @@ enum ObjectSelectionType
     OST_Media
 };
 
+class ScFormEditData;
 class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
@@ -113,6 +114,7 @@ private:
 
     std::unique_ptr<FmFormShell> pFormShell;
 
+    std::unique_ptr<ScFormEditData> mpFormEditData;
     std::unique_ptr<ScInputHandler, o3tl::default_delete<ScInputHandler>> mpInputHandler;              // for OLE input cell
 
     std::unique_ptr<::editeng::SvxBorderLine> pCurFrameLine;
@@ -163,7 +165,6 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
-
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -391,6 +392,10 @@ public:
     static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
+
+    void InitFormEditData();
+    void ClearFormEditData();
+    ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 };
 
 #endif
