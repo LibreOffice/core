@@ -49,6 +49,7 @@ class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_se
     ScDocumentImport& mrDoc;
     formula::FormulaGrammar::Grammar meCalcGrammar;
     orcus::spreadsheet::formula_grammar_t meOrcusGrammar;
+    rtl_TextEncoding mnTextEncoding;
 
 public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
@@ -62,6 +63,11 @@ public:
     formula::FormulaGrammar::Grammar getCalcGrammar() const
     {
         return meCalcGrammar;
+    }
+
+    rtl_TextEncoding getTextEncoding() const
+    {
+        return mnTextEncoding;
     }
 };
 
@@ -178,7 +184,7 @@ private:
 class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
 {
 public:
-    ScOrcusAutoFilter();
+    ScOrcusAutoFilter( const ScOrcusGlobalSettings& rGS );
 
     virtual ~ScOrcusAutoFilter() override;
 
@@ -193,6 +199,7 @@ public:
     virtual void commit() override;
 
 private:
+    const ScOrcusGlobalSettings& mrGlobalSettings;
     ScRange maRange;
 };
 
@@ -339,6 +346,7 @@ public:
 class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
 {
 private:
+    ScOrcusFactory& mrFactory;
     ScDocument& mrDoc;
 
     struct font
@@ -470,7 +478,7 @@ private:
     void applyXfToItemSet(SfxItemSet& rSet, const xf& rXf);
 
 public:
-    ScOrcusStyles(ScDocument& rDoc, bool bSkipDefaultStyles=false);
+    ScOrcusStyles( ScOrcusFactory& rFactory, ScDocument& rDoc, bool bSkipDefaultStyles=false );
 
     void applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
 
