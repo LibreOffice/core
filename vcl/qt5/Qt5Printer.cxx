@@ -19,8 +19,6 @@
 
 #include <Qt5Printer.hxx>
 
-bool Qt5InfoPrinter::Setup(weld::Window*, ImplJobSetup*) { return false; }
-
 Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
     : PspSalPrinter(pInfoPrinter)
 {
