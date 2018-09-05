@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_bad5dcbb",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-05T13:03:28Z",
+      "side": 1,
+      "message": "Instead of asking the currently viewed sheet the sheet(s) selected in pTabMark should be considered. Then the problem arises what should happen if both LTR and RTL sheets are selected, in which case I think either commands should not be exchanged or only then the currently viewed sheet be considered, if it is part of the selected sheets.",
+      "revId": "3be44241805b95aa10ecf46f2e6058ff94e8c4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_9ada18e7",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-05T13:03:28Z",
+      "side": 1,
+      "message": "The ScDocFunc functions are also called via API (and unit tests), silently changing the command here will break things. Instead, if at all then change it where this ScDocFunc::InsertCells() is called in the view.",
+      "revId": "3be44241805b95aa10ecf46f2e6058ff94e8c4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
