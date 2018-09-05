@@ -602,7 +602,8 @@ void Qt5Frame::SetPointerPos(long nX, long nY)
 
 void Qt5Frame::Flush()
 {
-    QGuiApplication::sync();
+    // was: QGuiApplication::sync();
+    // but FIXME it causes too many issues, figure out sth better
 
     // unclear if we need to also flush cairo surface - gtk3 backend
     // does not do it. QPainter in Qt5Widget::paintEvent() is
