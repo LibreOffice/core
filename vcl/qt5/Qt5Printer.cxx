@@ -19,7 +19,10 @@
 
 #include <Qt5Printer.hxx>
 
-bool Qt5InfoPrinter::Setup(weld::Window*, ImplJobSetup*) { return false; }
+bool Qt5InfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pJobSetup)
+{
+    return PspSalInfoPrinter::Setup(pFrame, pJobSetup);
+}
 
 Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
     : PspSalPrinter(pInfoPrinter)
