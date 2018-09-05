@@ -5345,18 +5345,18 @@ find_winsdk_version()
             if test -n "$regvalue"; then
                 winsdkbinsubdir="$regvalue".0
             fi
-            winsdklibsubdir=$regvalue
-            if test "$regvalue" = "10.0.14393"; then
-                winsdklibsubdir="10.0.14393.0"
-            elif test "$regvalue" = "10.0.15063"; then
-                winsdklibsubdir="10.0.15063.0"
-                dnl Hack needed at least by tml:
-                if test ! -f "${winsdktest}/Include/10.0.15063.0/um/sqlext.h" \
-                    -a -f "${winsdktest}/Include/10.0.14393.0/um/sqlext.h"
-                then
-                    winsdklibsubdir="10.0.14393.0"
-                fi
+            winsdklibsubdir=$winsdkbinsubdir
+            tmppath="$winsdktest\\Include\\$winsdklibsubdir"
+            # test exist the SDK path
+            if test -d "$tmppath"; then
+               # when path is convertable to a short path then path is okay
+               if ! cygpath -d "$tmppath"; then
+                  AC_MSG_ERROR([Windows SDK doesn't have a 8.3 name, see NtfsDisable8dot3NameCreation])
+               fi
+            else
+               AC_MSG_ERROR([The Windows SDK not found, check the installation])
             fi
+
             return
         fi
         ;;
