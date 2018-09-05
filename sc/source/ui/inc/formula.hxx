@@ -41,6 +41,7 @@ class ScFormulaDlg final : public formula::FormulaDlg,
 
             ScDocument*                 m_pDoc;
             ScAddress                   m_CursorPos;
+            ScTabViewShell*             m_pViewShell;
     mutable std::shared_ptr<ScCompiler> m_xCompiler;
 
 public:

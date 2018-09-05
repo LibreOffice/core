@@ -166,8 +166,6 @@ ScModule::~ScModule()
 
     SfxItemPool::Free(m_pMessagePool);
 
-    m_pFormEditData.reset();
-
     m_pDragData.reset();
     m_pErrorHdl.reset();
 
@@ -652,16 +650,6 @@ ScDocument* ScModule::GetClipDoc()
 void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
 {
     m_pSelTransfer = pNew;
-}
-
-void ScModule::InitFormEditData()
-{
-    m_pFormEditData.reset( new ScFormEditData );
-}
-
-void ScModule::ClearFormEditData()
-{
-    m_pFormEditData.reset();
 }
 
 void ScModule::SetViewOptions( const ScViewOptions& rOpt )
@@ -1318,7 +1306,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
  */
 ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
 {
-    if ( m_pRefInputHandler && bUseRef )
+    if ( !comphelper::LibreOfficeKit::isActive() && m_pRefInputHandler && bUseRef )
         return m_pRefInputHandler;
 
     ScInputHandler* pHdl = nullptr;
@@ -1443,15 +1431,6 @@ void ScModule::InputTurnOffWinEngine()
         pHdl->InputTurnOffWinEngine();
 }
 
-OUString ScModule::InputGetFormulaStr()
-{
-    ScInputHandler* pHdl = GetInputHdl();
-    OUString aStr;
-    if ( pHdl )
-        aStr = pHdl->GetFormString();
-    return aStr;
-}
-
 void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
 {
     ScInputHandler* pHdl = GetInputHdl();
@@ -1493,7 +1472,8 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
 {
     //TODO: Move reference dialog handling to view
     //      Just keep function autopilot here for references to other documents
-    if(m_nCurRefDlgId==0 || (nId==m_nCurRefDlgId && !bVis))
+    if ( m_nCurRefDlgId == 0 || ( nId == m_nCurRefDlgId && !bVis )
+       || ( comphelper::LibreOfficeKit::isActive() && m_nCurRefDlgId == SID_OPENDLG_FUNCTION ) )
     {
         if ( !pViewFrm )
             pViewFrm = SfxViewFrame::Current();
@@ -1661,7 +1641,13 @@ bool ScModule::IsFormulaMode()
 
     if ( m_nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        SfxChildWindow* pChildWnd = nullptr;
+
+        if ( comphelper::LibreOfficeKit::isActive() )
+            pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+        else
+            pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+
         if ( pChildWnd )
         {
             if (pChildWnd->GetWindow())

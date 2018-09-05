@@ -740,7 +740,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
             // we will save the doc immediately afterwards, the modified state event
             // is clobbered. To avoid that, we notify all views immediately of the
             // modified state, apply the modification, then save the document.
-            ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+            ScInputHandler* pHdl = GetInputHandler();
             if (pHdl != nullptr && pHdl->GetModified())
                 SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, ".uno:ModifiedStatus=true");
         }
