@@ -1,13 +1,8 @@
 vcl/uiconfig/ui/cupspassworddialog.ui://GtkLabel[@id='text'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkSpinButton[@id='pageedit-nospin'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='totalnumpages'] orphan-label
-vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='forward'] button-no-label
-vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='backward'] button-no-label
 vcl/uiconfig/ui/printdialog.ui://GtkImage[@id='collateimage'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='fromwhich'] orphan-label
-vcl/uiconfig/ui/printdialog.ui://GtkEntry[@id='pagerange'] no-labelled-by
-vcl/uiconfig/ui/printdialog.ui://GtkComboBox[@id='paperspersheetlb'] no-labelled-by
-vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='pagespersheettxt'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://vcllo-ShowNupOrderWindow[@id='orderpreview'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='pagemargintxt2'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='sheetmargintxt2'] orphan-label
