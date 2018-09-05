@@ -62,7 +62,7 @@ all: build
 check-if-root:
 	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && ! grep -q 'lxc\|docker' /proc/self/cgroup; then \
 		echo; \
-		echo 'No. You make ME a sandwich.'; \
+		echo 'Building LibreOffice as root is a very bad idea, use a regular user.'; \
 		echo; \
 		exit 1; \
 	fi
