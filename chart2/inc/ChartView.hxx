@@ -223,7 +223,7 @@ private: //member
 
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 
-    std::vector< VCoordinateSystem* > m_aVCooSysList;
+    std::vector< std::unique_ptr<VCoordinateSystem> > m_aVCooSysList;
 
     ::cppu::OMultiTypeInterfaceContainerHelper
                         m_aListenerContainer;
