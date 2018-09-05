@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_1f8f1acd",
+        "filename": "vcl/unx/kde5/KDE5FilePicker2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-05T00:58:32Z",
+      "side": 1,
+      "message": "Bubli - not sure the above is a good idea, but c.f. fpicker.cxx",
+      "revId": "f1a1905aad54ccd80b4f43d2531150b6f9c2d673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
