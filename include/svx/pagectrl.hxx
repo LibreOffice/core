@@ -28,112 +28,6 @@ class SvxBoxItem;
 enum class SvxPageUsage;
 enum class SvxFrameDirection;
 
-class SVX_DLLPUBLIC SvxPageWindow : public vcl::Window
-{
-    using Window::GetBorder;
-
-private:
-    Size aWinSize;
-    Size aSize;
-
-    long nTop;
-    long nBottom;
-    long nLeft;
-    long nRight;
-
-    long nHdLeft;
-    long nHdRight;
-    long nHdDist;
-    long nHdHeight;
-
-    long nFtLeft;
-    long nFtRight;
-    long nFtDist;
-    long nFtHeight;
-
-    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maHeaderFillAttributes;
-    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFooterFillAttributes;
-    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maPageFillAttributes;
-
-    bool bFooter : 1;
-    bool bHeader : 1;
-
-    SvxPageUsage eUsage;
-
-protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-
-    virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
-                          const bool bSecond, const bool bEnabled);
-
-    void drawFillAttributes(vcl::RenderContext& rRenderContext,
-                            const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
-                            const tools::Rectangle& rPaintRange, const tools::Rectangle& rDefineRange);
-
-public:
-    SvxPageWindow(vcl::Window* pParent);
-    virtual ~SvxPageWindow() override;
-
-    void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
-    {
-        maHeaderFillAttributes = rFillAttributes;
-    }
-    void setFooterFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
-    {
-        maFooterFillAttributes = rFillAttributes;
-    }
-    void setPageFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
-    {
-        maPageFillAttributes = rFillAttributes;
-    }
-    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& getPageFillAttributes() const
-    {
-        return maPageFillAttributes;
-    }
-    void SetSize(const Size& rSize)
-    {
-        aSize = rSize;
-    }
-    const Size& GetSize() const
-    {
-        return aSize;
-    }
-
-    void SetTop(long nNew) { nTop = nNew; }
-    void SetBottom(long nNew) { nBottom = nNew; }
-    void SetLeft(long nNew) { nLeft = nNew; }
-    void SetRight(long nNew) { nRight = nNew; }
-
-    long GetTop() const { return nTop; }
-    long GetBottom() const { return nBottom; }
-    long GetLeft() const { return nLeft; }
-    long GetRight() const { return nRight; }
-
-    void SetHdLeft(long nNew) { nHdLeft = nNew; }
-    void SetHdRight(long nNew) { nHdRight = nNew; }
-    void SetHdDist(long nNew) { nHdDist = nNew; }
-    void SetHdHeight(long nNew) { nHdHeight = nNew; }
-
-    long GetHdDist() const { return nHdDist; }
-    long GetHdHeight() const { return nHdHeight; }
-
-    void SetFtLeft(long nNew) { nFtLeft = nNew; }
-    void SetFtRight(long nNew) { nFtRight = nNew; }
-    void SetFtDist(long nNew) { nFtDist = nNew; }
-    void SetFtHeight(long nNew) { nFtHeight = nNew; }
-
-    long GetFtDist() const { return nFtDist; }
-    long GetFtHeight() const { return nFtHeight; }
-
-    void SetUsage(SvxPageUsage eU) { eUsage = eU; }
-    SvxPageUsage GetUsage() const { return eUsage; }
-
-    void SetHeader( bool bNew ) { bHeader = bNew; }
-    void SetFooter( bool bNew ) { bFooter = bNew; }
-
-    virtual Size GetOptimalSize() const override;
-};
-
 class SVX_DLLPUBLIC PageWindow : public weld::CustomWidgetController
 {
 private:
@@ -197,6 +91,10 @@ public:
     void setPageFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
     {
         maPageFillAttributes = rFillAttributes;
+    }
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& getPageFillAttributes() const
+    {
+        return maPageFillAttributes;
     }
     void SetSize(const Size& rSize)
     {
