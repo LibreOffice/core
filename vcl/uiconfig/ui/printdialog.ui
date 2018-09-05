@@ -243,6 +243,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">image2</property>
+                        <property name="tooltip_text" translatable="yes" context="printdialog|forward">Next page</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -257,6 +258,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">image1</property>
+                        <property name="tooltip_text" translatable="yes" context="printdialog|backward">Previous page</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -711,6 +713,9 @@
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">printselection</property>
+                                            <accessibility>
+                                              <relation type="label-for" target="pagerange"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -722,6 +727,9 @@
                                           <object class="GtkEntry" id="pagerange">
                                             <property name="can_focus">True</property>
                                             <property name="no_show_all">True</property>
+                                            <accessibility>
+                                              <relation type="labelled-by" target="printpages"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1066,6 +1074,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">liststore1</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="pagespersheettxt"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -1098,6 +1109,9 @@
                                     <child>
                                       <object class="GtkLabel" id="pagespersheettxt">
                                         <property name="can_focus">False</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="paperspersheetlb"/>
+                                        </accessibility>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
