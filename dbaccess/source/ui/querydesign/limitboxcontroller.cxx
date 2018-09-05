@@ -86,9 +86,7 @@ bool LimitBoxImpl::EventNotify( NotifyEvent& rNEvt )
 
 LimitBoxController::LimitBoxController(
     const uno::Reference< uno::XComponentContext >& rxContext ) :
-    svt::ToolboxController( rxContext,
-                            uno::Reference< frame::XFrame >(),
-                            ".uno:DBLimit" ),
+    ImplInheritanceHelper( rxContext, uno::Reference< frame::XFrame >(), ".uno:DBLimit" ),
     m_pLimitBox( nullptr )
 {
 }
@@ -96,27 +94,6 @@ LimitBoxController::LimitBoxController(
 LimitBoxController::~LimitBoxController()
 {
 }
-
-/// XInterface
-uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
-}
-
-void SAL_CALL LimitBoxController::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL LimitBoxController::release() throw ()
-{
-    ToolboxController::release();
-}
-
 
 /// XServiceInfo
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LimitBoxController, "org.libreoffice.comp.dbu.LimitBoxController")
