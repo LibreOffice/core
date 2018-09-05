@@ -544,7 +544,7 @@ endif
 
 $(call gb_UnoPrivateApiTarget_get_target,$(1)/idl.cppumaker.flag): $(2) $(3)
 	$(call gb_Output_announce,$@,$(true),PVTIDL,2)
-	-$$(call gb_Helper_abbreviate_dirs,\
+	-$$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/urd) && \
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/rdb) && \
 		mkdir -p $$(call gb_UnoPrivateApiTarget_get_target,$(1)/inc) && \

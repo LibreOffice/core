@@ -70,7 +70,11 @@ namespace salhelper {
     as missing vector delete errors stopped linking. The small consolation is
     that is a private method, so it may as well not exist. Right?
  */
+#if defined _MSC_VER
+class SimpleReferenceObject
+#else
 class SALHELPER_DLLPUBLIC SimpleReferenceObject
+#endif
 {
 public:
     inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}
@@ -89,25 +93,25 @@ public:
 
     /** see general class documentation
      */
-    static void * operator new(std::size_t nSize) SAL_THROW((std::bad_alloc));
+    SALHELPER_DLLPUBLIC static void * operator new(std::size_t nSize) SAL_THROW((std::bad_alloc));
 
     /** see general class documentation
      */
-    static void * operator new(std::size_t nSize,
+    SALHELPER_DLLPUBLIC static void * operator new(std::size_t nSize,
                                std::nothrow_t const & rNothrow)
         SAL_THROW(());
 
     /** see general class documentation
      */
-    static void operator delete(void * pPtr) SAL_THROW(());
+    SALHELPER_DLLPUBLIC static void operator delete(void * pPtr) SAL_THROW(());
 
     /** see general class documentation
      */
-    static void operator delete(void * pPtr, std::nothrow_t const & rNothrow)
+    SALHELPER_DLLPUBLIC static void operator delete(void * pPtr, std::nothrow_t const & rNothrow)
         SAL_THROW(());
 
 protected:
-    virtual ~SimpleReferenceObject() SAL_THROW(());
+    SALHELPER_DLLPUBLIC virtual ~SimpleReferenceObject() SAL_THROW(());
 
 private:
     oslInterlockedCount m_nCount;
@@ -130,7 +134,7 @@ private:
     /** not implemented (see general class documentation)
         @internal
      */
-    static void operator delete[](void * pPtr);
+    SALHELPER_DLLPUBLIC static void operator delete[](void * pPtr);
 };
 
 }

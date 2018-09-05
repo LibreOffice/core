@@ -147,7 +147,6 @@ my_components = \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
-    date \
     dbase \
     dbp \
     dbpool2 \
