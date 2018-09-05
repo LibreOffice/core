@@ -807,7 +807,7 @@ void Qt5Frame::BeginSetClipRegion(sal_uLong)
 
 void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
 {
-    m_aRegion.united(QRegion(nX, nY, nWidth, nHeight));
+    m_aRegion = m_aRegion.united(QRegion(nX, nY, nWidth, nHeight));
 }
 
 void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
