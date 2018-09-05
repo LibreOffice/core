@@ -410,9 +410,11 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
     pFS->endElementNS(XML_p, XML_attrNameLst);
 }
 
-/// convert animation node type to corresponding ooxml element.
-sal_Int32 convertNodeType(sal_Int16 nType)
+/// extract ooxml node type from a XAnimationNode.
+sal_Int32 extractNodeType(const Reference<XAnimationNode>& rXNode)
 {
+    Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
+    sal_Int16 nType = rXNode->getType();
     sal_Int32 xmlNodeType = -1;
     switch (nType)
     {
@@ -430,8 +432,13 @@ sal_Int32 convertNodeType(sal_Int16 nType)
             xmlNodeType = XML_animMotion;
             break;
         case AnimationNodeType::ANIMATETRANSFORM:
-            // could be XML_animScale or XML_animRot based on xTransform->getTransformType()
-            xmlNodeType = -1;
+            if (xTransform.is())
+            {
+                if (xTransform->getTransformType() == AnimationTransformType::SCALE)
+                    xmlNodeType = XML_animScale;
+                else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
+                    xmlNodeType = XML_animRot;
+            }
             break;
         case AnimationNodeType::ANIMATECOLOR:
             xmlNodeType = XML_animClr;
@@ -1125,7 +1132,10 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
     const Reference<XAnimationNode>& rXNode = getCurrentNode();
 
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
-    sal_Int32 xmlNodeType = convertNodeType(rXNode->getType());
+    sal_Int32 xmlNodeType = extractNodeType(rXNode);
+
+    if (xmlNodeType == -1)
+        return;
 
     switch (rXNode->getType())
     {
@@ -1139,22 +1149,6 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
             WriteAnimationNodeSeq();
             break;
         case AnimationNodeType::ANIMATETRANSFORM:
-        {
-            Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
-            if (xTransform.is())
-            {
-                if (xTransform->getTransformType() == AnimationTransformType::SCALE)
-                    xmlNodeType = XML_animScale;
-                else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
-                    xmlNodeType = XML_animRot;
-
-                WriteAnimationNodeAnimate(xmlNodeType);
-            }
-            else
-                SAL_WARN("sd.eppt",
-                         "XAnimateTransform not handled: " << xTransform->getTransformType());
-        }
-        break;
         case AnimationNodeType::ANIMATE:
         case AnimationNodeType::ANIMATEMOTION:
         case AnimationNodeType::ANIMATECOLOR:
