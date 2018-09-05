@@ -608,7 +608,7 @@ void SvxMeasurePage::Construct()
     m_pCtlPreview->Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxMeasurePage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxMeasurePage::Create( const TabPageParent& pWindow,
                                            const SfxItemSet* rAttrs )
 {
     return VclPtr<SvxMeasurePage>::Create( pWindow.pParent, *rAttrs );

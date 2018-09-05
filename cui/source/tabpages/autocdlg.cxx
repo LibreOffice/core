@@ -214,7 +214,7 @@ void OfaAutocorrOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create( const TabPageParent& pParent,
                                                    const SfxItemSet* rSet)
 {
     return VclPtr<OfaAutocorrOptionsPage>::Create(pParent.pParent, *rSet);
@@ -502,7 +502,7 @@ void OfaSwAutoFmtOptionsPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create( const TabPageParent& pParent,
                                                     const SfxItemSet* rAttrSet)
 {
     return VclPtr<OfaSwAutoFmtOptionsPage>::Create(pParent.pParent, *rAttrSet);
@@ -925,7 +925,7 @@ void OfaAutocorrReplacePage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create( const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<OfaAutocorrReplacePage>::Create(pParent.pParent, *rSet);
 }
@@ -1434,7 +1434,7 @@ void OfaAutocorrExceptPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create( const TabPageParent& pParent,
                                                   const SfxItemSet* rSet)
 {
     return VclPtr<OfaAutocorrExceptPage>::Create(pParent.pParent, *rSet);
@@ -1888,7 +1888,7 @@ void OfaQuoteTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaQuoteTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaQuoteTabPage::Create( const TabPageParent& pParent,
                                             const SfxItemSet* rAttrSet)
 {
     return VclPtr<OfaQuoteTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -2224,7 +2224,7 @@ void OfaAutoCompleteTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create( const TabPageParent& pParent,
                                                    const SfxItemSet* rSet)
 {
     return VclPtr<OfaAutoCompleteTabPage>::Create( pParent.pParent, *rSet );
@@ -2476,7 +2476,7 @@ void OfaSmartTagOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<OfaSmartTagOptionsTabPage>::Create( pParent.pParent, *rSet );
 }

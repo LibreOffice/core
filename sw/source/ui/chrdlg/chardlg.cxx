@@ -131,7 +131,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-SwCharURLPage::SwCharURLPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+SwCharURLPage::SwCharURLPage(const TabPageParent& pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "modules/swriter/ui/charurlpage.ui", "CharURLPage", &rCoreSet)
     , pINetItem(nullptr)
     , bModified(false)
@@ -280,7 +280,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwCharURLPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwCharURLPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwCharURLPage>::Create(pParent, *rAttrSet);
 }

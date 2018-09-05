@@ -100,7 +100,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     pCbxRotate->GetClickHdl().Call(nullptr);
 }
 
-VclPtr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsSnap::Create( const TabPageParent& pWindow,
                                             const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsSnap>::Create( pWindow.pParent, *rAttrs );
@@ -173,7 +173,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsContents::Create( const TabPageParent& pWindow,
                                                 const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsContents>::Create( pWindow.pParent, *rAttrs );
@@ -526,7 +526,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-VclPtr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SdTpOptionsMisc::Create( const TabPageParent& pWindow,
                                             const SfxItemSet* rAttrs )
 {
     return VclPtr<SdTpOptionsMisc>::Create( pWindow.pParent, *rAttrs );

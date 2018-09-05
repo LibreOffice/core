@@ -39,7 +39,7 @@ void ScTpDefaultsOptions::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScTpDefaultsOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
+VclPtr<SfxTabPage> ScTpDefaultsOptions::Create(const TabPageParent& pParent, const SfxItemSet *rCoreAttrs)
 {
     return VclPtr<ScTpDefaultsOptions>::Create(pParent.pParent, *rCoreAttrs);
 }

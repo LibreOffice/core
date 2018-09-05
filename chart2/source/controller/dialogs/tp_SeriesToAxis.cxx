@@ -96,7 +96,7 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, Button*, void)
         m_pCBAxisSideBySide->Enable( m_pRbtAxis1->IsChecked());
 }
 
-VclPtr<SfxTabPage> SchOptionTabPage::Create(TabPageParent pWindow,
+VclPtr<SfxTabPage> SchOptionTabPage::Create(const TabPageParent& pWindow,
                                             const SfxItemSet* rOutAttrs)
 {
     return VclPtr<SchOptionTabPage>::Create(pWindow.pParent, *rOutAttrs);

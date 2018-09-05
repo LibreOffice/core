@@ -76,7 +76,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    VclPtr<SfxTabPage> OConnectionTabPage::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> OConnectionTabPage::Create( const TabPageParent& pParent, const SfxItemSet* _rAttrSet )
     {
         return VclPtr<OConnectionTabPage>::Create( pParent.pParent, *_rAttrSet );
     }

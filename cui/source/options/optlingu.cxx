@@ -1045,7 +1045,7 @@ void SvxLinguTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxLinguTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SvxLinguTabPage::Create( const TabPageParent& pParent,
                                             const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxLinguTabPage>::Create( pParent.pParent, *rAttrSet );

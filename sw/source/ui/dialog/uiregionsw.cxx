@@ -1674,7 +1674,7 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( const TabPageParent& pParent,
                                                    const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwInsertSectionTabPage>::Create(pParent.pParent, *rAttrSet);
@@ -1823,7 +1823,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         m_sFilterName = m_sFilePasswd = aEmptyOUStr;
 }
 
-SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
+SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(const TabPageParent& pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "modules/swriter/ui/footnotesendnotestabpage.ui", "FootnotesEndnotesTabPage", &rAttrSet)
     , m_xFootnoteNtAtTextEndCB(m_xBuilder->weld_check_button("ftnntattextend"))
     , m_xFootnoteNtNumCB(m_xBuilder->weld_check_button("ftnntnum"))
@@ -2000,7 +2000,7 @@ void SwSectionFootnoteEndTabPage::Reset( const SfxItemSet* rSet )
     ResetState( false, rSet->Get( RES_END_AT_TXTEND, false ));
 }
 
-VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( const TabPageParent& pParent,
                                                    const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwSectionFootnoteEndTabPage>::Create(pParent, *rAttrSet);
@@ -2105,7 +2105,7 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
         static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
-SwSectionIndentTabPage::SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
+SwSectionIndentTabPage::SwSectionIndentTabPage(const TabPageParent& pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "modules/swriter/ui/indentpage.ui", "IndentPage", &rAttrSet)
     , m_xBeforeMF(m_xBuilder->weld_metric_spin_button("before", FUNIT_CM))
     , m_xAfterMF(m_xBuilder->weld_metric_spin_button("after", FUNIT_CM))
@@ -2158,7 +2158,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(*m_xBeforeMF);
 }
 
-VclPtr<SfxTabPage> SwSectionIndentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwSectionIndentTabPage::Create(const TabPageParent& pParent, const SfxItemSet* rAttrSet)
 {
     return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }

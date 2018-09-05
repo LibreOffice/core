@@ -225,7 +225,7 @@ inline SvxFont& CharBasePage::GetPreviewCTLFont()
     return m_aPreviewWin.GetCTLFont();
 }
 
-CharBasePage::CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+CharBasePage::CharBasePage(const TabPageParent& pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
     : SfxTabPage(pParent, rUIXMLDescription, rID, &rItemset)
     , m_bPreviewBackgroundToCharacter( false )
 {
@@ -1263,7 +1263,7 @@ DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-VclPtr<SfxTabPage> SvxCharNamePage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharNamePage::Create( const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxCharNamePage>::Create( pParent.pParent, *rSet );
 }
@@ -1776,7 +1776,7 @@ DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-VclPtr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxCharEffectsPage::Create( const TabPageParent& pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxCharEffectsPage>::Create( pParent.pParent, *rSet );
 }
@@ -2566,7 +2566,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharPositionPage::SvxCharPositionPage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : CharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
@@ -2791,7 +2791,7 @@ DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxCharPositionPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxCharPositionPage>::Create(pParent, *rSet);
 }
@@ -3172,7 +3172,7 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rInSet)
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(const TabPageParent& pParent, const SfxItemSet& rInSet)
     : CharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
@@ -3298,7 +3298,7 @@ DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxCharTwoLinesPage::Create(const TabPageParent& pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SvxCharTwoLinesPage>::Create(pParent, *rSet);
 }

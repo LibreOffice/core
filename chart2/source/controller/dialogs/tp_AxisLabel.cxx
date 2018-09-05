@@ -97,7 +97,7 @@ void SchAxisLabelTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchAxisLabelTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SchAxisLabelTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rAttrs )
 {
     return VclPtr<SchAxisLabelTabPage>::Create( pParent.pParent, *rAttrs );
 }

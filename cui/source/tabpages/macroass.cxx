@@ -447,7 +447,7 @@ namespace
     }
 }
 
-VclPtr<SfxTabPage> SfxMacroTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxMacroTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return CreateSfxMacroTabPage(pParent.pParent, *rAttrSet);
 }

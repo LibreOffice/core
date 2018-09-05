@@ -389,7 +389,7 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxConnectionPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxConnectionPage::Create( const TabPageParent& pWindow,
                                               const SfxItemSet* rAttrs )
 {
     return VclPtr<SvxConnectionPage>::Create( pWindow.pParent, *rAttrs );

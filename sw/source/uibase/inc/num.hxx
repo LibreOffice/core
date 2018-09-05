@@ -103,7 +103,7 @@ class SwNumPositionTabPage : public SfxTabPage
 
 public:
 
-    SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwNumPositionTabPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage() override;
     virtual void        dispose() override;
 
@@ -112,7 +112,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create( const TabPageParent& pParent,
                                       const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
