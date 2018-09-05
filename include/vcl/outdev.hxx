@@ -995,7 +995,8 @@ public:
 
     void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
+                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                              const SalLayoutGlyphs* pGlyphs = nullptr);
 
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
@@ -1093,7 +1094,8 @@ public:
     OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
                                                    DrawTextFlags nStyle = DrawTextFlags::EndEllipsis ) const;
 
-    long                        GetCtrlTextWidth( const OUString& rStr ) const;
+    long                        GetCtrlTextWidth( const OUString& rStr,
+                                                  const SalLayoutGlyphs* pLayoutCache = nullptr ) const;
 
     static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
 
@@ -1163,7 +1165,8 @@ public:
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
     void                        GetCaretPositions( const OUString&, long* pCaretXArray,
-                                              sal_Int32 nIndex, sal_Int32 nLen ) const;
+                                              sal_Int32 nIndex, sal_Int32 nLen,
+                                              const SalLayoutGlyphs* pGlyphs = nullptr ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);

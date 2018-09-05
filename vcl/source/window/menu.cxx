@@ -65,6 +65,7 @@
 #include <vcl/configsettings.hxx>
 
 #include <vcl/lazydelete.hxx>
+#include <vcl/vcllayout.hxx>
 
 #include <map>
 #include <vector>
@@ -1513,7 +1514,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // Text:
             if ( (pData->eType == MenuItemType::STRING) || (pData->eType == MenuItemType::STRINGIMAGE) )
             {
-                long nTextWidth = pWin->GetCtrlTextWidth( pData->aText );
+                const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(pWin);
+                long nTextWidth = pWin->GetCtrlTextWidth(pData->aText, pGlyphs);
                 long nTextHeight = pWin->GetTextHeight();
 
                 if (IsMenuBar())
@@ -2009,7 +2011,13 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                         pData->bHiddenOnGUI = false;
                     }
 
-                    rRenderContext.DrawCtrlText(aTmpPos, aItemText, 0, aItemText.getLength(), nStyle, pVector, pDisplayText);
+                    const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(&rRenderContext);
+                    if (aItemText != pData->aText)
+                        // Can't use pre-computed glyphs, item text was
+                        // changed.
+                        pGlyphs = nullptr;
+                    rRenderContext.DrawCtrlText(aTmpPos, aItemText, 0, aItemText.getLength(),
+                                                nStyle, pVector, pDisplayText, pGlyphs);
                     if (bSetTmpBackground)
                         rRenderContext.SetBackground();
                 }
