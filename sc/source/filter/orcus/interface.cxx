@@ -283,7 +283,7 @@ ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles) :
     maGlobalSettings(maDoc),
     maSharedStrings(*this),
     maNamedExpressions(maDoc, maGlobalSettings),
-    maStyles(*this, rDoc, bSkipDefaultStyles),
+    maStyles(*this, bSkipDefaultStyles),
     mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
@@ -495,6 +495,11 @@ void ScOrcusFactory::finalize()
         mxStatusIndicator->end();
 
     maDoc.finalize();
+}
+
+ScDocumentImport& ScOrcusFactory::getDoc()
+{
+    return maDoc;
 }
 
 size_t ScOrcusFactory::appendString(const OUString& rStr)
@@ -1261,12 +1266,12 @@ size_t ScOrcusSharedStrings::commit_segments()
         OStringToOUString(aStr, mrFactory.getGlobalSettings().getTextEncoding()));
 }
 
-ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, ScDocument& rDoc, bool bSkipDefaultStyles ) :
-    mrFactory(rFactory),
-    mrDoc(rDoc)
+ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles ) :
+    mrFactory(rFactory)
 {
-    if (!bSkipDefaultStyles && !mrDoc.GetStyleSheetPool()->HasStandardStyles())
-        mrDoc.GetStyleSheetPool()->CreateStandardStyles();
+    ScDocument& rDoc = rFactory.getDoc().getDoc();
+    if (!bSkipDefaultStyles && !rDoc.GetStyleSheetPool()->HasStandardStyles())
+        rDoc.GetStyleSheetPool()->CreateStandardStyles();
 }
 
 ScOrcusStyles::font::font():
@@ -1526,7 +1531,7 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     }
     const number_format& rFormat = maNumberFormats[nNumberFormatId];
     if (rFormat.mbHasNumberFormatAttr)
-        rFormat.applyToItemSet(rSet, mrDoc);
+        rFormat.applyToItemSet(rSet, mrFactory.getDoc().getDoc());
 
     if(rXf.mbAlignment)
     {
@@ -2134,7 +2139,7 @@ size_t ScOrcusStyles::commit_cell_style()
         return 0;
     }
 
-    ScStyleSheetPool* pPool = mrDoc.GetStyleSheetPool();
+    ScStyleSheetPool* pPool = mrFactory.getDoc().getDoc().GetStyleSheetPool();
     SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
     rBase.SetParent(maCurrentCellStyle.maParentName);
     SfxItemSet& rSet = rBase.GetItemSet();

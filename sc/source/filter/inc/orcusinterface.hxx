@@ -347,7 +347,6 @@ class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
 {
 private:
     ScOrcusFactory& mrFactory;
-    ScDocument& mrDoc;
 
     struct font
     {
@@ -478,7 +477,7 @@ private:
     void applyXfToItemSet(SfxItemSet& rSet, const xf& rXf);
 
 public:
-    ScOrcusStyles( ScOrcusFactory& rFactory, ScDocument& rDoc, bool bSkipDefaultStyles=false );
+    ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles=false );
 
     void applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
 
@@ -641,6 +640,8 @@ public:
     virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
     virtual orcus::spreadsheet::iface::import_styles* get_styles() override;
     virtual void finalize() override;
+
+    ScDocumentImport& getDoc();
 
     size_t appendString(const OUString& rStr);
     size_t addString(const OUString& rStr);
