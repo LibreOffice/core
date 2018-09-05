@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
-  <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -13,12 +12,12 @@
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">0.01</property>
     <property name="upper">56</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="upper">56</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
@@ -35,6 +34,23 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">0.01</property>
+    <property name="upper">56</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment7">
+    <property name="lower">0.01</property>
+    <property name="upper">56</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="upper">56</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -46,36 +62,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-forward</property>
     <property name="icon_size">1</property>
-  </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="columnpage|liststore2">Selection</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="columnpage|liststore2">Current Section</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="columnpage|liststore2">Selected section</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="columnpage|liststore2">Frame</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="columnpage|liststore2">Page Style: </col>
-        <col id="1">3</col>
-      </row>
-    </data>
   </object>
   <object class="GtkGrid" id="ColumnPage">
     <property name="visible">True</property>
@@ -128,7 +114,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_1</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">width1mf:0.00cm</property>
+                    <property name="mnemonic_widget">width1mf</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -142,10 +128,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_2</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">width2mf:0.00cm</property>
-                    <attributes>
-                      <attribute name="background" value="#ffffffffffff"/>
-                    </attributes>
+                    <property name="mnemonic_widget">width2mf</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -159,7 +142,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_3</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">width3mf:0.00cm</property>
+                    <property name="mnemonic_widget">width3mf</property>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -173,9 +156,9 @@
                     <property name="label" translatable="yes" context="columnpage|widthft">Width:</property>
                     <property name="xalign">1</property>
                     <accessibility>
-                      <relation type="label-for" target="width3mf:0.00cm"/>
-                      <relation type="label-for" target="width2mf:0.00cm"/>
-                      <relation type="label-for" target="width1mf:0.00cm"/>
+                      <relation type="label-for" target="width3mf"/>
+                      <relation type="label-for" target="width2mf"/>
+                      <relation type="label-for" target="width1mf"/>
                     </accessibility>
                   </object>
                   <packing>
@@ -184,12 +167,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="width3mf:0.00cm">
+                  <object class="GtkSpinButton" id="width3mf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="adjustment">adjustment2</property>
+                    <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
@@ -201,12 +184,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="width2mf:0.00cm">
+                  <object class="GtkSpinButton" id="width2mf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="adjustment">adjustment2</property>
+                    <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
@@ -218,7 +201,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="width1mf:0.00cm">
+                  <object class="GtkSpinButton" id="width1mf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -241,8 +224,8 @@
                     <property name="label" translatable="yes" context="columnpage|distft">Spacing:</property>
                     <property name="xalign">1</property>
                     <accessibility>
-                      <relation type="label-for" target="spacing1mf:0.00cm"/>
-                      <relation type="label-for" target="spacing2mf:0.00cm"/>
+                      <relation type="label-for" target="spacing1mf"/>
+                      <relation type="label-for" target="spacing2mf"/>
                     </accessibility>
                   </object>
                   <packing>
@@ -257,7 +240,7 @@
                     <property name="halign">center</property>
                     <property name="column_spacing">24</property>
                     <child>
-                      <object class="GtkSpinButton" id="spacing1mf:0.00cm">
+                      <object class="GtkSpinButton" id="spacing1mf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
@@ -273,11 +256,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spacing2mf:0.00cm">
+                      <object class="GtkSpinButton" id="spacing2mf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
-                        <property name="adjustment">adjustment3</property>
+                        <property name="adjustment">adjustment8</property>
                         <property name="digits">2</property>
                         <accessibility>
                           <relation type="labelled-by" target="distft"/>
@@ -423,7 +406,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="columnpage|linewidthft">_Width:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linewidthmf:0.00pt</property>
+                    <property name="mnemonic_widget">linewidthmf</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -437,7 +420,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linewidthmf:0.00pt</property>
+                    <property name="mnemonic_widget">lineheightmf</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -460,10 +443,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-LineListBox" id="linestylelb">
+                  <object class="GtkMenuButton" id="linestylelb">
                     <property name="visible">True</property>
-                    <property name="dropdown">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -486,7 +473,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="lineheightmf:0%">
+                  <object class="GtkSpinButton" id="lineheightmf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment5</property>
@@ -497,7 +484,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="linewidthmf:0.00pt">
+                  <object class="GtkSpinButton" id="linewidthmf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment4</property>
@@ -509,10 +496,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxColorListBox" id="colorlb">
+                  <object class="GtkMenuButton" id="colorlb">
                     <property name="visible">True</property>
-                    <property name="dropdown">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -652,11 +643,18 @@
                             <property name="can_focus">False</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkComboBox" id="applytolb">
+                              <object class="GtkComboBoxText" id="applytolb">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
+                                <property name="halign">start</property>
                                 <property name="hexpand">True</property>
-                                <property name="model">liststore2</property>
+                                <items>
+                                  <item id="0" translatable="yes" context="columnpage|liststore2">Selection</item>
+                                  <item id="1" translatable="yes" context="columnpage|liststore2">Current Section</item>
+                                  <item id="2" translatable="yes" context="columnpage|liststore2">Selected section</item>
+                                  <item id="4" translatable="yes" context="columnpage|liststore2">Frame</item>
+                                  <item id="3" translatable="yes" context="columnpage|liststore2">Page Style: </item>
+                                </items>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -703,9 +701,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="svxlo-FrameDirectionListBox" id="textdirectionlb">
-                                <property name="no_show_all">True</property>
+                              <object class="GtkComboBoxText" id="textdirectionlb">
                                 <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -726,11 +724,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="swuilo-ColumnValueSet" id="valueset">
+                      <object class="GtkDrawingArea" id="valueset">
                         <property name="width_request">160</property>
                         <property name="height_request">35</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                       </object>
@@ -764,7 +763,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="swlo-SwColExample" id="pageexample">
+              <object class="GtkDrawingArea" id="pageexample">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -776,7 +775,7 @@
               </packing>
             </child>
             <child>
-              <object class="swlo-SwColumnOnlyExample" id="frameexample">
+              <object class="GtkDrawingArea" id="frameexample">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>

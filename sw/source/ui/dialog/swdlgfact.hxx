@@ -115,13 +115,14 @@ class VclAbstractDialog_Impl : public VclAbstractDialog
 class AbstractGenericDialog_Impl : public VclAbstractDialog
 {
 protected:
-    std::unique_ptr<weld::GenericDialogController> m_xDlg;
+    std::shared_ptr<weld::GenericDialogController> m_xDlg;
 public:
     explicit AbstractGenericDialog_Impl(std::unique_ptr<weld::GenericDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
 };
 
 class AbstractSwSortDlg_Impl : public VclAbstractDialog
@@ -583,7 +584,7 @@ public:
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(const OUString &rShortName) override;
     virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window * pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;
 
     virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,

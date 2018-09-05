@@ -294,12 +294,14 @@ public:
     ~SvtLineListBox();
 
     /** Set the width in Twips */
-    void SetWidth( long nWidth )
+    void SetWidth(long nWidth)
     {
         m_nWidth = nWidth;
         UpdateEntries();
         UpdatePreview();
     }
+
+    long GetWidth() const { return m_nWidth; }
 
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry(const BorderWidthImpl& rWidthImpl,
@@ -317,11 +319,14 @@ public:
     {
         aColor = rColor;
         UpdateEntries();
+        UpdatePreview();
     }
 
     const Color&    GetColor() const { return aColor; }
 
     void            SetSelectHdl(const Link<SvtLineListBox&,void>& rLink) { maSelectHdl = rLink; }
+
+    void            set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
 
 private:
 
