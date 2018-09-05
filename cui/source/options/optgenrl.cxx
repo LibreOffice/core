@@ -349,7 +349,7 @@ void SvxGeneralTabPage::SetLinks ()
 }
 
 
-VclPtr<SfxTabPage> SvxGeneralTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxGeneralTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxGeneralTabPage>::Create( pParent.pParent, *rAttrSet );
 }

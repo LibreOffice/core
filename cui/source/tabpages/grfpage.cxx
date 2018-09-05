@@ -152,7 +152,7 @@ void SvxGrfCropPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SvxGrfCropPage::Create(const TabPageParent& pParent, const SfxItemSet *rSet)
 {
     return VclPtr<SvxGrfCropPage>::Create( pParent.pParent, *rSet );
 }

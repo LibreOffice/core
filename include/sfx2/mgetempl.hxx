@@ -79,7 +79,7 @@ friend class SfxStyleDialogController;
     virtual ~SfxManageStyleSheetPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( const TabPageParent& pParent, const SfxItemSet* );
 
     virtual bool        FillItemSet(SfxItemSet *) override;
     virtual void        Reset(const SfxItemSet *) override;
@@ -91,7 +91,7 @@ friend class SfxStyleDialogController;
     virtual DeactivateRC DeactivatePage(SfxItemSet *) override;
 
 public:
-    SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SfxManageStyleSheetPage(const TabPageParent& pParent, const SfxItemSet &rAttrSet);
 };
 
 #endif

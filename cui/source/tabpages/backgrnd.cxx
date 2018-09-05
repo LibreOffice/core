@@ -422,7 +422,7 @@ void SvxBackgroundTabPage::dispose()
     SvxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( const TabPageParent& pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxBackgroundTabPage>::Create( pParent.pParent, *rAttrSet );
 }
@@ -1443,7 +1443,7 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
-SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+SvxBkgTabPage::SvxBkgTabPage(const TabPageParent& pParent, const SfxItemSet& rInAttrs)
     : SvxAreaTabPage(pParent, rInAttrs)
     , bHighlighting(false)
 {
@@ -1547,7 +1547,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return true;
 }
 
-VclPtr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxBkgTabPage::Create(const TabPageParent& pWindow, const SfxItemSet* rAttrs)
 {
     return VclPtr<SvxBkgTabPage>::Create(pWindow, *rAttrs);
 }

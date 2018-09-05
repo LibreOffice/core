@@ -56,7 +56,7 @@ class SwEnvPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwEnvPrtPage(const TabPageParent& pParent, const SfxItemSet& rSet);
     virtual void dispose() override
     {
         m_xPrt.clear();
@@ -64,7 +64,7 @@ public:
     }
     virtual ~SwEnvPrtPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

@@ -87,7 +87,7 @@ public:
     virtual ~SwLoadOptPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create( const TabPageParent& pParent,
                                       const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -203,7 +203,7 @@ public:
                         virtual ~SwCaptionOptPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static VclPtr<SfxTabPage> Create( const TabPageParent& pParent,
                                       const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

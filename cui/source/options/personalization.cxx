@@ -325,7 +325,7 @@ void SvxPersonalizationTabPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
+VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create( const TabPageParent& pParent, const SfxItemSet *rSet )
 {
     return VclPtr<SvxPersonalizationTabPage>::Create( pParent.pParent, *rSet );
 }

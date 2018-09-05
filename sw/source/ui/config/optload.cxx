@@ -168,7 +168,7 @@ void SwLoadOptPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwLoadOptPage::Create( const TabPageParent& pParent,
                                           const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwLoadOptPage>::Create(pParent.pParent, *rAttrSet );
@@ -584,7 +584,7 @@ void SwCaptionOptPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCaptionOptPage::Create( TabPageParent pParent,
+VclPtr<SfxTabPage> SwCaptionOptPage::Create( const TabPageParent& pParent,
                                              const SfxItemSet* rAttrSet )
 {
     return VclPtr<SwCaptionOptPage>::Create( pParent.pParent, *rAttrSet );

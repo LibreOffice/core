@@ -26,10 +26,10 @@
 class SwDocStatPage final : public SfxTabPage
 {
 public:
-    SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwDocStatPage(const TabPageParent& pParent, const SfxItemSet &rSet);
     virtual ~SwDocStatPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static VclPtr<SfxTabPage> Create(const TabPageParent& pParent, const SfxItemSet *rSet);
 
 private:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;

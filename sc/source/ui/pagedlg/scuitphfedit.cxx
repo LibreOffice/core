@@ -832,7 +832,7 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( vcl::Window* pParent, const SfxIte
                     true )
     {}
 
-VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( const TabPageParent& pParent, const SfxItemSet* rCoreSet )
 {
     return VclPtr<ScRightHeaderEditPage>::Create( pParent.pParent, *rCoreSet );
 }
@@ -846,7 +846,7 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemS
                     true )
     {}
 
-VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( const TabPageParent& pParent, const SfxItemSet* rCoreSet )
 {
     return VclPtr<ScLeftHeaderEditPage>::Create( pParent.pParent, *rCoreSet );
 }
@@ -860,7 +860,7 @@ ScRightFooterEditPage::ScRightFooterEditPage( vcl::Window* pParent, const SfxIte
                     false )
     {}
 
-VclPtr<SfxTabPage> ScRightFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScRightFooterEditPage::Create( const TabPageParent& pParent, const SfxItemSet* rCoreSet )
 {
     return VclPtr<ScRightFooterEditPage>::Create( pParent.pParent, *rCoreSet );
 }
@@ -874,7 +874,7 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemS
                     false )
     {}
 
-VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( const TabPageParent& pParent, const SfxItemSet* rCoreSet )
 {
     return VclPtr<ScLeftFooterEditPage>::Create( pParent.pParent, *rCoreSet );
 };
