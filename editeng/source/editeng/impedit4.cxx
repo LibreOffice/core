@@ -1458,10 +1458,10 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart )
         bIsStart = true;
 
-    EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefDialogParent(),
-            bIsStart, pEditView );
+    std::unique_ptr<EditSpellWrapper> pWrp(new EditSpellWrapper( Application::GetDefDialogParent(),
+            bIsStart, pEditView ));
     pWrp->SpellDocument();
-    delete pWrp;
+    pWrp.reset();
 
     if ( !bMultipleDoc )
     {
