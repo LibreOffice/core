@@ -52,7 +52,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
+std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
             const Reference< XCoordinateSystem >& xCooSysModel )
 {
     if( !xCooSysModel.is() )
@@ -61,13 +61,13 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
     OUString aViewServiceName = xCooSysModel->getViewServiceName();
 
     //@todo: in future the coordinatesystems should be instantiated via service factory
-    VCoordinateSystem* pRet=nullptr;
+    std::unique_ptr<VCoordinateSystem> pRet;
     if( aViewServiceName == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME )
-        pRet = new VCartesianCoordinateSystem(xCooSysModel);
+        pRet.reset( new VCartesianCoordinateSystem(xCooSysModel) );
     else if( aViewServiceName == CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME )
-        pRet = new VPolarCoordinateSystem(xCooSysModel);
+        pRet.reset( new VPolarCoordinateSystem(xCooSysModel) );
     if(!pRet)
-        pRet = new VCoordinateSystem(xCooSysModel);
+        pRet.reset( new VCoordinateSystem(xCooSysModel) );
     return pRet;
 }
 
