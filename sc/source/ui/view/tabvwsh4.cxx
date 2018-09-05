@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <formdata.hxx>
 
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
@@ -1777,6 +1778,7 @@ ScTabViewShell::~ScTabViewShell()
     pPivotShell.reset();
     pAuditingShell.reset();
     pCurFrameLine.reset();
+    mpFormEditData.reset();
     mpInputHandler.reset();
     pPivotSource.reset();
     pDialogDPObject.reset();
