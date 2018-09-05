@@ -3639,9 +3639,12 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     {
         ScModule* pScMod = SC_MOD();
 
+        ScTabViewShell* pScTabViewShell = pScMod ? dynamic_cast<ScTabViewShell*>(pScMod->GetViewShell()) : nullptr;
+
         // Also take foreign reference input into account here (e.g. FunctionsAutoPilot),
         // FormEditData, if we're switching from Help to Calc:
-        if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
+        if ( !bFormulaMode && !pScMod->IsFormulaMode() &&
+             ( !pScTabViewShell || !pScTabViewShell->GetFormEditData() ) )
         {
             bool bIgnore = false;
             if ( bModified )

@@ -100,7 +100,6 @@ class SAL_DLLPUBLIC_RTTI ScModule: public SfxModule, public SfxListener, public 
     std::unique_ptr<SvtCTLOptions>           m_pCTLOptions;
     std::unique_ptr<SvtUserOptions>          m_pUserOptions;
     std::unique_ptr<SfxErrorHandler>  m_pErrorHdl;
-    std::unique_ptr<ScFormEditData>   m_pFormEditData;
     sal_uInt16          m_nCurRefDlgId;
     bool                m_bIsWaterCan:1;
     bool                m_bIsInEditCommand:1;
@@ -206,7 +205,6 @@ public:
     void                InputSelection( const EditView* pView );
     void                InputChanged( const EditView* pView );
     ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = nullptr, bool bUseRef = true );
-
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl() { return m_pRefInputHandler;}
 
@@ -217,13 +215,8 @@ public:
     void                InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd );
     void                InputReplaceSelection( const OUString& rStr );
     void                InputTurnOffWinEngine();
-    OUString            InputGetFormulaStr();
     void                ActivateInputWindow( const OUString* pStr = nullptr,
                                                 bool bMatrix = false );
-
-    void                InitFormEditData();
-    void                ClearFormEditData();
-    ScFormEditData*     GetFormEditData()       { return m_pFormEditData.get(); }
 
     // input of reference:
     SC_DLLPUBLIC void   SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = nullptr );
