@@ -437,7 +437,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linewidthmf:0.00pt</property>
+                    <property name="mnemonic_widget">lineheightmf:0%</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
