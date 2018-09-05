@@ -38,6 +38,29 @@ MenuItemData::~MenuItemData()
     pSubMenu.disposeAndClear();
 }
 
+SalLayoutGlyphs* MenuItemData::GetTextGlyphs(OutputDevice* pOutputDevice)
+{
+    if (!aTextGlyphs.empty())
+        // Use pre-calculated result.
+        return &aTextGlyphs;
+
+    OUString aNonMnemonicString = OutputDevice::GetNonMnemonicString(aText);
+    std::unique_ptr<SalLayout> pLayout
+        = pOutputDevice->ImplLayout(aNonMnemonicString, 0, aNonMnemonicString.getLength(),
+                                    Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    if (!pLayout)
+        return nullptr;
+
+    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
+    if (!pGlyphs)
+        return nullptr;
+
+    // Remember the calculation result.
+    aTextGlyphs = *pGlyphs;
+
+    return &aTextGlyphs;
+}
+
 MenuItemList::~MenuItemList()
 {
 }

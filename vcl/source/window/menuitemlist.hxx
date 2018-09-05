@@ -21,6 +21,7 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/vcllayout.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
@@ -36,6 +37,7 @@ struct MenuItemData
     MenuItemBits    nBits;                  // MenuItem-Bits
     VclPtr<Menu>    pSubMenu;               // Pointer to SubMenu
     OUString        aText;                  // Menu-Text
+    SalLayoutGlyphs aTextGlyphs;            ///< Text layout of aText.
     OUString        aHelpText;              // Help-String
     OUString        aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     OUString        aCommandStr;            // CommandString
@@ -87,6 +89,10 @@ struct MenuItemData
     {
     }
     ~MenuItemData();
+
+    /// Computes aText's text layout (glyphs), cached in aTextGlyphs.
+    SalLayoutGlyphs* GetTextGlyphs(OutputDevice* pOutputDevice);
+
     bool HasCheck() const
     {
         return bChecked || ( nBits & ( MenuItemBits::RADIOCHECK | MenuItemBits::CHECKABLE | MenuItemBits::AUTOCHECK ) );
