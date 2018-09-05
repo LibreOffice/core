@@ -606,23 +606,12 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
-    if (maVector.empty())
-        return;
-    SwDoc *const pDoc = maVector.front()->GetDoc();
     while (!maVector.empty())
     {
         auto const pRedline = maVector.back();
         maVector.erase(maVector.back());
         LOKRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
-    }
-    if (pDoc && !pDoc->IsInDtor())
-    {
-        SwViewShell* pSh(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() );
-        if (pSh)
-        {
-            pSh->InvalidateWindows(SwRect(0, 0, SAL_MAX_INT32, SAL_MAX_INT32));
-        }
     }
 }
 
