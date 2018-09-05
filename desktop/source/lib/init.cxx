@@ -3857,6 +3857,14 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         ::osl::Module::getUrlFromAddress( reinterpret_cast< oslGenericFunction >(lo_initialize),
                                           aAppURL);
         osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
+#ifdef IOS
+        // The above gives something like
+        // "/private/var/containers/Bundle/Application/953AA851-CC15-4C60-A2CB-C2C6F24E6F71/Foo.app/Foo",
+        // and we want to drop the final component (the binary name).
+        sal_Int32 lastSlash = aAppPath.lastIndexOf('/');
+        assert(lastSlash > 0);
+        aAppPath = aAppPath.copy(0, lastSlash);
+#endif
     }
 
     OUString aAppURL;
