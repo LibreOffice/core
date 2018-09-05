@@ -38,6 +38,9 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
     $(if,$(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \
 ))
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_tdf119625 \
+))
 endif
 
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
