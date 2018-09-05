@@ -493,18 +493,6 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     UpdatePaintLineColor();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeLineListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<LineListBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 LineListBox::~LineListBox()
 {
     disposeOnce();
@@ -1587,11 +1575,19 @@ SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
     return static_cast<SvxBorderLineStyle>(nId - 1);
 }
 
+namespace
+{
+    Size getPreviewSize(const weld::Widget& rControl)
+    {
+        return Size(rControl.get_approximate_digit_width() * 15, rControl.get_text_height());
+    }
+}
+
 void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
                             SvxBorderLineStyle nStyle, BitmapEx& rBmp )
 {
-    Size aSize(m_xControl->get_approximate_digit_width() * 15, m_xControl->get_text_height());
+    Size aSize(getPreviewSize(*m_xControl));
 
     // SourceUnit to Twips
     if ( eSourceUnit == FUNIT_POINT )
@@ -1682,9 +1678,16 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
 
     m_xTopLevel->connect_focus_in(LINK(this, SvtLineListBox, FocusHdl));
     m_xControl->set_popover(m_xTopLevel.get());
+
+    // lock size to these maxes height/width so it doesn't jump around in size
     m_xControl->set_label(GetLineStyleName(SvxBorderLineStyle::NONE));
-    // lock to this text height
-    m_xControl->set_size_request(-1, m_xControl->get_preferred_size().Height());
+    Size aNonePrefSize = m_xControl->get_preferred_size();
+    m_xControl->set_label("");
+    aVirDev->SetOutputSizePixel(getPreviewSize(*m_xControl));
+    m_xControl->set_image(aVirDev);
+    Size aSolidPrefSize = m_xControl->get_preferred_size();
+    m_xControl->set_size_request(std::max(aNonePrefSize.Width(), aSolidPrefSize.Width()),
+                                 std::max(aNonePrefSize.Height(), aSolidPrefSize.Height()));
 
     eSourceUnit = FUNIT_POINT;
 
@@ -1868,8 +1871,8 @@ void SvtLineListBox::UpdatePreview()
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
         aVirDev->Erase();
         aVirDev->DrawImage(Point(0, nPos), aImage);
-        aVirDev->Pop();
         m_xControl->set_image(aVirDev.get());
+        aVirDev->Pop();
     }
 }
 

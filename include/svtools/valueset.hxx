@@ -495,8 +495,10 @@ public:
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
-    virtual void    Select();
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
+
+    virtual void    Select();
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     OUString const & GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
@@ -513,6 +515,8 @@ public:
                                const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
+    /// Insert an User Drawn item with @rStr tooltip.
+    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -560,6 +564,7 @@ public:
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
     void            Format(vcl::RenderContext const & rRenderContext);
+    void            SetFormat();
 
     Size            CalcWindowSizePixel(const Size& rItemSize,
                                         sal_uInt16 nCalcCols = 0,

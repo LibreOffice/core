@@ -174,18 +174,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Svt Line ListBox" name="svtlo-LineListBox"
-                        generic-name="Line ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-      <properties>
-        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
-          <parameter-spec>
-            <type>GParamBoolean</type>
-          </parameter-spec>
-        </property>
-      </properties>
-    </glade-widget-class>
-
     <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
                         generic-name="FontStyleBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
@@ -320,9 +308,6 @@
     <glade-widget-class title="SvxPresetListBox" name="svxcorelo-SvxPresetListBox"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SwColumnValueSet" name="swuilo-ColumnValueSet"
-                        generic-name="Set of Value Options" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="TableValueSet" name="sdlo-TableValueSet"
                         generic-name="Set of Table Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -355,12 +340,6 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Paragraph Preview" name="svxlo-SvxParaPrevWindow"
                         generic-name="Paragraph Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Page Preview" name="swlo-SwColExample"
-                        generic-name="Page Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Page Preview" name="swlo-SwColumnOnlyExample"
-                        generic-name="Page Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"

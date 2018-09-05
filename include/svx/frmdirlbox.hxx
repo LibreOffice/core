@@ -70,7 +70,7 @@ public:
     void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
     void remove_id(SvxFrameDirection eDir) { m_xControl->remove_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
     void hide() { m_xControl->hide(); }
-    void show() { m_xControl->show(); }
+    void show(bool bShow = true) { m_xControl->show(bShow); }
     int get_count() const { return m_xControl->get_count(); }
     /** Inserts a string with corresponding direction enum into the listbox. */
     void append(SvxFrameDirection eDirection, const OUString& rString)
