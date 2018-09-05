@@ -1295,12 +1295,18 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
         sal_Int32 nCurrentCellType(
             GetNumberFormatAttributesExportHelper()->GetCellType(
                 rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
-        if ((nCellType != nCurrentCellType) && !((nCellType == util::NumberFormat::NUMBER &&
-            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
-            (nCurrentCellType == util::NumberFormat::FRACTION) ||
-            (nCurrentCellType == util::NumberFormat::LOGICAL) ||
-            (nCurrentCellType == 0))) || (nCurrentCellType == util::NumberFormat::TEXT)) && !((nCellType == util::NumberFormat::DATETIME) &&
-            (nCurrentCellType == util::NumberFormat::DATE)))
+        // If the (numeric) cell type (number, currency, date, time, boolean)
+        // is different from the format type then for some combinations we may
+        // have to apply a format, e.g. in case the generator deduced format
+        // from type and did not apply a format but we don't keep a dedicated
+        // type internally. Specifically this is necessary if the cell type is
+        // not number but the format type is (i.e. General). Currency cells
+        // need extra attention, see calls of ScXMLImport::IsCurrencySymbol()
+        // and description within there and ScXMLImport::SetCurrencySymbol().
+        if ((nCellType != nCurrentCellType) &&
+                (nCellType != util::NumberFormat::NUMBER) &&
+                (nCellType != util::NumberFormat::TEXT) &&
+                (bIsStandard || (nCellType == util::NumberFormat::CURRENCY)))
         {
             if (!xNumberFormats.is())
             {
