@@ -38,7 +38,7 @@ using namespace css;
 namespace {
 
 /// Controller for .uno:MailMergeCurrentEntry toolbar checkbox: creates the checkbox & handles the value.
-class MMCurrentEntryController : public svt::ToolboxController, public lang::XServiceInfo
+class MMCurrentEntryController : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<Edit> m_pCurrentEdit;
 
@@ -46,29 +46,9 @@ class MMCurrentEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
+        : ImplInheritanceHelper(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
         , m_pCurrentEdit(nullptr)
     {
-    }
-
-    // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
-    {
-        uno::Any a(ToolboxController::queryInterface(aType));
-        if (a.hasValue())
-            return a;
-
-        return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
-    }
-
-    void SAL_CALL acquire() throw () override
-    {
-        ToolboxController::acquire();
-    }
-
-    void SAL_CALL release() throw () override
-    {
-        ToolboxController::release();
     }
 
     // XServiceInfo
@@ -99,7 +79,7 @@ public:
 };
 
 /// Controller for .uno:MailMergeExcludeEntry toolbar checkbox: creates the checkbox & handles the value.
-class MMExcludeEntryController : public svt::ToolboxController, public lang::XServiceInfo
+class MMExcludeEntryController : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<CheckBox> m_pExcludeCheckbox;
 
@@ -107,29 +87,9 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
+        : ImplInheritanceHelper(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
         , m_pExcludeCheckbox(nullptr)
     {
-    }
-
-    // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
-    {
-        uno::Any a(ToolboxController::queryInterface(aType));
-        if (a.hasValue())
-            return a;
-
-        return ::cppu::queryInterface(aType, static_cast<lang::XServiceInfo*>(this));
-    }
-
-    void SAL_CALL acquire() throw () override
-    {
-        ToolboxController::acquire();
-    }
-
-    void SAL_CALL release() throw () override
-    {
-        ToolboxController::release();
     }
 
     // XServiceInfo

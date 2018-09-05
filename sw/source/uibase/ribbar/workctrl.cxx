@@ -650,17 +650,11 @@ VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *
 }
 
 class NavElementBox_Impl;
-class NavElementToolBoxControl : public svt::ToolboxController,
-                                 public lang::XServiceInfo
+class NavElementToolBoxControl : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     public:
         explicit NavElementToolBoxControl(
             const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -818,31 +812,9 @@ bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
 }
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
- : svt::ToolboxController( rxContext,
-                           uno::Reference< frame::XFrame >(),
-                           ".uno:NavElement" ),
+ : ImplInheritanceHelper( rxContext, uno::Reference< frame::XFrame >(), ".uno:NavElement" ),
    m_pBox( nullptr )
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL NavElementToolBoxControl::queryInterface( const css::uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL NavElementToolBoxControl::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL NavElementToolBoxControl::release() throw ()
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
@@ -952,18 +924,12 @@ lo_writer_NavElementToolBoxController_get_implementation(
     return cppu::acquire( new NavElementToolBoxControl( rxContext ) );
 }
 
-class PrevNextScrollToolboxController : public svt::ToolboxController,
-                                      public css::lang::XServiceInfo
+class PrevNextScrollToolboxController : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
 public:
     enum Type { PREVIOUS, NEXT };
 
     PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -985,32 +951,12 @@ private:
 };
 
 PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
-    : svt::ToolboxController( rxContext,
+    : ImplInheritanceHelper( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == PREVIOUS) ? OUString( ".uno:ScrollToPrevious" ): OUString( ".uno:ScrollToNext" ) ),
       meType( eType )
 {
     addStatusListener(".uno:NavElement");
-}
-
-// XInterface
-css::uno::Any SAL_CALL PrevNextScrollToolboxController::queryInterface( const css::uno::Type& aType )
-{
-    css::uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
-}
-
-void SAL_CALL PrevNextScrollToolboxController::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL PrevNextScrollToolboxController::release() throw ()
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
