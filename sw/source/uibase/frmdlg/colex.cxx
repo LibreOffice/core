@@ -40,7 +40,7 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/svxids.hrc>
 
-void PageExample::UpdateExample( const SfxItemSet& rSet )
+void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR))
     {
@@ -196,7 +196,7 @@ void PageExample::UpdateExample( const SfxItemSet& rSet )
 void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                             const bool bSecond, const bool bEnabled)
 {
-    PageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+    SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
     if (!pColMgr)
         return;
     sal_uInt16 nColumnCount = pColMgr->GetCount();
@@ -506,7 +506,7 @@ SwPageGridExample::SwPageGridExample()
 void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
                                  const bool bSecond, const bool bEnabled)
 {
-    PageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+    SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
 
     if (!pGridItem || !pGridItem->GetGridType())
         return;
@@ -609,7 +609,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     //get the grid information
     if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID))
         pGridItem.reset(static_cast<SwTextGridItem*>(rSet.Get(RES_TEXTGRID).Clone()));
-    PageExample::UpdateExample(rSet);
+    SwPageExample::UpdateExample(rSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

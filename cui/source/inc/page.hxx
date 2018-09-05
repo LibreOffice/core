@@ -96,7 +96,7 @@ private:
     bool                mbDelPrinter : 1;
     bool                mbEnableDrawingLayerFillStyles : 1;
 
-    PageWindow m_aBspWin;
+    SvxPageWindow m_aBspWin;
 
     // paper format
     std::unique_ptr<SvxPaperSizeListBox> m_xPaperSizeBox;

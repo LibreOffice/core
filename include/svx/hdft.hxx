@@ -68,7 +68,7 @@ protected:
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 
-    PageWindow m_aBspWin;
+    SvxPageWindow m_aBspWin;
     std::unique_ptr<weld::Label> m_xPageLbl;
     std::unique_ptr<weld::CheckButton> m_xTurnOnBox;
     std::unique_ptr<weld::CheckButton> m_xCntSharedBox;
