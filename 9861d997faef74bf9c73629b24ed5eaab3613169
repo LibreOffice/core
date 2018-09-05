@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_d5cbd3a2",
+        "filename": "starmath/source/smmod.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-05T19:22:47Z",
+      "side": 1,
+      "message": "caolon, this line looks suspicious, deliberately dropping the other field of TabPageParent?",
+      "revId": "9861d997faef74bf9c73629b24ed5eaab3613169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
