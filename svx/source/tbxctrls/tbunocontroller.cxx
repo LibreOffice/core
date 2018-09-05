@@ -41,17 +41,11 @@ using namespace ::com::sun::star;
 namespace {
 
 class SvxFontSizeBox_Impl;
-class FontHeightToolBoxControl : public svt::ToolboxController,
-                                 public lang::XServiceInfo
+class FontHeightToolBoxControl : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     public:
         explicit FontHeightToolBoxControl(
             const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -261,32 +255,10 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
- : svt::ToolboxController( rxContext,
-                           uno::Reference< frame::XFrame >(),
-                           ".uno:FontHeight" ),
+ : ImplInheritanceHelper( rxContext, uno::Reference< frame::XFrame >(), ".uno:FontHeight" ),
    m_pBox( nullptr )
 {
     addStatusListener( ".uno:CharFontName");
-}
-
-// XInterface
-css::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const css::uno::Type& aType )
-{
-    uno::Any a = ToolboxController::queryInterface( aType );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
-}
-
-void SAL_CALL FontHeightToolBoxControl::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL FontHeightToolBoxControl::release() throw ()
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo

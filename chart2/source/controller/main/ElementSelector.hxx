@@ -21,7 +21,6 @@
 
 #include <ObjectHierarchy.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
 #include <vcl/lstbox.hxx>
@@ -63,10 +62,7 @@ class SelectorListBox : public ListBox
         bool m_bReleaseFocus;
 };
 
-typedef ::cppu::ImplHelper1 < css::lang::XServiceInfo> ElementSelectorToolbarController_BASE;
-
-class ElementSelectorToolbarController : public ::svt::ToolboxController
-                                                , public ElementSelectorToolbarController_BASE
+class ElementSelectorToolbarController : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
 public:
     explicit ElementSelectorToolbarController();
@@ -76,11 +72,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XInterface
-     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-     virtual void SAL_CALL acquire() throw () override;
-     virtual void SAL_CALL release() throw () override;
 
      // XStatusListener
      virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;

@@ -35,8 +35,15 @@ namespace svt
 {
 class PopupWindowControllerImpl;
 
-class SVT_DLLPUBLIC PopupWindowController : public cppu::ImplInheritanceHelper< svt::ToolboxController,
-                                                                                css::lang::XServiceInfo >
+// workaround MSVC linking issue
+class SAL_DLLPUBLIC_TEMPLATE PopupWindowControllerBase
+    : public cppu::ImplInheritanceHelper< svt::ToolboxController,
+                                          css::lang::XServiceInfo >
+{
+    using ImplInheritanceHelper::ImplInheritanceHelper;
+};
+
+class SVT_DLLPUBLIC PopupWindowController : public PopupWindowControllerBase
 {
 public:
     PopupWindowController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

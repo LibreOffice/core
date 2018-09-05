@@ -258,22 +258,6 @@ ElementSelectorToolbarController::ElementSelectorToolbarController()
 ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
-// XInterface
-Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType )
-{
-    Any aReturn = ToolboxController::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = ElementSelectorToolbarController_BASE::queryInterface(_rType);
-    return aReturn;
-}
-void SAL_CALL ElementSelectorToolbarController::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-void SAL_CALL ElementSelectorToolbarController::release() throw ()
-{
-    ToolboxController::release();
-}
 void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     if( m_apSelectorListBox.get() )
