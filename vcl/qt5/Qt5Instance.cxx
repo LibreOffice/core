@@ -127,7 +127,7 @@ std::unique_ptr<SalMenuItem> Qt5Instance::CreateMenuItem(const SalItemParams& rI
 
 SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
 
-SalSystem* Qt5Instance::CreateSalSystem() { return new Qt5System(); }
+SalSystem* Qt5Instance::CreateSalSystem() { return new Qt5System; }
 
 std::shared_ptr<SalBitmap> Qt5Instance::CreateSalBitmap()
 {
