@@ -222,11 +222,11 @@ std::string Gtk3KDE5FilePickerIpc::readResponseLine()
 {
     if (!m_responseBuffer.empty()) // check whether we have a line in our buffer
     {
-        auto it = m_responseBuffer.find('\n');
+        std::size_t it = m_responseBuffer.find('\n');
         if (it != std::string::npos)
         {
             auto ret = m_responseBuffer.substr(0, it);
-            m_responseBuffer.erase(0, it);
+            m_responseBuffer.erase(0, it + 1);
             return ret;
         }
     }
