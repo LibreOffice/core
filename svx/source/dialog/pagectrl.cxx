@@ -36,7 +36,7 @@
 #define CELL_WIDTH      1600L
 #define CELL_HEIGHT      800L
 
-PageWindow::PageWindow() :
+SvxPageWindow::SvxPageWindow() :
     aWinSize(),
     aSize(),
     nTop(0),
@@ -66,11 +66,11 @@ PageWindow::PageWindow() :
 {
 }
 
-PageWindow::~PageWindow()
+SvxPageWindow::~SvxPageWindow()
 {
 }
 
-void PageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
@@ -127,7 +127,7 @@ void PageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     rRenderContext.Pop();
 }
 
-void PageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg, const bool bSecond, const bool bEnabled)
+void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg, const bool bSecond, const bool bEnabled)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
@@ -320,7 +320,7 @@ void PageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
     }
 }
 
-void PageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
+void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                                        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                                        const tools::Rectangle& rPaintRange,
                                        const tools::Rectangle& rDefineRange)
@@ -378,22 +378,22 @@ void PageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 }
 
 
-void PageWindow::EnableFrameDirection(bool bEnable)
+void SvxPageWindow::EnableFrameDirection(bool bEnable)
 {
     bFrameDirection = bEnable;
 }
 
-void PageWindow::SetFrameDirection(SvxFrameDirection nDirection)
+void SvxPageWindow::SetFrameDirection(SvxFrameDirection nDirection)
 {
     nFrameDirection = nDirection;
 }
 
-void PageWindow::ResetBackground()
+void SvxPageWindow::ResetBackground()
 {
     bResetBackground = true;
 }
 
-void PageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxPageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
     // Count in Twips by default

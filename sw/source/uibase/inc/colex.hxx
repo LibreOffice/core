@@ -29,12 +29,12 @@
 class SwColMgr;
 class SfxItemSet;
 
-class SW_DLLPUBLIC PageExample : public PageWindow
+class SW_DLLPUBLIC SwPageExample : public PageWindow
 {
 protected:
     bool            m_bVertical;
 public:
-    PageExample()
+    SwPageExample()
         : m_bVertical(false)
     {
         SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
@@ -43,7 +43,7 @@ public:
     void UpdateExample( const SfxItemSet& rSet );
 };
 
-class SW_DLLPUBLIC SwPageGridExample : public PageExample
+class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
     std::unique_ptr<SwTextGridItem> pGridItem;
 protected:
@@ -58,11 +58,11 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwColExample : public PageExample
+class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
     SwColMgr*   pColMgr;
 
-    using PageExample::UpdateExample;
+    using SwPageExample::UpdateExample;
 
 protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
@@ -79,7 +79,7 @@ public:
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
     {
         pColMgr = pMgr;
-        PageExample::UpdateExample(rSet);
+        SwPageExample::UpdateExample(rSet);
     }
 };
 
