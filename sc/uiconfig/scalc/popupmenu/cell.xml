@@ -13,10 +13,11 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menu menu:id=".uno:PasteSpecialMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:PasteUnformatted"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PasteOnlyText"/>
       <menu:menuitem menu:id=".uno:PasteOnlyValue"/>
       <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
-      <menu:menuitem menu:id=".uno:PasteUnformatted"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
     </menu:menupopup>

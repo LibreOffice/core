@@ -11,6 +11,7 @@
   <menu:menuitem menu:id=".uno:Cut"/>
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuitem menu:id=".uno:PasteUnformatted"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SetDefault"/>
   <menu:menuseparator/>
