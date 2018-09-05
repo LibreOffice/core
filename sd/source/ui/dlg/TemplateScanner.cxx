@@ -22,6 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/doctempl.hxx>

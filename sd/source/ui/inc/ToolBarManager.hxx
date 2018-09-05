@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TOOLBARMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLBARMANAGER_HXX
 
-#include "ViewShell.hxx"
 #include "ShellFactory.hxx"
 #include <rtl/ustring.hxx>
 
@@ -28,6 +27,7 @@
 #include <memory>
 
 class SdrView;
+namespace sd { class ViewShell; }
 
 namespace sd { namespace tools {
 class EventMultiplexer;

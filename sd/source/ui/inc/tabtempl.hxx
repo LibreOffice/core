@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
 
-#include <svx/tabarea.hxx>
 #include <sfx2/styledlg.hxx>
+#include <svx/xtable.hxx>
+
 class SdrModel;
 class SfxObjectShell;
 class SdrView;

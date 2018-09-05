@@ -23,8 +23,7 @@
 #include "tools/AsynchronousTask.hxx"
 #include <sddllapi.h>
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <o3tl/make_unique.hxx>
+#include <com/sun/star/uno/Reference.h>
 
 #include <memory>
 #include <vector>
@@ -37,10 +36,6 @@ class XCommandEnvironment;
 namespace com { namespace sun { namespace star { namespace sdbc {
 class XResultSet;
 } } } }
-
-namespace comphelper { namespace string {
-class NaturalStringSorter;
-} }
 
 namespace sd {
 

@@ -31,6 +31,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/xtable.hxx>
+#include <svx/svdopath.hxx>
 
 #include <strings.hrc>
 #include <drawdoc.hxx>

@@ -48,6 +48,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 class SvxColorListBox;
+class SvxPageItem;
 
 static const long MINBODY = 284;
 

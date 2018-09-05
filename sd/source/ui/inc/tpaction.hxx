@@ -23,7 +23,6 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <svx/dlgctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include "sdtreelb.hxx"

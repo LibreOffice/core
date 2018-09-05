@@ -21,20 +21,18 @@
 #define INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
 
 #include <memory>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/util/XReplaceable.hpp>
-#include <com/sun/star/util/XSearchable.hpp>
-#include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/unoipset.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XSearchDescriptor; } } } }
 
 class SvxItemPropertySet;
 class SdUnoSearchReplaceDescriptor;

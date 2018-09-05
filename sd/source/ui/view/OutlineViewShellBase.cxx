@@ -20,6 +20,7 @@
 #include <OutlineViewShellBase.hxx>
 #include <DrawDocShell.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
