@@ -2469,6 +2469,12 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
                     ( nFontScale < MAX_SCALE_VAL && nFontScale > 0 ) ? I32S(nFontScale) : nullptr, FSEND);
             }
+            else
+            {
+                bool bTextAutoGrowHeight = false;
+                GET(bTextAutoGrowHeight, TextAutoGrowHeight);
+                mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
+            }
         }
         mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
