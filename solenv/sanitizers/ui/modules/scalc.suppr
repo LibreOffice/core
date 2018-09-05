@@ -77,7 +77,6 @@ sc/uiconfig/scalc/ui/groupbydate.ui://GtkSpinButton[@id='end_date:yy:mm:dd'] no-
 sc/uiconfig/scalc/ui/groupbydate.ui://GtkSpinButton[@id='days_value'] no-labelled-by
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelFT_H_CUSTOM'] orphan-label
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelFT_F_CUSTOM'] orphan-label
-sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkComboBox[@id='comboLB_DEFINED'] duplicate-mnemonic
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='label2'] orphan-label
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelSTR_HF_NONE_IN_BRACKETS'] orphan-label
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelSTR_PAGE'] orphan-label
