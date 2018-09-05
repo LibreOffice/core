@@ -24,6 +24,7 @@
 #include "ViewShell.hxx"
 #include "tools/AsynchronousCall.hxx"
 #include "TabControl.hxx"
+#include <glob.hxx>
 #include <pres.hxx>
 #include <unotools/caserotate.hxx>
 #include <unotools/options.hxx>

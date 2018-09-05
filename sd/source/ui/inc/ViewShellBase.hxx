@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLBASE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLBASE_HXX
 
-#include "ViewShell.hxx"
-
 #include <glob.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/viewfac.hxx>
 #include <memory>
 
 class SdDrawDocument;

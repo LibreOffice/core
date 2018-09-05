@@ -22,6 +22,7 @@
 
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <rtl/ustring.hxx>
 
@@ -33,6 +34,7 @@
 #include "annotationtag.hxx"
 
 class SfxRequest;
+class SdPage;
 
 namespace sd
 {

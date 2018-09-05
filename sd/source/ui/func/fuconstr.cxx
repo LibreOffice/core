@@ -40,6 +40,7 @@
 #include <sdresid.hxx>
 #include <stlpool.hxx>
 #include <svx/globl3d.hxx>
+#include <glob.hxx>
 
 using namespace com::sun::star;
 

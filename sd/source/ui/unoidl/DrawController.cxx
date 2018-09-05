@@ -22,6 +22,7 @@
 
 #include <DrawSubController.hxx>
 #include <sdpage.hxx>
+#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <FormShellManager.hxx>

@@ -22,40 +22,36 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPageSummarizer.hpp>
 #include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
-#include <com/sun/star/drawing/XLayerManager.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/ref.hxx>
 
-#include <svl/lstner.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 
-#include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
-
-#include <editeng/unoipset.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sddllapi.h>
 
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { class XForbiddenCharacters; } } } }
+namespace com { namespace sun { namespace star { namespace presentation { class XPresentation; } } } }
+
 class SdDrawDocument;
 class SdPage;
+class SvxItemPropertySet;
 
 namespace sd {
 class DrawDocShell;
@@ -65,9 +61,6 @@ class DrawViewShell;
 extern OUString getPageApiName( SdPage const * pPage );
 extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
                            public SvxFmMSFactory,
                            public css::drawing::XDrawPageDuplicator,

@@ -25,13 +25,10 @@
 #include <tools/gen.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/fmview.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/idle.hxx>
-#include "fupoor.hxx"
 
 #include "smarttag.hxx"
-#include <editeng/numitem.hxx>
 
 class SdDrawDocument;
 class SdPage;
@@ -40,16 +37,12 @@ class SdrGrafObj;
 class SdrMediaObj;
 class OutputDevice;
 class ImageMap;
-class Point;
 class Graphic;
 class SdrOutliner;
-class TransferableDataHelper;
-class Outliner;
 
 namespace sd {
 
 class DrawDocShell;
-struct SdNavigatorDropEvent;
 class ViewShell;
 class Window;
 class ViewClipboard;

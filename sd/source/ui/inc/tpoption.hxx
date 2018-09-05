@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
@@ -67,7 +66,7 @@ public:
 /**
  * Option-Tab-Page: View
  */
-class SdModule;
+
 class SdTpOptionsMisc : public SfxTabPage
 {
  friend class SdModule;

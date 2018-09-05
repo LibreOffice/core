@@ -25,6 +25,8 @@
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
 
+namespace sd { class SmartTag; }
+
 namespace sd
 {
 

@@ -25,6 +25,7 @@
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <DrawController.hxx>
 
 using namespace ::com::sun::star;
