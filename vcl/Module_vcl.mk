@@ -75,13 +75,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk3 \
 ))
 endif
-ifneq ($(ENABLE_KDE4),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_kde4_moc \
-    Library_vclplug_kde4 \
-))
-endif
-
 ifneq ($(ENABLE_KDE5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_kde5_moc \
