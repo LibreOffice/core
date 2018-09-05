@@ -77,7 +77,8 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo "buildid=$(BUILDID)"   >> $(IOSRES)/program/versionrc
 
 
-	$(SRCDIR)/bin/lo-all-static-libs >$(WORKDIR)/ios-all-static-libs.list
+	$(SRCDIR)/bin/lo-all-static-libs | sed -e 's/ /\
+/g' >$(WORKDIR)/ios-all-static-libs.list
 
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
