@@ -3137,6 +3137,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Hide Details</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ZoomPageWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3149,6 +3152,9 @@
       <node oor:name=".uno:ShowDetail" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Show Details</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ZoomObjects" oor:op="replace">

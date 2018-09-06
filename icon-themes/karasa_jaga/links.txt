@@ -155,7 +155,6 @@ cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertplugin.png cmd/32/addons.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
-cmd/32/insertrowbreak.png cmd/32/insertpagebreak.png
 cmd/32/insertrowdialog.png cmd/32/insertrows.png
 cmd/32/insertrowsbefore.png cmd/32/insertrows.png
 cmd/32/insertrowsmenu.png cmd/32/insertrows.png
@@ -477,7 +476,6 @@ cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertplugin.png cmd/lc_addons.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
-cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_insertrowdialog.png cmd/lc_insertrows.png
 cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertrowsmenu.png cmd/lc_insertrows.png
@@ -751,7 +749,6 @@ cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertplugin.png cmd/sc_addons.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
-cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
