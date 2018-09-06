@@ -1528,7 +1528,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     // initialize pConvInfo
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Adjust( aEditDoc );
-    pConvInfo = new ConvInfo;
+    pConvInfo.reset(new ConvInfo);
     pConvInfo->bMultipleDoc = bMultipleDoc;
     pConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
 
@@ -1595,8 +1595,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
         pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
-    delete pConvInfo;
-    pConvInfo = nullptr;
+    pConvInfo.reset();
 }
 
 
