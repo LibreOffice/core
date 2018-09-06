@@ -6433,25 +6433,6 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([whether $CXX supports inline variables])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-        #if !defined __cpp_inline_variables
-        // This tests for one specific aspect of inline variables that is actually used by
-        // ORegistry::ROOT (registry/source/regimpl.cxx):
-        struct S { constexpr S() {} };
-        struct T { static constexpr S s{}; };
-        S const * f() { return &T::s; }
-        #endif
-    ]])], [
-        AC_DEFINE([HAVE_CPP_INLINE_VARIABLES],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
-
 AC_MSG_CHECKING([whether $CXX has a fix for CWG1579])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
@@ -12434,6 +12415,32 @@ if test "$build_os" = "cygwin"; then
 
     AC_SUBST(ILIB)
 fi
+
+AC_MSG_CHECKING([whether $CXX supports inline variables])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+if test "$build_os" = cygwin; then
+    save_LIB=$LIB
+    export LIB=$ILIB
+fi
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+        #if !defined __cpp_inline_variables
+        // This tests for one specific aspect of inline variables that is actually used by
+        // ORegistry::ROOT (registry/source/regimpl.cxx):
+        struct S { constexpr S() {} };
+        struct T { static constexpr S s{}; };
+        S const * f() { return &T::s; }
+        #endif
+    ]])], [
+        AC_DEFINE([HAVE_CPP_INLINE_VARIABLES],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+if test "$build_os" = cygwin; then
+    LIB=$save_LIB
+fi
+AC_LANG_POP([C++])
 
 dnl We should be able to drop the below check when bumping the GCC baseline to
 dnl 4.9, as <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577>
