@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_1076e9a5",
+        "filename": "svx/source/table/tablelayouter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-06T10:00:08Z",
+      "side": 0,
+      "message": "oops: I didn\u0027t notice this nit-pick removal.",
+      "range": {
+        "startLine": 1085,
+        "startChar": 0,
+        "endLine": 1086,
+        "endChar": 0
+      },
+      "revId": "6e79acd7238c5e5ab19d0f2c0bbda99b3cfa067c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

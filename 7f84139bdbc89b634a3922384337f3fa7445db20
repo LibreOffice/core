@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_700f752e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-06T10:00:08Z",
+      "side": 1,
+      "message": "copied from WriterCommands.xcu",
+      "range": {
+        "startLine": 1809,
+        "startChar": 34,
+        "endLine": 1809,
+        "endChar": 54
+      },
+      "revId": "7f84139bdbc89b634a3922384337f3fa7445db20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3019ed78",
+        "filename": "sd/uiconfig/sdraw/popupmenu/table.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-06T10:00:08Z",
+      "side": 1,
+      "message": "matches writer - OptimalColumns come before DistributedColumns.\n\nYou\u0027ll notice that I tried to do that consistently in code functions as well (even though it doesn\u0027t matter there.)",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 55
+      },
+      "revId": "7f84139bdbc89b634a3922384337f3fa7445db20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_10282984",
+        "filename": "sd/uiconfig/sdraw/toolbar/optimizetablebar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-06T10:00:08Z",
+      "side": 1,
+      "message": "matches writer: Optimal is below Distribute",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 63
+      },
+      "revId": "7f84139bdbc89b634a3922384337f3fa7445db20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_30320df3",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-06T10:00:08Z",
+      "side": 1,
+      "message": "I started with a copy of getMinimumHeight as a template. That means that I don\u0027t really understand everything in here, but it did what I wanted it to do.\nI removed the pEditOutliner part out for this function because in my testing it wasn\u0027t being used, and I don\u0027t know why I would want it. Is it just a less resource-intensive way of getting the info if the text is already being edited? It just seems safer to not be touching the real, live data and just simulating on a copy.\n\nThere might be a much better way of doing this - I\u0027m not very familiar with Draw code.",
+      "range": {
+        "startLine": 712,
+        "startChar": 4,
+        "endLine": 712,
+        "endChar": 88
+      },
+      "revId": "7f84139bdbc89b634a3922384337f3fa7445db20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
