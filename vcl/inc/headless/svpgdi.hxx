@@ -122,9 +122,8 @@ private:
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
                           cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
-    void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
     void applyColor(cairo_t *cr, Color rColor);
-    void drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
+
 protected:
     vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;
@@ -200,7 +199,12 @@ public:
     virtual void            drawPixel( long nX, long nY, Color nColor ) override;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
+
+    virtual bool            drawPolyPolygon(
+                                const basegfx::B2DHomMatrix& rObjectToDevice,
+                                const basegfx::B2DPolyPolygon&,
+                                double fTransparency ) override;
+
     virtual bool            drawPolyLine(
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolygon&,

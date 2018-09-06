@@ -90,7 +90,8 @@ basegfx::SystemDependentDataManager& SalGraphics::getSystemDependentDataManager(
 
         virtual ~SystemDependentDataBuffer() override
         {
-            Stop();
+            ::osl::MutexGuard aGuard(m_aMutex);
+            flushAll();
         }
 
         void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
@@ -606,17 +607,50 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& i_rPolyPolygon,
+    double i_fTransparency,
+    const OutputDevice* i_pOutDev)
 {
-    bool bRet = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
-        basegfx::B2DPolyPolygon aMirror( mirror( i_rPolyPolygon, i_pOutDev ) );
-        bRet = drawPolyPolygon( aMirror, i_fTransparency );
+        // mirroring set
+        const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
+
+        if(!rMirror.isIdentity())
+        {
+            if(rObjectToDevice.isIdentity())
+            {
+                // There is no ObjectToDevice transformation set. We can just
+                // use rMirror, that would be the result of the linear combination
+                return drawPolyPolygon(
+                    rMirror,
+                    i_rPolyPolygon,
+                    i_fTransparency);
+            }
+            else
+            {
+                // Create the linear combination
+                basegfx::B2DHomMatrix aLinearCombination(rObjectToDevice);
+                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+
+                aLinearCombination = rMirror * aLinearCombination;
+                aObjectToDeviceInv.invert();
+                aLinearCombination = aObjectToDeviceInv * aLinearCombination;
+
+                return drawPolyPolygon(
+                    aLinearCombination,
+                    i_rPolyPolygon,
+                    i_fTransparency);
+            }
+        }
     }
-    else
-        bRet = drawPolyPolygon( i_rPolyPolygon, i_fTransparency );
-    return bRet;
+
+    return drawPolyPolygon(
+        rObjectToDevice,
+        i_rPolyPolygon,
+        i_fTransparency);
 }
 
 bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
