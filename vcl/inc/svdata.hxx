@@ -106,6 +106,11 @@ namespace vcl
     class Window;
 }
 
+namespace basegfx
+{
+    class SystemDependentDataManager;
+}
+
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
 public:
@@ -372,6 +377,7 @@ struct ImplSVData
 css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
 
 void        ImplDeInitSVData();
+VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultContextWindow();
 VCL_PLUGIN_PUBLIC const std::locale& ImplGetResLocale();

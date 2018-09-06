@@ -155,7 +155,7 @@ void Scheduler::ImplDeInitScheduler()
                         || !strcmp( pTask->GetDebugName(), "svtools::GraphicCache maReleaseTimer" )
                         || !strcmp( pTask->GetDebugName(), "svtools::GraphicObject mpSwapOutTimer" )
                         || !strcmp( pTask->GetDebugName(), "svx OLEObjCache pTimer UnloadCheck" )
-                        || !strcmp( pTask->GetDebugName(), "vcl::win GdiPlusBuffer aGdiPlusBuffer" )
+                        || !strcmp( pTask->GetDebugName(), "vcl SystemDependentDataBuffer aSystemDependentDataBuffer" )
                         ))
                 {
                     sIgnored = " (ignored)";
