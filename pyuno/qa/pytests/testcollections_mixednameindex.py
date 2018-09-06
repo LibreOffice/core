@@ -41,6 +41,8 @@ class TestMixedNameIndex(CollectionsTestBase):
         self.assertEqual('foo', table_by_index.Name)
         self.assertEqual(table_by_name, table_by_index)
 
+        doc.close(True)
+
 
 if __name__ == '__main__':
     unittest.main()

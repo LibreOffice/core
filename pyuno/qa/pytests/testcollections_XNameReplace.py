@@ -40,6 +40,8 @@ class TestXNameReplace(CollectionsTestBase):
         on_save = [p.Value for p in doc.Events['OnSave'] if p.Name == 'Script'][0]
         self.assertEqual(getScriptName(), on_save)
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[key] = val              # Replace by key
     # For:
@@ -53,6 +55,8 @@ class TestXNameReplace(CollectionsTestBase):
         with self.assertRaises(KeyError):
             doc.Events['qqqqq'] = event_properties
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[key] = val              # Replace by key
     # For:
@@ -65,6 +69,8 @@ class TestXNameReplace(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             doc.Events[12.34] = event_properties
+
+        doc.close(True)
 
 
 if __name__ == '__main__':

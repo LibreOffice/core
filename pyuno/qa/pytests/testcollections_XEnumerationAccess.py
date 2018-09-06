@@ -37,6 +37,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
         # Then
         self.assertEqual(1, len(paragraphs))
 
+        doc.close(True)
+
     # Tests syntax:
     #    itr = iter(obj)             # Named iterator
     # For:
@@ -53,6 +55,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
         with self.assertRaises(StopIteration):
             next(itr)
 
+        doc.close(True)
+
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
     # For:
@@ -67,6 +71,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
 
         # Then
         self.assertTrue(result)
+
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -84,6 +90,9 @@ class TestXEnumerationAccess(CollectionsTestBase):
         # Then
         self.assertFalse(result)
 
+        doc1.close(True)
+        doc2.close(True)
+
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
     # For:
@@ -97,6 +106,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
 
         # Then
         self.assertFalse(result)
+
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -112,6 +123,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
         # Then
         self.assertFalse(result)
 
+        doc.close(True)
+
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
     # For:
@@ -123,6 +136,8 @@ class TestXEnumerationAccess(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             result = {} in doc.Text
+
+        doc.close(True)
 
 
 if __name__ == '__main__':

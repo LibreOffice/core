@@ -22,6 +22,7 @@
 
 #include "pyuno_impl.hxx"
 
+#include <cassert>
 #include <unordered_map>
 #include <utility>
 
@@ -318,12 +319,22 @@ static PyObject* getComponentContext(
     return ret.getAcquired();
 }
 
+// While pyuno.private_initTestEnvironment is called from individual Python tests (e.g., from
+// UnoInProcess in unotest/source/python/org/libreoffice/unotest.py, which makes sure to call it
+// only once), pyuno.private_deinitTestEnvironment is called centrally from
+// unotest/source/python/org/libreoffice/unittest.py at the end of every PythonTest (to DeInitVCL
+// exactly once near the end of the process, if InitVCL has ever been called via
+// pyuno.private_initTestEnvironment):
+
+static osl::Module * testModule = nullptr;
+
 static PyObject* initTestEnvironment(
     SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
 {
     // this tries to bootstrap enough of the soffice from python to run
     // unit tests, which is only possible indirectly because pyuno is URE
     // so load "test" library and invoke a function there to do the work
+    assert(testModule == nullptr);
     try
     {
         PyObject *const ctx(getComponentContext(nullptr, nullptr));
@@ -353,10 +364,31 @@ static PyObject* initTestEnvironment(
                 mod.getFunctionSymbol("test_init"));
         if (!pFunc) { abort(); }
         reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
+        testModule = &mod;
     }
     catch (const css::uno::Exception &)
     {
         abort();
+    }
+    return Py_None;
+}
+
+static PyObject* deinitTestEnvironment(
+    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
+{
+    if (testModule != nullptr)
+    {
+        try
+        {
+            oslGenericFunction const pFunc(
+                    testModule->getFunctionSymbol("test_deinit"));
+            if (!pFunc) { abort(); }
+            reinterpret_cast<void (SAL_CALL *)()>(pFunc)();
+        }
+        catch (const css::uno::Exception &)
+        {
+            abort();
+        }
     }
     return Py_None;
 }
@@ -843,6 +875,7 @@ static PyObject *sal_debug(
 struct PyMethodDef PyUNOModule_methods [] =
 {
     {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, nullptr},
+    {"private_deinitTestEnvironment", deinitTestEnvironment, METH_VARARGS, nullptr},
     {"getComponentContext", getComponentContext, METH_VARARGS, nullptr},
     {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, nullptr},
     {"getTypeByName", getTypeByName, METH_VARARGS, nullptr},

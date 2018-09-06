@@ -78,6 +78,8 @@ class TestXIndexReplace(CollectionsTestBase):
         # Then
         self.assertEqual(('Caption',), index.LevelParagraphStyles[0])
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[0] = val                # Replace by index
     # For:
@@ -90,6 +92,8 @@ class TestXIndexReplace(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = None
+
+        doc.close(True)
 
     # Tests syntax:
     #    obj[0] = val                # Replace by index
@@ -104,6 +108,8 @@ class TestXIndexReplace(CollectionsTestBase):
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = 'foo'
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[0] = val                # Replace by index
     # For:
@@ -116,6 +122,8 @@ class TestXIndexReplace(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = 12.34
+
+        doc.close(True)
 
     # Tests syntax:
     #    obj[0] = val                # Replace by index
@@ -130,6 +138,8 @@ class TestXIndexReplace(CollectionsTestBase):
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = [0, 1]
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[0] = val                # Replace by index
     # For:
@@ -143,6 +153,8 @@ class TestXIndexReplace(CollectionsTestBase):
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = {'a': 'b'}
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[0] = val                # Replace by index
     # For:
@@ -155,6 +167,8 @@ class TestXIndexReplace(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             index.LevelParagraphStyles[0] = ('Caption', ())
+
+        doc.close(True)
 
     # Tests syntax:
     #    obj[2:4] = val1,val2        # Replace by slice
@@ -177,6 +191,7 @@ class TestXIndexReplace(CollectionsTestBase):
                     if (len(expected) != 10):
                         expected = ValueError()
                     self.assignValuesTestFixture(doc, key, assign, expected)
+        doc.close(True)
 
     # Tests syntax:
     #    obj[2:4] = val1,val2        # Replace by slice
@@ -193,6 +208,8 @@ class TestXIndexReplace(CollectionsTestBase):
                 ('Caption',),
                 12.34
             )
+
+        doc.close(True)
 
     # Tests syntax:
     #    obj[0:3:2] = val1,val2      # Replace by extended slice
@@ -214,6 +231,7 @@ class TestXIndexReplace(CollectionsTestBase):
                         except Exception as e:
                             expected = e
                         self.assignValuesTestFixture(doc, key, assign, expected)
+        doc.close(True)
 
 
 if __name__ == '__main__':

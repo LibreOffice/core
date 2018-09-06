@@ -583,6 +583,8 @@ class CheckTable(unittest.TestCase):
         xCellRangeString = xChartDataProvider.convertRangeFromXML("Table1.$A$1:.$C$3")
         self.assertEqual("Table1.A1:C3", xCellRangeString)
 
+        xDoc.dispose()
+
     def test_splitRangeHorizontal(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
@@ -600,6 +602,7 @@ class CheckTable(unittest.TestCase):
         self.assertTrue(math.isnan(xTable.Data[1][1]))
         self.assertTrue(math.isnan(xTable.Data[2][0]))
         self.assertTrue(math.isnan(xTable.Data[2][1]))
+        xDoc.dispose()
 
     def test_mergeRangeHorizontal(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
@@ -618,6 +621,7 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.Data[1][1], float(5))
         self.assertEqual(xTable.Data[1][2], float(6))
         self.assertEqual(xTable.Data[2], (float(7), float(8), float(9)))
+        xDoc.dispose()
 
 if __name__ == '__main__':
     unittest.main()

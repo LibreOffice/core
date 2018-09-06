@@ -36,7 +36,6 @@ class CheckNamedPropertyValues(unittest.TestCase):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
         cls.xContext = cls._uno.getContext()
-        cls.xDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod
     def tearDownClass(cls):

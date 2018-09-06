@@ -32,6 +32,8 @@ class TestMisc(CollectionsTestBase):
             for val in doc.UIConfigurationManager:
                 pass
 
+        doc.close(True)
+
     # Tests syntax:
     #    if val in itr: ...          # Test value presence
     # For:
@@ -43,6 +45,8 @@ class TestMisc(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             foo = "bar" in doc.UIConfigurationManager
+
+        doc.close(True)
 
     # Tests syntax:
     #    num = len(obj)              # Number of elements
@@ -56,6 +60,8 @@ class TestMisc(CollectionsTestBase):
         with self.assertRaises(TypeError):
             len(doc.UIConfigurationManager)
 
+        doc.close(True)
+
     # Tests syntax:
     #    val = obj[0]                # Access by index
     # For:
@@ -67,6 +73,8 @@ class TestMisc(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             doc.UIConfigurationManager[0]
+
+        doc.close(True)
 
 
 if __name__ == '__main__':
