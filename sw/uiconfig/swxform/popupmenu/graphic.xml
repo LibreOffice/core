@@ -35,15 +35,15 @@
       <menu:menuitem menu:id=".uno:WrapAnchorOnly"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:AlignFrameMenu">
+  <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:AlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignHorizontalCenter"/>
-      <menu:menuitem menu:id=".uno:AlignRight"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignCenter"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignTop"/>
-      <menu:menuitem menu:id=".uno:AlignVerticalCenter"/>
-      <menu:menuitem menu:id=".uno:AlignBottom"/>
+      <menu:menuitem menu:id=".uno:AlignUp"/>
+      <menu:menuitem menu:id=".uno:AlignMiddle"/>
+      <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ArrangeFrameMenu">
@@ -54,12 +54,16 @@
       <menu:menuitem menu:id=".uno:SendToBack"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:RotateMenu">
+  <menu:menu menu:id=".uno:RotateFlipMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:RotateLeft"/>
+      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
       <menu:menuitem menu:id=".uno:RotateRight"/>
+      <menu:menuitem menu:id=".uno:RotateLeft"/>
       <menu:menuitem menu:id=".uno:Rotate180"/>
       <menu:menuitem menu:id=".uno:RotateReset"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:FlipVertical"/>
+      <menu:menuitem menu:id=".uno:FlipHorizontal"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
