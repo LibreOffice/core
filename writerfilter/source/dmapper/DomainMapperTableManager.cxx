@@ -30,6 +30,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <o3tl/numeric.hxx>
+#include <o3tl/safeint.hxx>
 #include <ooxml/resourceids.hxx>
 #include "DomainMapper.hxx"
 #include <rtl/math.hxx>
@@ -575,7 +576,7 @@ void DomainMapperTableManager::endOfRowAction()
             TagLogger::getInstance().endElement();
 #endif
 
-             m_nTableWidth += *aCellIter++;
+             m_nTableWidth = o3tl::saturating_add(m_nTableWidth, *aCellIter++);
         }
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
