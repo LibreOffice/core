@@ -78,6 +78,7 @@ public:
     sal_Int32 getRowHeight( sal_Int32 nRow ) const;
 
     sal_Int32 getColumnWidth( sal_Int32 nColumn ) const;
+    sal_Int32 calcPreferredColumnWidth( sal_Int32 nColumn, Size aSize ) const;
 
     sal_Int32 getMinimumColumnWidth( sal_Int32 nColumn );
 
@@ -94,7 +95,7 @@ public:
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);
 
-    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
+    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol, const bool bOptimize );
     void DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
@@ -103,7 +104,7 @@ private:
     basegfx::B2ITuple getCellSize( const CellRef& xCell, const CellPos& rPos ) const;
 
     void LayoutTableWidth( ::tools::Rectangle& rArea, bool bFit );
-    void LayoutTableHeight( ::tools::Rectangle& rArea, bool bFit );
+    void LayoutTableHeight( ::tools::Rectangle& rArea, bool bFit )
 
     bool isValidColumn( sal_Int32 nColumn ) const { return (nColumn >= 0) && (nColumn < static_cast<sal_Int32>( maColumns.size())); }
     bool isValidRow( sal_Int32 nRow ) const { return (nRow >= 0) && (nRow < static_cast<sal_Int32>( maRows.size())); }

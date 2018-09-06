@@ -144,6 +144,12 @@ shell TableObjectBar
         StateMethod = GetState;
     ]
 
+    SID_TABLE_OPTIMAL_COLUMN_WIDTH
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
     SID_TABLE_DISTRIBUTE_COLUMNS
     [
         ExecMethod = Execute;
