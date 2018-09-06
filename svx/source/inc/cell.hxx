@@ -80,6 +80,7 @@ public:
     SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems);
     void SetMergedItem(const SfxPoolItem& rItem);
 
+    SVX_DLLPRIVATE sal_Int32 calcPreferredWidth( const Size aSize );
     SVX_DLLPRIVATE sal_Int32 getMinimumWidth();
     SVX_DLLPRIVATE sal_Int32 getMinimumHeight();
 
