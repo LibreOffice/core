@@ -1241,7 +1241,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     BinaryOutput aOut( m_xContext );
 
     sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
-    Sequence< sal_Int8 >* pLocaleDataSeq = new Sequence< sal_Int8 >[ nLocaleCount ];
+    Sequence< sal_Int8 > aLocaleDataSeq[ nLocaleCount ];
 
     sal_Int32 iLocale = 0;
     sal_Int32 iDefault = 0;
@@ -1255,7 +1255,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
             BinaryOutput aLocaleOut( m_xContext );
             implWriteLocaleBinary( pLocaleItem.get(), aLocaleOut );
 
-            pLocaleDataSeq[iLocale] = aLocaleOut.closeAndGetData();
+            aLocaleDataSeq[iLocale] = aLocaleOut.closeAndGetData();
         }
         ++iLocale;
     }
@@ -1273,7 +1273,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     {
         aOut.writeInt32( nDataPos );
 
-        Sequence< sal_Int8 >& rSeq = pLocaleDataSeq[iLocale];
+        Sequence< sal_Int8 >& rSeq = aLocaleDataSeq[iLocale];
         sal_Int32 nSeqLen = rSeq.getLength();
         nDataPos += nSeqLen;
     }
@@ -1286,12 +1286,10 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     {
         for( iLocale = 0; iLocale < nLocaleCount; iLocale++ )
         {
-            Sequence< sal_Int8 >& rSeq = pLocaleDataSeq[iLocale];
+            Sequence< sal_Int8 >& rSeq = aLocaleDataSeq[iLocale];
             xOutputStream->writeBytes( rSeq );
         }
     }
-
-    delete[] pLocaleDataSeq;
 
     Sequence< sal_Int8 > aRetSeq = aOut.closeAndGetData();
     return aRetSeq;
