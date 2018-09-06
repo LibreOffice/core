@@ -55,7 +55,6 @@ namespace basegfx {
     class B2DVector;
     class B2DPolygon;
     class B2DPolyPolygon;
-    class SystemDependentDataManager;
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
@@ -77,10 +76,6 @@ public:
     virtual                     ~SalGraphics();
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
-
-    // access to single global managing instance of a basegfx::SystemDependentDataManager,
-    // used to handle graphic data in system-dependent form
-    static basegfx::SystemDependentDataManager& getSystemDependentDataManager();
 
     /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
     rtl::Reference<OpenGLContext> GetOpenGLContext() const;
@@ -245,6 +240,7 @@ public:
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolyPolygon(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon &i_rPolyPolygon,
                                     double i_fTransparency,
                                     const OutputDevice *i_pOutDev);
@@ -465,7 +461,11 @@ protected:
     virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
     virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
-    virtual bool                drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
+
+    virtual bool                drawPolyPolygon(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
+                                    const basegfx::B2DPolyPolygon&,
+                                    double fTransparency) = 0;
 
     virtual bool                drawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
