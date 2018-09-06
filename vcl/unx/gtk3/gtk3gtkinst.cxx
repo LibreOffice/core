@@ -1232,6 +1232,11 @@ public:
         return gtk_widget_is_visible(m_pWidget);
     }
 
+    virtual void set_can_focus(bool bCanFocus) override
+    {
+        gtk_widget_set_can_focus(m_pWidget, bCanFocus);
+    }
+
     virtual void grab_focus() override
     {
         gtk_widget_grab_focus(m_pWidget);
@@ -3378,6 +3383,11 @@ public:
     virtual void set_editable(bool bEditable) override
     {
         gtk_editable_set_editable(GTK_EDITABLE(m_pEntry), bEditable);
+    }
+
+    virtual bool get_editable() const override
+    {
+        return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
     virtual void disable_notify_events() override

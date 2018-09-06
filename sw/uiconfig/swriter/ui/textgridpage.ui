@@ -293,7 +293,6 @@
                         <property name="valign">start</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
-                        <property name="row_homogeneous">True</property>
                         <child>
                           <object class="GtkSpinButton" id="spinMF_CHARWIDTH">
                             <property name="visible">True</property>
