@@ -213,7 +213,8 @@ void BitmapTest::testMonochrome()
     Bitmap aBmp = createTestBitmap();
 
     BitmapEx aBmpEx(aBmp);
-    BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(63));
+    BitmapMonochromeFilter filter(63);
+    BitmapFilter::Filter(aBmpEx, filter);
     aBmp = aBmpEx.GetBitmap();
     BitmapReadAccess aBmpReadAccess(aBmp);
 

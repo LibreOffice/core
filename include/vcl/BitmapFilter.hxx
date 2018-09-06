@@ -22,8 +22,8 @@ public:
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) = 0;
 
-    static bool Filter(BitmapEx& rBmpEx, BitmapFilter&& rFilter);
-    static bool Filter(Animation& rBmpEx, BitmapFilter&& rFilter);
+    static bool Filter(BitmapEx& rBmpEx, BitmapFilter& rFilter);
+    static bool Filter(Animation& rBmpEx, BitmapFilter& rFilter);
 };
 
 #endif

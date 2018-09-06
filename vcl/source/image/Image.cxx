@@ -138,7 +138,8 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         if (mpImplData->maBitmapChecksum != aChecksum)
         {
             BitmapEx aDisabledBmpEx(mpImplData->maBitmapEx);
-            BitmapFilter::Filter(aDisabledBmpEx, BitmapDisabledImageFilter());
+            BitmapDisabledImageFilter filter;
+            BitmapFilter::Filter(aDisabledBmpEx, filter);
 
             mpImplData->maBitmapChecksum = aChecksum;
             mpImplData->maDisabledBitmapEx = aDisabledBmpEx;
@@ -161,7 +162,8 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
                 else
                     aColor = rSettings.GetDeactiveColor();
 
-                BitmapFilter::Filter(aTempBitmapEx, BitmapColorizeFilter(aColor));
+                BitmapColorizeFilter filter(aColor);
+                BitmapFilter::Filter(aTempBitmapEx, filter);
             }
 
             if (nStyle & DrawImageFlags::SemiTransparent)

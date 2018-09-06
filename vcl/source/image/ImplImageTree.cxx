@@ -163,7 +163,10 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
         vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
 
         if (bConvertToDarkTheme)
-            BitmapFilter::Filter(rParameters.mrBitmap, BitmapLightenFilter());
+        {
+            BitmapLightenFilter filter;
+            BitmapFilter::Filter(rParameters.mrBitmap, filter);
+        }
 
         return;
     }
@@ -175,7 +178,8 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     if (bConvertToDarkTheme)
     {
         rParameters.mbWriteImageToCache = true; // Cache the dark variant
-        BitmapFilter::Filter(rParameters.mrBitmap, BitmapLightenFilter());
+        BitmapLightenFilter filter;
+        BitmapFilter::Filter(rParameters.mrBitmap, filter);
     }
 
     if (aScalePercentage > 100)

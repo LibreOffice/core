@@ -525,12 +525,13 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
     {
         bRet = true;
 
+        BitmapColorQuantizationFilter filter(nNewColorCount);
         for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
         {
-            bRet = BitmapFilter::Filter(maList[i]->aBmpEx, BitmapColorQuantizationFilter(nNewColorCount));
+            bRet = BitmapFilter::Filter(maList[i]->aBmpEx, filter);
         }
 
-        BitmapFilter::Filter(maBitmapEx, BitmapColorQuantizationFilter(nNewColorCount));
+        BitmapFilter::Filter(maBitmapEx, filter);
     }
     else
     {

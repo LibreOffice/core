@@ -720,7 +720,8 @@ namespace vclcanvas
                     // transparency is fully transparent
                     if( aBmpEx.IsAlpha() )
                     {
-                        BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                        BitmapAlphaClampFilter filter(253);
+                        BitmapFilter::Filter(aBmpEx, filter);
                     }
 
                     mp2ndOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),

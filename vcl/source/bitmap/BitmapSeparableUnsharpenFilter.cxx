@@ -28,7 +28,8 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx)
     Bitmap aBlur(aBitmap);
     BitmapEx aBlurEx(aBlur);
 
-    BitmapFilter::Filter(aBlurEx, BitmapGaussianSeparableBlurFilter(-mfRadius));
+    BitmapGaussianSeparableBlurFilter filter(-mfRadius);
+    BitmapFilter::Filter(aBlurEx, filter);
     aBlur = aBlurEx.GetBitmap();
 
     // Amount of unsharpening effect on image - currently set to a fixed value

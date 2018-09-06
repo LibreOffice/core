@@ -148,7 +148,8 @@ public:
         maIntroBW = maIntro.GetBitmap();
 
         BitmapEx aTmpBmpEx(maIntroBW);
-        BitmapFilter::Filter(aTmpBmpEx, BitmapEmbossGreyFilter(0, 0));
+        BitmapEmbossGreyFilter filter(0, 0);
+        BitmapFilter::Filter(aTmpBmpEx, filter);
         maIntroBW = aTmpBmpEx.GetBitmap();
 
         InitRenderers();
