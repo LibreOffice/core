@@ -1139,32 +1139,24 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
     if (xmlNodeType == -1)
         return;
 
-    switch (rXNode->getType())
+    switch (xmlNodeType)
     {
-        case AnimationNodeType::ITERATE:
-        case AnimationNodeType::PAR:
+        case XML_par:
             mpFS->startElementNS(XML_p, xmlNodeType, FSEND);
             WriteAnimationNodeCommonPropsStart();
             mpFS->endElementNS(XML_p, xmlNodeType);
             break;
-        case AnimationNodeType::SEQ:
+        case XML_seq:
             WriteAnimationNodeSeq();
             break;
-        case AnimationNodeType::ANIMATETRANSFORM:
-        case AnimationNodeType::ANIMATE:
-        case AnimationNodeType::ANIMATEMOTION:
-        case AnimationNodeType::ANIMATECOLOR:
-        case AnimationNodeType::SET:
-            WriteAnimationNodeAnimate(xmlNodeType);
-            break;
-        case AnimationNodeType::TRANSITIONFILTER:
+        case XML_animEffect:
             WriteAnimationNodeEffect();
             break;
-        case AnimationNodeType::COMMAND:
+        case XML_cmd:
             WriteAnimationNodeCommand();
             break;
         default:
-            SAL_WARN("sd.eppt", "unhandled animation node: " << rXNode->getType());
+            WriteAnimationNodeAnimate(xmlNodeType);
             break;
     }
 
