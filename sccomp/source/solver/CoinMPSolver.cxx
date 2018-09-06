@@ -143,7 +143,7 @@ void SAL_CALL CoinMPSolver::solve()
     // set objective function
 
     const std::vector<double>& rObjCoeff = aCellsHash[maObjective];
-    double* pObjectCoeffs = new double[nVariables];
+    std::unique_ptr<double[]> pObjectCoeffs(new double[nVariables]);
     for (nVar=0; nVar<nVariables; nVar++)
         pObjectCoeffs[nVar] = rObjCoeff[nVar+1];
     double nObjectConst = rObjCoeff[0];             // constant term of objective
@@ -152,12 +152,12 @@ void SAL_CALL CoinMPSolver::solve()
 
     size_t nRows = maConstraints.getLength();
     size_t nCompSize = nVariables * nRows;
-    double* pCompMatrix = new double[nCompSize];    // first collect all coefficients, row-wise
+    std::unique_ptr<double[]> pCompMatrix(new double[nCompSize]);    // first collect all coefficients, row-wise
     for (size_t i=0; i<nCompSize; i++)
         pCompMatrix[i] = 0.0;
 
-    double* pRHS = new double[nRows];
-    char* pRowType = new char[nRows];
+    std::unique_ptr<double[]> pRHS(new double[nRows]);
+    std::unique_ptr<char[]> pRowType(new char[nRows]);
     for (size_t i=0; i<nRows; i++)
     {
         pRHS[i] = 0.0;
@@ -217,10 +217,10 @@ void SAL_CALL CoinMPSolver::solve()
 
     // Find non-zero coefficients, column-wise
 
-    int* pMatrixBegin = new int[nVariables+1];
-    int* pMatrixCount = new int[nVariables];
-    double* pMatrix = new double[nCompSize];    // not always completely used
-    int* pMatrixIndex = new int[nCompSize];
+    std::unique_ptr<int[]> pMatrixBegin(new int[nVariables+1]);
+    std::unique_ptr<int[]> pMatrixCount(new int[nVariables]);
+    std::unique_ptr<double[]> pMatrix(new double[nCompSize]);    // not always completely used
+    std::unique_ptr<int[]> pMatrixIndex(new int[nCompSize]);
     int nMatrixPos = 0;
     for (nVar=0; nVar<nVariables; nVar++)
     {
@@ -239,13 +239,12 @@ void SAL_CALL CoinMPSolver::solve()
         pMatrixCount[nVar] = nMatrixPos - nBegin;
     }
     pMatrixBegin[nVariables] = nMatrixPos;
-    delete[] pCompMatrix;
-    pCompMatrix = nullptr;
+    pCompMatrix.reset();
 
     // apply settings to all variables
 
-    double* pLowerBounds = new double[nVariables];
-    double* pUpperBounds = new double[nVariables];
+    std::unique_ptr<double[]> pLowerBounds(new double[nVariables]);
+    std::unique_ptr<double[]> pUpperBounds(new double[nVariables]);
     for (nVar=0; nVar<nVariables; nVar++)
     {
         pLowerBounds[nVar] = mbNonNegative ? 0.0 : -DBL_MAX;
@@ -254,7 +253,7 @@ void SAL_CALL CoinMPSolver::solve()
         // bounds could possibly be further restricted from single-cell constraints
     }
 
-    char* pColType = new char[nVariables];
+    std::unique_ptr<char[]> pColType(new char[nVariables]);
     for (nVar=0; nVar<nVariables; nVar++)
         pColType[nVar] = mbInteger ? 'I' : 'C';
 
@@ -287,25 +286,25 @@ void SAL_CALL CoinMPSolver::solve()
 
     HPROB hProb = CoinCreateProblem("");
     int nResult = CoinLoadProblem( hProb, nVariables, nRows, nMatrixPos, 0,
-                    nObjectSense, nObjectConst, pObjectCoeffs,
-                    pLowerBounds, pUpperBounds, pRowType, pRHS, nullptr,
-                    pMatrixBegin, pMatrixCount, pMatrixIndex, pMatrix,
+                    nObjectSense, nObjectConst, pObjectCoeffs.get(),
+                    pLowerBounds.get(), pUpperBounds.get(), pRowType.get(), pRHS.get(), nullptr,
+                    pMatrixBegin.get(), pMatrixCount.get(), pMatrixIndex.get(), pMatrix.get(),
                     nullptr, nullptr, nullptr );
     if (nResult == SOLV_CALL_SUCCESS)
     {
-        nResult = CoinLoadInteger( hProb, pColType );
+        nResult = CoinLoadInteger( hProb, pColType.get() );
     }
 
-    delete[] pColType;
-    delete[] pMatrixIndex;
-    delete[] pMatrix;
-    delete[] pMatrixCount;
-    delete[] pMatrixBegin;
-    delete[] pUpperBounds;
-    delete[] pLowerBounds;
-    delete[] pRowType;
-    delete[] pRHS;
-    delete[] pObjectCoeffs;
+    pColType.reset();
+    pMatrixIndex.reset();
+    pMatrix.reset();
+    pMatrixCount.reset();
+    pMatrixBegin.reset();
+    pUpperBounds.reset();
+    pLowerBounds.reset();
+    pRowType.reset();
+    pRHS.reset();
+    pObjectCoeffs.reset();
 
     CoinSetRealOption( hProb, COIN_REAL_MAXSECONDS, mnTimeout );
     CoinSetRealOption( hProb, COIN_REAL_MIPMAXSEC, mnTimeout );
