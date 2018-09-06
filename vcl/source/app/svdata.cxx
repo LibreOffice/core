@@ -60,6 +60,8 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
+#include <basegfx/utils/systemdependentdata.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -95,6 +97,136 @@ void ImplDeInitSVData()
     pSVData->maCtrlData.maFieldUnitStrings.clear();
     pSVData->maCtrlData.maCleanUnitStrings.clear();
     pSVData->maPaperNames.clear();
+}
+
+namespace
+{
+    typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
+
+    class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex
+    {
+    private:
+        EntryMap                maEntries;
+        Timer*                  mpTimer;
+
+        DECL_LINK(implTimeoutHdl, Timer *, void);
+
+    public:
+        SystemDependentDataBuffer(const sal_Char* pDebugName)
+        :   basegfx::SystemDependentDataManager(),
+            mpTimer(new Timer(pDebugName)),
+            maEntries()
+        {
+            mpTimer->SetTimeout(1000);
+            mpTimer->SetInvokeHandler(LINK(this, SystemDependentDataBuffer, implTimeoutHdl));
+        }
+
+        virtual ~SystemDependentDataBuffer() override
+        {
+            flushAll();
+        }
+
+        void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound == maEntries.end())
+            {
+                if(maEntries.empty() && nullptr != mpTimer)
+                {
+                    mpTimer->Start();
+                }
+
+                maEntries[rData] = rData->getHoldCycles();
+            }
+        }
+
+        void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                maEntries.erase(aFound);
+
+                if(maEntries.empty() && nullptr != mpTimer)
+                {
+                    mpTimer->Stop();
+                }
+            }
+        }
+
+        void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                aFound->second = rData->getHoldCycles();
+            }
+        }
+
+        void flushAll() override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aIter(maEntries.begin());
+
+            if(nullptr != mpTimer)
+            {
+                mpTimer->Stop();
+                delete mpTimer;
+                mpTimer = nullptr;
+            }
+
+            while(aIter != maEntries.end())
+            {
+                EntryMap::iterator aDelete(aIter);
+                ++aIter;
+                maEntries.erase(aDelete);
+            }
+        }
+    };
+
+    IMPL_LINK_NOARG(SystemDependentDataBuffer, implTimeoutHdl, Timer *, void)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aIter(maEntries.begin());
+
+        while(aIter != maEntries.end())
+        {
+            if(aIter->second)
+            {
+                aIter->second--;
+                ++aIter;
+            }
+            else
+            {
+                EntryMap::iterator aDelete(aIter);
+                ++aIter;
+                maEntries.erase(aDelete);
+
+                if(maEntries.empty() && nullptr != mpTimer)
+                {
+                    mpTimer->Stop();
+                }
+            }
+        }
+
+        if(!maEntries.empty() && nullptr != mpTimer)
+        {
+            mpTimer->Start();
+        }
+    }
+}
+
+basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager()
+{
+    static SystemDependentDataBuffer aSystemDependentDataBuffer("vcl SystemDependentDataBuffer aSystemDependentDataBuffer");
+
+    return aSystemDependentDataBuffer;
 }
 
 /// Returns either the application window, or the default GL context window
