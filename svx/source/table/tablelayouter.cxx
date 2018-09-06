@@ -507,10 +507,11 @@ typedef std::vector< CellRef > MergeableCellVector;
 typedef std::vector< MergeableCellVector > MergeVector;
 
 
-void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
+void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit, const bool bOptimize )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
+    const sal_Int32 nEqualWidth = rArea.getWidth() / nColCount;
     if( nColCount == 0 )
         return;
 
@@ -531,6 +532,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     for( nCol = 0; nCol < nColCount; nCol++ )
     {
         sal_Int32 nMinWidth = 0;
+        sal_Int32 nWish = 0;
 
         bool bIsEmpty = true; // check if all cells in this column are merged
 
@@ -546,6 +548,12 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
                 {
                     // merged cells will be evaluated later
                     aMergedCells[nCol+nColSpan-1].push_back( xCell );
+                }
+                else if ( bOptimize )
+                {
+                    const Size aSize( 0x0FFFFFFF, 0x0FFFFFFF );
+                    nWish = std::max( nWish, xCell->calcPreferredWidth(aSize) );
+                    nMinWidth = std::min( nWish, nEqualWidth );
                 }
                 else
                 {
@@ -572,13 +580,14 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
             }
             else
             {
-                xColSet->getPropertyValue( gsSize ) >>= nColWidth;
+                if ( bOptimize && nWish )
+                    nColWidth = nWish;
+                else
+                    xColSet->getPropertyValue( gsSize ) >>= nColWidth;
+
             }
 
-            maColumns[nCol].mnSize = nColWidth;
-
-            if( maColumns[nCol].mnSize < nMinWidth )
-                maColumns[nCol].mnSize = nMinWidth;
+            maColumns[nCol].mnSize = std::max( nColWidth, nMinWidth);
 
             nCurrentWidth = o3tl::saturating_add(nCurrentWidth, maColumns[nCol].mnSize);
         }
@@ -818,7 +827,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 
 /** try to fit the table into the given rectangle.
     If the rectangle is to small, it will be grown to fit the table. */
-void TableLayouter::LayoutTable( tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight )
+void TableLayouter::LayoutTable( tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight, const bool bOptimizeWidth )
 {
     if( !mxTable.is() )
         return;
@@ -841,7 +850,7 @@ void TableLayouter::LayoutTable( tools::Rectangle& rRectangle, bool bFitWidth, b
             maColumns[nCol].clear();
     }
 
-    LayoutTableWidth( rRectangle, bFitWidth );
+    LayoutTableWidth( rRectangle, bFitWidth, bOptimizeWidth );
     LayoutTableHeight( rRectangle, bFitHeight );
     UpdateBorderLayout();
 }
@@ -1047,7 +1056,7 @@ void TableLayouter::UpdateBorderLayout()
 }
 
 
-void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
+void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol, const bool bOptimize )
 {
     if( mxTable.is() ) try
     {
@@ -1075,15 +1084,13 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFir
             nAllWidth -= nWidth;
         }
 
-        LayoutTable( rArea, true, false );
+        LayoutTable( rArea, true, false, /*bOptimizeWidth=*/bOptimize );
     }
     catch( Exception& )
     {
         OSL_FAIL("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
     }
 }
-
-
 void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
 {
     if( mxTable.is() ) try
@@ -1125,7 +1132,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
             nAllHeight -= nHeight;
         }
 
-        LayoutTable( rArea, false, true );
+        LayoutTable( rArea, false, true, /*bOptimizeWidth=*/false );
     }
     catch( Exception& )
     {

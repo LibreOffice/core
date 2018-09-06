@@ -812,7 +812,7 @@ void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool
             // table is unchanged, but re-layout is still needed.
             lastColWidths = getColumnWidths();
             TableModelNotifyGuard aGuard( mxTable.get() );
-            mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
+            mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight, /*bOptimizeWidth=*/false );
             lastLayoutResultRectangle = rArea;
         }
         else
@@ -2442,12 +2442,12 @@ void SdrTableObj::CropTableModelToSelection(const CellPos& rStart, const CellPos
     mpImpl->CropTableModelToSelection(rStart, rEnd);
 }
 
-void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn )
+void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize )
 {
     if( mpImpl.is() && mpImpl->mpLayouter )
     {
         TableModelNotifyGuard aGuard( mpImpl->mxTable.get() );
-        mpImpl->mpLayouter->DistributeColumns( maRect, nFirstColumn, nLastColumn );
+        mpImpl->mpLayouter->DistributeColumns( maRect, nFirstColumn, nLastColumn, bOptimize );
     }
 }
 

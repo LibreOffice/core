@@ -67,7 +67,7 @@ public:
 
         if bFitWidth or bFitHeight is set, the model is changed.
     */
-    void LayoutTable( ::tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight );
+    void LayoutTable( ::tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight, const bool bOptimizeWidth );
 
     void UpdateBorderLayout();
 
@@ -94,7 +94,7 @@ public:
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);
 
-    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
+    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol, const bool bOptimize );
     void DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
@@ -102,7 +102,7 @@ private:
     CellRef getCell( const CellPos& rPos ) const;
     basegfx::B2ITuple getCellSize( const CellRef& xCell, const CellPos& rPos ) const;
 
-    void LayoutTableWidth( ::tools::Rectangle& rArea, bool bFit );
+    void LayoutTableWidth( ::tools::Rectangle& rArea, bool bFit, const bool bOptimize );
     void LayoutTableHeight( ::tools::Rectangle& rArea, bool bFit );
 
     bool isValidColumn( sal_Int32 nColumn ) const { return (nColumn >= 0) && (nColumn < static_cast<sal_Int32>( maColumns.size())); }
