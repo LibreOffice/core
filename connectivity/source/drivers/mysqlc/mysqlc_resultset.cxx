@@ -75,6 +75,15 @@ std::vector<OUString> lcl_split(const OUString& rStr, sal_Unicode cSeparator)
 }
 }
 
+void OResultSet::checkRowIndex()
+{
+    auto iRowPos = mysql_field_tell(m_pResult);
+    if (iRowPos <= 0 || iRowPos > fieldCount)
+    {
+        throw SQLException("Cursor position out of range", *this, rtl::OUString(), 1, Any());
+    }
+}
+
 rtl::OUString SAL_CALL OResultSet::getImplementationName()
 {
     return rtl::OUString("com.sun.star.sdbcx.mysqlc.ResultSet");
@@ -159,6 +168,7 @@ uno::Reference<XInputStream> SAL_CALL OResultSet::getBinaryStream(sal_Int32 colu
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBinaryStream", *this);
     return nullptr;
@@ -169,6 +179,7 @@ uno::Reference<XInputStream> SAL_CALL OResultSet::getCharacterStream(sal_Int32 c
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getCharacterStream",
                                                             *this);
@@ -180,6 +191,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -197,6 +209,7 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -230,6 +243,7 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     Date d; // TODO initialize
     char* dateStr = m_aRow[column - 1];
@@ -269,6 +283,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -286,6 +301,7 @@ float SAL_CALL OResultSet::getFloat(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -326,6 +342,7 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -354,6 +371,7 @@ uno::Reference<XArray> SAL_CALL OResultSet::getArray(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getArray", *this);
     return nullptr;
@@ -364,6 +382,7 @@ uno::Reference<XClob> SAL_CALL OResultSet::getClob(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getClob", *this);
     return nullptr;
@@ -374,6 +393,7 @@ uno::Reference<XBlob> SAL_CALL OResultSet::getBlob(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBlob", *this);
     return nullptr;
@@ -384,6 +404,7 @@ uno::Reference<XRef> SAL_CALL OResultSet::getRef(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getRef", *this);
     return nullptr;
@@ -395,6 +416,7 @@ Any SAL_CALL OResultSet::getObject(sal_Int32 column,
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     Any aRet = Any();
 
@@ -407,6 +429,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -423,6 +446,7 @@ rtl::OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -440,6 +464,7 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
 
     checkColumnIndex(column);
+    checkRowIndex();
     Time t; // initialize
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -479,6 +504,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     checkColumnIndex(column);
+    checkRowIndex();
 
     char* pValue = m_aRow[column - 1];
     if (!pValue)
@@ -760,6 +786,7 @@ void SAL_CALL OResultSet::updateNull(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateNull", *this);
 }
 
@@ -768,6 +795,7 @@ void SAL_CALL OResultSet::updateBoolean(sal_Int32 column, sal_Bool /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateBoolean", *this);
 }
 
@@ -776,6 +804,7 @@ void SAL_CALL OResultSet::updateByte(sal_Int32 column, sal_Int8 /* x */)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateByte", *this);
 }
 
@@ -784,6 +813,7 @@ void SAL_CALL OResultSet::updateShort(sal_Int32 column, sal_Int16 /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateShort", *this);
 }
 
@@ -792,6 +822,7 @@ void SAL_CALL OResultSet::updateInt(sal_Int32 column, sal_Int32 /* x */)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateInt", *this);
 }
 
@@ -800,6 +831,7 @@ void SAL_CALL OResultSet::updateLong(sal_Int32 column, sal_Int64 /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateLong", *this);
 }
 
@@ -808,6 +840,7 @@ void SAL_CALL OResultSet::updateFloat(sal_Int32 column, float /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateFloat", *this);
 }
 
@@ -816,6 +849,7 @@ void SAL_CALL OResultSet::updateDouble(sal_Int32 column, double /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateDouble", *this);
 }
 
@@ -824,6 +858,7 @@ void SAL_CALL OResultSet::updateString(sal_Int32 column, const rtl::OUString& /*
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateString", *this);
 }
 
@@ -832,6 +867,7 @@ void SAL_CALL OResultSet::updateBytes(sal_Int32 column, const uno::Sequence<sal_
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateBytes", *this);
 }
 
@@ -840,6 +876,7 @@ void SAL_CALL OResultSet::updateDate(sal_Int32 column, const Date& /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateDate", *this);
 }
 
@@ -848,6 +885,7 @@ void SAL_CALL OResultSet::updateTime(sal_Int32 column, const Time& /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateTime", *this);
 }
 
@@ -856,6 +894,7 @@ void SAL_CALL OResultSet::updateTimestamp(sal_Int32 column, const DateTime& /* x
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateTimestamp", *this);
 }
 
@@ -866,6 +905,7 @@ void SAL_CALL OResultSet::updateBinaryStream(sal_Int32 column,
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateBinaryStream",
                                                             *this);
 }
@@ -877,6 +917,7 @@ void SAL_CALL OResultSet::updateCharacterStream(sal_Int32 column,
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateCharacterStream",
                                                             *this);
 }
@@ -893,6 +934,7 @@ void SAL_CALL OResultSet::updateObject(sal_Int32 column, const Any& /* x */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateObject", *this);
 }
 
@@ -902,6 +944,7 @@ void SAL_CALL OResultSet::updateNumericObject(sal_Int32 column, const Any& /* x 
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
+    checkRowIndex();
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateNumericObject",
                                                             *this);
 }

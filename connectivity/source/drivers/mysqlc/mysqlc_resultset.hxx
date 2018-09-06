@@ -232,9 +232,8 @@ public:
     css::uno::Sequence<sal_Int32>
         SAL_CALL deleteRows(const css::uno::Sequence<Any>& rows) SAL_OVERRIDE;
 
-    /// @throws SQLException
-    /// @throws RuntimeException
     void checkColumnIndex(sal_Int32 index);
+    void checkRowIndex();
 
 private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
