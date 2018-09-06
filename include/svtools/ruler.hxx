@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>
+#include <vcl/vcllayout.hxx>
 
 #include <svtools/accessibleruler.hxx>
 
@@ -660,6 +661,8 @@ private:
     std::unique_ptr<RulerSelection> mxPreviousHitTest;
 
     rtl::Reference<SvtRulerAccessible> mxAccContext;
+
+    std::map<OUString, SalLayoutGlyphs> maTextGlyphs;
 
     SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawRect(vcl::RenderContext& rRenderContext, long nX1, long nY1, long nX2, long nY2 );

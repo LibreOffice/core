@@ -62,6 +62,37 @@ using namespace ::com::sun::star::accessibility;
 #define RULER_UNIT_LINE    10
 #define RULER_UNIT_COUNT   11
 
+namespace
+{
+/**
+ * Pre-calculates glyph items for rText on rRenderContext. Subsequent calls
+ * avoid the calculation and just return a pointer to rTextGlyphs.
+ */
+SalLayoutGlyphs* lcl_GetRulerTextGlyphs(vcl::RenderContext& rRenderContext, const OUString& rText,
+                                        SalLayoutGlyphs& rTextGlyphs)
+{
+    if (!rTextGlyphs.empty())
+        // Use pre-calculated result.
+        return &rTextGlyphs;
+
+    // Calculate glyph items.
+
+    std::unique_ptr<SalLayout> pLayout = rRenderContext.ImplLayout(
+        rText, 0, rText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    if (!pLayout)
+        return nullptr;
+
+    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
+    if (!pGlyphs)
+        return nullptr;
+
+    // Remember the calculation result.
+    rTextGlyphs = *pGlyphs;
+
+    return &rTextGlyphs;
+}
+}
+
 class ImplRulerData
 {
     friend class Ruler;
@@ -311,7 +342,9 @@ void Ruler::ImplVDrawRect(vcl::RenderContext& rRenderContext, long nX1, long nY1
 void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, const OUString& rText, long nMin, long nMax)
 {
     tools::Rectangle aRect;
-    rRenderContext.GetTextBoundRect(aRect, rText);
+    SalLayoutGlyphs* pTextLayout
+        = lcl_GetRulerTextGlyphs(rRenderContext, rText, maTextGlyphs[rText]);
+    rRenderContext.GetTextBoundRect(aRect, rText, 0, 0, -1, 0, nullptr, pTextLayout);
 
     long nShiftX = ( aRect.GetWidth() / 2 ) + aRect.Left();
     long nShiftY = ( aRect.GetHeight() / 2 ) + aRect.Top();
@@ -319,9 +352,11 @@ void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, 
     if ( (nX > -RULER_CLIP) && (nX < mnVirWidth + RULER_CLIP) && ( nX < nMax - nShiftX ) && ( nX > nMin + nShiftX ) )
     {
         if ( mnWinStyle & WB_HORZ )
-            rRenderContext.DrawText(Point(nX - nShiftX, nY - nShiftY), rText);
+            rRenderContext.DrawText(Point(nX - nShiftX, nY - nShiftY), rText, 0, -1, nullptr,
+                                    nullptr, pTextLayout);
         else
-            rRenderContext.DrawText(Point(nY - nShiftX, nX - nShiftY), rText);
+            rRenderContext.DrawText(Point(nY - nShiftX, nX - nShiftY), rText, 0, -1, nullptr,
+                                    nullptr, pTextLayout);
     }
 }
 

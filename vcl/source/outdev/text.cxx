@@ -2344,7 +2344,8 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, const long* pDXAry ) const
+                                         sal_uLong nLayoutWidth, const long* pDXAry,
+                                         const SalLayoutGlyphs* pGlyphs ) const
 {
     bool bRet = false;
     rRect.SetEmpty();
@@ -2368,7 +2369,8 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
+    pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, SalLayoutFlags::NONE,
+                            nullptr, pGlyphs);
     tools::Rectangle aPixelRect;
     if( pSalLayout )
     {
