@@ -52,7 +52,6 @@ using namespace ::com::sun::star;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper )
                         : m_pDrawModelWrapper( pDrawModelWrapper )
-                        , m_pFontList(nullptr)
 {
 }
 
@@ -118,7 +117,7 @@ XPatternListRef   ViewElementListProvider::GetPatternList() const
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
     SdrObjList* pSymbolList = nullptr;
-    uno::Reference< drawing::XShapes > xSymbols(nullptr);//@todo this keeps the first drawinglayer alive ...
+    uno::Reference< drawing::XShapes > xSymbols;//@todo this keeps the first drawinglayer alive ...
     try
     {
         if(!pSymbolList || !pSymbolList->GetObjCount())

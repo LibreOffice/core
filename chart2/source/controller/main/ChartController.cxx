@@ -108,20 +108,17 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
     m_xCC(xContext), //@todo is it allowed to hold this context??
-    m_xFrame( nullptr ),
     m_aModelMutex(),
     m_aModel( nullptr, m_aModelMutex ),
     m_xViewWindow(),
     m_xChartView(),
     m_pDrawModelWrapper(),
-    m_pDrawViewWrapper(nullptr),
     m_eDragMode(SdrDragMode::Move),
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
     m_bFieldButtonDown(false),
     m_bConnectingToView(false),
     m_bDisposed(false),
-    m_xUndoManager( nullptr ),
     m_aDispatchContainer( m_xCC ),
     m_eDrawMode( CHARTDRAW_SELECT ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
@@ -138,7 +135,6 @@ ChartController::~ChartController()
 
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
-    m_xCloseable( nullptr ),
     m_bOwnership( true )
 {
     m_xCloseable =

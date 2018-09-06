@@ -56,7 +56,6 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     : OIndex(true/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
-    , m_pFileStream(nullptr)
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)
     , m_nRootPage(0)
@@ -71,7 +70,6 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const OUString& _rName)
     : OIndex(_rName, OUString(), _rHeader.db_unique, false, false, true)
-    , m_pFileStream(nullptr)
     , m_aHeader(_rHeader)
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)

@@ -131,10 +131,8 @@ AffineBridge::AffineBridge()
       m_pCallee      (nullptr),
       m_pParam       (nullptr),
       m_innerThreadId(0),
-      m_pInnerThread (nullptr),
       m_enterCount   (0),
-      m_outerThreadId(0),
-      m_pOuterThread (nullptr)
+      m_outerThreadId(0)
 {
     SAL_INFO("cppu.affinebridge", "LIFE: AffineBridge::AffineBridge(uno_Environment * pEnv) -> " << this);
 }

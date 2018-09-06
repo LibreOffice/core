@@ -74,8 +74,6 @@ EquidistantTickFactory::EquidistantTickFactory(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
             : m_rScale( rScale )
             , m_rIncrement( rIncrement )
-            , m_xInverseScaling(nullptr)
-            , m_pfCurrentValues(nullptr)
 {
     //@todo: make sure that the scale is valid for the scaling
 
@@ -418,8 +416,7 @@ EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< do
                 , m_pInfoTicks(nullptr)
                 , m_rIncrement(rIncrement)
                 , m_nMaxDepth(0)
-                , m_nTickCount(0), m_pnPositions(nullptr)
-                , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
+                , m_nTickCount(0)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
     initIter( nMaxDepth );
@@ -432,8 +429,7 @@ EquidistantTickIter::EquidistantTickIter( TickInfoArraysType& rTicks
                 , m_pInfoTicks(&rTicks)
                 , m_rIncrement(rIncrement)
                 , m_nMaxDepth(0)
-                , m_nTickCount(0), m_pnPositions(nullptr)
-                , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
+                , m_nTickCount(0)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
     initIter( nMaxDepth );

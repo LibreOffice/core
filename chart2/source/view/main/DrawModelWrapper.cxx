@@ -52,8 +52,6 @@ namespace chart
 DrawModelWrapper::DrawModelWrapper()
 :   SdrModel()
     , m_pChartItemPool(nullptr)
-    , m_xMainDrawPage(nullptr)
-    , m_xHiddenDrawPage(nullptr)
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 

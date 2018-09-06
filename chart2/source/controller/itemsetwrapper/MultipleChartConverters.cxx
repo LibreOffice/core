@@ -111,7 +111,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     for (auto const& series : aSeriesList)
     {
         uno::Reference< beans::XPropertySet > xObjectProperties(series, uno::UNO_QUERY);
-        uno::Reference< uno::XComponentContext> xContext(nullptr);//do not need Context for label properties
+        uno::Reference< uno::XComponentContext> xContext;//do not need Context for label properties
 
         sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, series, -1/*nPointIndex*/, ChartModelHelper::findDiagram( xChartModel ) );
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(

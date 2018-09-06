@@ -426,7 +426,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    Reference< XResultSet > xRS = nullptr;
+    Reference< XResultSet > xRS;
 
     // Execute the statement.  If execute returns true, a result
     // set exists.

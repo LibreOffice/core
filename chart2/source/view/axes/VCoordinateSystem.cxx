@@ -73,10 +73,6 @@ std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
 
 VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
-    , m_xLogicTargetForGrids(nullptr)
-    , m_xLogicTargetForAxes(nullptr)
-    , m_xFinalTarget(nullptr)
-    , m_xShapeFactory(nullptr)
     , m_aMatrixSceneToScreen()
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
@@ -84,7 +80,6 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
     , m_aMergedMinMaxSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
-    , m_apExplicitCategoriesProvider(nullptr)
 {
     if( !m_xCooSysModel.is() || m_xCooSysModel->getDimension()<3 )
     {

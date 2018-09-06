@@ -441,7 +441,6 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     LanguageType nLanguage)
     : SvxStandardDialog(pParent, "ThesaurusDialog", "cui/ui/thesaurus.ui")
     , m_aErrStr(CuiResId(RID_SVXSTR_ERR_TEXTNOTFOUND))
-    , xThesaurus(nullptr)
     , aLookUpText()
     , nLookUpLanguage(LANGUAGE_NONE)
     , m_bWordFound(false)

@@ -57,7 +57,6 @@ namespace dbtools
         :m_rMutex             ( _rMutex )
         ,m_aParameterListeners( _rMutex )
         ,m_xContext           ( _rxContext  )
-        ,m_pOuterParameters   ( nullptr    )
         ,m_nInnerCount        ( 0       )
         ,m_bUpToDate          ( false   )
     {
