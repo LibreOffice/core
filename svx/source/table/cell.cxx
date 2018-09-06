@@ -704,6 +704,25 @@ void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllIt
 }
 
 
+sal_Int32 Cell::calcPreferredWidth( const Size aSize )
+{
+    if ( !hasText() )
+        return getMinimumWidth();
+
+    Outliner& rOutliner=static_cast< SdrTableObj& >( GetObject() ).ImpGetDrawOutliner();
+    rOutliner.SetPaperSize(aSize);
+    rOutliner.SetUpdateMode(true);
+    ForceOutlinerParaObject( OutlinerMode::TextObject );
+
+    if( GetOutlinerParaObject() )
+        rOutliner.SetText(*GetOutlinerParaObject());
+
+    sal_Int32 nPreferredWidth = const_cast<EditEngine&>(rOutliner.GetEditEngine()).CalcTextWidth();
+    rOutliner.Clear();
+
+    return GetTextLeftDistance() + GetTextRightDistance() + nPreferredWidth;
+}
+
 sal_Int32 Cell::getMinimumWidth()
 {
     return GetTextLeftDistance() + GetTextRightDistance() + 100;

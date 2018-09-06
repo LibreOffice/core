@@ -42,6 +42,7 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ColumnMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EntireColumn"/>

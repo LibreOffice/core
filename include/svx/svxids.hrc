@@ -469,6 +469,7 @@ class SfxStringItem;
 #define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
 #define SID_PSZ_FUNCTION                                ( SID_SVX_START + 423 )
 
+// CAUTION! <424 > used by sfxids (!)
 #define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
 #define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
 #define SID_TABLE_PARAM_INSERT_AFTER                    ( SID_SVX_START + 428 )
@@ -970,8 +971,12 @@ class SfxStringItem;
 #define SID_MEASURE_DLG                                 ( SID_SVX_START + 1176 )
 
 
+#define SID_TABLE_OPTIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1187 )
+#define SID_TABLE_OPTIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1188 )
+
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_MEASURE_DLG + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_TABLE_OPTIMAL_ROW_HEIGHT + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
