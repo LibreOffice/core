@@ -1236,7 +1236,7 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Column Break</value>
         </prop>
-      </node>
+        </node>
       <node oor:name=".uno:AdjustPrintZoom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Adjust Scale</value>
@@ -2383,6 +2383,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Formula</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:PasteOnlyText" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2391,6 +2394,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Text</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:PasteOnlyValue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2398,6 +2404,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Number</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ColumnOperations" oor:op="replace">

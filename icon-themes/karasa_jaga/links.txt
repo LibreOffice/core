@@ -70,6 +70,7 @@ cmd/32/draw.png cmd/32/reload.png
 cmd/32/drawselect.png cmd/32/selectobject.png
 cmd/32/drawtext.png cmd/32/text.png
 cmd/32/dsbeditdoc.png cmd/32/editdoc.png
+cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/underlinesimple.png cmd/32/es/underline.png
@@ -155,7 +156,6 @@ cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertplugin.png cmd/32/addons.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
-cmd/32/insertrowbreak.png cmd/32/insertpagebreak.png
 cmd/32/insertrowdialog.png cmd/32/insertrows.png
 cmd/32/insertrowsbefore.png cmd/32/insertrows.png
 cmd/32/insertrowsmenu.png cmd/32/insertrows.png
@@ -175,6 +175,7 @@ cmd/32/ko/sortup.png cmd/32/ko/sortascending.png
 cmd/32/ko/tablesort.png cmd/32/ko/datasort.png
 cmd/32/ko/drawtext.png cmd/32/ko/text.png
 cmd/32/ko/underlinesimple.png cmd/32/ko/underline.png
+cmd/32/languagemenu.png cmd/32/managelanguage.png
 cmd/32/leftpara.png cmd/32/alignleft.png
 cmd/32/linenumberingdialog.png cmd/32/linenumberdialog.png
 cmd/32/linespacing.png cmd/32/spacepara15.png
@@ -277,7 +278,7 @@ cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
 cmd/32/tablesort.png cmd/32/datasort.png
-cmd/32/templatemenu.png cmd/32/newdoc.png
+cmd/32/templatemenu.png cmd/32/templatemanager.png
 cmd/32/textalign.png cmd/32/alignblock.png
 cmd/32/texttoolbox.png cmd/32/text.png
 cmd/32/thesaurusdialog.png cmd/32/thesaurus.png
@@ -395,6 +396,7 @@ cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
+cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
@@ -477,7 +479,6 @@ cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertplugin.png cmd/lc_addons.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
-cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_insertrowdialog.png cmd/lc_insertrows.png
 cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
 cmd/lc_insertrowsmenu.png cmd/lc_insertrows.png
@@ -489,6 +490,7 @@ cmd/lc_inserttimefieldvar.png cmd/lc_timefield.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_justifypara.png cmd/lc_alignblock.png
+cmd/lc_languagemenu.png cmd/lc_managelanguage.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
 cmd/lc_linenumberingdialog.png cmd/lc_linenumberdialog.png
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
@@ -586,7 +588,7 @@ cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
-cmd/lc_templatemenu.png cmd/lc_newdoc.png
+cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
@@ -669,6 +671,7 @@ cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_drawtext.png cmd/sc_text.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
+cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
@@ -751,7 +754,6 @@ cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertplugin.png cmd/sc_addons.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
-cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
@@ -763,6 +765,7 @@ cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_justifypara.png cmd/sc_alignblock.png
+cmd/sc_languagemenu.png cmd/sc_managelanguage.png
 cmd/sc_leftpara.png cmd/sc_alignleft.png
 cmd/sc_linenumberingdialog.png cmd/sc_linenumberdialog.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
@@ -860,7 +863,7 @@ cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
-cmd/sc_templatemenu.png cmd/sc_newdoc.png
+cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
