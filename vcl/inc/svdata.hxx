@@ -39,6 +39,7 @@
 #include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
 #include "schedulerimpl.hxx"
+#include <basegfx/utils/systemdependentdata.hxx>
 
 struct ImplPostEventData;
 struct ImplTimerData;
@@ -104,6 +105,16 @@ namespace vcl
     class SettingsConfigItem;
     class DeleteOnDeinitBase;
     class Window;
+}
+
+namespace basegfx
+{
+    class SystemDependentDataManager;
+}
+
+namespace cppu
+{
+    class BaseMutex;
 }
 
 class LocaleConfigurationListener : public utl::ConfigurationListener
@@ -332,6 +343,120 @@ struct ImplSchedulerContext
     bool                    mbActive = true;                ///< is the scheduler active?
 };
 
+typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
+
+class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex, public Timer
+{
+private:
+    EntryMap        maEntries;
+
+public:
+    SystemDependentDataBuffer( const sal_Char *pDebugName )
+    :   basegfx::SystemDependentDataManager(),
+        Timer( pDebugName ),
+        maEntries()
+    {
+        SetTimeout(1000);
+        SetStatic();
+    }
+
+    virtual ~SystemDependentDataBuffer() override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        flushAll();
+    }
+
+    void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound(maEntries.find(rData));
+
+        if(aFound == maEntries.end())
+        {
+            if(maEntries.empty())
+            {
+                Start();
+            }
+
+            maEntries[rData] = rData->getHoldCycles();
+        }
+    }
+
+    void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound(maEntries.find(rData));
+
+        if(aFound != maEntries.end())
+        {
+            maEntries.erase(aFound);
+
+            if(maEntries.empty())
+            {
+                Stop();
+            }
+        }
+    }
+
+    void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound(maEntries.find(rData));
+
+        if(aFound != maEntries.end())
+        {
+            aFound->second = rData->getHoldCycles();
+        }
+    }
+
+    void flushAll() override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aIter(maEntries.begin());
+
+        Stop();
+
+        while(aIter != maEntries.end())
+        {
+            EntryMap::iterator aDelete(aIter);
+            ++aIter;
+            maEntries.erase(aDelete);
+        }
+    }
+
+    // from parent Timer
+    virtual void Invoke() override
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aIter(maEntries.begin());
+
+        while(aIter != maEntries.end())
+        {
+            if(aIter->second)
+            {
+                aIter->second--;
+                ++aIter;
+            }
+            else
+            {
+                EntryMap::iterator aDelete(aIter);
+                ++aIter;
+                maEntries.erase(aDelete);
+
+                if(maEntries.empty())
+                {
+                    Stop();
+                }
+            }
+        }
+
+        if(!maEntries.empty())
+        {
+            Start();
+        }
+    }
+};
+
 struct ImplSVData
 {
     ~ImplSVData();
@@ -367,11 +492,14 @@ struct ImplSVData
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
 
     Link<LinkParamNone*,void> maDeInitHook;
+
+    std::unique_ptr<SystemDependentDataBuffer> aSystemDependentDataBuffer;
 };
 
 css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
 
 void        ImplDeInitSVData();
+VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultContextWindow();
 VCL_PLUGIN_PUBLIC const std::locale& ImplGetResLocale();

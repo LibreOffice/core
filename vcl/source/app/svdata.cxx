@@ -95,6 +95,20 @@ void ImplDeInitSVData()
     pSVData->maCtrlData.maFieldUnitStrings.clear();
     pSVData->maCtrlData.maCleanUnitStrings.clear();
     pSVData->maPaperNames.clear();
+
+    pSVData->aSystemDependentDataBuffer.reset();
+}
+
+basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if(!pSVData->aSystemDependentDataBuffer)
+    {
+        pSVData->aSystemDependentDataBuffer.reset(new SystemDependentDataBuffer(nullptr));
+    }
+
+    return *pSVData->aSystemDependentDataBuffer.get();
 }
 
 /// Returns either the application window, or the default GL context window
