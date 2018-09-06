@@ -230,8 +230,8 @@ class SbiRuntime
     const sal_uInt8*   pStmnt;           // beginning of the last statement
     const sal_uInt8*   pError;           // address of the current error handler
     const sal_uInt8*   pRestart;         // restart-address
-    const sal_uInt8*   pErrCode;         // restart-adresse RESUME NEXT
-    const sal_uInt8*   pErrStmnt;        // Restart-Adresse RESUME 0
+    const sal_uInt8*   pErrCode;         // restart-address RESUME NEXT
+    const sal_uInt8*   pErrStmnt;        // restart-address RESUME 0
     OUString           aLibName;         // Lib-name for declare-call
     SbxArrayRef        refParams;        // current procedure parameters
     SbxArrayRef        refLocals;        // local variable
