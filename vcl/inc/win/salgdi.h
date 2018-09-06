@@ -171,8 +171,6 @@ private:
 
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     WinFontInstance*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
-    float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
-    float                   mfCurrentFontScale;
     HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
