@@ -249,7 +249,8 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case BmpConversion::N1BitThreshold:
         {
             BitmapEx aBmpEx(*this);
-            bRet = BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(128));
+            BitmapMonochromeFilter filter(128);
+            bRet = BitmapFilter::Filter(aBmpEx, filter);
             *this = aBmpEx.GetBitmap();
         }
         break;
@@ -775,32 +776,49 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     switch(nScaleFlag)
     {
         case BmpScaleFlag::Fast:
-            bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
+        {
+            BitmapFastScaleFilter filter(rScaleX, rScaleY);
+            bRetval = BitmapFilter::Filter(aBmpEx, filter);
             break;
-
+        }
         case BmpScaleFlag::Interpolate:
-            bRetval = BitmapFilter::Filter(aBmpEx, BitmapInterpolateScaleFilter(rScaleX, rScaleY));
+        {
+            BitmapInterpolateScaleFilter filter(rScaleX, rScaleY);
+            bRetval = BitmapFilter::Filter(aBmpEx, filter);
             break;
-
+        }
         case BmpScaleFlag::Default:
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-                bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
+            {
+                BitmapFastScaleFilter filter(rScaleX, rScaleY);
+                bRetval = BitmapFilter::Filter(aBmpEx, filter);
+            }
             else
-                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
+            {
+                BitmapScaleSuperFilter filter(rScaleX, rScaleY);
+                bRetval = BitmapFilter::Filter(aBmpEx, filter);
+            }
             break;
 
         case BmpScaleFlag::Lanczos:
         case BmpScaleFlag::BestQuality:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
+        {
+            vcl::BitmapScaleLanczos3Filter filter(rScaleX, rScaleY);
+            bRetval = BitmapFilter::Filter(aBmpEx, filter);
             break;
-
+        }
         case BmpScaleFlag::BiCubic:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
+        {
+            vcl::BitmapScaleBicubicFilter filter(rScaleX, rScaleY);
+            bRetval = BitmapFilter::Filter(aBmpEx, filter);
             break;
-
+        }
         case BmpScaleFlag::BiLinear:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
+        {
+            vcl::BitmapScaleBilinearFilter filter(rScaleX, rScaleY);
+            bRetval = BitmapFilter::Filter(aBmpEx, filter);
             break;
+        }
     }
 
     if (bRetval)

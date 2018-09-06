@@ -18,7 +18,7 @@ BitmapFilter::BitmapFilter() {}
 
 BitmapFilter::~BitmapFilter() {}
 
-bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter&& rFilter)
+bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter& rFilter)
 {
     BitmapEx aTmpBmpEx(rFilter.execute(rBmpEx));
 
@@ -32,7 +32,7 @@ bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter&& rFilter)
     return true;
 }
 
-bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter&& rFilter)
+bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter& rFilter)
 {
     SAL_WARN_IF(rAnimation.IsInAnimation(), "vcl", "Animation modified while it is animated");
 
@@ -45,11 +45,11 @@ bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter&& rFilter)
         std::vector<std::unique_ptr<AnimationBitmap>>& aList = rAnimation.GetAnimationFrames();
         for (size_t i = 0, n = aList.size(); (i < n) && bRet; ++i)
         {
-            bRet = BitmapFilter::Filter(aList[i]->aBmpEx, std::move(rFilter));
+            bRet = BitmapFilter::Filter(aList[i]->aBmpEx, rFilter);
         }
 
         BitmapEx aBmpEx(rAnimation.GetBitmapEx());
-        BitmapFilter::Filter(aBmpEx, std::move(rFilter));
+        BitmapFilter::Filter(aBmpEx, rFilter);
         rAnimation.SetBitmapEx(aBmpEx);
     }
 
