@@ -1441,10 +1441,10 @@
       </node>
       <node oor:name=".uno:InsertColumnsBefore" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Columns Left</value>
+          <value xml:lang="en-US">Insert Columns Before</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Columns ~Left</value>
+          <value xml:lang="en-US">Columns ~Before</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1461,10 +1461,10 @@
       </node>
       <node oor:name=".uno:InsertColumnsAfter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Columns Right</value>
+          <value xml:lang="en-US">Insert Columns After</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Columns R~ight</value>
+          <value xml:lang="en-US">Columns ~After</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
