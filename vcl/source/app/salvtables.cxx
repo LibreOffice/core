@@ -220,6 +220,16 @@ public:
         return m_xWidget->IsReallyVisible();
     }
 
+    virtual void set_can_focus(bool bCanFocus) override
+    {
+        auto nStyle = m_xWidget->GetStyle() & ~(WB_TABSTOP | WB_NOTABSTOP);
+        if (bCanFocus)
+            nStyle |= WB_TABSTOP;
+        else
+            nStyle |= WB_NOTABSTOP;
+        m_xWidget->SetStyle(nStyle);
+    }
+
     virtual void grab_focus() override
     {
         m_xWidget->GrabFocus();
@@ -1417,6 +1427,11 @@ public:
     virtual void set_editable(bool bEditable) override
     {
         m_xEntry->SetReadOnly(!bEditable);
+    }
+
+    virtual bool get_editable() const override
+    {
+        return !m_xEntry->IsReadOnly();
     }
 
     virtual vcl::Font get_font() override
