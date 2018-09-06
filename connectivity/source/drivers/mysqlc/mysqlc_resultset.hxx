@@ -71,8 +71,10 @@ class OResultSet final : public OBase_Mutex,
     MYSQL_RES* m_pResult;
     unsigned int fieldCount;
     rtl_TextEncoding m_encoding;
-    sal_Int32 m_nCurrentField = 0;
     bool m_bWasNull = false; // did the last getXXX result null?
+    sal_Int32 m_nRowPosition = 0;
+    sal_Int32 m_nRowCount = 0;
+
     // OPropertyArrayUsageHelper
     ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
     // OPropertySetHelper
@@ -232,9 +234,8 @@ public:
     css::uno::Sequence<sal_Int32>
         SAL_CALL deleteRows(const css::uno::Sequence<Any>& rows) SAL_OVERRIDE;
 
-    /// @throws SQLException
-    /// @throws RuntimeException
     void checkColumnIndex(sal_Int32 index);
+    void checkRowIndex();
 
 private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
