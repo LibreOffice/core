@@ -59,8 +59,6 @@ NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_pMainPosHelper(std::move(pPlottingPositionHelper))
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
-        , m_xSeriesTarget(nullptr)
-        , m_xTextTarget(nullptr)
 {
     // we only support 2D Net charts
     assert(nDimensionCount == 2);
@@ -158,7 +156,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
-    uno::Reference< drawing::XShape > xShape(nullptr);
+    uno::Reference< drawing::XShape > xShape;
     {
         xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );

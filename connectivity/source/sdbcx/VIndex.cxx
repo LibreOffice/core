@@ -66,7 +66,6 @@ OIndex::OIndex(bool _bCase) : ODescriptor_BASE(m_aMutex)
                 ,m_IsUnique(false)
                 ,m_IsPrimaryKeyIndex(false)
                 ,m_IsClustered(false)
-                ,m_pColumns(nullptr)
 {
 }
 
@@ -81,7 +80,6 @@ OIndex::OIndex( const OUString& Name,
                         ,m_IsUnique(_isUnique)
                         ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)
                         ,m_IsClustered(_isClustered)
-                        ,m_pColumns(nullptr)
 {
     m_Name = Name;
 }

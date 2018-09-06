@@ -35,7 +35,6 @@
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
-    , m_pFontList(nullptr)
     , m_nNamePageId(0)
     , m_nParaStdPageId(0)
     , m_nParaAlignPageId(0)

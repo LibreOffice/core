@@ -56,8 +56,7 @@ AccessibleChartView::AccessibleChartView(SdrView* pView ) :
             true, // has children
             true  // always transparent
             ),
-        m_pSdrView( pView ),
-        m_pViewForwarder( nullptr )
+        m_pSdrView( pView )
 {
     AddState( AccessibleStateType::OPAQUE );
 }

@@ -323,7 +323,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
     aStaggerDirection.normalize();
 
     sal_Int32 nDistance=0;
-    Reference< drawing::XShape >  xShape2DText(nullptr);
+    Reference< drawing::XShape >  xShape2DText;
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rIter.nextInfo() )
@@ -352,7 +352,7 @@ void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
 {
     if(rStaggerDistance.getLength()==0.0)
         return;
-    Reference< drawing::XShape >  xShape2DText(nullptr);
+    Reference< drawing::XShape >  xShape2DText;
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rIter.nextInfo() )
