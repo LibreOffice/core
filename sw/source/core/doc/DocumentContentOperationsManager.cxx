@@ -2448,6 +2448,15 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
 bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUString &rStr,
         const SwInsertFlags nInsertMode )
 {
+    // tdf#119019 accept tracked paragraph formatting to do not hide new insertions
+    if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+    {
+        RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        m_rDoc.getIDocumentRedlineAccess().AcceptRedlineParagraphFormatting( rRg );
+        if (eOld != m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags())
+            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
+    }
+
     // fetching DoesUndo is surprisingly expensive
     bool bDoesUndo = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
     if (bDoesUndo)
@@ -3576,6 +3585,10 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                 ++iter;
             }
         }
+
+        // tdf#119019 accept tracked paragraph formatting to do not hide new deletions
+        if ( *rPam.GetPoint() != *rPam.GetMark() )
+            m_rDoc.getIDocumentRedlineAccess().AcceptRedlineParagraphFormatting( rPam );
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {

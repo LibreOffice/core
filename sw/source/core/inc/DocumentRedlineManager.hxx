@@ -86,6 +86,8 @@ public:
 
     virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 
+    virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam) override;
+
     virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) override;
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;

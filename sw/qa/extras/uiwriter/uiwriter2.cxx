@@ -25,11 +25,13 @@ public:
     void testTdf101534();
     void testTdf54819();
     void testTdf119571();
+    void testTdf119019();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
     CPPUNIT_TEST(testTdf119571);
+    CPPUNIT_TEST(testTdf119019);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -128,6 +130,39 @@ void SwUiWriterTest2::testTdf119571()
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+}
+
+void SwUiWriterTest2::testTdf119019()
+{
+    load(DATA_DIRECTORY, "tdf119019.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."),
+                         getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 1)->getString());
+    // second paragraph has got a tracked paragraph formatting yet
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+
+    // delete last word of the second paragraph to remove tracked paragraph formatting
+    // of this paragraph to track and show word deletion correctly.
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 7, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // check tracked text deletion
+    CPPUNIT_ASSERT_EQUAL(OUString("tellus."), getRun(getParagraph(2), 3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 2)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
+
+    // check removing of tracked paragraph formatting
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

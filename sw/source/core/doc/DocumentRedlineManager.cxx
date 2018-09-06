@@ -2262,6 +2262,31 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
+void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam )
+{
+    const SwPosition* pStt = rPam.Start(),
+                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
+                                                     : rPam.GetPoint();
+
+    const sal_uLong nSttIdx = pStt->nNode.GetIndex();
+    const sal_uLong nEndIdx = pEnd->nNode.GetIndex();
+
+    for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size() ; ++n )
+    {
+        const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
+        sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+              nMk = pTmp->GetMark()->nNode.GetIndex();
+        if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+
+        if( nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType() &&
+            ( (nSttIdx <= nMk && nMk <= nEndIdx) || (nSttIdx <= nPt && nPt <= nEndIdx) ) )
+                AcceptRedline( n, false );
+
+        if( nMk > nEndIdx )
+            break;
+    }
+}
+
 bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool bCallDelete )
 {
     bool bRet = false;

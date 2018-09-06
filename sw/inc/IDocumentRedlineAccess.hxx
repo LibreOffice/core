@@ -205,6 +205,8 @@ public:
 
     virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
 
+    virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam ) = 0;
+
     virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
