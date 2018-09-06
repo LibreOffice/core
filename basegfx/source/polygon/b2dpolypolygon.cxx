@@ -22,22 +22,63 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <functional>
 #include <algorithm>
 
 class ImplB2DPolyPolygon
 {
-    basegfx::B2DPolygonVector                   maPolygons;
+    basegfx::B2DPolygonVector                               maPolygons;
+    std::unique_ptr< basegfx::SystemDependentDataHolder >   mpSystemDependentDataHolder;
 
 public:
-    ImplB2DPolyPolygon() : maPolygons()
+    ImplB2DPolyPolygon()
+    :   maPolygons(),
+        mpSystemDependentDataHolder()
     {
     }
 
-    explicit ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied) :
-        maPolygons(1,rToBeCopied)
+    explicit ImplB2DPolyPolygon(const ImplB2DPolyPolygon& rSource)
+    :   maPolygons(rSource.maPolygons),
+        mpSystemDependentDataHolder()
     {
+    }
+
+    explicit ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied)
+    :   maPolygons(1,rToBeCopied),
+        mpSystemDependentDataHolder()
+    {
+    }
+
+    ImplB2DPolyPolygon& operator=(const ImplB2DPolyPolygon& rSource)
+    {
+        if (this != &rSource)
+        {
+            maPolygons = rSource.maPolygons;
+            mpSystemDependentDataHolder.reset();
+        }
+
+        return *this;
+    }
+
+    void addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData)
+    {
+        if(!mpSystemDependentDataHolder)
+        {
+            mpSystemDependentDataHolder.reset(new basegfx::SystemDependentDataHolder());
+        }
+
+        mpSystemDependentDataHolder->addOrReplaceSystemDependentData(rData);
+    }
+
+    basegfx::SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const
+    {
+        if(!mpSystemDependentDataHolder)
+        {
+            return basegfx::SystemDependentData_SharedPtr();
+        }
+
+        return mpSystemDependentDataHolder->getSystemDependentData(hash_code);
     }
 
     bool operator==(const ImplB2DPolyPolygon& rPolygonList) const
@@ -385,6 +426,24 @@ namespace basegfx
     {
         return mpPolyPolygon->end();
     }
+
+    void B2DPolyPolygon::addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const
+    {
+        // Need to get ImplB2DPolyPolygon* from cow_wrapper *without*
+        // calling make_unique() here - we do not want to
+        // 'modify' the ImplB2DPolyPolygon, but add buffered data that
+        // is valid for all referencing instances
+        const B2DPolyPolygon* pMe(this);
+        const ImplB2DPolyPolygon* pMyImpl(pMe->mpPolyPolygon.get());
+
+        const_cast<ImplB2DPolyPolygon*>(pMyImpl)->addOrReplaceSystemDependentData(rData);
+    }
+
+    SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependantDataInternal(size_t hash_code) const
+    {
+        return mpPolyPolygon->getSystemDependentData(hash_code);
+    }
+
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

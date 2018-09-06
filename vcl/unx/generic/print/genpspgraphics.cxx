@@ -404,7 +404,10 @@ void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, reinterpret_cast<const Point**>(pPtAry));
 }
 
-bool GenPspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+bool GenPspGraphics::drawPolyPolygon(
+    const basegfx::B2DHomMatrix& /*rObjectToDevice*/,
+    const basegfx::B2DPolyPolygon&,
+    double /*fTransparency*/)
 {
         // TODO: implement and advertise OutDevSupportType::B2DDraw support
         return false;
