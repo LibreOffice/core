@@ -492,6 +492,7 @@ public:
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
+    virtual bool get_editable() const = 0;
 
     virtual vcl::Font get_font() = 0;
     virtual void set_font(const vcl::Font& rFont) = 0;

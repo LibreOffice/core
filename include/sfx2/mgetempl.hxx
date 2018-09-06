@@ -49,8 +49,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     OUString aParent;
     SfxStyleSearchBits nFlags;
 
-    std::unique_ptr<weld::TextView> m_xNameRo;
-    std::unique_ptr<weld::Entry> m_xNameRw;
+    std::unique_ptr<weld::Entry> m_xName;
     std::unique_ptr<weld::CheckButton> m_xAutoCB;
     std::unique_ptr<weld::Label> m_xFollowFt;
     std::unique_ptr<weld::ComboBoxText> m_xFollowLb;

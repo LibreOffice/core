@@ -3380,6 +3380,11 @@ public:
         gtk_editable_set_editable(GTK_EDITABLE(m_pEntry), bEditable);
     }
 
+    virtual bool get_editable() const override
+    {
+        return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);

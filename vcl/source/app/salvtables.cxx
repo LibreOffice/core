@@ -1419,6 +1419,11 @@ public:
         m_xEntry->SetReadOnly(!bEditable);
     }
 
+    virtual bool get_editable() const override
+    {
+        return !m_xEntry->IsReadOnly();
+    }
+
     virtual vcl::Font get_font() override
     {
         return m_xEntry->GetFont();
