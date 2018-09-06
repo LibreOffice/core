@@ -60,6 +60,8 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
+#include <basegfx/utils/systemdependentdata.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -95,6 +97,134 @@ void ImplDeInitSVData()
     pSVData->maCtrlData.maFieldUnitStrings.clear();
     pSVData->maCtrlData.maCleanUnitStrings.clear();
     pSVData->maPaperNames.clear();
+
+    pSVData->aSystemDependentDataBuffer.reset();
+}
+
+basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager()
+{
+    typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
+
+    class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex, public Timer
+    {
+    private:
+        EntryMap        maEntries;
+
+    public:
+        SystemDependentDataBuffer( const sal_Char *pDebugName )
+        :   basegfx::SystemDependentDataManager(),
+            Timer( pDebugName ),
+            maEntries()
+        {
+            SetTimeout(1000);
+            SetStatic();
+        }
+
+        virtual ~SystemDependentDataBuffer() override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            flushAll();
+        }
+
+        void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound == maEntries.end())
+            {
+                if(maEntries.empty())
+                {
+                    Start();
+                }
+
+                maEntries[rData] = rData->getHoldCycles();
+            }
+        }
+
+        void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                maEntries.erase(aFound);
+
+                if(maEntries.empty())
+                {
+                    Stop();
+                }
+            }
+        }
+
+        void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aFound(maEntries.find(rData));
+
+            if(aFound != maEntries.end())
+            {
+                aFound->second = rData->getHoldCycles();
+            }
+        }
+
+        void flushAll() override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aIter(maEntries.begin());
+
+            Stop();
+
+            while(aIter != maEntries.end())
+            {
+                EntryMap::iterator aDelete(aIter);
+                ++aIter;
+                maEntries.erase(aDelete);
+            }
+        }
+
+        // from parent Timer
+        virtual void Invoke() override
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+            EntryMap::iterator aIter(maEntries.begin());
+
+            while(aIter != maEntries.end())
+            {
+                if(aIter->second)
+                {
+                    aIter->second--;
+                    ++aIter;
+                }
+                else
+                {
+                    EntryMap::iterator aDelete(aIter);
+                    ++aIter;
+                    maEntries.erase(aDelete);
+
+                    if(maEntries.empty())
+                    {
+                        Stop();
+                    }
+                }
+            }
+
+            if(!maEntries.empty())
+            {
+                Start();
+            }
+        }
+    };
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if(!pSVData->aSystemDependentDataBuffer)
+    {
+        pSVData->aSystemDependentDataBuffer.reset(new SystemDependentDataBuffer(nullptr));
+    }
+
+    return *pSVData->aSystemDependentDataBuffer.get();
 }
 
 /// Returns either the application window, or the default GL context window
