@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_506d9196",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 5257,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-06T11:49:37Z",
+      "side": 1,
+      "message": "and +\u003d is a bashism, unsuitable for use in configure.ac",
+      "revId": "a74ef1dc67ecc1e177f9814f11db5426991467b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
