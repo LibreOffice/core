@@ -141,6 +141,8 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
         /** @short contains all registered interceptor objects. */
         InterceptorList m_lInterceptionRegs;
 
+        osl::Mutex m_Mutex;
+
     // native interface
 
     public:

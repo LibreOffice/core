@@ -40,6 +40,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
                                                                                         const OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
+
     // SAFE {
     SolarMutexClearableGuard aReadLock;
 
@@ -97,6 +99,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Inte
 
 void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
     // reject incorrect calls of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
@@ -160,6 +163,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 
 void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
     // reject wrong calling of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
@@ -207,6 +211,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 #define FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
 void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
     // SAFE ->
     SolarMutexResettableGuard aReadLock;
