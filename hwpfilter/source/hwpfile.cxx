@@ -94,17 +94,14 @@ int detect_hwp_version(const char *str)
 
 int HWPFile::Open(std::unique_ptr<HStream> stream)
 {
-    HStreamIODev *hstreamio = new HStreamIODev(std::move(stream));
+    std::unique_ptr<HStreamIODev> hstreamio(new HStreamIODev(std::move(stream)));
 
     if (!hstreamio->open())
     {
-        delete hstreamio;
-
         return SetState(HWP_EMPTY_FILE);
     }
 
-    HIODev *pPrev = SetIODevice(hstreamio);
-    delete pPrev;
+    SetIODevice(std::move(hstreamio));
 
     char idstr[HWPIDLen];
 
@@ -185,13 +182,10 @@ void HWPFile::SetCompressed(bool flag)
 }
 
 
-HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
+std::unique_ptr<HIODev> HWPFile::SetIODevice(std::unique_ptr<HIODev> new_hiodev)
 {
-    HIODev *old_hiodev = hiodev.release();
-
-    hiodev.reset( new_hiodev );
-
-    return old_hiodev;
+    std::swap(hiodev, new_hiodev);
+    return new_hiodev;
 }
 
 
