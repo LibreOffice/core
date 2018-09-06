@@ -451,7 +451,7 @@ private:
 
     std::unique_ptr<SfxItemSet> pEmptyItemSet;
     EditUndoManager*    pUndoManager;
-    ESelection*         pUndoMarkSelection;
+    std::unique_ptr<ESelection> pUndoMarkSelection;
 
     std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 

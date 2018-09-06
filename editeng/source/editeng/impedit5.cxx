@@ -242,7 +242,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId, const ESelection& aSel )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
-        pUndoMarkSelection = new ESelection( aSel );
+        pUndoMarkSelection.reset(new ESelection( aSel ));
     }
 }
 
@@ -260,8 +260,7 @@ void ImpEditEngine::UndoActionEnd()
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().LeaveListAction();
-        delete pUndoMarkSelection;
-        pUndoMarkSelection = nullptr;
+        pUndoMarkSelection.reset();
     }
 }
 
@@ -272,8 +271,7 @@ void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
     {
         EditUndoMarkSelection* pU = new EditUndoMarkSelection(pEditEngine, *pUndoMarkSelection);
         GetUndoManager().AddUndoAction( pU );
-        delete pUndoMarkSelection;
-        pUndoMarkSelection = nullptr;
+        pUndoMarkSelection.reset();
     }
     GetUndoManager().AddUndoAction( pUndo, bTryMerge );
 
