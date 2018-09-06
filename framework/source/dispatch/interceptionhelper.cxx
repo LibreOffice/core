@@ -43,6 +43,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
                                                                                               sal_Int32        nSearchFlags    )
     throw(css::uno::RuntimeException, std::exception)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
+
     // SAFE {
     SolarMutexClearableGuard aReadLock;
 
@@ -115,6 +117,8 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
             m_xUrlTransformer->parseStrict(aTargetURL);*/
         xInterceptor->queryDispatch(aTargetURL, OUString(), 0);
     }
+
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
 
     // reject incorrect calls of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
@@ -195,6 +199,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw(css::uno::RuntimeException, std::exception)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
     // reject wrong calling of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
@@ -243,6 +248,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
+    osl::Guard<osl::Mutex> aGuard(m_Mutex);
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
     // SAFE ->
     SolarMutexResettableGuard aReadLock;
