@@ -44,6 +44,7 @@ public:
     virtual void set_visible(bool visible) = 0;
     virtual bool get_visible() const = 0; //if this widget visibility is true
     virtual bool is_visible() const = 0; //if this widget visibility and all parents is true
+    virtual void set_can_focus(bool bCanFocus) = 0;
     virtual void grab_focus() = 0;
     virtual bool has_focus() const = 0;
     virtual void set_has_default(bool has_default) = 0;
@@ -492,6 +493,7 @@ public:
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
+    virtual bool get_editable() const = 0;
 
     virtual vcl::Font get_font() = 0;
     virtual void set_font(const vcl::Font& rFont) = 0;
