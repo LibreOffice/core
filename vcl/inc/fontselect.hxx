@@ -25,6 +25,7 @@
 
 #include "fontattributes.hxx"
 
+#include <ostream>
 #include <unordered_map>
 
 namespace vcl { class Font; }
@@ -67,6 +68,16 @@ public:
     bool            mbEmbolden;                 // Force emboldening
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant
 };
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const FontSelectPattern & rFSP)
+{
+    stream << (rFSP.maTargetName.isEmpty() ? "<default>" : rFSP.maTargetName)
+           << " (" << rFSP.maSearchName << ") w: " << rFSP.mnWidth << " h: "
+           << rFSP.mnHeight << " alias: " << rFSP.mbNonAntialiased;
+    return stream;
+}
 
 #endif // INCLUDED_VCL_INC_FONTSELECT_HXX
 
