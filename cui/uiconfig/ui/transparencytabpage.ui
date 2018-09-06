@@ -74,7 +74,7 @@
                       <object class="GtkRadioButton" id="RBT_TRANS_OFF">
                         <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_OFF">_No transparency</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -91,7 +91,7 @@
                       <object class="GtkRadioButton" id="RBT_TRANS_LINEAR">
                         <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_LINEAR">_Transparency:</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -111,7 +111,7 @@
                       <object class="GtkRadioButton" id="RBT_TRANS_GRADIENT">
                         <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_GRADIENT">_Gradient</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -126,7 +126,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRANSPARENT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                         <accessibility>
@@ -160,7 +160,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_END_VALUE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent5</property>
                       </object>
@@ -172,7 +172,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_START_VALUE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent4</property>
                       </object>
@@ -184,7 +184,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_BORDER">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent3</property>
                       </object>
@@ -196,7 +196,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_ANGLE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDegrees</property>
                       </object>
@@ -208,7 +208,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_CENTER_Y">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent2</property>
                       </object>
@@ -220,7 +220,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_TRGR_CENTER_X">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent1</property>
                       </object>

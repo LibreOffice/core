@@ -23,7 +23,7 @@ class WriterInsertHorizontalLine(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:EditStyle")  #open style dialog
         xDialog = self.xUITest.getTopFocusWindow()
-        xStyleNametxt = xDialog.getChild("namerw")
+        xStyleNametxt = xDialog.getChild("name")
         self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line") #check style name
         xCancBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancBtn)
@@ -33,7 +33,7 @@ class WriterInsertHorizontalLine(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:EditStyle")  #open style dialog
         xDialog = self.xUITest.getTopFocusWindow()
-        xStyleNametxt = xDialog.getChild("namerw")
+        xStyleNametxt = xDialog.getChild("name")
         self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line")  #check style name
         xCancBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancBtn)
