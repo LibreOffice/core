@@ -307,13 +307,16 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
 
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
+    mpWinFontEntry[nFallbackLevel]->SetGraphics(this);
     GenericSalLayout *aLayout = new GenericSalLayout(*mpWinFontEntry[nFallbackLevel]);
     return std::unique_ptr<SalLayout>(aLayout);
 }
 
 WinFontInstance::WinFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
+    , m_pGraphics(nullptr)
     , m_hFont(nullptr)
+    , m_fScale(1.0f)
 {
 }
 
@@ -335,8 +338,12 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 {
     sal_uLong nLength = 0;
     unsigned char* pBuffer = nullptr;
-    HFONT hFont = static_cast<HFONT>(pUserData);
-    HDC hDC = GetDC(nullptr);
+    WinFontInstance* pFont = static_cast<WinFontInstance*>(pUserData);
+    HDC hDC = pFont->GetGraphics()->getHDC();
+    HFONT hFont = pFont->GetHFONT();
+    assert(hDC);
+    assert(hFont);
+
     HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
     nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
     if (nLength > 0 && nLength != GDI_ERROR)
@@ -345,7 +352,6 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
         ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
     }
     SelectObject(hDC, hOrigFont);
-    ReleaseDC(nullptr, hDC);
 
     hb_blob_t* pBlob = nullptr;
     if (pBuffer != nullptr)
@@ -356,8 +362,8 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* WinFontInstance::ImplInitHbFont()
 {
-    assert(m_hFont);
-    hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, m_hFont, nullptr));
+    assert(m_pGraphics);
+    hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
 
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
     if (GetFontSelectPattern().mnWidth)
@@ -373,14 +379,13 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
         aLogFont.lfWidth = 0;
 
         // Get the font metrics.
+        HDC hDC = m_pGraphics->getHDC();
         HFONT hNewFont = CreateFontIndirectW(&aLogFont);
-        HDC hDC = GetDC(nullptr);
         HGDIOBJ hOrigFont = SelectObject(hDC, hNewFont);
         TEXTMETRICW aFontMetric;
         GetTextMetricsW(hDC, &aFontMetric);
         SelectObject(hDC, hOrigFont);
         DeleteObject(hNewFont);
-        ReleaseDC(nullptr, hDC);
 
         SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
     }
@@ -388,12 +393,15 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
     return pHbFont;
 }
 
-void WinFontInstance::SetHFONT(const HFONT hFont)
+void WinFontInstance::SetGraphics(WinSalGraphics *pGraphics)
 {
     ReleaseHbFont();
     if (m_hFont)
         ::DeleteFont(m_hFont);
-    m_hFont = hFont;
+    m_pGraphics = pGraphics;
+    HFONT hOrigFont;
+    m_hFont = m_pGraphics->ImplDoSetFont(GetFontSelectPattern(), GetFontFace(), m_fScale, hOrigFont);
+    SelectObject(m_pGraphics->getHDC(), hOrigFont);
 }
 
 bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
