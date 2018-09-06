@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_503591d9",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5259,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-06T09:40:47Z",
+      "side": 1,
+      "message": "this WINDOWS_SDK_PATH variable appears to be newly introduced here; what is it good for?",
+      "revId": "5ba42b96d110be60a0d193514b93126bb7634c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_903b19d0",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5261,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-06T09:40:47Z",
+      "side": 1,
+      "message": "any reason to introduce an empty line here?",
+      "revId": "5ba42b96d110be60a0d193514b93126bb7634c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
