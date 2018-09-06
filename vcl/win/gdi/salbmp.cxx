@@ -146,7 +146,7 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
     {
         // add to buffering mechanism
         pSystemDependentData_GdiPlusBitmap = addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
-            SalGraphics::getSystemDependentDataManager());
+            ImplGetSystemDependentDataManager());
 
         // create and set data
         if(pAlphaSource)

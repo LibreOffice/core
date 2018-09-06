@@ -577,14 +577,17 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
 #endif // ENABLE_CAIRO_CANVAS
 
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
+bool X11SalGraphics::drawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    double fTransparency)
 {
     if(fTransparency >= 1.0)
     {
         return true;
     }
 
-    const sal_uInt32 nPolyCount(rOrigPolyPoly.count());
+    const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
     if(nPolyCount <= 0)
     {
@@ -592,6 +595,10 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
     }
 
 #if ENABLE_CAIRO_CANVAS
+    // Fallback: Transform to DeviceCoordinates
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+
     if(SALCOLOR_NONE == mnFillColor && SALCOLOR_NONE == mnPenColor)
     {
         return true;
@@ -602,12 +609,11 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
     if (!m_bOpenGL && bUseCairoForPolygons && SupportsCairo())
     {
         // snap to raster if requested
-        basegfx::B2DPolyPolygon aPolyPoly(rOrigPolyPoly);
         const bool bSnapPoints(!getAntiAliasB2DDraw());
 
         if(bSnapPoints)
         {
-            aPolyPoly = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPoly);
+            aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygon);
         }
 
         cairo_t* cr = getCairoContext();
@@ -615,7 +621,7 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
 
         for(sal_uInt32 a(0); a < nPolyCount; ++a)
         {
-            const basegfx::B2DPolygon aPolygon(aPolyPoly.getB2DPolygon(a));
+            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(a));
             const sal_uInt32 nPointCount(aPolygon.count());
 
             if(nPointCount)
@@ -684,7 +690,10 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
     }
 #endif // ENABLE_CAIRO_CANVAS
 
-    return mxImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
+    return mxImpl->drawPolyPolygon(
+        rObjectToDevice,
+        rPolyPolygon,
+        fTransparency);
 }
 
 #if ENABLE_CAIRO_CANVAS

@@ -1951,71 +1951,6 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
     }
 }
 
-bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
-{
-    const sal_uInt32 nCount(rPolyPolygon.count());
-
-    if(mbBrush && nCount && (fTransparency >= 0.0 && fTransparency < 1.0))
-    {
-        Gdiplus::Graphics aGraphics(mrParent.getHDC());
-        const sal_uInt8 aTrans(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
-        const Gdiplus::Color aTestColor(aTrans, maFillColor.GetRed(), maFillColor.GetGreen(), maFillColor.GetBlue());
-        const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
-        Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
-
-        for(sal_uInt32 a(0); a < nCount; a++)
-        {
-            if(0 != a)
-            {
-                // #i101491# not needed for first run
-                aGraphicsPath.StartFigure();
-            }
-
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(
-                aGraphicsPath,
-                rPolyPolygon.getB2DPolygon(a),
-                basegfx::B2DHomMatrix(),
-                false,
-                false);
-
-            aGraphicsPath.CloseFigure();
-        }
-
-        if(mrParent.getAntiAliasB2DDraw())
-        {
-            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-        }
-        else
-        {
-            aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
-        }
-
-        if(mrParent.isPrinter())
-        {
-            // #i121591#
-            // Normally GdiPlus should not be used for printing at all since printers cannot
-            // print transparent filled polygon geometry and normally this does not happen
-            // since OutputDevice::RemoveTransparenciesFromMetaFile is used as preparation
-            // and no transparent parts should remain for printing. But this can be overridden
-            // by the user and thus happens. This call can only come (currently) from
-            // OutputDevice::DrawTransparent, see comments there with the same TaskID.
-            // If it is used, the mapping for the printer is wrong and needs to be corrected. I
-            // checked that there is *no* transformation set and estimated that a stable factor
-            // dependent of the printer's DPI is used. Create and set a transformation here to
-            // correct this.
-            const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
-            const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
-
-            aGraphics.ResetTransform();
-            aGraphics.ScaleTransform(Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY, Gdiplus::MatrixOrderAppend);
-        }
-
-        aGraphics.FillPath(&aSolidBrush, &aGraphicsPath);
-    }
-
-     return true;
-}
-
 class SystemDependentData_GraphicsPath : public basegfx::SystemDependentData
 {
 private:
@@ -2040,6 +1975,150 @@ SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
 {
 }
 
+bool WinSalGraphicsImpl::drawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    double fTransparency)
+{
+    const sal_uInt32 nCount(rPolyPolygon.count());
+
+    if(!mbBrush || 0 == nCount || fTransparency < 0.0 || fTransparency > 1.0)
+    {
+        return true;
+    }
+
+    Gdiplus::Graphics aGraphics(mrParent.getHDC());
+    const sal_uInt8 aTrans(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
+    const Gdiplus::Color aTestColor(aTrans, maFillColor.GetRed(), maFillColor.GetGreen(), maFillColor.GetBlue());
+    const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
+
+    // Set full (Object-to-Device) transformation - if used
+    if(rObjectToDevice.isIdentity())
+    {
+        aGraphics.ResetTransform();
+    }
+    else
+    {
+        Gdiplus::Matrix aMatrix;
+
+        aMatrix.SetElements(
+            rObjectToDevice.get(0, 0),
+            rObjectToDevice.get(1, 0),
+            rObjectToDevice.get(0, 1),
+            rObjectToDevice.get(1, 1),
+            rObjectToDevice.get(0, 2),
+            rObjectToDevice.get(1, 2));
+        aGraphics.SetTransform(&aMatrix);
+    }
+
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
+        rPolyPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
+
+    if(!pSystemDependentData_GraphicsPath)
+    {
+        // add to buffering mechanism
+        pSystemDependentData_GraphicsPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
+            ImplGetSystemDependentDataManager());
+
+        // Note: In principle we could use the same buffered geometry at line
+        // and fill polygons. Checked that in a first try, used
+        // GraphicsPath::AddPath from Gdiplus combined with below used
+        // StartFigure/CloseFigure, worked well (thus the line-draw version
+        // may create non-cloded partial Polygon data).
+        //
+        // But in current reality it gets not used due to e.g.
+        // SdrPathPrimitive2D::create2DDecomposition creating transformed
+        // line and fill polygon-primitives (what could be changed).
+        //
+        // There will probably be more hindrances here in other rendering paths
+        // which could all be found - intention to do this would be: Use more
+        // transformations, less modifications of B2DPolygons/B2DPolyPolygons.
+        //
+        // A fix for SdrPathPrimitive2D would be to create the sub-geometry
+        // and embed into a TransformPrimitive2D containing the transformation.
+        //
+        // A 2nd problem is that the NoLineJoin mode (basegfx::B2DLineJoin::NONE
+        // && rLineWidths > 0.0) creates polygon fill infos that are not reusable
+        // for the fill case (see ::drawPolyLine bnelow) - thus we would need a
+        // bool and/or two system-dependent paths buffered - doable, but complicated.
+        //
+        // All in all: Make B2DPolyPolygon a SystemDependentDataProvider and buffer
+        // the whole to-be-filled PolyPolygon independent from evtl. line-polygon
+        // (at least for now...)
+
+        // create data
+        for(sal_uInt32 a(0); a < nCount; a++)
+        {
+            if(0 != a)
+            {
+                // #i101491# not needed for first run
+                pSystemDependentData_GraphicsPath->getGraphicsPath().StartFigure();
+            }
+
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(
+                pSystemDependentData_GraphicsPath->getGraphicsPath(),
+                rPolyPolygon.getB2DPolygon(a),
+                rObjectToDevice, // not used due to the two 'false' values below, but to not forget later
+                false,
+                false);
+
+            pSystemDependentData_GraphicsPath->getGraphicsPath().CloseFigure();
+        }
+    }
+
+    if(mrParent.getAntiAliasB2DDraw())
+    {
+        aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+    }
+    else
+    {
+        aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
+    }
+
+    if(mrParent.isPrinter())
+    {
+        // #i121591#
+        // Normally GdiPlus should not be used for printing at all since printers cannot
+        // print transparent filled polygon geometry and normally this does not happen
+        // since OutputDevice::RemoveTransparenciesFromMetaFile is used as preparation
+        // and no transparent parts should remain for printing. But this can be overridden
+        // by the user and thus happens. This call can only come (currently) from
+        // OutputDevice::DrawTransparent, see comments there with the same TaskID.
+        // If it is used, the mapping for the printer is wrong and needs to be corrected. I
+        // checked that there is *no* transformation set and estimated that a stable factor
+        // dependent of the printer's DPI is used. Create and set a transformation here to
+        // correct this.
+        const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
+        const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
+
+        // Now the transformation maybe/is already used (see above), so do
+        // modify it without resetting to not destroy it.
+        // I double-checked with MS docu that Gdiplus::MatrixOrderAppend does what
+        // we need - in our notation, would be a multiply from left to execute
+        // current transform first and this scale last.
+        // I tried to trigger this code using Print from the menu and various
+        // targets, but got no hit, thus maybe obsolete anyways. If someone knows
+        // more, feel free to remove it.
+        // One more hint: This *may* also be needed now in ::drawPolyLine below
+        // since it also uses transformations now.
+        //
+        // aGraphics.ResetTransform();
+
+        aGraphics.ScaleTransform(
+            Gdiplus::REAL(100.0) / aDpiX,
+            Gdiplus::REAL(100.0) / aDpiY,
+            Gdiplus::MatrixOrderAppend);
+    }
+
+    // use created or buffered data
+    aGraphics.FillPath(
+        &aSolidBrush,
+        &pSystemDependentData_GraphicsPath->getGraphicsPath());
+
+    return true;
+}
+
 bool WinSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
@@ -2062,15 +2141,24 @@ bool WinSalGraphicsImpl::drawPolyLine(
     bool bNoLineJoin(false);
     Gdiplus::Matrix aMatrix;
 
-    // Set full (Object-to-Device) transformation
-    aMatrix.SetElements(
-        rObjectToDevice.get(0, 0),
-        rObjectToDevice.get(1, 0),
-        rObjectToDevice.get(0, 1),
-        rObjectToDevice.get(1, 1),
-        rObjectToDevice.get(0, 2),
-        rObjectToDevice.get(1, 2));
-    aGraphics.SetTransform(&aMatrix);
+    // Set full (Object-to-Device) transformation - if used
+    if(rObjectToDevice.isIdentity())
+    {
+        aGraphics.ResetTransform();
+    }
+    else
+    {
+        Gdiplus::Matrix aMatrix;
+
+        aMatrix.SetElements(
+            rObjectToDevice.get(0, 0),
+            rObjectToDevice.get(1, 0),
+            rObjectToDevice.get(0, 1),
+            rObjectToDevice.get(1, 1),
+            rObjectToDevice.get(0, 2),
+            rObjectToDevice.get(1, 2));
+        aGraphics.SetTransform(&aMatrix);
+    }
 
     switch(eLineJoin)
     {
@@ -2145,7 +2233,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     {
         // add to buffering mechanism
         pSystemDependentData_GraphicsPath = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            SalGraphics::getSystemDependentDataManager());
+            ImplGetSystemDependentDataManager());
 
         // fill data of buffered data
         pSystemDependentData_GraphicsPath->setPixelSnapHairline(bPixelSnapHairline);

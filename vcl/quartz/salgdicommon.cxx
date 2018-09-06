@@ -1072,13 +1072,15 @@ bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const Pol
     return false;
 }
 
-bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
-                                       double fTransparency )
+bool AquaSalGraphics::drawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    double fTransparency)
 {
     DBG_DRAW_OPERATION("drawPolyPolygon", true);
 
     // short circuit if there is nothing to do
-    const int nPolyCount = rPolyPoly.count();
+    const int nPolyCount = rPolyPolygon.count();
     if( nPolyCount <= 0 )
     {
         DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
@@ -1092,12 +1094,16 @@ bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
         return true;
     }
 
+    // Fallback: Transform to DeviceCoordinates
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
-        const basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
+        const basegfx::B2DPolygon rPolygon = rPolyPolygon.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
 
