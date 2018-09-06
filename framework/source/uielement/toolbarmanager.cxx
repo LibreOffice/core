@@ -139,7 +139,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_bAddedToTaskPaneList( true ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
-    m_bDisposing( false ),
     m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize()),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
@@ -330,10 +329,6 @@ void ToolBarManager::RefreshImages()
 
 void ToolBarManager::UpdateControllers()
 {
-    if ( m_bDisposing )
-    {
-        return;
-    }
 
     if( SvtMiscOptions().DisableUICustomization() )
     {
@@ -378,10 +373,6 @@ void ToolBarManager::UpdateControllers()
 //for update toolbar controller via Support Visible
 void ToolBarManager::UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController)
 {
-    if ( m_bDisposing )
-    {
-        return;
-    }
 
     if ( !m_bUpdateControllers )
     {
@@ -466,7 +457,6 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
     {
         SolarMutexGuard g;
-        m_bDisposing = true;
 
         if (m_bDisposed)
         {
@@ -528,7 +518,6 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
         m_aAsyncUpdateControllersTimer.Stop();
 
         m_bDisposed = true;
-        m_bDisposing = false;
     }
 }
 
