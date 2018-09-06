@@ -626,12 +626,12 @@ static HWPPara *LoadParaList()
         return nullptr;
 
     HWPFile *hwpf = GetCurrentDoc();
-    HIODev *hio = hwpf->SetIODevice(hmem);
+    std::unique_ptr<HIODev> hio = hwpf->SetIODevice(std::unique_ptr<HIODev>(hmem));
 
     std::vector< HWPPara* > plist;
 
     hwpf->ReadParaList(plist);
-    hwpf->SetIODevice(hio);
+    hwpf->SetIODevice(std::move(hio));
 
     return plist.size()? plist.front() : nullptr;
 }
