@@ -245,6 +245,7 @@ public:
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolyPolygon(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon &i_rPolyPolygon,
                                     double i_fTransparency,
                                     const OutputDevice *i_pOutDev);
@@ -465,7 +466,11 @@ protected:
     virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
     virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
-    virtual bool                drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
+
+    virtual bool                drawPolyPolygon(
+                                    const basegfx::B2DHomMatrix& rObjectToDevice,
+                                    const basegfx::B2DPolyPolygon&,
+                                    double fTransparency) = 0;
 
     virtual bool                drawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,

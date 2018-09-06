@@ -1610,7 +1610,12 @@ public:
 
 
     void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-    void                        DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
+
+    void                        DrawTransparent(
+                                    const basegfx::B2DHomMatrix& rObjectTransform,
+                                    const basegfx::B2DPolyPolygon& rB2DPolyPoly,
+                                    double fTransparency);
+
     void                        DrawTransparent(
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
                                         const Gradient& rTransparenceGradient );
