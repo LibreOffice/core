@@ -154,20 +154,22 @@ public:
     GlyphCache& GetGlyphCache() { return maGlyphCache; }
     bool hasHScale() const;
 
-    void SetHFONT(const HFONT);
+    void SetGraphics(WinSalGraphics*);
+    WinSalGraphics* GetGraphics() const { return m_pGraphics; }
+
     HFONT GetHFONT() const { return m_hFont; }
-    void SetScale(float fScale) { m_fScale = fScale; }
     float GetScale() const { return m_fScale; }
 
     // Prevent deletion of the HFONT in the WinFontInstance destructor
     // Used for the ScopedFont handling
-    void UnsetHFONT() { m_hFont = nullptr; }
+    void SetHFONT(HFONT hFont) { m_hFont = hFont; }
 
 private:
     explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 
+    WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
     GlyphCache maGlyphCache;

@@ -934,13 +934,10 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     HFONT hNewFont = pFontInstance->GetHFONT();
     if (!hNewFont)
     {
-        float fFontScale = 1.0;
-        hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), pFont->GetFontFace(), fFontScale, hOldFont);
-        mpWinFontEntry[ nFallbackLevel ]->SetHFONT(hNewFont);
-        mpWinFontEntry[ nFallbackLevel ]->SetScale(fFontScale);
+        pFontInstance->SetGraphics(this);
+        hNewFont = pFontInstance->GetHFONT();
     }
-    else
-        hOldFont = ::SelectFont( getHDC(), hNewFont );
+    hOldFont = ::SelectFont(getHDC(), hNewFont);
 
     // keep default font
     if( !mhDefFont )
@@ -1586,7 +1583,7 @@ private:
 ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData)
 {
     m_hOrigFont = m_rData.mpWinFontEntry[0]->GetHFONT();
-    m_rData.mpWinFontEntry[0]->UnsetHFONT();
+    m_rData.mpWinFontEntry[0]->SetHFONT(nullptr);
 }
 
 ScopedFont::~ScopedFont()
