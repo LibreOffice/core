@@ -4167,6 +4167,74 @@ void SwRootFrame::InvalidateAllObjPos()
     }
 }
 
+namespace sw {
+
+/// rTextNode is the first one of the "new" merge - if rTextNode isn't the same
+/// as MergedPara::pFirstNode, then nodes before rTextNode have their flys
+/// already properly attached, so only the other nodes need handling here.
+void AddRemoveFlysAnchoredToFrameStartingAtNode(
+        SwTextFrame & rFrame, SwTextNode & rTextNode,
+        std::set<sal_uLong> *const pSkipped)
+{
+    auto const pMerged(rFrame.GetMergedPara());
+    if (pMerged
+        // do this only *once*, for the *last* frame
+        // otherwise AppendObj would create multiple frames for fly-frames!
+        && !rFrame.GetFollow())
+    {
+        assert(pMerged->pFirstNode->GetIndex() <= rTextNode.GetIndex()
+            && rTextNode.GetIndex() <= pMerged->pLastNode->GetIndex());
+        // add visible flys in non-first node to merged frame
+        // (hidden flys remain and are deleted via DelFrames())
+        SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
+        SwPageFrame *const pPage(rFrame.FindPageFrame());
+        std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
+        std::vector<sw::Extent>::const_iterator iter(iterFirst);
+        SwTextNode const* pNode(pMerged->pFirstNode);
+        for ( ; ; ++iter)
+        {
+            if (iter == pMerged->extents.end()
+                || iter->pNode != pNode)
+            {
+                if (pNode == &rTextNode)
+                {   // remove existing hidden at-char anchored flys
+                    RemoveHiddenObjsOfNode(
+                        rTextNode, &iterFirst, &iter);
+                }
+                else if (rTextNode.GetIndex() < pNode->GetIndex())
+                {
+                    // pNode's frame has been deleted by CheckParaRedlineMerge()
+                    AppendObjsOfNode(&rTable,
+                        pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
+                        &iterFirst, &iter);
+                    if (pSkipped)
+                    {
+                        // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
+                        if (auto const pFlys = pNode->GetAnchoredFlys())
+                        {
+                            for (auto const pFly : *pFlys)
+                            {
+                                if (pFly->Which() != RES_DRAWFRMFMT)
+                                {
+                                    pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (iter == pMerged->extents.end())
+                {
+                    break;
+                }
+                pNode = iter->pNode;
+                iterFirst = iter;
+            }
+        }
+    }
+}
+
+} // namespace sw
+
 static void UnHideRedlines(SwRootFrame & rLayout,
         SwNodes & rNodes, SwNode const& rEndOfSectionNode,
         std::set<sal_uLong> *const pSkipped)
@@ -4226,59 +4294,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                 }
                             }
                         }
-                        if (pMerged
-                            // do this only *once*, for the *last* frame
-                            // otherwise AppendObj would create multiple frames for fly-frames!
-                            && !pFrame->GetFollow())
-                        {
-                            // add visible flys in non-first node to merged frame
-                            // (hidden flys remain and are deleted via DelFrames())
-                            SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
-                            SwPageFrame *const pPage(pFrame->FindPageFrame());
-                            std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
-                            std::vector<sw::Extent>::const_iterator iter(iterFirst);
-                            SwTextNode const* pNode(&rTextNode);
-                            for ( ; ; ++iter)
-                            {
-                                if (iter == pMerged->extents.end()
-                                    || iter->pNode != pNode)
-                                {
-                                    if (pNode == &rTextNode)
-                                    {   // remove existing hidden at-char anchored flys
-                                        RemoveHiddenObjsOfNode(
-                                            rTextNode, &iterFirst, &iter);
-                                    }
-                                    else
-                                    {
-                                        // pNode's frame has been deleted by CheckParaRedlineMerge()
-                                        AppendObjsOfNode(&rTable,
-                                            pNode->GetIndex(), pFrame, pPage,
-                                            rTextNode.GetDoc(),
-                                            &iterFirst, &iter);
-                                        if (pSkipped)
-                                        {
-                                            // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
-                                            if (auto const pFlys = pNode->GetAnchoredFlys())
-                                            {
-                                                for (auto const pFly : *pFlys)
-                                                {
-                                                    if (pFly->Which() != RES_DRAWFRMFMT)
-                                                    {
-                                                        pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (iter == pMerged->extents.end())
-                                    {
-                                        break;
-                                    }
-                                    pNode = iter->pNode;
-                                    iterFirst = iter;
-                                }
-                            }
-                        }
+                        sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, rTextNode, pSkipped);
                     }
                 }
                 else

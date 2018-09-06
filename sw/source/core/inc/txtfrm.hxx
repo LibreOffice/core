@@ -106,11 +106,18 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
 
+void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
+        SwTextNode const& rFirstNode, SwTextNode & rSecondNode, bool);
+
 void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool bRecreateMerged);
 
 void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
+
+void AddRemoveFlysAnchoredToFrameStartingAtNode(
+        SwTextFrame & rFrame, SwTextNode & rTextNode,
+        std::set<sal_uLong> *pSkipped);
 
 } // namespace sw
 
