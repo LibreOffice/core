@@ -156,6 +156,8 @@ public:
 
     void SetHFONT(const HFONT);
     HFONT GetHFONT() const { return m_hFont; }
+    void SetScale(float fScale) { m_fScale = fScale; }
+    float GetScale() const { return m_fScale; }
 
     // Prevend deletion of the HFONT in the WinFontInstance destructor
     // Used for the ScopedFont handling
@@ -167,6 +169,7 @@ private:
     virtual hb_font_t* ImplInitHbFont() override;
 
     HFONT m_hFont;
+    float m_fScale;
     GlyphCache maGlyphCache;
 };
 
