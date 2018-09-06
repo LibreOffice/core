@@ -145,6 +145,8 @@ class TestXIndexContainer(CollectionsTestBase):
         # Then
         self.assertEqual('foo', doc.DrawPage.Forms[0].Name)
 
+        doc.close(True)
+
     # Tests syntax:
     #    obj[0:3:2] = val1,val2      # Replace by extended slice
     # For:

@@ -43,6 +43,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, cell.CellAddress.Row)
         self.assertEqual(0, cell.CellAddress.Column)
 
+        spr.close(True)
+
     # Tests syntax:
     #    cell = cellrange[0,0]       # Access cell by indices
     # For:
@@ -63,6 +65,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual('A1', cell.CellName)
 
+        doc.close(True)
+
     # Tests syntax:
     #    cell = cellrange[0,0]       # Access cell by indices
     # For:
@@ -80,6 +84,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.CellAddress.Sheet)
         self.assertEqual(3, rng.CellAddress.Row)
         self.assertEqual(7, rng.CellAddress.Column)
+
+        spr.close(True)
 
     # Tests syntax:
     #    cell = cellrange[0,0]       # Access cell by indices
@@ -101,6 +107,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual('H4', cell.CellName)
 
+        doc.close(True)
+
     # Tests syntax:
     #    rng = cellrange[0,1:2]      # Access cell range by index,slice
     # For:
@@ -119,6 +127,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(1, rng.RangeAddress.StartColumn)
         self.assertEqual(0, rng.RangeAddress.EndRow)
         self.assertEqual(2, rng.RangeAddress.EndColumn)
+
+        spr.close(True)
 
     # Tests syntax:
     #    rng = cellrange[0,1:2]      # Access cell range by index,slice
@@ -142,6 +152,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual((('101', '102'),), rng.DataArray)
 
+        doc.close(True)
+
     # Tests syntax:
     #    rng = cellrange[1:2,0]      # Access cell range by slice,index
     # For:
@@ -160,6 +172,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(2, rng.RangeAddress.EndRow)
         self.assertEqual(0, rng.RangeAddress.EndColumn)
+
+        spr.close(True)
 
     # Tests syntax:
     #    rng = cellrange[1:2,0]      # Access cell range by index,slice
@@ -183,6 +197,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual((('110',), ('120',)), rng.DataArray)
 
+        doc.close(True)
+
     # Tests syntax:
     #    rng = cellrange[0:1,2:3]    # Access cell range by slices
     # For:
@@ -202,6 +218,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(2, rng.RangeAddress.EndRow)
         self.assertEqual(4, rng.RangeAddress.EndColumn)
 
+        spr.close(True)
+
     # Tests syntax:
     #    rng = cellrange[0:1,2:3]    # Access cell range by slices
     # For:
@@ -217,6 +235,8 @@ class TestXCellRange(CollectionsTestBase):
             rng = sht[1:1, 3:5]
         with self.assertRaises(KeyError):
             rng = sht[1:3, 3:3]
+
+        spr.close(True)
 
     # Tests syntax:
     #    rng = cellrange[0:1,2:3]    # Access cell range by slices
@@ -240,6 +260,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual((('113', '114'), ('123', '124')), rng.DataArray)
 
+        doc.close(True)
+
     # Tests syntax:
     #    rng = cellrange['A1:B2']    # Access cell range by descriptor
     # For:
@@ -258,6 +280,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(3, rng.RangeAddress.EndRow)
         self.assertEqual(1, rng.RangeAddress.EndColumn)
+
+        spr.close(True)
 
     # Tests syntax:
     #    rng = cellrange['A1:B2']    # Access cell range by descriptor
@@ -281,6 +305,8 @@ class TestXCellRange(CollectionsTestBase):
         # Then
         self.assertEqual((('120', '121'), ('130', '131')), rng.DataArray)
 
+        doc.close(True)
+
     # Tests syntax:
     #    rng = cellrange['Name']     # Access cell range by name
     # For:
@@ -303,6 +329,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(9, rng.RangeAddress.EndRow)
         self.assertEqual(5, rng.RangeAddress.EndColumn)
 
+        spr.close(True)
+
     # Tests syntax:
     #    rng = cellrange[0]          # Access cell range by row index
     # For:
@@ -321,6 +349,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(0, rng.RangeAddress.EndRow)
         self.assertEqual(1023, rng.RangeAddress.EndColumn)
+
+        spr.close(True)
 
     # Tests syntax:
     #    rng = cellrange[0,:]        # Access cell range by row index
@@ -341,6 +371,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.EndRow)
         self.assertEqual(1023, rng.RangeAddress.EndColumn)
 
+        spr.close(True)
+
     # Tests syntax:
     #    rng = cellrange[:,0]        # Access cell range by column index
     # For:
@@ -359,6 +391,8 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(1048575, rng.RangeAddress.EndRow)
         self.assertEqual(0, rng.RangeAddress.EndColumn)
+
+        spr.close(True)
 
 
 if __name__ == '__main__':

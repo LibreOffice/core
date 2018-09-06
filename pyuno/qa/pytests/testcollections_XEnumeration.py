@@ -38,6 +38,8 @@ class TestXEnumeration(CollectionsTestBase):
         # Then
         self.assertEqual(1, len(paragraphs))
 
+        doc.close(True)
+
     # Tests syntax:
     #    if val in itr: ...          # Test value presence
     # For:
@@ -53,6 +55,8 @@ class TestXEnumeration(CollectionsTestBase):
 
         # Then
         self.assertTrue(result)
+
+        doc.close(True)
 
     # Tests syntax:
     #    if val in itr: ...          # Test value presence
@@ -71,6 +75,9 @@ class TestXEnumeration(CollectionsTestBase):
         # Then
         self.assertFalse(result)
 
+        doc1.close(True)
+        doc2.close(True)
+
     # Tests syntax:
     #    if val in itr: ...          # Test value presence
     # For:
@@ -85,6 +92,8 @@ class TestXEnumeration(CollectionsTestBase):
 
         # Then
         self.assertFalse(result)
+
+        doc.close(True)
 
     # Tests syntax:
     #    if val in itr: ...          # Test value presence
@@ -103,6 +112,8 @@ class TestXEnumeration(CollectionsTestBase):
 
         # Then
         self.assertFalse(result)
+
+        doc.close(True)
 
 
 if __name__ == '__main__':

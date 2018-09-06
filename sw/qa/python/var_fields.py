@@ -19,7 +19,6 @@ class TestVarFields(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod
     def tearDownClass(cls):
@@ -32,7 +31,7 @@ class TestVarFields(unittest.TestCase):
         sw/qa/complex/writer/VarFields.java
 
         """
-        xDoc = self.__class__._xDoc
+        xDoc = self.__class__._uno.openEmptyWriterDoc()
         xBodyText = xDoc.getText()
         xCursor = xBodyText.createTextCursor()
         # 0. create text field

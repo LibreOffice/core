@@ -35,6 +35,8 @@ class TestXNameAccess(CollectionsTestBase):
         # Then
         self.assertEqual(2, length)
 
+        drw.close(True)
+
     # Tests syntax:
     #    val = obj[key]              # Access by key
     # For:
@@ -50,6 +52,8 @@ class TestXNameAccess(CollectionsTestBase):
         # Then
         self.assertEqual('foo', link.getName())
 
+        drw.close(True)
+
     # Tests syntax:
     #    val = obj[key]              # Access by key
     # For:
@@ -61,6 +65,8 @@ class TestXNameAccess(CollectionsTestBase):
         # When / Then
         with self.assertRaises(KeyError):
             link = drw.Links['foo']
+
+        drw.close(True)
 
     # Tests syntax:
     #    val = obj[key]              # Access by key
@@ -74,6 +80,8 @@ class TestXNameAccess(CollectionsTestBase):
         with self.assertRaises(TypeError):
             link = drw.Links[None]
 
+        drw.close(True)
+
     # Tests syntax:
     #    val = obj[key]              # Access by key
     # For:
@@ -85,6 +93,8 @@ class TestXNameAccess(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             link = drw.Links[12.34]
+
+        drw.close(True)
 
     # Tests syntax:
     #    val = obj[key]              # Access by key
@@ -98,6 +108,8 @@ class TestXNameAccess(CollectionsTestBase):
         with self.assertRaises(TypeError):
             link = drw.Links[(1, 2)]
 
+        drw.close(True)
+
     # Tests syntax:
     #    val = obj[key]              # Access by key
     # For:
@@ -110,6 +122,8 @@ class TestXNameAccess(CollectionsTestBase):
         with self.assertRaises(TypeError):
             link = drw.Links[[1, 2]]
 
+        drw.close(True)
+
     # Tests syntax:
     #    val = obj[key]              # Access by key
     # For:
@@ -121,6 +135,8 @@ class TestXNameAccess(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             link = drw.Links[{'a': 'b'}]
+
+        drw.close(True)
 
     # Tests syntax:
     #    if key in obj: ...          # Test key presence
@@ -136,6 +152,8 @@ class TestXNameAccess(CollectionsTestBase):
 
         # Then
         self.assertTrue(present)
+
+        drw.close(True)
 
     # Tests syntax:
     #    for key in obj: ...         # Implicit iterator (keys)
@@ -157,6 +175,8 @@ class TestXNameAccess(CollectionsTestBase):
         # Then
         self.assertEqual(['foo0', 'foo1'], read_links)
 
+        drw.close(True)
+
     # Tests syntax:
     #    itr = iter(obj)             # Named iterator (keys)
     # For:
@@ -173,6 +193,8 @@ class TestXNameAccess(CollectionsTestBase):
         self.assertIsNotNone(next(itr))
         with self.assertRaises(StopIteration):
             next(itr)
+
+        drw.close(True)
 
 
 if __name__ == '__main__':

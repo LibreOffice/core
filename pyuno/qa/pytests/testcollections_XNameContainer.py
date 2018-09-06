@@ -41,6 +41,8 @@ class TestXNameContainer(CollectionsTestBase):
         # Then
         self.assertEqual(1, len(ranges.ElementNames))
 
+        spr.close(True)
+
     # Tests syntax:
     #    obj[key] = val              # Insert by key
     # For:
@@ -54,6 +56,8 @@ class TestXNameContainer(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             ranges[12.34] = new_range
+
+        spr.close(True)
 
     # Tests syntax:
     #    obj[key] = val              # Replace by key
@@ -73,6 +77,8 @@ class TestXNameContainer(CollectionsTestBase):
         read_range = ranges['foo']
         self.assertEqual(6, read_range.CellAddress.Column)
 
+        spr.close(True)
+
     # Tests syntax:
     #    del obj[key]                # Delete by key
     # For:
@@ -89,6 +95,8 @@ class TestXNameContainer(CollectionsTestBase):
         self.assertEqual(1, len(spr.Sheets))
         self.assertFalse('foo' in spr.Sheets)
 
+        spr.close(True)
+
     # Tests syntax:
     #    del obj[key]                # Delete by key
     # For:
@@ -101,6 +109,8 @@ class TestXNameContainer(CollectionsTestBase):
         with self.assertRaises(KeyError):
             del spr.Sheets['foo']
 
+        spr.close(True)
+
     # Tests syntax:
     #    del obj[key]                # Delete by key
     # For:
@@ -112,6 +122,8 @@ class TestXNameContainer(CollectionsTestBase):
         # When / Then
         with self.assertRaises(TypeError):
             del spr.Sheets[12.34]
+
+        spr.close(True)
 
 
 if __name__ == '__main__':
