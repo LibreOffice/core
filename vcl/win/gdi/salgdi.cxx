@@ -620,12 +620,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this, pProvider));
     else
         mpImpl.reset(new WinSalGraphicsImpl(*this));
-
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-    {
-        mhFonts[ i ] = nullptr;
-        mpWinFontEntry[ i ] = nullptr;
-    }
 }
 
 WinSalGraphics::~WinSalGraphics()

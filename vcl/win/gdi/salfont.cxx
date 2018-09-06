@@ -913,22 +913,17 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     // return early if there is no new font
     if( !pFont )
     {
-        // deselect still active font
-        if (mhDefFont)
-        {
-            ::SelectFont(getHDC(), mhDefFont);
-            mhDefFont = nullptr;
-        }
+        if (!mpWinFontEntry[nFallbackLevel].is())
+            return;
+
+        // select original DC font
+        assert(mhDefFont);
+        ::SelectFont(getHDC(), mhDefFont);
+        mhDefFont = nullptr;
+
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-        {
-            if( mhFonts[i] )
-            {
-                ::DeleteFont( mhFonts[i] );
-                mhFonts[ i ] = nullptr;
-            }
             mpWinFontEntry[i] = nullptr;
-        }
         return;
     }
 
@@ -953,16 +948,8 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     else
     {
         // release no longer referenced font handles
-        for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-        {
-            if( mhFonts[i] )
-            {
-                ::DeleteFont( mhFonts[i] );
-                mhFonts[i] = nullptr;
-            }
-            if (i > nFallbackLevel)
-                mpWinFontEntry[i] = nullptr;
-        }
+        for( int i = nFallbackLevel + 1; mpWinFontEntry[i].is() && i < MAX_FALLBACK; ++i )
+            mpWinFontEntry[i] = nullptr;
     }
 
     // now the font is live => update font face
@@ -973,8 +960,8 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
-    assert(!mhFonts[nFallbackLevel] && mpWinFontEntry[nFallbackLevel]);
-    const HFONT hOldFont = SelectFont(getHDC(), mpWinFontEntry[nFallbackLevel]->GetHFONT());
+    rtl::Reference<WinFontInstance> pFontInstance = mpWinFontEntry[nFallbackLevel];
+    const HFONT hOldFont = SelectFont(getHDC(), pFontInstance->GetHFONT());
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
@@ -985,7 +972,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
-    rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
+    rxFontMetric->SetMinKashida(pFontInstance->GetKashidaWidth());
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
@@ -1006,7 +993,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->SetSlant( 0 );
 
     // transformation dependent font metrics
-    rxFontMetric->SetWidth(static_cast<int>(mpWinFontEntry[nFallbackLevel]->GetScale() * aWinMetric.tmAveCharWidth));
+    rxFontMetric->SetWidth(static_cast<int>(pFontInstance->GetScale() * aWinMetric.tmAveCharWidth));
 
     const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
     const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
@@ -1596,17 +1583,12 @@ private:
     HFONT m_hOrigFont;
 };
 
-ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData)
+ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData), m_hOrigFont(nullptr)
 {
     if (m_rData.mpWinFontEntry[0])
     {
         m_hOrigFont = m_rData.mpWinFontEntry[0]->GetHFONT();
         m_rData.mpWinFontEntry[0]->UnsetHFONT();
-    }
-    else
-    {
-        m_hOrigFont = m_rData.mhFonts[0];
-        m_rData.mhFonts[0] = nullptr; // avoid deletion of current font
     }
 }
 
@@ -1615,11 +1597,8 @@ ScopedFont::~ScopedFont()
     if( m_hOrigFont )
     {
         // restore original font, destroy temporary font
-        HFONT hTempFont = m_rData.mhFonts[0];
-        if (m_rData.mpWinFontEntry[0])
-            m_rData.mpWinFontEntry[0]->SetHFONT(m_hOrigFont);
-        else
-            m_rData.mhFonts[0] = m_hOrigFont;
+        HFONT hTempFont = m_rData.mpWinFontEntry[0]->GetHFONT();
+        m_rData.mpWinFontEntry[0]->SetHFONT(m_hOrigFont);
         SelectObject( m_rData.getHDC(), m_hOrigFont );
         DeleteObject( hTempFont );
     }
