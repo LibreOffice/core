@@ -40,13 +40,11 @@ IMPLEMENT_SERVICE_INFO(OUser,"com.sun.star.sdbcx.VUser","com.sun.star.sdbcx.User
 
 OUser::OUser(bool _bCase)  : OUser_BASE(m_aMutex)
                 , ODescriptor(OUser_BASE::rBHelper,_bCase,true)
-                , m_pGroups(nullptr)
 {
 }
 
 OUser::OUser(const OUString& Name, bool _bCase) :    OUser_BASE(m_aMutex)
                         ,ODescriptor(OUser_BASE::rBHelper,_bCase)
-                        ,m_pGroups(nullptr)
 {
     m_Name = Name;
 }

@@ -84,9 +84,7 @@ namespace cppcanvas
             , dashOffset(0.0)
             , alignment(0)
             , customStartCapLen(0)
-            , customStartCap(nullptr)
             , customEndCapLen(0)
-            , customEndCap(nullptr)
         {
         }
 

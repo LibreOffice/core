@@ -422,8 +422,6 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     SvxSpellWrapper* pWrapper)
     : SfxModalDialog(pParent, "HyphenateDialog", "cui/ui/hyphenate.ui")
     , m_pHyphWrapper(pWrapper)
-    , m_xHyphenator(nullptr)
-    , m_xPossHyph(nullptr)
     , m_aActWord(rWord)
     , m_nActLanguage(nLang)
     , m_nMaxHyphenationPos(0)

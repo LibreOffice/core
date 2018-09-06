@@ -150,8 +150,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     mnCurrentPageId ( HyperLinkPageType::NONE ),
 
     pSet            ( nullptr ),
-    pExampleSet     ( nullptr ),
-    pRanges         ( nullptr )
+    pExampleSet     ( nullptr )
 {
     get(m_pOKBtn, "ok");
     get(m_pApplyBtn, "apply");

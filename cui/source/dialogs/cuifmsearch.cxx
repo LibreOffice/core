@@ -76,7 +76,6 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     ,m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
     ,m_pPreSearchFocus( nullptr )
     ,m_lnkContextSupplier(lnkContextSupplier)
-    ,m_pConfig( nullptr )
 {
     get(m_prbSearchForText,"rbSearchForText");
     get(m_prbSearchForNull,"rbSearchForNull");

@@ -70,7 +70,6 @@ const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
 SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
-    , m_pBitmapList(nullptr)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)
     , m_fObjectHeight(0.0)

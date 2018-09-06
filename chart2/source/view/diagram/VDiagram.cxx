@@ -50,12 +50,7 @@ using namespace ::com::sun::star::chart2;
 VDiagram::VDiagram(
     const uno::Reference<XDiagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
     sal_Int32 nDimension )
-    : m_xTarget(nullptr)
-    , m_xShapeFactory(nullptr)
-    , m_pShapeFactory(nullptr)
-    , m_xOuterGroupShape(nullptr)
-    , m_xCoordinateRegionShape(nullptr)
-    , m_xWall2D(nullptr)
+    : m_pShapeFactory(nullptr)
     , m_nDimensionCount(nDimension)
     , m_xDiagram(xDiagram)
     , m_aPreferredAspectRatio(rPreferredAspectRatio)
@@ -490,7 +485,7 @@ void VDiagram::createShapes_3d()
 
     //add walls
     {
-        uno::Reference< beans::XPropertySet > xWallProp( nullptr );
+        uno::Reference< beans::XPropertySet > xWallProp;
         if( m_xDiagram.is() )
             xWallProp.set( m_xDiagram->getWall() );
 
@@ -614,7 +609,7 @@ void VDiagram::createShapes_3d()
 
     //add floor plate
     {
-        uno::Reference< beans::XPropertySet > xFloorProp( nullptr );
+        uno::Reference< beans::XPropertySet > xFloorProp;
         if( m_xDiagram.is() )
             xFloorProp.set( m_xDiagram->getFloor() );
 

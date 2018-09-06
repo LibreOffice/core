@@ -162,7 +162,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getProperty
 }
 void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
 {
-    Reference< beans::XPropertySet > xPropSet(nullptr);
+    Reference< beans::XPropertySet > xPropSet;
 
     Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
@@ -185,7 +185,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyN
 {
     Any aRet;
 
-    Reference< beans::XPropertySet > xPropSet(nullptr);
+    Reference< beans::XPropertySet > xPropSet;
 
     Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );

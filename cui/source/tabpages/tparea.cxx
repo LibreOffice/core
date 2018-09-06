@@ -84,12 +84,6 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 
 SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", rInAttrs)
-    , m_pFillTabPage(nullptr)
-    , m_pColorList(nullptr)
-    , m_pGradientList(nullptr)
-    , m_pHatchingList(nullptr)
-    , m_pBitmapList(nullptr)
-    , m_pPatternList(nullptr)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType

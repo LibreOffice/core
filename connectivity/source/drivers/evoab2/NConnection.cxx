@@ -41,7 +41,6 @@ using namespace ::com::sun::star::lang;
 OEvoabConnection::OEvoabConnection(OEvoabDriver const & _rDriver)
     : m_rDriver(_rDriver)
     , m_eSDBCAddressType(SDBCAddress::EVO_LOCAL)
-    , m_xCatalog(nullptr)
 {
 }
 

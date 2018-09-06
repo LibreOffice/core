@@ -1086,7 +1086,7 @@ namespace cairocanvas
                                                                                        bool                             bHasAlpha )
     {
         SurfaceSharedPtr pSurface=pInputSurface;
-        uno::Reference< rendering::XCachedPrimitive > rv(nullptr);
+        uno::Reference< rendering::XCachedPrimitive > rv;
         geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo )

@@ -238,7 +238,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     }
 
     //create point
-    uno::Reference< drawing::XShape > xShape(nullptr);
+    uno::Reference< drawing::XShape > xShape;
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createPieSegment( xTarget
@@ -661,7 +661,7 @@ void PieChart::createShapes()
                 aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
                 ///point color:
-                std::unique_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(nullptr);
+                std::unique_ptr< tPropertyNameValueMap > apOverwritePropertiesMap;
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
                     apOverwritePropertiesMap.reset( new tPropertyNameValueMap );
@@ -754,8 +754,8 @@ bool lcl_isInsidePage( const awt::Point& rPos, const awt::Size& rSize, const awt
 }//end anonymous namespace
 
 PieChart::PieLabelInfo::PieLabelInfo()
-    : xTextShape(nullptr), xLabelGroupShape(nullptr), aFirstPosition(), aOrigin(), fValue(0.0)
-    , bMovementAllowed(false), bMoved(false), xTextTarget(nullptr), pPrevious(nullptr),pNext(nullptr)
+    : aFirstPosition(), aOrigin(), fValue(0.0)
+    , bMovementAllowed(false), bMoved(false), pPrevious(nullptr),pNext(nullptr)
 {
 }
 
