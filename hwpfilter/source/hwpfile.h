@@ -165,7 +165,7 @@ class DLLEXPORT HWPFile
 /**
  * Sets current HIODev
  */
-        HIODev *SetIODevice( HIODev *hiodev );
+        std::unique_ptr<HIODev> SetIODevice( std::unique_ptr<HIODev> hiodev );
 
 /**
  * Reads all information of hwp file from stream
