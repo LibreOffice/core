@@ -212,7 +212,10 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 // void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 // so when changes are made here do not forget to make changes there, too
 
-void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
+void OutputDevice::DrawTransparent(
+    const basegfx::B2DHomMatrix& rObjectTransform,
+    const basegfx::B2DPolyPolygon& rB2DPolyPoly,
+    double fTransparency)
 {
     assert(!is_double_buffered_window());
 
@@ -241,16 +244,27 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
        (RasterOp::OverPaint == GetRasterOp()) )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
-        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
 
-        // transform the polygon into device space and ensure it is closed
-        aB2DPolyPolygon.transform( aTransform );
-        aB2DPolyPolygon.setClosed( true );
+        // ensure it is closed
+        if(!aB2DPolyPolygon.isClosed())
+        {
+            // maybe assert, prevents buffering due to making a copy
+            aB2DPolyPolygon.setClosed( true );
+        }
 
-        bool bDrawnOk = true;
+        // create ObjectToDevice transformation
+        const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rObjectTransform);
+        bool bDrawnOk(true);
+
         if( IsFillColor() )
-            bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        {
+            bDrawnOk = mpGraphics->DrawPolyPolygon(
+                aFullTransform,
+                aB2DPolyPolygon,
+                fTransparency,
+                this);
+        }
 
         if( bDrawnOk && IsLineColor() )
         {
@@ -263,7 +277,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
                 const basegfx::B2DPolygon aOnePoly(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
 
                 mpGraphics->DrawPolyLine(
-                    basegfx::B2DHomMatrix(),
+                    aFullTransform,
                     aOnePoly,
                     fTransparency,
                     aHairlineWidth,
@@ -338,9 +352,8 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             InitFillColor();
 
         // get the polygon in device coordinates
-        basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
-        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        aB2DPolyPolygon.transform( aTransform );
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
 
         const double fTransparency = 0.01 * nTransparencePercent;
         if( mbFillColor )
@@ -354,13 +367,18 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             // functionality and we use the fallback some lines below (which is not very good,
             // though. For now, WinSalGraphics::drawPolyPolygon will detect printer usage and
             // correct the wrong mapping (see there for details)
-            bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+            bDrawn = mpGraphics->DrawPolyPolygon(
+                aTransform,
+                aB2DPolyPolygon,
+                fTransparency,
+                this);
         }
 
         if( mbLineColor )
         {
             // disable the fill color for now
             mpGraphics->SetFillColor();
+
             // draw the border line
             const basegfx::B2DVector aLineWidths( 1, 1 );
             const sal_uInt32 nPolyCount(aB2DPolyPolygon.count());
@@ -371,7 +389,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                 const basegfx::B2DPolygon aPolygon(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
 
                 bDrawn = mpGraphics->DrawPolyLine(
-                    basegfx::B2DHomMatrix(),
+                    aTransform,
                     aPolygon,
                     fTransparency,
                     aLineWidths,
@@ -381,6 +399,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     bPixelSnapHairline,
                     this );
             }
+
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;
         }

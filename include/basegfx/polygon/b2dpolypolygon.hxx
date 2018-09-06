@@ -126,6 +126,26 @@ namespace basegfx
         const B2DPolygon* end() const;
         B2DPolygon* begin();
         B2DPolygon* end();
+
+        // exclusive management op's for SystemDependentData at B2DPolygon
+        template<class T>
+        std::shared_ptr<T> getSystemDependentData() const
+        {
+            return std::static_pointer_cast<T>(getSystemDependantDataInternal(typeid(T).hash_code()));
+        }
+
+        template<class T, class... Args>
+        std::shared_ptr<T> addOrReplaceSystemDependentData(SystemDependentDataManager& manager, Args&&... args) const
+        {
+            std::shared_ptr<T> r = std::make_shared<T>(manager, std::forward<Args>(args)...);
+            basegfx::SystemDependentData_SharedPtr r2(r);
+            addOrReplaceSystemDependentDataInternal(r2);
+            return r;
+        }
+
+    private:
+        void addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const;
+        SystemDependentData_SharedPtr getSystemDependantDataInternal(size_t hash_code) const;
     };
 
     // typedef for a vector of B2DPolyPolygons

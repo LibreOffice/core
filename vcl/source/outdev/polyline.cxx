@@ -71,14 +71,6 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
     const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-    // transform the polygon - do not (!)
-    // aB2DPolyLine.transform( aTransform );
-
-    // if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
-    // {
-    //     aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
-    // }
-
     if(mpGraphics->DrawPolyLine(
         aTransform,
         aB2DPolyLine,
@@ -350,27 +342,7 @@ bool OutputDevice::DrawPolyLineDirect(
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
         const bool bLineWidthZero(basegfx::fTools::equalZero(fLineWidth));
         const basegfx::B2DVector aB2DLineWidth(bLineWidthZero ? 1.0 : fLineWidth, bLineWidthZero ? 1.0 : fLineWidth);
-
-        // transform the line width if used
-        // if( fLineWidth != 0.0 )
-        // {
-        //     aB2DLineWidth = aTransform * basegfx::B2DVector( fLineWidth, fLineWidth );
-        // }
-
-        // transform the polygon - no!
-        // basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
-        // aB2DPolygon.transform(aTransform);
-
         const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
-        // if((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) &&
-        //    aB2DPolygon.count() < 1000)
-        // {
-        //     // #i98289#, #i101491#
-        //     // better to remove doubles on device coordinates. Also assume from a given amount
-        //     // of points that the single edges are not long enough to smooth
-        //     aB2DPolygon.removeDoublePoints();
-        //     aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
-        // }
 
         // draw the polyline
         bool bDrawSuccess = mpGraphics->DrawPolyLine(
