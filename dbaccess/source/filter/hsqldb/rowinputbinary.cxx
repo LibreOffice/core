@@ -86,7 +86,7 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
     return rtl::OStringToOUString(OString(scratch.data(), scratch.size()), RTL_TEXTENCODING_UTF8);
 }
 
-OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8> bytes)
+OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
 {
     std::vector<sal_uInt8> aBytes{ bytes };
 

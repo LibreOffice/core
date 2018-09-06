@@ -210,7 +210,7 @@ bool VMLExport::IsWaterMarkShape(const OUString& rStr)
      return rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark");
 }
 
-void VMLExport::OverrideShapeIDGen(bool bOverrideShapeIdGen, const OString sShapeIDPrefix)
+void VMLExport::OverrideShapeIDGen(bool bOverrideShapeIdGen, const OString& sShapeIDPrefix)
 {
     m_bOverrideShapeIdGeneration = bOverrideShapeIdGen;
     if(bOverrideShapeIdGen)

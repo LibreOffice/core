@@ -32,7 +32,7 @@ class TextBodyContext final : public ::oox::core::ContextHandler2
 {
 public:
     TextBodyContext( ::oox::core::ContextHandler2Helper const & rParent, TextBody& rTextBody );
-    TextBodyContext( ::oox::core::ContextHandler2Helper const & rParent, ShapePtr pShapePtr );
+    TextBodyContext(::oox::core::ContextHandler2Helper const& rParent, const ShapePtr& pShapePtr);
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

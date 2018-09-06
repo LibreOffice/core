@@ -56,6 +56,7 @@
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationCommon.hxx>
 #include <svl/cryptosign.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -1269,7 +1270,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
-    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, aResults);
+    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, std::move(aResults));
 }
 
 std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)

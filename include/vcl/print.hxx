@@ -371,7 +371,7 @@ public:
     // by repeated calls to ExecutePrintJob(). Used by mailmerge.
     static bool                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
                                     const JobSetup& i_rInitSetup );
-    static bool                 ExecutePrintJob( std::shared_ptr<vcl::PrinterController> i_pController );
+    static bool ExecutePrintJob(const std::shared_ptr<vcl::PrinterController>& i_pController);
     static void                 FinishPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController );
 
     /** Implementation detail of PrintJob being asynchronous

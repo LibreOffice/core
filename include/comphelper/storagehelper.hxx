@@ -195,7 +195,7 @@ public:
         LifecycleProxy const & rNastiness );
 
     static OUString
-    GetODFVersionFromStorage(css::uno::Reference<css::embed::XStorage> xStorage);
+    GetODFVersionFromStorage(const css::uno::Reference<css::embed::XStorage>& xStorage);
 };
 
 }

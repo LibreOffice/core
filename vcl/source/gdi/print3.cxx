@@ -507,7 +507,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     return true;
 }
 
-bool Printer::ExecutePrintJob(std::shared_ptr<PrinterController> xController)
+bool Printer::ExecutePrintJob(const std::shared_ptr<PrinterController>& xController)
 {
     OUString aJobName;
     css::beans::PropertyValue* pJobNameVal = xController->getValue( OUString( "JobName" ) );

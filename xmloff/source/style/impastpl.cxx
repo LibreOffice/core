@@ -161,8 +161,7 @@ data2string(void *data,
     return result.makeStringAndClear();
 }
 
-static OUString
-any2string(uno::Any any)
+static OUString any2string(const uno::Any& any)
 {
     return data2string(const_cast<void*>(any.getValue()), any.pType);
 }

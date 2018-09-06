@@ -181,9 +181,10 @@ private:
 
 };
 
-uno::Reference<drawing::XShape> getShapeByName(const uno::Reference<drawing::XShapes>& rShapes,
-    const OUString& rName,
-    std::function<bool(const uno::Reference<drawing::XShape>&)> pCondition = nullptr)
+uno::Reference<drawing::XShape>
+getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
+               const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
+               = nullptr)
 {
     uno::Reference<container::XIndexAccess> XIndexAccess(rShapes, uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < XIndexAccess->getCount(); ++i)

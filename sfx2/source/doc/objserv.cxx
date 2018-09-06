@@ -1609,9 +1609,9 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent)
 
 void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
                                        const OUString& aSignatureLineId,
-                                       const Reference<XCertificate> xCert,
-                                       const Reference<XGraphic> xValidGraphic,
-                                       const Reference<XGraphic> xInvalidGraphic,
+                                       const Reference<XCertificate>& xCert,
+                                       const Reference<XGraphic>& xValidGraphic,
+                                       const Reference<XGraphic>& xInvalidGraphic,
                                        const OUString& aComment)
 {
     if (!PrepareForSigning(pDialogParent))

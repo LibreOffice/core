@@ -38,6 +38,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
@@ -240,15 +241,14 @@ void OUndoContainerAction::Redo()
     }
 }
 
-OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
-                                             ,Action _eAction
-                                             ,::std::function<uno::Reference< report::XSection >(OGroupHelper *)> _pMemberFunction
-                                             ,const uno::Reference< report::XGroup >& _xGroup
-                                             ,const Reference< XInterface > & xElem
-                                             ,const char* pCommentId)
-:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,pCommentId)
-,m_aGroupHelper(_xGroup)
-,m_pMemberFunction(_pMemberFunction)
+OUndoGroupSectionAction::OUndoGroupSectionAction(
+    SdrModel& _rMod, Action _eAction,
+    ::std::function<uno::Reference<report::XSection>(OGroupHelper*)> _pMemberFunction,
+    const uno::Reference<report::XGroup>& _xGroup, const Reference<XInterface>& xElem,
+    const char* pCommentId)
+    : OUndoContainerAction(_rMod, _eAction, nullptr, xElem, pCommentId)
+    , m_aGroupHelper(_xGroup)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
 }
 
@@ -285,15 +285,14 @@ void OUndoGroupSectionAction::implReRemove( )
     m_xOwnElement = m_xElement;
 }
 
-OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
-                                             ,Action _eAction
-                                             ,::std::function<uno::Reference< report::XSection >(OReportHelper *)> _pMemberFunction
-                                             ,const uno::Reference< report::XReportDefinition >& _xReport
-                                             ,const Reference< XInterface > & xElem
-                                             ,const char* pCommentId)
-:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,pCommentId)
-,m_aReportHelper(_xReport)
-,m_pMemberFunction(_pMemberFunction)
+OUndoReportSectionAction::OUndoReportSectionAction(
+    SdrModel& _rMod, Action _eAction,
+    ::std::function<uno::Reference<report::XSection>(OReportHelper*)> _pMemberFunction,
+    const uno::Reference<report::XReportDefinition>& _xReport, const Reference<XInterface>& xElem,
+    const char* pCommentId)
+    : OUndoContainerAction(_rMod, _eAction, nullptr, xElem, pCommentId)
+    , m_aReportHelper(_xReport)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
 }
 
@@ -384,14 +383,13 @@ OUString ORptUndoPropertyAction::GetComment() const
     return aStr.replaceFirst("#", m_aPropertyName);
 }
 
-OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(SdrModel& _rMod
-                                             ,const PropertyChangeEvent& evt
-                                             ,::std::function<uno::Reference< report::XSection >(OGroupHelper *)> _pMemberFunction
-                                             ,const uno::Reference< report::XGroup >& _xGroup
-                                             )
-:ORptUndoPropertyAction(_rMod,evt)
-,m_aGroupHelper(_xGroup)
-,m_pMemberFunction(_pMemberFunction)
+OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(
+    SdrModel& _rMod, const PropertyChangeEvent& evt,
+    ::std::function<uno::Reference<report::XSection>(OGroupHelper*)> _pMemberFunction,
+    const uno::Reference<report::XGroup>& _xGroup)
+    : ORptUndoPropertyAction(_rMod, evt)
+    , m_aGroupHelper(_xGroup)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
 }
 
@@ -400,14 +398,13 @@ Reference< XPropertySet> OUndoPropertyGroupSectionAction::getObject()
     return m_pMemberFunction(&m_aGroupHelper).get();
 }
 
-OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(SdrModel& _rMod
-                                             ,const PropertyChangeEvent& evt
-                                             ,::std::function<uno::Reference< report::XSection >(OReportHelper *)> _pMemberFunction
-                                             ,const uno::Reference< report::XReportDefinition >& _xReport
-                                             )
-:ORptUndoPropertyAction(_rMod,evt)
-,m_aReportHelper(_xReport)
-,m_pMemberFunction(_pMemberFunction)
+OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(
+    SdrModel& _rMod, const PropertyChangeEvent& evt,
+    ::std::function<uno::Reference<report::XSection>(OReportHelper*)> _pMemberFunction,
+    const uno::Reference<report::XReportDefinition>& _xReport)
+    : ORptUndoPropertyAction(_rMod, evt)
+    , m_aReportHelper(_xReport)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
 }
 

@@ -46,6 +46,7 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
+#include <utility>
 #include <vector>
 #include <set>
 #include <string.h>
@@ -76,8 +77,10 @@ SpellChecker::SpellChecker() :
 {
 }
 
-SpellChecker::DictItem::DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc):
-    m_aDName(i_DName), m_aDLoc(i_DLoc), m_aDEnc(i_DEnc)
+SpellChecker::DictItem::DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc)
+    : m_aDName(std::move(i_DName))
+    , m_aDLoc(std::move(i_DLoc))
+    , m_aDEnc(i_DEnc)
 {
 }
 

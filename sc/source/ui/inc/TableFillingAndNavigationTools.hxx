@@ -101,7 +101,7 @@ private:
     SCROW   mRow;
 
 public:
-    DataCellIterator(ScRange aInputRange, bool aByColumn);
+    DataCellIterator(const ScRange& aInputRange, bool aByColumn);
     ~DataCellIterator();
 
     bool hasNext();
@@ -136,7 +136,7 @@ class DataRangeByColumnIterator final : public DataRangeIterator
     SCCOL mCol;
 
 public:
-    DataRangeByColumnIterator(ScRange aInputRange);
+    DataRangeByColumnIterator(const ScRange& aInputRange);
 
     virtual bool hasNext() override;
     virtual void next() override;
@@ -151,7 +151,7 @@ class DataRangeByRowIterator final : public DataRangeIterator
     SCROW mRow;
 
 public:
-    DataRangeByRowIterator(ScRange aInputRange);
+    DataRangeByRowIterator(const ScRange& aInputRange);
 
     virtual bool hasNext() override;
     virtual void next() override;

@@ -171,7 +171,8 @@ void EnhancedShapeDumper::dumpBrightnessAsAttribute(double aBrightness)
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("brightness"), "%f", aBrightness);
 }
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::EnhancedCustomShapeParameterPair aParameterPair)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(
+    const drawing::EnhancedCustomShapeParameterPair& aParameterPair)
 {
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "First" ));
@@ -515,7 +516,7 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< dra
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPropertyValue)
+void EnhancedShapeDumper::dumpPropertyValueAsElement(const beans::PropertyValue& aPropertyValue)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
 
@@ -753,7 +754,8 @@ void EnhancedShapeDumper::dumpRefRAsAttribute(sal_Int32 aRefR)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refR"), "%" SAL_PRIdINT32, aRefR);
 }
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCustomShapeParameter aParameter)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(
+    const drawing::EnhancedCustomShapeParameter& aParameter)
 {
     uno::Any aAny = aParameter.Value;
     OUString sValue;

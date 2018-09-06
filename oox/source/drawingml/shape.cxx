@@ -429,12 +429,11 @@ static inline SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
     return SDRTEXTHORZADJUST_LEFT;
 }
 
-static inline void lcl_createPresetShape( uno::Reference<drawing::XShape>& xShape,
-                                   const OUString& rClass,
-                                   const OUString& rPresetType,
-                                   const CustomShapePropertiesPtr pCustomShapePropertiesPtr,
-                                   const TextBodyPtr pTextBody,
-                                   const GraphicHelper& rGraphicHelper )
+static inline void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
+                                         const OUString& rClass, const OUString& rPresetType,
+                                         const CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
+                                         const TextBodyPtr& pTextBody,
+                                         const GraphicHelper& rGraphicHelper)
 {
     if (!xShape.is() || !pCustomShapePropertiesPtr || !pTextBody)
         return;

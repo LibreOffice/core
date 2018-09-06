@@ -9,6 +9,7 @@
 
 #include <SignatureLineDialogBase.hxx>
 
+#include <utility>
 #include <vcl/weld.hxx>
 
 using namespace css;
@@ -18,7 +19,7 @@ using namespace css::frame;
 SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Reference<XModel> xModel,
                                                  const OUString& rUIFile, const OString& rDialogId)
     : GenericDialogController(pParent, rUIFile, rDialogId)
-    , m_xModel(xModel)
+    , m_xModel(std::move(xModel))
 {
 }
 

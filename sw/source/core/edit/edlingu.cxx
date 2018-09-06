@@ -814,10 +814,9 @@ void SwEditShell::HyphIgnore()
     g_pHyphIter->ShowSelection();
 }
 
-void SwEditShell::HandleCorrectionError(
-    const OUString aText, SwPosition aPos, sal_Int32 nBegin,
-    sal_Int32 nLen, SwPaM* pCursor,
-    const Point* pPt, SwRect& rSelectRect )
+void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, sal_Int32 nBegin,
+                                        sal_Int32 nLen, SwPaM* pCursor, const Point* pPt,
+                                        SwRect& rSelectRect)
 {
     // save the start and end positions of the line and the starting point
     Push();

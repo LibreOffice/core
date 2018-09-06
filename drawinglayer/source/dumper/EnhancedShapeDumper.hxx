@@ -39,10 +39,12 @@ public:
     }
 
     // auxiliary functions
-    void dumpEnhancedCustomShapeParameterPair(css::drawing::EnhancedCustomShapeParameterPair aParameterPair);
+    void dumpEnhancedCustomShapeParameterPair(
+        const css::drawing::EnhancedCustomShapeParameterPair& aParameterPair);
     void dumpDirection3D(css::drawing::Direction3D aDirection3D);
-    void dumpPropertyValueAsElement(css::beans::PropertyValue aPropertyValue);
-    void dumpEnhancedCustomShapeParameter(css::drawing::EnhancedCustomShapeParameter aParameter);
+    void dumpPropertyValueAsElement(const css::beans::PropertyValue& aPropertyValue);
+    void
+    dumpEnhancedCustomShapeParameter(const css::drawing::EnhancedCustomShapeParameter& aParameter);
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);

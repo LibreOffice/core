@@ -139,11 +139,11 @@ private:
 class ScUndoCut: public ScBlockUndo
 {
 public:
-                    ScUndoCut( ScDocShell* pNewDocShell,
-                               ScRange aRange,              // adjusted for merged cells
-                               const ScAddress& aOldEnd,           // end position without adjustment
-                               const ScMarkData& rMark,     // selected sheets
-                               ScDocumentUniquePtr pNewUndoDoc );
+    ScUndoCut(ScDocShell* pNewDocShell,
+              const ScRange& aRange, // adjusted for merged cells
+              const ScAddress& aOldEnd, // end position without adjustment
+              const ScMarkData& rMark, // selected sheets
+              ScDocumentUniquePtr pNewUndoDoc);
     virtual         ~ScUndoCut() override;
 
     virtual void    Undo() override;

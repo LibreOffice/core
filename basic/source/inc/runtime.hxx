@@ -286,7 +286,7 @@ class SbiRuntime
     void DllCall( const OUString&, const OUString&, SbxArray*, SbxDataType, bool );
 
     // #56204 swap out DIM-functionality into help method (step0.cxx)
-    void DimImpl( SbxVariableRef refVar );
+    void DimImpl(const SbxVariableRef& refVar);
 
     static bool implIsClass( SbxObject const * pObj, const OUString& aClass );
 

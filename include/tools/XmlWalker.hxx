@@ -45,7 +45,7 @@ public:
     void parent();
     void next();
     bool isValid() const;
-    OString attribute(OString sName);
+    OString attribute(const OString& sName);
 };
 
 } // end tools namespace

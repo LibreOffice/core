@@ -738,19 +738,18 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
 {
 }
 
-SwScanner::SwScanner(
-    std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfChar,
-    const OUString& rText,
-    const LanguageType* pLang, const ModelToViewHelper& rConvMap,
-    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
-    : m_pGetLangOfChar( pGetLangOfChar )
+SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> const& pGetLangOfChar,
+                     const OUString& rText, const LanguageType* pLang,
+                     const ModelToViewHelper& rConvMap, sal_uInt16 nType, sal_Int32 nStart,
+                     sal_Int32 nEnde, bool bClp)
+    : m_pGetLangOfChar(pGetLangOfChar)
     , m_aPreDashReplacementText(rText)
-    , m_pLanguage( pLang )
-    , m_ModelToView( rConvMap )
-    , m_nLength( 0 )
-    , m_nOverriddenDashCount( 0 )
-    , m_nWordType( nType )
-    , m_bClip( bClp )
+    , m_pLanguage(pLang)
+    , m_ModelToView(rConvMap)
+    , m_nLength(0)
+    , m_nOverriddenDashCount(0)
+    , m_nWordType(nType)
+    , m_bClip(bClp)
 {
     m_nStartPos = m_nBegin = nStart;
     m_nEndPos = nEnde;

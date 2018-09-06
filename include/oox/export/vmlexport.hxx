@@ -143,7 +143,9 @@ public:
 
     void    SetSkipwzName(bool bSkipwzName) { m_bSkipwzName = bSkipwzName; }
     void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }
-    void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration, const OString sShapeIDPrefix = OString());
+    void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration,
+                            const OString& sShapeIDPrefix = OString());
+
 protected:
     /// Add an attribute to the generated <v:shape/> element.
     ///

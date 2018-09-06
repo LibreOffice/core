@@ -93,7 +93,8 @@ void LineBuilder::appendAndConnectLinePoint(const glm::vec2& rPoint, const glm::
     }
 }
 
-void LineBuilder::appendMiterJoint(glm::vec2 const & point, glm::vec2 prevLineVector, glm::vec2 const & nextLineVector)
+void LineBuilder::appendMiterJoint(glm::vec2 const& point, const glm::vec2& prevLineVector,
+                                   glm::vec2 const& nextLineVector)
 {
     // With miter join we calculate the extrusion vector by adding normals of
     // previous and next line segment. The vector shows the way but we also
@@ -111,7 +112,8 @@ void LineBuilder::appendMiterJoint(glm::vec2 const & point, glm::vec2 prevLineVe
     appendAndConnectLinePoint(point, extrusionVector, length);
 }
 
-void LineBuilder::appendBevelJoint(glm::vec2 const & point, glm::vec2 prevLineVector, glm::vec2 nextLineVector)
+void LineBuilder::appendBevelJoint(glm::vec2 const& point, const glm::vec2& prevLineVector,
+                                   const glm::vec2& nextLineVector)
 {
     // For bevel join we just add 2 additional vertices and use previous
     // line segment normal and next line segment normal as extrusion vector.
@@ -125,7 +127,8 @@ void LineBuilder::appendBevelJoint(glm::vec2 const & point, glm::vec2 prevLineVe
     appendAndConnectLinePoint(point, nextNormal, 1.0f);
 }
 
-void LineBuilder::appendRoundJoint(glm::vec2 const & point, glm::vec2 prevLineVector, glm::vec2 nextLineVector)
+void LineBuilder::appendRoundJoint(glm::vec2 const& point, const glm::vec2& prevLineVector,
+                                   const glm::vec2& nextLineVector)
 {
     // For round join we do a similar thing as in bevel, we add more intermediate
     // vertices and add normals to get extrusion vectors in the between the

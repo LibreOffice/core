@@ -89,7 +89,7 @@ void XmlWalker::parent()
     mpImpl->mpStack.pop_back();
 }
 
-OString XmlWalker::attribute(OString sName)
+OString XmlWalker::attribute(const OString& sName)
 {
     xmlChar* xmlName = xmlCharStrdup(sName.getStr());
     xmlChar* xmlAttribute = xmlGetProp(mpImpl->mpCurrent, xmlName);

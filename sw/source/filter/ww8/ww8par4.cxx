@@ -309,8 +309,8 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     return pFormat;
 }
 
-bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &rWMF,
-    long &rX,long &rY)
+bool SwWW8ImplReader::ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF,
+                                   long& rX, long& rY)
 {
     bool bOk = false;
     OLE_MFP aMfp;

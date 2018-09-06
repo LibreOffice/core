@@ -63,9 +63,8 @@ SvXMLImportContext* createXFormsModelContext(
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 
-void bindXFormsValueBinding(
-    Reference<XModel> const & xModel,
-    pair<Reference<XPropertySet>,OUString> aPair )
+void bindXFormsValueBinding(Reference<XModel> const& xModel,
+                            const pair<Reference<XPropertySet>, OUString>& aPair)
 {
     Reference<XBindableValue> xBindable(
         aPair.first,
@@ -88,9 +87,8 @@ void bindXFormsValueBinding(
     }
 }
 
-void bindXFormsListBinding(
-    Reference<XModel> const & xModel,
-    ::pair<Reference<XPropertySet>,OUString> aPair )
+void bindXFormsListBinding(Reference<XModel> const& xModel,
+                           const ::pair<Reference<XPropertySet>, OUString>& aPair)
 {
     Reference<XListEntrySink> xListEntrySink(
         aPair.first,
@@ -113,9 +111,8 @@ void bindXFormsListBinding(
     }
 }
 
-void bindXFormsSubmission(
-    Reference<XModel> const & xModel,
-    pair<Reference<XPropertySet>,OUString> aPair )
+void bindXFormsSubmission(Reference<XModel> const& xModel,
+                          const pair<Reference<XPropertySet>, OUString>& aPair)
 {
     Reference<XSubmissionSupplier> xSubmissionSupp( aPair.first, UNO_QUERY );
     Reference<XSubmission> xSubmission(

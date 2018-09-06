@@ -266,11 +266,11 @@ public:
     SAL_DLLPRIVATE bool
     SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocumentSignature,
                       const OUString& aSignatureLineId = OUString(),
-                      const css::uno::Reference<css::security::XCertificate> xCert
+                      const css::uno::Reference<css::security::XCertificate>& xCert
                       = css::uno::Reference<css::security::XCertificate>(),
-                      const css::uno::Reference<css::graphic::XGraphic> xValidGraphic
+                      const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic
                       = css::uno::Reference<css::graphic::XGraphic>(),
-                      const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic
+                      const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
                       = css::uno::Reference<css::graphic::XGraphic>(),
                       const OUString& aComment = OUString());
 

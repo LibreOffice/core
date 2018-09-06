@@ -273,7 +273,7 @@ public:
     void adaptFrameAreasToTransformations();
 
     // Modify current definitions by applying the given transformation
-    void transform(const basegfx::B2DHomMatrix aTransform);
+    void transform(const basegfx::B2DHomMatrix& aTransform);
 };
 
 /**

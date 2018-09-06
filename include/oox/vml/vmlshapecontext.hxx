@@ -121,10 +121,8 @@ private:
 class ShapeContext : public ShapeTypeContext
 {
 public:
-    explicit            ShapeContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            std::shared_ptr<ShapeBase> pShape,
-                            const AttributeList& rAttribs );
+    explicit ShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                          const std::shared_ptr<ShapeBase>& pShape, const AttributeList& rAttribs);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -154,10 +152,9 @@ private:
 class GroupShapeContext : public ShapeContext
 {
 public:
-    explicit            GroupShapeContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            std::shared_ptr<GroupShape> pShape,
-                            const AttributeList& rAttribs );
+    explicit GroupShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                               const std::shared_ptr<GroupShape>& pShape,
+                               const AttributeList& rAttribs);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -170,10 +167,9 @@ private:
 class RectangleShapeContext : public ShapeContext
 {
 public:
-    explicit            RectangleShapeContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const AttributeList& rAttribs,
-                            std::shared_ptr<RectangleShape> pShape);
+    explicit RectangleShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                                   const AttributeList& rAttribs,
+                                   const std::shared_ptr<RectangleShape>& pShape);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

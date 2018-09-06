@@ -44,7 +44,7 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Activate( ) override;
 
-    void UpdatePosition( boost::optional<Point> xEvtPt = boost::optional<Point>() );
+    void UpdatePosition(const boost::optional<Point>& xEvtPt = boost::optional<Point>());
 
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;

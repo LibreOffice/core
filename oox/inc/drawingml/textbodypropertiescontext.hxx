@@ -34,8 +34,8 @@ public:
              const ::oox::AttributeList& rAttributes,
              TextBodyProperties& rTextBodyProp );
 
-    TextBodyPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
-             const ::oox::AttributeList& rAttributes, ShapePtr pShapePtr );
+    TextBodyPropertiesContext(::oox::core::ContextHandler2Helper const& rParent,
+                              const ::oox::AttributeList& rAttributes, const ShapePtr& pShapePtr);
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

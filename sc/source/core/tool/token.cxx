@@ -60,6 +60,7 @@ using ::std::vector;
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/NameToken.hpp>
+#include <utility>
 
 using namespace formula;
 using namespace com::sun::star;
@@ -939,8 +940,9 @@ bool ScTableRefToken::operator==( const FormulaToken& r ) const
     return true;
 }
 
-ScJumpMatrixToken::ScJumpMatrixToken( std::shared_ptr<ScJumpMatrix> p )
-    : FormulaToken( formula::svJumpMatrix ), mpJumpMatrix( p )
+ScJumpMatrixToken::ScJumpMatrixToken(std::shared_ptr<ScJumpMatrix> p)
+    : FormulaToken(formula::svJumpMatrix)
+    , mpJumpMatrix(std::move(p))
 {}
 
 ScJumpMatrixToken::ScJumpMatrixToken( const ScJumpMatrixToken & ) = default;

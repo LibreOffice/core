@@ -43,7 +43,8 @@ public:
     virtual ~ListControl() override;
     virtual void dispose() override;
 
-    void addEntry(VclPtr<vcl::Window> xEntry, sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
+    void addEntry(const VclPtr<vcl::Window>& xEntry,
+                  sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
     std::vector<VclPtr<vcl::Window>> const & getEntries() const;
     void deleteEntry(sal_uInt32 nPos);
 

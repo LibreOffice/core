@@ -346,7 +346,7 @@ void ScColorScaleEntry::setListener()
     }
 }
 
-void ScColorScaleEntry::SetRepaintCallback(std::function<void()> func)
+void ScColorScaleEntry::SetRepaintCallback(const std::function<void()>& func)
 {
     mpListener->setCallback(func);
 }
