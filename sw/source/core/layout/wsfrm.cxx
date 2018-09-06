@@ -4365,14 +4365,6 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                     assert(!pFrame || static_cast<SwTextFrame*>(pFrame)->GetMergedPara()->pFirstNode != &rNode);
 #endif
                 }
-                else if (rNode.IsTableNode())
-                {
-                    static_cast<SwTableNode&>(rNode).DelFrames(&rLayout);
-                }
-                else if (rNode.IsSectionNode())
-                {
-                    static_cast<SwSectionNode&>(rNode).DelFrames(&rLayout);
-                }
             }
             else
             {
