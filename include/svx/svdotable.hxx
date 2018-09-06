@@ -113,7 +113,7 @@ public:
     void CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd);
 
     // Table stuff
-    void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
+    void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
 
     css::uno::Reference< css::table::XTable > getTable() const;
