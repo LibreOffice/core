@@ -107,9 +107,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
         {
-            basegfx::B2DPolyPolygon aLocalPolyPolygon(rSource.getB2DPolyPolygon());
-
-            if(!aLocalPolyPolygon.count())
+            if(!rSource.getB2DPolyPolygon().count())
             {
                 // no geometry, done
                 return;
@@ -119,9 +117,9 @@ namespace drawinglayer
 
             mpOutputDevice->SetFillColor(Color(aPolygonColor));
             mpOutputDevice->SetLineColor();
-            aLocalPolyPolygon.transform(maCurrentTransformation);
             mpOutputDevice->DrawTransparent(
-                aLocalPolyPolygon,
+                maCurrentTransformation,
+                rSource.getB2DPolyPolygon(),
                 fTransparency);
         }
 
