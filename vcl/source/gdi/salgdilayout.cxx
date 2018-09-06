@@ -31,11 +31,8 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <basegfx/numeric/ftools.hxx> //for F_PI180
-#include <basegfx/utils/systemdependentdata.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <o3tl/make_unique.hxx>
 
 // The only common SalFrame method
 
@@ -67,131 +64,6 @@ SalGraphics::SalGraphics()
 
 SalGraphics::~SalGraphics()
 {
-}
-
-basegfx::SystemDependentDataManager& SalGraphics::getSystemDependentDataManager()
-{
-    typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
-
-    class SystemDependentDataBuffer : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex, public Timer
-    {
-    private:
-        EntryMap        maEntries;
-
-    public:
-        SystemDependentDataBuffer( const sal_Char *pDebugName )
-        :   basegfx::SystemDependentDataManager(),
-            Timer( pDebugName ),
-            maEntries()
-        {
-            SetTimeout(1000);
-            SetStatic();
-        }
-
-        virtual ~SystemDependentDataBuffer() override
-        {
-            Stop();
-        }
-
-        void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aFound(maEntries.find(rData));
-
-            if(aFound == maEntries.end())
-            {
-                if(maEntries.empty())
-                {
-                    Start();
-                }
-
-                maEntries[rData] = rData->getHoldCycles();
-            }
-        }
-
-        void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aFound(maEntries.find(rData));
-
-            if(aFound != maEntries.end())
-            {
-                maEntries.erase(aFound);
-
-                if(maEntries.empty())
-                {
-                    Stop();
-                }
-            }
-        }
-
-        void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aFound(maEntries.find(rData));
-
-            if(aFound != maEntries.end())
-            {
-                aFound->second = rData->getHoldCycles();
-            }
-        }
-
-        void flushAll() override
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aIter(maEntries.begin());
-
-            Stop();
-
-            while(aIter != maEntries.end())
-            {
-                EntryMap::iterator aDelete(aIter);
-                ++aIter;
-                maEntries.erase(aDelete);
-            }
-        }
-
-        // from parent Timer
-        virtual void Invoke() override
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            EntryMap::iterator aIter(maEntries.begin());
-
-            while(aIter != maEntries.end())
-            {
-                if(aIter->second)
-                {
-                    aIter->second--;
-                    ++aIter;
-                }
-                else
-                {
-                    EntryMap::iterator aDelete(aIter);
-                    ++aIter;
-                    maEntries.erase(aDelete);
-
-                    if(maEntries.empty())
-                    {
-                        Stop();
-                    }
-                }
-            }
-
-            if(!maEntries.empty())
-            {
-                Start();
-            }
-        }
-    };
-
-    static std::unique_ptr<SystemDependentDataBuffer> aSystemDependentDataBuffer;
-
-    if(!aSystemDependentDataBuffer)
-    {
-        aSystemDependentDataBuffer = o3tl::make_unique<SystemDependentDataBuffer>(nullptr);
-    }
-
-    return *aSystemDependentDataBuffer.get();
 }
 
 #if HAVE_FEATURE_OPENGL
@@ -606,17 +478,50 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& i_rPolyPolygon,
+    double i_fTransparency,
+    const OutputDevice* i_pOutDev)
 {
-    bool bRet = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
-        basegfx::B2DPolyPolygon aMirror( mirror( i_rPolyPolygon, i_pOutDev ) );
-        bRet = drawPolyPolygon( aMirror, i_fTransparency );
+        // mirroring set
+        const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
+
+        if(!rMirror.isIdentity())
+        {
+            if(rObjectToDevice.isIdentity())
+            {
+                // There is no ObjectToDevice transformation set. We can just
+                // use rMirror, that would be the result of the linear combination
+                return drawPolyPolygon(
+                    rMirror,
+                    i_rPolyPolygon,
+                    i_fTransparency);
+            }
+            else
+            {
+                // Create the linear combination
+                basegfx::B2DHomMatrix aLinearCombination(rObjectToDevice);
+                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+
+                aLinearCombination = rMirror * aLinearCombination;
+                aObjectToDeviceInv.invert();
+                aLinearCombination = aObjectToDeviceInv * aLinearCombination;
+
+                return drawPolyPolygon(
+                    aLinearCombination,
+                    i_rPolyPolygon,
+                    i_fTransparency);
+            }
+        }
     }
-    else
-        bRet = drawPolyPolygon( i_rPolyPolygon, i_fTransparency );
-    return bRet;
+
+    return drawPolyPolygon(
+        rObjectToDevice,
+        i_rPolyPolygon,
+        i_fTransparency);
 }
 
 bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
