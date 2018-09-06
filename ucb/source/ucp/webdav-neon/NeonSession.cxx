@@ -1056,8 +1056,8 @@ void NeonSession::PROPPATCH( const OUString & inPath,
 
     // Generate the list of properties we want to set.
     int nPropCount = inValues.size();
-    ne_proppatch_operation* pItems
-        = new ne_proppatch_operation[ nPropCount + 1 ];
+    std::unique_ptr<ne_proppatch_operation[]> pItems(
+        new ne_proppatch_operation[ nPropCount + 1 ]);
     for ( n = 0; n < nPropCount; ++n )
     {
         const ProppatchValue & rValue = inValues[ n ];
@@ -1136,7 +1136,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
         theRetVal = ne_proppatch( m_pHttpSession,
                                   OUStringToOString(
                                       inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                  pItems );
+                                  pItems.get() );
     }
 
     for ( n = 0; n < nPropCount; ++n )
@@ -1145,8 +1145,6 @@ void NeonSession::PROPPATCH( const OUString & inPath,
         delete pItems[ n ].name;
         free( const_cast<char *>(pItems[ n ].value) );
     }
-
-    delete [] pItems;
 
     HandleError( theRetVal, inPath, rEnv );
 }
