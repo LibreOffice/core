@@ -75,7 +75,7 @@ public:
     SVX_DLLPRIVATE void onFormatTable( SfxRequest const & rReq );
     SVX_DLLPRIVATE void MergeMarkedCells();
     SVX_DLLPRIVATE void SplitMarkedCells();
-    SVX_DLLPRIVATE void DistributeColumns();
+    SVX_DLLPRIVATE void DistributeColumns( const bool bOptimize );
     SVX_DLLPRIVATE void DistributeRows();
     SVX_DLLPRIVATE void SetVertical( sal_uInt16 nSId );
 
