@@ -139,11 +139,43 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             rTextNode.SetRedlineMergeFlag(SwNode::Merge::None);
         }
     }
+    // Reset flag of the following text node since we know it's not merged;
+    // also any table/sections in between.
+    // * the following SwTextNode is in same nodes section as pNode (nLevel=0)
+    // * the start nodes that don't have a SwTextNode before them
+    //   on their level, and their corresponding end nodes
+    // * the first SwTextNode inside each start node of the previous point
+    // Other (non-first) SwTextNodes in nested sections shouldn't be reset!
+    int nLevel(0);
+    for (sal_uLong j = pNode->GetIndex() + 1; j < pNode->GetNodes().Count(); ++j)
     {
-        SwNode *const pNextNode(pNode->GetNodes()[pNode->GetIndex() + 1]);
-        if (!pNextNode->IsCreateFrameWhenHidingRedlines())
+        SwNode *const pTmp(pNode->GetNodes()[j]);
+        if (!pTmp->IsCreateFrameWhenHidingRedlines())
         {   // clear stale flag caused by editing with redlines shown
-            pNextNode->SetRedlineMergeFlag(SwNode::Merge::None);
+            pTmp->SetRedlineMergeFlag(SwNode::Merge::None);
+        }
+        if (pTmp->IsStartNode())
+        {
+            ++nLevel;
+        }
+        else if (pTmp->IsEndNode())
+        {
+            if (nLevel == 0)
+            {
+                break; // there is no following text node; avoid leaving section
+            }
+            --nLevel;
+        }
+        else if (pTmp->IsTextNode())
+        {
+            if (nLevel == 0)
+            {
+                break; // done
+            }
+            else
+            {   // skip everything other than 1st text node in section!
+                j = pTmp->EndOfSectionIndex() - 1; // will be incremented again
+            }
         }
     }
     if (!bHaveRedlines)
