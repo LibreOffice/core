@@ -70,7 +70,7 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
 
         // test1 now contains a null pointer
         CPPUNIT_ASSERT_MESSAGE("!test1.is()",
-                               !test1.is());
+                               !test1.is()); // NOLINT(bugprone-use-after-move)
 
         // function return should move the reference
         test2 = get_reference( &cTestClass );
@@ -94,7 +94,7 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("!test1.is()",
                                !test1.is());
         CPPUNIT_ASSERT_MESSAGE("!test2.is()",
-                               !test2.is());
+                               !test2.is()); // NOLINT(bugprone-use-after-move)
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("cTestClass.use_count() == 0",
                                static_cast<long>(0), cTestClass.use_count());

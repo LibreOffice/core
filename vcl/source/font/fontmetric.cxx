@@ -65,8 +65,8 @@ FontMetric& FontMetric::operator=(const FontMetric& rFontMetric)
 
 FontMetric& FontMetric::operator=(FontMetric&& rFontMetric)
 {
-    Font::operator=(std::move(rFontMetric));
     mxImplMetric = std::move(rFontMetric.mxImplMetric);
+    Font::operator=(std::move(rFontMetric));
     return *this;
 }
 
