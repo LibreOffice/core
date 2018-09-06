@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_d07d216f",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-09-06T10:38:27Z",
+      "side": 1,
+      "message": "FWIW the cairo AddPolygonToPath was a copy and paste of the quartz one in vcl/quartz/salgdicommon.cxx, should that one get the same treatment ?",
+      "revId": "a5d8c3bfa457f12a0e5127ca34cdb18dd23d0c6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
