@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_10bee964",
+        "filename": "sc/qa/extras/scchartobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-06T18:06:06Z",
+      "side": 1,
+      "message": "Please remove all unnecessary header files.",
+      "revId": "50984c8c15ba497de56b9c0860f3a79d3c28fbbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
