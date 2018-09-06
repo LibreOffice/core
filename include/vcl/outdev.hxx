@@ -1071,7 +1071,8 @@ public:
     */
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
+                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr,
+                                                  const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
