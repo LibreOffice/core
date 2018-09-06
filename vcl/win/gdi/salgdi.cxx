@@ -607,7 +607,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mbWindow(eType == WinSalGraphics::WINDOW),
     mbScreen(bScreen),
     mhWnd(hWnd),
-    mfCurrentFontScale(1.0),
     mhRegion(nullptr),
     mhDefPen(nullptr),
     mhDefBrush(nullptr),
