@@ -47,6 +47,10 @@ class CheckBookmarks(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
+        # HACK in case cls._xDoc holds a UNO proxy to an SwXTextDocument (whose dtor calls
+        # Application::GetSolarMutex via sw::UnoImplPtrDeleter), which would potentially only be
+        # garbage-collected after VCL has already been deinitialized:
+        cls._xDoc = None
 
     def test_bookmarks(self):
         self.xDoc = self.__class__._xDoc

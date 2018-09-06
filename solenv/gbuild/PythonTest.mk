@@ -21,7 +21,7 @@ gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
 gb_PythonTest_DEPS :=
 endif
 
-gb_PythonTest_COMMAND := $(gb_PythonTest_EXECUTABLE) -m unittest
+gb_PythonTest_COMMAND := $(gb_PythonTest_EXECUTABLE) -m org.libreoffice.unittest
 
 .PHONY : $(call gb_PythonTest_get_clean_target,%)
 $(call gb_PythonTest_get_clean_target,%) :
@@ -31,7 +31,10 @@ $(call gb_PythonTest_get_clean_target,%) :
 ifneq ($(DISABLE_PYTHON),TRUE)
 
 .PHONY : $(call gb_PythonTest_get_target,%)
-$(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
+$(call gb_PythonTest_get_target,%) :\
+        $(call gb_Library_get_target,pyuno) \
+        $(if $(filter-out WNT,$(OS)),$(call gb_Library_get_target,pyuno_wrapper)) \
+        | $(gb_PythonTest_DEPS)
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else

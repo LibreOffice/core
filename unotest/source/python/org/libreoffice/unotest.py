@@ -246,7 +246,12 @@ class UnoInProcess:
     def postTest(self):
         assert(self.xContext)
     def tearDown(self):
-        self.xDoc.close(True)
+        if hasattr(self, 'xDoc'):
+            self.xDoc.close(True)
+            # HACK in case self.xDoc holds a UNO proxy to an SwXTextDocument (whose dtor calls
+            # Application::GetSolarMutex via sw::UnoImplPtrDeleter), which would potentially only be
+            # garbage-collected after VCL has already been deinitialized:
+            self.xDoc = None
 
 def simpleInvoke(connection, test):
     try:

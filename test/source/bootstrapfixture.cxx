@@ -99,6 +99,12 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
     catch (...) { abort(); }
 }
 
+// this is called from pyuno
+SAL_DLLPUBLIC_EXPORT void test_deinit()
+{
+    DeInitVCL();
+}
+
 } // extern "C"
 
 void test::BootstrapFixture::setUp()

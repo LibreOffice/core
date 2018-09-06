@@ -18,15 +18,15 @@ class TestSetExpression(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
 
     def test_set_expression(self):
+        xDoc = self.__class__._uno.openEmptyWriterDoc()
         self.__class__._uno.checkProperties(
-            self.__class__._xDoc.createInstance("com.sun.star.text.textfield.SetExpression"),
+            xDoc.createInstance("com.sun.star.text.textfield.SetExpression"),
             {"NumberingType": 0,
              "Content": "foo",
              "CurrentPresentation": "bar",

@@ -26,18 +26,18 @@ class CheckFlies(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.document = cls._uno.openDocFromTDOC("CheckFlies.odt")
 
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
 
     def test_checkFlies(self):
-        xTFS = self.__class__.document
+        document = self.__class__._uno.openDocFromTDOC("CheckFlies.odt")
+        xTFS = document
         self.checkTextFrames(xTFS)
-        xTGOS = self.__class__.document
+        xTGOS = document
         self.checkGraphicFrames(xTGOS)
-        xTEOS = self.__class__.document
+        xTEOS = document
         self.checkEmbeddedFrames(xTEOS)
 
     def checkEmbeddedFrames(self, xTGOS):

@@ -24,7 +24,6 @@ class CheckSidebar(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyDoc( url = "private:factory/scalc", bHidden = False, bReadOnly = False)
 
     @classmethod
     def tearDownClass(cls):
@@ -32,7 +31,7 @@ class CheckSidebar(unittest.TestCase):
 
     def test_check_sidebar(self):
 
-        xDoc = self.__class__._xDoc
+        xDoc = self.__class__._uno.openEmptyDoc( url = "private:factory/scalc", bHidden = False, bReadOnly = False)
         xController = xDoc.getCurrentController()
 
         xSidebar = xController.getSidebar()

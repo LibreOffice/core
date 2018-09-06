@@ -934,6 +934,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.xDoc.close(True)
+        cls._uno.tearDown()
+        # HACK in case cls.xDoc holds a UNO proxy to an SwXTextDocument (whose dtor calls
+        # Application::GetSolarMutex via sw::UnoImplPtrDeleter), which would potentially only be
+        # garbage-collected after VCL has already been deinitialized:
+        cls.xDoc = None
 
     def test_text(self):
         root = TreeNode()

@@ -27,7 +27,6 @@ class CheckChangeColor(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xEmptyDoc = cls._uno.openEmptyWriterDoc()
         cls.RED = 0xFF0000
         cls.BLUE = 0x0000FF
         cls.GREEN = 0x008000

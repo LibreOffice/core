@@ -19,7 +19,6 @@ class CheckSidebarRegistry(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyDoc( url = "private:factory/scalc", bHidden = False, bReadOnly = False)
 
     @classmethod
     def tearDownClass(cls):
