@@ -925,7 +925,6 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
             ::SelectFont(getHDC(), mhDefFont);
             mhDefFont = nullptr;
         }
-        mfCurrentFontScale = mfFontScale[nFallbackLevel];
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
@@ -953,25 +952,25 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     {
         pFont->mpFontInstance->Acquire();
     }
-    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance );
+
+    WinFontInstance *pFontInstance = static_cast<WinFontInstance*>(pFont->mpFontInstance);
+    mpWinFontEntry[ nFallbackLevel ] = pFontInstance;
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = mpWinFontEntry[ nFallbackLevel ] ? mpWinFontEntry[ nFallbackLevel ]->GetHFONT() : nullptr;
+    HFONT hNewFont = pFontInstance ? pFontInstance->GetHFONT() : nullptr;
     if (!hNewFont)
     {
-        hNewFont = ImplDoSetFont(pFont->GetFontSelectPattern(), pFont->GetFontFace(), mfFontScale[ nFallbackLevel ], hOldFont);
+        float fFontScale = 1.0;
+        hNewFont = ImplDoSetFont(pFont, nullptr, fFontScale, hOldFont);
         mpWinFontEntry[ nFallbackLevel ]->SetHFONT(hNewFont);
+        mpWinFontEntry[ nFallbackLevel ]->SetScale(fFontScale);
     }
     else
         hOldFont = ::SelectFont( getHDC(), hNewFont );
 
-    mfCurrentFontScale = mfFontScale[nFallbackLevel];
-
+    // keep default font
     if( !mhDefFont )
-    {
-        // keep default font
         mhDefFont = hOldFont;
-    }
     else
     {
         // release no longer referenced font handles
@@ -991,10 +990,10 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     }
 
     // store new font in correct layer
-    if (mpWinFontEntry[nFallbackLevel])
+    if (pFontInstance)
     {
         // now the font is live => update font face
-        const WinFontFace* pFontFace = static_cast<const WinFontFace*>(mpWinFontEntry[nFallbackLevel]->GetFontFace());
+        const WinFontFace* pFontFace = static_cast<const WinFontFace*>(pFontInstance->GetFontFace());
         pFontFace->UpdateFromHDC(getHDC());
     }
     else
@@ -1037,7 +1036,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->SetSlant( 0 );
 
     // transformation dependent font metrics
-    rxFontMetric->SetWidth(static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ));
+    rxFontMetric->SetWidth(static_cast<int>(mpWinFontEntry[nFallbackLevel]->GetScale() * aWinMetric.tmAveCharWidth));
 
     const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
     const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
@@ -1385,7 +1384,18 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
         return true;
     }
 
+    rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+    assert(pFont.is());
+
     HDC hDC = getHDC();
+    HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
+    float fFontScale = 1.0;
+    if (pFont.is())
+    {
+        if (hFont != pFont->GetHFONT())
+            SelectObject(hDC, pFont->GetHFONT());
+        fFontScale = pFont->GetScale();
+    }
 
     // use unity matrix
     MAT2 aMat;
@@ -1399,15 +1409,17 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
     DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
+    if (pFont.is() && hFont != pFont->GetHFONT())
+        SelectObject(hDC, hFont);
     if( nSize == GDI_ERROR )
         return false;
 
     rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.SetLeft(static_cast<int>( mfCurrentFontScale * rRect.Left() ));
-    rRect.SetRight(static_cast<int>( mfCurrentFontScale * rRect.Right() ) + 1);
-    rRect.SetTop(static_cast<int>( mfCurrentFontScale * rRect.Top() ));
-    rRect.SetBottom(static_cast<int>( mfCurrentFontScale * rRect.Bottom() ) + 1);
+    rRect.SetLeft(static_cast<int>( fFontScale * rRect.Left() ));
+    rRect.SetRight(static_cast<int>( fFontScale * rRect.Right() ) + 1);
+    rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
+    rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
 
     g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
 
@@ -1587,7 +1599,10 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        const double fFactor(mfCurrentFontScale/256);
+        rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+        assert(pFont.is());
+        float fFontScale = pFont.is() ? pFont->GetScale() : 1.0;
+        const double fFactor(fFontScale/256);
         rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
