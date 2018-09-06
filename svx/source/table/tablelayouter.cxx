@@ -171,6 +171,21 @@ sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
         return 0;
 }
 
+sal_Int32 TableLayouter::calcPreferredColumnWidth( sal_Int32 nColumn, Size aSize ) const
+{
+    sal_Int32 nRet = 0;
+    if ( isValidColumn(nColumn) )
+    {
+        for ( sal_uInt32 nRow = 0; nRow < static_cast<sal_uInt32>(maRows.size()); ++nRow )
+        {
+            CellRef xCell( getCell( CellPos( nColumn, nRow ) ) );
+            if ( xCell.is() && !xCell->isMerged() && xCell->getColumnSpan() == 1 )
+                nRet = std::max( nRet, xCell->calcPreferredWidth(aSize) );
+        }
+    }
+    return nRet;
+}
+
 
 bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const
 {
@@ -575,10 +590,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
                 xColSet->getPropertyValue( gsSize ) >>= nColWidth;
             }
 
-            maColumns[nCol].mnSize = nColWidth;
-
-            if( maColumns[nCol].mnSize < nMinWidth )
-                maColumns[nCol].mnSize = nMinWidth;
+            maColumns[nCol].mnSize = std::max( nColWidth, nMinWidth);
 
             nCurrentWidth = o3tl::saturating_add(nCurrentWidth, maColumns[nCol].mnSize);
         }
@@ -1047,27 +1059,83 @@ void TableLayouter::UpdateBorderLayout()
 }
 
 
-void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
+void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
+                                       sal_Int32 nFirstCol,
+                                       sal_Int32 nLastCol,
+                                       const bool bOptimize )
 {
     if( mxTable.is() ) try
     {
         const sal_Int32 nColCount = getColumnCount();
+        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+        const Size aSize(0xffffff, 0xffffff);
+
+        //special case - optimize a single column
+        if ( bOptimize && nFirstCol == nLastCol )
+        {
+            const sal_Int32 nWish = calcPreferredColumnWidth(nFirstCol, aSize);
+            if ( nWish < getColumnWidth(nFirstCol) )
+            {
+                Reference< XPropertySet > xColSet( xCols->getByIndex(nFirstCol), UNO_QUERY_THROW );
+                xColSet->setPropertyValue( gsSize, Any( nWish ) );
+
+                //FitWidth automatically distributes the new excess space
+                LayoutTable( rArea, /*bFitWidth=*/true, /*bFitHeight=*/false );
+            }
+        }
 
         if( (nFirstCol < 0) || (nFirstCol>= nLastCol) || (nLastCol >= nColCount) )
             return;
 
         sal_Int32 nAllWidth = 0;
+        float fAllWish = 0;
+        sal_Int32 nUnused = 0;
+        std::vector<sal_Int32> aWish(nColCount);
+
         for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
             nAllWidth += getColumnWidth(nCol);
 
-        sal_Int32 nWidth = nAllWidth / (nLastCol-nFirstCol+1);
+        const sal_Int32 nEqualWidth = nAllWidth / (nLastCol-nFirstCol+1);
 
-        Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
+        //pass 1 - collect unneeded space (from an equal width perspective)
+        if ( bOptimize )
+        {
+            for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
+            {
+                const sal_Int32 nIndex = nCol - nFirstCol;
+                aWish[nIndex] = calcPreferredColumnWidth(nCol, aSize);
+                fAllWish += aWish[nIndex];
+                if ( aWish[nIndex] < nEqualWidth )
+                    nUnused += nEqualWidth - aWish[nIndex];
+            }
+        }
+        const sal_Int32 nDistributeExcess = nAllWidth - fAllWish;
 
+        sal_Int32 nWidth = nEqualWidth;
         for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
         {
             if( nCol == nLastCol )
-                nWidth = nAllWidth; // last column get round errors
+                nWidth = nAllWidth; // last column gets rounding/logic errors
+            else if ( bOptimize && fAllWish )
+            {
+                //pass 2 - first come, first served when requesting from the
+                //  unneeded pool, or proportionally allocate excess.
+                const sal_Int32 nIndex = nCol - nFirstCol;
+                if ( aWish[nIndex] > nEqualWidth + nUnused )
+                {
+                    nWidth = nEqualWidth + nUnused;
+                    nUnused = 0;
+                }
+                else
+                {
+                    nWidth = aWish[nIndex];
+                    if ( aWish[nIndex] > nEqualWidth )
+                        nUnused -= aWish[nIndex] - nEqualWidth;
+
+                    if ( nDistributeExcess > 0 )
+                        nWidth += nWidth / fAllWish * nDistributeExcess;
+                }
+            }
 
             Reference< XPropertySet > xColSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
             xColSet->setPropertyValue( gsSize, Any( nWidth ) );
