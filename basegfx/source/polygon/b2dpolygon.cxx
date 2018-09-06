@@ -467,7 +467,8 @@ private:
 
 public:
     ImplBufferedData()
-    :   mpDefaultSubdivision(),
+    :   basegfx::SystemDependentDataHolder(),
+        mpDefaultSubdivision(),
         mpB2DRange()
     {
     }
