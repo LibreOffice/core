@@ -408,7 +408,6 @@ namespace drawinglayer
             mfDepth(fDepth),
             mfDiagonal(fDiagonal),
             mfBackScale(fBackScale),
-            mpLastRLGViewInformation(nullptr),
             mbSmoothNormals(bSmoothNormals),
             mbSmoothLids(bSmoothLids),
             mbCharacterMode(bCharacterMode),

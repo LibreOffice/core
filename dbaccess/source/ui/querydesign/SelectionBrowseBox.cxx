@@ -893,7 +893,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
 bool OSelectionBrowseBox::SaveModified()
 {
     OQueryController& rController = static_cast<OQueryController&>(getDesignView()->getController());
-    OTableFieldDescRef pEntry = nullptr;
+    OTableFieldDescRef pEntry;
     sal_uInt16 nCurrentColumnPos = GetColumnPos(GetCurColumnId());
     if(getFields().size() > static_cast<sal_uInt16>(nCurrentColumnPos - 1))
         pEntry = getEntry(nCurrentColumnPos - 1);
@@ -1220,7 +1220,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
 {
     rDev.SetClipRegion(vcl::Region(rRect));
 
-    OTableFieldDescRef pEntry = nullptr;
+    OTableFieldDescRef pEntry;
     sal_uInt16 nPos = GetColumnPos(nColumnId);
     if(getFields().size() > sal_uInt16(nPos - 1))
         pEntry = getFields()[nPos - 1];
@@ -1434,7 +1434,7 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
             DeactivateCell();
 
         OTableFields::const_reverse_iterator aIter = getFields().rbegin();
-        OTableFieldDescRef pEntry = nullptr;
+        OTableFieldDescRef pEntry;
         for(sal_uInt16 nPos=sal::static_int_cast< sal_uInt16 >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
         {
             pEntry = *aIter;
@@ -2656,7 +2656,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
 
 Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
-    OTableFieldDescRef pEntry = nullptr;
+    OTableFieldDescRef pEntry;
     if(getFields().size() > sal_uInt16(_nColumnPos - 1))
         pEntry = getFields()[_nColumnPos - 1];
 

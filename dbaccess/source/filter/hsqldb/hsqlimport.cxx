@@ -215,7 +215,6 @@ using namespace css::embed;
 
 HsqlImporter::HsqlImporter(Reference<XConnection>& rConnection, const Reference<XStorage>& rStorage)
     : m_rConnection(rConnection)
-    , m_xStorage(nullptr)
 {
     m_xStorage.set(rStorage);
 }
