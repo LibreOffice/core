@@ -16,6 +16,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 
+#include <utility>
 #include <vcl/lstbox.hxx>
 
 constexpr int MENU_START = 0;
@@ -267,10 +268,11 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScDeleteColumnTransformationControl::ScDeleteColumnTransformationControl(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/deletecolumnentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScDeleteColumnTransformationControl::ScDeleteColumnTransformationControl(
+    vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/deletecolumnentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(maColumnNums, "ed_columns");
     get(maDelete, "ed_delete");
@@ -331,11 +333,13 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(vcl::Window* pParent, SCCOL nCol, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui"),
-    mnCol(nCol),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(
+    vcl::Window* pParent, SCCOL nCol, sal_uInt32 aIndex,
+    std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui")
+    , mnCol(nCol)
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(maSeparator, "ed_separator");
     get(maNumColumns, "num_cols");
@@ -383,10 +387,12 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Window* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(
+    vcl::Window* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 aIndex,
+    std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(mpSeparator, "ed_separator");
     get(mpEdColumns, "ed_columns");
@@ -459,10 +465,11 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScSortTransformationControl::ScSortTransformationControl(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/sorttransformationentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScSortTransformationControl::ScSortTransformationControl(
+    vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/sorttransformationentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(mpAscending, "ed_ascending");
     get(mpEdColumns, "ed_columns");
@@ -522,10 +529,11 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScColumnTextTransformation::ScColumnTextTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/texttransformationentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScColumnTextTransformation::ScColumnTextTransformation(
+    vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/texttransformationentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(maColumnNums, "ed_columns");
     get(maType, "ed_lst");
@@ -602,10 +610,11 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScAggregateFunction::ScAggregateFunction(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/aggregatefunctionentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScAggregateFunction::ScAggregateFunction(vcl::Window* pParent, sal_uInt32 aIndex,
+                                         std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/aggregatefunctionentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(maColumnNums, "ed_columns");
     get(maType, "ed_lst");
@@ -681,10 +690,11 @@ public:
     DECL_LINK(DeleteHdl, Button*, void);
 };
 
-ScNumberTransformation::ScNumberTransformation(vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation):
-    ScDataTransformationBaseControl(pParent,"modules/scalc/ui/numbertransformationentry.ui"),
-    maIndex(aIndex),
-    maDeleteTransformation(aDeleteTransformation)
+ScNumberTransformation::ScNumberTransformation(
+    vcl::Window* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/numbertransformationentry.ui")
+    , maIndex(aIndex)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
 {
     get(maColumnNums, "ed_columns");
     get(maType, "ed_lst");
@@ -826,10 +836,11 @@ std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransfor
 
 }
 
-ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
-    ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true),
-    mpDoc(pDoc),
-    mpBar(VclPtr<MenuBar>::Create())
+ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc,
+                                     ScDocument* pDocument)
+    : ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true)
+    , mpDoc(std::move(pDoc))
+    , mpBar(VclPtr<MenuBar>::Create())
 {
     get(mpTable, "data_table");
     get(mpList, "operation_ctrl");

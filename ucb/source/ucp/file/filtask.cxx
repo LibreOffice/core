@@ -2619,9 +2619,8 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
     return listeners;
 }
 
-
-void
-TaskManager::notifyInsert( std::vector< std::unique_ptr<ContentEventNotifier> > listeners, const OUString& aChildName )
+void TaskManager::notifyInsert(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners,
+                               const OUString& aChildName)
 {
     for (const auto & l : listeners )
     {
@@ -2629,9 +2628,8 @@ TaskManager::notifyInsert( std::vector< std::unique_ptr<ContentEventNotifier> > 
     }
 }
 
-
-void
-TaskManager::notifyContentDeleted( std::vector< std::unique_ptr< ContentEventNotifier> > listeners )
+void TaskManager::notifyContentDeleted(
+    const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners)
 {
     for( auto const & l : listeners )
     {
@@ -2639,10 +2637,8 @@ TaskManager::notifyContentDeleted( std::vector< std::unique_ptr< ContentEventNot
     }
 }
 
-
-void
-TaskManager::notifyContentRemoved( std::vector< std::unique_ptr<ContentEventNotifier> > listeners,
-                             const OUString& aChildName )
+void TaskManager::notifyContentRemoved(
+    const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners, const OUString& aChildName)
 {
     for( auto const & l : listeners )
     {
@@ -2672,10 +2668,9 @@ TaskManager::getPropertySetListeners( const OUString& aName )
     return listeners;
 }
 
-
-void
-TaskManager::notifyPropertyAdded( std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
-                            const OUString& aPropertyName )
+void TaskManager::notifyPropertyAdded(
+    const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+    const OUString& aPropertyName)
 {
     for( auto const & l : listeners )
     {
@@ -2683,10 +2678,9 @@ TaskManager::notifyPropertyAdded( std::vector< std::unique_ptr< PropertySetInfoC
     }
 }
 
-
-void
-TaskManager::notifyPropertyRemoved( std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
-                              const OUString& aPropertyName )
+void TaskManager::notifyPropertyRemoved(
+    const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+    const OUString& aPropertyName)
 {
     for( auto const & l : listeners )
     {
@@ -2781,9 +2775,8 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
     return aVector;
 }
 
-
-void
-TaskManager::notifyContentExchanged( std::vector< std::unique_ptr< ContentEventNotifier > > listeners_vec )
+void TaskManager::notifyContentExchanged(
+    const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners_vec)
 {
     for( auto & l : listeners_vec)
     {
@@ -2813,9 +2806,9 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
     return listeners;
 }
 
-
-void TaskManager::notifyPropertyChanges( std::vector< std::unique_ptr< PropertyChangeNotifier > > listeners,
-                                            const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
+void TaskManager::notifyPropertyChanges(
+    const std::vector<std::unique_ptr<PropertyChangeNotifier>>& listeners,
+    const uno::Sequence<beans::PropertyChangeEvent>& seqChanged)
 {
     for( auto const & l : listeners )
     {

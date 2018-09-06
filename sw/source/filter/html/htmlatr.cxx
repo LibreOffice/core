@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/htmlout.hxx>
@@ -1569,16 +1570,15 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
     return pFormatInfo;
 }
 
-HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
-                              boost::optional<Color> xDfltCol, bool bStyles,
-                              sal_uLong nMode, const OUString& rText,
-                              std::set<OUString>& rStyles ):
-    pDoc( pD ),
-    pTemplate( pTempl ),
-    xDfltColor( xDfltCol ),
-    rScriptTextStyles( rStyles ),
-    nHTMLMode( nMode ),
-    bOutStyles( bStyles )
+HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, boost::optional<Color> xDfltCol,
+                             bool bStyles, sal_uLong nMode, const OUString& rText,
+                             std::set<OUString>& rStyles)
+    : pDoc(pD)
+    , pTemplate(pTempl)
+    , xDfltColor(std::move(xDfltCol))
+    , rScriptTextStyles(rStyles)
+    , nHTMLMode(nMode)
+    , bOutStyles(bStyles)
 {
     sal_Int32 nEndPos = rText.getLength();
     sal_Int32 nPos = 0;

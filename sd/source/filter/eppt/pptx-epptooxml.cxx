@@ -1682,7 +1682,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
       </a:bgFillStyleLst>\
     </a:fmtScheme>"
 
-void PowerPointExport::WriteDefaultColorSchemes(FSHelperPtr pFS)
+void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
 {
     for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
     {
@@ -1741,7 +1741,7 @@ void PowerPointExport::WriteDefaultColorSchemes(FSHelperPtr pFS)
     }
 }
 
-bool PowerPointExport::WriteColorSchemes(FSHelperPtr pFS, const OUString& rThemePath)
+bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath)
 {
     try
     {

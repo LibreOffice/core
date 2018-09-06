@@ -168,8 +168,8 @@ public:
 
 namespace
 {
-
-uno::Reference<awt::XBitmap> getBitmapFromTable(sd::DrawDocShellRef xDocShRef, OUString const & rName)
+uno::Reference<awt::XBitmap> getBitmapFromTable(const sd::DrawDocShellRef& xDocShRef,
+                                                OUString const& rName)
 {
     uno::Reference<awt::XBitmap> xBitmap;
 

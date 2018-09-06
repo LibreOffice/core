@@ -307,7 +307,9 @@ public:
     // text group methods
 
     SAL_DLLPRIVATE CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
-    CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse );
+    CustomAnimationTextGroupPtr createTextGroup(const CustomAnimationEffectPtr& pEffect,
+                                                sal_Int32 nTextGrouping, double fTextGroupingAuto,
+                                                bool bAnimateForm, bool bTextReverse);
     SAL_DLLPRIVATE void setTextGrouping( const CustomAnimationTextGroupPtr& pTextGroup, sal_Int32 nTextGrouping );
     SAL_DLLPRIVATE void setAnimateForm( const CustomAnimationTextGroupPtr& pTextGroup, bool bAnimateForm );
     SAL_DLLPRIVATE void setTextGroupingAuto( const CustomAnimationTextGroupPtr& pTextGroup, double fTextGroupingAuto );

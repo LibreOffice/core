@@ -18,6 +18,7 @@
 #include <libxml/xpathInternals.h>
 
 #include <comphelper/string.hxx>
+#include <utility>
 
 namespace sc {
 
@@ -41,14 +42,16 @@ public:
     virtual void execute() override;
 };
 
-HTMLFetchThread::HTMLFetchThread(ScDocument& rDoc, const OUString& rURL, const OUString& rID, std::function<void()> aImportFinishedHdl,
-        const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations):
-    salhelper::Thread("HTML Fetch Thread"),
-    mrDocument(rDoc),
-    maURL(rURL),
-    maID(rID),
-    maDataTransformations(rTransformations),
-    maImportFinishedHdl(aImportFinishedHdl)
+HTMLFetchThread::HTMLFetchThread(
+    ScDocument& rDoc, const OUString& rURL, const OUString& rID,
+    std::function<void()> aImportFinishedHdl,
+    const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations)
+    : salhelper::Thread("HTML Fetch Thread")
+    , mrDocument(rDoc)
+    , maURL(rURL)
+    , maID(rID)
+    , maDataTransformations(rTransformations)
+    , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
 

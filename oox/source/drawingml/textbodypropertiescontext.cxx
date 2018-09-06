@@ -49,9 +49,10 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_TextBodyProperties
-TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper const & rParent,
-    const AttributeList& rAttribs, ShapePtr pShapePtr )
-: TextBodyPropertiesContext( rParent, rAttribs, pShapePtr->getTextBody()->getTextProperties() )
+TextBodyPropertiesContext::TextBodyPropertiesContext(ContextHandler2Helper const& rParent,
+                                                     const AttributeList& rAttribs,
+                                                     const ShapePtr& pShapePtr)
+    : TextBodyPropertiesContext(rParent, rAttribs, pShapePtr->getTextBody()->getTextProperties())
 {
     mpShapePtr = pShapePtr;
 }

@@ -1046,8 +1046,9 @@ public:
     void StartCommentOutput( const OUString& rName );
     void EndCommentOutput(   const OUString& rName );
     void OutGrf(const ww8::Frame &rFrame);
-    bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const & xOleStg,
-        tools::SvRef<SotStorage> xObjStg, OUString const &rStorageName, SwOLENode *pOLENd);
+    bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const& xOleStg,
+                             const tools::SvRef<SotStorage>& xObjStg, OUString const& rStorageName,
+                             SwOLENode* pOLENd);
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
     virtual void AppendBookmark( const OUString& rName ) override;

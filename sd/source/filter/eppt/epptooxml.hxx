@@ -92,8 +92,8 @@ private:
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
-    bool WriteColorSchemes(FSHelperPtr pFS, const OUString& rThemePath);
-    void WriteDefaultColorSchemes(FSHelperPtr pFS);
+    bool WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath);
+    void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum );
 
     virtual bool ImplCreateDocument() override;

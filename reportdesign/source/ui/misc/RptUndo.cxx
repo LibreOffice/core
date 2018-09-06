@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <comphelper/types.hxx>
 #include <svx/unoshape.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 
 #include <functional>
@@ -215,14 +216,13 @@ void OSectionUndo::Redo()
     }
 }
 
-
-OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::function<uno::Reference< report::XSection >(OReportHelper *)> _pMemberFunction
-                                       ,const uno::Reference< report::XReportDefinition >& _xReport
-                                       ,Action _eAction)
-: OSectionUndo(_rMod,_nSlot,_eAction,nullptr)
-,m_aReportHelper(_xReport)
-,m_pMemberFunction(_pMemberFunction)
+OReportSectionUndo::OReportSectionUndo(
+    OReportModel& _rMod, sal_uInt16 _nSlot,
+    ::std::function<uno::Reference<report::XSection>(OReportHelper*)> _pMemberFunction,
+    const uno::Reference<report::XReportDefinition>& _xReport, Action _eAction)
+    : OSectionUndo(_rMod, _nSlot, _eAction, nullptr)
+    , m_aReportHelper(_xReport)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
     if( m_eAction == Removed )
         collectControls(m_pMemberFunction(&m_aReportHelper));
@@ -251,15 +251,13 @@ void OReportSectionUndo::implReRemove( )
     m_bInserted = false;
 }
 
-
-OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::function<uno::Reference< report::XSection >(OGroupHelper *)> _pMemberFunction
-                                       ,const uno::Reference< report::XGroup >& _xGroup
-                                       ,Action _eAction
-                                       ,const char* pCommentID)
-: OSectionUndo(_rMod,_nSlot,_eAction,pCommentID)
-,m_aGroupHelper(_xGroup)
-,m_pMemberFunction(_pMemberFunction)
+OGroupSectionUndo::OGroupSectionUndo(
+    OReportModel& _rMod, sal_uInt16 _nSlot,
+    ::std::function<uno::Reference<report::XSection>(OGroupHelper*)> _pMemberFunction,
+    const uno::Reference<report::XGroup>& _xGroup, Action _eAction, const char* pCommentID)
+    : OSectionUndo(_rMod, _nSlot, _eAction, pCommentID)
+    , m_aGroupHelper(_xGroup)
+    , m_pMemberFunction(std::move(_pMemberFunction))
 {
     if( m_eAction == Removed )
     {

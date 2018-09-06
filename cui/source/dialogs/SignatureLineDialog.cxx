@@ -13,6 +13,7 @@
 #include <comphelper/xmltools.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,7 +49,8 @@ using namespace css::graphic;
 
 SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                          bool bEditExisting)
-    : SignatureLineDialogBase(pParent, xModel, "cui/ui/signatureline.ui", "SignatureLineDialog")
+    : SignatureLineDialogBase(pParent, std::move(xModel), "cui/ui/signatureline.ui",
+                              "SignatureLineDialog")
     , m_xEditName(m_xBuilder->weld_entry("edit_name"))
     , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
     , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))

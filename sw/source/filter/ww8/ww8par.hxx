@@ -1886,8 +1886,8 @@ public:     // really private, but can only be done public
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
-    static bool ImportOleWMF( tools::SvRef<SotStorage> xSrc1, GDIMetaFile &rWMF,
-        long &rX, long &rY);
+    static bool ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF, long& rX,
+                             long& rY);
     static Color GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,

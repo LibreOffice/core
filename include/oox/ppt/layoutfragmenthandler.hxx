@@ -34,7 +34,8 @@ namespace oox { namespace ppt {
 class LayoutFragmentHandler : public SlideFragmentHandler
 {
 public:
-    LayoutFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr);
+    LayoutFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                          const SlidePersistPtr& pMasterPersistPtr);
     virtual ~LayoutFragmentHandler() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

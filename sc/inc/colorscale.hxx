@@ -77,7 +77,7 @@ public:
     void SetType( ScColorScaleEntryType eType );
 
     void SetRepaintCallback(ScConditionalFormat* pParent);
-    void SetRepaintCallback(std::function<void()> func);
+    void SetRepaintCallback(const std::function<void()>& func);
 };
 
 namespace databar

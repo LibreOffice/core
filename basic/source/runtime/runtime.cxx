@@ -2081,7 +2081,7 @@ void SbiRuntime::StepDIM()
 }
 
 // #56204 swap out DIM-functionality into a help method (step0.cxx)
-void SbiRuntime::DimImpl( SbxVariableRef refVar )
+void SbiRuntime::DimImpl(const SbxVariableRef& refVar)
 {
     // If refDim then this DIM statement is terminating a ReDIM and
     // previous StepERASE_CLEAR for an array, the following actions have

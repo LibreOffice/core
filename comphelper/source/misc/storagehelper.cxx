@@ -705,7 +705,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
     return nullptr;
 }
 
-OUString OStorageHelper::GetODFVersionFromStorage(uno::Reference<embed::XStorage> xStorage)
+OUString OStorageHelper::GetODFVersionFromStorage(const uno::Reference<embed::XStorage>& xStorage)
 {
     OUString aODFVersion;
     try

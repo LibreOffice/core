@@ -97,7 +97,7 @@ public:
 
     void refresh(ScDocument* pDoc, bool bDeterministic = false);
 
-    void AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation);
+    void AddDataTransformation(const std::shared_ptr<sc::DataTransformation>& mpDataTransformation);
     const std::vector<std::shared_ptr<sc::DataTransformation>>& getDataTransformation() const;
 };
 

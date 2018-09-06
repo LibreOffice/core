@@ -107,9 +107,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     return xRet;
 }
 
-void ShapeFactory::setPageSize(uno::Reference< drawing::XShapes >, const awt::Size& )
-{
-}
+void ShapeFactory::setPageSize(const uno::Reference<drawing::XShapes>&, const awt::Size&) {}
 
 //  diverse tools::PolyPolygon create methods
 

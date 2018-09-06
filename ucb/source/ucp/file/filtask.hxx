@@ -536,30 +536,30 @@ namespace fileaccess
         /********************************************************************************/
 
         static void notifyPropertyChanges(
-            std::vector< std::unique_ptr< PropertyChangeNotifier > > listeners,
-            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
+            const std::vector<std::unique_ptr<PropertyChangeNotifier>>& listeners,
+            const css::uno::Sequence<css::beans::PropertyChangeEvent>& seqChanged);
 
         static void notifyContentExchanged(
-            std::vector< std::unique_ptr< ContentEventNotifier > > listeners_vec );
+            const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners_vec);
 
-        static void notifyInsert(
-            std::vector< std::unique_ptr< ContentEventNotifier > > listeners, const OUString& aChildName );
+        static void
+        notifyInsert(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners,
+                     const OUString& aChildName);
 
-        static void notifyContentDeleted(
-            std::vector< std::unique_ptr< ContentEventNotifier > > listeners );
+        static void
+        notifyContentDeleted(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners);
 
-        static void notifyContentRemoved(
-            std::vector< std::unique_ptr< ContentEventNotifier > > listeners,
-            const OUString& aChildName );
+        static void
+        notifyContentRemoved(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners,
+                             const OUString& aChildName);
 
         static void notifyPropertyAdded(
-            std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
-            const OUString& aPropertyName );
+            const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+            const OUString& aPropertyName);
 
         static void notifyPropertyRemoved(
-            std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > > listeners,
-            const OUString& aPropertyName );
-
+            const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+            const OUString& aPropertyName);
 
         /********************************************************************************/
         /*                       remove persistent propertyset                          */

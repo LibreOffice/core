@@ -170,7 +170,8 @@ void CPDManager::printerRemoved (GDBusConnection *,
     pManager->m_aPrinters.erase(printersIt);
 }
 
-GDBusProxy * CPDManager::getProxy(std::string target) {
+GDBusProxy* CPDManager::getProxy(const std::string& target)
+{
     std::unordered_map<std::string, GDBusProxy *>::const_iterator it = m_pBackends.find(target);
     if (it == m_pBackends.end()) {
         return nullptr;
@@ -182,7 +183,8 @@ void CPDManager::addBackend(std::pair<std::string, GDBusProxy *> pair) {
     m_pBackends.insert(pair);
 }
 
-void CPDManager::addTempBackend(std::pair<std::string, gchar*> pair) {
+void CPDManager::addTempBackend(const std::pair<std::string, gchar*>& pair)
+{
     m_tBackends.push_back(pair);
 }
 

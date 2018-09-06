@@ -32,6 +32,7 @@
 #include <svdata.hxx>
 #include <messagedialog.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -1875,7 +1876,7 @@ public:
         , m_xDrawingArea(pDrawingArea)
     {
         m_xDrawingArea->SetAccessible(rAlly);
-        m_xDrawingArea->SetUITestFactory(pUITestFactoryFunction, pUserData);
+        m_xDrawingArea->SetUITestFactory(std::move(pUITestFactoryFunction), pUserData);
         m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
         m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
         m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));

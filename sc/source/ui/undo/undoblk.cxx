@@ -799,13 +799,12 @@ bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
-                ScRange aRange, const ScAddress& aOldEnd, const ScMarkData& rMark,
-                ScDocumentUniquePtr pNewUndoDoc ) :
-    ScBlockUndo( pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT ),
-    aMarkData( rMark ),
-    pUndoDoc( std::move(pNewUndoDoc) ),
-    aExtendedRange( aRange )
+ScUndoCut::ScUndoCut(ScDocShell* pNewDocShell, const ScRange& aRange, const ScAddress& aOldEnd,
+                     const ScMarkData& rMark, ScDocumentUniquePtr pNewUndoDoc)
+    : ScBlockUndo(pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT)
+    , aMarkData(rMark)
+    , pUndoDoc(std::move(pNewUndoDoc))
+    , aExtendedRange(aRange)
 {
     SetChangeTrack();
 }

@@ -452,17 +452,19 @@ std::set<SCCOL> AggregateFunction::getColumns() const
      return maColumns;
 }
 
-NumberTransformation::NumberTransformation(const std::set<SCCOL> nCol, const NUMBER_TRANSFORM_TYPE rType):
-    mnCol(nCol),
-    maType(rType),
-    maPrecision(-1)
+NumberTransformation::NumberTransformation(const std::set<SCCOL>& nCol,
+                                           const NUMBER_TRANSFORM_TYPE rType)
+    : mnCol(nCol)
+    , maType(rType)
+    , maPrecision(-1)
 {
 }
 
-NumberTransformation::NumberTransformation(const std::set<SCCOL> nCol,const NUMBER_TRANSFORM_TYPE rType, int nPrecision):
-    mnCol(nCol),
-    maType(rType),
-    maPrecision(nPrecision)
+NumberTransformation::NumberTransformation(const std::set<SCCOL>& nCol,
+                                           const NUMBER_TRANSFORM_TYPE rType, int nPrecision)
+    : mnCol(nCol)
+    , maType(rType)
+    , maPrecision(nPrecision)
 {
 }
 
@@ -708,9 +710,10 @@ std::set<SCCOL> NumberTransformation::getColumn() const
     return mnCol;
 }
 
-ReplaceNullTransformation::ReplaceNullTransformation(const std::set<SCCOL> nCol, const OUString sReplaceWith):
-    mnCol(nCol),
-    msReplaceWith(sReplaceWith)
+ReplaceNullTransformation::ReplaceNullTransformation(const std::set<SCCOL>& nCol,
+                                                     const OUString& sReplaceWith)
+    : mnCol(nCol)
+    , msReplaceWith(sReplaceWith)
 {
 }
 
@@ -757,10 +760,10 @@ TransformationType ReplaceNullTransformation::getTransformationType() const
      return TransformationType::REMOVE_NULL_TRANSFORMATION;
 }
 
-
-DateTimeTransformation::DateTimeTransformation(const std::set<SCCOL> nCol,const DATETIME_TRANSFORMATION_TYPE rType):
-    mnCol(nCol),
-    maType(rType)
+DateTimeTransformation::DateTimeTransformation(const std::set<SCCOL>& nCol,
+                                               const DATETIME_TRANSFORMATION_TYPE rType)
+    : mnCol(nCol)
+    , maType(rType)
 {
 }
 

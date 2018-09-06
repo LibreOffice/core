@@ -14,6 +14,7 @@
 #include <filter.hxx>
 #include <document.hxx>
 #include <orcusfilters.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -46,7 +47,7 @@ XMLFetchThread::XMLFetchThread(
     , maID(rID)
     , maParam(rParam)
     , maDataTransformations(rTransformations)
-    , maImportFinishedHdl(aImportFinishedHdl)
+    , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
 

@@ -164,8 +164,8 @@ TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, TextBod
 {
 }
 
-TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, ShapePtr pShapePtr )
-: TextBodyContext( rParent, *pShapePtr->getTextBody() )
+TextBodyContext::TextBodyContext(ContextHandler2Helper const& rParent, const ShapePtr& pShapePtr)
+    : TextBodyContext(rParent, *pShapePtr->getTextBody())
 {
     mpShapePtr = pShapePtr;
 }

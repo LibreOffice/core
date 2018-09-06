@@ -18,6 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -48,7 +49,7 @@ using namespace css::graphic;
 using namespace css::security;
 
 SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel)
-    : SignatureLineDialogBase(pParent, xModel, "cui/ui/signsignatureline.ui",
+    : SignatureLineDialogBase(pParent, std::move(xModel), "cui/ui/signsignatureline.ui",
                               "SignSignatureLineDialog")
     , m_xEditName(m_xBuilder->weld_entry("edit_name"))
     , m_xEditComment(m_xBuilder->weld_text_view("edit_comment"))

@@ -65,7 +65,7 @@ protected:
                               const OString& rAttribute = OString(),
                               const OUString& rExpectedValue = OUString());
     void          assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath,
-                                   std::vector<std::pair<OString, OUString>> aPairVector);
+                          const std::vector<std::pair<OString, OUString>>& aPairVector);
     /**
      * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
      * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).

@@ -43,13 +43,13 @@ class AccessibilityTools
 {
 public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    getAccessibleObjectForRole(css::uno::Reference<css::accessibility::XAccessible> xacc,
+    getAccessibleObjectForRole(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
                                sal_Int16 role);
 };
 
 css::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForRole(
-    css::uno::Reference<css::accessibility::XAccessible> xacc, sal_Int16 role)
+    const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
     css::uno::Reference<css::accessibility::XAccessibleContext> ac = xacc->getAccessibleContext();
     bool isShowing = ac->getAccessibleStateSet()->contains(AccessibleStateType::SHOWING);

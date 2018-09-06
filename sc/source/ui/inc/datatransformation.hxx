@@ -145,13 +145,14 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
     int maPrecision;
 
     public:
-    NumberTransformation(const std::set<SCCOL> nCol, const NUMBER_TRANSFORM_TYPE rType);
-    NumberTransformation(const std::set<SCCOL> nCol, const NUMBER_TRANSFORM_TYPE rType, int nPrecision);
-    virtual void Transform(ScDocument& rDoc) const override;
-    virtual TransformationType getTransformationType() const override;
-    NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
-    int getPrecision() const;
-    std::set<SCCOL> getColumn() const;
+        NumberTransformation(const std::set<SCCOL>& nCol, const NUMBER_TRANSFORM_TYPE rType);
+        NumberTransformation(const std::set<SCCOL>& nCol, const NUMBER_TRANSFORM_TYPE rType,
+                             int nPrecision);
+        virtual void Transform(ScDocument& rDoc) const override;
+        virtual TransformationType getTransformationType() const override;
+        NUMBER_TRANSFORM_TYPE getNumberTransfromationType() const;
+        int getPrecision() const;
+        std::set<SCCOL> getColumn() const;
 };
 
 class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
@@ -160,11 +161,11 @@ class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
     OUString msReplaceWith;
 
     public:
-    ReplaceNullTransformation(const std::set<SCCOL> nCol, const OUString sReplaceWith);
-    virtual void Transform(ScDocument& rDoc) const override;
-    virtual TransformationType getTransformationType() const override;
-    std::set<SCCOL> getColumn() const;
-    OUString getReplaceString() const;
+        ReplaceNullTransformation(const std::set<SCCOL>& nCol, const OUString& sReplaceWith);
+        virtual void Transform(ScDocument& rDoc) const override;
+        virtual TransformationType getTransformationType() const override;
+        std::set<SCCOL> getColumn() const;
+        OUString getReplaceString() const;
 };
 
 class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
@@ -173,11 +174,12 @@ class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
     DATETIME_TRANSFORMATION_TYPE maType;
 
     public:
-    DateTimeTransformation(const std::set<SCCOL> nCol, const DATETIME_TRANSFORMATION_TYPE rType);
-    virtual void Transform(ScDocument& rDoc) const override;
-    virtual TransformationType getTransformationType() const override;
-    DATETIME_TRANSFORMATION_TYPE getDateTimeTransfromationType() const;
-    std::set<SCCOL> getColumn() const;
+        DateTimeTransformation(const std::set<SCCOL>& nCol,
+                               const DATETIME_TRANSFORMATION_TYPE rType);
+        virtual void Transform(ScDocument& rDoc) const override;
+        virtual TransformationType getTransformationType() const override;
+        DATETIME_TRANSFORMATION_TYPE getDateTimeTransfromationType() const;
+        std::set<SCCOL> getColumn() const;
 };
 
 }

@@ -51,7 +51,8 @@
 
 using namespace css;
 
-void drawBitmapCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext)
+void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBitmap,
+                        vcl::RenderContext& rRenderContext)
 {
     long nWidth = rRect.GetWidth();
     long nHeight = rRect.GetHeight();

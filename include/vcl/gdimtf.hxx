@@ -157,9 +157,9 @@ public:
 
     size_t          GetActionSize() const;
 
-    void            AddAction( rtl::Reference<MetaAction> pAction );
-    void            AddAction( rtl::Reference<MetaAction> pAction, size_t nPos );
-    void            push_back( rtl::Reference<MetaAction> pAction );
+    void            AddAction(const rtl::Reference<MetaAction>& pAction);
+    void            AddAction(const rtl::Reference<MetaAction>& pAction, size_t nPos);
+    void            push_back(const rtl::Reference<MetaAction>& pAction);
     /**
      * @param pAction takes ownership
      * @param nAction the action to replace

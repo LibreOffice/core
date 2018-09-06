@@ -92,9 +92,9 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
     }
 }
 
-bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
-    tools::SvRef<SotStorage> const & xOleStg, tools::SvRef<SotStorage> xObjStg, OUString const &rStorageName,
-    SwOLENode *pOLENd)
+bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const& xOleStg,
+                                    const tools::SvRef<SotStorage>& xObjStg,
+                                    OUString const& rStorageName, SwOLENode* pOLENd)
 {
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );

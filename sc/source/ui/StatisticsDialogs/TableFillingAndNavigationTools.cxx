@@ -203,7 +203,7 @@ void AddressWalkerWriter::writeValue(double aValue)
 
 // DataCellIterator
 
-DataCellIterator::DataCellIterator(ScRange aInputRange, bool aByColumn)
+DataCellIterator::DataCellIterator(const ScRange& aInputRange, bool aByColumn)
     : mInputRange(aInputRange)
     , mByColumn(aByColumn)
     , mCol(0)
@@ -282,9 +282,9 @@ sal_Int32 DataRangeIterator::index()
 
 // DataRangeByColumnIterator
 
-DataRangeByColumnIterator::DataRangeByColumnIterator(ScRange aInputRange) :
-    DataRangeIterator(aInputRange),
-    mCol(aInputRange.aStart.Col())
+DataRangeByColumnIterator::DataRangeByColumnIterator(const ScRange& aInputRange)
+    : DataRangeIterator(aInputRange)
+    , mCol(aInputRange.aStart.Col())
 {}
 
 bool DataRangeByColumnIterator::hasNext()
@@ -323,9 +323,9 @@ DataCellIterator DataRangeByColumnIterator::iterateCells()
 
 // DataRangeByRowIterator
 
-DataRangeByRowIterator::DataRangeByRowIterator(ScRange aInputRange) :
-    DataRangeIterator(aInputRange),
-    mRow(aInputRange.aStart.Row())
+DataRangeByRowIterator::DataRangeByRowIterator(const ScRange& aInputRange)
+    : DataRangeIterator(aInputRange)
+    , mRow(aInputRange.aStart.Row())
 {}
 
 bool DataRangeByRowIterator::hasNext()

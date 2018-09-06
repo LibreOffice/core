@@ -105,8 +105,8 @@ void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const O
                                  rExpectedValue, aValue);
 }
 
-
-void XmlTestTools::assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath, std::vector<std::pair<OString, OUString>> aPairVector)
+void XmlTestTools::assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath,
+                                    const std::vector<std::pair<OString, OUString>>& aPairVector)
 {
     for (auto& rPair : aPairVector)
     {

@@ -26,7 +26,7 @@ namespace dbahsql
 using namespace css::sdbc;
 
 ColumnDefinition::ColumnDefinition(const OUString& sName, sal_Int32 eType,
-                                   const std::vector<sal_Int32> aParams, bool bPrimary,
+                                   const std::vector<sal_Int32>& aParams, bool bPrimary,
                                    sal_Int32 nAutoIncr, bool bNullable, bool bCaseInsensitive,
                                    const OUString& sDefault)
     : m_sName(sName)

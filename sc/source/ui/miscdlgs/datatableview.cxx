@@ -20,6 +20,7 @@
 #include <datatableview.hxx>
 
 #include <document.hxx>
+#include <utility>
 #include <viewdata.hxx>
 #include <output.hxx>
 #include <fillinfo.hxx>
@@ -165,7 +166,7 @@ ScDataTableView::ScDataTableView(vcl::Window* pParent):
 
 void ScDataTableView::Init(std::shared_ptr<ScDocument> pDoc)
 {
-    mpDoc = pDoc;
+    mpDoc = std::move(pDoc);
     mpColView->Init(mpDoc.get());
     mpRowView->Init(mpDoc.get());
 }

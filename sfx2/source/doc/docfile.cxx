@@ -3649,12 +3649,11 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-bool SfxMedium::SignContents_Impl(bool bSignScriptingContent,
-                                  bool bHasValidDocumentSignature,
+bool SfxMedium::SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocumentSignature,
                                   const OUString& aSignatureLineId,
-                                  const Reference<XCertificate> xCert,
-                                  const Reference<XGraphic> xValidGraphic,
-                                  const Reference<XGraphic> xInvalidGraphic,
+                                  const Reference<XCertificate>& xCert,
+                                  const Reference<XGraphic>& xValidGraphic,
+                                  const Reference<XGraphic>& xInvalidGraphic,
                                   const OUString& aComment)
 {
     bool bChanges = false;

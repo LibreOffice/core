@@ -8,6 +8,7 @@
  *
  */
 
+#include <utility>
 #include <vcl/font/Feature.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -44,7 +45,7 @@ Feature::Feature(FeatureID const& rID, FeatureType eType)
 
 FeatureParameter::FeatureParameter(sal_uInt32 nCode, OUString aDescription)
     : m_nCode(nCode)
-    , m_sDescription(aDescription)
+    , m_sDescription(std::move(aDescription))
     , m_pDescriptionID(nullptr)
 {
 }
@@ -103,7 +104,7 @@ FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionI
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
     , m_eType(FeatureParameterType::ENUM)
-    , m_aEnumParameters(aEnumParameters)
+    , m_aEnumParameters(std::move(aEnumParameters))
 {
 }
 

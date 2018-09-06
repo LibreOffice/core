@@ -163,7 +163,8 @@ void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
     mpDataProvider->Import();
 }
 
-void ExternalDataSource::AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation)
+void ExternalDataSource::AddDataTransformation(
+    const std::shared_ptr<sc::DataTransformation>& mpDataTransformation)
 {
     maDataTransformations.push_back(mpDataTransformation);
 }

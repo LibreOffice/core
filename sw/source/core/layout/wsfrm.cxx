@@ -272,7 +272,7 @@ void TransformableSwFrame::restoreFrameAreas()
 }
 
 // transform by given B2DHomMatrix
-void TransformableSwFrame::transform(const basegfx::B2DHomMatrix aTransform)
+void TransformableSwFrame::transform(const basegfx::B2DHomMatrix& aTransform)
 {
     maFrameAreaTransformation *= aTransform;
     maFramePrintAreaTransformation *= aTransform;
