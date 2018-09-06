@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb2761_7094158c",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5259,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2018-09-06T10:49:49Z",
+      "side": 1,
+      "message": "It is only a temp var for testing the path.\nThe main line is 5255",
+      "parentUuid": "dfeb2761_503591d9",
+      "revId": "5ba42b96d110be60a0d193514b93126bb7634c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfeb2761_903b19d0",
         "filename": "configure.ac",
         "patchSetId": 1
