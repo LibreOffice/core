@@ -1067,7 +1067,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
                     xParagraphStyles->getByName("Standard") >>= xStandard;
                 if ( xStandard.is() )
                 {
-                    sal_Int16 aWritingMode;
+                    sal_Int16 aWritingMode(0);
                     xStandard->getPropertyValue( getPropertyName(PROP_WRITING_MODE) ) >>= aWritingMode;
                     if( aWritingMode == text::WritingMode2::RL_TB )
                         Insert( PROP_FOOTNOTE_LINE_ADJUST, uno::makeAny( sal_Int16(text::HorizontalAdjust_RIGHT) ), false );
