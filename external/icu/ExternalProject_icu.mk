@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
-				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
+				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) || cat config.log \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
