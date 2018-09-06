@@ -655,6 +655,7 @@ const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
             { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_CONTENT_AUTOSTYLES  },
             { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_CONTENT_SCRIPTS     },
             { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_CONTENT_BODY        },
+            { XML_NAMESPACE_OOO,    XML_BODY,               XML_TOK_CONTENT_BODY        },
             XML_TOKEN_MAP_END
         };
         m_pDocContentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
