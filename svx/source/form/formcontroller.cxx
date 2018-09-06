@@ -3723,8 +3723,6 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
         for ( size_t col = 0; col < colCount; ++col )
         {
             const ColumnInfo& rColInfo = m_pColumnInfoCache->getColumnInfo( col );
-            if ( rColInfo.nNullable != ColumnValue::NO_NULLS )
-                continue;
 
             if ( rColInfo.bAutoIncrement )
                 continue;
@@ -3732,8 +3730,11 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             if ( rColInfo.bReadOnly )
                 continue;
 
-            if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is() )
+            if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is()
+                  && rColInfo.nNullable != ColumnValue::NO_NULLS )
+            {
                 continue;
+            }
 
             // TODO: in case of binary fields, this "getString" below is extremely expensive
             if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
