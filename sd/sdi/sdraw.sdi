@@ -4073,6 +4073,23 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem SetOptimalColumnWidth SID_TABLE_OPTIMAL_COLUMN_WIDTH
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Table;
+]
+
 SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 ()
 [
