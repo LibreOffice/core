@@ -2262,6 +2262,16 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
+void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rRg )
+{
+    SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
+    const SwPosition& rPos = *rRg.GetPoint();
+    const SwRangeRedline* pRedl = m_rDoc.getIDocumentRedlineAccess().GetRedline( rPos, &nRedline );
+    if( pRedl && nRedline != SwRedlineTable::npos &&
+        pRedl->GetType() == nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT )
+            AcceptRedline( nRedline, false );
+}
+
 bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool bCallDelete )
 {
     bool bRet = false;
