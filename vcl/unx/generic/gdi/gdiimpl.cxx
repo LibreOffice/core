@@ -1442,10 +1442,13 @@ bool X11SalGraphicsImpl::drawEPS( long,long,long,long,void*,sal_uLong )
 }
 
 // draw a poly-polygon
-bool X11SalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
+bool X11SalGraphicsImpl::drawPolyPolygon(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    double fTransparency)
 {
     // nothing to do for empty polypolygons
-    const int nOrigPolyCount = rOrigPolyPoly.count();
+    const int nOrigPolyCount = rPolyPolygon.count();
     if( nOrigPolyCount <= 0 )
         return true;
 
@@ -1464,21 +1467,24 @@ bool X11SalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPo
     if( pRenderEnv )
         return false;
 
+    // Fallback: Transform to DeviceCoordinates
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+
     // snap to raster if requested
-    basegfx::B2DPolyPolygon aPolyPoly = rOrigPolyPoly;
     const bool bSnapToRaster = !mrParent.getAntiAliasB2DDraw();
     if( bSnapToRaster )
-        aPolyPoly = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPoly );
+        aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPolygon );
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    aPolyPoly = basegfx::utils::clipPolyPolygonOnRange( aPolyPoly, aViewRange, true, false );
-    if( !aPolyPoly.count() )
+    aPolyPolygon = basegfx::utils::clipPolyPolygonOnRange( aPolyPolygon, aViewRange, true, false );
+    if( !aPolyPolygon.count() )
         return true;
 
     // tessellate the polypolygon into trapezoids
     basegfx::B2DTrapezoidVector aB2DTrapVector;
-    basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
+    basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aPolyPolygon );
     const int nTrapCount = aB2DTrapVector.size();
     if( !nTrapCount )
         return true;
@@ -1654,7 +1660,12 @@ bool X11SalGraphicsImpl::drawPolyLine(
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawnOk = drawPolyPolygon( aOnePoly, fTransparency );
+
+        bDrawnOk = drawPolyPolygon(
+            basegfx::B2DHomMatrix(),
+            aOnePoly,
+            fTransparency);
+
         if( !bDrawnOk )
             break;
     }

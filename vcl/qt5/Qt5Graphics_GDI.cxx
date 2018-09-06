@@ -279,7 +279,8 @@ void Qt5Graphics::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32* pPoin
     aPainter.update(aPath.boundingRect());
 }
 
-bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+                                  const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
 {
     // ignore invisible polygons
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
@@ -287,9 +288,13 @@ bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, doub
     if ((fTransparency >= 1.0) || (fTransparency < 0))
         return true;
 
+    // Fallback: Transform to DeviceCoordinates
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+
     QPainterPath aPath;
     // ignore empty polygons
-    if (!AddPolyPolygonToPath(aPath, rPolyPoly, !getAntiAliasB2DDraw(),
+    if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAliasB2DDraw(),
                               m_aLineColor != SALCOLOR_NONE))
         return true;
 
