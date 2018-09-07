@@ -340,6 +340,13 @@ class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
 };
 
+
+namespace sw {
+
+std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p);
+
+} // namespace sw
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
