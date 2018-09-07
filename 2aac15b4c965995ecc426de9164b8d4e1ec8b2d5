@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0bf0f866",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-07T08:38:04Z",
+      "side": 1,
+      "message": "it looks like the old code before my patch already had only \"OFFICE\" for the \"scripts\" element, so we can probably assume that writing this element was added *after* switching the namespace to OFFICE...",
+      "revId": "2aac15b4c965995ecc426de9164b8d4e1ec8b2d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
