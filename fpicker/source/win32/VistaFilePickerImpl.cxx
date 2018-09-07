@@ -33,7 +33,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 #include <shlguid.h>
 #include <shlobj.h>
