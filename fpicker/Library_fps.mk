@@ -61,14 +61,14 @@ $(eval $(call gb_Library_add_libs,fps,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,fps,\
-	fpicker/source/win32/filepicker/asyncrequests \
-	fpicker/source/win32/filepicker/FilterContainer \
-	fpicker/source/win32/filepicker/FPentry \
-	fpicker/source/win32/filepicker/VistaFilePicker \
-	fpicker/source/win32/filepicker/VistaFilePickerEventHandler \
-	fpicker/source/win32/filepicker/VistaFilePickerImpl \
-	fpicker/source/win32/misc/resourceprovider \
-	fpicker/source/win32/misc/WinImplHelper \
+	fpicker/source/win32/asyncrequests \
+	fpicker/source/win32/FilterContainer \
+	fpicker/source/win32/FPentry \
+	fpicker/source/win32/VistaFilePicker \
+	fpicker/source/win32/VistaFilePickerEventHandler \
+	fpicker/source/win32/VistaFilePickerImpl \
+	fpicker/source/win32/resourceprovider \
+	fpicker/source/win32/WinImplHelper \
 ))
 
 # vim: set noet sw=4 ts=4:
