@@ -48,7 +48,7 @@
 #define INCLUDED_SYS_TYPES_H
 #endif
 
-#elif defined (WNT)
+#elif defined (_WIN32)
 
 #ifndef INCLUDED_MALLOC_H
 #include <malloc.h>
