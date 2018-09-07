@@ -3142,9 +3142,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        packages::NoEncryptionException();
-
     if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
         throw io::IOException( THROW_WHERE ); // TODO: access denied
 
@@ -3230,9 +3227,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
         SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
         throw lang::DisposedException( THROW_WHERE );
     }
-
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        packages::NoEncryptionException();
 
     if ( !aEncryptionData.getLength() )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
