@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_ebda73e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-07T15:02:42Z",
+      "side": 1,
+      "message": "...which might or might not be what is wanted in a specific case.  Hard to tell in general for a generic function like osl_moveFile.  No idea whether the benefits of this change will outweigh its drawbacks (if there actually are any real ones in practice, which I have no idea about, either).",
+      "revId": "2314e3b6cc0f245a711109db2573a50c312e11e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
