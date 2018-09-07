@@ -451,10 +451,12 @@ bool SwRedlineTable::Insert(SwRangeRedlinePtr& p, size_type& rP)
     return InsertWithValidRanges( p, &rP );
 }
 
-bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
+namespace sw {
+
+std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p)
 {
+    std::vector<SwRangeRedline*> ret;
     // Create valid "sub-ranges" from the Selection
-    bool bAnyIns = false;
     SwPosition* pStt = p->Start(),
               * pEnd = pStt == p->GetPoint() ? p->GetMark() : p->GetPoint();
     SwPosition aNewStt( *pStt );
@@ -471,7 +473,6 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
     }
 
     SwRangeRedline* pNew = nullptr;
-    size_type nInsPos;
 
     if( aNewStt < *pEnd )
         do {
@@ -539,14 +540,10 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
 #endif
 
             if( *pNew->GetPoint() != *pNew->GetMark() &&
-                pNew->HasValidRange() &&
-                Insert( pNew, nInsPos ) )
+                pNew->HasValidRange())
             {
-                pNew->CallDisplayFunc(nInsPos);
-                bAnyIns = true;
+                ret.push_back(pNew);
                 pNew = nullptr;
-                if( pInsPos && *pInsPos < nInsPos )
-                    *pInsPos = nInsPos;
             }
 
             if( aNewStt >= *pEnd ||
@@ -558,7 +555,31 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pIns
         } while( aNewStt < *pEnd );
 
     delete pNew;
-    delete p;
+    p.reset();
+    return ret;
+}
+
+} // namespace sw
+
+bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, size_type* pInsPos)
+{
+    bool bAnyIns = false;
+    std::vector<SwRangeRedline*> const redlines(
+            GetAllValidRanges(std::unique_ptr<SwRangeRedline>(p)));
+    for (SwRangeRedline * pRedline : redlines)
+    {
+        assert(pRedline->HasValidRange());
+        size_type nInsPos;
+        if (Insert(pRedline, nInsPos))
+        {
+            pRedline->CallDisplayFunc(nInsPos);
+            bAnyIns = true;
+            if (pInsPos && *pInsPos < nInsPos)
+            {
+                *pInsPos = nInsPos;
+            }
+        }
+    }
     p = nullptr;
     return bAnyIns;
 }

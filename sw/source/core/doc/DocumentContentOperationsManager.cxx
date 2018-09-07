@@ -3570,9 +3570,31 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 {
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
-    SwUndoRedlineDelete* pUndo = nullptr;
     RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
     m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
+
+    if (*rPam.GetPoint() == *rPam.GetMark())
+    {
+        return false; // do not add empty redlines
+    }
+
+    std::vector<SwRangeRedline*> redlines;
+    {
+        auto pRedline(o3tl::make_unique<SwRangeRedline>(nsRedlineType_t::REDLINE_DELETE, rPam));
+        if (pRedline->HasValidRange())
+        {
+            redlines.push_back(pRedline.release());
+        }
+        else // sigh ... why is such a selection even possible...
+        {    // split it up so we get one SwUndoRedlineDelete per inserted RL
+            redlines = GetAllValidRanges(std::move(pRedline));
+        }
+    }
+
+    if (redlines.empty())
+    {
+        return false;
+    }
 
     auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
     std::vector<std::unique_ptr<SwUndo>> MarkUndos;
@@ -3603,6 +3625,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         }
     }
 
+    std::vector<std::unique_ptr<SwUndoRedlineDelete>> undos;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         /* please don't translate -- for cultural reasons this comment is protected
@@ -3610,47 +3633,61 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         //JP 06.01.98: MUSS noch optimiert werden!!!
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
             RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
-        pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
-        const SwRewriter aRewriter = pUndo->GetRewriter();
-        m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
-        for (auto& it : MarkUndos)
+        for (SwRangeRedline * pRedline : redlines)
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+            assert(pRedline->HasValidRange());
+            undos.emplace_back(o3tl::make_unique<SwUndoRedlineDelete>(
+                        *pRedline, SwUndoId::DELETE));
         }
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
-    }
-
-    if (*rPam.GetPoint() != *rPam.GetMark())
-        m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
-    m_rDoc.getIDocumentState().SetModified();
-
-    // sw_redlinehide: 2 reasons why this is needed:
-    // 1. it's the first redline in node => RedlineDelText was sent but ignored
-    // 2. redline spans multiple nodes => must merge text frames
-    sw::UpdateFramesForAddDeleteRedline(rPam);
-
-    if (pUndo)
-    {
-        m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
-        // ??? why the hell is the AppendUndo not below the
-        // CanGrouping, so this hideous cleanup wouldn't be necessary?
-        // bah, this is redlining, probably changing this would break it...
-        if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
+        const SwRewriter aRewriter = undos.front()->GetRewriter();
+        // can only group a single undo action
+        if (MarkUndos.empty() && undos.size() == 1
+            && m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
         {
             SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
-            SwUndoRedlineDelete *const pUndoRedlineDel( dynamic_cast<SwUndoRedlineDelete*>(pLastUndo) );
-            if (pUndoRedlineDel)
+            SwUndoRedlineDelete *const pUndoRedlineDel(dynamic_cast<SwUndoRedlineDelete*>(pLastUndo));
+            bool const bMerged = pUndoRedlineDel
+                && pUndoRedlineDel->CanGrouping(*undos.front());
+            if (!bMerged)
             {
-                bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
-                if (bMerged)
-                {
-                    ::sw::UndoGuard const undoGuard( m_rDoc.GetIDocumentUndoRedo() );
-                    SwUndo const*const pDeleted = m_rDoc.GetUndoManager().RemoveLastUndo();
-                    OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
-                        "undo removed is not undo inserted?" );
-                    delete pDeleted;
-                }
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(undos.front().release());
             }
+            undos.clear(); // prevent unmatched EndUndo
+        }
+        else
+        {
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
+            for (auto& it : MarkUndos)
+            {
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+            }
+            for (auto & it : undos)
+            {
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+            }
+        }
+    }
+
+    for (SwRangeRedline *const pRedline : redlines)
+    {
+        // note: 1. the pRedline can still be merged & deleted
+        //       2. the impl. can even DeleteAndJoin the range => no plain PaM
+        std::shared_ptr<SwUnoCursor> const pCursor(m_rDoc.CreateUnoCursor(*pRedline->GetMark()));
+        pCursor->SetMark();
+        *pCursor->GetPoint() = *pRedline->GetPoint();
+        m_rDoc.getIDocumentRedlineAccess().AppendRedline(pRedline, true);
+        // sw_redlinehide: 2 reasons why this is needed:
+        // 1. it's the first redline in node => RedlineDelText was sent but ignored
+        // 2. redline spans multiple nodes => must merge text frames
+        sw::UpdateFramesForAddDeleteRedline(*pCursor);
+    }
+    m_rDoc.getIDocumentState().SetModified();
+
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {
+        if (!undos.empty())
+        {
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         }
         //JP 06.01.98: MUSS noch optimiert werden!!!
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
