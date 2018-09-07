@@ -604,6 +604,11 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return oslDoMoveFile( srcPath, destPath );
 }
 
+oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDestPath)
+{
+    return osl_moveFile(ustrFileURL, ustrDestURL);
+}
+
 oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
     char srcPath[PATH_MAX];
