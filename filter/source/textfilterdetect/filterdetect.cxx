@@ -171,8 +171,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             std::unique_ptr<SvMemoryStream> pDecompressedStream(new SvMemoryStream());
             if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream))
             {
-                uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(*pDecompressedStream));
-                pDecompressedStream.release();
+                uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(std::move(pDecompressedStream)));
                 aMediaDesc[MediaDescriptor::PROP_STREAM()] <<= xStreamDecompressed;
                 aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()] <<= xStreamDecompressed->getInputStream();
                 OUString aURL = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() );
