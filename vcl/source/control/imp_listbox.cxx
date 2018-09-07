@@ -601,6 +601,27 @@ struct ImplEntryMetrics
     long    nImgHeight;
 };
 
+SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(OutputDevice* pOutputDevice)
+{
+    if (!maStrGlyphs.empty())
+        // Use pre-calculated result.
+        return &maStrGlyphs;
+
+    std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
+        maStr, 0, maStr.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    if (!pLayout)
+        return nullptr;
+
+    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
+    if (!pGlyphs)
+        return nullptr;
+
+    // Remember the calculation result.
+    maStrGlyphs = *pGlyphs;
+
+    return &maStrGlyphs;
+}
+
 void ImplListBoxWindow::EnableQuickSelection( bool b )
 {
     maQuickSelectionEngine.SetEnabled( b );
@@ -637,7 +658,9 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         else
         {
             // normal single line case
-            aMetrics.nTextWidth = static_cast<sal_uInt16>(GetTextWidth( rEntry.maStr ));
+            const SalLayoutGlyphs* pGlyphs = rEntry.GetTextGlyphs(this);
+            aMetrics.nTextWidth
+                = static_cast<sal_uInt16>(GetTextWidth(rEntry.maStr, 0, -1, nullptr, pGlyphs));
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
             aMetrics.nEntryWidth = mnMaxTxtWidth;
