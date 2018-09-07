@@ -40,14 +40,13 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence ) SAL_THROW_EXTERN_C()
 {
     sal_Sequence * pSequence, * pNew;
-    sal_Int32 nElements;
 
     OSL_ENSURE( ppSequence, "### null ptr!" );
     pSequence = *ppSequence;
 
     if (pSequence->nRefCount > 1)
     {
-        nElements = pSequence->nElements;
+        sal_Int32 nElements = pSequence->nElements;
         if (nElements)
         {
             pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nElements ));
