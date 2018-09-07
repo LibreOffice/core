@@ -163,6 +163,10 @@ public:
     void               getVisibleLayersODF( SdrLayerIDSet& rOutSet) const;
     void               getPrintableLayersODF( SdrLayerIDSet& rOutSet) const;
     void               getLockedLayersODF( SdrLayerIDSet& rOutSet) const;
+
+    // Generates a bitfield for settings.xml from the SdrLayerIDSet.
+    // Output is a uno sequence of BYTE (which is 'short' in API).
+    void               QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny);
 };
 
 #endif // INCLUDED_SVX_SVDLAYER_HXX

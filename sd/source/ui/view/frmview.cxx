@@ -395,14 +395,15 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle()) ) );
     aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( IsEliminatePolyPoints() ) );
 
+    SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrView().GetLayerAdmin();
     Any aAny;
-    GetVisibleLayers().QueryValue( aAny );
+    rLayerAdmin.QueryValue(GetVisibleLayers(), aAny);
     aUserData.addValue( sUNO_View_VisibleLayers, aAny );
 
-    GetPrintableLayers().QueryValue( aAny );
+    rLayerAdmin.QueryValue(GetPrintableLayers(), aAny);
     aUserData.addValue( sUNO_View_PrintableLayers, aAny );
 
-    GetLockedLayers().QueryValue( aAny );
+    rLayerAdmin.QueryValue(GetLockedLayers(), aAny);
     aUserData.addValue( sUNO_View_LockedLayers, aAny );
 
     aUserData.addValue( sUNO_View_NoAttribs, makeAny( IsNoAttribs() ) );

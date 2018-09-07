@@ -82,11 +82,9 @@ public:
 
     void operator&=(const SdrLayerIDSet& r2ndSet);
 
-    // initialize this set with a uno sequence of sal_Int8
+    // initialize this set with a uno sequence of sal_Int8 (e.g. as stored in settings.xml)
     void PutValue(const css::uno::Any & rAny);
 
-    // returns a uno sequence of sal_Int8
-    void QueryValue(css::uno::Any & rAny) const;
 };
 
 #endif // INCLUDED_SVX_SVDSOB_HXX
