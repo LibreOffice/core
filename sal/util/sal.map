@@ -738,6 +738,11 @@ PRIVATE_1.5 { # LibreOffice 6.1
         rtl_alloc_preInit;
 } PRIVATE_1.4;
 
+PRIVATE_1.6 { # LibreOffice 6.2
+    global:
+        osl_replaceFile;
+} PRIVATE_1.5;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;
