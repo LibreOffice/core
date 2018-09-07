@@ -70,7 +70,7 @@ class FWI_DLLPUBLIC ShareableMutex
 class ShareGuard
 {
     public:
-        ShareGuard( ShareableMutex& rShareMutex ) :
+        explicit ShareGuard( ShareableMutex& rShareMutex ) :
             m_rShareMutex( rShareMutex )
         {
             m_rShareMutex.acquire();
