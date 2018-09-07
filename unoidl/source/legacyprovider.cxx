@@ -377,7 +377,7 @@ rtl::Reference< Entity > readEntity(
                     base = reader.getSuperTypeName(0).replace('/', '.');
                     break;
                 default:
-                    FileFormatException(
+                    throw FileFormatException(
                         key.getRegistryName(),
                         ("legacy format: unexpected number "
                          + OUString::number(reader.getSuperTypeCount())
@@ -397,7 +397,7 @@ rtl::Reference< Entity > readEntity(
                     translateAnnotations(reader.getDocumentation()));
             } else {
                 if (reader.getSuperTypeCount() != 0) {
-                    FileFormatException(
+                    throw FileFormatException(
                         key.getRegistryName(),
                         ("legacy format: unexpected number "
                          + OUString::number(reader.getSuperTypeCount())
@@ -432,7 +432,7 @@ rtl::Reference< Entity > readEntity(
             for (sal_uInt16 j = 0; j != n; ++j) {
                 RTConstValue v(reader.getFieldValue(j));
                 if (v.m_type != RT_TYPE_INT32) {
-                    FileFormatException(
+                    throw FileFormatException(
                         key.getRegistryName(),
                         ("legacy format: unexpected type "
                          + OUString::number(v.m_type) + " of value of field "
