@@ -470,13 +470,6 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
         </a:xfrm>\
       </p:grpSpPr>"
 
-#define GETA(propName) \
-    ImplGetPropertyValue( mXPagePropSet, #propName )
-
-#define GET(variable, propName) \
-    if ( GETA(propName) ) \
-        mAny >>= variable;
-
 const char* PowerPointExport::GetSideDirection(sal_uInt8 nDirection)
 {
     const char* pDirection = nullptr;
@@ -536,14 +529,15 @@ const char* PowerPointExport::Get8Direction(sal_uInt8 nDirection)
 void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 {
     FadeEffect eFadeEffect = FadeEffect_NONE;
-    GET(eFadeEffect, Effect);
+    if (ImplGetPropertyValue(mXPagePropSet, "Effect"))
+        mAny >>= eFadeEffect;
 
     sal_Int16 nTransitionType = 0, nTransitionSubtype = 0;
     sal_Int8 nPPTTransitionType = 0;
     sal_uInt8 nDirection = 0;
 
-    if (GETA(TransitionType) && (mAny >>= nTransitionType) &&
-            GETA(TransitionSubtype) && (mAny >>= nTransitionSubtype))
+    if (ImplGetPropertyValue(mXPagePropSet, "TransitionType") && (mAny >>= nTransitionType) &&
+            ImplGetPropertyValue(mXPagePropSet, "TransitionSubtype") && (mAny >>= nTransitionSubtype))
         nPPTTransitionType = GetTransition(nTransitionType, nTransitionSubtype, eFadeEffect, nDirection);
 
     if (!nPPTTransitionType && eFadeEffect != FadeEffect_NONE)
@@ -648,7 +642,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     bool isTransitionDurationSet = false;
 
     // try to use TransitionDuration instead of old Speed property
-    if (GETA(TransitionDuration))
+    if (ImplGetPropertyValue(mXPagePropSet, "TransitionDuration"))
     {
         double fTransitionDuration = -1.0;
         mAny >>= fTransitionDuration;
@@ -679,7 +673,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 isTransitionDurationSet = true;
         }
     }
-    else if (GETA(Speed))
+    else if (ImplGetPropertyValue(mXPagePropSet, "Speed"))
     {
         mAny >>= animationSpeed;
 
@@ -701,11 +695,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isTransitionDurationSet)
         return;
 
-    if (GETA(Change))
+    if (ImplGetPropertyValue(mXPagePropSet, "Change"))
         mAny >>= changeType;
 
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
-    if (changeType == 1 && GETA(Duration))
+    if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, "Duration"))
         mAny >>= advanceTiming;
 
     if (!bOOXmlSpecificTransition)
@@ -1085,7 +1079,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     const char* pShow = nullptr;
 
-    if (GETA(Visible))
+    if (ImplGetPropertyValue(mXPagePropSet, "Visible"))
     {
         bool bShow(false);
         if ((mAny >>= bShow) && !bShow)
