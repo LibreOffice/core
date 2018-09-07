@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -47,6 +48,7 @@ typedef ::cppu::WeakComponentImplHelper<
                 css::ui::dialogs::XFilePicker3,
                 css::ui::dialogs::XFilePickerControlAccess,
                 css::ui::dialogs::XFilePreview,
+                css::ui::dialogs::XFolderPicker2,
                 css::lang::XInitialization,
                 css::lang::XServiceInfo >   TVistaFilePickerBase;
 
@@ -67,7 +69,7 @@ public:
     // ctor/dtor
 
 
-    explicit VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+    explicit VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, bool bFolderPicker );
     virtual ~VistaFilePicker() override;
 
 
@@ -187,22 +189,14 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    /*
 
-    // FilePicker Event functions
+    // XFolderPicker functions
 
 
-    void SAL_CALL fileSelectionChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
-    void SAL_CALL directoryChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
-    OUString SAL_CALL helpRequested(const css::ui::dialogs::FilePickerEvent& aEvent ) const;
-    void SAL_CALL controlStateChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
-    void SAL_CALL dialogSizeChanged( );
+    virtual OUString SAL_CALL getDirectory( ) override;
 
-    bool startupEventNotification(bool bStartupSuspended);
-    void shutdownEventNotification();
-    void suspendEventNotification();
-    void resumeEventNotification();
-    */
+    virtual void SAL_CALL setDescription( const OUString& aDescription ) override;
+
 
     private:
 
@@ -234,6 +228,7 @@ public:
         oslThreadIdentifier m_nFilePickerThreadId;
 
         bool m_bInitialized;
+        const bool m_bFolderPicker;
 };
 
 } // namespace vista
