@@ -1061,7 +1061,7 @@ OUString WinSalInstance::getOSVersion()
             dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
             if (dwCount != 0)
             {
-                std::unique_ptr<char> ver(new char[dwCount]);
+                std::unique_ptr<char[]> ver(new char[dwCount]);
                 if (GetFileVersionInfoW(szPath, 0, dwCount, ver.get()) != FALSE)
                 {
                     void* pBlock = nullptr;

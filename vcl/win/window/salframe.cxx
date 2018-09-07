@@ -4986,12 +4986,12 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         if ( nTextLen > 0 )
         {
             {
-                auto pTextBuf = std::unique_ptr<WCHAR>(new WCHAR[nTextLen]);
+                auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
                 ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
                 aEvt.maText = OUString( o3tl::toU(pTextBuf.get()), static_cast<sal_Int32>(nTextLen) );
             }
 
-            std::unique_ptr<BYTE> pAttrBuf;
+            std::unique_ptr<BYTE[]> pAttrBuf;
             LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, nullptr, 0 );
             if ( nAttrLen > 0 )
             {
