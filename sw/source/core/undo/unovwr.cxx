@@ -267,7 +267,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         rIdx.Assign( pTextNd, nSttContent );
         pCurrentPam->SetMark();
-        pCurrentPam->GetMark()->nContent += aInsStr.getLength();
+        pCurrentPam->GetMark()->nContent += aDelStr.getLength();
         pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, USHRT_MAX );
         pCurrentPam->DeleteMark();
     }
