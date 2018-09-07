@@ -657,16 +657,16 @@ namespace dbaui
         return true;
     }
 
-    void OConnectionHelper::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFT_Connection));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_Connection));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_CreateDB));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFT_Connection));
+        _rControlList.emplace_back(new ODisableWrapper<PushButton>(m_pPB_Connection));
+        _rControlList.emplace_back(new ODisableWrapper<PushButton>(m_pPB_CreateDB));
     }
 
-    void OConnectionHelper::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back( new OSaveValueWrapper<Edit>( m_pConnectionURL ) );
+        _rControlList.emplace_back( new OSaveValueWrapper<Edit>( m_pConnectionURL ) );
     }
 
     bool OConnectionHelper::commitURL()

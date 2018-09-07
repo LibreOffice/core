@@ -351,14 +351,14 @@ namespace dbaui
         m_aEmbeddedURLPrefixes[nPos] = _sType;
     }
 
-    void OGeneralPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OGeneralPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back( new ODisableWrapper<FixedText>( m_pSpecialMessage ) );
+        _rControlList.emplace_back( new ODisableWrapper<FixedText>( m_pSpecialMessage ) );
     }
 
-    void OGeneralPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OGeneralPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back( new OSaveValueWrapper<ListBox>( m_pDatasourceType ) );
+        _rControlList.emplace_back( new OSaveValueWrapper<ListBox>( m_pDatasourceType ) );
     }
 
     void OGeneralPage::implSetCurrentType( const OUString& _eType )

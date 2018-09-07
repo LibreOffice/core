@@ -200,23 +200,23 @@ namespace dbaui
         TabPage::dispose();
     }
 
-    void MySQLNativeSettings::fillControls( std::vector< ISaveValueWrapper* >& _rControlList )
+    void MySQLNativeSettings::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pHostName ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pPort ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pSocket ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pNamedPipe ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pHostName ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pPort ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pSocket ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pNamedPipe ) );
     }
 
-    void MySQLNativeSettings::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
+    void MySQLNativeSettings::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pDatabaseNameLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHostNameLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pPortLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pDefaultPort ) );
-        _rControlList.push_back( new ODisableWrapper< RadioButton >( m_pSocketRadio ) );
-        _rControlList.push_back( new ODisableWrapper< RadioButton >( m_pNamedPipeRadio ) );
+        _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pDatabaseNameLabel ) );
+        _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pHostNameLabel ) );
+        _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pPortLabel ) );
+        _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pDefaultPort ) );
+        _rControlList.emplace_back( new ODisableWrapper< RadioButton >( m_pSocketRadio ) );
+        _rControlList.emplace_back( new ODisableWrapper< RadioButton >( m_pNamedPipeRadio ) );
     }
 
     bool MySQLNativeSettings::FillItemSet( SfxItemSet* _rSet )

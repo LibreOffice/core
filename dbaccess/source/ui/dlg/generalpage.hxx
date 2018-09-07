@@ -80,9 +80,9 @@ namespace dbaui
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();

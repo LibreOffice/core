@@ -194,32 +194,32 @@ namespace dbaui
         }
     }
 
-    void SpecialSettingsPage::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
+    void SpecialSettingsPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
         if ( m_bHasBooleanComparisonMode )
         {
-            _rControlList.push_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
+            _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
         }
         if ( m_bHasMaxRowScan )
         {
-            _rControlList.push_back( new ODisableWrapper< FixedText >( m_pMaxRowScanLabel ) );
+            _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pMaxRowScanLabel ) );
         }
     }
 
-    void SpecialSettingsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void SpecialSettingsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         for (auto const& booleanSetting : m_aBooleanSettings)
         {
             if ( *booleanSetting.ppControl )
             {
-                _rControlList.push_back( new OSaveValueWrapper< CheckBox >( *booleanSetting.ppControl ) );
+                _rControlList.emplace_back( new OSaveValueWrapper< CheckBox >( *booleanSetting.ppControl ) );
             }
         }
 
         if ( m_bHasBooleanComparisonMode )
-            _rControlList.push_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
+            _rControlList.emplace_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
         if ( m_bHasMaxRowScan )
-            _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
+            _rControlList.emplace_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
     }
 
     void SpecialSettingsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -349,16 +349,16 @@ namespace dbaui
         OGenericAdministrationPage::dispose();
     }
 
-    void GeneratedValuesPage::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
+    void GeneratedValuesPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.push_back( new ODisableWrapper< VclFrame >( m_pAutoFrame ) );
+        _rControlList.emplace_back( new ODisableWrapper< VclFrame >( m_pAutoFrame ) );
     }
 
-    void GeneratedValuesPage::fillControls( std::vector< ISaveValueWrapper* >& _rControlList )
+    void GeneratedValuesPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.push_back( new OSaveValueWrapper< CheckBox >( m_pAutoRetrievingEnabled ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoIncrement ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoRetrieving ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< CheckBox >( m_pAutoRetrievingEnabled ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pAutoIncrement ) );
+        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pAutoRetrieving ) );
     }
 
     void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )

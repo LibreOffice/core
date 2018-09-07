@@ -181,25 +181,25 @@ namespace dbaui
         m_aGetExtensionHandler.Call(this);
     }
 
-    void OTextConnectionHelper::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pFieldSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pTextSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pDecimalSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pThousandsSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pRowHeader));
-        _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharSet));
+        _rControlList.emplace_back(new OSaveValueWrapper<ComboBox>(m_pFieldSeparator));
+        _rControlList.emplace_back(new OSaveValueWrapper<ComboBox>(m_pTextSeparator));
+        _rControlList.emplace_back(new OSaveValueWrapper<ComboBox>(m_pDecimalSeparator));
+        _rControlList.emplace_back(new OSaveValueWrapper<ComboBox>(m_pThousandsSeparator));
+        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pRowHeader));
+        _rControlList.emplace_back(new OSaveValueWrapper<ListBox>(m_pCharSet));
     }
 
-    void OTextConnectionHelper::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextConnectionHelper::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFieldSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pTextSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pDecimalSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pThousandsSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharSetHeader));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharSetLabel));
-        _rControlList.push_back(new ODisableWrapper<ListBox>(m_pCharSet));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFieldSeparatorLabel));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pTextSeparatorLabel));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pDecimalSeparatorLabel));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pThousandsSeparatorLabel));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pCharSetHeader));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pCharSetLabel));
+        _rControlList.emplace_back(new ODisableWrapper<ListBox>(m_pCharSet));
     }
 
     void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)

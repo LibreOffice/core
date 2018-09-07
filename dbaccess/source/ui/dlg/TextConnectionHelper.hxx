@@ -84,8 +84,8 @@ namespace dbaui
 
     public:
         void        implInitControls(const SfxItemSet& _rSet, bool _bValid);
-        void        fillControls(std::vector< ISaveValueWrapper* >& _rControlList);
-        void        fillWindows(std::vector< ISaveValueWrapper* >& _rControlList);
+        void        fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
+        void        fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList);
         void        SetClickHandler(const Link<OTextConnectionHelper*, void>& _rHandler) { m_aGetExtensionHandler = _rHandler; }
         OUString    GetExtension();
         bool        FillItemSet( SfxItemSet& rSet, const bool bChangedSomething );
