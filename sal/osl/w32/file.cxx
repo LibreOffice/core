@@ -1084,7 +1084,15 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
         LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
         LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
 
-        if (MoveFileExW(src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING))
+        // First, try to replace the file, which could even later be combined with creating backups
+        if (ReplaceFileW(dst, src, nullptr,
+                         REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_MERGE_ERRORS
+                             | REPLACEFILE_IGNORE_ACL_ERRORS,
+                         nullptr, nullptr))
+            error = osl_File_E_None;
+        else if (MoveFileExW(src, dst,
+                             MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH
+                                 | MOVEFILE_REPLACE_EXISTING))
             error = osl_File_E_None;
         else
             error = oslTranslateFileError(GetLastError());
