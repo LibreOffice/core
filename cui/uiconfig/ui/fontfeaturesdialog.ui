@@ -141,12 +141,27 @@
                 <property name="left_padding">12</property>
                 <property name="right_padding">12</property>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="preview:border">
+                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="preview:border-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="fontfeaturesdialog|preview-atkobject">Preview</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="preview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="preview-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="effectspage|preview-atkobject">Preview</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

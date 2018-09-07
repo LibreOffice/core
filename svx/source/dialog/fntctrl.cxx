@@ -1541,6 +1541,16 @@ void FontPrevWindow::SetFontNameAsPreviewText()
     pImpl->mbUseFontNameAsText = true;
 }
 
+void FontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
+{
+    setFont(rNormalOutFont, pImpl->maFont);
+    setFont(rCJKOutFont, pImpl->maCJKFont);
+    setFont(rCTLFont, pImpl->maCTLFont);
+
+    pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
+}
+
 void FontPrevWindow::SetBackColor(const Color &rColor)
 {
     pImpl->mpBackColor.reset(new Color(rColor));

@@ -11,7 +11,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_FONTFEATURESDIALOG_HXX
 #define INCLUDED_CUI_SOURCE_INC_FONTFEATURESDIALOG_HXX
 
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/font/Feature.hxx>
 #include <svx/fntctrl.hxx>
 #include "chardlg.hxx"
@@ -21,40 +22,45 @@ namespace cui
 {
 struct FontFeatureItem
 {
-    FontFeatureItem()
+    FontFeatureItem(weld::Widget* pParent)
         : m_aFeatureCode(0)
+        , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/fontfragment.ui"))
+        , m_xText(m_xBuilder->weld_label("label"))
+        , m_xCombo(m_xBuilder->weld_combo_box_text("combo"))
+        , m_xCheck(m_xBuilder->weld_check_button("check"))
     {
     }
 
     sal_uInt32 m_aFeatureCode;
-    VclPtr<Control> m_pText;
-    VclPtr<ComboBox> m_pCombo;
-    VclPtr<CheckBox> m_pCheck;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Label> m_xText;
+    std::unique_ptr<weld::ComboBoxText> m_xCombo;
+    std::unique_ptr<weld::CheckButton> m_xCheck;
 };
 
-class FontFeaturesDialog : public ModalDialog
+class FontFeaturesDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<VclGrid> m_pContentGrid;
-    VclPtr<SvxFontPrevWindow> m_pPreviewWindow;
-
     std::vector<FontFeatureItem> m_aFeatureItems;
     OUString m_sFontName;
     OUString m_sResultFontName;
+
+    FontPrevWindow m_aPreviewWindow;
+    std::unique_ptr<weld::Container> m_xContentGrid;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
 
     void initialize();
     OUString createFontNameWithFeatures();
 
     void fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
 
-    DECL_LINK(ComboBoxSelectedHdl, ComboBox&, void);
-    DECL_LINK(CheckBoxToggledHdl, CheckBox&, void);
+    DECL_LINK(ComboBoxSelectedHdl, weld::ComboBoxText&, void);
+    DECL_LINK(CheckBoxToggledHdl, weld::ToggleButton&, void);
 
 public:
-    FontFeaturesDialog(vcl::Window* pParent, OUString const& rFontName);
+    FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName);
     ~FontFeaturesDialog() override;
-    void dispose() override;
-    short Execute() override;
+    short execute();
 
     OUString const& getResultFontName() { return m_sResultFontName; }
 
