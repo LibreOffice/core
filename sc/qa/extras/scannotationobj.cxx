@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xchild.hxx>
 #include <test/sheet/xsheetannotation.hxx>
 #include <test/sheet/xsheetannotationshapesupplier.hxx>
 
@@ -26,7 +27,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation, public apitest::XSheetAnnotationShapeSupplier
+class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation,
+                                                public apitest::XSheetAnnotationShapeSupplier,
+                                                public apitest::XChild
 {
 public:
     ScAnnontationObj();
@@ -38,6 +41,9 @@ public:
     virtual uno::Reference< sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationObj);
+
+    // XChild
+    CPPUNIT_TEST(testGetSetParent);
 
     // XSheetAnnotation
     CPPUNIT_TEST(testGetPosition);

@@ -276,7 +276,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/configuration/_XTemplateInstance \
     qadevOOo/tests/java/ifc/connection/_XAcceptor \
     qadevOOo/tests/java/ifc/connection/_XConnector \
-    qadevOOo/tests/java/ifc/container/_XChild \
     qadevOOo/tests/java/ifc/container/_XContainer \
     qadevOOo/tests/java/ifc/container/_XContainerQuery \
     qadevOOo/tests/java/ifc/container/_XContentEnumerationAccess \
