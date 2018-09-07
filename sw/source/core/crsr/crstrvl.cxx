@@ -199,7 +199,8 @@ bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
     if( SIZE_MAX == nDescNo )
     {
         // take the current one
-        const SwPageFrame* pPage = GetCurrFrame()->FindPageFrame();
+        const SwContentFrame *pCurrFrame = GetCurrFrame();
+        const SwPageFrame* pPage = (pCurrFrame == nullptr) ? nullptr : pCurrFrame->FindPageFrame();
         if( pPage && pMyDoc->ContainsPageDesc(
                 pPage->GetPageDesc(), &nDescNo) )
             pDesc = pPage->GetPageDesc();
