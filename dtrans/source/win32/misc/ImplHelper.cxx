@@ -95,7 +95,7 @@ OUString getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
     if ( nResult )
     {
-        std::unique_ptr<wchar_t> buff( new wchar_t[nResult] );
+        std::unique_ptr<wchar_t[]> buff( new wchar_t[nResult] );
         // Now get the actual data
         nResult = GetLocaleInfoW( lcid, lctype, buff.get(), nResult );
 
