@@ -16,6 +16,24 @@
       "revId": "aef44b5a71d6d2bd8e399d2cb35bce6d6023fbf8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_cb668fee",
+        "filename": "sal/osl/w32/dllentry.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-07T10:25:19Z",
+      "side": 1,
+      "message": "Well - because the check didn\u0027t find the other two; here it asks not only to keep the value, but also to test it; and also - the line is too long here to wrap it into CloseHandle :-)\n\nSo - for no really important reason.",
+      "parentUuid": "dfeb2761_cb3d6fbc",
+      "revId": "aef44b5a71d6d2bd8e399d2cb35bce6d6023fbf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
