@@ -20,8 +20,10 @@ where
     Module - the name of the python file (without the .py extension)
     Class - is the name in the "class Class" declaration
 
-Or to do interactive debugging, put a long sleep in the beginning of the .py
-uitest file, and attach gdb to the running soffice process.
+Or to do interactive debugging, put a
+    time.sleep(60)
+in the beginning of the method in the .py file,
+and attach gdb to the running soffice process.
 
 EOF
 
