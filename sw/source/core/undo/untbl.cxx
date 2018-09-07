@@ -300,6 +300,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     const SwTable* pTable = rDoc.InsertTable( aInsTableOpts, aPos, nRows, nCols,
                                             nAdjust,
                                             pAutoFormat.get(), pColWidth.get() );
+    rDoc.GetEditShell()->MoveTable( GotoPrevTable, fnTableStart );
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
     SwTableNode* pTableNode = rDoc.GetNodes()[nSttNode]->GetTableNode();
 
