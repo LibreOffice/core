@@ -122,6 +122,7 @@ public:
     sal_uInt16   GetZoom() const { return m_nZoom; }
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
+    std::map<SwTextGlyphsKey, SalLayoutGlyphs>& GetTextGlyphs() { return m_aTextGlyphs; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)

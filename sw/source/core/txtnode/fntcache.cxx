@@ -2483,10 +2483,17 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth
             *rInf.GetHyphPos() = TextFrameIndex((nHyphPos == -1) ? COMPLETE_STRING : nHyphPos);
         }
         else
+        {
+            SwFntAccess aFntAccess(m_aSub[m_nActual].m_nFontCacheId, m_aSub[m_nActual].m_nFontIndex,
+                                   &m_aSub[m_nActual], rInf.GetShell());
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pTmpText, nTmpIdx, nTmpLen };
+            SalLayoutGlyphs* pGlyphs
+                = lcl_CreateLayout(aGlyphsKey, aFntAccess.Get()->GetTextGlyphs()[aGlyphsKey]);
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
                              *pTmpText, nTextWidth,
                              sal_Int32(nTmpIdx), sal_Int32(nTmpLen),
-                             nKern, rInf.GetVclCache()));
+                             nKern, rInf.GetVclCache(), pGlyphs));
+        }
 
         if (bTextReplaced && sal_Int32(nTextBreak) != -1)
         {

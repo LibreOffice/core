@@ -1174,7 +1174,8 @@ public:
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Int32 nIndex, sal_Int32 nLen = -1,
                                               long nCharExtra = 0,
-                                              vcl::TextLayoutCache const* = nullptr) const;
+                                              vcl::TextLayoutCache const* = nullptr,
+                                              const SalLayoutGlyphs* pGlyphs = nullptr) const;
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
