@@ -23,6 +23,7 @@
 #endif
 #include <windows.h>
 #include <sqlext.h>
+#include <comphelper/scopeguard.hxx>
 
 // the name of the library which contains the SQLManageDataSources function
 #define ODBC_UI_LIB_NAME    L"ODBCCP32.DLL"
@@ -113,6 +114,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
         hModule = LoadLibraryExW( ODBC_UI_LIB_NAME, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if ( hModule == nullptr )
         return displayLastError();
+    comphelper::ScopeGuard hModuleReleaser([hModule]() { FreeLibrary(hModule); });
 
     FARPROC pManageDSProc = GetProcAddress( hModule, "SQLManageDataSources" );
     if ( pManageDSProc == nullptr )
@@ -121,8 +123,6 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
     TSQLManageDataSource pManageDS = reinterpret_cast<TSQLManageDataSource>(pManageDSProc);
     if ( !( (*pManageDS)( hAppWindow ) ) )
         return displayLastError();
-
-    FreeLibrary( hModule );
 
     return 0;
 }
