@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
@@ -32,10 +36,9 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
         Bitmap::ScopedReadAccess pRAcc(aBitmap);
         sal_uInt16 nBitCount;
 
-        if (mnNewColorCount > 256)
-            mnNewColorCount = 256;
+        auto const cappedNewColorCount = std::min(mnNewColorCount, sal_uInt16(256));
 
-        if (mnNewColorCount < 17)
+        if (cappedNewColorCount < 17)
             nBitCount = 4;
         else
             nBitCount = 8;
@@ -104,7 +107,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
                 }
             }
 
-            BitmapPalette aNewPal(mnNewColorCount);
+            BitmapPalette aNewPal(cappedNewColorCount);
 
             std::qsort(pCountTable.get(), nTotalColors, sizeof(PopularColorCount),
                        [](const void* p1, const void* p2) {
@@ -122,7 +125,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
                            return nRet;
                        });
 
-            for (sal_uInt16 n = 0; n < mnNewColorCount; n++)
+            for (sal_uInt16 n = 0; n < cappedNewColorCount; n++)
             {
                 const PopularColorCount& rPop = pCountTable[n];
                 aNewPal[n] = BitmapColor(
