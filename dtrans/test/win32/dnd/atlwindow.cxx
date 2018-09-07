@@ -181,7 +181,7 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
                 data.evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
 
-                HANDLE hThread= CreateThread( NULL, 0, MTAFunc, &data, 0, &mtaThreadId);
+                CloseHandle(CreateThread(NULL, 0, MTAFunc, &data, 0, &mtaThreadId));
                 // We must wait until the thread copied the ThreadData structure
                 WaitForSingleObject( data.evtThreadReady, INFINITE);
                 CloseHandle( data.evtThreadReady);

@@ -527,7 +527,7 @@ void win32_init_sys_tray()
             );
 
         DWORD   dwThreadId;
-        CreateThread( nullptr, 0, SystrayThread, nullptr, 0, &dwThreadId );
+        CloseHandle(CreateThread(nullptr, 0, SystrayThread, nullptr, 0, &dwThreadId));
     }
 }
 
