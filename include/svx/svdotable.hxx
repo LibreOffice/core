@@ -114,7 +114,7 @@ public:
 
     // Table stuff
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize );
-    void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
+    void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow, const bool bOptimize );
 
     css::uno::Reference< css::table::XTable > getTable() const;
 

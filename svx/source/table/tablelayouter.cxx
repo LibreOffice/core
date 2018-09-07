@@ -1152,7 +1152,10 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
 }
 
 
-void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
+void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
+                                    sal_Int32 nFirstRow,
+                                    sal_Int32 nLastRow,
+                                    const bool bOptimize )
 {
     if( mxTable.is() ) try
     {
@@ -1173,7 +1176,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
         const sal_Int32 nRows = (nLastRow-nFirstRow+1);
         sal_Int32 nHeight = nAllHeight / nRows;
 
-        if( nHeight < nMinHeight )
+        if( nHeight < nMinHeight && !bOptimize )
         {
             sal_Int32 nNeededHeight = nRows * nMinHeight;
             rArea.AdjustBottom(nNeededHeight - nAllHeight );
@@ -1184,7 +1187,9 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
         Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
-            if( nRow == nLastRow )
+            if ( bOptimize )
+                nHeight = maRows[nRow].mnMinSize;
+            else if ( nRow == nLastRow )
                 nHeight = nAllHeight; // last row get round errors
 
             Reference< XPropertySet > xRowSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -1192,6 +1197,9 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
 
             nAllHeight -= nHeight;
         }
+
+        if ( bOptimize )
+            rArea.AdjustBottom( -nAllHeight );
 
         LayoutTable( rArea, false, true );
     }
