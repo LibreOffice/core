@@ -70,9 +70,8 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         std::unique_ptr< DAVSession > xElement(
             new NeonSession( this, inUri, rFlags, *m_xProxyDecider.get() ) );
 
-        aIt = m_aMap.emplace( inUri, xElement.get() ).first;
+        aIt = m_aMap.emplace( inUri, xElement.release() ).first;
         aIt->second->m_aContainerIt = aIt;
-        xElement.release();
         return aIt->second;
     }
     else if ( osl_atomic_increment( &aIt->second->m_nRefCount ) > 1 )

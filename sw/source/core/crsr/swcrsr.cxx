@@ -964,7 +964,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     {
         // put cursor as copy of current into ring
         // chaining points always to first created, so forward
-        std::unique_ptr< SwCursor > pSav( Create( this ) ); // save the current cursor
+        SwCursor* pSav = Create( this ); // save the current cursor
 
         // if already outside of body text search from this position or start at
         // 1. base section
@@ -995,7 +995,6 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
                 DeleteMark();
             return 0;
         }
-        pSav.release();
 
         if( !( FindRanges::InSelAll & eFndRngs ))
         {
@@ -1021,7 +1020,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     }
     else if( FindRanges::InSelAll & eFndRngs )
     {
-        std::unique_ptr< SwCursor> pSav( Create( this ) );    // save the current cursor
+        SwCursor* pSav = Create( this );    // save the current cursor
 
         const SwNode* pSttNd = ( FindRanges::InBodyOnly & eFndRngs )
                             ? rNds.GetEndOfContent().StartOfSectionNode()
@@ -1048,7 +1047,6 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
                 DeleteMark();
             return 0;
         }
-        pSav.release();
         while( GetNext() != this )
             delete GetNext();
 
