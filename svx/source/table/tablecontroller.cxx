@@ -492,7 +492,10 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 if( !bDistributeColumns )
                     rSet.DisableItem(SID_TABLE_DISTRIBUTE_COLUMNS);
                 if( !bDistributeRows )
+                {
+                    rSet.DisableItem(SID_TABLE_OPTIMAL_ROW_HEIGHT);
                     rSet.DisableItem(SID_TABLE_DISTRIBUTE_ROWS);
+                }
                 break;
             }
 
@@ -1007,8 +1010,12 @@ void SvxTableController::Execute( SfxRequest& rReq )
         DistributeColumns(/*bOptimize=*/false);
         break;
 
+    case SID_TABLE_OPTIMAL_ROW_HEIGHT:
+        DistributeRows(/*bOptimize=*/true);
+        break;
+
     case SID_TABLE_DISTRIBUTE_ROWS:
-        DistributeRows();
+        DistributeRows(/*bOptimize=*/false);
         break;
 
     case SID_TABLE_VERT_BOTTOM:
@@ -1316,7 +1323,7 @@ void SvxTableController::DistributeColumns(const bool bOptimize)
         rModel.EndUndo();
 }
 
-void SvxTableController::DistributeRows()
+void SvxTableController::DistributeRows(const bool bOptimize)
 {
     if(!checkTableObject())
         return;
@@ -1333,7 +1340,7 @@ void SvxTableController::DistributeRows()
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
-    rTableObj.DistributeRows( aStart.mnRow, aEnd.mnRow );
+    rTableObj.DistributeRows( aStart.mnRow, aEnd.mnRow, bOptimize );
 
     if( bUndo )
         rModel.EndUndo();

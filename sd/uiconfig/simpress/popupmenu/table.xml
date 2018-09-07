@@ -32,6 +32,7 @@
   </menu:menu>
   <menu:menu menu:id=".uno:RowMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EntireRow"/>
