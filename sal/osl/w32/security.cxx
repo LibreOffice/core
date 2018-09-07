@@ -318,10 +318,9 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 else
                 {
                     const DWORD dwError = GetLastError();
-                    char sBuf[100];
-                    sprintf(sBuf, "ConvertSidToStringSidW failed. GetLastError returned: %d",
-                            dwError);
-                    SAL_WARN("sal.osl", sBuf);
+                    SAL_WARN(
+                        "sal.osl",
+                        "ConvertSidToStringSidW failed. GetLastError returned: " << dwError);
                 }
 
                 free(pInfoBuffer);
