@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_cb3d6fbc",
+        "filename": "sal/osl/w32/dllentry.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-07T10:20:54Z",
+      "side": 1,
+      "message": "why call CloseHandle only on success here, but no such check in the other two places?",
+      "revId": "aef44b5a71d6d2bd8e399d2cb35bce6d6023fbf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
