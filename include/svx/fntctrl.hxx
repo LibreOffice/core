@@ -105,12 +105,13 @@ public:
 
     virtual void        StyleUpdated() override;
 
-    // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
     void                SetBackColor( const Color& rColor );
+    void                SetTextLineColor(const Color& rColor);
+    void                SetOverlineColor(const Color& rColor);
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;
