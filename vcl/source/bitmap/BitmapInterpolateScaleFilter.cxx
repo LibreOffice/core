@@ -26,7 +26,7 @@
 #include <BitmapFastScaleFilter.hxx>
 #include <BitmapInterpolateScaleFilter.hxx>
 
-BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 

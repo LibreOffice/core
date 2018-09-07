@@ -15,7 +15,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <BitmapLightenFilter.hxx>
 
-BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 

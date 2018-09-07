@@ -930,7 +930,7 @@ BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const doub
 BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 {}
 
-BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
+BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 {
     Bitmap aBitmap(rBitmap.GetBitmap());
 

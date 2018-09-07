@@ -17,7 +17,7 @@
 
 #include <cstdlib>
 
-BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 

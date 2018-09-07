@@ -18,7 +18,7 @@ class VCL_DLLPUBLIC BitmapPopArtFilter : public BitmapFilter
 public:
     BitmapPopArtFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
     struct PopArtEntry

@@ -24,7 +24,7 @@ static inline sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 
     return static_cast<sal_uInt8>(color1 + color2);
 }
 
-BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 

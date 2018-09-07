@@ -11,6 +11,10 @@
 #ifndef INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
 #define INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <vcl/BitmapFilter.hxx>
 
 class BitmapEx;
@@ -19,12 +23,12 @@ class VCL_DLLPUBLIC BitmapMosaicFilter : public BitmapFilter
 {
 public:
     BitmapMosaicFilter(sal_uLong nTileWidth, sal_uLong nTileHeight)
-        : mnTileWidth(nTileWidth)
-        , mnTileHeight(nTileHeight)
+        : mnTileWidth(std::max(nTileWidth, sal_uLong(1)))
+        , mnTileHeight(std::max(nTileHeight, sal_uLong(1)))
     {
     }
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
     sal_uLong mnTileWidth;

@@ -18,7 +18,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 

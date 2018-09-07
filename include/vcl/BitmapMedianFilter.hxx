@@ -20,7 +20,7 @@ class VCL_DLLPUBLIC BitmapMedianFilter : public BitmapFilter
 public:
     BitmapMedianFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 };
 
 #endif

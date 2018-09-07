@@ -15,17 +15,11 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     bool bRet = false;
-
-    if (!mnTileWidth)
-        mnTileWidth = 1;
-
-    if (!mnTileHeight)
-        mnTileHeight = 1;
 
     if (mnTileWidth > 1 || mnTileHeight > 1)
     {
