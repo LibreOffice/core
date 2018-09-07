@@ -825,7 +825,7 @@ class ControlRow(object):
         self.timebox.Model.Enabled = enabled
 
     '''
-    Impelementation of XKeyListener.
+    Implementation of XKeyListener.
     Optionally performs the one of the following:
     cursor up, or down, row up or down
     '''

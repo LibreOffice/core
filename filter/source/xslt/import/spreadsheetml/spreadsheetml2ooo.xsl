@@ -2691,7 +2691,7 @@
                             <xsl:with-param name="condition-pos" select="$condition-pos"/>
                             <xsl:with-param name="isNumberTextElementOpened" select="$isNumberTextElementOpened"/>
                             <xsl:with-param name="posed-number-format-unit" select="substring($number-format-unit,$unit-pos + 2)"/>
-                            <!-- place '*' temparily here, because now StarCalc doesn't support variable filling character definition -->
+                            <!-- place '*' temporarily here, because now StarCalc doesn't support variable filling character definition -->
                             <xsl:with-param name="numberTextValue" select="substring($posed-number-format-unit,2,1)"/>
                             <xsl:with-param name="finished" select="$finished"/>
                         </xsl:call-template>
