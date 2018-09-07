@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_8bf9a881",
+        "filename": "dbaccess/win32/source/odbcconfig/odbcconfig.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-07T06:58:55Z",
+      "side": 1,
+      "message": "comphelper::ScopeGuard is a nice thing to use here",
+      "revId": "84e4b1424de773e988bdc79b9e03be2152def9c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
