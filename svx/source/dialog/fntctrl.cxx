@@ -1443,30 +1443,15 @@ Size SvxFontPrevWindow::GetOptimalSize() const
     return getPreviewStripSize(*this);
 }
 
-void FontPrevWindow::ResetSettings()
-{
-    mbResetForeground = true;
-    mbResetBackground = true;
-    Invalidate();
-}
-
 void FontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if (mbResetForeground)
-    {
-        svtools::ColorConfig aColorConfig;
-        Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-        rRenderContext.SetTextColor(aTextColor);
-        mbResetForeground = false;
-    }
+    svtools::ColorConfig aColorConfig;
+    Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    rRenderContext.SetTextColor(aTextColor);
 
-    if (mbResetBackground)
-    {
-        rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
-        mbResetBackground = false;
-    }
+    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
 }
 
 void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -1490,12 +1475,10 @@ void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     initFont(pImpl->maCJKFont);
     initFont(pImpl->maCTLFont);
 
-    ResetSettings();
+    Invalidate();
 }
 
 FontPrevWindow::FontPrevWindow()
-    : mbResetForeground(true)
-    , mbResetBackground(true)
 {
 }
 
@@ -1511,12 +1494,6 @@ SvxFont& FontPrevWindow::GetCTLFont()
 SvxFont& FontPrevWindow::GetCJKFont()
 {
     return pImpl->maCJKFont;
-}
-
-void FontPrevWindow::StyleUpdated()
-{
-    ResetSettings();
-    CustomWidgetController::StyleUpdated();
 }
 
 SvxFont& FontPrevWindow::GetFont()
@@ -1539,6 +1516,16 @@ void FontPrevWindow::SetPreviewText( const OUString& rString )
 void FontPrevWindow::SetFontNameAsPreviewText()
 {
     pImpl->mbUseFontNameAsText = true;
+}
+
+void FontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
+{
+    setFont(rNormalOutFont, pImpl->maFont);
+    setFont(rCJKOutFont, pImpl->maCJKFont);
+    setFont(rCTLFont, pImpl->maCTLFont);
+
+    pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
 }
 
 void FontPrevWindow::SetBackColor(const Color &rColor)

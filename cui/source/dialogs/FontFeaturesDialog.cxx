@@ -16,28 +16,23 @@ using namespace css;
 
 namespace cui
 {
-FontFeaturesDialog::FontFeaturesDialog(vcl::Window* pParent, OUString const& rFontName)
-    : ModalDialog(pParent, "FontFeaturesDialog", "cui/ui/fontfeaturesdialog.ui")
+FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName)
+    : GenericDialogController(pParent, "cui/ui/fontfeaturesdialog.ui", "FontFeaturesDialog")
     , m_sFontName(rFontName)
+    , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
+    , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
+    , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWindow))
 {
-    get(m_pContentGrid, "contentGrid");
-    get(m_pPreviewWindow, "preview");
     initialize();
 }
 
-FontFeaturesDialog::~FontFeaturesDialog() { disposeOnce(); }
+FontFeaturesDialog::~FontFeaturesDialog() {}
 
-VclPtr<ComboBox> makeEnumComboBox(vcl::Window* pParent,
-                                  vcl::font::FeatureDefinition const& rFeatureDefinition)
+void makeEnumComboBox(weld::ComboBoxText& rNameBox,
+                      vcl::font::FeatureDefinition const& rFeatureDefinition)
 {
-    VclPtr<ComboBox> aNameBox(
-        VclPtr<ComboBox>::Create(pParent, WB_TABSTOP | WB_DROPDOWN | WB_AUTOHSCROLL));
     for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
-    {
-        aNameBox->InsertEntry(rParameter.getDescription());
-    }
-    aNameBox->EnableAutoSize(true);
-    return aNameBox;
+        rNameBox.append_text(rParameter.getDescription());
 }
 
 void FontFeaturesDialog::initialize()
@@ -88,7 +83,7 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
         if (!aDefinition)
             aDefinition = { nFontFeatureCode, nullptr };
 
-        m_aFeatureItems.emplace_back();
+        m_aFeatureItems.emplace_back(m_xContentGrid.get());
 
         sal_uInt32 nValue = 0;
         if (aExistingFeatures.find(nFontFeatureCode) != aExistingFeatures.end())
@@ -99,63 +94,47 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
 
         sal_Int32 nGridPositionX = (i % 2) * 2;
         sal_Int32 nGridPositionY = i / 2;
+        aCurrentItem.m_xContainer->set_grid_left_attach(nGridPositionX);
+        aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
 
-        Link<ComboBox&, void> aComboBoxSelectHandler
+        Link<weld::ComboBoxText&, void> aComboBoxSelectHandler
             = LINK(this, FontFeaturesDialog, ComboBoxSelectedHdl);
-        Link<CheckBox&, void> aCheckBoxToggleHandler
+        Link<weld::ToggleButton&, void> aCheckBoxToggleHandler
             = LINK(this, FontFeaturesDialog, CheckBoxToggledHdl);
 
         if (aDefinition.getType() == vcl::font::FeatureParameterType::ENUM)
         {
-            aCurrentItem.m_pText
-                = VclPtr<FixedText>::Create(m_pContentGrid, WB_LEFT | WB_VCENTER | WB_3DLOOK);
-            aCurrentItem.m_pText->set_grid_left_attach(nGridPositionX);
-            aCurrentItem.m_pText->set_grid_top_attach(nGridPositionY);
-            aCurrentItem.m_pText->set_margin_left(6);
-            aCurrentItem.m_pText->set_margin_right(6);
-            aCurrentItem.m_pText->set_margin_top(3);
-            aCurrentItem.m_pText->set_margin_bottom(3);
-            aCurrentItem.m_pText->SetText(aDefinition.getDescription());
-            aCurrentItem.m_pText->Show();
+            aCurrentItem.m_xText->set_label(aDefinition.getDescription());
+            aCurrentItem.m_xText->show();
 
-            aCurrentItem.m_pCombo = makeEnumComboBox(m_pContentGrid, aDefinition);
+            makeEnumComboBox(*aCurrentItem.m_xCombo, aDefinition);
 
-            aCurrentItem.m_pCombo->SelectEntryPos(nValue);
-            aCurrentItem.m_pCombo->set_grid_left_attach(nGridPositionX + 1);
-            aCurrentItem.m_pCombo->set_grid_top_attach(nGridPositionY);
-            aCurrentItem.m_pCombo->set_margin_left(6);
-            aCurrentItem.m_pCombo->set_margin_right(6);
-            aCurrentItem.m_pCombo->set_margin_top(3);
-            aCurrentItem.m_pCombo->set_margin_bottom(3);
-            aCurrentItem.m_pCombo->SetSelectHdl(aComboBoxSelectHandler);
-            aCurrentItem.m_pCombo->Show();
+            aCurrentItem.m_xCombo->set_active(nValue);
+            aCurrentItem.m_xCombo->connect_changed(aComboBoxSelectHandler);
+            aCurrentItem.m_xCombo->show();
         }
         else
         {
-            aCurrentItem.m_pCheck = VclPtr<CheckBox>::Create(
-                m_pContentGrid, WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_3DLOOK);
-            aCurrentItem.m_pCheck->set_grid_left_attach(nGridPositionX);
-            aCurrentItem.m_pCheck->set_grid_top_attach(nGridPositionY);
-            aCurrentItem.m_pCheck->set_grid_width(2);
-            aCurrentItem.m_pCheck->set_margin_left(6);
-            aCurrentItem.m_pCheck->set_margin_right(6);
-            aCurrentItem.m_pCheck->set_margin_top(3);
-            aCurrentItem.m_pCheck->set_margin_bottom(3);
-            aCurrentItem.m_pCheck->Check(nValue > 0);
-            aCurrentItem.m_pCheck->SetText(aDefinition.getDescription());
-            aCurrentItem.m_pCheck->SetToggleHdl(aCheckBoxToggleHandler);
-            aCurrentItem.m_pCheck->Show();
+            aCurrentItem.m_xCheck->set_active(nValue > 0);
+            aCurrentItem.m_xCheck->set_label(aDefinition.getDescription());
+            aCurrentItem.m_xCheck->connect_toggled(aCheckBoxToggleHandler);
+            aCurrentItem.m_xCheck->show();
         }
 
         i++;
     }
+
+    Size aSize(m_xContentWindow->get_preferred_size());
+    Size aMaxSize(std::min<int>(aSize.Width(), m_xContentGrid->get_approximate_digit_width() * 100),
+                  std::min<int>(aSize.Height(), m_xContentGrid->get_text_height() * 20));
+    m_xContentWindow->set_size_request(aMaxSize.Width(), aMaxSize.Height());
 }
 
 void FontFeaturesDialog::updateFontPreview()
 {
-    vcl::Font rPreviewFont = m_pPreviewWindow->GetFont();
-    vcl::Font rPreviewFontCJK = m_pPreviewWindow->GetCJKFont();
-    vcl::Font rPreviewFontCTL = m_pPreviewWindow->GetCTLFont();
+    vcl::Font rPreviewFont = m_aPreviewWindow.GetFont();
+    vcl::Font rPreviewFontCJK = m_aPreviewWindow.GetCJKFont();
+    vcl::Font rPreviewFontCTL = m_aPreviewWindow.GetCTLFont();
 
     OUString sNewFontName = createFontNameWithFeatures();
 
@@ -163,25 +142,18 @@ void FontFeaturesDialog::updateFontPreview()
     rPreviewFontCJK.SetFamilyName(sNewFontName);
     rPreviewFontCTL.SetFamilyName(sNewFontName);
 
-    m_pPreviewWindow->SetFont(rPreviewFont, rPreviewFontCJK, rPreviewFontCTL);
+    m_aPreviewWindow.SetFont(rPreviewFont, rPreviewFontCJK, rPreviewFontCTL);
 }
 
-void FontFeaturesDialog::dispose()
+IMPL_LINK_NOARG(FontFeaturesDialog, CheckBoxToggledHdl, weld::ToggleButton&, void)
 {
-    m_pContentGrid.clear();
-    m_pPreviewWindow.clear();
-    for (FontFeatureItem& rItem : m_aFeatureItems)
-    {
-        rItem.m_pText.disposeAndClear();
-        rItem.m_pCombo.disposeAndClear();
-        rItem.m_pCheck.disposeAndClear();
-    }
-    ModalDialog::dispose();
+    updateFontPreview();
 }
 
-IMPL_LINK_NOARG(FontFeaturesDialog, CheckBoxToggledHdl, CheckBox&, void) { updateFontPreview(); }
-
-IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, ComboBox&, void) { updateFontPreview(); }
+IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, weld::ComboBoxText&, void)
+{
+    updateFontPreview();
+}
 
 OUString FontFeaturesDialog::createFontNameWithFeatures()
 {
@@ -191,9 +163,9 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
 
     for (FontFeatureItem& rItem : m_aFeatureItems)
     {
-        if (rItem.m_pCheck)
+        if (rItem.m_xCheck->get_visible())
         {
-            if (rItem.m_pCheck->IsChecked())
+            if (rItem.m_xCheck->get_active())
             {
                 if (!bFirst)
                     sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
@@ -203,9 +175,9 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
                 sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
             }
         }
-        else if (rItem.m_pCombo && rItem.m_pText)
+        else if (rItem.m_xCombo->get_visible() && rItem.m_xText->get_visible())
         {
-            sal_uInt32 nSelection = rItem.m_pCombo->GetSelectedEntryPos();
+            int nSelection = rItem.m_xCombo->get_active();
             if (nSelection > 0)
             {
                 if (!bFirst)
@@ -225,9 +197,9 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     return sResultFontName;
 }
 
-short FontFeaturesDialog::Execute()
+short FontFeaturesDialog::execute()
 {
-    short nResult = ModalDialog::Execute();
+    short nResult = m_xDialog->run();
     if (nResult == RET_OK)
     {
         m_sResultFontName = createFontNameWithFeatures();

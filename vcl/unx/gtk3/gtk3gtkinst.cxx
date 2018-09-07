@@ -2545,6 +2545,20 @@ public:
         enable_notify_events();
     }
 
+    virtual void set_hpolicy(VclPolicyType eHPolicy) override
+    {
+        GtkPolicyType eGtkVPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, nullptr, &eGtkVPolicy);
+        gtk_scrolled_window_set_policy(m_pScrolledWindow, eGtkVPolicy, VclToGtk(eHPolicy));
+    }
+
+    virtual VclPolicyType get_hpolicy() const override
+    {
+        GtkPolicyType eGtkHPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, &eGtkHPolicy, nullptr);
+        return GtkToVcl(eGtkHPolicy);
+    }
+
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
     {
         GtkPolicyType eGtkHPolicy;

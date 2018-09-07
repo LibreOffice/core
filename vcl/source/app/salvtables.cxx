@@ -841,6 +841,27 @@ public:
         rVertScrollBar.SetRangeMax(upper);
     }
 
+    virtual void set_hpolicy(VclPolicyType eHPolicy) override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL);
+        if (eHPolicy == VclPolicyType::ALWAYS)
+            nWinBits |= WB_HSCROLL;
+        else if (eHPolicy == VclPolicyType::AUTOMATIC)
+            nWinBits |= WB_AUTOHSCROLL;
+        m_xScrolledWindow->SetStyle(nWinBits);
+        m_xScrolledWindow->queue_resize();
+    }
+
+    virtual VclPolicyType get_hpolicy() const override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle();
+        if (nWinBits & WB_AUTOHSCROLL)
+            return VclPolicyType::AUTOMATIC;
+        else if (nWinBits & WB_HSCROLL)
+            return VclPolicyType::ALWAYS;
+        return VclPolicyType::NEVER;
+    }
+
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
     {
         WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOVSCROLL|WB_VSCROLL);
