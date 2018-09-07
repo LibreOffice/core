@@ -15,7 +15,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx)
+BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);

@@ -15,7 +15,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
 {
     if (!rBitmapEx.IsTransparent())
         return rBitmapEx;

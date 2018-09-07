@@ -37,7 +37,7 @@ protected:
     {
     }
 
-    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
 
 private:
     std::unique_ptr<Kernel> mxKernel;

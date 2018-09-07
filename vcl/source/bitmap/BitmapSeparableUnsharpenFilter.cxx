@@ -18,7 +18,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 

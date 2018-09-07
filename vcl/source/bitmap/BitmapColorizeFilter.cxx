@@ -16,7 +16,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <BitmapColorizeFilter.hxx>
 
-BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap = rBitmapEx.GetBitmap();
     BitmapScopedWriteAccess pWriteAccess(aBitmap);

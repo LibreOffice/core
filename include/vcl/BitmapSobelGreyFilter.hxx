@@ -18,7 +18,7 @@ class VCL_DLLPUBLIC BitmapSobelGreyFilter : public BitmapFilter
 public:
     BitmapSobelGreyFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 };
 
 #endif

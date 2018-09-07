@@ -26,7 +26,7 @@
 #include <BitmapFastScaleFilter.hxx>
 #include <sal/log.hxx>
 
-BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
 {
     SAL_INFO("vcl.gdi", "BitmapFastScaleFilter::execute()");
 

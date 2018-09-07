@@ -17,7 +17,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
@@ -86,7 +86,7 @@ bool BitmapGaussianSeparableBlurFilter::convolutionPass(Bitmap& rBitmap, Bitmap&
                                                         BitmapReadAccess const* pReadAcc,
                                                         int aNumberOfContributions,
                                                         const double* pWeights, int const* pPixels,
-                                                        const int* pCount)
+                                                        const int* pCount) const
 {
     if (!pReadAcc)
         return false;

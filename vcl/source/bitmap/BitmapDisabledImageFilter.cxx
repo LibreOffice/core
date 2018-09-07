@@ -15,7 +15,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <BitmapDisabledImageFilter.hxx>
 
-BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 

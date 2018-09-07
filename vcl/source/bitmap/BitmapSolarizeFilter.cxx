@@ -15,7 +15,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapSolarizeFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapSolarizeFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     bool bRet = false;

@@ -21,7 +21,7 @@
 
 #include <cstdlib>
 
-BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
+BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
 

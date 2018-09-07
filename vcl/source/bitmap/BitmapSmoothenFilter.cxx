@@ -17,7 +17,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx) const
 {
     BitmapEx aBitmapEx(rBitmapEx);
     bool bRet = false;

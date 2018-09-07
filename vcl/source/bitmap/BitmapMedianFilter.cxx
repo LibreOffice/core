@@ -52,7 +52,7 @@
     MN3(a, b, c);                                                                                  \
     MX3(d, e, f);
 
-BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx)
+BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
