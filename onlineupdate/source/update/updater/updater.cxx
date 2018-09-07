@@ -1119,8 +1119,8 @@ public:
     void Finish(int status);
 
 private:
-    std::unique_ptr<const NS_tchar> mFile;
-    std::unique_ptr<NS_tchar> mRelPath;
+    std::unique_ptr<const NS_tchar[]> mFile;
+    std::unique_ptr<NS_tchar[]> mRelPath;
     int mSkip;
 };
 
@@ -1247,8 +1247,8 @@ public:
     virtual void Finish(int status);
 
 private:
-    std::unique_ptr<NS_tchar> mDir;
-    std::unique_ptr<NS_tchar> mRelPath;
+    std::unique_ptr<NS_tchar[]> mDir;
+    std::unique_ptr<NS_tchar[]> mRelPath;
     int mSkip;
 };
 
@@ -1260,6 +1260,7 @@ RemoveDir::Parse(NS_tchar *line)
     NS_tchar* validPath = get_valid_path(&line, true);
     if (!validPath)
         return PARSE_ERROR;
+
     mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
@@ -1371,8 +1372,8 @@ public:
     virtual void Finish(int status);
 
 private:
-    std::unique_ptr<NS_tchar> mFile;
-    std::unique_ptr<NS_tchar> mRelPath;
+    std::unique_ptr<NS_tchar[]> mFile;
+    std::unique_ptr<NS_tchar[]> mRelPath;
     bool mAdded;
     ArchiveReader& mArchiveReader;
 };
@@ -1387,7 +1388,6 @@ AddFile::Parse(NS_tchar *line)
         return PARSE_ERROR;
 
     mRelPath.reset(new NS_tchar[MAXPATHLEN]);
-
     NS_tstrcpy(mRelPath.get(), validPath);
 
     mFile.reset(get_full_path(validPath));
@@ -1799,7 +1799,7 @@ public:
     virtual void Finish(int status);
 
 protected:
-    std::unique_ptr<NS_tchar> mTestFile;
+    std::unique_ptr<NS_tchar[]> mTestFile;
 };
 
 AddIfFile::AddIfFile(ArchiveReader& archiveReader):
@@ -1866,7 +1866,7 @@ public:
     virtual void Finish(int status);
 
 protected:
-    std::unique_ptr<NS_tchar> mTestFile;
+    std::unique_ptr<NS_tchar[]> mTestFile;
 };
 
 AddIfNotFile::AddIfNotFile(ArchiveReader& archiveReader):
@@ -1933,7 +1933,7 @@ public:
     virtual void Finish(int status);
 
 private:
-    std::unique_ptr<NS_tchar> mTestFile;
+    std::unique_ptr<NS_tchar[]> mTestFile;
 };
 
 PatchIfFile::PatchIfFile(ArchiveReader& archiveReader):
@@ -2323,7 +2323,7 @@ CopyInstallDirToDestDir()
 #endif
     copy_recursive_skiplist<SKIPLIST_COUNT> skiplist;
 
-    std::unique_ptr<NS_tchar> pUserProfile(new NS_tchar[MAXPATHLEN]);
+    std::unique_ptr<NS_tchar[]> pUserProfile(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(pUserProfile.get(), gPatchDirPath);
     NS_tchar *slash = (NS_tchar *) NS_tstrrchr(pUserProfile.get(), NS_T('/'));
     if (slash)
@@ -4036,7 +4036,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
 
     NS_tsnprintf(searchspec, sizeof(searchspec)/sizeof(searchspec[0]),
                  NS_T("%s*"), dirpath);
-    std::unique_ptr<const NS_tchar> pszSpec(get_full_path(searchspec));
+    std::unique_ptr<const NS_tchar[]> pszSpec(get_full_path(searchspec));
 
     hFindFile = FindFirstFileW(pszSpec.get(), &finddata);
     if (hFindFile != INVALID_HANDLE_VALUE)
@@ -4116,7 +4116,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
         char chars[MAXNAMLEN];
     } ent_buf;
     struct dirent* ent;
-    std::unique_ptr<NS_tchar> searchpath(get_full_path(dirpath));
+    std::unique_ptr<NS_tchar[]> searchpath(get_full_path(dirpath));
 
     DIR* dir = opendir(searchpath.get());
     if (!dir)
@@ -4206,7 +4206,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
     int rv = OK;
     FTS *ftsdir;
     FTSENT *ftsdirEntry;
-    std::unique_ptr<NS_tchar> searchpath(get_full_path(dirpath));
+    std::unique_ptr<NS_tchar[]> searchpath(get_full_path(dirpath));
 
     // Remove the trailing slash so the paths don't contain double slashes. The
     // existence of the slash has already been checked in DoUpdate.
@@ -4384,10 +4384,10 @@ GetManifestContents(const NS_tchar *manifest)
 int AddPreCompleteActions(ActionList *list)
 {
 #ifdef MACOSX
-    std::unique_ptr<NS_tchar> manifestPath(get_full_path(
+    std::unique_ptr<NS_tchar[]> manifestPath(get_full_path(
             NS_T("Contents/Resources/precomplete")));
 #else
-    std::unique_ptr<NS_tchar> manifestPath(get_full_path(
+    std::unique_ptr<NS_tchar[]> manifestPath(get_full_path(
             NS_T("precomplete")));
 #endif
 
