@@ -119,7 +119,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     OUString idxDir;
     bool bExtension = false;
     int iDir = 0;
-    vector< vector<HitItem>* > aIndexFolderResultVectorVector;
+    vector< vector<HitItem> > aIndexFolderResultVectorVector;
 
     bool bTemporary;
     while( !(idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).isEmpty() )
@@ -236,8 +236,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 sort( aIndexFolderResultVector.begin(), aIndexFolderResultVector.end() );
             }
 
-            vector<HitItem>* pIndexFolderHitItemVector = new vector<HitItem>( aIndexFolderResultVector );
-            aIndexFolderResultVectorVector.push_back( pIndexFolderHitItemVector );
+            aIndexFolderResultVectorVector.push_back( std::move(aIndexFolderResultVector) );
             aIndexFolderResultVector.clear();
         }
         catch (const Exception &e)
@@ -254,7 +253,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
 
     int nVectorCount = aIndexFolderResultVectorVector.size();
-    vector<HitItem>::size_type* pCurrentVectorIndex = new vector<HitItem>::size_type[nVectorCount];
+    std::unique_ptr<std::vector<HitItem>::size_type[]> pCurrentVectorIndex(new vector<HitItem>::size_type[nVectorCount]);
     for( int j = 0 ; j < nVectorCount ; ++j )
         pCurrentVectorIndex[j] = 0;
 
@@ -266,7 +265,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         float fBestScore = 0.0;
         for( int k = 0 ; k < nVectorCount ; ++k )
         {
-            vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[k];
+            vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[k];
             if( pCurrentVectorIndex[k] < rIndexFolderVector.size() )
             {
                 const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[k] ];
@@ -282,7 +281,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         if( iVectorWithBestScore == -1 )    // No item left at all
             break;
 
-        vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[iVectorWithBestScore];
+        vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[iVectorWithBestScore];
         const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[iVectorWithBestScore] ];
 
         pCurrentVectorIndex[iVectorWithBestScore]++;
@@ -291,12 +290,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         ++nHitCount;
     }
 
-    delete[] pCurrentVectorIndex;
-    for( int n = 0 ; n < nVectorCount ; ++n )
-    {
-        vector<HitItem>* pIndexFolderVector = aIndexFolderResultVectorVector[n];
-        delete pIndexFolderVector;
-    }
+    pCurrentVectorIndex.reset();
+    aIndexFolderResultVectorVector.clear();
 
     sal_Int32 replIdx = OUString( "#HLP#" ).getLength();
     OUString replWith = "vnd.sun.star.help://";

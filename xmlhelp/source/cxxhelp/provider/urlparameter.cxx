@@ -338,7 +338,7 @@ void URLParameter::open( const Reference< XOutputStream >& xDataSink )
         return;
 
     // a standard document or else an active help text, plug in the new input stream
-    InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
+    std::unique_ptr<InputStreamTransformer> p(new InputStreamTransformer( this,m_pDatabases,isRoot() ));
     try
     {
         xDataSink->writeBytes( Sequence< sal_Int8 >( reinterpret_cast<const sal_Int8*>(p->getData().getStr()), p->getData().getLength() ) );
@@ -346,7 +346,7 @@ void URLParameter::open( const Reference< XOutputStream >& xDataSink )
     catch( const Exception& )
     {
     }
-    delete p;
+    p.reset();
     xDataSink->closeOutput();
 }
 
