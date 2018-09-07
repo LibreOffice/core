@@ -1394,10 +1394,11 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+         vcl::TextLayoutCache const*const pLayoutCache,
+         const SalLayoutGlyphs* pGlyphs) const
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
+            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
