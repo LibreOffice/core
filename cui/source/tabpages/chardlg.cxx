@@ -1226,10 +1226,10 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, Button*, pButton, void )
 
     if (!sFontName.isEmpty() && pNameBox)
     {
-        ScopedVclPtrInstance<cui::FontFeaturesDialog> pDialog(this, sFontName);
-        if (pDialog->Execute() == RET_OK)
+        cui::FontFeaturesDialog aDialog(GetDialogFrameWeld(), sFontName);
+        if (aDialog.execute() == RET_OK)
         {
-            pNameBox->SetText(pDialog->getResultFontName());
+            pNameBox->SetText(aDialog.getResultFontName());
             UpdatePreview_Impl();
         }
     }

@@ -107,6 +107,7 @@ public:
 
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
+    void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
     void                SetBackColor( const Color& rColor );
