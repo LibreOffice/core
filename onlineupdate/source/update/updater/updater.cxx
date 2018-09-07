@@ -2323,7 +2323,7 @@ CopyInstallDirToDestDir()
 #endif
     copy_recursive_skiplist<SKIPLIST_COUNT> skiplist;
 
-    std::unique_ptr<NS_tchar> pUserProfile(new NS_tchar[MAXPATHLEN]);
+    std::unique_ptr<NS_tchar[]> pUserProfile(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(pUserProfile.get(), gPatchDirPath);
     NS_tchar *slash = (NS_tchar *) NS_tstrrchr(pUserProfile.get(), NS_T('/'));
     if (slash)
