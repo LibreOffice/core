@@ -331,7 +331,7 @@
                                             <property name="label" translatable="yes" context="printdialog|label7">Status:</property>
                                             <property name="xalign">0</property>
                                             <accessibility>
-                                              <role type="static"/>
+                                              <relation type="label-for" target="status"/>
                                             </accessibility>
                                           </object>
                                           <packing>
@@ -346,7 +346,7 @@
                                             <property name="label" translatable="yes" context="printdialog|label8">Location:</property>
                                             <property name="xalign">0</property>
                                             <accessibility>
-                                              <role type="static"/>
+                                              <relation type="label-for" target="location"/>
                                             </accessibility>
                                           </object>
                                           <packing>
@@ -361,7 +361,7 @@
                                             <property name="label" translatable="yes" context="printdialog|label9">Comment:</property>
                                             <property name="xalign">0</property>
                                             <accessibility>
-                                              <role type="static"/>
+                                              <relation type="label-for" target="comment"/>
                                             </accessibility>
                                           </object>
                                           <packing>
@@ -377,6 +377,7 @@
                                             <property name="xalign">0</property>
                                             <accessibility>
                                               <role type="static"/>
+                                              <relation type="labelled-by" target="label7"/>
                                             </accessibility>
                                           </object>
                                           <packing>
@@ -392,6 +393,7 @@
                                             <property name="xalign">0</property>
                                             <accessibility>
                                               <role type="static"/>
+                                              <relation type="labelled-by" target="label8"/>
                                             </accessibility>
                                           </object>
                                           <packing>
@@ -407,6 +409,7 @@
                                             <property name="xalign">0</property>
                                             <accessibility>
                                               <role type="static"/>
+                                              <relation type="labelled-by" target="label9"/>
                                             </accessibility>
                                           </object>
                                           <packing>
