@@ -1477,6 +1477,11 @@ void SvxColorWindow::ShowNoneButton()
     mpButtonNoneColor->Show();
 }
 
+void ColorWindow::ShowNoneButton()
+{
+    mxButtonNoneColor->show();
+}
+
 SvxColorWindow::~SvxColorWindow()
 {
     disposeOnce();
@@ -3601,6 +3606,16 @@ void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     createColorWindow();
 }
 
+void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
+{
+    m_nSlotId = nSlotId;
+    m_bShowNoneButton = bShowNoneButton;
+    m_xColorWindow.reset();
+    m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
+    ShowPreview(m_aSelectedColor);
+    createColorWindow();
+}
+
 //to avoid the box resizing every time the color is changed to
 //the optimal size of the individual color, get the longest
 //standard color and stick with that as the size for all
@@ -3754,9 +3769,11 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Win
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
+    , m_nSlotId(0)
+    , m_bShowNoneButton(false)
     , m_bInterimBuilder(bInterimBuilder)
 {
-    m_aSelectedColor = GetAutoColor(0);
+    m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
     ShowPreview(m_aSelectedColor);
 }
@@ -3783,7 +3800,7 @@ void ColorListBox::createColorWindow()
     m_xColorWindow.reset(new ColorWindow(
                             m_xPaletteManager,
                             m_aBorderColorStatus,
-                            0, // slotID
+                            m_nSlotId,
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
@@ -3792,6 +3809,8 @@ void ColorListBox::createColorWindow()
 
     SetNoSelection();
     m_xButton->set_popover(m_xColorWindow->GetWidget());
+    if (m_bShowNoneButton)
+        m_xColorWindow->ShowNoneButton();
     m_xColorWindow->SelectEntry(m_aSelectedColor);
 }
 
@@ -3841,10 +3860,20 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
     ScopedVclPtrInstance<VirtualDevice> xDevice;
     xDevice->SetOutputSize(aImageSize);
     const tools::Rectangle aRect(Point(0, 0), aImageSize);
-    if (rColor.first == COL_AUTO)
-        xDevice->SetFillColor(m_aAutoDisplayColor);
+    if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
+    {
+        const Color aW(COL_WHITE);
+        const Color aG(0xef, 0xef, 0xef);
+        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
+        xDevice->SetFillColor();
+    }
     else
-        xDevice->SetFillColor(rColor.first);
+    {
+        if (rColor.first == COL_AUTO)
+            xDevice->SetFillColor(m_aAutoDisplayColor);
+        else
+            xDevice->SetFillColor(rColor.first);
+    }
 
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);

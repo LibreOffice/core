@@ -1389,46 +1389,46 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharEffectsPage ----------------------------------------------
 
-SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rInSet )
-    : SvxCharBasePage(pParent, "EffectsPage", "cui/ui/effectspage.ui", rInSet)
+SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rInSet)
+    : CharBasePage(pParent, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
+    , m_bUnderlineColorDisabled(false)
+    , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
+    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pParent.GetFrameWeld()))
+    , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
+    , m_xEffectsLB(m_xBuilder->weld_combo_box_text("effectslb"))
+    , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
+    , m_xReliefLB(m_xBuilder->weld_combo_box_text("relieflb"))
+    , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
+    , m_xShadowBtn(m_xBuilder->weld_check_button("shadowcb"))
+    , m_xBlinkingBtn(m_xBuilder->weld_check_button("blinkingcb"))
+    , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
+    , m_xOverlineLB(m_xBuilder->weld_combo_box_text("overlinelb"))
+    , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
+    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"), pParent.GetFrameWeld()))
+    , m_xStrikeoutLB(m_xBuilder->weld_combo_box_text("strikeoutlb"))
+    , m_xUnderlineLB(m_xBuilder->weld_combo_box_text("underlinelb"))
+    , m_xUnderlineColorFT(m_xBuilder->weld_label("underlinecolorft"))
+    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pParent.GetFrameWeld()))
+    , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
+    , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
+    , m_xEmphasisLB(m_xBuilder->weld_combo_box_text("emphasislb"))
+    , m_xPositionFT(m_xBuilder->weld_label("positionft"))
+    , m_xPositionLB(m_xBuilder->weld_combo_box_text("positionlb"))
+    , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
 {
-    get(m_pFontColorFT, "fontcolorft");
-    get(m_pFontColorLB, "fontcolorlb");
-    m_pFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-    get(m_pEffectsFT, "effectsft");
-    get(m_pEffectsLB, "effectslb");
-    get(m_pReliefFT, "reliefft");
-    get(m_pReliefLB, "relieflb");
-    get(m_pOutlineBtn, "outlinecb");
-    get(m_pShadowBtn, "shadowcb");
-    get(m_pBlinkingBtn, "blinkingcb");
-    get(m_pHiddenBtn, "hiddencb");
-    get(m_pOverlineLB, "overlinelb");
-    get(m_pOverlineColorFT, "overlinecolorft");
-    get(m_pOverlineColorLB, "overlinecolorlb");
-    m_pOverlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-    get(m_pStrikeoutLB, "strikeoutlb");
-    get(m_pUnderlineLB, "underlinelb");
-    get(m_pUnderlineColorFT, "underlinecolorft");
-    get(m_pUnderlineColorLB, "underlinecolorlb");
-    m_pUnderlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-    get(m_pIndividualWordsBtn, "individualwordscb");
-    get(m_pEmphasisFT, "emphasisft");
-    get(m_pEmphasisLB, "emphasislb");
-    get(m_pPositionFT, "positionft");
-    get(m_pPositionLB, "positionlb");
-    get(m_pA11yWarningFT, "a11ywarning");
-
-    get(m_pPreviewWin, "preview");
+    m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+    m_xFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
+    m_xOverlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
+    m_xUnderlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     Initialize();
 }
 
 void SvxCharEffectsPage::EnableNoneFontColor()
 {
-    m_pFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR, true);
+    m_xFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR, true);
     m_bEnableNoneFontColor = true;
 }
 
@@ -1448,32 +1448,11 @@ SvxCharEffectsPage::~SvxCharEffectsPage()
 
 void SvxCharEffectsPage::dispose()
 {
-    m_pFontColorFT.clear();
-    m_pFontColorLB.clear();
-    m_pEffectsFT.clear();
-    m_pEffectsLB.clear();
-    m_pReliefFT.clear();
-    m_pReliefLB.clear();
-    m_pOutlineBtn.clear();
-    m_pShadowBtn.clear();
-    m_pBlinkingBtn.clear();
-    m_pHiddenBtn.clear();
-    m_pOverlineLB.clear();
-    m_pOverlineColorFT.clear();
-    m_pOverlineColorLB.clear();
-    m_pStrikeoutLB.clear();
-    m_pUnderlineLB.clear();
-    m_pUnderlineColorFT.clear();
-    m_pUnderlineColorLB.clear();
-    m_pIndividualWordsBtn.clear();
-    m_pEmphasisFT.clear();
-    m_pEmphasisLB.clear();
-    m_pPositionFT.clear();
-    m_pPositionLB.clear();
-    m_pA11yWarningFT.clear();
-    SvxCharBasePage::dispose();
+    m_xUnderlineColorLB.reset();
+    m_xOverlineColorLB.reset();
+    m_xFontColorLB.reset();
+    CharBasePage::dispose();
 }
-
 
 void SvxCharEffectsPage::Initialize()
 {
@@ -1494,44 +1473,44 @@ void SvxCharEffectsPage::Initialize()
         }
     }
 
-    m_pFontColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+    m_xFontColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
 
     // handler
-    Link<ListBox&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
-    m_pUnderlineLB->SetSelectHdl( aLink );
-    m_pUnderlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
-    m_pOverlineLB->SetSelectHdl( aLink );
-    m_pOverlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
-    m_pStrikeoutLB->SetSelectHdl( aLink );
-    m_pEmphasisLB->SetSelectHdl( aLink );
-    m_pPositionLB->SetSelectHdl( aLink );
-    m_pEffectsLB->SetSelectHdl( aLink );
-    m_pReliefLB->SetSelectHdl( aLink );
+    Link<weld::ComboBoxText&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
+    m_xUnderlineLB->connect_changed( aLink );
+    m_xUnderlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+    m_xOverlineLB->connect_changed( aLink );
+    m_xOverlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
+    m_xStrikeoutLB->connect_changed( aLink );
+    m_xEmphasisLB->connect_changed( aLink );
+    m_xPositionLB->connect_changed( aLink );
+    m_xEffectsLB->connect_changed( aLink );
+    m_xReliefLB->connect_changed( aLink );
 
-    m_pUnderlineLB->SelectEntryPos( 0 );
-    m_pOverlineLB->SelectEntryPos( 0 );
-    m_pStrikeoutLB->SelectEntryPos( 0 );
-    m_pEmphasisLB->SelectEntryPos( 0 );
-    m_pPositionLB->SelectEntryPos( 0 );
-    SelectHdl_Impl( nullptr );
-    SelectHdl_Impl( m_pEmphasisLB );
+    m_xUnderlineLB->set_active( 0 );
+    m_xOverlineLB->set_active( 0 );
+    m_xStrikeoutLB->set_active( 0 );
+    m_xEmphasisLB->set_active( 0 );
+    m_xPositionLB->set_active( 0 );
+    SelectHdl_Impl(nullptr);
+    SelectHdl_Impl(m_xEmphasisLB.get());
 
-    m_pEffectsLB->SelectEntryPos( 0 );
+    m_xEffectsLB->set_active( 0 );
 
-    m_pIndividualWordsBtn->SetClickHdl( LINK( this, SvxCharEffectsPage, CbClickHdl_Impl ) );
-    Link<Button*,void> aLink2 = LINK( this, SvxCharEffectsPage, TristClickHdl_Impl );
-    m_pOutlineBtn->SetClickHdl( aLink2 );
-    m_pShadowBtn->SetClickHdl( aLink2 );
+    m_xIndividualWordsBtn->connect_toggled(LINK(this, SvxCharEffectsPage, CbClickHdl_Impl));
+    Link<weld::ToggleButton&,void> aLink2 = LINK(this, SvxCharEffectsPage, TristClickHdl_Impl);
+    m_xOutlineBtn->connect_toggled(aLink2);
+    m_xShadowBtn->connect_toggled(aLink2);
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
-        m_pEmphasisFT->Hide();
-        m_pEmphasisLB->Hide();
-        m_pPositionFT->Hide();
-        m_pPositionLB->Hide();
+        m_xEmphasisFT->hide();
+        m_xEmphasisLB->hide();
+        m_xPositionFT->hide();
+        m_xPositionLB->hide();
     }
 
-    m_pA11yWarningFT->Show(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
+    m_xA11yWarningFT->show(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
 }
 
 void SvxCharEffectsPage::UpdatePreview_Impl()
@@ -1540,34 +1519,30 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
-    const Color& rSelectedColor = m_pFontColorLB->GetSelectEntryColor();
+    const Color& rSelectedColor = m_xFontColorLB->GetSelectEntryColor();
     rFont.SetColor(GetPreviewFontColor(rSelectedColor));
     rCJKFont.SetColor(GetPreviewFontColor(rSelectedColor));
     rCTLFont.SetColor(GetPreviewFontColor(rSelectedColor));
 
-    sal_Int32 nPos = m_pUnderlineLB->GetSelectedEntryPos();
-    FontLineStyle eUnderline = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos )));
-    nPos = m_pOverlineLB->GetSelectedEntryPos();
-    FontLineStyle eOverline = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos )));
-    nPos = m_pStrikeoutLB->GetSelectedEntryPos();
-    FontStrikeout eStrikeout = static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos )));
+    FontLineStyle eUnderline = static_cast<FontLineStyle>(m_xUnderlineLB->get_active_id().toInt32());
+    FontLineStyle eOverline = static_cast<FontLineStyle>(m_xOverlineLB->get_active_id().toInt32());
+    FontStrikeout eStrikeout = static_cast<FontStrikeout>(m_xStrikeoutLB->get_active_id().toInt32());
     rFont.SetUnderline( eUnderline );
     rCJKFont.SetUnderline( eUnderline );
     rCTLFont.SetUnderline( eUnderline );
-    m_pPreviewWin->SetTextLineColor( m_pUnderlineColorLB->GetSelectEntryColor() );
+    m_aPreviewWin.SetTextLineColor( m_xUnderlineColorLB->GetSelectEntryColor() );
     rFont.SetOverline( eOverline );
     rCJKFont.SetOverline( eOverline );
     rCTLFont.SetOverline( eOverline );
-    m_pPreviewWin->SetOverlineColor( m_pOverlineColorLB->GetSelectEntryColor() );
+    m_aPreviewWin.SetOverlineColor( m_xOverlineColorLB->GetSelectEntryColor() );
     rFont.SetStrikeout( eStrikeout );
     rCJKFont.SetStrikeout( eStrikeout );
     rCTLFont.SetStrikeout( eStrikeout );
 
-    nPos = m_pPositionLB->GetSelectedEntryPos();
-    sal_Int32 nEmphasis = m_pEmphasisLB->GetSelectedEntryPos();
-    if (nEmphasis != LISTBOX_ENTRY_NOTFOUND)
+    auto nEmphasis = m_xEmphasisLB->get_active();
+    if (nEmphasis != -1)
     {
-        bool bUnder = ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPos )) );
+        bool bUnder = (CHRDLG_POSITION_UNDER == m_xPositionLB->get_active_id().toInt32());
         FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nEmphasis);
         eMark |= bUnder ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
         rFont.SetEmphasisMark( eMark );
@@ -1575,24 +1550,24 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetEmphasisMark( eMark );
     }
 
-    sal_Int32 nRelief = m_pReliefLB->GetSelectedEntryPos();
-    if (LISTBOX_ENTRY_NOTFOUND != nRelief)
+    auto nRelief = m_xReliefLB->get_active();
+    if (nRelief != -1)
     {
         rFont.SetRelief( static_cast<FontRelief>(nRelief) );
         rCJKFont.SetRelief( static_cast<FontRelief>(nRelief) );
         rCTLFont.SetRelief( static_cast<FontRelief>(nRelief) );
     }
 
-    rFont.SetOutline( StateToAttr( m_pOutlineBtn->GetState() ) );
+    rFont.SetOutline( StateToAttr( m_xOutlineBtn->get_state() ) );
     rCJKFont.SetOutline( rFont.IsOutline() );
     rCTLFont.SetOutline( rFont.IsOutline() );
 
-    rFont.SetShadow( StateToAttr( m_pShadowBtn->GetState() ) );
+    rFont.SetShadow( StateToAttr( m_xShadowBtn->get_state() ) );
     rCJKFont.SetShadow( rFont.IsShadow() );
     rCTLFont.SetShadow( rFont.IsShadow() );
 
-    sal_Int32 nCapsPos = m_pEffectsLB->GetSelectedEntryPos();
-    if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
+    auto nCapsPos = m_xEffectsLB->get_active();
+    if (nCapsPos != -1)
     {
         SvxCaseMap eCaps = static_cast<SvxCaseMap>(nCapsPos);
         rFont.SetCaseMap( eCaps );
@@ -1601,29 +1576,27 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetCaseMap( eCaps == SvxCaseMap::SmallCaps ? SvxCaseMap::NotMapped : eCaps );
     }
 
-    bool bWordLine = m_pIndividualWordsBtn->IsChecked();
+    bool bWordLine = m_xIndividualWordsBtn->get_active();
     rFont.SetWordLineMode( bWordLine );
     rCJKFont.SetWordLineMode( bWordLine );
     rCTLFont.SetWordLineMode( bWordLine );
 
-    m_pPreviewWin->Invalidate();
+    m_aPreviewWin.Invalidate();
 }
-
 
 void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 {
     if ( SvxCaseMap::End > eCaseMap )
-        m_pEffectsLB->SelectEntryPos(
+        m_xEffectsLB->set_active(
             sal::static_int_cast< sal_Int32 >( eCaseMap ) );
     else
     {
         // not mapped
-        m_pEffectsLB->SetNoSelection();
+        m_xEffectsLB->set_active(-1);
     }
 
     UpdatePreview_Impl();
 }
-
 
 void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 {
@@ -1634,21 +1607,21 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pFontColorFT->Hide();
-            m_pFontColorLB->Hide();
+            m_xFontColorFT->hide();
+            m_xFontColorLB->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pFontColorFT->Disable();
-            m_pFontColorLB->Disable();
+            m_xFontColorFT->set_sensitive(false);
+            m_xFontColorLB->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
             //Related: tdf#106080 if there is no font color, then allow "none"
             //as a color so the listbox can display that state.
             EnableNoneFontColor();
-            m_pFontColorLB->SetNoSelection();
+            m_xFontColorLB->SetNoSelection();
             break;
 
         case SfxItemState::DEFAULT:
@@ -1664,9 +1637,9 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             rCJKFont.SetColor(GetPreviewFontColor(aColor));
             rCTLFont.SetColor(GetPreviewFontColor(aColor));
 
-            m_pPreviewWin->Invalidate();
+            m_aPreviewWin.Invalidate();
 
-            m_pFontColorLB->SelectEntry(aColor);
+            m_xFontColorLB->SelectEntry(aColor);
 
             m_aOrigFontColor = aColor;
             m_bOrigFontColor = true;
@@ -1686,7 +1659,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 
     if (bChanged)
     {
-        aSelectedColor = m_pFontColorLB->GetSelectEntryColor();
+        aSelectedColor = m_xFontColorLB->GetSelectEntryColor();
         if (m_bOrigFontColor)
             bChanged = aSelectedColor != m_aOrigFontColor;
         if (m_bEnableNoneFontColor && bChanged && aSelectedColor == COL_NONE_COLOR)
@@ -1701,69 +1674,71 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     return bChanged;
 }
 
-IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBoxText&, rBox, void )
 {
     SelectHdl_Impl(&rBox);
 }
 
-void SvxCharEffectsPage::SelectHdl_Impl( ListBox* pBox )
+void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBoxText* pBox)
 {
-    if ( m_pEmphasisLB == pBox )
+    if (m_xEmphasisLB.get() == pBox)
     {
-        sal_Int32 nEPos = m_pEmphasisLB->GetSelectedEntryPos();
-        bool bEnable = ( nEPos > 0 && nEPos != LISTBOX_ENTRY_NOTFOUND );
-        m_pPositionFT->Enable( bEnable );
-        m_pPositionLB->Enable( bEnable );
+        auto nEPos = m_xEmphasisLB->get_active();
+        bool bEnable = nEPos > 0 && nEPos != -1;
+        m_xPositionFT->set_sensitive( bEnable );
+        m_xPositionLB->set_sensitive( bEnable );
     }
-    else if( m_pReliefLB == pBox)
+    else if (m_xReliefLB.get() == pBox)
     {
-        bool bEnable = ( pBox->GetSelectedEntryPos() == 0 );
-        m_pOutlineBtn->Enable( bEnable );
-        m_pShadowBtn->Enable( bEnable );
+        bool bEnable = ( pBox->get_active() == 0 );
+        m_xOutlineBtn->set_sensitive( bEnable );
+        m_xShadowBtn->set_sensitive( bEnable );
     }
-    else if ( m_pPositionLB.get() != pBox )
+    else if (m_xPositionLB.get() != pBox)
     {
-        sal_Int32 nUPos = m_pUnderlineLB->GetSelectedEntryPos(),
-               nOPos = m_pOverlineLB->GetSelectedEntryPos(),
-               nSPos = m_pStrikeoutLB->GetSelectedEntryPos();
-        bool bUEnable = ( nUPos > 0 && nUPos != LISTBOX_ENTRY_NOTFOUND );
-        bool bOEnable = ( nOPos > 0 && nOPos != LISTBOX_ENTRY_NOTFOUND );
-        m_pUnderlineColorFT->Enable( bUEnable );
-        m_pUnderlineColorLB->Enable( bUEnable );
-        m_pOverlineColorFT->Enable( bOEnable );
-        m_pOverlineColorLB->Enable( bOEnable );
-        m_pIndividualWordsBtn->Enable( bUEnable || bOEnable || ( nSPos > 0 && nSPos != LISTBOX_ENTRY_NOTFOUND ) );
+        bool bUEnable = false;
+        if (!m_bUnderlineColorDisabled)
+        {
+            auto nUPos = m_xUnderlineLB->get_active();
+            bUEnable = nUPos > 0;
+            m_xUnderlineColorFT->set_sensitive(bUEnable);
+            m_xUnderlineColorLB->set_sensitive(bUEnable);
+        }
+
+        auto nOPos = m_xOverlineLB->get_active();
+        bool bOEnable = nOPos > 0;
+        m_xOverlineColorFT->set_sensitive(bOEnable);
+        m_xOverlineColorLB->set_sensitive(bOEnable);
+
+        auto nSPos = m_xStrikeoutLB->get_active();
+        m_xIndividualWordsBtn->set_sensitive( bUEnable || bOEnable || nSPos > 0);
     }
     UpdatePreview_Impl();
 }
 
-
-IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, weld::ComboBoxText&, void)
 {
-    bool bEnable = ( ( m_pUnderlineLB->GetSelectedEntryPos() > 0 ) ||
-                     ( m_pOverlineLB->GetSelectedEntryPos()  > 0 ) ||
-                     ( m_pStrikeoutLB->GetSelectedEntryPos() > 0 ) );
-    m_pIndividualWordsBtn->Enable( bEnable );
+    bool bEnable = ( ( m_xUnderlineLB->get_active() > 0 ) ||
+                     ( m_xOverlineLB->get_active()  > 0 ) ||
+                     ( m_xStrikeoutLB->get_active() > 0 ) );
+    m_xIndividualWordsBtn->set_sensitive( bEnable );
 
     UpdatePreview_Impl();
 }
 
-
-IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, weld::ToggleButton&, void)
 {
     UpdatePreview_Impl();
 }
 
-
-IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, weld::ToggleButton&, void)
 {
     UpdatePreview_Impl();
 }
 
-
-IMPL_LINK(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, SvxColorListBox&, rBox, void)
+IMPL_LINK(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox&, rBox, void)
 {
-    if (m_pFontColorLB == &rBox)
+    if (m_xFontColorLB.get() == &rBox)
         m_bNewFontColor = true;
     UpdatePreview_Impl();
 }
@@ -1775,12 +1750,10 @@ DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-
 VclPtr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxCharEffectsPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SvxCharEffectsPage>::Create( pParent, *rSet );
 }
-
 
 void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 {
@@ -1796,13 +1769,13 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     rCJKFont.SetUnderline( LINESTYLE_NONE );
     rCTLFont.SetUnderline( LINESTYLE_NONE );
 
-    m_pUnderlineLB->SelectEntryPos( 0 );
+    m_xUnderlineLB->set_active( 0 );
     SfxItemState eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SfxItemState::DONTCARE )
     {
         if ( eState == SfxItemState::DONTCARE )
-            m_pUnderlineLB->SetNoSelection();
+            m_xUnderlineLB->set_active(-1);
         else
         {
             const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(rSet->Get( nWhich ));
@@ -1813,23 +1786,19 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
             if ( eUnderline != LINESTYLE_NONE )
             {
-                for ( sal_Int32 i = 0; i < m_pUnderlineLB->GetEntryCount(); ++i )
+                auto nPos = m_xUnderlineLB->find_id(OUString::number(eUnderline));
+                if (nPos != -1)
                 {
-                    if ( static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData(i))) == eUnderline )
-                    {
-                        m_pUnderlineLB->SelectEntryPos(i);
-                        bEnable = true;
-                        break;
-                    }
+                    m_xUnderlineLB->set_active(nPos);
+                    bEnable = true;
                 }
-
                 Color aColor = rItem.GetColor();
-                m_pUnderlineColorLB->SelectEntry(aColor);
+                m_xUnderlineColorLB->SelectEntry(aColor);
             }
             else
             {
-                m_pUnderlineColorLB->SelectEntry(COL_AUTO);
-                m_pUnderlineColorLB->Disable();
+                m_xUnderlineColorLB->SelectEntry(COL_AUTO);
+                m_xUnderlineColorLB->set_sensitive(false);
             }
         }
     }
@@ -1840,13 +1809,13 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     rCJKFont.SetOverline( LINESTYLE_NONE );
     rCTLFont.SetOverline( LINESTYLE_NONE );
 
-    m_pOverlineLB->SelectEntryPos( 0 );
+    m_xOverlineLB->set_active( 0 );
     eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SfxItemState::DONTCARE )
     {
         if ( eState == SfxItemState::DONTCARE )
-            m_pOverlineLB->SetNoSelection();
+            m_xOverlineLB->set_active(-1);
         else
         {
             const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>(rSet->Get( nWhich ));
@@ -1857,23 +1826,19 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
             if ( eOverline != LINESTYLE_NONE )
             {
-                for ( sal_Int32 i = 0; i < m_pOverlineLB->GetEntryCount(); ++i )
+                auto nPos = m_xOverlineLB->find_id(OUString::number(eOverline));
+                if (nPos != -1)
                 {
-                    if ( static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData(i))) == eOverline )
-                    {
-                        m_pOverlineLB->SelectEntryPos(i);
-                        bEnable = true;
-                        break;
-                    }
+                    m_xOverlineLB->set_active(nPos);
+                    bEnable = true;
                 }
-
                 Color aColor = rItem.GetColor();
-                m_pOverlineColorLB->SelectEntry(aColor);
+                m_xOverlineColorLB->SelectEntry(aColor);
             }
             else
             {
-                m_pOverlineColorLB->SelectEntry(COL_AUTO);
-                m_pOverlineColorLB->Disable();
+                m_xOverlineColorLB->SelectEntry(COL_AUTO);
+                m_xOverlineColorLB->set_sensitive(false);
             }
         }
     }
@@ -1884,13 +1849,13 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     rCJKFont.SetStrikeout( STRIKEOUT_NONE );
     rCTLFont.SetStrikeout( STRIKEOUT_NONE );
 
-    m_pStrikeoutLB->SelectEntryPos( 0 );
+    m_xStrikeoutLB->set_active( 0 );
     eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SfxItemState::DONTCARE )
     {
         if ( eState == SfxItemState::DONTCARE )
-            m_pStrikeoutLB->SetNoSelection();
+            m_xStrikeoutLB->set_active(-1);
         else
         {
             const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>(rSet->Get( nWhich ));
@@ -1901,14 +1866,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
             if ( eStrikeout != STRIKEOUT_NONE )
             {
-                for ( sal_Int32 i = 0; i < m_pStrikeoutLB->GetEntryCount(); ++i )
+                auto nPos = m_xStrikeoutLB->find_id(OUString::number(eStrikeout));
+                if (nPos != -1)
                 {
-                    if ( static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData(i))) == eStrikeout )
-                    {
-                        m_pStrikeoutLB->SelectEntryPos(i);
-                        bEnable = true;
-                        break;
-                    }
+                    m_xStrikeoutLB->set_active(nPos);
+                    bEnable = true;
                 }
             }
         }
@@ -1919,16 +1881,16 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pIndividualWordsBtn->Hide();
+            m_xIndividualWordsBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pIndividualWordsBtn->Disable();
+            m_xIndividualWordsBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pIndividualWordsBtn->SetState( TRISTATE_INDET );
+            m_xIndividualWordsBtn->set_state( TRISTATE_INDET );
             break;
 
         case SfxItemState::DEFAULT:
@@ -1939,8 +1901,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             rCJKFont.SetWordLineMode( rItem.GetValue() );
             rCTLFont.SetWordLineMode( rItem.GetValue() );
 
-            m_pIndividualWordsBtn->Check( rItem.GetValue() );
-            m_pIndividualWordsBtn->Enable( bEnable );
+            m_xIndividualWordsBtn->set_active(rItem.GetValue());
+            m_xIndividualWordsBtn->set_sensitive(bEnable);
             break;
         }
     }
@@ -1957,48 +1919,34 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_pEmphasisLB->SelectEntryPos( static_cast<sal_Int32>(FontEmphasisMark( eMark & FontEmphasisMark::Style )) );
+        m_xEmphasisLB->set_active( static_cast<sal_Int32>(FontEmphasisMark( eMark & FontEmphasisMark::Style )) );
         eMark &= ~FontEmphasisMark::Style;
-        sal_uLong nEntryData = ( eMark == FontEmphasisMark::PosAbove )
+        int nEntryData = ( eMark == FontEmphasisMark::PosAbove )
             ? CHRDLG_POSITION_OVER
             : ( eMark == FontEmphasisMark::PosBelow ) ? CHRDLG_POSITION_UNDER : 0;
 
-        for ( sal_Int32 i = 0; i < m_pPositionLB->GetEntryCount(); i++ )
-        {
-            if ( nEntryData == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData(i)) )
-            {
-                m_pPositionLB->SelectEntryPos(i);
-                break;
-            }
-        }
+        auto nPos = m_xPositionLB->find_id(OUString::number(nEntryData));
+        if (nPos != -1)
+            m_xPositionLB->set_active(nPos);
     }
     else if ( eState == SfxItemState::DONTCARE )
-        m_pEmphasisLB->SetNoSelection( );
+        m_xEmphasisLB->set_active(-1);
     else if ( eState == SfxItemState::UNKNOWN )
     {
-        m_pEmphasisFT->Hide();
-        m_pEmphasisLB->Hide();
+        m_xEmphasisFT->hide();
+        m_xEmphasisLB->hide();
     }
     else // SfxItemState::DISABLED or SfxItemState::READONLY
     {
-        m_pEmphasisFT->Disable();
-        m_pEmphasisLB->Disable();
+        m_xEmphasisFT->set_sensitive(false);
+        m_xEmphasisLB->set_sensitive(false);
     }
 
     // the select handler for the underline/overline/strikeout list boxes
-    DBG_ASSERT(m_pUnderlineLB->GetSelectHdl() == m_pOverlineLB->GetSelectHdl(),
-        "SvxCharEffectsPage::Reset: inconsistence (1)!");
-    DBG_ASSERT(m_pUnderlineLB->GetSelectHdl() == m_pStrikeoutLB->GetSelectHdl(),
-        "SvxCharEffectsPage::Reset: inconsistence (1)!");
-    m_pUnderlineLB->GetSelectHdl().Call(*m_pUnderlineLB);
-        // don't call SelectHdl_Impl directly!
-        // in DisableControls, we may have re-routed the select handler
+    SelectHdl_Impl(m_xUnderlineLB.get());
 
     // the select handler for the emphasis listbox
-    DBG_ASSERT(m_pEmphasisLB->GetSelectHdl() == LINK(this, SvxCharEffectsPage, SelectListBoxHdl_Impl),
-        "SvxCharEffectsPage::Reset: inconsistence (2)!");
-    m_pEmphasisLB->GetSelectHdl().Call( *m_pEmphasisLB );
-        // this is for consistency only. Here it would be allowed to call SelectHdl_Impl directly ...
+    SelectHdl_Impl(m_xEmphasisLB.get());
 
     // Effects
     SvxCaseMap eCaseMap = SvxCaseMap::End;
@@ -2007,18 +1955,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pEffectsFT->Hide();
-            m_pEffectsLB->Hide();
+            m_xEffectsFT->hide();
+            m_xEffectsLB->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pEffectsFT->Disable();
-            m_pEffectsLB->Disable();
+            m_xEffectsFT->set_sensitive(false);
+            m_xEffectsLB->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pEffectsLB->SetNoSelection();
+            m_xEffectsLB->set_active(-1);
             break;
 
         case SfxItemState::DEFAULT:
@@ -2037,26 +1985,26 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pReliefFT->Hide();
-            m_pReliefLB->Hide();
+            m_xReliefFT->hide();
+            m_xReliefLB->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pReliefFT->Disable();
-            m_pReliefLB->Disable();
+            m_xReliefFT->set_sensitive(false);
+            m_xReliefLB->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pReliefLB->SetNoSelection();
+            m_xReliefLB->set_active(-1);
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>(rSet->Get( nWhich ));
-            m_pReliefLB->SelectEntryPos(static_cast<sal_Int32>(rItem.GetValue()));
-            SelectHdl_Impl(m_pReliefLB);
+            m_xReliefLB->set_active(static_cast<sal_Int32>(rItem.GetValue()));
+            SelectHdl_Impl(m_xReliefLB.get());
             break;
         }
     }
@@ -2067,24 +2015,23 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pOutlineBtn->Hide();
+            m_xOutlineBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pOutlineBtn->Disable();
+            m_xOutlineBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pOutlineBtn->SetState( TRISTATE_INDET );
+            m_xOutlineBtn->set_state(TRISTATE_INDET);
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxContourItem& rItem = static_cast<const SvxContourItem&>(rSet->Get( nWhich ));
-            m_pOutlineBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
-            m_pOutlineBtn->EnableTriState( false );
+            m_xOutlineBtn->set_state(static_cast<TriState>(rItem.GetValue()));
             break;
         }
     }
@@ -2096,24 +2043,23 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pShadowBtn->Hide();
+            m_xShadowBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pShadowBtn->Disable();
+            m_xShadowBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pShadowBtn->SetState( TRISTATE_INDET );
+            m_xShadowBtn->set_state( TRISTATE_INDET );
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxShadowedItem& rItem = static_cast<const SvxShadowedItem&>(rSet->Get( nWhich ));
-            m_pShadowBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
-            m_pShadowBtn->EnableTriState( false );
+            m_xShadowBtn->set_state( static_cast<TriState>(rItem.GetValue()) );
             break;
         }
     }
@@ -2125,24 +2071,23 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pBlinkingBtn->Hide();
+            m_xBlinkingBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pBlinkingBtn->Disable();
+            m_xBlinkingBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pBlinkingBtn->SetState( TRISTATE_INDET );
+            m_xBlinkingBtn->set_state( TRISTATE_INDET );
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxBlinkItem& rItem = static_cast<const SvxBlinkItem&>(rSet->Get( nWhich ));
-            m_pBlinkingBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
-            m_pBlinkingBtn->EnableTriState( false );
+            m_xBlinkingBtn->set_state( static_cast<TriState>(rItem.GetValue()) );
             break;
         }
     }
@@ -2153,24 +2098,23 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
-            m_pHiddenBtn->Hide();
+            m_xHiddenBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
-            m_pHiddenBtn->Disable();
+            m_xHiddenBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
-            m_pHiddenBtn->SetState( TRISTATE_INDET );
+            m_xHiddenBtn->set_state(TRISTATE_INDET);
             break;
 
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SvxCharHiddenItem& rItem = static_cast<const SvxCharHiddenItem&>(rSet->Get( nWhich ));
-            m_pHiddenBtn->SetState( static_cast<TriState>(rItem.GetValue()) );
-            m_pHiddenBtn->EnableTriState( false );
+            m_xHiddenBtn->set_state(static_cast<TriState>(rItem.GetValue()));
             break;
         }
     }
@@ -2179,7 +2123,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     ResetColor_Impl( *rSet );
 
     // preview update
-    m_pPreviewWin->Invalidate();
+    m_aPreviewWin.Invalidate();
 
     // save this settings
     ChangesApplied();
@@ -2187,18 +2131,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
 void SvxCharEffectsPage::ChangesApplied()
 {
-    m_pUnderlineLB->SaveValue();
-    m_pOverlineLB->SaveValue();
-    m_pStrikeoutLB->SaveValue();
-    m_pIndividualWordsBtn->SaveValue();
-    m_pEmphasisLB->SaveValue();
-    m_pPositionLB->SaveValue();
-    m_pEffectsLB->SaveValue();
-    m_pReliefLB->SaveValue();
-    m_pOutlineBtn->SaveValue();
-    m_pShadowBtn->SaveValue();
-    m_pBlinkingBtn->SaveValue();
-    m_pHiddenBtn->SaveValue();
+    m_xUnderlineLB->save_value();
+    m_xOverlineLB->save_value();
+    m_xStrikeoutLB->save_value();
+    m_xIndividualWordsBtn->save_state();
+    m_xEmphasisLB->save_value();
+    m_xPositionLB->save_value();
+    m_xEffectsLB->save_value();
+    m_xReliefLB->save_value();
+    m_xOutlineBtn->save_state();
+    m_xShadowBtn->save_state();
+    m_xBlinkingBtn->save_state();
+    m_xHiddenBtn->save_state();
 }
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
@@ -2211,8 +2155,8 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Underline
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_UNDERLINE );
-    sal_Int32 nPos = m_pUnderlineLB->GetSelectedEntryPos();
-    FontLineStyle eUnder = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos )));
+    auto nPos = m_xUnderlineLB->get_active();
+    FontLineStyle eUnder = static_cast<FontLineStyle>(m_xUnderlineLB->get_active_id().toInt32());
 
     if ( pOld )
     {
@@ -2220,12 +2164,12 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
-        bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+        bool bAllowChg = nPos != -1  &&
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxUnderlineItem& rItem = *static_cast<const SvxUnderlineItem*>(pOld);
         if ( rItem.GetValue() == eUnder &&
-             ( LINESTYLE_NONE == eUnder || rItem.GetColor() == m_pUnderlineColorLB->GetSelectEntryColor() ) &&
+             ( LINESTYLE_NONE == eUnder || rItem.GetColor() == m_xUnderlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;
     }
@@ -2233,7 +2177,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( bChanged )
     {
         SvxUnderlineItem aNewItem( eUnder, nWhich );
-        aNewItem.SetColor( m_pUnderlineColorLB->GetSelectEntryColor() );
+        aNewItem.SetColor( m_xUnderlineColorLB->GetSelectEntryColor() );
         rSet->Put( aNewItem );
         bModified = true;
     }
@@ -2245,8 +2189,8 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Overline
     nWhich = GetWhich( SID_ATTR_CHAR_OVERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_OVERLINE );
-    nPos = m_pOverlineLB->GetSelectedEntryPos();
-    FontLineStyle eOver = static_cast<FontLineStyle>(reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos )));
+    nPos = m_xOverlineLB->get_active();
+    FontLineStyle eOver = static_cast<FontLineStyle>(m_xOverlineLB->get_active_id().toInt32());
 
     if ( pOld )
     {
@@ -2254,12 +2198,12 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
-        bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+        bool bAllowChg = nPos != -1 &&
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxOverlineItem& rItem = *static_cast<const SvxOverlineItem*>(pOld);
         if ( rItem.GetValue() == eOver &&
-             ( LINESTYLE_NONE == eOver || rItem.GetColor() == m_pOverlineColorLB->GetSelectEntryColor() ) &&
+             ( LINESTYLE_NONE == eOver || rItem.GetColor() == m_xOverlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;
     }
@@ -2267,7 +2211,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( bChanged )
     {
         SvxOverlineItem aNewItem( eOver, nWhich );
-        aNewItem.SetColor( m_pOverlineColorLB->GetSelectEntryColor() );
+        aNewItem.SetColor( m_xOverlineColorLB->GetSelectEntryColor() );
         rSet->Put( aNewItem );
         bModified = true;
     }
@@ -2279,8 +2223,8 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Strikeout
     nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_STRIKEOUT );
-    nPos = m_pStrikeoutLB->GetSelectedEntryPos();
-    FontStrikeout eStrike = static_cast<FontStrikeout>(reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos )));
+    nPos = m_xStrikeoutLB->get_active();
+    FontStrikeout eStrike = static_cast<FontStrikeout>(m_xStrikeoutLB->get_active_id().toInt32());
 
     if ( pOld )
     {
@@ -2288,11 +2232,11 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the strikeout style will be allowed if a style is
         //! selected in the listbox.
-        bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+        bool bAllowChg = nPos != -1 &&
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCrossedOutItem& rItem = *static_cast<const SvxCrossedOutItem*>(pOld);
-        if ( !m_pStrikeoutLB->IsEnabled()
+        if ( !m_xStrikeoutLB->get_sensitive()
             || (rItem.GetValue() == eStrike  && !bAllowChg) )
             bChanged = false;
     }
@@ -2314,17 +2258,17 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( pOld )
     {
         const SvxWordLineModeItem& rItem = *static_cast<const SvxWordLineModeItem*>(pOld);
-        if ( rItem.GetValue() == m_pIndividualWordsBtn->IsChecked() )
+        if ( rItem.GetValue() == m_xIndividualWordsBtn->get_active() )
             bChanged = false;
     }
 
     if ( rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
-         ! m_pIndividualWordsBtn->IsValueChangedFromSaved() )
+         ! m_xIndividualWordsBtn->get_state_changed_from_saved() )
         bChanged = false;
 
     if ( bChanged )
     {
-        rSet->Put( SvxWordLineModeItem( m_pIndividualWordsBtn->IsChecked(), nWhich ) );
+        rSet->Put( SvxWordLineModeItem( m_xIndividualWordsBtn->get_active(), nWhich ) );
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
@@ -2335,12 +2279,13 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_EMPHASISMARK );
-    sal_Int32 nMarkPos = m_pEmphasisLB->GetSelectedEntryPos();
-    sal_Int32 nPosPos = m_pPositionLB->GetSelectedEntryPos();
+    int nMarkPos = m_xEmphasisLB->get_active();
+    OUString sMarkPos = m_xEmphasisLB->get_active_text();
+    OUString sPosPos = m_xPositionLB->get_active_text();
     FontEmphasisMark eMark = static_cast<FontEmphasisMark>(nMarkPos);
-    if ( m_pPositionLB->IsEnabled() )
+    if (m_xPositionLB->get_sensitive())
     {
-        eMark |= ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPosPos )) )
+        eMark |= (CHRDLG_POSITION_UNDER == m_xPositionLB->get_active_id().toInt32())
             ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
     }
 
@@ -2354,11 +2299,13 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if ( rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
-         m_pEmphasisLB->GetSavedValue() == nMarkPos && m_pPositionLB->GetSavedValue() == nPosPos )
+    if (rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
+         m_xEmphasisLB->get_saved_value() == sMarkPos && m_xPositionLB->get_saved_value() == sPosPos)
+    {
         bChanged = false;
+    }
 
-    if ( bChanged )
+    if (bChanged)
     {
         rSet->Put( SvxEmphasisMarkItem( eMark, nWhich ) );
         bModified = true;
@@ -2373,8 +2320,8 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CASEMAP );
     SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
     bool bChecked = false;
-    sal_Int32 nCapsPos = m_pEffectsLB->GetSelectedEntryPos();
-    if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
+    auto nCapsPos = m_xEffectsLB->get_active();
+    if (nCapsPos != -1)
     {
         eCaseMap = static_cast<SvxCaseMap>(nCapsPos);
         bChecked = true;
@@ -2386,7 +2333,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the effect style will be allowed if a style is
         //! selected in the listbox.
-        bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+        bool bAllowChg = nPos != -1 &&
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCaseMapItem& rItem = *static_cast<const SvxCaseMapItem*>(pOld);
@@ -2406,10 +2353,10 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 
     //Relief
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
-    if(m_pReliefLB->IsValueChangedFromSaved())
+    if (m_xReliefLB->get_value_changed_from_saved())
     {
-        m_pReliefLB->SaveValue();
-        SvxCharReliefItem aRelief(static_cast<FontRelief>(m_pReliefLB->GetSelectedEntryPos()), nWhich);
+        m_xReliefLB->save_value();
+        SvxCharReliefItem aRelief(static_cast<FontRelief>(m_xReliefLB->get_active()), nWhich);
         rSet->Put(aRelief);
     }
 
@@ -2417,13 +2364,13 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CONTOUR );
-    TriState eState = m_pOutlineBtn->GetState();
+    TriState eState = m_xOutlineBtn->get_state();
     const SfxPoolItem* pItem;
 
     if ( pOld )
     {
         const SvxContourItem& rItem = *static_cast<const SvxContourItem*>(pOld);
-        if ( rItem.GetValue() == StateToAttr( eState ) && m_pOutlineBtn->GetSavedValue() == eState )
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_xOutlineBtn->get_saved_state() == eState )
             bChanged = false;
     }
 
@@ -2444,12 +2391,12 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Shadow
     nWhich = GetWhich( SID_ATTR_CHAR_SHADOWED );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_SHADOWED );
-    eState = m_pShadowBtn->GetState();
+    eState = m_xShadowBtn->get_state();
 
     if ( pOld )
     {
         const SvxShadowedItem& rItem = *static_cast<const SvxShadowedItem*>(pOld);
-        if ( rItem.GetValue() == StateToAttr( eState ) && m_pShadowBtn->GetSavedValue() == eState )
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_xShadowBtn->get_saved_state() == eState )
             bChanged = false;
     }
 
@@ -2470,12 +2417,12 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Blinking
     nWhich = GetWhich( SID_ATTR_FLASH );
     pOld = GetOldItem( *rSet, SID_ATTR_FLASH );
-    eState = m_pBlinkingBtn->GetState();
+    eState = m_xBlinkingBtn->get_state();
 
     if ( pOld )
     {
         const SvxBlinkItem& rItem = *static_cast<const SvxBlinkItem*>(pOld);
-        if ( rItem.GetValue() == StateToAttr( eState ) && m_pBlinkingBtn->GetSavedValue() == eState )
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_xBlinkingBtn->get_saved_state() == eState )
             bChanged = false;
     }
 
@@ -2494,13 +2441,13 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Hidden
     nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_HIDDEN );
-    eState = m_pHiddenBtn->GetState();
+    eState = m_xHiddenBtn->get_state();
     bChanged = true;
 
     if ( pOld )
     {
         const SvxCharHiddenItem& rItem = *static_cast<const SvxCharHiddenItem*>(pOld);
-        if ( rItem.GetValue() == StateToAttr( eState ) && m_pHiddenBtn->GetSavedValue() == eState )
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_xHiddenBtn->get_saved_state() == eState )
             bChanged = false;
     }
 
@@ -2525,24 +2472,22 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
 {
     if ( ( DISABLE_CASEMAP & nDisable ) == DISABLE_CASEMAP )
     {
-        m_pEffectsFT->Disable();
-        m_pEffectsLB->Disable();
+        m_xEffectsFT->set_sensitive(false);
+        m_xEffectsLB->set_sensitive(false);
     }
 
     if ( ( DISABLE_WORDLINE & nDisable ) == DISABLE_WORDLINE )
-        m_pIndividualWordsBtn->Disable();
+        m_xIndividualWordsBtn->set_sensitive(false);;
 
     if ( ( DISABLE_BLINK & nDisable ) == DISABLE_BLINK )
-        m_pBlinkingBtn->Disable();
+        m_xBlinkingBtn->set_sensitive(false);;
 
     if ( ( DISABLE_UNDERLINE_COLOR & nDisable ) == DISABLE_UNDERLINE_COLOR )
     {
         // disable the controls
-        m_pUnderlineColorFT->Disable( );
-        m_pUnderlineColorLB->Disable( );
-        // and reroute the selection handler of the controls which normally would affect the color box dis-/enabling
-        m_pUnderlineLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, UpdatePreview_Impl));
-        m_pStrikeoutLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, UpdatePreview_Impl));
+        m_xUnderlineColorFT->set_sensitive(false);;
+        m_xUnderlineColorLB->set_sensitive(false);;
+        m_bUnderlineColorDisabled = true;
     }
 }
 
@@ -2557,7 +2502,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
-            m_pBlinkingBtn->Show();
+            m_xBlinkingBtn->show();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             // the writer uses SID_ATTR_BRUSH as font background
             m_bPreviewBackgroundToCharacter = true;

@@ -200,7 +200,7 @@ public:
 
 // class SvxCharEffectsPage ----------------------------------------------
 
-class SvxCharEffectsPage : public SvxCharBasePage
+class SvxCharEffectsPage : public CharBasePage
 {
     friend class VclPtr<SvxCharEffectsPage>;
 
@@ -210,43 +210,34 @@ private:
     bool                       m_bNewFontColor;
     bool                       m_bEnableNoneFontColor;
     Color                      m_aOrigFontColor;
-    VclPtr<FixedText>          m_pFontColorFT;
-    VclPtr<SvxColorListBox>    m_pFontColorLB;
+    sal_uInt16                 m_nHtmlMode;
+    bool                       m_bUnderlineColorDisabled;
 
-    VclPtr<FixedText>          m_pEffectsFT;
-    VclPtr<ListBox>            m_pEffectsLB;
+    std::unique_ptr<weld::Label> m_xFontColorFT;
+    std::unique_ptr<ColorListBox> m_xFontColorLB;
+    std::unique_ptr<weld::Label> m_xEffectsFT;
+    std::unique_ptr<weld::ComboBoxText> m_xEffectsLB;
+    std::unique_ptr<weld::Label> m_xReliefFT;
+    std::unique_ptr<weld::ComboBoxText> m_xReliefLB;
+    std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
+    std::unique_ptr<weld::CheckButton> m_xShadowBtn;
+    std::unique_ptr<weld::CheckButton> m_xBlinkingBtn;
+    std::unique_ptr<weld::CheckButton> m_xHiddenBtn;
+    std::unique_ptr<weld::ComboBoxText> m_xOverlineLB;
+    std::unique_ptr<weld::Label> m_xOverlineColorFT;
+    std::unique_ptr<ColorListBox> m_xOverlineColorLB;
+    std::unique_ptr<weld::ComboBoxText> m_xStrikeoutLB;
+    std::unique_ptr<weld::ComboBoxText> m_xUnderlineLB;
+    std::unique_ptr<weld::Label> m_xUnderlineColorFT;
+    std::unique_ptr<ColorListBox> m_xUnderlineColorLB;
+    std::unique_ptr<weld::CheckButton> m_xIndividualWordsBtn;
+    std::unique_ptr<weld::Label> m_xEmphasisFT;
+    std::unique_ptr<weld::ComboBoxText> m_xEmphasisLB;
+    std::unique_ptr<weld::Label> m_xPositionFT;
+    std::unique_ptr<weld::ComboBoxText> m_xPositionLB;
+    std::unique_ptr<weld::Label> m_xA11yWarningFT;
 
-    VclPtr<FixedText>          m_pReliefFT;
-    VclPtr<ListBox>            m_pReliefLB;
-
-    VclPtr<TriStateBox>        m_pOutlineBtn;
-    VclPtr<TriStateBox>        m_pShadowBtn;
-    VclPtr<TriStateBox>        m_pBlinkingBtn;
-    VclPtr<TriStateBox>        m_pHiddenBtn;
-
-    VclPtr<ListBox>            m_pOverlineLB;
-    VclPtr<FixedText>          m_pOverlineColorFT;
-    VclPtr<SvxColorListBox>    m_pOverlineColorLB;
-
-    VclPtr<ListBox>            m_pStrikeoutLB;
-
-    VclPtr<ListBox>            m_pUnderlineLB;
-    VclPtr<FixedText>          m_pUnderlineColorFT;
-    VclPtr<SvxColorListBox>    m_pUnderlineColorLB;
-
-    VclPtr<CheckBox>           m_pIndividualWordsBtn;
-
-    VclPtr<FixedText>          m_pEmphasisFT;
-    VclPtr<ListBox>            m_pEmphasisLB;
-
-    VclPtr<FixedText>          m_pPositionFT;
-    VclPtr<ListBox>            m_pPositionLB;
-
-    VclPtr<FixedText>          m_pA11yWarningFT;
-
-    sal_uInt16          m_nHtmlMode;
-
-                        SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -256,12 +247,12 @@ private:
     Color               GetPreviewFontColor(const Color& rColor) const;
     void                EnableNoneFontColor();
 
-    void SelectHdl_Impl(ListBox*);
-    DECL_LINK(SelectListBoxHdl_Impl, ListBox&, void);
-    DECL_LINK(CbClickHdl_Impl, Button*, void);
-    DECL_LINK(TristClickHdl_Impl, Button*, void);
-    DECL_LINK(UpdatePreview_Impl, ListBox&, void);
-    DECL_LINK(ColorBoxSelectHdl_Impl, SvxColorListBox&, void);
+    void SelectHdl_Impl(weld::ComboBoxText*);
+    DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(UpdatePreview_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
 
 public:
     virtual ~SvxCharEffectsPage() override;

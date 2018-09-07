@@ -158,6 +158,8 @@ class FontPrevWin_Impl
     OUString maScriptText;
     std::unique_ptr<Color> mpColor;
     std::unique_ptr<Color> mpBackColor;
+    std::unique_ptr<Color> mpTextLineColor;
+    std::unique_ptr<Color> mpOverlineColor;
     long mnAscent;
     sal_Unicode mcStartBracket;
     sal_Unicode mcEndBracket;
@@ -1545,9 +1547,21 @@ void FontPrevWindow::SetBackColor(const Color &rColor)
     Invalidate();
 }
 
+void FontPrevWindow::SetTextLineColor(const Color &rColor)
+{
+    pImpl->mpTextLineColor.reset(new Color(rColor));
+    Invalidate();
+}
+
+void FontPrevWindow::SetOverlineColor(const Color &rColor)
+{
+    pImpl->mpOverlineColor.reset(new Color(rColor));
+    Invalidate();
+}
+
 void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     ApplySettings(rRenderContext);
@@ -1666,6 +1680,16 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
             rRenderContext.DrawRect(aRect);
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);
+        }
+
+        if (pImpl->mpTextLineColor)
+        {
+            rRenderContext.SetTextLineColor(*pImpl->mpTextLineColor);
+        }
+
+        if (pImpl->mpOverlineColor)
+        {
+            rRenderContext.SetOverlineColor(*pImpl->mpOverlineColor);
         }
 
         long nStdAscent = pImpl->mnAscent;

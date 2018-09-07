@@ -101,6 +101,8 @@ private:
     Color m_aAutoDisplayColor;
     Color m_aSaveColor;
     NamedColor m_aSelectedColor;
+    sal_uInt16 m_nSlotId;
+    bool m_bShowNoneButton;
     bool m_bInterimBuilder;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
@@ -118,6 +120,8 @@ public:
         m_aSelectedLink = rLink;
     }
 
+    void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
+
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
     NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
 
@@ -133,6 +137,7 @@ public:
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 
     void set_sensitive(bool sensitive) { m_xButton->set_sensitive(sensitive); }
+    void hide() { m_xButton->hide(); }
 };
 
 /** A wrapper for SvxColorListBox. */
