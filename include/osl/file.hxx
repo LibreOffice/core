@@ -1300,6 +1300,39 @@ public:
         return static_cast< RC >( osl_moveFile( ustrSourceFileURL.pData, ustrDestFileURL.pData ) );
     }
 
+    /** Move a file to a new destination or rename it, taking old file's identity (if exists).
+
+        Moves or renames a file, replacing an existing file if exist. If the old file existed,
+        moved file's metadata, e.g. creation time (on FSes which keep files' creation time) or
+        ACLs, are set to old one's (to keep the old file's identity) - currently this is only
+        implemented on Windows; on other platforms, this is equivalent to osl_moveFile.
+
+        @param[in] ustrSourceFileURL
+        Full qualified URL of the source file.
+
+        @param[in] ustrDestFileURL
+        Full qualified URL of the destination file.
+
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_PERM operation not permitted
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file
+        @retval E_ROFS read-only file system
+        @retval E_BUSY device or resource busy
+
+        @see move()
+
+        @since LibreOffice 6.2
+    */
+    static RC replace(const ::rtl::OUString& ustrSourceFileURL,
+                      const ::rtl::OUString& ustrDestFileURL)
+    {
+        return static_cast<RC>(osl_replaceFile(ustrSourceFileURL.pData, ustrDestFileURL.pData));
+    }
+
     /** Remove a regular file.
 
         @param[in] ustrFileURL
