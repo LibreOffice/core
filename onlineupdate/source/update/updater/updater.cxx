@@ -301,14 +301,15 @@ EnvHasValue(const char *name)
 #endif
 
 /**
- * Coverts a relative update path to a full path.
+ * Coverts a relative update path to a absolute path related to the working
+ * or install directory. Allocates a new NS_tchar[] based path!
  *
  * @param  relpath
  *         The relative path to convert to a full path.
  * @return valid filesystem full path or nullptr if memory allocation fails.
  */
 static NS_tchar*
-get_full_path(const NS_tchar *relpath)
+new_absolute_path(const NS_tchar *relpath)
 {
     NS_tchar *destpath = sStagedUpdate ? gWorkingDirPath : gInstallDirPath;
     size_t lendestpath = NS_tstrlen(destpath);
@@ -358,36 +359,36 @@ bool is_userprofile_in_instdir()
 }
 
 /**
- * Converts a full update path into a relative path; reverses get_full_path.
+ * Get a pointer in the absolute path, relative to the working or install
+ * directory. Returns itself, if not absolute or outside of the directory.
  *
- * @param  fullpath
- *         The absolute path to convert into a relative path.
+ * @param  abs_path
+ *         An absolute path.
  * return pointer to the location within fullpath where the relative path starts
  *        or fullpath itself if it already looks relative.
  */
 static const NS_tchar*
-get_relative_path(const NS_tchar *fullpath)
+get_relative_offset(const NS_tchar *abs_path)
 {
     // If the path isn't absolute, just return it as-is.
 #ifdef _WIN32
-    if (fullpath[1] != ':' && fullpath[2] != '\\')
+    if (abs_path[1] != ':' && abs_path[2] != '\\')
     {
 #else
-    if (fullpath[0] != '/')
+    if (abs_path[0] != '/')
     {
 #endif
-        return fullpath;
+        return abs_path;
     }
 
     NS_tchar *prefix = sStagedUpdate ? gWorkingDirPath : gInstallDirPath;
 
-    // If the path isn't long enough to be absolute, return it as-is.
-    if (NS_tstrlen(fullpath) <= NS_tstrlen(prefix))
-    {
-        return fullpath;
-    }
-
-    return fullpath + NS_tstrlen(prefix) + 1;
+    size_t len = NS_tstrlen(prefix);
+    if (NS_tstrlen(abs_path) <= len)
+        return abs_path;
+    if (0 != strncmp(abs_path, prefix, len))
+        return abs_path;
+    return abs_path + len + 1;
 }
 
 /**
@@ -1136,7 +1137,7 @@ RemoveFile::Parse(NS_tchar *line)
     mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
-    mFile.reset(get_full_path(validPath));
+    mFile.reset(new_absolute_path(validPath));
     if (!mFile)
     {
         return PARSE_ERROR;
@@ -1264,7 +1265,7 @@ RemoveDir::Parse(NS_tchar *line)
     mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
-    mDir.reset(get_full_path(validPath));
+    mDir.reset(new_absolute_path(validPath));
     if (!mDir)
     {
         return PARSE_ERROR;
@@ -1390,7 +1391,7 @@ AddFile::Parse(NS_tchar *line)
     mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
-    mFile.reset(get_full_path(validPath));
+    mFile.reset(new_absolute_path(validPath));
     if (!mFile)
     {
         return PARSE_ERROR;
@@ -1586,7 +1587,7 @@ PatchFile::Parse(NS_tchar *line)
     mFileRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mFileRelPath.get(), validPath);
 
-    mFile.reset(get_full_path(validPath));
+    mFile.reset(new_absolute_path(validPath));
     if (!mFile)
     {
         return PARSE_ERROR;
@@ -1812,7 +1813,7 @@ AddIfFile::Parse(NS_tchar *line)
 {
     // format "<testfile>" "<newfile>"
 
-    mTestFile.reset(get_full_path(get_valid_path(&line)));
+    mTestFile.reset(new_absolute_path(get_valid_path(&line)));
     if (!mTestFile)
         return PARSE_ERROR;
 
@@ -1879,7 +1880,7 @@ AddIfNotFile::Parse(NS_tchar *line)
 {
     // format "<testfile>" "<newfile>"
 
-    mTestFile.reset(get_full_path(get_valid_path(&line)));
+    mTestFile.reset(new_absolute_path(get_valid_path(&line)));
     if (!mTestFile)
         return PARSE_ERROR;
 
@@ -1946,7 +1947,7 @@ PatchIfFile::Parse(NS_tchar *line)
 {
     // format "<testfile>" "<patchfile>" "<filetopatch>"
 
-    mTestFile.reset(get_full_path(get_valid_path(&line)));
+    mTestFile.reset(new_absolute_path(get_valid_path(&line)));
     if (!mTestFile)
         return PARSE_ERROR;
 
@@ -4036,7 +4037,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
 
     NS_tsnprintf(searchspec, sizeof(searchspec)/sizeof(searchspec[0]),
                  NS_T("%s*"), dirpath);
-    std::unique_ptr<const NS_tchar[]> pszSpec(get_full_path(searchspec));
+    std::unique_ptr<const NS_tchar[]> pszSpec(new_absolute_path(searchspec));
 
     hFindFile = FindFirstFileW(pszSpec.get(), &finddata);
     if (hFindFile != INVALID_HANDLE_VALUE)
@@ -4116,7 +4117,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
         char chars[MAXNAMLEN];
     } ent_buf;
     struct dirent* ent;
-    std::unique_ptr<NS_tchar[]> searchpath(get_full_path(dirpath));
+    std::unique_ptr<NS_tchar[]> searchpath(new_absolute_path(dirpath));
 
     DIR* dir = opendir(searchpath.get());
     if (!dir)
@@ -4157,7 +4158,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
         else
         {
             // Add the file to be removed to the ActionList.
-            NS_tchar *quotedpath = get_quoted_path(get_relative_path(foundpath));
+            NS_tchar *quotedpath = get_quoted_path(get_relative_offset(foundpath));
             if (!quotedpath)
             {
                 closedir(dir);
@@ -4180,7 +4181,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
     closedir(dir);
 
     // Add the directory to be removed to the ActionList.
-    NS_tchar *quotedpath = get_quoted_path(get_relative_path(dirpath));
+    NS_tchar *quotedpath = get_quoted_path(get_relative_offset(dirpath));
     if (!quotedpath)
         return PARSE_ERROR;
 
@@ -4206,7 +4207,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
     int rv = OK;
     FTS *ftsdir;
     FTSENT *ftsdirEntry;
-    std::unique_ptr<NS_tchar[]> searchpath(get_full_path(dirpath));
+    std::unique_ptr<NS_tchar[]> searchpath(new_absolute_path(dirpath));
 
     // Remove the trailing slash so the paths don't contain double slashes. The
     // existence of the slash has already been checked in DoUpdate.
@@ -4242,7 +4243,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
                 // Add the file to be removed to the ActionList.
                 NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
                              NS_T("%s"), ftsdirEntry->fts_accpath);
-                quotedpath = get_quoted_path(get_relative_path(foundpath));
+                quotedpath = get_quoted_path(get_relative_offset(foundpath));
                 if (!quotedpath)
                 {
                     rv = UPDATER_QUOTED_PATH_MEM_ERROR;
@@ -4261,7 +4262,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
                 // Add the directory to be removed to the ActionList.
                 NS_tsnprintf(foundpath, sizeof(foundpath)/sizeof(foundpath[0]),
                              NS_T("%s/"), ftsdirEntry->fts_accpath);
-                quotedpath = get_quoted_path(get_relative_path(foundpath));
+                quotedpath = get_quoted_path(get_relative_offset(foundpath));
                 if (!quotedpath)
                 {
                     rv = UPDATER_QUOTED_PATH_MEM_ERROR;
@@ -4384,10 +4385,10 @@ GetManifestContents(const NS_tchar *manifest)
 int AddPreCompleteActions(ActionList *list)
 {
 #ifdef MACOSX
-    std::unique_ptr<NS_tchar[]> manifestPath(get_full_path(
+    std::unique_ptr<NS_tchar[]> manifestPath(new_absolute_path(
             NS_T("Contents/Resources/precomplete")));
 #else
-    std::unique_ptr<NS_tchar[]> manifestPath(get_full_path(
+    std::unique_ptr<NS_tchar[]> manifestPath(new_absolute_path(
             NS_T("precomplete")));
 #endif
 
