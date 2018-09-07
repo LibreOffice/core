@@ -61,9 +61,7 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn )
     : SvRTFParser( rIn, 5 )
     , aPlainMap(rPool)
     , aPardMap(rPool)
-    , pInsPos( nullptr )
     , pAttrPool( &rPool )
-    , pRTFDefaults( nullptr )
     , nDfltFont( 0)
     , bNewDoc( true )
     , bNewGroup( false)
@@ -945,7 +943,6 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         SfxItemPool& rPool, const sal_uInt16* pWhichRange,
         const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
-    , m_pChildList( nullptr )
     , nStyleNo( 0 )
 {
     pSttNd.reset( rPos.MakeNodeIdx() );
@@ -959,7 +956,6 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos,
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
-    , m_pChildList( nullptr )
     , nStyleNo( rCpy.nStyleNo )
 {
     pSttNd.reset( rPos.MakeNodeIdx() );

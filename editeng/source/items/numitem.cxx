@@ -62,7 +62,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
-css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter = nullptr;
+css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter;
 static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
 {
     if(!_xFormatter.is())
@@ -165,17 +165,13 @@ SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
       mnListtabPos( 0 ),
       mnFirstLineIndent( 0 ),
       mnIndentAt( 0 ),
-      pGraphicBrush(nullptr),
-      eVertOrient(text::VertOrientation::NONE),
-      pBulletFont(nullptr)
+      eVertOrient(text::VertOrientation::NONE)
 {
 }
 
 SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
     SvxNumberType(rFormat),
-    mePositionAndSpaceMode( rFormat.mePositionAndSpaceMode ),
-    pGraphicBrush(nullptr),
-    pBulletFont(nullptr)
+    mePositionAndSpaceMode( rFormat.mePositionAndSpaceMode )
 {
     *this = rFormat;
 }

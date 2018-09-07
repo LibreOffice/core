@@ -576,7 +576,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     const OUString& aListenerType,
     const OUString& aAddListenerParam)
 {
-    Reference< XEventListener > xRet = nullptr;
+    Reference< XEventListener > xRet;
 
     // Construct the name of the addListener-Method.
     sal_Int32 nIndex = aListenerType.lastIndexOf('.');

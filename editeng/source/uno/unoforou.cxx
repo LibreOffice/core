@@ -42,8 +42,6 @@ using namespace ::com::sun::star;
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText /* = false */ ) :
     rOutliner( rOutl ),
     bOutlinerText( bOutlText ),
-    mpAttribsCache( nullptr ),
-    mpParaAttribsCache( nullptr ),
     mnParaAttribsCache( 0 )
 {
 }
