@@ -117,14 +117,14 @@ namespace osl
 
         /** Acquires the object specified as parameter.
         */
-        Guard(T * pT_) : pT(pT_)
+        explicit Guard(T * pT_) : pT(pT_)
         {
             pT->acquire();
         }
 
         /** Acquires the object specified as parameter.
         */
-        Guard(T & t) : pT(&t)
+        explicit Guard(T & t) : pT(&t)
         {
             pT->acquire();
         }
@@ -151,14 +151,14 @@ namespace osl
 
         /** Acquires the object specified as parameter.
         */
-        ClearableGuard(T * pT_) : pT(pT_)
+        explicit ClearableGuard(T * pT_) : pT(pT_)
         {
             pT->acquire();
         }
 
         /** Acquires the object specified as parameter.
         */
-        ClearableGuard(T & t) : pT(&t)
+        explicit ClearableGuard(T & t) : pT(&t)
         {
             pT->acquire();
         }
@@ -197,14 +197,14 @@ namespace osl
     public:
         /** Acquires the object specified as parameter.
         */
-        ResettableGuard( T* pT_ ) :
+        explicit ResettableGuard( T* pT_ ) :
                 ClearableGuard<T>( pT_ ),
                 pResetT( pT_ )
         {}
 
         /** Acquires the object specified as parameter.
         */
-        ResettableGuard( T& rT ) :
+        explicit ResettableGuard( T& rT ) :
                 ClearableGuard<T>( rT ),
                 pResetT( &rT )
         {}

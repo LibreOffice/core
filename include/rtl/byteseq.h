@@ -207,7 +207,7 @@ public:
 
         @param len initial sequence length
     */
-    inline ByteSequence( sal_Int32 len );
+    explicit inline ByteSequence( sal_Int32 len );
     /** Constructor: Creates sequence of given length and does NOT initialize data.
                      Use this ctor for performance optimization only.
 
