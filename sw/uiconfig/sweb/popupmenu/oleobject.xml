@@ -29,15 +29,15 @@
       <menu:menuitem menu:id=".uno:WrapAnchorOnly"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:AlignFrameMenu">
+  <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:AlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignHorizontalCenter"/>
-      <menu:menuitem menu:id=".uno:AlignRight"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignCenter"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignTop"/>
-      <menu:menuitem menu:id=".uno:AlignVerticalCenter"/>
-      <menu:menuitem menu:id=".uno:AlignBottom"/>
+      <menu:menuitem menu:id=".uno:AlignUp"/>
+      <menu:menuitem menu:id=".uno:AlignMiddle"/>
+      <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ArrangeFrameMenu">
@@ -51,4 +51,5 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
   <menu:menuitem menu:id=".uno:FrameDialog"/>
+  <menu:menuseparator/>
 </menu:menupopup>
