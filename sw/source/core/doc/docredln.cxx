@@ -121,8 +121,10 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
     while( pEndStart && (!pEndStart->IsStartNode() || pEndStart->IsSectionNode() ||
         pEndStart->IsTableNode() ) )
         pEndStart = pEndStart->StartOfSectionNode();
+    assert(pSttTab == pEndTab);
     if( pSttTab != pEndTab )
         nError = 1;
+    assert(pSttTab || pSttStart == pEndStart);
     if( !pSttTab && pSttStart != pEndStart )
         nError |= 2;
     if( nError )
