@@ -26,7 +26,7 @@
 
 #define nBackGroundColor    aColorTable[ 0 ]
 
-typedef ::std::vector< Bundle* > BundleList;
+typedef ::std::vector< std::unique_ptr<Bundle> > BundleList;
 
 class CGMElements
 {
@@ -132,7 +132,6 @@ class CGMElements
         static Bundle*      GetBundleIndex( long nIndex, BundleList&, Bundle& );
         static Bundle*      GetBundle( BundleList& rList, long nIndex );
         static Bundle*      InsertBundle( BundleList&, Bundle& );
-        static void         DeleteAllBundles( BundleList& );
         static void         CopyAllBundles( const BundleList& Source, BundleList& Dest );
 };
 
