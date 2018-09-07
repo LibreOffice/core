@@ -223,7 +223,7 @@ public:
             BogusRefCountPolicy::s_bShouldDecrement = true;
             aTestObj3 = std::move( aTestObj2 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE("aTestObj2.use_count()",
-                                         static_cast<sal_uInt32>(0), aTestObj2.use_count() );
+                                         static_cast<sal_uInt32>(0), aTestObj2.use_count() ); // NOLINT(bugprone-use-after-move)
             CPPUNIT_ASSERT_EQUAL_MESSAGE("aTestObj3.use_count()",
                                          static_cast<sal_uInt32>(1), aTestObj3.use_count() );
 
