@@ -25,32 +25,27 @@
 #include "../misc/WinImplHelper.hxx"
 #include <stdio.h>
 
-#include "../folderpicker/FolderPicker.hxx"
-#include "../folderpicker/FOPServiceInfo.hxx"
-#include "../folderpicker/WinFOPImpl.hxx"
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
+using ::com::sun::star::ui::dialogs::XFolderPicker2;
 
 static Reference< XInterface > createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    Reference< XInterface > xDlg;
-
-    xDlg.set(static_cast<XFilePicker2*>(
-            new ::fpicker::win32::vista::VistaFilePicker(rServiceManager)));
-
-    return xDlg;
+    return Reference<ui::dialogs::XFilePicker2>(
+            new ::fpicker::win32::vista::VistaFilePicker(rServiceManager, false));
 }
 
 static Reference< XInterface >
 createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    return Reference< XInterface >( static_cast< cppu::OWeakObject * >( new CFolderPicker( rServiceManager ) ) );
+    return Reference<ui::dialogs::XFolderPicker2>(
+            new ::fpicker::win32::vista::VistaFilePicker(rServiceManager, true));
 }
 
 extern "C"

@@ -26,6 +26,12 @@
 // the implementation names
 #define FILE_PICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FilePicker"
 
+// the service names
+#define FOLDER_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.SystemFolderPicker"
+
+// the implementation names
+#define FOLDER_PICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FolderPicker"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
