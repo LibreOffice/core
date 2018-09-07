@@ -1634,6 +1634,37 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL);
 
+/** Move a file to a new destination or renames it, taking old file's identity (if exists).
+
+    Moves or renames a file, replacing an existing file if exist. If the old file existed,
+    moved file creation time (on FSes which keep files' creation time) is set to old one's
+    (to keep the old file's identity) - currently this is only relevant to Windows, on other
+    platforms, this is equivalent to osl_moveFile.
+
+    @param[in] pustrSourceFileURL
+    Full qualified URL of the source file.
+
+    @param[in] pustrDestFileURL
+    Full qualified URL of the destination file.
+
+    @retval osl_File_E_None on success
+    @retval osl_File_E_INVAL the format of the parameters was not valid
+    @retval osl_File_E_NOMEM not enough memory for allocating structures
+    @retval osl_File_E_ACCES permission denied
+    @retval osl_File_E_PERM operation not permitted
+    @retval osl_File_E_NAMETOOLONG file name too long
+    @retval osl_File_E_NOENT no such file
+    @retval osl_File_E_ROFS read-only file system
+    @retval osl_File_E_BUSY if the implementation internally requires resources that are
+        (temporarily) unavailable
+
+    @see osl_copyFile()
+
+    @since LibreOffice 6.2
+*/
+SAL_DLLPUBLIC oslFileError SAL_CALL osl_replaceFile(rtl_uString* pustrSourceFileURL,
+                                                    rtl_uString* pustrDestFileURL);
+
 #ifdef __cplusplus
 }
 #endif
