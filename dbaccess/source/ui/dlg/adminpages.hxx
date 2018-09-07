@@ -152,16 +152,16 @@ namespace dbaui
         /** will be called inside <method>implInitControls</method> to save the value if necessary
             @param  _rControlList
                 The list must be filled with the controls.
-                It is not allowed to clear the list before pusching data into it.
+                It is not allowed to clear the list before pushing data into it.
         */
-        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) = 0;
+        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) = 0;
 
         /** will be called inside <method>implInitControls</method> to disable if necessary
             @param  _rControlList
                 The list must be filled with the controls.
-                It is not allowed to clear the list before pusching data into it.
+                It is not allowed to clear the list before pushing data into it.
         */
-        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) = 0;
+        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) = 0;
 
     public:
         /** fills the Boolean value into the item set when the value changed.

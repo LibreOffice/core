@@ -290,11 +290,11 @@ OUString OUserAdmin::GetUser()
     return m_pUSER->GetSelectedEntry();
 }
 
-void OUserAdmin::fillControls(std::vector< ISaveValueWrapper* >& /*_rControlList*/)
+void OUserAdmin::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
 {
 }
 
-void OUserAdmin::fillWindows(std::vector< ISaveValueWrapper* >& /*_rControlList*/)
+void OUserAdmin::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
 {
 }
 

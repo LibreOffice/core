@@ -116,25 +116,25 @@ namespace dbaui
         OGenericAdministrationPage::dispose();
     }
 
-    void OCommonBehaviourTabPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
         {
-            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pOptionsLabel));
+            _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pOptionsLabel));
         }
 
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
         {
-            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
+            _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
         }
     }
-    void OCommonBehaviourTabPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OCommonBehaviourTabPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
-            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pOptions));
+            _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pOptions));
 
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
-            _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharset));
+            _rControlList.emplace_back(new OSaveValueWrapper<ListBox>(m_pCharset));
     }
 
     void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -360,18 +360,18 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    void OUserDriverDetailsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OUserDriverDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pEDHostname));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pUseCatalog));
-        _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
+        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pEDHostname));
+        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pUseCatalog));
+        _rControlList.emplace_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
     }
-    void OUserDriverDetailsPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostname));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pPortNumber));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pFTHostname));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pPortNumber));
     }
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -585,22 +585,22 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    void MySQLNativePage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls( _rControlList );
         m_aMySQLSettings->fillControls( _rControlList );
 
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pUserName));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
+        _rControlList.emplace_back(new OSaveValueWrapper<Edit>(m_pUserName));
+        _rControlList.emplace_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
     }
-    void MySQLNativePage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
         m_aMySQLSettings->fillWindows( _rControlList);
 
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator1));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator2));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pUserNameLabel));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pSeparator1));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pSeparator2));
+        _rControlList.emplace_back(new ODisableWrapper<FixedText>(m_pUserNameLabel));
     }
 
     bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
@@ -769,13 +769,13 @@ namespace dbaui
         return VclPtr<OTextDetailsPage>::Create( pParent.pParent, *_rAttrSet );
     }
 
-    void OTextDetailsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         m_pTextConnectionHelper->fillControls(_rControlList);
 
     }
-    void OTextDetailsPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         m_pTextConnectionHelper->fillWindows(_rControlList);

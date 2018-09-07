@@ -155,7 +155,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        std::vector< ISaveValueWrapper* > aControlList;
+        std::vector< std::unique_ptr<ISaveValueWrapper> > aControlList;
         if ( _bSaveValue )
         {
             fillControls(aControlList);
@@ -173,12 +173,6 @@ namespace dbaui
                 pValueWrapper->Disable();
             }
         }
-
-        for( const auto& pValueWrapper : aControlList )
-        {
-            delete pValueWrapper;
-        }
-        aControlList.clear();
     }
 
     void OGenericAdministrationPage::initializePage()
