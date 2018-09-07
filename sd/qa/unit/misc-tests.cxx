@@ -66,6 +66,7 @@ public:
     void testTdf38225();
     void testTdf101242_ODF();
     void testTdf101242_settings();
+    void testTdf119392();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testTdf38225);
     CPPUNIT_TEST(testTdf101242_ODF);
     CPPUNIT_TEST(testTdf101242_settings);
+    CPPUNIT_TEST(testTdf119392);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -484,6 +486,51 @@ void SdMiscTest::testTdf101242_settings()
     CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
     CPPUNIT_ASSERT_EQUAL( 0x04, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0x1F);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf119392()
+{
+    // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
+    // Checks, that the bitfields in the saved file have the bits in the correct order.
+
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+    // Insert layer "-P-", not visible, printable, not locked
+    SdrView* pView = xDocShRef -> GetViewShell()->GetView();
+    pView -> InsertNewLayer("-P-", 6); // 0..4 standard layer, 5 layer "V--"
+    SdrPageView* pPageView = pView -> GetSdrPageView();
+    pPageView -> SetLayerVisible("-P-", false);
+    pPageView -> SetLayerPrintable("-P-", true);
+    pPageView -> SetLayerLocked("-P-", false);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile );
+
+    // Verify correct bit order in bitfield in the items in settings.xml
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "settings.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
+    // First Byte is in order 'V-L -P- V-- measurelines controls backgroundobjects background layout'
+    // Bits need to be: visible=10111111=0xbf=191 printable=01011111=0x5f=95 locked=10000000=0x80=128
+    // The values in file are Base64 encoded.
+    OUString sBase64;
+    uno::Sequence<sal_Int8> aDecodedSeq;
+    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='VisibleLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0xbF, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff); // & 0xff forces unambigious types for CPPUNIT_ASSERT_EQUAL
+
+    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='PrintableLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x5f, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
+
+    sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='LockedLayers']");
+    CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
+    comphelper::Base64::decode(aDecodedSeq, sBase64);
+    CPPUNIT_ASSERT_EQUAL( 0x80, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
 
     xDocShRef->DoClose();
 }

@@ -43,7 +43,7 @@ void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
     }
 }
 
-/** initialize this set with a uno sequence of sal_Int8
+/** initialize this set with a uno sequence of sal_Int8 (e.g. as stored in settings.xml)
 */
 void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
 {
@@ -66,32 +66,6 @@ void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
         }
     }
 }
-
-/** returns a uno sequence of sal_Int8
-*/
-void SdrLayerIDSet::QueryValue( css::uno::Any & rAny ) const
-{
-    sal_Int16 nNumBytesSet = 0;
-    sal_Int16 nIndex;
-    for( nIndex = 31; nIndex >= 00; nIndex-- )
-    {
-        if( 0 != aData[nIndex] )
-        {
-            nNumBytesSet = nIndex + 1;
-            break;
-        }
-    }
-
-    css::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
-
-    for( nIndex = 0; nIndex < nNumBytesSet; nIndex++ )
-    {
-        aSeq[nIndex] = static_cast<sal_Int8>(aData[nIndex]);
-    }
-
-    rAny <<= aSeq;
-}
-
 
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
     maName(rNewName), pModel(nullptr), nType(0), nID(nNewID)
@@ -366,5 +340,51 @@ void SdrLayerAdmin::getLockedLayersODF( SdrLayerIDSet& rOutSet) const
     }
 }
 
+    // Generates a bitfield for settings.xml from the SdrLayerIDSet.
+    // Output is a uno sequence of BYTE (which is 'short' in API).
+void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny)
+{
+    // tdf#119392 The SdrLayerIDSet in a view is ordered according LayerID, but in file
+    // the bitfield is interpreted in order of layers in <draw:layer-set>.
+    // First generate a new bitfield based on rViewLayerSet in the needed order.
+    sal_uInt8 aTmp[32]; // 256 bits in settings.xml makes byte 0 to 31
+    for (auto nIndex = 0; nIndex <32; nIndex++)
+    {
+        aTmp[nIndex] = 0;
+    }
+    sal_uInt8 nByteIndex = 0;
+    sal_uInt8 nBitpos = 0;
+    sal_uInt16 nLayerPos = 0; // Position of the layer in member aLayer and in <draw:layer-set> in file
+    for( SdrLayer* pCurrentLayer : aLayer )
+    {
+        SdrLayerID nCurrentID = pCurrentLayer->GetID();
+        if ( rViewLayerSet.IsSet(nCurrentID) )
+        {
+            nLayerPos = GetLayerPos(pCurrentLayer);
+            nByteIndex = nLayerPos / 8;
+            if (nByteIndex > 31)
+                continue; // skip position, if too large for bitfield
+            nBitpos = nLayerPos % 8;
+            aTmp[nByteIndex] |= (1 << nBitpos);
+        }
+    }
+
+    // Second transform the bitfield to byte sequence, same as in previous version of QueryValue
+    sal_uInt8 nNumBytesSet = 0;
+    for( auto nIndex = 31; nIndex >= 0; nIndex--)
+    {
+        if( 0 != aTmp[nIndex] )
+        {
+            nNumBytesSet = nIndex + 1;
+            break;
+        }
+    }
+    css::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
+    for( auto nIndex = 0; nIndex < nNumBytesSet; nIndex++ )
+    {
+        aSeq[nIndex] = static_cast<sal_Int8>(aTmp[nIndex]);
+    }
+    rAny <<= aSeq;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
