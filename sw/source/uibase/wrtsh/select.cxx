@@ -296,7 +296,7 @@ void SwWrtShell::PopMode()
         LeaveBlockMode();
     m_bIns = m_pModeStack->bIns;
 
-    m_pModeStack = m_pModeStack->pNext;
+    m_pModeStack = std::move(m_pModeStack->pNext);
 }
 
 // Two methods for setting cursors: the first maps at the
