@@ -156,6 +156,12 @@ shell TableObjectBar
         StateMethod = GetState;
     ]
 
+    SID_TABLE_OPTIMAL_ROW_HEIGHT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
     SID_TABLE_DISTRIBUTE_ROWS
     [
         ExecMethod = Execute;
