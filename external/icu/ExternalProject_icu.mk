@@ -65,6 +65,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 		./configure \
+			ac_cv_namespace_ok=yes \
 			--disable-layout --disable-samples \
 			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
