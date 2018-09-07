@@ -850,7 +850,7 @@ basegfx::B2DPoint impPixelSnap(
 // special case relative to the also executed LineDraw-Offset of (0.5, 0.5) in
 // DeviceCoordinates: The LineDraw-Offset is applied *after* the snap, so we
 // need the ObjectToDevice transformation *without* that offset here to do the
-// same. The LineDraw-Offset will be appied by the callers using a linear
+// same. The LineDraw-Offset will be applied by the callers using a linear
 // transformation for Cairo now
 // For support of PixelSnapHairline we also need the ObjectToDevice transformation
 // and a method (same as in gdiimpl.cxx for Win and Gdiplus). This is needed e.g.
@@ -984,7 +984,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     basegfx::B2DPolygon aPoly;
 
     // PixelOffset used: To not mix with possible PixelSnap, cannot do
-    // directly on coordinates as truied before - despite being already 'snapped'
+    // directly on coordinates as tried before - despite being already 'snapped'
     // due to being integer. If it would be directly added here, it would be
     // 'snapped' again when !getAntiAliasB2DDraw(), losing the (0.5, 0.5) offset
     aPoly.append(basegfx::B2DPoint(nX1, nY1));
@@ -1391,7 +1391,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
 
-        // Note: Other methods use applyColor(...) to set the Color. Thst
+        // Note: Other methods use applyColor(...) to set the Color. That
         // seems to do some more. Maybe it should be used here, too (?)
         cairo_set_source_rgba(cr, m_aLineColor.GetRed()/255.0,
                                   m_aLineColor.GetGreen()/255.0,
