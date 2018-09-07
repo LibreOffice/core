@@ -54,24 +54,6 @@ using ::com::sun::star::lang::XComponent;
 
 namespace oox { namespace ppt {
 
-OUString PowerPointImport_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
-}
-
-uno::Sequence< OUString > PowerPointImport_getSupportedServiceNames()
-{
-    Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
-    aSeq[ 1 ] = "com.sun.star.document.ExportFilter";
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext )
-{
-    return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
-}
-
 #if OSL_DEBUG_LEVEL > 0
 XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 #endif
@@ -321,9 +303,16 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 OUString PowerPointImport::getImplementationName()
 {
-    return PowerPointImport_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
 }
 
 }}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_ppt_PowerPointImport_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::ppt::PowerPointImport(pCtx));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
