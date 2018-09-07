@@ -183,7 +183,6 @@ namespace accessibility
 
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
-        mxThis( nullptr ),
         mxTextParagraph( new AccessibleEditableTextPara(nullptr) ),
         maEditSource(),
         maMutex(),

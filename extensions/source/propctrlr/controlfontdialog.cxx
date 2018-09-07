@@ -41,7 +41,6 @@ namespace pcr
 
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
-        ,m_pFontItems(nullptr)
         ,m_pItemPool(nullptr)
         ,m_pItemPoolDefaults(nullptr)
     {

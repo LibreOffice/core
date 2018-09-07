@@ -150,7 +150,6 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
 }
 
 Sane::Sane() :
-        mppOptions( nullptr ),
         mnOptions( 0 ),
         mnDevice( -1 ),
         maHandle( nullptr )

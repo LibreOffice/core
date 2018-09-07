@@ -824,7 +824,6 @@ void IdleFormattter::ForceTimeout()
 
 ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos )
  : aOldTextAfterStartPos( rOldTextAfterStartPos ),
- pAttribs(nullptr),
  aPos(rPos),
  nLen(0),
  bWasCursorOverwrite(false)
