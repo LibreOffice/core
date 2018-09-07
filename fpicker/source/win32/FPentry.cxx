@@ -23,7 +23,7 @@
 #include "FPServiceInfo.hxx"
 
 #include "VistaFilePicker.hxx"
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 #include <stdio.h>
 
 using namespace ::com::sun::star;

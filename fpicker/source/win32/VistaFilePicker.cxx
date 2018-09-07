@@ -19,7 +19,7 @@
 
 #include "VistaFilePicker.hxx"
 
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 #include "FPServiceInfo.hxx"
 #include "shared.hxx"
 
