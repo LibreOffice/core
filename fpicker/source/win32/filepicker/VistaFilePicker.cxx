@@ -46,20 +46,22 @@ namespace
 {
     css::uno::Sequence< OUString > VistaFilePicker_getSupportedServiceNames()
     {
-        css::uno::Sequence< OUString > aRet(2);
+        css::uno::Sequence< OUString > aRet(3);
         aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
         aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
+        aRet[2] = "com.sun.star.ui.dialogs.SystemFolderPicker";
         return aRet;
     }
 }
 
-VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, bool bFolderPicker)
     : TVistaFilePickerBase  (m_aMutex                 )
     , m_xSMGR               (xSMGR                    )
     , m_rDialog             (new VistaFilePickerImpl())
     , m_aAsyncExecute       (m_rDialog                )
     , m_nFilePickerThreadId (0                        )
     , m_bInitialized        (false                    )
+    , m_bFolderPicker       (bFolderPicker            )
 {
 }
 
@@ -233,9 +235,24 @@ void VistaFilePicker::ensureInit()
 
     if ( !bInitialized )
     {
-        css::uno::Sequence < css::uno::Any > aInitArguments(1);
-        aInitArguments[0] <<= css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-        initialize(aInitArguments);
+        if (m_bFolderPicker)
+        {
+            RequestRef rRequest(new Request());
+            rRequest->setRequest (VistaFilePickerImpl::E_CREATE_FOLDER_PICKER);
+            if ( ! m_aAsyncExecute.isRunning())
+                m_aAsyncExecute.create();
+            m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
+            {
+                osl::MutexGuard aGuard(m_aMutex);
+                m_bInitialized = true;
+            }
+        }
+        else
+        {
+            css::uno::Sequence < css::uno::Any > aInitArguments(1);
+            aInitArguments[0] <<= css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+            initialize(aInitArguments);
+        }
     }
 }
 
@@ -507,11 +524,27 @@ void SAL_CALL VistaFilePicker::cancel()
 {
 }
 
+OUString SAL_CALL VistaFilePicker::getDirectory()
+{
+    ensureInit();
+    css::uno::Sequence< OUString > aFileSeq = getSelectedFiles();
+    assert(aFileSeq.getLength() <= 1);
+    return aFileSeq.getLength() ? aFileSeq[0] : OUString();
+}
+
+void SAL_CALL VistaFilePicker::setDescription( const OUString& aDescription )
+{
+    setTitle(aDescription);
+}
+
 // XServiceInfo
 
 OUString SAL_CALL VistaFilePicker::getImplementationName()
 {
-    return OUString("com.sun.star.comp.fpicker.VistaFileDialog");
+    if (m_bFolderPicker)
+        return OUString(FOLDER_PICKER_IMPL_NAME);
+    else
+        return OUString(FILE_PICKER_IMPL_NAME);
 }
 
 sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
