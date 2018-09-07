@@ -277,11 +277,11 @@ void TakeThread::execute()
 {
     sal_Int32           nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    GalleryProgress*    pStatusProgress;
+    std::unique_ptr<GalleryProgress> pStatusProgress;
 
     {
         SolarMutexGuard aGuard;
-        pStatusProgress = new GalleryProgress;
+        pStatusProgress.reset(new GalleryProgress);
         nEntries = mpBrowser->bTakeAll ? mpBrowser->m_pLbxFound->GetEntryCount() : mpBrowser->m_pLbxFound->GetSelectedEntryCount();
         pThm->LockBroadcaster();
     }
@@ -307,7 +307,7 @@ void TakeThread::execute()
         SolarMutexGuard aGuard;
 
         pThm->UnlockBroadcaster();
-        delete pStatusProgress;
+        pStatusProgress.reset();
     }
 
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), nullptr, true );
