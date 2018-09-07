@@ -287,7 +287,7 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
 PoEntry& PoEntry::operator=(PoEntry&& rPo)
 {
     m_pGenPo = std::move(rPo.m_pGenPo);
-    m_bIsInitialized = rPo.m_bIsInitialized;
+    m_bIsInitialized = std::move(rPo.m_bIsInitialized);
     return *this;
 }
 
