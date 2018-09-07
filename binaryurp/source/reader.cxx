@@ -335,9 +335,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             bridge_->incrementActiveCalls();
         }
         uno_threadpool_putJob(
-            bridge_->getThreadPool(), tid.getHandle(), req.get(), &request,
+            bridge_->getThreadPool(), tid.getHandle(), req.release(), &request,
             !synchronous);
-        req.release();
     }
 }
 
@@ -443,9 +442,8 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
             std::unique_ptr< IncomingReply > resp(
                 new IncomingReply(exc, ret, outArgs));
             uno_threadpool_putJob(
-                bridge_->getThreadPool(), tid.getHandle(), resp.get(), nullptr,
+                bridge_->getThreadPool(), tid.getHandle(), resp.release(), nullptr,
                 false);
-            resp.release();
             break;
         }
     case OutgoingRequest::KIND_REQUEST_CHANGE:

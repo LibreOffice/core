@@ -700,8 +700,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
         }
 
         std::unique_ptr< ORegKey > p(new ORegKey(path, this));
-        i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
-        p.release();
+        i = m_openKeyTable.insert(std::make_pair(path, p.release())).first;
     } else {
         i->second->acquire();
     }
