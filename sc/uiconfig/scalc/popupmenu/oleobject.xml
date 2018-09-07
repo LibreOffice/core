@@ -12,27 +12,12 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:OriginalSize"/>
+  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
-  <menu:menuitem menu:id=".uno:TextAttributes"/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuitem menu:id=".uno:OriginalSize"/>
-  <menu:menuitem menu:id=".uno:FitCellSize"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:RenameObject"/>
-  <menu:menuseparator/>
-  <menu:menu menu:id=".uno:ArrangeMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:BringToFront"/>
-      <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
-      <menu:menuitem menu:id=".uno:ObjectBackOne"/>
-      <menu:menuitem menu:id=".uno:SendToBack"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
-      <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
@@ -44,14 +29,30 @@
       <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:AnchorMenu"/>
-  <menu:menuseparator/>
-  <menu:menu menu:id=".uno:GroupMenu">
+  <menu:menu menu:id=".uno:ArrangeMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:FormatGroup"/>
-      <menu:menuitem menu:id=".uno:FormatUngroup"/>
-      <menu:menuitem menu:id=".uno:EnterGroup"/>
-      <menu:menuitem menu:id=".uno:LeaveGroup"/>
+      <menu:menuitem menu:id=".uno:BringToFront"/>
+      <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+      <menu:menuitem menu:id=".uno:ObjectBackOne"/>
+      <menu:menuitem menu:id=".uno:SendToBack"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
+      <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menu menu:id=".uno:RotateFlipMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
+      <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
+  <menu:menuitem menu:id=".uno:RenameObject"/>
+  <menu:menuitem menu:id=".uno:AssignMacro"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
 </menu:menupopup>
