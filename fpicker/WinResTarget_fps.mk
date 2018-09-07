@@ -9,6 +9,6 @@
 
 $(eval $(call gb_WinResTarget_WinResTarget,fps/Fps))
 
-$(eval $(call gb_WinResTarget_set_rcfile,fps/Fps,fpicker/source/win32/filepicker/Fps))
+$(eval $(call gb_WinResTarget_set_rcfile,fps/Fps,fpicker/source/win32/Fps))
 
 # vim: set ts=4 sw=4 et:
