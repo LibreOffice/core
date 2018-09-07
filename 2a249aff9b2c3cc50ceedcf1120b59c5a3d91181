@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_4b9280f8",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-09-07T08:46:07Z",
+      "side": 0,
+      "message": "Is this some markup that Word never writes? If Word does and Writer did, not sure if it\u0027s a good idea to remove the tests.",
+      "revId": "2a249aff9b2c3cc50ceedcf1120b59c5a3d91181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
