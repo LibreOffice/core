@@ -113,6 +113,15 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
         hModule = LoadLibraryExW( ODBC_UI_LIB_NAME, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if ( hModule == nullptr )
         return displayLastError();
+    struct HModuleReleaser
+    {
+        HMODULE m_hModule;
+        HModuleReleaser(HMODULE hModule)
+            : m_hModule(hModule)
+        {
+        }
+        ~HModuleReleaser() { FreeLibrary(m_hModule); }
+    } hModuleReleaser(hModule);
 
     FARPROC pManageDSProc = GetProcAddress( hModule, "SQLManageDataSources" );
     if ( pManageDSProc == nullptr )
@@ -121,8 +130,6 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
     TSQLManageDataSource pManageDS = reinterpret_cast<TSQLManageDataSource>(pManageDSProc);
     if ( !( (*pManageDS)( hAppWindow ) ) )
         return displayLastError();
-
-    FreeLibrary( hModule );
 
     return 0;
 }
