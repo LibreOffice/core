@@ -246,6 +246,7 @@ public:
     void testBorderColorsXLSXML();
     void testHiddenRowsColumnsXLSXML();
     void testColumnWidthRowHeightXLSXML();
+    void testCharacterSetXLSXML();
     void testTdf62268();
     void testVBAMacroFunctionODS();
 
@@ -379,6 +380,7 @@ public:
     CPPUNIT_TEST(testBorderColorsXLSXML);
     CPPUNIT_TEST(testHiddenRowsColumnsXLSXML);
     CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
+    CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
@@ -3985,6 +3987,37 @@ void ScFiltersTest::testColumnWidthRowHeightXLSXML()
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(cw.nWidth*20), nWidth);
         }
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCharacterSetXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("character-set.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load column-width-row-height.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDoc.GetTableCount());
+
+    OUString aName;
+    rDoc.GetName(0, aName);
+
+    // Check the sheet name.  The values are all Cyrillic letters.
+    std::vector<sal_Unicode> aBuf = { 0x041b, 0x0438, 0x0441, 0x0442, 0x0031 };
+    OUString aExpected(aBuf.data(), aBuf.size());
+    CPPUNIT_ASSERT_EQUAL(aExpected, aName);
+
+    // Check the value of I4
+    OUString aVal = rDoc.GetString(ScAddress(8,3,0));
+    aBuf = { 0x0421, 0x0443, 0x043c, 0x043c, 0x0430 };
+    aExpected = OUString(aBuf.data(), aBuf.size());
+    CPPUNIT_ASSERT_EQUAL(aExpected, aVal);
+
+    // Check the value of J3
+    aVal = rDoc.GetString(ScAddress(9,2,0));
+    aBuf = { 0x041e, 0x0441, 0x0442, 0x0430, 0x0442, 0x043e, 0x043a };
+    aExpected = OUString(aBuf.data(), aBuf.size());
+    CPPUNIT_ASSERT_EQUAL(aExpected, aVal);
 
     xDocSh->DoClose();
 }

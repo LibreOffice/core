@@ -1,0 +1,1840 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Горленко Галина</Author>
+  <LastAuthor>BORLAS_T</LastAuthor>
+  <Revision>1</Revision>
+  <TotalTime>0</TotalTime>
+  <LastPrinted>2014-02-05T05:01:01Z</LastPrinted>
+  <Created>2014-01-16T09:15:45Z</Created>
+  <LastSaved>2014-02-05T05:02:30Z</LastSaved>
+  <Version>12.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+  <DoNotRelyOnCSS/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>7860</WindowHeight>
+  <WindowWidth>18885</WindowWidth>
+  <WindowTopX>180</WindowTopX>
+  <WindowTopY>465</WindowTopY>
+  <Iteration/>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman1" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="m61638848">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior ss:Color="#FFCC00" ss:Pattern="Solid"/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="m61638868">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="m43941496">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="m43941516">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s62">
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s63">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s64">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s65">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s68">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s70">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s77">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"/>
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s81">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s90">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s91">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s99">
+   <Alignment ss:Vertical="Bottom" ss:ShrinkToFit="1" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s100">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior ss:Color="#66FFFF" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s101">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior ss:Color="#66FFFF" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s102">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior ss:Color="#66FFFF" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="0.0000"/>
+  </Style>
+  <Style ss:ID="s103">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s104">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s105">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s106">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="dd&quot;.&quot;mm&quot;.&quot;yyyy"/>
+  </Style>
+  <Style ss:ID="s107">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s109">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="0.0000"/>
+  </Style>
+  <Style ss:ID="s110">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="0.000"/>
+  </Style>
+  <Style ss:ID="s113">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s114">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:ShrinkToFit="1"
+    ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="0.000"/>
+  </Style>
+  <Style ss:ID="s115">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="0.0000"/>
+  </Style>
+  <Style ss:ID="s123">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s124">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s125">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s127">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s129">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Bold="1" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s132">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="0.000"/>
+  </Style>
+  <Style ss:ID="s133">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman"
+    ss:Color="#000000" ss:Italic="1"/>
+   <Interior/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Лист1">
+  <Names>
+   <NamedRange ss:Name="Sheet_Title" ss:RefersTo="=&quot;Лист1&quot;"/>
+   <NamedRange ss:Name="Print_Area" ss:RefersTo="=Лист1!#REF!"/>
+  </Names>
+  <Table ss:ExpandedColumnCount="10" ss:ExpandedRowCount="65000" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s62" ss:DefaultColumnWidth="42">
+   <Column ss:StyleID="s63" ss:AutoFitWidth="0" ss:Width="55.5"/>
+   <Column ss:StyleID="s64" ss:Width="67.5"/>
+   <Column ss:StyleID="s63" ss:AutoFitWidth="0" ss:Width="118.5"/>
+   <Column ss:StyleID="s63" ss:AutoFitWidth="0" ss:Width="46.5"/>
+   <Column ss:StyleID="s64" ss:AutoFitWidth="0" ss:Width="82.5"/>
+   <Column ss:StyleID="s64" ss:AutoFitWidth="0" ss:Width="43.5" ss:Span="1"/>
+   <Column ss:Index="8" ss:StyleID="s64" ss:AutoFitWidth="0" ss:Width="46.5"/>
+   <Column ss:StyleID="s64" ss:AutoFitWidth="0" ss:Width="43.5"/>
+   <Column ss:StyleID="s64" ss:AutoFitWidth="0" ss:Width="78.75"/>
+   <Row ss:AutoFitHeight="0" ss:Height="13.3125">
+    <Cell ss:Index="2" ss:StyleID="s65"><Data ss:Type="String">ГСМ </Data></Cell>
+    <Cell ss:MergeAcross="7" ss:StyleID="s65"><Data ss:Type="String">Акмолинские МЭС за июль     2013 г. по  01.Ералина, Кенжегуль Хибратовна</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.3125">
+    <Cell ss:MergeAcross="9" ss:StyleID="s68"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="21">
+    <Cell ss:MergeDown="1" ss:StyleID="s70"><Data ss:Type="String">Дата записи</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s70"><Data ss:Type="String">№ документа</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s70"><Data ss:Type="String">От кого получено или кому выдано</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s77"><Data ss:Type="String">Т.Е</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Остаток</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="m43941496"><Data ss:Type="String">Приход</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="m43941516"><Data ss:Type="String">Расход</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="String">Остаток</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="25.5">
+    <Cell ss:Index="5" ss:StyleID="s81"><Data ss:Type="String">на начало месяца</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Кол-во</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Цена</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Кол-во</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Сумма</Data></Cell>
+    <Cell ss:StyleID="s90"><Data ss:Type="String">на конец месяца</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">6</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">7</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">8</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">9</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">10</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное М8В</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0000179</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Литол 24</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0000186</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Жидкость тормозная</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0000191</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло М8Г2К</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0001530</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Талоны на бензин АИ-92</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0002060</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">20.3928</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842392</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002060</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">371.0922</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842393</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002060</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">1010.3928</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Перенос в 03.004.17</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002060</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">1410</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">1410</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">1381.485</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">48.9078</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Талоны на бензин АИ-80</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0002061</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">401.2055</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842394</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002061</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">5233.9721</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842395</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002061</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">2511.2055</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842396</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002061</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">600</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Перенос в 03.004.17</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0002061</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">8420</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">8420</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">8345.1776</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">476.0279</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное М8Г2</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0002327</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное М10-Г2К</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0002328</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Талоны на бензин АИ-93</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0002999</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Тосол А-40</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003048</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Жидкость тормозная ДОТ-4</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003431</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Талоны дизтопливо летнее</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003561</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Талоны дизтопливо зимнее</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003562</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное М10В</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003763</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Дизельное топливо летнее (талоны)</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003784</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">740.4011</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842397</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0003784</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">540</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842398</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0003784</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">561.4532</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842399</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0003784</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">16190.4011</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Перенос в 03.004.17</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0003784</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">17260</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">17260</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">17291.8543</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">708.5468</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Дизельное топливо зимнее (талоны)</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0003785</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Охлаждающая жидкость Тосол А-40</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0004225</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное Лукойл-Стандарт</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0009423</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное ESSO 10W40 полусинтетик турбо</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0016962</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное Лукойл Стандарт</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0016971</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло гидравлическое ВМГЗ</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0023122</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло дизельное М8ДМ</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0027124</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло трансмиссионное CASTROL GH 75W90</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028139</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Охлаждающая жидкость MOBIL Antifreez Advanced  красный G12</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028143</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное CASTROL diesel SAE 5W40</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028154</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное, SAE 20 API SD/CB</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028448</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Охлаждающая жидкость, антифриз</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028451</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное, SAE 5W-40 API SJ/CF</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028455</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное, SAE 30 API СС</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028457</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло трансмиссионное, SAE 80W-90 API GL-5</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028459</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Тормозная жидкость, Роса ДОТ-4</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028461</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Пластичные смазки, литол-24</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028462</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло гидравлическое, ВМГЗ</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0028464</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842400</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0028464</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">140</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Перенос в 03.004.17</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0028464</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">140</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">140</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">140</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное, SAE 10W40 АРI CF</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0030826</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло трансмиссионное, SAE 75W-90 API GL-5</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0030830</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638848"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s100"><Data ss:Type="String">Масло моторное, SAE 5W-40 API SJ/CF</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">0032519</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String">31.07.2013</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">9842401</Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Зак. на перемещ.1064770</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0032519</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s106"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s133"><Data ss:Type="String">Перенос в 03.004.17</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String">0032519</Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s110"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s132"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s105"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s81"/>
+    <Cell ss:StyleID="s113"><Data ss:Type="String">Итого:</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s109"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="s103"/>
+    <Cell ss:StyleID="s114"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="s104"/>
+    <Cell ss:StyleID="s115"><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:MergeAcross="9" ss:StyleID="m61638868"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:Index="5" ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s124"><Data ss:Type="String">Начальник _________________</Data></Cell>
+    <Cell ss:StyleID="s125"/>
+    <Cell ss:Index="5" ss:MergeAcross="5" ss:StyleID="s127"><Data ss:Type="String">Начальник СМиТ __________________</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:Index="5" ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:Index="5" ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:Index="5" ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+    <Cell ss:StyleID="s123"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s124"><Data ss:Type="String">Механик ___________________</Data></Cell>
+    <Cell ss:Index="5" ss:MergeAcross="5" ss:StyleID="s129"><Data ss:Type="String">Диспетчер СМиТ __________________</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Layout x:Orientation="Landscape"/>
+    <Header x:Margin="0.28739999999999999"/>
+    <Footer x:Margin="0.28739999999999999"/>
+    <PageMargins x:Bottom="0.28739999999999999" x:Left="0.28739999999999999"
+     x:Right="0.28739999999999999" x:Top="0.28739999999999999"/>
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+   <EnableSelection>NoSelection</EnableSelection>
+   <AllowFormatCells/>
+   <AllowSizeCols/>
+   <AllowSizeRows/>
+   <AllowInsertCols/>
+   <AllowInsertRows/>
+   <AllowInsertHyperlinks/>
+   <AllowDeleteCols/>
+   <AllowDeleteRows/>
+   <AllowSort/>
+   <AllowFilter/>
+   <AllowUsePivotTables/>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
