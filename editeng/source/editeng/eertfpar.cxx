@@ -62,14 +62,14 @@ RtfImportInfo::~RtfImportInfo()
 {
 }
 
-EditRTFParser::EditRTFParser(SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool,
-                             EditEngine* pEditEngine)
-    : SvxRTFParser(rAttrPool, rIn)
-    , aCurSel(aSel)
-    , mpEditEngine(pEditEngine)
-    , aRTFMapMode(MapUnit::MapTwip)
-    , nDefFont(0)
-    , bLastActionInsertParaBreak(false)
+EditRTFParser::EditRTFParser(
+    SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
+    SvxRTFParser(rAttrPool, rIn),
+    aCurSel(std::move(aSel)),
+    mpEditEngine(pEditEngine),
+    aRTFMapMode(MapUnit::MapTwip),
+    nDefFont(0),
+    bLastActionInsertParaBreak(false)
 {
     SetInsPos(EditPosition(mpEditEngine, &aCurSel));
 

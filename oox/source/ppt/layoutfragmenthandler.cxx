@@ -43,7 +43,7 @@ namespace oox { namespace ppt {
 
 LayoutFragmentHandler::LayoutFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath,
                                              const SlidePersistPtr& pMasterPersistPtr)
-    : SlideFragmentHandler(rFilter, rFragmentPath, pMasterPersistPtr, Layout)
+    : SlideFragmentHandler(rFilter, rFragmentPath, std::move(pMasterPersistPtr), Layout)
 {
 }
 

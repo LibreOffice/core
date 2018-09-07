@@ -221,7 +221,7 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 
 Bitmap& Bitmap::operator=( Bitmap&& rBitmap )
 {
-    maPrefSize = rBitmap.maPrefSize;
+    maPrefSize = std::move(rBitmap.maPrefSize);
     maPrefMapMode = std::move(rBitmap.maPrefMapMode);
     mxSalBmp = std::move(rBitmap.mxSalBmp);
 
