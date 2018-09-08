@@ -617,7 +617,8 @@ endif
 
 $(call gb_BisonTarget_get_target,$(1),$(2)) : $(call gb_BisonTarget_get_source,$(2))
 	mkdir -p $(dir $(call gb_BisonTarget_get_target,$(1),$(2))) && \
-	bison -d -o $(call gb_BisonTarget_get_target,$(1),$(2)) $(call gb_BisonTarget_get_source,$(2)) 
+	tr -d "\015" < $(call gb_BisonTarget_get_source,$(2)) > $(dir $(call gb_BisonTarget_get_target,$(1),$(2)))/stripped_$(notdir $(call gb_BisonTarget_get_source,$(2))) && \
+	bison -d -o $(call gb_BisonTarget_get_target,$(1),$(2)) $(dir $(call gb_BisonTarget_get_target,$(1),$(2)))/stripped_$(notdir $(call gb_BisonTarget_get_source,$(2)))
 
 endef
 
