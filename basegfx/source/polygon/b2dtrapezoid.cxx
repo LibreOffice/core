@@ -485,9 +485,7 @@ namespace basegfx
                 maNewPoints()
             {
                 B2DPolyPolygon aSource(rSourcePolyPolygon);
-                const sal_uInt32 nPolygonCount(rSourcePolyPolygon.count());
                 TrDeSimpleEdges aTrDeSimpleEdges;
-                sal_uInt32 a(0), b(0);
                 sal_uInt32 nAllPointCount(0);
 
                 // ensure there are no curves used
@@ -496,10 +494,9 @@ namespace basegfx
                     aSource = aSource.getDefaultAdaptiveSubdivision();
                 }
 
-                for(a = 0; a < nPolygonCount; a++)
+                for(const auto& aPolygonCandidate : aSource)
                 {
                     // 1st run: count points
-                    const B2DPolygon aPolygonCandidate(aSource.getB2DPolygon(a));
                     const sal_uInt32 nCount(aPolygonCandidate.count());
 
                     if(nCount > 2)
@@ -514,15 +511,14 @@ namespace basegfx
                     // after 2nd loop since pointers to it are used in the edges
                     maPoints.reserve(nAllPointCount);
 
-                    for(a = 0; a < nPolygonCount; a++)
+                    for(const auto& aPolygonCandidate : aSource)
                     {
                         // 2nd run: add points
-                        const B2DPolygon aPolygonCandidate(aSource.getB2DPolygon(a));
                         const sal_uInt32 nCount(aPolygonCandidate.count());
 
                         if(nCount > 2)
                         {
-                            for(b = 0; b < nCount; b++)
+                            for(sal_uInt32 b = 0; b < nCount; b++)
                             {
                                 maPoints.push_back(aPolygonCandidate.getB2DPoint(b));
                             }
@@ -535,9 +531,8 @@ namespace basegfx
                     // in the edges may be wrong. Security first here.
                     sal_uInt32 nStartIndex(0);
 
-                    for(a = 0; a < nPolygonCount; a++)
+                    for(const auto& aPolygonCandidate : aSource)
                     {
-                        const B2DPolygon aPolygonCandidate(aSource.getB2DPolygon(a));
                         const sal_uInt32 nCount(aPolygonCandidate.count());
 
                         if(nCount > 2)
@@ -545,7 +540,7 @@ namespace basegfx
                             // get the last point of the current polygon
                             B2DPoint* pPrev(&maPoints[nCount + nStartIndex - 1]);
 
-                            for(b = 0; b < nCount; b++)
+                            for(sal_uInt32 b = 0; b < nCount; b++)
                             {
                                 // get next point
                                 B2DPoint* pCurr(&maPoints[nStartIndex++]);
