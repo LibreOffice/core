@@ -20,6 +20,7 @@
 #include <condformatcontext.hxx>
 #include <extlstcontext.hxx>
 
+#include <biffhelper.hxx>
 #include <condformatbuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

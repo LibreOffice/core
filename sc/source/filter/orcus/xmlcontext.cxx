@@ -11,6 +11,7 @@
 #include <orcusinterface.hxx>
 #include <orcusxml.hxx>
 #include <document.hxx>
+#include <tokenarray.hxx>
 
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>

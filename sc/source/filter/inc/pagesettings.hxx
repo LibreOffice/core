@@ -23,6 +23,7 @@
 #include <memory>
 #include "worksheethelper.hxx"
 
+namespace oox { class AttributeList; }
 namespace oox { class PropertySet; }
 namespace oox { namespace core { class Relations; } }
 

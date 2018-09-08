@@ -18,6 +18,7 @@
  */
 
 #include <sharedstringsfragment.hxx>
+#include <biffhelper.hxx>
 
 #include <richstringcontext.hxx>
 #include <sharedstringsbuffer.hxx>

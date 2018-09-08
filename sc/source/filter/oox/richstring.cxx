@@ -18,6 +18,7 @@
  */
 
 #include <richstring.hxx>
+#include <biffhelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>

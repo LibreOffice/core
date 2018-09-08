@@ -24,6 +24,9 @@
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
+namespace oox { class AttributeList; }
+namespace oox { class SequenceInputStream; }
+
 namespace oox {
 namespace xls {
 

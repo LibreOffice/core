@@ -28,6 +28,9 @@
 
 class ScTokenArray;
 
+namespace oox { class AttributeList; }
+namespace oox { class SequenceInputStream; }
+
 namespace oox {
 namespace xls {
 

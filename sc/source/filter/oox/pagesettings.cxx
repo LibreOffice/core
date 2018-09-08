@@ -46,7 +46,10 @@
 #include <stylesbuffer.hxx>
 #include <unitconverter.hxx>
 #include <document.hxx>
+#include <biffhelper.hxx>
 #include <filter/msfilter/util.hxx>
+
+namespace oox { class AttributeList; }
 
 namespace oox {
 namespace xls {

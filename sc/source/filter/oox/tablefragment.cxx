@@ -18,6 +18,7 @@
  */
 
 #include <tablefragment.hxx>
+#include <biffhelper.hxx>
 
 #include <autofilterbuffer.hxx>
 #include <autofiltercontext.hxx>

@@ -31,15 +31,16 @@
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
 #include "numberformatsbuffer.hxx"
-#include <patattr.hxx>
-#include <stlsheet.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include <attarray.hxx>
 #include <vector>
 
+namespace oox { class SequenceInputStream; }
+
 namespace oox { class PropertySet;
-                class PropertyMap; }
+                class PropertyMap;
+                class AttributeList; }
 
 namespace oox {
 namespace xls {

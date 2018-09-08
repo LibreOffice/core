@@ -50,6 +50,8 @@
 #include <sheetdatacontext.hxx>
 #include <extlstcontext.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <documentimport.hxx>
+#include <biffhelper.hxx>
 
 #include <document.hxx>
 #include <docsh.hxx>

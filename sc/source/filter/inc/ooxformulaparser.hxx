@@ -21,11 +21,12 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_OOXFORMULAPARSER_HXX
 
 #include <memory>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
 
 namespace oox {
 namespace xls {

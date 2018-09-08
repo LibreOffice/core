@@ -19,6 +19,7 @@
 
 #include <querytablefragment.hxx>
 #include <querytablebuffer.hxx>
+#include <biffhelper.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

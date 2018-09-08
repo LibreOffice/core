@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_TOOL_H
 #define INCLUDED_SC_SOURCE_FILTER_INC_TOOL_H
 
-#include <attrib.hxx>
-#include <document.hxx>
+#include <i18nlangtag/lang.h>
+#include <svl/intitem.hxx>
+#include <types.hxx>
 #include <osl/diagnose.h>
 
 // Default values

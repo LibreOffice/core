@@ -27,6 +27,7 @@
 #include <root.hxx>
 #include <filtopt.hxx>
 #include <ftools.hxx>
+#include <patattr.hxx>
 
 ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {

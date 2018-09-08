@@ -21,12 +21,16 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_NUMBERFORMATSBUFFER_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
-#include <svl/itemset.hxx>
 #include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace util { class XNumberFormats; }
 } } }
+
+class SfxItemSet;
+
+namespace oox { class AttributeList; }
+namespace oox { class SequenceInputStream; }
 
 namespace oox {
 namespace xls {

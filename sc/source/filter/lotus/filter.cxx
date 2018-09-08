@@ -34,7 +34,9 @@
 #include <decl.h>
 #include <tool.h>
 #include <fprogressbar.hxx>
+#include <patattr.hxx>
 #include "lotfilter.hxx"
+#include <tools/stream.hxx>
 
 static ErrCode
 generate_Opcodes(LotusContext &rContext, SvStream& aStream,

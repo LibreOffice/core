@@ -33,6 +33,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <externallinkbuffer.hxx>
 #include <formulabase.hxx>
 #include <formulaparser.hxx>

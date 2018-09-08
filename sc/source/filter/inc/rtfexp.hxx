@@ -22,6 +22,7 @@
 
 #include <memory>
 #include "expbase.hxx"
+#include <tools/solar.h>
 
 class ScRTFExport : public ScExportBase
 {

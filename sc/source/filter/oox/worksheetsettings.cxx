@@ -29,6 +29,8 @@
 #include <pagesettings.hxx>
 #include <tabprotection.hxx>
 #include <document.hxx>
+#include <addressconverter.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

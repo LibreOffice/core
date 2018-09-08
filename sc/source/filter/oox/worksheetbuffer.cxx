@@ -34,6 +34,8 @@
 #include <oox/token/tokens.hxx>
 #include <excelhandlers.hxx>
 #include <document.hxx>
+#include <documentimport.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

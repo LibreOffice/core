@@ -31,6 +31,8 @@ namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
 
+namespace oox { class SequenceInputStream; }
+
 namespace oox {
 namespace xls {
 

@@ -23,8 +23,10 @@
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 
+#include <attrib.hxx>
 #include <rangenam.hxx>
 #include <compiler.hxx>
+#include <document.hxx>
 
 #include <tool.h>
 #include <decl.h>

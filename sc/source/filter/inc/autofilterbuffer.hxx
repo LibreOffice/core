@@ -30,6 +30,9 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSheetFilterDescriptor3; }
 } } }
 
+namespace oox { class AttributeList; }
+namespace oox { class SequenceInputStream; }
+
 namespace oox {
 namespace xls {
 

@@ -30,6 +30,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <connectionsbuffer.hxx>
 #include <defnamesbuffer.hxx>
 

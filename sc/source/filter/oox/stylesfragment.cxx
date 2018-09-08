@@ -18,6 +18,7 @@
  */
 
 #include <stylesfragment.hxx>
+#include <biffhelper.hxx>
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

@@ -23,6 +23,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include "worksheethelper.hxx"
 
+namespace oox { class AttributeList; }
 
 namespace oox {
 namespace xls {

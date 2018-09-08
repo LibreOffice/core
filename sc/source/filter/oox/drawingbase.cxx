@@ -18,6 +18,7 @@
  */
 
 #include <drawingbase.hxx>
+#include <addressconverter.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <osl/diagnose.h>

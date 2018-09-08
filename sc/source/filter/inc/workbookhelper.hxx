@@ -21,11 +21,11 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKBOOKHELPER_HXX
 
 #include <memory>
-#include <rtl/ref.hxx>
 #include <oox/helper/storagebase.hxx>
-#include <oox/drawingml/chart/chartconverter.hxx>
-#include "biffhelper.hxx"
-#include <rangenam.hxx>
+#include <address.hxx>
+
+namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox {
-    class AttributeList;
     class SegmentProgressBar;
 }
 
@@ -53,6 +52,7 @@ class ScDocument;
 class ScDocumentImport;
 class ScEditEngineDefaulter;
 class ScDBData;
+class ScRangeData;
 
 namespace oox {
 namespace xls {

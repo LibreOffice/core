@@ -27,6 +27,7 @@
 #include <attrib.hxx>
 #include "lotfilter.hxx"
 #include <tool.h>
+#include <editeng/svxenum.hxx>
 
 bool MemNew(LotusContext &rContext)
 {
