@@ -474,9 +474,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage));
 
     // *** column type ListBox ***
-    sal_Int32 nCount = comphelper::string::getTokenCount(aColumnUser, ';');
-    for (sal_Int32 i=0; i<nCount; i++)
-        pLbType->InsertEntry( aColumnUser.getToken( i, ';' ) );
+    for (sal_Int32 nIdx {0}; nIdx>0; )
+    {
+        pLbType->InsertEntry( aColumnUser.getToken( 0, ';', nIdx ) );
+    }
 
     pLbType->SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
     pFtType->Disable();
