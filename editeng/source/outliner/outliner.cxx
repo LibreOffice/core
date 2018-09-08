@@ -428,12 +428,12 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
         if (aText.endsWith("\x0A"))
             aText = aText.copy(0, aText.getLength()-1); // Delete the last break
 
-        sal_Int32 nCount = comphelper::string::getTokenCount(aText, '\x0A');
         sal_Int32 nPos = 0;
         sal_Int32 nInsPos = nPara+1;
-        while( nCount > nPos )
+        sal_Int32 nIdx {aText.isEmpty() ? -1 : 0};
+        while( nIdx>=0 )
         {
-            OUString aStr = aText.getToken( nPos, '\x0A' );
+            OUString aStr = aText.getToken( 0, '\x0A', nIdx );
 
             sal_Int16 nCurDepth;
             if( nPos )
