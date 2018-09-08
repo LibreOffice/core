@@ -56,7 +56,6 @@ public:
 
     HelpLinker()
         : bExtensionMode(false)
-        , m_pIndexerPreProcessor(nullptr)
         , m_bUseLangRoot(true)
         , m_bCreateIndex(true)
     {}

@@ -34,9 +34,6 @@ IdlDll & GetIdlApp()
 }
 
 IdlDll::IdlDll()
-    : pHashTable( nullptr )
-    , pGlobalNames( nullptr )
-
 {}
 
 IdlDll::~IdlDll()

@@ -103,10 +103,6 @@ bool isSimpleRegexTrans( TransliterationFlags n )
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
-        , pJumpTable( nullptr )
-        , pJumpTable2( nullptr )
-        , pRegexMatcher( nullptr )
-        , pWLD( nullptr )
 {
     SearchOptions2 aOpt;
     aOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;

@@ -34,8 +34,6 @@ AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *p
     : m_combOperator(c)
     , m_subExpr1(pExpr1)
     , m_subExpr2(pExpr2)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -43,10 +41,6 @@ AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *p
 
 AstExpression::AstExpression(sal_Int32 l)
     : m_combOperator(ExprComb::NONE)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -57,10 +51,6 @@ AstExpression::AstExpression(sal_Int32 l)
 
 AstExpression::AstExpression(sal_Int32  l, ExprType et)
     : m_combOperator(ExprComb::NONE)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -71,10 +61,6 @@ AstExpression::AstExpression(sal_Int32  l, ExprType et)
 
 AstExpression::AstExpression(sal_Int64  h)
     : m_combOperator(ExprComb::NONE)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -85,10 +71,6 @@ AstExpression::AstExpression(sal_Int64  h)
 
 AstExpression::AstExpression(sal_uInt64 uh)
     : m_combOperator(ExprComb::NONE)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -99,10 +81,6 @@ AstExpression::AstExpression(sal_uInt64 uh)
 
 AstExpression::AstExpression(double d)
     : m_combOperator(ExprComb::NONE)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
-    , m_pSymbolicName(nullptr)
 {
     fillDefinitionDetails();
 
@@ -113,9 +91,6 @@ AstExpression::AstExpression(double d)
 
 AstExpression::AstExpression(OString* scopedName)
     : m_combOperator(ExprComb::Symbol)
-    , m_subExpr1(nullptr)
-    , m_subExpr2(nullptr)
-    , m_exprValue(nullptr)
     , m_pSymbolicName(scopedName)
 {
     fillDefinitionDetails();
