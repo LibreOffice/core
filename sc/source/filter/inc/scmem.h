@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCMEM_H
 
 #include <sal/config.h>
-#include <sal/types.h>
 
 struct LotusContext;
 

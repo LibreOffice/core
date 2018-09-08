@@ -30,6 +30,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <defnamesbuffer.hxx>
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>

@@ -22,6 +22,7 @@
 
 #include <mdds/flat_segment_tree.hpp>
 #include <set>
+#include <address.hxx>
 
 class ScOutlineArray;
 

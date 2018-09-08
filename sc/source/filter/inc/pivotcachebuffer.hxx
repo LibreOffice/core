@@ -25,6 +25,9 @@
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
+namespace oox { class AttributeList; }
+namespace oox { class SequenceInputStream; }
+
 namespace com { namespace sun { namespace star {
     namespace sheet { class XDataPilotField; }
 } } }

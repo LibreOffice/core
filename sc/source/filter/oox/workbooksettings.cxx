@@ -33,6 +33,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <unitconverter.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

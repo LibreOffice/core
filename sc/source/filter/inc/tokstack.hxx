@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_TOKSTACK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_TOKSTACK_HXX
 
-#include <string.h>
-#include <compiler.hxx>
 #include <tokenarray.hxx>
-#include <osl/diagnose.h>
+#include <refdata.hxx>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -51,7 +49,6 @@ struct TokenId
     operator const sal_uInt16&() const { return nId; }
 };
 
-struct ScComplexRefData;
 class TokenStack;
 
 enum E_TYPE

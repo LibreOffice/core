@@ -34,6 +34,8 @@ struct ScDataBarFormatData;
 class ScIconSetFormat;
 struct ScIconSetFormatData;
 
+namespace oox { class AttributeList; }
+
 namespace oox {
 namespace xls {
 

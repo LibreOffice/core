@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <sharedformulagroups.hxx>
+#include <tokenarray.hxx>
 
 namespace sc {
 

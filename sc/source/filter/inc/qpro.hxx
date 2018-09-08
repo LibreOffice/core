@@ -22,13 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <filter.hxx>
-
-#include "flttypes.hxx"
-#include "ftools.hxx"
-#include "qprostyle.hxx"
+#include <vcl/errcode.hxx>
+#include <types.hxx>
 
 class ScDocument;
+class SvStream;
+class ScQProStyle;
 
 // Stream wrapper class
 class ScQProReader

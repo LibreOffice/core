@@ -18,6 +18,7 @@
  */
 
 #include <connectionsbuffer.hxx>
+#include <biffhelper.hxx>
 
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>

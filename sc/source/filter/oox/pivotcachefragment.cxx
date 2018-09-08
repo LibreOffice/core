@@ -24,6 +24,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <formulabuffer.hxx>
 #include <pivotcachebuffer.hxx>
 #include <worksheetbuffer.hxx>

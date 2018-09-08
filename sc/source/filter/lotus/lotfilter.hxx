@@ -25,6 +25,7 @@
 #include <op.h>
 #include <optab.h>
 #include <root.hxx>
+#include <patattr.hxx>
 
 class SvxHorJustifyItem;
 class ScProtectionAttr;

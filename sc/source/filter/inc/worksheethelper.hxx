@@ -23,7 +23,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/progressbar.hxx>
 #include <oox/ole/olehelper.hxx>
-#include "addressconverter.hxx"
+#include <rangelst.hxx>
 #include "formulabase.hxx"
 
 struct ScDataBarFormatData;
@@ -42,8 +42,6 @@ namespace oox {
 namespace xls {
 
 class AutoFilterBuffer;
-struct BinAddress;
-struct BinRange;
 class CommentsBuffer;
 class CondFormatBuffer;
 class Font;

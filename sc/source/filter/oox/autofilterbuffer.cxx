@@ -38,6 +38,7 @@
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <defnamesbuffer.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

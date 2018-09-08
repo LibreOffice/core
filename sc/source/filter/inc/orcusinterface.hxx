@@ -31,11 +31,9 @@
 #include <unordered_map>
 #include <vector>
 
-class ScDocumentImport;
 class ScOrcusSheet;
 class ScOrcusStyles;
 class ScOrcusFactory;
-class ScRangeData;
 class SfxItemSet;
 
 namespace com { namespace sun { namespace star { namespace task {
@@ -221,8 +219,6 @@ public:
 
     virtual void set_merge_cell_range(const orcus::spreadsheet::range_t& range) override;
 };
-
-class ScOrcusSheet;
 
 class ScOrcusFormula : public orcus::spreadsheet::iface::import_formula
 {

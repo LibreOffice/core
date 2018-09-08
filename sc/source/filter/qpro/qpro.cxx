@@ -30,6 +30,7 @@
 #include <docpool.hxx>
 #include <patattr.hxx>
 #include <filter.hxx>
+#include <ftools.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tools/stream.hxx>

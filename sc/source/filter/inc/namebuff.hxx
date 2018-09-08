@@ -21,16 +21,11 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_NAMEBUFF_HXX
 
 #include <memory>
+#include <map>
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
-#include <compiler.hxx>
 #include "root.hxx"
 #include "xiroot.hxx"
 
-#include <rangenam.hxx>
-#include <formulacell.hxx>
-
-#include <list>
 #include <unordered_map>
 
 class ScTokenArray;

@@ -32,6 +32,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <stylesbuffer.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

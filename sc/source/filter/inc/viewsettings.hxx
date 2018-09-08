@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 
-#include "addressconverter.hxx"
+#include <rangelst.hxx>
 #include "stylesbuffer.hxx"
 #include "worksheethelper.hxx"
+#include "workbookhelper.hxx"
 
 namespace oox {
 namespace xls {

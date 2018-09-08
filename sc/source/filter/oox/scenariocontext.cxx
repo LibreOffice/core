@@ -18,6 +18,7 @@
  */
 
 #include <scenariocontext.hxx>
+#include <biffhelper.hxx>
 
 #include <scenariobuffer.hxx>
 #include <oox/token/namespaces.hxx>

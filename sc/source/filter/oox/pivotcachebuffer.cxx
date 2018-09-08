@@ -49,6 +49,8 @@
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
 #include <tools/datetime.hxx>
+#include <addressconverter.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

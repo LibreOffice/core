@@ -24,6 +24,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 #include <string.h>

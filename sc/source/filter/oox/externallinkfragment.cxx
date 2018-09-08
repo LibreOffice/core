@@ -28,6 +28,7 @@
 #include <defnamesbuffer.hxx>
 #include <sheetdatacontext.hxx>
 #include <unitconverter.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

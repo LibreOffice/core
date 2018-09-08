@@ -26,6 +26,7 @@
 #include <viewsettings.hxx>
 #include <workbooksettings.hxx>
 #include <worksheetsettings.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

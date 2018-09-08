@@ -46,6 +46,7 @@
 #include <formulacell.hxx>
 #include <docpool.hxx>
 #include <paramisc.hxx>
+#include <patattr.hxx>
 #include <documentimport.hxx>
 #include <formulabuffer.hxx>
 #include <numformat.hxx>

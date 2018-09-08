@@ -29,6 +29,7 @@
 #include <xiroot.hxx>
 
 #include <string.h>
+#include <osl/diagnose.h>
 
 sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
 {

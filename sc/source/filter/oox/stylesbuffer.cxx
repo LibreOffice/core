@@ -81,6 +81,9 @@
 #include <xlconst.hxx>
 #include <documentimport.hxx>
 #include <numformat.hxx>
+#include <patattr.hxx>
+#include <stlsheet.hxx>
+#include <biffhelper.hxx>
 
 namespace oox {
 namespace xls {

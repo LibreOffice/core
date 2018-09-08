@@ -383,3 +383,8 @@ blacklist:
     - class XclExpChangeTrack
     # Needed for typedef
     - excrecds.hxx
+    sc/source/filter/inc/ooxformulaparser.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XFilterFormulaParser.hpp

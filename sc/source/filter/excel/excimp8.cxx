@@ -84,6 +84,7 @@
 #include <xiescher.hxx>
 #include <xipivot.hxx>
 #include <xistyle.hxx>
+#include <excdefs.hxx>
 
 #include <excform.hxx>
 #include <scextopt.hxx>

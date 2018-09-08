@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_OP_H
 #define INCLUDED_SC_SOURCE_FILTER_INC_OP_H
 
-#include <patattr.hxx>
+#include <sal/types.h>
+class SfxItemSet;
 
 // OP code functions
 class SvStream;

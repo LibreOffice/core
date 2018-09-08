@@ -35,6 +35,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>
 
@@ -44,6 +45,8 @@
 #include <docfunc.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
+
+namespace oox { class AttributeList; }
 
 namespace oox {
 namespace xls {

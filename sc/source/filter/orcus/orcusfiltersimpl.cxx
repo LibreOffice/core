@@ -9,6 +9,7 @@
 
 #include <orcusfiltersimpl.hxx>
 #include <orcusinterface.hxx>
+#include <tokenarray.hxx>
 
 #include <document.hxx>
 

@@ -18,6 +18,7 @@
  */
 
 #include <autofiltercontext.hxx>
+#include <biffhelper.hxx>
 
 #include <autofilterbuffer.hxx>
 #include <oox/token/namespaces.hxx>

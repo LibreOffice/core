@@ -20,6 +20,7 @@
 #include <formel.hxx>
 
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 ScRangeListTabs::ScRangeListTabs()
 {

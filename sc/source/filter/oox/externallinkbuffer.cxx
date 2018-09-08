@@ -35,6 +35,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+#include <biffhelper.hxx>
 #include <excelhandlers.hxx>
 #include <formulaparser.hxx>
 #include <worksheetbuffer.hxx>

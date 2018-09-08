@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
 
-#include <global.hxx>
 #include <address.hxx>
 #include "flttypes.hxx"
-#include <filter.hxx>
-#include "excdefs.hxx"
 #include "lotattr.hxx"
 #include "lotfntbf.hxx"
 #include "lotrange.hxx"

@@ -22,9 +22,7 @@
 
 #include <sal/config.h>
 #include "formel.hxx"
-#include "qpro.hxx"
 
-#include <compiler.hxx>
 typedef OpCode DefTokenId;
 
 enum FUNC_TYPE

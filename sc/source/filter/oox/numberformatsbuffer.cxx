@@ -18,6 +18,7 @@
  */
 
 #include <numberformatsbuffer.hxx>
+#include <biffhelper.hxx>
 
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -31,6 +32,7 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
