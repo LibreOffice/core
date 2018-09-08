@@ -4323,12 +4323,11 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         sal_Int32 nTotalSize = 0;
 
         // must be a one-dimensional array
-        sal_Int32 nLower, nUpper, nSize;
-        sal_Int32 i;
-        for( i = 0 ; i < nDims ; i++ )
+        sal_Int32 nLower, nUpper;
+        for( sal_Int32 i = 0 ; i < nDims ; ++i )
         {
             pArray->GetDim32( i+1, nLower, nUpper );
-            nSize = nUpper - nLower + 1;
+            sal_Int32 nSize = nUpper - nLower + 1;
             if( i == 0 )
             {
                 nTotalSize = nSize;
@@ -4341,7 +4340,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
         // create objects and insert them into the array
         OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
-        for( i = 0 ; i < nTotalSize ; i++ )
+        for( sal_Int32 i = 0 ; i < nTotalSize ; ++i )
         {
             SbxObject *pClassObj = SbxBase::CreateObject( aClass );
             if( !pClassObj )
