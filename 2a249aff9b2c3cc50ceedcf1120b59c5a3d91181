@@ -16,6 +16,24 @@
       "revId": "2a249aff9b2c3cc50ceedcf1120b59c5a3d91181",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_ab6d8b99",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-08T04:32:52Z",
+      "side": 0,
+      "message": "Hard to know if Word never does this.  But I did find all(maybe 10) of the unit tests that we have that include insideV/H (using assert false) and as I indicated somewhere, they all appear to have been created by LO.  I just now used Word 2010 to create a 5x5 table, cleared all borders, selected the inside 3x3 squares, and set only the inside borders.  When I saved it, the document.xml contains only top/bottom/left/right in the individual cells (which is primarily where LO writes both tblr and vh borders). \n\nword 2010:\n\u003cw:tcBorders\u003e\n  \u003cw:left w:val\u003d\"single\" w:sz\u003d\"4\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:bottom w:val\u003d\"single\" w:sz\u003d\"4\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:right w:val\u003d\"single\" w:sz\u003d\"4\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n\u003c/w:tcBorders\u003e\n\nWord does use insideV/H in the Table properties (since right/left/top/bottom refer only to the outside rows)\n\u003cw:tblPr\u003e\u003cw:tblStyle w:val\u003d\"TableGrid\"/\u003e\u003cw:tblW w:w\u003d\"0\" w:type\u003d\"auto\"/\u003e\n\u003cw:tblBorders\u003e\n  \u003cw:top w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:left w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:bottom w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:right w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:insideH w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n  \u003cw:insideV w:val\u003d\"none\" w:sz\u003d\"0\" w:space\u003d\"0\" w:color\u003d\"auto\"/\u003e\n\u003c/w:tblBorders\u003e\u003cw:tblLook w:val\u003d\"04A0\" w:firstRow\u003d\"1\" w:lastRow\u003d\"0\" w:firstColumn\u003d\"1\" w:lastColumn\u003d\"0\" w:noHBand\u003d\"0\" w:noVBand\u003d\"1\"/\u003e\u003c/w:tblPr\u003e\n\nBut LO handles this completely wrong. It doesn\u0027t know what to do with the insideV/H (we don\u0027t import that), so it is dropped, and the only thing that it would write out would be a copy of the outside borders, which simply isn\u0027t correct. I\u0027ve made up an example document proving this. Perhaps the the table properties should also be grab-bagged, although currently it is pretty much irrelevant since we explicitly set every border for every cell, thus completely hiding the table properties.\n\nIn terms of eliminating the test, I have no choice but to eliminate the test if we don\u0027t write out insideV/H since it simply won\u0027t be there in the export (since this is an export test - especially with ODT as the source document. Perhaps I could craft a replacement test where the style is written out in the proper order - since we do a grabbag dump for that.",
+      "parentUuid": "dfeb2761_4b9280f8",
+      "revId": "2a249aff9b2c3cc50ceedcf1120b59c5a3d91181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
