@@ -453,7 +453,6 @@ void SbxVariable::ClearComListener()
 
 bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    sal_uInt16 nType;
     sal_uInt8 cMark;
     rStrm.ReadUChar( cMark );
     if( cMark == 0xFF )
@@ -470,6 +469,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     }
     else
     {
+        sal_uInt16 nType;
         rStrm.SeekRel( -1 );
         rStrm.ReadUInt16( nType );
         maName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,

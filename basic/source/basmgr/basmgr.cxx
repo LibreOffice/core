@@ -551,20 +551,18 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         xLibContainer->addContainerListener( xLibContainerListener );
 
         uno::Sequence< OUString > aScriptLibNames = xScriptCont->getElementNames();
-        const OUString* pScriptLibName = aScriptLibNames.getConstArray();
-        sal_Int32 i, nNameCount = aScriptLibNames.getLength();
 
-        if( nNameCount )
+        if( aScriptLibNames.hasElements() )
         {
-            for( i = 0 ; i < nNameCount ; ++i, ++pScriptLibName )
+            for(const auto& rScriptLibName : aScriptLibNames)
             {
-                uno::Any aLibAny = xScriptCont->getByName( *pScriptLibName );
+                uno::Any aLibAny = xScriptCont->getByName( rScriptLibName );
 
-                if ( *pScriptLibName == "Standard" || *pScriptLibName == "VBAProject")
-                    xScriptCont->loadLibrary( *pScriptLibName );
+                if ( rScriptLibName == "Standard" || rScriptLibName == "VBAProject")
+                    xScriptCont->loadLibrary( rScriptLibName );
 
                 BasMgrContainerListenerImpl::insertLibraryImpl
-                    ( xScriptCont, this, aLibAny, *pScriptLibName );
+                    ( xScriptCont, this, aLibAny, rScriptLibName );
             }
         }
         else

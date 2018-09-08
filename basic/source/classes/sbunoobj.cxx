@@ -2150,7 +2150,6 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 sal_uInt32 nParamCount = pParams ? (static_cast<sal_uInt32>(pParams->Count()) - 1) : 0;
                 Sequence<Any> args;
                 bool bOutParams = false;
-                sal_uInt32 i;
 
                 if( !bInvocation && mxUnoAccess.is() )
                 {
@@ -2173,7 +2172,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         {
                             // Check types
                             bool bError = false;
-                            for( i = nParamCount ; i < nUnoParamCount ; i++ )
+                            for( sal_uInt32 i = nParamCount ; i < nUnoParamCount ; i++ )
                             {
                                 const ParamInfo& rInfo = pParamInfos[i];
                                 const Reference< XIdlClass >& rxClass = rInfo.aType;
@@ -2192,7 +2191,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         args.realloc( nAllocParamCount );
                         Any* pAnyArgs = args.getArray();
-                        for( i = 0 ; i < nParamCount ; i++ )
+                        for( sal_uInt32 i = 0 ; i < nParamCount ; i++ )
                         {
                             const ParamInfo& rInfo = pParamInfos[i];
                             const Reference< XIdlClass >& rxClass = rInfo.aType;
