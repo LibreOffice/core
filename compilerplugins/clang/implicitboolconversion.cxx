@@ -880,10 +880,9 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         && !calls.empty())
     {
         CallExpr const * call = calls.top();
-        if (std::find_if(
+        if (std::any_of(
                 call->arg_begin(), call->arg_end(),
-                [expr](Expr const * e) { return expr == e->IgnoreParens(); })
-            != call->arg_end())
+                [expr](Expr const * e) { return expr == e->IgnoreParens(); }))
         {
             report(
                 DiagnosticsEngine::Warning,

@@ -284,13 +284,9 @@ void SvxCharacterMap::updateRecentCharControl()
 
 void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find_if(maRecentCharList.begin(),
-         maRecentCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
+    auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
 
-    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
-         maRecentCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
+    auto itChar2 = std::find(maRecentCharFontList.begin(), maRecentCharFontList.end(), rFont);
 
     // if recent char to be added is already in list, remove it
     if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
@@ -328,13 +324,9 @@ void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OU
 
 void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find_if(maFavCharList.begin(),
-         maFavCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
+    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
 
-    auto itChar2 = std::find_if(maFavCharFontList.begin(),
-         maFavCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
+    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
 
     // if Fav char to be added is already in list, remove it
     if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
@@ -393,13 +385,9 @@ void SvxCharacterMap::updateFavCharControl()
 
 void SvxCharacterMap::deleteFavCharacterFromList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find_if(maFavCharList.begin(),
-         maFavCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
+    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
 
-    auto itChar2 = std::find_if(maFavCharFontList.begin(),
-         maFavCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
+    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
 
     // if Fav char to be added is already in list, remove it
     if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
@@ -543,19 +531,16 @@ void SvxCharacterMap::init()
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find_if(maFavCharList.begin(),
+    auto isFavCharTitleExists = std::any_of(maFavCharList.begin(),
          maFavCharList.end(),
          [sTitle] (const OUString & a) { return a == sTitle; });
 
-    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+    auto isFavCharFontExists = std::any_of(maFavCharFontList.begin(),
          maFavCharFontList.end(),
          [rFont] (const OUString & a) { return a == rFont; });
 
     // if Fav char to be added is already in list, remove it
-    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
-        return true;
-    else
-        return false;
+    return isFavCharTitleExists && isFavCharFontExists;
 }
 
 
@@ -763,15 +748,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBoxText&, void)
 IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
 {
     OUString sTitle = rView->GetText();
-    auto itChar = std::find_if(maRecentCharList.begin(),
-         maRecentCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
+    auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
 
     OUString sFont = rView->GetFont().GetFamilyName();
-    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
-         maRecentCharFontList.end(),
-         [sFont] (const OUString & a)
-         { return a == sFont; });
+    auto itChar2 = std::find(maRecentCharFontList.begin(), maRecentCharFontList.end(), sFont);
 
     // if recent char to be added is already in list, remove it
     if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
