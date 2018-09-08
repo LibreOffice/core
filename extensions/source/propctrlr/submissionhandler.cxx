@@ -280,7 +280,7 @@ namespace pcr
         if ( !_rxControlFactory.is() )
             throw NullPointerException();
         if ( !m_pHelper.get() )
-            RuntimeException();
+            throw RuntimeException();
 
         std::vector< OUString > aListEntries;
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
