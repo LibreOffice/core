@@ -891,20 +891,15 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
 
                 OUString sRealName;
                 xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
-                std::vector< OUString>::const_iterator aFindName;
                 if ( sColumnName.isEmpty() )
                     xProp->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
 
-                aFindName = std::find_if(aNames.begin(),aNames.end(),
-                                    [&aCaseCompare, &sColumnName](const OUString& lhs)
-                                    { return aCaseCompare(lhs, sColumnName); } );
                 sal_Int32 j = 0;
-                while ( aFindName != aNames.end() )
+                while ( std::any_of(aNames.begin(),aNames.end(),
+                                    [&aCaseCompare, &sColumnName](const OUString& lhs)
+                                    { return aCaseCompare(lhs, sColumnName); } ) )
                 {
                     sColumnName += OUString::number(++j);
-                    aFindName = std::find_if(aNames.begin(),aNames.end(),
-                                        [&aCaseCompare, &sColumnName](const OUString& lhs)
-                                        { return aCaseCompare(lhs, sColumnName); } );
                 }
 
                 pColumn->setName(sColumnName);

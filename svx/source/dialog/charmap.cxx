@@ -276,13 +276,8 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
 {
     if(isFavChar(sTitle, rFont))
     {
-        auto itChar = std::find_if(maFavCharList.begin(),
-             maFavCharList.end(),
-             [sTitle] (const OUString & a) { return a == sTitle; });
-
-        auto itChar2 = std::find_if(maFavCharFontList.begin(),
-             maFavCharFontList.end(),
-             [rFont] (const OUString & a) { return a == rFont; });
+        auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
+        auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
 
         // if Fav char to be added is already in list, remove it
         if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
@@ -307,13 +302,8 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
         return;
     }
 
-    auto itChar = std::find_if(maFavCharList.begin(),
-         maFavCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
-
-    auto itChar2 = std::find_if(maFavCharFontList.begin(),
-         maFavCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
+    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
+    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
 
     // if Fav char to be added is already in list, remove it
     if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )

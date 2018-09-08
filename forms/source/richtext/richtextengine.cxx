@@ -115,10 +115,10 @@ namespace frm
 
     void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener const * _pListener )
     {
-        ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
+        ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find(
             m_aStatusListeners.begin(),
             m_aStatusListeners.end(),
-            [_pListener](IEngineStatusListener * p) { return p == _pListener; }
+            _pListener
         );
         OSL_ENSURE( aPos != m_aStatusListeners.end(), "RichTextEngine::revokeEngineStatusListener: listener not registered!" );
         if ( aPos != m_aStatusListeners.end() )

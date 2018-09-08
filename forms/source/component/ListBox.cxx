@@ -463,9 +463,8 @@ namespace frm
         // #i27024#
         const Any* pSelectSequenceValue = nullptr;
 
-        const OUString* pSelectedItemsPos = ::std::find_if(
-            _rPropertyNames.begin(), _rPropertyNames.end(),
-             [](OUString const & s) { return s == PROPERTY_SELECT_SEQ; }
+        const OUString* pSelectedItemsPos = std::find(
+            _rPropertyNames.begin(), _rPropertyNames.end(), PROPERTY_SELECT_SEQ
         );
         auto aStringItemListExists = std::any_of(
             _rPropertyNames.begin(), _rPropertyNames.end(),

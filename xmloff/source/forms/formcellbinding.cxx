@@ -251,15 +251,7 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
             if ( xDocumentFactory.is() )
                 aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            const OUString* pFound = ::std::find_if(
-                aAvailableServices.begin(),
-                aAvailableServices.end(),
-                StringCompare( _rService )
-            );
-            if ( pFound - aAvailableServices.getConstArray() < aAvailableServices.getLength() )
-            {
-                bYesItIs = true;
-            }
+            bYesItIs = std::any_of( aAvailableServices.begin(), aAvailableServices.end(), StringCompare( _rService ) );
         }
     }
     catch( const Exception& )
