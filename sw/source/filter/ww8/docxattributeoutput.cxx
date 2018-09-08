@@ -3044,7 +3044,7 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.tag = XML_tcBorders;
     rOptions.bUseStartEnd = !bEcma;
     rOptions.bWriteTag = true;
-    rOptions.bWriteInsideHV = true;
+    rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = false;
 
     return rOptions;
@@ -3067,9 +3067,7 @@ static void impl_borders( FSHelperPtr const & pSerializer,
                           const SvxBoxItem& rBox,
                           const OutputBorderOptions& rOptions,
                           std::map<SvxBoxItemLine,
-                          css::table::BorderLine2> &rTableStyleConf,
-                          const bool bIsLastColumn = false,
-                          const bool bIsLastRow = false )
+                          css::table::BorderLine2> &rTableStyleConf )
 {
     static const SvxBoxItemLine aBorders[] =
     {
@@ -3161,14 +3159,14 @@ static void impl_borders( FSHelperPtr const & pSerializer,
                 bWriteInsideV = true;
         }
     }
-    if (bWriteInsideH && !bIsLastRow)
+    if (bWriteInsideH)
     {
         const table::BorderLine2 *aStyleProps = nullptr;
         if( rTableStyleConf.find( SvxBoxItemLine::BOTTOM ) != rTableStyleConf.end() )
             aStyleProps = &rTableStyleConf[ SvxBoxItemLine::BOTTOM ];
         impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(SvxBoxItemLine::BOTTOM), 0, false, aStyleProps );
     }
-    if (bWriteInsideV && !bIsLastColumn)
+    if (bWriteInsideV)
     {
         const table::BorderLine2 *aStyleProps = nullptr;
         if( rTableStyleConf.find( SvxBoxItemLine::RIGHT ) != rTableStyleConf.end() )
@@ -3237,8 +3235,6 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SwTableBox *pTableBox = pTableTextNodeInfoInner->getTableBox( );
 
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
-    const bool bIsLastColumn = pTableTextNodeInfoInner->isEndOfLine();
-    const bool bIsLastRow = pTableTextNodeInfoInner->isFinalRow();
 
     // Output any table cell redlines if there are any attached to this specific cell
     TableCellRedline( pTableTextNodeInfoInner );
@@ -3298,7 +3294,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), m_aTableStyleConf, bIsLastColumn, bIsLastRow );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), m_aTableStyleConf );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
