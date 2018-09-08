@@ -46,15 +46,13 @@ namespace svt
 
 
     SmartContent::SmartContent()
-        :m_pContent( nullptr )
-        ,m_eState( NOT_BOUND )
+        :m_eState( NOT_BOUND )
     {
     }
 
 
     SmartContent::SmartContent( const OUString& _rInitialURL )
-        :m_pContent( nullptr )
-        ,m_eState( NOT_BOUND )
+        :m_eState( NOT_BOUND )
     {
         bindTo( _rInitialURL );
     }

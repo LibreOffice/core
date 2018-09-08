@@ -504,7 +504,6 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     nSlidePersistEndOffset  ( 0 ),
     nBackgroundOffset       ( 0 ),
     nDrawingDgId            ( 0xffffffff ),
-    pPresentationObjects    ( nullptr ),
     pBObj                   ( nullptr ),
     ePageKind               ( PPT_MASTERPAGE ),
     bNotesMaster            ( false ),
@@ -520,7 +519,6 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
-    m_pFonts                ( nullptr ),
     nStreamLen              ( 0 ),
     rImportParam            ( rParam )
 {
@@ -1319,12 +1317,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
 SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SdrEscherImport     ( rParam, rBaseURL ),
     bOk                 ( rStCtrl.GetErrorCode() == ERRCODE_NONE ),
-    pPersistPtr         ( nullptr ),
     nPersistPtrCnt      ( 0 ),
     pDefaultSheet       ( nullptr ),
-    m_pMasterPages      ( nullptr ),
-    m_pSlidePages       ( nullptr ),
-    m_pNotePages        ( nullptr ),
     nCurrentPageNum     ( 0 ),
     nDocStreamPos       ( 0 ),
     nPageColorsNum      ( 0xFFFF ),
@@ -4449,7 +4443,6 @@ PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
 PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     : mnOriginalTextPos(0)
     , mnParagraph(nParagraph)
-    , mpFieldItem(nullptr)
     , mpImplPPTCharPropSet()
 {
     mnHylinkOrigColor = 0;
@@ -4529,7 +4522,6 @@ void PPTCharPropSet::SetColor( sal_uInt32 nColor )
 PPTRuler::PPTRuler()
     : nFlags(0)
     , nDefaultTab(0x240)
-    , pTab(nullptr)
     , nTabCount(0)
 {
     memset(nTextOfs, 0, sizeof(nTextOfs));

@@ -175,7 +175,6 @@ Size SvtUpButton_Impl::GetOptimalSize() const
 SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
 
     _pCurFilter         ( nullptr ),
-    _pUserFilter        ( nullptr ),
     _pFtFileName        ( nullptr ),
     _pEdFileName        ( nullptr ),
     _pFtFileVersion     ( nullptr ),

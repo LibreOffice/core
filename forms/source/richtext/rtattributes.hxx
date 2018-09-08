@@ -61,20 +61,17 @@ namespace frm
     };
 
     inline AttributeState::AttributeState( )
-        :pItemHandleItem ( nullptr )
-        ,eSimpleState( eIndetermined )
+        :eSimpleState( eIndetermined )
     {
     }
 
     inline AttributeState::AttributeState( AttributeCheckState _eCheckState )
-        :pItemHandleItem ( nullptr )
-        ,eSimpleState( _eCheckState )
+        :eSimpleState( _eCheckState )
     {
     }
 
     inline AttributeState::AttributeState( const AttributeState& _rSource )
-        :pItemHandleItem ( nullptr )
-        ,eSimpleState( eIndetermined )
+        :eSimpleState( eIndetermined )
     {
         operator=( _rSource );
     }
