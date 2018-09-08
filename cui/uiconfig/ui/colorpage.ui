@@ -926,6 +926,7 @@
                     <property name="valign">start</property>
                     <property name="image">image3</property>
                     <property name="image_position">right</property>
+                    <property name="always_show_image">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
