@@ -1319,7 +1319,7 @@ bool RequestHandler::ExecuteCmdLineRequests(
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
     // ensure that Processed flag (if exists) is signaled in any outcome
-    ConditionSetGuard(aRequest.pcProcessed);
+    ConditionSetGuard aSetGuard(aRequest.pcProcessed);
 
     static std::vector<DispatchWatcher::DispatchRequest> aDispatchList;
 
