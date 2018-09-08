@@ -31,6 +31,10 @@ $(eval $(call gb_Executable_set_include,rscpp,\
         -I$(SRCDIR)/rsc/inc/pch \
 ))
 
+$(eval $(call gb_Executable_add_defs,rscpp,\
+	-DSOLAR \
+))
+
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Executable_add_defs,rscpp,\
 	-Dunix \
