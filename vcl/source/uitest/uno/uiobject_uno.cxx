@@ -58,8 +58,7 @@ class ExecuteWrapper
 {
     std::function<void()> mFunc;
     Link<Timer*, void> mHandler;
-    bool mbSignal;
-    std::mutex mMutex;
+    volatile bool mbSignal;
 
 public:
 
@@ -73,11 +72,6 @@ public:
     void setSignal()
     {
         mbSignal = true;
-    }
-
-    std::mutex& getMutex()
-    {
-        return mMutex;
     }
 
     DECL_LINK( ExecuteActionHdl, Timer*, void );
@@ -96,20 +90,8 @@ IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
             aIdle.Start();
         }
 
-        for (;;) {
-            {
-                std::unique_lock<std::mutex> lock(mMutex);
-                if (mbSignal) {
-                    break;
-                }
-            }
+        while (!mbSignal) {
             Application::Reschedule();
-        }
-        std::unique_lock<std::mutex> lock(mMutex);
-        while (!mbSignal)
-        {
-            // coverity[sleep] - intentional sleep while mutex held
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
     delete this;
@@ -146,7 +128,6 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     };
 
     ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(this, UIObjectUnoObj, NotifyHdl));
-    std::unique_lock<std::mutex>(pWrapper->getMutex());
     aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
     {
         SolarMutexGuard aGuard;
