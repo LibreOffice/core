@@ -2422,7 +2422,7 @@
                 <xsl:attribute name="number:country">BT</xsl:attribute>
             </xsl:when>
             <xsl:when test="$language-country-code = 1105">
-                <!-- Tibetan - Peoples' Republic of China, #0451 -->
+                <!-- Tibetan - People's Republic of China, #0451 -->
                 <xsl:attribute name="number:language">bo</xsl:attribute>
                 <xsl:attribute name="number:country">CN</xsl:attribute>
             </xsl:when>
