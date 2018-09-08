@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_8e73f515",
+        "filename": "basegfx/source/polygon/b2dtrapezoid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-08T11:23:02Z",
+      "side": 1,
+      "message": "the number of polygons may change here, so this might actually be a bugfix?",
+      "revId": "d0857b922e6731835cf65e38381de42fdb276ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
