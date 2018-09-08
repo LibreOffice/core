@@ -40,6 +40,7 @@ cmd/sc_addprintarea.svg cmd/sc_inserttable.svg
 cmd/sc_addtable.svg cmd/sc_inserttable.svg
 
 # Insert
+cmd/32/insertavmedia.svg cmd/32/avmediaplayer.svg
 cmd/lc_insobjctrl.svg cmd/lc_newdoc.svg
 cmd/lc_insert.svg cmd/lc_togglesheetgrid.svg
 cmd/lc_insertavmedia.svg cmd/lc_avmediaplayer.svg
@@ -96,7 +97,6 @@ cmd/sc_insertformula.svg cmd/sc_dbviewfunctions.svg
 cmd/sc_insertformvscroll.svg cmd/sc_scrollbar.svg
 cmd/sc_insertframeinteract.svg cmd/sc_insertframe.svg
 cmd/sc_insertframeinteractnocolumns.svg cmd/sc_insertframe.svg
-cmd/sc_insertgraphic.svg cmd/sc_gallery.svg
 cmd/sc_insertimagecontrol.svg cmd/sc_drawchart.svg
 cmd/sc_insertobjectchart.svg cmd/sc_drawchart.svg
 cmd/sc_insertnumericfield.svg cmd/sc_numberformatstandard.svg
@@ -280,8 +280,8 @@ cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
 cmd/sc_shapesmenu.svg cmd/sc_basicshapes.round-quadrat.svg
 cmd/sc_shapeslinemenu.svg cmd/sc_line.svg
 
-cmd/lc_measureattributes.png cmd/lc_measureline.png
-cmd/sc_measureattributes.png cmd/sc_measureline.png
+cmd/lc_measureattributes.svg cmd/lc_measureline.svg
+cmd/sc_measureattributes.svg cmd/sc_measureline.svg
 
 # Open
 cmd/lc_openfromwriter.svg cmd/lc_open.svg
@@ -686,6 +686,8 @@ cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
 # Grid
 cmd/lc_gridvisible.svg cmd/lc_grid.svg
 cmd/sc_gridvisible.svg cmd/sc_grid.svg
+cmd/lc_gridmenu.svg cmd/lc_grid.svg
+cmd/sc_gridmenu.svg cmd/sc_grid.svg
 
 # Crop
 cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
@@ -710,8 +712,16 @@ cmd/sc_presentation.svg cmd/sc_dia.svg
 # Style
 cmd/lc_editstyled.svg cmd/lc_editstyle.svg
 cmd/sc_editstyled.svg cmd/sc_editstyle.svg
+cmd/32/loadstyles.svg cmd/32/open.svg
+cmd/lc_loadstyles.svg cmd/lc_open.svg
+cmd/sc_loadstyles.svg cmd/sc_open.svg
 cmd/lc_viewsidebarstyles.svg cmd/lc_designerdialog.svg
 cmd/sc_viewsidebarstyles.svg cmd/sc_designerdialog.svg
+
+# Macro
+cmd/32/macrosmenu.svg cmd/32/choosemacro.svg
+cmd/lc_macrosmenu.svg cmd/lc_choosemacro.svg
+cmd/sc_macrosmenu.svg cmd/sc_choosemacro.svg
 
 # Outline
 cmd/lc_outlineright.svg cmd/lc_decrementlevel.svg
@@ -761,11 +771,15 @@ cmd/lc_insertauthoritiesentry.svg cmd/lc_bibliographycomponent.svg
 cmd/sc_insertauthoritiesentry.svg cmd/sc_bibliographycomponent.svg
 
 # Reload
+cmd/32/updateallindexes.svg cmd/32/reload.svg
+cmd/32/updateall.svg cmd/32/reload.svg
+cmd/32/updatemenu.svg cmd/32/reload.svg
 cmd/lc_refresh.svg cmd/lc_reload.svg
 cmd/lc_refreshformcontrol.svg cmd/lc_reload.svg
 cmd/lc_draw.svg cmd/lc_reload.svg
 cmd/lc_updateallindexes.svg cmd/lc_reload.svg
 cmd/lc_updateall.svg cmd/lc_reload.svg
+cmd/lc_updatemenu.svg cmd/lc_reload.svg
 cmd/sc_refresh.svg cmd/sc_reload.svg
 cmd/sc_refreshformcontrol.svg cmd/sc_reload.svg
 cmd/sc_styleupdatebyexample.svg cmd/sc_reload.svg
@@ -773,6 +787,7 @@ cmd/sc_draw.svg cmd/sc_reload.svg
 cmd/sc_updatecurindex.svg cmd/sc_reload.svg
 cmd/sc_updateallindexes.svg cmd/sc_reload.svg
 cmd/sc_updateall.svg cmd/sc_reload.svg
+cmd/sc_updatemenu.svg cmd/sc_reload.svg
 
 # Select
 cmd/lc_selectmode.svg cmd/lc_selectobject.svg
@@ -870,7 +885,6 @@ cmd/sc_underlinesimple.svg cmd/sc_underline.svg
 
 # Slide command aliases
 cmd/lc_insertslide.svg cmd/lc_insertpage.svg
-cmd/lc_duplicateslide.svg cmd/lc_duplicatepage.svg
 cmd/lc_deleteslide.svg cmd/lc_deletepage.svg
 cmd/lc_moveslidefirst.svg cmd/lc_movepagefirst.svg
 cmd/lc_moveslidelast.svg cmd/lc_movepagelast.svg
@@ -883,7 +897,6 @@ cmd/lc_nextslide.svg cmd/lc_nextrecord.svg
 cmd/lc_slidesetup.svg cmd/lc_pagesetup.svg
 
 cmd/sc_insertslide.svg cmd/sc_insertpage.svg
-cmd/sc_duplicateslide.svg cmd/sc_duplicatepage.svg
 cmd/sc_deleteslide.svg cmd/sc_deletepage.svg
 cmd/sc_moveslidefirst.svg cmd/sc_movepagefirst.svg
 cmd/sc_moveslidelast.svg cmd/sc_movepagelast.svg

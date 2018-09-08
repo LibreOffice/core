@@ -40,6 +40,7 @@ cmd/sc_addprintarea.png cmd/sc_inserttable.png
 cmd/sc_addtable.png cmd/sc_inserttable.png
 
 # Insert
+cmd/32/insertavmedia.png cmd/32/avmediaplayer.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_insert.png cmd/lc_togglesheetgrid.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
@@ -96,7 +97,6 @@ cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
-cmd/sc_insertgraphic.png cmd/sc_gallery.png
 cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
@@ -690,6 +690,8 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
+cmd/lc_gridmenu.png cmd/lc_grid.png
+cmd/sc_gridmenu.png cmd/sc_grid.png
 
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
@@ -714,8 +716,16 @@ cmd/sc_presentation.png cmd/sc_dia.png
 # Style
 cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
+cmd/32/loadstyles.png cmd/32/open.png
+cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/sc_loadstyles.png cmd/sc_open.png
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
+
+# Macro
+cmd/32/macrosmenu.png cmd/32/choosemacro.png
+cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
+cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
@@ -765,11 +775,15 @@ cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
 cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
 
 # Reload
+cmd/32/updateallindexes.png cmd/32/reload.png
+cmd/32/updateall.png cmd/32/reload.png
+cmd/32/updatemenu.png cmd/32/reload.png
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_refreshformcontrol.png cmd/lc_reload.png
 cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_updateallindexes.png cmd/lc_reload.png
 cmd/lc_updateall.png cmd/lc_reload.png
+cmd/lc_updatemenu.png cmd/lc_reload.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
 cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
@@ -777,6 +791,7 @@ cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_updatecurindex.png cmd/sc_reload.png
 cmd/sc_updateallindexes.png cmd/sc_reload.png
 cmd/sc_updateall.png cmd/sc_reload.png
+cmd/sc_updatemenu.png cmd/sc_reload.png
 
 # Select
 cmd/lc_selectmode.png cmd/lc_selectobject.png
@@ -876,7 +891,6 @@ cmd/sc_underlinesimple.png cmd/sc_underline.png
 
 # Slide command aliases
 cmd/lc_insertslide.png cmd/lc_insertpage.png
-cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
 cmd/lc_deleteslide.png cmd/lc_deletepage.png
 cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
 cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
@@ -889,7 +903,6 @@ cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
 
 cmd/sc_insertslide.png cmd/sc_insertpage.png
-cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
 cmd/sc_deleteslide.png cmd/sc_deletepage.png
 cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
 cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
