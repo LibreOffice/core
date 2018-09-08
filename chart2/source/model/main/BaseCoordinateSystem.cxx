@@ -246,8 +246,8 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
 // ____ XChartTypeContainer ____
 void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
 {
-    if( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
-        != m_aChartTypes.end())
+    if( std::any_of( m_aChartTypes.begin(), m_aChartTypes.end(),
+            [&aChartType](Reference<chart2::XChartType>& chartType) { return chartType == aChartType; } ))
         throw lang::IllegalArgumentException();
 
     m_aChartTypes.push_back( aChartType );

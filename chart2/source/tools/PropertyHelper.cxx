@@ -131,8 +131,8 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
             // check if preferred name is already used
             if( !rPreferredName.isEmpty())
             {
-                aIt = std::find( aNames.begin(), aNames.end(), rPreferredName );
-                if( aIt == aNames.end())
+                if( std::none_of( aNames.begin(), aNames.end(),
+                        [&rPreferredName](OUString& aName) { return aName == rPreferredName; } ) )
                     aUniqueName = rPreferredName;
             }
 

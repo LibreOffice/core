@@ -779,8 +779,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
                 std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
-                std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
-                if( aIt != aIndices.end())
+                if( std::any_of( aIndices.begin(), aIndices.end(), [nPointIndex](sal_Int32 aIndex) { return aIndex == nPointIndex; } ) )
                     xProp = xSeries->getDataPointByIndex(nPointIndex);
                 else
                     xProp = xSeriesProperties;

@@ -151,17 +151,19 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                     if( bDocument )
                     {
                         GraphicDescriptor   aDesc( aFoundURL );
+                        OUString aFormatShortName( GraphicDescriptor::GetImportFormatShortName(
+                            aDesc.GetFileFormat() ).toAsciiLowerCase() );
+                        OUString aExtension( aFoundURL.GetExtension().toAsciiLowerCase() );
 
                         if( ( aDesc.Detect() &&
-                              std::find( rFormats.begin(),
+                              std::any_of( rFormats.begin(),
                                            rFormats.end(),
-                                           GraphicDescriptor::GetImportFormatShortName(
-                                               aDesc.GetFileFormat() ).toAsciiLowerCase() )
-                              != rFormats.end() ) ||
-                            std::find( rFormats.begin(),
+                                           [&aFormatShortName](OUString& format)
+                                           { return format == aFormatShortName; } ) ) ||
+                            std::any_of( rFormats.begin(),
                                          rFormats.end(),
-                                         aFoundURL.GetExtension().toAsciiLowerCase() )
-                            != rFormats.end() )
+                                         [&aExtension](OUString& format)
+                                         { return format == aExtension; } ) )
                         {
                             SolarMutexGuard aGuard;
 

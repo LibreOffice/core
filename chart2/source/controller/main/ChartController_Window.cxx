@@ -1053,11 +1053,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                                 if( bIsPoint )
                                 {
                                     std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
-                                    std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
-                                    if( aIt != aIndices.end())
-                                        bSelectedPointIsFormatted = true;
-                                    else
-                                        bHasFormattedDataPointsOtherThanSelected = true;
+                                    bSelectedPointIsFormatted = std::any_of( aIndices.begin(), aIndices.end(),
+                                                                             [nPointIndex](sal_Int32 index) { return nPointIndex == index; } );
+                                    bHasFormattedDataPointsOtherThanSelected = !bSelectedPointIsFormatted;
                                 }
                                 else
                                     bHasFormattedDataPointsOtherThanSelected = true;

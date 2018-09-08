@@ -66,7 +66,7 @@ bool ColorPerPointHelper::hasPointOwnProperties(
         {
             const sal_Int32 * pBegIt = aIndexList.getConstArray();
             const sal_Int32 * pEndIt = pBegIt + aIndexList.getLength();
-            return ( std::find( pBegIt, pEndIt, nPointIndex ) != pEndIt );
+            return std::any_of( pBegIt, pEndIt, [nPointIndex](sal_Int32 aIndex) { return aIndex == nPointIndex; } );
         }
     }
 

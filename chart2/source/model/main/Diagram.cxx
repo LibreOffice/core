@@ -485,8 +485,8 @@ void SAL_CALL Diagram::addCoordinateSystem(
 {
     {
         MutexGuard aGuard( GetMutex() );
-        if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
-            != m_aCoordSystems.end())
+        if( std::any_of( m_aCoordSystems.begin(), m_aCoordSystems.end(),
+                [&aCoordSys](uno::Reference<chart2::XCoordinateSystem>& rCoordSys) { return rCoordSys == aCoordSys; } ))
             throw lang::IllegalArgumentException();
 
         if( m_aCoordSystems.size()>=1 )

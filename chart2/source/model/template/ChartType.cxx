@@ -126,8 +126,8 @@ OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
 void ChartType::impl_addDataSeriesWithoutNotification(
         const Reference< chart2::XDataSeries >& xDataSeries )
 {
-    if( std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
-        != m_aDataSeries.end())
+    if( std::any_of( m_aDataSeries.begin(), m_aDataSeries.end(),
+            [&xDataSeries](Reference<chart2::XDataSeries>& rDataSeries) { return rDataSeries == xDataSeries; } ))
         throw lang::IllegalArgumentException();
 
     m_aDataSeries.push_back( xDataSeries );

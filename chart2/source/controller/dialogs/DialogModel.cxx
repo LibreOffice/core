@@ -802,8 +802,8 @@ void DialogModel::applyInterpretedData(
                 const sal_Int32 nSeriesInGroup = aSeries.getLength();
                 for( sal_Int32 nSeries=0; nSeries<nSeriesInGroup; ++nSeries, ++nSeriesCounter )
                 {
-                    if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), aSeries[nSeries] )
-                        == rSeriesToReUse.end())
+                    if( std::none_of( rSeriesToReUse.begin(), rSeriesToReUse.end(),
+                            [&aSeries[nSeries]](Reference<XDataSeries>& rSeries) { return rSeries == aSeries[nSeries]; } ))
                     {
                         Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );
                         if( xSeriesProp.is())

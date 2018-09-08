@@ -42,8 +42,7 @@ public:
         }
         if (!pt.isNull()) {
             QualType const pPointee(pt.getUnqualifiedType().getCanonicalType());
-            auto const iter(std::find(rParents.begin(), rParents.end(), pPointee));
-            if (iter == rParents.end())
+            if (std::none_of(rParents.begin(), rParents.end(), [&pPointee](QualType& rParent) { return rParent == pPointee; }))
             {
                 std::vector<QualType> copy(rParents);
                 copy.push_back(rpType.getUnqualifiedType().getCanonicalType());

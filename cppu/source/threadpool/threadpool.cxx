@@ -78,7 +78,7 @@ namespace cppu_threadpool
     bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        return (std::find(m_vector.begin(), m_vector.end(), nDisposeId) != m_vector.end());
+        return std::any_of(m_vector.begin(), m_vector.end(), [nDisposeId](sal_Int64 id) { return id == nDisposeId; });
     }
 
 

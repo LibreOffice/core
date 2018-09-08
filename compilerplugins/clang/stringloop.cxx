@@ -271,7 +271,7 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
                 return true;
             // if the var is at the same block scope as the +=, not interesting
             auto vars = m_varsPerLoopLevel.back();
-            if (std::find(vars.begin(), vars.end(), varDecl) != vars.end())
+            if (std::any_of(vars.begin(), vars.end(), [&varDecl](VarDecl const* var) { return var == varDecl; }))
                 return true;
             report(DiagnosticsEngine::Warning,
                    "appending to OUString in loop, rather use OUStringBuffer",

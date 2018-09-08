@@ -1053,9 +1053,7 @@ Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
             xCooSys = aCooSysList[nCooSysIndex];
             std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxesOfCoordinateSystem( xCooSys ) );
 
-            std::vector< Reference< XAxis > >::iterator aFound =
-                  std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
-            if( aFound != aAllAxis.end())
+            if( std::any_of( aAllAxis.begin(), aAllAxis.end(), [&xAxis](Reference<XAxis>& rAxis) { return rAxis == xAxis; } ))
             {
                 xRet.set( xCooSys );
                 break;

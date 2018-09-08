@@ -77,7 +77,8 @@ bool UnusedIndex::VisitDeclRefExpr(DeclRefExpr const* stmt)
     auto varDecl = dyn_cast<VarDecl>(stmt->getDecl());
     if (!varDecl)
         return true;
-    if (std::find(mLoopVarDecls.begin(), mLoopVarDecls.end(), varDecl) != mLoopVarDecls.end())
+    if (std::any_of(mLoopVarDecls.begin(), mLoopVarDecls.end(),
+            [&varDecl](const VarDecl* loopVarDecl) { return loopVarDecl == varDecl; }))
         mFoundSet.insert(varDecl);
     return true;
 }

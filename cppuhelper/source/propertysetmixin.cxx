@@ -249,8 +249,8 @@ void Data::initProperties(
                                     css::uno::Type(
                                         t->getTypeClass(), t->getName()),
                                     attrAttribs),
-                                (std::find(absentBegin, absentEnd, name)
-                                 == absentEnd))).
+                                std::none_of(absentBegin, absentEnd,
+                                    [&name](OUString& absentString) { return absentString == name; })))).
                     second)
                 {
                     throw css::uno::RuntimeException(

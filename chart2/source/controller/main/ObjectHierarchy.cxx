@@ -563,9 +563,7 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectI
     {
         for (auto const& child : m_aChildMap)
         {
-            ObjectHierarchy::tChildContainer::const_iterator aElemIt(
-                std::find( child.second.begin(), child.second.end(), rNode ));
-            if( aElemIt != child.second.end())
+            if( std::any_of( child.second.begin(), child.second.end(), [&rNode](ObjectIdentifier& node) { return node == rNode; } ))
                 return child.second;
         }
     }
@@ -578,10 +576,8 @@ ObjectIdentifier ImplObjectHierarchy::getParentImpl(
 {
     // search children
     ObjectHierarchy::tChildContainer aChildren( getChildren( rParentOID ));
-    ObjectHierarchy::tChildContainer::const_iterator aIt(
-        std::find( aChildren.begin(), aChildren.end(), rOID ));
     // recursion end
-    if( aIt != aChildren.end())
+    if( std::any_of( aChildren.begin(), aChildren.end(), [&rOID](ObjectIdentifier& OID) { return OID == rOID; } ))
         return rParentOID;
 
     for (auto const& child : aChildren)

@@ -182,7 +182,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     {
         // Let's try to retrieve the list in Collected Addresses book
         pMork = xConnection->getMorkParser(OString("CollectedAddressBook"));
-        if (std::find(pMork->lists_.begin(), pMork->lists_.end(), m_aAddressbook) == pMork->lists_.end())
+        if (std::none_of(pMork->lists_.begin(), pMork->lists_.end(), [&m_aAddressbook](OUString& rAddressbook) { return rAddressbook == m_aAddressbook; }))
         {
             // so the list is in Address book
             // TODO : manage case where an address book has been created

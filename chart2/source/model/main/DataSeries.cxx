@@ -420,8 +420,8 @@ void SAL_CALL DataSeries::addRegressionCurve(
     {
         MutexGuard aGuard( GetMutex() );
         xModifyEventForwarder = m_xModifyEventForwarder;
-        if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve )
-            != m_aRegressionCurves.end())
+        if( std::any_of( m_aRegressionCurves.begin(), m_aRegressionCurves.end(),
+                [&xRegressionCurve](uno::Reference<chart2::XRegressionCurve>& rRegressionCurve) { return rRegressionCurve == xRegressionCurve; } ))
             throw lang::IllegalArgumentException();
         m_aRegressionCurves.push_back( xRegressionCurve );
     }

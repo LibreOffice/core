@@ -1858,7 +1858,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (aLibrary.isEmpty())
                 continue;
 
-            if (std::find(aReported.begin(), aReported.end(), aLibrary) == aReported.end())
+            if (std::none_of(aReported.begin(), aReported.end(), [&aLibrary](OUString& rLibrary) { return rLibrary == aLibrary; }))
             {
                 std::cerr << " " << simplifyModule(aLibrary);
                 std::cerr.flush();
@@ -1981,7 +1981,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (fpPreload)
             {
                 static std::vector<oslGenericFunction> aPreloaded;
-                if (std::find(aPreloaded.begin(), aPreloaded.end(), fpPreload) == aPreloaded.end())
+                if (std::none_of(aPreloaded.begin(), aPreloaded.end(), [&fpPreload](oslGenericFunction& rFunc) { return rFunc == fpPreload; }))
                 {
                     aPreloaded.push_back(fpPreload);
                     fpPreload();

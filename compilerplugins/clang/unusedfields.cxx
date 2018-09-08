@@ -686,7 +686,8 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
     //   if (fieldDecl)
     //       ....
     // then writes to this field don't matter, because unless we find another write to this field, this field is dead
-    if (std::find(insideConditionalCheckOfMemberSet.begin(), insideConditionalCheckOfMemberSet.end(), fieldDecl) != insideConditionalCheckOfMemberSet.end())
+    if (std::any_of(insideConditionalCheckOfMemberSet.begin(), insideConditionalCheckOfMemberSet.end(),
+            [&fieldDecl](const FieldDecl* decl) { return decl == fieldDecl; }))
         return;
 
     auto parentsRange = compiler.getASTContext().getParents(*memberExpr);

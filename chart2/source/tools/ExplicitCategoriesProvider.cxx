@@ -262,7 +262,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     for( sal_Int32 nN=0; nN<nMaxCount; nN++ )
     {
         const OUString& aCurrent = rStrings[nN];
-        if( bCreateSingleCategories || std::find( rLimitingBorders.begin(), rLimitingBorders.end(), nN ) != rLimitingBorders.end() )
+        if( bCreateSingleCategories || std::any_of( rLimitingBorders.begin(), rLimitingBorders.end(), [nN](sal_Int32 border) { return border == nN; } ) )
         {
             aResult.emplace_back(aPrevious,nCurrentCount );
             nCurrentCount=1;

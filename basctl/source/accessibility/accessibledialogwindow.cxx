@@ -211,10 +211,8 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
 {
     // check, if object is already in child list
-    AccessibleChildren::iterator aIter = std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
-
     // if not found, insert in child list
-    if ( aIter == m_aAccessibleChildren.end() )
+    if ( std::none_of( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), [&rDesc](ChildDescriptor& child) { return child == rDesc; } ) )
     {
         // insert entry in child list
         m_aAccessibleChildren.push_back( rDesc );

@@ -1763,7 +1763,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::any_of(maChildren.begin(), maChildren.end(), [&newChild](Reference<XAnimationNode>& child) { return child == newChild; }) )
         throw ElementExistException();
 
     auto before = std::find(maChildren.begin(), maChildren.end(), refChild);
@@ -1787,7 +1787,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::any_of(maChildren.begin(), maChildren.end(), [&newChild](Reference<XAnimationNode>& child) { return child == newChild; }) )
         throw ElementExistException();
 
     auto before = std::find(maChildren.begin(), maChildren.end(), refChild);
@@ -1815,7 +1815,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException();
 
-    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::any_of(maChildren.begin(), maChildren.end(), [&newChild](Reference<XAnimationNode>& child) { return child == newChild; }) )
         throw ElementExistException();
 
     auto replace = std::find(maChildren.begin(), maChildren.end(), oldChild);
@@ -1861,7 +1861,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
     if( !newChild.is() )
         throw IllegalArgumentException();
 
-    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::any_of(maChildren.begin(), maChildren.end(), [&newChild](Reference<XAnimationNode>& child) { return child == newChild; }) )
         throw ElementExistException();
 
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );

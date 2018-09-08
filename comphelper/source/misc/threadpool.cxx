@@ -167,8 +167,7 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
     {
         rtl::Reference<ThreadWorker> xWorker = aWorkers.back();
         aWorkers.pop_back();
-        assert(std::find(aWorkers.begin(), aWorkers.end(), xWorker)
-                == aWorkers.end());
+        assert(std::none_of(aWorkers.begin(), aWorkers.end(), [&xWorker](rtl::Reference<ThreadWorker>& aWorker) { return aWorker == xWorker; }));
         {
             xWorker->join();
             xWorker.clear();

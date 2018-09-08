@@ -151,7 +151,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
             if ( nDriverPos > static_cast<sal_Int32>(m_aBookmarksPositions.size()) )
                 m_aBookmarksPositions.push_back(nDriverPos);
         }
-        else if ( std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
+        else if ( std::none_of(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),[nDriverPos](sal_Int32 position) { return position == nDriverPos; }) )
             m_aBookmarksPositions.push_back(nDriverPos);
         /*sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())

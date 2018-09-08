@@ -1254,10 +1254,9 @@ void OResultSet::OpenImpl()
                     for (size_t i = 1; // 0: bookmark (see setBoundedColumns)
                          i < m_aColMapping.size(); ++i)
                     {
-                        if (std::find(m_aOrderbyColumnNumber.begin(),
+                        if (std::none_of(m_aOrderbyColumnNumber.begin(),
                                         m_aOrderbyColumnNumber.end(),
-                                        sal::static_int_cast<sal_Int32>(i))
-                                == m_aOrderbyColumnNumber.end())
+                                        [i](sal_Int32 n) { return n == sal::static_int_cast<sal_Int32>(i); }))
                         {
                             m_aOrderbyColumnNumber.push_back(i);
                             // ASC or DESC doesn't matter
