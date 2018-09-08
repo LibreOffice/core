@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2e99896d",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-08T05:26:34Z",
+      "side": 0,
+      "message": "always visible for single column optimization",
+      "range": {
+        "startLine": 480,
+        "startChar": 17,
+        "endLine": 480,
+        "endChar": 35
+      },
+      "revId": "d9998186d37c58751f45dd7cb97d6c72f901a346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

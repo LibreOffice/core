@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_0e9ec555",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-08T05:26:34Z",
+      "side": 1,
+      "message": "reserving the slot for the companion patch",
+      "range": {
+        "startLine": 973,
+        "startChar": 1,
+        "endLine": 973,
+        "endChar": 36
+      },
+      "revId": "d3c640bccf073a3b2fba8149becb54977292906d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
