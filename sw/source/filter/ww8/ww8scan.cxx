@@ -8207,7 +8207,7 @@ void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
 LanguageType WW8DopTypography::GetConvertedLang() const
 {
     LanguageType nLang;
-    //I have assumed peoples republic/taiwan == simplified/traditional
+    //I have assumed people's republic/taiwan == simplified/traditional
 
     //This isn't a documented issue, so we might have it all wrong,
     //i.e. i.e. what's with the powers of two ?
@@ -8222,7 +8222,7 @@ LanguageType WW8DopTypography::GetConvertedLang() const
         case 2:     //Japan
             nLang = LANGUAGE_JAPANESE;
             break;
-        case 4:     //Chinese (Peoples Republic)
+        case 4:     //Chinese (People's Republic)
             nLang = LANGUAGE_CHINESE_SIMPLIFIED;
             break;
         case 6:     //Korean
