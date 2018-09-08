@@ -134,7 +134,6 @@ XMLFilterTestDialog::XMLFilterTestDialog(weld::Window* pParent,
     const Reference<XComponentContext>& rxContext)
     : GenericDialogController(pParent, "filter/ui/testxmlfilter.ui", "TestXMLFilterDialog")
     , mxContext(rxContext)
-    , m_xFilterInfo(nullptr)
     , m_xExport(m_xBuilder->weld_widget("export"))
     , m_xFTExportXSLTFile(m_xBuilder->weld_label("exportxsltfile"))
     , m_xPBExportBrowse(m_xBuilder->weld_button("exportbrowse"))

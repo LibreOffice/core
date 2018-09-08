@@ -216,7 +216,6 @@ void Impl_OlePres::Write( SvStream & rStm )
 
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
     : rManager(rMan)
-    , pDefaultPropSet(nullptr)
     , mnFix16Angle(0)
     , mbRotateGranientFillWithAngle(false)
 {
@@ -2893,8 +2892,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
 DffRecordList::DffRecordList( DffRecordList* pList ) :
     nCount                  ( 0 ),
     nCurrent                ( 0 ),
-    pPrev                   ( pList ),
-    pNext                   ( nullptr )
+    pPrev                   ( pList )
 {
     if ( pList )
         pList->pNext.reset( this );
@@ -5696,7 +5694,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pStData2( pStData2_ ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pSecPropSet( nullptr ),
      mnDefaultColor( mnDefaultColor_),
      mbSkipImages (bSkipImages)
 {
@@ -5739,7 +5736,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      pStData2( nullptr ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pSecPropSet( nullptr ),
      mnDefaultColor( COL_DEFAULT ),
      mbSkipImages(false)
 {
@@ -7405,10 +7401,7 @@ bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< 
 
 SvxMSDffImportRec::SvxMSDffImportRec()
     : pObj( nullptr ),
-      pWrapPolygon(nullptr),
-      pClientAnchorBuffer( nullptr ),
       nClientAnchorLen(  0 ),
-      pClientDataBuffer( nullptr ),
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
       nYAlign( 0 ), // position n cm below

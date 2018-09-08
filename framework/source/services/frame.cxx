@@ -469,7 +469,6 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         , m_bSelfClose                ( false ) // Important!
         , m_bIsHidden                 ( true )
         , m_xTitleHelper              ()
-        , m_pWindowCommandDispatch    ( nullptr )
         , m_lSimpleChangeListener     ( m_aMutex )
         , m_lVetoChangeListener       ( m_aMutex )
         , m_aChildFrameContainer      ()

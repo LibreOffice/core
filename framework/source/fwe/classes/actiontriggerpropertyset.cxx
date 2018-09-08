@@ -55,8 +55,6 @@ ActionTriggerPropertySet::ActionTriggerPropertySet()
     : OBroadcastHelper         ( m_aMutex )
     , OPropertySetHelper       ( *static_cast< OBroadcastHelper * >(this) )
     , OWeakObject              ()
-    , m_xBitmap                ( nullptr )
-    , m_xActionTriggerContainer( nullptr )
 {
 }
 

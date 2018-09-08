@@ -111,7 +111,7 @@ struct GIFLZWCTreeNode
 
 
 GIFLZWCompressor::GIFLZWCompressor()
-    : pIDOS(nullptr), pTable(nullptr), pPrefix(nullptr), nDataSize(0), nClearCode(0),
+    : pPrefix(nullptr), nDataSize(0), nClearCode(0),
       nEOICode(0), nTableSize(0), nCodeSize(0)
 {
 }

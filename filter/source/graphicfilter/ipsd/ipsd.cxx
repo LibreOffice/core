@@ -85,14 +85,12 @@ public:
 
 PSDReader::PSDReader(SvStream &rStream)
     : m_rPSD(rStream)
-    , mpFileHeader(nullptr)
     , mnXResFixed(0)
     , mnYResFixed(0)
     , mbStatus(true)
     , mbTransparent(false)
     , mnDestBitDepth(0)
     , mbCompression(false)
-    , mpPalette(nullptr)
 {
 }
 
