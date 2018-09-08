@@ -94,7 +94,6 @@ public:
     bool isEndOfCell() const { return mbEndOfCell;}
     bool isEndOfLine() const { return mbEndOfLine;}
     bool isFinalEndOfLine() const { return mbFinalEndOfLine;}
-    bool isFinalRow() const;
     bool isFirstInTable() const { return mbFirstInTable;}
     const SwTableBox * getTableBox() const { return mpTableBox;}
     const SwTable * getTable() const { return mpTable;}
