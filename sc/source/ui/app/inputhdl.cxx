@@ -52,7 +52,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -875,6 +874,16 @@ void ScInputHandler::HideTipBelow()
     aManualTip.clear();
 }
 
+namespace
+{
+
+bool lcl_hasSingleToken(const OUString& s, sal_Unicode c)
+{
+    return !s.isEmpty() && s.indexOf(c)<0;
+}
+
+}
+
 void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 {
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
@@ -917,12 +926,10 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                         }
                         if( bFlag )
                         {
-                            sal_Int32 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
-                            sal_Int32 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
                             sal_Int32 nStartPosition = 0;
                             sal_Int32 nEndPosition = 0;
 
-                            if( !nCountSemicolon )
+                            if( lcl_hasSingleToken(aNew, cSep) )
                             {
                                 for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                 {
@@ -933,7 +940,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                     }
                                 }
                             }
-                            else if( !nCountDot )
+                            else if( lcl_hasSingleToken(aNew, cSheetSep) )
                             {
                                 sal_uInt16 nCount = 0;
                                 for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
