@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <rtl/tencinfo.h>
@@ -350,24 +349,17 @@ void ScHTMLExport::WriteHeader()
        .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tableheader ).WriteCharPtr( "," )
        .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tabledata ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_parabreak )
        .WriteCharPtr( " { " ).WriteCharPtr( "font-family:" );
-    sal_Int32 nFonts = comphelper::string::getTokenCount(aHTMLStyle.aFontFamilyName, ';');
-    if ( nFonts == 1 )
+    if (!aHTMLStyle.aFontFamilyName.isEmpty())
     {
-        rStrm.WriteChar( '\"' );
-        OUT_STR( aHTMLStyle.aFontFamilyName );
-        rStrm.WriteChar( '\"' );
-    }
-    else
-    {   // Fontlist, VCL: Semicolon as separator
-        // CSS1: Comma as separator and every single font name quoted
         const OUString& rList = aHTMLStyle.aFontFamilyName;
-        for ( sal_Int32 j = 0, nPos = 0; j < nFonts; j++ )
+        for(sal_Int32 nPos {0};;)
         {
             rStrm.WriteChar( '\"' );
             OUT_STR( rList.getToken( 0, ';', nPos ) );
             rStrm.WriteChar( '\"' );
-            if ( j < nFonts-1 )
-                rStrm.WriteCharPtr( ", " );
+            if (nPos<0)
+                break;
+            rStrm.WriteCharPtr( ", " );
         }
     }
     rStrm.WriteCharPtr( "; " ).WriteCharPtr( "font-size:" )
@@ -1104,26 +1096,22 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         {
             aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
                 append("=\"");
-            sal_Int32 nFonts = comphelper::string::getTokenCount(rFontItem.GetFamilyName(), ';');
-            if ( nFonts == 1 )
+
+            if (!rFontItem.GetFamilyName().isEmpty())
             {
-                OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
-                    rFontItem.GetFamilyName(), eDestEnc, &aNonConvertibleChars);
-                aStr.append(aTmpStr);
-            }
-            else
-            {   // Font list, VCL: Semicolon as separator, HTML: Comma
                 const OUString& rList = rFontItem.GetFamilyName();
-                for ( sal_Int32 j = 0, nPos = 0; j < nFonts; j++ )
+                for (sal_Int32 nPos {0};;)
                 {
                     OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
                         rList.getToken( 0, ';', nPos ), eDestEnc,
                         &aNonConvertibleChars);
                     aStr.append(aTmpStr);
-                    if ( j < nFonts-1 )
-                        aStr.append(',');
+                    if (nPos<0)
+                        break;
+                    aStr.append(',');
                 }
             }
+
             aStr.append('\"');
         }
         if ( nSetFontSizeNumber )
