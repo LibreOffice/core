@@ -24,7 +24,6 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <comphelper/string.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
@@ -36,65 +35,54 @@ class ScDelimiterTable
 public:
     explicit ScDelimiterTable( const OUString& rDelTab )
             :   theDelTab ( rDelTab ),
-                nCount    ( comphelper::string::getTokenCount(rDelTab, '\t') ),
-                nIter     ( 0 )
+                nDelIdx   ( 0 )
             {}
 
     sal_uInt16  GetCode( const OUString& rDelimiter ) const;
     OUString  GetDelimiter( sal_Unicode nCode ) const;
 
-    OUString  FirstDel()  { nIter = 0; return theDelTab.getToken( nIter, cSep ); }
-    OUString  NextDel()   { nIter +=2; return theDelTab.getToken( nIter, cSep ); }
+    OUString  FirstDel()  { nDelIdx = 0; return theDelTab.getToken( 0, cSep, nDelIdx ); }
+    OUString  NextDel()   { return theDelTab.getToken( 1, cSep, nDelIdx ); }
 
 private:
     const OUString      theDelTab;
-    static const sal_Unicode   cSep = '\t';
-    const sal_Int32    nCount;
-    sal_Int32          nIter;
+    static constexpr sal_Unicode cSep {'\t'};
+    sal_Int32           nDelIdx;
 };
 
 sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 {
-    sal_Unicode nCode = 0;
-
-    if ( nCount >= 2 )
+    if (!theDelTab.isEmpty())
     {
-        sal_Int32 i = 0;
-        while ( i<nCount )
-        {
-            if ( rDel == theDelTab.getToken( i, cSep ) )
-            {
-                nCode = static_cast<sal_Unicode>(theDelTab.getToken( i+1, cSep ).toInt32());
-                i     = nCount;
-            }
-            else
-                i += 2;
-        }
+        sal_Int32 nIdx {0};
+
+        // Check even tokens: start from 0 and then skip 1 token at each iteration
+        if (rDel != theDelTab.getToken( 0, cSep, nIdx ))
+            while (nIdx>0 && rDel != theDelTab.getToken( 1, cSep, nIdx ));
+
+        if (nIdx>0)
+            return static_cast<sal_Unicode>(theDelTab.getToken( 0, cSep, nIdx ).toInt32());
     }
 
-    return nCode;
+    return 0;
 }
 
 OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
-    OUString aStrDel;
-
-    if ( nCount >= 2 )
+    if (!theDelTab.isEmpty())
     {
-        sal_Int32 i = 0;
-        while ( i<nCount )
+        sal_Int32 nIdx {0};
+        // Check odd tokens: start from 1 and then skip 1 token at each iteration
+        do
         {
-            if ( nCode == static_cast<sal_Unicode>(theDelTab.getToken( i+1, cSep ).toInt32()) )
-            {
-                aStrDel = theDelTab.getToken( i, cSep );
-                i       = nCount;
-            }
-            else
-                i += 2;
+            sal_Int32 nPrevIdx {nIdx};
+            if (nCode == static_cast<sal_Unicode>(theDelTab.getToken( 1, cSep, nIdx ).toInt32()))
+                return theDelTab.getToken( 0, cSep, nPrevIdx );
         }
+        while (nIdx>0);
     }
 
-    return aStrDel;
+    return OUString();
 }
 
 // ScImportOptionsDlg
