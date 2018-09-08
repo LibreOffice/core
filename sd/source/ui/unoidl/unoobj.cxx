@@ -571,7 +571,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                 {
                     bool bDimHide = false;
                     if( !(aValue >>= bDimHide) )
-                        lang::IllegalArgumentException();
+                        throw lang::IllegalArgumentException();
 
                     EffectMigration::SetDimHide( mpShape, bDimHide );
                     break;
@@ -580,7 +580,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                 {
                     bool bDimPrevious = false;
                     if( !(aValue >>= bDimPrevious) )
-                        lang::IllegalArgumentException();
+                        throw lang::IllegalArgumentException();
 
                     EffectMigration::SetDimPrevious( mpShape, bDimPrevious );
                     break;
@@ -589,7 +589,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                 {
                     sal_Int32 nNewPos = 0;
                     if( !(aValue >>= nNewPos) )
-                        lang::IllegalArgumentException();
+                        throw lang::IllegalArgumentException();
 
                     EffectMigration::SetPresentationOrder( mpShape, nNewPos );
                     break;
