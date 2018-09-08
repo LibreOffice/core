@@ -460,7 +460,7 @@ bool Picture::Read(HWPFile & hwpf)
 
         if (pictype == PICTYPE_DRAW)
         {
-            HMemIODev* pOldMem = hmem;
+            HIODev* pOldMem = hmem;
             HMemIODev* pNewMem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
             hmem = pNewMem;
             LoadDrawingObjectBlock(this);

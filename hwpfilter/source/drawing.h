@@ -85,7 +85,7 @@ HWPDOFuncType HWPDOFuncTbl[] =
     HWPDOFreeFormFunc,
 };
 
-static HMemIODev *hmem = nullptr;
+static HIODev *hmem = nullptr;
 
 static int count = 0;
 
@@ -631,7 +631,8 @@ static HWPPara *LoadParaList()
     std::vector< HWPPara* > plist;
 
     hwpf->ReadParaList(plist);
-    hwpf->SetIODevice(std::move(hio));
+    std::unique_ptr<HIODev> orighmem = hwpf->SetIODevice(std::move(hio));
+    hmem = orighmem.release();
 
     return plist.size()? plist.front() : nullptr;
 }
