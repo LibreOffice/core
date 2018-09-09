@@ -180,7 +180,16 @@ short AbstractSvxPathSelectDialog_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
+
+short AbstractSvxAreaTabDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
+bool AbstractSvxAreaTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractPasteDialog_Impl::Execute()
 {
@@ -798,27 +807,27 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OString& rName )
 {
-    pDlg->SetCurPageId( rName );
+    m_xDlg->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractSvxAreaTabDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 const sal_uInt16* AbstractSvxAreaTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
-    return pDlg->GetInputRanges( pItem );
+    return m_xDlg->GetInputRanges( pItem );
 }
 
 void AbstractSvxAreaTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
-     pDlg->SetInputSet( pInSet );
+     m_xDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void AbstractSvxAreaTabDialog_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 void AbstractSvxPostItDialog_Impl::SetText( const OUString& rStr )
@@ -1293,13 +1302,12 @@ VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFil
     return VclPtr<AbstractGraphicFilterDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( vcl::Window* pParent,
+VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDialog(weld::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
                                                             bool bShadow)
 {
-    VclPtrInstance<SvxAreaTabDialog> pDlg( pParent, pAttr, pModel, bShadow );
-    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(o3tl::make_unique<SvxAreaTabDialog>(pParent, pAttr, pModel, bShadow));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog

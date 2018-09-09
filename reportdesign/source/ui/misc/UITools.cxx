@@ -743,7 +743,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
     std::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
 
-    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    weld::Window* pParent = Application::GetFrameWeld(_rxParentWindow);
 
     bool bSuccess = false;
     try
@@ -754,7 +754,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(), true ));
+            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog(pParent, pDescriptor.get(), pModel.get(), true));
             if ( RET_OK == pDialog->Execute() )
             {
                 bSuccess = true;

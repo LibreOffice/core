@@ -292,7 +292,7 @@ void ShapeController::executeDispatch_FormatArea()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
-                    pFact->CreateSvxAreaTabDialog( pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(), true ) );
+                    pFact->CreateSvxAreaTabDialog(pChartWindow->GetFrameWeld(), &aAttr, &pDrawModelWrapper->getSdrModel(), true));
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -326,7 +326,7 @@ void ShapeController::executeDispatch_TextAttributes()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                pFact->CreateTextTabDialog( pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, &aAttr, pDrawViewWrapper ) );
+                pFact->CreateTextTabDialog(pChartWindow->GetFrameWeld(), &aAttr, pDrawViewWrapper));
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
