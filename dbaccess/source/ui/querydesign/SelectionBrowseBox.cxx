@@ -190,12 +190,9 @@ void OSelectionBrowseBox::initialize()
 
         for (IParseContext::InternationalKeyCode eFunction : eFunctions)
         {
-            m_aFunctionStrings += ";";
-            m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunction),
-                RTL_TEXTENCODING_UTF8);
+            m_aFunctionStrings += ";" + OStringToOUString(rContext.getIntlKeywordAscii(eFunction), RTL_TEXTENCODING_UTF8);
         }
-        m_aFunctionStrings += ";";
-        m_aFunctionStrings += sGroup;
+        m_aFunctionStrings += ";" + sGroup;
 
         // Aggregate functions in general available only with Core SQL
         // We slip in a few optionals one, too.
@@ -697,13 +694,12 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
             bool bQuote = ( nPass <= 2 );
             bool bInternational = ( nPass % 2 ) == 0;
 
-            OUString sSql;
+            OUString sSql {"SELECT "};
             if ( bQuote )
                 sSql += sQuotedFullFieldName;
             else
                 sSql += sFullFieldName;
 
-            sSql = "SELECT " + sSql;
             if ( !sFieldAlias.isEmpty() )
             { // always quote the alias name: there cannot be a function in it
                 sSql += " " + ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
