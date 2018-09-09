@@ -130,7 +130,7 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
             if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.getToken(i,'\t') ) )
                 c = static_cast<sal_Unicode>(rList.getToken(i+1,'\t').toInt32());
         }
-        if (!c && !aStr.isEmpty())
+        if (!c)
         {
             sal_Unicode cFirst = aStr[0];
             // #i24235# first try the first character of the string directly
