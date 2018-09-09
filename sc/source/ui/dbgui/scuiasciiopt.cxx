@@ -34,7 +34,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <csvtablebox.hxx>
-#include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
@@ -122,13 +121,19 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
 {
     sal_Unicode c = 0;
     OUString aStr = rCombo.GetText();
-    if ( !aStr.isEmpty() )
+    if ( !aStr.isEmpty() && !rList.isEmpty() )
     {
-        sal_Int32 nCount = comphelper::string::getTokenCount(rList, '\t');
-        for ( sal_Int32 i=0; i<nCount; i+=2 )
+        sal_Int32 nIdx {0};
+        OUString sToken {rList.getToken(0, '\t', nIdx)};
+        while (nIdx>0)
         {
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.getToken(i,'\t') ) )
-                c = static_cast<sal_Unicode>(rList.getToken(i+1,'\t').toInt32());
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, sToken ) )
+            {
+                sal_Int32 nTmpIdx {nIdx};
+                c = static_cast<sal_Unicode>(rList.getToken(0, '\t', nTmpIdx).toInt32());
+            }
+            // Skip to next token at even position
+            sToken = rList.getToken(1, '\t', nIdx);
         }
         if (!c)
         {
