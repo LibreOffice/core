@@ -22,7 +22,7 @@
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),
     mpObj(std::move(pObj)),
-    mReady(true)
+    mReady(false)
 {
 }
 
@@ -45,58 +45,25 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-IMPL_LINK_NOARG(UIObjectUnoObj, NotifyHdl, Timer*, void)
+IMPL_LINK_NOARG(UIObjectUnoObj, NotifyHdl, void*, void)
 {
+    StringMap aMap;
+    for (sal_Int32 i = 0, n = mPropValues.getLength(); i < n; ++i)
+     {
+        OUString aVal;
+        if (!(mPropValues[i].Value >>= aVal))
+            continue;
+    }
+    // execute the action
+    mpObj->execute(mAction, aMap);
+
+    // wait until any UI stuff triggered by the action is done
+    Scheduler::ProcessEventsToIdle();
+
+    // notify the executeAction method that we're done
     std::lock_guard<std::mutex> lk(mMutex);
     mReady = true;
     cv.notify_all();
-}
-
-namespace {
-
-class ExecuteWrapper
-{
-    std::function<void()> mFunc;
-    Link<Timer*, void> mHandler;
-    volatile bool mbSignal;
-
-public:
-
-    ExecuteWrapper(std::function<void()> func, Link<Timer*, void> handler):
-        mFunc(std::move(func)),
-        mHandler(handler),
-        mbSignal(false)
-    {
-    }
-
-    void setSignal()
-    {
-        mbSignal = true;
-    }
-
-    DECL_LINK( ExecuteActionHdl, Timer*, void );
-};
-
-
-IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
-{
-    {
-        Idle aIdle;
-        {
-            mFunc();
-            aIdle.SetDebugName("UI Test Idle Handler2");
-            aIdle.SetPriority(TaskPriority::LOWEST);
-            aIdle.SetInvokeHandler(mHandler);
-            aIdle.Start();
-        }
-
-        while (!mbSignal) {
-            Application::Reschedule();
-        }
-    }
-    delete this;
-}
-
 }
 
 void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
@@ -108,37 +75,10 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     mAction = rAction;
     mPropValues = rPropValues;
     mReady = false;
-    auto aIdle = o3tl::make_unique<Idle>();
-    aIdle->SetDebugName("UI Test Idle Handler");
-    aIdle->SetPriority(TaskPriority::HIGHEST);
 
-    std::function<void()> func = [this](){
-
-        SolarMutexGuard aGuard;
-        StringMap aMap;
-        for (sal_Int32 i = 0, n = mPropValues.getLength(); i < n; ++i)
-        {
-            OUString aVal;
-            if (!(mPropValues[i].Value >>= aVal))
-                continue;
-
-            aMap[mPropValues[i].Name] = aVal;
-        }
-        mpObj->execute(mAction, aMap);
-    };
-
-    ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(this, UIObjectUnoObj, NotifyHdl));
-    aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
-    {
-        SolarMutexGuard aGuard;
-        aIdle->Start();
-    }
+    Application::PostUserEvent(LINK(this, UIObjectUnoObj, NotifyHdl), nullptr);
 
     cv.wait(lk, [this]{return mReady;});
-    pWrapper->setSignal();
-
-    SolarMutexGuard aGuard;
-    aIdle.reset();
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
