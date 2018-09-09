@@ -1154,9 +1154,7 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
 ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
         const uno::Reference<XAccessible>& rxParent, ScPreviewShell* pViewShell ) :
     ScAccessibleDocumentBase(rxParent),
-    mpViewShell(pViewShell),
-    mpNotesChildren(nullptr),
-    mpShapeChildren(nullptr)
+    mpViewShell(pViewShell)
 {
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);

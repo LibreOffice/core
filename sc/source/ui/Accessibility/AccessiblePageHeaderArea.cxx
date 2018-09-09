@@ -53,7 +53,6 @@ ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         SvxAdjust eAdjust)
         : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT),
         mpEditObj(pEditObj->Clone().release()),
-        mpTextHelper(nullptr),
         mpViewShell(pViewShell),
         mbHeader(bHeader),
         meAdjust(eAdjust)

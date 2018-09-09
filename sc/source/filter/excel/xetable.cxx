@@ -2365,7 +2365,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
     if( !bFound || bFoundHigher )
     {
         size_t nFrom = 0;
-        RowRef pPrevEntry = nullptr;
+        RowRef pPrevEntry;
         if( itr != maRowMap.begin() )
         {
             --itr;

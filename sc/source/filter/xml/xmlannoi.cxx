@@ -46,8 +46,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLAnnotationData& rAnnotationData) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
-    mrAnnotationData( rAnnotationData ),
-    pShapeContext(nullptr)
+    mrAnnotationData( rAnnotationData )
 {
     uno::Reference<drawing::XShapes> xLocalShapes (GetScImport().GetTables().GetCurrentXShapes());
     if (xLocalShapes.is())

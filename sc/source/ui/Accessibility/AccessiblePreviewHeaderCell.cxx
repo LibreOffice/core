@@ -65,8 +65,7 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const css::uno::Re
     mnIndex( nIndex ),
     maCellPos( rCellPos ),
     mbColumnHeader( bIsColHdr ),
-    mbRowHeader( bIsRowHdr ),
-    mpTableInfo( nullptr )
+    mbRowHeader( bIsRowHdr )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);

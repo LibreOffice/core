@@ -59,15 +59,12 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN))
-    , pOptionsMgr(nullptr)
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
-    , pOutItem(nullptr)
     , pViewData(nullptr)
     , pDoc(nullptr)
     , nSrcTab(0)
     , bRefInputMode(false)
-    , pTimer(nullptr)
 {
     get(pLbConnect1,"connect1");
     get(pLbField1,"field1");

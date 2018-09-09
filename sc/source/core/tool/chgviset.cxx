@@ -29,7 +29,6 @@ ScChangeViewSettings::~ScChangeViewSettings()
 }
 
 ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
-    pCommentSearcher(nullptr),
     aFirstDateTime( DateTime::EMPTY ),
     aLastDateTime( DateTime::EMPTY )
 {

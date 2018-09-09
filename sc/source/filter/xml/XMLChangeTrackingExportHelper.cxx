@@ -45,8 +45,7 @@ using namespace xmloff::token;
 ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExport)
     : rExport(rTempExport),
     pChangeTrack(nullptr),
-    pEditTextObj(nullptr),
-    pDependings(nullptr)
+    pEditTextObj(nullptr)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
     pDependings.reset( new ScChangeActionMap );
