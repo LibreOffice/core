@@ -2145,7 +2145,6 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
 
 bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt)
 {
-    bool bErg=true;
     switch(_nFunctionTokenId)
     {
         case SQL_TOKEN_COUNT:
@@ -2205,11 +2204,11 @@ bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString
                         return true;
                     }
                 }
-                bErg = false;
+                return false;
             }
     }
 
-    return bErg;
+    return true;
 }
 
 OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId)
