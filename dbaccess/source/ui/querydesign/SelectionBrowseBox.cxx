@@ -185,7 +185,7 @@ void OSelectionBrowseBox::initialize()
             ,IParseContext::InternationalKeyCode::Intersection
         };
 
-        OUString sGroup = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1, ';');
+        OUString sGroup = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);;
         m_aFunctionStrings = m_aFunctionStrings.getToken(0, ';');
 
         for (IParseContext::InternationalKeyCode eFunction : eFunctions)
@@ -822,7 +822,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
                     aSelEntry->SetField(sParameters);
                     if ( aSelEntry->IsGroupBy() )
                     {
-                        sOldLocalizedFunctionName = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
+                        sOldLocalizedFunctionName = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
                         aSelEntry->SetGroupBy(false);
                     }
 
@@ -1040,7 +1040,7 @@ bool OSelectionBrowseBox::SaveModified()
                     sal_Int32 nPos = m_pFunctionCell->GetSelectedEntryPos();
                     // these functions are only available in CORE
                     OUString sFunctionName        = m_pFunctionCell->GetEntry(nPos);
-                    OUString sGroupFunctionName   = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
+                    OUString sGroupFunctionName   = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
                     bool bGroupBy = false;
                     if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
                     {
@@ -2137,7 +2137,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         case BROW_FUNCTION_ROW:
             // we always show the group function at first
             if ( pEntry->IsGroupBy() )
-                aText = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
+                aText = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
             else if ( pEntry->isNumericOrAggreateFunction() )
                 aText = pEntry->GetFunction();
             break;
@@ -2273,7 +2273,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             break;
         case BROW_FUNCTION_ROW:
         {
-            OUString sGroupFunctionName = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
+            OUString sGroupFunctionName = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
             pEntry->SetFunction(strNewText);
             // first reset this two member
             sal_Int32 nFunctionType = pEntry->GetFunctionType();
