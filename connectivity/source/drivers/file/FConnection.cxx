@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <tools/urlobj.hxx>

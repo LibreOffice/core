@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include "ftpresultsetbase.hxx"
 
 using namespace ftp;

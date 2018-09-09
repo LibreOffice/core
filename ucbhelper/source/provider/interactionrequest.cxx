@@ -25,6 +25,7 @@
  *************************************************************************/
 #include <ucbhelper/interactionrequest.hxx>
 
+#include <rtl/ref.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

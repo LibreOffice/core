@@ -20,10 +20,11 @@
 #ifndef INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX
 #define INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX
 
-#include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
-#include <com/sun/star/security/XCertificate.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
 
 
 namespace ucbhelper {

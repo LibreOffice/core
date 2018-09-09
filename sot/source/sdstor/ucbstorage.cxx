@@ -42,6 +42,7 @@
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <memory>
 #include <rtl/digest.h>

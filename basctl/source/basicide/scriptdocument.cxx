@@ -26,6 +26,7 @@
 #include <doceventnotifier.hxx>
 #include "documentenumeration.hxx"
 
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

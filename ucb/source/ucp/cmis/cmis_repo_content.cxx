@@ -31,6 +31,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/proxydecider.hxx>
+#include <ucbhelper/macros.hxx>
 
 #include "auth_provider.hxx"
 #include "certvalidation_handler.hxx"

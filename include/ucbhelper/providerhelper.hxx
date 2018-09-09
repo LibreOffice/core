@@ -24,12 +24,10 @@
 #include <memory>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
 
 #include <rtl/ref.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 
@@ -37,6 +35,8 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XPropertySetRegistry;
     class XPersistentPropertySet;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 

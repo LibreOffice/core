@@ -27,7 +27,6 @@
 #include <cppuhelper/weak.hxx>
 
 #include <osl/mutex.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
@@ -36,9 +35,10 @@ namespace com { namespace sun { namespace star { namespace script {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace beans {
-    struct PropertyValue;
     class XPropertySet;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace ucbhelper {
 

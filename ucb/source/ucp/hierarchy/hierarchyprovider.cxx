@@ -31,7 +31,10 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 #include "hierarchyprovider.hxx"
 #include "hierarchycontent.hxx"
 #include "hierarchyuri.hxx"

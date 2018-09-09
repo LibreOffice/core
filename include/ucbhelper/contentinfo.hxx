@@ -22,13 +22,13 @@
 
 #include <memory>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/weak.hxx>
 
 #include <osl/mutex.hxx>
-#include <ucbhelper/macros.hxx>
+
+namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
 
 namespace ucbhelper {
 

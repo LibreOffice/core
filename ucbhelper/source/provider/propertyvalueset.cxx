@@ -35,7 +35,9 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/macros.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;

@@ -20,11 +20,8 @@
 #define INCLUDED_UCBHELPER_CONTENT_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
@@ -35,6 +32,7 @@ namespace com { namespace sun { namespace star { namespace io {
     class XActiveDataSink;
     class XOutputStream;
     class XInputStream;
+    class XStream;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace sdbc {
@@ -46,7 +44,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandEnvironment;
     class XCommandInfo;
     class XContent;
-    class XContentIdentifier;
     class XDynamicResultSet;
     class XAnyCompareFactory;
     struct ContentInfo;
@@ -56,6 +53,8 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 namespace ucbhelper
 {

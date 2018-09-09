@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;

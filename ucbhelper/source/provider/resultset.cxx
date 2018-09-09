@@ -25,10 +25,13 @@
  *************************************************************************/
 #include <memory>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/ucb/ResultSetException.hpp>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
+#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star;
 

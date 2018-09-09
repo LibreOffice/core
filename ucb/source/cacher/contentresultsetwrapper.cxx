@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

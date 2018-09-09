@@ -33,6 +33,7 @@
 #include <config_lgpl.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include "DAVSessionFactory.hxx"
 #include <ucbhelper/providerhelper.hxx>
 #include "PropertyMap.hxx"

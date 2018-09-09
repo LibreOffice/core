@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;

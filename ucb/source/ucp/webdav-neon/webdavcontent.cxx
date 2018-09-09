@@ -38,6 +38,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <officecfg/Inet.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
@@ -85,6 +86,8 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/ResultSetException.hpp>
+#include <ucbhelper/macros.hxx>
 
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"

@@ -63,6 +63,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>

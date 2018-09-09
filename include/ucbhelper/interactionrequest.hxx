@@ -29,10 +29,11 @@
 #include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
-#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace ucbhelper {
 

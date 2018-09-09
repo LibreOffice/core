@@ -62,9 +62,11 @@
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/macros.hxx>
 
 #include "tdoc_content.hxx"
 #include "tdoc_resultset.hxx"

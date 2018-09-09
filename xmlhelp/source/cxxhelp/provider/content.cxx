@@ -38,6 +38,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/macros.hxx>
 #include <o3tl/make_unique.hxx>
 #include "content.hxx"
 #include "provider.hxx"

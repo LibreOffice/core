@@ -36,6 +36,7 @@
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>

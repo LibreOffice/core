@@ -27,15 +27,12 @@
 #include <com/sun/star/beans/XPropertySetInfoChangeNotifier.hpp>
 #include <com/sun/star/ucb/XCommandInfoChangeNotifier.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <cppuhelper/weak.hxx>
 
 #include <rtl/ref.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
@@ -50,6 +47,8 @@ namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
     class XPropertySetInfo;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace ucbhelper_impl { struct ContentImplHelper_Impl; }
 

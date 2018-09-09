@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/solar.hrc>

@@ -53,6 +53,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/proxydecider.hxx>
+#include <ucbhelper/macros.hxx>
 #include <sax/tools/converter.hxx>
 
 #include "auth_provider.hxx"

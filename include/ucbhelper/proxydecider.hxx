@@ -22,13 +22,10 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-} } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace ucbhelper
 {

@@ -30,6 +30,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/factory.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 

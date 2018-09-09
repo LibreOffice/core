@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>

@@ -25,6 +25,8 @@
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
