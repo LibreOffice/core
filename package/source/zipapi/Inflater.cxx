@@ -31,8 +31,7 @@ Inflater::Inflater(bool bNoWrap)
   bNeedDict(false),
   nOffset(0),
   nLength(0),
-  nLastInflateError(0),
-  pStream(nullptr)
+  nLastInflateError(0)
 {
     pStream.reset(new z_stream);
     /* memset to 0 to set zalloc/opaque etc */

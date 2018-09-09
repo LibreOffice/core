@@ -69,7 +69,7 @@ TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
     const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
     if (nLevel >= static_cast< sal_Int16 >(rListStyle.size()))
         nLevel = 0;
-    TextParagraphPropertiesPtr pTextParagraphStyle = nullptr;
+    TextParagraphPropertiesPtr pTextParagraphStyle;
     if (rListStyle.size())
         pTextParagraphStyle = rListStyle[nLevel];
 

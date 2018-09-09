@@ -478,7 +478,7 @@ XFFrame* LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
 LwpDrawPolyLine::LwpDrawPolyLine(SvStream * pStream, DrawingOffsetAndScale* pTransData)
-: LwpDrawObj(pStream, pTransData), m_pVector(nullptr)
+: LwpDrawObj(pStream, pTransData)
 {
 }
 LwpDrawPolyLine::~LwpDrawPolyLine()
