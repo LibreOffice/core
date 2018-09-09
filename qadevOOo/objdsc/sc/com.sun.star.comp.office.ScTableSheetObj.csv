@@ -108,8 +108,6 @@
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"protect()"
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"unprotect()"
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"isProtected()"
-"ScTableSheetObj";"com::sun::star::util::XIndent";"decrementIndent()"
-"ScTableSheetObj";"com::sun::star::util::XIndent";"incrementIndent()"
 "ScTableSheetObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
 "ScTableSheetObj";"com::sun::star::table::XTableChartsSupplier";"getCharts()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangesQuery";"queryVisibleCells()"
