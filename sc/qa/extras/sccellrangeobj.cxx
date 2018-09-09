@@ -26,6 +26,7 @@
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/util/xindent.hxx>
 #include <test/util/xmergeable.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
@@ -63,6 +64,7 @@ class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellSeries,
                                               public apitest::XColumnRowRange,
                                               public apitest::XFormulaQuery,
+                                              public apitest::XIndent,
                                               public apitest::XMergeable,
                                               public apitest::XMultipleOperation,
                                               public apitest::XReplaceable,
@@ -129,6 +131,10 @@ public:
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
     CPPUNIT_TEST(testQueryPrecedents);
+
+    // XIndent
+    CPPUNIT_TEST(testIncrementIndent);
+    CPPUNIT_TEST(testDecrementIndent);
 
     // XMergeable
     CPPUNIT_TEST(testGetIsMergedMerge);
