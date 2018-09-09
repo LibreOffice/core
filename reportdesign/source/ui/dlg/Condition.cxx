@@ -108,8 +108,6 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     , m_aColorWrapper(this)
     , m_rController(_rController)
     , m_rAction(_rAction)
-    , m_pBtnUpdaterFontColor(nullptr)
-    , m_pBtnUpdaterBackgroundColor(nullptr)
     , m_nCondIndex(0)
     , m_bInDestruction(false)
 {
