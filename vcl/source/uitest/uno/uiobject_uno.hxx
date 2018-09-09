@@ -58,17 +58,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
-
-private:
-
-    DECL_LINK( NotifyHdl, Timer*, void );
-
-    std::condition_variable cv;
-    std::mutex mMutex;
-    bool mReady;
-
-    OUString mAction;
-    css::uno::Sequence<css::beans::PropertyValue> mPropValues;
 };
 
 #endif
