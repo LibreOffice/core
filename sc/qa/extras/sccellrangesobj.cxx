@@ -13,6 +13,7 @@
 #include <test/sheet/xsheetcellrangecontainer.hxx>
 #include <test/sheet/xsheetcellranges.hxx>
 #include <test/sheet/xsheetoperation.hxx>
+#include <test/util/xindent.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -32,6 +33,7 @@ namespace sc_apitest {
 class ScCellRangesObj : public CalcUnoApiTest,
                         public apitest::SheetCellRanges,
                         public apitest::XFormulaQuery,
+                        public apitest::XIndent,
                         public apitest::XSheetCellRangeContainer,
                         public apitest::XSheetCellRanges,
                         public apitest::XSheetOperation
@@ -53,6 +55,10 @@ public:
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
     CPPUNIT_TEST(testQueryPrecedents);
+
+    // XIndent
+    CPPUNIT_TEST(testIncrementIndent);
+    CPPUNIT_TEST(testDecrementIndent);
 
     // XSheetCellRangeContainer
     CPPUNIT_TEST(testAddRemoveRangeAddress);
