@@ -945,7 +945,7 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     else
     {
         // release no longer referenced font handles
-        for( int i = nFallbackLevel + 1; mpWinFontEntry[i].is() && i < MAX_FALLBACK; ++i )
+        for( int i = nFallbackLevel + 1; i < MAX_FALLBACK && mpWinFontEntry[i].is(); ++i )
             mpWinFontEntry[i] = nullptr;
     }
 
