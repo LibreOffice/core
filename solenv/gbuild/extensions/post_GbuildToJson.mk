@@ -186,7 +186,7 @@ endef
 
 gb_Module_add_l10n_target =
 
-gb_GbuildToJson_BLACKLISTEDMODULES := cli_ure jurt external
+gb_GbuildToJson_BLACKLISTEDMODULES := cli_ure external
 
 define gb_Module__add_moduledir_impl
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
