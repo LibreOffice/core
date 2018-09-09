@@ -404,6 +404,8 @@ private:
 protected:
     void InitSettings();
 
+    tools::Rectangle GetPreviewSize() const;
+
     // prepare buffered paint
     void LocalPrePaint(vcl::RenderContext const & rRenderContext);
 
@@ -495,7 +497,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC XRectPreview : public PreviewBase
 private:
     SdrObject* mpRectangleObject;
 
-    tools::Rectangle GetPreviewSize() const;
 public:
     XRectPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -513,7 +514,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public PreviewBase
 {
 private:
     Point maShadowOffset;
@@ -522,16 +523,15 @@ private:
     SdrObject* mpRectangleShadow;
 
 public:
-    SvxXShadowPreview(vcl::Window *pParent);
-
+    SvxXShadowPreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~SvxXShadowPreview() override;
-    virtual void dispose() override;
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX
