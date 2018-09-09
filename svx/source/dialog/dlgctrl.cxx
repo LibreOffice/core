@@ -635,15 +635,17 @@ RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
 void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
-    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 25,
-                                   pDrawingArea->get_text_height() * 5);
+    Size aSize(pDrawingArea->get_approximate_digit_width() * 25,
+               pDrawingArea->get_text_height() * 5);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    Resize_Impl(aSize);
 }
 
 void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 {
     nBorderWidth = Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width();
     eDefRP = eRpt;
-    Resize_Impl();
+    Resize();
 }
 
 RectCtl::~RectCtl()
@@ -654,24 +656,22 @@ RectCtl::~RectCtl()
 
 void RectCtl::Resize()
 {
-    Resize_Impl();
+    Resize_Impl(GetOutputSizePixel());
 }
 
-void RectCtl::Resize_Impl()
+void RectCtl::Resize_Impl(const Size &rSize)
 {
-    Size aSize(GetOutputSizePixel());
-
     aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
-    aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
-    aPtRT = Point( aSize.Width() - nBorderWidth, 0 + nBorderWidth );
+    aPtMT = Point( rSize.Width() / 2, 0 + nBorderWidth );
+    aPtRT = Point( rSize.Width() - nBorderWidth, 0 + nBorderWidth );
 
-    aPtLM = Point( 0 + nBorderWidth,  aSize.Height() / 2 );
-    aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
-    aPtRM = Point( aSize.Width() - nBorderWidth, aSize.Height() / 2 );
+    aPtLM = Point( 0 + nBorderWidth,  rSize.Height() / 2 );
+    aPtMM = Point( rSize.Width() / 2, rSize.Height() / 2 );
+    aPtRM = Point( rSize.Width() - nBorderWidth, rSize.Height() / 2 );
 
-    aPtLB = Point( 0 + nBorderWidth,    aSize.Height() - nBorderWidth );
-    aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
-    aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
+    aPtLB = Point( 0 + nBorderWidth,    rSize.Height() - nBorderWidth );
+    aPtMB = Point( rSize.Width() / 2,   rSize.Height() - nBorderWidth );
+    aPtRB = Point( rSize.Width() - nBorderWidth, rSize.Height() - nBorderWidth );
 
     Reset();
     StyleUpdated();
@@ -2073,15 +2073,19 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     LocalPostPaint(rRenderContext);
 }
 
-SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
-    : SvxPreviewBase(pParent)
-    , mpRectangleObject(nullptr)
+SvxXShadowPreview::SvxXShadowPreview()
+    : mpRectangleObject(nullptr)
     , mpRectangleShadow(nullptr)
 {
-    InitSettings(true, true);
+}
+
+void SvxXShadowPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    PreviewBase::SetDrawingArea(pDrawingArea);
+    InitSettings();
 
     // prepare size
-    Size aSize = GetOutputSize();
+    Size aSize = GetPreviewSize().GetSize();
     aSize.setWidth( aSize.Width() / 3 );
     aSize.setHeight( aSize.Height() / 3 );
 
@@ -2098,18 +2102,10 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
         aShadowSize);
 }
 
-VCL_BUILDER_FACTORY(SvxXShadowPreview)
-
 SvxXShadowPreview::~SvxXShadowPreview()
-{
-    disposeOnce();
-}
-
-void SvxXShadowPreview::dispose()
 {
     SdrObject::Free(mpRectangleObject);
     SdrObject::Free(mpRectangleShadow);
-    SvxPreviewBase::dispose();
 }
 
 void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)
@@ -2131,6 +2127,9 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
 
 void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
+    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
+
     LocalPrePaint(rRenderContext);
 
     // prepare size
@@ -2154,6 +2153,8 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     aPainter.ProcessDisplay(aDisplayInfo);
 
     LocalPostPaint(rRenderContext);
+
+    rRenderContext.Pop();
 }
 
 void PreviewBase::InitSettings()
@@ -2247,10 +2248,7 @@ XRectPreview::XRectPreview()
 {
 }
 
-// expand to avoid 1 pixel band to the right and bottom of previews
-// in color/gradient/bitmap/pattern/hatch subpages of area tab
-// in e.g. page dialog
-tools::Rectangle XRectPreview::GetPreviewSize() const
+tools::Rectangle PreviewBase::GetPreviewSize() const
 {
     tools::Rectangle aObjectSize(Point(), getBufferDevice().PixelToLogic(GetOutputSizePixel()));
     return aObjectSize;
