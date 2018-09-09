@@ -423,15 +423,16 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     }
     else
     {
-        OUString aText(convertLineEnd(rText, LINEEND_LF));
-
-        if (aText.endsWith("\x0A"))
-            aText = aText.copy(0, aText.getLength()-1); // Delete the last break
+        const OUString aText(convertLineEnd(rText, LINEEND_LF));
 
         sal_Int32 nPos = 0;
         sal_Int32 nInsPos = nPara+1;
-        sal_Int32 nIdx {aText.isEmpty() ? -1 : 0};
-        while( nIdx>=0 )
+        sal_Int32 nIdx {0};
+        // Loop over all tokens, but ignore the last one if empty
+        // (i.e. if strings ends with the delimiter, detected by
+        // checking nIdx against string length). This check also
+        // handle empty strings.
+        while( nIdx>=0 && nIdx<aText.getLength() )
         {
             OUString aStr = aText.getToken( 0, '\x0A', nIdx );
 
