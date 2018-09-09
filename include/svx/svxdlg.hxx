@@ -54,7 +54,6 @@ class SdrObject;
 class SvxSpellWrapper;
 struct FmSearchContext;
 
-typedef VclPtr<SfxTabPage> (*CreateSvxDistributePage)(vcl::Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
 typedef const sal_uInt16*  (*DialogGetRanges)();
 
 typedef ::std::vector< OUString > TargetList;
