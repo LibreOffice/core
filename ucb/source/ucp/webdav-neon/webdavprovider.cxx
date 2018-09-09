@@ -31,6 +31,9 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
 

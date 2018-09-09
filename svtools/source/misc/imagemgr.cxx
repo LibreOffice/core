@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
 #include <unotools/configmgr.hxx>

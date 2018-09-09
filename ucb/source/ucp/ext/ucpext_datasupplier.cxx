@@ -24,6 +24,7 @@
 
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/ucb/ResultSetException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <ucbhelper/content.hxx>

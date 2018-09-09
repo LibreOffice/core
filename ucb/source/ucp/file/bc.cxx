@@ -41,6 +41,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"

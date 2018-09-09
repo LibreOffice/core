@@ -32,6 +32,8 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
 #include <memory>
 
 using namespace com::sun::star::beans;

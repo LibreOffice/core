@@ -35,6 +35,7 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

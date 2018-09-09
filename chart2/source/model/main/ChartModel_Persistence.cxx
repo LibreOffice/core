@@ -45,6 +45,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 

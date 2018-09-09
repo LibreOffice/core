@@ -33,6 +33,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>

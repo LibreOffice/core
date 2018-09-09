@@ -22,7 +22,9 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "cachedcontentresultset.hxx"
 #include <osl/diagnose.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;

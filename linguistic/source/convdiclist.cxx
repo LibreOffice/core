@@ -29,6 +29,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>

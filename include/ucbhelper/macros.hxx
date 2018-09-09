@@ -21,14 +21,9 @@
 #define INCLUDED_UCBHELPER_MACROS_HXX
 
 #include <sal/types.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-
-#include <ucbhelper/getcomponentcontext.hxx>
-
 
 #define CPPU_TYPE( T )      cppu::UnoType<T>::get()
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( T )

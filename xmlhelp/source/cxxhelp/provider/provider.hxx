@@ -26,6 +26,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace chelp {
 

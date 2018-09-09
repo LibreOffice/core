@@ -21,6 +21,8 @@
 #define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_PROVIDER_HXX
 
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ucbhelper/providerhelper.hxx>
 
 
