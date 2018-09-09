@@ -34,7 +34,10 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 
 #include "tdoc_provider.hxx"
 #include "tdoc_content.hxx"

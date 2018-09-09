@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XArray.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
@@ -38,7 +39,9 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/PropertiesManager.hpp>
+#include <ucbhelper/macros.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;

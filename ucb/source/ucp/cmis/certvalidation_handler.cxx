@@ -17,6 +17,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 
+#include <rtl/ref.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/simplecertificatevalidationrequest.hxx>
 

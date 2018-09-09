@@ -45,6 +45,7 @@
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #if defined(_WIN32)
 

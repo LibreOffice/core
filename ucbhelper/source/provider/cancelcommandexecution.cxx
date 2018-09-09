@@ -24,6 +24,7 @@
 
  *************************************************************************/
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>

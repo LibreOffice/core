@@ -22,6 +22,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <string.h>
 
 #include "gio_outputstream.hxx"

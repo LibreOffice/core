@@ -22,6 +22,8 @@
 
 #include <memory>
 #include <ucbhelper/providerhelper.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "pkguri.hxx"
 
 namespace com { namespace sun { namespace star { namespace container {

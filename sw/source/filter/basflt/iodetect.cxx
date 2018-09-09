@@ -27,7 +27,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 using namespace ::com::sun::star;
 

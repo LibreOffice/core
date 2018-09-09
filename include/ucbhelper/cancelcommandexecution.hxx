@@ -21,14 +21,13 @@
 #define INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno { class Any; }
     namespace ucb { class XCommandEnvironment; }
+    namespace ucb { class XCommandProcessor; }
 } } }
 
 namespace ucbhelper

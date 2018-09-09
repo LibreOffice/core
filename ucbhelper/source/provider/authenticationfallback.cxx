@@ -8,6 +8,7 @@
  */
 
 #include <ucbhelper/authenticationfallback.hxx>
+#include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
 
 using namespace com::sun::star;
 using namespace ucbhelper;

@@ -39,6 +39,7 @@
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <vcl/dibtools.hxx>
 #include <memory>
 #include <o3tl/make_unique.hxx>

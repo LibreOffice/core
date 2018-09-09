@@ -25,12 +25,11 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
-#include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace cppu {
     class OInterfaceContainerHelper;
