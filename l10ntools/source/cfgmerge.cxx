@@ -396,8 +396,7 @@ void CfgExport::WorkOnText(
 CfgMerge::CfgMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename, const OString &rLanguage )
-                : pMergeDataFile( nullptr ),
-                sFilename( rFilename ),
+                : sFilename( rFilename ),
                 bEnglish( false )
 {
     pOutputStream.open(
