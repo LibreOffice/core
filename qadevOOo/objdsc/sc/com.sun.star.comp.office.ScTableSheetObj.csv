@@ -21,8 +21,6 @@
 "ScTableSheetObj";"com::sun::star::table::CellProperties";"DiagonalTLBR#optional"
 "ScTableSheetObj";"com::sun::star::table::CellProperties";"DiagonalBLTR#optional"
 "ScTableSheetObj";"com::sun::star::table::CellProperties";"ShrinkToFit#optional"
-"ScTableSheetObj";"com::sun::star::util::XMergeable";"merge()"
-"ScTableSheetObj";"com::sun::star::util::XMergeable";"getIsMerged()"
 "ScTableSheetObj";"com::sun::star::util::XSearchable";"createSearchDescriptor()"
 "ScTableSheetObj";"com::sun::star::util::XSearchable";"findAll()"
 "ScTableSheetObj";"com::sun::star::util::XSearchable";"findFirst()"
