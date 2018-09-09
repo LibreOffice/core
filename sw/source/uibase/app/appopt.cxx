@@ -429,7 +429,7 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
         }
         case RID_SW_TP_HTML_OPTGRID_PAGE:
         case RID_SVXPAGE_GRID:
-            pRet = SvxGridTabPage::Create(pParent.pParent, rSet);
+            pRet = SvxGridTabPage::Create(pParent, rSet);
         break;
 
         case RID_SW_TP_STD_FONT:
