@@ -415,8 +415,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    vcl::Window* pWin = pViewData->GetDialogParent();
     ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
-        pViewData->GetDialogParent(), &aNewAttr,
+        pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr,
         pViewData->GetDocument()->GetDrawLayer(), true));
 
     if ( pDlg->Execute() == RET_OK )

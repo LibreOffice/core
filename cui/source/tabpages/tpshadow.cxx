@@ -416,7 +416,6 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-
 VclPtr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrs )
 {
@@ -428,10 +427,12 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::ToggleButton&, void
     if (m_xTsbShowShadow->get_state() == TRISTATE_FALSE)
     {
         m_xGridShadow->set_sensitive(false);
+        m_xCtlPosition->set_sensitive(false);
     }
     else
     {
         m_xGridShadow->set_sensitive(true);
+        m_xCtlPosition->set_sensitive(true);
     }
     m_aCtlPosition.Invalidate();
     ModifyShadowHdl_Impl(*m_xMtrTransparent);

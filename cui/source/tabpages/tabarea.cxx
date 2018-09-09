@@ -34,18 +34,12 @@
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (
-    vcl::Window* pParent,
+    weld::Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     bool bShadow
 )
-    : SfxTabDialog( pParent,
-                  "AreaDialog",
-                  "cui/ui/areadialog.ui",
-                  pAttr )
-    , m_nAreaTabPage(0)
-    , m_nShadowTabPage(0)
-    , m_nTransparenceTabPage(0)
+    : SfxTabDialogController(pParent, "cui/ui/areadialog.ui", "AreaDialog", pAttr)
     , mpDrawModel          ( pModel ),
     mpColorList          ( pModel->GetColorList() ),
     mpNewColorList       ( pModel->GetColorList() ),
@@ -64,21 +58,21 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnGradientListState ( ChangeType::NONE ),
     mnHatchingListState ( ChangeType::NONE )
 {
-    m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr );
+    AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr);
 
-    if(bShadow)
+    if (bShadow)
     {
-        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr );
+        AddTabPage("RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr);
     }
     else
     {
         RemoveTabPage( "RID_SVXPAGE_SHADOW" );
     }
 
-    m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
+    AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
 
-    CancelButton& rBtnCancel = GetCancelButton();
-    rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
+    weld::Button& rBtnCancel = GetCancelButton();
+    rBtnCancel.connect_clicked(LINK(this, SvxAreaTabDialog, CancelHdlImpl));
 }
 
 void SvxAreaTabDialog::SavePalettes()
@@ -221,40 +215,39 @@ short SvxAreaTabDialog::Ok()
     // RET_OK is returned, if at least one
     // TabPage returns sal_True in FillItemSet().
     // This happens by default at the moment.
-    return SfxTabDialog::Ok();
+    return SfxTabDialogController::Ok();
 }
 
-
-IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl, Button*, void)
+IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl, weld::Button&, void)
 {
     SavePalettes();
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxAreaTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nAreaTabPage )
+    if (rId == "RID_SVXPAGE_AREA")
     {
-            static_cast<SvxAreaTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxAreaTabPage&>(rPage).SetGradientList( mpGradientList );
-            static_cast<SvxAreaTabPage&>(rPage).SetHatchingList( mpHatchingList );
-            static_cast<SvxAreaTabPage&>(rPage).SetBitmapList( mpBitmapList );
-            static_cast<SvxAreaTabPage&>(rPage).SetPatternList( mpPatternList );
-            static_cast<SvxAreaTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
-            static_cast<SvxAreaTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
-            static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
-            static_cast<SvxAreaTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
-            static_cast<SvxAreaTabPage&>(rPage).SetColorChgd( &mnColorListState );
+        static_cast<SvxAreaTabPage&>(rPage).SetColorList( mpColorList );
+        static_cast<SvxAreaTabPage&>(rPage).SetGradientList( mpGradientList );
+        static_cast<SvxAreaTabPage&>(rPage).SetHatchingList( mpHatchingList );
+        static_cast<SvxAreaTabPage&>(rPage).SetBitmapList( mpBitmapList );
+        static_cast<SvxAreaTabPage&>(rPage).SetPatternList( mpPatternList );
+        static_cast<SvxAreaTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
+        static_cast<SvxAreaTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
+        static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
+        static_cast<SvxAreaTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
+        static_cast<SvxAreaTabPage&>(rPage).SetColorChgd( &mnColorListState );
     }
-    else if (nId == m_nShadowTabPage)
+    else if (rId == "RID_SVXPAGE_SHADOW")
     {
-            static_cast<SvxShadowTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
+        static_cast<SvxShadowTabPage&>(rPage).SetColorList( mpColorList );
+        static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
     }
-    else if (nId == m_nTransparenceTabPage)
+    else if (rId == "RID_SVXPAGE_TRANSPARENCE")
     {
-            static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( PageType::Area );
-            static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
+        static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( PageType::Area );
+        static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
     }
 }
 
