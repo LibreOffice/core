@@ -61,14 +61,10 @@ public:
 
 private:
 
-    DECL_LINK( NotifyHdl, Timer*, void );
-
+    DECL_LINK( NotifyHdl, void*, void );
     std::condition_variable cv;
     std::mutex mMutex;
     bool mReady;
-
-    OUString mAction;
-    css::uno::Sequence<css::beans::PropertyValue> mPropValues;
 };
 
 #endif
