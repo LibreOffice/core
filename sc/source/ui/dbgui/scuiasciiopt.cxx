@@ -95,17 +95,22 @@ CSVImportOptionsIndex getSkipEmptyCellsIndex( ScImportAsciiCall eCall )
 
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
-    sal_Int32 i;
-    sal_Int32 nCount = comphelper::string::getTokenCount(rList, '\t');
-    for ( i=0; i<nCount; i+=2 )
-        rCombo.InsertEntry( rList.getToken(i,'\t') );
+    OUString aStr;
+    if (!rList.isEmpty())
+    {
+        sal_Int32 nIdx {0};
+        do
+        {
+            const OUString sEntry {rList.getToken(0, '\t', nIdx)};
+            rCombo.InsertEntry( sEntry );
+            if (nIdx>0 && static_cast<sal_Unicode>(rList.getToken(0, '\t', nIdx).toInt32()) == cSelect)
+                aStr = sEntry;
+        }
+        while (nIdx>0);
+    }
 
     if ( cSelect )
     {
-        OUString aStr;
-        for ( i=0; i<nCount; i+=2 )
-            if ( static_cast<sal_Unicode>(rList.getToken(i+1,'\t').toInt32()) == cSelect )
-                aStr = rList.getToken(i,'\t');
         if (aStr.isEmpty())
             aStr = OUString(cSelect);         // Ascii
 
