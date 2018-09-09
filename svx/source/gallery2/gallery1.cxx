@@ -33,6 +33,7 @@
 #include <tools/vcompat.hxx>
 #include <vcl/lstbox.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>

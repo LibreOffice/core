@@ -20,6 +20,7 @@
 #include "smdetect.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sal/log.hxx>

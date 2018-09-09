@@ -21,6 +21,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

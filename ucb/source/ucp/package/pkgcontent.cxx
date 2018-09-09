@@ -64,9 +64,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/macros.hxx>
 #include "pkgcontent.hxx"
 #include "pkgprovider.hxx"
 #include "pkgresultset.hxx"

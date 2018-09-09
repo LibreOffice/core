@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>

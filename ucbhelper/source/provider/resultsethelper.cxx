@@ -33,8 +33,10 @@
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/resultsethelper.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 
 #include <osl/diagnose.h>
 

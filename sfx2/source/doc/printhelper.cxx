@@ -26,6 +26,8 @@
 #include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>

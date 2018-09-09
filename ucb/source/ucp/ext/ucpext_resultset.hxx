@@ -22,6 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 
 namespace ucb { namespace ucp { namespace ext

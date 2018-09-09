@@ -25,10 +25,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/contentinfo.hxx>
+#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star;
 

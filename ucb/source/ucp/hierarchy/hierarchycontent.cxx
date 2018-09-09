@@ -63,9 +63,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/macros.hxx>
 #include "hierarchycontent.hxx"
 #include "hierarchyprovider.hxx"
 #include "dynamicresultset.hxx"

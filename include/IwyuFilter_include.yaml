@@ -94,3 +94,15 @@ blacklist:
     include/cppuhelper/interfacecontainer.h:
     #Needed for implicit destructor
     - com/sun/star/uno/Sequence.hxx
+    include/ucbhelper/fd_inputstream.hxx:
+    # Needed for typedef
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XSeekable.hpp
+    include/ucbhelper/macros.hxx:
+    # Used in macros defined here
+    - cppuhelper/typeprovider.hxx
+    - cppuhelper/supportsservice.hxx
+    - cppuhelper/factory.hxx
+    include/ucbhelper/simpleinteractionrequest.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

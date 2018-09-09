@@ -62,6 +62,7 @@
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>

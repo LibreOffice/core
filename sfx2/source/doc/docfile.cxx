@@ -44,6 +44,7 @@
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>

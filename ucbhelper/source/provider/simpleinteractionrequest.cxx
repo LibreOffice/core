@@ -21,6 +21,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 using namespace ucbhelper;

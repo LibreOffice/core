@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <sfx2/app.hxx>
 #include <helpids.h>
 #include <svx/gallery1.hxx>
