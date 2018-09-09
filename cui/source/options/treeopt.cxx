@@ -279,8 +279,8 @@ void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 {
 }
 
-//typedef SfxTabPage* (*FNCreateTabPage)( vcl::Window *pParent, const SfxItemSet &rAttrSet );
-VclPtr<SfxTabPage> CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+//typedef SfxTabPage* (*FNCreateTabPage)(TabPageParent pParent, const SfxItemSet &rAttrSet);
+VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -1054,10 +1054,12 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                     pGroupInfo->m_pInItemSet->GetRanges());
         }
 
-        pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
+        TabPageParent pPageParent(pTabBox);
+
+        pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet ) );
 
         if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-            pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, TabPageParent(pTabBox), *pGroupInfo->m_pInItemSet) );
+            pPageInfo->m_pPage.disposeAndReset(pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet));
 
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
         if ( pPageInfo->m_pPage )
