@@ -2199,18 +2199,17 @@ bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString
             break;
         default:
             {
-                sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
-                sal_Int32 i;
-                for( i = 0; i < nCount-1; i++ ) // grouping is not counted
+                const sal_Int32 nStopIdx = m_aFunctionStrings.lastIndexOf(';'); // grouping is not counted
+                for (sal_Int32 nIdx {0}; nIdx<nStopIdx;)
                 {
-                    if(rFkt.equalsIgnoreAsciiCase(m_aFunctionStrings.getToken(i, ';')))
+                    const OUString sFunc {m_aFunctionStrings.getToken(0, ';', nIdx)};
+                    if (rFkt.equalsIgnoreAsciiCase(sFunc))
                     {
-                        rFkt = m_aFunctionStrings.getToken(i, ';');
-                        break;
+                        rFkt = sFunc;
+                        return true;
                     }
                 }
-                if(i == nCount-1)
-                    bErg = false;
+                bErg = false;
             }
     }
 
