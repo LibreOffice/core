@@ -84,7 +84,7 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
                                static_cast<long>(2), test2->use_count());
 
         // use count should decrement
-        test2 = rtl::Reference< MoveTestClass >(nullptr);
+        test2 = rtl::Reference< MoveTestClass >();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("test1.use_count() == 1",
                                static_cast<long>(1), test1->use_count());
 

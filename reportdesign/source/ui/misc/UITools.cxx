@@ -176,7 +176,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
 
 ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener(const uno::Reference< report::XReportDefinition >& _xReportDefinition,::comphelper::OPropertyChangeListener* _pListener)
 {
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pRet = nullptr;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pRet;
     if ( _xReportDefinition.is() )
     {
         uno::Reference<beans::XPropertySet> xPageStyle(getUsedStyle(_xReportDefinition),uno::UNO_QUERY);

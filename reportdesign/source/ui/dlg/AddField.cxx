@@ -153,8 +153,6 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent ,const uno::Reference< bea
     , m_pListBox(VclPtr<OAddFieldWindowListBox>::Create(get<vcl::Window>("box"), this))
     , m_nCommandType(0)
     , m_bEscapeProcessing(false)
-    , m_pChangeListener(nullptr)
-    , m_pContainerListener(nullptr)
 {
     get(m_aActions, "toolbox");
     m_nSortUpId = m_aActions->GetItemId(0);
