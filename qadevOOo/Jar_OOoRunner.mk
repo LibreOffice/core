@@ -721,7 +721,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/util/_XCloneable \
     qadevOOo/tests/java/ifc/util/_XFlushable \
     qadevOOo/tests/java/ifc/util/_XImportable \
-    qadevOOo/tests/java/ifc/util/_XIndent \
     qadevOOo/tests/java/ifc/util/_XModeSelector \
     qadevOOo/tests/java/ifc/util/_XModifiable \
     qadevOOo/tests/java/ifc/util/_XModifyBroadcaster \

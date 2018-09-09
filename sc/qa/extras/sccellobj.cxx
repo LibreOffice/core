@@ -14,6 +14,7 @@
 #include <test/sheet/xformulaquery.hxx>
 #include <test/sheet/xsheetannotationanchor.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/util/xindent.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
@@ -35,6 +36,7 @@ class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XCellAddressable,
                                          public apitest::XColumnRowRange,
                                          public apitest::XFormulaQuery,
+                                         public apitest::XIndent,
                                          public apitest::XSheetAnnotationAnchor
 {
 public:
@@ -66,6 +68,10 @@ public:
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
     CPPUNIT_TEST(testQueryPrecedents);
+
+    // XIndent
+    CPPUNIT_TEST(testIncrementIndent);
+    CPPUNIT_TEST(testDecrementIndent);
 
     // XSheetAnnotationAnchor
     CPPUNIT_TEST(testGetAnnotation);

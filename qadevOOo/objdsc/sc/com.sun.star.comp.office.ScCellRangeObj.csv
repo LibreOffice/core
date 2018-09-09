@@ -105,8 +105,6 @@
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharFontPitchComplex"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharPostureComplex"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharLocaleComplex"
-"ScCellRangeObj";"com::sun::star::util::XIndent";"decrementIndent()"
-"ScCellRangeObj";"com::sun::star::util::XIndent";"incrementIndent()"
 "ScCellRangeObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryVisibleCells()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryEmptyCells()"
