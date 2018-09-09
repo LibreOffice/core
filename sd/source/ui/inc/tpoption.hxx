@@ -33,13 +33,12 @@
 class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
-            SdTpOptionsSnap( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-            virtual ~SdTpOptionsSnap() override;
+    SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    virtual ~SdTpOptionsSnap() override;
 
     static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
-
 };
 
 /**
