@@ -135,10 +135,9 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     aTitleFont.SetFontSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 
-    OUString aTxt(DBA_RES(STR_QUERY_SORTTEXT));
-    sal_Int32 nCount = comphelper::string::getTokenCount(aTxt, ';');
-    for (sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
-        m_pOrderCell->InsertEntry(aTxt.getToken(nIdx, ';'));
+    const OUString aTxt(DBA_RES(STR_QUERY_SORTTEXT));
+    for (sal_Int32 nIdx {0}; nIdx>=0;)
+        m_pOrderCell->InsertEntry(aTxt.getToken(0, ';', nIdx));
 
     m_bVisibleRow.insert(m_bVisibleRow.end(), BROW_ROW_CNT, true);
 
@@ -202,9 +201,8 @@ void OSelectionBrowseBox::initialize()
         // We slip in a few optionals one, too.
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
-            sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
-            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(nIdx, ';'));
+            for (sal_Int32 nIdx {0}; nIdx>=0;)
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
         }
         else // else only COUNT(*) and COUNT("table".*)
         {
