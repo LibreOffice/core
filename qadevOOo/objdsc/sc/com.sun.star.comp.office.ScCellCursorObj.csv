@@ -21,8 +21,6 @@
 "ScCellCursorObj";"com::sun::star::table::CellProperties";"DiagonalTLBR#optional"
 "ScCellCursorObj";"com::sun::star::table::CellProperties";"DiagonalBLTR#optional"
 "ScCellCursorObj";"com::sun::star::table::CellProperties";"ShrinkToFit#optional"
-"ScCellCursorObj";"com::sun::star::util::XMergeable";"merge()"
-"ScCellCursorObj";"com::sun::star::util::XMergeable";"getIsMerged()"
 "ScCellCursorObj";"com::sun::star::util::XSearchable";"createSearchDescriptor()"
 "ScCellCursorObj";"com::sun::star::util::XSearchable";"findAll()"
 "ScCellCursorObj";"com::sun::star::util::XSearchable";"findFirst()"

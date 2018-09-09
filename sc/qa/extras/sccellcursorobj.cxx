@@ -27,6 +27,7 @@
 #include <test/sheet/xusedareacursor.hxx>
 #include <test/table/xcellcursor.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/util/xmergeable.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -47,6 +48,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XCellSeries,
                                                public apitest::XColumnRowRange,
                                                public apitest::XFormulaQuery,
+                                               public apitest::XMergeable,
                                                public apitest::XMultipleOperation,
                                                public apitest::XSheetCellCursor,
                                                public apitest::XSheetCellRange,
@@ -105,6 +107,9 @@ public:
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
     CPPUNIT_TEST(testQueryPrecedents);
+
+    // XMergeable
+    CPPUNIT_TEST(testGetIsMergedMerge);
 
     // XMultipleOperation
     CPPUNIT_TEST(testSetTableOperation);

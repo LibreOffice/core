@@ -37,6 +37,7 @@
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/util/xmergeable.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
@@ -64,6 +65,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XColumnRowRange,
                                                public apitest::XDataPilotTablesSupplier,
                                                public apitest::XFormulaQuery,
+                                               public apitest::XMergeable,
                                                public apitest::XMultipleOperation,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
@@ -148,6 +150,9 @@ public:
     // XFormulaQuery
     CPPUNIT_TEST(testQueryDependents);
     CPPUNIT_TEST(testQueryPrecedents);
+
+    // XMergeable
+    CPPUNIT_TEST(testGetIsMergedMerge);
 
     // XSearchable
     CPPUNIT_TEST(testFindAll);
