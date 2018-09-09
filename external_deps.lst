@@ -224,8 +224,8 @@ if (SYSTEM_EXPAT != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_CURL != YES)
-    MD5 = ef343f64daab4691f528697b58a2d984
-    name = curl-7.61.0.tar.gz
+    MD5 = 4762f41ef0dba751d1c7a3060a1c6ec6
+    name = curl-7.61.1.tar.gz
     URL1 = https://curl.haxx.se/download/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 

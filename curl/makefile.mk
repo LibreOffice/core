@@ -37,8 +37,8 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.61.0
-TARFILE_MD5=ef343f64daab4691f528697b58a2d984
+TARFILE_NAME=curl-7.61.1
+TARFILE_MD5=4762f41ef0dba751d1c7a3060a1c6ec6
 PATCH_FILES=
 
 #ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
