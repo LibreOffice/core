@@ -65,8 +65,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 		./configure \
-			ac_cv_namespace_ok=yes \
 			--disable-layout --disable-samples \
+			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
 			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
 			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
@@ -75,7 +75,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
-				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) || cat config.log \
+				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
