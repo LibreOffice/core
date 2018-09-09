@@ -945,7 +945,7 @@ bool OSelectionBrowseBox::SaveModified()
 
                         sal_Int32 nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         OUString aAliasName = pEntry->GetAlias();
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aAliasName.isEmpty() && comphelper::string::getTokenCount(aFieldName, '.') > 1 )
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aAliasName.isEmpty() && aFieldName.indexOf('.') >= 0 )
                         { // special case, we have a table field so we must cut the table name
                             OUString sTableAlias = aFieldName.getToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
