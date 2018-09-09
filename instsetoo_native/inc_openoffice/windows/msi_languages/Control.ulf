@@ -305,7 +305,7 @@ en-US = "< &Back"
 en-US = "Cancel"
 
 [OOO_CONTROL_124]
-en-US = "This Program is based on the 'Apache OpenOffice' project which is supported by members of the Apache Community. For credits please see: https://www.openoffice.org/welcome/credits.html"
+en-US = "This program is based on the 'Apache OpenOffice' project which is supported by members of the Apache OpenOffice community. For credits please see: https://www.openoffice.org/welcome/credits.html"
 
 [OOO_CONTROL_125]
 en-US = "&Next >"
@@ -506,7 +506,7 @@ en-US = "The Installation Wizard has successfully uninstalled [ProductName]. Cli
 en-US = "Setup has finished installing [ProductName]."
 
 [OOO_CONTROL_202]
-en-US = "Some program files might have been updated since you purchased your copy of [ProductName]."
+en-US = "Some program files might have been updated since you obtained your copy of [ProductName]."
 
 [OOO_CONTROL_203]
 en-US = "Your Internet connection can be used to make sure that you have the latest updates."
@@ -740,7 +740,7 @@ en-US = "No languages have been selected for installation. Click OK to select on
 en-US = "No applications have been selected for installation. Click OK to select one or more applications for installation."
 
 [OOO_CONTROL_319]
-en-US = "Create a start link on desktop"
+en-US = "Create shortcut on desktop"
 
 [OOO_CONTROL_320]
 en-US = "Remove all older product versions"
