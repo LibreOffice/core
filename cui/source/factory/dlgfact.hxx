@@ -468,15 +468,21 @@ class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
 };
 
 class SvxAreaTabDialog;
-class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
+class AbstractSvxAreaTabDialog_Impl : public AbstractSvxAreaTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl,SvxAreaTabDialog)
-    virtual void                SetCurPageId( const OString& rName ) override;
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
-    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-    // From class Window.
-    virtual void        SetText( const OUString& rStr ) override;
+protected:
+    std::unique_ptr<SvxAreaTabDialog> m_xDlg;
+public:
+    explicit AbstractSvxAreaTabDialog_Impl(std::unique_ptr<SvxAreaTabDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual void SetCurPageId(const OString& rName) override;
+    virtual const SfxItemSet* GetOutputItemSet() const override;
+    virtual const sal_uInt16* GetInputRanges(const SfxItemPool& pItem) override;
+    virtual void SetInputSet(const SfxItemSet* pInSet) override;
+    virtual void SetText(const OUString& rStr) override;
 };
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
@@ -737,10 +743,10 @@ public:
                                                 const Graphic& rGraphic) override;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterMosaic (vcl::Window* pParent,
                                                 const Graphic& rGraphic) override;
-    virtual VclPtr<AbstractSvxAreaTabDialog>       CreateSvxAreaTabDialog( vcl::Window* pParent,
-                                                            const SfxItemSet* pAttr,
-                                                            SdrModel* pModel,
-                                                            bool bShadow ) override;
+    virtual VclPtr<AbstractSvxAreaTabDialog>       CreateSvxAreaTabDialog(weld::Window* pParent,
+                                                                          const SfxItemSet* pAttr,
+                                                                          SdrModel* pModel,
+                                                                          bool bShadow) override;
     virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,

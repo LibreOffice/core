@@ -95,12 +95,8 @@ enum class PageType
     Transparence,
 };
 
-class SvxAreaTabDialog final : public SfxTabDialog
+class SvxAreaTabDialog final : public SfxTabDialogController
 {
-    sal_uInt16            m_nAreaTabPage;
-    sal_uInt16            m_nShadowTabPage;
-    sal_uInt16            m_nTransparenceTabPage;
-
     SdrModel*           mpDrawModel;
 
     XColorListRef         mpColorList;
@@ -120,14 +116,14 @@ class SvxAreaTabDialog final : public SfxTabDialog
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
     virtual short       Ok() override;
-    DECL_LINK( CancelHdlImpl, Button*, void );
+    DECL_LINK(CancelHdlImpl, weld::Button&, void);
     void                SavePalettes();
 
 public:
-    SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
+    SvxAreaTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow);
 
     void                SetNewColorList( XColorListRef const & pColorList )
                             { mpNewColorList = pColorList; }
