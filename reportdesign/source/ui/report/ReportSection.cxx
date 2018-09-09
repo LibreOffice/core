@@ -82,8 +82,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     , m_pPage(nullptr)
     , m_pView(nullptr)
     , m_pParent(_pParent)
-    , m_pMulti(nullptr)
-    , m_pReportListener(nullptr)
     , m_xSection(_xSection)
     , m_nPaintEntranceCount(0)
     , m_eMode(DlgEdMode::Select)
