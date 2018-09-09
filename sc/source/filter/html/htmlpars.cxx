@@ -202,7 +202,6 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         aPageSize( aPageSizeP ),
         aBaseURL( rBaseURL ),
         xLockedList( new ScRangeList ),
-        pTables( nullptr ),
         pLocalColOffset( new ScHTMLColOffset ),
         nFirstTableCell(0),
         nTableLevel(0),

@@ -39,7 +39,6 @@ ScInsertTableDlg::ScInsertTableDlg(weld::Window* pParent, ScViewData& rData, SCT
     , rViewData(rData)
     , rDoc(*rData.GetDocument())
     , pDocShTables(nullptr)
-    , pDocInserter(nullptr)
     , bMustClose(false)
     , nSelTabIndex(0)
     , nTableCount(nTabCount)

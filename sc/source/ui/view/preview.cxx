@@ -98,8 +98,6 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nDisplayStart( 0 ),
     aDateTime( DateTime::SYSTEM ),
     nTotalPages( 0 ),
-    pLocationData( nullptr ),
-    pDrawView( nullptr ),
     pDocShell( pDocSh ),
     pViewShell( pViewSh ),
     bInGetState( false ),

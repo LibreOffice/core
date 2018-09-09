@@ -390,8 +390,6 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh ),
-    pPrintFuncCache( nullptr ),
-    pPrinterOptions( nullptr ),
     maChangesListeners( m_aMutex )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj

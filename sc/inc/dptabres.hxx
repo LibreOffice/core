@@ -163,7 +163,7 @@ private:
     std::vector<double> mSortedValues;
 
 public:
-            ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(nullptr) {}
+            ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY) {}
 
     void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );

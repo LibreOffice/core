@@ -327,8 +327,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
-    XclExpChTrTabId( sal_uInt16 nCount ) :
-                                    pBuffer( nullptr ), nTabCount( nCount ) {}
+    XclExpChTrTabId( sal_uInt16 nCount ) : nTabCount( nCount ) {}
                                 XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
     virtual                     ~XclExpChTrTabId() override;
 

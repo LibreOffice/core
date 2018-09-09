@@ -882,9 +882,6 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
     maBtnOk(VclPtr<OKButton>::Create(this)),
     maBtnCancel(VclPtr<CancelButton>::Create(this)),
-    mpExtendedData(nullptr),
-    mpOKAction(nullptr),
-    mpPopupEndAction(nullptr),
     maWndSize(),
     mePrevToggleAllState(TRISTATE_INDET),
     maTabStops(this)
@@ -1610,7 +1607,7 @@ void ScTabStops::clear()
 }
 
 ScCheckListBox::ScCheckListBox( vcl::Window* pParent )
-    :  SvTreeListBox( pParent, 0 ), mpCheckButton( nullptr ), mbSeenMouseButtonDown( false )
+    :  SvTreeListBox( pParent, 0 ), mbSeenMouseButtonDown( false )
 {
     Init();
     set_id("check_list_box");

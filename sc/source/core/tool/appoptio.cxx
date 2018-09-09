@@ -36,12 +36,12 @@ using namespace com::sun::star::uno;
 
 //      ScAppOptions - Application Options
 
-ScAppOptions::ScAppOptions() : pLRUList( nullptr )
+ScAppOptions::ScAppOptions()
 {
     SetDefaults();
 }
 
-ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( nullptr )
+ScAppOptions::ScAppOptions( const ScAppOptions& rCpy )
 {
     *this = rCpy;
 }

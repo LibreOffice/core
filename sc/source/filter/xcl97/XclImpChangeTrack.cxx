@@ -37,8 +37,6 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     XclImpRoot( rRoot ),
     aRecHeader(),
     sOldUsername(),
-    pChangeTrack( nullptr ),
-    pStrm( nullptr ),
     nTabIdCount( 0 ),
     bGlobExit( false ),
     eNestedMode( nmBase )

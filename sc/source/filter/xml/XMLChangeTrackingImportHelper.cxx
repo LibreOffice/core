@@ -106,7 +106,6 @@ ScMyInsAction::~ScMyInsAction()
 ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
     : ScMyBaseAction(nActionTypeP),
     aGeneratedList(),
-    pInsCutOff(nullptr),
     aMoveCutOffs(),
     nD(0)
 {
@@ -118,8 +117,7 @@ ScMyDelAction::~ScMyDelAction()
 
 ScMyMoveAction::ScMyMoveAction()
     : ScMyBaseAction(SC_CAT_MOVE),
-    aGeneratedList(),
-    pMoveRanges(nullptr)
+    aGeneratedList()
 {
 }
 
@@ -128,8 +126,7 @@ ScMyMoveAction::~ScMyMoveAction()
 }
 
 ScMyContentAction::ScMyContentAction()
-    : ScMyBaseAction(SC_CAT_CONTENT),
-    pCellInfo(nullptr)
+    : ScMyBaseAction(SC_CAT_CONTENT)
 {
 }
 
@@ -150,7 +147,6 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     aActions(),
     pDoc(nullptr),
     pTrack(nullptr),
-    pCurrentAction(nullptr),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0)
 {

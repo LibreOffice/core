@@ -653,7 +653,6 @@ XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
     sUsername( rCopy.sUsername ),
     aDateTime( rCopy.aDateTime ),
     nIndex( 0 ),
-    pAddAction( nullptr ),
     bAccepted( rCopy.bAccepted ),
     rTabInfo( rCopy.rTabInfo ),
     rIdBuffer( rCopy.rIdBuffer ),
@@ -671,7 +670,6 @@ XclExpChTrAction::XclExpChTrAction(
     sUsername( rAction.GetUser() ),
     aDateTime( rAction.GetDateTime() ),
     nIndex( 0 ),
-    pAddAction( nullptr ),
     bAccepted( rAction.IsAccepted() ),
     rTabInfo( rRoot.GetTabInfo() ),
     rIdBuffer( rTabIdBuffer ),
@@ -748,7 +746,6 @@ std::size_t XclExpChTrAction::GetLen() const
 }
 
 XclExpChTrData::XclExpChTrData() :
-    pString( nullptr ),
     mpFormulaCell( nullptr ),
     fValue( 0.0 ),
     nRKValue( 0 ),
@@ -827,8 +824,6 @@ XclExpChTrCellContent::XclExpChTrCellContent(
         const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_CELL ),
     XclExpRoot( rRoot ),
-    pOldData( nullptr ),
-    pNewData( nullptr ),
     aPosition( rAction.GetBigRange().MakeRange().aStart )
 {
     sal_uInt32 nDummy32;

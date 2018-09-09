@@ -60,9 +60,7 @@ struct ScPreviewLocationEntry
 ScPreviewTableInfo::ScPreviewTableInfo() :
     nTab(0),
     nCols(0),
-    nRows(0),
-    pColInfo(nullptr),
-    pRowInfo(nullptr)
+    nRows(0)
 {
 }
 

@@ -817,7 +817,7 @@ std::shared_ptr< SdrCaptionObj > ScNoteUtil::CreateTempCaption(
 {
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
-    std::shared_ptr< SdrCaptionObj > pNoteCaption = nullptr;
+    std::shared_ptr< SdrCaptionObj > pNoteCaption;
     const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
     {

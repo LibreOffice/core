@@ -116,7 +116,6 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
 
 ScProgress::ScProgress()
     : bEnabled(true)
-    , pProgress(nullptr)
 {
     // DummyInterpret
 }
