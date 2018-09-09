@@ -2040,7 +2040,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
             break;
         }
         case SID_SC_TP_GRID:
-            pRet = SvxGridTabPage::Create(pParent.pParent, rSet);
+            pRet = SvxGridTabPage::Create(pParent, rSet);
             break;
         case SID_SC_TP_USERLISTS:
         {

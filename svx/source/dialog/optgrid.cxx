@@ -26,20 +26,16 @@
 #include <svx/dlgutil.hxx>
 
 // local functions
-static void    lcl_GetMinMax(MetricField const & rField, long& nFirst, long& nLast, long& nMin, long& nMax)
+static void lcl_GetMinMax(weld::MetricSpinButton const& rField, int& nMin, int& nMax)
 {
-    nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
-    nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FUNIT_TWIP ) ));
-    nMin = static_cast<long>(rField.Denormalize( rField.GetMin( FUNIT_TWIP ) ));
-    nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FUNIT_TWIP ) ));
+    rField.get_range(nMin, nMax, FUNIT_TWIP);
+    nMin = rField.denormalize(nMin);
+    nMax = rField.denormalize(nMax);
 }
 
-static void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
+static void lcl_SetMinMax(weld::MetricSpinButton& rField, int nMin, int nMax)
 {
-    rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
-    rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );
-    rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
-    rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
+    rField.set_range(rField.normalize(nMin), rField.normalize(nMax), FUNIT_TWIP);
 }
 
 SvxOptionsGrid::SvxOptionsGrid() :
@@ -92,59 +88,56 @@ bool  SvxGridItem::GetPresentation
 }
 
 // TabPage Screen Settings
-SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet) :
-
-    SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", &rCoreSet ),
-    bAttrModified( false )
+SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
+    , bAttrModified(false)
+    , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
+    , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
+    , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button("mtrflddrawx", FUNIT_CM))
+    , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button("mtrflddrawy", FUNIT_CM))
+    , m_xNumFldDivisionX(m_xBuilder->weld_spin_button("numflddivisionx"))
+    , m_xNumFldDivisionY(m_xBuilder->weld_spin_button("numflddivisiony"))
+    , m_xCbxSynchronize(m_xBuilder->weld_check_button("synchronize"))
+    , m_xSnapFrames(m_xBuilder->weld_widget("snapframes"))
+    , m_xCbxSnapHelplines(m_xBuilder->weld_check_button("snaphelplines"))
+    , m_xCbxSnapBorder(m_xBuilder->weld_check_button("snapborder"))
+    , m_xCbxSnapFrame(m_xBuilder->weld_check_button("snapframe"))
+    , m_xCbxSnapPoints(m_xBuilder->weld_check_button("snappoints"))
+    , m_xMtrFldSnapArea(m_xBuilder->weld_metric_spin_button("mtrfldsnaparea", FUNIT_PIXEL))
+    , m_xCbxOrtho(m_xBuilder->weld_check_button("ortho"))
+    , m_xCbxBigOrtho(m_xBuilder->weld_check_button("bigortho"))
+    , m_xCbxRotate(m_xBuilder->weld_check_button("rotate"))
+    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("mtrfldangle", FUNIT_DEGREE))
+    , m_xMtrFldBezAngle(m_xBuilder->weld_metric_spin_button("mtrfldbezangle", FUNIT_DEGREE))
 {
-    get(pCbxUseGridsnap,"usegridsnap");
-    get(pCbxGridVisible,"gridvisible");
-    get(pMtrFldDrawX,"mtrflddrawx");
-    get(pMtrFldDrawY,"mtrflddrawy");
-    get(pNumFldDivisionX,"numflddivisionx");
-    get(pNumFldDivisionY,"numflddivisiony");
-    get(pCbxSynchronize,"synchronize");
-
-    get(pSnapFrames,"snapframes");
-    get(pCbxSnapHelplines,"snaphelplines");
-    get(pCbxSnapBorder,"snapborder");
-    get(pCbxSnapFrame,"snapframe");
-    get(pCbxSnapPoints,"snappoints");
-    get(pMtrFldSnapArea,"mtrfldsnaparea");
-    get(pCbxOrtho,"ortho");
-    get(pCbxBigOrtho,"bigortho");
-    get(pCbxRotate,"rotate");
-    get(pMtrFldAngle,"mtrfldangle");
-    get(pMtrFldBezAngle,"mtrfldbezangle");
-
     // This page requires exchange Support
     SetExchangeSupport();
 
     // Set Metrics
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
-    long nFirst, nLast, nMin, nMax;
+    int nMin, nMax;
 
-    lcl_GetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
-    SetFieldUnit( *pMtrFldDrawX , eFUnit, true );
-    lcl_SetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
+    lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
+    SetFieldUnit( *m_xMtrFldDrawX, eFUnit, true );
+    lcl_SetMinMax(*m_xMtrFldDrawX, nMin, nMax);
 
-    lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( *pMtrFldDrawY, eFUnit, true );
-    lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
+    lcl_GetMinMax(*m_xMtrFldDrawY, nMin, nMax);
+    SetFieldUnit( *m_xMtrFldDrawY, eFUnit, true );
+    lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
 
 
-    pCbxRotate->SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
-    Link<Button*,void> aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
-    pCbxUseGridsnap->SetClickHdl( aLink );
-    pCbxSynchronize->SetClickHdl( aLink );
-    pCbxGridVisible->SetClickHdl( aLink );
-    pMtrFldDrawX->SetModifyHdl(
+    m_xCbxRotate->connect_toggled(LINK(this, SvxGridTabPage, ClickRotateHdl_Impl));
+    Link<weld::ToggleButton&,void> aLink = LINK(this, SvxGridTabPage, ChangeGridsnapHdl_Impl);
+    m_xCbxUseGridsnap->connect_toggled(aLink);
+    m_xCbxSynchronize->connect_toggled(aLink);
+    m_xCbxGridVisible->connect_toggled(aLink);
+    m_xMtrFldDrawX->connect_value_changed(
         LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
-    pMtrFldDrawY->SetModifyHdl(
+    m_xMtrFldDrawY->connect_value_changed(
         LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
-    pNumFldDivisionX->SetModifyHdl(
+    m_xNumFldDivisionX->connect_value_changed(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
-    pNumFldDivisionY->SetModifyHdl(
+    m_xNumFldDivisionY->connect_value_changed(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
 }
 
@@ -153,35 +146,10 @@ SvxGridTabPage::~SvxGridTabPage()
     disposeOnce();
 }
 
-void SvxGridTabPage::dispose()
+VclPtr<SfxTabPage> SvxGridTabPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
 {
-    pCbxUseGridsnap.clear();
-    pCbxGridVisible.clear();
-    pMtrFldDrawX.clear();
-    pMtrFldDrawY.clear();
-    pNumFldDivisionX.clear();
-    pNumFldDivisionY.clear();
-    pCbxSynchronize.clear();
-    pSnapFrames.clear();
-    pCbxSnapHelplines.clear();
-    pCbxSnapBorder.clear();
-    pCbxSnapFrame.clear();
-    pCbxSnapPoints.clear();
-    pMtrFldSnapArea.clear();
-    pCbxOrtho.clear();
-    pCbxBigOrtho.clear();
-    pCbxRotate.clear();
-    pMtrFldAngle.clear();
-    pMtrFldBezAngle.clear();
-    SfxTabPage::dispose();
+    return VclPtr<SvxGridTabPage>::Create(pParent, rAttrSet);
 }
-
-
-VclPtr<SfxTabPage> SvxGridTabPage::Create( vcl::Window* pParent, const SfxItemSet& rAttrSet )
-{
-    return VclPtr<SvxGridTabPage>::Create( pParent, rAttrSet );
-}
-
 
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
@@ -189,25 +157,24 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
-        aGridItem.bUseGridsnap  = pCbxUseGridsnap->IsChecked();
-        aGridItem.bSynchronize  = pCbxSynchronize->IsChecked();
-        aGridItem.bGridVisible  = pCbxGridVisible->IsChecked();
+        aGridItem.bUseGridsnap  = m_xCbxUseGridsnap->get_active();
+        aGridItem.bSynchronize  = m_xCbxSynchronize->get_active();
+        aGridItem.bGridVisible  = m_xCbxGridVisible->get_active();
 
         MapUnit eUnit =
             rCoreSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        long nX =GetCoreValue(  *pMtrFldDrawX, eUnit );
-        long nY = GetCoreValue( *pMtrFldDrawY, eUnit );
+        long nX = GetCoreValue(  *m_xMtrFldDrawX, eUnit );
+        long nY = GetCoreValue( *m_xMtrFldDrawY, eUnit );
 
         aGridItem.nFldDrawX    = static_cast<sal_uInt32>(nX);
         aGridItem.nFldDrawY    = static_cast<sal_uInt32>(nY);
-        aGridItem.nFldDivisionX = static_cast<long>(pNumFldDivisionX->GetValue()-1);
-        aGridItem.nFldDivisionY = static_cast<long>(pNumFldDivisionY->GetValue()-1);
+        aGridItem.nFldDivisionX = static_cast<long>(m_xNumFldDivisionX->get_value() - 1);
+        aGridItem.nFldDivisionY = static_cast<long>(m_xNumFldDivisionY->get_value() - 1);
 
         rCoreSet->Put( aGridItem );
     }
     return bAttrModified;
 }
-
 
 void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -217,23 +184,22 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
                                     &pAttr ))
     {
         const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
-        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
-        pCbxSynchronize->Check( pGridAttr->bSynchronize );
-        pCbxGridVisible->Check( pGridAttr->bGridVisible );
+        m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
+        m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
+        m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
 
         MapUnit eUnit =
             rSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        SetMetricValue( *pMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
-        SetMetricValue( *pMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
+        SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
+        SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-        pNumFldDivisionX->SetValue( pGridAttr->nFldDivisionX+1 );
-        pNumFldDivisionY->SetValue( pGridAttr->nFldDivisionY+1 );
+        m_xNumFldDivisionX->set_value(pGridAttr->nFldDivisionX + 1);
+        m_xNumFldDivisionY->set_value(pGridAttr->nFldDivisionY + 1);
     }
 
-    ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
+    ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
     bAttrModified = false;
 }
-
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -242,9 +208,9 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
                                     &pAttr ))
     {
         const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
-        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
+        m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
 
-        ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
+        ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
     }
 
     // Metric Change if necessary (as TabPage is in the dialog, where the
@@ -256,28 +222,27 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
         FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
-        if( eFUnit != pMtrFldDrawX->GetUnit() )
+        if (eFUnit != m_xMtrFldDrawX->get_unit())
         {
             // Set Metrics
-            long nFirst, nLast, nMin, nMax;
-            long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FUNIT_TWIP ) ));
+            int nMin, nMax;
+            int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FUNIT_TWIP));
 
-            lcl_GetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( *pMtrFldDrawX, eFUnit, true );
-            lcl_SetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
+            lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
+            SetFieldUnit(*m_xMtrFldDrawX, eFUnit, true);
+            lcl_SetMinMax(*m_xMtrFldDrawX, nMin, nMax);
 
-            pMtrFldDrawX->SetValue( pMtrFldDrawX->Normalize( nVal ), FUNIT_TWIP );
+            m_xMtrFldDrawX->set_value(m_xMtrFldDrawX->normalize(nVal), FUNIT_TWIP);
 
-            nVal = static_cast<long>(pMtrFldDrawY->Denormalize( pMtrFldDrawY->GetValue( FUNIT_TWIP ) ));
-            lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            SetFieldUnit(*pMtrFldDrawY, eFUnit, true );
-            lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            pMtrFldDrawY->SetValue( pMtrFldDrawY->Normalize( nVal ), FUNIT_TWIP );
+            nVal = m_xMtrFldDrawY->denormalize(m_xMtrFldDrawY->get_value(FUNIT_TWIP));
+            lcl_GetMinMax(*m_xMtrFldDrawY, nMin, nMax);
+            SetFieldUnit(*m_xMtrFldDrawY, eFUnit, true);
+            lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
+            m_xMtrFldDrawY->set_value(m_xMtrFldDrawY->normalize(nVal), FUNIT_TWIP);
 
         }
     }
 }
-
 
 DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -286,45 +251,41 @@ DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )
+IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
     bAttrModified = true;
-    if( pCbxSynchronize->IsChecked() )
+    if (m_xCbxSynchronize->get_active())
     {
-        if(&rField == pMtrFldDrawX)
-            pMtrFldDrawY->SetValue( pMtrFldDrawX->GetValue() );
+        if (&rField == m_xMtrFldDrawX.get())
+            m_xMtrFldDrawY->set_value(m_xMtrFldDrawX->get_value(FUNIT_NONE), FUNIT_NONE);
         else
-            pMtrFldDrawX->SetValue( pMtrFldDrawY->GetValue() );
+            m_xMtrFldDrawX->set_value(m_xMtrFldDrawY->get_value(FUNIT_NONE), FUNIT_NONE);
     }
 }
 
-
-IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::ToggleButton&, void)
 {
-    if( pCbxRotate->IsChecked() )
-        pMtrFldAngle->Enable();
+    if (m_xCbxRotate->get_active())
+        m_xMtrFldAngle->set_sensitive(true);
     else
-        pMtrFldAngle->Disable();
+        m_xMtrFldAngle->set_sensitive(false);
 }
 
-
-IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )
+IMPL_LINK(SvxGridTabPage, ChangeDivisionHdl_Impl, weld::SpinButton&, rField, void)
 {
     bAttrModified = true;
-    if( pCbxSynchronize->IsChecked() )
+    if (m_xCbxSynchronize->get_active())
     {
-        if(pNumFldDivisionX == &rField)
-            pNumFldDivisionY->SetValue( pNumFldDivisionX->GetValue() );
+        if (m_xNumFldDivisionX.get() == &rField)
+            m_xNumFldDivisionY->set_value(m_xNumFldDivisionX->get_value());
         else
-            pNumFldDivisionX->SetValue( pNumFldDivisionY->GetValue() );
+            m_xNumFldDivisionX->set_value(m_xNumFldDivisionY->get_value());
     }
 }
 
-
-IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, weld::ToggleButton&, void)
 {
     bAttrModified = true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

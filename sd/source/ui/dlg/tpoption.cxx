@@ -46,10 +46,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SdTpOptionsSnap::SdTpOptionsSnap( vcl::Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SvxGridTabPage(pParent, rInAttrs)
+SdTpOptionsSnap::SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxGridTabPage(pParent, rInAttrs)
 {
-    pSnapFrames->Show();
+    m_xSnapFrames->show();
 }
 
 SdTpOptionsSnap::~SdTpOptionsSnap()
@@ -61,16 +61,16 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem aOptsItem;
 
-    aOptsItem.GetOptionsSnap().SetSnapHelplines( pCbxSnapHelplines->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapBorder( pCbxSnapBorder->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapFrame( pCbxSnapFrame->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapPoints( pCbxSnapPoints->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetOrtho( pCbxOrtho->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetBigOrtho( pCbxBigOrtho->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetRotate( pCbxRotate->IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapArea( static_cast<sal_Int16>(pMtrFldSnapArea->GetValue()) );
-    aOptsItem.GetOptionsSnap().SetAngle( static_cast<sal_Int16>(pMtrFldAngle->GetValue()) );
-    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( static_cast<sal_Int16>(pMtrFldBezAngle->GetValue()) );
+    aOptsItem.GetOptionsSnap().SetSnapHelplines( m_xCbxSnapHelplines->get_active() );
+    aOptsItem.GetOptionsSnap().SetSnapBorder( m_xCbxSnapBorder->get_active() );
+    aOptsItem.GetOptionsSnap().SetSnapFrame( m_xCbxSnapFrame->get_active() );
+    aOptsItem.GetOptionsSnap().SetSnapPoints( m_xCbxSnapPoints->get_active() );
+    aOptsItem.GetOptionsSnap().SetOrtho( m_xCbxOrtho->get_active() );
+    aOptsItem.GetOptionsSnap().SetBigOrtho( m_xCbxBigOrtho->get_active() );
+    aOptsItem.GetOptionsSnap().SetRotate( m_xCbxRotate->get_active() );
+    aOptsItem.GetOptionsSnap().SetSnapArea(static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FUNIT_PIXEL)));
+    aOptsItem.GetOptionsSnap().SetAngle(static_cast<sal_Int16>(m_xMtrFldAngle->get_value(FUNIT_DEGREE)));
+    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle(static_cast<sal_Int16>(m_xMtrFldBezAngle->get_value(FUNIT_DEGREE)));
 
     rAttrs->Put( aOptsItem );
 
@@ -86,24 +86,24 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     SdOptionsSnapItem aOptsItem( static_cast<const SdOptionsSnapItem&>( rAttrs->
                         Get( ATTR_OPTIONS_SNAP ) ) );
 
-    pCbxSnapHelplines->Check( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
-    pCbxSnapBorder->Check( aOptsItem.GetOptionsSnap().IsSnapBorder() );
-    pCbxSnapFrame->Check( aOptsItem.GetOptionsSnap().IsSnapFrame() );
-    pCbxSnapPoints->Check( aOptsItem.GetOptionsSnap().IsSnapPoints() );
-    pCbxOrtho->Check( aOptsItem.GetOptionsSnap().IsOrtho() );
-    pCbxBigOrtho->Check( aOptsItem.GetOptionsSnap().IsBigOrtho() );
-    pCbxRotate->Check( aOptsItem.GetOptionsSnap().IsRotate() );
-    pMtrFldSnapArea->SetValue( aOptsItem.GetOptionsSnap().GetSnapArea() );
-    pMtrFldAngle->SetValue( aOptsItem.GetOptionsSnap().GetAngle() );
-    pMtrFldBezAngle->SetValue( aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle() );
+    m_xCbxSnapHelplines->set_active( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
+    m_xCbxSnapBorder->set_active( aOptsItem.GetOptionsSnap().IsSnapBorder() );
+    m_xCbxSnapFrame->set_active( aOptsItem.GetOptionsSnap().IsSnapFrame() );
+    m_xCbxSnapPoints->set_active( aOptsItem.GetOptionsSnap().IsSnapPoints() );
+    m_xCbxOrtho->set_active( aOptsItem.GetOptionsSnap().IsOrtho() );
+    m_xCbxBigOrtho->set_active( aOptsItem.GetOptionsSnap().IsBigOrtho() );
+    m_xCbxRotate->set_active( aOptsItem.GetOptionsSnap().IsRotate() );
+    m_xMtrFldSnapArea->set_value(aOptsItem.GetOptionsSnap().GetSnapArea(), FUNIT_PIXEL);
+    m_xMtrFldAngle->set_value(aOptsItem.GetOptionsSnap().GetAngle(), FUNIT_DEGREE);
+    m_xMtrFldBezAngle->set_value(aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle(), FUNIT_DEGREE);
 
-    pCbxRotate->GetClickHdl().Call(nullptr);
+    ClickRotateHdl_Impl(*m_xCbxRotate);
 }
 
 VclPtr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
                                             const SfxItemSet* rAttrs )
 {
-    return VclPtr<SdTpOptionsSnap>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SdTpOptionsSnap>::Create(pWindow, *rAttrs);
 }
 
 /*************************************************************************
