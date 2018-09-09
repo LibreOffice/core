@@ -1801,7 +1801,7 @@ public:
     }
     virtual void set_mode(VclSizeGroupMode eVclMode) override
     {
-        GtkSizeGroupMode eGtkMode;
+        GtkSizeGroupMode eGtkMode(GTK_SIZE_GROUP_NONE);
         switch (eVclMode)
         {
             case VclSizeGroupMode::NONE:
