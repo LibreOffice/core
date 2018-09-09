@@ -46,7 +46,7 @@
                   <object class="GtkCheckButton" id="TSB_SHOW_SHADOW">
                     <property name="label" translatable="yes" context="shadowtabpage|TSB_SHOW_SHADOW">_Use shadow</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -69,7 +69,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_SHADOW_TRANSPARENT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
@@ -81,7 +81,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_DISTANCE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDistance</property>
                       </object>
