@@ -308,14 +308,6 @@ class SvxShadowTabPage : public SvxTabPage
     static const sal_uInt16 pShadowRanges[];
 
 private:
-    VclPtr<TriStateBox>        m_pTsbShowShadow;
-    VclPtr<VclGrid>            m_pGridShadow;
-    VclPtr<SvxRectCtl>         m_pCtlPosition;
-    VclPtr<MetricField>        m_pMtrDistance;
-    VclPtr<SvxColorListBox>    m_pLbShadowColor;
-    VclPtr<MetricField>        m_pMtrTransparent;
-    VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
-
     const SfxItemSet&   m_rOutAttrs;
 
     XColorListRef       m_pColorList;
@@ -327,12 +319,22 @@ private:
     SfxItemSet&         m_rXFSet;
     MapUnit             m_ePoolUnit;
 
-    DECL_LINK( ClickShadowHdl_Impl, Button*, void );
-    DECL_LINK( ModifyShadowHdl_Impl, Edit&, void );
-    DECL_LINK( SelectShadowHdl_Impl, SvxColorListBox&, void );
+    RectCtl m_aCtlPosition;
+    SvxXShadowPreview  m_aCtlXRectPreview;
+    std::unique_ptr<weld::CheckButton> m_xTsbShowShadow;
+    std::unique_ptr<weld::Widget> m_xGridShadow;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
+    std::unique_ptr<ColorListBox> m_xLbShadowColor;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPosition;
+    std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
+
+    DECL_LINK(ClickShadowHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyShadowHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(SelectShadowHdl_Impl, ColorListBox&, void);
 
 public:
-    SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxShadowTabPage() override;
     virtual void dispose() override;
 

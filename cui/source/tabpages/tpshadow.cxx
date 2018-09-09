@@ -45,27 +45,23 @@ const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
     0
 };
 
-SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-
-    SvxTabPage          ( pParent,
-                          "ShadowTabPage",
-                          "cui/ui/shadowtabpage.ui",
-                          rInAttrs ),
-    m_rOutAttrs           ( rInAttrs ),
-    m_pnColorListState    ( nullptr ),
-    m_nPageType           ( PageType::Area ),
-    m_nDlgType            ( 0 ),
-    m_aXFillAttr          ( rInAttrs.GetPool() ),
-    m_rXFSet              ( m_aXFillAttr.GetItemSet() )
+SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)
+    , m_rOutAttrs(rInAttrs)
+    , m_pnColorListState(nullptr)
+    , m_nPageType(PageType::Area)
+    , m_nDlgType(0)
+    , m_aXFillAttr(rInAttrs.GetPool())
+    , m_rXFSet(m_aXFillAttr.GetItemSet())
+    , m_aCtlPosition(this)
+    , m_xTsbShowShadow(m_xBuilder->weld_check_button("TSB_SHOW_SHADOW"))
+    , m_xGridShadow(m_xBuilder->weld_widget("gridSHADOW"))
+    , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FUNIT_CM))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), pParent.GetFrameWeld()))
+    , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FUNIT_PERCENT))
+    , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
+    , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_COLOR_PREVIEW", m_aCtlXRectPreview))
 {
-    get(m_pTsbShowShadow,"TSB_SHOW_SHADOW");
-    get(m_pGridShadow,"gridSHADOW");
-    get(m_pCtlPosition,"CTL_POSITION");
-    get(m_pMtrDistance,"MTR_FLD_DISTANCE");
-    get(m_pLbShadowColor,"LB_SHADOW_COLOR");
-    get(m_pMtrTransparent,"MTR_SHADOW_TRANSPARENT");
-    get(m_pCtlXRectPreview,"CTL_COLOR_PREVIEW");
-
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
@@ -80,7 +76,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
             break;
         default: ;//prevent warning
     }
-    SetFieldUnit( *m_pMtrDistance, eFUnit );
+    SetFieldUnit( *m_xMtrDistance, eFUnit );
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
@@ -143,14 +139,13 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     }
 
     m_rXFSet.Put( XFillStyleItem( eXFS ) );
-    m_pCtlXRectPreview->SetRectangleAttributes(m_aXFillAttr.GetItemSet());
-    //aCtlXRectPreview.SetFillAttr( aXFillAttr );
+    m_aCtlXRectPreview.SetRectangleAttributes(m_aXFillAttr.GetItemSet());
 
-    m_pTsbShowShadow->SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
-    m_pLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
-    Link<Edit&,void> aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
-    m_pMtrTransparent->SetModifyHdl( aLink );
-    m_pMtrDistance->SetModifyHdl( aLink );
+    m_xTsbShowShadow->connect_toggled(LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl));
+    m_xLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
+    Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
+    m_xMtrTransparent->connect_value_changed(aLink);
+    m_xMtrDistance->connect_value_changed(aLink);
 }
 
 SvxShadowTabPage::~SvxShadowTabPage()
@@ -160,13 +155,9 @@ SvxShadowTabPage::~SvxShadowTabPage()
 
 void SvxShadowTabPage::dispose()
 {
-    m_pTsbShowShadow.clear();
-    m_pGridShadow.clear();
-    m_pCtlPosition.clear();
-    m_pMtrDistance.clear();
-    m_pLbShadowColor.clear();
-    m_pMtrTransparent.clear();
-    m_pCtlXRectPreview.clear();
+    m_xCtlXRectPreview.reset();
+    m_xLbShadowColor.reset();
+    m_xCtlPosition.reset();
     SvxTabPage::dispose();
 }
 
@@ -206,8 +197,8 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 SdrOnOffItem aItem( makeSdrShadowItem( false ));
                 rAttribs.Put( aItem );
 
-                m_pCtlXRectPreview->SetRectangleAttributes( rAttribs );
-                ModifyShadowHdl_Impl( *m_pMtrTransparent );
+                m_aCtlXRectPreview.SetRectangleAttributes( rAttribs );
+                ModifyShadowHdl_Impl( *m_xMtrTransparent );
             }
             m_nPageType = PageType::Shadow;
         }
@@ -230,11 +221,11 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     const SfxPoolItem*  pOld = nullptr;
 
-    if( m_pTsbShowShadow->IsValueChangedFromSaved() )
+    if (m_xTsbShowShadow->get_state_changed_from_saved())
     {
-        TriState eState = m_pTsbShowShadow->GetState();
+        TriState eState = m_xTsbShowShadow->get_state();
         assert(eState != TRISTATE_INDET);
-            // given how m_pTsbShowShadow is set up and saved in Reset(),
+            // given how m_xTsbShowShadow is set up and saved in Reset(),
             // eState == TRISTATE_INDET would imply
             // !IsValueChangedFromSaved()
         SdrOnOffItem aItem( makeSdrShadowItem(eState == TRISTATE_TRUE) );
@@ -250,9 +241,9 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     // a bit intricate inquiry whether there was something changed,
     // as the items can't be displayed directly on controls
     sal_Int32 nX = 0, nY = 0;
-    sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
+    sal_Int32 nXY = GetCoreValue( *m_xMtrDistance, m_ePoolUnit );
 
-    switch( m_pCtlPosition->GetActualRP() )
+    switch (m_aCtlPosition.GetActualRP())
     {
         case RectPoint::LT: nX = nY = -nXY;      break;
         case RectPoint::MT: nY = -nXY;           break;
@@ -269,7 +260,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     // string in the respective MetricField=="", then the comparison of the old
     // and the new distance values would return a wrong result because in such a
     // case the new distance values would match the default values of the MetricField !!!!
-    if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
+    if ( !m_xMtrDistance->get_text().isEmpty() ||
          m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
          m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
     {
@@ -301,7 +292,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     // ShadowColor
     {
-        XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
+        XColorItem aItem(makeSdrShadowColorItem(m_xLbShadowColor->GetSelectEntryColor()));
         pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
         if ( !pOld || !( *static_cast<const XColorItem*>(pOld) == aItem ) )
         {
@@ -311,8 +302,8 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // transparency
-    sal_uInt16 nVal = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
-    if( m_pMtrTransparent->IsValueChangedFromSaved() )
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FUNIT_PERCENT));
+    if (m_xMtrTransparent->get_value_changed_from_saved())
     {
         SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
         pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWTRANSPARENCE );
@@ -337,17 +328,15 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     // has a shadow been set?
     if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SfxItemState::DONTCARE )
     {
-        m_pTsbShowShadow->EnableTriState( false );
-
         if( rAttrs->Get( SDRATTR_SHADOW ).GetValue() )
-            m_pTsbShowShadow->SetState( TRISTATE_TRUE );
+            m_xTsbShowShadow->set_state(TRISTATE_TRUE);
         else
         {
-            m_pTsbShowShadow->SetState( TRISTATE_FALSE );
+            m_xTsbShowShadow->set_state(TRISTATE_FALSE);
         }
     }
     else
-        m_pTsbShowShadow->SetState( TRISTATE_INDET );
+        m_xTsbShowShadow->set_state(TRISTATE_INDET);
 
     // distance (only 8 possible positions),
     // so there is only one item evaluated
@@ -359,21 +348,21 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         sal_Int32 nY = rAttrs->Get( SDRATTR_SHADOWYDIST ).GetValue();
 
         if( nX != 0 )
-            SetMetricValue( *m_pMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
+            SetMetricValue( *m_xMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
         else
-            SetMetricValue( *m_pMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
+            SetMetricValue( *m_xMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
 
         // setting the shadow control
-        if     ( nX <  0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::LT );
-        else if( nX == 0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::MT );
-        else if( nX >  0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::RT );
-        else if( nX <  0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::LM );
+        if     ( nX <  0 && nY <  0 ) m_aCtlPosition.SetActualRP( RectPoint::LT );
+        else if( nX == 0 && nY <  0 ) m_aCtlPosition.SetActualRP( RectPoint::MT );
+        else if( nX >  0 && nY <  0 ) m_aCtlPosition.SetActualRP( RectPoint::RT );
+        else if( nX <  0 && nY == 0 ) m_aCtlPosition.SetActualRP( RectPoint::LM );
         // there's no center point anymore
-        else if( nX == 0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::RB );
-        else if( nX >  0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::RM );
-        else if( nX <  0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::LB );
-        else if( nX == 0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::MB );
-        else if( nX >  0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::RB );
+        else if( nX == 0 && nY == 0 ) m_aCtlPosition.SetActualRP( RectPoint::RB );
+        else if( nX >  0 && nY == 0 ) m_aCtlPosition.SetActualRP( RectPoint::RM );
+        else if( nX <  0 && nY >  0 ) m_aCtlPosition.SetActualRP( RectPoint::LB );
+        else if( nX == 0 && nY >  0 ) m_aCtlPosition.SetActualRP( RectPoint::MB );
+        else if( nX >  0 && nY >  0 ) m_aCtlPosition.SetActualRP( RectPoint::RB );
     }
     else
     {
@@ -386,90 +375,88 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
             sal_Int32 nX = pXDistItem->GetValue();
             sal_Int32 nY = pYDistItem->GetValue();
             if( nX != 0 )
-                SetMetricValue( *m_pMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
+                SetMetricValue( *m_xMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
             else
-                SetMetricValue( *m_pMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
+                SetMetricValue( *m_xMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
         }
 
         // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
         // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
         // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
-        m_pMtrDistance->SetText( "" );
-        m_pCtlPosition->SetActualRP( RectPoint::MM );
+        m_xMtrDistance->set_text( "" );
+        m_aCtlPosition.SetActualRP( RectPoint::MM );
     }
 
     if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::DONTCARE )
     {
-        m_pLbShadowColor->SelectEntry( rAttrs->Get( SDRATTR_SHADOWCOLOR ).GetColorValue() );
+        m_xLbShadowColor->SelectEntry( rAttrs->Get( SDRATTR_SHADOWCOLOR ).GetColorValue() );
     }
     else
-        m_pLbShadowColor->SetNoSelection();
+        m_xLbShadowColor->SetNoSelection();
 
     if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SfxItemState::DONTCARE )
     {
         sal_uInt16 nTransp = rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ).GetValue();
-        m_pMtrTransparent->SetValue( nTransp );
+        m_xMtrTransparent->set_value(nTransp, FUNIT_PERCENT);
     }
     else
-        m_pMtrTransparent->SetText( "" );
+        m_xMtrTransparent->set_text("");
 
     //aCtlPosition
-    m_pMtrDistance->SaveValue();
-    m_pLbShadowColor->SaveValue();
-    m_pTsbShowShadow->SaveValue();
+    m_xMtrDistance->save_value();
+    m_xLbShadowColor->SaveValue();
+    m_xTsbShowShadow->save_state();
 
     // #66832# This field was not saved, but used to determine changes.
     // Why? Seems to be the error.
     // It IS the error.
-    m_pMtrTransparent->SaveValue();
+    m_xMtrTransparent->save_value();
 
-    ClickShadowHdl_Impl( nullptr );
-    ModifyShadowHdl_Impl( *m_pMtrTransparent );
+    ClickShadowHdl_Impl(*m_xTsbShowShadow);
+    ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
 
-VclPtr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pWindow,
+VclPtr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxShadowTabPage>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SvxShadowTabPage>::Create( pParent, *rAttrs );
 }
 
-
-IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::ToggleButton&, void)
 {
-    if( m_pTsbShowShadow->GetState() == TRISTATE_FALSE )
+    if (m_xTsbShowShadow->get_state() == TRISTATE_FALSE)
     {
-        m_pGridShadow->Disable();
+        m_xGridShadow->set_sensitive(false);
     }
     else
     {
-        m_pGridShadow->Enable();
+        m_xGridShadow->set_sensitive(true);
     }
-    m_pCtlPosition->Invalidate();
-
-    ModifyShadowHdl_Impl( *m_pMtrTransparent );
+    m_aCtlPosition.Invalidate();
+    ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-IMPL_LINK_NOARG(SvxShadowTabPage, SelectShadowHdl_Impl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, SelectShadowHdl_Impl, ColorListBox&, void)
 {
-    ModifyShadowHdl_Impl(*m_pMtrTransparent);
+    ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&, void)
 {
-    if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
+    if (m_xTsbShowShadow->get_state() == TRISTATE_TRUE)
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     else
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
-    sal_uInt16 nVal = static_cast<sal_uInt16>(m_pMtrTransparent->GetValue());
+    m_rXFSet.Put( XFillColorItem( OUString(), m_xLbShadowColor->GetSelectEntryColor() ) );
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FUNIT_PERCENT));
     m_rXFSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal
     sal_Int32 nX = 0, nY = 0;
-    sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
-    switch( m_pCtlPosition->GetActualRP() )
+    sal_Int32 nXY = GetCoreValue( *m_xMtrDistance, m_ePoolUnit );
+    switch( m_aCtlPosition.GetActualRP() )
     {
         case RectPoint::LT: nX = nY = -nXY;      break;
         case RectPoint::MT: nY = -nXY;           break;
@@ -482,24 +469,22 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
         case RectPoint::MM: break;
     }
 
-    m_pCtlXRectPreview->SetShadowPosition(Point(nX, nY));
+    m_aCtlXRectPreview.SetShadowPosition(Point(nX, nY));
 
-    m_pCtlXRectPreview->SetShadowAttributes(m_aXFillAttr.GetItemSet());
-    //aCtlXRectPreview.SetFillAttr( aXFillAttr );
-    m_pCtlXRectPreview->Invalidate();
+    m_aCtlXRectPreview.SetShadowAttributes(m_aXFillAttr.GetItemSet());
+    m_aCtlXRectPreview.Invalidate();
 }
-
 
 void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint )
 {
     // repaint shadow
-    ModifyShadowHdl_Impl( *m_pMtrTransparent );
+    ModifyShadowHdl_Impl( *m_xMtrTransparent );
 }
 
 void SvxShadowTabPage::PointChanged( weld::DrawingArea*, RectPoint )
 {
     // repaint shadow
-    ModifyShadowHdl_Impl( *m_pMtrTransparent );
+    ModifyShadowHdl_Impl( *m_xMtrTransparent );
 }
 
 void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
