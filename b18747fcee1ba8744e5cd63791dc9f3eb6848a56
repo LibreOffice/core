@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_34143c4e",
+        "filename": "dtrans/source/win32/misc/ImplHelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-10T13:43:52Z",
+      "side": 1,
+      "message": "btw, the danger of accidents like this is reduced further by banning naked new there, like\n\n  auto buf \u003d o3tl::make_unique\u003cwchar_t[]\u003e(nResult);",
+      "revId": "b18747fcee1ba8744e5cd63791dc9f3eb6848a56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
