@@ -244,14 +244,11 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     if( rGraphic.IsAnimated() )
     {
         Animation aAnim( rGraphic.GetAnimation() );
-        BitmapMosaicFilter mosiacFilter(aSize.getWidth(), aSize.getHeight());
-        if (BitmapFilter::Filter(aAnim, mosiacFilter))
+
+        if (BitmapFilter::Filter(aAnim, BitmapMosaicFilter(aSize.getWidth(), aSize.getHeight())))
         {
             if( IsEnhanceEdges() )
-            {
-                BitmapSharpenFilter sharpenFilter;
-                (void)BitmapFilter::Filter(aAnim, sharpenFilter);
-            }
+                (void)BitmapFilter::Filter(aAnim, BitmapSharpenFilter());
 
             aRet = aAnim;
         }
@@ -260,14 +257,10 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapMosaicFilter mosiacFilter(aSize.getWidth(), aSize.getHeight());
-        if (BitmapFilter::Filter(aBmpEx, mosiacFilter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapMosaicFilter(aSize.getWidth(), aSize.getHeight())))
         {
             if( IsEnhanceEdges() )
-            {
-                BitmapSharpenFilter sharpenFilter;
-                BitmapFilter::Filter(aBmpEx, sharpenFilter);
-            }
+                BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter());
 
             aRet = aBmpEx;
         }
@@ -317,8 +310,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        BitmapSmoothenFilter filter(nRadius);
-        if (BitmapFilter::Filter(aAnim, filter))
+        if (BitmapFilter::Filter(aAnim, BitmapSmoothenFilter(nRadius)))
         {
             aRet = aAnim;
         }
@@ -327,8 +319,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapSmoothenFilter filter(nRadius);
-        if (BitmapFilter::Filter(aBmpEx, filter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapSmoothenFilter(nRadius)))
         {
             aRet = aBmpEx;
         }
@@ -389,8 +380,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        BitmapSolarizeFilter filter(nGreyThreshold);
-        if (BitmapFilter::Filter(aAnim, filter))
+        if (BitmapFilter::Filter(aAnim, BitmapSolarizeFilter(nGreyThreshold)))
         {
             if( IsInvert() )
                 aAnim.Invert();
@@ -402,8 +392,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapSolarizeFilter filter(nGreyThreshold);
-        if (BitmapFilter::Filter(aBmpEx, filter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapSolarizeFilter(nGreyThreshold)))
         {
             if( IsInvert() )
                 aBmpEx.Invert();
@@ -452,16 +441,14 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double,
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        BitmapSepiaFilter filter(nSepiaPct);
-        if (BitmapFilter::Filter(aAnim, filter))
+        if (BitmapFilter::Filter(aAnim, BitmapSepiaFilter(nSepiaPct)))
             aRet = aAnim;
     }
     else
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapSepiaFilter filter(nSepiaPct);
-        if (BitmapFilter::Filter(aBmpEx, filter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapSepiaFilter(nSepiaPct)))
             aRet = aBmpEx;
     }
 
@@ -518,8 +505,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapColorQuantizationFilter filter(nPosterCount);
-        if (BitmapFilter::Filter(aBmpEx, filter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapColorQuantizationFilter(nPosterCount)))
             aRet = aBmpEx;
     }
 
@@ -596,16 +582,14 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        BitmapEmbossGreyFilter filter(nAzim, nElev);
-        if (BitmapFilter::Filter(aAnim, filter))
+        if (BitmapFilter::Filter(aAnim, BitmapEmbossGreyFilter(nAzim, nElev)))
             aRet = aAnim;
     }
     else
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        BitmapEmbossGreyFilter filter(nAzim, nElev);
-        if (BitmapFilter::Filter(aBmpEx, filter))
+        if (BitmapFilter::Filter(aBmpEx, BitmapEmbossGreyFilter(nAzim, nElev)))
             aRet = aBmpEx;
     }
 

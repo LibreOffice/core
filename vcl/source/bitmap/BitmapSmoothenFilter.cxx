@@ -23,15 +23,9 @@ BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx) const
     bool bRet = false;
 
     if (mfRadius > 0.0) // Blur for positive values of mnRadius
-    {
-        BitmapGaussianSeparableBlurFilter filter(mfRadius);
-        bRet = BitmapFilter::Filter(aBitmapEx, filter);
-    }
+        bRet = BitmapFilter::Filter(aBitmapEx, BitmapGaussianSeparableBlurFilter(mfRadius));
     else if (mfRadius < 0.0) // Unsharpen mask for negative values of mnRadius
-    {
-        BitmapSeparableUnsharpenFilter filter(mfRadius);
-        bRet = BitmapFilter::Filter(aBitmapEx, filter);
-    }
+        bRet = BitmapFilter::Filter(aBitmapEx, BitmapSeparableUnsharpenFilter(mfRadius));
 
     if (bRet)
         return rBitmapEx;

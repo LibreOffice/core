@@ -330,8 +330,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     // output, having alpha-induced grey levels is not
                     // acceptable.
                     BitmapEx aMaskEx(aBmpEx.GetAlpha().GetBitmap());
-                    BitmapMonochromeFilter filter(129);
-                    BitmapFilter::Filter(aMaskEx, filter);
+                    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(129));
                     aBmpEx = BitmapEx(aColorBmp, aMaskEx.GetBitmap());
                 }
                 else

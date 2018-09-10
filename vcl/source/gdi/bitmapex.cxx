@@ -128,8 +128,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     {
         SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
         BitmapEx aMaskEx(maMask);
-        BitmapMonochromeFilter filter(255);
-        BitmapFilter::Filter(aMaskEx, filter);
+        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
         maMask = aMaskEx.GetBitmap();
     }
 
@@ -256,8 +255,7 @@ Bitmap BitmapEx::GetMask() const
         return maMask;
 
     BitmapEx aMaskEx(maMask);
-    BitmapMonochromeFilter filter(255);
-    BitmapFilter::Filter(aMaskEx, filter);
+    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
     return aMaskEx.GetBitmap();
 }
 
