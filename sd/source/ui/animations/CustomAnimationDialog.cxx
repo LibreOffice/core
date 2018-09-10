@@ -2157,7 +2157,6 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, void)
 CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
 , mpSet( std::move(pSet) )
-, mpResultSet( nullptr )
 {
     get(mpTabControl, "tabs");
 
@@ -2268,7 +2267,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationDialog::createDefaultSet()
 }
 
 PropertyControl::PropertyControl( vcl::Window* pParent )
-: ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(nullptr)
+: ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN )
 {
 }
 

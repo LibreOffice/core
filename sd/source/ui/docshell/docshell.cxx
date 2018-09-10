@@ -132,10 +132,8 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                DocumentType eDocumentType) :
     SfxObjectShell( eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(nullptr),
-    mpUndoManager(nullptr),
     mpPrinter(nullptr),
     mpViewShell(nullptr),
-    mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false)
@@ -146,10 +144,8 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(nullptr),
-    mpUndoManager(nullptr),
     mpPrinter(nullptr),
     mpViewShell(nullptr),
-    mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false)
@@ -162,10 +158,8 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(pDoc),
-    mpUndoManager(nullptr),
     mpPrinter(nullptr),
     mpViewShell(nullptr),
-    mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false)

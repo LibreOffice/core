@@ -478,8 +478,6 @@ MasterPageContainer::Implementation::Implementation()
     : maMutex(),
       maContainer(),
       meInitializationState(NOT_INITIALIZED),
-      mpRequestQueue(nullptr),
-      mxModel(nullptr),
       mpDocument(nullptr),
       maPreviewRenderer(),
       mbFirstPageObjectSeen(false),

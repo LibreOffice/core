@@ -125,9 +125,7 @@ static PHLayout pPHLayout[] =
 };
 
 PPTWriterBase::PPTWriterBase()
-    : mXModel(nullptr)
-    , mXStatusIndicator(nullptr)
-    , mbStatusIndicator(false)
+    : mbStatusIndicator(false)
     , mbPresObj(false)
     , mbEmptyPresObj(false)
     , mbIsBackgroundDark(false)

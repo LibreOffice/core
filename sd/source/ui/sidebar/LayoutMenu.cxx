@@ -129,7 +129,6 @@ LayoutMenu::LayoutMenu (
       DragSourceHelper(this),
       DropTargetHelper(this),
       mrBase(rViewShellBase),
-      mxListener(nullptr),
       mbIsMainViewChangePending(false),
       mxSidebar(rxSidebar),
       mbIsDisposed(false)

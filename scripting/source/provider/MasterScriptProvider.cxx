@@ -70,7 +70,7 @@ bool endsWith( const OUString& target, const OUString& item )
 
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ):
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
-        m_bIsPkgMSP( false ), m_pPCache( nullptr )
+        m_bIsPkgMSP( false )
 {
     ENSURE_OR_THROW( m_xContext.is(), "MasterScriptProvider::MasterScriptProvider: No context available\n" );
     m_xMgr = m_xContext->getServiceManager();

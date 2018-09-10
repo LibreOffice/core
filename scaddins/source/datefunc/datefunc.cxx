@@ -123,9 +123,7 @@ SAL_DLLPUBLIC_EXPORT void * date_component_getFactory(
 }   // extern C
 
 //  "normal" service implementation
-ScaDateAddIn::ScaDateAddIn() :
-    pDefLocales( nullptr ),
-    pFuncDataList( nullptr )
+ScaDateAddIn::ScaDateAddIn()
 {
 }
 

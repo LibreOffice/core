@@ -100,8 +100,6 @@ namespace basprov
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
         :m_pAppBasicManager( nullptr )
         ,m_pDocBasicManager( nullptr )
-        ,m_xLibContainerApp( nullptr )
-        ,m_xLibContainerDoc( nullptr )
         ,m_xContext( xContext )
         ,m_bIsAppScriptCtx( true )
         ,m_bIsUserCtx(true)

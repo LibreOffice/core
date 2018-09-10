@@ -73,8 +73,6 @@ PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & r
     , mnAsianOrComplexFont(0xffff)
     , mnTextSize(0)
     , mbLastPortion(true)
-    , mpText(nullptr)
-    , mpFieldEntry(nullptr)
 {
     mXPropSet = rXPropSet;
 
@@ -96,8 +94,6 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
     , mnAsianOrComplexFont(0xffff)
     , mnCharEscapement(0)
     , mbLastPortion(bLast)
-    , mpText(nullptr)
-    , mpFieldEntry(nullptr)
 {
     OUString aString( rXTextRange->getString() );
     OUString aURL;
