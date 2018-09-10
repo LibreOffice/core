@@ -158,8 +158,7 @@ namespace vclcanvas
                         OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
                                    "monochrome (performance!)");
                         BitmapEx aMaskEx(aMask);
-                        BitmapMonochromeFilter filter(255);
-                        BitmapFilter::Filter(aMaskEx, filter);
+                        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
                         aMask = aMaskEx.GetBitmap();
                     }
 #endif

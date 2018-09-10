@@ -131,8 +131,7 @@ void setupMethodStubs( functor_vector_type& res )
     Bitmap            aBitmapBW( aBitmap );
 
     BitmapEx aTmpBmpEx(aBitmapBW);
-    BitmapEmbossGreyFilter filter(0, 0);
-    BitmapFilter::Filter(aTmpBmpEx, filter);
+    BitmapFilter::Filter(aTmpBmpEx, BitmapEmbossGreyFilter(0, 0));
     aBitmapBW = aTmpBmpEx.GetBitmap();
 
     Bitmap      aBitmapAlien( Size( 100, 100 ), 8 );

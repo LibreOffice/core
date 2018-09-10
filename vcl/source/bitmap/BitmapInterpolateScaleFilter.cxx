@@ -223,8 +223,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
     {
         // fallback to fast scale filter
         BitmapEx aBmpEx(aBitmap);
-        BitmapFastScaleFilter filter(mfScaleX, mfScaleY);
-        bRet = BitmapFilter::Filter(aBmpEx, filter);
+        bRet = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(mfScaleX, mfScaleY));
         aBitmap = aBmpEx.GetBitmap();
     }
 
