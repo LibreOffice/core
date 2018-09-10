@@ -119,7 +119,7 @@ void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_APPEND_FILTER);
-    rRequest->setArgument(PROP_FILTER_TITLE, sTitle );
+    rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
     rRequest->setArgument(PROP_FILTER_VALUE, sFilter);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
