@@ -71,9 +71,9 @@ struct DBusObject {
         return dbus_message_new_method_call( maBusName.getStr(), maPath.getStr(),
                                              maInterface.getStr(), pName );
     }
-    DBusObject *cloneForInterface( const char *pInterface )
+    std::unique_ptr<DBusObject> cloneForInterface( const char *pInterface )
     {
-        DBusObject *pObject = new DBusObject();
+        std::unique_ptr<DBusObject> pObject(new DBusObject());
 
         pObject->maBusName = maBusName;
         pObject->maPath = maPath;
@@ -83,7 +83,7 @@ struct DBusObject {
     }
 };
 
-static DBusObject* getBluez5Adapter(DBusConnection *pConnection);
+static std::unique_ptr<DBusObject> getBluez5Adapter(DBusConnection *pConnection);
 
 struct sd::BluetoothServer::Impl {
     // the glib mainloop running in the thread
@@ -100,12 +100,11 @@ struct sd::BluetoothServer::Impl {
         , maBluezVersion( UNKNOWN )
     { }
 
-    DBusObject *getAdapter()
+    std::unique_ptr<DBusObject> getAdapter()
     {
         if (mpService)
         {
-            DBusObject* pAdapter = mpService->cloneForInterface( "org.bluez.Adapter" );
-            return pAdapter;
+            return mpService->cloneForInterface( "org.bluez.Adapter" );
         }
         else if (spServer->mpImpl->maBluezVersion == BLUEZ5)
         {
@@ -199,7 +198,7 @@ isBluez5Available(DBusConnection *pConnection)
     return true;
 }
 
-static DBusObject*
+static std::unique_ptr<DBusObject>
 getBluez5Adapter(DBusConnection *pConnection)
 {
     DBusMessage *pMsg;
@@ -257,7 +256,7 @@ getBluez5Adapter(DBusConnection *pConnection)
                                                 dbus_message_unref(pMsg);
                                                 if (pPath)
                                                 {
-                                                    return new DBusObject( "org.bluez", pPath, pInterfaceType );
+                                                    return o3tl::make_unique<DBusObject>( "org.bluez", pPath, pInterfaceType );
                                                 }
                                                 assert(false); // We should already have pPath provided for us.
                                             }
@@ -1119,17 +1118,15 @@ void BluetoothServer::doEnsureDiscoverable()
         return;
 
     // Find out if we are discoverable already ...
-    DBusObject *pAdapter = spServer->mpImpl->getAdapter();
+    std::unique_ptr<DBusObject> pAdapter = spServer->mpImpl->getAdapter();
     if( !pAdapter )
         return;
 
-    bool bDiscoverable = getDiscoverable(spServer->mpImpl->mpConnection, pAdapter );
+    bool bDiscoverable = getDiscoverable(spServer->mpImpl->mpConnection, pAdapter.get() );
 
     spServer->meWasDiscoverable = bDiscoverable ? DISCOVERABLE : NOT_DISCOVERABLE;
     if( !bDiscoverable )
-        setDiscoverable( spServer->mpImpl->mpConnection, pAdapter, true );
-
-    delete pAdapter;
+        setDiscoverable( spServer->mpImpl->mpConnection, pAdapter.get(), true );
 #endif
 }
 
@@ -1138,11 +1135,10 @@ void BluetoothServer::doRestoreDiscoverable()
     if( spServer->meWasDiscoverable == NOT_DISCOVERABLE )
     {
 #ifdef LINUX_BLUETOOTH
-        DBusObject *pAdapter = spServer->mpImpl->getAdapter();
+        std::unique_ptr<DBusObject> pAdapter = spServer->mpImpl->getAdapter();
         if( !pAdapter )
             return;
-        setDiscoverable( spServer->mpImpl->mpConnection, pAdapter, false );
-        delete pAdapter;
+        setDiscoverable( spServer->mpImpl->mpConnection, pAdapter.get(), false );
 #endif
     }
     spServer->meWasDiscoverable = UNKNOWN;
