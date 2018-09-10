@@ -105,7 +105,7 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
 
     // display languages
     m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::ALL, true, true);
-    m_xLanguageLB->SelectEntryPos(0);
+    m_xLanguageLB->set_active(0);
 }
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
     }
 
     // create and add
-    LanguageType nLang = m_xLanguageLB->GetSelectedLanguage();
+    LanguageType nLang = m_xLanguageLB->get_active_id();
     try
     {
         // create new dictionary

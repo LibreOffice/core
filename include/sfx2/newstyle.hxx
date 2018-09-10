@@ -38,13 +38,13 @@ private:
 
     DECL_DLLPRIVATE_LINK(OKHdl, weld::TreeView&, void);
     DECL_DLLPRIVATE_LINK(OKClickHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBoxText&, void);
 
 public:
     SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool&);
     virtual ~SfxNewStyleDlg() override;
 
-    OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_text(), ' '); }
+    OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_active_text(), ' '); }
 };
 
 #endif

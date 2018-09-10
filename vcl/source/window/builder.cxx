@@ -148,9 +148,9 @@ weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWin
     return ImplGetSVData()->mpDefInst->GetFrameWeld(rWindow);
 }
 
-namespace
+namespace weld
 {
-    const OUString MetricToString(FieldUnit rUnit)
+    OUString MetricSpinButton::MetricToString(FieldUnit rUnit)
     {
         FieldUnitStringList* pList = ImplGetFieldUnits();
         if (pList)
@@ -165,10 +165,7 @@ namespace
 
         return OUString();
     }
-}
 
-namespace weld
-{
     IMPL_LINK_NOARG(MetricSpinButton, spin_button_value_changed, SpinButton&, void)
     {
         signal_value_changed();
@@ -374,13 +371,14 @@ namespace weld
     IMPL_LINK(EntryTreeView, ModifyHdl, weld::Entry&, rBox, void)
     {
         EntryModifyHdl(rBox);
-        m_aChangeHdl.Call(rBox);
+        m_aChangeHdl.Call(*this);
     }
 
     void EntryTreeView::set_size_request_by_digits_rows(int nDigits, int nRows)
     {
-        m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * nDigits,
-                                      m_xTreeView->get_height_rows(nRows));
+        int nWidth = nDigits == -1 ? -1 : m_xTreeView->get_approximate_digit_width() * nDigits;
+        int nHeight = nRows == -1 ? -1 : m_xTreeView->get_height_rows(nRows);
+        m_xTreeView->set_size_request(nWidth, nHeight);
     }
 }
 

@@ -255,32 +255,39 @@ protected:
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
 public:
-    virtual int get_active() const = 0;
-    virtual void set_active(int pos) = 0;
-    virtual OUString get_active_text() const = 0;
-    virtual OUString get_active_id() const = 0;
-    virtual void set_active_id(const OUString& rStr) = 0;
-    virtual OUString get_text(int pos) const = 0;
-    virtual OUString get_id(int pos) const = 0;
     virtual void insert_text(int pos, const OUString& rStr) = 0;
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
     void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
-    virtual void remove(int pos) = 0;
-    void remove_text(const OUString& rText) { remove(find_text(rText)); }
-    virtual int find_text(const OUString& rStr) const = 0;
-    void remove_id(const OUString& rId) { remove(find_id(rId)); }
-    virtual int find_id(const OUString& rId) const = 0;
+
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
     virtual void clear() = 0;
 
-    virtual void set_entry_error(bool bError) = 0;
+    //by index
+    virtual int get_active() const = 0;
+    virtual void set_active(int pos) = 0;
+    virtual void remove(int pos) = 0;
+
+    //by text
+    virtual OUString get_active_text() const = 0;
+    void set_active_text(const OUString& rStr) { set_active(find_text(rStr)); }
+    virtual OUString get_text(int pos) const = 0;
+    virtual int find_text(const OUString& rStr) const = 0;
+    void remove_text(const OUString& rText) { remove(find_text(rText)); }
+
+    //by id
+    virtual OUString get_active_id() const = 0;
+    virtual void set_active_id(const OUString& rStr) = 0;
+    virtual OUString get_id(int pos) const = 0;
+    virtual int find_id(const OUString& rId) const = 0;
+    void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
     void connect_changed(const Link<ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
 
-    void set_active_text(const OUString& rStr) { set_active(find_text(rStr)); }
-
+    //entry related
+    virtual bool has_entry() const = 0;
+    virtual void set_entry_error(bool bError) = 0;
     virtual void set_entry_text(const OUString& rStr) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
@@ -496,6 +503,7 @@ public:
     virtual void set_position(int nCursorPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
+    virtual void set_error(bool bShowError) = 0;
 
     virtual vcl::Font get_font() = 0;
     virtual void set_font(const vcl::Font& rFont) = 0;
@@ -581,6 +589,87 @@ public:
     static unsigned int Power10(unsigned int n);
 };
 
+// an entry + treeview pair, where the entry autocompletes from the
+// treeview list, and selecting something in the list sets the
+// entry to that text, i.e. a visually exploded ComboBox
+class VCL_DLLPUBLIC EntryTreeView : virtual public ComboBoxText
+{
+private:
+    DECL_DLLPRIVATE_LINK(ClickHdl, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
+    void EntryModifyHdl(weld::Entry& rEntry);
+
+protected:
+    std::unique_ptr<Entry> m_xEntry;
+    std::unique_ptr<TreeView> m_xTreeView;
+
+public:
+    EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
+
+    virtual void insert_text(int pos, const OUString& rStr) override
+    {
+        m_xTreeView->insert_text(rStr, pos);
+    }
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
+    {
+        m_xTreeView->insert(pos, rId, rStr, OUString());
+    }
+
+    virtual int get_count() const override { return m_xTreeView->n_children(); }
+    virtual void clear() override { m_xTreeView->clear(); }
+
+    //by index
+    virtual int get_active() const override { return m_xTreeView->get_selected_index(); }
+    virtual void set_active(int pos) override
+    {
+        m_xTreeView->select(pos);
+        m_xEntry->set_text(m_xTreeView->get_selected_text());
+    }
+    virtual void remove(int pos) override { m_xTreeView->remove(pos); }
+
+    //by text
+    virtual OUString get_active_text() const override { return m_xEntry->get_text(); }
+    virtual OUString get_text(int pos) const override { return m_xTreeView->get_text(pos); }
+    virtual int find_text(const OUString& rStr) const override
+    {
+        return m_xTreeView->find_text(rStr);
+    }
+
+    //by id
+    virtual OUString get_active_id() const override { return m_xTreeView->get_selected_id(); }
+    virtual void set_active_id(const OUString& rStr) override
+    {
+        m_xTreeView->select_id(rStr);
+        m_xEntry->set_text(m_xTreeView->get_selected_text());
+    }
+    virtual OUString get_id(int pos) const override { return m_xTreeView->get_id(pos); }
+    virtual int find_id(const OUString& rId) const override { return m_xTreeView->find_id(rId); }
+
+    //entry related
+    virtual bool has_entry() const override { return true; }
+    virtual void set_entry_error(bool bError) override { m_xEntry->set_error(bError); }
+    virtual void set_entry_text(const OUString& rStr) override { m_xEntry->set_text(rStr); }
+    virtual void select_entry_region(int nStartPos, int nEndPos) override
+    {
+        m_xEntry->select_region(nStartPos, nEndPos);
+    }
+    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
+    {
+        return m_xEntry->get_selection_bounds(rStartPos, rEndPos);
+    }
+    virtual void set_entry_completion(bool bEnable) override
+    {
+        assert(!bEnable && "not implemented yet");
+        (void)bEnable;
+    }
+    void connect_row_activated(const Link<TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_row_activated(rLink);
+    }
+
+    void set_size_request_by_digits_rows(int nDigits, int nRows);
+};
+
 class VCL_DLLPUBLIC MetricSpinButton
 {
 protected:
@@ -610,6 +699,8 @@ public:
             LINK(this, MetricSpinButton, spin_button_value_changed));
         spin_button_output(*m_xSpinButton);
     }
+
+    static OUString MetricToString(FieldUnit rUnit);
 
     FieldUnit get_unit() const { return m_eSrcUnit; }
 
@@ -901,33 +992,6 @@ public:
     virtual Point get_accessible_location() = 0;
 };
 
-// an entry + treeview pair, where the entry autocompletes from the
-// treeview list, and selecting something in the list sets the
-// entry to that text
-class VCL_DLLPUBLIC EntryTreeView
-{
-private:
-    DECL_DLLPRIVATE_LINK(ClickHdl, weld::TreeView&, void);
-    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
-    void EntryModifyHdl(weld::Entry& rEntry);
-
-protected:
-    Link<Entry&, void> m_aChangeHdl;
-    std::unique_ptr<Entry> m_xEntry;
-    std::unique_ptr<TreeView> m_xTreeView;
-
-public:
-    EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
-    OUString get_text() const { return m_xEntry->get_text(); }
-    void append_text(const OUString& rText) { m_xTreeView->append_text(rText); }
-    void connect_row_activated(const Link<TreeView&, void>& rLink)
-    {
-        m_xTreeView->connect_row_activated(rLink);
-    }
-    void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
-    void set_size_request_by_digits_rows(int nDigits, int nRows);
-};
-
 class VCL_DLLPUBLIC Menu
 {
 public:
@@ -1019,9 +1083,9 @@ public:
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
                       bool bTakeOwnership = false)
         = 0;
-    virtual std::unique_ptr<EntryTreeView> weld_entry_tree_view(const OString& entryid,
-                                                                const OString& treeviewid,
-                                                                bool bTakeOwnership = false)
+    virtual std::unique_ptr<EntryTreeView>
+    weld_entry_tree_view(const OString& containerid, const OString& entryid,
+                         const OString& treeviewid, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Menu> weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;

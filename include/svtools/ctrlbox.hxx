@@ -411,7 +411,12 @@ public:
     virtual void    Modify() override;
     virtual Size    GetOptimalSize() const override;
 
-    void            SetText( const OUString& rText ) override;
+    void            SetText( const OUString& rText ) override
+    {
+        aLastStyle = rText;
+        ComboBox::SetText( rText );
+    }
+
     void            Fill( const OUString& rName, const FontList* pList );
 
 private:
@@ -419,11 +424,27 @@ private:
     FontStyleBox&   operator =( const FontStyleBox& ) = delete;
 };
 
-inline void FontStyleBox::SetText( const OUString& rText )
+class SVT_DLLPUBLIC SvtFontStyleBox
 {
-    aLastStyle = rText;
-    ComboBox::SetText( rText );
-}
+    std::unique_ptr<weld::ComboBoxText> m_xComboBox;
+public:
+    SvtFontStyleBox(std::unique_ptr<weld::ComboBoxText> p);
+
+    void Fill(const OUString& rName, const FontList* pList);
+
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
+    OUString get_active_text() const { return m_xComboBox->get_active_text(); }
+    void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
+    void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }
+    void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
+    void save_value() { m_xComboBox->save_value(); }
+    OUString const& get_saved_value() const { return m_xComboBox->get_saved_value(); }
+    int get_count() const { return m_xComboBox->get_count(); }
+    int find_text(const OUString& rStr) const { return m_xComboBox->find_text(rStr); }
+private:
+    SvtFontStyleBox(const SvtFontStyleBox& ) = delete;
+    SvtFontStyleBox& operator=(const SvtFontStyleBox&) = delete;
+};
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
@@ -473,6 +494,73 @@ private:
                     FontSizeBox( const FontSizeBox& ) = delete;
     FontSizeBox&    operator =( const FontSizeBox& ) = delete;
 };
+
+class SVT_DLLPUBLIC SvtFontSizeBox
+{
+    FontMetric      aFontMetric;
+    const FontList* pFontList;
+    int             nSavedValue;
+    int             nMin;
+    int             nMax;
+    FieldUnit       eUnit;
+    sal_uInt16      nDecimalDigits;
+    sal_uInt16      nRelMin;
+    sal_uInt16      nRelMax;
+    sal_uInt16      nRelStep;
+    short           nPtRelMin;
+    short           nPtRelMax;
+    short           nPtRelStep;
+    bool            bRelativeMode:1,
+                    bRelative:1,
+                    bPtRelative:1,
+                    bStdSize:1;
+    Link<weld::ComboBoxText&, void> m_aChangeHdl;
+    std::unique_ptr<weld::ComboBoxText> m_xComboBox;
+
+    sal_uInt16 GetDecimalDigits() const { return nDecimalDigits; }
+    void SetDecimalDigits(sal_uInt16 nDigits) { nDecimalDigits = nDigits; }
+    FieldUnit GetUnit() const { return eUnit; }
+    void SetUnit(FieldUnit _eUnit) { eUnit = _eUnit; }
+    void SetRange(int nNewMin, int nNewMax) { nMin = nNewMin; nMax = nNewMax; }
+    void SetValue(int nNewValue, FieldUnit eInUnit);
+
+    void InsertValue(int i);
+
+    OUString format_number(int nValue) const;
+
+    DECL_LINK(ModifyHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ReformatHdl, weld::Widget&, void);
+public:
+    SvtFontSizeBox(std::unique_ptr<weld::ComboBoxText> p);
+
+    void Fill(const FontMetric* pFontMetric, const FontList* pList);
+
+    void EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep = 5);
+    void EnablePtRelativeMode(short nMin, short nMax, short nStep = 10);
+    bool IsRelativeMode() const { return bRelativeMode; }
+    void SetRelative( bool bRelative );
+    bool IsRelative() const { return bRelative; }
+    void SetPtRelative( bool bPtRel )
+    {
+        bPtRelative = bPtRel;
+        SetRelative(true);
+    }
+    bool IsPtRelative() const { return bPtRelative; }
+
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    OUString get_active_text() const { return m_xComboBox->get_active_text(); }
+    void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
+    void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
+    int get_value() const;
+    void set_value(int nValue);
+    void save_value() { nSavedValue = get_value(); }
+    int get_saved_value() const { return nSavedValue; }
+
+private:
+    SvtFontSizeBox(const SvtFontSizeBox&) = delete;
+    SvtFontSizeBox& operator=(const SvtFontSizeBox&) = delete;
+};
+
 
 #endif // INCLUDED_SVTOOLS_CTRLBOX_HXX
 

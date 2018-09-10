@@ -3404,6 +3404,14 @@ public:
         return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
+    virtual void set_error(bool bError) override
+    {
+        if (bError)
+            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+        else
+            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
@@ -4772,6 +4780,11 @@ public:
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
     }
 
+    virtual bool has_entry() const override
+    {
+        return gtk_combo_box_get_has_entry(GTK_COMBO_BOX(m_pComboBoxText));
+    }
+
     virtual void set_entry_error(bool bError) override
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBoxText));
@@ -4867,6 +4880,27 @@ public:
             g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
         g_signal_handler_disconnect(m_pComboBoxText, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pComboBoxText, m_nPopupShownSignalId);
+    }
+};
+
+class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual weld::EntryTreeView
+{
+private:
+    GtkInstanceTreeView* m_pTreeView;
+public:
+    GtkInstanceEntryTreeView(GtkContainer* pContainer, bool bTakeOwnership, std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+        : EntryTreeView(std::move(xEntry), std::move(xTreeView))
+        , GtkInstanceContainer(pContainer, bTakeOwnership)
+        , m_pTreeView(dynamic_cast<GtkInstanceTreeView*>(m_xTreeView.get()))
+    {
+        assert(m_pTreeView);
+    }
+
+    virtual void make_sorted() override
+    {
+        GtkWidget* pTreeView = m_pTreeView->getWidget();
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pTreeView);
+        gtk_tree_sortable_set_sort_column_id(pSortable, 1, GTK_SORT_ASCENDING);
     }
 };
 
@@ -5352,9 +5386,13 @@ public:
         return o3tl::make_unique<GtkInstanceTreeView>(pTreeView, bTakeOwnership);
     }
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
     {
-        return o3tl::make_unique<weld::EntryTreeView>(weld_entry(entryid, bTakeOwnership), weld_tree_view(treeviewid, bTakeOwnership));
+        GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, containerid.getStr()));
+        if (!pContainer)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
+        return o3tl::make_unique<GtkInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership), weld_tree_view(treeviewid, bTakeOwnership));
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
