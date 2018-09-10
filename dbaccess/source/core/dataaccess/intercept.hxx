@@ -104,7 +104,6 @@ private:
 
     css::uno::Sequence< OUString >      m_aInterceptedURL;
 
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2>    m_pDisposeEventListeners;
     std::unique_ptr<PropertyChangeListenerContainer>           m_pStatCL;
 };
 

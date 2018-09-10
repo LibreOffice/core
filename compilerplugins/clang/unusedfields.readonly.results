@@ -154,7 +154,7 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/options/optcolor.cxx:254
+cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
@@ -172,6 +172,8 @@ dbaccess/source/core/api/RowSetBase.hxx:96
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:64
     dbaccess::LocalNameApproval m_aErrors ::connectivity::SQLError
+dbaccess/source/core/dataaccess/intercept.hxx:107
+    dbaccess::OInterceptor m_pDisposeEventListeners std::unique_ptr<comphelper::OInterfaceContainerHelper2>
 dbaccess/source/core/inc/ContentHelper.hxx:108
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:36
@@ -236,7 +238,7 @@ filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:143
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
-framework/inc/helper/uiconfigelementwrapperbase.hxx:127
+framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
 framework/inc/xml/menudocumenthandler.hxx:133
     framework::OReadMenuBarHandler m_bMenuMode _Bool
@@ -260,23 +262,27 @@ include/basic/sbstar.hxx:57
     StarBASIC aBreakHdl Link<class StarBASIC *, enum BasicDebugFlags>
 include/connectivity/DriversConfig.hxx:76
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
+include/connectivity/sdbcx/VCatalog.hxx:67
+    connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
 include/connectivity/sdbcx/VDescriptor.hxx:56
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
+include/connectivity/sdbcx/VGroup.hxx:58
+    connectivity::sdbcx::OGroup m_pUsers rtl::Reference<OUsers>
+include/connectivity/sdbcx/VUser.hxx:56
+    connectivity::sdbcx::OUser m_pGroups rtl::Reference<OGroups>
 include/connectivity/sqlparse.hxx:115
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
 include/drawinglayer/processor3d/defaultprocessor3d.hxx:94
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/editeng/brushitem.hxx:53
     SvxBrushItem maSecOptions class SvtSecurityOptions
-include/editeng/charsetcoloritem.hxx:35
-    SvxCharSetColorItem eFrom rtl_TextEncoding
-include/filter/msfilter/svdfppt.hxx:711
+include/filter/msfilter/svdfppt.hxx:710
     PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel [5]
-include/filter/msfilter/svdfppt.hxx:882
+include/filter/msfilter/svdfppt.hxx:881
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:883
+include/filter/msfilter/svdfppt.hxx:882
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:884
+include/filter/msfilter/svdfppt.hxx:883
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:220
     oox::core::ContextHandler2Helper mnRootStackSize size_t
@@ -337,7 +343,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -364,7 +370,7 @@ include/vcl/filter/pdfdocument.hxx:200
     vcl::filter::PDFNameElement m_nLength sal_uInt64
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:179
+include/vcl/opengl/OpenGLContext.hxx:177
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 include/vcl/ppdparser.hxx:134
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
@@ -410,33 +416,33 @@ sal/osl/unx/process.cxx:828
     osl_procStat sigcatch char [24]
 sal/rtl/alloc_arena.hxx:100
     rtl_arena_st m_hash_table_0 struct rtl_arena_segment_type *[64]
-sal/rtl/digest.cxx:181
-    DigestContextMD2 m_state sal_uInt32 [16]
 sal/rtl/digest.cxx:182
+    DigestContextMD2 m_state sal_uInt32 [16]
+sal/rtl/digest.cxx:183
     DigestContextMD2 m_chksum sal_uInt32 [16]
 sal/rtl/uuid.cxx:64
     UUID clock_seq_low sal_uInt8
 sal/rtl/uuid.cxx:65
     UUID node sal_uInt8 [6]
-sc/inc/compiler.hxx:128
+sc/inc/compiler.hxx:127
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
-sc/inc/compiler.hxx:129
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:126:9)
-sc/inc/compiler.hxx:134
+sc/inc/compiler.hxx:128
+    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
+sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
-sc/source/core/inc/adiasync.hxx:41
+sc/source/core/inc/adiasync.hxx:42
     ScAddInAsync::(anonymous) pStr class rtl::OUString *
-sc/source/core/inc/interpre.hxx:105
+sc/source/core/inc/interpre.hxx:99
     ScTokenStack pPointer const formula::FormulaToken *[512]
 sc/source/filter/inc/autofilterbuffer.hxx:178
     oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
 sc/source/filter/inc/commentsbuffer.hxx:42
     oox::xls::CommentModel maAnchor css::awt::Rectangle
-sc/source/filter/inc/defnamesbuffer.hxx:84
+sc/source/filter/inc/defnamesbuffer.hxx:85
     oox::xls::DefinedNameBase maRefAny css::uno::Any
 sc/source/filter/inc/htmlpars.hxx:56
     ScHTMLStyles maEmpty const class rtl::OUString
@@ -498,11 +504,13 @@ sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:42
     pdfi::StyleContainer::Style Contents class rtl::OUString
-sfx2/source/appl/lnkbase2.cxx:96
+sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
+sfx2/source/doc/docfile.cxx:270
+    SfxMedium_Impl pOrigFilter std::shared_ptr<const SfxFilter>
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
-sot/source/sdstor/ucbstorage.cxx:408
+sot/source/sdstor/ucbstorage.cxx:407
     UCBStorageStream_Impl m_aKey class rtl::OString
 starmath/source/view.cxx:856
     SmViewShell_Impl aOpts class SvtMiscOptions
@@ -670,6 +678,8 @@ vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
 vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase _Bool
+vcl/inc/svdata.hxx:295
+    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
 vcl/inc/unx/saldisp.hxx:288
@@ -726,9 +736,9 @@ vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:301
+vcl/source/gdi/pdfwriter_impl.hxx:299
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
-vcl/source/window/menuitemlist.hxx:55
+vcl/source/window/menuitemlist.hxx:57
     MenuItemData aAccessibleName class rtl::OUString
 vcl/unx/generic/print/bitmap_gfx.cxx:67
     psp::HexEncoder mpFileBuffer sal_Char [16400]

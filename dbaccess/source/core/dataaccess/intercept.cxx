@@ -59,9 +59,6 @@ void OInterceptor::dispose()
 
     osl::MutexGuard aGuard(m_aMutex);
 
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
-
     if ( m_pStatCL )
         m_pStatCL->disposeAndClear( aEvt );
 
