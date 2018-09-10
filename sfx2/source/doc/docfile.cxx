@@ -200,10 +200,17 @@ sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
     return nRet;
 }
 
-/// Determines if rURL is a non-linked (symlink or hardlink) file:// URL.
-bool IsNotLinkedFile(const OUString& rURL)
+/// Determines if rURL is safe to move or not.
+bool IsFileMovable(const OUString& rURL)
 {
+#ifdef MACOSX
+    (void)rURL;
+    // Hide extension macOS-specific file property would be lost.
+    return false;
+#else
+
     if (!comphelper::isFileUrl(rURL))
+        // Not a file:// URL.
         return false;
 
 #ifdef UNX
@@ -221,6 +228,7 @@ bool IsNotLinkedFile(const OUString& rURL)
 #endif
 
     return true;
+#endif
 }
 
 } // anonymous namespace
@@ -1837,7 +1845,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                 sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
-                if (IsNotLinkedFile(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                if (IsFileMovable(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
                 {
                     if (nAttributes)
                         // Adjust attributes, source might be created with
