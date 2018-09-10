@@ -670,7 +670,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags ))
         return ;
 
-    SwCalc* pCalc = nullptr;
+    std::unique_ptr<SwCalc> pCalc;
 
     if( pFieldType )
     {
@@ -704,7 +704,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         continue;
 
                     if( !pCalc )
-                        pCalc = new SwCalc( m_rDoc );
+                        pCalc.reset(new SwCalc( m_rDoc ));
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
@@ -769,7 +769,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 {
                     double nValue;
                     if( !pCalc )
-                        pCalc = new SwCalc( m_rDoc );
+                        pCalc.reset(new SwCalc( m_rDoc ));
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
@@ -829,8 +829,6 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
             }
         }
     }
-
-    delete pCalc;
 }
 
 void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUpdRefFields )
