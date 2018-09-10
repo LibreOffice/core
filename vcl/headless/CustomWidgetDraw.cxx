@@ -16,6 +16,7 @@
 #include <tools/svlibrary.h>
 #include <osl/module.hxx>
 #include <cairo.h>
+#include <svdata.hxx>
 
 namespace vcl
 {
@@ -37,6 +38,14 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
 
         if (fCreateWidgetThemeLibraryFunction)
             s_pWidgetImplementation = (*fCreateWidgetThemeLibraryFunction)();
+
+        // Init
+        if (s_pWidgetImplementation)
+        {
+            ImplSVData* pSVData = ImplGetSVData();
+            pSVData->maNWFData.mbNoFocusRects = true;
+            pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
+        }
     }
 }
 
