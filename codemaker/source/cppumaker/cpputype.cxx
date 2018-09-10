@@ -3035,7 +3035,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
 
 void ExceptionType::dumpDeclaration(FileStream & out)
 {
-    out << "\nclass CPPU_GCC_DLLPUBLIC_EXPORT " << id_;
+    out << "\nclass CPPU_GCC_DLLPUBLIC_EXPORT SAL_WARN_UNUSED " << id_;
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << " : public " << codemaker::cpp::scopedCppName(u2b(base));
