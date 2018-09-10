@@ -3179,6 +3179,18 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
     m_xBtnUpdater->Update(rColor.first);
+
+    // Also show the current color as QuickHelpText
+    OUString colorSuffix = " (%1)";
+    colorSuffix = colorSuffix.replaceFirst("%1", rColor.second);
+    OUString colorHelpText = vcl::CommandInfoProvider::GetLabelForCommand( getCommandURL(), getModuleName() ) + colorSuffix;
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
+
+    pToolBox->SetQuickHelpText(nId, colorHelpText);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
