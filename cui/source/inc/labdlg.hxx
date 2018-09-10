@@ -100,21 +100,18 @@ public:
 
 // class SvxCaptionTabDialog ---------------------------------------------
 struct SvxSwFrameValidation;
-class SvxCaptionTabDialog : public SfxTabDialog
+class SvxCaptionTabDialog : public SfxTabDialogController
 {
 private:
     const SdrView* pView;
     SvxAnchorIds nAnchorCtrls;
-    sal_uInt16 m_nSwPosSizePageId;
-    sal_uInt16 m_nPositionSizePageId;
-    sal_uInt16 m_nCaptionPageId;
 
     Link<SvxSwFrameValidation&,void> aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-    SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pView,
+    SvxCaptionTabDialog(weld::Window* pParent, const SdrView* pView,
                             SvxAnchorIds nAnchorTypes);
 
     /// link for the Writer to validate positions

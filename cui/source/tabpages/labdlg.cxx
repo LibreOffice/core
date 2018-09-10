@@ -473,37 +473,34 @@ void SvxCaptionTabPage::FillValueSet()
     m_xCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_3, m_aBmpCapTypes[2] );
 }
 
-SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pSdrView,
+SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* pSdrView,
     SvxAnchorIds nAnchorTypes)
-    : SfxTabDialog( pParent, "CalloutDialog", "cui/ui/calloutdialog.ui")
+    : SfxTabDialogController(pParent, "cui/ui/calloutdialog.ui", "CalloutDialog")
     , pView(pSdrView)
     , nAnchorCtrls(nAnchorTypes)
-    , m_nSwPosSizePageId(0)
-    , m_nPositionSizePageId(0)
-    , m_nCaptionPageId(0)
 {
     assert(pView); // No valid View transferred!
 
     //different positioning page in Writer
     if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
-        m_nSwPosSizePageId = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,
+        AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,
             SvxSwPosSizeTabPage::GetRanges );
         RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
     }
     else
     {
-        m_nPositionSizePageId = AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create,
+        AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create,
             SvxPositionSizeTabPage::GetRanges );
         RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
     }
-    m_nCaptionPageId = AddTabPage("RID_SVXPAGE_CAPTION", SvxCaptionTabPage::Create,
+    AddTabPage("RID_SVXPAGE_CAPTION", SvxCaptionTabPage::Create,
         SvxCaptionTabPage::GetRanges );
 }
 
-void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxCaptionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nPositionSizePageId)
+    if (rId == "RID_SVXPAGE_POSITION_SIZE")
     {
         static_cast<SvxPositionSizeTabPage&>( rPage ).SetView( pView );
         static_cast<SvxPositionSizeTabPage&>( rPage ).Construct();
@@ -513,13 +510,13 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         if( nAnchorCtrls & SvxAnchorIds::NoProtect )
             static_cast<SvxPositionSizeTabPage&>( rPage ).DisableProtect();
     }
-    else if (nId == m_nSwPosSizePageId)
+    else if (rId == "RID_SVXPAGE_SWPOSSIZE")
     {
         SvxSwPosSizeTabPage& rSwPage = static_cast<SvxSwPosSizeTabPage&>(rPage);
         rSwPage.EnableAnchorTypes(nAnchorCtrls);
         rSwPage.SetValidateFramePosLink( aValidateLink );
     }
-    else if (nId == m_nCaptionPageId)
+    else if (rId == "RID_SVXPAGE_CAPTION")
     {
         static_cast<SvxCaptionTabPage&>( rPage ).SetView( pView );
         static_cast<SvxCaptionTabPage&>( rPage ).Construct();
@@ -530,6 +527,5 @@ void SvxCaptionTabDialog::SetValidateFramePosLink( const Link<SvxSwFrameValidati
 {
     aValidateLink = rLink;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
