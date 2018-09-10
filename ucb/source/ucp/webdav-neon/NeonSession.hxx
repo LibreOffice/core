@@ -204,6 +204,13 @@ public:
 
     bool isDomainMatch( const OUString& certHostName );
 
+    int CertificationNotify(const ne_ssl_certificate *cert);
+
+    int NeonAuth(const char* inAuthProtocol, const char* inRealm,
+                 int attempt, char* inoutUserName, char * inoutPassWord);
+
+    void PreSendRequest(ne_request* req, ne_buffer* headers);
+
 private:
     friend class NeonLockStore;
 
