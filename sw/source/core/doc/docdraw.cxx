@@ -312,11 +312,11 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >* pFormatsAndObjs( nullptr );
+    std::unique_ptr<std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >[]> pFormatsAndObjs;
     const size_t nMarkCount( rMrkList.GetMarkCount() );
     if ( nMarkCount )
     {
-        pFormatsAndObjs = new std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >[nMarkCount];
+        pFormatsAndObjs.reset( new std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >[nMarkCount] );
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->getParentSdrObjectFromSdrObject() )
         {
@@ -383,7 +383,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
             }
         }
     }
-    delete [] pFormatsAndObjs;
 }
 
 bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
