@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_340f9ce2",
+        "filename": "fpicker/source/win32/filepicker/VistaFilePicker.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-09-10T08:21:52Z",
+      "side": 1,
+      "message": "Originally the file picker was called \n\n\"com.sun.star.comp.fpicker.VistaFileDialog\"\n\nnow the code returns \n\n#define FILE_PICKER_IMPL_NAME \"com.sun.star.ui.dialogs.Win32FilePicker\"\nor\n#define FOLDER_PICKER_IMPL_NAME \"com.sun.star.ui.dialogs.Win32FolderPicker\"\n\ndepending on the picker type, since there isn\u0027t any other implementation left.\n\nThe folder picker was always FOLDER_PICKER_IMPL_NAME, that\u0027s why the original services test failed, when I dropped the extra folder pricker type. The file picker service name was never tested.",
+      "revId": "2129753120d8101f0f484571b6a8cd8eb4d4629c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
