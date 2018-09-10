@@ -250,7 +250,7 @@ public:
 
     const ::accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
 
-    SwAccessibleObjShape_Impl *Copy( size_t& rSize,
+    std::unique_ptr<SwAccessibleObjShape_Impl[]> Copy( size_t& rSize,
         const SwFEShell *pFESh,
         SwAccessibleObjShape_Impl  **pSelShape ) const;
 
@@ -271,12 +271,12 @@ SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
         static_cast < SwDrawModellListener_Impl * >( xBrd.get() )->Dispose();
 }
 
-SwAccessibleObjShape_Impl
-    *SwAccessibleShapeMap_Impl::Copy(
+std::unique_ptr<SwAccessibleObjShape_Impl[]>
+    SwAccessibleShapeMap_Impl::Copy(
             size_t& rSize, const SwFEShell *pFESh,
             SwAccessibleObjShape_Impl **pSelStart ) const
 {
-    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
 
     size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
@@ -284,12 +284,12 @@ SwAccessibleObjShape_Impl
 
     if( rSize > 0 )
     {
-        pShapes = new SwAccessibleObjShape_Impl[rSize];
+        pShapes.reset(new SwAccessibleObjShape_Impl[rSize]);
 
         const_iterator aIter = maMap.cbegin();
         const_iterator aEndIter = maMap.cend();
 
-        SwAccessibleObjShape_Impl *pShape = pShapes;
+        SwAccessibleObjShape_Impl *pShape = pShapes.get();
         pSelShape = &(pShapes[rSize]);
         while( aIter != aEndIter )
         {
@@ -1099,7 +1099,7 @@ void SwAccessibleMap::InvalidateShapeSelection()
 //3.find the paragraph objects and set the selected state.
 void SwAccessibleMap::InvalidateShapeInParaSelection()
 {
-    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
@@ -1226,7 +1226,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     }
                     if( !bMarked )
                     {
-                        SwAccessibleObjShape_Impl  *pShape = pShapes;
+                        SwAccessibleObjShape_Impl  *pShape = pShapes.get();
                         size_t nNumShapes = nShapes;
                         while( nNumShapes )
                         {
@@ -1247,7 +1247,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         }//else
     }
 
-    delete[] pShapes;
+    pShapes.reset();
 
     //Checked for FlyFrame
     if (mpFrameMap)
@@ -1416,7 +1416,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 //Marge with DoInvalidateShapeFocus
 void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=false*/)
 {
-    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
@@ -1447,7 +1447,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
 
     vcl::Window *pWin = GetShell()->GetWin();
     bool bFocused = pWin && pWin->HasFocus();
-    SwAccessibleObjShape_Impl *pShape = pShapes;
+    SwAccessibleObjShape_Impl *pShape = pShapes.get();
     int nShapeCount = nShapes;
     while( nShapeCount )
     {
@@ -1476,7 +1476,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         }
     }
 
-    pShape = pShapes;
+    pShape = pShapes.get();
 
     while( nShapes )
     {
@@ -1580,9 +1580,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             }
         }
     }
-
-    delete[] pShapes;
-
 }
 
 //Marge with DoInvalidateShapeSelection
