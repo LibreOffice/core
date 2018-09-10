@@ -275,7 +275,6 @@ public:
     std::unique_ptr<SvStream> m_pInStream;
     std::unique_ptr<SvStream> m_pOutStream;
 
-    std::shared_ptr<const SfxFilter> pOrigFilter;
     OUString    aOrigURL;
     DateTime         aExpireTime;
     SfxFrameWeakRef  wLoadTargetFrame;
@@ -2798,13 +2797,6 @@ const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
 {
     return pImpl->m_pFilter;
 }
-
-
-std::shared_ptr<const SfxFilter> const & SfxMedium::GetOrigFilter() const
-{
-    return pImpl->pOrigFilter ? pImpl->pOrigFilter : pImpl->m_pFilter;
-}
-
 
 sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter )
 {
