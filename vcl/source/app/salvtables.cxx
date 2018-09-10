@@ -187,11 +187,13 @@ private:
     DECL_LINK(FocusOutListener, VclWindowEvent&, void);
 
     bool m_bTakeOwnership;
+    int m_nBlockNotify;
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, bool bTakeOwnership)
         : m_xWidget(pWidget)
         , m_bTakeOwnership(bTakeOwnership)
+        , m_nBlockNotify(0)
     {
     }
 
@@ -434,6 +436,21 @@ public:
     vcl::Window* getWidget()
     {
         return m_xWidget;
+    }
+
+    void disable_notify_events()
+    {
+        ++m_nBlockNotify;
+    }
+
+    bool notify_events_disabled()
+    {
+        return m_nBlockNotify != 0;
+    }
+
+    void enable_notify_events()
+    {
+        --m_nBlockNotify;
     }
 
     SystemWindow* getSystemWindow()
@@ -1143,7 +1160,6 @@ class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::Ra
 {
 private:
     VclPtr<::RadioButton> m_xRadioButton;
-    bool m_bBlockNotify;
 
     DECL_LINK(ToggleHdl, ::RadioButton&, void);
 
@@ -1151,16 +1167,15 @@ public:
     SalInstanceRadioButton(::RadioButton* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xRadioButton(pButton)
-        , m_bBlockNotify(false)
     {
         m_xRadioButton->SetToggleHdl(LINK(this, SalInstanceRadioButton, ToggleHdl));
     }
 
     virtual void set_active(bool active) override
     {
-        m_bBlockNotify = true;
+        disable_notify_events();
         m_xRadioButton->Check(active);
-        m_bBlockNotify = false;
+        enable_notify_events();
     }
 
     virtual bool get_active() const override
@@ -1186,7 +1201,7 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
 {
-    if (m_bBlockNotify)
+    if (notify_events_disabled())
         return;
     signal_toggled();
 }
@@ -1195,7 +1210,6 @@ class SalInstanceToggleButton : public SalInstanceButton, public virtual weld::T
 {
 private:
     VclPtr<PushButton> m_xToggleButton;
-    bool m_bBlockNotify;
 
     DECL_LINK(ToggleListener, VclWindowEvent&, void);
 
@@ -1203,7 +1217,6 @@ public:
     SalInstanceToggleButton(PushButton* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xToggleButton(pButton)
-        , m_bBlockNotify(false)
     {
     }
 
@@ -1216,9 +1229,9 @@ public:
 
     virtual void set_active(bool active) override
     {
-        m_bBlockNotify = true;
+        disable_notify_events();
         m_xToggleButton->Check(active);
-        m_bBlockNotify = false;
+        enable_notify_events();
     }
 
     virtual bool get_active() const override
@@ -1228,9 +1241,9 @@ public:
 
     virtual void set_inconsistent(bool inconsistent) override
     {
-        m_bBlockNotify = false;
+        disable_notify_events();
         m_xToggleButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
-        m_bBlockNotify = true;
+        enable_notify_events();
     }
 
     virtual bool get_inconsistent() const override
@@ -1247,7 +1260,7 @@ public:
 
 IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
 {
-    if (m_bBlockNotify)
+    if (notify_events_disabled())
         return;
     if (rEvent.GetId() == VclEventId::PushbuttonToggle)
         signal_toggled();
@@ -1257,24 +1270,22 @@ class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::Ch
 {
 private:
     VclPtr<CheckBox> m_xCheckButton;
-    bool m_bBlockNotify;
 
     DECL_LINK(ToggleHdl, CheckBox&, void);
 public:
     SalInstanceCheckButton(CheckBox* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xCheckButton(pButton)
-        , m_bBlockNotify(false)
     {
         m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
     }
 
     virtual void set_active(bool active) override
     {
-        m_bBlockNotify = true;
+        disable_notify_events();
         m_xCheckButton->EnableTriState(false);
         m_xCheckButton->Check(active);
-        m_bBlockNotify = false;
+        enable_notify_events();
     }
 
     virtual bool get_active() const override
@@ -1284,10 +1295,10 @@ public:
 
     virtual void set_inconsistent(bool inconsistent) override
     {
-        m_bBlockNotify = true;
+        disable_notify_events();
         m_xCheckButton->EnableTriState(true);
         m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
-        m_bBlockNotify = false;
+        enable_notify_events();
     }
 
     virtual bool get_inconsistent() const override
@@ -1303,7 +1314,7 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
 {
-    if (m_bBlockNotify)
+    if (notify_events_disabled())
         return;
     m_xCheckButton->EnableTriState(false);
     signal_toggled();
@@ -1455,6 +1466,14 @@ public:
         return !m_xEntry->IsReadOnly();
     }
 
+    virtual void set_error(bool bError) override
+    {
+        if (bError)
+            m_xEntry->SetControlForeground(Color(0xf0, 0, 0));
+        else
+            m_xEntry->SetControlForeground();
+    }
+
     virtual vcl::Font get_font() override
     {
         return m_xEntry->GetFont();
@@ -1472,9 +1491,14 @@ public:
         weld::Entry::connect_cursor_position(rLink);
     }
 
-    void SetAutocompleteHdl(const Link<Edit&,void>& rLink)
+    Edit& getEntry()
     {
-        m_xEntry->SetAutocompleteHdl(rLink);
+        return *m_xEntry;
+    }
+
+    void fire_signal_changed()
+    {
+        signal_changed();
     }
 
     virtual ~SalInstanceEntry() override
@@ -1660,6 +1684,11 @@ public:
         return m_xTreeView->CalcWindowSizePixel(nRows);
     }
 
+    ListBox& getTreeView()
+    {
+        return *m_xTreeView;
+    }
+
     virtual ~SalInstanceTreeView() override
     {
         m_xTreeView->SetDoubleClickHdl(Link<ListBox&, void>());
@@ -1669,11 +1698,15 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, ListBox&, void)
 {
+    if (notify_events_disabled())
+        return;
     signal_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, ListBox&, void)
 {
+    if (notify_events_disabled())
+        return;
     signal_row_activated();
 }
 
@@ -2205,6 +2238,11 @@ public:
         m_xComboBoxText->RemoveEntry(pos);
     }
 
+    virtual bool has_entry() const override
+    {
+        return false;
+    }
+
     virtual void set_entry_error(bool /*bError*/) override
     {
         assert(false);
@@ -2253,6 +2291,11 @@ public:
     {
         m_xComboBoxText->SetModifyHdl(LINK(this, SalInstanceComboBoxTextWithEdit, ChangeHdl));
         m_xComboBoxText->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxTextWithEdit, EntryActivateHdl));
+    }
+
+    virtual bool has_entry() const override
+    {
+        return true;
     }
 
     virtual void set_entry_error(bool bError) override
@@ -2313,24 +2356,66 @@ IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, EntryActivateHdl, Edit&, void)
     m_aEntryActivateHdl.Call(*this);
 }
 
-class SalInstanceEntryTreeView : public weld::EntryTreeView
+class SalInstanceEntryTreeView : public SalInstanceContainer, public virtual weld::EntryTreeView
 {
 private:
     DECL_LINK(AutocompleteHdl, Edit&, void);
+    DECL_LINK(KeyPressListener, VclWindowEvent&, void);
     SalInstanceEntry* m_pEntry;
+    SalInstanceTreeView* m_pTreeView;
 public:
-    SalInstanceEntryTreeView(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+    SalInstanceEntryTreeView(vcl::Window *pContainer, bool bTakeOwnership, std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
         : EntryTreeView(std::move(xEntry), std::move(xTreeView))
+        , SalInstanceContainer(pContainer, bTakeOwnership)
         , m_pEntry(dynamic_cast<SalInstanceEntry*>(m_xEntry.get()))
+        , m_pTreeView(dynamic_cast<SalInstanceTreeView*>(m_xTreeView.get()))
     {
-        assert(m_pEntry);
-        m_pEntry->SetAutocompleteHdl(LINK(this, SalInstanceEntryTreeView, AutocompleteHdl));
+        assert(m_pEntry && m_pTreeView);
+
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.SetAutocompleteHdl(LINK(this, SalInstanceEntryTreeView, AutocompleteHdl));
+        rEntry.AddEventListener(LINK(this, SalInstanceEntryTreeView, KeyPressListener));
     }
-    ~SalInstanceEntryTreeView()
+
+    virtual void make_sorted() override
     {
-        m_pEntry->SetAutocompleteHdl(Link<Edit&, void>());
+        vcl::Window *pTreeView = m_pTreeView->getWidget();
+        pTreeView->SetStyle(pTreeView->GetStyle() | WB_SORT);
+    }
+
+    virtual void set_entry_completion(bool bEnable) override
+    {
+        assert(!bEnable && "not implemented yet"); (void) bEnable;
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.SetAutocompleteHdl(Link<Edit&, void>());
+    }
+
+    virtual ~SalInstanceEntryTreeView() override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.RemoveEventListener(LINK(this, SalInstanceEntryTreeView, KeyPressListener));
+        rEntry.SetAutocompleteHdl(Link<Edit&, void>());
     }
 };
+
+IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::WindowKeyInput)
+        return;
+    const KeyEvent& rKeyEvent = *static_cast<KeyEvent*>(rEvent.GetData());
+    sal_uInt16 nKeyCode = rKeyEvent.GetKeyCode().GetCode();
+    if (nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP || nKeyCode == KEY_PAGEDOWN)
+    {
+        m_pTreeView->disable_notify_events();
+        ListBox& rListBox = m_pTreeView->getTreeView();
+        NotifyEvent aNotifyEvt(MouseNotifyEvent::KEYINPUT, reinterpret_cast<vcl::Window*>(rListBox.mpImplWin.get()), &rKeyEvent);
+        rListBox.PreNotify(aNotifyEvt);
+        m_xEntry->set_text(m_xTreeView->get_selected_text());
+        m_xEntry->select_region(0, -1);
+        m_pTreeView->enable_notify_events();
+        m_pEntry->fire_signal_changed();
+    }
+}
 
 IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
 {
@@ -2512,10 +2597,11 @@ public:
         return pListBox ? o3tl::make_unique<SalInstanceComboBoxTextWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
     }
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
     {
-        return o3tl::make_unique<SalInstanceEntryTreeView>(weld_entry(entryid, bTakeOwnership),
-                                                           weld_tree_view(treeviewid, bTakeOwnership));
+        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
+        return pContainer ? o3tl::make_unique<SalInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
+                                                                        weld_tree_view(treeviewid, bTakeOwnership)) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override

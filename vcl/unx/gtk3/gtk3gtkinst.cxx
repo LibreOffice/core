@@ -378,7 +378,7 @@ namespace
 
 namespace
 {
-    void ClipboardGetFunc(GtkClipboard */*clipboard*/, GtkSelectionData *selection_data,
+    void ClipboardGetFunc(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                           guint info,
                           gpointer user_data_or_owner)
     {
@@ -386,13 +386,13 @@ namespace
         pThis->ClipboardGet(selection_data, info);
     }
 
-    void ClipboardClearFunc(GtkClipboard */*clipboard*/, gpointer user_data_or_owner)
+    void ClipboardClearFunc(GtkClipboard* /*clipboard*/, gpointer user_data_or_owner)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear();
     }
 
-    void handle_owner_change(GtkClipboard *clipboard, GdkEvent */*event*/, gpointer user_data)
+    void handle_owner_change(GtkClipboard *clipboard, GdkEvent* /*event*/, gpointer user_data)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
         pThis->OwnerPossiblyChanged(clipboard);
@@ -3405,6 +3405,14 @@ public:
         return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
+    virtual void set_error(bool bError) override
+    {
+        if (bError)
+            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+        else
+            gtk_entry_set_icon_from_icon_name(m_pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
@@ -3499,6 +3507,11 @@ public:
         }
         gtk_entry_set_attributes(m_pEntry, pAttrList);
         pango_attr_list_unref(pAttrList);
+    }
+
+    void fire_signal_changed()
+    {
+        signal_changed();
     }
 
     virtual ~GtkInstanceEntry() override
@@ -4773,6 +4786,11 @@ public:
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
     }
 
+    virtual bool has_entry() const override
+    {
+        return gtk_combo_box_get_has_entry(GTK_COMBO_BOX(m_pComboBoxText));
+    }
+
     virtual void set_entry_error(bool bError) override
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBoxText));
@@ -4869,6 +4887,83 @@ public:
         g_signal_handler_disconnect(m_pComboBoxText, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pComboBoxText, m_nPopupShownSignalId);
     }
+};
+
+class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual weld::EntryTreeView
+{
+private:
+    GtkInstanceEntry* m_pEntry;
+    GtkInstanceTreeView* m_pTreeView;
+    gulong m_nKeyPressSignalId;
+
+    gboolean signal_key_press(GdkEventKey* pEvent)
+    {
+        if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
+            pEvent->keyval == GDK_KEY_KP_Down || pEvent->keyval == GDK_KEY_Down || pEvent->keyval == GDK_KEY_KP_Page_Down || pEvent->keyval == GDK_KEY_Page_Down)
+        {
+            gboolean ret;
+            m_pTreeView->disable_notify_events();
+            GtkWidget* pWidget = m_pTreeView->getWidget();
+            gtk_widget_grab_focus(pWidget);
+            g_signal_emit_by_name(pWidget, "key-press-event", pEvent, &ret);
+            m_xEntry->set_text(m_xTreeView->get_selected_text());
+            gtk_widget_grab_focus(m_pEntry->getWidget());
+            m_xEntry->select_region(0, -1);
+            m_pTreeView->enable_notify_events();
+            m_pEntry->fire_signal_changed();
+            return true;
+        }
+        return false;
+    }
+
+    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    {
+        GtkInstanceEntryTreeView* pThis = static_cast<GtkInstanceEntryTreeView*>(widget);
+        return pThis->signal_key_press(pEvent);
+    }
+
+public:
+    GtkInstanceEntryTreeView(GtkContainer* pContainer, bool bTakeOwnership, std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+        : EntryTreeView(std::move(xEntry), std::move(xTreeView))
+        , GtkInstanceContainer(pContainer, bTakeOwnership)
+        , m_pEntry(dynamic_cast<GtkInstanceEntry*>(m_xEntry.get()))
+        , m_pTreeView(dynamic_cast<GtkInstanceTreeView*>(m_xTreeView.get()))
+    {
+        assert(m_pEntry);
+        GtkWidget* pWidget = m_pEntry->getWidget();
+        m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+    }
+
+    virtual void make_sorted() override
+    {
+        GtkWidget* pTreeView = m_pTreeView->getWidget();
+        GtkTreeModel* pModel = gtk_tree_view_get_model(GTK_TREE_VIEW(pTreeView));
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+        gtk_tree_sortable_set_sort_column_id(pSortable, 1, GTK_SORT_ASCENDING);
+    }
+
+    virtual void set_entry_completion(bool bEnable) override
+    {
+        assert(!bEnable && "not implemented yet");
+        gtk_entry_set_completion(GTK_ENTRY(m_pEntry->getWidget()), nullptr);
+    }
+
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
+    {
+        m_xEntry->connect_focus_in(rLink);
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
+    {
+        m_xEntry->connect_focus_out(rLink);
+    }
+
+    virtual ~GtkInstanceEntryTreeView() override
+    {
+        GtkWidget* pWidget = m_pEntry->getWidget();
+        g_signal_handler_disconnect(pWidget, m_nKeyPressSignalId);
+    }
+
 };
 
 class GtkInstanceExpander : public GtkInstanceContainer, public virtual weld::Expander
@@ -5353,9 +5448,13 @@ public:
         return o3tl::make_unique<GtkInstanceTreeView>(pTreeView, bTakeOwnership);
     }
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
     {
-        return o3tl::make_unique<weld::EntryTreeView>(weld_entry(entryid, bTakeOwnership), weld_tree_view(treeviewid, bTakeOwnership));
+        GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, containerid.getStr()));
+        if (!pContainer)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
+        return o3tl::make_unique<GtkInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership), weld_tree_view(treeviewid, bTakeOwnership));
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override

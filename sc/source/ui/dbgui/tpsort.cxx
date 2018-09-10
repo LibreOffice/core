@@ -623,7 +623,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
     LanguageType eLang = LanguageTag::convertToLanguageType( aSortData.aCollatorLocale, false);
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
-    m_xLbLanguage->SelectLanguage( eLang );
+    m_xLbLanguage->set_active_id(eLang);
     FillAlgor();               // get algorithms, select default
     if ( !aSortData.aCollatorAlgorithm.isEmpty() )
         m_xLbAlgorithm->set_active_text(m_xColRes->GetTranslation(aSortData.aCollatorAlgorithm));
@@ -685,7 +685,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
                                    : 0;
 
     // get locale
-    LanguageType eLang = m_xLbLanguage->GetSelectedLanguage();
+    LanguageType eLang = m_xLbLanguage->get_active_id();
     aNewSortData.aCollatorLocale = LanguageTag::convertToLocale( eLang, false);
 
     // get algorithm
@@ -877,7 +877,7 @@ void ScTabPageSortOptions::FillAlgor()
     m_xLbAlgorithm->freeze();
     m_xLbAlgorithm->clear();
 
-    LanguageType eLang = m_xLbLanguage->GetSelectedLanguage();
+    LanguageType eLang = m_xLbLanguage->get_active_id();
     if ( eLang == LANGUAGE_SYSTEM )
     {
         //  for LANGUAGE_SYSTEM no algorithm can be selected because
