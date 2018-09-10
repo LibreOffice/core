@@ -323,7 +323,15 @@ public:
 
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog)
+protected:
+    std::shared_ptr<SvxCaptionTabDialog> m_xDlg;
+public:
+    explicit AbstractSvxCaptionDialog_Impl(std::unique_ptr<SvxCaptionTabDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) override;
     virtual void                SetCurPageId( const OString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
@@ -647,9 +655,9 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateTabItemDialog(vcl::Window* pParent,
                                             const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSvxCaptionDialog>
-                                          CreateCaptionDialog( vcl::Window* pParent,
+                                          CreateCaptionDialog(weld::Window* pParent,
                                             const SdrView* pView,
-                                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE ) override;
+                                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) override;
     virtual VclPtr<AbstractSvxDistributeDialog>
                                           CreateSvxDistributeDialog(const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractInsertObjectDialog>

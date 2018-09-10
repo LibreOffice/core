@@ -141,7 +141,16 @@ bool AbstractSvxTransformTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
     return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
-IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
+short AbstractSvxCaptionDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
+bool AbstractSvxCaptionDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
 
 short AbstractFmInputRecordNoDialog_Impl::Execute()
@@ -630,31 +639,32 @@ void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<Svx
 // AbstractSvxCaptionDialog implementations just forwards everything to the dialog
 void AbstractSvxCaptionDialog_Impl::SetCurPageId( const OString& rName )
 {
-    pDlg->SetCurPageId( rName );
+    m_xDlg->SetCurPageId(rName);
 }
 
 const SfxItemSet* AbstractSvxCaptionDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 const sal_uInt16* AbstractSvxCaptionDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
-    return pDlg->GetInputRanges( pItem );
+    return m_xDlg->GetInputRanges( pItem );
 }
 
 void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
-     pDlg->SetInputSet( pInSet );
+     m_xDlg->SetInputSet( pInSet );
 }
-//From class Window.
+
 void AbstractSvxCaptionDialog_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
+
 void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
 {
-    pDlg->SetValidateFramePosLink( rLink );
+    m_xDlg->SetValidateFramePosLink( rLink );
 }
 
 TransliterationFlags AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
@@ -1008,12 +1018,11 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog(wel
 }
 
 // TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
-VclPtr<AbstractSvxCaptionDialog>      AbstractDialogFactory_Impl::CreateCaptionDialog( vcl::Window* pParent,
-                                            const SdrView* pView,
-                                            SvxAnchorIds nAnchorTypes )
+VclPtr<AbstractSvxCaptionDialog> AbstractDialogFactory_Impl::CreateCaptionDialog(weld::Window* pParent,
+                                                                                 const SdrView* pView,
+                                                                                 SvxAnchorIds nAnchorTypes)
 {
-    VclPtrInstance<SvxCaptionTabDialog> pDlg( pParent, pView, nAnchorTypes );
-    return VclPtr<AbstractSvxCaptionDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxCaptionDialog_Impl>::Create(o3tl::make_unique<SvxCaptionTabDialog>(pParent, pView, nAnchorTypes));
 }
 
 VclPtr<AbstractSvxDistributeDialog>    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(const SfxItemSet& rAttr)
