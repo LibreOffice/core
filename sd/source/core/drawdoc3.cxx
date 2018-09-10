@@ -978,7 +978,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 {
     bool bOK = true;
     bool bOLEObjFound = false;
-    ::sd::View* pBMView = nullptr;
+    std::unique_ptr<::sd::View> pBMView;
 
     SdDrawDocument* pBookmarkDoc = nullptr;
 
@@ -997,7 +997,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 
     if (rBookmarkList.empty())
     {
-        pBMView = new ::sd::View(*pBookmarkDoc, nullptr);
+        pBMView.reset(new ::sd::View(*pBookmarkDoc, nullptr));
         pBMView->EndListening(*pBookmarkDoc);
         pBMView->MarkAll();
     }
@@ -1024,7 +1024,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
                 if (!pBMView)
                 {
                     // Create View for the first time
-                    pBMView = new ::sd::View(*pBookmarkDoc, nullptr);
+                    pBMView.reset(new ::sd::View(*pBookmarkDoc, nullptr));
                     pBMView->EndListening(*pBookmarkDoc);
                 }
 
@@ -1130,8 +1130,6 @@ bool SdDrawDocument::InsertBookmarkAsObject(
             }
         }
     }
-
-    delete pBMView;
 
     return bOK;
 }
