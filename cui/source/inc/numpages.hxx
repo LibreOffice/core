@@ -88,7 +88,6 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclPtr<SvxNumValueSet>  m_pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
@@ -98,12 +97,14 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
 
     sal_uInt16              nNumItemId;
 
-    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    std::unique_ptr<NumValueSet> m_xExamplesVS;
+    std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
+
+    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 
 public:
-        SvxSingleNumPickTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet);
+    SvxSingleNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxSingleNumPickTabPage() override;
     virtual void dispose() override;
 
@@ -115,7 +116,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
-
 
 class SvxBulletPickTabPage final : public SfxTabPage
 {
