@@ -2090,7 +2090,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
 
     if ( aUrl.GetProtocol() == INetProtocol::File )
     {
-        std::shared_ptr<const SfxFilter> pOrgFilter = pMedium->GetOrigFilter();
+        std::shared_ptr<const SfxFilter> pOrgFilter = pMedium->GetFilter();
         Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                                               pOrgFilter ? pOrgFilter->GetMimeType() : OUString(),
                                               pOrgFilter ? pOrgFilter->GetServiceName() : OUString() );

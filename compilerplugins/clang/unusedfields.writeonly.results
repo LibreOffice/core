@@ -56,22 +56,18 @@ canvas/source/cairo/cairo_spritehelper.hxx:103
     cairocanvas::SpriteHelper mbTextureDirty _Bool
 canvas/source/opengl/ogl_spritedevicehelper.hxx:124
     oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
-chart2/inc/ChartModel.hxx:471
-    chart::ChartModel mnStart sal_Int32
 chart2/inc/ChartModel.hxx:472
+    chart::ChartModel mnStart sal_Int32
+chart2/inc/ChartModel.hxx:473
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/MediaDescriptorHelper.hxx:75
+chart2/source/inc/MediaDescriptorHelper.hxx:77
     apphelper::MediaDescriptorHelper ReadOnly _Bool
 chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
 codemaker/source/cppumaker/dependencies.hxx:108
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
-codemaker/source/cppumaker/dependencies.hxx:117
-    codemaker::cppumaker::Dependencies m_floatDependency _Bool
-codemaker/source/cppumaker/dependencies.hxx:118
-    codemaker::cppumaker::Dependencies m_doubleDependency _Bool
 comphelper/qa/container/comphelper_ifcontainer.cxx:45
     ContainerListener m_pStats struct ContainerStats *const
 configmgr/source/components.cxx:164
@@ -142,9 +138,9 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cppuhelper/source/access_control.cxx:80
-    cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
+    cppu::(anonymous namespace)::permission m_str1 rtl_uString *
+cppuhelper/source/access_control.cxx:82
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
 cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
@@ -208,8 +204,6 @@ framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-framework/source/services/frame.cxx:421
-    (anonymous namespace)::Frame m_pWindowCommandDispatch class framework::WindowCommandDispatch *
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:70
@@ -244,8 +238,6 @@ include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/relfld.hxx:31
-    SvxRelativeField bRelative _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
@@ -302,13 +294,13 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/compiler.hxx:260
+sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pODFF const char *
-sc/inc/compiler.hxx:261
+sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
-sc/inc/compiler.hxx:263
+sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2527
+sc/inc/document.hxx:2523
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -346,13 +338,13 @@ sc/source/filter/excel/xltoolbar.hxx:79
     CTBS ictbView sal_uInt16
 sc/source/filter/excel/xltools.cxx:104
      smD union sal_math_Double
-sc/source/filter/inc/exp_op.hxx:52
+sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot struct RootData *
-sc/source/filter/inc/imp_op.hxx:86
+sc/source/filter/inc/imp_op.hxx:81
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/orcusinterface.hxx:387
+sc/source/filter/inc/orcusinterface.hxx:450
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:407
+sc/source/filter/inc/orcusinterface.hxx:470
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
@@ -388,7 +380,7 @@ sd/source/ui/remotecontrol/Receiver.hxx:36
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
-sd/source/ui/sidebar/SlideBackground.hxx:99
+sd/source/ui/sidebar/SlideBackground.hxx:100
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
@@ -471,7 +463,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -492,10 +484,6 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
-vcl/inc/qt5/Qt5Frame.hxx:59
-    Qt5Frame m_pSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Graphics.hxx:50
-    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -550,9 +538,5 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-vcl/unx/kde4/KDEXLib.hxx:49
-    KDEXLib::SocketData pending YieldFunc
-vcl/unx/kde4/KDEXLib.hxx:50
-    KDEXLib::SocketData queued YieldFunc
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
