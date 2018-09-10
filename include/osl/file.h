@@ -717,8 +717,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
     @see    osl_openFile()
     @see    osl_getFilePos()
 */
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
-        oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT;
+SAL_WARN_UNUSED_RESULT SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
+        oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos );
 
 /** Retrieve the current position of the internal pointer of an open file.
 

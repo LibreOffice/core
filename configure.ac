@@ -6408,6 +6408,36 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
+AC_MSG_CHECKING([[whether $CXX supports [[nodiscard]]]])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        // There appears to be no feature-test macro for __has_cpp_attribute in C++2a, approximate
+        // by checking for __cplusplus:
+        #if __cplusplus > 201703L
+        #if !__has_cpp_attribute(nodiscard)
+        #error
+        #endif
+        #else
+        [[nodiscard]] int f();
+        #endif
+    ]])], [
+        if test "$_os" = WINNT; then
+            CXXFLAGS="$CXXFLAGS /WX"
+        else
+            CXXFLAGS="$CXXFLAGS -Werror"
+        fi
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+                [[nodiscard]] int f();
+                void g() { f(); }
+            ]])], [AC_MSG_RESULT([no])], [
+                AC_DEFINE([HAVE_CPP_ATTRIBUTE_NODISCARD],[1])
+                AC_MSG_RESULT([yes])])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX supports guaranteed copy elision])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
