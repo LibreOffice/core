@@ -180,6 +180,22 @@ struct NeonRequestContext
                         DAVResource & ioResource )
     : xOutputStream( nullptr ), xInputStream( xInStrm ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
+
+    void ResponseBlockReader(const char * inBuf, size_t inLen)
+    {
+        if (xInputStream.is())
+            xInputStream->AddToStream( inBuf, inLen );
+    }
+
+    void ResponseBlockWriter(const char * inBuf, size_t inLen)
+    {
+        if (xOutputStream.is())
+        {
+            const uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(inBuf), inLen );
+            xOutputStream->writeBytes( aSeq );
+        }
+    }
+
 };
 
 // A simple Neon response_block_reader for use with an XInputStream
@@ -190,14 +206,8 @@ extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
     // neon sometimes calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        NeonRequestContext * pCtx
-            = static_cast< NeonRequestContext * >( inUserData );
-
-        rtl::Reference< NeonInputStream > xInputStream(
-            pCtx->xInputStream );
-
-        if ( xInputStream.is() )
-            xInputStream->AddToStream( inBuf, inLen );
+        NeonRequestContext * pCtx = static_cast<NeonRequestContext*>(inUserData);
+        pCtx->ResponseBlockReader(inBuf, inLen);
     }
     return 0;
 }
@@ -210,16 +220,8 @@ extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        NeonRequestContext * pCtx
-            = static_cast< NeonRequestContext * >( inUserData );
-        uno::Reference< io::XOutputStream > xOutputStream
-            = pCtx->xOutputStream;
-
-        if ( xOutputStream.is() )
-        {
-            const uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(inBuf), inLen );
-            xOutputStream->writeBytes( aSeq );
-        }
+        NeonRequestContext * pCtx = static_cast<NeonRequestContext*>(inUserData);
+        pCtx->ResponseBlockWriter(inBuf, inLen);
     }
     return 0;
 }
@@ -244,9 +246,32 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
 
-    NeonSession * theSession = static_cast< NeonSession * >( inUserData );
+    NeonSession * theSession = static_cast<NeonSession*>(inUserData);
+    const char * pAuthProtocol;
+#if defined NE_FEATURE_SSPI && ! defined SYSTEM_NEON
+    pAuthProtocol = inAuthProtocol;
+#else
+    pAuthProtocol = nullptr;
+#endif
+    return theSession->NeonAuth(pAuthProtocol, inRealm, attempt, inoutUserName, inoutPassWord);
+}
+
+int NeonSession::NeonAuth(const char* inAuthProtocol, const char* inRealm,
+                          int attempt, char* inoutUserName, char * inoutPassWord)
+{
+/* The callback used to request the username and password in the given
+ * realm. The username and password must be copied into the buffers
+ * which are both of size NE_ABUFSIZ.  The 'attempt' parameter is zero
+ * on the first call to the callback, and increases by one each time
+ * an attempt to authenticate fails.
+ *
+ * The callback must return zero to indicate that authentication
+ * should be attempted with the username/password, or non-zero to
+ * cancel the request. (if non-zero, username and password are
+ * ignored.)  */
+
     DAVAuthListener * pListener
-        = theSession->getRequestEnvironment().m_xAuthListener.get();
+        = getRequestEnvironment().m_xAuthListener.get();
     if ( !pListener )
     {
         // abort
@@ -262,7 +287,7 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 
         try
         {
-            NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
+            NeonUri uri( getRequestEnvironment().m_aRequestURI );
             OUString aUserInfo( uri.GetUserInfo() );
             if ( !aUserInfo.isEmpty() )
             {
@@ -299,12 +324,13 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
           ( ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
             ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
 #else
+    (void)inAuthProtocol;
     const bool bCanUseSystemCreds = false;
 #endif
 
     int theRetVal = pListener->authenticate(
                             OUString::createFromAscii( inRealm ),
-                            theSession->getHostName(),
+                            getHostName(),
                             theUserName,
                             thePassWord,
                             bCanUseSystemCreds);
@@ -352,13 +378,18 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int,
                                                 const ne_ssl_certificate *cert )
 {
+    NeonSession * pSession = static_cast< NeonSession * >( userdata );
+    return pSession->CertificationNotify(cert);
+}
+
+int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
+{
     OSL_ASSERT( cert );
 
-    NeonSession * pSession = static_cast< NeonSession * >( userdata );
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     try
     {
-        xCertificateContainer = security::CertificateContainer::create( pSession->getComponentContext() );
+        xCertificateContainer = security::CertificateContainer::create( getComponentContext() );
     }
     catch ( uno::Exception const & )
     {
@@ -374,7 +405,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
     security::CertificateContainerStatus certificateContainer(
         xCertificateContainer->hasCertificate(
-            pSession->getHostName(), cert_subject ) );
+            getHostName(), cert_subject ) );
 
     if ( certificateContainer != security::CertificateContainerStatus_NOCERT )
         return
@@ -385,7 +416,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try
     {
-        xSEInitializer = xml::crypto::SEInitializer::create( pSession->getComponentContext() );
+        xSEInitializer = xml::crypto::SEInitializer::create( getComponentContext() );
     }
     catch ( uno::Exception const & )
     {
@@ -438,7 +469,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xEECert,
         ::comphelper::containerToSequence( vecCerts ) );
 
-    if ( pSession->isDomainMatch(
+    if ( isDomainMatch(
         GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
     {
         // if host name matched with certificate then look if the
@@ -448,7 +479,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     }
 
     const uno::Reference< ucb::XCommandEnvironment > xEnv(
-        pSession->getRequestEnvironment().m_xEnv );
+        getRequestEnvironment().m_xEnv );
     if ( xEnv.is() )
     {
         uno::Reference< task::XInteractionHandler > xIH(
@@ -457,7 +488,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         {
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                 xRequest( new ucbhelper::SimpleCertificateValidationRequest(
-                    static_cast<sal_Int32>(certValidity), xEECert, pSession->getHostName() ) );
+                    static_cast<sal_Int32>(certValidity), xEECert, getHostName() ) );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -470,14 +501,14 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
                 if ( xApprove.is() )
                 {
                     xCertificateContainer->addCertificate(
-                        pSession->getHostName(), cert_subject,  true );
+                        getHostName(), cert_subject,  true );
                     return 0;
                 }
                 else
                 {
                     // Don't trust cert
                     xCertificateContainer->addCertificate(
-                        pSession->getHostName(), cert_subject, false );
+                        getHostName(), cert_subject, false );
                     return 1;
                 }
             }
@@ -486,7 +517,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         {
             // Don't trust cert
             xCertificateContainer->addCertificate(
-                pSession->getHostName(), cert_subject, false );
+                getHostName(), cert_subject, false );
             return 1;
         }
     }
@@ -498,71 +529,75 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             ne_buffer * headers )
 {
     // userdata -> value returned by 'create'
-
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
-    if ( pSession )
+    if (!pSession)
+        return;
+    pSession->PreSendRequest(req, headers);
+}
+
+void NeonSession::PreSendRequest(ne_request* req, ne_buffer* headers)
+{
+    // If there is a proxy server in between, it shall never use
+    // cached data. We always want 'up-to-date' data.
+    ne_buffer_concat( headers, "Pragma: no-cache", EOL, nullptr );
+    // alternative, but understood by HTTP 1.1 servers only:
+    // ne_buffer_concat( headers, "Cache-Control: max-age=0", EOL, NULL );
+
+    const RequestDataMap * pRequestData
+        = static_cast< const RequestDataMap* >(
+            getRequestData() );
+
+    RequestDataMap::const_iterator it = pRequestData->find( req );
+    if ( it != pRequestData->end() )
     {
-        // If there is a proxy server in between, it shall never use
-        // cached data. We always want 'up-to-date' data.
-        ne_buffer_concat( headers, "Pragma: no-cache", EOL, nullptr );
-        // alternative, but understood by HTTP 1.1 servers only:
-        // ne_buffer_concat( headers, "Cache-Control: max-age=0", EOL, NULL );
-
-        const RequestDataMap * pRequestData
-            = static_cast< const RequestDataMap* >(
-                pSession->getRequestData() );
-
-        RequestDataMap::const_iterator it = pRequestData->find( req );
-        if ( it != pRequestData->end() )
+        if ( !(*it).second.aContentType.isEmpty() )
         {
-            if ( !(*it).second.aContentType.isEmpty() )
+            char * pData = headers->data;
+            if ( strstr( pData, "Content-Type:" ) == nullptr )
             {
-                char * pData = headers->data;
-                if ( strstr( pData, "Content-Type:" ) == nullptr )
-                {
-                    OString aType
-                        = OUStringToOString( (*it).second.aContentType,
-                                                  RTL_TEXTENCODING_UTF8 );
-                    ne_buffer_concat( headers, "Content-Type: ",
-                                      aType.getStr(), EOL, nullptr );
-                }
-            }
-
-            if ( !(*it).second.aReferer.isEmpty() )
-            {
-                char * pData = headers->data;
-                if ( strstr( pData, "Referer:" ) == nullptr )
-                {
-                    OString aReferer
-                        = OUStringToOString( (*it).second.aReferer,
-                                                  RTL_TEXTENCODING_UTF8 );
-                    ne_buffer_concat( headers, "Referer: ",
-                                      aReferer.getStr(), EOL, nullptr );
-                }
+                OString aType
+                    = OUStringToOString( (*it).second.aContentType,
+                                              RTL_TEXTENCODING_UTF8 );
+                ne_buffer_concat( headers, "Content-Type: ",
+                                  aType.getStr(), EOL, nullptr );
             }
         }
 
-        const DAVRequestHeaders & rHeaders
-            = pSession->getRequestEnvironment().m_aRequestHeaders;
-
-        DAVRequestHeaders::const_iterator it1( rHeaders.begin() );
-        const DAVRequestHeaders::const_iterator end1( rHeaders.end() );
-
-        while ( it1 != end1 )
+        if ( !(*it).second.aReferer.isEmpty() )
         {
-            OString aHeader
-                = OUStringToOString( (*it1).first,
-                                          RTL_TEXTENCODING_UTF8 );
-            OString aValue
-                = OUStringToOString( (*it1).second,
-                                          RTL_TEXTENCODING_UTF8 );
-            ne_buffer_concat( headers, aHeader.getStr(), ": ",
-                              aValue.getStr(), EOL, nullptr );
-
-            ++it1;
+            char * pData = headers->data;
+            if ( strstr( pData, "Referer:" ) == nullptr )
+            {
+                OString aReferer
+                    = OUStringToOString( (*it).second.aReferer,
+                                              RTL_TEXTENCODING_UTF8 );
+                ne_buffer_concat( headers, "Referer: ",
+                                  aReferer.getStr(), EOL, nullptr );
+            }
         }
     }
+
+    const DAVRequestHeaders & rHeaders
+        = getRequestEnvironment().m_aRequestHeaders;
+
+    DAVRequestHeaders::const_iterator it1( rHeaders.begin() );
+    const DAVRequestHeaders::const_iterator end1( rHeaders.end() );
+
+    while ( it1 != end1 )
+    {
+        OString aHeader
+            = OUStringToOString( (*it1).first,
+                                      RTL_TEXTENCODING_UTF8 );
+        OString aValue
+            = OUStringToOString( (*it1).second,
+                                      RTL_TEXTENCODING_UTF8 );
+        ne_buffer_concat( headers, aHeader.getStr(), ": ",
+                          aValue.getStr(), EOL, nullptr );
+
+        ++it1;
+    }
 }
+
 
 // static members
 bool NeonSession::m_bGlobalsInited = false;
