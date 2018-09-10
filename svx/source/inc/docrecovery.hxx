@@ -521,7 +521,7 @@ class RecoveryDialog : public Dialog
         virtual void start() override;
         virtual void end() override;
 
-        short execute();
+        virtual short Execute() override;
 
     // helper
     private:
