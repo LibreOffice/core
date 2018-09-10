@@ -157,7 +157,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
 void SdModifyFieldDlg::FillFormatList()
 {
-    LanguageType eLangType = m_xLbLanguage->GetSelectedLanguage();
+    LanguageType eLangType = m_xLbLanguage->get_active_id();
 
     m_xLbFormat->clear();
 
@@ -293,9 +293,9 @@ void SdModifyFieldDlg::FillControls()
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == m_aInputSet.GetItemState(EE_CHAR_LANGUAGE, true, &pItem ) )
-        m_xLbLanguage->SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
+        m_xLbLanguage->set_active_id(static_cast<const SvxLanguageItem*>(pItem)->GetLanguage());
 
-    m_xLbLanguage->save_value();
+    m_xLbLanguage->save_active_id();
 
     FillFormatList();
     m_xLbFormat->save_value();
@@ -310,9 +310,9 @@ SfxItemSet SdModifyFieldDlg::GetItemSet()
 {
     SfxItemSet aOutput( *m_aInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
 
-    if( m_xLbLanguage->get_value_changed_from_saved() )
+    if (m_xLbLanguage->get_active_id_changed_from_saved())
     {
-        LanguageType eLangType = m_xLbLanguage->GetSelectedLanguage();
+        LanguageType eLangType = m_xLbLanguage->get_active_id();
         SvxLanguageItem aItem( eLangType, EE_CHAR_LANGUAGE );
         aOutput.Put( aItem );
 
