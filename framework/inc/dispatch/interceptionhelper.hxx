@@ -146,8 +146,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
                    The last or the first registered one. */
         static bool m_bPreferrFirstInterceptor;
 
-        osl::Mutex m_Mutex;
-
     // native interface
 
     public:
