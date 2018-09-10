@@ -259,6 +259,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 int NeonSession::NeonAuth(const char* inAuthProtocol, const char* inRealm,
                           int attempt, char* inoutUserName, char * inoutPassWord)
 {
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
 /* The callback used to request the username and password in the given
  * realm. The username and password must be copied into the buffers
  * which are both of size NE_ABUFSIZ.  The 'attempt' parameter is zero
@@ -384,6 +386,8 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
 int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
 {
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
     OSL_ASSERT( cert );
 
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
@@ -537,6 +541,8 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
 
 void NeonSession::PreSendRequest(ne_request* req, ne_buffer* headers)
 {
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
     // If there is a proxy server in between, it shall never use
     // cached data. We always want 'up-to-date' data.
     ne_buffer_concat( headers, "Pragma: no-cache", EOL, nullptr );
