@@ -204,7 +204,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
     aMapMode.SetScaleY( aFrac );
     pVDev->SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, pVDev );
+    std::unique_ptr<ClientView> pView(new ClientView( this, pVDev ));
     FrameView*      pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
@@ -258,7 +258,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
     pView->CompleteRedraw( pVDev, vcl::Region(::tools::Rectangle(aNullPt, aSize)) );
 
     // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
-    delete pView;
+    pView.reset();
 
     pVDev->SetMapMode( MapMode() );
 
