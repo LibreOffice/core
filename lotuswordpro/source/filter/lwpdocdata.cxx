@@ -116,8 +116,8 @@ void LwpDocData::Read()
 
     //EditorList
     m_DocInfo.nNumEditedBy = m_pObjStrm->QuickReaduInt16();
-    LwpAtomHolder* pCDLNList = new LwpAtomHolder[m_DocInfo.nNumEditedBy];
-    LwpAtomHolder* pEditorList = new LwpAtomHolder[m_DocInfo.nNumEditedBy];
+    std::unique_ptr<LwpAtomHolder[]> pCDLNList(new LwpAtomHolder[m_DocInfo.nNumEditedBy]);
+    std::unique_ptr<LwpAtomHolder[]> pEditorList(new LwpAtomHolder[m_DocInfo.nNumEditedBy]);
     sal_uInt16 i = 0;
     for ( i = 0; i < m_DocInfo.nNumEditedBy; i++)
     {
@@ -131,8 +131,8 @@ void LwpDocData::Read()
 
     m_pObjStrm->SkipExtra();
 
-    delete [] pCDLNList;
-    delete [] pEditorList;
+    pCDLNList.reset();
+    pEditorList.reset();
 
     //doc control
     //cGreeting
