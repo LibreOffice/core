@@ -29,7 +29,7 @@
 
 IMPL_LINK_NOARG(SfxNewStyleDlg, OKClickHdl, weld::Button&, void)
 {
-    const OUString aName(m_xColBox->get_text());
+    const OUString aName(m_xColBox->get_active_text());
     SfxStyleSheetBase* pStyle = m_rPool.Find(aName, m_rPool.GetSearchFamily());
     if ( pStyle )
     {
@@ -54,20 +54,21 @@ IMPL_LINK_NOARG(SfxNewStyleDlg, OKHdl, weld::TreeView&, void)
     OKClickHdl(*m_xOKBtn);
 }
 
-IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::Entry&, rBox, void)
+IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBoxText&, rBox, void)
 {
-    m_xOKBtn->set_sensitive(!rBox.get_text().replaceAll(" ", "").isEmpty());
+    m_xOKBtn->set_sensitive(!rBox.get_active_text().replaceAll(" ", "").isEmpty());
 }
 
 SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool)
     : GenericDialogController(pParent, "sfx/ui/newstyle.ui", "CreateStyleDialog")
     , m_rPool(rInPool)
-    , m_xColBox(m_xBuilder->weld_entry_tree_view("stylename", "styles"))
+    , m_xColBox(m_xBuilder->weld_entry_tree_view("stylegrid", "stylename", "styles"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xQueryOverwriteBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
                                                                            SfxResId(STR_QUERY_OVERWRITE)))
 {
-    m_xColBox->set_size_request_by_digits_rows(20, 8);
+    m_xColBox->set_entry_width_chars(20);
+    m_xColBox->set_height_request_by_rows(8);
 
     m_xOKBtn->connect_clicked(LINK(this, SfxNewStyleDlg, OKClickHdl));
     m_xColBox->connect_changed(LINK(this, SfxNewStyleDlg, ModifyHdl));
