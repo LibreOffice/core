@@ -564,34 +564,31 @@ void Hash::CalcHashValue( CompareData& rData )
 
 Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
 {
-    MovedData *pMD1, *pMD2;
+    std::unique_ptr<MovedData> pMD1, pMD2;
     // Look for the differing lines
     {
         std::unique_ptr<sal_Char[]> pDiscard1( new sal_Char[ rData1.GetLineCount() ] );
         std::unique_ptr<sal_Char[]> pDiscard2( new sal_Char[ rData2.GetLineCount() ] );
 
-        sal_uLong* pCount1 = new sal_uLong[ nDiff ];
-        sal_uLong* pCount2 = new sal_uLong[ nDiff ];
-        memset( pCount1, 0, nDiff * sizeof( sal_uLong ));
-        memset( pCount2, 0, nDiff * sizeof( sal_uLong ));
+        std::unique_ptr<sal_uLong[]> pCount1(new sal_uLong[ nDiff ]);
+        std::unique_ptr<sal_uLong[]> pCount2(new sal_uLong[ nDiff ]);
+        memset( pCount1.get(), 0, nDiff * sizeof( sal_uLong ));
+        memset( pCount2.get(), 0, nDiff * sizeof( sal_uLong ));
 
         // find indices in CompareData which have been assigned multiple times
-        CountDifference( rData1, pCount1 );
-        CountDifference( rData2, pCount2 );
+        CountDifference( rData1, pCount1.get() );
+        CountDifference( rData2, pCount2.get() );
 
         // All which occur only once now have either been inserted or deleted.
         // All which are also contained in the other one have been moved.
-        SetDiscard( rData1, pDiscard1.get(), pCount2 );
-        SetDiscard( rData2, pDiscard2.get(), pCount1 );
-
-        // forget the arrays again
-        delete [] pCount1; delete [] pCount2;
+        SetDiscard( rData1, pDiscard1.get(), pCount2.get() );
+        SetDiscard( rData2, pDiscard2.get(), pCount1.get() );
 
         CheckDiscard( rData1.GetLineCount(), pDiscard1.get() );
         CheckDiscard( rData2.GetLineCount(), pDiscard2.get() );
 
-        pMD1 = new MovedData( rData1, pDiscard1.get() );
-        pMD2 = new MovedData( rData2, pDiscard2.get() );
+        pMD1.reset(new MovedData( rData1, pDiscard1.get() ));
+        pMD2.reset(new MovedData( rData2, pDiscard2.get() ));
     }
 
     {
@@ -599,9 +596,6 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
     }
 
     ShiftBoundaries( rData1, rData2 );
-
-    delete pMD1;
-    delete pMD2;
 }
 
 void Compare::CountDifference( const CompareData& rData, sal_uLong* pCounts )
