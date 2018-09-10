@@ -180,10 +180,10 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     sal_uInt32 nNumItemId = SID_ATTR_NUMBERING_RULE;
     const SfxPoolItem* pTmpItem = GetNumBulletItem( aNewAttr, nNumItemId );
-    SvxNumRule* pNumRule = nullptr;
+    std::unique_ptr<SvxNumRule> pNumRule;
     if ( pTmpItem )
     {
-        pNumRule = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule());
+        pNumRule.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
 
         // get numbering rule corresponding to <nIdx> and apply the needed number formats to <pNumRule>
         NBOTypeMgrBase* pNumRuleMgr =
@@ -245,11 +245,11 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if ( pOLV )
     {
-        pOLV->ToggleBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? nullptr : pNumRule );
+        pOLV->ToggleBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? nullptr : pNumRule.get() );
     }
     else
     {
-        mpView->ChangeMarkedObjectsBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? nullptr : pNumRule );
+        mpView->ChangeMarkedObjectsBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? nullptr : pNumRule.get() );
     }
 
     if (bInMasterView && pNumRule)
@@ -268,7 +268,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         pSdrModel->EndUndo();
     }
 
-    delete pNumRule;
+    pNumRule.reset();
     rReq.Done();
 }
 
