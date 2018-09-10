@@ -45,9 +45,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
 {
     osl::Guard<osl::Mutex> aGuard(m_Mutex);
 
-    // SAFE {
-    SolarMutexClearableGuard aReadLock;
-
     // a) first search an interceptor, which match to this URL by its URL pattern registration
     //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
     css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
@@ -78,9 +75,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     //    But to be more feature proof - we should check that .-)
     if (!xInterceptor.is() && m_xSlave.is())
         xInterceptor = m_xSlave;
-
-    aReadLock.clear();
-    // } SAFE
 
     css::uno::Reference< css::frame::XDispatch > xReturn;
     if (xInterceptor.is())
@@ -127,9 +121,6 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         aInfo.lURLPattern[0] = "*";
     }
 
-    // SAFE {
-    SolarMutexClearableGuard aWriteLock;
-
     // a) no interceptor at all - set this instance as master for given interceptor
     //    and set our slave as its slave - and put this interceptor to the list.
     //    Its place there doesn't matter. Because this list is currently empty.
@@ -174,9 +165,6 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
 
-    aWriteLock.clear();
-    // } SAFE
-
     // Don't forget to send a frame action event "context changed".
     // Any cached dispatch objects must be validated now!
     if (xOwner.is())
@@ -191,9 +179,6 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
         throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
-
-    // SAFE {
-    SolarMutexClearableGuard aWriteLock;
 
     // search this interceptor ...
     // If it could be located inside cache -
@@ -222,9 +207,6 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
 
-    aWriteLock.clear();
-    // } SAFE
-
     // Don't forget to send a frame action event "context changed".
     // Any cached dispatch objects must be validated now!
     if (xOwner.is())
@@ -237,8 +219,6 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 {
     osl::Guard<osl::Mutex> aGuard(m_Mutex);
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
-    // SAFE ->
-    SolarMutexResettableGuard aReadLock;
 
     // check call... we accept such disposing calls only from our owner frame.
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
@@ -253,9 +233,6 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // Otherwise we can't iterate over this vector without the risk, that our iterator will be invalid.
     // Because this vetor will be influenced by every deregistered interceptor.
     InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
-
-    aReadLock.clear();
-    // <- SAFE
 
     InterceptionHelper::InterceptorList::iterator pIt;
     for (  pIt  = aCopy.begin();
@@ -275,11 +252,8 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 
     #if OSL_DEBUG_LEVEL > 0
     // SAFE ->
-    aReadLock.reset();
     if (!m_lInterceptionRegs.empty() )
         OSL_FAIL("There are some pending interceptor objects, which seems to be registered during (!) the destruction of a frame.");
-    aReadLock.clear();
-    // <- SAFE
     #endif // ODL_DEBUG_LEVEL>0
 
     #endif // FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
