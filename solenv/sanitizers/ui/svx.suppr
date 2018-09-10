@@ -1,6 +1,4 @@
-svx/uiconfig/ui/addinstancedialog.ui://GtkEntry[@id='name'] duplicate-mnemonic
 svx/uiconfig/ui/addinstancedialog.ui://GtkLabel[@id='alttitle'] orphan-label
-svx/uiconfig/ui/addinstancedialog.ui://GtkComboBoxText[@id='url'] no-labelled-by
 svx/uiconfig/ui/addmodeldialog.ui://GtkLabel[@id='alttitle'] orphan-label
 svx/uiconfig/ui/addnamespacedialog.ui://GtkLabel[@id='alttitle'] orphan-label
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkLabel[@id='basetextft'] orphan-label
@@ -50,10 +48,6 @@ svx/uiconfig/ui/compressgraphicdialog.ui://GtkLabel[@id='label-graphic-type'] or
 svx/uiconfig/ui/crashreportdlg.ui://GtkLabel[@id='ed_pre'] orphan-label
 svx/uiconfig/ui/crashreportdlg.ui://GtkTextView[@id='ed_post'] no-labelled-by
 svx/uiconfig/ui/crashreportdlg.ui://GtkTextView[@id='ed_bugreport'] no-labelled-by
-svx/uiconfig/ui/docking3deffects.ui://GtkSpinButton[@id='hori'] duplicate-mnemonic
-svx/uiconfig/ui/docking3deffects.ui://GtkSpinButton[@id='veri'] duplicate-mnemonic
-svx/uiconfig/ui/docking3deffects.ui://GtkSpinButton[@id='focal:0.00cm'] no-labelled-by
-svx/uiconfig/ui/docking3deffects.ui://GtkSpinButton[@id='distance:0.00cm'] no-labelled-by
 svx/uiconfig/ui/docking3deffects.ui://GtkLabel[@id='label17'] orphan-label
 svx/uiconfig/ui/docking3deffects.ui://svxcorelo-SvxColorListBox[@id='lightcolor1'] no-labelled-by
 svx/uiconfig/ui/docking3deffects.ui://svxcorelo-SvxColorListBox[@id='lightcolor2'] no-labelled-by

@@ -424,7 +424,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="optviewpage|label9">Sidebar _icon size:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">iconsize</property>
+                            <property name="mnemonic_widget">sidebariconsize</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -453,7 +453,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="optviewpage|label7">_Notebookbar icon size:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">iconsize</property>
+                            <property name="mnemonic_widget">notebookbariconsize</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

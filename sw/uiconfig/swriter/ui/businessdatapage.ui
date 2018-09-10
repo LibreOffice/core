@@ -410,7 +410,7 @@
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|titleft1">Phone/mobile:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">position</property>
+                <property name="mnemonic_widget">phone</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
