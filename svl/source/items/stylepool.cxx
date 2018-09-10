@@ -20,6 +20,7 @@
 #include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
+#include <o3tl/make_unique.hxx>
 #include <algorithm>
 #include <map>
 #include <memory>
@@ -357,7 +358,7 @@ public:
     std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
 
     // #i86923#
-    IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets,
+    std::unique_ptr<IStylePoolIteratorAccess> createIterator( bool bSkipUnusedItemSets,
                                               bool bSkipIgnorableItems );
 };
 
@@ -432,10 +433,10 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
 }
 
 // #i86923#
-IStylePoolIteratorAccess* StylePoolImpl::createIterator( bool bSkipUnusedItemSets,
+std::unique_ptr<IStylePoolIteratorAccess> StylePoolImpl::createIterator( bool bSkipUnusedItemSets,
                                                          bool bSkipIgnorableItems )
 {
-    return new Iterator( maRoot, bSkipUnusedItemSets, bSkipIgnorableItems );
+    return o3tl::make_unique<Iterator>( maRoot, bSkipUnusedItemSets, bSkipIgnorableItems );
 }
 // Ctor, Dtor and redirected methods of class StylePool, nearly inline ;-)
 
@@ -448,7 +449,7 @@ std::shared_ptr<SfxItemSet> StylePool::insertItemSet( const SfxItemSet& rSet )
 { return pImpl->insertItemSet( rSet ); }
 
 // #i86923#
-IStylePoolIteratorAccess* StylePool::createIterator( const bool bSkipUnusedItemSets,
+std::unique_ptr<IStylePoolIteratorAccess> StylePool::createIterator( const bool bSkipUnusedItemSets,
                                                      const bool bSkipIgnorableItems )
 {
     return pImpl->createIterator( bSkipUnusedItemSets, bSkipIgnorableItems );

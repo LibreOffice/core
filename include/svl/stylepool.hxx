@@ -62,7 +62,7 @@ public:
         @postcond the iterator "points before the first" SfxItemSet of the pool.
         The first StylePoolIterator::getNext() call will deliver the first SfxItemSet.
     */
-    IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
+    std::unique_ptr<IStylePoolIteratorAccess> createIterator( const bool bSkipUnusedItemSets = false,
                                                       const bool bSkipIgnorableItems = false );
 
     ~StylePool();
