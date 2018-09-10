@@ -340,7 +340,7 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
+    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
             ScAddress& rErrorPos, const ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
@@ -615,11 +615,11 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
     SC_DLLPUBLIC void IncColIfNotLessThan(SCCOL nStartCol, SCCOL nOffset);

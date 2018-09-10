@@ -574,11 +574,11 @@ public:
                                            sal_uInt32 nMaxLen,
                                            bool bUniCode);
 
-    static bool ReadCommonRecordHeader( SvStream& rSt,
+    SAL_WARN_UNUSED_RESULT static bool ReadCommonRecordHeader( SvStream& rSt,
                                         sal_uInt8& rVer,
                                         sal_uInt16& rInst,
                                         sal_uInt16& rFbt,
-                                        sal_uInt32& rLength) SAL_WARN_UNUSED_RESULT;
+                                        sal_uInt32& rLength);
 
 // TODO: provide proper documentation here
     /** constructor
