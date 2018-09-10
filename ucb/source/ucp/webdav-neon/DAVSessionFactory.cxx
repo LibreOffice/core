@@ -45,9 +45,9 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< uno::XComponentContext > & rxContext )
 {
-    m_xContext = rxContext;
-
     osl::MutexGuard aGuard( m_aMutex );
+
+    m_xContext = rxContext;
 
     if ( !m_xProxyDecider.get() )
         m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
