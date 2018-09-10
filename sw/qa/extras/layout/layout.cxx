@@ -21,6 +21,7 @@ public:
     void testTdf117028();
     void testTdf117923();
     void testTdf118058();
+    void testTdf117188();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -28,6 +29,7 @@ public:
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf117923);
     CPPUNIT_TEST(testTdf118058);
+    CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -130,6 +132,27 @@ void SwLayoutWriter::testTdf118058()
     SwDoc* pDoc = createDoc("tdf118058.fodt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
+void SwLayoutWriter::testTdf117188()
+{
+    createDoc("tdf117188.docx");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    }));
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    loadURL(aTempFile.GetURL(), "tdf117188.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    OUString sWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "width");
+    OUString sHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height");
+    // The text box must have zero border distances
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "left", "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "top", "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "width", sWidth);
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "height", sHeight);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
