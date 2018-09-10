@@ -491,12 +491,12 @@ bool SwPaM::Move( SwMoveFnCollection const & fnMove, SwGoInDoc fnGo )
 
     @return Newly created range, in Ring with parameter pOrigRg.
 */
-SwPaM* SwPaM::MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg )
+std::unique_ptr<SwPaM> SwPaM::MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg )
 {
-    SwPaM* pPam;
+    std::unique_ptr<SwPaM> pPam;
     if( pOrigRg == nullptr )
     {
-        pPam = new SwPaM( *m_pPoint );
+        pPam.reset(new SwPaM( *m_pPoint ));
         pPam->SetMark(); // set beginning
         pPam->Move( fnMove, GoInSection); // to beginning or end of a node
 
@@ -505,7 +505,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrig
     }
     else
     {
-        pPam = new SwPaM(*pOrigRg, const_cast<SwPaM*>(pOrigRg)); // given search range
+        pPam.reset(new SwPaM(*pOrigRg, const_cast<SwPaM*>(pOrigRg))); // given search range
         // make sure that SPoint is on the "real" start position
         // FORWARD: SPoint always smaller than GetMark
         // BACKWARD: SPoint always bigger than GetMark

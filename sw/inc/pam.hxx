@@ -151,7 +151,7 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
     SwPosition * m_pMark;  ///< points at either m_Bound1 or m_Bound2
     bool m_bIsInFrontOfLabel;
 
-    SwPaM* MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg );
+    std::unique_ptr<SwPaM> MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg );
 
     SwPaM(SwPaM const& rPaM) = delete;
 

@@ -234,7 +234,7 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
     if( rSearchOpt.searchString.isEmpty() )
         return false;
 
-    SwPaM* pPam = MakeRegion( fnMove, pRegion );
+    std::unique_ptr<SwPaM> pPam = MakeRegion( fnMove, pRegion );
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rContentIdx = pPam->GetPoint()->nContent;
@@ -437,7 +437,7 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                     bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
                                        nStartInside, nEndInside, nTextLen, pNode,
-                                       pPam );
+                                       pPam.get() );
                     if ( bFound )
                         break;
                     else
@@ -465,13 +465,12 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                 // is disabled, we search the whole length just like before
                 bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
-                                   nStart, nEnd, nTextLen, pNode, pPam );
+                                   nStart, nEnd, nTextLen, pNode, pPam.get() );
             }
             if (bFound)
                 break;
         }
     }
-    delete pPam;
     return bFound;
 }
 
