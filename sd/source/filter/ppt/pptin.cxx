@@ -110,7 +110,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     : maParam(rDocStream)
 {
 #ifdef DBG_UTIL
-    PropRead* pSummaryInformation = new PropRead( rStorage, "\005SummaryInformation" );
+    std::unique_ptr<PropRead> pSummaryInformation(new PropRead( rStorage, "\005SummaryInformation" ));
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
@@ -133,7 +133,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
             }
         }
     }
-    delete pSummaryInformation;
+    pSummaryInformation.reset();
 #endif
 
     SvStream* pCurrentUserStream = rStorage.OpenSotStream( "Current User", StreamMode::STD_READ );
@@ -259,7 +259,7 @@ bool ImplSdPPTImport::Import()
         SeekOle( pDocShell, mnFilterOptions );
 
     // hyperlinks
-    PropRead* pDInfoSec2 = new PropRead( mrStorage, "\005DocumentSummaryInformation" );
+    std::unique_ptr<PropRead> pDInfoSec2(new PropRead( mrStorage, "\005DocumentSummaryInformation" ));
     if ( pDInfoSec2->IsValid() )
     {
         PropItem aPropItem;
@@ -522,7 +522,7 @@ bool ImplSdPPTImport::Import()
             }
         }
     }
-    delete pDInfoSec2;
+    pDInfoSec2.reset();
 
     if ( mbDocumentFound )
     {
