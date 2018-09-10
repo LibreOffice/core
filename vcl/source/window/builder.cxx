@@ -379,8 +379,9 @@ namespace weld
 
     void EntryTreeView::set_size_request_by_digits_rows(int nDigits, int nRows)
     {
-        m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * nDigits,
-                                      m_xTreeView->get_height_rows(nRows));
+        int nWidth = nDigits == -1 ? -1 : m_xTreeView->get_approximate_digit_width() * nDigits;
+        int nHeight = nRows == -1 ? -1 : m_xTreeView->get_height_rows(nRows);
+        m_xTreeView->set_size_request(nWidth, nHeight);
     }
 }
 
