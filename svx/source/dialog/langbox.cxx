@@ -528,7 +528,7 @@ sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
     return ImplGetSavedValue();
 }
 
-LanguageType LanguageBox::GetSelectedLanguage() const
+LanguageType LanguageBox::get_active_id() const
 {
     OUString sLang = m_xControl->get_active_id();
     if (!sLang.isEmpty())
@@ -537,7 +537,7 @@ LanguageType LanguageBox::GetSelectedLanguage() const
         return LANGUAGE_DONTKNOW;
 }
 
-void LanguageBox::SelectLanguage( const LanguageType eLangType )
+void LanguageBox::set_active_id(const LanguageType eLangType)
 {
     // If the core uses a LangID of an imported MS document and wants to select
     // a language that is replaced, we need to select the replacement instead.
@@ -579,12 +579,13 @@ void LanguageBox::ImplClear()
 }
 
 void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
-        bool bHasLangNone, bool bLangNoneIsLangAll )
+        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
     ImplClear();
 
     m_bHasLangNone          = bHasLangNone;
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
+    m_bWithCheckmark        = bCheckSpellAvail;
 
     if ( SvxLanguageListFlags::EMPTY == nLangList )
         return;
@@ -734,31 +735,89 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
         aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
     }
 
-    // aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
+    aStrEntry = ApplyLreOrRleEmbedding(aStrEntry);
 
     m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry);
 }
 
 IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBoxText&, rControl, void)
 {
-    int nModelPos = rControl.find_text(rControl.get_active_text());
-    if (nModelPos == -1)
-    {
-        rControl.set_entry_error(true);
-    }
+    EditedAndValid eOldState = m_eEditedAndValid;
+    OUString aStr(vcl::I18nHelper::filterFormattingChars(rControl.get_active_text()));
+    if (aStr.isEmpty())
+        m_eEditedAndValid = EditedAndValid::Invalid;
     else
     {
-        rControl.set_active(nModelPos);
-        rControl.set_entry_error(false);
-        m_aChangeHdl.Call(rControl);
+        const int nPos = rControl.find_text(aStr);
+        if (nPos != -1)
+        {
+            int nStartSelectPos, nEndSelectPos;
+            rControl.get_entry_selection_bounds(nStartSelectPos, nEndSelectPos);
+
+            // Select the corresponding listbox entry if not current. This
+            // invalidates the Edit Selection thus has to happen between
+            // obtaining the Selection and setting the new Selection.
+            int nSelPos = m_xControl->get_active();
+            bool bSetEditSelection;
+            if (nSelPos == nPos)
+                bSetEditSelection = false;
+            else
+            {
+                m_xControl->set_active(nPos);
+                bSetEditSelection = true;
+            }
+
+            // If typing into the Edit control led us here, advance start of a
+            // full selection by one so the next character will already
+            // continue the string instead of having to type the same character
+            // again to start a new string. The selection includes formatting
+            // characters and is reverse when obtained from the Edit control.
+            if (nEndSelectPos == 1)
+            {
+                OUString aText(m_xControl->get_active_text());
+                if (nStartSelectPos == aText.getLength())
+                {
+                    ++nEndSelectPos;
+                    bSetEditSelection = true;
+                }
+            }
+
+            if (bSetEditSelection)
+                rControl.select_entry_region(nStartSelectPos, nEndSelectPos);
+
+            m_eEditedAndValid = EditedAndValid::No;
+        }
+        else
+        {
+            OUString aCanonicalized;
+            bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, true);
+            m_eEditedAndValid = (bValid ? EditedAndValid::Valid : EditedAndValid::Invalid);
+            if (bValid && aCanonicalized != aStr)
+            {
+                m_xControl->set_entry_text(aCanonicalized);
+                const auto nCursorPos = aCanonicalized.getLength();
+                m_xControl->select_entry_region(nCursorPos, nCursorPos);
+            }
+        }
     }
+    if (eOldState != m_eEditedAndValid)
+    {
+        if (m_eEditedAndValid == EditedAndValid::Invalid)
+            rControl.set_entry_error(true);
+        else
+            rControl.set_entry_error(false);
+    }
+    m_aChangeHdl.Call(rControl);
 }
 
 LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl)
     : m_xControl(std::move(pControl))
     , m_aAllString(SvxResId(RID_SVXSTR_LANGUAGE_ALL))
+    , m_eSavedLanguage(LANGUAGE_DONTKNOW)
+    , m_eEditedAndValid(EditedAndValid::No)
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
+    , m_bWithCheckmark(false)
 {
     m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, LanguageBox, ChangeHdl));
@@ -1089,6 +1148,42 @@ sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
     nPos = InsertLanguage( nLang);
 
     return nPos;
+}
+
+sal_Int32 LanguageBox::SaveEditedAsEntry()
+{
+    if (m_eEditedAndValid != EditedAndValid::Valid)
+        return -1;
+
+    LanguageTag aLanguageTag(vcl::I18nHelper::filterFormattingChars(m_xControl->get_active_text()));
+    LanguageType nLang = aLanguageTag.getLanguageType();
+    if (nLang == LANGUAGE_DONTKNOW)
+    {
+        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: unknown tag");
+        return -1;
+    }
+
+    int nPos = ImplTypeToPos( nLang);
+    if (nPos != -1)
+        return nPos;    // Already present but with a different string.
+
+    if (SvtLanguageTable::HasLanguageType( nLang))
+    {
+        // In SvtLanguageTable but not in SvxLanguageComboBox. On purpose? This
+        // may be an entry with different settings or CTL instead of Western or
+        // ... all things we don't handle yet.
+        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: already in SvtLanguageTable: " <<
+                SvtLanguageTable::GetLanguageString( nLang) << ", " << nLang);
+    }
+    else
+    {
+        // Add to both, SvtLanguageTable and SvxLanguageComboBox.
+        /* TODO: a descriptive user comment would be a nice to have here. */
+        SvtLanguageTable::AddLanguageTag( aLanguageTag );
+    }
+
+    InsertLanguage(nLang);
+    return ImplTypeToPos(nLang);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

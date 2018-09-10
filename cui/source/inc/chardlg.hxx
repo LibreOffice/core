@@ -94,57 +94,62 @@ public:
 
 struct SvxCharNamePage_Impl;
 
-class SvxCharNamePage : public SvxCharBasePage
+class SvxCharNamePage : public CharBasePage
 {
     friend class VclPtr<SvxCharNamePage>;
 
 private:
     static const sal_uInt16 pNameRanges[];
-    VclPtr<VclContainer>       m_pWestFrame;
-    VclPtr<FixedText>          m_pWestFontNameFT;
-    VclPtr<FontNameBox>        m_pWestFontNameLB;
-    VclPtr<FixedText>          m_pWestFontStyleFT;
-    VclPtr<FontStyleBox>       m_pWestFontStyleLB;
-    VclPtr<FixedText>          m_pWestFontSizeFT;
-    VclPtr<FontSizeBox>        m_pWestFontSizeLB;
-    VclPtr<FixedText>          m_pWestFontLanguageFT;
-    VclPtr<SvxLanguageComboBox> m_pWestFontLanguageLB;
-    VclPtr<FixedText>          m_pWestFontTypeFT;
-    VclPtr<PushButton>         m_pWestFontFeaturesButton;
-
-    VclPtr<VclContainer>       m_pEastFrame;
-    VclPtr<FixedText>          m_pEastFontNameFT;
-    VclPtr<FontNameBox>        m_pEastFontNameLB;
-    VclPtr<FixedText>          m_pEastFontStyleFT;
-    VclPtr<FontStyleBox>       m_pEastFontStyleLB;
-    VclPtr<FixedText>          m_pEastFontSizeFT;
-    VclPtr<FontSizeBox>        m_pEastFontSizeLB;
-    VclPtr<FixedText>          m_pEastFontLanguageFT;
-    VclPtr<SvxLanguageBox>     m_pEastFontLanguageLB;
-    VclPtr<FixedText>          m_pEastFontTypeFT;
-    VclPtr<PushButton>         m_pEastFontFeaturesButton;
-
-    VclPtr<VclContainer>       m_pCTLFrame;
-    VclPtr<FixedText>          m_pCTLFontNameFT;
-    VclPtr<FontNameBox>        m_pCTLFontNameLB;
-    VclPtr<FixedText>          m_pCTLFontStyleFT;
-    VclPtr<FontStyleBox>       m_pCTLFontStyleLB;
-    VclPtr<FixedText>          m_pCTLFontSizeFT;
-    VclPtr<FontSizeBox>        m_pCTLFontSizeLB;
-    VclPtr<FixedText>          m_pCTLFontLanguageFT;
-    VclPtr<SvxLanguageBox>     m_pCTLFontLanguageLB;
-    VclPtr<FixedText>          m_pCTLFontTypeFT;
-    VclPtr<PushButton>         m_pCTLFontFeaturesButton;
 
     std::unique_ptr<SvxCharNamePage_Impl>   m_pImpl;
 
-                        SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rSet );
+    std::unique_ptr<weld::Widget> m_xWestFrame;
+    std::unique_ptr<weld::Label> m_xWestFontNameFT;
+    std::unique_ptr<weld::ComboBoxText> m_xWestFontNameLB;
+    std::unique_ptr<weld::Label> m_xWestFontStyleFT;
+    std::unique_ptr<SvtFontStyleBox> m_xWestFontStyleLB;
+    std::unique_ptr<weld::Label> m_xWestFontSizeFT;
+    std::unique_ptr<SvtFontSizeBox> m_xWestFontSizeLB;
+    std::unique_ptr<weld::Label> m_xWestFontLanguageFT;
+    std::unique_ptr<LanguageBox> m_xWestFontLanguageLB;
+    std::unique_ptr<weld::Label> m_xWestFontTypeFT;
+    std::unique_ptr<weld::Button> m_xWestFontFeaturesButton;
+
+    std::unique_ptr<weld::Widget> m_xEastFrame;
+    std::unique_ptr<weld::Label> m_xEastFontNameFT;
+    std::unique_ptr<weld::ComboBoxText> m_xEastFontNameLB;
+    std::unique_ptr<weld::Label> m_xEastFontStyleFT;
+    std::unique_ptr<SvtFontStyleBox> m_xEastFontStyleLB;
+    std::unique_ptr<weld::Label> m_xEastFontSizeFT;
+    std::unique_ptr<SvtFontSizeBox> m_xEastFontSizeLB;
+    std::unique_ptr<weld::Label> m_xEastFontLanguageFT;
+    std::unique_ptr<LanguageBox> m_xEastFontLanguageLB;
+    std::unique_ptr<weld::Label> m_xEastFontTypeFT;
+    std::unique_ptr<weld::Button> m_xEastFontFeaturesButton;
+
+    std::unique_ptr<weld::Widget> m_xCTLFrame;
+    std::unique_ptr<weld::Label> m_xCTLFontNameFT;
+    std::unique_ptr<weld::ComboBoxText> m_xCTLFontNameLB;
+    std::unique_ptr<weld::Label> m_xCTLFontStyleFT;
+    std::unique_ptr<SvtFontStyleBox> m_xCTLFontStyleLB;
+    std::unique_ptr<weld::Label> m_xCTLFontSizeFT;
+    std::unique_ptr<SvtFontSizeBox> m_xCTLFontSizeLB;
+    std::unique_ptr<weld::Label> m_xCTLFontLanguageFT;
+    std::unique_ptr<LanguageBox> m_xCTLFontLanguageLB;
+    std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
+    std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
+
+    std::unique_ptr<weld::EntryTreeView> m_xWestFontNameETV;
+    std::unique_ptr<weld::EntryTreeView> m_xWestFontStyleETV;
+    std::unique_ptr<weld::EntryTreeView> m_xWestFontSizeETV;
+
+    SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rSet);
 
     void                Initialize();
     const FontList*     GetFontList() const;
     void                UpdatePreview_Impl();
-    void                FillStyleBox_Impl( const FontNameBox* rBox );
-    void                FillSizeBox_Impl( const FontNameBox* rBox );
+    void                FillStyleBox_Impl(const weld::ComboBoxText& rBox);
+    void                FillSizeBox_Impl(const weld::ComboBoxText& rBox);
 
     enum LanguageGroup
     {
@@ -164,13 +169,13 @@ private:
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
-    DECL_LINK( UpdateHdl_Impl, Timer *, void );
-    DECL_LINK( FontModifyEditHdl_Impl, Edit&, void );
-    DECL_LINK( FontModifyListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( FontModifyComboBoxHdl_Impl, ComboBox&, void );
-    DECL_LINK(FontFeatureButtonClicked, Button*, void);
+    DECL_LINK(UpdateHdl_Impl, Timer *, void );
+    DECL_LINK(FontModifyEditHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(FontModifyListBoxHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(FontFeatureButtonClicked, weld::Button&, void);
 
-    void FontModifyHdl_Impl(void const *);
+    void FontModifyHdl_Impl(const weld::ComboBoxText&);
 
 public:
     using SfxTabPage::ActivatePage;

@@ -1239,6 +1239,165 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     }
 }
 
+SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBoxText> p)
+    : m_xComboBox(std::move(p))
+{
+    //Use the standard texts to get an optimal size and stick to that size.
+    //That should stop the character dialog dancing around.
+    m_xComboBox->freeze();
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_LIGHT));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_LIGHT_ITALIC));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_NORMAL));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_NORMAL_ITALIC));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_BOLD));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_BOLD_ITALIC));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_BLACK));
+    m_xComboBox->append_text(SvtResId(STR_SVT_STYLE_BLACK_ITALIC));
+    Size aOptimalSize = m_xComboBox->get_preferred_size();
+    m_xComboBox->set_size_request(aOptimalSize.Width(), aOptimalSize.Height());
+    m_xComboBox->clear();
+    m_xComboBox->thaw();
+}
+
+void SvtFontStyleBox::Fill( const OUString& rName, const FontList* pList )
+{
+    m_xComboBox->freeze();
+    OUString aOldText = m_xComboBox->get_active_text();
+    int nPos = m_xComboBox->get_active();
+    m_xComboBox->clear();
+
+    // does a font with this name already exist?
+    sal_Handle hFontMetric = pList->GetFirstFontMetric( rName );
+    if ( hFontMetric )
+    {
+        OUString aStyleText;
+        FontWeight  eLastWeight = WEIGHT_DONTKNOW;
+        FontItalic  eLastItalic = ITALIC_NONE;
+        FontWidth   eLastWidth = WIDTH_DONTKNOW;
+        bool        bNormal = false;
+        bool        bItalic = false;
+        bool        bBold = false;
+        bool        bBoldItalic = false;
+        bool        bInsert = false;
+        FontMetric    aFontMetric;
+        while ( hFontMetric )
+        {
+            aFontMetric = FontList::GetFontMetric( hFontMetric );
+
+            FontWeight  eWeight = aFontMetric.GetWeight();
+            FontItalic  eItalic = aFontMetric.GetItalic();
+            FontWidth   eWidth = aFontMetric.GetWidthType();
+            // Only if the attributes are different, we insert the
+            // Font to avoid double Entries in different languages
+            if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||
+                 (eWidth != eLastWidth) )
+            {
+                if ( bInsert )
+                    m_xComboBox->append_text(aStyleText);
+
+                if ( eWeight <= WEIGHT_NORMAL )
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bItalic = true;
+                    else
+                        bNormal = true;
+                }
+                else
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bBoldItalic = true;
+                    else
+                        bBold = true;
+                }
+
+                // For wrong StyleNames we replace this with the correct once
+                aStyleText = pList->GetStyleName( aFontMetric );
+                bInsert = m_xComboBox->find_text(aStyleText) == -1;
+                if ( !bInsert )
+                {
+                    aStyleText = pList->GetStyleName( eWeight, eItalic );
+                    bInsert = m_xComboBox->find_text(aStyleText) == -1;
+                }
+
+                eLastWeight = eWeight;
+                eLastItalic = eItalic;
+                eLastWidth = eWidth;
+            }
+            else
+            {
+                if ( bInsert )
+                {
+                    // If we have two names for the same attributes
+                    // we prefer the translated standard names
+                    const OUString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
+                    if (rAttrStyleText != aStyleText)
+                    {
+                        OUString aTempStyleText = pList->GetStyleName( aFontMetric );
+                        if (rAttrStyleText == aTempStyleText)
+                            aStyleText = rAttrStyleText;
+                        bInsert = m_xComboBox->find_text(aStyleText) == -1;
+                    }
+                }
+            }
+
+            if ( !bItalic && (aStyleText == pList->GetItalicStr()) )
+                bItalic = true;
+            else if ( !bBold && (aStyleText == pList->GetBoldStr()) )
+                bBold = true;
+            else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
+                bBoldItalic = true;
+
+            hFontMetric = FontList::GetNextFontMetric( hFontMetric );
+        }
+
+        if ( bInsert )
+            m_xComboBox->append_text(aStyleText);
+
+        // certain style as copy
+        if ( bNormal )
+        {
+            if ( !bItalic )
+                m_xComboBox->append_text(pList->GetItalicStr());
+            if ( !bBold )
+                m_xComboBox->append_text(pList->GetBoldStr());
+        }
+        if ( !bBoldItalic )
+        {
+            if ( bNormal || bItalic || bBold )
+                m_xComboBox->append_text(pList->GetBoldItalicStr());
+        }
+        if (!aOldText.isEmpty())
+        {
+            int nFound = m_xComboBox->find_text(aOldText);
+            if (nFound != -1)
+                m_xComboBox->set_active(nFound);
+            else
+            {
+                if (nPos >= m_xComboBox->get_count())
+                    m_xComboBox->set_active(0);
+                else
+                    m_xComboBox->set_active(nPos);
+            }
+        }
+    }
+    else
+    {
+        // insert standard styles if no font
+        m_xComboBox->append_text(pList->GetNormalStr());
+        m_xComboBox->append_text(pList->GetItalicStr());
+        m_xComboBox->append_text(pList->GetBoldStr());
+        m_xComboBox->append_text(pList->GetBoldItalicStr());
+        if (!aOldText.isEmpty())
+        {
+            if (nPos >= m_xComboBox->get_count())
+                m_xComboBox->set_active(0);
+            else
+                m_xComboBox->set_active(nPos);
+        }
+    }
+    m_xComboBox->thaw();
+}
+
 FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )
 {
@@ -1558,6 +1717,306 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
     }
 
     return MetricBox::GetValueFromStringUnit( rStr, eOutUnit );
+}
+
+SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBoxText> p)
+    : pFontList(nullptr)
+    , nSavedValue(0)
+    , nRelMin(0)
+    , nRelMax(0)
+    , nRelStep(0)
+    , nPtRelMin(0)
+    , nPtRelMax(0)
+    , nPtRelStep(0)
+    , bRelativeMode(false)
+    , bRelative(false)
+    , bPtRelative(false)
+    , bStdSize(false)
+    , m_xComboBox(std::move(p))
+{
+}
+
+#if 0
+//TODO
+void SvtFontSizeBox::Reformat()
+{
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
+    if ( !bRelativeMode || !aFontSizeNames.IsEmpty() )
+    {
+        long nNewValue = aFontSizeNames.Name2Size( GetText() );
+        if ( nNewValue)
+        {
+            mnLastValue = nNewValue;
+            return;
+        }
+    }
+
+    MetricBox::Reformat();
+}
+
+void SvtFontSizeBox::Modify()
+{
+    MetricBox::Modify();
+
+    if ( !bRelativeMode )
+        return;
+
+    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
+
+    bool bNewMode = bRelative;
+    bool bOldPtRelMode = bPtRelative;
+
+    if ( bRelative )
+    {
+        bPtRelative = false;
+        const sal_Unicode* pStr = aStr.getStr();
+        while ( *pStr )
+        {
+            if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
+            {
+                if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
+                    bPtRelative = true;
+                else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
+                    ;
+                else
+                {
+                    bNewMode = false;
+                    break;
+                }
+            }
+            pStr++;
+        }
+    }
+    else if (!aStr.isEmpty())
+    {
+        if ( -1 != aStr.indexOf('%') )
+        {
+            bNewMode = true;
+            bPtRelative = false;
+        }
+
+        if ( '-' == aStr[0] || '+' == aStr[0] )
+        {
+            bNewMode = true;
+            bPtRelative = true;
+        }
+    }
+
+    if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
+        SetRelative( bNewMode );
+}
+#endif
+
+void SvtFontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
+{
+    // remember for relative mode
+    pFontList = pList;
+
+    // no font sizes need to be set for relative mode
+    if ( bRelative )
+        return;
+
+    // query font sizes
+    const sal_IntPtr* pTempAry;
+    const sal_IntPtr* pAry = nullptr;
+
+    if( pFontMetric )
+    {
+        aFontMetric = *pFontMetric;
+        pAry = pList->GetSizeAry( *pFontMetric );
+    }
+    else
+    {
+        pAry = FontList::GetStdSizeAry();
+    }
+
+    // first insert font size names (for simplified/traditional chinese)
+    FontSizeNames aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
+    if ( pAry == FontList::GetStdSizeAry() )
+    {
+        // for standard sizes we don't need to bother
+        if (bStdSize && m_xComboBox->get_count() && aFontSizeNames.IsEmpty())
+            return;
+        bStdSize = true;
+    }
+    else
+        bStdSize = false;
+
+    int nSelectionStart, nSelectionEnd;
+    m_xComboBox->get_entry_selection_bounds(nSelectionStart, nSelectionEnd);
+    OUString aStr = m_xComboBox->get_active_text();
+
+    m_xComboBox->freeze();
+    m_xComboBox->clear();
+    int nPos = 0;
+
+    if ( !aFontSizeNames.IsEmpty() )
+    {
+        if ( pAry == FontList::GetStdSizeAry() )
+        {
+            // for scalable fonts all font size names
+            sal_uLong nCount = aFontSizeNames.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
+            {
+                OUString    aSizeName = aFontSizeNames.GetIndexName( i );
+                sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
+                OUString sId(OUString::number(-nSize)); // mark as special
+                m_xComboBox->insert(nPos, sId, aSizeName);
+                nPos++;
+            }
+        }
+        else
+        {
+            // for fixed size fonts only selectable font size names
+            pTempAry = pAry;
+            while ( *pTempAry )
+            {
+                OUString aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                if ( !aSizeName.isEmpty() )
+                {
+                    OUString sId(OUString::number(-(*pTempAry))); // mark as special
+                    m_xComboBox->insert(nPos, sId, aSizeName);
+                    nPos++;
+                }
+                pTempAry++;
+            }
+        }
+    }
+
+    // then insert numerical font size values
+    pTempAry = pAry;
+    while ( *pTempAry )
+    {
+        OUString sNumber(OUString::number(*pTempAry));
+        m_xComboBox->insert(nPos, sNumber, sNumber);
+        nPos++;
+        pTempAry++;
+    }
+
+    m_xComboBox->set_entry_text(aStr);
+    m_xComboBox->select_entry_region(nSelectionStart, nSelectionEnd);
+    m_xComboBox->thaw();
+}
+
+void SvtFontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep )
+{
+    bRelativeMode = true;
+    nRelMin       = nMin;
+    nRelMax       = nMax;
+    nRelStep      = nStep;
+//TODO    SetUnit( FUNIT_POINT );
+}
+
+void SvtFontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
+{
+    bRelativeMode = true;
+    nPtRelMin     = nMin;
+    nPtRelMax     = nMax;
+    nPtRelStep    = nStep;
+//TODO    SetUnit( FUNIT_POINT );
+}
+
+void SvtFontSizeBox::SetRelative( bool bNewRelative )
+{
+    if ( !bRelativeMode )
+        return;
+    (void)bNewRelative;
+#if 0
+    //TODO
+
+    Selection aSelection = GetSelection();
+    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
+
+    if ( bNewRelative )
+    {
+        bRelative = true;
+        bStdSize = false;
+
+        if ( bPtRelative )
+        {
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
+
+            SetDecimalDigits( 1 );
+            SetMin( nPtRelMin );
+            SetMax( nPtRelMax );
+            SetUnit( FUNIT_POINT );
+
+            short i = nPtRelMin, n = 0;
+            // JP 30.06.98: more than 100 values are not useful
+            while ( i <= nPtRelMax && n++ < 100 )
+            {
+                InsertValue( i );
+                i = i + nPtRelStep;
+            }
+        }
+        else
+        {
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
+
+            SetDecimalDigits( 0 );
+            SetMin( nRelMin );
+            SetMax( nRelMax );
+            SetUnit( FUNIT_PERCENT );
+
+            sal_uInt16 i = nRelMin;
+            while ( i <= nRelMax )
+            {
+                InsertValue( i );
+                i = i + nRelStep;
+            }
+        }
+    }
+    else
+    {
+        if (pFontList)
+            Clear(); //clear early because SetDecimalDigits is a slow recalc
+        bRelative = bPtRelative = false;
+        SetDecimalDigits( 1 );
+        SetMin( 20 );
+        SetMax( 9999 );
+        SetUnit( FUNIT_POINT );
+        if ( pFontList )
+            Fill( &aFontMetric, pFontList );
+    }
+
+    SetText( aStr );
+    SetSelection( aSelection );
+#endif
+}
+
+#if 0
+void SvtFontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
+{
+    if ( !bRelative )
+    {
+        sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
+        // conversion loses precision; however font sizes should
+        // never have a problem with that
+        OUString aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
+        if ( !aName.isEmpty() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
+        {
+            mnLastValue = nTempValue;
+            SetText( aName );
+            mnFieldValue = mnLastValue;
+            SetEmptyFieldValueData( false );
+            return;
+        }
+    }
+
+    MetricBox::SetValue( nNewValue, eInUnit );
+}
+#endif
+
+void SvtFontSizeBox::set_value(int nNewValue)
+{
+//TODO    SetValue( nNewValue, FUNIT_NONE );
+    (void)nNewValue;
+}
+
+int SvtFontSizeBox::get_value() const
+{
+    return get_active_text().toInt32();
 }
 
 SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
