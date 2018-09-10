@@ -16,6 +16,24 @@
       "revId": "7764ae70b04058a64a3999529e98d1115ba59d1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_b4072c1d",
+        "filename": "basctl/source/basicide/bastype2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-10T13:50:16Z",
+      "side": 1,
+      "message": "Hmmm. Good point. My intention was to use this to expose more places to my useuniqueptr loplugin, where the next pattern I want to match on is calling release() before passing a param, which indicates an ownership change such that the callee should really be taking a std::unique_ptr parameter instead of a raw pointer.\n\nBut I can always just go through this by hand, will revert.",
+      "parentUuid": "dfeb2761_f40db43e",
+      "revId": "7764ae70b04058a64a3999529e98d1115ba59d1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
