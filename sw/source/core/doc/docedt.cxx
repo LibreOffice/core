@@ -418,7 +418,10 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 sw::MoveDeletedPrevFrames(*pOldTextNd, *pTextNd);
             }
             pDoc->GetNodes().Delete( aOldIdx );
-            sw::CheckResetRedlineMergeFlag(*pTextNd, eOldMergeFlag == SwNode::Merge::NonFirst);
+            sw::CheckResetRedlineMergeFlag(*pTextNd,
+                    eOldMergeFlag == SwNode::Merge::NonFirst
+                        ? sw::Recreate::Predecessor
+                        : sw::Recreate::No);
         }
         else
         {

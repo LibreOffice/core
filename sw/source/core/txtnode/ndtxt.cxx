@@ -872,21 +872,42 @@ void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode)
 
 /// if first node is First, its frames may need to be moved, never deleted.
 /// if first node is NonFirst, second node's own frames (First/None) must be deleted
-void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool const bRecreateMerged)
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerged)
 {
-    if (bRecreateMerged)
+    if (eRecreateMerged != sw::Recreate::No)
     {
+        SwTextNode * pMergeNode(&rNode);
+        if (eRecreateMerged == sw::Recreate::Predecessor)
+        {
+            for (sal_uLong i = rNode.GetIndex() - 1; ; --i)
+            {
+                SwNode *const pNode(rNode.GetNodes()[i]);
+                assert(!pNode->IsStartNode());
+                if (pNode->IsEndNode())
+                {
+                    i = pNode->StartOfSectionIndex();
+                }
+                else if (pNode->IsTextNode())
+                {
+                    pMergeNode = pNode->GetTextNode(); // use predecessor to merge
+                    break;
+                }
+            }
+        }
         std::vector<SwTextFrame*> frames;
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pMergeNode);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
-            frames.push_back(pFrame);
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+            }
         }
         for (SwTextFrame * pFrame : frames)
         {
             SwTextNode & rFirstNode(pFrame->GetMergedPara()
                 ? *pFrame->GetMergedPara()->pFirstNode
-                : rNode);
+                : *pMergeNode);
             assert(rFirstNode.GetIndex() <= rNode.GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, sw::FrameMode::Existing));
@@ -1007,7 +1028,9 @@ SwContentNode *SwTextNode::JoinNext()
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
-        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First);
+        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First
+                                            ? sw::Recreate::ThisNode
+                                            : sw::Recreate::No);
     }
     else {
         OSL_FAIL( "No TextNode." );
@@ -1107,7 +1130,10 @@ void SwTextNode::JoinPrev()
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
-        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::NonFirst);
+        sw::CheckResetRedlineMergeFlag(*this,
+                eOldMergeFlag == SwNode::Merge::NonFirst
+                    ? sw::Recreate::Predecessor
+                    : sw::Recreate::No);
     }
     else {
         OSL_FAIL( "No TextNode." );

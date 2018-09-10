@@ -110,7 +110,8 @@ void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
         SwTextNode const& rFirstNode, SwTextNode & rSecondNode, bool);
 
 void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
-void CheckResetRedlineMergeFlag(SwTextNode & rNode, bool bRecreateMerged);
+enum class Recreate { No, ThisNode, Predecessor };
+void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate eRecreateMerged);
 
 void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
