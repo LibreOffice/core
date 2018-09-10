@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 ContextHandler::ContextHandler( const ContextHandler& rParent ) :
-    ContextHandler_BASE(),
+    ContextHandler_BASE(rParent),
     mxBaseData( rParent.mxBaseData )
 {
 }

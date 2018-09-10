@@ -2805,7 +2805,7 @@ ScDocument* ScDocShell::GetClipDoc()
 }
 
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
-    SvRefBase(),
+    SvRefBase(rShell),
     SotObject(),
     SfxObjectShell( rShell.GetCreateMode() ),
     SfxListener(),

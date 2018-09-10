@@ -133,7 +133,7 @@ GridProperties::GridProperties() :
 
 GridProperties::GridProperties( const GridProperties & rOther ) :
         MutexContainer(),
-        impl::GridProperties_Base(),
+        impl::GridProperties_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {

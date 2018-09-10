@@ -405,7 +405,7 @@ InternalDataProvider::InternalDataProvider(
 
 // copy-CTOR
 InternalDataProvider::InternalDataProvider( const InternalDataProvider & rOther ) :
-        impl::InternalDataProvider_Base(),
+        impl::InternalDataProvider_Base(rOther),
         m_aSequenceMap( rOther.m_aSequenceMap ),
         m_aInternalData( rOther.m_aInternalData ),
         m_bDataInColumns( rOther.m_bDataInColumns )

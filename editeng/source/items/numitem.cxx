@@ -911,7 +911,7 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 _nWhich 
 }
 
 SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
-    SfxPoolItem(rCopy.Which())
+    SfxPoolItem(rCopy)
 {
     pNumRule.reset( new SvxNumRule(*rCopy.pNumRule) );
 }

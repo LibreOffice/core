@@ -186,7 +186,7 @@ RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
 
 RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther ) :
     MutexContainer(),
-    impl::RegressionCurveModel_Base(),
+    impl::RegressionCurveModel_Base(rOther),
     ::property::OPropertySet( rOther, m_aMutex ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())

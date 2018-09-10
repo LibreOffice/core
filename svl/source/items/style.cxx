@@ -119,7 +119,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePo
 }
 
 SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
-    : comphelper::OWeakTypeObject()
+    : comphelper::OWeakTypeObject(r)
     , m_pPool( r.m_pPool )
     , nFamily( r.nFamily )
     , aName( r.aName )
@@ -573,7 +573,7 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r ) :
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r ) :
     SfxBroadcaster( r ),
-    comphelper::OWeakTypeObject(),
+    comphelper::OWeakTypeObject(r),
     pImpl(new SfxStyleSheetBasePool_Impl),
     rPool(r.rPool),
     nSearchFamily(r.nSearchFamily),

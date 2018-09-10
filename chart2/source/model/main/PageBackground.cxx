@@ -119,7 +119,7 @@ PageBackground::PageBackground() :
 
 PageBackground::PageBackground( const PageBackground & rOther ) :
         MutexContainer(),
-        impl::PageBackground_Base(),
+        impl::PageBackground_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}

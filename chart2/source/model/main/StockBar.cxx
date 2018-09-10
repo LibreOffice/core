@@ -126,7 +126,7 @@ StockBar::StockBar( bool bRisingCourse ) :
 
 StockBar::StockBar( const StockBar & rOther ) :
         MutexContainer(),
-        impl::StockBar_Base(),
+        impl::StockBar_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}

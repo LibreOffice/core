@@ -39,7 +39,7 @@ OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue,
 }
 
 OOXMLProperty::OOXMLProperty(const OOXMLProperty & rSprm)
-: SvRefBase(), mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
+: SvRefBase(rSprm), mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
 {
 }
 

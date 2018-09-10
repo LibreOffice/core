@@ -126,7 +126,7 @@ AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialSt
 }
 
 AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
-    : cppu::WeakImplHelper<XAccessibleStateSet>()
+    : cppu::WeakImplHelper<XAccessibleStateSet>(rHelper)
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl.reset(new AccessibleStateSetHelperImpl(*rHelper.mpHelperImpl));

@@ -152,7 +152,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
 // explicit
 BaseCoordinateSystem::BaseCoordinateSystem(
     const BaseCoordinateSystem & rSource ) :
-        impl::BaseCoordinateSystem_Base(),
+        impl::BaseCoordinateSystem_Base(rSource),
         MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),

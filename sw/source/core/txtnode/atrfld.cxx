@@ -83,7 +83,7 @@ SwFormatField::SwFormatField( const SwField &rField )
 // full pool range, all items need to be clonable. Thus, this one needed to be
 // corrected
 SwFormatField::SwFormatField( const SwFormatField& rAttr )
-    : SfxPoolItem( RES_TXTATR_FIELD )
+    : SfxPoolItem( rAttr )
     , SwModify(nullptr)
     , SfxBroadcaster()
     , mpField( nullptr )

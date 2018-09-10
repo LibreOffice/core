@@ -1863,7 +1863,7 @@ SwChartDataSequence::SwChartDataSequence(
 }
 
 SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
-    SwChartDataSequenceBaseClass(),
+    SwChartDataSequenceBaseClass(rObj),
     SwClient( rObj.GetFrameFormat() ),
     m_aEvtListeners( GetChartMutex() ),
     m_aModifyListeners( GetChartMutex() ),
