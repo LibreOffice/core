@@ -2382,7 +2382,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
 {
     for (const auto & rPostponedDiagram : *m_pPostponedGraphic)
         FlyFrameGraphic(rPostponedDiagram.grfNode, rPostponedDiagram.size,
-            rPostponedDiagram.mOLEFrameFormat, rPostponedDiagram.mOLENode,
+            nullptr, nullptr,
             rPostponedDiagram.pSdrObj);
     m_pPostponedGraphic.reset(nullptr);
 }
@@ -5378,7 +5378,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_bPostponedProcessingFly = true ;
-                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr, pSdrObj));
+                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
                     }
                 }
             }

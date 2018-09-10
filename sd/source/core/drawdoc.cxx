@@ -615,7 +615,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
                 SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
         else
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
-                SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
+                SfxObjectCreateMode::EMBEDDED ) );
 
         pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell().get() );
         pNewDocSh->DoInitNew();

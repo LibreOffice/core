@@ -3764,14 +3764,13 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
-ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevel, bool bInterimBuilder)
+ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevel)
     : m_xButton(std::move(pControl))
     , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
-    , m_bInterimBuilder(bInterimBuilder)
 {
     m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
@@ -3804,7 +3803,7 @@ void ColorListBox::createColorWindow()
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
-                            m_bInterimBuilder,
+                            /*bInterimBuilder*/false,
                             m_aColorWrapper));
 
     SetNoSelection();
