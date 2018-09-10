@@ -338,9 +338,9 @@ public:
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) = 0 ;
 
-    virtual VclPtr<AbstractSvxCaptionDialog> CreateCaptionDialog( vcl::Window* pParent,
-                                        const SdrView* pView,
-                                        SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE ) = 0;
+    virtual VclPtr<AbstractSvxCaptionDialog> CreateCaptionDialog(weld::Window* pParent,
+                                                                 const SdrView* pView,
+                                                                 SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
 
     virtual VclPtr<AbstractSvxDistributeDialog>    CreateSvxDistributeDialog(
                                             const SfxItemSet& rAttr)= 0;
