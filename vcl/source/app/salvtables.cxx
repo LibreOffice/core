@@ -1455,6 +1455,14 @@ public:
         return !m_xEntry->IsReadOnly();
     }
 
+    virtual void set_error(bool bError) override
+    {
+        if (bError)
+            m_xEntry->SetControlForeground(Color(0xf0, 0, 0));
+        else
+            m_xEntry->SetControlForeground();
+    }
+
     virtual vcl::Font get_font() override
     {
         return m_xEntry->GetFont();
@@ -2205,6 +2213,11 @@ public:
         m_xComboBoxText->RemoveEntry(pos);
     }
 
+    virtual bool has_entry() const override
+    {
+        return false;
+    }
+
     virtual void set_entry_error(bool /*bError*/) override
     {
         assert(false);
@@ -2253,6 +2266,11 @@ public:
     {
         m_xComboBoxText->SetModifyHdl(LINK(this, SalInstanceComboBoxTextWithEdit, ChangeHdl));
         m_xComboBoxText->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxTextWithEdit, EntryActivateHdl));
+    }
+
+    virtual bool has_entry() const override
+    {
+        return true;
     }
 
     virtual void set_entry_error(bool bError) override
@@ -2313,20 +2331,36 @@ IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, EntryActivateHdl, Edit&, void)
     m_aEntryActivateHdl.Call(*this);
 }
 
-class SalInstanceEntryTreeView : public weld::EntryTreeView
+class SalInstanceEntryTreeView : public SalInstanceContainer, public virtual weld::EntryTreeView
 {
 private:
     DECL_LINK(AutocompleteHdl, Edit&, void);
     SalInstanceEntry* m_pEntry;
+    SalInstanceTreeView* m_pTreeView;
 public:
-    SalInstanceEntryTreeView(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+    SalInstanceEntryTreeView(vcl::Window *pContainer, bool bTakeOwnership, std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
         : EntryTreeView(std::move(xEntry), std::move(xTreeView))
+        , SalInstanceContainer(pContainer, bTakeOwnership)
         , m_pEntry(dynamic_cast<SalInstanceEntry*>(m_xEntry.get()))
+        , m_pTreeView(dynamic_cast<SalInstanceTreeView*>(m_xTreeView.get()))
     {
-        assert(m_pEntry);
+        assert(m_pEntry && m_pTreeView);
         m_pEntry->SetAutocompleteHdl(LINK(this, SalInstanceEntryTreeView, AutocompleteHdl));
     }
-    ~SalInstanceEntryTreeView()
+
+    virtual void make_sorted() override
+    {
+        vcl::Window *pTreeView = m_pTreeView->getWidget();
+        pTreeView->SetStyle(pTreeView->GetStyle() | WB_SORT);
+    }
+
+    virtual void set_entry_completion(bool bEnable) override
+    {
+        assert(!bEnable && "not implemented yet"); (void) bEnable;
+        m_pEntry->SetAutocompleteHdl(Link<Edit&, void>());
+    }
+
+    virtual ~SalInstanceEntryTreeView() override
     {
         m_pEntry->SetAutocompleteHdl(Link<Edit&, void>());
     }
@@ -2512,10 +2546,11 @@ public:
         return pListBox ? o3tl::make_unique<SalInstanceComboBoxTextWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
     }
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
     {
-        return o3tl::make_unique<SalInstanceEntryTreeView>(weld_entry(entryid, bTakeOwnership),
-                                                           weld_tree_view(treeviewid, bTakeOwnership));
+        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
+        return pContainer ? o3tl::make_unique<SalInstanceEntryTreeView>(pContainer, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
+                                                                        weld_tree_view(treeviewid, bTakeOwnership)) : nullptr;
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
