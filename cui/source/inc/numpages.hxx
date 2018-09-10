@@ -65,6 +65,27 @@ class SvxNumberingPreview : public vcl::Window
 
 };
 
+class NumberingPreview : public weld::CustomWidgetController
+{
+    const SvxNumRule*   pActNum;
+    vcl::Font           aStdFont;
+    bool                bPosition;
+    sal_uInt16          nActLevel;
+
+protected:
+    virtual void  Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
+
+public:
+    NumberingPreview();
+
+    void    SetNumRule(const SvxNumRule* pNum)
+                {pActNum = pNum; Invalidate();};
+    void    SetPositionMode()
+                    { bPosition = true;}
+    void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
+
+};
+
 struct SvxNumSettings_Impl
 {
     SvxNumType nNumberType;
@@ -358,37 +379,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclPtr<ListBox>            m_pLevelLB;
-
-    // former set of controls shown for numbering rules containing list level
-    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    VclPtr<FixedText>          m_pDistBorderFT;
-    VclPtr<MetricField>        m_pDistBorderMF;
-    VclPtr<CheckBox>           m_pRelativeCB;
-    VclPtr<FixedText>          m_pIndentFT;
-    VclPtr<MetricField>        m_pIndentMF;
-    VclPtr<FixedText>          m_pDistNumFT;
-    VclPtr<MetricField>        m_pDistNumMF;
-    VclPtr<FixedText>          m_pAlignFT;
-    VclPtr<ListBox>            m_pAlignLB;
-
-    // new set of controls shown for numbering rules containing list level
-    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
-    VclPtr<FixedText>          m_pLabelFollowedByFT;
-    VclPtr<ListBox>            m_pLabelFollowedByLB;
-    VclPtr<FixedText>          m_pListtabFT;
-    VclPtr<MetricField>        m_pListtabMF;
-    VclPtr<FixedText>          m_pAlign2FT;
-    VclPtr<ListBox>            m_pAlign2LB;
-    VclPtr<FixedText>          m_pAlignedAtFT;
-    VclPtr<MetricField>        m_pAlignedAtMF;
-    VclPtr<FixedText>          m_pIndentAtFT;
-    VclPtr<MetricField>        m_pIndentAtMF;
-
-    VclPtr<PushButton>         m_pStandardPB;
-
-    VclPtr<SvxNumberingPreview> m_pPreviewWIN;
-
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
 
@@ -401,30 +391,54 @@ class SvxNumPositionTabPage : public SfxTabPage
     bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
+    NumberingPreview m_aPreviewWIN;
+    std::unique_ptr<weld::TreeView> m_xLevelLB;
+    // former set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
+    std::unique_ptr<weld::Label> m_xDistBorderFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xDistBorderMF;
+    std::unique_ptr<weld::CheckButton> m_xRelativeCB;
+    std::unique_ptr<weld::Label> m_xIndentFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xIndentMF;
+    std::unique_ptr<weld::Label> m_xDistNumFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xDistNumMF;
+    std::unique_ptr<weld::Label> m_xAlignFT;
+    std::unique_ptr<weld::ComboBoxText> m_xAlignLB;
+    // new set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
+    std::unique_ptr<weld::Label> m_xLabelFollowedByFT;
+    std::unique_ptr<weld::ComboBoxText> m_xLabelFollowedByLB;
+    std::unique_ptr<weld::Label> m_xListtabFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xListtabMF;
+    std::unique_ptr<weld::Label>m_xAlign2FT;
+    std::unique_ptr<weld::ComboBoxText> m_xAlign2LB;
+    std::unique_ptr<weld::Label> m_xAlignedAtFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xAlignedAtMF;
+    std::unique_ptr<weld::Label> m_xIndentAtFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xIndentAtMF;
+    std::unique_ptr<weld::Button> m_xStandardPB;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
+
     void                InitControls();
 
-    DECL_LINK( LevelHdl_Impl, ListBox&, void );
-    DECL_LINK( EditModifyHdl_Impl, ListBox&, void);
-    DECL_LINK( DistanceHdl_Impl, SpinField&, void );
-    DECL_LINK( DistanceFocusHdl_Impl, Control&, void );
-    DECL_LINK( RelativeHdl_Impl, Button*, void );
-    DECL_LINK( StandardHdl_Impl, Button*, void);
+    DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(EditModifyHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(DistanceHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(DistanceFocusHdl_Impl, Control&, void);
+    DECL_LINK(RelativeHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK(LabelFollowedByHdl_Impl, ListBox&, void);
-    DECL_LINK( ListtabPosHdl_Impl, SpinField&, void );
-    DECL_LINK( ListtabPosFocusHdl_Impl, Control&, void );
-    DECL_LINK( AlignAtHdl_Impl, SpinField&, void );
-    DECL_LINK( AlignAtFocusHdl_Impl, Control&, void );
-    DECL_LINK( IndentAtHdl_Impl, SpinField&, void );
-    DECL_LINK( IndentAtFocusHdl_Impl, Control&, void );
+    DECL_LINK(LabelFollowedByHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(ListtabPosHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(AlignAtHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(IndentAtHdl_Impl, weld::MetricSpinButton&, void);
 
 public:
-        SvxNumPositionTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet);
-        virtual ~SvxNumPositionTabPage() override;
+    SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~SvxNumPositionTabPage() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
