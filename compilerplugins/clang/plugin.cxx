@@ -217,6 +217,10 @@ const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
 
 StringRef Plugin::getFileNameOfSpellingLoc(SourceLocation spellingLocation) const
 {
+    // prevent crashes when running the global-analysis plugins
+    if (!spellingLocation.isValid())
+        return "";
+
     static enum { NOINIT, STDIN, GOOD } s_Mode(NOINIT);
     if (s_Mode == GOOD)
     {
