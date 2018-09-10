@@ -358,9 +358,9 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
  */
 bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    WaitObject* pWait = nullptr;
+    std::unique_ptr<WaitObject> pWait;
     if( mpViewShell )
-        pWait = new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
+        pWait.reset(new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) ));
 
     mpDoc->NewOrLoadCompleted( NEW_DOC );
     mpDoc->CreateFirstPages();
@@ -378,8 +378,6 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
         if( pSet )
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
     }
-
-    delete pWait;
 
     return bRet;
 }
