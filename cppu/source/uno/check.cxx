@@ -256,7 +256,7 @@ static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 # error unexpected alignment of 8 byte types
 #endif
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 
 #define OFFSET_OF( s, m ) reinterpret_cast< size_t >(reinterpret_cast<char *>(&reinterpret_cast<s *>(16)->m) -16)
 
