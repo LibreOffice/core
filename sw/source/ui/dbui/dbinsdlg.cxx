@@ -653,7 +653,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
         TableToFromHdl( pButton );
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
+IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, Button*, void)
 {
     SwWrtShell& rSh = pView->GetWrtShell();
     bool bNewSet = false;
@@ -761,7 +761,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, pTableSet.get(), &rSh));
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetFrameWeld(), pTableSet.get(), &rSh));
     if( RET_OK == pDlg->Execute() )
         pTableSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )

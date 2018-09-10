@@ -593,7 +593,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             setSvxBrushItemAsFillAttributesToTargetSet(aBrush, aCoreSet);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
+            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(GetView().GetFrameWeld(), &aCoreSet, &rSh));
 
             if (pDlg)
             {
