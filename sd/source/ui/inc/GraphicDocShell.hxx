@@ -44,15 +44,9 @@ private:
 public:
     SFX_DECL_OBJECTFACTORY();
 
-    GraphicDocShell (
-        SfxObjectCreateMode eMode,
-        bool bSdDataObj,
-        DocumentType);
+    GraphicDocShell(SfxObjectCreateMode eMode);
 
-    GraphicDocShell (
-        SfxModelFlags nModelCreationFlags,
-        bool bSdDataObj,
-        DocumentType);
+    GraphicDocShell(SfxModelFlags nModelCreationFlags);
 
     virtual ~GraphicDocShell() override;
 };

@@ -125,7 +125,7 @@ public:
 
     /** Show only the tab bar, not the deck.
     */
-    void RequestCloseDeck(bool bFocusMenuTab = false);
+    void RequestCloseDeck();
 
     /** Open the deck area and restore the parent window to its old width.
     */

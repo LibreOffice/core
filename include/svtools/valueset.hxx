@@ -507,9 +507,9 @@ public:
 
     void SetOptimalSize();
 
-    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
+    /// Insert @rImage item with @rStr as a tooltip
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);

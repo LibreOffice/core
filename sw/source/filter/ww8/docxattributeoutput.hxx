@@ -841,13 +841,11 @@ private:
 
     struct PostponedGraphic
     {
-        PostponedGraphic( const SwGrfNode* n, Size s, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* sObj )
-            : grfNode( n ), size( s ), mOLEFrameFormat( pOLEFrameFormat ), mOLENode( pOLENode ), pSdrObj(sObj) {};
+        PostponedGraphic( const SwGrfNode* n, Size s, const SdrObject* sObj )
+            : grfNode( n ), size( s ), pSdrObj(sObj) {};
 
         const SwGrfNode* grfNode;
         Size size;
-        const SwFlyFrameFormat* mOLEFrameFormat;
-        SwOLENode* mOLENode;
         const SdrObject* pSdrObj;
     };
     std::unique_ptr< std::vector<PostponedGraphic> > m_pPostponedGraphic;

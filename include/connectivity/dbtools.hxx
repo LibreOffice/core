@@ -667,18 +667,13 @@ namespace dbtools
             The descriptor of the new table.
         @param  _xConnection
             The connection.
-        @param  _pHelper
-            Allow to add special SQL constructs.
-        @param  _sCreatePattern
 
         @return
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
     OUString createSqlCreateTableStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor
-                                                    ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
-                                                    ,ISQLStatementHelper* _pHelper = nullptr
-                                                    ,const OUString& _sCreatePattern = OUString());
+                                                    ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable
