@@ -147,15 +147,14 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     aXOBitmap.Array2Bitmap();
     WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
-    sal_uInt8* pImageBuff = new sal_uInt8 [nSize];
-    memcpy(pImageBuff, aPicMemStream.GetData(), nSize);
+    std::unique_ptr<sal_uInt8[]> pImageBuff(new sal_uInt8 [nSize]);
+    memcpy(pImageBuff.get(), aPicMemStream.GetData(), nSize);
 
     // create XFBGImage object.
     std::unique_ptr<XFBGImage> xXFBGImage(new XFBGImage);
-    xXFBGImage->SetImageData(pImageBuff, nSize);
+    xXFBGImage->SetImageData(pImageBuff.get(), nSize);
 
-    delete [] pImageBuff;
-    pImageBuff = nullptr;
+    pImageBuff.reset();
 
     xXFBGImage->SetRepeate();
 
