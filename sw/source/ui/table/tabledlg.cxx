@@ -1150,35 +1150,33 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent,
-    const SfxItemSet* pItemSet, SwWrtShell* pSh)
-    : SfxTabDialog(pParent, "TablePropertiesDialog",
-        "modules/swriter/ui/tableproperties.ui", pItemSet)
+SwTableTabDlg::SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, SwWrtShell* pSh)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/tableproperties.ui", "TablePropertiesDialog", pItemSet)
     , pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     AddTabPage("table", &SwFormatTablePage::Create, nullptr);
-    m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
+    AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
     AddTabPage("columns", &SwTableColumnPage::Create, nullptr);
-    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
+    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
 }
 
-void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void  SwTableTabDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nBackgroundId)
+    if (rId == "background")
     {
         SvxBackgroundTabFlags const nFlagType = SvxBackgroundTabFlags::SHOW_TBLCTL;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nBorderId)
+    else if (rId == "borders")
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(SwBorderModes::TABLE)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nTextFlowId)
+    else if (rId == "textflow")
     {
         static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
         const FrameTypeFlags eType = pShell->GetFrameType(nullptr,true);
