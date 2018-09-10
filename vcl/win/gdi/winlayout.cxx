@@ -395,10 +395,9 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
 
 void WinFontInstance::SetGraphics(WinSalGraphics *pGraphics)
 {
-    ReleaseHbFont();
-    if (m_hFont)
-        ::DeleteFont(m_hFont);
     m_pGraphics = pGraphics;
+    if (m_hFont)
+        return;
     HFONT hOrigFont;
     m_hFont = m_pGraphics->ImplDoSetFont(GetFontSelectPattern(), GetFontFace(), m_fScale, hOrigFont);
     SelectObject(m_pGraphics->getHDC(), hOrigFont);
