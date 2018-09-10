@@ -496,17 +496,17 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
 
-    SwSpellArgs      *pSpellArgs = nullptr;
+    std::unique_ptr<SwSpellArgs> pSpellArgs;
     if (pConvArgs)
     {
         pConvArgs->SetStart(pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent);
         pConvArgs->SetEnd(  pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent );
     }
     else
-        pSpellArgs = new SwSpellArgs( xSpeller,
+        pSpellArgs.reset(new SwSpellArgs( xSpeller,
                             pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent,
-                            bGrammarCheck );
+                            bGrammarCheck ));
 
     sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
     sal_uLong nEndNd = pEndPos->nNode.GetIndex();
@@ -573,7 +573,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                         }
 
                         sal_Int32 nSpellErrorPosition = pNd->GetTextNode()->GetText().getLength();
-                        if( (!pConvArgs && pNd->GetTextNode()->Spell( pSpellArgs )) ||
+                        if( (!pConvArgs && pNd->GetTextNode()->Spell( pSpellArgs.get() )) ||
                             ( pConvArgs && pNd->GetTextNode()->Convert( *pConvArgs )))
                         {
                             // Cancel and remember position
@@ -663,7 +663,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
         else
             aRet <<= pSpellArgs->xSpellAlt;
     }
-    delete pSpellArgs;
 
     return aRet;
 }
