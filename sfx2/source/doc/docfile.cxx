@@ -333,14 +333,7 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
     m_bInCheckIn(false),
-    m_pSet(nullptr),
-    m_pURLObj(nullptr),
-    m_pFilter(nullptr),
-    m_pInStream(nullptr),
-    m_pOutStream(nullptr),
-    pOrigFilter( nullptr ),
     aExpireTime( DateTime( DateTime::SYSTEM ) + static_cast<sal_Int32>(10) ),
-    pTempFile( nullptr ),
     nLastStorageError( ERRCODE_NONE ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
 {

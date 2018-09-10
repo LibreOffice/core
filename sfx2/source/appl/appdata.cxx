@@ -81,11 +81,7 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
 }
 
 SfxAppData_Impl::SfxAppData_Impl()
-    : pDdeService( nullptr )
-    , pDocTopics( nullptr )
-    , pTriggerTopic(nullptr)
-    , pDdeService2(nullptr)
-    , pFactArr(nullptr)
+    : pFactArr(nullptr)
     , pMatcher( nullptr )
     , m_pToolsErrorHdl(nullptr)
     , m_pSoErrorHdl(nullptr)

@@ -385,8 +385,6 @@ SfxTabDialog::SfxTabDialog
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
-    , m_pOutSet(nullptr)
-    , m_pRanges(nullptr)
     , m_nAppPageId(USHRT_MAX)
     , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)

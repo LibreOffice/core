@@ -55,7 +55,6 @@ struct BaseLink_Impl
     BaseLink_Impl() :
           m_pLinkMgr( nullptr )
         , m_pParentWin( nullptr )
-        , m_pFileDlg( nullptr )
         , m_bIsConnect( false )
         {}
 };
