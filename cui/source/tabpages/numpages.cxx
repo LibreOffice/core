@@ -176,7 +176,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(TabPageParent pParent, const Sf
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
-    , m_xExamplesVS(new NumValueSet)
+    , m_xExamplesVS(new NumValueSet(nullptr))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
@@ -361,7 +361,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(TabPageParent pParent, const SfxItemS
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
-    , m_xExamplesVS(new NumValueSet)
+    , m_xExamplesVS(new NumValueSet(nullptr))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
@@ -516,7 +516,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rS
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
     , bPreset(false)
-    , m_xExamplesVS(new NumValueSet)
+    , m_xExamplesVS(new NumValueSet(nullptr))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
@@ -755,22 +755,23 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetCharFormatNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 
-SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PickGraphicPage", "cui/ui/pickgraphicpage.ui", &rSet)
+SvxBitmapPickTabPage::SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/pickgraphicpage.ui", "PickGraphicPage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
     , bPreset(false)
+    , m_xErrorText(m_xBuilder->weld_label("errorft"))
+    , m_xBtBrowseFile(m_xBuilder->weld_button("browseBtn"))
+    , m_xExamplesVS(new SvxBmpNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
-    get(m_pErrorText, "errorft");
-    get(m_pExamplesVS, "valueset");
-    get(m_pBtBrowseFile, "browseBtn");
 
-    m_pExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
-    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
-    m_pBtBrowseFile->SetClickHdl(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
+    m_xExamplesVS->init();
+    m_xExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
+    m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
+    m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
@@ -780,25 +781,25 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
     size_t i = 0;
     for (auto & grfName : aGrfNames)
     {
-        m_pExamplesVS->InsertItem( i + 1, i);
+        m_xExamplesVS->InsertItem( i + 1, i);
 
         INetURLObject aObj(grfName);
         if(aObj.GetProtocol() == INetProtocol::File)
             grfName = aObj.PathToFileName();
 
-        m_pExamplesVS->SetItemText( i + 1, grfName );
+        m_xExamplesVS->SetItemText( i + 1, grfName );
         ++i;
     }
 
     if(aGrfNames.empty())
     {
-        m_pErrorText->Show();
+        m_xErrorText->show();
     }
     else
     {
-        m_pExamplesVS->Show();
-        m_pExamplesVS->SetFormat();
-        m_pExamplesVS->Invalidate();
+        m_xExamplesVS->Show();
+        m_xExamplesVS->SetFormat();
+        m_xExamplesVS->Invalidate();
     }
 }
 
@@ -809,18 +810,15 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 
 void SvxBitmapPickTabPage::dispose()
 {
-    pActNum.reset();
-    pSaveNum.reset();
-    m_pBtBrowseFile.clear();
-    m_pErrorText.clear();
-    m_pExamplesVS.clear();
+    m_xExamplesVSWin.reset();
+    m_xExamplesVS.reset();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( TabPageParent pParent,
-                                                 const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create(TabPageParent pParent,
+                                                const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBitmapPickTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxBitmapPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -843,14 +841,14 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pActNum && *pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        m_pExamplesVS->SetNoSelection();
+        m_xExamplesVS->SetNoSelection();
     }
 
     if(!aGrfNames.empty() &&
         (pActNum && (lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset)))
     {
-        m_pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(m_pExamplesVS);
+        m_xExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_xExamplesVS.get());
         bPreset = true;
     }
     bPreset |= bIsPreset;
@@ -906,13 +904,13 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
     if(pActNum)
     {
         bPreset = false;
         bModified = true;
-        sal_uInt16 nIdx = m_pExamplesVS->GetSelectedItemId() - 1;
+        sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -943,14 +941,14 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
-    NumSelectHdl_Impl(m_pExamplesVS);
+    NumSelectHdl_Impl(m_xExamplesVS.get());
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
     aFileDialog.SetTitle(CuiResId(RID_SVXSTR_ADD_IMAGE));
@@ -1023,22 +1021,22 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
                 size_t i = 0;
                 for (auto & grfName : aGrfNames)
                 {
-                    m_pExamplesVS->InsertItem( i + 1, i);
+                    m_xExamplesVS->InsertItem( i + 1, i);
                     INetURLObject aObj(grfName);
                     if(aObj.GetProtocol() == INetProtocol::File)
                         grfName = aObj.PathToFileName();
-                    m_pExamplesVS->SetItemText( i + 1, grfName );
+                    m_xExamplesVS->SetItemText( i + 1, grfName );
                     ++i;
                 }
 
                 if(aGrfNames.empty())
                 {
-                    m_pErrorText->Show();
+                    m_xErrorText->show();
                 }
                 else
                 {
-                    m_pExamplesVS->Show();
-                    m_pExamplesVS->SetFormat();
+                    m_xExamplesVS->Show();
+                    m_xExamplesVS->SetFormat();
                 }
 
             }

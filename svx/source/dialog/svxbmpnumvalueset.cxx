@@ -750,8 +750,8 @@ void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-NumValueSet::NumValueSet()
-    : SvtValueSet(nullptr)
+NumValueSet::NumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
+    : SvtValueSet(std::move(pScrolledWindow))
     , ePageType(NumberingPageType::BULLET)
     , pVDev(nullptr)
 {
@@ -815,18 +815,15 @@ void NumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits)
-    : SvxNumValueSet(pParent, nWinBits)
+SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
+    : NumValueSet(std::move(pScrolledWindow))
     , aFormatIdle("SvxBmpNumValueSet FormatIdle")
 {
-    init();
 }
-
-VCL_BUILDER_FACTORY_ARGS(SvxBmpNumValueSet, WB_TABSTOP)
 
 void SvxBmpNumValueSet::init()
 {
-    SvxNumValueSet::init(NumberingPageType::BITMAP);
+    NumValueSet::init(NumberingPageType::BITMAP);
     bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
@@ -838,19 +835,13 @@ void SvxBmpNumValueSet::init()
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
-    disposeOnce();
-}
-
-void SvxBmpNumValueSet::dispose()
-{
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatIdle.Stop();
-    SvxNumValueSet::dispose();
 }
 
 void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 {
-    SvxNumValueSet::UserDraw(rUDEvt);
+    NumValueSet::UserDraw(rUDEvt);
 
     tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();

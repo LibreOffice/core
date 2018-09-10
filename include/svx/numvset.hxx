@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC NumValueSet : public SvtValueSet
             css::container::XIndexAccess> > aOutlineSettings;
 
 public:
-    NumValueSet();
+    NumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
     void init(NumberingPageType eType);
     virtual ~NumValueSet() override;
 
@@ -126,19 +126,17 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
+class SVX_DLLPUBLIC SvxBmpNumValueSet final : public NumValueSet
 {
     Idle        aFormatIdle;
     bool        bGrfNotFound;
 
-    void init();
-
     DECL_LINK(FormatHdl_Impl, Timer *, void);
 
 public:
-    SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits);
+    SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
+    void init();
     virtual ~SvxBmpNumValueSet() override;
-    virtual void dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
