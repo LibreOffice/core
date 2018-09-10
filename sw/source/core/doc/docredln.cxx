@@ -924,38 +924,38 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
 }
 
 SwRedlineData::SwRedlineData( RedlineType_t eT, std::size_t nAut )
-    : pNext( nullptr ), pExtraData( nullptr ),
-    aStamp( DateTime::SYSTEM ),
-    eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
+    : m_pNext( nullptr ), m_pExtraData( nullptr ),
+    m_aStamp( DateTime::SYSTEM ),
+    m_eType( eT ), m_nAuthor( nAut ), m_nSeqNo( 0 )
 {
-    aStamp.SetNanoSec( 0 );
+    m_aStamp.SetNanoSec( 0 );
 }
 
 SwRedlineData::SwRedlineData(
     const SwRedlineData& rCpy,
     bool bCpyNext )
-    : pNext( ( bCpyNext && rCpy.pNext ) ? new SwRedlineData( *rCpy.pNext ) : nullptr )
-    , pExtraData( rCpy.pExtraData ? rCpy.pExtraData->CreateNew() : nullptr )
-    , sComment( rCpy.sComment )
-    , aStamp( rCpy.aStamp )
-    , eType( rCpy.eType )
-    , nAuthor( rCpy.nAuthor )
-    , nSeqNo( rCpy.nSeqNo )
+    : m_pNext( ( bCpyNext && rCpy.m_pNext ) ? new SwRedlineData( *rCpy.m_pNext ) : nullptr )
+    , m_pExtraData( rCpy.m_pExtraData ? rCpy.m_pExtraData->CreateNew() : nullptr )
+    , m_sComment( rCpy.m_sComment )
+    , m_aStamp( rCpy.m_aStamp )
+    , m_eType( rCpy.m_eType )
+    , m_nAuthor( rCpy.m_nAuthor )
+    , m_nSeqNo( rCpy.m_nSeqNo )
 {
 }
 
 // For sw3io: We now own pNext!
 SwRedlineData::SwRedlineData(RedlineType_t eT, std::size_t nAut, const DateTime& rDT,
     const OUString& rCmnt, SwRedlineData *pNxt)
-    : pNext(pNxt), pExtraData(nullptr), sComment(rCmnt), aStamp(rDT),
-    eType(eT), nAuthor(nAut), nSeqNo(0)
+    : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(rCmnt), m_aStamp(rDT),
+    m_eType(eT), m_nAuthor(nAut), m_nSeqNo(0)
 {
 }
 
 SwRedlineData::~SwRedlineData()
 {
-    delete pExtraData;
-    delete pNext;
+    delete m_pExtraData;
+    delete m_pNext;
 }
 
 bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
@@ -964,29 +964,29 @@ bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
     aTime.SetSec(0);
     DateTime aCompareTime = rCmp.GetTimeStamp();
     aCompareTime.SetSec(0);
-    return nAuthor == rCmp.nAuthor &&
-            eType == rCmp.eType &&
-            sComment == rCmp.sComment &&
+    return m_nAuthor == rCmp.m_nAuthor &&
+            m_eType == rCmp.m_eType &&
+            m_sComment == rCmp.m_sComment &&
             aTime == aCompareTime &&
-            (( !pNext && !rCmp.pNext ) ||
-                ( pNext && rCmp.pNext &&
-                pNext->CanCombine( *rCmp.pNext ))) &&
-            (( !pExtraData && !rCmp.pExtraData ) ||
-                ( pExtraData && rCmp.pExtraData &&
-                    *pExtraData == *rCmp.pExtraData ));
+            (( !m_pNext && !rCmp.m_pNext ) ||
+                ( m_pNext && rCmp.m_pNext &&
+                m_pNext->CanCombine( *rCmp.m_pNext ))) &&
+            (( !m_pExtraData && !rCmp.m_pExtraData ) ||
+                ( m_pExtraData && rCmp.m_pExtraData &&
+                    *m_pExtraData == *rCmp.m_pExtraData ));
 }
 
 /// ExtraData is copied. The Pointer's ownership is thus NOT transferred
 /// to the Redline Object!
 void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 {
-    delete pExtraData;
+    delete m_pExtraData;
 
     // Check if there is data - and if so - delete it
     if( pData )
-        pExtraData = pData->CreateNew();
+        m_pExtraData = pData->CreateNew();
     else
-        pExtraData = nullptr;
+        m_pExtraData = nullptr;
 }
 
 static const char* STR_REDLINE_ARY[] =
@@ -1217,10 +1217,10 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // Determine the Type, it's the first on Stack
-    for( pCur = m_pRedlineData; pCur->pNext; )
-        pCur = pCur->pNext;
+    for( pCur = m_pRedlineData; pCur->m_pNext; )
+        pCur = pCur->m_pNext;
 
-    switch( pCur->eType )
+    switch( pCur->m_eType )
     {
     case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
         m_bIsVisible = false;
@@ -1710,23 +1710,23 @@ void SwRangeRedline::PushData( const SwRangeRedline& rRedl, bool bOwnAsNext )
     SwRedlineData* pNew = new SwRedlineData( *rRedl.m_pRedlineData, false );
     if( bOwnAsNext )
     {
-        pNew->pNext = m_pRedlineData;
+        pNew->m_pNext = m_pRedlineData;
         m_pRedlineData = pNew;
     }
     else
     {
-        pNew->pNext = m_pRedlineData->pNext;
-        m_pRedlineData->pNext = pNew;
+        pNew->m_pNext = m_pRedlineData->m_pNext;
+        m_pRedlineData->m_pNext = pNew;
     }
 }
 
 bool SwRangeRedline::PopData()
 {
-    if( !m_pRedlineData->pNext )
+    if( !m_pRedlineData->m_pNext )
         return false;
     SwRedlineData* pCur = m_pRedlineData;
-    m_pRedlineData = pCur->pNext;
-    pCur->pNext = nullptr;
+    m_pRedlineData = pCur->m_pNext;
+    pCur->m_pNext = nullptr;
     delete pCur;
     return true;
 }
@@ -1734,34 +1734,34 @@ bool SwRangeRedline::PopData()
 sal_uInt16 SwRangeRedline::GetStackCount() const
 {
     sal_uInt16 nRet = 1;
-    for( SwRedlineData* pCur = m_pRedlineData; pCur->pNext; pCur = pCur->pNext )
+    for( SwRedlineData* pCur = m_pRedlineData; pCur->m_pNext; pCur = pCur->m_pNext )
         ++nRet;
     return nRet;
 }
 
 std::size_t SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
 {
-    return GetRedlineData(nPos).nAuthor;
+    return GetRedlineData(nPos).m_nAuthor;
 }
 
 OUString const & SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
 {
-    return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).nAuthor);
+    return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).m_nAuthor);
 }
 
 const DateTime& SwRangeRedline::GetTimeStamp( sal_uInt16 nPos ) const
 {
-    return GetRedlineData(nPos).aStamp;
+    return GetRedlineData(nPos).m_aStamp;
 }
 
 RedlineType_t SwRangeRedline::GetRealType( sal_uInt16 nPos ) const
 {
-    return GetRedlineData(nPos).eType;
+    return GetRedlineData(nPos).m_eType;
 }
 
 const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
 {
-    return GetRedlineData(nPos).sComment;
+    return GetRedlineData(nPos).m_sComment;
 }
 
 bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
@@ -1778,9 +1778,9 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) cons
 
     sal_uInt16 nP = nPos;
 
-    while (nP > 0 && nullptr != pCur->pNext)
+    while (nP > 0 && nullptr != pCur->m_pNext)
     {
-        pCur = pCur->pNext;
+        pCur = pCur->m_pNext;
 
         nP--;
     }
