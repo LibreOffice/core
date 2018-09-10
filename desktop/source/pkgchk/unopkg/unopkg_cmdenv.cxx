@@ -213,8 +213,6 @@ void CommandEnvironmentImpl::handle(
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
     deployment::PlatformException platExc;
-    deployment::VersionException verExc;
-
 
     if (request >>= wtExc) {
         // ignore intermediate errors of legacy packages, i.e.
