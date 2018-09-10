@@ -23,7 +23,5 @@
 en-US = "XSLT Sample Filters"
 
 [STR_DESC_MODULE_OPTIONAL_XSLTFILTERSAMPLES]
-en-US = "XSLT Sample Filters"
-
-
+en-US = "Filters and Conversions based on OpenDocument/OpenOffice.org XML. Includes DocBook, MS Word 2003 XML, MS Excel 2003 XML, and others."
 
