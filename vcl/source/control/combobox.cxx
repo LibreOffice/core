@@ -57,6 +57,7 @@ struct ComboBox::Impl
     bool                m_isSyntheticModify   : 1;
     bool                m_isMatchCase         : 1;
     sal_Int32           m_nMaxWidthChars;
+    sal_Int32           m_nWidthInChars;
     Link<ComboBox&,void>               m_SelectHdl;
     Link<ComboBox&,void>               m_DoubleClickHdl;
 
@@ -68,6 +69,7 @@ struct ComboBox::Impl
         , m_isSyntheticModify(false)
         , m_isMatchCase(false)
         , m_nMaxWidthChars(0)
+        , m_nWidthInChars(-1)
     {
     }
 
@@ -141,6 +143,7 @@ void ComboBox::Impl::ImplInitComboBoxData()
     m_isMatchCase       = false;
     m_cMultiSep         = ';';
     m_nMaxWidthChars    = -1;
+    m_nWidthInChars     = -1;
 }
 
 void ComboBox::ImplCalcEditHeight()
@@ -1049,7 +1052,11 @@ Size ComboBox::CalcMinimumSize() const
     else
     {
         aSz.setHeight( Edit::CalcMinimumSizeForText(GetText()).Height() );
-        aSz.setWidth( m_pImpl->m_pImplLB->GetMaxEntryWidth() );
+
+        if (m_pImpl->m_nWidthInChars!= -1)
+            aSz.setWidth(m_pImpl->m_nWidthInChars * approximate_digit_width());
+        else
+            aSz.setWidth(m_pImpl->m_pImplLB->GetMaxEntryWidth());
     }
 
     if (m_pImpl->m_nMaxWidthChars != -1)
@@ -1499,6 +1506,15 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     return aBounds;
 }
 
+void ComboBox::SetWidthInChars(sal_Int32 nWidthInChars)
+{
+    if (nWidthInChars != m_pImpl->m_nWidthInChars)
+    {
+        m_pImpl->m_nWidthInChars = nWidthInChars;
+        queue_resize();
+    }
+}
+
 void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
 {
     if (nWidth != m_pImpl->m_nMaxWidthChars)
@@ -1510,7 +1526,9 @@ void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
 
 bool ComboBox::set_property(const OString &rKey, const OUString &rValue)
 {
-    if (rKey == "max-width-chars")
+    if (rKey == "width-chars")
+        SetWidthInChars(rValue.toInt32());
+    else if (rKey == "max-width-chars")
         setMaxWidthChars(rValue.toInt32());
     else
         return Control::set_property(rKey, rValue);
