@@ -39,16 +39,6 @@ class SvxCaptionTabPage : public SfxTabPage
 {
 private:
     static const sal_uInt16 pCaptionRanges[];
-    VclPtr<ValueSet>       m_pCT_CAPTTYPE;
-    VclPtr<MetricField>    m_pMF_SPACING;
-    VclPtr<ListBox>        m_pLB_EXTENSION;
-    VclPtr<FixedText>      m_pFT_BYFT;
-    VclPtr<MetricField>    m_pMF_BY;
-    VclPtr<FixedText>      m_pFT_POSITIONFT;
-    VclPtr<ListBox>        m_pLB_POSITION;
-    VclPtr<FixedText>      m_pFT_LENGTHFT;
-    VclPtr<MetricField>    m_pMF_LENGTH;
-    VclPtr<CheckBox>       m_pCB_OPTIMAL;
 
     Image           m_aBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
 
@@ -67,18 +57,31 @@ private:
     sal_uInt16          nPosition;
     sal_uInt16          nExtension;
 
-    void            SetupExtension_Impl( sal_uInt16 nType );
-    void            SetupType_Impl( SdrCaptionType nType );
-    DECL_LINK( ExtensionSelectHdl_Impl, ListBox&, void );
-    DECL_LINK( PositionSelectHdl_Impl, ListBox&, void );
-    DECL_LINK( LineOptHdl_Impl, Button *, void );
-    DECL_LINK( SelectCaptTypeHdl_Impl, ValueSet*, void );
-
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
+    std::unique_ptr<weld::MetricSpinButton> m_xMF_SPACING;
+    std::unique_ptr<weld::ComboBoxText> m_xLB_EXTENSION;
+    std::unique_ptr<weld::Label> m_xFT_BYFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xMF_BY;
+    std::unique_ptr<weld::Label> m_xFT_POSITIONFT;
+    std::unique_ptr<weld::ComboBoxText> m_xLB_POSITION;
+    std::unique_ptr<weld::ComboBoxText> m_xLineTypes;
+    std::unique_ptr<weld::Label> m_xFT_LENGTHFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xMF_LENGTH;
+    std::unique_ptr<weld::CheckButton> m_xCB_OPTIMAL;
+    std::unique_ptr<SvtValueSet> m_xCT_CAPTTYPE;
+    std::unique_ptr<weld::CustomWeld> m_xCT_CAPTTYPEWin;
+
+    void            SetupExtension_Impl( sal_uInt16 nType );
+    void            SetupType_Impl( SdrCaptionType nType );
+    DECL_LINK(ExtensionSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(PositionSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(LineOptHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(SelectCaptTypeHdl_Impl, SvtValueSet*, void);
+
 public:
-    SvxCaptionTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxCaptionTabPage() override;
     virtual void dispose() override;
 
