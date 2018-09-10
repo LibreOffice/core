@@ -196,15 +196,10 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-
 class SvxBitmapPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
-
-    VclPtr<FixedText>          m_pErrorText;
-    VclPtr<SvxBmpNumValueSet>  m_pExamplesVS;
-    VclPtr<Button>             m_pBtBrowseFile;
 
     std::vector<OUString> aGrfNames;
 
@@ -216,26 +211,28 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
-    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
-    DECL_LINK(ClickAddBrowseHdl_Impl, Button*, void );
+    std::unique_ptr<weld::Label> m_xErrorText;
+    std::unique_ptr<weld::Button> m_xBtBrowseFile;
+    std::unique_ptr<SvxBmpNumValueSet> m_xExamplesVS;
+    std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
+    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
 
 public:
-        SvxBitmapPickTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet);
-        virtual ~SvxBitmapPickTabPage() override;
+    SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~SvxBitmapPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create(TabPageParent pParent,
+                                      const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
-
 
 class SvxNumOptionsTabPage : public SfxTabPage
 {
