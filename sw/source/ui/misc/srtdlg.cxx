@@ -181,7 +181,7 @@ SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
         nLang = GetAppLanguage();
 
     m_xLangLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, true );
-    m_xLangLB->SelectLanguage( nLang );
+    m_xLangLB->set_active_id(nLang);
 
     LanguageHdl( nullptr );
     m_xLangLB->connect_changed( LINK( this, SwSortDlg, LanguageListBoxHdl ));
@@ -254,7 +254,7 @@ void SwSortDlg::Apply()
     bAsc2 = m_xSortUp2RB->get_active();
     bAsc3 = m_xSortUp3RB->get_active();
     bCol = m_xColumnRB->get_active();
-    nLang = m_xLangLB->GetSelectedLanguage();
+    nLang = m_xLangLB->get_active_id();
     cDeli = GetDelimChar();
     bCsSens = m_xCaseCB->get_active();
 
@@ -384,7 +384,7 @@ IMPL_LINK( SwSortDlg, LanguageListBoxHdl, weld::ComboBoxText&, rLBox, void )
 void SwSortDlg::LanguageHdl(weld::ComboBoxText const* pLBox)
 {
     Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms(
-                LanguageTag( m_xLangLB->GetSelectedLanguage()).getLocale() ));
+                LanguageTag( m_xLangLB->get_active_id()).getLocale() ));
 
     if (!m_xColRes)
         m_xColRes.reset(new CollatorResource);
