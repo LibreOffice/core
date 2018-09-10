@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_94e1c89d",
+        "filename": "include/cppuhelper/compbase.hxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-10T11:40:06Z",
+      "side": 1,
+      "message": "I\u0027m not convinced that changes like these, esp. in include files that are part of the stable URE interface (i.e., are consumed by 3rd-party code, which may expect a certain level of stability), are actually good.  For better or worse, for many of the C++ include files in the URE interface, there is a \"low-level\" .h file (defining classes, declaring inline functions) and a corresponding \"higher-level\" .hxx file (including the low-level .h file and defining inline functions).  Occasionally, this may help avoid circular dependencies (which is the rationale for the cppumaker-generated .hdl/.hpp file combos), but client code is in general supposed to consider the \"low-level\" .h file an implementation detail of the .hxx file, and only include the .hxx file directly.",
+      "revId": "cc7280efdbfefd96eb96b63dc8bd171d39704388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
