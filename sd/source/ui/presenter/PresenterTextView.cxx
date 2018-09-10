@@ -217,7 +217,6 @@ PresenterTextView::Implementation::Implementation()
     : mxBitmap(),
       mpCanvas(),
       mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)),
-      mpEditEngine(nullptr),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
       maBackgroundColor(0xffffffff),

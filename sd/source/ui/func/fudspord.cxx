@@ -35,7 +35,6 @@ namespace sd {
 FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 , mpRefObj(nullptr)
-, mpOverlay(nullptr)
 {
 }
 

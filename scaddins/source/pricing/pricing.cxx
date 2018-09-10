@@ -125,9 +125,7 @@ SAL_DLLPUBLIC_EXPORT void * pricing_component_getFactory(
 }   // extern C
 
 //  "normal" service implementation
-ScaPricingAddIn::ScaPricingAddIn() :
-    pDefLocales( nullptr ),
-    pFuncDataList( nullptr )
+ScaPricingAddIn::ScaPricingAddIn()
 {
 }
 

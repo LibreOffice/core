@@ -188,7 +188,6 @@ OutlineViewShell::OutlineViewShell (
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell(pParentWindow, rViewShellBase),
-      pOlView(nullptr),
       pLastPage( nullptr ),
       bPastePossible(false),
       mbInitialized(false)

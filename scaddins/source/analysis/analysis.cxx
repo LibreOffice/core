@@ -81,10 +81,6 @@ void AnalysisAddIn::InitData()
 }
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
-    pDefLocales( nullptr ),
-    pFD( nullptr ),
-    pFactDoubles( nullptr ),
-    pCDL( nullptr ),
     aAnyConv( xContext )
 {
 }
