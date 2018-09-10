@@ -892,11 +892,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(we
     return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(o3tl::make_unique<SwTableWidthDlg>(pParent, rFnc));
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(weld::Window* pParent,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTableTabDlg>::Create(pParent, pItemSet, pSh);
-    return VclPtr<AbstractTabDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwTableTabDlg>(pParent, pItemSet, pSh));
 }
 
 VclPtr<AbstractSwFieldDlg> SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent)
