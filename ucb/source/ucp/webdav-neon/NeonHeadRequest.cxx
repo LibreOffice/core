@@ -133,7 +133,7 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         nError = ne_request_dispatch( req );
     }
 

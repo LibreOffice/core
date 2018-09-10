@@ -261,7 +261,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         thePropNames[ theIndex ].name   = nullptr;
 
         {
-            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
             nError = ne_simple_propfind( inSession,
                                          inPath,
                                          inDepth,
@@ -276,7 +276,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     else
     {
         // ALLPROP
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         nError = ne_simple_propfind( inSession,
                                      inPath,
                                      inDepth,
@@ -298,7 +298,7 @@ NeonPropFindRequest::NeonPropFindRequest(
                             int & nError )
 {
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         nError = ne_propnames( inSession,
                             inPath,
                             inDepth,

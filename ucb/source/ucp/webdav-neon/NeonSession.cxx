@@ -604,15 +604,22 @@ void NeonSession::PreSendRequest(ne_request* req, ne_buffer* headers)
     }
 }
 
-
-// static members
-bool NeonSession::m_bGlobalsInited = false;
 //See https://bugzilla.redhat.com/show_bug.cgi?id=544619#c4
 //neon is threadsafe, but uses gnutls which is only thread-safe
 //if initialized to be thread-safe. cups, unfortunately, generally
 //initializes it first, and as non-thread-safe, leaving the entire
 //stack unsafe
-osl::Mutex aGlobalNeonMutex;
+namespace webdav_ucp
+{
+    osl::Mutex& getGlobalNeonMutex()
+    {
+        static osl::Mutex aMutex;
+        return aMutex;
+    }
+}
+
+// static members
+bool NeonSession::m_bGlobalsInited = false;
 NeonLockStore NeonSession::m_aNeonLockStore;
 
 NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
@@ -638,7 +645,7 @@ NeonSession::~NeonSession( )
     if ( m_pHttpSession )
     {
         {
-            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
             ne_session_destroy( m_pHttpSession );
         }
         m_pHttpSession = nullptr;
@@ -662,8 +669,8 @@ void NeonSession::Init()
     if ( m_pHttpSession == nullptr )
     {
         // Ensure that Neon sockets are initialized
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
-        if ( !m_bGlobalsInited )
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
+        if (!m_bGlobalsInited )
         {
             if ( ne_sock_init() != 0 )
                 throw DAVException( DAVException::DAV_SESSION_CREATE,
@@ -713,7 +720,7 @@ void NeonSession::Init()
 
             // new session needed, destroy old first
             {
-                osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+                osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
                 ne_session_destroy( m_pHttpSession );
             }
             m_pHttpSession = nullptr;
@@ -735,7 +742,7 @@ void NeonSession::Init()
     //     to the session
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         m_pHttpSession = ne_session_create(
             OUStringToOString( m_aScheme, RTL_TEXTENCODING_UTF8 ).getStr(),
             /* theUri.GetUserInfo(),
@@ -892,7 +899,7 @@ void NeonSession::OPTIONS( const OUString & inPath,
     ne_request *req = ne_request_create(m_pHttpSession, "OPTIONS", OUStringToOString(
                                             inPath, RTL_TEXTENCODING_UTF8 ).getStr());
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         theRetVal = ne_request_dispatch(req);
     }
 
@@ -2086,7 +2093,7 @@ int NeonSession::GET( ne_session * sess,
         = ne_decompress_reader( req, ne_accept_2xx, reader, userdata );
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         ret = ne_request_dispatch( req );
     }
 
@@ -2125,7 +2132,7 @@ int NeonSession::GET0( ne_session * sess,
     int ret;
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         ret = ne_request_dispatch( req );
     }
 
@@ -2171,7 +2178,7 @@ int NeonSession::PUT( ne_session * sess,
     ne_set_request_body_buffer( req, buffer, size );
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         ret = ne_request_dispatch( req );
     }
 
@@ -2218,7 +2225,7 @@ int NeonSession::POST( ne_session * sess,
     ne_set_request_body_buffer( req, buffer, strlen( buffer ) );
 
     {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
         ret = ne_request_dispatch( req );
     }
 
