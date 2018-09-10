@@ -37,6 +37,7 @@
 
 #define MN_GALLERY_ENTRY 100
 
+class NumValueSet;
 class SvxColorListBox;
 class SvxNumRule;
 class SvxBmpNumValueSet;
@@ -121,7 +122,6 @@ class SvxBulletPickTabPage final : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclPtr<SvxNumValueSet>     m_pExamplesVS;
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16          nActNumLvl;
@@ -131,11 +131,13 @@ class SvxBulletPickTabPage final : public SfxTabPage
 
     OUString            sBulletCharFormatName;
 
-    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    std::unique_ptr<NumValueSet> m_xExamplesVS;
+    std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
+
+    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 public:
-        SvxBulletPickTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet);
+    SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
     virtual void dispose() override;
 
