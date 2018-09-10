@@ -426,7 +426,6 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
     _pViewSh        ( pViewSh ),
     _rSetupParent   ( rParent ),
-    _pOptions       ( nullptr ),
     _bHelpDisabled  ( false )
 
 {

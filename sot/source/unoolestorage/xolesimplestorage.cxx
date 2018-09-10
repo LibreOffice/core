@@ -45,7 +45,6 @@ OLESimpleStorage::OLESimpleStorage(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Sequence<css::uno::Any> const &aArguments)
 : m_bDisposed( false )
-, m_pStream( nullptr )
 , m_pStorage( nullptr )
 , m_pListenersContainer( nullptr )
 , m_xContext( xContext )

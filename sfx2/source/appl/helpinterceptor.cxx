@@ -37,7 +37,6 @@ using namespace ::com::sun::star::lang;
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
-    m_pHistory  ( nullptr ),
     m_pWindow  ( nullptr ),
     m_nCurPos   ( 0 )
 

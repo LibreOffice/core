@@ -221,7 +221,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSuicide              ( false     )
             ,   m_bExternalTitle        ( false     )
             ,   m_bModifiedSinceLastSave( false     )
-            ,   m_pStorageModifyListen  ( nullptr          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
@@ -447,7 +446,6 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
                                  IMPL_SfxBaseModel_DataContainer* pData)
     : m_xModel     ( xModel )
     , m_pData      ( pData )
-    , m_pFramesLock( nullptr )
 {
     if ( m_pData->m_bClosed )
         throw lang::DisposedException("Object already disposed.");

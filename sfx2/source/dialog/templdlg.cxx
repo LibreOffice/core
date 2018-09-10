@@ -637,8 +637,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     : pBindings(pB)
     , pWindow(pW)
     , pModule(nullptr)
-    , pIdle(nullptr)
-    , pStyleFamilies(nullptr)
     , pStyleSheetPool(nullptr)
     , pCurObjShell(nullptr)
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))

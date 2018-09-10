@@ -75,8 +75,6 @@ struct SfxShell_Impl: public SfxBroadcaster
         , pRepeatTarget(nullptr)
         , bActive(false)
         , nDisableFlags(SfxDisableFlags::NONE)
-        , pExecuter(nullptr)
-        , pUpdater(nullptr)
     {
     }
 

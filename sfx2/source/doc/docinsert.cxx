@@ -78,7 +78,6 @@ DocumentInserter::DocumentInserter(weld::Window* pParent, const OUString& rFacto
     , m_sDocFactory             ( rFactory )
     , m_nDlgFlags               ( lcl_map_mode_to_flags(mode) )
     , m_nError                  ( ERRCODE_NONE )
-    , m_pFileDlg                ( nullptr )
     , m_pItemSet                ( nullptr )
 {
 }

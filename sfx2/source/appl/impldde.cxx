@@ -96,7 +96,7 @@ IMPL_LINK_NOARG( SvDDELinkEditDialog, EditHdl_Impl, weld::Entry&, void)
 }
 
 SvDDEObject::SvDDEObject()
-    : pConnection( nullptr ), pLink( nullptr ), pRequest( nullptr ), pGetData( nullptr )
+    :  pGetData( nullptr )
 {
     SetUpdateTimeout( 100 );
     bWaitForData = false;

@@ -130,7 +130,6 @@ public:
 
 NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 : NotebookbarTabControlBase( pParent )
-, m_pListener( nullptr )
 , m_bInitialized( false )
 , m_bInvalidate( true )
 {
