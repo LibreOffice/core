@@ -35,6 +35,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
+#include <editeng/unoprnms.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
@@ -2064,6 +2065,12 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
     uno::Reference<beans::XPropertySet> xBookmark5(xBookmarksByName->getByName("BookmarkHiddenWithCondition"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("1==1"), getProperty<OUString>(xBookmark5, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark5, UNO_NAME_BOOKMARK_HIDDEN));
+}
+
+DECLARE_ODFEXPORT_TEST(tdf117188, "tdf117188.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, UNO_NAME_TEXT_LEFTDIST));
 }
 
 #endif
