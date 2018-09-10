@@ -696,17 +696,21 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
             }
 
+            // Writer shapes: if this one has a TextBox, set it here. We need to do it before
+            // pDocStyle->FillPropertySet, because setting some properties depend on the format
+            // having RES_CNTNT attribute (e.g., UNO_NAME_TEXT_(LEFT|RIGHT|UPPER|LOWER)DIST; see
+            // SwTextBoxHelper::syncProperty, which indirectly calls SwTextBoxHelper::isTextBox)
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo
+                = xPropSet->getPropertySetInfo();
+            if (xPropertySetInfo->hasPropertyByName("TextBox"))
+                xPropSet->setPropertyValue("TextBox", uno::makeAny(mbTextBox));
+
             // if this is an auto style, set its properties
             if(bAutoStyle && pDocStyle)
             {
                 // set PropertySet on object
                 pDocStyle->FillPropertySet(xPropSet);
             }
-
-            // Writer shapes: if this one has a TextBox, set it here.
-            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropSet->getPropertySetInfo();
-            if (xPropertySetInfo->hasPropertyByName("TextBox"))
-                xPropSet->setPropertyValue("TextBox", uno::makeAny(mbTextBox));
 
         } while(false);
 
