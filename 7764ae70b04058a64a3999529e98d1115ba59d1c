@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_f40db43e",
+        "filename": "basctl/source/basicide/bastype2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-10T13:46:59Z",
+      "side": 1,
+      "message": "aren\u0027t these changes broken in general, when the called function may throw an exception before it takes ownership of the passed-in pointer?",
+      "revId": "7764ae70b04058a64a3999529e98d1115ba59d1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
