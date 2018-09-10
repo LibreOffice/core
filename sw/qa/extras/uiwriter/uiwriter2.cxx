@@ -142,7 +142,7 @@ void SwUiWriterTest2::testTdf119019()
     CPPUNIT_ASSERT_EQUAL(OUString("Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."),
                          getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 1)->getString());
-    // second paragraph has got a tracked paragraph formatting yet
+    // second paragraph has got a tracked paragraph formatting at this point
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 
     // delete last word of the second paragraph to remove tracked paragraph formatting
@@ -161,7 +161,7 @@ void SwUiWriterTest2::testTdf119019()
     CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 2)->getString());
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
 
-    // check removing of tracked paragraph formatting
+    // make sure that the tracked paragraph formatting is removed
     CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 }
 
