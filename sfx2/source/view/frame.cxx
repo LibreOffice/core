@@ -326,7 +326,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell const *pDoc )
     // Mark FileOpen parameter
     SfxItemSet* pItemSet = pMed->GetItemSet();
 
-    std::shared_ptr<const SfxFilter> pFilter = pMed->GetOrigFilter();
+    std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
     OUString aFilter;
     if ( pFilter )
         aFilter = pFilter->GetFilterName();

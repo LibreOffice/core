@@ -294,7 +294,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
         mnRowPosCount(0),
 
-        aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aTextSepList(SCSTR_TEXTSEP),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         meCall(eCall),
@@ -483,6 +482,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage));
 
     // *** column type ListBox ***
+    OUString aColumnUser( ScResId( SCSTR_COLUMN_USER ) );
     for (sal_Int32 nIdx {0}; nIdx>=0; )
     {
         pLbType->InsertEntry( aColumnUser.getToken( 0, ';', nIdx ) );
