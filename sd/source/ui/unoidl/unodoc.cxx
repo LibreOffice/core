@@ -53,9 +53,7 @@ uno::Reference< uno::XInterface > SdDrawingDocument_createInstance(
 
     SdDLL::Init();
 
-    SfxObjectShell* pShell =
-        new ::sd::GraphicDocShell(
-            _nCreationFlags, false, DocumentType::Draw );
+    SfxObjectShell* pShell = new ::sd::GraphicDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 

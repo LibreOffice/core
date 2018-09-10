@@ -3730,12 +3730,11 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
 }
 
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const OUString& rText, size_t nPos,
-                           bool bShowLegend )
+                           const OUString& rText, size_t nPos )
 {
     SvtValueSetItem* pItem = new SvtValueSetItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
+    pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );

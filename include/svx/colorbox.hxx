@@ -103,7 +103,6 @@ private:
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
-    bool m_bInterimBuilder;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 
@@ -112,7 +111,7 @@ private:
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
 public:
-    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pWindow, bool bInterimBuilder = false);
+    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pWindow);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink)

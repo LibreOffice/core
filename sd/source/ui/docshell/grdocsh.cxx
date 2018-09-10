@@ -48,18 +48,14 @@ void GraphicDocShell::InitInterface_Impl()
 
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SfxObjectShellFlags::STD_NORMAL, "sdraw" )
 
-GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
-                                     bool bDataObject,
-                                     DocumentType eDocType) :
-    DrawDocShell(eMode, bDataObject, eDocType)
+GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode) :
+    DrawDocShell(eMode, /*bDataObject*/true, DocumentType::Draw)
 {
     SetStyleFamily( SfxStyleFamily::Para );
 }
 
-GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags,
-                                     bool bDataObject,
-                                     DocumentType eDocType) :
-    DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
+GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags) :
+    DrawDocShell(nModelCreationFlags, /*bDataObject*/false, DocumentType::Draw)
 {
     SetStyleFamily( SfxStyleFamily::Para );
 }
