@@ -510,21 +510,20 @@ void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         sBulletCharFormatName = pBulletCharFmt->GetValue();
 }
 
-
-SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
-                               const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PickOutlinePage", "cui/ui/pickoutlinepage.ui", &rSet)
+SvxNumPickTabPage::SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/pickoutlinepage.ui", "PickOutlinePage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
     , bPreset(false)
+    , m_xExamplesVS(new NumValueSet)
+    , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
 
-    get(m_pExamplesVS, "valueset");
-    m_pExamplesVS->init(NumberingPageType::OUTLINE);
-    m_pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
-    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
+    m_xExamplesVS->init(NumberingPageType::OUTLINE);
+    m_xExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
+    m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
 
     Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
     if(xDefNum.is())
@@ -556,7 +555,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
         {
         }
         Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        m_pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
+        m_xExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
     }
 }
 
@@ -567,16 +566,15 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
 
 void SvxNumPickTabPage::dispose()
 {
-    pActNum.reset();
-    pSaveNum.reset();
-    m_pExamplesVS.clear();
+    m_xExamplesVSWin.reset();
+    m_xExamplesVS.reset();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxNumPickTabPage::Create( TabPageParent pParent,
-                                              const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SvxNumPickTabPage::Create(TabPageParent pParent,
+                                             const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumPickTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxNumPickTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -610,13 +608,13 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pActNum && *pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        m_pExamplesVS->SetNoSelection();
+        m_xExamplesVS->SetNoSelection();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
-        m_pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(m_pExamplesVS);
+        m_xExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_xExamplesVS.get());
         bPreset = true;
     }
     bPreset |= bIsPreset;
@@ -658,7 +656,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 }
 
 // all levels are changed here
-IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
     if(pActNum)
     {
@@ -667,7 +665,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
         const FontList*  pList = nullptr;
 
-        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectedItemId() - 1];
+        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_xExamplesVS->GetSelectedItemId() - 1];
 
         const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         SvxNumSettings_Impl* pLevelSettings = nullptr;
@@ -740,9 +738,9 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 {
-    NumSelectHdl_Impl(m_pExamplesVS);
+    NumSelectHdl_Impl(m_xExamplesVS.get());
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
 }
