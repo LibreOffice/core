@@ -350,7 +350,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
     const SfxPoolItem* pItem;
     // here we explicitly also search in character templates
     sal_uInt16 nWhch = rAttr.Which();
-    SfxWhichIter* pIter = nullptr;
+    std::unique_ptr<SfxWhichIter> pIter;
     const SfxPoolItem* pTmpItem = nullptr;
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
@@ -361,7 +361,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( pSet )
         {
-            pIter = new SfxWhichIter( *pSet );
+            pIter.reset(new SfxWhichIter( *pSet ));
             nWhch = pIter->FirstWhich();
             while( nWhch &&
                 SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
@@ -486,7 +486,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
         else
             break;
     }
-    delete pIter;
+    pIter.reset();
     return Found();
 }
 
@@ -503,7 +503,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
     const SfxPoolItem* pItem;
     // here we explicitly also search in character templates
     sal_uInt16 nWhch = rAttr.Which();
-    SfxWhichIter* pIter = nullptr;
+    std::unique_ptr<SfxWhichIter> pIter;
     const SfxPoolItem* pTmpItem = nullptr;
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
@@ -514,7 +514,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( pSet )
         {
-            pIter = new SfxWhichIter( *pSet );
+            pIter.reset( new SfxWhichIter( *pSet ) );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
                 SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
@@ -637,7 +637,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
         else
             break;
     }
-    delete pIter;
+    pIter.reset();
     return Found();
 }
 
