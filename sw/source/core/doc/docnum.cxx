@@ -2229,8 +2229,8 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     }
 
     sal_uInt16 nNum(0), nTmp, nFlagSize = ( mpNumRuleTable->size() / 8 ) +2;
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    memset( pSetFlags, 0, nFlagSize );
+    std::unique_ptr<sal_uInt8[]> pSetFlags(new sal_uInt8[ nFlagSize ]);
+    memset( pSetFlags.get(), 0, nFlagSize );
 
     sal_Int32 nNmLen = aName.getLength();
     if( !bAutoNum && pChkStr )
@@ -2277,7 +2277,6 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
                 break;
             }
     }
-    delete [] pSetFlags;
     if( pChkStr && !pChkStr->isEmpty() )
         return *pChkStr;
     return aName + OUString::number( ++nNum );
