@@ -219,7 +219,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label2">_Operators:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_function</property>
+                            <property name="mnemonic_widget">spinB_operator</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
