@@ -292,7 +292,9 @@ typedef void *                   sal_Handle;
     Compilers that support a construct of this nature will emit a compile
     time warning on unchecked return value.
 */
-#if (defined __GNUC__ \
+#if defined __cplusplus && HAVE_CPP_ATTRIBUTE_NODISCARD
+#define SAL_WARN_UNUSED_RESULT [[nodiscard]]
+#elif (defined __GNUC__ \
      && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))) \
     || defined __clang__
 #   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
