@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 
+<!ENTITY % menustyle "radio">
+
 <!ELEMENT menu:menubar (menu:menu+)>
 <!ELEMENT menu:menu (menu:menupopup)>
 <!ELEMENT menu:menupopup (menu:menuitem | menu:menuseparator | menu:menu)+>
@@ -34,4 +36,5 @@
 	menu:id CDATA #REQUIRED
 	menu:helpid CDATA #IMPLIED
 	menu:label CDATA #IMPLIED
+	menu:style %menustyle; #IMPLIED
 >
