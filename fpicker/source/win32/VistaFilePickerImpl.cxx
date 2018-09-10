@@ -360,11 +360,22 @@ void VistaFilePickerImpl::impl_sta_appendFilter(const RequestRef& rRequest)
 {
     const OUString sTitle  = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
     const OUString sFilter = rRequest->getArgumentOrDefault(PROP_FILTER_VALUE, OUString());
-
     // SYNCHRONIZED->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-    m_lFilters.addFilter(sTitle, sFilter);
+    int idx = sTitle.indexOf("(.");
+    if (idx > 0)
+    {
+        const OUString sTitle_ = sTitle.copy(0, idx > 0 ? idx : sTitle.getLength());
+        m_mapRealFilter[sTitle_] = std::make_pair(sTitle, sFilter);
+        m_lFilters.addFilter(sTitle_, sFilter);
+    }
+    else
+    {
+        m_mapRealFilter[sTitle] = std::make_pair(sTitle, sFilter);
+        m_lFilters.addFilter(sTitle, sFilter);
+    }
+
 }
 
 
@@ -384,7 +395,20 @@ void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
     for (i=0; i<c; ++i)
     {
         const css::beans::StringPair& rFilter = aFilterGroup[i];
-        m_lFilters.addFilter(rFilter.First, rFilter.Second);
+        const OUString sTitle = rFilter.First;
+        const OUString sFilter = rFilter.Second;
+        int idx = sTitle.indexOf("(.");
+        if (idx > 0)
+        {
+            const OUString sTitle_ = sTitle.copy(0, idx > 0 ? idx : sTitle.getLength());
+            m_mapRealFilter[sTitle_] = std::make_pair(sTitle, sFilter);
+            m_lFilters.addFilter(sTitle_, sFilter);
+        }
+        else
+        {
+            m_mapRealFilter[sTitle] = std::make_pair(sTitle, sFilter);
+            m_lFilters.addFilter(sTitle, sFilter);
+        }
     }
 }
 
@@ -417,10 +441,15 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
     OUString sTitle;
     ::sal_Int32     nRealIndex = (nIndex-1); // COM dialog base on 1 ... filter container on 0 .-)
     if (
-        (nRealIndex >= 0                         ) &&
+        (nRealIndex >= 0) &&
         (m_lFilters.getFilter(nRealIndex, sTitle))
-       )
+        )
+    {
+        if (m_mapRealFilter.find(sTitle) != m_mapRealFilter.end())
+            sTitle = m_mapRealFilter[sTitle].first;
+
         rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
+    }
     else if ( nRealIndex == -1 ) // Dialog not visible yet
     {
         sTitle = m_lFilters.getCurrentFilter();
