@@ -105,7 +105,7 @@ FormattedString::FormattedString() :
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
         MutexContainer(),
-        impl::FormattedString_Base(),
+        impl::FormattedString_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_aString( rOther.m_aString ),
     m_aType(rOther.m_aType),

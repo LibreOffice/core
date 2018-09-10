@@ -101,7 +101,7 @@ ErrorBar::ErrorBar() :
 
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     MutexContainer(),
-    impl::ErrorBar_Base(),
+    impl::ErrorBar_Base(rOther),
     maDashName(rOther.maDashName),
     maLineDash(rOther.maLineDash),
     mnLineWidth(rOther.mnLineWidth),

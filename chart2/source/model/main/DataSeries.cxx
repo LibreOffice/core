@@ -133,7 +133,7 @@ DataSeries::DataSeries() :
 
 DataSeries::DataSeries( const DataSeries & rOther ) :
         MutexContainer(),
-        impl::DataSeries_Base(),
+        impl::DataSeries_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {

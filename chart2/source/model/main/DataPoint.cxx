@@ -98,7 +98,7 @@ DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentPrope
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
         MutexContainer(),
-        impl::DataPoint_Base(),
+        impl::DataPoint_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_bNoParentPropAllowed( true )

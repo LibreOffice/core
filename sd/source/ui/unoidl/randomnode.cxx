@@ -159,7 +159,7 @@ Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetCla
 }
 
 RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
-:   RandomAnimationNodeBase(),
+:   RandomAnimationNodeBase(rNode),
     mnPresetClass( rNode.mnPresetClass ),
     maBegin( rNode.maBegin ),
     maDuration( rNode.maDuration ),

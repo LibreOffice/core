@@ -40,7 +40,7 @@ SvxClipboardFormatItem::SvxClipboardFormatItem( sal_uInt16 nId )
 }
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( const SvxClipboardFormatItem& rCpy )
-    : SfxPoolItem( rCpy.Which() ),
+    : SfxPoolItem( rCpy ),
     pImpl( new SvxClipboardFormatItem_Impl( *rCpy.pImpl ) )
 {
 }

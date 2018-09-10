@@ -72,7 +72,7 @@ OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper(   const   Referenc
 {
 }
 
-OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& /*aCopyInstance*/ )
+OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance )
     : XFocusListener()
     , XWindowListener()
     , XKeyListener()
@@ -80,7 +80,7 @@ OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper( const OMRCListener
     , XMouseMotionListener()
     , XPaintListener()
     , XTopWindowListener()
-    , OWeakObject()
+    , OWeakObject(aCopyInstance)
     , m_aListenerHolder ( m_aMutex  )
 {
 }

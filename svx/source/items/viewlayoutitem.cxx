@@ -46,7 +46,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
 
 
 SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
+:   SfxUInt16Item( rOrig ),
     mbBookMode( rOrig.IsBookMode() )
 {
 }

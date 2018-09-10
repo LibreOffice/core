@@ -178,7 +178,7 @@ AffineMatrixItem::AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix)
 }
 
 AffineMatrixItem::AffineMatrixItem(const AffineMatrixItem& rRef)
-:   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
+:   SfxPoolItem(rRef)
 {
     maMatrix = rRef.maMatrix;
 }

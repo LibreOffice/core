@@ -103,7 +103,7 @@ AttributeList::AttributeList()
 }
 
 AttributeList::AttributeList(const AttributeList &r)
-    : cppu::WeakImplHelper<XAttributeList, XCloneable>()
+    : cppu::WeakImplHelper<XAttributeList, XCloneable>(r)
     , m_pImpl(new AttributeList_Impl)
 {
     *m_pImpl = *(r.m_pImpl);

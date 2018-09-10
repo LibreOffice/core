@@ -129,7 +129,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
-    : impl::ChartModel_Base()
+    : impl::ChartModel_Base(rOther)
     , m_aLifeTimeManager( this, this )
     , m_bReadOnly( rOther.m_bReadOnly )
     , m_bModified( rOther.m_bModified )

@@ -1001,7 +1001,7 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
 ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
 
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
-    SvRefBase(),
+    SvRefBase(rList),
     maRanges(rList.maRanges),
     mnMaxRowUsed(rList.mnMaxRowUsed)
 {

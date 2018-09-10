@@ -48,7 +48,7 @@ ChartType::ChartType() :
 
 ChartType::ChartType( const ChartType & rOther ) :
         MutexContainer(),
-        impl::ChartType_Base(),
+        impl::ChartType_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_bNotifyChanges( true )

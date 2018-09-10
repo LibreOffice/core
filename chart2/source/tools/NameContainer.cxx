@@ -45,7 +45,7 @@ NameContainer::NameContainer( const css::uno::Type& rType, const OUString& rServ
 
 NameContainer::NameContainer(
     const NameContainer & rOther )
-    : impl::NameContainer_Base()
+    : impl::NameContainer_Base(rOther)
     , m_aType( rOther.m_aType )
     , m_aServicename( rOther.m_aServicename )
     , m_aImplementationName( rOther.m_aImplementationName )
