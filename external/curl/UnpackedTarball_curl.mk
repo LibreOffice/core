@@ -27,6 +27,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/CVE-2017-8816.patch \
 	external/curl/CVE-2018-1000005.patch \
 	external/curl/CVE-2018-1000007.patch \
+	external/curl/CVE-2018-14618.patch \
+	external/curl/CVE-2017-1000254.patch \
+	external/curl/CVE-2018-1000120.patch \
 ))
 
 ifeq ($(SYSTEM_NSS),)
