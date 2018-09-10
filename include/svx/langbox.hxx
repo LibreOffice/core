@@ -149,12 +149,23 @@ private:
 
 class SVX_DLLPUBLIC LanguageBox
 {
+public:
+    enum class EditedAndValid
+    {
+        No,
+        Valid,
+        Invalid
+    };
+
 private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
     Link<weld::ComboBoxText&, void> m_aChangeHdl;
     OUString m_aAllString;
+    LanguageType m_eSavedLanguage;
+    EditedAndValid  m_eEditedAndValid;
     bool m_bHasLangNone;
     bool m_bLangNoneIsLangAll;
+    bool m_bWithCheckmark;
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
     SVX_DLLPRIVATE void ImplClear();
@@ -162,17 +173,24 @@ private:
 public:
     LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
-                            bool bHasLangNone, bool bLangNoneIsLangAll = false );
+                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
+                            bool bCheckSpellAvail = false );
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
     void            InsertLanguage(const LanguageType nLangType);
-    void            SelectLanguage( const LanguageType eLangType );
-    LanguageType    GetSelectedLanguage() const;
-    void            SelectEntryPos(int nPos) { m_xControl->set_active(nPos); }
+
+    EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
+    sal_Int32           SaveEditedAsEntry();
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
-    void save_value() { m_xControl->save_value(); }
-    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    void save_active_id() { m_eSavedLanguage = get_active_id(); }
+    LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
+    bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
     void hide() { m_xControl->hide(); }
+    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    void set_active(int nPos) { m_xControl->set_active(nPos); }
+    int get_active() const { return m_xControl->get_active(); }
+    void set_active_id(const LanguageType eLangType);
+    LanguageType get_active_id() const;
 };
 
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase

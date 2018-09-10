@@ -70,10 +70,12 @@ class ImplListBoxFloatingWindow;
 class ImplBtn;
 class ImplWin;
 class ImplListBoxWindow;
+class SalInstanceEntryTreeView;
 
 class VCL_DLLPUBLIC ListBox : public Control
 {
 private:
+    friend SalInstanceEntryTreeView;
     VclPtr<ImplListBox>                mpImplLB;
     VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
     VclPtr<ImplWin>                    mpImplWin;
