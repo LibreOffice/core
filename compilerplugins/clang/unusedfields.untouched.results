@@ -110,7 +110,7 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/svtools/ctrlbox.hxx:364
+include/svtools/ctrlbox.hxx:355
     SvtLineListBox m_xLineSetWin std::unique_ptr<weld::CustomWeld>
 include/svtools/genericunodialog.hxx:218
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
@@ -230,6 +230,8 @@ sd/source/ui/view/viewshel.cxx:1219
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:193
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
+sfx2/source/dialog/itemconnect.cxx:139
+    sfx::MultiControlWrapperHelper_Impl maVec sfx::ControlWrpVec
 sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
@@ -318,6 +320,16 @@ uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/qt5/Qt5Data.hxx:35
+    Qt5Data m_pGlyphCache std::unique_ptr<GlyphCache>
+vcl/inc/qt5/Qt5Graphics.hxx:59
+    Qt5Graphics m_focusedButton std::unique_ptr<QPushButton>
+vcl/inc/qt5/Qt5Graphics.hxx:60
+    Qt5Graphics m_image std::unique_ptr<QImage>
+vcl/inc/qt5/Qt5Graphics.hxx:61
+    Qt5Graphics m_lastPopupRect class QRect
+vcl/inc/qt5/Qt5Object.hxx:34
+    Qt5Object m_aSystemData struct SystemEnvData
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
 vcl/source/app/salvtables.cxx:520
@@ -336,6 +348,8 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:2248
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
+vcl/unx/kde5/KDE5FilePicker.hxx:81
+    KDE5FilePicker allowRemoteUrls _Bool
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 writerperfect/inc/WPFTEncodingDialog.hxx:37

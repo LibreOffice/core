@@ -102,11 +102,6 @@ IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
         return false;
     }
     pMenu->Deactivate();
-    OString sIdent = pMenu->GetCurItemIdent();
-    if (sIdent == "rename")
-        maRenameHdl.Call(this);
-    else if (sIdent == "delete")
-        maDeleteHdl.Call(this);
     return false;
 }
 

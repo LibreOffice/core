@@ -120,7 +120,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1387
+cui/source/factory/dlgfact.cxx:1396
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:190
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -366,8 +366,6 @@ sc/source/ui/inc/msgpool.hxx:46
     ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
 sc/source/ui/inc/notemark.hxx:43
     ScNoteMarker m_aTimer class Timer
-sc/source/ui/inc/scuiasciiopt.hxx:85
-    ScImportAsciiDlg aColumnUser class rtl::OUString
 sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
@@ -398,6 +396,8 @@ sd/source/ui/view/viewshel.cxx:1218
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1219
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
+sfx2/source/dialog/itemconnect.cxx:139
+    sfx::MultiControlWrapperHelper_Impl maVec sfx::ControlWrpVec
 sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:89
@@ -556,6 +556,12 @@ vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/qt5/Qt5Graphics.hxx:61
+    Qt5Graphics m_lastPopupRect class QRect
+vcl/inc/qt5/Qt5Object.hxx:34
+    Qt5Object m_aSystemData struct SystemEnvData
+vcl/inc/qt5/Qt5Object.hxx:36
+    Qt5Object m_pParent class Qt5Frame *
 vcl/inc/salmenu.hxx:42
     SalMenuButtonItem mnId sal_uInt16
 vcl/inc/salmenu.hxx:43
@@ -594,6 +600,8 @@ vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
+vcl/unx/kde5/KDE5FilePicker.hxx:81
+    KDE5FilePicker allowRemoteUrls _Bool
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/text/XMLTextListBlockContext.hxx:35

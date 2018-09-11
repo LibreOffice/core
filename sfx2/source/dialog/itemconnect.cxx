@@ -129,16 +129,6 @@ void CheckBoxWrapper::SetControlValue( bool bValue )
 }
 
 
-// Multi control wrappers
-
-
-typedef std::vector< ControlWrapperBase* >  ControlWrpVec;
-
-struct MultiControlWrapperHelper_Impl
-{
-    ControlWrpVec       maVec;
-};
-
 // Base connection classes
 
 
