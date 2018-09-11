@@ -683,9 +683,8 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
     if ( pParentFrame )
         pFrame->mpParentFrame = pParentFrame;
 
-    // Icon setzen (YD win32 does it in the class registration)
-    if ( nFrameFlags & FCF_MINBUTTON )
-        WinSendMsg( hWndFrame, WM_SETICON, (MPARAM)pInst->mhAppIcon, (MPARAM)0 );
+    // since os2 windows always have a close button, always set icon
+    WinSendMsg( hWndFrame, WM_SETICON, (MPARAM)pInst->mhAppIcon, (MPARAM)0 );
 
     // If we have an Window with an Caption Bar and without
     // an MaximizeBox, we change the SystemMenu

@@ -126,6 +126,85 @@ $(eval $(call gb_WinResTarget_add_file,vcl/src,\
     vcl/os2/source/src/salsrc \
 ))
 
+$(eval $(call gb_WinResTarget_add_dependency,vcl/src,\
+    vcl/os2/source/src/airbrush.ptr \
+    vcl/os2/source/src/ase.ptr \
+    vcl/os2/source/src/asn.ptr \
+    vcl/os2/source/src/asne.ptr \
+    vcl/os2/source/src/asns.ptr \
+    vcl/os2/source/src/asnswe.ptr \
+    vcl/os2/source/src/asnw.ptr \
+    vcl/os2/source/src/ass.ptr \
+    vcl/os2/source/src/asse.ptr \
+    vcl/os2/source/src/assw.ptr \
+    vcl/os2/source/src/asw.ptr \
+    vcl/os2/source/src/aswe.ptr \
+    vcl/os2/source/src/chain.ptr \
+    vcl/os2/source/src/chainnot.ptr \
+    vcl/os2/source/src/chart.ptr \
+    vcl/os2/source/src/copydata.ptr \
+    vcl/os2/source/src/copydlnk.ptr \
+    vcl/os2/source/src/copyf.ptr \
+    vcl/os2/source/src/copyf2.ptr \
+    vcl/os2/source/src/copyflnk.ptr \
+    vcl/os2/source/src/crook.ptr \
+    vcl/os2/source/src/crop.ptr \
+    vcl/os2/source/src/cross.ptr \
+    vcl/os2/source/src/darc.ptr \
+    vcl/os2/source/src/dbezier.ptr \
+    vcl/os2/source/src/dcapt.ptr \
+    vcl/os2/source/src/dcirccut.ptr \
+    vcl/os2/source/src/dconnect.ptr \
+    vcl/os2/source/src/dellipse.ptr \
+    vcl/os2/source/src/detectiv.ptr \
+    vcl/os2/source/src/dfree.ptr \
+    vcl/os2/source/src/dline.ptr \
+    vcl/os2/source/src/dpie.ptr \
+    vcl/os2/source/src/dpolygon.ptr \
+    vcl/os2/source/src/drect.ptr \
+    vcl/os2/source/src/dtext.ptr \
+    vcl/os2/source/src/dtext.ptr \
+    vcl/os2/source/src/fill.ptr \
+    vcl/os2/source/src/hand.ptr \
+    vcl/os2/source/src/help.ptr \
+    vcl/os2/source/src/hshear.ptr \
+    vcl/os2/source/src/hsizebar.ptr \
+    vcl/os2/source/src/hsplit.ptr \
+    vcl/os2/source/src/linkdata.ptr \
+    vcl/os2/source/src/linkf.ptr \
+    vcl/os2/source/src/magnify.ptr \
+    vcl/os2/source/src/mirror.ptr \
+    vcl/os2/source/src/move.ptr \
+    vcl/os2/source/src/movebw.ptr \
+    vcl/os2/source/src/movedata.ptr \
+    vcl/os2/source/src/movedlnk.ptr \
+    vcl/os2/source/src/movef.ptr \
+    vcl/os2/source/src/movef2.ptr \
+    vcl/os2/source/src/moveflnk.ptr \
+    vcl/os2/source/src/movept.ptr \
+    vcl/os2/source/src/nullptr.ptr \
+    vcl/os2/source/src/pen.ptr \
+    vcl/os2/source/src/pivotcol.ptr \
+    vcl/os2/source/src/pivotfld.ptr \
+    vcl/os2/source/src/pivotrow.ptr \
+    vcl/os2/source/src/pntbrsh.ptr \
+    vcl/os2/source/src/refhand.ptr \
+    vcl/os2/source/src/rotate.ptr \
+    vcl/os2/source/src/salsrc.rc \
+    vcl/os2/source/src/sd.ico \
+    vcl/os2/source/src/tblsele.ptr \
+    vcl/os2/source/src/tblsels.ptr \
+    vcl/os2/source/src/tblselse.ptr \
+    vcl/os2/source/src/tblselsw.ptr \
+    vcl/os2/source/src/tblselw.ptr \
+    vcl/os2/source/src/timemove.ptr \
+    vcl/os2/source/src/timesize.ptr \
+    vcl/os2/source/src/vshear.ptr \
+    vcl/os2/source/src/vsizebar.ptr \
+    vcl/os2/source/src/vsplit.ptr \
+    vcl/os2/source/src/vtext.ptr \
+))
+
 $(eval $(call gb_WinResTarget_set_include,vcl/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/os2/source/src \
