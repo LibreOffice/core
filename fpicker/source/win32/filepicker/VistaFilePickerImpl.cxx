@@ -125,7 +125,7 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
         hr = IIDFromString(aStr.c_str(), &known_folder_id);
         if (SUCCEEDED(hr))
         {
-            hr = SHGetKnownFolderPath(known_folder_id, 0, NULL, &pStr);
+            hr = SHGetKnownFolderPath(known_folder_id, 0, nullptr, &pStr);
             if (SUCCEEDED(hr))
             {
                 ::osl::FileBase::getFileURLFromSystemPath(o3tl::toU(pStr), sURL);
@@ -135,7 +135,7 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     }
 
     // Default fallback
-    hr = SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pStr);
+    hr = SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pStr);
     if (SUCCEEDED(hr))
         ::osl::FileBase::getFileURLFromSystemPath(o3tl::toU(pStr), sURL);
     else // shouldn't happen...
