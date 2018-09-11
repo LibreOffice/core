@@ -30,9 +30,9 @@
      inkscape:window-height="706"
      id="namedview23"
      showgrid="true"
-     inkscape:zoom="7.375"
-     inkscape:cx="-19.720172"
-     inkscape:cy="3.7516344"
+     inkscape:zoom="14.75"
+     inkscape:cx="-10.660076"
+     inkscape:cy="5.3299371"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -48,10 +48,10 @@
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient3104-9"
        id="linearGradient3092"
-       y2="2.9062471"
-       x2="-51.786404"
-       y1="50.786446"
-       x1="-51.786404" />
+       y2="28.475233"
+       x2="-59.613167"
+       y1="28.475233"
+       x1="-20.209869" />
     <linearGradient
        id="linearGradient3104-9">
       <stop
@@ -179,13 +179,30 @@
          id="stop3250-8-2-8-5-6-40-4" />
     </linearGradient>
     <linearGradient
-       id="e"
-       gradientTransform="matrix(0.1959881,-0.20631521,0.1959881,0.20631521,2.200421,11.896463)"
+       id="b"
+       gradientTransform="matrix(0.36872249,0,0,0.38856797,7.575734,7.143101)"
        gradientUnits="userSpaceOnUse"
-       x1="28.449389"
+       x1="11.192374"
+       x2="11.192374"
+       y1="4.0641632"
+       y2="30.298229">
+      <stop
+         offset="0"
+         stop-color="#ed5353"
+         id="stop11" />
+      <stop
+         offset="1"
+         stop-color="#c6262e"
+         id="stop13" />
+    </linearGradient>
+    <linearGradient
+       id="c"
+       gradientTransform="matrix(0.1959881,-0.20631521,0.1959881,0.20631521,2.397994,11.792362)"
+       gradientUnits="userSpaceOnUse"
+       x1="36.010902"
        x2="16.331276"
        xlink:href="#d"
-       y1="20.584223"
+       y1="13.022708"
        y2="32.702335" />
     <linearGradient
        id="d">
@@ -210,31 +227,14 @@
          id="stop23" />
     </linearGradient>
     <linearGradient
-       id="c"
-       gradientTransform="matrix(0.1959881,-0.20631521,0.1959881,0.20631521,2.397994,11.792362)"
+       id="e"
+       gradientTransform="matrix(0.1959881,-0.20631521,0.1959881,0.20631521,2.200421,11.896463)"
        gradientUnits="userSpaceOnUse"
-       x1="36.010902"
+       x1="28.449389"
        x2="16.331276"
        xlink:href="#d"
-       y1="13.022708"
+       y1="20.584223"
        y2="32.702335" />
-    <linearGradient
-       id="b"
-       gradientTransform="matrix(0.36872249,0,0,0.38856797,7.575734,7.143101)"
-       gradientUnits="userSpaceOnUse"
-       x1="11.192374"
-       x2="11.192374"
-       y1="4.0641632"
-       y2="30.298229">
-      <stop
-         offset="0"
-         stop-color="#ed5353"
-         id="stop11" />
-      <stop
-         offset="1"
-         stop-color="#c6262e"
-         id="stop13" />
-    </linearGradient>
   </defs>
   <metadata
      id="metadata3947">
