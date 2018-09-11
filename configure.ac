@@ -6404,6 +6404,41 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
+AC_MSG_CHECKING([[whether $CXX supports [[fallthrough]]]])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+dnl Unknown attributes must be ignored by compilers, but they do emit warnings about them:
+if test "$COM" = MSC; then
+    CXXFLAGS="$CXXFLAGS /we5030"
+else
+    CXXFLAGS="$CXXFLAGS -Werror"
+fi
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        // There appears to be no feature-test macro for __has_cpp_attribute in C++2a, approximate
+        // by checking for __cplusplus:
+        #if __cplusplus > 201703L
+        #if !__has_cpp_attribute(fallthrough)
+        #error
+        #endif
+        #else
+        void f(int & x) {
+            switch (x) {
+            case 0:
+                ++x;
+                [[fallthrough]];
+            default:
+                ++x;
+            }
+        }
+        #endif
+    ]])], [
+        AC_DEFINE([HAVE_CPP_ATTRIBUTE_FALLTHROUGH],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([[whether $CXX supports [[nodiscard]]]])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
