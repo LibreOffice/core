@@ -1197,7 +1197,6 @@ public:
                                                       ShowTrackFlags nFlags = ShowTrackFlags::Small );
     void                                HideTracking();
     void                                InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags );
-    void                                InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );

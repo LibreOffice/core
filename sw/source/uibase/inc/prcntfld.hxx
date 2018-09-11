@@ -54,9 +54,6 @@ public:
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true) { m_pField->Enable(bEnable); }
     void Disable() { m_pField->Disable(); }
-    void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
-    void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
-    void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
 
     void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
 

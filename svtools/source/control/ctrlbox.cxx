@@ -528,13 +528,6 @@ sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
     return nPos;
 }
 
-void LineListBox::SelectEntry( SvxBorderLineStyle nStyle, bool bSelect )
-{
-    sal_Int32 nPos = GetEntryPos( nStyle );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SelectEntryPos( nPos, bSelect );
-}
-
 void LineListBox::InsertEntry(
     const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )

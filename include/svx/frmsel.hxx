@@ -103,8 +103,6 @@ public:
     sal_Int32           GetEnabledBorderCount() const;
     /** Returns the border type from the passed index (counts only enabled frame borders). */
     FrameBorderType     GetEnabledBorderType( sal_Int32 nIndex ) const;
-    /** Returns the index of a frame border (counts only enabled borders) from passed type. */
-    sal_Int32           GetEnabledBorderIndex( FrameBorderType eBorder ) const;
 
     // frame border state and style
 
@@ -177,8 +175,6 @@ public:
     css::uno::Reference< css::accessibility::XAccessible >
                         GetChildAccessible( const Point& rPos );
 
-    /** Returns true, if the passed point is inside the click area of any enabled frame border. */
-    bool                ContainsClickPoint( const Point& rPos ) const;
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 

@@ -94,26 +94,6 @@ void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStart
     }
 }
 
-void SvxPresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
-{
-    FillPresetListBoxImpl< XGradientList, XGradientEntry>( pList, nStartIndex );
-}
-
-void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
-{
-    FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
-}
-
-void SvxPresetListBox::FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex)
-{
-    FillPresetListBoxImpl< XBitmapList, XBitmapEntry >( pList, nStartIndex );
-}
-
-void SvxPresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex)
-{
-    FillPresetListBoxImpl< XPatternList, XBitmapEntry >( pList, nStartIndex );
-}
-
 IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if( pMenu == nullptr )

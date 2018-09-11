@@ -272,7 +272,6 @@ public:
     static long GetSquares() { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }
-    SvxTabPage* GetTabPage() const { return m_pPage; }
 
     //Device Pixel .
     long ShowPosition( const Point &pt);

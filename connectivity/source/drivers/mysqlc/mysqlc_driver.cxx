@@ -78,28 +78,6 @@ Sequence<OUString> SAL_CALL MysqlCDriver::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-void MysqlCDriver::impl_initCppConn_lck_throw()
-{
-#ifdef BUNDLE_MARIADB
-    if (!m_bAttemptedLoadCConn)
-    {
-        const OUString sModuleName(BUNDLE_MARIADB);
-        m_hCConnModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
-        m_bAttemptedLoadCConn = true;
-    }
-
-    // attempted to load - was it successful?
-    if (!m_hCConnModule)
-    {
-        OSL_FAIL("MysqlCDriver::impl_initCppConn_lck_throw: could not load the " BUNDLE_MARIADB
-                 " library!");
-        throw SQLException("Unable to load the " BUNDLE_MARIADB " library.", *this,
-                           OUString("08001"), // "unable to connect"
-                           0, Any());
-    }
-#endif
-}
-
 Reference<XConnection> SAL_CALL MysqlCDriver::connect(const OUString& url,
                                                       const Sequence<PropertyValue>& info)
 {

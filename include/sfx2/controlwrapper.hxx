@@ -259,7 +259,6 @@ public:
 
     virtual ValueT      GetControlValue() const SAL_OVERRIDE;
     virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
-    bool                IsControlValueChanged() const;
 
 private:
     FieldUnit           meUnit;
@@ -329,76 +328,6 @@ public:
 
     virtual ValueT      GetControlValue() const SAL_OVERRIDE;
     virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
-};
-
-
-// Multi control wrappers
-
-
-struct MultiControlWrapperHelper_Impl;
-
-/** A container of control wrappers.
-
-    Derived classes should define control wrapper members and register them in
-    their constructor, using the function RegisterControlWrapper().
-
-    This wrapper implements the abstract functions of the ControlWrapperBase
-    base class by calling the functions of all registered wrappers.
- */
-class SFX2_DLLPUBLIC MultiControlWrapperHelper : public ControlWrapperBase
-{
-public:
-    explicit            MultiControlWrapperHelper();
-    virtual             ~MultiControlWrapperHelper() override;
-
-    /** Registers a control wrapper (should be a member of a derived class). */
-    void                RegisterControlWrapper( ControlWrapperBase& rWrapper );
-
-    /** Enables, disables, shows, or hides the registered controls. */
-    virtual void        ModifyControl( TriState eShow ) override;
-
-    /** Returns true if all registered controls are in "don't know" state. */
-    virtual bool        IsControlDontKnow() const override;
-    /** Sets all registered controls to "don't know" state. */
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-private:
-    std::unique_ptr< MultiControlWrapperHelper_Impl > mxImpl;
-};
-
-
-/** A multi control wrapper with extended interface.
-
-    This template class extends the MultiControlWrapperHelper class by the
-    functions GetControlValue() and SetControlValue(), known from the
-    SingleControlWrapper template. This makes it possible to use this template
-    in item connections expecting a single control wrapper. The type ValueT
-    should be able to contain the values of all controls handled in this
-    wrapper. In most cases, the easiest way to achieve this is to use the
-    related item type directly, using the IdentItemWrapper template
-    (itemwrapper.hxx).
- */
-template< typename ValueT >
-class MultiControlWrapper : public MultiControlWrapperHelper
-{
-public:
-    typedef MultiControlWrapperHelper       ControlType;
-    typedef ValueT                          ControlValueType;
-
-    MultiControlWrapper() : maDefValue( 0 ){}
-
-    /** Returns the default value that can be used in GetControlValue(). */
-    const ValueT& GetDefaultValue() const { return maDefValue; }
-    /** Sets a default value that can be used in GetControlValue(). */
-    void         SetDefaultValue( const ValueT& rDefValue ) { maDefValue = rDefValue; }
-
-    /** Derived classes return the value the control contains. */
-    virtual ValueT      GetControlValue() const = 0;
-    /** Derived classes set the contents of the control to the passed value. */
-    virtual void        SetControlValue( ValueT aValue ) = 0;
-
-private:
-    ValueT              maDefValue;
 };
 
 
@@ -480,13 +409,6 @@ void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
     this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ), meUnit );
 }
-
-template< typename ValueT >
-bool MetricFieldWrapper< ValueT >::IsControlValueChanged() const
-{
-    return this->GetControl().IsValueChangedFromSaved();
-}
-
 
 template< typename ValueT >
 ValueT ListBoxWrapper< ValueT >::GetControlValue() const
