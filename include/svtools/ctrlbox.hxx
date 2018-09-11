@@ -216,8 +216,6 @@ public:
                         ColorFunc pColor2Fn = &sameColor,
                         ColorDistFunc pColorDistFn = &sameDistColor);
 
-    using ListBox::GetEntryPos;
-    sal_Int32       GetEntryPos( SvxBorderLineStyle nStyle ) const;
     SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
 
     SvxBorderLineStyle GetSelectEntryStyle() const;

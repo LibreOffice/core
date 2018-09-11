@@ -536,23 +536,6 @@ void LineListBox::InsertEntry(
         rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn));
 }
 
-sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
-{
-    if(nStyle == SvxBorderLineStyle::NONE && !m_sNone.isEmpty())
-        return 0;
-    for ( size_t i = 0, n = m_vLineList.size(); i < n; ++i ) {
-        auto& pData = m_vLineList[ i ];
-        if ( pData->GetStyle() == nStyle )
-        {
-            size_t nPos = i;
-            if (!m_sNone.isEmpty())
-                nPos ++;
-            return static_cast<sal_Int32>(nPos);
-        }
-    }
-    return LISTBOX_ENTRY_NOTFOUND;
-}
-
 SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
     ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;

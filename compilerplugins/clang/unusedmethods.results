@@ -24,16 +24,6 @@ connectivity/source/drivers/firebird/Util.hxx:66
     const class rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
 connectivity/source/drivers/mork/mork_helper.cxx:37
     int main(int,char **)
-connectivity/source/drivers/mysqlc/mysqlc_driver.hxx:92
-    void connectivity::mysqlc::MysqlCDriver::impl_initCppConn_lck_throw()
-connectivity/source/drivers/mysqlc/mysqlc_general.hxx:95
-    class rtl::OString escapeSql(const class rtl::OString &)
-connectivity/source/drivers/mysqlc/mysqlc_general.hxx:97
-    class rtl::OUString getStringFromAny(const class com::sun::star::uno::Any &)
-connectivity/source/drivers/mysqlc/mysqlc_general.hxx:120
-    class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > convert(const class rtl::OUString &,const unsigned short)
-connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:62
-    class rtl::OUString connectivity::mysqlc::OResultSetMetaData::convert(const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &) const
 connectivity/source/inc/dbase/dindexnode.hxx:70
     _Bool connectivity::dbase::ONDXKey::operator<(const class connectivity::dbase::ONDXKey &) const
 connectivity/source/inc/java/sql/Connection.hxx:63
@@ -56,6 +46,8 @@ connectivity/source/inc/OTypeInfo.hxx:46
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
+cui/source/inc/numpages.hxx:62
+    void SvxNumberingPreview::SetPositionMode()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:82
@@ -554,28 +546,8 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
-include/sfx2/controlwrapper.hxx:262
-    _Bool sfx::MetricFieldWrapper::IsControlValueChanged() const
-include/sfx2/controlwrapper.hxx:351
-     sfx::MultiControlWrapperHelper::MultiControlWrapperHelper()
-include/sfx2/controlwrapper.hxx:355
-    void sfx::MultiControlWrapperHelper::RegisterControlWrapper(class sfx::ControlWrapperBase &)
-include/sfx2/controlwrapper.hxx:388
-     sfx::MultiControlWrapper::MultiControlWrapper<ValueT>()
-include/sfx2/controlwrapper.hxx:391
-    const type-parameter-?-? & sfx::MultiControlWrapper::GetDefaultValue() const
-include/sfx2/controlwrapper.hxx:393
-    void sfx::MultiControlWrapper::SetDefaultValue(const type-parameter-?-? &)
-include/sfx2/controlwrapper.hxx:396
-    type-parameter-?-? sfx::MultiControlWrapper::GetControlValue() const
-include/sfx2/controlwrapper.hxx:398
-    void sfx::MultiControlWrapper::SetControlValue(type-parameter-?-?)
-include/sfx2/dialoghelper.hxx:30
-    void setPreviewsToSamePlace(const class vcl::Window *,class VclBuilderContainer *)
 include/sfx2/docfilt.hxx:83
     _Bool SfxFilter::GetGpgEncryption() const
-include/sfx2/itemwrapper.hxx:153
-     sfx::IdentItemWrapper::IdentItemWrapper<ItemT>(unsigned short)
 include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
@@ -588,16 +560,10 @@ include/svl/itempool.hxx:196
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
 include/svtools/ctrlbox.hxx:208
     long LineListBox::GetWidth() const
-include/svtools/ctrlbox.hxx:223
-    void LineListBox::SelectEntry(enum SvxBorderLineStyle,_Bool)
-include/svtools/ctrlbox.hxx:228
-    void LineListBox::SetColor(const class Color &)
+include/svtools/ctrlbox.hxx:220
+    int LineListBox::GetEntryPos(enum SvxBorderLineStyle) const
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
-include/svtools/valueset.hxx:315
-    void ValueSet::InsertItem(unsigned short,const class rtl::OUString &,unsigned long)
-include/svtools/valueset.hxx:347
-    unsigned long ValueSet::GetSelectItemPos() const
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -606,38 +572,18 @@ include/svx/ClassificationField.hxx:48
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/colorbox.hxx:150
-     SvxColorListBoxWrapper::SvxColorListBoxWrapper(class SvxColorListBox &)
-include/svx/dlgctrl.hxx:275
-    class SvxTabPage * SvxPixelCtl::GetTabPage() const
 include/svx/framelink.hxx:201
     _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/frmsel.hxx:107
-    int svx::FrameSelector::GetEnabledBorderIndex(enum svx::FrameBorderType) const
-include/svx/frmsel.hxx:181
-    _Bool svx::FrameSelector::ContainsClickPoint(const class Point &) const
 include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
-include/svx/svdlayer.hxx:129
-    class SdrLayerAdmin * SdrLayerAdmin::GetParent() const
 include/svx/svdpage.hxx:105
     class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
-include/svx/SvxPresetListBox.hxx:51
-    void SvxPresetListBox::SetRenameHdl(const class Link<class SvxPresetListBox *, void> &)
-include/svx/SvxPresetListBox.hxx:55
-    void SvxPresetListBox::SetDeleteHdl(const class Link<class SvxPresetListBox *, void> &)
-include/svx/SvxPresetListBox.hxx:60
-    void SvxPresetListBox::FillPresetListBox(class XGradientList &,unsigned int)
-include/svx/SvxPresetListBox.hxx:61
-    void SvxPresetListBox::FillPresetListBox(class XHatchList &,unsigned int)
-include/svx/SvxPresetListBox.hxx:62
-    void SvxPresetListBox::FillPresetListBox(class XBitmapList &,unsigned int)
-include/svx/SvxPresetListBox.hxx:63
-    void SvxPresetListBox::FillPresetListBox(class XPatternList &,unsigned int)
+include/svx/SvxPresetListBox.hxx:41
+    void SvxPresetListBox::FillPresetListBoxImpl(type-parameter-?-? &,unsigned int)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -712,9 +658,9 @@ include/vcl/commandevent.hxx:289
      CommandLongPressData::CommandLongPressData()
 include/vcl/cursor.hxx:96
     _Bool vcl::Cursor::operator!=(const class vcl::Cursor &) const
-include/vcl/customweld.hxx:70
+include/vcl/customweld.hxx:71
     void weld::CustomWidgetController::SetAccessibleName(const class rtl::OUString &)
-include/vcl/customweld.hxx:111
+include/vcl/customweld.hxx:112
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
 include/vcl/edit.hxx:206
     _Bool Edit::IsSelectAllSingleClick() const
@@ -764,8 +710,6 @@ include/vcl/settings.hxx:654
     _Bool HelpSettings::operator!=(const class HelpSettings &) const
 include/vcl/settings.hxx:708
     _Bool AllSettings::operator!=(const class AllSettings &) const
-include/vcl/spinfld.hxx:55
-    const class Link<class SpinField &, void> & SpinField::GetDownHdl() const
 include/vcl/svapp.hxx:178
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
 include/vcl/svapp.hxx:812
@@ -850,9 +794,7 @@ include/vcl/weld.hxx:1078
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:430
     const char * ImplDbgCheckWindow(const void *)
-include/vcl/window.hxx:1200
-    void vcl::Window::InvertTracking(const class tools::Polygon &,enum ShowTrackFlags)
-include/vcl/window.hxx:1240
+include/vcl/window.hxx:1239
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
@@ -988,8 +930,6 @@ sd/source/ui/inc/optsitem.hxx:178
     _Bool SdOptionsContents::operator==(const class SdOptionsContents &) const
 sd/source/ui/inc/unomodel.hxx:136
     _Bool SdXImpressDocument::operator==(const class SdXImpressDocument &) const
-sdext/source/minimizer/pppoptimizer.hxx:40
-     PPPOptimizer::PPPOptimizer(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
 sfx2/source/appl/shutdownicon.hxx:82
     class rtl::OUString ShutdownIcon::getShortcutName()
 sfx2/source/appl/shutdownicon.hxx:98
@@ -1046,8 +986,6 @@ svgio/inc/svgstyleattributes.hxx:370
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:56
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
-svx/source/inc/svxpixelctlaccessiblecontext.hxx:146
-    void SvxPixelCtlAccessible::LoseFocus()
 svx/source/svdraw/svdpdf.hxx:92
     double ImpSdrPdfImport::Matrix::b() const
 svx/source/svdraw/svdpdf.hxx:94
@@ -1208,12 +1146,6 @@ sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
 sw/source/filter/ww8/ww8struc.hxx:243
      WW8_BRCVer6::WW8_BRCVer6()
-sw/source/uibase/inc/prcntfld.hxx:57
-    void PercentField::SetAccessibleName(const class rtl::OUString &)
-sw/source/uibase/inc/prcntfld.hxx:58
-    void PercentField::SetText(const class rtl::OUString &)
-sw/source/uibase/inc/prcntfld.hxx:59
-    void PercentField::SetMetricFieldMin(long)
 sw/source/uibase/inc/swcont.hxx:86
     _Bool SwContent::operator==(const class SwContent &) const
 test/source/sheet/xsubtotalfield.cxx:28
@@ -1284,9 +1216,7 @@ vcl/inc/qt5/Qt5Painter.hxx:56
     void Qt5Painter::update()
 vcl/inc/regionband.hxx:27
     const char * ImplDbgTestRegionBand(const void *)
-vcl/inc/salgdi.hxx:220
-    class basegfx::B2DPolygon SalGraphics::mirror(const class basegfx::B2DPolygon &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:223
+vcl/inc/salgdi.hxx:222
     class basegfx::B2DHomMatrix SalGraphics::mirror(const class basegfx::B2DHomMatrix &,const class OutputDevice *) const
 vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
