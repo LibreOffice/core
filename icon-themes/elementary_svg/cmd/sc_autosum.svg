@@ -1,5 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-
-
-     /&gt;
- <path d="m3.507967 14.440543v-1.147742l3.882067-5.6306847-3.8735745-5.0568142v-1.1207359h9.0423245v1.701358h-6.1747117l3.3352019 4.4356836-3.5039874 5.1040742h6.3434972v1.714861z" fill="#8c8c8c" stroke="#565656" stroke-linejoin="round" stroke-width=".983095" transform="scale(.99531931 1.0047027)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><defs><linearGradient id="a"><stop offset="0" stop-color="#737373"/><stop offset=".262" stop-color="#636363"/><stop offset=".705" stop-color="#4b4b4b"/><stop offset="1" stop-color="#3f3f3f"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="10.047" x2="9.042" y2="15.925" gradientUnits="userSpaceOnUse"/></defs>/&gt;<path d="M3.508 14.44v-1.147l3.882-5.63-3.874-5.058v-1.12h9.043v1.7H6.383L9.72 7.623l-3.505 5.104h6.344v1.715z" fill="url(#b)" stroke="#000" stroke-linejoin="round" stroke-width=".983" transform="scale(.99532 1.0047)" stroke-opacity=".49"/></svg>
