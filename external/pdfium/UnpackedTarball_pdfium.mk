@@ -25,10 +25,9 @@ pdfium_patches += 0001-Add-FPDFFormObj_GetObject-API.patch.1
 pdfium_patches += 0001-Add-FPDFText_GetFontName-API.patch.1
 # Backport of <https://pdfium-review.googlesource.com/39530>.
 pdfium_patches += 0001-Add-FPDFTextObj_GetText-API.patch.1
+# Backport of <https://pdfium-review.googlesource.com/39930>.
+pdfium_patches += 0001-Add-FPDFFormObj_GetMatrix-API.patch.1
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
-pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
-pdfium_patches += 0011-svx-correctly-possition-form-objects-from-PDF.patch.2
-pdfium_patches += 0014-svx-update-PDFium-patch-and-code.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
