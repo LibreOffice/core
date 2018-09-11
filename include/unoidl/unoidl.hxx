@@ -24,7 +24,7 @@
 
 namespace unoidl {
 
-class LO_DLLPUBLIC_UNOIDL SAL_WARN_UNUSED NoSuchFileException final {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL NoSuchFileException final {
 public:
     SAL_DLLPRIVATE NoSuchFileException(rtl::OUString const & uri): uri_(uri) {}
 
@@ -41,7 +41,7 @@ private:
     rtl::OUString uri_;
 };
 
-class LO_DLLPUBLIC_UNOIDL SAL_WARN_UNUSED FileFormatException final {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL FileFormatException final {
 public:
     SAL_DLLPRIVATE FileFormatException(
         rtl::OUString const & uri, rtl::OUString const & detail):
