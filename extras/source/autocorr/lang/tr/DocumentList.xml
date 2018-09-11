@@ -46,7 +46,7 @@
   <block-list:block block-list:abbreviated-name="faide" block-list:name="fayda"/>
   <block-list:block block-list:abbreviated-name="fantazi" block-list:name="fantezi"/>
   <block-list:block block-list:abbreviated-name="fiat" block-list:name="fiyat"/>
-  <block-list:block block-list:abbreviated-name="filim" block-list:name="Film"/>
+  <block-list:block block-list:abbreviated-name="filim" block-list:name="film"/>
   <block-list:block block-list:abbreviated-name="Gider ayak" block-list:name="Giderayak"/>
   <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
   <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
@@ -118,6 +118,70 @@
   <block-list:block block-list:abbreviated-name="yeldeğirmeni" block-list:name="yel değirmeni"/>
   <block-list:block block-list:abbreviated-name="Yeraltı" block-list:name="Yer altı"/>
   <block-list:block block-list:abbreviated-name="zatüre" block-list:name="zatürre"/>
+  <block-list:block block-list:abbreviated-name="Abondone" block-list:name="Abandone"/>
+  <block-list:block block-list:abbreviated-name="Abonoz" block-list:name="Abanoz"/>
+  <block-list:block block-list:abbreviated-name="Açıcak" block-list:name="Açacak"/>
+  <block-list:block block-list:abbreviated-name="Afaroz" block-list:name="Aforoz"/>
+  <block-list:block block-list:abbreviated-name="Akordiyon" block-list:name="Akordeon"/>
+  <block-list:block block-list:abbreviated-name="Akşam üzeri" block-list:name="Akşamüzeri"/>
+  <block-list:block block-list:abbreviated-name="Almünyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Ana kara" block-list:name="Anakara"/>
+  <block-list:block block-list:abbreviated-name="Antreman" block-list:name="Antrenman"/>
+  <block-list:block block-list:abbreviated-name="Arasıra" block-list:name="Ara sıra"/>
+  <block-list:block block-list:abbreviated-name="Aritmatik" block-list:name="Aritmetik"/>
+  <block-list:block block-list:abbreviated-name="Aşkolsun" block-list:name="Aşk olsun"/>
+  <block-list:block block-list:abbreviated-name="Assubay" block-list:name="Astsubay"/>
+  <block-list:block block-list:abbreviated-name="Birşey" block-list:name="Bir şey"/>
+  <block-list:block block-list:abbreviated-name="Birgün" block-list:name="Bir gün"/>
+  <block-list:block block-list:abbreviated-name="Büyültmek" block-list:name="Büyütmek"/>
+  <block-list:block block-list:abbreviated-name="Canbaz" block-list:name="Cambaz"/>
+  <block-list:block block-list:abbreviated-name="Cübbe" block-list:name="Cüppe"/>
+  <block-list:block block-list:abbreviated-name="Dekaratör" block-list:name="Dekoratör"/>
+  <block-list:block block-list:abbreviated-name="Deynek" block-list:name="Değnek"/>
+  <block-list:block block-list:abbreviated-name="Difransiyel" block-list:name="Diferansiyel"/>
+  <block-list:block block-list:abbreviated-name="Dinazor" block-list:name="Dinozor"/>
+  <block-list:block block-list:abbreviated-name="Döğmek" block-list:name="Dövmek"/>
+  <block-list:block block-list:abbreviated-name="Döküman" block-list:name="Doküman"/>
+  <block-list:block block-list:abbreviated-name="Egzos" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="Entellektüel" block-list:name="Entelektüel"/>
+  <block-list:block block-list:abbreviated-name="Espiri" block-list:name="Espri"/>
+  <block-list:block block-list:abbreviated-name="Eşkiya" block-list:name="Eşkıya"/>
+  <block-list:block block-list:abbreviated-name="Eşortman" block-list:name="Eşofman"/>
+  <block-list:block block-list:abbreviated-name="Faide" block-list:name="Fayda"/>
+  <block-list:block block-list:abbreviated-name="Fantazi" block-list:name="Fantezi"/>
+  <block-list:block block-list:abbreviated-name="Fiat" block-list:name="Fiyat"/>
+  <block-list:block block-list:abbreviated-name="Filim" block-list:name="Film"/>
+  <block-list:block block-list:abbreviated-name="Hegamonya" block-list:name="Hegemonya"/>
+  <block-list:block block-list:abbreviated-name="Hoşçakal" block-list:name="Hoşça kal"/>
+  <block-list:block block-list:abbreviated-name="Hoşgeldin" block-list:name="Hoş geldin"/>
+  <block-list:block block-list:abbreviated-name="İnformasyon" block-list:name="Enformasyon"/>
+  <block-list:block block-list:abbreviated-name="İnsiyatif" block-list:name="İnisiyatif"/>
+  <block-list:block block-list:abbreviated-name="İsbat" block-list:name="İspat"/>
+  <block-list:block block-list:abbreviated-name="Kapora" block-list:name="Kaparo"/>
+  <block-list:block block-list:abbreviated-name="Karma karışık" block-list:name="Karmakarışık"/>
+  <block-list:block block-list:abbreviated-name="Karnıbahar" block-list:name="Karnabahar"/>
+  <block-list:block block-list:abbreviated-name="Kazazade" block-list:name="Kazazede"/>
+  <block-list:block block-list:abbreviated-name="Kiprik" block-list:name="Kirpik"/>
+  <block-list:block block-list:abbreviated-name="Kirbit" block-list:name="Kibrit"/>
+  <block-list:block block-list:abbreviated-name="Klavuz" block-list:name="Kılavuz"/>
+  <block-list:block block-list:abbreviated-name="Sarmısak" block-list:name="Sarımsak"/>
+  <block-list:block block-list:abbreviated-name="Selilöz" block-list:name="Selüloz"/>
+  <block-list:block block-list:abbreviated-name="Silahşör" block-list:name="Silahşor"/>
+  <block-list:block block-list:abbreviated-name="Sne" block-list:name="Sen"/>
+  <block-list:block block-list:abbreviated-name="Süpriz" block-list:name="Sürpriz"/>
+  <block-list:block block-list:abbreviated-name="Tesbih" block-list:name="Tespih"/>
+  <block-list:block block-list:abbreviated-name="Tesbit" block-list:name="Tespit"/>
+  <block-list:block block-list:abbreviated-name="Traş" block-list:name="Tıraş"/>
+  <block-list:block block-list:abbreviated-name="Turizim" block-list:name="Turizm"/>
+  <block-list:block block-list:abbreviated-name="Uluslar arası" block-list:name="Uluslararası"/>
+  <block-list:block block-list:abbreviated-name="Vaz geçmek" block-list:name="Vazgeçmek"/>
+  <block-list:block block-list:abbreviated-name="Vaz geç" block-list:name="Vazgeç"/>
+  <block-list:block block-list:abbreviated-name="Ve ya" block-list:name="Veya"/>
+  <block-list:block block-list:abbreviated-name="Vurdum duymaz" block-list:name="Vurdumduymaz"/>
+  <block-list:block block-list:abbreviated-name="Yalnış" block-list:name="Yanlış"/>
+  <block-list:block block-list:abbreviated-name="Yanısıra" block-list:name="Yanı sıra"/>
+  <block-list:block block-list:abbreviated-name="Yeldeğirmeni" block-list:name="Yel değirmeni"/>
+  <block-list:block block-list:abbreviated-name="Zatüre" block-list:name="Zatürre"/>
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
