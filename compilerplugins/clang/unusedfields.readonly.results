@@ -172,8 +172,6 @@ dbaccess/source/core/api/RowSetBase.hxx:96
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:64
     dbaccess::LocalNameApproval m_aErrors ::connectivity::SQLError
-dbaccess/source/core/dataaccess/intercept.hxx:107
-    dbaccess::OInterceptor m_pDisposeEventListeners std::unique_ptr<comphelper::OInterfaceContainerHelper2>
 dbaccess/source/core/inc/ContentHelper.hxx:108
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:36
@@ -334,6 +332,10 @@ include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:170
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
+include/svx/SvxPresetListBox.hxx:35
+    SvxPresetListBox maRenameHdl Link<class SvxPresetListBox *, void>
+include/svx/SvxPresetListBox.hxx:36
+    SvxPresetListBox maDeleteHdl Link<class SvxPresetListBox *, void>
 include/test/sheet/xdatapilottable.hxx:31
     apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
 include/test/sheet/xdatapilottable.hxx:32
@@ -506,8 +508,6 @@ sdext/source/pdfimport/tree/style.hxx:42
     pdfi::StyleContainer::Style Contents class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
-sfx2/source/doc/docfile.cxx:270
-    SfxMedium_Impl pOrigFilter std::shared_ptr<const SfxFilter>
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:407
@@ -582,9 +582,9 @@ sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/doc/swstylemanager.cxx:59
+sw/source/core/doc/swstylemanager.cxx:58
     SwStyleManager aAutoCharPool class StylePool
-sw/source/core/doc/swstylemanager.cxx:60
+sw/source/core/doc/swstylemanager.cxx:59
     SwStyleManager aAutoParaPool class StylePool
 sw/source/core/doc/tblrwcl.cxx:83
     CpyTabFrame::(anonymous) nSize SwTwips
@@ -678,8 +678,6 @@ vcl/inc/svdata.hxx:284
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
 vcl/inc/svdata.hxx:286
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:295
-    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/unx/i18n_status.hxx:56
     vcl::I18NStatus m_aCurrentIM class rtl::OUString
 vcl/inc/unx/saldisp.hxx:288
