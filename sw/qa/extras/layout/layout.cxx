@@ -35,6 +35,7 @@ public:
     void testTdf109137();
     void testForcepoint72();
     void testTdf118058();
+    void testTdf117187();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST(testForcepoint72);
     CPPUNIT_TEST(testTdf118058);
+    CPPUNIT_TEST(testTdf117187);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -305,6 +307,15 @@ void SwLayoutWriter::testTdf118058()
     SwDoc* pDoc = createDoc("tdf118058.fodt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
+void SwLayoutWriter::testTdf117187()
+{
+    createDoc("tdf117187.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // there should be no fly portions
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLY']", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
