@@ -455,13 +455,18 @@ class VCL_DLLPUBLIC PushButtonValue : public ImplControlValue
 {
 public:
     PushButtonValue()
-    : ImplControlValue( ControlType::Pushbutton, 0 )
-    , mbBevelButton( false ), mbSingleLine( true ) {}
+        : ImplControlValue( ControlType::Pushbutton, 0 )
+        , mbBevelButton(false)
+        , mbSingleLine(true)
+        , mbIsStock(false)
+    {}
+
     virtual ~PushButtonValue() override;
     virtual PushButtonValue* clone() const override;
 
-    bool            mbBevelButton:1; // only used on OSX
-    bool            mbSingleLine:1;  // only used on OSX
+    bool mbBevelButton:1; // only used on OSX
+    bool mbSingleLine:1;  // only used on OSX
+    bool mbIsStock:1;
 };
 
 
