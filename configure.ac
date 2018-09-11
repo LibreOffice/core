@@ -6413,7 +6413,7 @@ AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 dnl Unknown attributes must be ignored by compilers, but they do emit warnings about them:
-if test "$_os" = WINNT; then
+if test "$COM" = MSC; then
     CXXFLAGS="$CXXFLAGS /WX"
 else
     CXXFLAGS="$CXXFLAGS -Werror"
