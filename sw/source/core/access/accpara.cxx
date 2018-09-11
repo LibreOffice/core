@@ -1875,7 +1875,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
-    SwPaM* pPaM( nullptr );
+    std::unique_ptr<SwPaM> pPaM;
     {
         const SwTextNode* pTextNode( GetTextNode() );
         std::unique_ptr<SwPosition> pStartPos( new SwPosition( *pTextNode ) );
@@ -1883,7 +1883,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         std::unique_ptr<SwPosition> pEndPos( new SwPosition( *pTextNode ) );
         pEndPos->nContent.Assign( const_cast<SwTextNode*>(pTextNode), nIndex+1 );
 
-        pPaM = new SwPaM( *pStartPos, *pEndPos );
+        pPaM.reset(new SwPaM( *pStartPos, *pEndPos ));
     }
 
     // retrieve character attributes for the created PaM <pPaM>
@@ -1972,8 +1972,6 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             }
         }
     }
-
-    delete pPaM;
 }
 
 uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
