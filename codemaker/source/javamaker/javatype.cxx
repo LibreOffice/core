@@ -764,7 +764,8 @@ void handleEnumType(
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);
             blockCode->instrAreturn();
-            blocks.push_back(blockCode.release());
+            blocks.push_back(blockCode.get());
+            blockCode.release();
         }
         code->instrTableswitch(defCode.get(), min, blocks);
         for (ClassFile::Code *p : blocks)
@@ -782,7 +783,8 @@ void handleEnumType(
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);
             blockCode->instrAreturn();
-            blocks.emplace_back(pair.first, blockCode.release());
+            blocks.emplace_back(pair.first, blockCode.get());
+            blockCode.release();
         }
         code->instrLookupswitch(defCode.get(), blocks);
         for (const std::pair< sal_Int32, ClassFile::Code * >& pair : blocks)
