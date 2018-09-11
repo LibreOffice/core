@@ -19,10 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_BASE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_BASE_HXX
 
-#include <DrawViewWrapper.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svx/svddrgmt.hxx>
 #include <cppuhelper/weakref.hxx>
+
+namespace chart { class DrawViewWrapper; }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

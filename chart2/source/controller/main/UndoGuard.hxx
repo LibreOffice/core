@@ -21,12 +21,12 @@
 
 #include "ChartModelClone.hxx"
 
-#include <com/sun/star/document/XUndoManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <rtl/ustring.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace document { class XUndoManager; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

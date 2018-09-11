@@ -19,12 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_CHARTELEMENTFACTORY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_CHARTELEMENTFACTORY_HXX
 
-#include <AccessibleBase.hxx>
-
 namespace chart
 {
 
 class AccessibleBase;
+struct AccessibleElementInfo;
 
 class ChartElementFactory
 {

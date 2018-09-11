@@ -393,3 +393,50 @@ blacklist:
     chart2/source/controller/inc/RangeSelectionHelper.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Sequence.h
+    chart2/source/controller/inc/RangeSelectionListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/XRangeSelectionListener.hpp
+    chart2/source/controller/accessibility/AccessibleChartShape.hxx:
+    # base class has to be a complete type
+    - AccessibleBase.hxx
+    - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
+    chart2/source/controller/accessibility/AccessibleChartElement.hxx:
+    # base class has to be a complete type
+    - AccessibleBase.hxx
+    - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
+    chart2/source/controller/main/ChartModelClone.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/uno/Any.hxx
+    chart2/source/controller/main/ChartFrameloader.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XSynchronousFrameLoader.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/main/CommandDispatch.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatch.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    - comphelper/interfacecontainer2.hxx
+    chart2/source/controller/main/ControllerCommandDispatch.hxx:
+    # base class has to be a complete type
+    - CommandDispatch.hxx
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/main/ElementSelector.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/main/StatusBarCommandDispatch.hxx:
+    # base class has to be a complete type
+    - CommandDispatch.hxx
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/main/UndoActions.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XUndoAction.hpp
+    chart2/source/controller/sidebar/Chart2PanelFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XUIElementFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/sidebar/ChartSidebarModifyListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XSelectionChangeListener.hpp

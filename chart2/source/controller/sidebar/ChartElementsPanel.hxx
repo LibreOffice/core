@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTELEMENTSPANEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTELEMENTSPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
@@ -27,11 +26,9 @@
 #include "ChartSidebarModifyListener.hxx"
 #include <TitleHelper.hxx>
 
-#include <com/sun/star/util/XModifyListener.hpp>
+namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 
-class FixedText;
 class ListBox;
-class NumericField;
 
 namespace chart {
 

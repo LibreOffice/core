@@ -22,7 +22,6 @@
 #include "CommandDispatch.hxx"
 
 #include <com/sun/star/frame/DispatchInformation.hpp>
-#include <com/sun/star/util/URL.hpp>
 
 namespace chart
 {

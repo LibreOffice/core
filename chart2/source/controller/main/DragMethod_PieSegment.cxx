@@ -18,6 +18,7 @@
  */
 
 #include "DragMethod_PieSegment.hxx"
+#include <DrawViewWrapper.hxx>
 
 #include <strings.hrc>
 #include <ResId.hxx>

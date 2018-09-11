@@ -19,17 +19,15 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOACTIONS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOACTIONS_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 
 #include <rtl/ustring.hxx>
-#include <unotools/configitem.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <memory>
-#include <deque>
-#include <utility>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class SdrUndoAction;
 

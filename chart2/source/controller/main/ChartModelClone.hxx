@@ -20,8 +20,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XInternalDataProvider; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

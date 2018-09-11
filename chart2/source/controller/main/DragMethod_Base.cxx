@@ -18,6 +18,7 @@
  */
 
 #include "DragMethod_Base.hxx"
+#include <DrawViewWrapper.hxx>
 
 #include <ObjectNameProvider.hxx>
 #include <ObjectIdentifier.hxx>

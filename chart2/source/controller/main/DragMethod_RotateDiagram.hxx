@@ -23,6 +23,9 @@
 
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 
+class E3dScene;
+namespace chart { class DrawViewWrapper; }
+
 namespace chart
 {
 
