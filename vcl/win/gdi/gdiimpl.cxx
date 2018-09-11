@@ -2025,7 +2025,6 @@ private:
 public:
     SystemDependentData_GraphicsPath(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager);
-    virtual ~SystemDependentData_GraphicsPath() override;
 
     Gdiplus::GraphicsPath& getGraphicsPath() { return maGraphicsPath; }
 
@@ -2038,10 +2037,6 @@ SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     maGraphicsPath(),
     mbPixelSnapHairline(false)
-{
-}
-
-SystemDependentData_GraphicsPath::~SystemDependentData_GraphicsPath()
 {
 }
 
