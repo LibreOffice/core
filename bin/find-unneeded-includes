@@ -179,6 +179,19 @@ def run_tool(task_queue, failed_files):
         task_queue.task_done()
 
 
+def isInUnoIncludeFile(path):
+    return path.startswith("include/com/") \
+            or path.startswith("include/cppu/") \
+            or path.startswith("include/cppuhelper/") \
+            or path.startswith("include/osl/") \
+            or path.startswith("include/rtl/") \
+            or path.startswith("include/sal/") \
+            or path.startswith("include/salhelper/") \
+            or path.startswith("include/systools/") \
+            or path.startswith("include/typelib/") \
+            or path.startswith("include/uno/")
+
+
 def tidy(compileCommands, paths):
     return_code = 0
     try:
@@ -191,6 +204,9 @@ def tidy(compileCommands, paths):
             t.start()
 
         for path in sorted(paths):
+            if isInUnoIncludeFile(path):
+                continue
+
             moduleName = path.split("/")[0]
 
             rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
