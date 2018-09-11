@@ -516,13 +516,13 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
         sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nEnd, nStart,
                         aFltArr, bRemoveSoftHyphens, bRemoveCommentAnchors);
 
-    SwScriptIterator* pScriptIter = nullptr;
+    std::unique_ptr<SwScriptIterator> pScriptIter;
     sal_uInt16 nSearchScript = 0;
     sal_uInt16 nCurrScript = 0;
 
     if (SearchAlgorithms2::APPROXIMATE == rSearchOpt.AlgorithmType2)
     {
-        pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
+        pScriptIter.reset(new SwScriptIterator( sCleanStr, nStart, bSrchForward ));
         nSearchScript = g_pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
     }
 
@@ -606,7 +606,7 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
         nStart = nEnd;
     }
 
-    delete pScriptIter;
+    pScriptIter.reset();
 
     if ( bFound )
         return true;
