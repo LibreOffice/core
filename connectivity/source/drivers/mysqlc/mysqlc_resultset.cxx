@@ -629,6 +629,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     if (nToGo < 0)
         nToGo = 0;
 
+    m_nRowPosition = nToGo;
     mysql_data_seek(m_pResult, nToGo);
     next();
 
@@ -649,6 +650,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     if (nToGo < 0)
         nToGo = 0;
 
+    m_nRowPosition = nToGo;
     mysql_data_seek(m_pResult, nToGo);
     next();
 
@@ -663,7 +665,8 @@ sal_Bool SAL_CALL OResultSet::previous()
     if (m_nRowPosition <= 1)
         return false;
 
-    mysql_data_seek(m_pResult, m_nRowPosition - 2);
+    m_nRowPosition -= 2;
+    mysql_data_seek(m_pResult, m_nRowPosition);
     next();
     return true;
 }
