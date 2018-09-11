@@ -31,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
     $(if $(filter MSC,$(COM)),external/mariadb-connector-c/mariadb-msvc.patch.1) \
     external/mariadb-connector-c/mariadb-inline.patch.1 \
     external/mariadb-connector-c/mariadb-CONC-104.patch.1 \
+    external/mariadb-connector-c/clang-cl.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
