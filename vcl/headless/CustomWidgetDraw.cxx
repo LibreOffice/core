@@ -236,7 +236,10 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         }
         break;
         case ControlType::Fixedline:
-            break;
+        {
+            bOK = s_pWidgetImplementation->drawFixedline(aParameters, nWidth, nHeight);
+        }
+        break;
         case ControlType::Toolbar:
         {
             bOK = s_pWidgetImplementation->drawToolbar(aParameters, nWidth, nHeight);
