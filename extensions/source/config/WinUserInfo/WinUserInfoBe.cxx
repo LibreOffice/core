@@ -220,21 +220,27 @@ private:
         {
             const OUString sNul('\0');
             OUStringBuffer sCachedData(200);
-            sCachedData.append("user=" + m_sUserDN);
-            sCachedData.append(sNul + givenname + "=" + GetGivenName());
-            sCachedData.append(sNul + sn + "=" + GetSn());
-            sCachedData.append(sNul + initials + "=" + GetInitials());
-            sCachedData.append(sNul + street + "=" + GetStreet());
-            sCachedData.append(sNul + l + "=" + GetCity());
-            sCachedData.append(sNul + st + "=" + GetState());
-            sCachedData.append(sNul + postalcode + "=" + GetPostalCode());
-            sCachedData.append(sNul + c + "=" + GetCountry());
-            sCachedData.append(sNul + o + "=" + GetOrganization());
-            sCachedData.append(sNul + title + "=" + GetTitle());
-            sCachedData.append(sNul + homephone + "=" + GetHomePhone());
-            sCachedData.append(sNul + telephonenumber + "=" + GetTelephoneNumber());
-            sCachedData.append(sNul + facsimiletelephonenumber + "=" + GetFaxNumber());
-            sCachedData.append(sNul + mail + "=" + GetMail());
+            sCachedData.append("user=").append(m_sUserDN);
+            sCachedData.append(sNul).append(givenname).append("=").append(GetGivenName());
+            sCachedData.append(sNul).append(sn).append("=").append(GetSn());
+            sCachedData.append(sNul).append(initials).append("=").append(GetInitials());
+            sCachedData.append(sNul).append(street).append("=").append(GetStreet());
+            sCachedData.append(sNul).append(l).append("=").append(GetCity());
+            sCachedData.append(sNul).append(st).append("=").append(GetState());
+            sCachedData.append(sNul).append(postalcode).append("=").append(GetPostalCode());
+            sCachedData.append(sNul).append(c).append("=").append(GetCountry());
+            sCachedData.append(sNul).append(o).append("=").append(GetOrganization());
+            sCachedData.append(sNul).append(title).append("=").append(GetTitle());
+            sCachedData.append(sNul).append(homephone).append("=").append(GetHomePhone());
+            sCachedData.append(sNul)
+                .append(telephonenumber)
+                .append("=")
+                .append(GetTelephoneNumber());
+            sCachedData.append(sNul)
+                .append(facsimiletelephonenumber)
+                .append("=")
+                .append(GetFaxNumber());
+            sCachedData.append(sNul).append(mail).append("=").append(GetMail());
             const css::uno::Sequence<sal_Int8> seqCachedData(
                 reinterpret_cast<const sal_Int8*>(sCachedData.getStr()),
                 sCachedData.getLength() * sizeof(sal_Unicode));
