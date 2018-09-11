@@ -319,7 +319,6 @@ void SvInputStream::SetSize(sal_uInt64)
 
 SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream):
     m_xStream(rTheStream),
-    m_pPipe(nullptr),
     m_nSeekedFrom(STREAM_SEEK_TO_END)
 {
     SetBufferSize(0);

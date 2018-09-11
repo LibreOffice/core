@@ -32,8 +32,7 @@ namespace svgio
             maSvgStyleAttributes(*this),
             maCx(0),
             maCy(0),
-            maR(0),
-            mpaTransform(nullptr)
+            maR(0)
         {
         }
 

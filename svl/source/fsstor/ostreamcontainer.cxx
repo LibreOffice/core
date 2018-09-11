@@ -28,7 +28,6 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
 : m_bDisposed( false )
 , m_bInputClosed( false )
 , m_bOutputClosed( false )
-, m_pListenersContainer( nullptr )
 , m_pTypeCollection( nullptr )
 {
     try

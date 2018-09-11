@@ -35,8 +35,7 @@ namespace svgio
             maWidth(0),
             maHeight(0),
             maRx(0),
-            maRy(0),
-            mpaTransform(nullptr)
+            maRy(0)
         {
         }
 
