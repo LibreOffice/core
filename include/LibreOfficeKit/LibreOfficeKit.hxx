@@ -303,7 +303,7 @@ public:
     }
 
     /**
-     * Posts a UNO command to the document.
+     * Posts an UNO command to the document.
      *
      * Example argument string:
      *
@@ -648,6 +648,14 @@ public:
     {
         return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
     }
+
+    /// Set a part's selection mode.
+    /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
+    void selectPart(int nPart, int nSelect)
+    {
+        mpDoc->pClass->selectPart(mpDoc, nPart, nSelect);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
@@ -669,7 +677,7 @@ public:
     }
 
     /**
-     * Loads a document from a URL.
+     * Loads a document from an URL.
      *
      * @param pUrl the URL of the document to load
      * @param pFilterOptions options for the import filter, e.g. SkipImages.
