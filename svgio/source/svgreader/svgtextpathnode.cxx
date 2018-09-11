@@ -120,7 +120,6 @@ namespace svgio
             mnMaxIndex(rPolygon.isClosed() ? rPolygon.count() : rPolygon.count() - 1),
             mnIndex(0),
             maCurrentSegment(),
-            mpB2DCubicBezierHelper(nullptr),
             mfCurrentSegmentLength(0.0),
             mfSegmentStartPosition(0.0)
         {

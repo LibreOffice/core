@@ -266,7 +266,6 @@ namespace svgio
             maXmlSpace(XmlSpace_notset),
             maDisplay(Display_inline),
             maCssStyleVector(),
-            mpLocalCssStyle(nullptr),
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {

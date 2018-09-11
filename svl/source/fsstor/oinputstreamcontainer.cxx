@@ -29,7 +29,6 @@ OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInp
 , m_xSeekable( xStream, uno::UNO_QUERY )
 , m_bSeekable( false )
 , m_bDisposed( false )
-, m_pListenersContainer( nullptr )
 {
     m_bSeekable = m_xSeekable.is();
 }

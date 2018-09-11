@@ -82,8 +82,6 @@ struct FSStorage_Impl
     : m_aURL( aContent.getURL() )
     , m_aContent( aContent )
     , m_nMode( nMode )
-    , m_pListenersContainer( nullptr )
-    , m_pTypeCollection( nullptr )
     , m_xContext( xContext )
     {
         OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
