@@ -99,7 +99,6 @@ private:
 public:
     SystemDependentData_GdiPlusBitmap(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager);
-    virtual ~SystemDependentData_GdiPlusBitmap() override;
 
     const WinSalBitmap* getAssociatedAlpha() const { return mpAssociatedAlpha; }
     void setAssociatedAlpha(const WinSalBitmap* pNew) { mpAssociatedAlpha = pNew; }
@@ -113,10 +112,6 @@ SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpGdiPlusBitmap(),
     mpAssociatedAlpha(nullptr)
-{
-}
-
-SystemDependentData_GdiPlusBitmap::~SystemDependentData_GdiPlusBitmap()
 {
 }
 
