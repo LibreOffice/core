@@ -3881,33 +3881,4 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
     m_xButton->set_label(rColor.second);
 }
 
-SvxColorListBoxWrapper::SvxColorListBoxWrapper(SvxColorListBox& rListBox)
-    : sfx::SingleControlWrapper<SvxColorListBox, Color>(rListBox)
-{
-}
-
-SvxColorListBoxWrapper::~SvxColorListBoxWrapper()
-{
-}
-
-bool SvxColorListBoxWrapper::IsControlDontKnow() const
-{
-    return GetControl().IsNoSelection();
-}
-
-void SvxColorListBoxWrapper::SetControlDontKnow( bool bSet )
-{
-    if( bSet ) GetControl().SetNoSelection();
-}
-
-Color SvxColorListBoxWrapper::GetControlValue() const
-{
-    return GetControl().GetSelectEntryColor();
-}
-
-void SvxColorListBoxWrapper::SetControlValue( Color aColor )
-{
-    GetControl().SelectEntry( aColor );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -302,11 +302,6 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
     return xChild;
 }
 
-void SvxPixelCtlAccessible::LoseFocus()
-{
-    m_xCurChild.clear();
-}
-
 void SvxPixelCtlAccessibleChild::CheckChild()
 {
     Any aChecked;

@@ -92,10 +92,6 @@ void resetSqlVar(void** target, T* pValue, enum_field_types type, sal_Int32 nSiz
 
 void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize = 0);
 
-rtl::OString escapeSql(const rtl::OString& from);
-
-rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
-
 /// @throws css::sdbc::SQLException
 void throwFeatureNotImplementedException(
     const sal_Char* _pAsciiFeatureName,
@@ -116,8 +112,6 @@ rtl::OUString mysqlTypeToStr(MYSQL_FIELD* pField);
 sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType);
 
 rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
-
-::std::string convert(const rtl::OUString& _string, const rtl_TextEncoding encoding);
 }
 
 #endif

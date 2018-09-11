@@ -139,45 +139,6 @@ struct MultiControlWrapperHelper_Impl
     ControlWrpVec       maVec;
 };
 
-MultiControlWrapperHelper::MultiControlWrapperHelper() :
-    mxImpl( new MultiControlWrapperHelper_Impl )
-{
-}
-
-MultiControlWrapperHelper::~MultiControlWrapperHelper()
-{
-}
-
-void MultiControlWrapperHelper::RegisterControlWrapper( ControlWrapperBase& rWrapper )
-{
-    mxImpl->maVec.push_back( &rWrapper );
-}
-
-void MultiControlWrapperHelper::ModifyControl( TriState eShow )
-{
-    for (auto const& elem : mxImpl->maVec)
-        elem->ModifyControl( eShow );
-}
-
-bool MultiControlWrapperHelper::IsControlDontKnow() const
-{
-    if (mxImpl->maVec.empty())
-        return false;
-    for (auto const& elem : mxImpl->maVec)
-    {
-        if (!elem->IsControlDontKnow())
-            return false;
-    }
-    return true;
-}
-
-void MultiControlWrapperHelper::SetControlDontKnow( bool bSet )
-{
-    for (auto const& elem : mxImpl->maVec)
-        elem->SetControlDontKnow(bSet);
-}
-
-
 // Base connection classes
 
 

@@ -52,7 +52,6 @@ public:
 
     void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
-    const Link<SpinField&,void>&   GetDownHdl() const { return maDownHdlLink; }
 
     virtual Size    CalcMinimumSize() const override;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;

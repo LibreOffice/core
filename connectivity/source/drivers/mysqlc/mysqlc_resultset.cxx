@@ -363,7 +363,7 @@ uno::Reference<XResultSetMetaData> SAL_CALL OResultSet::getMetaData()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if (!m_xMetaData.is())
     {
-        m_xMetaData = new OResultSetMetaData(m_rConnection, m_pResult, m_encoding);
+        m_xMetaData = new OResultSetMetaData(m_rConnection, m_pResult);
     }
     return m_xMetaData;
 }

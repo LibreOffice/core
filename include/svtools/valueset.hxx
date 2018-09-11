@@ -311,8 +311,6 @@ public:
                                const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    /// Insert an User Drawn item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -343,10 +341,6 @@ public:
     sal_uInt16     GetSelectedItemId() const
     {
         return mnSelItemId;
-    }
-    size_t         GetSelectItemPos() const
-    {
-        return GetItemPos( mnSelItemId );
     }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {

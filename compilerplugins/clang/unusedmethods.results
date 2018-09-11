@@ -24,6 +24,16 @@ connectivity/source/drivers/firebird/Util.hxx:66
     const class rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
 connectivity/source/drivers/mork/mork_helper.cxx:37
     int main(int,char **)
+connectivity/source/drivers/mysqlc/mysqlc_driver.hxx:92
+    void connectivity::mysqlc::MysqlCDriver::impl_initCppConn_lck_throw()
+connectivity/source/drivers/mysqlc/mysqlc_general.hxx:95
+    class rtl::OString escapeSql(const class rtl::OString &)
+connectivity/source/drivers/mysqlc/mysqlc_general.hxx:97
+    class rtl::OUString getStringFromAny(const class com::sun::star::uno::Any &)
+connectivity/source/drivers/mysqlc/mysqlc_general.hxx:120
+    class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > convert(const class rtl::OUString &,const unsigned short)
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:62
+    class rtl::OUString connectivity::mysqlc::OResultSetMetaData::convert(const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &) const
 connectivity/source/inc/dbase/dindexnode.hxx:70
     _Bool connectivity::dbase::ONDXKey::operator<(const class connectivity::dbase::ONDXKey &) const
 connectivity/source/inc/java/sql/Connection.hxx:63
@@ -150,9 +160,9 @@ include/basegfx/matrix/b3dhommatrix.hxx:106
     class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator*=(double)
 include/basegfx/matrix/b3dhommatrix.hxx:107
     class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator/=(double)
-include/basegfx/numeric/ftools.hxx:162
+include/basegfx/numeric/ftools.hxx:144
     double snapToRange(double,double,double)
-include/basegfx/numeric/ftools.hxx:166
+include/basegfx/numeric/ftools.hxx:148
     double copySign(double,double)
 include/basegfx/pixel/bpixel.hxx:56
      basegfx::BPixel::BPixel(unsigned char,unsigned char,unsigned char,unsigned char)
@@ -276,6 +286,8 @@ include/basegfx/tuple/b3ituple.hxx:166
     _Bool basegfx::B3ITuple::operator!=(const class basegfx::B3ITuple &) const
 include/basegfx/utils/b2dclipstate.hxx:75
     _Bool basegfx::utils::B2DClipState::operator!=(const class basegfx::utils::B2DClipState &) const
+include/basegfx/utils/systemdependentdata.hxx:69
+     basegfx::MinimalSystemDependentDataManager::MinimalSystemDependentDataManager()
 include/basegfx/utils/unopolypolygon.hxx:91
     const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
 include/basegfx/vector/b2ivector.hxx:75
@@ -380,7 +392,7 @@ include/comphelper/types.hxx:56
     _Bool getImplementation(type-parameter-?-? *&,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
 include/comphelper/unique_disposing_ptr.hxx:46
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
-include/comphelper/unwrapargs.hxx:49
+include/comphelper/unwrapargs.hxx:50
     void unwrapArgs(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
 include/connectivity/dbcharset.hxx:139
     const class dbtools::OCharsetMap::CharsetIterator & dbtools::OCharsetMap::CharsetIterator::operator--()
@@ -394,6 +406,14 @@ include/connectivity/sdbcx/VGroup.hxx:68
      connectivity::sdbcx::OGroup::OGroup(const class rtl::OUString &,_Bool)
 include/connectivity/sqlparse.hxx:197
     class rtl::OUString connectivity::OSQLParser::RuleIDToStr(unsigned int)
+include/desktop/crashreport.hxx:46
+    class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CrashReporter::getIniFileName()
+include/desktop/crashreport.hxx:48
+    void CrashReporter::writeCommonInfo()
+include/desktop/crashreport.hxx:50
+    void CrashReporter::storeExceptionHandler(class google_breakpad::ExceptionHandler *)
+include/desktop/crashreport.hxx:54
+    void CrashReporter::updateMinidumpLocation()
 include/drawinglayer/geometry/viewinformation2d.hxx:128
     _Bool drawinglayer::geometry::ViewInformation2D::operator!=(const class drawinglayer::geometry::ViewInformation2D &) const
 include/drawinglayer/primitive2d/baseprimitive2d.hxx:193
@@ -534,8 +554,28 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
+include/sfx2/controlwrapper.hxx:262
+    _Bool sfx::MetricFieldWrapper::IsControlValueChanged() const
+include/sfx2/controlwrapper.hxx:351
+     sfx::MultiControlWrapperHelper::MultiControlWrapperHelper()
+include/sfx2/controlwrapper.hxx:355
+    void sfx::MultiControlWrapperHelper::RegisterControlWrapper(class sfx::ControlWrapperBase &)
+include/sfx2/controlwrapper.hxx:388
+     sfx::MultiControlWrapper::MultiControlWrapper<ValueT>()
+include/sfx2/controlwrapper.hxx:391
+    const type-parameter-?-? & sfx::MultiControlWrapper::GetDefaultValue() const
+include/sfx2/controlwrapper.hxx:393
+    void sfx::MultiControlWrapper::SetDefaultValue(const type-parameter-?-? &)
+include/sfx2/controlwrapper.hxx:396
+    type-parameter-?-? sfx::MultiControlWrapper::GetControlValue() const
+include/sfx2/controlwrapper.hxx:398
+    void sfx::MultiControlWrapper::SetControlValue(type-parameter-?-?)
+include/sfx2/dialoghelper.hxx:30
+    void setPreviewsToSamePlace(const class vcl::Window *,class VclBuilderContainer *)
 include/sfx2/docfilt.hxx:83
     _Bool SfxFilter::GetGpgEncryption() const
+include/sfx2/itemwrapper.hxx:153
+     sfx::IdentItemWrapper::IdentItemWrapper<ItemT>(unsigned short)
 include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
@@ -546,8 +586,18 @@ include/svl/itempool.hxx:167
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
 include/svl/itempool.hxx:196
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
+include/svtools/ctrlbox.hxx:208
+    long LineListBox::GetWidth() const
+include/svtools/ctrlbox.hxx:223
+    void LineListBox::SelectEntry(enum SvxBorderLineStyle,_Bool)
+include/svtools/ctrlbox.hxx:228
+    void LineListBox::SetColor(const class Color &)
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
+include/svtools/valueset.hxx:315
+    void ValueSet::InsertItem(unsigned short,const class rtl::OUString &,unsigned long)
+include/svtools/valueset.hxx:347
+    unsigned long ValueSet::GetSelectItemPos() const
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -556,16 +606,38 @@ include/svx/ClassificationField.hxx:48
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
+include/svx/colorbox.hxx:150
+     SvxColorListBoxWrapper::SvxColorListBoxWrapper(class SvxColorListBox &)
+include/svx/dlgctrl.hxx:275
+    class SvxTabPage * SvxPixelCtl::GetTabPage() const
 include/svx/framelink.hxx:201
     _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/svdlayer.hxx:72
+include/svx/frmsel.hxx:107
+    int svx::FrameSelector::GetEnabledBorderIndex(enum svx::FrameBorderType) const
+include/svx/frmsel.hxx:181
+    _Bool svx::FrameSelector::ContainsClickPoint(const class Point &) const
+include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
+include/svx/svdlayer.hxx:129
+    class SdrLayerAdmin * SdrLayerAdmin::GetParent() const
 include/svx/svdpage.hxx:105
     class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
+include/svx/SvxPresetListBox.hxx:51
+    void SvxPresetListBox::SetRenameHdl(const class Link<class SvxPresetListBox *, void> &)
+include/svx/SvxPresetListBox.hxx:55
+    void SvxPresetListBox::SetDeleteHdl(const class Link<class SvxPresetListBox *, void> &)
+include/svx/SvxPresetListBox.hxx:60
+    void SvxPresetListBox::FillPresetListBox(class XGradientList &,unsigned int)
+include/svx/SvxPresetListBox.hxx:61
+    void SvxPresetListBox::FillPresetListBox(class XHatchList &,unsigned int)
+include/svx/SvxPresetListBox.hxx:62
+    void SvxPresetListBox::FillPresetListBox(class XBitmapList &,unsigned int)
+include/svx/SvxPresetListBox.hxx:63
+    void SvxPresetListBox::FillPresetListBox(class XPatternList &,unsigned int)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -620,10 +692,6 @@ include/tools/weakbase.h:111
     _Bool tools::WeakReference::operator<(const WeakReference<reference_type> &) const
 include/tools/weakbase.h:114
     _Bool tools::WeakReference::operator>(const WeakReference<reference_type> &) const
-include/unotest/assertion_traits.hxx:25
-    _Bool CppUnit::assertion_traits::equal(signed char,signed char)
-include/unotest/assertion_traits.hxx:27
-    class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CppUnit::assertion_traits::toString(signed char)
 include/unotest/directories.hxx:43
     class rtl::OUString test::Directories::getPathFromWorkdir(const class rtl::OUString &) const
 include/unotools/moduleoptions.hxx:165
@@ -644,12 +712,10 @@ include/vcl/commandevent.hxx:289
      CommandLongPressData::CommandLongPressData()
 include/vcl/cursor.hxx:96
     _Bool vcl::Cursor::operator!=(const class vcl::Cursor &) const
-include/vcl/customweld.hxx:65
+include/vcl/customweld.hxx:70
     void weld::CustomWidgetController::SetAccessibleName(const class rtl::OUString &)
-include/vcl/customweld.hxx:105
+include/vcl/customweld.hxx:111
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
-include/vcl/customweld.hxx:114
-    void weld::CustomWeld::hide()
 include/vcl/edit.hxx:206
     _Bool Edit::IsSelectAllSingleClick() const
 include/vcl/edit.hxx:237
@@ -698,6 +764,8 @@ include/vcl/settings.hxx:654
     _Bool HelpSettings::operator!=(const class HelpSettings &) const
 include/vcl/settings.hxx:708
     _Bool AllSettings::operator!=(const class AllSettings &) const
+include/vcl/spinfld.hxx:55
+    const class Link<class SpinField &, void> & SpinField::GetDownHdl() const
 include/vcl/svapp.hxx:178
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
 include/vcl/svapp.hxx:812
@@ -720,68 +788,70 @@ include/vcl/uitest/uiobject.hxx:351
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
 include/vcl/wall.hxx:98
     _Bool Wallpaper::operator!=(const class Wallpaper &) const
-include/vcl/weld.hxx:64
+include/vcl/weld.hxx:66
     class rtl::OString weld::Widget::get_buildable_name() const
-include/vcl/weld.hxx:69
+include/vcl/weld.hxx:71
     int weld::Widget::get_grid_left_attach() const
-include/vcl/weld.hxx:74
-    _Bool weld::Widget::get_hexpand() const
-include/vcl/weld.hxx:75
-    void weld::Widget::set_vexpand(_Bool)
 include/vcl/weld.hxx:76
+    _Bool weld::Widget::get_hexpand() const
+include/vcl/weld.hxx:77
+    void weld::Widget::set_vexpand(_Bool)
+include/vcl/weld.hxx:78
     _Bool weld::Widget::get_vexpand() const
-include/vcl/weld.hxx:84
+include/vcl/weld.hxx:88
     void weld::Widget::set_tooltip_text(const class rtl::OUString &)
-include/vcl/weld.hxx:136
+include/vcl/weld.hxx:140
     void weld::ScrolledWindow::vadjustment_set_upper(int)
-include/vcl/weld.hxx:165
+include/vcl/weld.hxx:141
+    void weld::ScrolledWindow::set_hpolicy(enum VclPolicyType)
+include/vcl/weld.hxx:142
+    enum VclPolicyType weld::ScrolledWindow::get_hpolicy() const
+include/vcl/weld.hxx:171
     class rtl::OUString weld::Notebook::get_tab_label_text(const class rtl::OString &) const
-include/vcl/weld.hxx:191
+include/vcl/weld.hxx:197
     struct SystemEnvData weld::Window::get_system_data() const
-include/vcl/weld.hxx:327
+include/vcl/weld.hxx:333
     void weld::TreeView::set_top_entry(int)
-include/vcl/weld.hxx:353
+include/vcl/weld.hxx:359
     void weld::TreeView::select_all()
-include/vcl/weld.hxx:479
+include/vcl/weld.hxx:486
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:546
+include/vcl/weld.hxx:555
     int weld::SpinButton::get_min() const
-include/vcl/weld.hxx:696
-    _Bool weld::MetricSpinButton::get_visible() const
-include/vcl/weld.hxx:702
-    void weld::MetricSpinButton::set_accessible_name(const class rtl::OUString &)
-include/vcl/weld.hxx:725
+include/vcl/weld.hxx:737
     void weld::MetricSpinButton::set_position(int)
-include/vcl/weld.hxx:771
+include/vcl/weld.hxx:784
     _Bool weld::TimeSpinButton::get_sensitive() const
-include/vcl/weld.hxx:772
+include/vcl/weld.hxx:785
     _Bool weld::TimeSpinButton::get_visible() const
-include/vcl/weld.hxx:773
+include/vcl/weld.hxx:786
     void weld::TimeSpinButton::grab_focus()
-include/vcl/weld.hxx:774
+include/vcl/weld.hxx:787
     _Bool weld::TimeSpinButton::has_focus() const
-include/vcl/weld.hxx:775
+include/vcl/weld.hxx:788
     void weld::TimeSpinButton::show(_Bool)
-include/vcl/weld.hxx:776
+include/vcl/weld.hxx:789
     void weld::TimeSpinButton::hide()
-include/vcl/weld.hxx:777
+include/vcl/weld.hxx:790
     void weld::TimeSpinButton::save_value()
-include/vcl/weld.hxx:778
+include/vcl/weld.hxx:791
     _Bool weld::TimeSpinButton::get_value_changed_from_saved() const
-include/vcl/weld.hxx:868
+include/vcl/weld.hxx:882
     void weld::DrawingArea::connect_key_release(const class Link<const class KeyEvent &, _Bool> &)
-include/vcl/weld.hxx:893
+include/vcl/weld.hxx:935
     void weld::Menu::set_sensitive(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:894
+include/vcl/weld.hxx:936
     void weld::Menu::set_active(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:903
+include/vcl/weld.hxx:945
     void weld::SizeGroup::set_mode(enum VclSizeGroupMode)
-include/vcl/weld.hxx:923
-    class weld::Window * weld::Builder::weld_window(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:1008
+include/vcl/weld.hxx:967
+    class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
+include/vcl/weld.hxx:1078
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:430
     const char * ImplDbgCheckWindow(const void *)
+include/vcl/window.hxx:1200
+    void vcl::Window::InvertTracking(const class tools::Polygon &,enum ShowTrackFlags)
 include/vcl/window.hxx:1240
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
@@ -800,7 +870,7 @@ oox/inc/drawingml/textparagraphproperties.hxx:100
     void oox::drawingml::TextParagraphProperties::setLineSpacing(const class oox::drawingml::TextSpacing &)
 sc/inc/address.hxx:651
     _Bool ScRange::operator<=(const class ScRange &) const
-sc/inc/bigrange.hxx:71
+sc/inc/bigrange.hxx:73
     _Bool ScBigAddress::operator!=(const class ScBigAddress &) const
 sc/inc/columniterator.hxx:82
     int sc::ColumnIterator::getType() const
@@ -810,11 +880,9 @@ sc/inc/datamapper.hxx:85
     void sc::ExternalDataSource::setURL(const class rtl::OUString &)
 sc/inc/datamapper.hxx:86
     void sc::ExternalDataSource::setProvider(const class rtl::OUString &)
-sc/inc/document.hxx:2100
-    void ScDocument::SetFormulaResults(const class ScAddress &,const class boost::intrusive_ptr<const class formula::FormulaToken> *,unsigned long)
 sc/inc/dpfilteredcache.hxx:143
     void ScDPFilteredCache::dump() const
-sc/inc/formulacell.hxx:462
+sc/inc/formulacell.hxx:460
     void ScFormulaCell::Dump() const
 sc/inc/formulagroup.hxx:141
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
@@ -824,18 +892,12 @@ sc/inc/scdll.hxx:36
      ScDLL::ScDLL()
 sc/inc/scmatrix.hxx:622
     class ScFullMatrix & ScFullMatrix::operator+=(const class ScFullMatrix &)
-sc/inc/scmatrix.hxx:654
-     ScVectorRefMatrix::ScVectorRefMatrix(const class formula::DoubleVectorRefToken *,unsigned long,unsigned long)
-sc/inc/scmatrix.hxx:843
-    class ScVectorRefMatrix & ScVectorRefMatrix::operator+=(const class ScVectorRefMatrix &)
 sc/inc/stlalgorithm.hxx:61
     _Bool sc::AlignedAllocator::operator==(const AlignedAllocator<T, Alignment> &) const
 sc/inc/stlalgorithm.hxx:62
     _Bool sc::AlignedAllocator::operator!=(const AlignedAllocator<T, Alignment> &) const
 sc/inc/table.hxx:321
     _Bool ScTable::IsColRowTabValid(const short,const int,const short) const
-sc/inc/token.hxx:126
-     ScMatrixRangeToken::ScMatrixRangeToken(const class boost::intrusive_ptr<class ScMatrix> &,const struct ScComplexRefData &)
 sc/inc/userlist.hxx:86
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > > ScUserList::begin() const
 sc/qa/unit/helper/qahelper.hxx:164
@@ -850,37 +912,37 @@ sc/qa/unit/ucalc.hxx:375
     void Test::testCopyPasteSkipEmptyConditionalFormatting()
 sc/qa/unit/ucalc.hxx:402
     void Test::testSharedFormulaMoveBlock()
-sc/qa/unit/ucalc.hxx:513
-    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:514
-    void Test::testCondFormatUpdateDeleteTab()
+    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:515
-    void Test::testCondFormatUpdateInsertTab()
+    void Test::testCondFormatUpdateDeleteTab()
 sc/qa/unit/ucalc.hxx:516
+    void Test::testCondFormatUpdateInsertTab()
+sc/qa/unit/ucalc.hxx:517
     void Test::testCondFormatUpdateReference()
-sc/qa/unit/ucalc.hxx:526
+sc/qa/unit/ucalc.hxx:527
     void Test::testCondFormatListenToOwnRange()
-sc/source/core/opencl/formulagroupcl.cxx:909
+sc/source/core/opencl/formulagroupcl.cxx:907
     void sc::opencl::DynamicKernelMixedArgument::GenNumDeclRef(class std::__cxx11::basic_stringstream<char> &) const
-sc/source/core/opencl/formulagroupcl.cxx:1253
+sc/source/core/opencl/formulagroupcl.cxx:1254
     unsigned long sc::opencl::ParallelReductionVectorRef::GetArrayLength() const
-sc/source/core/opencl/formulagroupcl.cxx:1255
+sc/source/core/opencl/formulagroupcl.cxx:1256
     unsigned long sc::opencl::ParallelReductionVectorRef::GetWindowSize() const
-sc/source/core/opencl/formulagroupcl.cxx:1257
+sc/source/core/opencl/formulagroupcl.cxx:1258
     _Bool sc::opencl::ParallelReductionVectorRef::GetStartFixed() const
-sc/source/core/opencl/formulagroupcl.cxx:1259
+sc/source/core/opencl/formulagroupcl.cxx:1260
     _Bool sc::opencl::ParallelReductionVectorRef::GetEndFixed() const
 sc/source/core/opencl/op_statistical.hxx:204
      sc::opencl::OpGeoMean::OpGeoMean()
-sc/source/core/tool/scmatrix.cxx:2269
+sc/source/core/tool/scmatrix.cxx:2355
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3263
+sc/source/core/tool/scmatrix.cxx:3361
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
-sc/source/filter/inc/orcusinterface.hxx:72
+sc/source/filter/inc/orcusinterface.hxx:79
      ScOrcusRefResolver::ScOrcusRefResolver(const class ScOrcusGlobalSettings &)
 sc/source/filter/inc/tokstack.hxx:217
     _Bool TokenPool::GrowTripel(unsigned short)
-sc/source/filter/inc/xestream.hxx:106
+sc/source/filter/inc/xestream.hxx:107
     class XclExpStream & XclExpStream::operator<<(float)
 sc/source/filter/inc/xiescher.hxx:155
     class Color XclImpDrawObjBase::GetSolidLineColor(const struct XclObjLineData &) const
@@ -922,10 +984,12 @@ sd/source/filter/ppt/pptinanimations.hxx:105
     void ppt::AnimationImporter::dump(const char *,long)
 sd/source/ui/inc/filedlg.hxx:54
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected()
-sd/source/ui/inc/optsitem.hxx:181
+sd/source/ui/inc/optsitem.hxx:178
     _Bool SdOptionsContents::operator==(const class SdOptionsContents &) const
-sd/source/ui/inc/unomodel.hxx:143
+sd/source/ui/inc/unomodel.hxx:136
     _Bool SdXImpressDocument::operator==(const class SdXImpressDocument &) const
+sdext/source/minimizer/pppoptimizer.hxx:40
+     PPPOptimizer::PPPOptimizer(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
 sfx2/source/appl/shutdownicon.hxx:82
     class rtl::OUString ShutdownIcon::getShortcutName()
 sfx2/source/appl/shutdownicon.hxx:98
@@ -982,6 +1046,8 @@ svgio/inc/svgstyleattributes.hxx:370
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:56
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
+svx/source/inc/svxpixelctlaccessiblecontext.hxx:146
+    void SvxPixelCtlAccessible::LoseFocus()
 svx/source/svdraw/svdpdf.hxx:92
     double ImpSdrPdfImport::Matrix::b() const
 svx/source/svdraw/svdpdf.hxx:94
@@ -1068,11 +1134,11 @@ sw/inc/IMark.hxx:64
     _Bool sw::mark::IMark::operator<(const class sw::mark::IMark &) const
 sw/inc/IMark.hxx:66
     _Bool sw::mark::IMark::operator==(const class sw::mark::IMark &) const
-sw/inc/node.hxx:98
+sw/inc/node.hxx:97
     enum SwNode::Merge SwNode::GetRedlineMergeFlag() const
-sw/inc/node.hxx:232
+sw/inc/node.hxx:231
     const class IDocumentStylePoolAccess & SwNode::getIDocumentStylePoolAccess() const
-sw/inc/node.hxx:236
+sw/inc/node.hxx:235
     const class IDocumentDrawModelAccess & SwNode::getIDocumentDrawModelAccess() const
 sw/inc/pagedesc.hxx:419
     void SwPageDescs::erase(class SwPageDesc *const &)
@@ -1094,13 +1160,13 @@ sw/inc/swcrsr.hxx:225
     class SwCursor * SwCursor::GetPrev()
 sw/inc/swcrsr.hxx:226
     const class SwCursor * SwCursor::GetPrev() const
-sw/inc/swcrsr.hxx:312
+sw/inc/swcrsr.hxx:310
     class SwTableCursor * SwTableCursor::GetNext()
-sw/inc/swcrsr.hxx:313
+sw/inc/swcrsr.hxx:311
     const class SwTableCursor * SwTableCursor::GetNext() const
-sw/inc/swcrsr.hxx:314
+sw/inc/swcrsr.hxx:312
     class SwTableCursor * SwTableCursor::GetPrev()
-sw/inc/swcrsr.hxx:315
+sw/inc/swcrsr.hxx:313
     const class SwTableCursor * SwTableCursor::GetPrev() const
 sw/inc/swrect.hxx:99
     class SwRect & SwRect::operator-=(const class Point &)
@@ -1112,17 +1178,17 @@ sw/inc/swrect.hxx:134
     void SwRect::SetLowerLeftCorner(const class Point &)
 sw/inc/swrect.hxx:147
     _Bool SwRect::OverStepTop(long) const
-sw/inc/viscrs.hxx:203
+sw/inc/viscrs.hxx:201
     class SwShellTableCursor * SwShellTableCursor::GetNext()
-sw/inc/viscrs.hxx:204
+sw/inc/viscrs.hxx:202
     const class SwShellTableCursor * SwShellTableCursor::GetNext() const
-sw/inc/viscrs.hxx:205
+sw/inc/viscrs.hxx:203
     class SwShellTableCursor * SwShellTableCursor::GetPrev()
-sw/inc/viscrs.hxx:206
+sw/inc/viscrs.hxx:204
     const class SwShellTableCursor * SwShellTableCursor::GetPrev() const
 sw/qa/extras/inc/swmodeltestbase.hxx:621
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:6476
+sw/qa/extras/uiwriter/uiwriter.cxx:6538
     int main()
 sw/source/core/inc/frame.hxx:907
     void SwFrame::dumpTopMostAsXml(struct _xmlTextWriter *) const
@@ -1142,6 +1208,12 @@ sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
 sw/source/filter/ww8/ww8struc.hxx:243
      WW8_BRCVer6::WW8_BRCVer6()
+sw/source/uibase/inc/prcntfld.hxx:57
+    void PercentField::SetAccessibleName(const class rtl::OUString &)
+sw/source/uibase/inc/prcntfld.hxx:58
+    void PercentField::SetText(const class rtl::OUString &)
+sw/source/uibase/inc/prcntfld.hxx:59
+    void PercentField::SetMetricFieldMin(long)
 sw/source/uibase/inc/swcont.hxx:86
     _Bool SwContent::operator==(const class SwContent &) const
 test/source/sheet/xsubtotalfield.cxx:28
@@ -1162,14 +1234,12 @@ vcl/inc/bitmapwriteaccess.hxx:75
     void BitmapWriteAccess::SetFillColor()
 vcl/inc/fontinstance.hxx:62
     void LogicalFontInstance::SetAverageWidthFactor(double)
-vcl/inc/fontinstance.hxx:63
+vcl/inc/fontinstance.hxx:64
     double LogicalFontInstance::GetAverageWidthFactor() const
-vcl/inc/fontinstance.hxx:80
+vcl/inc/fontinstance.hxx:81
     void LogicalFontInstance::ReleaseHbFont()
-vcl/inc/fontselect.hxx:48
+vcl/inc/fontselect.hxx:49
     _Bool FontSelectPattern::operator!=(const class FontSelectPattern &) const
-vcl/inc/headless/svpgdi.hxx:230
-    void SvpSalGraphics::drawBitmap(const struct SalTwoRect &,struct BitmapBuffer *,enum _cairo_operator)
 vcl/inc/impgraph.hxx:57
     _Bool GraphicID::operator==(const class GraphicID &) const
 vcl/inc/opengl/BufferObject.hxx:50
@@ -1204,16 +1274,20 @@ vcl/inc/PhysicalFontFamily.hxx:58
     const class rtl::OUString & PhysicalFontFamily::GetAliasNames() const
 vcl/inc/qt5/Qt5FilePicker.hxx:122
     void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
-vcl/inc/qt5/Qt5FontFace.hxx:44
+vcl/inc/qt5/Qt5FontFace.hxx:42
     int Qt5FontFace::GetFontTable(const char *,unsigned char *) const
-vcl/inc/qt5/Qt5FontFace.hxx:48
+vcl/inc/qt5/Qt5FontFace.hxx:46
     _Bool Qt5FontFace::HasChar(unsigned int) const
-vcl/inc/qt5/Qt5Frame.hxx:80
+vcl/inc/qt5/Qt5Frame.hxx:91
     void Qt5Frame::TriggerPaintEvent(class QRect)
 vcl/inc/qt5/Qt5Painter.hxx:56
     void Qt5Painter::update()
 vcl/inc/regionband.hxx:27
     const char * ImplDbgTestRegionBand(const void *)
+vcl/inc/salgdi.hxx:220
+    class basegfx::B2DPolygon SalGraphics::mirror(const class basegfx::B2DPolygon &,const class OutputDevice *) const
+vcl/inc/salgdi.hxx:223
+    class basegfx::B2DHomMatrix SalGraphics::mirror(const class basegfx::B2DHomMatrix &,const class OutputDevice *) const
 vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
 vcl/inc/salobj.hxx:69
@@ -1254,146 +1328,18 @@ vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
 vcl/unx/kde4/KDE4FilePicker.hxx:137
     void KDE4FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
+vcl/unx/kde5/KDE5FilePicker.hxx:149
+    void KDE5FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
 workdir/LexTarget/l10ntools/source/cfglex.cxx:3721
     void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
     void YYWarning()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:117
-    void writerfilter::ooxml::OOXMLFastContextHandler::setXNoteId(const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:131
-    void writerfilter::ooxml::OOXMLFastContextHandler::sendTableDepth() const
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:132
-    void writerfilter::ooxml::OOXMLFastContextHandler::setHandle()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:135
-    void writerfilter::ooxml::OOXMLFastContextHandler::setLastParagraphInSection()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:136
-    void writerfilter::ooxml::OOXMLFastContextHandler::setLastSectionGroup()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:142
-    void writerfilter::ooxml::OOXMLFastContextHandler::startSdt()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:143
-    void writerfilter::ooxml::OOXMLFastContextHandler::endSdt()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:145
-    void writerfilter::ooxml::OOXMLFastContextHandler::startField()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:146
-    void writerfilter::ooxml::OOXMLFastContextHandler::fieldSeparator()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:147
-    void writerfilter::ooxml::OOXMLFastContextHandler::endField()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:148
-    void writerfilter::ooxml::OOXMLFastContextHandler::lockField()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:149
-    void writerfilter::ooxml::OOXMLFastContextHandler::ftnednref()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:150
-    void writerfilter::ooxml::OOXMLFastContextHandler::ftnedncont()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:151
-    void writerfilter::ooxml::OOXMLFastContextHandler::ftnednsep()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:152
-    void writerfilter::ooxml::OOXMLFastContextHandler::pgNum()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:153
-    void writerfilter::ooxml::OOXMLFastContextHandler::tab()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:154
-    void writerfilter::ooxml::OOXMLFastContextHandler::symbol()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:155
-    void writerfilter::ooxml::OOXMLFastContextHandler::cr()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:156
-    void writerfilter::ooxml::OOXMLFastContextHandler::noBreakHyphen()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:157
-    void writerfilter::ooxml::OOXMLFastContextHandler::softHyphen()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:158
-    void writerfilter::ooxml::OOXMLFastContextHandler::handleLastParagraphInSection()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:161
-    void writerfilter::ooxml::OOXMLFastContextHandler::positionOffset(const class rtl::OUString &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:162
-    void writerfilter::ooxml::OOXMLFastContextHandler::ignore()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:163
-    void writerfilter::ooxml::OOXMLFastContextHandler::alignH(const class rtl::OUString &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:164
-    void writerfilter::ooxml::OOXMLFastContextHandler::alignV(const class rtl::OUString &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:165
-    void writerfilter::ooxml::OOXMLFastContextHandler::positivePercentage(const class rtl::OUString &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:166
-    void writerfilter::ooxml::OOXMLFastContextHandler::startGlossaryEntry()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:167
-    void writerfilter::ooxml::OOXMLFastContextHandler::endGlossaryEntry()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:168
-    void writerfilter::ooxml::OOXMLFastContextHandler::startTxbxContent()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:169
-    void writerfilter::ooxml::OOXMLFastContextHandler::endTxbxContent()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:170
-    void writerfilter::ooxml::OOXMLFastContextHandler::propagateCharacterProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:171
-    void writerfilter::ooxml::OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(unsigned int)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:172
-    void writerfilter::ooxml::OOXMLFastContextHandler::propagateTableProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:173
-    void writerfilter::ooxml::OOXMLFastContextHandler::propagateRowProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:174
-    void writerfilter::ooxml::OOXMLFastContextHandler::propagateCellProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:178
-    void writerfilter::ooxml::OOXMLFastContextHandler::sendRowProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:179
-    void writerfilter::ooxml::OOXMLFastContextHandler::sendTableProperties()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:183
-    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultBooleanValue()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:184
-    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultIntegerValue()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:185
-    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultHexValue()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:186
-    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultStringValue()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:256
-    void writerfilter::ooxml::OOXMLFastContextHandlerStream::sendProperty(unsigned int)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:259
-    void writerfilter::ooxml::OOXMLFastContextHandlerStream::handleHyperlink()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:281
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleXNotes()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:282
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHdrFtr()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:283
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleComment()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:284
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handlePicture()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:285
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleBreak()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:286
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleOutOfOrderBreak()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:287
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleOLE()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:288
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleFontRel()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:289
-    void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHyperlinkURL()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:371
-    void writerfilter::ooxml::OOXMLFastContextHandlerXNote::checkId(const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:373
-    void writerfilter::ooxml::OOXMLFastContextHandlerXNote::checkType(const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:397
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTableCell::startCell()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:398
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTableCell::endCell()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:409
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::startRow()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:410
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::endRow()
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:412
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::handleGridAfter(const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &)
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:427
-    void writerfilter::ooxml::OOXMLFastContextHandlerTextTable::start_P_Tbl()
-writerfilter/source/ooxml/OOXMLFastHelper.hxx:38
-    void writerfilter::ooxml::OOXMLFastHelper::newProperty(class writerfilter::ooxml::OOXMLFastContextHandler *,unsigned int,int)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:177
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::end() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:180
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()
-writerfilter/source/ooxml/OOXMLPropertySet.hxx:374
-     writerfilter::ooxml::OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(unsigned int)
-writerfilter/source/ooxml/OOXMLPropertySet.hxx:380
-    int writerfilter::ooxml::OOXMLPropertySetEntryToInteger::getValue() const
-writerfilter/source/ooxml/OOXMLPropertySet.hxx:388
-     writerfilter::ooxml::OOXMLPropertySetEntryToBool::OOXMLPropertySetEntryToBool(unsigned int)
-writerfilter/source/ooxml/OOXMLPropertySet.hxx:394
-    _Bool writerfilter::ooxml::OOXMLPropertySetEntryToBool::getValue() const
 xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx:44

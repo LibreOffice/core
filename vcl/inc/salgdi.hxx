@@ -217,7 +217,6 @@ public:
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
     void                        mirror( ImplControlValue&, const OutputDevice* ) const;
     basegfx::B2DPoint           mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev ) const;
-    basegfx::B2DPolygon         mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev ) const;
     basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev ) const;
     const basegfx::B2DHomMatrix& getMirror( const OutputDevice *pOutDev ) const;
     basegfx::B2DHomMatrix       mirror( const basegfx::B2DHomMatrix& i_rMatrix, const OutputDevice *pOutDev ) const;

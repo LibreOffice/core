@@ -37,15 +37,13 @@
 #include "mysqlc_preparedstatement.hxx"
 
 #include <stdio.h>
+#include <sal/macros.h>
 
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using mysqlc_sdbc_driver::getStringFromAny;
-
-#include <sal/macros.h>
 
 static std::string wild("%");
 

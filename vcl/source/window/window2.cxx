@@ -222,57 +222,6 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
     }
 }
 
-void Window::InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags )
-{
-    sal_uInt16 nPoints = rPoly.GetSize();
-
-    if ( nPoints < 2 )
-        return;
-
-    OutputDevice *pOutDev = GetOutDev();
-
-    tools::Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
-
-    SalGraphics* pGraphics;
-
-    if ( nFlags & ShowTrackFlags::TrackWindow )
-    {
-        if ( !IsDeviceOutputNecessary() )
-            return;
-
-        // we need a graphics
-        if ( !mpGraphics )
-        {
-            if ( !pOutDev->AcquireGraphics() )
-                return;
-        }
-
-        if ( mbInitClipRegion )
-            InitClipRegion();
-
-        if ( mbOutputClipped )
-            return;
-
-        pGraphics = mpGraphics;
-    }
-    else
-    {
-        pGraphics = ImplGetFrameGraphics();
-
-        if ( nFlags & ShowTrackFlags::Clip )
-        {
-            Point aPoint( mnOutOffX, mnOutOffY );
-            vcl::Region aRegion( tools::Rectangle( aPoint,
-                                       Size( mnOutWidth, mnOutHeight ) ) );
-            ImplClipBoundaries( aRegion, false, false );
-            pOutDev->SelectClipRegion( aRegion, pGraphics );
-        }
-    }
-
-    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
-    pGraphics->Invert( nPoints, pPtAry, SalInvert::TrackFrame, this );
-}
-
 IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 {
     ImplSVData* pSVData = ImplGetSVData();

@@ -46,22 +46,15 @@ class OResultSetMetaData final : public OResultSetMetaData_BASE
 private:
     OConnection& m_rConnection;
     MYSQL_RES* m_pRes;
-    rtl_TextEncoding m_encoding;
 
     virtual ~OResultSetMetaData() override = default;
     MYSQL_FIELD* getField(sal_Int32 column) const;
 
 public:
-    OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult, rtl_TextEncoding _encoding)
+    OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult)
         : m_rConnection(rConn)
         , m_pRes(pResult)
-        , m_encoding(_encoding)
     {
-    }
-
-    rtl::OUString convert(const ::std::string& _string) const
-    {
-        return rtl::OUString(_string.c_str(), _string.size(), m_encoding);
     }
 
     sal_Int32 SAL_CALL getColumnCount() SAL_OVERRIDE;

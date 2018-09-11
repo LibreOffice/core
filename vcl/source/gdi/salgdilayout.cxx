@@ -423,23 +423,6 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
     }
 }
 
-basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice* i_pOutDev ) const
-{
-    const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
-
-    if(rMirror.isIdentity())
-    {
-        return i_rPoly;
-    }
-    else
-    {
-        basegfx::B2DPolygon aRet(i_rPoly);
-        aRet.transform(rMirror);
-        aRet.flip();
-        return aRet;
-    }
-}
-
 basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice* i_pOutDev ) const
 {
     const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));

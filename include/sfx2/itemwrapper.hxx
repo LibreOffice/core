@@ -145,21 +145,6 @@ typedef ValueItemWrapper< SfxUInt16Item, sal_uInt16 >        UInt16ItemWrapper;
 typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
 
 
-/** An item wrapper that uses the item itself as value. */
-template< typename ItemT >
-class IdentItemWrapper : public SingleItemWrapper< ItemT, const ItemT& >
-{
-public:
-    explicit     IdentItemWrapper( sal_uInt16 nSlot ) :
-                            SingleItemWrapper< ItemT, const ItemT& >( nSlot ) {}
-
-    virtual const ItemT& GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE
-                            { return rItem; }
-    virtual void        SetItemValue( ItemT& rItem, const ItemT& rValue ) const SAL_OVERRIDE
-                            { rItem = rValue; }
-};
-
-
 //               ***  Implementation of template functions  ***
 
 
