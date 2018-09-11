@@ -247,6 +247,8 @@ public:
     bool            SwitchPage(sal_uInt16 nPage);
     bool            IsSwitchPageAllowed() const;
 
+    bool            SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect);
+
     void            GotoBookmark(const OUString& rBookmark);
     //Realize multi-selection of objects, If object is marked, the
     //corresponding entry is set true, else the corresponding entry is set
