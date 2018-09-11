@@ -1128,6 +1128,9 @@ namespace
                 xWindow = VclPtr<PushButton>::Create(pParent, nBits);
                 xWindow->SetText(getStockText(sType));
             }
+            PushButton* pPushButton = dynamic_cast<PushButton*>(xWindow.get());
+            if (pPushButton)
+                pPushButton->setStock(true);
         }
 
         if (!xWindow)

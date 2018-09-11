@@ -163,6 +163,16 @@ public:
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
+    void setStock(bool bIsStock)
+    {
+        mbIsStock = bIsStock;
+    }
+
+    bool isStock()
+    {
+        return mbIsStock;
+    }
+
 protected:
     PushButtonDropdownStyle mnDDStyle;
     bool            mbIsActive;
@@ -199,6 +209,7 @@ private:
     SymbolType      meSymbol;
     TriState        meState;
     bool            mbPressed;
+    bool            mbIsStock;
 };
 
 inline void PushButton::Check( bool bCheck )
