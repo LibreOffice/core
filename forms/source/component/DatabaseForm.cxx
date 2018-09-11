@@ -495,13 +495,13 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
     // Copy MessageStream to SvStream
     SvMemoryStream aMemStream;
-    char* pBuf = new char[1025];
+    std::unique_ptr<char[]> pBuf(new char[1025]);
     int nRead;
-    while( (nRead = aMessStream.Read(pBuf, 1024)) > 0 )
+    while( (nRead = aMessStream.Read(pBuf.get(), 1024)) > 0 )
     {
-        aMemStream.WriteBytes(pBuf, nRead);
+        aMemStream.WriteBytes(pBuf.get(), nRead);
     }
-    delete[] pBuf;
+    pBuf.reset();
 
     aMemStream.Flush();
     aMemStream.Seek( 0 );
