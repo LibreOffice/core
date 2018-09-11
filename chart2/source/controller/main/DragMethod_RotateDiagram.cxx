@@ -18,6 +18,7 @@
  */
 
 #include "DragMethod_RotateDiagram.hxx"
+#include <DrawViewWrapper.hxx>
 
 #include <SelectionHelper.hxx>
 #include <CommonConverters.hxx>

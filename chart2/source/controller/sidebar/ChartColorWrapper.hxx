@@ -10,9 +10,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTCOLORWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTCOLORWRAPPER_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <tools/color.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <svx/Palette.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class SvxColorToolBoxControl;
 

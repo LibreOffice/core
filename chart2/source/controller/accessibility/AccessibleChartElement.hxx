@@ -20,24 +20,11 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_ACCESSIBLECHARTELEMENT_HXX
 
 #include <AccessibleBase.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <comphelper/accessibleeventnotifier.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 
-#include <vector>
-#include <map>
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XFont; } } } }
 
 namespace chart
 {

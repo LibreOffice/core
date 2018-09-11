@@ -24,11 +24,11 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <vector>
 #include <map>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
 
 namespace chart
 {

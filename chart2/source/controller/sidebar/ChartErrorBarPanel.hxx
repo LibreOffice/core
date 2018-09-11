@@ -18,12 +18,10 @@
 
 #include "ChartSidebarModifyListener.hxx"
 
-#include <com/sun/star/util/XModifyListener.hpp>
+namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 
-class FixedText;
 class ListBox;
 class NumericField;
-class MetricField;
 class Edit;
 
 namespace chart {

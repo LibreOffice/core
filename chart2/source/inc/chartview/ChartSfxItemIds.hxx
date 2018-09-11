@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
 
+#include <svl/ilstitem.hxx>
+#include <svx/chrtitem.hxx>
+#include <editeng/brushitem.hxx>
+
 // SCHATTR
 
 // can't this be changed to 0?

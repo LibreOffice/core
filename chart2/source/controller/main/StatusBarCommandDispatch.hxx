@@ -22,9 +22,11 @@
 #include "CommandDispatch.hxx"
 #include <ObjectIdentifier.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XModifiable; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 namespace chart
 {

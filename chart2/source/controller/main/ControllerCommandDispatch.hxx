@@ -20,11 +20,13 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CONTROLLERCOMMANDDISPATCH_HXX
 
 #include "CommandDispatch.hxx"
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 namespace chart
 {

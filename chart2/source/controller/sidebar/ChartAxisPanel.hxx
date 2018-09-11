@@ -20,10 +20,9 @@
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
+namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
+namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
 
-class FixedText;
 class ListBox;
 class MetricField;
 
