@@ -98,11 +98,9 @@ void SignatureEngine::tryToPerform( )
 
         xSignatureTemplate->setTemplate(xXMLElement);
 
-        std::vector< sal_Int32 >::const_iterator ii = m_vReferenceIds.begin();
-
-        for( ; ii != m_vReferenceIds.end() ; ++ii )
+        for( const auto i : m_vReferenceIds )
         {
-            xXMLElement = m_xSAXEventKeeper->getElement( *ii );
+            xXMLElement = m_xSAXEventKeeper->getElement( i );
             xSignatureTemplate->setTarget(xXMLElement);
         }
 
@@ -145,14 +143,12 @@ void SignatureEngine::clearUp( ) const
 
     m_xSAXEventKeeper->removeElementCollector(m_nIdOfTemplateEC);
 
-    std::vector< sal_Int32 >::const_iterator ii = m_vReferenceIds.begin();
-
-    for( ; ii != m_vReferenceIds.end() ; ++ii )
+    for( const auto& i : m_vReferenceIds )
     {
         xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
-            *ii,
+            i,
             static_cast<const cssu::Reference < cssxc::sax::XReferenceResolvedListener > >(static_cast<SecurityEngine *>(const_cast<SignatureEngine *>(this))));
-        m_xSAXEventKeeper->removeElementCollector(*ii);
+        m_xSAXEventKeeper->removeElementCollector(i);
     }
 
     if (m_nIdOfKeyEC != 0 && m_nIdOfKeyEC != -1)

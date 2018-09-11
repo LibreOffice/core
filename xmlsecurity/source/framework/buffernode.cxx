@@ -803,35 +803,18 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *  bExist - true if a match found, false otherwise.
  ******************************************************************************/
 {
-    bool rc = false;
-
-    std::vector< const ElementCollector* >::const_iterator jj = m_vElementCollectors.begin();
-
-    for( ; jj != m_vElementCollectors.end() ; ++jj )
-    {
-        ElementCollector* pElementCollector = const_cast<ElementCollector*>(*jj);
-        if (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
-             pElementCollector->getSecurityId() != nIgnoredSecurityId)
-        {
-            rc = true;
-            break;
-        }
-    }
+    bool rc = std::any_of(m_vElementCollectors.begin(), m_vElementCollectors.end(),
+        [nIgnoredSecurityId](const ElementCollector* pElementCollector) {
+            return nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
+                pElementCollector->getSecurityId() != nIgnoredSecurityId;
+    });
 
     if ( !rc )
     {
-        std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-
-        for( ; ii != m_vChildren.end() ; ++ii )
-        {
-            BufferNode* pBufferNode = const_cast<BufferNode*>(*ii);
-
-            if ( pBufferNode->isECInSubTreeIncluded(nIgnoredSecurityId))
-            {
-                rc = true;
-                break;
-            }
-        }
+        rc = std::any_of(m_vChildren.begin(), m_vChildren.end(),
+            [nIgnoredSecurityId](const BufferNode* pBufferNode) {
+                return pBufferNode->isECInSubTreeIncluded(nIgnoredSecurityId);
+        });
     }
 
     return rc;
@@ -904,31 +887,14 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *  bExist - true if a match found, false otherwise.
  ******************************************************************************/
 {
-    bool rc = false;
-
-    std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-
-    for( ; ii != m_vChildren.end() ; ++ii )
-    {
-        BufferNode* pBufferNode = const_cast<BufferNode*>(*ii);
-        ElementMark* pBlocker = pBufferNode->getBlocker();
-
-        if (pBlocker != nullptr &&
-            (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
-            pBlocker->getSecurityId() != nIgnoredSecurityId ))
-        {
-            rc = true;
-            break;
-        }
-
-        if (rc || pBufferNode->isBlockerInSubTreeIncluded(nIgnoredSecurityId))
-        {
-            rc = true;
-            break;
-        }
-    }
-
-    return rc;
+    return std::any_of(m_vChildren.begin(), m_vChildren.end(),
+        [nIgnoredSecurityId](const BufferNode* pBufferNode) {
+            ElementMark* pBlocker = pBufferNode->getBlocker();
+            return (pBlocker != nullptr &&
+                (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
+                 pBlocker->getSecurityId() != nIgnoredSecurityId )) ||
+                pBufferNode->isBlockerInSubTreeIncluded(nIgnoredSecurityId);
+    });
 }
 
 const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
@@ -954,16 +920,15 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
     BufferNode* rc = nullptr;
     bool bChildFound = false;
 
-    std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    for( ; ii != m_vChildren.end() ; ++ii )
+    for( const BufferNode* i : m_vChildren )
     {
         if (bChildFound)
         {
-            rc = const_cast<BufferNode*>(*ii);
+            rc = const_cast<BufferNode*>(i);
             break;
         }
 
-        if( *ii == pChild )
+        if( i == pChild )
         {
             bChildFound = true;
         }
@@ -992,10 +957,9 @@ void BufferNode::freeAllChildren()
  *  empty
  ******************************************************************************/
 {
-    std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    for( ; ii != m_vChildren.end() ; ++ii )
+    for( const BufferNode* i : m_vChildren )
     {
-        BufferNode *pChild = const_cast<BufferNode *>(*ii);
+        BufferNode *pChild = const_cast<BufferNode *>(i);
         pChild->freeAllChildren();
         delete pChild;
     }
