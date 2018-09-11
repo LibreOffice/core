@@ -627,8 +627,8 @@ void DomainMapperTableManager::endOfRowAction()
     // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
     // -> so we have get the sum of each grid entry for the fullWidthRelative:
     int nFullWidthRelative = 0;
-    for (sal_Int32 i : (*pTableGrid.get()))
-        nFullWidthRelative += i;
+    for (int i : (*pTableGrid.get()))
+        nFullWidthRelative = o3tl::saturating_add(nFullWidthRelative, i);
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
