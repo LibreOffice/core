@@ -2265,7 +2265,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 
 bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2279,13 +2279,12 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
         pImp->WriteToDocument();
         EndPaste();
     }
-    delete pImp;
     return bOk;
 }
 
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange);
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange);
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2316,7 +2315,6 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
         EndPaste();
     }
-    delete pImp;
     return bOk;
 }
 

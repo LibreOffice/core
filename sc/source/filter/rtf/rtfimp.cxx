@@ -24,6 +24,7 @@
 #include <rtfimp.hxx>
 #include <rtfparse.hxx>
 #include <ftools.hxx>
+#include <o3tl/make_unique.hxx>
 
 ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
 {
@@ -35,9 +36,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
+std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
 {
-    return new ScRTFImport( pDoc, rRange );
+    return o3tl::make_unique<ScRTFImport>( pDoc, rRange );
 }
 
 ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :

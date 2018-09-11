@@ -275,8 +275,8 @@ public:
                                    double nOutputFactor, bool bCalcWidthHeight,
                                    SvNumberFormatter* pFormatter, bool bConvertDate ) override;
 
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;
+    virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
+    virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;
     virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) override;
 
     // various export filters

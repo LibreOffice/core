@@ -54,9 +54,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUStrin
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
+std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
 {
-    return new ScHTMLImport( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
+    return o3tl::make_unique<ScHTMLImport>( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
 }
 
 ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
