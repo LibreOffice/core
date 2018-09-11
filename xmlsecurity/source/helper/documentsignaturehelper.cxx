@@ -21,6 +21,7 @@
 #include <documentsignaturehelper.hxx>
 
 #include <algorithm>
+#include <functional>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -424,40 +425,25 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
 {
     // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
     unsigned int nRealCount = 0;
+    std::function<OUString(const OUString&)> fEncode = [](const OUString& rStr) { return rStr; };
+    if (alg == DocumentSignatureAlgorithm::OOo2)
+        //Comparing URIs is a difficult. Therefore we kind of normalize
+        //it before comparing. We assume that our URI do not have a leading "./"
+        //and fragments at the end (...#...)
+        fEncode = [](const OUString& rStr) {
+            return rtl::Uri::encode(rStr, rtl_UriCharClassPchar, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
+        };
+
     for ( int i = sigInfo.vSignatureReferenceInfors.size(); i; )
     {
         const SignatureReferenceInformation& rInf = sigInfo.vSignatureReferenceInfors[--i];
         // There is also an extra entry of type SignatureReferenceType::SAMEDOCUMENT because of signature date.
         if ( ( rInf.nType == SignatureReferenceType::BINARYSTREAM ) || ( rInf.nType == SignatureReferenceType::XMLSTREAM ) )
         {
-            OUString sReferenceURI = rInf.ouURI;
-            if (alg == DocumentSignatureAlgorithm::OOo2)
-            {
-                //Comparing URIs is a difficult. Therefore we kind of normalize
-                //it before comparing. We assume that our URI do not have a leading "./"
-                //and fragments at the end (...#...)
-                sReferenceURI = ::rtl::Uri::encode(
-                    sReferenceURI, rtl_UriCharClassPchar,
-                    rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
-            }
-
             //find the file in the element list
-            for (auto aIter = sElementList.cbegin(); aIter != sElementList.cend(); ++aIter)
-            {
-                OUString sElementListURI = *aIter;
-                if (alg == DocumentSignatureAlgorithm::OOo2)
-                {
-                    sElementListURI =
-                        ::rtl::Uri::encode(
-                        sElementListURI, rtl_UriCharClassPchar,
-                        rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
-                }
-                if (sElementListURI == sReferenceURI)
-                {
-                    nRealCount++;
-                    break;
-                }
-            }
+            if (std::any_of(sElementList.cbegin(), sElementList.cend(),
+                    [&fEncode, &rInf](const OUString& rElement) { return fEncode(rElement) == fEncode(rInf.ouURI); }))
+                nRealCount++;
         }
     }
     return  sElementList.size() == nRealCount;
@@ -470,7 +456,6 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
 bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
     const OUString & rUri, const OUString & rPath)
 {
-    bool retVal = false;
     //split up the uri and path into segments. Both are separated by '/'
     std::vector<OUString> vUriSegments;
     sal_Int32 nIndex = 0;
@@ -490,25 +475,17 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
     }
     while (nIndex >= 0);
 
-    //Now compare each segment of the uri with its counterpart from the path
-    if (vUriSegments.size() == vPathSegments.size())
-    {
-        retVal = true;
-        for (auto i = vUriSegments.cbegin(), j = vPathSegments.cbegin();
-            i != vUriSegments.cend(); ++i, ++j)
-        {
-            //Decode the uri segment, so that %20 becomes ' ', etc.
-            OUString sDecUri = ::rtl::Uri::decode(
-                *i, rtl_UriDecodeWithCharset,  RTL_TEXTENCODING_UTF8);
-            if (sDecUri != *j)
-            {
-                retVal = false;
-                break;
-            }
-        }
-    }
+    if (vUriSegments.size() != vPathSegments.size())
+        return false;
 
-    return retVal;
+    //Now compare each segment of the uri with its counterpart from the path
+    return std::equal(
+        vUriSegments.cbegin(), vUriSegments.cend(), vPathSegments.cbegin(),
+        [](const OUString& rUriSegment, const OUString& rPathSegment) {
+            //Decode the uri segment, so that %20 becomes ' ', etc.
+            OUString sDecUri = rtl::Uri::decode(rUriSegment, rtl_UriDecodeWithCharset,  RTL_TEXTENCODING_UTF8);
+            return sDecUri == rPathSegment;
+        });
 }
 
 OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
