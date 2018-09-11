@@ -197,11 +197,11 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pO->SetVertical( bVertical );
 
                 //!?? the default values are not correct when result is without outliner ???!?
-                auto pUndoManager = &pO->GetUndoManager();
+                auto pOTemp = pO.get();
                 if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
                 {
                     // subscribe EditEngine-UndoManager
-                    rViewShell.SetDrawTextUndo( pUndoManager );
+                    rViewShell.SetDrawTextUndo( &pOTemp->GetUndoManager() );
 
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                     if ( pOLV->MouseButtonDown(rMEvt) )
@@ -592,7 +592,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 pO->SetVertical( bVertical );
 
                 //!??  without returned Outliner the defaults are not correct ???!?
-                auto pUndoManager = &pO->GetUndoManager();
+                auto pOTemp = pO.get();
                 if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
                 {
                     //  Toggle out of paste mode if we are in it, otherwise
@@ -602,7 +602,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     rViewShell.UpdateCopySourceOverlay();
 
                     //  EditEngine-UndoManager anmelden
-                    rViewShell.SetDrawTextUndo( pUndoManager );
+                    rViewShell.SetDrawTextUndo( &pOTemp->GetUndoManager() );
 
                     pView->SetEditMode();
 
