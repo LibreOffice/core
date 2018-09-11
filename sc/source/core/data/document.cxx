@@ -3920,7 +3920,7 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
     if (!m_TableOpList.empty())
     {
-        ScInterpreterTableOpParams *const p = m_TableOpList.back().get();
+        ScInterpreterTableOpParams *const p = m_TableOpList.back();
         if ( p->bCollectNotifications )
         {
             if ( p->bRefresh )

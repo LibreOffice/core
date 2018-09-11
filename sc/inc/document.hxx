@@ -427,7 +427,7 @@ private:
                         mxVbaEvents;
 public:
     /// list of ScInterpreterTableOpParams currently in use
-    std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
+    std::vector<ScInterpreterTableOpParams*> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
 
 private:
