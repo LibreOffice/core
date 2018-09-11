@@ -65,6 +65,7 @@ public:
     virtual bool drawTabHeader(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawTabBody(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawSlider(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    virtual bool drawFixedline(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawToolbar(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawProgress(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawWindowsBackground(ControlDrawParameters const& rParameters, long nWidth,
