@@ -99,8 +99,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aDocRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged" ),
     aVisRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged" ),
     aCallSelectHdlIdle ( "svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl" ),
-    aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
-    m_pColumns( nullptr )
+    aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor())
 {
     bChooseWithCursor = false;
     pEntryPaintDev = nullptr;

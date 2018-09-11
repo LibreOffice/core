@@ -98,8 +98,7 @@ private:
         // used by locked columns
 public:
     DbGridColumn(sal_uInt16 _nId, DbGridControl& rParent)
-        :m_pCell(nullptr)
-        ,m_rParent(rParent)
+        :m_rParent(rParent)
         ,m_nLastVisibleWidth(-1)
         ,m_nFormatKey(0)
         ,m_nFieldType(0)
