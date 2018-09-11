@@ -2636,7 +2636,15 @@ vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScri
 #if HAVE_GCC_BUG_87150
     return aFont;
 #else
+// <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150#c15>:
+#if defined __GNUC__ && __GNUC__ == 9 && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wredundant-move"
+#endif
     return std::move(aFont);
+#if defined __GNUC__ && __GNUC__ == 9 && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 #endif
 }
 
