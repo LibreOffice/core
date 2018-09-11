@@ -727,9 +727,10 @@ bool ZipPackageStream::saveChild(
             if ( m_bRawStream )
                 xStream->skipBytes( m_nMagicalHackPos );
 
-            // the entry is provided to the ZipOutputStream that will delete it
-            ZipOutputStream::setEntry(pAutoTempEntry.release());
+            ZipOutputStream::setEntry(pTempEntry);
             rZipOut.writeLOC(pTempEntry);
+            // the entry is provided to the ZipOutputStream that will delete it
+            pAutoTempEntry.release();
 
             uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
             sal_Int32 nLength;
@@ -796,8 +797,9 @@ bool ZipPackageStream::saveChild(
 
         try
         {
+            ZipOutputStream::setEntry(pTempEntry);
             // the entry is provided to the ZipOutputStream that will delete it
-            ZipOutputStream::setEntry(pAutoTempEntry.release());
+            pAutoTempEntry.release();
 
             if (pTempEntry->nMethod == STORED)
             {
