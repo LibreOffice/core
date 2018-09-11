@@ -262,6 +262,9 @@ public:
     virtual Pointer getPointer() override;
     /// @see vcl::ITiledRenderable::getPostIts().
     virtual OUString getPostIts() override;
+    /// @see vcl::ITiledRenderable::selectPart().
+    virtual void selectPart(int nPart, int nSelect) override;
+
 
     // XComponent
 

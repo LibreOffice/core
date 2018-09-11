@@ -362,6 +362,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::createViewWithOptions().
     int (*createViewWithOptions) (LibreOfficeKitDocument* pThis, const char* pOptions);
 
+    /// @see lok::Document::selectPart().
+    void (*selectPart) (LibreOfficeKitDocument* pThis, int nPart, int nSelect);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -370,6 +370,13 @@ public:
         return OUString();
     }
 
+    /**
+     * Select/Unselect a document "part", i.e. slide for a slideshow, and
+     * tab for a spreadsheet(?).
+     * nSelect: 0 to deselect, 1 to select, and 2 to toggle.
+     */
+    virtual void selectPart(int /*nPart*/, int /*nSelect*/) {}
+
 };
 } // namespace vcl
 

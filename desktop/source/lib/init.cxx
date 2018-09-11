@@ -591,6 +591,7 @@ static int doc_getParts(LibreOfficeKitDocument* pThis);
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
+static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
 static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
 static void doc_paintTile(LibreOfficeKitDocument* pThis,
@@ -741,6 +742,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartPageRectangles = doc_getPartPageRectangles;
         m_pDocumentClass->getPart = doc_getPart;
         m_pDocumentClass->setPart = doc_setPart;
+        m_pDocumentClass->selectPart = doc_selectPart;
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->paintTile = doc_paintTile;
@@ -2034,6 +2036,22 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
     return pMemory;
 }
 
+static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->selectPart( nPart, nSelect );
+}
+
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
@@ -2378,6 +2396,8 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     if (pDoc)
     {
         doc_iniUnoCommands();
+        // Create the SlideSorter which is used for multiselection and reordering.
+        doc_postUnoCommand(pThis, ".uno:LeftPaneImpress", nullptr, false);
         pDoc->initializeForTiledRendering(
                 comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
     }
