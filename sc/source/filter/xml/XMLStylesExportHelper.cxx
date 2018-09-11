@@ -306,11 +306,11 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TRUE);
     else
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
-    SvXMLElementExport* pMessage(nullptr);
+    std::unique_ptr<SvXMLElementExport> pMessage;
     if (bIsHelpMessage)
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, true, true);
+        pMessage.reset(new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, true, true));
     else
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, true, true);
+        pMessage.reset(new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, true, true));
     if (!sOUMessage.isEmpty())
     {
         sal_Int32 i(0);
@@ -335,7 +335,6 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
         }
     }
-    delete pMessage;
 }
 
 void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
