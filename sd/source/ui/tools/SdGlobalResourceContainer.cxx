@@ -99,7 +99,7 @@ void SdGlobalResourceContainer::AddResource (
         mpImpl->maResources.end(),
         pResource.get());
     if (iResource == mpImpl->maResources.end())
-        mpImpl->maResources.push_back(pResource.release());
+        mpImpl->maResources.push_back(pResource.get());
     else
     {
         // Because the given resource is a unique_ptr it is highly unlikely
@@ -107,6 +107,9 @@ void SdGlobalResourceContainer::AddResource (
         SAL_WARN ( "sd.tools",
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
+    // We can not put the unique_ptr into the vector so we release the
+    // unique_ptr and document that we take ownership explicitly.
+    pResource.release();
 }
 
 void SdGlobalResourceContainer::AddResource (
