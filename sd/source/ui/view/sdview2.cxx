@@ -896,24 +896,6 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
     return bNameOK;
 }
 
-typedef std::vector< SdrObject* > SdrObjectVector;
-
-void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
-{
-    bool bIsGroup(pObj->IsGroupObject());
-    if(bIsGroup && dynamic_cast< const E3dObject *>( pObj ) != nullptr && dynamic_cast< const E3dScene *>( pObj ) ==  nullptr)
-        bIsGroup = false;
-
-    rVector.push_back( pObj );
-
-    if(bIsGroup)
-    {
-        SdrObjList* pObjList = pObj->GetSubList();
-        for( size_t a = 0; a < pObjList->GetObjCount(); ++a)
-            ImplProcessObjectList(pObjList->GetObj(a), rVector);
-    }
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
