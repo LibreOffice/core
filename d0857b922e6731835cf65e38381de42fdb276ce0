@@ -16,6 +16,24 @@
       "revId": "d0857b922e6731835cf65e38381de42fdb276ce0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_3aa663c3",
+        "filename": "basegfx/source/polygon/b2dtrapezoid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-09-11T12:47:10Z",
+      "side": 1,
+      "message": "True. If you use ::count(), do it after subdivide. One possibility here would be to call self recursive when subdivision is needed -\u003e safe in the sense that the B2DPolyPolygon handed in by reference will not have to be changed, can stay const and no copy will be needed.",
+      "parentUuid": "dfeb2761_8e73f515",
+      "revId": "d0857b922e6731835cf65e38381de42fdb276ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
