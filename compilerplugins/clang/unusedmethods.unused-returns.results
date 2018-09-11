@@ -294,7 +294,7 @@ sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
-ucb/source/ucp/webdav-neon/NeonSession.hxx:232
+ucb/source/ucp/webdav-neon/NeonSession.hxx:239
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
 vcl/inc/font/FeatureCollector.hxx:48
     _Bool vcl::font::FeatureCollector::collect()
@@ -310,7 +310,7 @@ vcl/inc/salframe.hxx:222
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
 vcl/inc/salgdi.hxx:219
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:402
+vcl/inc/salgdi.hxx:401
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)

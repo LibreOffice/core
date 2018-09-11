@@ -59,8 +59,6 @@ class SvxNumberingPreview : public vcl::Window
 
         void    SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
-        void    SetPositionMode()
-                        { bPosition = true;}
         void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
