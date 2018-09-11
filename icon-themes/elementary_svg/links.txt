@@ -238,6 +238,12 @@ cmd/sc_savegraphic.svg cmd/sc_save.svg
 cmd/sc_recsave.svg cmd/sc_save.svg
 
 # Text
+cmd/32/textfittosizetool.svg cmd/32/text_marquee.svg
+cmd/32/texttoolbox.svg cmd/32/text.svg
+cmd/32/drawtext.svg cmd/32/text.svg
+cmd/32/doubleclicktextedit.svg cmd/32/pickthrough.svg
+cmd/32/fontworkcharacterspacingfloater.svg cmd/32/spacing.svg
+cmd/32/fontheight.svg cmd/32/scaletext.svg
 cmd/lc_textfittosizetool.svg cmd/lc_text_marquee.svg
 cmd/lc_texttoolbox.svg cmd/lc_text.svg
 cmd/lc_drawtext.svg cmd/lc_text.svg
@@ -361,7 +367,6 @@ cmd/32/grafmode.svg cmd/32/graphicdialog.svg
 cmd/32/graphicfilterposter.svg cmd/32/graphicdialog.svg
 cmd/32/imagebutton.svg cmd/32/gallery.svg
 
-cmd/lc_colorsettings.svg cmd/lc_graphicfiltersmooth.svg
 cmd/lc_colorview.svg cmd/lc_graphicfilterinvert.svg
 cmd/lc_formatimagemenu.svg cmd/lc_graphic.svg
 cmd/lc_grafgamma.svg cmd/lc_graphicfilterinvert.svg
@@ -370,7 +375,6 @@ cmd/lc_grafmode.svg cmd/lc_graphicdialog.svg
 cmd/lc_graphicfilterposter.svg cmd/lc_graphicdialog.svg
 cmd/lc_imagebutton.svg cmd/lc_gallery.svg
 
-cmd/sc_colorsettings.svg cmd/sc_graphicfiltersmooth.svg
 cmd/sc_colorview.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_formatimagemenu.svg cmd/sc_graphic.svg
 cmd/sc_graphicfilterposter.svg cmd/sc_graphicdialog.svg
@@ -600,15 +604,15 @@ cmd/sc_removefilter.svg cmd/sc_removefiltersort.svg
 # Bullets
 cmd/32/bulletliststyle.svg cmd/32/defaultbullet.svg
 cmd/32/defaultparastyle.svg cmd/32/controlcodes.svg
-cmd/32/romanliststyle.svg cmd/32/defaultnumbering.svg
+cmd/32/numberliststyle.svg cmd/32/defaultnumbering.svg
 
 cmd/lc_bulletliststyle.svg cmd/lc_defaultbullet.svg
 cmd/lc_defaultparastyle.svg cmd/lc_controlcodes.svg
-cmd/lc_romanliststyle.svg cmd/lc_defaultnumbering.svg
+cmd/lc_numberliststyle.svg cmd/lc_defaultnumbering.svg
 
 cmd/sc_bulletliststyle.svg cmd/sc_defaultbullet.svg
 cmd/sc_defaultparastyle.svg cmd/sc_controlcodes.svg
-cmd/sc_romanliststyle.svg cmd/sc_defaultnumbering.svg
+cmd/sc_numberliststyle.svg cmd/sc_defaultnumbering.svg
 
 # Format
 cmd/32/formattextmenu.svg cmd/32/bold.svg
@@ -795,11 +799,20 @@ cmd/sc_spellingandgrammardialog.svg cmd/sc_spelling.svg
 cmd/sc_spelldialog.svg cmd/sc_spelling.svg
 
 # Color
-cmd/lc_fontcolor.svg cmd/lc_color.svg
-cmd/sc_fontcolor.svg cmd/sc_color.svg
-cmd/sc_characterbackgroundpattern.svg cmd/sc_backcolor.svg
-cmd/lc_characterbackgroundpattern.svg cmd/lc_backcolor.svg
+cmd/32/backgroundpatterncontroller.svg cmd/32/backgroundcolor.svg
+cmd/32/characterbackgroundpattern.svg cmd/32/backcolor.svg
+cmd/32/fontcolor.svg cmd/32/color.svg
+cmd/32/formatarea.svg cmd/32/backgroundcolor.svg
+
 cmd/lc_backgroundpatterncontroller.svg cmd/lc_backgroundcolor.svg
+cmd/lc_characterbackgroundpattern.svg cmd/lc_backcolor.svg
+cmd/lc_fontcolor.svg cmd/lc_color.svg
+cmd/lc_formatarea.svg cmd/lc_backgroundcolor.svg
+
+cmd/sc_backgroundpatterncontroller.svg cmd/sc_backgroundcolor.svg
+cmd/sc_characterbackgroundpattern.svg cmd/sc_backcolor.svg
+cmd/sc_fontcolor.svg cmd/sc_color.svg
+cmd/sc_formatarea.svg cmd/sc_backgroundcolor.svg
 
 # Paragraph Alignment
 cmd/lc_leftpara.svg cmd/lc_alignleft.svg
@@ -940,10 +953,12 @@ cmd/lc_toggleaxisdescr.svg cmd/lc_helplinesvisible.svg
 cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
 
 # Grid
-cmd/lc_gridvisible.svg cmd/lc_grid.svg
-cmd/sc_gridvisible.svg cmd/sc_grid.svg
-cmd/lc_gridmenu.svg cmd/lc_grid.svg
-cmd/sc_gridmenu.svg cmd/sc_grid.svg
+cmd/32/grid.svg cmd/32/inserttable.svg
+cmd/lc_grid.svg cmd/lc_inserttable.svg
+cmd/sc_grid.svg cmd/sc_inserttable.svg
+cmd/32/gridmenu.svg cmd/32/gridvisible.svg
+cmd/lc_gridmenu.svg cmd/lc_gridvisible.svg
+cmd/sc_gridmenu.svg cmd/sc_gridvisible.svg
 
 # Crop
 cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
@@ -1093,6 +1108,7 @@ cmd/sc_browsebackward cmd/lc_prevrecord.svg
 cmd/sc_browseforward.svg cmd/sc_nextrecord.svg
 
 # Math
+cmd/32/symbolcatalogue.svg cmd/32/insertsymbol.svg
 cmd/lc_symbolcatalogue.svg cmd/lc_insertsymbol.svg
 cmd/sc_symbolcatalogue.svg cmd/sc_insertsymbol.svg
 
@@ -1154,6 +1170,7 @@ cmd/lc_savesimple.svg cmd/lc_save.svg
 cmd/sc_savesimple.svg cmd/sc_save.svg
 
 # Underline include language support
+cmd/32/underlinesimple.svg cmd/32/underline.svg
 cmd/lc_underlinesimple.svg cmd/lc_underline.svg
 cmd/sc_underlinesimple.svg cmd/sc_underline.svg
 
@@ -1343,7 +1360,7 @@ res/sx10596.svg cmd/sc_checkbox.svg
 res/sx10599.svg cmd/sc_text.svg
 res/sx10600.svg cmd/lc_listbox.svg
 res/sx10601.svg cmd/sc_combobox.svg
-res/sx10603.svg cmd/sc_grid.svg
+res/sx10603.svg cmd/sc_gridvisible.svg
 
 res/sx10605.svg cmd/sc_open.svg
 res/sx10704.svg cmd/sc_datefield.svg
@@ -1558,7 +1575,7 @@ svx/res/symphony/AdjustColorBlue_16x16.svg cmd/sc_grafblue.svg
 svx/res/symphony/AdjustColorGamma_16x16.svg cmd/sc_graphicfilterinvert.svg
 svx/res/symphony/AdjustColorGreen_16x16.svg cmd/sc_grafgreen.svg
 svx/res/symphony/AdjustColorRed_16x16.svg cmd/sc_grafred.svg
-svx/res/symphony/fill_color.svg cmd/sc_backgroundpatterncontroller.svg
+svx/res/symphony/fill_color.svg cmd/sc_backgroundcolor.svg
 svx/res/symphony/last_custom_common.svg sw/res/sidebar/pageproppanel/last_custom_common.svg
 svx/res/symphony/last_custom_common_grey.svg sw/res/sidebar/pageproppanel/last_custom_common_grey.svg
 svx/res/symphony/rotate_left.svg cmd/sc_rotateleft.svg
@@ -1673,3 +1690,11 @@ cmd/sc_rulermenu.svg cmd/sc_ruler.svg
 cmd/32/formatallnotes.svg cmd/32/editannotation.svg
 cmd/lc_formatallnotes.svg cmd/lc_editannotation.svg
 cmd/sc_formatallnotes.svg cmd/sc_editannotation.svg
+
+cmd/32/charmapcontrol.svg cmd/32/insertsymbol.svg
+cmd/lc_charmapcontrol.svg cmd/lc_insertsymbol.svg
+cmd/sc_charmapcontrol.svg cmd/sc_insertsymbol.svg
+
+cmd/32/showruler.svg cmd/32/ruler.svg
+cmd/lc_showruler.svg cmd/lc_ruler.svg
+cmd/sc_showruler.svg cmd/sc_ruler.svg
