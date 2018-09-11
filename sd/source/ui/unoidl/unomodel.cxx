@@ -2282,6 +2282,15 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
+void SdXImpressDocument::selectPart(int nPart, int nSelect)
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
+    pViewSh->SelectPage(nPart, nSelect);
+}
+
 void SdXImpressDocument::setPart( int nPart )
 {
     DrawViewShell* pViewSh = GetViewShell();
