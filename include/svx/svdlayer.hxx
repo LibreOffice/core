@@ -126,7 +126,6 @@ public:
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
     SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
-    SdrLayerAdmin*    GetParent() const { return pParent; }
 
     void               SetModel(SdrModel* pNewModel);
 

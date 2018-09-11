@@ -143,8 +143,6 @@ public:
     css::uno::Reference< css::accessibility::XAccessible >
          CreateChild (long nIndex, Point mPoint);
 
-    void LoseFocus();
-
 private:
     virtual ~SvxPixelCtlAccessible() override;
 

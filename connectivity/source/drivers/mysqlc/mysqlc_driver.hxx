@@ -87,9 +87,6 @@ public:
     const Reference<css::lang::XMultiServiceFactory>& getFactory() const { return m_xFactory; }
 
     static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
-
-private:
-    void impl_initCppConn_lck_throw();
 };
 } /* mysqlc */
 } /* connectivity */

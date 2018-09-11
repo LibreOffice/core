@@ -220,12 +220,10 @@ public:
     sal_Int32       GetEntryPos( SvxBorderLineStyle nStyle ) const;
     SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
 
-    void            SelectEntry( SvxBorderLineStyle nStyle, bool bSelect = true );
     SvxBorderLineStyle GetSelectEntryStyle() const;
 
     void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
-    void            SetColor( const Color& rColor );
     const Color&    GetColor() const { return aColor; }
 
 private:
@@ -257,13 +255,6 @@ private:
     Color           maPaintCol;
     FieldUnit       eSourceUnit;
 };
-
-inline void LineListBox::SetColor( const Color& rColor )
-{
-    aColor = rColor;
-
-    UpdateEntries( m_nWidth );
-}
 
 const Color& LineListBox::GetPaintColor() const
 {

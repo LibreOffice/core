@@ -20,6 +20,8 @@ filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
+idlc/inc/aststack.hxx:38
+    class AstStack * AstStack::push(class AstScope *)
 include/basegfx/range/b2dconnectedranges.hxx:217
     type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
 include/basegfx/vector/b2dvector.hxx:115
@@ -60,8 +62,6 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:697
     char * lok::Office::getVersionInfo()
 include/LibreOfficeKit/LibreOfficeKit.hxx:711
     _Bool lok::Office::runMacro(const char *)
-include/oox/crypto/AgileEngine.hxx:111
-    _Bool oox::core::AgileEngine::decryptEncryptionKey(const class rtl::OUString &)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
 include/oox/crypto/AgileEngine.hxx:122
@@ -196,11 +196,11 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:280
+include/vcl/weld.hxx:286
     _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:487
+include/vcl/weld.hxx:495
     _Bool weld::Entry::get_selection_bounds(int &,int &)
-include/vcl/weld.hxx:803
+include/vcl/weld.hxx:816
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -212,12 +212,14 @@ reportdesign/source/ui/inc/DateTime.hxx:76
     short rptui::ODateTimeDialog::execute()
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/source/core/opencl/formulagroupcl.cxx:991
+sc/source/core/opencl/formulagroupcl.cxx:990
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1229
+sc/source/core/opencl/formulagroupcl.cxx:1230
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
+sc/source/filter/xml/XMLStylesExportHelper.hxx:179
+    _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
 sc/source/ui/inc/select.hxx:73
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
@@ -252,9 +254,9 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:144
+sd/source/filter/eppt/pptx-epptooxml.cxx:123
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
-sd/source/ui/inc/OutlineViewShell.hxx:114
+sd/source/ui/inc/OutlineViewShell.hxx:115
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
@@ -264,13 +266,13 @@ sfx2/source/appl/appserv.cxx:339
     short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:113
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1061
+sw/inc/doc.hxx:1063
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1243
+sw/inc/doc.hxx:1245
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
-sw/inc/editsh.hxx:262
+sw/inc/editsh.hxx:264
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
-sw/inc/editsh.hxx:633
+sw/inc/editsh.hxx:635
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
@@ -306,13 +308,15 @@ vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:222
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:392
+vcl/inc/salgdi.hxx:219
+    class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
+vcl/inc/salgdi.hxx:402
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/source/gdi/pdfwriter_impl.hxx:1261
+vcl/source/gdi/pdfwriter_impl.hxx:1259
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1262
+vcl/source/gdi/pdfwriter_impl.hxx:1260
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1263
+vcl/source/gdi/pdfwriter_impl.hxx:1261
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

@@ -48,21 +48,7 @@ public:
     sal_uInt32 getColumnCount() const { return nColCount; }
     Size const & GetIconSize() const { return aIconSize; }
 
-    void SetRenameHdl( const Link<SvxPresetListBox*,void>& rLink )
-    {
-        maRenameHdl = rLink;
-    }
-    void SetDeleteHdl( const Link<SvxPresetListBox*,void>& rLink )
-    {
-        maDeleteHdl = rLink;
-    }
-
-    void FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex = 1);
-    void FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex = 1);
-    void FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex = 1);
-    void FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex = 1);
     void DrawLayout();
-
 };
 
 class SVX_DLLPUBLIC PresetListBox : public SvtValueSet

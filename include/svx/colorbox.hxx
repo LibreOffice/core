@@ -139,25 +139,6 @@ public:
     void hide() { m_xButton->hide(); }
 };
 
-/** A wrapper for SvxColorListBox. */
-class SVX_DLLPUBLIC SvxColorListBoxWrapper
-    : public sfx::SingleControlWrapper<SvxColorListBox, Color>
-{
-    /*  Note: cannot use 'const Color&' as template argument, because the
-        SvxColorListBox returns the color by value and not by reference,
-        therefore GetControlValue() must return a temporary object too. */
-public:
-    explicit SvxColorListBoxWrapper(SvxColorListBox& rListBox);
-
-    virtual ~SvxColorListBoxWrapper() override;
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-    virtual Color       GetControlValue() const override;
-    virtual void        SetControlValue( Color aColor ) override;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -862,15 +862,6 @@ FrameBorderType FrameSelector::GetEnabledBorderType( sal_Int32 nIndex ) const
     return eBorder;
 }
 
-sal_Int32 FrameSelector::GetEnabledBorderIndex( FrameBorderType eBorder ) const
-{
-    sal_Int32 nIndex = 0;
-    for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt, ++nIndex )
-        if( (*aIt)->GetType() == eBorder )
-            return nIndex;
-    return -1;
-}
-
 // frame border state and style
 bool FrameSelector::SupportsDontCareState() const
 {
@@ -1053,14 +1044,6 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )
         if( (*aIt)->ContainsClickPoint( rPos ) )
             xRet = GetChildAccessible( (*aIt)->GetType() );
     return xRet;
-}
-
-bool FrameSelector::ContainsClickPoint( const Point& rPos ) const
-{
-    bool bContains = false;
-    for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); !bContains && aIt.Is(); ++aIt )
-        bContains = (*aIt)->ContainsClickPoint( rPos );
-    return bContains;
 }
 
 tools::Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
