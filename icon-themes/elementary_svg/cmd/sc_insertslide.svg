@@ -30,9 +30,9 @@
      inkscape:window-height="706"
      id="namedview23"
      showgrid="true"
-     inkscape:zoom="7.375"
-     inkscape:cx="4.0086417"
-     inkscape:cy="3.7516344"
+     inkscape:zoom="14.75"
+     inkscape:cx="1.2043306"
+     inkscape:cy="5.3299371"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -48,10 +48,10 @@
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient3104-9"
        id="linearGradient3092"
-       y2="2.9062471"
-       x2="-51.786404"
-       y1="50.786446"
-       x1="-51.786404" />
+       y2="28.475233"
+       x2="-59.613167"
+       y1="28.475233"
+       x1="-20.209869" />
     <linearGradient
        id="linearGradient3104-9">
       <stop
@@ -187,7 +187,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
