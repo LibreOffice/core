@@ -1,1 +1,85 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m1.6617216.58079727 12.6766174 7.49008673-4.6458982 1.2809918s2.9476992 3.6042502 2.9476992 3.6042502c1.041566 1.666688-1.513195 3.002471-2.29437 1.752456 0 0-2.7966553-3.6407-2.7966553-3.6407l-2.466395 4.35136-3.4209981-14.83844473z" fill="#e9e9e9" fill-rule="evenodd" stroke="#8c8c8c" stroke-linejoin="round" stroke-width="1.161716"/><path d="m2.9080937 2.2651337 9.4126453 5.4896699-4.0801396 1.1485366 3.6845676 4.5810668c.365145.45399-.532953 1.079084-.855206.66159l-3.6189692-4.6885425-2.0172919 3.6649075z" fill="none" stroke="#fff" stroke-width=".5"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="sc_autocontrolfocus.svg"
+   inkscape:version="0.92.3 (unknown)"
+   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-elementary/images_elementary/cmd/sc_autocontrolfocus.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient826">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop822" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="1"
+         id="stop824" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient826"
+       id="linearGradient828"
+       x1="4.7742572"
+       y1="-0.63685352"
+       x2="8.5631971"
+       y2="11.443886"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-6.5980662,8.0000009,7.9999791)" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="7.0706996"
+     inkscape:cy="11.52771"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M 3.6869481,0.89253459 13.187744,9.8274988 8.9238816,10.032302 c 0,0 1.8475024,3.68733 1.8475024,3.68733 0.576464,1.642665 -1.890833,2.300931 -2.3231821,1.068931 0,0 -1.7098874,-3.689496 -1.7098874,-3.689496 l -2.97657,3.281553 z"
+     id="path2"
+     inkscape:connector-curvature="0"
+     style="fill:#e9e9e9;fill-rule:evenodd;stroke:#8c8c8c;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     d="M 4.4369831,2.5902272 11.505475,9.1625063 7.7562764,9.3627119 10.050893,14.037333 c 0.227399,0.463261 -0.6701537,0.829066 -0.8675722,0.405675 L 6.9662682,9.6882437 4.5111358,12.463769 Z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:url(#linearGradient828);stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+</svg>

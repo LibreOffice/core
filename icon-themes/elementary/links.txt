@@ -238,6 +238,12 @@ cmd/sc_savegraphic.png cmd/sc_save.png
 cmd/sc_recsave.png cmd/sc_save.png
 
 # Text
+cmd/32/textfittosizetool.png cmd/32/text_marquee.png
+cmd/32/texttoolbox.png cmd/32/text.png
+cmd/32/drawtext.png cmd/32/text.png
+cmd/32/doubleclicktextedit.png cmd/32/pickthrough.png
+cmd/32/fontworkcharacterspacingfloater.png cmd/32/spacing.png
+cmd/32/fontheight.png cmd/32/scaletext.png
 cmd/lc_textfittosizetool.png cmd/lc_text_marquee.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_drawtext.png cmd/lc_text.png
@@ -361,7 +367,6 @@ cmd/32/grafmode.png cmd/32/graphicdialog.png
 cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
 cmd/32/imagebutton.png cmd/32/gallery.png
 
-cmd/lc_colorsettings.png cmd/lc_graphicfiltersmooth.png
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
 cmd/lc_formatimagemenu.png cmd/lc_graphic.png
 cmd/lc_grafgamma.png cmd/lc_graphicfilterinvert.png
@@ -370,7 +375,6 @@ cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
 cmd/lc_imagebutton.png cmd/lc_gallery.png
 
-cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
@@ -600,15 +604,15 @@ cmd/sc_removefilter.png cmd/sc_removefiltersort.png
 # Bullets
 cmd/32/bulletliststyle.png cmd/32/defaultbullet.png
 cmd/32/defaultparastyle.png cmd/32/controlcodes.png
-cmd/32/romanliststyle.png cmd/32/defaultnumbering.png
+cmd/32/numberliststyle.png cmd/32/defaultnumbering.png
 
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
-cmd/lc_romanliststyle.png cmd/lc_defaultnumbering.png
+cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
-cmd/sc_romanliststyle.png cmd/sc_defaultnumbering.png
+cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 
 # Format
 cmd/32/formattextmenu.png cmd/32/bold.png
@@ -795,11 +799,17 @@ cmd/sc_spellingandgrammardialog.png cmd/sc_spelling.png
 cmd/sc_spelldialog.png cmd/sc_spelling.png
 
 # Color
-cmd/lc_fontcolor.png cmd/lc_color.png
-cmd/sc_fontcolor.png cmd/sc_color.png
-cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
-cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
+cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
+cmd/32/characterbackgroundpattern.png cmd/32/backcolor.png
+cmd/32/fontcolor.png cmd/32/color.png
+
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
+cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
+cmd/lc_fontcolor.png cmd/lc_color.png
+
+cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
+cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
+cmd/sc_fontcolor.png cmd/sc_color.png
 
 # Paragraph Alignment
 cmd/lc_leftpara.png cmd/lc_alignleft.png
@@ -940,10 +950,12 @@ cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Grid
-cmd/lc_gridvisible.png cmd/lc_grid.png
-cmd/sc_gridvisible.png cmd/sc_grid.png
-cmd/lc_gridmenu.png cmd/lc_grid.png
-cmd/sc_gridmenu.png cmd/sc_grid.png
+cmd/32/grid.png cmd/32/inserttable.png
+cmd/lc_grid.png cmd/lc_inserttable.png
+cmd/sc_grid.png cmd/sc_inserttable.png
+cmd/32/gridmenu.png cmd/32/gridvisible.png
+cmd/lc_gridmenu.png cmd/lc_gridvisible.png
+cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
@@ -1093,6 +1105,7 @@ cmd/sc_browsebackward cmd/lc_prevrecord.png
 cmd/sc_browseforward.png cmd/sc_nextrecord.png
 
 # Math
+cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 
@@ -1154,6 +1167,7 @@ cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 
 # Underline include language support
+cmd/32/underlinesimple.png cmd/32/underline.png
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
 
@@ -1343,7 +1357,7 @@ res/sx10596.png cmd/sc_checkbox.png
 res/sx10599.png cmd/sc_text.png
 res/sx10600.png cmd/lc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
-res/sx10603.png cmd/sc_grid.png
+res/sx10603.png cmd/sc_gridvisible.png
 
 res/sx10605.png cmd/sc_open.png
 res/sx10704.png cmd/sc_datefield.png
@@ -1673,3 +1687,8 @@ cmd/sc_rulermenu.png cmd/sc_ruler.png
 cmd/32/formatallnotes.png cmd/32/editannotation.png
 cmd/lc_formatallnotes.png cmd/lc_editannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
+
+cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
+cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
+cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
+
