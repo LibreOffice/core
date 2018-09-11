@@ -1123,8 +1123,10 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
 
     // Optimised loop for finding the bottom of the area, can be costly in large
     // spreadsheets.
+    SCROW lastDataPos = 0;
     for (SCCOL i=rStartCol; i<=rEndCol; i++)
-        rEndRow = std::min(rEndRow, aCol[i].GetLastDataPos());
+        lastDataPos = std::max(lastDataPos, aCol[i].GetLastDataPos());
+    rEndRow = std::min(rEndRow, lastDataPos);
 }
 
 SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
