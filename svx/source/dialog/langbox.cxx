@@ -139,8 +139,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageComboBox(VclPtr<vcl::Window>
 }
 
 SvxLanguageBoxBase::SvxLanguageBoxBase()
-    : m_pSpellUsedLang(nullptr)
-    , m_bHasLangNone(false)
+    : m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(false)
 {

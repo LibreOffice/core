@@ -101,7 +101,6 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     , aDaTiLast( DateTime::EMPTY )
     , aDaTiFilterFirst( DateTime::EMPTY )
     , aDaTiFilterLast( DateTime::EMPTY )
-    , pCommentSearcher(nullptr)
 {
     SetNodeDefaultImages();
 }

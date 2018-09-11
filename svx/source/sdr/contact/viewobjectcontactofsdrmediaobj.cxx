@@ -35,8 +35,7 @@ namespace sdr { namespace contact {
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
                                                                 const ::avmedia::MediaItem& rMediaItem ) :
-    ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
-    mpMediaWindow( nullptr )
+    ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
 #if HAVE_FEATURE_AVMEDIA
     vcl::Window* pWindow = getWindow();

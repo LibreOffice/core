@@ -457,8 +457,7 @@ namespace svt
 
         public:
             BrowserMouseEventPtr()
-                : pEvent(nullptr)
-                , bDown(false)
+                : bDown(false)
             {
             }
 

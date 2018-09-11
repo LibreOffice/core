@@ -32,8 +32,7 @@ namespace textconversiondlgs
 using namespace ::com::sun::star;
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog()
-                    : m_xParentWindow( nullptr )
-                    , m_pDialog( nullptr )
+                    : m_pDialog( nullptr )
                     , m_bDisposed(false)
                     , m_bInDispose(false)
                     , m_aContainerMutex()
