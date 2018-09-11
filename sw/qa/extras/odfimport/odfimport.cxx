@@ -910,5 +910,24 @@ DECLARE_ODFIMPORT_TEST(testTdf116195, "tdf116195.odt")
     );
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf117187, "tdf117187.odt")
+{
+    // there should be no special fly portions in the document
+    auto nOfSpecial = parseDump("count(/root/page/body/txt/Special)").toInt32();
+
+    char path[] = "/root/page/body/txt/Special[0]";
+
+    // test maximal 9 portions
+    for(auto i=1; i<=nOfSpecial && i<=9; i++)
+    {
+        // increment the number of "Speial" at position 28
+        path[28]++;
+        CPPUNIT_ASSERT(
+             OUString("POR_FLY") != parseDump(path, "nType")
+        );
+    }
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
