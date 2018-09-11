@@ -1,0 +1,11 @@
+--- libmariadb/getopt.c
++++ libmariadb/getopt.c
+@@ -38,7 +38,7 @@
+ #include <config.h>
+ #endif
+ 
+-#if (!defined (__STDC__) || !__STDC__) && !defined(MSDOS) && !defined(OS2)
++#if (!defined (__STDC__) || !__STDC__) && !defined(MSDOS) && !defined(OS2) && !(defined _MSC_VER && defined __clang__)
+ /* This is a separate conditional since some stdc systems
+    reject `defined (const)'.  */
+ #ifndef const
