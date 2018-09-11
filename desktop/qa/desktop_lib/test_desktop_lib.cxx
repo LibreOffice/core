@@ -927,7 +927,7 @@ void DesktopLOKTest::testTrackChanges()
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
     Scheduler::ProcessEventsToIdle();
 
-    // Enable track changes and assert that both views get notified.
+    // Enable trak changes and assert that both views get notified.
     m_nTrackChanges = 0;
     pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
     Scheduler::ProcessEventsToIdle();
@@ -2715,9 +2715,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(46), offsetof(struct _LibreOfficeKitDocumentClass, renderShapeSelection));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(47), offsetof(struct _LibreOfficeKitDocumentClass, postWindowGestureEvent));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), offsetof(struct _LibreOfficeKitDocumentClass, createViewWithOptions));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), offsetof(struct _LibreOfficeKitDocumentClass, selectPart));
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(50), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

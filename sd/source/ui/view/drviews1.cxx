@@ -79,6 +79,10 @@
 #include <LayerTabBar.hxx>
 #include <ViewShellManager.hxx>
 #include <ViewShellHint.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
 
 #include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>
@@ -762,6 +766,48 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     }
 
     return bActivated;
+}
+
+/**
+ * Mark the desired page as selected (1), deselected (0), toggle (2).
+ * nPage refers to the page in question.
+ */
+bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
+{
+    bool bOK = false;
+
+    // Tell the slide sorter about the name change (necessary for
+    // accessibility.)
+    slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (pSlideSorterViewShell != nullptr)
+    {
+        slidesorter::controller::PageSelector& aPageSelector
+            = pSlideSorterViewShell->GetSlideSorter().GetController().GetPageSelector();
+        if (nSelect == 0)
+        {
+            // Deselect.
+            aPageSelector.DeselectPage(nPage);
+            bOK = true;
+        }
+        else if (nSelect == 1)
+        {
+            // Select.
+            aPageSelector.SelectPage(nPage);
+            bOK = true;
+        }
+        else
+        {
+            // Toggle.
+            if (aPageSelector.IsPageSelected(nPage))
+                aPageSelector.DeselectPage(nPage);
+            else
+                aPageSelector.SelectPage(nPage);
+            bOK = true;
+        }
+    }
+
+    return bOK;
 }
 
 /**
