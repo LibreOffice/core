@@ -139,21 +139,28 @@ namespace emfio
 
                 bool bReadError(false);
 
-                if (nMetaType == 0x464d4520)
+                try
                 {
-                    // read and get possible failure/error, ReadEnhWMF returns success
-                    bReadError = !emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
+                    if (nMetaType == 0x464d4520)
+                    {
+                        // read and get possible failure/error, ReadEnhWMF returns success
+                        bReadError = !emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
+                    }
+                    else
+                    {
+                        emfio::WmfReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr).ReadWMF();
+
+                        // Need to check for ErrCode at stream to not lose former work.
+                        // This may contain important information and will behave the
+                        // same as before. When we have an error, do not create content
+                        ErrCode aErrCode(pStream->GetError());
+
+                        bReadError = aErrCode.IsError();
+                    }
                 }
-                else
+                catch (...)
                 {
-                    emfio::WmfReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr).ReadWMF();
-
-                    // Need to check for ErrCode at stream to not lose former work.
-                    // This may contain important information and will behave the
-                    // same as before. When we have an error, do not create content
-                    ErrCode aErrCode(pStream->GetError());
-
-                    bReadError = aErrCode.IsError();
+                    bReadError = true;
                 }
 
                 pStream->SetEndian(nOrigNumberFormat);
