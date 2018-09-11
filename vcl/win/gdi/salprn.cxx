@@ -1287,6 +1287,7 @@ static BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 {
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter;
+    int         i = 0;
     bool        bWhile = true;
 
     // Ensure we handle the mutex which will be released in WinSalInstance::DoYield
@@ -1295,6 +1296,10 @@ static BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     {
         // process messages
         bWhile = Application::Reschedule( true );
+        if (i > 15)
+            bWhile = false;
+        else
+            ++i;
 
         pPrinter = pSalData->mpFirstPrinter;
         while ( pPrinter )
@@ -1457,7 +1462,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
-    while ( Application::Reschedule( true ) );
+    for (int i = 0; Application::Reschedule( true ) && i <= 15; ++i);
     BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
     SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
 
