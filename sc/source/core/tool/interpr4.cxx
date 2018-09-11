@@ -92,7 +92,7 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
     size_t ListSize = pDok->m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
+        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ];
         if ( rPos == pTOp->aOld1 )
         {
             rPos = pTOp->aNew1;
@@ -115,7 +115,7 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     size_t ListSize = pDok->m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
+        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ];
         if ( rRange.In( pTOp->aOld1 ) )
             return true;
         if ( rRange.In( pTOp->aOld2 ) )
@@ -3533,21 +3533,6 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 #endif
 
-namespace {
-
-class FindByPointer
-{
-    const ScInterpreterTableOpParams* mpTableOp;
-public:
-    explicit FindByPointer(const ScInterpreterTableOpParams* p) : mpTableOp(p) {}
-    bool operator() (std::unique_ptr<ScInterpreterTableOpParams> const& val) const
-    {
-        return val.get() == mpTableOp;
-    }
-};
-
-}
-
 void ScInterpreter::ScTableOp()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -3556,7 +3541,7 @@ void ScInterpreter::ScTableOp()
         PushIllegalParameter();
         return;
     }
-    ScInterpreterTableOpParams* pTableOp = new ScInterpreterTableOpParams;
+    std::unique_ptr<ScInterpreterTableOpParams> pTableOp(new ScInterpreterTableOpParams);
     if (nParamCount == 5)
     {
         PopSingleRef( pTableOp->aNew2 );
@@ -3567,8 +3552,7 @@ void ScInterpreter::ScTableOp()
     PopSingleRef( pTableOp->aFormulaPos );
 
     pTableOp->bValid = true;
-    pDok->m_TableOpList.push_back(
-            std::unique_ptr<ScInterpreterTableOpParams>(pTableOp));
+    pDok->m_TableOpList.push_back(pTableOp.get());
     pDok->IncInterpreterTableOpLevel();
 
     bool bReuseLastParams = (pDok->aLastTableOpParams == *pTableOp);
@@ -3609,10 +3593,9 @@ void ScInterpreter::ScTableOp()
     }
 
     auto const itr =
-        ::std::find_if(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), FindByPointer(pTableOp));
+        ::std::find(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), pTableOp.get());
     if (itr != pDok->m_TableOpList.end())
     {
-        pTableOp = itr->release();
         pDok->m_TableOpList.erase(itr);
     }
 
@@ -3645,7 +3628,7 @@ void ScInterpreter::ScTableOp()
     {
         (*iBroadcast2)->ResetTableOpDirtyVar();
     }
-    delete pTableOp;
+    pTableOp.reset();
 
     pDok->DecInterpreterTableOpLevel();
 }
