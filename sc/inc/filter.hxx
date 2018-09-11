@@ -25,6 +25,7 @@
 #include <vcl/errcode.hxx>
 
 #include "scdllapi.h"
+#include <memory>
 
 class SfxMedium;
 class SvStream;
@@ -71,8 +72,8 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
                                    bool bCalcWidthHeight, SvNumberFormatter* pFormatter, bool bConvertDate ) = 0;
 
     // various import helpers
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) = 0;
+    virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
+    virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) = 0;
     virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
