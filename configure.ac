@@ -2841,9 +2841,7 @@ if test $_os = Darwin -o $_os = iOS; then
 
     AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_RESULT([$MAC_OS_X_VERSION_MIN_REQUIRED])
-        AC_MSG_RESULT([$MAC_OS_X_VERSION_MAX_REQUIRED])
-        AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
+        AC_MSG_ERROR([the version minimumn required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
     else
         AC_MSG_RESULT([ok])
     fi
