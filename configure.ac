@@ -6177,14 +6177,11 @@ libo_FUZZ_ARG_ENABLE(c++17,
         [Do not attempt to run GCC/Clang in C++17 mode (needed for Coverity).])
 )
 
+AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
-    AC_MSG_CHECKING([whether $CXX supports C++11])
-    AC_MSG_RESULT(yes)
     CXXFLAGS_CXX11=-std:c++17
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    HAVE_CXX11=
-    AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
     dnl But only use C++17 if the gperf that is being used knows not to emit
     dnl "register" in C++ output:
     printf 'foo\n' | $GPERF -L C++ > conftest.inc
@@ -6266,16 +6263,15 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
         if test -n "$CXXFLAGS_CXX11"; then
-            HAVE_CXX11=TRUE
             break
         fi
     done
     rm conftest.inc
-    if test "$HAVE_CXX11" = TRUE; then
-        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
-    else
-        AC_MSG_ERROR(no)
-    fi
+fi
+if test -n "$CXXFLAGS_CXX11"; then
+    AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
+else
+    AC_MSG_ERROR(no)
 fi
 AC_SUBST(CXXFLAGS_CXX11)
 
