@@ -1,4 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-
-     /&gt;
- <circle cx="8" cy="8" fill="#fdfdfb" r="7.5" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" fill="#9cde4a" r="4.5" stroke="#5ca12a" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><defs><linearGradient id="a"><stop offset="0" stop-color="#64baff"/><stop offset="1" stop-color="#3689e6"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="7.814" y1="4.475" x2="9.271" y2="11.39" gradientUnits="userSpaceOnUse"/></defs>/&gt;<circle cx="8" cy="8" fill="#fdfdfb" r="7.5" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round"/><circle r="4.5" cy="8" cx="8" fill="url(#b)"/><circle fill="none" stroke="#002e99" stroke-linecap="round" stroke-linejoin="round" cx="8" cy="8" r="4.5" opacity=".5"/></svg>
