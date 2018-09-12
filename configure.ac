@@ -2742,15 +2742,6 @@ if test $_os = Darwin -o $_os = iOS; then
 
 
     case $with_macosx_sdk in
-    10.9)
-        MACOSX_SDK_VERSION=1090
-        ;;
-    10.10)
-        MACOSX_SDK_VERSION=101000
-        ;;
-    10.11)
-        MACOSX_SDK_VERSION=101100
-        ;;
     10.12)
         MACOSX_SDK_VERSION=101200
         ;;
