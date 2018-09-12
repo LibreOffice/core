@@ -38,10 +38,7 @@ ResultSetBase::ResultSetBase(
       m_xProvider( xProvider ),
       m_nRow( -1 ),
       m_nWasNull( true ),
-      m_sProperty( seq ),
-      m_pDisposeEventListeners( nullptr ),
-      m_pRowCountListeners( nullptr ),
-      m_pIsFinalListeners( nullptr )
+      m_sProperty( seq )
 {
 }
 
@@ -288,8 +285,7 @@ ResultSetBase::rowDeleted()
 uno::Reference< uno::XInterface > SAL_CALL
 ResultSetBase::getStatement()
 {
-    uno::Reference< uno::XInterface > test( nullptr );
-    return test;
+    return uno::Reference< uno::XInterface >();
 }
 
 

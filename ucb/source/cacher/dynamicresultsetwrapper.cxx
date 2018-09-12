@@ -45,18 +45,12 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
 
                 : m_bDisposed( false )
                 , m_bInDispose( false )
-                , m_pDisposeEventListeners( nullptr )
                 , m_xContext( rxContext )
                 , m_bStatic( false )
                 , m_bGotWelcome( false )
                 , m_xSource( xOrigin )
-                , m_xSourceResultOne( nullptr )
-                , m_xSourceResultTwo( nullptr )
             //  , m_xSourceResultCurrent( NULL )
             //  , m_bUseOne( NULL )
-                , m_xMyResultOne( nullptr )
-                , m_xMyResultTwo( nullptr )
-                , m_xListener( nullptr )
 {
     m_xMyListenerImpl = new DynamicResultSetWrapperListener( this );
     //call impl_init() at the end of constructor of derived class
@@ -67,7 +61,7 @@ void DynamicResultSetWrapper::impl_init()
     //call this at the end of constructor of derived class
 
 
-    Reference< XDynamicResultSet > xSource = nullptr;
+    Reference< XDynamicResultSet > xSource;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;
@@ -291,8 +285,8 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
     OSL_ENSURE( xSourceDynamic.is(),
         "the given source is not of required type XDynamicResultSet" );
 
-    Reference< XDynamicResultSetListener > xListener = nullptr;
-    Reference< XDynamicResultSetListener > xMyListenerImpl = nullptr;
+    Reference< XDynamicResultSetListener > xListener;
+    Reference< XDynamicResultSetListener > xMyListenerImpl;
 
     bool bStatic = false;
     {
@@ -320,8 +314,8 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 {
     impl_EnsureNotDisposed();
 
-    Reference< XDynamicResultSet > xSource = nullptr;
-    Reference< XEventListener > xMyListenerImpl = nullptr;
+    Reference< XDynamicResultSet > xSource;
+    Reference< XEventListener > xMyListenerImpl;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
@@ -350,8 +344,8 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
 {
     impl_EnsureNotDisposed();
 
-    Reference< XDynamicResultSet > xSource = nullptr;
-    Reference< XDynamicResultSetListener > xMyListenerImpl = nullptr;
+    Reference< XDynamicResultSet > xSource;
+    Reference< XDynamicResultSetListener > xMyListenerImpl;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
@@ -413,7 +407,7 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
     impl_EnsureNotDisposed();
 
     m_aSourceSet.wait();
-    Reference< XDynamicResultSet > xSource = nullptr;
+    Reference< XDynamicResultSet > xSource;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;

@@ -40,8 +40,6 @@ using namespace com::sun::star::beans;
 
 FTPContentProvider::FTPContentProvider( const Reference< XComponentContext >& rxContext)
     : ::ucbhelper::ContentProviderImplHelper(rxContext)
-    , m_ftpLoaderThread(nullptr)
-    , m_pProxyDecider(nullptr)
 {
 }
 

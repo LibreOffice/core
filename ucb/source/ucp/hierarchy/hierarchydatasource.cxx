@@ -176,8 +176,7 @@ using namespace hcp_impl;
 
 HierarchyDataSource::HierarchyDataSource(
         const uno::Reference< uno::XComponentContext > & rxContext )
-: m_xContext( rxContext ),
-  m_pDisposeEventListeners( nullptr )
+: m_xContext( rxContext )
 {
 }
 
