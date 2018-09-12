@@ -65,6 +65,8 @@ class SvxNumberingPreview : public vcl::Window
 
 };
 
+namespace cui {
+
 class NumberingPreview : public weld::CustomWidgetController
 {
     const SvxNumRule*   pActNum;
@@ -85,6 +87,8 @@ public:
     void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
+
+}
 
 struct SvxNumSettings_Impl
 {
@@ -391,7 +395,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
-    NumberingPreview m_aPreviewWIN;
+    cui::NumberingPreview m_aPreviewWIN;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
