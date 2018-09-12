@@ -128,11 +128,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
 		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
-		$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \
-			$(if $(shell test $(MACOSX_SDK_VERSION) -ge 101200 || echo nope), \
-				$(call gb_Helper_optional,AVMEDIA,avmedia/source/quicktime/avmediaQuickTime) \
-			) \
-		) \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 		fpicker/source/aqua/fps_aqua \
 		shell/source/backends/macbe/macbe1 \
