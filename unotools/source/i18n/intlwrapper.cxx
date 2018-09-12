@@ -26,10 +26,7 @@ IntlWrapper::IntlWrapper(
             const LanguageTag& rLanguageTag )
         :
         maLanguageTag( rLanguageTag ),
-        m_xContext( comphelper::getProcessComponentContext() ),
-        pLocaleData( nullptr ),
-        pCollator( nullptr ),
-        pCaseCollator( nullptr )
+        m_xContext( comphelper::getProcessComponentContext() )
 {
 }
 
