@@ -1561,7 +1561,8 @@ bool SwCursor::ExpandToSentenceBorders()
 }
 
 bool SwTableCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,
-    bool /*bVisualAllowed*/, bool /*bSkipHidden*/, bool /*bInsertCursor*/ )
+    bool /*bVisualAllowed*/, bool /*bSkipHidden*/, bool /*bInsertCursor*/,
+    SwRootFrame const*)
 {
     return bLeft ? GoPrevCell( nCnt )
                  : GoNextCell( nCnt );
@@ -1623,7 +1624,8 @@ SwCursor::DoSetBidiLevelLeftRight(
 }
 
 bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-                          bool bVisualAllowed,bool bSkipHidden, bool bInsertCursor )
+                          bool bVisualAllowed,bool bSkipHidden, bool bInsertCursor,
+                          SwRootFrame const*const pLayout)
 {
     // calculate cursor bidi level
     SwNode& rNode = GetPoint()->nNode.GetNode();
@@ -1640,12 +1642,58 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? GoInContentCells : GoInContent;
 
+    SwTextFrame const* pFrame(nullptr);
+    if (pLayout)
+    {
+        pFrame = static_cast<SwTextFrame*>(rNode.GetContentNode()->getLayoutFrame(pLayout));
+        if (pFrame)
+        {
+            while (pFrame->GetPrecede())
+            {
+                pFrame = static_cast<SwTextFrame const*>(pFrame->GetPrecede());
+            }
+        }
+    }
+
     while( nCnt )
     {
         SwNodeIndex aOldNodeIdx( GetPoint()->nNode );
 
+        TextFrameIndex beforeIndex(-1);
+        if (pFrame)
+        {
+            beforeIndex = pFrame->MapModelToViewPos(*GetPoint());
+        }
+
         if ( !Move( fnMove, fnGo ) )
             break;
+
+        if (pFrame)
+        {
+            SwTextFrame const* pNewFrame(static_cast<SwTextFrame const*>(
+                GetPoint()->nNode.GetNode().GetContentNode()->getLayoutFrame(pLayout)));
+            if (pNewFrame)
+            {
+                while (pNewFrame->GetPrecede())
+                {
+                    pNewFrame = static_cast<SwTextFrame const*>(pNewFrame->GetPrecede());
+                }
+            }
+            // sw_redlinehide: fully redline-deleted nodes don't have frames...
+            if (pFrame == pNewFrame || !pNewFrame)
+            {
+                if (!pNewFrame || beforeIndex == pFrame->MapModelToViewPos(*GetPoint()))
+                {
+                    continue; // moving inside delete redline, doesn't count...
+                }
+            }
+            else
+            {
+                // assume iteration is stable & returns the same frame
+                assert(!pFrame->IsAnFollow(pNewFrame) && !pNewFrame->IsAnFollow(pFrame));
+                pFrame = pNewFrame;
+            }
+        }
 
         // If we were located inside a covered cell but our position has been
         // corrected, we check if the last move has moved the cursor to a

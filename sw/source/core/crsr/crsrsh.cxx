@@ -355,7 +355,8 @@ bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         // reflected in the return value <bRet>.
         const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( false );
         bRet = pShellCursor->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
-                                      bSkipHidden, !IsOverwriteCursor() );
+                                      bSkipHidden, !IsOverwriteCursor(),
+                                      GetLayout());
         if ( !bRet && bLeft && bResetOfInFrontOfLabel )
         {
             // undo reset of <bInFrontOfLabel> flag

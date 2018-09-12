@@ -164,15 +164,16 @@ public:
     bool ExpandToSentenceBorders();
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor );
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
+        SwRootFrame const* pLayout);
     bool UpDown( bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX );
     bool LeftRightMargin( bool bLeftMargin, bool bAPI );
     bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 
-    bool Left( sal_uInt16 nCnt )   { return LeftRight( true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
-    bool Right( sal_uInt16 nCnt )  { return LeftRight( false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false ); }
+    bool Left( sal_uInt16 nCnt )   { return LeftRight( true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr ); }
+    bool Right( sal_uInt16 nCnt )  { return LeftRight( false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr ); }
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );
@@ -269,7 +270,8 @@ public:
     virtual ~SwTableCursor() override;
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor ) override;
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
+        SwRootFrame const*) override;
     virtual bool GotoTable( const OUString& rName ) override;
 
     void InsertBox( const SwTableBox& rTableBox );
