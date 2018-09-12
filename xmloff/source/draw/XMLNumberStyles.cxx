@@ -33,10 +33,10 @@ using namespace ::xmloff::token;
 
 struct SdXMLDataStyleNumber
 {
-    enum XMLTokenEnum meNumberStyle;
-    bool    mbLong;
-    bool    mbTextual;
-    bool    mbDecimal02;
+    enum XMLTokenEnum const meNumberStyle;
+    bool const    mbLong;
+    bool const    mbTextual;
+    bool const    mbDecimal02;
     const char* mpText;
 }
 const aSdXMLDataStyleNumbers[] =
@@ -88,8 +88,8 @@ const aSdXMLDataStyleNumbers[] =
 struct SdXMLFixedDataStyle
 {
     const char* mpName;
-    bool    mbAutomatic;
-    bool    mbDateStyle;
+    bool const  mbAutomatic;
+    bool const  mbDateStyle;
     sal_uInt8   mpFormat[8];
 };
 
@@ -481,7 +481,7 @@ class SdXMLNumberFormatMemberImportContext : public SvXMLImportContext
 private:
     SdXMLNumberFormatImportContext* mpParent;
 
-    OUString maNumberStyle;
+    OUString const maNumberStyle;
     bool mbLong;
     bool mbTextual;
     bool mbDecimal02;

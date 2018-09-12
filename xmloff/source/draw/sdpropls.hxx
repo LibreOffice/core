@@ -58,8 +58,8 @@ class XMLSdPropHdlFactory : public XMLPropertyHandlerFactory
 {
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
-    SvXMLExport* mpExport;
-    SvXMLImport* mpImport;
+    SvXMLExport* const mpExport;
+    SvXMLImport* const mpImport;
 
 public:
     XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel > const & xModel, SvXMLExport& rExport );

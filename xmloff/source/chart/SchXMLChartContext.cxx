@@ -445,7 +445,7 @@ namespace
 struct NewDonutSeries
 {
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
-    OUString msStyleName;
+    OUString const msStyleName;
     sal_Int32 mnAttachedAxis;
 
     ::std::vector< OUString > m_aSeriesStyles;

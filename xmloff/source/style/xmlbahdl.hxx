@@ -30,7 +30,7 @@
 */
 class XMLNumberPropHdl : public XMLPropertyHandler
 {
-    sal_Int8 nBytes;
+    sal_Int8 const nBytes;
 
 public:
     explicit XMLNumberPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
@@ -45,8 +45,8 @@ public:
 */
 class XMLNumberNonePropHdl : public XMLPropertyHandler
 {
-    OUString sZeroStr;
-    sal_Int8        nBytes;
+    OUString const sZeroStr;
+    sal_Int8 const nBytes;
 public:
     explicit XMLNumberNonePropHdl( sal_Int8 nB = 4 );
     XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB );
@@ -61,7 +61,7 @@ public:
 */
 class XMLMeasurePropHdl : public XMLPropertyHandler
 {
-    sal_Int8 nBytes;
+    sal_Int8 const nBytes;
 public:
     explicit XMLMeasurePropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePropHdl() override;
@@ -75,7 +75,7 @@ public:
 */
 class XMLPercentPropHdl : public XMLPropertyHandler
 {
-    sal_Int8 nBytes;
+    sal_Int8 const nBytes;
 public:
     explicit XMLPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLPercentPropHdl() override;
@@ -99,7 +99,7 @@ class XMLDoublePercentPropHdl : public XMLPropertyHandler
 */
 class XMLNegPercentPropHdl : public XMLPropertyHandler
 {
-    sal_Int8 nBytes;
+    sal_Int8 const nBytes;
 public:
     explicit XMLNegPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLNegPercentPropHdl() override;
@@ -113,7 +113,7 @@ public:
 */
 class XMLMeasurePxPropHdl : public XMLPropertyHandler
 {
-    sal_Int8 nBytes;
+    sal_Int8 const nBytes;
 public:
     explicit XMLMeasurePxPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePxPropHdl() override;
@@ -237,7 +237,7 @@ public:
 class XMLIsTransparentPropHdl : public XMLPropertyHandler
 {
     const OUString sTransparent;
-    bool bTransPropValue;
+    bool const bTransPropValue;
 
 public:
     XMLIsTransparentPropHdl( enum ::xmloff::token::XMLTokenEnum eTransparent = xmloff::token::XML_TOKEN_INVALID,
@@ -295,7 +295,7 @@ public:
 */
 class XMLNumberWithoutZeroPropHdl : public XMLPropertyHandler
 {
-    sal_Int8        nBytes;
+    sal_Int8 const        nBytes;
 public:
     explicit XMLNumberWithoutZeroPropHdl( sal_Int8 nB );
     virtual ~XMLNumberWithoutZeroPropHdl() override;
