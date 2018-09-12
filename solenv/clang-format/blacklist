@@ -18446,6 +18446,7 @@ vcl/unx/kde4/tst_exclude_posted_events.hxx
 vcl/unx/kde4/tst_exclude_socket_notifiers.hxx
 vcl/unx/x11/x11sys.cxx
 vcl/unx/x11/xlimits.cxx
+vcl/win/salplug.cxx
 vcl/win/app/saldata.cxx
 vcl/win/app/salinfo.cxx
 vcl/win/app/salinst.cxx
