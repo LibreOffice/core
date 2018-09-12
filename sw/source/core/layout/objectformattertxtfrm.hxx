@@ -124,7 +124,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
         /** method to create an instance of <SwObjectFormatterTextFrame> is
             necessary.
         */
-        static SwObjectFormatterTextFrame* CreateObjFormatter(
+        static std::unique_ptr<SwObjectFormatterTextFrame> CreateObjFormatter(
                                                 SwTextFrame& _rAnchorTextFrame,
                                                 const SwPageFrame& _rPageFrame,
                                                 SwLayAction* _pLayAction );

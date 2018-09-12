@@ -77,7 +77,7 @@ class SwObjectFormatter
                            SwLayAction* _pLayAction,
                            const bool _bCollectPgNumOfAnchors = false );
 
-        static SwObjectFormatter* CreateObjFormatter( SwFrame& _rAnchorFrame,
+        static std::unique_ptr<SwObjectFormatter> CreateObjFormatter( SwFrame& _rAnchorFrame,
                                                       const SwPageFrame& _rPageFrame,
                                                       SwLayAction* _pLayAction );
 

@@ -117,12 +117,12 @@ SwObjectFormatter::~SwObjectFormatter()
 {
 }
 
-SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
+std::unique_ptr<SwObjectFormatter> SwObjectFormatter::CreateObjFormatter(
                                                       SwFrame& _rAnchorFrame,
                                                       const SwPageFrame& _rPageFrame,
                                                       SwLayAction* _pLayAction )
 {
-    SwObjectFormatter* pObjFormatter = nullptr;
+    std::unique_ptr<SwObjectFormatter> pObjFormatter;
     if ( _rAnchorFrame.IsTextFrame() )
     {
         pObjFormatter = SwObjectFormatterTextFrame::CreateObjFormatter(
@@ -152,7 +152,7 @@ bool SwObjectFormatter::FormatObjsAtFrame( SwFrame& _rAnchorFrame,
     bool bSuccess( true );
 
     // create corresponding object formatter
-    SwObjectFormatter* pObjFormatter =
+    std::unique_ptr<SwObjectFormatter> pObjFormatter =
         SwObjectFormatter::CreateObjFormatter( _rAnchorFrame, _rPageFrame, _pLayAction );
 
     if ( pObjFormatter )
@@ -160,7 +160,6 @@ bool SwObjectFormatter::FormatObjsAtFrame( SwFrame& _rAnchorFrame,
         // format anchored floating screen objects
         bSuccess = pObjFormatter->DoFormatObjs();
     }
-    delete pObjFormatter;
 
     return bSuccess;
 }
@@ -182,7 +181,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     const SwPageFrame& rPageFrame = _pPageFrame ? *_pPageFrame : *(rAnchorFrame.FindPageFrame());
 
     // create corresponding object formatter
-    SwObjectFormatter* pObjFormatter =
+    std::unique_ptr<SwObjectFormatter> pObjFormatter =
         SwObjectFormatter::CreateObjFormatter( rAnchorFrame, rPageFrame, nullptr/*_pLayAction*/ );
 
     if ( pObjFormatter )
@@ -191,7 +190,6 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
         // --> #i40147# - check for moved forward anchor frame
         bSuccess = pObjFormatter->DoFormatObj( _rAnchoredObj, true );
     }
-    delete pObjFormatter;
 
     return bSuccess;
 }
