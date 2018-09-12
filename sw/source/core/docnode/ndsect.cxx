@@ -1363,8 +1363,8 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 
     SwSectionFormats::size_type nNum = 0;
     const SwSectionFormats::size_type nFlagSize = ( mpSectionFormatTable->size() / 8 ) + 2;
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    memset( pSetFlags, 0, nFlagSize );
+    std::unique_ptr<sal_uInt8[]> pSetFlags(new sal_uInt8[ nFlagSize ]);
+    memset( pSetFlags.get(), 0, nFlagSize );
 
     for( auto pFormat : *mpSectionFormatTable )
     {
@@ -1404,7 +1404,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
             }
         }
     }
-    delete [] pSetFlags;
+    pSetFlags.reset();
     if( pChkStr )
         return *pChkStr;
     return aName + OUString::number( ++nNum );
