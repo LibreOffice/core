@@ -132,6 +132,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCGM(SvStream &rStream)
 
     CGMPointer aPointer;
 
+    xDocShRef->GetDoc()->EnableUndo(false);
     bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), css::uno::Reference<css::task::XStatusIndicator>()) == 0;
 
     xDocShRef->DoClose();
