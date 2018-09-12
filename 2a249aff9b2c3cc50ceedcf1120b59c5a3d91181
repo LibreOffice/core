@@ -34,6 +34,24 @@
       "revId": "2a249aff9b2c3cc50ceedcf1120b59c5a3d91181",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_54057bc1",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-12T18:09:13Z",
+      "side": 0,
+      "message": "Good point. I moved the test into a document I found where the style contains _end and _insideV borders.",
+      "parentUuid": "dfeb2761_4b9280f8",
+      "revId": "2a249aff9b2c3cc50ceedcf1120b59c5a3d91181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
