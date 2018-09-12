@@ -513,10 +513,10 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     NodeToList(pLine, *pLineList);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList* pSelectedNodesList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList);
+        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
@@ -563,8 +563,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Add selection to pScriptLineList
     unsigned int nOldSize = pScriptLineList->size();
     pScriptLineList->insert(pScriptLineList->end(), pSelectedNodesList->begin(), pSelectedNodesList->end());
-    delete pSelectedNodesList;
-    pSelectedNodesList = nullptr;
+    pSelectedNodesList.reset();
 
     //Patch pScriptLineList if needed
     if(0 < nOldSize && nOldSize < pScriptLineList->size()) {
@@ -613,10 +612,10 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     NodeToList(pLine, *pLineList);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList *pSelectedNodesList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList);
+        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
@@ -627,9 +626,9 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
         pBodyNode = new SmPlaceNode();
         PosAfterInsert = SmCaretPos(pBodyNode, 1);
     } else
-        pBodyNode = SmNodeListParser().Parse(pSelectedNodesList);
+        pBodyNode = SmNodeListParser().Parse(pSelectedNodesList.get());
 
-    delete pSelectedNodesList;
+    pSelectedNodesList.reset();
 
     //Create SmBraceNode
     SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
@@ -830,10 +829,10 @@ void SmCursor::InsertFraction() {
     NodeToList(pLine, *pLineList);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList* pSelectedNodesList = new SmNodeList;
+    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList);
+        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
@@ -841,10 +840,9 @@ void SmCursor::InsertFraction() {
     bool bEmptyFraction = pSelectedNodesList->empty();
     SmNode *pNum = bEmptyFraction
         ? new SmPlaceNode()
-        : SmNodeListParser().Parse(pSelectedNodesList);
+        : SmNodeListParser().Parse(pSelectedNodesList.get());
     SmNode *pDenom = new SmPlaceNode();
-    delete pSelectedNodesList;
-    pSelectedNodesList = nullptr;
+    pSelectedNodesList.reset();
 
     //Create new fraction
     SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
