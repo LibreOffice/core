@@ -254,8 +254,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         const OUString sFormatStr = pColl->GetName();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(nullptr /*TODO*/, pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
-        //ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetDialogFrameWeld(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
         if (pDlg->Execute() == RET_OK)
         {
             SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
