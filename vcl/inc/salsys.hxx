@@ -83,7 +83,7 @@ public:
 
 };
 
-SalSystem* ImplGetSalSystem();
+VCL_DLLPUBLIC SalSystem* ImplGetSalSystem();
 
 #endif // INCLUDED_VCL_INC_SALSYS_HXX
 
