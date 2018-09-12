@@ -1179,7 +1179,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
     // takes care of the notification in the dtor
-    SwContentNotify *pNotify = new SwContentNotify( this );
+    std::unique_ptr<SwContentNotify> pNotify(new SwContentNotify( this ));
 
     // as long as bMakePage is true, a new page can be created (exactly once)
     bool bMakePage = true;
@@ -1216,7 +1216,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     const bool bKeep = IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem());
 
-    SwSaveFootnoteHeight *pSaveFootnote = nullptr;
+    std::unique_ptr<SwSaveFootnoteHeight> pSaveFootnote;
     if ( bFootnote )
     {
         SwFootnoteFrame *pFootnote = FindFootnoteFrame();
@@ -1226,8 +1226,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             SwFootnoteBossFrame* pBoss = pFootnote->GetRef()->FindFootnoteBossFrame(
                                     pFootnote->GetAttr()->GetFootnote().IsEndNote() );
             if( !pSct || pSct->IsColLocked() || !pSct->Growable() )
-                pSaveFootnote = new SwSaveFootnoteHeight( pBoss,
-                    static_cast<SwTextFrame*>(pFootnote->GetRef())->GetFootnoteLine( pFootnote->GetAttr() ) );
+                pSaveFootnote.reset( new SwSaveFootnoteHeight( pBoss,
+                    static_cast<SwTextFrame*>(pFootnote->GetRef())->GetFootnoteLine( pFootnote->GetAttr() ) ) );
         }
     }
 
@@ -1833,7 +1833,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                             ),
                          static_cast<SwTextFrame&>(*this) );
 
-    delete pSaveFootnote;
+    pSaveFootnote.reset();
 
     UnlockJoin();
     xDeleteGuard.reset();
@@ -1843,7 +1843,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     {
         pNotify->SetInvalidatePrevPrtArea();
     }
-    delete pNotify;
+    pNotify.reset();
     SetFlyLock( false );
 }
 
