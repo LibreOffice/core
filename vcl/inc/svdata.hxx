@@ -387,7 +387,7 @@ VCL_PLUGIN_PUBLIC OUString VclResId(const char* pId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
 
-bool        ImplCallPreNotify( NotifyEvent& rEvt );
+VCL_DLLPUBLIC bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
 VCL_PLUGIN_PUBLIC void ImplHideSplash();

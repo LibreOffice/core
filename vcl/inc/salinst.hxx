@@ -209,7 +209,7 @@ void DestroySalInstance( SalInstance* pInst );
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
-VCL_PLUGIN_PUBLIC const OUString& SalGetDesktopEnvironment();
+VCL_DLLPUBLIC const OUString& SalGetDesktopEnvironment();
 
 void InitSalData();                         // called from Application-Ctor
 void DeInitSalData();                       // called from Application-Dtor
