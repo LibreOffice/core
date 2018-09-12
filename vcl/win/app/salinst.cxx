@@ -32,6 +32,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
+#include <vclpluginapi.h>
 
 #include <opengl/salbmp.hxx>
 #include <opengl/win/gdiimpl.hxx>
@@ -299,55 +300,33 @@ SalData::SalData()
 
     SetSalData( this );
     initNWF();
+
+    CoInitialize(nullptr); // put main thread in Single Threaded Apartment (STA)
+    static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 }
 
 SalData::~SalData()
 {
     deInitNWF();
     SetSalData( nullptr );
-}
 
-void InitSalData()
-{
-    SalData* pSalData = new SalData;
-    CoInitialize(nullptr); // put main thread in Single Threaded Apartment (STA)
-
-    // init GDIPlus
-    static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-    Gdiplus::GdiplusStartup(&pSalData->gdiplusToken, &gdiplusStartupInput, nullptr);
-}
-
-void DeInitSalData()
-{
     CoUninitialize();
-    SalData* pSalData = GetSalData();
 
-    // deinit GDIPlus
-    if(pSalData)
-    {
-        Gdiplus::GdiplusShutdown(pSalData->gdiplusToken);
-    }
-
-    delete pSalData;
+    if (gdiplusToken)
+        Gdiplus::GdiplusShutdown(gdiplusToken);
 }
 
-void InitSalMain()
+extern "C" {
+VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 {
-    // remember data, copied from WinMain
-    SalData* pData = GetSalData();
-    if ( pData )    // Im AppServer NULL
-    {
-        STARTUPINFOW aSI;
-        aSI.cb = sizeof( aSI );
-        GetStartupInfoW( &aSI );
-        pData->mhInst    = GetModuleHandleW( nullptr );
-        pData->mnCmdShow = aSI.wShowWindow;
-    }
-}
+    SalData* pSalData = new SalData();
 
-SalInstance* CreateSalInstance()
-{
-    SalData* pSalData = GetSalData();
+    STARTUPINFOW aSI;
+    aSI.cb = sizeof( aSI );
+    GetStartupInfoW( &aSI );
+    pSalData->mhInst = GetModuleHandleW( nullptr );
+    pSalData->mnCmdShow = aSI.wShowWindow;
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
 
@@ -405,20 +384,6 @@ SalInstance* CreateSalInstance()
 
     return pInst;
 }
-
-void DestroySalInstance( SalInstance* pInst )
-{
-    SalData* pSalData = GetSalData();
-
-    //  (only one instance in this version !!!)
-
-    ImplFreeSalGDI();
-
-    // reset instance
-    if ( pSalData->mpInstance == pInst )
-        pSalData->mpInstance = nullptr;
-
-    delete pInst;
 }
 
 WinSalInstance::WinSalInstance()
@@ -427,11 +392,14 @@ WinSalInstance::WinSalInstance()
     , m_nNoYieldLock( 0 )
 {
     GetYieldMutex()->acquire();
+
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mxToolkitName = OUString("win");
 }
 
 WinSalInstance::~WinSalInstance()
 {
-    GetYieldMutex()->release();
+    ImplFreeSalGDI();
     DestroyWindow( mhComWnd );
 }
 
@@ -998,12 +966,6 @@ std::shared_ptr<SalBitmap> WinSalInstance::CreateSalBitmap()
         return std::make_shared<OpenGLSalBitmap>();
     else
         return std::make_shared<WinSalBitmap>();
-}
-
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aDesktopEnvironment( "Windows" );
-    return aDesktopEnvironment;
 }
 
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
