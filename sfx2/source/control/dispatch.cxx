@@ -1956,7 +1956,7 @@ void SfxDispatcher::Lock( bool bLock )
     if ( !bLock )
     {
         for(size_t i = 0; i < xImp->aReqArr.size(); ++i)
-            xImp->xPoster->Post(xImp->aReqArr[i].get());
+            xImp->xPoster->Post(xImp->aReqArr[i].release());
         xImp->aReqArr.clear();
     }
 }
