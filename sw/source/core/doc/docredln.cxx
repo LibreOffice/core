@@ -405,7 +405,9 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
         {
             for(SwNodeIndex nIdx = pStartPos->nNode; nIdx <= pEndPos->nNode; ++nIdx)
             {
-                pSh->InvalidateWindows( nIdx.GetNode().GetContentNode()->FindLayoutRect() );
+                SwContentNode* pContentNode = nIdx.GetNode().GetContentNode();
+                if (pContentNode)
+                    pSh->InvalidateWindows(pContentNode->FindLayoutRect());
             }
         }
     }
