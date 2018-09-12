@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_c0c2e685",
+        "filename": "xmlsecurity/source/helper/documentsignaturehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-12T07:24:04Z",
+      "side": 1,
+      "message": "this would read easier if it used std::equal (and then we could skip the size check too)",
+      "revId": "f96bae7b8c47afb86fc7bd4eb3fb380b45681a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
