@@ -20,59 +20,64 @@
 #include <crsrsh.hxx>
 #include <viscrs.hxx>
 
+#include <com/sun/star/i18n/WordType.hpp>
+
+using namespace ::com::sun::star::i18n;
+
 bool SwCursorShell::IsStartWord( sal_Int16 nWordType ) const
 {
-    return m_pCurrentCursor->IsStartWord( nWordType );
+    return m_pCurrentCursor->IsStartWordWT(nWordType, GetLayout());
 }
 bool SwCursorShell::IsEndWord( sal_Int16 nWordType ) const
 {
-    return m_pCurrentCursor->IsEndWord( nWordType );
+    return m_pCurrentCursor->IsEndWordWT(nWordType, GetLayout());
 }
 
 bool SwCursorShell::IsInWord( sal_Int16 nWordType ) const
 {
-    return m_pCurrentCursor->IsInWord( nWordType );
+    return m_pCurrentCursor->IsInWordWT(nWordType, GetLayout());
 }
 
 bool SwCursorShell::IsStartSentence() const
 {
-    return m_pCurrentCursor->IsStartEndSentence( false );
+    return m_pCurrentCursor->IsStartEndSentence(false, GetLayout());
 }
 bool SwCursorShell::IsEndSentence() const
 {
-    return m_pCurrentCursor->IsStartEndSentence( true );
+    return m_pCurrentCursor->IsStartEndSentence(true, GetLayout());
 }
 
 bool SwCursorShell::GoStartWord()
 {
-    return CallCursorFN( &SwCursor::GoStartWord );
+    return CallCursorShellFN( &SwCursorShell::GoStartWordImpl );
 }
 bool SwCursorShell::GoEndWord()
 {
-    return CallCursorFN( &SwCursor::GoEndWord );
+    return CallCursorShellFN( &SwCursorShell::GoEndWordImpl );
 }
 
 bool SwCursorShell::GoNextWord()
 {
-    return CallCursorFN( &SwCursor::GoNextWord );
+    return CallCursorShellFN( &SwCursorShell::GoNextWordImpl );
 }
 bool SwCursorShell::GoPrevWord()
 {
-    return CallCursorFN( &SwCursor::GoPrevWord );
+    return CallCursorShellFN( &SwCursorShell::GoPrevWordImpl );
 }
 
 bool SwCursorShell::GoNextSentence()
 {
-    return CallCursorFN( &SwCursor::GoNextSentence );
+    return CallCursorShellFN( &SwCursorShell::GoNextSentenceImpl );
 }
 
 bool SwCursorShell::GoEndSentence()
 {
-    return CallCursorFN( &SwCursor::GoEndSentence );
+    return CallCursorShellFN( &SwCursorShell::GoEndSentenceImpl );
 }
+
 bool SwCursorShell::GoStartSentence()
 {
-    return CallCursorFN( &SwCursor::GoStartSentence );
+    return CallCursorShellFN( &SwCursorShell::GoStartSentenceImpl );
 }
 
 bool SwCursorShell::SelectWord( const Point* pPt )
@@ -82,7 +87,40 @@ bool SwCursorShell::SelectWord( const Point* pPt )
 
 void SwCursorShell::ExpandToSentenceBorders()
 {
-    m_pCurrentCursor->ExpandToSentenceBorders();
+    m_pCurrentCursor->ExpandToSentenceBorders(GetLayout());
+}
+
+bool SwCursorShell::GoStartWordImpl()
+{
+    return getShellCursor(true)->GoStartWordWT(WordType::ANYWORD_IGNOREWHITESPACES, GetLayout());
+}
+
+bool SwCursorShell::GoEndWordImpl()
+{
+    return getShellCursor(true)->GoEndWordWT(WordType::ANYWORD_IGNOREWHITESPACES, GetLayout());
+}
+
+bool SwCursorShell::GoNextWordImpl()
+{
+    return getShellCursor(true)->GoNextWordWT(WordType::ANYWORD_IGNOREWHITESPACES, GetLayout());
+}
+
+bool SwCursorShell::GoPrevWordImpl()
+{
+    return getShellCursor(true)->GoPrevWordWT(WordType::ANYWORD_IGNOREWHITESPACES, GetLayout());
+}
+
+bool SwCursorShell::GoNextSentenceImpl()
+{
+    return getShellCursor(true)->GoSentence(SwCursor::NEXT_SENT, GetLayout());
+}
+bool SwCursorShell::GoEndSentenceImpl()
+{
+    return getShellCursor(true)->GoSentence(SwCursor::END_SENT, GetLayout());
+}
+bool SwCursorShell::GoStartSentenceImpl()
+{
+    return getShellCursor(true)->GoSentence(SwCursor::START_SENT, GetLayout());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
