@@ -1049,7 +1049,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         // Select the corresponding character
         SetChar(cChar);
     else {
-        m_xCharName->set_label(CuiResId(RID_SVXSTR_MISSING_GLYPH));
+        m_xCharName->set_label(CuiResId(RID_SVXSTR_MISSING_CHAR));
         m_aShowChar.SetText(" ");
         switch(radix)
         {
