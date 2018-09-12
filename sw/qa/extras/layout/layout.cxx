@@ -36,6 +36,7 @@ public:
     void testForcepoint72();
     void testTdf118058();
     void testTdf117188();
+    void testTdf117187();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testForcepoint72);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
+    CPPUNIT_TEST(testTdf117187);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -328,6 +330,15 @@ void SwLayoutWriter::testTdf117188()
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "top", "0");
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "width", sWidth);
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds", "height", sHeight);
+}
+
+void SwLayoutWriter::testTdf117187()
+{
+    createDoc("tdf117187.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // there should be no fly portions
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLY']", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
