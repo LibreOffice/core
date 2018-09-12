@@ -183,7 +183,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, *pCoreSet);
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
+        pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetFrameWeld(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
 
         if (nSlot == FN_INSERT_HYPERLINK)
             pDlg->SetCurPageId("hyperlink");

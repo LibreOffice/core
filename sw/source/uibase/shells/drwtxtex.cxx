@@ -352,7 +352,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, SwCharDlgMode::Draw));
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(pView->GetFrameWeld(), *pView, aDlgAttr, SwCharDlgMode::Draw));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
