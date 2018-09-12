@@ -13,14 +13,11 @@ diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
 index e7cd5c38..51c91399 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -363,6 +363,10 @@ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
+@@ -363,6 +363,7 @@ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
  CFLAGS 			= $(CFLAGS) /D "XMLSEC_NO_GOST" /D "XMLSEC_NO_GOST2012" 
 +CFLAGS 			= $(CFLAGS) -arch:SSE $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\libxml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
-+!if "$(MSVC_USE_DEBUG_RUNTIME)" != ""
-+CFLAGS 			= $(CFLAGS) /MDd
-+!endif
  
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
