@@ -770,11 +770,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwVi
     return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(vcl::Window* pParent, SwView& pVw,
+VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(weld::Window* pParent, SwView& pVw,
     const SfxItemSet& rCoreSet, SwCharDlgMode nDialogMode, const OUString* pFormatStr)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwCharDlg>::Create(pParent, pVw, rCoreSet, nDialogMode, pFormatStr);
-    return VclPtr<AbstractTabDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwCharDlg>(pParent, pVw, rCoreSet, nDialogMode, pFormatStr));
 }
 
 VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)

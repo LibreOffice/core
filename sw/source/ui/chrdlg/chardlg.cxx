@@ -58,38 +58,41 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
+SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     SwCharDlgMode nDialogMode, const OUString* pStr)
-    : SfxTabDialog(pParent, "CharacterPropertiesDialog",
-        "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != nullptr)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/characterproperties.ui",
+                             "CharacterPropertiesDialog", &rCoreSet, pStr != nullptr)
     , m_rView(rVw)
     , m_nDialogMode(nDialogMode)
 {
-    if(pStr)
+    if (pStr)
     {
-        SetText(GetText() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
+        m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nCharStdId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    m_nCharExtId = AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
-    m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-    m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, nullptr);
-    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-    m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
+    AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
+    AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
+    AddTabPage("hyperlink", SwCharURLPage::Create, nullptr);
+    AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+    AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
 
-    SvtCJKOptions aCJKOptions;
-    if(m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
+    if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {
-        RemoveTabPage(m_nCharUrlId);
-        RemoveTabPage(m_nCharBgdId);
-        RemoveTabPage(m_nCharTwoId);
+        RemoveTabPage("hyperlink");
+        RemoveTabPage("background");
+        RemoveTabPage("asianlayout");
     }
-    else if(!aCJKOptions.IsDoubleLinesEnabled())
-        RemoveTabPage(m_nCharTwoId);
+    else
+    {
+        SvtCJKOptions aCJKOptions;
+        if (!aCJKOptions.IsDoubleLinesEnabled())
+            RemoveTabPage("asianlayout");
+    }
 
-    if(m_nDialogMode != SwCharDlgMode::Std)
-        RemoveTabPage(m_nCharBrdId);
+    if (m_nDialogMode != SwCharDlgMode::Std)
+        RemoveTabPage("borders");
 }
 
 SwCharDlg::~SwCharDlg()
@@ -97,10 +100,10 @@ SwCharDlg::~SwCharDlg()
 }
 
 // set FontList
-void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nCharStdId)
+    if (rId == "font")
     {
         SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(
            ( m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
@@ -109,22 +112,22 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nCharExtId)
+    else if (rId == "fonteffects")
     {
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nCharPosId)
+    else if (rId == "position")
     {
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nCharTwoId)
+    else if (rId == "asianlayout")
     {
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nCharBgdId)
+    else if (rId == "background")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
         rPage.PageCreated(aSet);
