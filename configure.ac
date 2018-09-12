@@ -2713,7 +2713,7 @@ if test $_os = Darwin -o $_os = iOS; then
     # higher than or equal to the minimum required should be found.
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
-    for _macosx_sdk in $with_macosx_sdk 10.13 10.12; do
+    for _macosx_sdk in ${with_macosx_sdk-10.13 10.12}; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             with_macosx_sdk="${_macosx_sdk}"
@@ -2727,7 +2727,7 @@ if test $_os = Darwin -o $_os = iOS; then
         fi
     done
     if test ! -d "$MACOSX_SDK_PATH"; then
-        AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
+        AC_MSG_ERROR([Could not find an appropriate Mac OS X SDK])
     fi
 
     if test $_os = iOS; then
