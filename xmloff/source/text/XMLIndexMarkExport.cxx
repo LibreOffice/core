@@ -38,21 +38,25 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
 
+#if !HAVE_CPP_INLINE_VARIABLES
+constexpr OUStringLiteral XMLIndexMarkExport::gsLevel;
+constexpr OUStringLiteral XMLIndexMarkExport::gsUserIndexName;
+constexpr OUStringLiteral XMLIndexMarkExport::gsPrimaryKey;
+constexpr OUStringLiteral XMLIndexMarkExport::gsSecondaryKey;
+constexpr OUStringLiteral XMLIndexMarkExport::gsDocumentIndexMark;
+constexpr OUStringLiteral XMLIndexMarkExport::gsIsStart;
+constexpr OUStringLiteral XMLIndexMarkExport::gsIsCollapsed;
+constexpr OUStringLiteral XMLIndexMarkExport::gsAlternativeText;
+constexpr OUStringLiteral XMLIndexMarkExport::gsTextReading;
+constexpr OUStringLiteral XMLIndexMarkExport::gsPrimaryKeyReading;
+constexpr OUStringLiteral XMLIndexMarkExport::gsSecondaryKeyReading;
+constexpr OUStringLiteral XMLIndexMarkExport::gsMainEntry;
+#endif
+
+
 XMLIndexMarkExport::XMLIndexMarkExport(
     SvXMLExport& rExp)
-:   sLevel("Level")
-,   sUserIndexName("UserIndexName")
-,   sPrimaryKey("PrimaryKey")
-,   sSecondaryKey("SecondaryKey")
-,   sDocumentIndexMark("DocumentIndexMark")
-,   sIsStart("IsStart")
-,   sIsCollapsed("IsCollapsed")
-,   sAlternativeText("AlternativeText")
-,   sTextReading("TextReading")
-,   sPrimaryKeyReading("PrimaryKeyReading")
-,   sSecondaryKeyReading("SecondaryKeyReading")
-,   sMainEntry("IsMainEntry")
-,   rExport(rExp)
+:   rExport(rExp)
 {
 }
 
@@ -84,7 +88,7 @@ void XMLIndexMarkExport::ExportIndexMark(
 
     // get index mark
     Any aAny;
-    aAny = rPropSet->getPropertyValue(sDocumentIndexMark);
+    aAny = rPropSet->getPropertyValue(gsDocumentIndexMark);
     Reference<XPropertySet> xIndexMarkPropSet;
     aAny >>= xIndexMarkPropSet;
 
@@ -92,13 +96,13 @@ void XMLIndexMarkExport::ExportIndexMark(
     // alternative text
 
     // collapsed/alternative text entry?
-    aAny = rPropSet->getPropertyValue(sIsCollapsed);
+    aAny = rPropSet->getPropertyValue(gsIsCollapsed);
     if (*o3tl::doAccess<bool>(aAny))
     {
         // collapsed entry: needs alternative text
         nElementNo = 0;
 
-        aAny = xIndexMarkPropSet->getPropertyValue(sAlternativeText);
+        aAny = xIndexMarkPropSet->getPropertyValue(gsAlternativeText);
         OUString sTmp;
         aAny >>= sTmp;
         DBG_ASSERT(!sTmp.isEmpty(),
@@ -108,7 +112,7 @@ void XMLIndexMarkExport::ExportIndexMark(
     else
     {
         // start and end entries: has ID
-        aAny = rPropSet->getPropertyValue(sIsStart);
+        aAny = rPropSet->getPropertyValue(gsIsStart);
         nElementNo = *o3tl::doAccess<bool>(aAny) ? 1 : 2;
 
         // generate ID
@@ -124,7 +128,7 @@ void XMLIndexMarkExport::ExportIndexMark(
     // but not for -mark-end
     Reference<XPropertySetInfo> xPropertySetInfo =
         xIndexMarkPropSet->getPropertySetInfo();
-    if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
+    if (xPropertySetInfo->hasPropertyByName(gsUserIndexName))
     {
         // user index mark
         pElements = lcl_pUserIndexMarkName;
@@ -133,7 +137,7 @@ void XMLIndexMarkExport::ExportIndexMark(
             ExportUserIndexMarkAttributes(xIndexMarkPropSet);
         }
     }
-    else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
+    else if (xPropertySetInfo->hasPropertyByName(gsPrimaryKey))
     {
         // alphabetical index mark
         pElements = lcl_pAlphaIndexMarkName;
@@ -172,7 +176,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
 {
     // outline level
     sal_Int16 nLevel = 0;
-    Any aAny = rPropSet->getPropertyValue(sLevel);
+    Any aAny = rPropSet->getPropertyValue(gsLevel);
     aAny >>= nLevel;
     rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                              OUString::number(nLevel + 1));
@@ -220,7 +224,7 @@ void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
     // name of user index
     // (unless it's the default index; then it has no name)
     Any aAny;
-    lcl_ExportPropertyString( rExport, rPropSet, sUserIndexName, XML_INDEX_NAME, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsUserIndexName, XML_INDEX_NAME, aAny );
 
     // additionally export outline level; just reuse ExportTOCMarkAttributes
     ExportTOCMarkAttributes( rPropSet );
@@ -231,12 +235,12 @@ void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
 {
     // primary and secondary keys (if available)
     Any aAny;
-    lcl_ExportPropertyString( rExport, rPropSet, sTextReading, XML_STRING_VALUE_PHONETIC, aAny );
-    lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKey, XML_KEY1, aAny );
-    lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKeyReading, XML_KEY1_PHONETIC, aAny );
-    lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKey, XML_KEY2, aAny );
-    lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKeyReading, XML_KEY2_PHONETIC, aAny );
-    lcl_ExportPropertyBool( rExport, rPropSet, sMainEntry, XML_MAIN_ENTRY, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsTextReading, XML_STRING_VALUE_PHONETIC, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsPrimaryKey, XML_KEY1, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsPrimaryKeyReading, XML_KEY1_PHONETIC, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsSecondaryKey, XML_KEY2, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, gsSecondaryKeyReading, XML_KEY2_PHONETIC, aAny );
+    lcl_ExportPropertyBool( rExport, rPropSet, gsMainEntry, XML_MAIN_ENTRY, aAny );
 }
 
 void XMLIndexMarkExport::GetID(

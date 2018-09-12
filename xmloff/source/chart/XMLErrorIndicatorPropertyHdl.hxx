@@ -24,7 +24,7 @@
 class XMLErrorIndicatorPropertyHdl : public XMLPropertyHandler
 {
 private:
-    bool mbUpperIndicator;
+    bool const mbUpperIndicator;
 
 public:
     explicit XMLErrorIndicatorPropertyHdl( bool bUpper ) : mbUpperIndicator( bUpper )

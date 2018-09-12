@@ -30,9 +30,9 @@ class SvXMLImportPropertyMapper;
 class XMLOFF_DLLPUBLIC SvXMLPropertySetContext : public SvXMLImportContext
 {
 protected:
-    sal_Int32 mnStartIdx;
-    sal_Int32 mnEndIdx;
-    sal_uInt32 mnFamily;
+    sal_Int32 const mnStartIdx;
+    sal_Int32 const mnEndIdx;
+    sal_uInt32 const mnFamily;
     ::std::vector< XMLPropertyState > &mrProperties;
     rtl::Reference < SvXMLImportPropertyMapper >   mxMapper;
 

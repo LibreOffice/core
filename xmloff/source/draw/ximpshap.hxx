@@ -200,7 +200,7 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
 {
     OUString               maPoints;
     OUString               maViewBox;
-    bool                    mbClosed;
+    bool const             mbClosed;
 
 public:
 

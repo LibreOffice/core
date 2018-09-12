@@ -84,10 +84,10 @@ typedef ::std::map < const OUString, OUString > ParamMap;
 
 class XMLTextFrameContextHyperlink_Impl
 {
-    OUString sHRef;
-    OUString sName;
-    OUString sTargetFrameName;
-    bool bMap;
+    OUString const sHRef;
+    OUString const sName;
+    OUString const sTargetFrameName;
+    bool const bMap;
 
 public:
 
@@ -359,7 +359,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     sal_Int16   nRelWidth;
     sal_Int16   nRelHeight;
 
-    sal_uInt16 nType;
+    sal_uInt16 const nType;
     css::text::TextContentAnchorType   eAnchorType;
 
     bool    bMayScript : 1;

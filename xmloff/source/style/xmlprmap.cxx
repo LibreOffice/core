@@ -106,7 +106,7 @@ struct XMLPropertySetMapper::Impl
     std::vector<XMLPropertySetMapperEntry_Impl> maMapEntries;
     std::vector<rtl::Reference <XMLPropertyHandlerFactory> > maHdlFactories;
 
-    bool mbOnlyExportMappings;
+    bool const mbOnlyExportMappings;
 
     explicit Impl( bool bForExport ) : mbOnlyExportMappings(bForExport) {}
 };

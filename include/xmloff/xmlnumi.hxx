@@ -43,7 +43,7 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
     std::unique_ptr<SvxXMLListStyle_Impl> pLevelStyles;
 
     bool                        bConsecutive : 1;
-    bool                        bOutline : 1;
+    bool const                  bOutline : 1;
 
 protected:
 

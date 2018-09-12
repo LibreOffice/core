@@ -54,8 +54,8 @@ namespace {
 
 struct XMLPropTokens_Impl
 {
-    sal_uInt16 nType;
-    XMLTokenEnum eToken;
+    sal_uInt16 const nType;
+    XMLTokenEnum const eToken;
 };
 
 const sal_uInt16 MAX_PROP_TYPES =

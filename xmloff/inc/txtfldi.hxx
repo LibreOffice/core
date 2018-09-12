@@ -186,7 +186,7 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 protected:
     // variables for access in subclass
     bool bFixed;
-    sal_uInt16 nElementToken;   /// token for this element field
+    sal_uInt16 const nElementToken;   /// token for this element field
 
 public:
 
@@ -393,7 +393,7 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 
     bool bDisplay;
     bool bDisplayOK;
-    bool bUseDisplay;
+    bool const bUseDisplay;
 
 protected:
     bool bDatabaseOK;
@@ -533,8 +533,8 @@ class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 
 protected:
     bool bFixed;
-    bool bHasAuthor;
-    bool bHasContent;
+    bool const bHasAuthor;
+    bool const bHasContent;
 
 public:
 
@@ -912,7 +912,7 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString sLanguage;
-    sal_uInt16 nElementToken;
+    sal_uInt16 const nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
 
@@ -944,7 +944,7 @@ protected:
 /** import dde field declaration container (<text:dde-connection-decls>) */
 class XMLDdeFieldDeclsImportContext : public SvXMLImportContext
 {
-    SvXMLTokenMap aTokenMap;
+    SvXMLTokenMap const aTokenMap;
 
 public:
 
@@ -979,7 +979,7 @@ public:
 class XMLDdeFieldImportContext : public XMLTextFieldImportContext
 {
     OUString sName;
-    OUString sPropertyContent;
+    OUString const sPropertyContent;
 
 public:
 
@@ -1107,7 +1107,7 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     css::uno::Reference < css::text::XTextCursor >  mxCursor;
     css::uno::Reference < css::text::XTextCursor >  mxOldCursor;
 
-    sal_uInt16 m_nToken;
+    sal_uInt16 const m_nToken;
 
 public:
 

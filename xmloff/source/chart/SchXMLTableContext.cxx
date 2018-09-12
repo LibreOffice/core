@@ -95,7 +95,7 @@ struct lcl_ApplyCellToData
 private:
     Sequence< double > & m_rData;
     sal_Int32 m_nIndex;
-    sal_Int32 m_nSize;
+    sal_Int32 const m_nSize;
     double m_fNaN;
 };
 

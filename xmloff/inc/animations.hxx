@@ -45,7 +45,7 @@ extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Command[];
 
 struct ImplAttributeNameConversion
 {
-    token::XMLTokenEnum meXMLToken;
+    token::XMLTokenEnum const meXMLToken;
     const sal_Char* mpAPIName;
 };
 

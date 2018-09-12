@@ -49,9 +49,9 @@ private:
     ::std::vector< RegressionStyle >& mrRegressionStyleVector;
 
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
-    sal_Int32 mnSeriesIndex;
+    sal_Int32 const mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
-    bool m_bStockHasVolume;
+    bool const m_bStockHasVolume;
 
     GlobalSeriesImportInfo& m_rGlobalSeriesImportInfo;
 
@@ -67,7 +67,7 @@ private:
     tSchXMLLSequencesPerIndex maPostponedSequences;
     bool& mrGlobalChartTypeUsedBySeries;
     bool mbSymbolSizeIsMissingInFile;
-    css::awt::Size maChartSize;
+    css::awt::Size const maChartSize;
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,

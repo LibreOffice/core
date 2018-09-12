@@ -321,34 +321,34 @@ public:
     Reference< XPropertySet > mxLastShape;
     OUString maLastShapeId;
 
-    OUString msDimColor;
-    OUString msDimHide;
-    OUString msDimPrev;
-    OUString msEffect;
-    OUString msPlayFull;
-    OUString msSound;
-    OUString msSoundOn;
-    OUString msSpeed;
-    OUString msTextEffect;
-    OUString msPresShapeService;
-    OUString msAnimPath;
-    OUString msIsAnimation;
-
-    AnimImpImpl()
-    :   msDimColor( "DimColor" ),
-        msDimHide( "DimHide" ),
-        msDimPrev( "DimPrevious" ),
-        msEffect( "Effect" ),
-        msPlayFull( "PlayFull" ),
-        msSound( "Sound" ),
-        msSoundOn( "SoundOn" ),
-        msSpeed( "Speed" ),
-        msTextEffect( "TextEffect" ),
-        msPresShapeService( "com.sun.star.presentation.Shape" ),
-        msAnimPath( "AnimationPath" ),
-        msIsAnimation( "IsAnimation" )
-    {}
+    static constexpr OUStringLiteral gsDimColor = "DimColor";
+    static constexpr OUStringLiteral gsDimHide = "DimHide";
+    static constexpr OUStringLiteral gsDimPrev = "DimPrevious";
+    static constexpr OUStringLiteral gsEffect = "Effect";
+    static constexpr OUStringLiteral gsPlayFull = "PlayFull";
+    static constexpr OUStringLiteral gsSound = "Sound";
+    static constexpr OUStringLiteral gsSoundOn = "SoundOn";
+    static constexpr OUStringLiteral gsSpeed = "Speed";
+    static constexpr OUStringLiteral gsTextEffect = "TextEffect";
+    static constexpr OUStringLiteral gsPresShapeService = "com.sun.star.presentation.Shape";
+    static constexpr OUStringLiteral gsAnimPath = "AnimationPath";
+    static constexpr OUStringLiteral gsIsAnimation = "IsAnimation";
 };
+
+#if !HAVE_CPP_INLINE_VARIABLES
+constexpr OUStringLiteral AnimImpImpl::gsDimColor;
+constexpr OUStringLiteral AnimImpImpl::gsDimHide;
+constexpr OUStringLiteral AnimImpImpl::gsDimPrev;
+constexpr OUStringLiteral AnimImpImpl::gsEffect;
+constexpr OUStringLiteral AnimImpImpl::gsPlayFull;
+constexpr OUStringLiteral AnimImpImpl::gsSound;
+constexpr OUStringLiteral AnimImpImpl::gsSoundOn;
+constexpr OUStringLiteral AnimImpImpl::gsSpeed;
+constexpr OUStringLiteral AnimImpImpl::gsTextEffect;
+constexpr OUStringLiteral AnimImpImpl::gsPresShapeService;
+constexpr OUStringLiteral AnimImpImpl::gsAnimPath;
+constexpr OUStringLiteral AnimImpImpl::gsIsAnimation;
+#endif
 
 enum XMLActionKind
 {
@@ -543,7 +543,7 @@ void XMLAnimationsEffectContext::EndElement()
                     // check for presentation shape service
                     {
                         Reference< XServiceInfo > xServiceInfo( xSet, UNO_QUERY );
-                        if( !xServiceInfo.is() || !xServiceInfo->supportsService( mpImpl->msPresShapeService ) )
+                        if( !xServiceInfo.is() || !xServiceInfo->supportsService( AnimImpImpl::gsPresShapeService ) )
                             return;
                     }
 
@@ -560,13 +560,13 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( meKind == XMLE_DIM )
                 {
-                    xSet->setPropertyValue( mpImpl->msDimPrev, Any(true) );
+                    xSet->setPropertyValue( AnimImpImpl::gsDimPrev, Any(true) );
 
-                    xSet->setPropertyValue( mpImpl->msDimColor, Any(maDimColor) );
+                    xSet->setPropertyValue( AnimImpImpl::gsDimColor, Any(maDimColor) );
                 }
                 else if( meKind == XMLE_PLAY )
                 {
-                    xSet->setPropertyValue( mpImpl->msIsAnimation, Any(true) );
+                    xSet->setPropertyValue( AnimImpImpl::gsIsAnimation, Any(true) );
 
                     // #i42894# speed is not supported for the old group animation fallback, so no need to set it
                     // aAny <<= meSpeed;
@@ -576,20 +576,21 @@ void XMLAnimationsEffectContext::EndElement()
                 {
                     if( meKind == XMLE_HIDE && !mbTextEffect && meEffect == EK_none )
                     {
-                        xSet->setPropertyValue( mpImpl->msDimHide, Any(true) );
+                        xSet->setPropertyValue( AnimImpImpl::gsDimHide, Any(true) );
                     }
                     else
                     {
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
-                        xSet->setPropertyValue( mbTextEffect ? mpImpl->msTextEffect : mpImpl->msEffect, makeAny( eEffect ) );
-                        xSet->setPropertyValue( mpImpl->msSpeed, makeAny( meSpeed ) );
+                        OUString s = mbTextEffect ? AnimImpImpl::gsTextEffect : AnimImpImpl::gsEffect;
+                        xSet->setPropertyValue( s, makeAny( eEffect ) );
+                        xSet->setPropertyValue( AnimImpImpl::gsSpeed, makeAny( meSpeed ) );
 
                         if( eEffect == AnimationEffect_PATH && !maPathShapeId.isEmpty() )
                         {
                             Reference< XShape > xPath( GetImport().getInterfaceToIdentifierMapper().getReference( maPathShapeId ), UNO_QUERY );
                             if( xPath.is() )
-                                xSet->setPropertyValue( mpImpl->msAnimPath, makeAny( xPath ) );
+                                xSet->setPropertyValue( AnimImpImpl::gsAnimPath, makeAny( xPath ) );
                         }
                     }
                 }
@@ -598,9 +599,9 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( xSet.is() )
                 {
-                    xSet->setPropertyValue( mpImpl->msSound, Any(maSoundURL) );
-                    xSet->setPropertyValue( mpImpl->msPlayFull, Any(mbPlayFull) );
-                    xSet->setPropertyValue( mpImpl->msSoundOn, Any(true) );
+                    xSet->setPropertyValue( AnimImpImpl::gsSound, Any(maSoundURL) );
+                    xSet->setPropertyValue( AnimImpImpl::gsPlayFull, Any(mbPlayFull) );
+                    xSet->setPropertyValue( AnimImpImpl::gsSoundOn, Any(true) );
                 }
                 else
                 {

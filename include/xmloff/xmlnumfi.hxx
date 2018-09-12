@@ -121,9 +121,9 @@ struct MyCondition
 class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 {
     SvXMLNumImpData*    pData;
-    SvXMLStylesContext*             pStyles;
+    SvXMLStylesContext* const   pStyles;
     std::vector <MyCondition>   aMyConditions;
-    sal_uInt16          nType;
+    sal_uInt16 const          nType;
     sal_Int32           nKey;
 //  OUString       sFormatName;
     OUString       sFormatTitle;

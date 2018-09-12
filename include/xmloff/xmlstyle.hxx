@@ -73,7 +73,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
                               // by Finish() or si somehow invalid.
     bool         mbNew : 1;   // Set this to false in CreateAnsInsert
                               // if the style is already existing.
-    bool         mbDefaultStyle : 1;
+    bool const   mbDefaultStyle : 1;
 
 protected:
 
