@@ -1018,10 +1018,9 @@ Reference<XResultSet>
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
                                      UNO_QUERY);
-    std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
-    lcl_setRows_throw(xResultSet, 12, rRows);
+    throw SQLException("getTablePrivileges method not implemented", *this, "IM001", 0, Any());
     return xResultSet;
 }
 
