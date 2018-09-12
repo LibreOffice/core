@@ -196,10 +196,6 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
 #ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
             AVMEDIA_MANAGER_SERVICE_NAME_OLD
 #endif
-// fallback to AVMedia framework on OS X
-#ifdef AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1
-            AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1
-#endif
         };
 
         for (sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i)
