@@ -255,7 +255,6 @@ namespace sw { namespace mark
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName("__DdeLink__"))
-        , m_aRefObj(nullptr)
     { }
 
     void DdeBookmark::SetRefObject(SwServerObject* pObj)

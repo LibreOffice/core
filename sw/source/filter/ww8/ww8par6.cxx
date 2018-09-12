@@ -1821,7 +1821,6 @@ eSurround(( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapT
 nXBind(( rWW.nSp29 & 0xc0 ) >> 6),
 nYBind(( rWW.nSp29 & 0x30 ) >> 4),
 nNewNetWidth(MINFLY),
-xMainTextPos(nullptr),
 nLineSpace(0),
 bAutoWidth(false),
 bToggelPos(false)

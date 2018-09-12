@@ -101,7 +101,6 @@ struct SpellState
         m_bOtherSpelled(false),
         m_bStartedInOther(false),
         m_bStartedInSelection(false),
-        pOtherCursor(nullptr),
         m_bDrawingsSpelled(false),
         m_pStartDrawing(nullptr),
         m_bRestartDrawing(false),

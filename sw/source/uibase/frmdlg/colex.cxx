@@ -499,7 +499,6 @@ void SwColumnOnlyExample::Resize()
 }
 
 SwPageGridExample::SwPageGridExample()
-    : pGridItem(nullptr)
 {
 }
 

@@ -35,8 +35,7 @@ class SwDontExpandItem
     std::unique_ptr<SfxItemSet> pDontExpItems;
 
 public:
-    SwDontExpandItem() :
-        pDontExpItems(nullptr){}
+    SwDontExpandItem() {}
     ~SwDontExpandItem();
 
     void SaveDontExpandItems( const SwPosition& rPos );

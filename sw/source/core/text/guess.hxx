@@ -38,8 +38,8 @@ class SwTextGuess
                                // a field in the text has been expanded
     sal_uInt16 nBreakWidth;    // width of the broken portion
 public:
-    SwTextGuess(): pHanging( nullptr ), nCutPos(0), nBreakStart(0),
-                        nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
+    SwTextGuess(): nCutPos(0), nBreakStart(0),
+                   nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
 
     // true, if current portion still fits to current line
