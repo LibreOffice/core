@@ -29,6 +29,10 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 
+#ifdef IOS
+#include <ios/ios.hxx>
+#endif
+
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -185,6 +189,9 @@ void SAL_CALL throwException( Any const & exc )
             "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
+#ifdef IOS
+    lo_ios_throwException(exc);
+#else
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
     if (! uno2cpp.is())
     {
@@ -199,6 +206,7 @@ void SAL_CALL throwException( Any const & exc )
         ExceptionThrower::getCppuType() );
     OSL_ASSERT( xThrower.is() );
     xThrower->throwException( exc );
+#endif
 }
 
 
