@@ -2528,7 +2528,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
     rRenderContext.DrawOutDev(Point(), aSize, Point(), aSize, *pVDev);
 }
 
-NumberingPreview::NumberingPreview()
+cui::NumberingPreview::NumberingPreview()
     : pActNum(nullptr)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
@@ -2536,7 +2536,7 @@ NumberingPreview::NumberingPreview()
 }
 
 // paint preview of numeration
-void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+void cui::NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
