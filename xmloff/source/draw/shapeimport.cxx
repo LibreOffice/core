@@ -110,8 +110,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
 :   mpImpl( new XMLShapeImportHelperImpl ),
-    mpPropertySetMapper(nullptr),
-    mpPresPagePropsMapper(nullptr),
     mrImporter( rImporter )
 {
     mpImpl->mpSortContext = nullptr;

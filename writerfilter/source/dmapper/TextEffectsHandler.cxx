@@ -480,8 +480,7 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 }
 
 TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
-    LoggedProperties("TextEffectsHandler"),
-    mpGrabBagStack(nullptr)
+    LoggedProperties("TextEffectsHandler")
 {
     convertElementIdToPropertyId(aElementId);
     mpGrabBagStack.reset(new oox::GrabBagStack(maElementName));
