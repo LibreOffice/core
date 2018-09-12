@@ -586,42 +586,45 @@ void AnimationsExporterImpl::exportTransitionNode()
 
             SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_PAR, true, true );
 
-            sal_Int16 nSubtype = 0;
-            bool bDirection = false;
-            sal_Int32 nFadeColor = 0;
-            double fDuration = 0.0;
-            mxPageProps->getPropertyValue("TransitionSubtype") >>= nSubtype;
-            mxPageProps->getPropertyValue("TransitionDirection") >>= bDirection;
-            mxPageProps->getPropertyValue("TransitionFadeColor") >>= nFadeColor;
-            mxPageProps->getPropertyValue("TransitionDuration") >>= fDuration;
-
-            ::sax::Converter::convertDouble( sTmp, fDuration );
-            sTmp.append( 's');
-            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
-
-            SvXMLUnitConverter::convertEnum( sTmp, nTransition, aAnimations_EnumMap_TransitionType );
-            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
-
-            if( nSubtype != TransitionSubType::DEFAULT )
+            if( nTransition != 0 )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
-                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
-            }
+                sal_Int16 nSubtype = 0;
+                bool bDirection = false;
+                sal_Int32 nFadeColor = 0;
+                double fDuration = 0.0;
+                mxPageProps->getPropertyValue("TransitionSubtype") >>= nSubtype;
+                mxPageProps->getPropertyValue("TransitionDirection") >>= bDirection;
+                mxPageProps->getPropertyValue("TransitionFadeColor") >>= nFadeColor;
+                mxPageProps->getPropertyValue("TransitionDuration") >>= fDuration;
 
-            if( !bDirection )
-                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
+                ::sax::Converter::convertDouble( sTmp, fDuration );
+                sTmp.append( 's');
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
 
-            if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
-            {
-                ::sax::Converter::convertColor( sTmp, nFadeColor );
-                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
+                SvXMLUnitConverter::convertEnum( sTmp, nTransition, aAnimations_EnumMap_TransitionType );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
+
+                if( nSubtype != TransitionSubType::DEFAULT )
+                {
+                    SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
+                }
+
+                if( !bDirection )
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
+
+                if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
+                {
+                    ::sax::Converter::convertColor( sTmp, nFadeColor );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
+                }
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, true, true );
             }
-            SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, true, true );
 
             if( bStopSound )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, XML_STOP_AUDIO );
-                SvXMLElementExport aElement3( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
             }
             else if( !sSoundURL.isEmpty())
             {
@@ -633,7 +636,7 @@ void AnimationsExporterImpl::exportTransitionNode()
 
                 if( bLoopSound )
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
-                SvXMLElementExport aElement4( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, true, true );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, true, true );
             }
         }
     }
