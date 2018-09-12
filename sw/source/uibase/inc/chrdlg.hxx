@@ -31,26 +31,18 @@
 class SwView;
 class SvxMacroItem;
 
-class SwCharDlg: public SfxTabDialog
+class SwCharDlg : public SfxTabDialogController
 {
     SwView&   m_rView;
     SwCharDlgMode m_nDialogMode;
 
-    sal_uInt16 m_nCharStdId;
-    sal_uInt16 m_nCharExtId;
-    sal_uInt16 m_nCharPosId;
-    sal_uInt16 m_nCharTwoId;
-    sal_uInt16 m_nCharUrlId;
-    sal_uInt16 m_nCharBgdId;
-    sal_uInt16 m_nCharBrdId;
-
 public:
-    SwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
+    SwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
               SwCharDlgMode nDialogMode, const OUString* pFormatStr);
 
     virtual ~SwCharDlg() override;
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 };
 
 class SwCharURLPage : public SfxTabPage
