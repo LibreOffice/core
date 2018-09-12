@@ -5860,14 +5860,4 @@ bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
     return bResult;
 }
 
-#ifdef _WIN32
-bool HasAtHook()
-{
-    BOOL bIsRunning = FALSE;
-    // pvParam must be BOOL
-    return SystemParametersInfoW(SPI_GETSCREENREADER, 0, &bIsRunning, 0)
-        && bIsRunning;
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1138,8 +1138,7 @@ OUString Application::GetHWOSConfInfo()
         aDetails.append( VclResId(SV_APP_DEFAULT) );
     aDetails.append( "; " );
 
-#ifdef LINUX
-    // Only linux has different backends, so don't show blank for others.
+#if (defined LINUX || defined _WIN32)
     aDetails.append( SV_APP_VCLBACKEND );
     aDetails.append( GetToolkitName() );
     aDetails.append( "; " );
