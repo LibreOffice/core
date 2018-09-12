@@ -65,6 +65,9 @@ FilePickerIpc::~FilePickerIpc() = default;
 
 void FilePickerIpc::readCommands()
 {
+    // don't trigger again, loop runs until all is done
+    disconnect(m_stdinNotifier, &QSocketNotifier::activated, this, &FilePickerIpc::readCommands);
+
     while (readCommand())
     {
         // read next command
