@@ -95,7 +95,7 @@ friend class SfxPopupMenuManager;
 friend class SfxHelp;
 
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, Timer *, void );
-    DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest *, void );
+    void PostMsgHandler(std::unique_ptr<SfxRequest>);
 
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
     SAL_DLLPRIVATE void Update_Impl_( bool,bool,bool,SfxWorkWindow*);
