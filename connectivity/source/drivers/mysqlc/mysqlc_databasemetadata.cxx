@@ -971,7 +971,7 @@ Reference<XResultSet>
     std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
-    lcl_setRows_throw(xResultSet, 12, rRows);
+    throw SQLException("getTablePrivileges method not implemented", *this, "IM001", 0, Any());
     return xResultSet;
 }
 
