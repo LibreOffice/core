@@ -86,6 +86,9 @@ public:
 
 class VCL_PLUGIN_PUBLIC SalPrinter
 {
+    SalPrinter( const SalPrinter& ) = delete;
+    SalPrinter& operator=( const SalPrinter& ) = delete;
+
 public:
     SalPrinter() {}
     virtual ~SalPrinter();
