@@ -1442,7 +1442,6 @@ void Dialog::set_default_response(int response)
 }
 
 VclBuilderContainer::VclBuilderContainer()
-    : m_pUIBuilder(nullptr)
 {
 }
 

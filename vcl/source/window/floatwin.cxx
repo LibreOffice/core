@@ -157,7 +157,6 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const O
     : SystemWindow(WindowType::FLOATINGWINDOW)
     , mpNextFloat(nullptr)
     , mpFirstPopupModeWin(nullptr)
-    , mpImplData(nullptr)
     , mnPostId(nullptr)
     , mnPopupModeFlags(FloatWinPopupFlags::NONE)
     , mnTitle(FloatWinTitleType::Unknown)
