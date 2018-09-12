@@ -2524,6 +2524,7 @@ struct SvxStyleToolBoxControl::Impl
                     xParaStyles;
                 static const std::vector<OUString> aWriterStyles =
                 {
+                    "Standard",
                     "Text body",
                     "Title",
                     "Subtitle",
