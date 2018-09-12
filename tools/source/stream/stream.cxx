@@ -318,7 +318,6 @@ void SvStream::SetSize(sal_uInt64 const nSize)
 SvStream::SvStream() :
      m_nActPos(0)
 
-   , m_pRWBuf(nullptr)
    , m_pBufPos(nullptr)
    , m_nBufSize(0)
    , m_nBufActualLen(0)
