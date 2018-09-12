@@ -28,8 +28,8 @@ using namespace ::xmloff::token;
 static const struct ConditionMap
 {
         char const* aInternal;
-        XMLTokenEnum nExternal;
-        int         aValue;
+        XMLTokenEnum const nExternal;
+        int const         aValue;
 } g_ConditionMap[] =
 {
     { "TableHeader",            XML_TABLE_HEADER,   -1 },

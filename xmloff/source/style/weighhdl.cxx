@@ -36,8 +36,8 @@ using namespace ::xmloff::token;
 
 struct FontWeightMapper
 {
-    float fWeight;
-    sal_uInt16 nValue;
+    float const fWeight;
+    sal_uInt16 const nValue;
 };
 
 FontWeightMapper const aFontWeightMap[] =

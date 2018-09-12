@@ -26,8 +26,8 @@
 
 struct StyleNameKey_Impl
 {
-    sal_uInt16 m_nFamily;
-    OUString m_aName;
+    sal_uInt16 const m_nFamily;
+    OUString const m_aName;
 
     StyleNameKey_Impl( sal_uInt16 nFamily,
                                const OUString& rName ) :

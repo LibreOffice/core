@@ -297,9 +297,7 @@ SdXMLImport::SdXMLImport(
     mnNewMasterPageCount(0),
     mbIsDraw(bIsDraw),
     mbLoadDoc(true),
-    mbPreview(false),
-    msPageLayouts(  "PageLayouts"  ),
-    msPreview(  "Preview"  )
+    mbPreview(false)
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -386,11 +384,11 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     {
         uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-        if( xInfoSetInfo->hasPropertyByName( msPageLayouts ) )
-            xInfoSet->getPropertyValue( msPageLayouts ) >>= mxPageLayouts;
+        if( xInfoSetInfo->hasPropertyByName( gsPageLayouts ) )
+            xInfoSet->getPropertyValue( gsPageLayouts ) >>= mxPageLayouts;
 
-        if( xInfoSetInfo->hasPropertyByName( msPreview ) )
-            xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
+        if( xInfoSetInfo->hasPropertyByName( gsPreview ) )
+            xInfoSet->getPropertyValue( gsPreview ) >>= mbPreview;
 
         OUString const sOrganizerMode(
             "OrganizerMode");

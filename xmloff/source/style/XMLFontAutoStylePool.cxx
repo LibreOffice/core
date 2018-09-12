@@ -47,12 +47,12 @@ using namespace ::xmloff::token;
 
 class XMLFontAutoStylePoolEntry_Impl
 {
-    OUString    sName;
-    OUString    sFamilyName;
-    OUString    sStyleName;
-    FontFamily  nFamily;
-    FontPitch   nPitch;
-    rtl_TextEncoding eEnc;
+    OUString const    sName;
+    OUString const    sFamilyName;
+    OUString const    sStyleName;
+    FontFamily const  nFamily;
+    FontPitch const   nPitch;
+    rtl_TextEncoding const eEnc;
 
 public:
 

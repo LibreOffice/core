@@ -58,9 +58,9 @@ typedef std::set< sal_uInt32 >  SvXMLuInt32Set;
 
 struct SvXMLEmbeddedTextEntry
 {
-    sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
-    sal_Int32       nFormatPos;     // resulting position in embedded-text element
-    OUString   aText;
+    sal_uInt16 const  nSourcePos;     // position in NumberFormat (to skip later)
+    sal_Int32 const   nFormatPos;     // resulting position in embedded-text element
+    OUString const    aText;
 
     SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
         nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
