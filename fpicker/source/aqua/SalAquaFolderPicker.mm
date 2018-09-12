@@ -85,19 +85,11 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
 
     switch( nResult )
     {
-#if MACOSX_SDK_VERSION >= 101000
     case NSModalResponseOK:
-#else
-    case NSOKButton:
-#endif
         retVal = ExecutableDialogResults::OK;
         break;
 
-#if MACOSX_SDK_VERSION >= 101000
     case NSModalResponseCancel:
-#else
-    case NSCancelButton:
-#endif
         retVal = ExecutableDialogResults::CANCEL;
         break;
 
