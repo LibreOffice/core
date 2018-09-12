@@ -70,7 +70,7 @@ public:
 };
 
 
-class WinSalPrinter : public SalPrinter
+class SAL_DLLPUBLIC_EXPORT WinSalPrinter : public SalPrinter
 {
 public:
     WinSalGraphics*         mpGraphics;             // current Printer graphics

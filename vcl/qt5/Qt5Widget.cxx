@@ -39,10 +39,13 @@
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QWidget>
 
-#include <cairo.h>
-#include <headless/svpgdi.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+
+#ifndef _WIN32
+#include <cairo.h>
+#include <headless/svpgdi.hxx>
+#endif
 
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
@@ -50,6 +53,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
     if (!m_pFrame->m_bNullRegion)
         p.setClipRegion(m_pFrame->m_aRegion);
 
+#ifndef _WIN32
     if (m_pFrame->m_bUseCairo)
     {
         cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
@@ -60,11 +64,13 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
         p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
     }
     else
+#endif
         p.drawImage(pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect());
 }
 
 void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
+#ifndef _WIN32
     if (m_pFrame->m_bUseCairo)
     {
         int width = size().width();
@@ -89,6 +95,7 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
         }
     }
     else
+#endif
     {
         QImage* pImage = nullptr;
 
@@ -297,9 +304,11 @@ static sal_uInt16 GetKeyCode(int keyval)
             case Qt::Key_Insert:
                 nCode = KEY_INSERT;
                 break;
+#ifndef _WIN32
             case Qt::Key_Delete:
                 nCode = KEY_DELETE;
                 break;
+#endif
             case Qt::Key_Plus:
                 nCode = KEY_ADD;
                 break;

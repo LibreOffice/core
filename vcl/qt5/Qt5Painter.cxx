@@ -20,6 +20,7 @@
 #include <Qt5Painter.hxx>
 
 #include <QtGui/QColor>
+#include <QtWidgets/QPushButton>
 
 Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTransparency)
     : m_rGraphics(rGraphics)

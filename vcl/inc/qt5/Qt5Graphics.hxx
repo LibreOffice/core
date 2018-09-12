@@ -30,6 +30,10 @@
 #include "Qt5Data.hxx"
 #include "Qt5Graphics_Controls.hxx"
 
+#ifdef _WIN32
+#include <QtWidgets/QPushButton>
+#endif
+
 class PhysicalFontCollection;
 class QImage;
 class QPushButton;

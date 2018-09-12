@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 
-class WinSalSystem : public SalSystem
+class SAL_DLLPUBLIC_EXPORT WinSalSystem : public SalSystem
 {
 public:
     struct DisplayMonitor

@@ -19,13 +19,14 @@
 
 #pragma once
 
+#include <vclpluginapi.h>
 #include <salbmp.hxx>
 
 #include <memory>
 
 class QImage;
 
-class VCL_DLLPUBLIC Qt5Bitmap : public SalBitmap
+class VCLPLUG_QT5_PUBLIC Qt5Bitmap : public SalBitmap
 {
     std::unique_ptr<QImage> m_pImage;
     BitmapPalette m_aPalette;

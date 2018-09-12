@@ -108,6 +108,12 @@ $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
     Library_vclplug_win \
 ))
+ifneq ($(ENABLE_QT5),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_qt5_moc \
+    Library_vclplug_qt5 \
+))
+endif
 endif
 
 ifeq ($(OS),HAIKU)

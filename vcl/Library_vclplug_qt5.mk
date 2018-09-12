@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_sdk_api,vclplug_qt5))
 
 $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
     $(if $(USING_X11),vclplug_gen) \
+    $(if $(filter WNT,$(OS)),vclplug_win) \
     vcl \
     tl \
     utl \
@@ -54,7 +55,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
 
 $(eval $(call gb_Library_use_externals,vclplug_qt5,\
     boost_headers \
-    cairo \
+    $(if $(USING_X11),cairo) \
     epoxy \
     graphite \
     harfbuzz \
@@ -102,7 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5OpenGLContext \
     vcl/qt5/Qt5Painter \
     vcl/qt5/Qt5Printer \
-    vcl/qt5/Qt5System \
+    $(if $(USING_X11),vcl/qt5/Qt5System) \
     vcl/qt5/Qt5Timer \
     vcl/qt5/Qt5Tools \
     vcl/qt5/Qt5VirtualDevice \
@@ -112,9 +113,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_qt5,\
-	-lm \
-	-ldl \
-	-lpthread \
+    -lm \
+    -ldl \
+    -lpthread \
 ))
 endif
 

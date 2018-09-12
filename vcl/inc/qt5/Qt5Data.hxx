@@ -28,17 +28,22 @@
 
 class QCursor;
 
-class VCLPLUG_QT5_PUBLIC Qt5Data : public GenericUnixSalData
+class VCLPLUG_QT5_PUBLIC Qt5Data
+#ifndef _WIN32
+    : public GenericUnixSalData
+#else
+    : public SalData
+#endif
 {
     o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
 
 public:
     explicit Qt5Data(SalInstance* pInstance);
     virtual ~Qt5Data() override;
-
+#ifndef _WIN32
     virtual void ErrorTrapPush() override;
     virtual bool ErrorTrapPop(bool bIgnoreError = true) override;
-
+#endif
     QCursor& getCursor(PointerStyle ePointerStyle);
 
     static bool noNativeControls();

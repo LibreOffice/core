@@ -48,8 +48,10 @@
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
+#ifndef _WIN32
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
+#endif
 
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
@@ -58,10 +60,12 @@ static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExten
     pThis->Damage(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
 
-Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
+Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo )
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
+#ifndef _WIN32
     , m_pSvpGraphics(nullptr)
+#endif
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
     , m_ePointerStyle(PointerStyle::Arrow)
@@ -143,13 +147,12 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         maGeometry.nRightDecoration = 0;
     }
 
+#ifndef _WIN32
     m_aSystemData.nSize = sizeof(SystemEnvData);
     m_aSystemData.aWindow = m_pQWidget->winId();
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
-    //m_aSystemData.pSalFrame = this;
-    //m_aSystemData.pWidget = m_pQWidget;
-    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+#endif
 }
 
 Qt5Frame::~Qt5Frame()
@@ -160,7 +163,10 @@ Qt5Frame::~Qt5Frame()
         delete m_pTopLevel;
     else
         delete m_pQWidget;
+
+#ifndef _WIN32
     m_aSystemData.aShellWindow = 0;
+#endif
 }
 
 void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
@@ -182,6 +188,7 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
+#ifndef _WIN32
 void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
 {
     int width = 640;
@@ -192,6 +199,7 @@ void Qt5Frame::InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics)
     cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(), &m_aDamageHandler,
                                 nullptr);
 }
+#endif
 
 SalGraphics* Qt5Frame::AcquireGraphics()
 {
@@ -200,6 +208,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     m_bGraphicsInUse = true;
 
+#ifndef _WIN32
     if (m_bUseCairo)
     {
         if (!m_pOurSvpGraphics.get())
@@ -210,6 +219,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
         return m_pOurSvpGraphics.get();
     }
     else
+#endif
     {
         if (!m_pQt5Graphics.get())
         {
@@ -225,9 +235,11 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
+#ifndef _WIN32
     if (m_bUseCairo)
         assert(pSalGraph == m_pOurSvpGraphics.get());
     else
+#endif
         assert(pSalGraph == m_pQt5Graphics.get());
     m_bGraphicsInUse = false;
 }

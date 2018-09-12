@@ -38,13 +38,12 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (bShow)
         m_pQWidget->show();
 
+#ifndef _WIN32
     m_aSystemData.nSize = sizeof(SystemEnvData);
     m_aSystemData.aWindow = pParent->GetQWidget()->winId();
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
-    //m_aSystemData.pSalFrame = this;
-    //m_aSystemData.pWidget = m_pQWidget;
-    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.pToolkit = "qt5";
+#endif
 }
 
 void Qt5Object::ResetClipRegion()

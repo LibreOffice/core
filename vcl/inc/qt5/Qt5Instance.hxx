@@ -20,10 +20,10 @@
 #pragma once
 
 #include <vclpluginapi.h>
-#include <unx/geninst.h>
 #include <salusereventlist.hxx>
 
 #include <osl/conditn.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <QtCore/QObject>
 
@@ -31,8 +31,42 @@ class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
+#ifdef _WIN32
+#include <salinst.hxx>
+#include <comphelper/solarmutex.hxx>
+#include <memory>
+#include <unordered_map>
+#else
+#include <unx/geninst.h>
+#endif
+
+// Qts moc doesn't like macros, so this is handled by an extra base class
+// It also keeps all the #ifdef handling local
+class VCLPLUG_QT5_PUBLIC Qt5MocInstance
+#ifdef _WIN32
+    : public SalInstance
+#else
+    : public SalGenericInstance
+#endif
+{
+public:
+    Qt5MocInstance()
+#ifdef _WIN32
+        : SalInstance(o3tl::make_unique<comphelper::SolarMutex>())
+#else
+        : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
+#endif
+    {
+    }
+
+#ifndef _WIN32
+    virtual GenPspGraphics* CreatePrintGraphics() override;
+    virtual void PostPrintersChanged() override;
+#endif
+};
+
 class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
-                                       public SalGenericInstance,
+                                       public Qt5MocInstance,
                                        public SalUserEventList
 {
     Q_OBJECT
@@ -79,7 +113,6 @@ public:
     virtual void GetPrinterQueueInfo(ImplPrnQueueList* pList) override;
     virtual void GetPrinterQueueState(SalPrinterQueueInfo* pInfo) override;
     virtual OUString GetDefaultPrinter() override;
-    virtual void PostPrintersChanged() override;
 
     virtual std::unique_ptr<SalMenu> CreateMenu(bool, Menu*) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem(const SalItemParams&) override;
@@ -97,8 +130,6 @@ public:
 
     virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
                                          const OUString& rDocumentService) override;
-
-    virtual GenPspGraphics* CreatePrintGraphics() override;
 
     virtual bool IsMainThread() const override;
 

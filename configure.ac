@@ -636,6 +636,7 @@ cygwin*|interix*)
     test_xrender=no
     test_freetype=no
     test_fontconfig=no
+    test_qt5=yes
     _os=WINNT
 
     DLLPOST=".dll"
@@ -4681,7 +4682,6 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_kde5=no
-    test_qt5=no
     test_gtk3_kde5=no
     enable_cairo_canvas=no
 fi
@@ -10094,10 +10094,16 @@ dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
-if test "$USING_X11" != TRUE; then
+if test "$USING_X11" = TRUE; then
+    R="gen"
+else
     enable_gtk=no
     enable_gtk3=no
+    case "$_os" in
+    WINNT) R="win" ;;
+    esac
 fi
+
 GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
@@ -10108,7 +10114,7 @@ if test "x$enable_gtk3" = "xyes"; then
     : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
-        R="gtk3"
+        R=" gtk3"
         dnl Avoid installed by unpackaged files for now.
         if test -z "$PKGFORMAT"; then
             GOBJECT_INTROSPECTION_CHECK(INTROSPECTION_REQUIRED_VERSION)
@@ -10960,7 +10966,11 @@ then
     fi
 
     qt5_test_include="QtWidgets/qapplication.h"
-    qt5_test_library="libQt5Widgets.so"
+    if test $_os == "WINNT"; then
+        qt5_test_library="Qt5Widgets.lib"
+    else
+        qt5_test_library="libQt5Widgets.so"
+    fi
 
     dnl Check for qmake5
     AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH] )
@@ -10982,6 +10992,10 @@ then
 
     qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
     qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+    if test $_os == "WINNT"; then
+        qt5_incdirs="`cygpath -m $qt5_incdirs`"
+        qt5_libdirs="`cygpath -m $qt5_libdirs`"
+    fi
 
     AC_MSG_CHECKING([for Qt5 headers])
     qt5_incdir="no"
@@ -11011,7 +11025,11 @@ then
 
     QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
+    if test $_os == "WINNT"; then
+        QT5_LIBS="-LIBPATH:$qt5_libdir Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5Network.lib"
+    else
+        QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
+    fi
 
     dnl Check for Meta Object Compiler
 

@@ -28,6 +28,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
+#include <vcl/sysdata.hxx>
+
 Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     : m_pFrame( pFrame )
     , m_pQImage( pQImage )

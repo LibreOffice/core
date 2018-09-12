@@ -10,15 +10,27 @@
 #pragma once
 
 #include <vcl/sysdata.hxx>
-#include <unx/gensys.h>
 
-class Qt5System : public SalGenericSystem
+#ifndef _WIN32
+#include <unx/gensys.h>
+#else
+#include <win/salsys.h>
+#endif
+
+class Qt5System
+#ifndef _WIN32
+    : public SalGenericSystem
+#else
+    : public WinSalSystem
+#endif
 {
 public:
+#ifndef _WIN32
     virtual unsigned int GetDisplayScreenCount() override;
     virtual tools::Rectangle GetDisplayScreenPosSizePixel(unsigned int nScreen) override;
     virtual int ShowNativeDialog(const OUString& rTitle, const OUString& rMessage,
                                  const std::vector<OUString>& rButtons) override;
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

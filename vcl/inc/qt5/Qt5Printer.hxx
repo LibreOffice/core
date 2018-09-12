@@ -19,11 +19,22 @@
 
 #pragma once
 
+#ifndef _WIN32
 #include <unx/genprn.h>
+#else
+#include <WinDef.h>
+#include <win/salprn.h>
+#endif
 
+class Point;
 class SalFrame;
 
-class Qt5Printer : public PspSalPrinter
+class Qt5Printer
+#ifndef _WIN32
+    : public PspSalPrinter
+#else
+    : public WinSalPrinter
+#endif
 {
 public:
     Qt5Printer(SalInfoPrinter* pInfoPrinter);

@@ -19,11 +19,13 @@
 
 #include <Qt5Tools.hxx>
 
-#include <cairo.h>
-
 #include <vcl/event.hxx>
 
+#ifndef _WIN32
+#include <cairo.h>
+
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
+#endif
 
 sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers)
 {
