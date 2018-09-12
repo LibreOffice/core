@@ -18449,6 +18449,7 @@ vcl/unx/x11/xlimits.cxx
 vcl/win/app/saldata.cxx
 vcl/win/app/salinfo.cxx
 vcl/win/app/salinst.cxx
+vcl/win/app/salplug.cxx
 vcl/win/app/salshl.cxx
 vcl/win/app/saltimer.cxx
 vcl/win/gdi/DWriteTextRenderer.cxx
