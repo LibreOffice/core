@@ -721,7 +721,8 @@ void SwShellCursor::SaveTableBoxContent( const SwPosition* pPos )
 bool SwShellCursor::UpDown( bool bUp, sal_uInt16 nCnt )
 {
     return SwCursor::UpDown( bUp, nCnt,
-                            &GetPtPos(), GetShell()->GetUpDownX() );
+                            &GetPtPos(), GetShell()->GetUpDownX(),
+                            *GetShell()->GetLayout());
 }
 
 // if <true> than the cursor can be set to the position.

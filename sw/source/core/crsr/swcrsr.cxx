@@ -1827,7 +1827,8 @@ void SwCursor::DoSetBidiLevelUpDown()
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
-                       Point const * pPt, long nUpDownX )
+                       Point const * pPt, long nUpDownX,
+                       SwRootFrame & rLayout)
 {
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
     bool bAdjustTableCursor = false;
@@ -1846,7 +1847,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
     Point aPt;
     if( pPt )
         aPt = *pPt;
-    SwContentFrame* pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+    SwContentFrame* pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
 
     if( pFrame )
     {
@@ -1882,7 +1883,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 const SwNode* pEndNd = pTableNd->EndOfSectionNode();
                 GetPoint()->nNode = *pEndNd;
                 pTableCursor->Move( fnMoveBackward, GoInNode );
-                   pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+               pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
             }
         }
 
@@ -1891,7 +1892,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                     : pFrame->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
                 CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
         {
-               pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+               pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
             --nCnt;
         }
 
@@ -1902,8 +1903,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             if( !pTableCursor )
             {
                 // try to position the cursor at half of the char-rect's height
-                DisableCallbackAction a(*GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
-                pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+                DisableCallbackAction a(rLayout);
+                pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
                 SwCursorMoveState eTmpState( MV_UPDOWN );
                 eTmpState.m_bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
@@ -1911,13 +1912,13 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 if ( pFrame->IsVertical() )
                 {
                     aPt.setX(aTmpRect.Center().getX());
-                    pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
+                    pFrame->Calc(rLayout.GetCurrShell()->GetOut());
                     aPt.setY(pFrame->getFrameArea().Top() + nUpDownX);
                 }
                 else
                 {
                     aPt.setY(aTmpRect.Center().getY());
-                    pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
+                    pFrame->Calc(rLayout.GetCurrShell()->GetOut());
                     aPt.setX(pFrame->getFrameArea().Left() + nUpDownX);
                 }
                 pFrame->GetCursorOfst( GetPoint(), aPt, &eTmpState );

@@ -166,7 +166,7 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout);
-    bool UpDown( bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX );
+    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin( bool bLeftMargin, bool bAPI );
     bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
     bool SttEndDoc( bool bSttDoc );
