@@ -301,6 +301,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     checkParameterIndex(parameter);
 
     MYSQL_TIME my_time;
+    memset(&my_time, 0, sizeof(MYSQL_TIME));
 
     my_time.hour = aVal.Hours;
     my_time.minute = aVal.Minutes;
@@ -310,7 +311,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     my_time.day = aVal.Day;
 
     const sal_Int32 nIndex = parameter - 1;
-    m_binds[nIndex].buffer_type = MYSQL_TYPE_TIME;
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_DATETIME;
     mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &my_time, MYSQL_TYPE_DATETIME);
     m_bindMetas[nIndex].is_null = 0;
 }
