@@ -29,11 +29,11 @@ namespace xmloff { namespace token {
     {
         struct XMLTokenEntry
         {
-            sal_Int32 nLength;
+            sal_Int32 const nLength;
             const sal_Char* pChar;
             OUString* pOUString;
 #if OSL_DEBUG_LEVEL > 0
-            XMLTokenEnum eToken;
+            XMLTokenEnum const eToken;
 #endif
         };
     }

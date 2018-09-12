@@ -249,7 +249,7 @@ public:
     rtl::Reference< XMLPropertySetMapper > mxPropertySetMapper;
     rtl::Reference< XMLChartExportPropertyMapper > mxExpPropMapper;
 
-    OUString msTableName;
+    static constexpr OUStringLiteral gsTableName = "local-table";
     OUStringBuffer msStringBuffer;
     OUString msString;
 
@@ -260,7 +260,7 @@ public:
     OUString msTableNumberList;
     css::uno::Sequence< sal_Int32 > maSequenceMapping;
 
-    OUString msCLSID;
+    OUString const msCLSID;
 
     OUString maSrcShellID;
     OUString maDestShellID;
@@ -270,6 +270,10 @@ public:
     tDataSequenceCont m_aDataSequencesToExport;
     OUString maCategoriesRange;
 };
+
+#if !HAVE_CPP_INLINE_VARIABLES
+constexpr OUStringLiteral SchXMLExportHelper_Impl::gsTableName;
+#endif
 
 namespace
 {
@@ -294,7 +298,7 @@ public:
     }
 
 private:
-    OUString m_aRole;
+    OUString const m_aRole;
 };
 
 template< typename T >
@@ -1019,7 +1023,6 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         mrAutoStylePool( rASPool ),
         mxPropertySetMapper( new XMLChartPropertySetMapper( true ) ),
         mxExpPropMapper( new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport ) ),
-        msTableName("local-table"),
         mbHasCategoryLabels( false ),
         mbRowSourceColumns( true ),
         msCLSID( SvGlobalName( SO3_SCH_CLASSID ).GetHexName() )
@@ -1530,7 +1533,7 @@ static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, S
 void SchXMLExportHelper_Impl::exportTable()
 {
     // table element
-    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, msTableName );
+    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, gsTableName );
 
     try
     {

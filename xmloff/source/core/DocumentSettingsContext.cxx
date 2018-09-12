@@ -189,7 +189,7 @@ public:
 class XMLConfigItemMapIndexedContext : public XMLConfigBaseContext
 {
 private:
-    OUString maConfigItemName;
+    OUString const maConfigItemName;
 
 public:
     XMLConfigItemMapIndexedContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -253,7 +253,7 @@ namespace
 {
     struct SettingsGroup
     {
-        OUString sGroupName;
+        OUString const sGroupName;
         uno::Any        aSettings;
 
         SettingsGroup( const OUString& _rGroupName, const uno::Any& _rSettings )

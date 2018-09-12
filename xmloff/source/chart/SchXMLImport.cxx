@@ -76,7 +76,7 @@ public:
     }
 
 private:
-    OUString m_aChartTypeName;
+    OUString const m_aChartTypeName;
 };
 } // anonymous namespace
 

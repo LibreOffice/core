@@ -122,7 +122,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     std::unique_ptr<SvXMLExport_Impl>            mpImpl;            // dummy
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    OUString m_implementationName;
+    OUString const m_implementationName;
 
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
@@ -232,8 +232,8 @@ protected:
 
     struct SettingsGroup
     {
-        ::xmloff::token::XMLTokenEnum                     eGroupName;
-        css::uno::Sequence< css::beans::PropertyValue >   aSettings;
+        ::xmloff::token::XMLTokenEnum const                     eGroupName;
+        css::uno::Sequence< css::beans::PropertyValue > const   aSettings;
 
         SettingsGroup(
                 const ::xmloff::token::XMLTokenEnum _eGroupName,

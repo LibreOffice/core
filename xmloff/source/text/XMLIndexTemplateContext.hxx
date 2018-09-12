@@ -70,14 +70,14 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     OUString sStyleName;
 
     const SvXMLEnumMapEntry<sal_uInt16>* pOutlineLevelNameMap;
-    enum ::xmloff::token::XMLTokenEnum eOutlineLevelAttrName;
+    enum ::xmloff::token::XMLTokenEnum const eOutlineLevelAttrName;
     const sal_Char** pOutlineLevelStylePropMap;
     const bool* pAllowedTokenTypesMap;
 
     sal_Int32 nOutlineLevel;
     bool bStyleNameOK;
     bool bOutlineLevelOK;
-    bool bTOC;
+    bool const bTOC;
 
     // PropertySet of current index
     css::uno::Reference<css::beans::XPropertySet> & rPropertySet;

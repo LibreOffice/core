@@ -167,8 +167,8 @@ class SdXMLImport: public SvXMLImport
     bool                        mbLoadDoc;
     bool                        mbPreview;
 
-    OUString                    msPageLayouts;
-    OUString                    msPreview;
+    static constexpr OUStringLiteral gsPageLayouts = "PageLayouts";
+    static constexpr OUStringLiteral gsPreview = "Preview";
 
     HeaderFooterDeclMap         maHeaderDeclsMap;
     HeaderFooterDeclMap         maFooterDeclsMap;

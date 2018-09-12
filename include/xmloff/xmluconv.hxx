@@ -57,7 +57,7 @@ class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 private:
     const OUString&  maTokenString;
     sal_Int32               mnNextTokenPos;
-    sal_Unicode             mcSeparator;
+    sal_Unicode const       mcSeparator;
 
 public:
     SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator = u' ' );

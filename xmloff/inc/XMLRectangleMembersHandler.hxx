@@ -31,7 +31,7 @@ template<typename EnumT> struct SvXMLEnumMapEntry;
 class XMLRectangleMembersHdl: public XMLPropertyHandler
 {
 private:
-    sal_Int32 mnType;
+    sal_Int32 const mnType;
 public:
 
     XMLRectangleMembersHdl( sal_Int32 nType );

@@ -275,7 +275,7 @@ public:
     bool mbTextDocInOOoFileFormat;
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
-    OUString implementationName;
+    OUString const implementationName;
 
     uno::Reference< embed::XStorage > mxSourceStorage;
 

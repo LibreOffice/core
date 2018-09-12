@@ -127,9 +127,9 @@ namespace {
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sModelService;
-    sal_Int32      nModelServiceLen;
+    sal_Int32 const      nModelServiceLen;
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
+    sal_Int32 const      nFilterServiceLen;
 };
 
 }
@@ -255,7 +255,7 @@ public:
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
-    SvtSaveOptions                                      maSaveOptions;
+    SvtSaveOptions const                                maSaveOptions;
 
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;

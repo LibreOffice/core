@@ -288,6 +288,11 @@ SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", 
 SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS )
 SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS )
 
+#if !HAVE_CPP_INLINE_VARIABLES
+constexpr OUStringLiteral SdXMLImport::gsPageLayouts;
+constexpr OUStringLiteral SdXMLImport::gsPreview;
+#endif
+
 SdXMLImport::SdXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -297,9 +302,7 @@ SdXMLImport::SdXMLImport(
     mnNewMasterPageCount(0),
     mbIsDraw(bIsDraw),
     mbLoadDoc(true),
-    mbPreview(false),
-    msPageLayouts(  "PageLayouts"  ),
-    msPreview(  "Preview"  )
+    mbPreview(false)
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -386,11 +389,11 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     {
         uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-        if( xInfoSetInfo->hasPropertyByName( msPageLayouts ) )
-            xInfoSet->getPropertyValue( msPageLayouts ) >>= mxPageLayouts;
+        if( xInfoSetInfo->hasPropertyByName( gsPageLayouts ) )
+            xInfoSet->getPropertyValue( gsPageLayouts ) >>= mxPageLayouts;
 
-        if( xInfoSetInfo->hasPropertyByName( msPreview ) )
-            xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
+        if( xInfoSetInfo->hasPropertyByName( gsPreview ) )
+            xInfoSet->getPropertyValue( gsPreview ) >>= mbPreview;
 
         OUString const sOrganizerMode(
             "OrganizerMode");

@@ -187,7 +187,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             }
 
         // Create a name based on the properties used
-        for(XMLPropertyState & rState : maProperties)
+        for(XMLPropertyState const & rState : maProperties)
             {
                 if (rState.mnIndex == -1)
                     continue;
@@ -247,7 +247,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
 #if OSL_DEBUG_LEVEL > 0
     std::set<sal_Int32> DebugProperties;
-    for (XMLPropertyState & rPropState : maProperties)
+    for (XMLPropertyState const & rPropState : maProperties)
     {
         sal_Int32 const property(rPropState.mnIndex);
         // serious bug: will cause duplicate attributes to be exported

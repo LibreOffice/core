@@ -108,10 +108,10 @@ public:
 /** store parsed RDFa attributes */
 struct ParsedRDFaAttributes
 {
-    OUString m_About;
-    ::std::vector< OUString > m_Properties;
-    OUString m_Content;
-    OUString m_Datatype;
+    OUString const m_About;
+    ::std::vector< OUString > const m_Properties;
+    OUString const m_Content;
+    OUString const m_Datatype;
 
     ParsedRDFaAttributes(
             OUString const & i_rAbout,
