@@ -1046,14 +1046,9 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getBestRowIdentifier(const Any
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/)
 {
-    Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
-                                         "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
-                                     UNO_QUERY);
-    std::vector<std::vector<Any>> rRows;
     // TODO
     SAL_WARN("connectivity.mysqlc", "method not implemented");
-    lcl_setRows_throw(xResultSet, 12, rRows);
-    return xResultSet;
+    throw SQLException("getTablePrivileges method not implemented", *this, "IM001", 0, Any());
 }
 
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getCrossReference(
