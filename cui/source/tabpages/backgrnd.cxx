@@ -1468,6 +1468,8 @@ SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
 
     SetColorList(pColorTable);
     SetBitmapList(pBitmapList);
+
+    m_xFillTab->set_size_request(m_aColorSize.Width(), m_aColorSize.Height());
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()

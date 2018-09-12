@@ -245,6 +245,12 @@ private:
     SfxItemSet&         m_rXFSet;
 
 protected:
+    Size m_aColorSize;
+    Size m_aGradientSize;
+    Size m_aBitmapSize;
+    Size m_aHatchSize;
+    Size m_aPatternSize;
+
     std::unique_ptr<weld::Container> m_xFillTab;
     std::unique_ptr<weld::ToggleButton> m_xBtnNone;
     std::unique_ptr<weld::ToggleButton> m_xBtnColor;
