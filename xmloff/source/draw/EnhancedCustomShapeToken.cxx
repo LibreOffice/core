@@ -36,7 +36,7 @@ static ::osl::Mutex& getHashMapMutex()
 struct TokenTable
 {
     const char*                         pS;
-    EnhancedCustomShapeTokenEnum        pE;
+    EnhancedCustomShapeTokenEnum const  pE;
 };
 
 static const TokenTable pTokenTableArray[] =

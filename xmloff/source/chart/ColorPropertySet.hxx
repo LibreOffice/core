@@ -71,9 +71,9 @@ protected:
 
 private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
-    OUString  m_aColorPropName;
+    static constexpr OUStringLiteral g_aColorPropName = "FillColor";
     Color     m_nColor;
-    Color     m_nDefaultColor;
+    Color const     m_nDefaultColor;
 };
 
 } //  namespace chart

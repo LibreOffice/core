@@ -44,8 +44,8 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public cppu::WeakImplHelper< css::xm
 
     SvXMLImport& mrImport;
 
-    sal_uInt16       mnPrefix;
-    OUString maLocalName;
+    sal_uInt16 const       mnPrefix;
+    OUString const maLocalName;
 
     std::unique_ptr<SvXMLNamespaceMap> m_pRewindMap;
 

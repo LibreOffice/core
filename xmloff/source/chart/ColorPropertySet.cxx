@@ -45,13 +45,12 @@ protected:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
-    OUString m_aColorPropName;
+    static constexpr OUStringLiteral g_aColorPropName = "FillColor";
     Property m_aColorProp;
 };
 
 lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo() :
-        m_aColorPropName( "FillColor" ),
-        m_aColorProp( m_aColorPropName, -1,
+        m_aColorProp( g_aColorPropName, -1,
                       cppu::UnoType<sal_Int32>::get(), 0)
 {}
 
@@ -63,14 +62,14 @@ Sequence< Property > SAL_CALL lcl_ColorPropertySetInfo::getProperties()
 
 Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& aName )
 {
-    if( aName == m_aColorPropName )
+    if( aName == g_aColorPropName )
         return m_aColorProp;
-    throw UnknownPropertyException( m_aColorPropName, static_cast< uno::XWeak * >( this ));
+    throw UnknownPropertyException( g_aColorPropName, static_cast< uno::XWeak * >( this ));
 }
 
 sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
 {
-    return Name == m_aColorPropName;
+    return Name == g_aColorPropName;
 }
 
 } // anonymous namespace
@@ -81,7 +80,6 @@ namespace chart
 {
 
 ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
-        m_aColorPropName( "FillColor" ),
         m_nColor( nColor ),
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
@@ -144,13 +142,13 @@ Sequence< PropertyState > SAL_CALL ColorPropertySet::getPropertyStates( const Se
 
 void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyName )
 {
-    if( PropertyName == m_aColorPropName )
+    if( PropertyName == g_aColorPropName )
         m_nColor = m_nDefaultColor;
 }
 
 uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
-    if( aPropertyName == m_aColorPropName )
+    if( aPropertyName == g_aColorPropName )
         return uno::makeAny( m_nDefaultColor );
     return uno::Any();
 }

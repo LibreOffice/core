@@ -29,9 +29,9 @@ template<typename EnumT> struct SvXMLEnumMapEntry;
 */
 class XMLBitmapRepeatOffsetPropertyHandler: public XMLPropertyHandler
 {
-    bool mbX;
-    OUString msVertical;
-    OUString msHorizontal;
+    bool const mbX;
+    OUString const msVertical;
+    OUString const msHorizontal;
 public:
 
     XMLBitmapRepeatOffsetPropertyHandler( bool bX );

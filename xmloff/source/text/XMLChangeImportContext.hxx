@@ -62,8 +62,8 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
 private:
-    Element m_Element;
-    bool m_bIsOutsideOfParagraph;
+    Element const m_Element;
+    bool const m_bIsOutsideOfParagraph;
 };
 
 #endif

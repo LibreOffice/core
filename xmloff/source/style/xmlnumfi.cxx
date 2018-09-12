@@ -53,8 +53,8 @@ using namespace ::xmloff::token;
 
 struct SvXMLNumFmtEntry
 {
-    OUString   aName;
-    sal_uInt32  nKey;
+    OUString const    aName;
+    sal_uInt32 const  nKey;
     bool        bRemoveAfterUse;
 
     SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, bool bR ) :
@@ -116,7 +116,7 @@ struct SvXMLNumberInfo
 class SvXMLNumFmtElementContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-    sal_uInt16              nType;
+    sal_uInt16 const        nType;
     OUStringBuffer          aContent;
     SvXMLNumberInfo         aNumInfo;
     LanguageType            nElementLang;
@@ -310,15 +310,15 @@ static const SvXMLEnumMapEntry<bool> aFormatSourceMap[] =
 
 struct SvXMLDefaultDateFormat
 {
-    NfIndexTableOffset          eFormat;
-    SvXMLDateElementAttributes  eDOW;
-    SvXMLDateElementAttributes  eDay;
-    SvXMLDateElementAttributes  eMonth;
-    SvXMLDateElementAttributes  eYear;
-    SvXMLDateElementAttributes  eHours;
-    SvXMLDateElementAttributes  eMins;
-    SvXMLDateElementAttributes  eSecs;
-    bool                        bSystem;
+    NfIndexTableOffset const          eFormat;
+    SvXMLDateElementAttributes const  eDOW;
+    SvXMLDateElementAttributes const  eDay;
+    SvXMLDateElementAttributes const  eMonth;
+    SvXMLDateElementAttributes const  eYear;
+    SvXMLDateElementAttributes const  eHours;
+    SvXMLDateElementAttributes const  eMins;
+    SvXMLDateElementAttributes const  eSecs;
+    bool const                        bSystem;
 };
 
 static const SvXMLDefaultDateFormat aDefaultDateFormats[] =

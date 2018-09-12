@@ -718,7 +718,7 @@ bool XMLHoriMirrorPropHdl_Impl::exportXML(
 class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
-    bool bHori;
+    bool const bHori;
 
 public:
     XMLGrfMirrorPropHdl_Impl( enum XMLTokenEnum eVal, bool bH ) :

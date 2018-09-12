@@ -31,7 +31,7 @@ class SinglePropertySetInfoCache
     typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, bool>
         Map;
 
-    OUString sName;
+    OUString const sName;
     Map map_;
 
 public:

@@ -28,8 +28,8 @@ namespace
 {
 struct SvXMLSignedEnumMapEntry
 {
-    ::xmloff::token::XMLTokenEnum   eToken;
-    sal_Int32                       nValue;
+    ::xmloff::token::XMLTokenEnum const   eToken;
+    sal_Int32 const                       nValue;
 };
 
 const SvXMLSignedEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
