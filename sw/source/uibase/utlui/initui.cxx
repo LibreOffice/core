@@ -214,7 +214,6 @@ ShellResource::ShellResource()
     aTOXCitationName(    SwResId(STR_TOX_CITATION)),
     aLinkCtrlClick(SwResId(STR_LINK_CTRL_CLICK)),
     aLinkClick(SwResId(STR_LINK_CLICK)),
-    pAutoFormatNameLst(nullptr),
     sPageDescFirstName(     SwResId(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SwResId(STR_PAGEDESC_NAME))

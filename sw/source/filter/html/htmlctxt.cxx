@@ -62,7 +62,6 @@ class HTMLAttrContext_SaveDoc
 public:
 
     HTMLAttrContext_SaveDoc() :
-        pPos( nullptr ),
         nContextStMin( SIZE_MAX ), nContextStAttrMin( SIZE_MAX ),
         bStripTrailingPara( false ), bKeepNumRules( false ),
         bFixHeaderDist( false ), bFixFooterDist( false )
@@ -118,7 +117,6 @@ HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
 HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
                   bool bDfltColl ) :
     m_aClass( rClass ),
-    m_pSaveDocContext( nullptr ),
     m_nToken( nTokn ),
     m_nTextFormatColl( nPoolId ),
     m_nLeftMargin( 0 ),
@@ -140,7 +138,6 @@ HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const O
 {}
 
 HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn ) :
-    m_pSaveDocContext( nullptr ),
     m_nToken( nTokn ),
     m_nTextFormatColl( 0 ),
     m_nLeftMargin( 0 ),

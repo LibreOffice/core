@@ -3367,7 +3367,6 @@ uno::Reference<container::XNameReplace> SAL_CALL
 SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc )
     : SwXTextEmbeddedObjectBaseClass(FLYCNTTYPE_OLE,
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
-    , m_xOLEListener(nullptr)
 {
 }
 

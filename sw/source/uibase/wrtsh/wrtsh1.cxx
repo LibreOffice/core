@@ -113,7 +113,6 @@ using namespace com::sun::star;
         m_fnKillSel(&SwWrtShell::Ignore),\
         m_pModeStack(nullptr), \
         m_ePageMove(MV_NO),\
-        m_pCursorStack(nullptr),  \
         m_rView(rShell),\
         m_aNavigationMgr(*this), \
         m_bDestOnStack(false)

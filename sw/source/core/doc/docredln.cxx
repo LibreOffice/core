@@ -741,7 +741,7 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rColl,
                                                 sal_uInt16 nPoolFormatId,
                                                 const SfxItemSet* pItemSet )
-    : sFormatNm(rColl), pSet(nullptr), nPoolId(nPoolFormatId)
+    : sFormatNm(rColl), nPoolId(nPoolFormatId)
 {
     if( pItemSet && pItemSet->Count() )
         pSet.reset( new SfxItemSet( *pItemSet ) );
