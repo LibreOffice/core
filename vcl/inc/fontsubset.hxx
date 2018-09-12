@@ -44,7 +44,7 @@ namespace o3tl {
     template<> struct typed_flags<FontType> : is_typed_flags<FontType, (1<<8)-1> {};
 }
 
-class FontSubsetInfo final
+class VCL_DLLPUBLIC FontSubsetInfo final
 {
 public:
     explicit    FontSubsetInfo();

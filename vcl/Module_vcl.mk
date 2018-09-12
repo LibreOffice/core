@@ -112,6 +112,7 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
+    Library_vclplug_win \
 ))
 endif
 
