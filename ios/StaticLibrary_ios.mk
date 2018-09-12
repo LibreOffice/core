@@ -6,21 +6,15 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_Module_Module,ios))
+$(eval $(call gb_StaticLibrary_StaticLibrary,ios))
 
-ifeq ($(OS),IOS)
-
-$(eval $(call gb_Module_add_targets,ios,\
-	StaticLibrary_ios \
-	CustomTarget_iOS_setup \
+$(eval $(call gb_StaticLibrary_use_api,ios,\
+    udkapi \
+    offapi \
 ))
 
-ifneq ($(ENABLE_IOS_LIBREOFFICELIGHT_APP),)
-$(eval $(call gb_Module_add_targets,ios,\
-	CustomTarget_iOS_link \
+$(eval $(call gb_StaticLibrary_add_exception_objects,ios,\
+    ios/source/ios \
 ))
-
-endif
-endif
 
 # vim: set noet sw=4 ts=4:
