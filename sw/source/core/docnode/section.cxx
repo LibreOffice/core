@@ -1192,7 +1192,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     bool bWasVisibleLinks = pDoc->getIDocumentLinksAdministration().IsVisibleLinks();
     pDoc->getIDocumentLinksAdministration().SetVisibleLinks( false );
 
-    SwPaM* pPam;
+    std::unique_ptr<SwPaM> pPam;
     SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     SwEditShell* pESh = pDoc->GetEditShell();
     pDoc->getIDocumentFieldsAccess().LockExpFields();
@@ -1212,7 +1212,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         --aPos.nNode;
         SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
 
-        pPam = new SwPaM( aPos );
+        pPam.reset(new SwPaM( aPos ));
 
         // Delete everything succeeding it
         --aIdx;
@@ -1396,8 +1396,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             pESh->Push();
             SwPaM* pCursor = pESh->GetCursor();
             *pCursor->GetPoint() = *pPam->GetPoint();
-            delete pPam;
-            pPam = pCursor;
+            pPam.reset(pCursor);
         }
 
         SvMemoryStream aStrm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
@@ -1432,7 +1431,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         pESh->EndAllAction();
     else if( pVSh )
         pVSh->EndAction();
-    delete pPam; // Was created at the start
 
     return SUCCESS;
 }
