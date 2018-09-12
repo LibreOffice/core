@@ -768,7 +768,8 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
             aSource = m_aMediaDescriptor.get( "InputStream" );
         if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
             aSource <<= m_sDocFileLocation;
-        // TODO: shouldn't we also check URL?
+        if ( !aSource.hasValue() && !getURL().isEmpty() )
+            aSource <<= getURL();
 
         OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
 
