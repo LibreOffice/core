@@ -259,6 +259,7 @@ sal_Int32 SAL_CALL OPreparedResultSet::getInt(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
+    checkColumnIndex(column);
     if (*m_aData[column - 1].is_null)
     {
         m_bWasNull = true;
@@ -1081,6 +1082,8 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OPreparedResultSet::g
 
 void OPreparedResultSet::checkColumnIndex(sal_Int32 index)
 {
+    if (!m_aData)
+        throw SQLException("Cursor out of range", *this, rtl::OUString(), 1, Any());
     if (index < 1 || index > static_cast<int>(m_nFieldCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
