@@ -43,7 +43,10 @@ $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,sofficeapp))
+$(eval $(call gb_Library_use_api,sofficeapp,\
+	udkapi \
+	offapi \
+))
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \

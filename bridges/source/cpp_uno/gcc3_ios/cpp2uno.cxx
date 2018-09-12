@@ -434,6 +434,10 @@ namespace
                                sal_Int32 functionIndex,
                                sal_Int32 vtableOffset)
     {
+        // For now temporarily assert when we get here. The intent is
+        // that we won't need the code snippets at all on iOS.
+        assert(false);
+
         assert(functionIndex < nFunIndexes);
         if (!(functionIndex < nFunIndexes))
             return NULL;
