@@ -129,25 +129,18 @@ public:
                 const SfxItemSet* rReplSet = nullptr );
 
     // UI versions
-    bool IsStartWord( sal_Int16 nWordType ) const;
-    bool IsEndWord( sal_Int16 nWordType  ) const;
-    bool IsInWord( sal_Int16 nWordType ) const;
-    bool IsStartEndSentence( bool bEnd ) const;
-    bool GoStartWord();
-    bool GoEndWord();
-    bool GoNextWord();
-    bool GoPrevWord();
+    bool IsStartEndSentence(bool bEnd, SwRootFrame const* pLayout) const;
     bool SelectWord( SwViewShell const * pViewShell, const Point* pPt );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
-    bool IsStartWordWT( sal_Int16 nWordType ) const;
-    bool IsEndWordWT( sal_Int16 nWordType ) const;
-    bool IsInWordWT( sal_Int16 nWordType ) const;
-    bool GoStartWordWT( sal_Int16 nWordType );
-    bool GoEndWordWT( sal_Int16 nWordType );
-    bool GoNextWordWT( sal_Int16 nWordType );
-    bool GoPrevWordWT( sal_Int16 nWordType );
+    bool IsStartWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool IsEndWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool IsInWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr) const;
+    bool GoStartWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoEndWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoNextWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
+    bool GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
     bool SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt );
 
     enum SentenceMoveType
@@ -157,11 +150,8 @@ public:
         START_SENT,
         END_SENT
     };
-    bool GoSentence(SentenceMoveType eMoveType);
-    bool GoNextSentence(){return GoSentence(NEXT_SENT);}
-    bool GoEndSentence(){return GoSentence(END_SENT);}
-    bool GoStartSentence(){return GoSentence(START_SENT);}
-    bool ExpandToSentenceBorders();
+    bool GoSentence(SentenceMoveType eMoveType, SwRootFrame const*pLayout = nullptr);
+    bool ExpandToSentenceBorders(SwRootFrame const* pLayout);
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,

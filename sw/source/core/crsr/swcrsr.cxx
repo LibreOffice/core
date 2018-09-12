@@ -1117,70 +1117,100 @@ short SwCursor::MaxReplaceArived()
     return RET_YES;
 }
 
-bool SwCursor::IsStartWord( sal_Int16 nWordType ) const
-{
-    return IsStartWordWT( nWordType );
-}
+namespace {
 
-bool SwCursor::IsEndWord( sal_Int16 nWordType ) const
+struct HideWrapper
 {
-    return IsEndWordWT( nWordType );
-}
+    // either the frame's text or the node's text (possibly pre-filtered)
+    OUString const* m_pText;
+    // this is actually a TextFrameIndex but all of the i18n code uses sal_Int32
+    sal_Int32 m_nPtIndex;
+    // if mapping is needed, use this frame
+    SwTextFrame * m_pFrame;
+    // input in the constructor, output (via mapping) in the destructor
+    SwTextNode *& m_rpTextNode;
+    sal_Int32 & m_rPtPos;
 
-bool SwCursor::IsInWord( sal_Int16 nWordType ) const
-{
-    return IsInWordWT( nWordType );
-}
+    HideWrapper(SwRootFrame const*const pLayout,
+            SwTextNode *& rpTextNode, sal_Int32 & rPtPos,
+            OUString const*const pFilteredNodeText = nullptr)
+        : m_pText(pFilteredNodeText)
+        , m_pFrame(nullptr)
+        , m_rpTextNode(rpTextNode)
+        , m_rPtPos(rPtPos)
+    {
+        if (pLayout && pLayout->IsHideRedlines())
+        {
+            m_pFrame = static_cast<SwTextFrame*>(rpTextNode->getLayoutFrame(pLayout));
+            m_pText = &m_pFrame->GetText();
+            m_nPtIndex = sal_Int32(m_pFrame->MapModelToView(rpTextNode, rPtPos));
+        }
+        else
+        {
+            if (!m_pText)
+            {
+                m_pText = &rpTextNode->GetText();
+            }
+            m_nPtIndex = rPtPos;
+        }
+    }
+    ~HideWrapper()
+    {
+        AssignBack(m_rpTextNode, m_rPtPos);
+    }
+    void AssignBack(SwTextNode *& rpTextNode, sal_Int32 & rPtPos)
+    {
+        if (0 <= m_nPtIndex && m_pFrame)
+        {
+            std::pair<SwTextNode*, sal_Int32> const pos(
+                    m_pFrame->MapViewToModel(TextFrameIndex(m_nPtIndex)));
+            rpTextNode = pos.first;
+            rPtPos = pos.second;
+        }
+        else
+        {
+            rPtPos = m_nPtIndex;
+        }
+    }
+};
 
-bool SwCursor::GoStartWord()
-{
-    return GoStartWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
-}
-
-bool SwCursor::GoEndWord()
-{
-    return GoEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
-}
-
-bool SwCursor::GoNextWord()
-{
-    return GoNextWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
-}
-
-bool SwCursor::GoPrevWord()
-{
-    return GoPrevWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
-}
+} // namespace
 
 bool SwCursor::SelectWord( SwViewShell const * pViewShell, const Point* pPt )
 {
     return SelectWordWT( pViewShell, WordType::ANYWORD_IGNOREWHITESPACES, pPt );
 }
 
-bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
+bool SwCursor::IsStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
-        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+
+        HideWrapper w(pLayout, pTextNd, nPtPos);
+
         bRet = g_pBreakIt->GetBreakIter()->isBeginWord(
-                            pTextNd->GetText(), nPtPos,
+                            *w.m_pText, w.m_nPtIndex,
                             g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos )),
                             nWordType );
     }
     return bRet;
 }
 
-bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
+bool SwCursor::IsEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
-        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+
+        HideWrapper w(pLayout, pTextNd, nPtPos);
+
         bRet = g_pBreakIt->GetBreakIter()->isEndWord(
-                            pTextNd->GetText(), nPtPos,
+                            *w.m_pText, w.m_nPtIndex,
                             g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                             nWordType );
 
@@ -1188,64 +1218,75 @@ bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
     return bRet;
 }
 
-bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
+bool SwCursor::IsInWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
-        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        Boundary aBoundary = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                            pTextNd->GetText(), nPtPos,
-                            g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
-                            nWordType,
-                            true );
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
 
-        bRet = aBoundary.startPos != aBoundary.endPos &&
-                aBoundary.startPos <= nPtPos &&
-                    nPtPos <= aBoundary.endPos;
+        {
+            HideWrapper w(pLayout, pTextNd, nPtPos);
+
+            Boundary aBoundary = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                                *w.m_pText, w.m_nPtIndex,
+                                g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
+                                nWordType,
+                                true );
+
+            bRet = aBoundary.startPos != aBoundary.endPos &&
+                    aBoundary.startPos <= w.m_nPtIndex &&
+                        w.m_nPtIndex <= aBoundary.endPos;
+            w.m_nPtIndex = aBoundary.startPos; // hack: convert startPos back...
+        }
         if(bRet)
         {
             const CharClass& rCC = GetAppCharClass();
-            bRet = rCC.isLetterNumeric( pTextNd->GetText(), aBoundary.startPos );
+            bRet = rCC.isLetterNumeric(pTextNd->GetText(), nPtPos);
         }
     }
     return bRet;
 }
 
-bool SwCursor::IsStartEndSentence( bool bEnd ) const
+bool SwCursor::IsStartEndSentence(bool bEnd, SwRootFrame const*const pLayout) const
 {
     bool bRet = bEnd ?
                     GetContentNode() && GetPoint()->nContent == GetContentNode()->Len() :
                     GetPoint()->nContent.GetIndex() == 0;
 
-    if( !bRet )
+    if ((pLayout != nullptr && pLayout->IsHideRedlines()) || !bRet)
     {
         SwCursor aCursor(*GetPoint(), nullptr);
         SwPosition aOrigPos = *aCursor.GetPoint();
-        aCursor.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
+        aCursor.GoSentence(bEnd ? SwCursor::END_SENT : SwCursor::START_SENT, pLayout);
         bRet = aOrigPos == *aCursor.GetPoint();
     }
     return bRet;
 }
 
-bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
+bool SwCursor::GoStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                            pTextNd->GetText(), nPtPos,
+
+        {
+            HideWrapper w(pLayout, pTextNd, nPtPos);
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                            *w.m_pText, w.m_nPtIndex,
                             g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                             nWordType,
                             false ).startPos;
+        }
 
         if (nPtPos < pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            GetPoint()->nContent = nPtPos;
+            *GetPoint() = SwPosition(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1253,24 +1294,29 @@ bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
+bool SwCursor::GoEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                            pTextNd->GetText(), nPtPos,
+
+        {
+            HideWrapper w(pLayout, pTextNd, nPtPos);
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                            *w.m_pText, w.m_nPtIndex,
                             g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                             nWordType,
                             true ).endPos;
+        }
 
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0 &&
             GetPoint()->nContent.GetIndex() != nPtPos )
         {
-            GetPoint()->nContent = nPtPos;
+            *GetPoint() = SwPosition(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1278,23 +1324,27 @@ bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
+bool SwCursor::GoNextWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
 
-        nPtPos = g_pBreakIt->GetBreakIter()->nextWord(
-                                pTextNd->GetText(), nPtPos,
-            g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos, 1 ) ),
-                    nWordType ).startPos;
+        {
+            HideWrapper w(pLayout, pTextNd, nPtPos);
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->nextWord(
+                        *w.m_pText, w.m_nPtIndex,
+                        g_pBreakIt->GetLocale( pTextNd->GetLang(nPtPos, 1) ),
+                        nWordType ).startPos;
+        }
 
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            GetPoint()->nContent = nPtPos;
+            *GetPoint() = SwPosition(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1302,26 +1352,34 @@ bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
+bool SwCursor::GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        const sal_Int32 nPtStart = nPtPos;
 
-        if( nPtPos )
-            --nPtPos;
-        nPtPos = g_pBreakIt->GetBreakIter()->previousWord(
-                                pTextNd->GetText(), nPtStart,
-            g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos, 1 ) ),
-                    nWordType ).startPos;
+        {
+            HideWrapper w(pLayout, pTextNd, nPtPos);
+
+            const sal_Int32 nPtStart = w.m_nPtIndex;
+            if (w.m_nPtIndex)
+            {
+                --w.m_nPtIndex;
+                w.AssignBack(pTextNd, nPtPos);
+            }
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->previousWord(
+                        *w.m_pText, nPtStart,
+                        g_pBreakIt->GetLocale( pTextNd->GetLang(nPtPos, 1) ),
+                                nWordType ).startPos;
+        }
 
         if (nPtPos < pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            GetPoint()->nContent = nPtPos;
+            *GetPoint() = SwPosition(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1343,7 +1401,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
         pLayout->GetCursorOfst( GetPoint(), aPt );
     }
 
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
         // Should we select the whole fieldmark?
@@ -1371,30 +1429,46 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
         {
             bool bForward = true;
             sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+
+            HideWrapper w(pViewShell->GetLayout(), pTextNd, nPtPos);
+
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
-                                pTextNd->GetText(), nPtPos,
+                                *w.m_pText, w.m_nPtIndex,
                                 g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                                 nWordType,
                                 bForward ));
 
-            if (comphelper::LibreOfficeKit::isActive() && aBndry.startPos == aBndry.endPos && nPtPos > 0)
+            if (comphelper::LibreOfficeKit::isActive() && aBndry.startPos == aBndry.endPos && w.m_nPtIndex > 0)
             {
                 // nPtPos is the end of the paragraph, select the last word then.
-                --nPtPos;
+                --w.m_nPtIndex;
+                w.AssignBack(pTextNd, nPtPos);
+
                 aBndry = Boundary( g_pBreakIt->GetBreakIter()->getWordBoundary(
-                                    pTextNd->GetText(), nPtPos,
+                                    *w.m_pText, w.m_nPtIndex,
                                     g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                                     nWordType,
                                     bForward ));
+
             }
+
+            SwTextNode * pStartNode(pTextNd);
+            sal_Int32 nStartIndex;
+            w.m_nPtIndex = aBndry.startPos;
+            w.AssignBack(pStartNode, nStartIndex);
+
+            SwTextNode * pEndNode(pTextNd);
+            sal_Int32 nEndIndex;
+            w.m_nPtIndex = aBndry.endPos;
+            w.AssignBack(pEndNode, nEndIndex);
 
             if( aBndry.startPos != aBndry.endPos )
             {
-                GetPoint()->nContent = aBndry.endPos;
+                *GetPoint() = SwPosition(*pEndNode, nEndIndex);
                 if( !IsSelOvr() )
                 {
                     SetMark();
-                    GetMark()->nContent = aBndry.startPos;
+                    *GetMark() = SwPosition(*pStartNode, nStartIndex);
                     if (sw::mark::IMark* pAnnotationMark = pMarksAccess->getAnnotationMarkFor(*GetPoint()))
                     {
                         // An annotation mark covers the selected word. Check
@@ -1455,61 +1529,70 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
     return aRes;
 }
 
-bool SwCursor::GoSentence( SentenceMoveType eMoveType )
+bool SwCursor::GoSentence(SentenceMoveType eMoveType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    const SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetNode().GetTextNode();
     if (pTextNd)
     {
-        OUString sNodeText( lcl_MaskDeletedRedlines( pTextNd ) );
+        OUString const sNodeText(lcl_MaskDeletedRedlines(pTextNd));
 
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        switch ( eMoveType )
+
         {
-        case START_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                                    sNodeText,
-                                    nPtPos, g_pBreakIt->GetLocale(
-                                            pTextNd->GetLang( nPtPos ) ));
-            break;
-        case END_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = g_pBreakIt->GetBreakIter()->endOfSentence(
-                                    sNodeText,
-                                    nPtPos, g_pBreakIt->GetLocale(
-                                                pTextNd->GetLang( nPtPos ) ));
-            break;
-        case NEXT_SENT:
+            HideWrapper w(pLayout, pTextNd, nPtPos, &sNodeText);
+
+            switch ( eMoveType )
             {
-                nPtPos = g_pBreakIt->GetBreakIter()->endOfSentence(
-                                        sNodeText,
-                                        nPtPos, g_pBreakIt->GetLocale(
-                                                    pTextNd->GetLang( nPtPos ) ));
-                while (nPtPos>=0 && ++nPtPos < sNodeText.getLength()
-                       && sNodeText[nPtPos] == ' ' /*isWhiteSpace( aText.GetChar(nPtPos)*/ )
-                    ;
+            case START_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
+                w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale(pTextNd->GetLang(nPtPos)));
+                break;
+            case END_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
+                w.m_nPtIndex = g_pBreakIt->GetBreakIter()->endOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale(pTextNd->GetLang(nPtPos)));
+                break;
+            case NEXT_SENT:
+                {
+                    w.m_nPtIndex = g_pBreakIt->GetBreakIter()->endOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale(pTextNd->GetLang(nPtPos)));
+                    if (w.m_nPtIndex >= 0 && w.m_nPtIndex < w.m_pText->getLength())
+                    {
+                        do
+                        {
+                            ++w.m_nPtIndex;
+                        }
+                        while (w.m_nPtIndex < w.m_pText->getLength()
+                               && (*w.m_pText)[w.m_nPtIndex] == ' ');
+                    }
+                    break;
+                }
+            case PREV_SENT:
+                w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale(pTextNd->GetLang(nPtPos)));
+
+                if (w.m_nPtIndex == 0)
+                    return false;   // the previous sentence is not in this paragraph
+                if (w.m_nPtIndex > 0)
+                {
+                    w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
+                            *w.m_pText, w.m_nPtIndex - 1,
+                            g_pBreakIt->GetLocale(pTextNd->GetLang(nPtPos)));
+                }
                 break;
             }
-        case PREV_SENT:
-            nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                                    sNodeText,
-                                    nPtPos, g_pBreakIt->GetLocale(
-                                                pTextNd->GetLang( nPtPos ) ));
-            if (nPtPos == 0)
-                return false;   // the previous sentence is not in this paragraph
-            if (nPtPos > 0)
-                nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                                    sNodeText,
-                                    nPtPos - 1, g_pBreakIt->GetLocale(
-                                                pTextNd->GetLang( nPtPos ) ));
-            break;
         }
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
         if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0)
         {
-            GetPoint()->nContent = nPtPos;
+            *GetPoint() = SwPosition(*pTextNd, nPtPos);
             if( !IsSelOvr() )
                 bRet = true;
         }
@@ -1517,11 +1600,11 @@ bool SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-bool SwCursor::ExpandToSentenceBorders()
+bool SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 {
     bool bRes = false;
-    const SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
-    const SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
+    SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
+    SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
     if (pStartNd && pEndNd)
     {
         if (!HasMark())
@@ -1534,24 +1617,32 @@ bool SwCursor::ExpandToSentenceBorders()
         sal_Int32 nStartPos = Start()->nContent.GetIndex();
         sal_Int32 nEndPos   = End()->nContent.GetIndex();
 
-        nStartPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                                sStartText, nStartPos,
+        {
+            HideWrapper w(pLayout, pStartNd, nStartPos, &sStartText);
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
+                                *w.m_pText, w.m_nPtIndex,
                                 g_pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
-        nEndPos   = g_pBreakIt->GetBreakIter()->endOfSentence(
-                                sEndText, nEndPos,
+        }
+        {
+            HideWrapper w(pLayout, pEndNd, nEndPos, &sEndText);
+
+            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->endOfSentence(
+                                *w.m_pText, w.m_nPtIndex,
                                 g_pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
+        }
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
         bool bChanged = false;
         if (nStartPos <= pStartNd->GetText().getLength() && nStartPos >= 0)
         {
-            GetMark()->nContent = nStartPos;
+            *GetMark() = SwPosition(*pStartNd, nStartPos);
             bChanged = true;
         }
         if (nEndPos <= pEndNd->GetText().getLength() && nEndPos >= 0)
         {
-            GetPoint()->nContent = nEndPos;
+            *GetPoint() = SwPosition(*pEndNd, nEndPos);
             bChanged = true;
         }
         if (bChanged && !IsSelOvr())

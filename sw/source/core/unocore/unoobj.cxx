@@ -1435,9 +1435,9 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
     // if at the end of the sentence (i.e. at the space after the '.')
     // advance to next word in order for GoSentence to work properly
     // next time and have isStartOfSentence return true after this call
-    if (!rUnoCursor.IsStartWord(css::i18n::WordType::ANYWORD_IGNOREWHITESPACES))
+    if (!rUnoCursor.IsStartWordWT(css::i18n::WordType::ANYWORD_IGNOREWHITESPACES))
     {
-        const bool bNextWord = rUnoCursor.GoNextWord();
+        const bool bNextWord = rUnoCursor.GoNextWordWT(i18n::WordType::ANYWORD_IGNOREWHITESPACES);
         if (bWasEOS && !bNextWord)
         {
             bRet = false;
