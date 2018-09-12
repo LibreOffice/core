@@ -170,19 +170,11 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
 
     switch( nStatus )
     {
-#if MACOSX_SDK_VERSION >= 101000
         case NSModalResponseOK:
-#else
-        case NSOKButton:
-#endif
             retVal = ExecutableDialogResults::OK;
             break;
 
-#if MACOSX_SDK_VERSION >= 101000
         case NSModalResponseCancel:
-#else
-        case NSCancelButton:
-#endif
             retVal = ExecutableDialogResults::CANCEL;
             break;
 

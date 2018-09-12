@@ -173,9 +173,6 @@ static AquaSalFrame* getMouseContainerFrame()
                      { static_cast<CGFloat>(pFrame->maGeometry.nWidth), static_cast<CGFloat>(pFrame->maGeometry.nHeight) } };
     pFrame->VCLToCocoa( aRect );
     NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
-#if MACOSX_SDK_VERSION < 101000
-    [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
-#endif
 
     // Disallow full-screen mode on macOS >= 10.11 where it is enabled by default. We don't want it
     // for now as it will just be confused with LibreOffice's home-grown full-screen concept, with
