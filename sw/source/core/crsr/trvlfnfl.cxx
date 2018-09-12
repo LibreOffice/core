@@ -36,6 +36,16 @@
 #include "callnk.hxx"
 #include <svx/srchdlg.hxx>
 
+bool SwCursorShell::CallCursorShellFN( FNCursorShell fnCursor )
+{
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    bool bRet = (this->*fnCursor)();
+    if( bRet )
+        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                    SwCursorShell::READONLY );
+    return bRet;
+}
+
 bool SwCursorShell::CallCursorFN( FNCursor fnCursor )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves

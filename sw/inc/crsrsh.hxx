@@ -250,8 +250,18 @@ private:
 
     SAL_DLLPRIVATE bool isInHiddenTextFrame(SwShellCursor* pShellCursor);
 
-typedef bool (SwCursor:: *FNCursor)();
+    SAL_DLLPRIVATE bool GoStartWordImpl();
+    SAL_DLLPRIVATE bool GoEndWordImpl();
+    SAL_DLLPRIVATE bool GoNextWordImpl();
+    SAL_DLLPRIVATE bool GoPrevWordImpl();
+    SAL_DLLPRIVATE bool GoNextSentenceImpl();
+    SAL_DLLPRIVATE bool GoEndSentenceImpl();
+    SAL_DLLPRIVATE bool GoStartSentenceImpl();
+
+    typedef bool (SwCursor::*FNCursor)();
+    typedef bool (SwCursorShell::*FNCursorShell)();
     SAL_DLLPRIVATE bool CallCursorFN( FNCursor );
+    SAL_DLLPRIVATE bool CallCursorShellFN( FNCursorShell );
 
     SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
