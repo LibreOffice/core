@@ -71,12 +71,12 @@ SwObjectFormatterTextFrame::~SwObjectFormatterTextFrame()
 {
 }
 
-SwObjectFormatterTextFrame* SwObjectFormatterTextFrame::CreateObjFormatter(
+std::unique_ptr<SwObjectFormatterTextFrame> SwObjectFormatterTextFrame::CreateObjFormatter(
                                                 SwTextFrame& _rAnchorTextFrame,
                                                 const SwPageFrame& _rPageFrame,
                                                 SwLayAction* _pLayAction )
 {
-    SwObjectFormatterTextFrame* pObjFormatter = nullptr;
+    std::unique_ptr<SwObjectFormatterTextFrame> pObjFormatter;
 
     // determine 'master' of <_rAnchorTextFrame>, if anchor frame is a follow text frame.
     SwTextFrame* pMasterOfAnchorFrame = nullptr;
@@ -94,9 +94,9 @@ SwObjectFormatterTextFrame* SwObjectFormatterTextFrame::CreateObjFormatter(
     if ( _rAnchorTextFrame.GetDrawObjs() ||
          ( pMasterOfAnchorFrame && pMasterOfAnchorFrame->GetDrawObjs() ) )
     {
-        pObjFormatter =
+        pObjFormatter.reset(
             new SwObjectFormatterTextFrame( _rAnchorTextFrame, _rPageFrame,
-                                         pMasterOfAnchorFrame, _pLayAction );
+                                         pMasterOfAnchorFrame, _pLayAction ));
     }
 
     return pObjFormatter;

@@ -59,7 +59,7 @@ class SwObjectFormatterLayFrame : public SwObjectFormatter
                                   const bool _bCheckForMovedFwd = false ) override;
         virtual bool DoFormatObjs() override;
 
-        static SwObjectFormatterLayFrame* CreateObjFormatter(
+        static std::unique_ptr<SwObjectFormatterLayFrame> CreateObjFormatter(
                                                 SwLayoutFrame& _rAnchorLayFrame,
                                                 const SwPageFrame& _rPageFrame,
                                                 SwLayAction* _pLayAction );
