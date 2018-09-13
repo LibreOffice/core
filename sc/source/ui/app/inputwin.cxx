@@ -70,6 +70,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
+#include <output.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
@@ -1746,6 +1747,13 @@ void ScTextWnd::StopEditEngine( bool bAll )
 
         if (bSelection)
             Invalidate(); // So that the Selection is not left there
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Clear
+        std::vector<ReferenceMark> aReferenceMarks;
+        ScInputHandler::SendReferenceMarks( mpViewShell, aReferenceMarks );
     }
 }
 

@@ -37,6 +37,8 @@
 #include <vcl/settings.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <output.hxx>
 #include <document.hxx>
@@ -134,7 +136,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             SCTAB nNewTab, long nNewScrX, long nNewScrY,
                             SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                             double nPixelPerTwipsX, double nPixelPerTwipsY,
-                            const Fraction* pZoomX, const Fraction* pZoomY ) :
+                            const Fraction* pZoomX, const Fraction* pZoomY,
+                            long nNewTilePosX, long nNewTilePosY ) :
     mpDev( pNewDev ),
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
@@ -145,6 +148,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nTab( nNewTab ),
     nScrX( nNewScrX ),
     nScrY( nNewScrY ),
+    nTilePosX( nNewTilePosX ),
+    nTilePosY( nNewTilePosY ),
     nX1( nNewX1 ),
     nY1( nNewY1 ),
     nX2( nNewX2 ),
@@ -1877,10 +1882,103 @@ void ScOutputData::FindChanged()
     mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
-void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStartY,
+                                SCCOL nRefEndX, SCROW nRefEndY, const Color& rColor)
+{
+    ReferenceMark aResult;
+
+    PutInOrder( nRefStartX, nRefEndX );
+    PutInOrder( nRefStartY, nRefEndY );
+
+    if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
+        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
+
+    if ( nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
+         nRefStartY <= nVisY2 && nRefEndY >= nVisY1 )
+    {
+        long nMinX = nScrX;
+        long nMinY = nScrY;
+        long nMaxX = nScrX + nScrW - 1;
+        long nMaxY = nScrY + nScrH - 1;
+        if ( bLayoutRTL )
+        {
+            long nTemp = nMinX;
+            nMinX = nMaxX;
+            nMaxX = nTemp;
+        }
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+        bool bTop    = false;
+        bool bBottom = false;
+        bool bLeft   = false;
+        bool bRight  = false;
+
+        long nPosY = nScrY;
+        bool bNoStartY = ( nY1 < nRefStartY );
+        bool bNoEndY   = false;
+        for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+        {
+            SCROW nY = pRowInfo[nArrY].nRowNo;
+
+            if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
+            {
+                nMinY = nPosY;
+                bTop = true;
+            }
+            if ( nY==nRefEndY )
+            {
+                nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
+                bBottom = true;
+            }
+            if ( nY>nRefEndY && bNoEndY )
+            {
+                nMaxY = nPosY-2;
+                bBottom = true;
+            }
+            bNoStartY = ( nY < nRefStartY );
+            bNoEndY   = ( nY < nRefEndY );
+            nPosY += pRowInfo[nArrY].nHeight;
+        }
+
+        long nPosX = nScrX;
+        if ( bLayoutRTL )
+            nPosX += nMirrorW - 1;      // always in pixels
+
+        for (SCCOL nX=nX1; nX<=nX2; nX++)
+        {
+            if ( nX==nRefStartX )
+            {
+                nMinX = nPosX;
+                bLeft = true;
+            }
+            if ( nX==nRefEndX )
+            {
+                nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 2 ) * nLayoutSign;
+                bRight = true;
+            }
+            nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+        }
+
+        if (bTop && bBottom && bLeft && bRight)
+        {
+            aResult = ReferenceMark( nMinX / mnPPTX * double( aZoomX ),
+                                     nMinY / mnPPTY * double( aZoomY ),
+                                     ( nMaxX - nMinX ) / mnPPTX * double( aZoomX ),
+                                     ( nMaxY - nMinY ) / mnPPTY * double( aZoomY ),
+                                     nTab,
+                                     rColor );
+        }
+    }
+
+    return aResult;
+}
+
+ReferenceMark ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                                 SCCOL nRefEndX, SCROW nRefEndY,
                                 const Color& rColor, bool bHandle )
 {
+    ReferenceMark aResult;
+
     PutInOrder( nRefStartX, nRefEndX );
     PutInOrder( nRefStartY, nRefEndY );
 
@@ -1957,12 +2055,12 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
              nMaxY >= nMinY )
         {
             mpDev->SetLineColor( rColor );
-            if (bTop && bBottom && bLeft && bRight)
+            if (bTop && bBottom && bLeft && bRight && !comphelper::LibreOfficeKit::isActive() )
             {
-                mpDev->SetFillColor();
-                mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
+                    mpDev->SetFillColor();
+                    mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
             }
-            else
+            else if ( !comphelper::LibreOfficeKit::isActive() )
             {
                 if (bTop)
                     mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMaxX, nMinY ) );
@@ -1973,7 +2071,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                 if (bRight)
                     mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
             }
-            if ( bHandle && bRight && bBottom )
+            if ( bHandle && bRight && bBottom && !comphelper::LibreOfficeKit::isActive() )
             {
                 mpDev->SetLineColor( rColor );
                 mpDev->SetFillColor( rColor );
@@ -2003,6 +2101,8 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             }
         }
     }
+
+    return aResult;
 }
 
 void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,

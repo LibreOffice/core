@@ -5079,6 +5079,8 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
+        pHdl->UpdateLokReferenceMarks();
+
         // only redrawing what has been changed...
         lcl_PaintRefChanged( pDocSh, aOld, aNew );
 

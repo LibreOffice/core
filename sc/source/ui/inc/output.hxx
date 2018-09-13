@@ -58,6 +58,39 @@ enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 class ClearableClipRegion;
 typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipRegion>> ClearableClipRegionPtr;
 
+/// Describes reference mark to be drawn, position & size in TWIPs
+struct ReferenceMark {
+    long nX;
+    long nY;
+    long nWidth;
+    long nHeight;
+    long nTab;
+    Color aColor;
+
+    ReferenceMark()
+        : nX( 0 )
+        , nY( 0 )
+        , nWidth( 0 )
+        , nHeight( 0 )
+        , nTab( 0 )
+        , aColor( COL_AUTO ) {}
+
+    ReferenceMark( long aX,
+                   long aY,
+                   long aWidth,
+                   long aHeight,
+                   long aTab,
+                   const Color& rColor )
+        : nX( aX )
+        , nY( aY )
+        , nWidth( aWidth )
+        , nHeight( aHeight )
+        , nTab( aTab )
+        , aColor( rColor ) {}
+
+    bool Is() const { return ( nWidth > 0 && nHeight > 0 ); }
+};
+
 class ScOutputData
 {
 friend class ScDrawStringsVars;
@@ -152,8 +185,10 @@ private:
     long nScrW;                 // Output size (Pixel)
     long nScrH;
     long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    SCCOL const nX1;                  // Start-/End coordinates
-    SCROW const nY1;                  //  ( incl. hidden )
+    long nTilePosX;             // Current tile X offset (twips)
+    long nTilePosY;             // Current tile Y offset (twips)
+    SCCOL const nX1;            // Start-/End coordinates
+    SCROW const nY1;            //  ( incl. hidden )
     SCCOL const nX2;
     SCROW const nY2;
     SCCOL nVisX1;               // Start-/End coordinates
@@ -259,6 +294,7 @@ private:
     void    SetCellRotations();
 
 public:
+
     /**
      * @param nNewScrX: X-Offset in the output device for the table
      * @param nNewScrY: Y-Offset in the output device for the table
@@ -270,7 +306,8 @@ public:
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
                                     const Fraction* pZoomX = nullptr,
-                                    const Fraction* pZoomY = nullptr );
+                                    const Fraction* pZoomY = nullptr,
+                                    long nNewTilePosX = 0, long nNewTilePosY = 0 );
 
                     ~ScOutputData();
 
@@ -331,9 +368,13 @@ public:
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
-    void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+    /// Draws reference mark and returns its properties
+    ReferenceMark DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, bool bHandle );
+    ReferenceMark FillReferenceMark( SCCOL nRefStartX, SCROW nRefStartY,
+                                    SCCOL nRefEndX, SCROW nRefEndY,
+                                    const Color& rColor );
     void    DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
                             SCCOL nRefEndX, SCROW nRefEndY,
                             const Color& rColor, sal_uInt16 nType );
