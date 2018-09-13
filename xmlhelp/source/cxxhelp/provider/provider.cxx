@@ -169,7 +169,7 @@ ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& xCanonicId )
 {
     if ( !xCanonicId->getContentProviderScheme()
-             .equalsIgnoreAsciiCase( m_aScheme ) )
+             .equalsIgnoreAsciiCase( MYUCP_URL_SCHEME ) )
     {   // Wrong URL-scheme
         throw ucb::IllegalIdentifierException();
     }
