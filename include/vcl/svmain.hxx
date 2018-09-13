@@ -25,7 +25,7 @@
 
 // #i47888# allow for alternative initialization as required for e.g. MacOSX
 bool ImplSVMainHook( int* );
-int ImplSVMain();
+VCL_DLLPUBLIC int ImplSVMain();
 
 VCL_DLLPUBLIC int SVMain();
 
