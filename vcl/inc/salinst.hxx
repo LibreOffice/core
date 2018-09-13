@@ -77,7 +77,7 @@ enum class SalFrameStyleFlags;
 
 typedef struct _cairo_font_options cairo_font_options_t;
 
-class VCL_PLUGIN_PUBLIC SalInstance
+class VCL_DLLPUBLIC SalInstance
 {
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
@@ -210,11 +210,6 @@ void DestroySalInstance( SalInstance* pInst );
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
 VCL_DLLPUBLIC const OUString& SalGetDesktopEnvironment();
-
-void InitSalData();                         // called from Application-Ctor
-void DeInitSalData();                       // called from Application-Dtor
-
-void InitSalMain();
 
 #endif // INCLUDED_VCL_INC_SALINST_HXX
 

@@ -106,6 +106,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     lcms2 \
     mdds_headers \
 ))
+
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,vcl,\
      epoxy \
@@ -474,7 +475,7 @@ vcl_headless_freetype_code=\
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/plugadapt/salplug \
+    vcl/source/app/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/gdi/nativewindowhandleprovider \
@@ -520,8 +521,10 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lpthread \
 ))
 endif
-else
- $(eval $(call gb_Library_add_exception_objects,vcl,\
+
+else # ! DISABLE_GUI
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/DeviceInfo \
     vcl/opengl/gdiimpl \
     vcl/opengl/salbmp \
@@ -547,7 +550,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/x11/X11DeviceInfo \
 ))
 endif
-endif
+endif # ! DISABLE_GUI
+
 
 ifeq ($(OS),HAIKU)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -563,7 +567,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl, \
-    $(if $(or $(ENABLE_QT5),$(ENABLE_KDE5)),vcl/unx/generic/plugadapt/salplug) \
+    $(if $(or $(ENABLE_QT5),$(ENABLE_KDE5)),vcl/source/app/salplug) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -573,6 +577,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     expat \
 ))
 endif
+
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_libs,vcl,\
@@ -605,7 +610,6 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
-    $(vcl_really_generic_code) \
     $(vcl_coretext_code) \
     $(vcl_quartz_code) \
     $(vcl_headless_code) \
@@ -624,7 +628,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/osx/salplug \
+    vcl/source/app/salplug \
 ))
 endif
 
@@ -633,7 +637,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/win/WinDeviceInfo \
     vcl/opengl/win/blocklist_parser \
-    vcl/win/salplug \
+    vcl/source/app/salplug \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vcl,\
