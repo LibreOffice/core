@@ -8236,7 +8236,7 @@
     <resource name="CT_OMathJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
     </resource>
-    <resource name="ST_TwipsMeasure" resource="TwipsMeasure"/>
+    <resource name="ST_TwipsMeasure" resource="TwipsMeasure_asSigned"/>
     <resource name="CT_TwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
@@ -10686,6 +10686,24 @@
       <define name="ST_TwipsMeasure">
         <data type="unsignedLong"/>
       </define>
+<!-- MS documentation states that TwipsMeasure is a positive value
+     but it doesn't indicate how to handle an invalid negative
+     value. So, ST_TwipsMeasure matches the documented type,
+     and the extension indicates how MS handles it in practice.
+
+     Historically, LO has treated TwipsMeasure as signed,
+     i.e. that negative numbers are allowed and treated as negative,
+     so that is the default handling.
+-->
+      <define name="ST_TwipsMeasure_asSigned">
+        <data type="unsignedLong"/>
+      </define>
+      <define name="ST_TwipsMeasure_asZero">
+        <data type="unsignedLong"/>
+      </define>
+      <define name="ST_TwipsMeasure_asAbs">
+        <data type="unsignedLong"/>
+      </define>
       <define name="CT_TwipsMeasure">
         <attribute name="val">
           <ref name="ST_TwipsMeasure"/>
@@ -13013,10 +13031,10 @@
       </define>
       <define name="CT_Column">
         <attribute name="w">
-          <ref name="ST_TwipsMeasure"/>
+          <ref name="ST_TwipsMeasure_asZero"/>
         </attribute>
         <attribute name="space">
-          <ref name="ST_TwipsMeasure"/>
+          <ref name="ST_TwipsMeasure_asZero"/>
         </attribute>
       </define>
       <define name="CT_Columns">
@@ -16656,12 +16674,20 @@
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_UnsignedDecimalNumber" resource="Integer"/>
-    <resource name="ST_TwipsMeasure" resource="TwipsMeasure"/>
+<!--
+     Historically, LO has treated TwipsMeasure as signed,
+     i.e. that negative numbers are allowed and treated as negative,
+     so that is the default handling.
+-->
+    <resource name="ST_TwipsMeasure" resource="TwipsMeasure_asSigned"/>
+    <resource name="ST_TwipsMeasure_asSigned" resource="TwipsMeasure_asSigned"/>
+    <resource name="ST_TwipsMeasure_asZero" resource="TwipsMeasure_asZero"/>
+    <resource name="ST_TwipsMeasure_asAbs" resource="TwipsMeasure_asAbs"/>
     <resource name="CT_TwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_SignedTwipsMeasure" resource="TwipsMeasure"/>
+    <resource name="ST_SignedTwipsMeasure" resource="TwipsMeasure_asSigned"/>
     <resource name="CT_SignedTwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
