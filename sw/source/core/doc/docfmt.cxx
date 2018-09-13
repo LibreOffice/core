@@ -1359,13 +1359,13 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
         return ;
 
     // The header only contains the reference to the format from the other document!
-    SfxPoolItem* pNewItem = pItem->Clone();
+    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
 
     SwFrameFormat* pOldFormat;
     if( bCpyHeader )
-         pOldFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
+         pOldFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
     else
-         pOldFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+         pOldFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
 
     if( pOldFormat )
     {
@@ -1397,12 +1397,11 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                 pNewFormat->ResetFormatAttr( RES_CNTNT );
         }
         if( bCpyHeader )
-            static_cast<SwFormatHeader*>(pNewItem)->RegisterToFormat(*pNewFormat);
+            static_cast<SwFormatHeader*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
         else
-            static_cast<SwFormatFooter*>(pNewItem)->RegisterToFormat(*pNewFormat);
+            static_cast<SwFormatFooter*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
         rDestFormat.SetFormatAttr( *pNewItem );
     }
-    delete pNewItem;
 }
 
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
