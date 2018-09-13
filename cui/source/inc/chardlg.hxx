@@ -35,7 +35,7 @@
 class SvxFontListItem;
 class FontList;
 
-class CharBasePage : public SfxTabPage
+class SvxCharBasePage : public SfxTabPage
 {
 protected:
     FontPrevWindow   m_aPreviewWin;
@@ -43,7 +43,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+    SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -53,7 +53,7 @@ protected:
     inline SvxFont&     GetPreviewCTLFont();
 
 public:
-    virtual ~CharBasePage() override;
+    virtual ~SvxCharBasePage() override;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -66,7 +66,7 @@ public:
 
 struct SvxCharNamePage_Impl;
 
-class SvxCharNamePage : public CharBasePage
+class SvxCharNamePage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharNamePage>;
 
@@ -172,7 +172,7 @@ public:
 
 // class SvxCharEffectsPage ----------------------------------------------
 
-class SvxCharEffectsPage : public CharBasePage
+class SvxCharEffectsPage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharEffectsPage>;
 
@@ -248,7 +248,7 @@ public:
 // class SvxCharPositionPage ---------------------------------------------
 
 
-class SvxCharPositionPage : public CharBasePage
+class SvxCharPositionPage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharPositionPage>;
     static const sal_uInt16 pPositionRanges[];
@@ -322,7 +322,7 @@ public:
 
 // class SvxCharTwoLinesPage ---------------------------------------------
 
-class SvxCharTwoLinesPage : public CharBasePage
+class SvxCharTwoLinesPage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharTwoLinesPage>;
 private:
