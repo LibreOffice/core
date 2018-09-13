@@ -2583,16 +2583,16 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
                                        bool bChgFollow )
 {
     // ignore hard PageBreak/PageDesc/ColumnBreak from Auto-Set
-    SwAttrSet* pNewAttrSet = nullptr;
+    std::unique_ptr<SwAttrSet> pNewAttrSet;
     // #i75353#
     bool bClearHardSetNumRuleWhenFormatCollChanges( false );
     if( HasSwAttrSet() )
     {
-        pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
+        pNewAttrSet.reset(new SwAttrSet( *GetpSwAttrSet() ));
         const SfxItemSet* pTmpSet = GetpSwAttrSet();
 
         if (bNext)     // successor doesn't inherit breaks!
-            pTmpSet = pNewAttrSet;
+            pTmpSet = pNewAttrSet.get();
 
         // !bNext: remove PageBreaks/PageDesc/ColBreak from this
         bool bRemoveFromCache = false;
@@ -2658,9 +2658,9 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
     SwTextFormatColl* pColl = GetTextColl();
 
-    SwTextNode *pNode = new SwTextNode( rPos, pColl, pNewAttrSet );
+    SwTextNode *pNode = new SwTextNode( rPos, pColl, pNewAttrSet.get() );
 
-    delete pNewAttrSet;
+    pNewAttrSet.reset();
 
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() )
