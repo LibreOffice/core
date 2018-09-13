@@ -35,7 +35,6 @@
 #include <dbggui.hxx>
 
 #include <salinst.hxx>
-#include <svsys.h>
 
 #include <algorithm>
 #include <memory>
