@@ -1312,7 +1312,7 @@ class HandleGestureEventBase
 protected:
     ImplSVData* m_pSVData;
     VclPtr<vcl::Window> m_pWindow;
-    Point m_aMousePos;
+    Point const m_aMousePos;
 
 public:
     HandleGestureEventBase(vcl::Window *pWindow, const Point &rMousePos)

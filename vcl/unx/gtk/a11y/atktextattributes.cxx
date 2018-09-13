@@ -1303,7 +1303,7 @@ AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttribute
 struct AtkTextAttrMapping
 {
     const char *          name;
-    TextPropertyValueFunc toPropertyValue;
+    TextPropertyValueFunc const toPropertyValue;
 };
 
 const AtkTextAttrMapping g_TextAttrMap[] =

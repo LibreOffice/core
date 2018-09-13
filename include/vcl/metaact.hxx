@@ -65,7 +65,7 @@ struct ImplMetaWriteData
 class VCL_DLLPUBLIC MetaAction : public salhelper::SimpleReferenceObject
 {
 private:
-    MetaActionType       mnType;
+    MetaActionType const mnType;
 
 protected:
     virtual             ~MetaAction() override;
@@ -847,7 +847,7 @@ class VCL_DLLPUBLIC MetaMaskAction : public MetaAction
 private:
 
     Bitmap              maBmp;
-    Color               maColor;
+    Color const         maColor;
     Point               maPt;
 
 public:
@@ -881,7 +881,7 @@ class VCL_DLLPUBLIC MetaMaskScaleAction : public MetaAction
 private:
 
     Bitmap              maBmp;
-    Color               maColor;
+    Color const         maColor;
     Point               maPt;
     Size                maSz;
 

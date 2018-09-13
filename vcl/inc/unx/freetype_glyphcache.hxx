@@ -80,7 +80,7 @@ private:
     FreetypeFontFile* const mpFontFile;
     const int       mnFaceNum;
     int             mnRefCount;
-    sal_IntPtr      mnFontId;
+    sal_IntPtr const mnFontId;
     FontAttributes  maDevFontAttributes;
 
     FontCharMapRef  mxFontCharMap;
@@ -109,7 +109,7 @@ private:
 class FreetypeFontFace : public PhysicalFontFace
 {
 private:
-    FreetypeFontInfo*             mpFreetypeFontInfo;
+    FreetypeFontInfo* const             mpFreetypeFontInfo;
 
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );

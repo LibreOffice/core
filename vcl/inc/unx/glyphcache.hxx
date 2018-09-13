@@ -88,7 +88,7 @@ private:
     typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
 
     FontList                maFontList;
-    sal_uLong               mnMaxSize;      // max overall cache size in bytes
+    sal_uLong const         mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
     mutable long            mnLruIndex;
     mutable int             mnGlyphCount;
@@ -176,7 +176,7 @@ private:
     long                    mnSin;
 
     int                     mnWidth;
-    int                     mnPrioAntiAlias;
+    int const               mnPrioAntiAlias;
     FreetypeFontInfo*       mpFontInfo;
     FT_Int                  mnLoadFlags;
     double                  mfStretch;

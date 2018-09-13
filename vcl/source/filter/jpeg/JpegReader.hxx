@@ -53,9 +53,9 @@ class JPEGReader : public GraphicReader
     std::unique_ptr<Bitmap> mpBitmap;
     std::unique_ptr<Bitmap> mpIncompleteAlpha;
 
-    long                mnLastPos;
+    long const          mnLastPos;
     long                mnLastLines;
-    bool                mbSetLogSize;
+    bool const          mbSetLogSize;
 
     Graphic CreateIntermediateGraphic(long nLines);
 

@@ -141,7 +141,7 @@ class VCL_DLLPUBLIC PDFArrayElement : public PDFElement
 {
     std::vector<PDFElement*> m_aElements;
     /// The object that contains this array.
-    PDFObjectElement* m_pObject;
+    PDFObjectElement* const m_pObject;
 
 public:
     PDFArrayElement(PDFObjectElement* pObject);
@@ -178,7 +178,7 @@ public:
 /// Stream object: a byte array with a known length.
 class VCL_DLLPUBLIC PDFStreamElement : public PDFElement
 {
-    size_t m_nLength;
+    size_t const m_nLength;
     sal_uInt64 m_nOffset;
     /// The byte array itself.
     SvMemoryStream m_aMemory;
@@ -197,7 +197,7 @@ class VCL_DLLPUBLIC PDFNameElement : public PDFElement
     /// Offset after the '/' token.
     sal_uInt64 m_nLocation = 0;
     /// Length till the next token start.
-    sal_uInt64 m_nLength = 0;
+    sal_uInt64 const m_nLength = 0;
 
 public:
     PDFNameElement();
