@@ -143,72 +143,15 @@ inline bool StateToAttr( TriState aState )
     return ( TRISTATE_TRUE == aState );
 }
 
-// class SvxCharBasePage -------------------------------------------------
-
-inline SvxFont& SvxCharBasePage::GetPreviewFont()
-{
-    return m_pPreviewWin->GetFont();
-}
-
-
-inline SvxFont& SvxCharBasePage::GetPreviewCJKFont()
-{
-    return m_pPreviewWin->GetCJKFont();
-}
-
-
-inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
-{
-    return m_pPreviewWin->GetCTLFont();
-}
-
-
-SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset)
-    : SfxTabPage( pParent, rID, rUIXMLDescription, &rItemset )
-    , m_pPreviewWin(nullptr)
-    , m_bPreviewBackgroundToCharacter( false )
-{
-}
-
-SvxCharBasePage::~SvxCharBasePage()
-{
-    disposeOnce();
-}
-
-void SvxCharBasePage::dispose()
-{
-    m_pPreviewWin.clear();
-    SfxTabPage::dispose();
-}
-
-void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
-{
-    m_pPreviewWin->SetFromItemSet( rSet, m_bPreviewBackgroundToCharacter );
-}
-
-void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
-{
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if (rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT)
-    {
-        const SvxCharScaleWidthItem &rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
-        m_pPreviewWin->SetFontWidthScale( rItem.GetValue() );
-    }
-}
-
 namespace
 {
-
     void setPrevFontEscapement(SvxFont& _rFont,sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
     {
         _rFont.SetPropr( nProp );
         _rFont.SetProprRel( nEscProp );
         _rFont.SetEscapement( nEsc );
     }
-
-
 }
-
 
 inline SvxFont& CharBasePage::GetPreviewFont()
 {
