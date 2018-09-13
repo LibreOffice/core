@@ -25,16 +25,32 @@
 #include <sal/log.hxx>
 
 #include <salinst.hxx>
-#include <unx/gensys.h>
-#include <unx/gendata.hxx>
-#include <headless/svpinst.hxx>
-#include <unx/desktops.hxx>
-#include <printerinfomanager.hxx>
 #include <config_vclplug.h>
 #include <desktop/crashreport.hxx>
 
-#include <cstdio>
+#ifndef _WIN32
+#include <headless/svpinst.hxx>
+#include <printerinfomanager.hxx>
+#include <unx/desktops.hxx>
+#include <unx/gensys.h>
+#include <unx/gendata.hxx>
+
 #include <unistd.h>
+#else
+#include <saldatabasic.hxx>
+#include <Windows.h>
+#endif
+
+#include <cstdio>
+
+#ifdef ANDROID
+#error "Android has no plugin infrastructure!"
+#endif
+
+#if !(defined _WIN32 || defined MACOSX)
+#define DESKTOPDETECT
+#define HEADLESS_VCLPLUG
+#endif
 
 extern "C" {
 typedef SalInstance*(*salFactoryProc)();
@@ -42,32 +58,14 @@ typedef SalInstance*(*salFactoryProc)();
 
 namespace {
 
-// HACK to obtain Application::IsHeadlessModeEnabled early on, before
-// Application::EnableHeadlessMode has potentially been called:
-bool IsHeadlessModeRequested()
+oslModule pCloseModule = nullptr;
+
+SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
-    if (Application::IsHeadlessModeEnabled()) {
-        return true;
-    }
-    sal_uInt32 n = rtl_getAppCommandArgCount();
-    for (sal_uInt32 i = 0; i < n; ++i) {
-        OUString arg;
-        rtl_getAppCommandArg(i, &arg.pData);
-        if ( arg == "--headless" || arg == "-headless" ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-}
-
-static oslModule pCloseModule = nullptr;
-
-static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
-{
+#ifdef HEADLESS_VCLPLUG
     if (rModuleBase == "svp")
         return svp_create_SalInstance();
+#endif
 
     SalInstance* pInst = nullptr;
     OUString aModule(
@@ -91,7 +89,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                 pCloseModule = static_cast<oslModule>(aMod);
                 aMod.release();
 
-#ifndef ANDROID
                 /*
                  * Recent GTK+ versions load their modules with RTLD_LOCAL, so we can
                  * not access the 'gnome_accessibility_module_shutdown' anymore.
@@ -100,11 +97,10 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * #i109007# KDE3 seems to have the same problem.
                  * And same applies for KDE4.
                  */
-                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde4" || rModuleBase == "gtk3_kde5")
+                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde4" || rModuleBase == "gtk3_kde5" || rModuleBase == "win" )
                 {
                     pCloseModule = nullptr;
                 }
-#endif
             }
         }
         else
@@ -128,15 +124,10 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
     return pInst;
 }
 
-#if !defined(ANDROID)
-
-namespace {
-
+#ifdef DESKTOPDETECT
 extern "C" typedef DesktopType Fn_get_desktop_environment();
 
-}
-
-static DesktopType get_desktop_environment()
+DesktopType get_desktop_environment()
 {
     OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
     oslModule aMod = osl_loadModuleRelative(
@@ -155,18 +146,12 @@ static DesktopType get_desktop_environment()
     return ret;
 }
 
-#else
-
-#define get_desktop_environment() DESKTOP_NONE // For now...
-
-#endif
-
-static SalInstance* autodetect_plugin()
+SalInstance* autodetect_plugin()
 {
     static const char* const pKDEFallbackList[] =
     {
 #if ENABLE_KDE5
-       "kde5",
+        "kde5",
 #endif
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
@@ -182,19 +167,24 @@ static SalInstance* autodetect_plugin()
         "gtk3", "gtk", "gen", nullptr
     };
 
+#ifdef HEADLESS_VCLPLUG
     static const char* const pHeadlessFallbackList[] =
     {
         "svp", nullptr
     };
+#endif
 
     DesktopType desktop = get_desktop_environment();
     const char * const * pList = pStandardFallbackList;
     int nListEntry = 0;
 
+#ifdef HEADLESS_VCLPLUG
     // no server at all: dummy plugin
     if ( desktop == DESKTOP_NONE )
         pList = pHeadlessFallbackList;
-    else if ( desktop == DESKTOP_GNOME ||
+    else
+#endif
+        if ( desktop == DESKTOP_GNOME ||
               desktop == DESKTOP_UNITY ||
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
@@ -215,28 +205,62 @@ static SalInstance* autodetect_plugin()
 
     return pInst;
 }
+#endif // DESKTOPDETECT
+
+#ifdef HEADLESS_VCLPLUG
+// HACK to obtain Application::IsHeadlessModeEnabled early on, before
+// Application::EnableHeadlessMode has potentially been called:
+bool IsHeadlessModeRequested()
+{
+    if (Application::IsHeadlessModeEnabled()) {
+        return true;
+    }
+    sal_uInt32 n = rtl_getAppCommandArgCount();
+    for (sal_uInt32 i = 0; i < n; ++i) {
+        OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        if ( arg == "--headless" || arg == "-headless" ) {
+            return true;
+        }
+    }
+    return false;
+}
+#endif
+
+} // anonymous namespace
 
 SalInstance *CreateSalInstance()
 {
     SalInstance *pInst = nullptr;
 
     OUString aUsePlugin;
+#ifdef HEADLESS_VCLPLUG
     if( IsHeadlessModeRequested() )
         aUsePlugin = "svp";
     else
-    {
+#endif
         rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
-    }
 
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 
+#ifdef DESKTOPDETECT
     if( ! pInst )
         pInst = autodetect_plugin();
+#endif
 
     // fallback, try everything
     static const char* const pPlugin[] = {
-        "gtk3", "gtk", "kde5", "kde4", "gen" };
+#ifdef _WIN32
+        "win", "qt5"
+#else
+#ifdef MACOSX
+        "osx", "qt5"
+#else
+        "gtk3", "gtk", "kde5", "kde4", "gen"
+#endif
+#endif
+     };
 
     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
@@ -263,18 +287,6 @@ void DestroySalInstance( SalInstance *pInst )
         osl_unloadModule( pCloseModule );
 }
 
-void InitSalData()
-{
-}
-
-void DeInitSalData()
-{
-}
-
-void InitSalMain()
-{
-}
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     if( rErrorText.isEmpty() )
@@ -292,17 +304,26 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
+#ifdef _WIN32
+    static OUString aDesktopEnvironment( "Windows" );
+
+#else
+#ifdef MACOSX
+    static OUString aDesktopEnvironment( "MacOSX" );
+#else
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
         "XFCE", "MATE", "KDE4", "KDE5" };
-    static OUString aRet;
-    if( aRet.isEmpty())
+    static OUString aDesktopEnvironment;
+    if( aDesktopEnvironment.isEmpty())
     {
-        aRet = OUString::createFromAscii(
+        aDesktopEnvironment = OUString::createFromAscii(
             desktop_strings[get_desktop_environment()]);
     }
-    return aRet;
+#endif
+#endif
+    return aDesktopEnvironment;
 }
 
 SalData::SalData() :
@@ -313,7 +334,19 @@ SalData::SalData() :
 
 SalData::~SalData() COVERITY_NOEXCEPT_FALSE
 {
+#if (defined UNX && !defined MACOSX)
     psp::PrinterInfoManager::release();
+#endif
 }
+
+#ifdef _WIN32
+bool HasAtHook()
+{
+    BOOL bIsRunning = FALSE;
+    // pvParam must be BOOL
+    return SystemParametersInfoW(SPI_GETSCREENREADER, 0, &bIsRunning, 0)
+        && bIsRunning;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

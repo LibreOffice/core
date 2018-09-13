@@ -192,12 +192,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aDesktopEnvironment( "MacOSX" );
-    return aDesktopEnvironment;
-}
-
 SalYieldMutex::SalYieldMutex()
     : m_aCodeBlock( nullptr )
 {

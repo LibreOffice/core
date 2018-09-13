@@ -152,11 +152,6 @@ SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags
     return new AndroidSalFrame( this, pParent, nStyle );
 }
 
-// All the interesting stuff is slaved from the AndroidSalInstance
-void InitSalData()   {}
-void DeInitSalData() {}
-void InitSalMain()   {}
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     OUString aError( rErrorText );
