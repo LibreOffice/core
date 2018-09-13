@@ -905,7 +905,7 @@ namespace sw {
 // interrupts the first attribute.
 // E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
 // with different brackets interrupts another 2-line-attribute.
-SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
+std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                                                 SwMultiPortion const * pMulti ) const
 {
     SwScriptInfo& rSI = const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -938,7 +938,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
         rPos = bFieldBidi ? rPos + TextFrameIndex(1) : rSI.NextDirChg(rPos, &nCurrLevel);
         if (TextFrameIndex(COMPLETE_STRING) == rPos)
             return nullptr;
-        SwMultiCreator *pRet = new SwMultiCreator;
+        std::unique_ptr<SwMultiCreator> pRet(new SwMultiCreator);
         pRet->pItem = nullptr;
         pRet->pAttr = nullptr;
         pRet->nId = SwMultiCreatorId::Bidi;
@@ -1043,7 +1043,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
     {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
         rPos = m_pFrame->MapModelToView(startPos.first, *pRuby->End());
-        SwMultiCreator *pRet = new SwMultiCreator;
+        std::unique_ptr<SwMultiCreator> pRet(new SwMultiCreator);
         pRet->pItem = nullptr;
         pRet->pAttr = pRuby;
         pRet->nId = SwMultiCreatorId::Ruby;
@@ -1055,7 +1055,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
          rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
-        SwMultiCreator *pRet = new SwMultiCreator;
+        std::unique_ptr<SwMultiCreator> pRet(new SwMultiCreator);
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
         std::deque<TextFrameIndex> aEnd;
@@ -1202,7 +1202,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
          rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...
-        SwMultiCreator *pRet = new SwMultiCreator;
+        std::unique_ptr<SwMultiCreator> pRet(new SwMultiCreator);
         pRet->nId = SwMultiCreatorId::Rotate;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
@@ -2430,7 +2430,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
         return pRest;
 
     nPosition = nMultiPos + pHelpMulti->GetLen();
-    SwMultiCreator* pCreate = GetInfo().GetMultiCreator( nMultiPos, nullptr );
+    std::unique_ptr<SwMultiCreator> pCreate = GetInfo().GetMultiCreator( nMultiPos, nullptr );
 
     if ( !pCreate )
     {
@@ -2462,10 +2462,9 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             pTmp = new SwRotatedPortion( nMultiPos, pHelpMulti->GetDirection() );
         else
         {
-            delete pCreate;
             return pRest;
         }
-        delete pCreate;
+        pCreate.reset();
         pTmp->SetFollowField();
         if( pRest )
         {
@@ -2479,7 +2478,6 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
         }
         return pTmp;
     }
-    delete pCreate;
     return pRest;
 }
 
