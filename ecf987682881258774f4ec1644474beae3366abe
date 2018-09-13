@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_b7704974",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-09-13T12:36:39Z",
+      "side": 1,
+      "message": "Menu commands and heading labels use title case, the rest, sentence case.",
+      "range": {
+        "startLine": 1183,
+        "startChar": 43,
+        "endLine": 1183,
+        "endChar": 45
+      },
+      "revId": "ecf987682881258774f4ec1644474beae3366abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_776ac180",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-09-13T12:36:39Z",
+      "side": 1,
+      "message": "Teeny tiny typo: “interacive” → “interactive”. Funnily enough, I have also broken my laptop’s “T” key. :P",
+      "range": {
+        "startLine": 1186,
+        "startChar": 34,
+        "endLine": 1186,
+        "endChar": 44
+      },
+      "revId": "ecf987682881258774f4ec1644474beae3366abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
