@@ -15,11 +15,11 @@ struct Foo
     void acquire();
     void release();
 };
-class Foo16
+class Foo1
 {
     std::unique_ptr<int> m_pbar1;
     rtl::Reference<Foo> m_pbar2;
-    Foo16()
+    Foo1()
         : m_pbar1(nullptr)
         // expected-error@-1 {{no need to explicitly init this with nullptr, just use default constructor [loplugin:simplifyconstruct]}}
         , m_pbar2(nullptr)
@@ -27,4 +27,21 @@ class Foo16
     {
     }
 };
+
+// no warning expected when using std::unique_ptr constructor with a custom deleter
+struct ITypeLib
+{
+};
+struct IUnknown
+{
+    void Release();
+};
+void func2()
+{
+    std::unique_ptr<IUnknown, void (*)(IUnknown * p)> aITypeLibGuard(nullptr, [](IUnknown* p) {
+        if (p)
+            p->Release();
+    });
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

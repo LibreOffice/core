@@ -51,7 +51,7 @@ bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructE
                 .Namespace("com")
                 .GlobalNamespace())
         return true;
-    if (constructExpr->getNumArgs() > 0
+    if (constructExpr->getNumArgs() == 1
         && isa<CXXNullPtrLiteralExpr>(constructExpr->getArg(0)->IgnoreParenImpCasts()))
     {
         report(DiagnosticsEngine::Warning,
