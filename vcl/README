@@ -80,7 +80,7 @@ LibreOffice (and OpenOffice).
 == COM threading ==
 
 The way COM is used in LO generally:
-- vcl InitSalData() puts main thread into Single-threaded Apartment (STA)
+- vcl puts main thread into Single-threaded Apartment (STA)
 - oslWorkerWrapperFunction() puts every thread spawned via oslCreateThread()
   into MTA (free-threaded)
 
