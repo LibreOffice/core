@@ -504,6 +504,26 @@ void SAL_CALL ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ )
     // not supported
 }
 
+uno::Any SAL_CALL ScVbaButton::getValue()
+{
+    return mxControlProps->getPropertyValue( "State" );
+}
+
+void SAL_CALL ScVbaButton::setValue( const uno::Any &nValue )
+{
+    return mxControlProps->setPropertyValue( "State", nValue );
+}
+
+OUString SAL_CALL ScVbaButton::getText()
+{
+    return mxControlProps->getPropertyValue( "Label" ).get< OUString >();
+}
+
+void SAL_CALL ScVbaButton::setText( const OUString &aText )
+{
+    return mxControlProps->setPropertyValue( "Label", uno::Any( aText ) );
+}
+
 // XButton methods
 
 uno::Reference< excel::XCharacters > SAL_CALL ScVbaButton::Characters( const uno::Any& rStart, const uno::Any& rLength )
