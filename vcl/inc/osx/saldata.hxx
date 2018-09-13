@@ -57,7 +57,7 @@ class SystemFontList;
 #define INVALID_CURSOR_PTR reinterpret_cast<NSCursor*>(0xdeadbeef)
 
 // Singleton, instantiated from Application::Application() in
-// vcl/source/app/svapp.cxx through InitSalData().
+// vcl/source/app/svapp.cxx.
 
 class SalData
 {
