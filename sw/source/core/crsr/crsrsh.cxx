@@ -75,13 +75,6 @@
 using namespace com::sun::star;
 using namespace util;
 
-
-/**
- * Delete all overlapping Cursors from a Cursor ring.
- * @param pointer to SwCursor (ring)
- */
-void CheckRange( SwCursor* );
-
 /**
  * Check if pCurrentCursor points into already existing ranges and delete those.
  * @param Pointer to SwCursor object
