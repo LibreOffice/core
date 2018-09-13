@@ -116,9 +116,9 @@ void SwImpBlocks::ClearDoc()
 /**
  * Creating a PaM, that spans the whole document
  */
-SwPaM* SwImpBlocks::MakePaM()
+std::unique_ptr<SwPaM> SwImpBlocks::MakePaM()
 {
-    SwPaM* pPam = new SwPaM( m_xDoc->GetNodes().GetEndOfContent() );
+    std::unique_ptr<SwPaM> pPam(new SwPaM( m_xDoc->GetNodes().GetEndOfContent() ));
     pPam->Move( fnMoveBackward, GoInDoc );
     pPam->SetMark();
     pPam->Move( fnMoveForward, GoInDoc );
