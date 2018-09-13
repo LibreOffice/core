@@ -1046,7 +1046,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         {
             if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
             {
-                SAL_WARN("vcl.fonts", "Unsupported printer font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
+                SAL_INFO("vcl.fonts", "Unsupported printer font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
                 return 1;
             }
         }
@@ -1055,7 +1055,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
                  !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
                  !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
         {
-            SAL_WARN("vcl.fonts", "Unsupported font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
+            SAL_INFO("vcl.fonts", "Unsupported font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
             return 1;
         }
 
@@ -1063,7 +1063,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 
         pInfo->mpList->Add( pData.get() );
-        SAL_WARN("vcl.fonts", "SalEnumFontsProcExW: font added: " << pData->GetFamilyName() << " " << pData->GetStyleName());
+        SAL_INFO("vcl.fonts", "SalEnumFontsProcExW: font added: " << pData->GetFamilyName() << " " << pData->GetStyleName());
     }
 
     return 1;
@@ -1230,7 +1230,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
 bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
-    SAL_WARN( "vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL );
+    SAL_INFO("vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL);
 
     FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
@@ -1274,7 +1274,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    SAL_WARN( "vcl.fonts", "WinSalGraphics::GetDevFontList(): enter" );
+    SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList(): enter");
 
     // make sure all fonts are registered at least temporarily
     static bool bOnce = true;
@@ -1326,7 +1326,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     pFontCollection->SetFallbackHook( &aSubstFallback );
     pFontCollection->SetPreMatchHook(&aPreMatchFont);
 
-    SAL_WARN( "vcl.fonts", "WinSalGraphics::GetDevFontList(): leave" );
+    SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList(): leave");
 }
 
 void WinSalGraphics::ClearDevFontCache()
