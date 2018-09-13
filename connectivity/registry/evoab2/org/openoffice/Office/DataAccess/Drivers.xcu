@@ -25,6 +25,13 @@
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">Evolution Local</value>
       </prop>
+      <node oor:name="Properties">
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
@@ -40,6 +47,13 @@
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">Evolution LDAP</value>
       </prop>
+      <node oor:name="Properties">
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
@@ -55,6 +69,13 @@
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">Groupwise</value>
       </prop>
+      <node oor:name="Properties">
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
