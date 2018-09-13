@@ -349,7 +349,6 @@
 
 #define STR_UNDO_CHARTDATA          261
 #define STR_UNDO_ORIGINALSIZE       262
-#define STR_UNDO_FITCELLSIZE        263
 
 #define STR_LINKERROR               263
 #define STR_LINKERRORFILE           264
@@ -709,7 +708,9 @@
 
 #define STR_FILTER_SELCOUNT             533
 
-#define SC_GLOBSTR_STR_COUNT            534     /**< the count of permanently resident strings */
+#define STR_UNDO_FITCELLSIZE            534
+
+#define SC_GLOBSTR_STR_COUNT            535     /**< the count of permanently resident strings */
 
 #endif
 
