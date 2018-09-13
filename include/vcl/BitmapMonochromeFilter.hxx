@@ -37,7 +37,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uInt8 mcThreshold;
+    sal_uInt8 const mcThreshold;
 };
 
 #endif

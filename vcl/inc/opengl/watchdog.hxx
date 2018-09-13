@@ -20,7 +20,7 @@ struct WatchdogTimingsValues
 {
     /// delays to take various actions in 1/4 of a second increments.
     int mnDisableEntries;
-    int mnAbortAfter;
+    int const mnAbortAfter;
 };
 
 enum class WatchdogTimingMode

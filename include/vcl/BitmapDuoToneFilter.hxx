@@ -27,8 +27,8 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uLong mnColorOne;
-    sal_uLong mnColorTwo;
+    sal_uLong const mnColorOne;
+    sal_uLong const mnColorTwo;
 };
 
 #endif

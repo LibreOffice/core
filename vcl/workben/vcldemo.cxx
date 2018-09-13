@@ -351,9 +351,9 @@ public:
                                   aToplevelRegions[2].BottomRight());
                 DemoRenderer::clearRects(rDev,aSubRegions);
                 struct {
-                    bool mbClip;
-                    bool mbArabicText;
-                    bool mbRotate;
+                    bool const mbClip;
+                    bool const mbArabicText;
+                    bool const mbRotate;
                 } aRenderData[] = {
                     { false, false, false },
                     { false, true,  false },
@@ -1716,7 +1716,7 @@ class DemoWin : public WorkWindow
 
     class RenderThread : public salhelper::Thread {
         DemoWin  &mrWin;
-        sal_uInt32 mnDelaySecs = 0;
+        sal_uInt32 const mnDelaySecs = 0;
     public:
         RenderThread(DemoWin &rWin, sal_uInt32 nDelaySecs)
             : Thread("vcldemo render thread")

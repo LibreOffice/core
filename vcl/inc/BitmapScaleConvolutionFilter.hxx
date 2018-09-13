@@ -41,8 +41,8 @@ protected:
 
 private:
     std::unique_ptr<Kernel> mxKernel;
-    double mrScaleX;
-    double mrScaleY;
+    double const mrScaleX;
+    double const mrScaleY;
 };
 
 class VCL_DLLPUBLIC BitmapScaleBilinearFilter : public BitmapScaleConvolutionFilter

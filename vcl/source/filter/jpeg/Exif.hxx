@@ -59,7 +59,7 @@ private:
     };
 
     struct TiffHeader {
-        sal_uInt16 byteOrder;
+        sal_uInt16 const byteOrder;
         sal_uInt16 tagAlign;
         sal_uInt32 offset;
     };

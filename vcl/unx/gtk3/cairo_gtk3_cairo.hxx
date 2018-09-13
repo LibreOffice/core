@@ -24,7 +24,7 @@ namespace cairo {
     class Gtk3Surface : public Surface
     {
         const GtkSalGraphics* mpGraphics;
-        cairo_t* cr;
+        cairo_t* const cr;
         CairoSurfaceSharedPtr mpSurface;
     public:
         /// takes over ownership of passed cairo_surface

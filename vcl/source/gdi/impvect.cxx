@@ -182,10 +182,10 @@ class ImplVectMap
 {
 private:
 
-    Scanline        mpBuf;
+    Scanline const        mpBuf;
     Scanline*       mpScan;
-    long            mnWidth;
-    long            mnHeight;
+    long const            mnWidth;
+    long const            mnHeight;
 
 public:
 

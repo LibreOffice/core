@@ -33,7 +33,7 @@ namespace util {
 class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
 {
 private:
-    OUString              maGroupChars;
+    OUString const      maGroupChars;
 
 public:
                         ExtTextEngine();

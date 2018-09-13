@@ -45,9 +45,9 @@ enum LB_EVENT_TYPE
 
 struct ImplEntryType
 {
-    OUString    maStr;
-    SalLayoutGlyphs maStrGlyphs;
-    Image       maImage;
+    OUString const    maStr;
+    SalLayoutGlyphs   maStrGlyphs;
+    Image const       maImage;
     void*       mpUserData;
     bool        mbIsSelected;
     ListBoxEntryFlags mnFlags;

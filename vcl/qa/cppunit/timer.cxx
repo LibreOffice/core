@@ -31,7 +31,7 @@
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
 {
-    sal_Int32 mnSeconds;
+    sal_Int32 const mnSeconds;
 public:
     explicit WatchDog(sal_Int32 nSeconds) :
         Thread(),
@@ -450,7 +450,7 @@ void TimerTest::testInvokedReStart()
 
 class IdleSerializer : public Idle
 {
-    sal_uInt32 mnPosition;
+    sal_uInt32 const mnPosition;
     sal_uInt32 &mrProcesed;
 public:
     IdleSerializer( const sal_Char *pDebugName,
