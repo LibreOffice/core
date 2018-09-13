@@ -35,34 +35,6 @@
 class SvxFontListItem;
 class FontList;
 
-// class SvxCharBasePage -------------------------------------------------
-
-class SvxCharBasePage : public SfxTabPage
-{
-protected:
-    VclPtr<SvxFontPrevWindow>  m_pPreviewWin;
-
-    bool                m_bPreviewBackgroundToCharacter;
-
-    SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
-
-    void SetPrevFontWidthScale( const SfxItemSet& rSet );
-
-    inline SvxFont&     GetPreviewFont();
-    inline SvxFont&     GetPreviewCJKFont();
-    inline SvxFont&     GetPreviewCTLFont();
-
-public:
-    virtual ~SvxCharBasePage() override;
-    virtual void dispose() override;
-
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
-    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-
-};
-
 class CharBasePage : public SfxTabPage
 {
 protected:
