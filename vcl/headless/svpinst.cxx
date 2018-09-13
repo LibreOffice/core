@@ -94,7 +94,7 @@ SvpSalInstance::~SvpSalInstance()
 
 void SvpSalInstance::CloseWakeupPipe(bool log)
 {
-    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
+    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     if (!pMutex)
         return;
     if (pMutex->m_FeedbackFDs[0] != -1)
@@ -111,7 +111,7 @@ void SvpSalInstance::CloseWakeupPipe(bool log)
 
 void SvpSalInstance::CreateWakeupPipe(bool log)
 {
-    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
+    SvpSalYieldMutex *const pMutex(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     if (!pMutex)
         return;
     if (pipe (pMutex->m_FeedbackFDs) == -1)
@@ -163,7 +163,7 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
 #ifndef NDEBUG
     if (!g_CheckedMutex)
     {
-        assert(dynamic_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()) != nullptr
+        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
             && "This SvpSalInstance function requires use of SvpSalYieldMutex");
         g_CheckedMutex = true;
     }
@@ -171,7 +171,7 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
 #ifdef IOS
     (void)request;
 #else
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
+    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
     if (request != SvpRequest::NONE)
     {
@@ -198,7 +198,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 m_aTimeout = aTimeOfDay;
                 m_aTimeout += m_nTimeoutMS;
 
-                osl::Guard< comphelper::SolarMutex > aGuard( mpSalYieldMutex.get() );
+                osl::Guard< comphelper::SolarMutex > aGuard( GetYieldMutex() );
 
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();
@@ -287,12 +287,12 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 #ifndef NDEBUG
     if (!g_CheckedMutex)
     {
-        assert(dynamic_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()) != nullptr
+        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
             && "This SvpSalInstance function requires use of SvpSalYieldMutex");
         g_CheckedMutex = true;
     }
 #endif
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
+    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     pMutex->m_NonMainWaitingYieldCond.set();
 }
 
@@ -404,7 +404,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 #ifndef NDEBUG
     if (!g_CheckedMutex)
     {
-        assert(dynamic_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()) != nullptr
+        assert(dynamic_cast<SvpSalYieldMutex*>(GetYieldMutex()) != nullptr
             && "This SvpSalInstance function requires use of SvpSalYieldMutex");
         g_CheckedMutex = true;
     }
@@ -417,7 +417,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
     bEvent = CheckTimeout() || bEvent;
 
-    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
+    SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
 
     if (IsMainThread())
     {

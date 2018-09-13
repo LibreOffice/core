@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENINST_H
 #define INCLUDED_VCL_INC_GENERIC_GENINST_H
 
+#include <memory>
 #include <comphelper/solarmutex.hxx>
 #include <tools/solar.h>
 #include <osl/thread.hxx>
@@ -44,17 +45,11 @@ class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
 {
 protected:
     bool           mbPrinterInit;
-    std::unique_ptr<SalYieldMutex> mpSalYieldMutex;
 
 public:
-    SalGenericInstance( std::unique_ptr<SalYieldMutex> pMutex )
-        : mbPrinterInit( false ), mpSalYieldMutex( std::move(pMutex) ) {}
+    SalGenericInstance( std::unique_ptr<comphelper::SolarMutex> pMutex )
+        : SalInstance(std::move(pMutex)), mbPrinterInit(false) {}
     virtual ~SalGenericInstance() override;
-
-    // Yield mutex
-    virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uInt32         ReleaseYieldMutexAll() override;
-    virtual void               AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
 
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,

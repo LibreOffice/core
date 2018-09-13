@@ -79,8 +79,28 @@ void SalFrame::SetRepresentedURL( const OUString& )
     // currently this is Mac only functionality
 }
 
+SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex)
+    : m_pYieldMutex(std::move(pMutex))
+{
+}
+
 SalInstance::~SalInstance()
 {
+}
+
+comphelper::SolarMutex* SalInstance::GetYieldMutex()
+{
+    return m_pYieldMutex.get();
+}
+
+sal_uInt32 SalInstance::ReleaseYieldMutexAll()
+{
+    return m_pYieldMutex->release(true);
+}
+
+void SalInstance::AcquireYieldMutex(sal_uInt32 nCount)
+{
+    m_pYieldMutex->acquire(nCount);
 }
 
 std::unique_ptr<SalSession> SalInstance::CreateSalSession()
