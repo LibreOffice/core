@@ -36,23 +36,6 @@ using namespace oox::core;
 
 namespace oox { namespace ppt {
 
-OUString QuickDiagrammingImport_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
-}
-
-uno::Sequence< OUString > QuickDiagrammingImport_getSupportedServiceNames()
-{
-    const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.import";
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > QuickDiagrammingImport_createInstance( const Reference< XComponentContext >& rxContext )
-{
-    return static_cast<cppu::OWeakObject*>(new QuickDiagrammingImport( rxContext ));
-}
-
 QuickDiagrammingImport::QuickDiagrammingImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : XmlFilterBase( rxContext )
 {}
@@ -115,7 +98,7 @@ oox::drawingml::chart::ChartConverter* QuickDiagrammingImport::getChartConverter
 
 OUString QuickDiagrammingImport::getImplementationName()
 {
-    return QuickDiagrammingImport_getImplementationName();
+    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
 }
 
 ::oox::ole::VbaProject* QuickDiagrammingImport::implCreateVbaProject() const
@@ -124,5 +107,12 @@ OUString QuickDiagrammingImport::getImplementationName()
 }
 
 }}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_ppt_QuickDiagrammingImport_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::ppt::QuickDiagrammingImport(pCtx));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
