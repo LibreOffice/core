@@ -35,8 +35,6 @@ public:
     HINSTANCE           mhInst;
     /// invisible Window so non-main threads can SendMessage() the main thread
     HWND                mhComWnd;
-    /// The Yield mutex ensures that only one thread calls into VCL
-    SalYieldMutex*      mpSalYieldMutex;
 
     osl::Condition      maWaitingYieldCond;
     unsigned            m_nNoYieldLock;
@@ -65,9 +63,6 @@ public:
     virtual SalTimer*           CreateSalTimer() override;
     virtual SalSystem*          CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
-    virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uInt32          ReleaseYieldMutexAll() override;
-    virtual void                AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
     virtual bool                IsMainThread() const override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
