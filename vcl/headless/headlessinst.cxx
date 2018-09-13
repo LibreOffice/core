@@ -51,11 +51,6 @@ public:
     virtual bool ErrorTrapPop( bool ) override { return false; }
 };
 
-// All the interesting stuff is slaved from the AndroidSalInstance
-void InitSalData()   {}
-void DeInitSalData() {}
-void InitSalMain()   {}
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     OUString aError( rErrorText );
