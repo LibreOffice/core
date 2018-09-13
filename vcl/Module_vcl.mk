@@ -106,6 +106,7 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
     Package_osxres \
+    Library_vclplug_osx \
 ))
 endif
 

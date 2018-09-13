@@ -35,7 +35,7 @@
 #include <osl/process.h>
 
 #include <rtl/ustrbuf.hxx>
-
+#include <vclpluginapi.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>
@@ -57,6 +57,7 @@
 
 #include <print.h>
 #include <salimestatus.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -191,22 +192,10 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-void InitSalData()
-{
-}
-
 const OUString& SalGetDesktopEnvironment()
 {
     static OUString aDesktopEnvironment( "MacOSX" );
     return aDesktopEnvironment;
-}
-
-void DeInitSalData()
-{
-}
-
-void InitSalMain()
-{
 }
 
 SalYieldMutex::SalYieldMutex()
@@ -307,7 +296,8 @@ void ImplSalYieldMutexRelease()
         pInst->GetYieldMutex()->release();
 }
 
-SalInstance* CreateSalInstance()
+extern "C" {
+VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 {
     SalData* pSalData = new SalData;
 
@@ -345,10 +335,6 @@ SalInstance* CreateSalInstance()
 
     return pInst;
 }
-
-void DestroySalInstance( SalInstance* pInst )
-{
-    delete pInst;
 }
 
 AquaSalInstance::AquaSalInstance()
@@ -360,6 +346,9 @@ AquaSalInstance::AquaSalInstance()
 {
     GetYieldMutex()->acquire();
     maMainThread = osl::Thread::getCurrentIdentifier();
+
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mxToolkitName = OUString("osx");
 }
 
 AquaSalInstance::~AquaSalInstance()
