@@ -138,11 +138,6 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSt
     return new IosSalFrame( this, pParent, nStyle );
 }
 
-// All the interesting stuff is slaved from the IosSalInstance
-void InitSalData()   {}
-void DeInitSalData() {}
-void InitSalMain()   {}
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     (void) bDumpCore;
