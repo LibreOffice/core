@@ -139,6 +139,9 @@ struct LOKDocViewPrivateImpl
     /// see them, can't modify them. Key is the view id.
     std::map<int, ViewRectangle> m_aCellViewCursors;
     gboolean m_bInDragGraphicSelection;
+    /// Position, size and color of the reference marks. The current view can only
+    /// see them, can't modify them. Key is the view id.
+    std::vector<std::pair<ViewRectangle, sal_uInt32>> m_aReferenceMarks;
 
     /// @name Start/middle/end handle.
     ///@{
@@ -1363,6 +1366,27 @@ callback (gpointer pData)
     case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
     case LOK_CALLBACK_TABLE_SELECTED:
         break; // TODO
+    case LOK_CALLBACK_REFERENCE_MARKS:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        priv->m_aReferenceMarks.clear();
+
+        for(auto& rMark : aTree.get_child("marks"))
+        {
+            sal_uInt32 nColor = std::stoi(rMark.second.get<std::string>("color"), nullptr, 16);
+            std::string sRect = rMark.second.get<std::string>("rectangle");
+            sal_uInt32 nPart = std::stoi(rMark.second.get<std::string>("part"));
+
+            GdkRectangle aRect = payloadToRectangle(pDocView, sRect.c_str());
+            priv->m_aReferenceMarks.push_back(std::pair<ViewRectangle, sal_uInt32>(ViewRectangle(nPart, aRect), nColor));
+        }
+
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
     default:
         g_assert(false);
         break;
@@ -1815,6 +1839,27 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                         twipToPixel(rCursor.m_aRectangle.y, priv->m_fZoom),
                         twipToPixel(rCursor.m_aRectangle.width, priv->m_fZoom),
                         twipToPixel(rCursor.m_aRectangle.height, priv->m_fZoom));
+        cairo_set_line_width(pCairo, 2.0);
+        cairo_stroke(pCairo);
+    }
+
+    // Draw reference marks.
+    for (auto& rPair : priv->m_aReferenceMarks)
+    {
+        const ViewRectangle& rMark = rPair.first;
+        if (rMark.m_nPart != priv->m_nPartId)
+            continue;
+
+        sal_uInt32 nColor = rPair.second;
+        sal_uInt8 nRed = (nColor >> 16) & 0xff;
+        sal_uInt8 nGreen = (nColor >> 8) & 0xff;
+        sal_uInt8 nBlue = nColor & 0xff;
+        cairo_set_source_rgb(pCairo, nRed, nGreen, nBlue);
+        cairo_rectangle(pCairo,
+                        twipToPixel(rMark.m_aRectangle.x, priv->m_fZoom),
+                        twipToPixel(rMark.m_aRectangle.y, priv->m_fZoom),
+                        twipToPixel(rMark.m_aRectangle.width, priv->m_fZoom),
+                        twipToPixel(rMark.m_aRectangle.height, priv->m_fZoom));
         cairo_set_line_width(pCairo, 2.0);
         cairo_stroke(pCairo);
     }

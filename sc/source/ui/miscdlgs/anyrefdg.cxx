@@ -40,6 +40,8 @@
 #include <inputopt.hxx>
 #include <rangeutl.hxx>
 #include <tokenarray.hxx>
+#include <comphelper/lok.hxx>
+#include <output.hxx>
 
 #include <memory>
 
@@ -259,6 +261,13 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
             if ( bDoneRefMode )
                 pTabViewShell->DoneRefMode();
             pTabViewShell->ClearHighlightRanges();
+
+            if( comphelper::LibreOfficeKit::isActive() )
+            {
+                // Clear
+                std::vector<ReferenceMark> aReferenceMarks;
+                ScInputHandler::SendReferenceMarks( pTabViewShell, aReferenceMarks );
+            }
         }
         m_bHighlightRef=false;
     }

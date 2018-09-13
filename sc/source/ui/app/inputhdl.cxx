@@ -86,6 +86,8 @@
 #include <markdata.hxx>
 #include <tokenarray.hxx>
 #include <gridwin.hxx>
+#include <output.hxx>
+#include <fillinfo.hxx>
 
 // Maximum Ranges in RangeFinder
 #define RANGEFIND_MAX   64
@@ -281,6 +283,44 @@ ScTypedCaseStrSet::const_iterator findTextAll(
 
 }
 
+void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
+                            const std::vector<ReferenceMark>& rReferenceMarks )
+{
+    if ( !pViewShell )
+        return;
+
+    bool bSend = false;
+
+    std::stringstream ss;
+
+    ss << "{ \"marks\": [ ";
+
+    for ( size_t i = 0; i < rReferenceMarks.size(); i++ )
+    {
+        if ( rReferenceMarks[i].Is() )
+        {
+            if ( bSend )
+                ss << ", ";
+
+            ss << "{ \"rectangle\": \""
+               << rReferenceMarks[i].nX << ", "
+               << rReferenceMarks[i].nY << ", "
+               << rReferenceMarks[i].nWidth << ", "
+               << rReferenceMarks[i].nHeight << "\", "
+                  "\"color\": \"" << rReferenceMarks[i].aColor.AsRGBHexString() << "\", "
+                  "\"part\": \"" << rReferenceMarks[i].nTab << "\" } ";
+
+            bSend = true;
+        }
+    }
+
+    ss <<  " ] }";
+
+    OString aPayload = ss.str().c_str();
+    pViewShell->libreOfficeKitViewCallback(
+                LOK_CALLBACK_REFERENCE_MARKS, aPayload.getStr() );
+}
+
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
@@ -380,11 +420,116 @@ handle_r1c1:
         // Do not skip last separator; could be a quote (?)
     }
 
+    UpdateLokReferenceMarks();
+
     if (nCount)
     {
         mpEditEngine->SetUpdateMode( true );
 
         pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
+    }
+}
+
+static ReferenceMark lcl_GetReferenceMark( ScViewData& rViewData, ScDocShell* pDocSh,
+                                           long nX1, long nX2, long nY1, long nY2,
+                                           long nTab, const Color& rColor )
+{
+    ScSplitPos eWhich = rViewData.GetActivePart();
+
+    Point aScrPos = rViewData.GetScrPos( nX1, nY1, eWhich );
+    long nScrX = aScrPos.X();
+    long nScrY = aScrPos.Y();
+
+    double nPPTX = rViewData.GetPPTX();
+    double nPPTY = rViewData.GetPPTY();
+
+    Fraction aZoomX = rViewData.GetZoomX();
+    Fraction aZoomY = rViewData.GetZoomY();
+
+    ScTableInfo aTabInfo;
+    pDocSh->GetDocument().FillInfo( aTabInfo, nX1, nY1, nX2, nY2,
+                                    nTab, nPPTX, nPPTY, false, false );
+
+    ScOutputData aOutputData( nullptr, OUTTYPE_WINDOW, aTabInfo,
+                              &( pDocSh->GetDocument() ), nTab,
+                              nScrX, nScrY,
+                              nX1, nY1, nX2, nY2,
+                              nPPTX, nPPTY,
+                              &aZoomX, &aZoomY );
+
+    return aOutputData.FillReferenceMark( nX1, nY1, nX2, nY2,
+                                          rColor );
+}
+
+void ScInputHandler::UpdateLokReferenceMarks()
+{
+    if ( !comphelper::LibreOfficeKit::isActive() || !pActiveViewSh )
+        return;
+
+    ScViewData& rViewData = pActiveViewSh->GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScRangeFindList* pRangeFinder = GetRangeFindList();
+
+    if ( !pRangeFinder && !rViewData.IsRefMode() )
+        return;
+
+    sal_uInt16 nAdditionalMarks = 0;
+    std::vector<ReferenceMark> aReferenceMarks( 1 );
+
+    if ( rViewData.IsRefMode() )
+    {
+        nAdditionalMarks = 1;
+
+        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        Color aRefColor( rColorCfg.GetColorValue( svtools::CALCREFERENCE ).nColor );
+        long nX1 = rViewData.GetRefStartX();
+        long nX2 = rViewData.GetRefEndX();
+        long nY1 = rViewData.GetRefStartY();
+        long nY2 = rViewData.GetRefEndY();
+        long nTab = rViewData.GetRefTabNo();
+
+        PutInOrder(nX1, nX2);
+        PutInOrder(nY1, nY2);
+
+        aReferenceMarks[0] = lcl_GetReferenceMark( rViewData, pDocSh,
+                                                   nX1, nX2, nY1, nY2,
+                                                   nTab, aRefColor );
+    }
+
+    sal_uInt16 nCount = pRangeFinder ?
+        ( static_cast<sal_uInt16>( pRangeFinder->Count() ) + nAdditionalMarks ) : nAdditionalMarks;
+    aReferenceMarks.resize( nCount );
+
+    if ( nCount && pRangeFinder && !pRangeFinder->IsHidden() &&
+         pRangeFinder->GetDocName() == pDocSh->GetTitle() )
+    {
+        for (sal_uInt16 i = 0; i < nCount - nAdditionalMarks; i++)
+        {
+            ScRangeFindData& rData = pRangeFinder->GetObject( i );
+            ScRange aRef = rData.aRef;
+            aRef.PutInOrder();
+
+            long nX1 = aRef.aStart.Col();
+            long nX2 = aRef.aEnd.Col();
+            long nY1 = aRef.aStart.Row();
+            long nY2 = aRef.aEnd.Row();
+            long nTab = aRef.aStart.Tab();
+
+            aReferenceMarks[i + nAdditionalMarks] = lcl_GetReferenceMark(
+                rViewData, pDocSh, nX1, nX2, nY1, nY2, nTab, rData.nColor );
+
+            ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+        }
+    }
+    else if ( nCount )
+    {
+        ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+    }
+    else
+    {
+        // Clear
+        aReferenceMarks.clear();
+        ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
     }
 }
 
@@ -3010,6 +3155,13 @@ void ScInputHandler::CancelHandler()
     aFormText.clear();
 
     bInOwnChange = false;
+
+    if ( comphelper::LibreOfficeKit::isActive() && pExecuteSh )
+    {
+        // Clear
+        std::vector<ReferenceMark> aReferenceMarks;
+        ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+    }
 }
 
 bool ScInputHandler::IsModalMode( const SfxObjectShell* pDocSh )
