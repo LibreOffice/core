@@ -49,7 +49,6 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
     : MacabResultSet_BASE(m_aMutex),
       OPropertySetHelper(MacabResultSet_BASE::rBHelper),
       m_xStatement(pStmt),
-      m_xMetaData(nullptr),
       m_aMacabRecords(),
       m_nRowPos(-1),
       m_bWasNull(true)

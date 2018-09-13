@@ -45,7 +45,7 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
-    sdbcx::ObjectType xRet = nullptr;
+    sdbcx::ObjectType xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult, UNO_QUERY);
