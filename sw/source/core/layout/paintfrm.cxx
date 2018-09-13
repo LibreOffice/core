@@ -6122,7 +6122,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     const SvxBrushItem* pItem;
     // OD 05.09.2002 #102912#
     // temporary background brush for a fly frame without a background brush
-    SvxBrushItem* pTmpBackBrush = nullptr;
+    std::unique_ptr<SvxBrushItem> pTmpBackBrush;
     const Color* pCol;
     SwRect aOrigBackRect;
     const bool bPageFrame = IsPageFrame();
@@ -6156,20 +6156,20 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                  )
                )
             {
-                pTmpBackBrush = new SvxBrushItem( COL_WHITE, RES_BACKGROUND );
+                pTmpBackBrush.reset(new SvxBrushItem( COL_WHITE, RES_BACKGROUND ));
 
                 //UUU
                 aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(COL_WHITE));
             }
             else
             {
-                pTmpBackBrush = new SvxBrushItem( aGlobalRetoucheColor, RES_BACKGROUND);
+                pTmpBackBrush.reset(new SvxBrushItem( aGlobalRetoucheColor, RES_BACKGROUND));
 
                 //UUU
                 aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aGlobalRetoucheColor));
             }
 
-            pItem = pTmpBackBrush;
+            pItem = pTmpBackBrush.get();
             bBack = true;
         }
     }
@@ -6293,7 +6293,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 
     // OD 05.09.2002 #102912#
     // delete temporary background brush.
-    delete pTmpBackBrush;
+    pTmpBackBrush.reset();
 
     //Now process lower and his neighbour.
     //We end this as soon as a Frame leaves the chain and therefore is not a lower
