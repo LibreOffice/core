@@ -45,7 +45,7 @@ namespace chelp {
 
     private:
 
-        URLParameter m_aURLParameter;
+        URLParameter const m_aURLParameter;
     };
 
 }
