@@ -1050,10 +1050,10 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
     // If the rows should get the same (min) height, we first have
     // to store the old row heights before deleting the frames
-    long* pRowHeights = nullptr;
+    std::unique_ptr<long[]> pRowHeights;
     if ( bSameHeight )
     {
-        pRowHeights = new long[ rBoxes.size() ];
+        pRowHeights.reset(new long[ rBoxes.size() ]);
         for (size_t n = 0; n < rBoxes.size(); ++n)
         {
             SwTableBox* pSelBox = rBoxes[n];
@@ -1165,7 +1165,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         pFrameFormat->ResetFormatAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
     }
 
-    delete[] pRowHeights;
+    pRowHeights.reset();
 
     GCLines();
 
