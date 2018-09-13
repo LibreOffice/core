@@ -30,7 +30,7 @@ namespace vcl
     class VCL_DLLPUBLIC EventPoster
     {
         ImplSVEvent *             m_nId;
-        Link<LinkParamNone*,void> m_aLink;
+        Link<LinkParamNone*,void> const m_aLink;
 
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, void*, void );
 

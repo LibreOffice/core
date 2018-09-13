@@ -20,7 +20,7 @@
 
 struct Node
 {
-    tools::Rectangle mRectangle;
+    tools::Rectangle const mRectangle;
     std::unique_ptr<Node> mLeftNode;
     std::unique_ptr<Node> mRightNode;
     bool mOccupied;

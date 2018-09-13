@@ -29,8 +29,8 @@ typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
-    DeviceFormat                        m_eFormat;
-    cairo_surface_t*                    m_pRefSurface;
+    DeviceFormat const                  m_eFormat;
+    cairo_surface_t* const              m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
     basegfx::B2IVector                  m_aFrameSize;
     std::vector< SvpSalGraphics* >      m_aGraphics;

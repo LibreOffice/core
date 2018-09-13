@@ -39,8 +39,8 @@ namespace cairo {
         explicit X11SysData( const SystemEnvData& );
 
         void*   pDisplay;       // the relevant display connection
-        long    hDrawable;      // a drawable
-        void*   pVisual;        // the visual in use
+        long const    hDrawable;      // a drawable
+        void* const   pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
         void*   pRenderFormat;  // render format for drawable
     };
@@ -48,8 +48,8 @@ namespace cairo {
     /// RAII wrapper for a pixmap
     struct X11Pixmap
     {
-        void* mpDisplay;  // the relevant display connection
-        long  mhDrawable; // a drawable
+        void* const mpDisplay;  // the relevant display connection
+        long const  mhDrawable; // a drawable
 
         X11Pixmap( long hDrawable, void* pDisplay ) :
             mpDisplay(pDisplay),
@@ -64,8 +64,8 @@ namespace cairo {
     class X11Surface : public Surface
     {
         const X11SysData      maSysData;
-        X11PixmapSharedPtr    mpPixmap;
-        CairoSurfaceSharedPtr mpSurface;
+        X11PixmapSharedPtr const    mpPixmap;
+        CairoSurfaceSharedPtr const mpSurface;
 
         X11Surface( const X11SysData& rSysData, const X11PixmapSharedPtr& rPixmap, const CairoSurfaceSharedPtr& pSurface );
 

@@ -61,7 +61,7 @@ private:
     BitmapScopedWriteAccess     mpAcc;
     Bitmap                      maMaskBmp;
     BitmapScopedWriteAccess     mpMaskAcc;
-    long                        mnLastPos;
+    long const                  mnLastPos;
 
     sal_uLong               mnWidth;
     sal_uLong               mnHeight;

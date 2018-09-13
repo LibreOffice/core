@@ -128,9 +128,9 @@ struct SalKeyModEvent
 struct SalPaintEvent
 {
     long            mnBoundX;           // BoundRect - X
-    long            mnBoundY;           // BoundRect - Y
-    long            mnBoundWidth;       // BoundRect - Width
-    long            mnBoundHeight;      // BoundRect - Height
+    long const      mnBoundY;           // BoundRect - Y
+    long const      mnBoundWidth;       // BoundRect - Width
+    long const      mnBoundHeight;      // BoundRect - Height
     bool            mbImmediateUpdate;  // set to true to force an immediate update
 
     SalPaintEvent( long x, long y, long w, long h, bool bImmediate = false ) :
@@ -198,14 +198,14 @@ struct SalSurroundingTextRequestEvent
 
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uLong       mnStart;        // The beginning index of selected range
-    sal_uLong       mnEnd;          // The end index of selected range
+    sal_uLong const       mnStart;        // The beginning index of selected range
+    sal_uLong const       mnEnd;          // The end index of selected range
 };
 
 struct SalQueryCharPositionEvent
 {
     bool            mbValid;                // The data is valid or not.
-    sal_uLong       mnCharPos;              // The index of character in a composition.
+    sal_uLong const mnCharPos;              // The index of character in a composition.
     bool            mbVertical;             // The text is vertical or not.
     long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
     long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y

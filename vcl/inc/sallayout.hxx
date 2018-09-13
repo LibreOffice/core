@@ -77,11 +77,11 @@ class ImplLayoutArgs
 {
 public:
     // string related inputs
-    LanguageTag         maLanguageTag;
+    LanguageTag const   maLanguageTag;
     SalLayoutFlags      mnFlags;
     const OUString&     mrStr;
-    int                 mnMinCharPos;
-    int                 mnEndCharPos;
+    int const           mnMinCharPos;
+    int const           mnEndCharPos;
 
     // performance hack
     vcl::TextLayoutCache const* m_pTextLayoutCache;

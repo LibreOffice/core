@@ -139,7 +139,7 @@ class GtkSalDisplay : public SalDisplay
 #endif
 {
     GtkSalSystem*                   m_pSys;
-    GdkDisplay*                     m_pGdkDisplay;
+    GdkDisplay* const               m_pGdkDisplay;
     o3tl::enumarray<PointerStyle, GdkCursor*> m_aCursors;
     bool                            m_bStartupCompleted;
     bool                            m_bX11Display;

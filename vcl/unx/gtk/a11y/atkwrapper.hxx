@@ -46,7 +46,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 
 struct AtkObjectWrapper
 {
-    AtkObject aParent;
+    AtkObject const aParent;
     AtkObject* mpOrig;  //if we're a GtkDrawingArea acting as a custom LibreOffice widget, this is the toolkit default impl
 
     css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
@@ -77,7 +77,7 @@ struct AtkObjectWrapperClass
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidgetAccessibleClass aParentClass;
 #else
-    AtkObjectClass aParentClass;
+    AtkObjectClass const aParentClass;
 #endif
 };
 

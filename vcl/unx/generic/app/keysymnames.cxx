@@ -41,7 +41,7 @@ namespace vcl_sal {
 
     struct KeysymNameReplacement
     {
-        KeySym          aSymbol;
+        KeySym const    aSymbol;
         const char*     pName;
     };
 
@@ -49,7 +49,7 @@ namespace vcl_sal {
     {
         const char*                     pLangName;
         const KeysymNameReplacement*    pReplacements;
-        int                             nReplacements;
+        int const                       nReplacements;
     };
 
     // CAUTION CAUTION CAUTION

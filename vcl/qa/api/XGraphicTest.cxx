@@ -26,20 +26,19 @@ namespace
 {
 using namespace css;
 
+static OUString const gaDataUrl = "/vcl/qa/api/data/";
+
 class XGraphicTest : public test::BootstrapFixture
 {
 public:
-    OUString maDataUrl;
-
     XGraphicTest()
         : BootstrapFixture(true, false)
-        , maDataUrl("/vcl/qa/api/data/")
     {
     }
 
     OUString getFullUrl(const OUString& sFileName)
     {
-        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
 
     void testGraphic();

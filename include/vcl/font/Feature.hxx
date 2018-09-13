@@ -99,7 +99,7 @@ struct VCL_DLLPUBLIC Feature
     Feature(FeatureID const& rID, FeatureType eType);
 
     FeatureID m_aID;
-    FeatureType m_eType;
+    FeatureType const m_eType;
     FeatureDefinition m_aDefinition;
 };
 

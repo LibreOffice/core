@@ -155,7 +155,7 @@ extern "C" {
 
 struct ImplPostEventData
 {
-    VclEventId      mnEvent;
+    VclEventId const    mnEvent;
     VclPtr<vcl::Window> mpWin;
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
