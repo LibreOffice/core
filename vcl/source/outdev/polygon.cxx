@@ -192,7 +192,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
         bool bSuccess(true);
 
-        // ensure closed - maybe assert, hinders bufering
+        // ensure closed - maybe assert, hinders buffering
         if(!aB2DPolygon.isClosed())
         {
             aB2DPolygon.setClosed(true);

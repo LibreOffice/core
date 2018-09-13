@@ -5244,7 +5244,7 @@ find_winsdk_version()
                 tmppath="$winsdktest\\Include\\$winsdklibsubdir"
                 # test exist the SDK path
                 if test -d "$tmppath"; then
-                   # when path is convertable to a short path then path is okay
+                   # when path is convertible to a short path then path is okay
                    if ! cygpath -d "$tmppath"; then
                       AC_MSG_ERROR([Windows SDK doesn't have a 8.3 name, see NtfsDisable8dot3NameCreation])
                    fi
