@@ -143,23 +143,7 @@ bool AquaSalInstance::isOnCommandLine( const OUString& rArg )
     return false;
 }
 
-// initialize the cocoa VCL_NSApplication object
-// returns an NSAutoreleasePool that must be released when the event loop begins
-static void initNSApp()
-{
-    // create our cocoa NSApplication
-    [VCL_NSApplication sharedApplication];
-
-    SalData::ensureThreadAutoreleasePool();
-
-    // put cocoa into multithreaded mode
-    [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
-
-    // activate our delegate methods
-    [NSApp setDelegate: NSApp];
-}
-
-void postInitVCLinitNSApp()
+void AquaSalInstance::AfterAppInit()
 {
     [[NSNotificationCenter defaultCenter] addObserver: NSApp
                                           selector: @selector(systemColorsChanged:)
@@ -196,38 +180,6 @@ void postInitVCLinitNSApp()
 #endif
 }
 
-bool ImplSVMainHook( int * pnInit )
-{
-    if (comphelper::LibreOfficeKit::isActive())
-        return false;
-
-    NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
-    unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
-    unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
-    [ pool drain ];
-
-    gpnInit = pnInit;
-
-    bNoSVMain = false;
-    initNSApp();
-
-    OUString aExeURL, aExe;
-    osl_getExecutableFile( &aExeURL.pData );
-    osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
-    OString aByteExe( OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
-
-#ifdef DEBUG
-    aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
-    const char* pArgv[] = { aByteExe.getStr(), NULL };
-    NSApplicationMain( 3, pArgv );
-#else
-    const char* pArgv[] = { aByteExe.getStr(), nullptr };
-    NSApplicationMain( 1, pArgv );
-#endif
-
-    return TRUE;   // indicate that ImplSVMainHook is implemented
-}
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     if( rErrorText.isEmpty() )
@@ -243,8 +195,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 
 void InitSalData()
 {
-    SalData *pSalData = new SalData;
-    SetSalData( pSalData );
 }
 
 const OUString& SalGetDesktopEnvironment()
@@ -255,14 +205,6 @@ const OUString& SalGetDesktopEnvironment()
 
 void DeInitSalData()
 {
-    SalData *pSalData = GetSalData();
-    if( pSalData->mpStatusItem )
-    {
-        [pSalData->mpStatusItem release];
-        pSalData->mpStatusItem = nil;
-    }
-    delete pSalData;
-    SetSalData( nullptr );
 }
 
 void InitSalMain()
@@ -369,12 +311,24 @@ void ImplSalYieldMutexRelease()
 
 SalInstance* CreateSalInstance()
 {
-    // this is the case for not using SVMain
-    // not so good
-    if( bNoSVMain )
-        initNSApp();
+    SalData* pSalData = new SalData;
 
-    SalData* pSalData = GetSalData();
+    NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
+    unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
+    unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
+    [ pool drain ];
+
+    // create our cocoa NSApplication
+    [VCL_NSApplication sharedApplication];
+
+    SalData::ensureThreadAutoreleasePool();
+
+    // put cocoa into multithreaded mode
+    [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
+
+    // activate our delegate methods
+    [NSApp setDelegate: NSApp];
+
     SAL_WARN_IF( pSalData->mpInstance != nullptr, "vcl", "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
@@ -388,6 +342,8 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset = 10;
+
+    [NSApp finishLaunching];
 
     return pInst;
 }
@@ -410,8 +366,13 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
-    mpSalYieldMutex->release();
-    delete mpSalYieldMutex;
+    [NSApp stop: NSApp];
+    bLeftMain = true;
+    if( pDockMenu )
+    {
+        [pDockMenu release];
+        pDockMenu = nil;
+    }
 }
 
 void AquaSalInstance::TriggerUserEventProcessing()
@@ -445,20 +406,6 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     case AppEndLoopEvent:
         [NSApp stop: NSApp];
         break;
-    case AppExecuteSVMain:
-    {
-        int nResult = ImplSVMain();
-        if( gpnInit )
-            *gpnInit = nResult;
-        [NSApp stop: NSApp];
-        bLeftMain = true;
-        if( pDockMenu )
-        {
-            [pDockMenu release];
-            pDockMenu = nil;
-        }
-        break;
-    }
     case DispatchTimerEvent:
     {
         AquaSalInstance *pInst = GetSalData()->mpInstance;

@@ -112,111 +112,99 @@ static MainMenuSelector* pMainMenuSelector = nil;
 
 static void initAppMenu()
 {
-    static bool bOnce = true;
-    if( bOnce )
-    {
-        bOnce = false;
+    static bool bInitialized = false;
+    if (bInitialized)
+        return;
 
-        // get the main menu
-        NSMenu* pMainMenu = [NSApp mainMenu];
-        if( pMainMenu != nil )
-        {
-            // create the action selector
-            pMainMenuSelector = [[MainMenuSelector alloc] init];
+    // get the main menu
+    NSMenu* pMainMenu = [NSApp mainMenu];
+    assert(pMainMenu == nil);
+    if (pMainMenu != nil)
+        return;
 
-            // get the proper submenu
-            NSMenu* pAppMenu = [[pMainMenu itemAtIndex: 0] submenu];
-            if( pAppMenu )
-            {
-                // insert about entry
-                OUString aAbout(VclResId(SV_STDTEXT_ABOUT));
-                NSString* pString = CreateNSString( aAbout );
-                NSMenuItem* pNewItem = [pAppMenu insertItemWithTitle: pString
-                                                 action: @selector(showAbout:)
-                                                 keyEquivalent: @""
-                                                 atIndex: 0];
-                if (pString)
-                    [pString release];
-                if( pNewItem )
-                {
-                    [pNewItem setTarget: pMainMenuSelector];
-                    [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
-                }
+    bInitialized = true;
 
-                // insert preferences entry
-                OUString aPref(VclResId(SV_STDTEXT_PREFERENCES));
-                pString = CreateNSString( aPref );
-                pNewItem = [pAppMenu insertItemWithTitle: pString
-                                     action: @selector(showPreferences:)
-                                     keyEquivalent: @","
-                                     atIndex: 2];
-                if (pString)
-                    [pString release];
-                if( pNewItem )
-                {
+    NSMenu* pAppMenu = nil;
+    NSMenuItem* pNewItem = nil;
+
+    pMainMenu = [[[NSMenu alloc] initWithTitle: @"Main Menu"] autorelease];
+    pNewItem = [pMainMenu addItemWithTitle: @"Application"
+        action: nil
+        keyEquivalent: @""];
+    pAppMenu = [[[NSMenu alloc] initWithTitle: @"Application"] autorelease];
+    [pNewItem setSubmenu: pAppMenu];
+    [NSApp setMainMenu: pMainMenu];
+
+    pMainMenuSelector = [[MainMenuSelector alloc] init];
+
+    // about
+    NSString* pString = CreateNSString(VclResId(SV_STDTEXT_ABOUT));
+    pNewItem = [pAppMenu addItemWithTitle: pString
+        action: @selector(showAbout:)
+        keyEquivalent: @""];
+    [pString release];
+    [pNewItem setTarget: pMainMenuSelector];
+
+    [pAppMenu addItem:[NSMenuItem separatorItem]];
+
+    // preferences
+    pString = CreateNSString(VclResId(SV_STDTEXT_PREFERENCES));
+    pNewItem = [pAppMenu addItemWithTitle: pString
+        action: @selector(showPreferences:)
+        keyEquivalent: @","];
+    [pString release];
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-// 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-                    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
+    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
 SAL_WNODEPRECATED_DECLARATIONS_POP
-                    [pNewItem setTarget: pMainMenuSelector];
-                    [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
-                }
+    [pNewItem setTarget: pMainMenuSelector];
 
-                // WARNING: ultra ugly code ahead
+    [pAppMenu addItem:[NSMenuItem separatorItem]];
 
-                // rename standard entries
-                // rename "Services"
-                pNewItem = [pAppMenu itemAtIndex: 4];
-                if( pNewItem )
-                {
-                    pString = CreateNSString(VclResId(SV_MENU_MAC_SERVICES));
-                    [pNewItem  setTitle: pString];
-                    if( pString )
-                        [pString release];
-                }
+    // Services item and menu
+    pString = CreateNSString(VclResId(SV_MENU_MAC_SERVICES));
+    pNewItem = [pAppMenu addItemWithTitle: pString
+        action: nil
+        keyEquivalent: @""];
+    NSMenu *servicesMenu = [[[NSMenu alloc] initWithTitle:@"Services"] autorelease];
+    [pNewItem setSubmenu: servicesMenu];
+    [NSApp setServicesMenu: servicesMenu];
 
-                // rename "Hide NewApplication"
-                pNewItem = [pAppMenu itemAtIndex: 6];
-                if( pNewItem )
-                {
-                    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEAPP));
-                    [pNewItem  setTitle: pString];
-                    if( pString )
-                        [pString release];
-                }
+    [pAppMenu addItem:[NSMenuItem separatorItem]];
 
-                // rename "Hide Others"
-                pNewItem = [pAppMenu itemAtIndex: 7];
-                if( pNewItem )
-                {
-                    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEALL));
-                    [pNewItem  setTitle: pString];
-                    if( pString )
-                        [pString release];
-                }
+    // Hide Application
+    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEAPP));
+    [pAppMenu addItemWithTitle: pString
+        action:@selector(hide:)
+        keyEquivalent:@"h"];
+    [pString release];
 
-                // rename "Show all"
-                pNewItem = [pAppMenu itemAtIndex: 8];
-                if( pNewItem )
-                {
-                    pString = CreateNSString(VclResId(SV_MENU_MAC_SHOWALL));
-                    [pNewItem  setTitle: pString];
-                    if( pString )
-                        [pString release];
-                }
+    // Hide Others
+    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEALL));
+    [pAppMenu addItemWithTitle: pString
+        action:@selector(hideOtherApplications:)
+        keyEquivalent:@"h"];
+    [pString release];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
-                // rename "Quit NewApplication"
-                pNewItem = [pAppMenu itemAtIndex: 10];
-                if( pNewItem )
-                {
-                    pString = CreateNSString(VclResId(SV_MENU_MAC_QUITAPP));
-                    [pNewItem  setTitle: pString];
-                    if( pString )
-                        [pString release];
-                }
-            }
-        }
-    }
+    // Show All
+    pString = CreateNSString(VclResId(SV_MENU_MAC_SHOWALL));
+    [pAppMenu addItemWithTitle: pString
+        action:@selector(unhideAllApplications:)
+        keyEquivalent:@""];
+    [pString release];
+
+    [pAppMenu addItem:[NSMenuItem separatorItem]];
+
+    // Quit
+    pString = CreateNSString(VclResId(SV_MENU_MAC_QUITAPP));
+    [pAppMenu addItemWithTitle: pString
+        action:@selector(terminate:)
+        keyEquivalent:@"q"];
+    [pString release];
 }
 
 std::unique_ptr<SalMenu> AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
