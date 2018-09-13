@@ -373,7 +373,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/svapp \
     vcl/source/app/svdata \
     vcl/source/app/svmain \
-    vcl/source/app/svmainhook \
     vcl/source/app/timer \
     vcl/source/app/unohelp2 \
     vcl/source/app/unohelp \

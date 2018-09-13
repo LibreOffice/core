@@ -54,6 +54,7 @@ SalData::SalData()
     mnDPIX( 0 ),
     mnDPIY( 0 )
 {
+    SetSalData(this);
     maCursors.fill( INVALID_CURSOR_PTR );
     if( s_aAutoReleaseKey == nullptr )
         s_aAutoReleaseKey = osl_createThreadKey( releasePool );
@@ -85,6 +86,13 @@ SalData::~SalData()
     if ( mpAppleRemoteMainController )
         [mpAppleRemoteMainController release];
 #endif
+
+    if( mpStatusItem )
+    {
+        [mpStatusItem release];
+        mpStatusItem = nil;
+    }
+    SetSalData( nullptr );
 }
 
 void SalData::ensureThreadAutoreleasePool()
