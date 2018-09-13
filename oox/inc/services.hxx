@@ -24,13 +24,6 @@
 
 namespace oox {
     namespace ppt {
-        extern OUString QuickDiagrammingImport_getImplementationName();
-        extern css::uno::Sequence< OUString > QuickDiagrammingImport_getSupportedServiceNames();
-        /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > QuickDiagrammingImport_createInstance(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    }
-    namespace ppt {
         extern OUString QuickDiagrammingLayout_getImplementationName();
         extern css::uno::Sequence< OUString > QuickDiagrammingLayout_getSupportedServiceNames();
         /// @throws css::uno::Exception
