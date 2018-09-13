@@ -1863,10 +1863,10 @@ void SwFramePage::RangeModifyHdl()
     aMgr.ValidateMetrics(aVal, mpToCharContentPos);    // one more time, to determine all remaining values with correct width and height.
 
     // all columns have to be correct
-    if(GetTabDialog()->GetExampleSet() &&
-            SfxItemState::DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
+    if (pExampleSet && SfxItemState::DEFAULT <= pExampleSet->GetItemState(RES_COL))
     {
-        const SwFormatCol& rCol = GetTabDialog()->GetExampleSet()->Get(RES_COL);
+        const SwFormatCol& rCol = pExampleSet->Get(RES_COL);
         if ( rCol.GetColumns().size() > 1 )
         {
             for (const SwColumn & i : rCol.GetColumns())

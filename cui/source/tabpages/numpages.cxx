@@ -247,7 +247,7 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     bPreset = false;
     bool bIsPreset = false;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -404,7 +404,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     bPreset = false;
     bool bIsPreset = false;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -593,7 +593,7 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     bPreset = false;
     bool bIsPreset = false;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -826,7 +826,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     bPreset = false;
     bool bIsPreset = false;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -1217,7 +1217,7 @@ VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( TabPageParent pParent,
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     sal_uInt16 nTmpNumLvl = 1;
     if(pExampleSet)
     {
@@ -3081,7 +3081,7 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
     sal_uInt16 nTmpNumLvl = 1;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))

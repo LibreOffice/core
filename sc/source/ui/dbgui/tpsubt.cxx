@@ -189,12 +189,11 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         nGroupIdx = nGroupNo-1;
 
     ScSubTotalParam theSubTotalData;            // read out, if already partly filled
-    SfxTabDialog* pDlg = GetTabDialog();
-    if ( pDlg )
+    const SfxItemSet* pExample = GetDialogExampleSet();
+    if (pExample)
     {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
+        if (pExample->GetItemState(nWhichSubTotals, true, &pItem) == SfxItemState::SET)
             theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
@@ -531,12 +530,11 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
 bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // read out, if already partly filled
-    SfxTabDialog* pDlg = GetTabDialog();
-    if ( pDlg )
+    const SfxItemSet* pExample = GetDialogExampleSet();
+    if (pExample)
     {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
+        if (pExample->GetItemState(nWhichSubTotals, true, &pItem) == SfxItemState::SET)
             theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
