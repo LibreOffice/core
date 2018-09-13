@@ -31,7 +31,7 @@ class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
-#ifdef _WIN32
+#if (defined MACOSX || defined _WIN32)
 #include <salinst.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <memory>
@@ -43,7 +43,7 @@ class SalFrame;
 // Qts moc doesn't like macros, so this is handled by an extra base class
 // It also keeps all the #ifdef handling local
 class VCLPLUG_QT5_PUBLIC Qt5MocInstance
-#ifdef _WIN32
+#if (defined MACOSX || defined _WIN32)
     : public SalInstance
 #else
     : public SalGenericInstance
@@ -51,7 +51,7 @@ class VCLPLUG_QT5_PUBLIC Qt5MocInstance
 {
 public:
     Qt5MocInstance()
-#ifdef _WIN32
+#if (defined MACOSX || defined _WIN32)
         : SalInstance(o3tl::make_unique<comphelper::SolarMutex>())
 #else
         : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
@@ -59,7 +59,7 @@ public:
     {
     }
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     virtual GenPspGraphics* CreatePrintGraphics() override;
     virtual void PostPrintersChanged() override;
 #endif

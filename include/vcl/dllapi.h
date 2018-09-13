@@ -36,7 +36,7 @@
 #define UITEST_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#if (defined UNX  && ! defined MACOS) || defined _WIN32
+#if defined UNX || defined MACOS || defined _WIN32
 #define VCL_PLUGIN_PUBLIC VCL_DLLPUBLIC
 #else
 #define VCL_PLUGIN_PUBLIC SAL_DLLPRIVATE

@@ -26,6 +26,7 @@ $(eval $(call gb_Library_set_include,vclplug_qt5,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/qt5 \
 ))
+#	$(if $(filter MACOS,$(OS)), -F $(QT5_LIBS)) \
 
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
     -DVCLPLUG_QT5_IMPLEMENTATION \
@@ -67,6 +68,7 @@ $(eval $(call gb_Library_use_externals,vclplug_qt5,\
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
     $(QT5_CFLAGS) \
 ))
+
 $(eval $(call gb_Library_add_libs,vclplug_qt5,\
     $(QT5_LIBS) \
 ))
@@ -96,13 +98,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Graphics_GDI \
     vcl/qt5/Qt5Graphics_Text \
     vcl/qt5/Qt5Instance \
-    vcl/qt5/Qt5Instance_Print \
     vcl/qt5/Qt5MainWindow \
     vcl/qt5/Qt5Menu \
     vcl/qt5/Qt5Object \
     vcl/qt5/Qt5OpenGLContext \
     vcl/qt5/Qt5Painter \
-    vcl/qt5/Qt5Printer \
     $(if $(USING_X11),vcl/qt5/Qt5System) \
     vcl/qt5/Qt5Timer \
     vcl/qt5/Qt5Tools \
@@ -110,6 +110,34 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Widget \
     vcl/qt5/Qt5XAccessible \
 ))
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_qt5,\
+    ApplicationServices \
+    Cocoa \
+    Carbon \
+    CoreFoundation \
+    $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
+))
+
+$(eval $(call gb_Library_add_cxxflags,vclplug_qt5,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_use_libraries,vclplug_qt5,\
+    vclplug_osx \
+))
+
+$(eval $(call gb_Library_add_objcxxobjects,vclplug_qt5,\
+    vcl/qt5/Qt5Instance_Print \
+    vcl/qt5/Qt5Printer \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
+    vcl/qt5/Qt5Instance_Print \
+    vcl/qt5/Qt5Printer \
+))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_qt5,\

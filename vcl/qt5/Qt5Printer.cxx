@@ -25,11 +25,16 @@
 
 #include <Qt5Printer.hxx>
 
+#if defined _WIN32
 Qt5Printer::Qt5Printer(SalInfoPrinter* /* pInfoPrinter */)
-#ifndef _WIN32
-    : PspSalPrinter(pInfoPrinter)
-#else
     : WinSalPrinter()
+#else
+Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
+#ifdef MACOSX
+    : AquaSalPrinter(static_cast<AquaSalInfoPrinter*>(pInfoPrinter))
+#else
+    : PspSalPrinter(pInfoPrinter)
+#endif
 #endif
 {
 }

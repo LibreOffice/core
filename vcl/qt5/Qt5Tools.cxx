@@ -21,7 +21,7 @@
 
 #include <vcl/event.hxx>
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <cairo.h>
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }

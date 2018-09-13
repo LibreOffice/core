@@ -149,18 +149,18 @@
 #include <unx/x11_cursors/wsshow_curs.h>
 #include <unx/x11_cursors/wsshow_mask.h>
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <unx/glyphcache.hxx>
 #endif
 
 Qt5Data::Qt5Data(SalInstance* pInstance)
-#ifndef _WIN32
-    : GenericUnixSalData(SAL_DATA_QT5, pInstance)
-#else
+#if (defined MACOSX || defined _WIN32)
     : SalData()
+#else
+    : GenericUnixSalData(SAL_DATA_QT5, pInstance)
 #endif
 {
-#ifdef _WIN32
+#if (defined MACOSX || defined _WIN32)
     m_pInstance = pInstance;
     SetSalData(this);
 #endif
@@ -318,7 +318,7 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
     return *m_aCursors[ePointerStyle];
 }
 
-#ifndef _WIN32
+#if !(defined _WIN32 || defined MACOSX)
 void Qt5Data::ErrorTrapPush() {}
 
 bool Qt5Data::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }

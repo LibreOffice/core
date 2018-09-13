@@ -42,7 +42,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 #endif
@@ -53,7 +53,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
     if (!m_pFrame->m_bNullRegion)
         p.setClipRegion(m_pFrame->m_aRegion);
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     if (m_pFrame->m_bUseCairo)
     {
         cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
@@ -70,7 +70,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 
 void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     if (m_pFrame->m_bUseCairo)
     {
         int width = size().width();

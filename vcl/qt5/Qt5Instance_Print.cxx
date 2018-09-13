@@ -20,7 +20,7 @@
 #include <Qt5Instance.hxx>
 #include <Qt5Printer.hxx>
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 
@@ -39,7 +39,7 @@ using namespace psp;
  *  static helpers
  */
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 static OUString getPdfDir(const PrinterInfo& rInfo)
 {
     OUString aDir;
@@ -63,7 +63,7 @@ static OUString getPdfDir(const PrinterInfo& rInfo)
 SalInfoPrinter* Qt5Instance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pJobSetup)
 {
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     // create and initialize SalInfoPrinter
     PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
     configurePspInfoPrinter(pPrinter, pQueueInfo, pJobSetup);
@@ -79,7 +79,7 @@ void Qt5Instance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter
 
 std::unique_ptr<SalPrinter> Qt5Instance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
 {
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     // create and initialize SalPrinter
     Qt5Printer* pPrinter = new Qt5Printer(pInfoPrinter);
     pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
@@ -93,7 +93,7 @@ std::unique_ptr<SalPrinter> Qt5Instance::CreatePrinter(SalInfoPrinter* pInfoPrin
 
 void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
 {
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     PrinterInfoManager& rManager(PrinterInfoManager::get());
     static const char* pNoSyncDetection = getenv("SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION");
     if (!pNoSyncDetection || !*pNoSyncDetection)
@@ -136,7 +136,7 @@ void Qt5Instance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
 
 OUString Qt5Instance::GetDefaultPrinter()
 {
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     PrinterInfoManager& rManager(PrinterInfoManager::get());
     return rManager.getDefaultPrinter();
 #else
@@ -144,7 +144,7 @@ OUString Qt5Instance::GetDefaultPrinter()
 #endif
 }
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 void Qt5MocInstance::PostPrintersChanged() {}
 
 GenPspGraphics* Qt5MocInstance::CreatePrintGraphics() { return new GenPspGraphics(); }

@@ -22,13 +22,14 @@
 
 #include <osx/osxvcltypes.h>
 
+#include <vclpluginapi.h>
 #include <salprn.hxx>
 
 #include <memory>
 
 class AquaSalGraphics;
 
-class AquaSalInfoPrinter : public SalInfoPrinter
+class VCLPLUG_OSX_PUBLIC AquaSalInfoPrinter : public SalInfoPrinter
 {
     /// Printer graphics
     AquaSalGraphics*        mpGraphics;
@@ -111,7 +112,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 };
 
 
-class AquaSalPrinter : public SalPrinter
+class VCLPLUG_OSX_PUBLIC AquaSalPrinter : public SalPrinter
 {
     AquaSalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
     public:

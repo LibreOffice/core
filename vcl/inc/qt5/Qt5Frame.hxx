@@ -24,7 +24,7 @@
 
 #include "Qt5Tools.hxx"
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
 #include <headless/svpgdi.hxx>
 #endif
 #include <vcl/svapp.hxx>
@@ -44,7 +44,7 @@ class QScreen;
 class QImage;
 class SvpSalGraphics;
 
-#ifdef _WIN32
+#if (defined MACOSX || defined _WIN32)
 typedef void (*damageHandler)(void* handle,
                               sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                               sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
@@ -68,7 +68,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     const bool m_bUseCairo;
     std::unique_ptr<QImage> m_pQImage;
     std::unique_ptr<Qt5Graphics> m_pQt5Graphics;
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     UniqueCairoSurface m_pSurface;
     std::unique_ptr<SvpSalGraphics> m_pOurSvpGraphics;
     // in base class, this ptr is the same as m_pOurSvpGraphic
@@ -137,7 +137,7 @@ public:
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     virtual void InitSvpSalGraphics(SvpSalGraphics* pSvpSalGraphics);
 #endif
     virtual SalGraphics* AcquireGraphics() override;

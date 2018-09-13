@@ -11,21 +11,29 @@
 
 #include <vcl/sysdata.hxx>
 
-#ifndef _WIN32
-#include <unx/gensys.h>
-#else
+#ifdef _WIN32
 #include <win/salsys.h>
+#else
+#ifdef MACOSX
+#include <osx/salsys.h>
+#else
+#include <unx/gensys.h>
+#endif
 #endif
 
 class Qt5System
-#ifndef _WIN32
-    : public SalGenericSystem
-#else
+#ifdef _WIN32
     : public WinSalSystem
+#else
+#ifdef MACOSX
+    : public AquaSalSystem
+#else
+    : public SalGenericSystem
+#endif
 #endif
 {
 public:
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     virtual unsigned int GetDisplayScreenCount() override;
     virtual tools::Rectangle GetDisplayScreenPosSizePixel(unsigned int nScreen) override;
     virtual int ShowNativeDialog(const OUString& rTitle, const OUString& rMessage,

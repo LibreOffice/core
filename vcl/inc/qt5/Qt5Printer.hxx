@@ -19,21 +19,26 @@
 
 #pragma once
 
-#ifndef _WIN32
-#include <unx/genprn.h>
-#else
+#ifdef _WIN32
 #include <WinDef.h>
 #include <win/salprn.h>
+#else
+#ifdef MACOSX
+#include <osx/salprn.h>
+#else
+#include <unx/genprn.h>
+#endif
 #endif
 
-class Point;
-class SalFrame;
-
 class Qt5Printer
-#ifndef _WIN32
-    : public PspSalPrinter
-#else
+#ifdef _WIN32
     : public WinSalPrinter
+#else
+#ifdef MACOSX
+    : public AquaSalPrinter
+#else
+    : public PspSalPrinter
+#endif
 #endif
 {
 public:

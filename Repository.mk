@@ -484,6 +484,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 			AppleRemote \
 		) \
 		fps_aqua \
+		$(if $(ENABLE_QT5),vclplug_qt5) \
 		vclplug_osx \
 		MacOSXSpell \
 	) \

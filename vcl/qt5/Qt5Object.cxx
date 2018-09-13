@@ -38,7 +38,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (bShow)
         m_pQWidget->show();
 
-#ifndef _WIN32
+#if !(defined MACOSX || defined _WIN32)
     m_aSystemData.nSize = sizeof(SystemEnvData);
     m_aSystemData.aWindow = pParent->GetQWidget()->winId();
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
