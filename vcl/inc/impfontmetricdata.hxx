@@ -100,7 +100,7 @@ private:
     bool            ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo);
 
     // font instance attributes from the font request
-    long            mnHeight;                   // Font size
+    long const      mnHeight;                   // Font size
     long            mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
 

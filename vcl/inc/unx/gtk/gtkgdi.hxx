@@ -100,7 +100,7 @@ typedef void (*gtk_widget_path_iter_set_object_nameFunc)(GtkWidgetPath *, guint,
 
 class GtkSalGraphics : public SvpSalGraphics
 {
-    GtkSalFrame *mpFrame;
+    GtkSalFrame * const mpFrame;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
@@ -136,7 +136,7 @@ public:
     GtkStyleContext* createOldContext(GtkControlPart ePart);
     GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent);
 private:
-    GtkWidget       *mpWindow;
+    GtkWidget       * const mpWindow;
     static GtkStyleContext *mpWindowStyle;
     static GtkStyleContext *mpButtonStyle;
     static GtkStyleContext *mpLinkButtonStyle;

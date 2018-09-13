@@ -28,7 +28,7 @@ enum GenericUnixSalDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
 class VCL_DLLPUBLIC GenericUnixSalData : public SalData
 {
  protected:
-    GenericUnixSalDataType m_eType;
+    GenericUnixSalDataType const m_eType;
     SalGenericDisplay *m_pDisplay;
     // cached hostname to avoid slow lookup
     OUString      m_aHostname;

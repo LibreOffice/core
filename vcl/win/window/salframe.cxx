@@ -5338,11 +5338,8 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
 
     if( nTmpStart != aEvt.mnStart || nTmpEnd != aEvt.mnEnd )
     {
-    SalSurroundingTextSelectionChangeEvent aSelEvt;
-    aSelEvt.mnStart = nTmpStart;
-    aSelEvt.mnEnd = nTmpEnd;
-
-    pFrame->CallCallback( SalEvent::SurroundingTextSelectionChange, &aSelEvt );
+        SalSurroundingTextSelectionChangeEvent aSelEvt { nTmpStart, nTmpEnd };
+        pFrame->CallCallback( SalEvent::SurroundingTextSelectionChange, &aSelEvt );
     }
 
     return TRUE;

@@ -521,7 +521,7 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
 class ImplPspFontData : public FreetypeFontFace
 {
 private:
-    sal_IntPtr              mnFontId;
+    sal_IntPtr const              mnFontId;
 
 public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );

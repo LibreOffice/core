@@ -825,8 +825,8 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
 struct ButtonOrder
 {
-    OString m_aType;
-    int m_nPriority;
+    OString const m_aType;
+    int const m_nPriority;
 };
 
 static int getButtonPriority(const OString &rType)
@@ -874,7 +874,7 @@ static int getButtonPriority(const OString &rType)
 
 class sortButtons
 {
-    bool m_bVerticalContainer;
+    bool const m_bVerticalContainer;
 public:
     explicit sortButtons(bool bVerticalContainer)
         : m_bVerticalContainer(bVerticalContainer)

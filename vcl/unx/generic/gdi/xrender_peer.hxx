@@ -38,7 +38,7 @@ private:
                         XRenderPeer();
     void                InitRenderLib();
 
-    Display*            mpDisplay;
+    Display* const      mpDisplay;
     XRenderPictFormat*  mpStandardFormatA8;
 
 public:

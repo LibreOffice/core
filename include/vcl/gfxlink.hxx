@@ -60,7 +60,7 @@ private:
         SwapOutData(const OUString &aURL);
         ~SwapOutData();
 
-        OUString maURL; // File is removed in the destructor
+        OUString const maURL; // File is removed in the destructor
 
     };
 
