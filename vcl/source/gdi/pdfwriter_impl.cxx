@@ -1690,8 +1690,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
-        m_nInheritedPageWidth( 595 ),  // default A4
-        m_nInheritedPageHeight( 842 ), // default A4
         m_nCurrentPage( -1 ),
         m_nCatalogObject(0),
         m_nSignatureObject( -1 ),
@@ -4992,8 +4990,8 @@ bool PDFWriterImpl::emitCatalog()
     sal_Int32 nMediaBoxHeight = 0;
     if( m_aPages.empty() ) // sanity check, this should not happen
     {
-        nMediaBoxWidth = m_nInheritedPageWidth;
-        nMediaBoxHeight = m_nInheritedPageHeight;
+        nMediaBoxWidth = g_nInheritedPageWidth;
+        nMediaBoxHeight = g_nInheritedPageHeight;
     }
     else
     {
@@ -5109,14 +5107,14 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /FitH " );
-        aLine.append( m_nInheritedPageHeight );//Open fit width
+        aLine.append( g_nInheritedPageHeight );//Open fit width
         aLine.append( "]\n" );
         break;
     case PDFWriter::FitVisible :
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /FitBH " );
-        aLine.append( m_nInheritedPageHeight );//Open fit visible
+        aLine.append( g_nInheritedPageHeight );//Open fit visible
         aLine.append( "]\n" );
         break;
     case PDFWriter::ActionZoom :

@@ -88,7 +88,7 @@ private:
     typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
 
     FontList                maFontList;
-    sal_uLong const         mnMaxSize;      // max overall cache size in bytes
+    static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
     mutable long            mnLruIndex;
     mutable int             mnGlyphCount;

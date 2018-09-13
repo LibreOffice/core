@@ -46,7 +46,6 @@ private:
     OUString                                 maODFVersion;
     const css::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
-    const bool          mbSignedMode;           // mode of dialog (signed / unsigned macros)
     const bool          mbShowSignatures;
     sal_Int32           mnActSecLevel;
 

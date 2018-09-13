@@ -105,7 +105,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    unsigned char const mnNumberOfTests;
+    static constexpr unsigned char gnNumberOfTests = 6;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -113,9 +113,8 @@ private:
 public:
     VisualBackendTestWindow()
         : WorkWindow(nullptr, WB_APP | WB_STDWORK)
-        , mnNumberOfTests(6)
-        , mnTest(10 * mnNumberOfTests)
-        , mbAnimate(mnTest % mnNumberOfTests == mnNumberOfTests - 1)
+        , mnTest(10 * gnNumberOfTests)
+        , mbAnimate(mnTest % gnNumberOfTests == gnNumberOfTests - 1)
         , mpVDev(VclPtr<VirtualDevice>::Create())
     {
         maUpdateTimer.SetInvokeHandler(LINK(this, VisualBackendTestWindow, updateHdl));
@@ -145,7 +144,7 @@ public:
 
         if (nCode == KEY_BACKSPACE || nCode == KEY_SPACE)
         {
-            if (mnTest % mnNumberOfTests == mnNumberOfTests - 1)
+            if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
             {
                 mbAnimate = true;
                 maUpdateTimer.Start();
@@ -377,7 +376,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
-        if (mnTest % mnNumberOfTests == mnNumberOfTests - 1)
+        if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
         {
             rRenderContext.SetBackground(Wallpaper(COL_GREEN));
 
@@ -449,23 +448,23 @@ public:
         tools::Rectangle aRectangle;
         size_t index = 0;
 
-        if (mnTest % mnNumberOfTests == 0)
+        if (mnTest % gnNumberOfTests == 0)
         {
             testRectangles(rRenderContext, nWidth, nHeight);
         }
-        else if (mnTest % mnNumberOfTests == 1)
+        else if (mnTest % gnNumberOfTests == 1)
         {
             testFilledRectangles(rRenderContext, nWidth, nHeight);
         }
-        else if (mnTest % mnNumberOfTests == 2)
+        else if (mnTest % gnNumberOfTests == 2)
         {
             testLines(rRenderContext, nWidth, nHeight);
         }
-        else if (mnTest % mnNumberOfTests == 3)
+        else if (mnTest % gnNumberOfTests == 3)
         {
             testBitmaps(rRenderContext, nWidth, nHeight);
         }
-        else if (mnTest % mnNumberOfTests == 4)
+        else if (mnTest % gnNumberOfTests == 4)
         {
             std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
