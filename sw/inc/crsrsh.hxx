@@ -566,9 +566,6 @@ public:
     // get the selected text at the current cursor. it will be filled with
     // fields etc.
     OUString GetSelText() const;
-    // return only the text starting from the current cursor position (to the
-    // end of the node)
-    OUString GetTextUntilEndOfNode() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
     inline const SwTableNode* IsCursorInTable() const;

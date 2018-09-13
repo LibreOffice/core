@@ -2340,21 +2340,6 @@ OUString SwCursorShell::GetSelText() const
     return aText;
 }
 
-/// get text only from current cursor position (until end of node)
-OUString SwCursorShell::GetTextUntilEndOfNode() const
-{
-    OUString aText;
-    if( m_pCurrentCursor->GetPoint()->nNode.GetIndex() ==
-        m_pCurrentCursor->GetMark()->nNode.GetIndex() )
-    {
-        SwTextNode* pTextNd = m_pCurrentCursor->GetNode().GetTextNode();
-        if( pTextNd )
-            aText = pTextNd->GetText().copy(
-                    m_pCurrentCursor->GetPoint()->nContent.GetIndex() );
-    }
-    return aText;
-}
-
 /** get the nth character of the current SSelection
 
     @param bEnd    Start counting from the end? From start otherwise.
