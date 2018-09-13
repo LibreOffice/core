@@ -1180,7 +1180,10 @@
       </node>
       <node oor:name=".uno:InteractiveGradient" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Gradient</value>
+          <value xml:lang="en-US">Gradient tool</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Interacive gradient tool</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
