@@ -567,8 +567,9 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
     if ( IsRightToLeft() )
         SwitchRTLtoLTR( const_cast<Point&>(rPoint) );
 
-    SwFillData *pFillData = ( pCMS && pCMS->m_pFill ) ?
-                        new SwFillData( pCMS, pPos, getFrameArea(), rPoint ) : nullptr;
+    std::unique_ptr<SwFillData> pFillData;
+    if ( pCMS && pCMS->m_pFill )
+        pFillData.reset(new SwFillData( pCMS, pPos, getFrameArea(), rPoint ));
 
     if ( IsEmpty() )
     {
@@ -652,7 +653,6 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
     }
 
     const_cast<Point&>(rPoint) = aOldPoint;
-    delete pFillData;
 
     return true;
 }
@@ -1349,7 +1349,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             return;
         }
     }
-    SwFont *pFnt;
+    std::unique_ptr<SwFont> pFnt;
     SwTextFormatColl* pColl = GetTextNodeForParaProps()->GetTextColl();
     SwTwips nFirst = GetTextNodeForParaProps()->GetSwAttrSet().GetULSpace().GetLower();
     SwTwips nDiff = rFill.Y() - getFrameArea().Bottom();
@@ -1368,12 +1368,12 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         aSet.Put( *GetTextNodeForParaProps()->GetpSwAttrSet() );
         aSet.SetParent( pSet );
         pSet = &aSet;
-        pFnt = new SwFont( pSet, &GetDoc().getIDocumentSettingAccess() );
+        pFnt.reset(new SwFont( pSet, &GetDoc().getIDocumentSettingAccess() ));
     }
     else
     {
         SwFontAccess aFontAccess( pColl, pSh );
-        pFnt = new SwFont( aFontAccess.Get()->GetFont() );
+        pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();
@@ -1675,7 +1675,6 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         }
     }
     const_cast<SwCursorMoveState*>(rFill.pCMS)->m_bFillRet = bFill;
-    delete pFnt;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
