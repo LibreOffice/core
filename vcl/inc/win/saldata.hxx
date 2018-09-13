@@ -118,7 +118,6 @@ public:
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
     std::map< UINT,sal_uInt16 > maVKMap;      // map some dynamic VK_* entries
 
-    // must be deleted before exit(), so delete it in DeInitSalData()
     std::unique_ptr<TextOutRenderer> m_pD2DWriteTextOutRenderer;
     // tdf#107205 need 2 instances because D2DWrite can't rotate text
     std::unique_ptr<TextOutRenderer> m_pExTextOutRenderer;
