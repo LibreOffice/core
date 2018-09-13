@@ -106,15 +106,15 @@ public:
         const char *                m_pName;                     // Name
         const char *                m_pStyleName;                // StyleName
         const char *                m_pPSName;                   // PSName
-        int                         m_nAscent;
-        int                         m_nDescent;
-        FontFamily                  m_eFamily;                   // Family
-        rtl_TextEncoding            m_eCharSet;                  // CharSet
-        FontPitch                   m_ePitch;                    // Pitch
-        FontWidth                   m_eWidthType;                // WidthType
-        FontWeight                  m_eWeight;                   // Weight
-        FontItalic                  m_eItalic;                   // Italic
-        int                         m_aWidths[256];              // character metrics
+        int const                   m_nAscent;
+        int const                   m_nDescent;
+        FontFamily const            m_eFamily;                   // Family
+        rtl_TextEncoding const      m_eCharSet;                  // CharSet
+        FontPitch const             m_ePitch;                    // Pitch
+        FontWidth const             m_eWidthType;                // WidthType
+        FontWeight const            m_eWeight;                   // Weight
+        FontItalic const            m_eItalic;                   // Italic
+        int const                   m_aWidths[256];              // character metrics
 
         OString getNameObject() const;
     };
@@ -135,9 +135,9 @@ public:
     struct PDFPage
     {
         PDFWriterImpl*              m_pWriter;
-        double                      m_nPageWidth;           // in inch/72
-        double                      m_nPageHeight;          // in inch/72
-        PDFWriter::Orientation      m_eOrientation;
+        double const                      m_nPageWidth;           // in inch/72
+        double const                      m_nPageHeight;          // in inch/72
+        PDFWriter::Orientation const      m_eOrientation;
         sal_Int32                   m_nPageObject;
         std::vector<sal_Int32>      m_aStreamObjects;
         sal_Int32                   m_nStreamLengthObject;
@@ -529,9 +529,9 @@ public:
 
     struct PDFStructureElementKid // for Kids entries
     {
-        sal_Int32 nObject;  // an object number if nMCID is -1,
+        sal_Int32 const nObject;  // an object number if nMCID is -1,
                             // else the page object relevant to MCID
-        sal_Int32 nMCID;    // an MCID if >= 0
+        sal_Int32 const nMCID;    // an MCID if >= 0
 
         explicit PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
         PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
@@ -583,12 +583,12 @@ public:
     // helper structure for drawLayout and friends
     struct PDFGlyph
     {
-        Point       m_aPos;
+        Point const       m_aPos;
         const GlyphItem* m_pGlyph;
-        sal_Int32   m_nNativeWidth;
-        sal_Int32   m_nMappedFontId;
-        sal_uInt8   m_nMappedGlyphId;
-        int         m_nCharPos;
+        sal_Int32 const   m_nNativeWidth;
+        sal_Int32 const   m_nMappedFontId;
+        sal_uInt8 const   m_nMappedGlyphId;
+        int const         m_nCharPos;
 
         PDFGlyph( const Point& rPos,
                   const GlyphItem* pGlyph,
@@ -693,8 +693,8 @@ private:
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
-    sal_Int32                           m_nInheritedPageWidth;  // in inch/72
-    sal_Int32                           m_nInheritedPageHeight; // in inch/72
+    sal_Int32 const                           m_nInheritedPageWidth;  // in inch/72
+    sal_Int32 const                           m_nInheritedPageHeight; // in inch/72
     sal_Int32                           m_nCurrentPage;
 
     sal_Int32                           m_nCatalogObject;

@@ -156,9 +156,9 @@ extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {
     typedef struct {
-        srv_vendor_t    e_vendor;   // vendor as enum
+        srv_vendor_t const    e_vendor;   // vendor as enum
         const char      *p_name;    // vendor name as returned by VendorString()
-        unsigned int    n_len;  // number of chars to compare
+        unsigned int const    n_len;  // number of chars to compare
     } vendor_t;
 
     const vendor_t p_vendorlist[] = {

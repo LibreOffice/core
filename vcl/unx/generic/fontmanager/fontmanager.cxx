@@ -858,8 +858,8 @@ FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
 {
     typedef struct {
         const char*  mpName;
-        sal_uInt16   mnLength;
-        FontFamily   meType;
+        sal_uInt16 const   mnLength;
+        FontFamily const   meType;
     } family_t;
 
 #define InitializeClass( p, a ) p, sizeof(p) - 1, a

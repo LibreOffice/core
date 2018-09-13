@@ -46,7 +46,7 @@ namespace vcl
             sal_Int32           mnDPIY;
             BitmapEx            maPreviewBitmap;
             OUString            maReplacementString;
-            OUString            maToolTipString;
+            OUString const      maToolTipString;
             bool                mbGreyscale;
             VclPtr<FixedLine>   maHorzDim;
             VclPtr<FixedLine>   maVertDim;
@@ -145,8 +145,8 @@ namespace vcl
             VclPtr<FixedImage>                      mpCollateImage;
             VclPtr<CheckBox>                        mpReverseOrderBox;
 
-            BitmapEx                                maCollateBmp;
-            BitmapEx                                maNoCollateBmp;
+            BitmapEx const                          maCollateBmp;
+            BitmapEx const                          maNoCollateBmp;
 
             long                                    mnCollateUIMode;
 
@@ -187,7 +187,7 @@ namespace vcl
         VclPtr<HelpButton>                      mpHelpButton;
 
         OUString                                maPageStr;
-        OUString                                maNoPageStr;
+        OUString const                          maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
@@ -203,9 +203,9 @@ namespace vcl
         /// internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
 
-        OUString                           maPrintToFileText;
-        OUString                           maPrintText;
-        OUString                           maDefPrtText;
+        OUString const                          maPrintToFileText;
+        OUString                                maPrintText;
+        OUString const                          maDefPrtText;
 
         bool                                mbShowLayoutPage;
 
