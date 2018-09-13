@@ -641,11 +641,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     // Generating the output data
     const SfxPoolItem* pItem = nullptr;
     SfxDocumentInfoItem* pInfo = nullptr;
-    SfxTabDialog* pDlg = GetTabDialog();
-    const SfxItemSet* pExSet = nullptr;
-
-    if ( pDlg )
-        pExSet = pDlg->GetExampleSet();
+    const SfxItemSet* pExSet = GetDialogExampleSet();
 
     if ( pExSet && SfxItemState::SET != pExSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         pInfo = m_pInfoItem;
@@ -938,9 +934,9 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
     if ( !bHandleDelete && bEnableUseUserData &&
          m_pUseUserDataCB->IsValueChangedFromSaved() &&
-         GetTabDialog() && GetTabDialog()->GetExampleSet() )
+         GetDialogExampleSet() )
     {
-        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetDialogExampleSet();
         const SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
@@ -955,7 +951,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
     if ( bHandleDelete )
     {
-        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetDialogExampleSet();
         const SfxPoolItem* pItem;
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
@@ -975,9 +971,9 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
     }
 
     if ( m_pUseThumbnailSaveCB->IsValueChangedFromSaved() &&
-       GetTabDialog() && GetTabDialog()->GetExampleSet() )
+       GetDialogExampleSet() )
     {
-        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetDialogExampleSet();
         const SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
@@ -2151,10 +2147,9 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
     SfxDocumentInfoItem* pInfo = nullptr;
     bool bMustDelete = false;
 
-    if ( GetTabDialog() && GetTabDialog()->GetExampleSet() )
+    if (const SfxItemSet* pItemSet = GetDialogExampleSet())
     {
-        if ( SfxItemState::SET !=
-                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
+        if (SfxItemState::SET != pItemSet->GetItemState(SID_DOCINFO, true, &pItem))
             pInfo = const_cast<SfxDocumentInfoItem*>(&rSet->Get( SID_DOCINFO ));
         else
         {
@@ -2619,10 +2614,9 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
     SfxDocumentInfoItem* pInfo = nullptr;
     bool bMustDelete = false;
 
-    if ( GetTabDialog() && GetTabDialog()->GetExampleSet() )
+    if (const SfxItemSet* pItemSet = GetDialogExampleSet())
     {
-        if ( SfxItemState::SET !=
-                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
+        if (SfxItemState::SET != pItemSet->GetItemState(SID_DOCINFO, true, &pItem))
             pInfo = const_cast<SfxDocumentInfoItem*>(&rSet->Get( SID_DOCINFO ));
         else
         {
