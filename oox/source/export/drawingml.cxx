@@ -701,9 +701,9 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH )
     {
         // convert absolute dash/dot length to relative length
-        int relDotLen = aLineDash.DotLen / nLineWidth;
-        int relDashLen = aLineDash.DashLen / nLineWidth;
-        int relDistance = aLineDash.Distance / nLineWidth;
+        int relDotLen = nLineWidth ? aLineDash.DotLen / nLineWidth : -1;
+        int relDashLen = nLineWidth ? aLineDash.DashLen / nLineWidth : -1;
+        int relDistance = nLineWidth ? aLineDash.Distance / nLineWidth : -1;
         // keep default mso preset linestyles (instead of custdash)
         if (aLineDash.Dots == 1 && relDotLen == 1 && aLineDash.Dashes == 0 && relDashLen == 0 && relDistance == 3)
         {
