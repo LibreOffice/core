@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_BMPFAST_HXX
 #define INCLUDED_VCL_INC_BMPFAST_HXX
 
+#include <vcl/dllapi.h>
+
 class BitmapWriteAccess;
 class BitmapReadAccess;
 struct BitmapBuffer;
@@ -29,7 +31,7 @@ struct SalTwoRect;
 // the bmpfast functions have signatures with good compatibility to
 // their canonic counterparts, which employ the GetPixel/SetPixel methods
 
-bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
+VCL_DLLPUBLIC bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         const SalTwoRect& rTwoRect );
 
 bool ImplFastBitmapBlending( BitmapWriteAccess const & rDst,
