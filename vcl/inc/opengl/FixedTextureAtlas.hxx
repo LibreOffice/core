@@ -20,9 +20,9 @@ class VCL_PLUGIN_PUBLIC FixedTextureAtlasManager
 {
     std::vector<std::unique_ptr<FixedTexture>> maFixedTextures;
 
-    int mWidthFactor;
-    int mHeightFactor;
-    int mSubTextureSize;
+    int const mWidthFactor;
+    int const mHeightFactor;
+    int const mSubTextureSize;
 
     void CreateNewTexture();
 

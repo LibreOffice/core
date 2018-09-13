@@ -23,9 +23,9 @@
 struct XPMRGBTab
 {
     const char* name;
-    sal_uInt8  red;
-    sal_uInt8  green;
-    sal_uInt8  blue;
+    sal_uInt8 const  red;
+    sal_uInt8 const  green;
+    sal_uInt8 const  blue;
 };
 
 static const XPMRGBTab pRGBTable[] = {

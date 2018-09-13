@@ -54,7 +54,7 @@ struct VCL_DLLPUBLIC GLWindow
 
 struct VCL_DLLPUBLIC OpenGLCapabilitySwitch
 {
-    bool mbLimitedShaderRegisters;
+    bool const mbLimitedShaderRegisters;
 
     OpenGLCapabilitySwitch()
         : mbLimitedShaderRegisters(false)
@@ -168,7 +168,7 @@ protected:
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;
-    bool mbUseDoubleBufferedRendering;
+    bool const mbUseDoubleBufferedRendering;
     bool mbVCLOnly;
 
     int mnFramebufferCount;

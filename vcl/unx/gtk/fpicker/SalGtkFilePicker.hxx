@@ -202,8 +202,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         gulong mHID_Preview;
         GtkWidget* m_pPreview;
         GtkFileFilter* m_pPseudoFilter;
-        sal_Int32 m_PreviewImageWidth;
-        sal_Int32 m_PreviewImageHeight;
+        sal_Int32 const m_PreviewImageWidth;
+        sal_Int32 const m_PreviewImageHeight;
 
         GtkWidget  *getWidget( sal_Int16 nControlId, GType *pType = nullptr);
 

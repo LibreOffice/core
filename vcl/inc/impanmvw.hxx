@@ -46,13 +46,13 @@ private:
 
     friend class Animation;
 
-    Animation*      mpParent;
-    VclPtr<OutputDevice>   mpOut;
-    long            mnExtraData;
-    Point           maPt;
-    Point           maDispPt;
-    Point           maRestPt;
-    Size            maSz;
+    Animation* const      mpParent;
+    VclPtr<OutputDevice>  mpOut;
+    long const            mnExtraData;
+    Point const           maPt;
+    Point                 maDispPt;
+    Point                 maRestPt;
+    Size const            maSz;
     Size            maSzPix;
     Size            maDispSz;
     Size            maRestSz;
@@ -63,8 +63,8 @@ private:
     Disposal        meLastDisposal;
     bool            mbPause;
     bool            mbMarked;
-    bool            mbHMirr;
-    bool            mbVMirr;
+    bool const      mbHMirr;
+    bool const      mbVMirr;
 
 public:
                     ~ImplAnimView();
