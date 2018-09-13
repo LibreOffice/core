@@ -555,14 +555,14 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 
     where += rIdentifier.getLength();
 
-    sal_Int32 end = rBuffer.indexOf( "&#34;", where );
+    sal_Int32 end = rBuffer.indexOf( "\"", where );
     if ( end < 0 )
         return OUString();
 
     OString aOString( rBuffer.copy( where, end - where ) );
     OUString aString( aOString.getStr(),  aOString.getLength(), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
 
-    return aString.replaceAll( "\\/", "/" );
+    return aString.replaceAll( "\\u002F", "/" );
 }
 
 /// Parse the Persona web page, and find where to get the bitmaps + the color values.
@@ -574,32 +574,32 @@ static bool parsePersonaInfo( const OString &rBufferArg, OUString *pHeaderURL, O
     // let's replace the whole buffer with last one so we can treat it easily
     OString rBuffer = rBufferArg.replaceAll(OString("&quot;"), OString("&#34;"));
     // it is the first attribute that contains "persona="
-    sal_Int32 persona = rBuffer.indexOf( "data-browsertheme=\"{" );
+    sal_Int32 persona = rBuffer.indexOf( "\"type\":\"persona\"" );
     if ( persona < 0 )
         return false;
 
     // now search inside
-    *pHeaderURL = searchValue( rBuffer, persona, "&#34;headerURL&#34;:&#34;" );
+    *pHeaderURL = searchValue( rBuffer, persona, "\"headerURL\":\"" );
     if ( pHeaderURL->isEmpty() )
         return false;
 
-    *pFooterURL = searchValue( rBuffer, persona, "&#34;footerURL&#34;:&#34;" );
+    *pFooterURL = searchValue( rBuffer, persona, "\"footerURL\":\"" );
     if ( pFooterURL->isEmpty() )
         return false;
 
-    *pTextColor = searchValue( rBuffer, persona, "&#34;textcolor&#34;:&#34;" );
+    *pTextColor = searchValue( rBuffer, persona, "\"textcolor\":\"" );
     if ( pTextColor->isEmpty() )
         return false;
 
-    *pAccentColor = searchValue( rBuffer, persona, "&#34;accentcolor&#34;:&#34;" );
+    *pAccentColor = searchValue( rBuffer, persona, "\"accentcolor\":\"" );
     if ( pAccentColor->isEmpty() )
         return false;
 
-    *pPreviewURL = searchValue( rBuffer, persona, "&#34;previewURL&#34;:&#34;" );
+    *pPreviewURL = searchValue( rBuffer, persona, "\"previewURL\":\"" );
     if ( pPreviewURL->isEmpty() )
         return false;
 
-    *pName = searchValue( rBuffer, persona, "&#34;name&#34;:&#34;" );
+    *pName = searchValue( rBuffer, persona, "\"name\":\"" );
     return !pName->isEmpty();
 }
 
