@@ -1052,11 +1052,62 @@ int SwCursorShell::CompareCursorStackMkCurrPt() const
     return nRet;
 }
 
+bool SwCursorShell::IsSelOnePara() const
+{
+    if (m_pCurrentCursor->IsMultiSelection())
+    {
+        return false;
+    }
+    if (m_pCurrentCursor->GetPoint()->nNode == m_pCurrentCursor->GetMark()->nNode)
+    {
+        return true;
+    }
+    if (GetLayout()->IsHideRedlines())
+    {
+        SwContentFrame const*const pFrame(GetCurrFrame(false));
+        auto const n(m_pCurrentCursor->GetMark()->nNode.GetIndex());
+        return FrameContainsNode(*pFrame, n);
+    }
+    return false;
+}
+
 bool SwCursorShell::IsSttPara() const
-{   return m_pCurrentCursor->GetPoint()->nContent == 0; }
+{
+    if (GetLayout()->IsHideRedlines())
+    {
+        SwTextNode const*const pNode(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode());
+        if (pNode)
+        {
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(
+                        pNode->getLayoutFrame(GetLayout())));
+            if (pFrame)
+            {
+                return pFrame->MapModelToViewPos(*m_pCurrentCursor->GetPoint())
+                    == TextFrameIndex(0);
+            }
+        }
+    }
+    return m_pCurrentCursor->GetPoint()->nContent == 0;
+}
 
 bool SwCursorShell::IsEndPara() const
-{   return m_pCurrentCursor->GetPoint()->nContent == m_pCurrentCursor->GetContentNode()->Len(); }
+{
+    if (GetLayout()->IsHideRedlines())
+    {
+        SwTextNode const*const pNode(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode());
+        if (pNode)
+        {
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(
+                        pNode->getLayoutFrame(GetLayout())));
+            if (pFrame)
+            {
+                return pFrame->MapModelToViewPos(*m_pCurrentCursor->GetPoint())
+                    == TextFrameIndex(pFrame->GetText().getLength());
+            }
+        }
+    }
+    return m_pCurrentCursor->GetPoint()->nContent == m_pCurrentCursor->GetContentNode()->Len();
+}
 
 bool SwCursorShell::IsEndOfTable() const
 {
