@@ -142,6 +142,11 @@ private:
     bool mbFrameAreaSizeValid       : 1;
     bool mbFramePrintAreaValid      : 1;
 
+    // #i65250#
+    // frame ID is now in general available - used for layout loop control
+    static sal_uInt32 mnLastFrameId;
+    const  sal_uInt32 mnFrameId;
+
 protected:
     // write access to mb*Valid flags
     void setFrameAreaPositionValid(bool bNew);
@@ -159,6 +164,9 @@ public:
 
     // syntactic sugar: test whole FrameAreaDefinition
     bool isFrameAreaDefinitionValid() const { return isFrameAreaPositionValid() && isFrameAreaSizeValid() && isFramePrintAreaValid(); }
+
+    // #i65250#
+    sal_uInt32 GetFrameId() const { return mnFrameId; }
 
     // read accesses to FrameArea definitions - only const access allowed.
     // Do *not* const_cast results, it is necessary to track changes. use
@@ -304,11 +312,6 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
 
     // cache for (border) attributes
     static SwCache *mpCache;
-
-    // #i65250#
-    // frame ID is now in general available - used for layout loop control
-    static sal_uInt32 mnLastFrameId;
-    const  sal_uInt32 mnFrameId;
 
     SwRootFrame   *mpRoot;
     SwLayoutFrame *mpUpper;
@@ -879,9 +882,6 @@ public:
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
     bool IsNeighbourFrame() const
         { return bool(GetType() & FRM_NEIGHBOUR); }
-
-    // #i65250#
-    sal_uInt32 GetFrameId() const { return mnFrameId; }
 
     // NEW TABLES
     // Some functions for covered/covering table cells. This way unnecessary

@@ -228,7 +228,7 @@ SwRectFn fnRectVert = &aVertical;
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
 
 // #i65250#
-sal_uInt32 SwFrame::mnLastFrameId=0;
+sal_uInt32 SwFrameAreaDefinition::mnLastFrameId=0;
 
 
 void FrameInit()
