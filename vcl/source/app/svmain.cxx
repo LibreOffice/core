@@ -299,7 +299,6 @@ bool InitVCL()
     {
         pOwnSvApp = new Application();
     }
-    InitSalMain();
 
     ImplSVData* pSVData = ImplGetSVData();
 

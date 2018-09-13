@@ -17915,7 +17915,6 @@ vcl/osx/salinst.cxx
 vcl/osx/salmenu.cxx
 vcl/osx/salnativewidgets.cxx
 vcl/osx/salobj.cxx
-vcl/osx/salplug.cxx
 vcl/osx/salprn.cxx
 vcl/osx/salsys.cxx
 vcl/osx/saltimer.cxx
@@ -17958,6 +17957,7 @@ vcl/source/app/dndhelp.cxx
 vcl/source/app/help.cxx
 vcl/source/app/i18nhelp.cxx
 vcl/source/app/idle.cxx
+vcl/source/app/salplug.cxx
 vcl/source/app/salusereventlist.cxx
 vcl/source/app/salvtables.cxx
 vcl/source/app/scheduler.cxx
@@ -18323,7 +18323,6 @@ vcl/unx/generic/gdi/xrender_peer.cxx
 vcl/unx/generic/gdi/xrender_peer.hxx
 vcl/unx/generic/glyphs/freetype_glyphcache.cxx
 vcl/unx/generic/glyphs/glyphcache.cxx
-vcl/unx/generic/plugadapt/salplug.cxx
 vcl/unx/generic/print/bitmap_gfx.cxx
 vcl/unx/generic/print/common_gfx.cxx
 vcl/unx/generic/print/genprnpsp.cxx
@@ -18450,7 +18449,6 @@ vcl/unx/x11/xlimits.cxx
 vcl/win/app/saldata.cxx
 vcl/win/app/salinfo.cxx
 vcl/win/app/salinst.cxx
-vcl/win/app/salplug.cxx
 vcl/win/app/salshl.cxx
 vcl/win/app/saltimer.cxx
 vcl/win/gdi/DWriteTextRenderer.cxx
