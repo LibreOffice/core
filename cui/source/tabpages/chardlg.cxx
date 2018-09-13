@@ -937,7 +937,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOld = nullptr;
 
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
 
     bool bChanged = true;
     const OUString& rFontName  = pNameBox->GetText();
@@ -2361,7 +2361,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Outline
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CONTOUR );
     TriState eState = m_xOutlineBtn->get_state();

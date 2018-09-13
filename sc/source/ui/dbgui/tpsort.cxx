@@ -219,12 +219,11 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
 
-    ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
-    if (pDlg)
+    const SfxItemSet* pExample = GetDialogExampleSet();
+    if (pExample)
     {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SfxItemState::SET )
+        if (pExample->GetItemState(nWhichSort, true, &pItem) == SfxItemState::SET)
         {
             ScSortParam aTempData = static_cast<const ScSortItem*>(pItem)->GetSortData();
             aTempData.maKeyState = aNewSortData.maKeyState;
@@ -250,6 +249,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
         // If the "OK" was selected on the Options page while the sort
         // direction was changed, then the first field (i.e. nFieldArr[0])
         // of the respective direction is chosen as the sorting criterion:
+        ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
         if ( pDlg && bSortByRows != pDlg->GetByRows() )
         {
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -661,11 +661,11 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     // Create local copy of ScParam
     ScSortParam aNewSortData = aSortData;
 
-    if (ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController()))
+    const SfxItemSet* pExample = GetDialogExampleSet();
+    if (pExample)
     {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SfxItemState::SET )
+        if (pExample->GetItemState(nWhichSort, true, &pItem) == SfxItemState::SET)
             aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
     }
     aNewSortData.bByRow          = m_xBtnTopDown->get_active();

@@ -406,6 +406,8 @@ public:
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
     css::uno::Reference< css::frame::XFrame > GetFrame();
 
+    const SfxItemSet* GetDialogExampleSet() const;
+
     OString         GetConfigId() const;
 
     //TODO rename to GetFrameWeld when SfxTabPage doesn't inherit from anything

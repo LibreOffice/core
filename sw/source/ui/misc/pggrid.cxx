@@ -487,7 +487,7 @@ void SwTextGridPage::GridModifyHdl()
 {
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemSet aSet(rOldSet);
-    const SfxItemSet* pExSet = GetDialogController()->GetExampleSet();
+    const SfxItemSet* pExSet = GetDialogExampleSet();
     if(pExSet)
         aSet.Put(*pExSet);
     PutGridItem(aSet);

@@ -369,6 +369,15 @@ weld::Window* SfxTabPage::GetDialogFrameWeld() const
     return GetFrameWeld();
 }
 
+const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
+{
+    if (pImpl->mpDialogController)
+        return pImpl->mpDialogController->GetExampleSet();
+    if (pImpl->mxDialog)
+        return pImpl->mxDialog->GetExampleSet();
+    return nullptr;
+}
+
 SfxTabDialog::SfxTabDialog
 
 /*  [Description]
