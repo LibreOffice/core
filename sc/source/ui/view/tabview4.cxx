@@ -27,6 +27,9 @@
 #include <gridwin.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <formulacell.hxx>
+#include <dociter.hxx>
+#include <inputhdl.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor
 
@@ -247,6 +250,12 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         SCROW nPaintEndY;
         if (aRect.GetDiff( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY ))
             PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, ScUpdateMode::Marks );
+
+        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
+        if (pInputHandler)
+        {
+            pInputHandler->UpdateLokReferenceMarks();
+        }
     }
 
     //  autocomplete for Auto-Fill
@@ -323,6 +332,12 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
             //  SetReference without Merge-Adjustment
             ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
             SC_MOD()->SetReference( aRef, pDoc, &rMark );
+        }
+
+        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
+        if (pInputHandler)
+        {
+            pInputHandler->UpdateLokReferenceMarks();
         }
     }
 }

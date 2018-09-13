@@ -49,6 +49,8 @@ class KeyEvent;
 class CommandEvent;
 class VclWindowEvent;
 namespace vcl { class Window; }
+struct ReferenceMark;
+struct ESelection;
 
 //  ScInputHandler
 
@@ -272,6 +274,10 @@ public:
 
                     // actually private, public for SID_INPUT_SUM
     void            InitRangeFinder(const OUString& rFormula);
+
+    void            UpdateLokReferenceMarks();
+    static void     SendReferenceMarks( const SfxViewShell* pViewShell,
+                         const std::vector<ReferenceMark>& rReferenceMarks );
 
     void SetDocumentDisposing( bool b );
 
