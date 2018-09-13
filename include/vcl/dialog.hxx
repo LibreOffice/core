@@ -53,8 +53,8 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
     bool            mbPaintComplete;
-    bool            mbForceBorderWindow;
-    InitFlag        mnInitFlag; // used for deferred init
+    bool const      mbForceBorderWindow;
+    InitFlag const  mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;

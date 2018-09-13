@@ -225,7 +225,7 @@ private:
     static std::unique_ptr<ErrorInfo> GetDynamicErrorInfo(ErrCode nId);
 
     ErrCode                     nErrId;
-    DialogMask                  nMask;
+    DialogMask const            nMask;
 
 };
 

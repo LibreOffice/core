@@ -28,7 +28,7 @@
 struct ImplImage
 {
     BitmapChecksum maBitmapChecksum;
-    BitmapEx maBitmapEx;
+    BitmapEx const maBitmapEx;
     BitmapEx maDisabledBitmapEx;
 
     ImplImage(const BitmapEx& rBitmapEx);

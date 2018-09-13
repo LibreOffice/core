@@ -26,10 +26,10 @@
 class ControlCacheKey
 {
 public:
-    ControlType mnType;
-    ControlPart mnPart;
-    ControlState mnState;
-    Size maSize;
+    ControlType const mnType;
+    ControlPart const mnPart;
+    ControlState const mnState;
+    Size const maSize;
 
     ControlCacheKey(ControlType nType, ControlPart nPart, ControlState nState, const Size& rSize)
         : mnType(nType)

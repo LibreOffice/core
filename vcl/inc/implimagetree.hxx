@@ -41,10 +41,10 @@ namespace com { namespace sun { namespace star { namespace container {
 struct ImageRequestParameters
 {
     OUString msName;
-    OUString msStyle;
+    OUString const msStyle;
     BitmapEx& mrBitmap;
     bool mbLocalized;
-    ImageLoadFlags meFlags;
+    ImageLoadFlags const meFlags;
     bool mbWriteImageToCache;
 
     ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized, ImageLoadFlags eFlags)

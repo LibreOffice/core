@@ -599,8 +599,8 @@ void DeInitVCL()
 // only one call is allowed
 struct WorkerThreadData
 {
-    oslWorkerFunction   pWorker;
-    void *              pThreadData;
+    oslWorkerFunction const   pWorker;
+    void * const              pThreadData;
     WorkerThreadData( oslWorkerFunction pWorker_, void * pThreadData_ )
         : pWorker( pWorker_ )
         , pThreadData( pThreadData_ )

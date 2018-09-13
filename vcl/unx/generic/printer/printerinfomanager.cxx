@@ -959,8 +959,8 @@ struct SystemCommandParameters
     const char*     pPrintCommand;
     const char*     pForeToken;
     const char*     pAftToken;
-    unsigned int    nForeTokenCount;
-    tokenHandler    pHandler;
+    unsigned int const    nForeTokenCount;
+    tokenHandler const    pHandler;
 };
 
 #if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))

@@ -434,9 +434,9 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
 class ScanlineWriter
 {
     BitmapPalette& maPalette;
-    sal_uInt8 mnColorsPerByte; // number of colors that are stored in one byte
-    sal_uInt8 mnColorBitSize;  // number of bits a color takes
-    sal_uInt8 mnColorBitMask;  // bit mask used to isolate the color
+    sal_uInt8 const mnColorsPerByte; // number of colors that are stored in one byte
+    sal_uInt8 const mnColorBitSize;  // number of bits a color takes
+    sal_uInt8 const mnColorBitMask;  // bit mask used to isolate the color
     sal_uInt8* mpCurrentScanline;
     long mnX;
 

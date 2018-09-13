@@ -263,7 +263,7 @@ static OUString queryFile( Printer const * pPrinter )
 struct PrintJobAsync
 {
     std::shared_ptr<PrinterController>  mxController;
-    JobSetup                            maInitSetup;
+    JobSetup const                      maInitSetup;
 
     PrintJobAsync(const std::shared_ptr<PrinterController>& i_xController,
                   const JobSetup& i_rInitSetup)

@@ -186,7 +186,7 @@ private:
     DECL_LINK(FocusInListener, VclWindowEvent&, void);
     DECL_LINK(FocusOutListener, VclWindowEvent&, void);
 
-    bool m_bTakeOwnership;
+    bool const m_bTakeOwnership;
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, bool bTakeOwnership)
@@ -459,7 +459,7 @@ class SalInstanceMenu : public weld::Menu
 private:
     VclPtr<PopupMenu> m_xMenu;
 
-    bool m_bTakeOwnership;
+    bool const m_bTakeOwnership;
 
 public:
     SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
@@ -997,7 +997,7 @@ class SalInstanceButton : public SalInstanceContainer, public virtual weld::Butt
 {
 private:
     VclPtr<::Button> m_xButton;
-    Link<::Button*,void> m_aOldClickHdl;
+    Link<::Button*,void> const m_aOldClickHdl;
 
     DECL_LINK(ClickHdl, ::Button*, void);
 public:

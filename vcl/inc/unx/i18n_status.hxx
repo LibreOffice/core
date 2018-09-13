@@ -53,7 +53,7 @@ class I18NStatus
 private:
     SalFrame*                       m_pParent;
     VclPtr<StatusWindow>            m_pStatusWindow;
-    OUString                        m_aCurrentIM;
+    OUString const                  m_aCurrentIM;
 
     I18NStatus();
     ~I18NStatus();

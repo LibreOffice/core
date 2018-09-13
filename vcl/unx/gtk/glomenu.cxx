@@ -17,7 +17,7 @@
 
 struct GLOMenu
 {
-    GMenuModel  parent_instance;
+    GMenuModel const  parent_instance;
 
     GArray      *items;
 };

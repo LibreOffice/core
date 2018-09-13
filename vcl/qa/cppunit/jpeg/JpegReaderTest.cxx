@@ -14,22 +14,18 @@
 #include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 
+static OUString const gaDataUrl("/vcl/qa/cppunit/jpeg/data/");
+
 class JpegReaderTest : public test::BootstrapFixtureBase
 {
-    OUString maDataUrl;
-
     OUString getFullUrl(const OUString& sFileName)
     {
-        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
 
     Graphic loadJPG(const OUString& aURL);
 
 public:
-    JpegReaderTest() :
-        maDataUrl("/vcl/qa/cppunit/jpeg/data/")
-    {}
-
     void testReadRGB();
     void testReadGray();
     void testReadCMYK();

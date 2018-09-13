@@ -221,7 +221,7 @@ public:
 
     struct VCL_DLLPUBLIC AnyWidget
     {
-        WidgetType          Type;       // primitive RTTI
+        WidgetType const    Type;       // primitive RTTI
     public:
         OUString            Name;       // a distinct name to identify the control
         OUString            Description;// descriptive text for the control (e.g. for tool tip)

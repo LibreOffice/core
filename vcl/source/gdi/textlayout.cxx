@@ -93,7 +93,7 @@ namespace vcl
 
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
-        Font            m_aUnzoomedPointFont;
+        Font const      m_aUnzoomedPointFont;
         const bool      m_bRTLEnabled;
 
         tools::Rectangle       m_aCompleteTextRect;

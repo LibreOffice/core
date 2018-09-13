@@ -42,7 +42,7 @@ class ImplDockFloatWin2 : public FloatingWindow
 {
 private:
     ImplDockingWindowWrapper*  mpDockWin;
-    sal_uInt64      mnLastTicks;
+    sal_uInt64 const mnLastTicks;
     Timer           m_aDockTimer;
     Timer           m_aEndDockTimer;
     Point           maDockPos;
@@ -407,7 +407,7 @@ tools::Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 class ImplPopupFloatWin : public FloatingWindow
 {
 private:
-    bool mbToolBox;
+    bool const mbToolBox;
 
 public:
     ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox );

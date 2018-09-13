@@ -61,7 +61,7 @@ class HexEncoder : public ByteEncoder
 {
 private:
 
-    osl::File*      mpFile;
+    osl::File* const mpFile;
     sal_uInt32      mnColumn;
     sal_uInt32      mnOffset;
     sal_Char        mpFileBuffer[nBufferSize + 16];
@@ -127,7 +127,7 @@ class Ascii85Encoder : public ByteEncoder
 {
 private:
 
-    osl::File*      mpFile;
+    osl::File* const mpFile;
     sal_uInt32      mnByte;
     sal_uInt8       mpByteBuffer[4];
 
@@ -277,9 +277,9 @@ private:
     std::array<LZWCTreeNode, 4096>
                     mpTable;    // LZW compression data
     LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
-    sal_uInt16      mnDataSize;
-    sal_uInt16      mnClearCode;
-    sal_uInt16      mnEOICode;
+    sal_uInt16 const mnDataSize;
+    sal_uInt16 const mnClearCode;
+    sal_uInt16 const mnEOICode;
     sal_uInt16      mnTableSize;
     sal_uInt16      mnCodeSize;
     sal_uInt32      mnOffset;

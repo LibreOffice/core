@@ -56,8 +56,8 @@ namespace {
 
 class ExecuteWrapper
 {
-    std::function<void()> mFunc;
-    Link<Timer*, void> mHandler;
+    std::function<void()> const mFunc;
+    Link<Timer*, void> const mHandler;
     volatile bool mbSignal;
 
 public:
