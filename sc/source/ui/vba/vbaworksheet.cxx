@@ -821,16 +821,24 @@ ScVbaWorksheet::Shapes( const uno::Any& aIndex )
    return uno::makeAny( xVbaShapes );
 }
 
+uno::Any
+ScVbaWorksheet::getButtons( const uno::Any &rIndex, bool bOptionButtons )
+{
+    ::rtl::Reference< ScVbaSheetObjectsBase > &rxButtons = bOptionButtons ? mxButtons[0] : mxButtons[1];
+
+    if( !rxButtons.is() )
+        rxButtons.set( new ScVbaButtons( this, mxContext, mxModel, mxSheet, bOptionButtons ) );
+    else
+        rxButtons->collectShapes();
+    if( rIndex.hasValue() )
+        return rxButtons->Item( rIndex, uno::Any() );
+    return uno::Any( uno::Reference< XCollection >( rxButtons.get() ) );
+}
+
 uno::Any SAL_CALL
 ScVbaWorksheet::Buttons( const uno::Any& rIndex )
 {
-    if( !mxButtons.is() )
-        mxButtons.set( new ScVbaButtons( this, mxContext, mxModel, mxSheet ) );
-    else
-        mxButtons->collectShapes();
-    if( rIndex.hasValue() )
-        return mxButtons->Item( rIndex, uno::Any() );
-    return uno::Any( uno::Reference< XCollection >( mxButtons.get() ) );
+    return getButtons( rIndex, false );
 }
 
 uno::Any SAL_CALL
@@ -864,9 +872,9 @@ ScVbaWorksheet::ListBoxes( const uno::Any& /*rIndex*/ )
 }
 
 uno::Any SAL_CALL
-ScVbaWorksheet::OptionButtons( const uno::Any& /*rIndex*/ )
+ScVbaWorksheet::OptionButtons( const uno::Any& rIndex )
 {
-    throw uno::RuntimeException();
+    return getButtons( rIndex, true );
 }
 
 uno::Any SAL_CALL
