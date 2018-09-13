@@ -26,9 +26,9 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    double mfScaleX;
-    double mfScaleY;
-    Size maSize;
+    double const mfScaleX;
+    double const mfScaleY;
+    Size const maSize;
 };
 
 #endif

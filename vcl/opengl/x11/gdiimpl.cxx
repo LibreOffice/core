@@ -81,7 +81,7 @@ namespace
     {
     private:
         errorHandler oldErrorHandler;
-        Display* mdpy;
+        Display* const mdpy;
 
     public:
         TempErrorHandler(Display* dpy, errorHandler newErrorHandler)

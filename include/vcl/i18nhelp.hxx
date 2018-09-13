@@ -49,7 +49,7 @@ namespace vcl
 class VCL_DLLPUBLIC I18nHelper
 {
     ::osl::Mutex                    maMutex;
-    LanguageTag                     maLanguageTag;
+    LanguageTag const               maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     std::unique_ptr<LocaleDataWrapper>              mpLocaleDataWrapper;

@@ -697,8 +697,8 @@ typedef  GType (* GetGIfaceType ) (void);
 }
 const struct {
         const char          *name;
-        GInterfaceInitFunc   aInit;
-        GetGIfaceType        aGetGIfaceType;
+        GInterfaceInitFunc const   aInit;
+        GetGIfaceType const        aGetGIfaceType;
         const uno::Type &  (*aGetUnoType) ();
 } aTypeTable[] = {
 // re-location heaven:

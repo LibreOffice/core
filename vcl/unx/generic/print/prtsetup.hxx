@@ -36,7 +36,7 @@ class RTSDialog : public weld::GenericDialogController
     ::psp::PrinterInfo      m_aJobData;
 
     // some resources
-    OUString                m_aInvalidString;
+    OUString const          m_aInvalidString;
     bool m_bDataModified;
 
     // controls

@@ -50,7 +50,7 @@ private:
     Idle                            maUpdateMenuBarIdle;
 
     bool                            mbInActivateCallback;
-    bool                            mbMenuBar;
+    bool const                      mbMenuBar;
     bool                            mbNeedsUpdate;
     bool                            mbReturnFocusToDocument;
     bool                            mbAddedGrab;
@@ -144,8 +144,8 @@ public:
     GtkSalMenuItem( const SalItemParams* );
     virtual ~GtkSalMenuItem() override;
 
-    sal_uInt16          mnId;               // Item ID
-    MenuItemType        mnType;             // Item type
+    sal_uInt16 const    mnId;               // Item ID
+    MenuItemType const  mnType;             // Item type
     bool                mbVisible;          // Item visibility.
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)

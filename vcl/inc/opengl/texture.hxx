@@ -35,7 +35,7 @@ class ImplOpenGLTexture
 public:
     GLuint mnTexture;
     int    mnWidth;
-    int    mnHeight;
+    int const    mnHeight;
     GLenum mnFilter;
     GLuint mnOptStencil;
 

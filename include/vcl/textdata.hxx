@@ -115,7 +115,7 @@ inline bool TextSelection::operator != ( const TextSelection& rSel ) const
 class VCL_DLLPUBLIC TextHint : public SfxHint
 {
 private:
-    sal_uLong   mnValue;
+    sal_uLong const   mnValue;
 
 public:
     TextHint( SfxHintId nId );
@@ -126,7 +126,7 @@ public:
 
 struct TEIMEInfos
 {
-    OUString    aOldTextAfterStartPos;
+    OUString const    aOldTextAfterStartPos;
     std::unique_ptr<ExtTextInputAttr[]> pAttribs;
     TextPaM     aPos;
     sal_Int32   nLen;

@@ -198,14 +198,14 @@ struct SalSurroundingTextRequestEvent
 
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uLong       mnStart;        // The beginning index of selected range
-    sal_uLong       mnEnd;          // The end index of selected range
+    sal_uLong const       mnStart;        // The beginning index of selected range
+    sal_uLong const       mnEnd;          // The end index of selected range
 };
 
 struct SalQueryCharPositionEvent
 {
     bool            mbValid;                // The data is valid or not.
-    sal_uLong       mnCharPos;              // The index of character in a composition.
+    sal_uLong const mnCharPos;              // The index of character in a composition.
     bool            mbVertical;             // The text is vertical or not.
     long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
     long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y

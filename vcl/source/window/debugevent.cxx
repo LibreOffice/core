@@ -139,7 +139,7 @@ void DebugEventInjector::InjectTextEvent()
     {
         struct {
             sal_uInt16 nCodeStart, nCodeEnd;
-            char       aCharStart;
+            char const aCharStart;
         } nTextCodes[] = {
             { KEY_0, KEY_9, '0' },
             { KEY_A, KEY_Z, 'a' }
@@ -192,8 +192,8 @@ void DebugEventInjector::InjectKeyNavEdit()
     vcl::Window *pWindow = ChooseWindow();
 
     struct {
-        double     mnProb;
-        sal_uInt16 mnKey;
+        double const     mnProb;
+        sal_uInt16 const mnKey;
     } const nWeights[] = {
         // edit / escape etc. - 50%
         { 0.20, KEY_SPACE },

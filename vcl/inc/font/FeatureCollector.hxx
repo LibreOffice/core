@@ -23,9 +23,9 @@ namespace font
 class FeatureCollector
 {
 private:
-    hb_face_t* m_pHbFace;
+    hb_face_t* const m_pHbFace;
     std::vector<vcl::font::Feature>& m_rFontFeatures;
-    LanguageType m_eLanguageType;
+    LanguageType const m_eLanguageType;
 
 public:
     FeatureCollector(hb_face_t* pHbFace, std::vector<vcl::font::Feature>& rFontFeatures,

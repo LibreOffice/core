@@ -20,19 +20,18 @@
 
 #include <vcl/graphicfilter.hxx>
 
+static OUString const gaDataUrl = "/vcl/qa/cppunit/bitmaprender/data/";
+
 class BitmapRenderTest : public test::BootstrapFixture
 {
-    OUString maDataUrl;
-
     OUString getFullUrl(const OUString& sFileName)
     {
-        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
 
 public:
     BitmapRenderTest()
         : BootstrapFixture(true, false)
-        , maDataUrl("/vcl/qa/cppunit/bitmaprender/data/")
     {
     }
 

@@ -39,9 +39,9 @@ struct SalItemParams
 
 struct SalMenuButtonItem
 {
-    sal_uInt16          mnId;
-    Image               maImage;
-    OUString            maToolTipText;
+    sal_uInt16 const          mnId;
+    Image const               maImage;
+    OUString const            maToolTipText;
 
     SalMenuButtonItem() : mnId( 0 ) {}
     SalMenuButtonItem( sal_uInt16 i_nId, const Image& rImg, const OUString& i_rTTText )

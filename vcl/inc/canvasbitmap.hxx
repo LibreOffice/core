@@ -39,7 +39,7 @@ namespace unotools
                                      css::rendering::XIntegerBitmapColorSpace >
     {
     private:
-        BitmapEx                                       m_aBmpEx;
+        BitmapEx const                                 m_aBmpEx;
         ::Bitmap                                       m_aBitmap;
         ::Bitmap                                       m_aAlpha;
         Bitmap::ScopedReadAccess                       m_pBmpAcc;

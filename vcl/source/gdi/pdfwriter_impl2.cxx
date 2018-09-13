@@ -1684,9 +1684,9 @@ void PDFWriterImpl::putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStre
 
 struct PixelCode
 {
-    sal_uInt32      mnEncodedPixels;
-    sal_uInt32      mnCodeBits;
-    sal_uInt32      mnCode;
+    sal_uInt32 const      mnEncodedPixels;
+    sal_uInt32 const      mnCodeBits;
+    sal_uInt32 const      mnCode;
 };
 
 static const PixelCode WhitePixelCodes[] =
@@ -1958,8 +1958,8 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
                 {   // vertical coding
                     static const struct
                     {
-                        sal_uInt32 mnCodeBits;
-                        sal_uInt32 mnCode;
+                        sal_uInt32 const mnCodeBits;
+                        sal_uInt32 const mnCode;
                     } VerticalCodes[7] = {
                         { 7, 0x03 },    // 0000 011
                         { 6, 0x03 },    // 0000 11

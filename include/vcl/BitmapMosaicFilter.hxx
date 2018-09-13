@@ -31,8 +31,8 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uLong mnTileWidth;
-    sal_uLong mnTileHeight;
+    sal_uLong const mnTileWidth;
+    sal_uLong const mnTileHeight;
 };
 
 #endif

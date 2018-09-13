@@ -344,7 +344,7 @@ protected:
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
     bool                            bFontGC_ : 1;       // is Font GC valid
-    bool                            m_bOpenGL : 1;
+    bool const                      m_bOpenGL : 1;
 
 private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;
