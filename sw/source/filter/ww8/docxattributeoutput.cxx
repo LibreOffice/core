@@ -2084,6 +2084,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_specVanish ),
         FSNS( XML_w, XML_oMath ),
         FSNS( XML_w, XML_rPrChange ),
+        FSNS( XML_w, XML_del ),
         FSNS( XML_w14, XML_glow ),
         FSNS( XML_w14, XML_shadow ),
         FSNS( XML_w14, XML_reflection ),
