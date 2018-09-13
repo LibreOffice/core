@@ -1183,7 +1183,7 @@
           <value xml:lang="en-US">Gradient tool</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Interacive gradient tool</value>
+          <value xml:lang="en-US">Interactive gradient tool</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
