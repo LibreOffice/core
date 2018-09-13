@@ -196,13 +196,6 @@ UDK_3_0_0 {
         rtl_reallocateMemory;
         rtl_zeroMemory;
         rtl_findInMemory;
-        rtl_hashentry_destroy;
-        rtl_hashfunc;
-        rtl_hashtable_add;
-        rtl_hashtable_destroy;
-        rtl_hashtable_find;
-        rtl_hashtable_grow;
-        rtl_hashtable_init;
         rtl_locale_equals;
         rtl_locale_getCountry;
         rtl_locale_getDefault;
