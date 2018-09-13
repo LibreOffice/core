@@ -92,7 +92,7 @@ public:
     std::string toString() const override;
 #endif
 private:
-    Id m_nKeyword;
+    Id const m_nKeyword;
     RTFValue::Pointer_t& m_pValue;
 };
 } // namespace rtftok

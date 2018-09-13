@@ -165,7 +165,7 @@ private:
     bool      bYSizeValid;
 
 public:
-    GraphicImportType eGraphicImportType;
+    GraphicImportType const eGraphicImportType;
     DomainMapper&   rDomainMapper;
 
     sal_Int32 nLeftPosition;
@@ -198,9 +198,9 @@ public:
 
     sal_Int32 nContrast;
     sal_Int32 nBrightness;
-    double    fGamma;
+    double const    fGamma;
 
-    sal_Int32 nFillColor;
+    sal_Int32 const nFillColor;
 
     drawing::ColorMode eColorMode;
 

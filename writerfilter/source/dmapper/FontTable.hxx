@@ -91,7 +91,7 @@ public:
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
-    OUString fontName;
+    OUString const fontName;
     const char* const style;
     OUString id;
     OUString fontKey;
