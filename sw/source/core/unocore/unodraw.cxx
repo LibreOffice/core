@@ -683,12 +683,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     else
         pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
 
-    SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
-    SwUnoInternalPaM* pInternalPam = nullptr;
+    std::unique_ptr<SwPaM> pPam(new SwPaM(pDoc->GetNodes().GetEndOfContent()));
+    std::unique_ptr<SwUnoInternalPaM> pInternalPam;
     uno::Reference< text::XTextRange >  xRg;
     if( pDesc && (xRg = pDesc->GetTextRange()).is() )
     {
-        pInternalPam = new SwUnoInternalPaM(*pDoc);
+        pInternalPam.reset(new SwUnoInternalPaM(*pDoc));
         if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
             throw uno::RuntimeException();
 
@@ -721,9 +721,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         // attributes no longer needed, because it's already got a default.
     }
     aSet.Put(aAnchor);
-    SwPaM* pTemp = pInternalPam;
+    SwPaM* pTemp = pInternalPam.get();
     if ( !pTemp )
-        pTemp = pPam;
+        pTemp = pPam.get();
     UnoActionContext aAction(pDoc);
     pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
@@ -731,8 +731,8 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         pFormat->Add(pShape);
     pShape->m_bDescriptor = false;
 
-    delete pPam;
-    delete pInternalPam;
+    pPam.reset();
+    pInternalPam.reset();
 }
 
 void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
