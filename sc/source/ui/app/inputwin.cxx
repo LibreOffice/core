@@ -78,6 +78,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
+#include <output.hxx>
 
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
@@ -1589,6 +1590,13 @@ void ScTextWnd::StopEditEngine( bool bAll )
 
         if (bSelection)
             Invalidate(); // So that the Selection is not left there
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Clear
+        std::vector<ReferenceMark> aReferenceMarks;
+        ScInputHandler::SendReferenceMarks( mpViewShell, aReferenceMarks );
     }
 }
 
