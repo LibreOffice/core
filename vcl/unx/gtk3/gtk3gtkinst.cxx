@@ -2638,9 +2638,10 @@ private:
         if (!bAllow)
         {
             g_signal_stop_emission_by_name(m_pNotebook, "switch-page");
-            OString sNewIdent(get_page_ident(nNewPage));
-            m_aEnterPageHdl.Call(sNewIdent);
+            return;
         }
+        OString sNewIdent(get_page_ident(nNewPage));
+        m_aEnterPageHdl.Call(sNewIdent);
     }
 
     OString get_page_ident(guint nPage) const
