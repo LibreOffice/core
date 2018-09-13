@@ -21,9 +21,9 @@ class Foo1
     rtl::Reference<Foo> m_pbar2;
     Foo1()
         : m_pbar1(nullptr)
-        // expected-error@-1 {{no need to explicitly init this with nullptr, just use default constructor [loplugin:simplifyconstruct]}}
+        // expected-error@-1 {{no need to explicitly init an instance of 'std::unique_ptr<int>' with nullptr, just use default constructor [loplugin:simplifyconstruct]}}
         , m_pbar2(nullptr)
-    // expected-error@-1 {{no need to explicitly init this with nullptr, just use default constructor [loplugin:simplifyconstruct]}}
+    // expected-error@-1 {{no need to explicitly init an instance of 'rtl::Reference<Foo>' with nullptr, just use default constructor [loplugin:simplifyconstruct]}}
     {
     }
 };

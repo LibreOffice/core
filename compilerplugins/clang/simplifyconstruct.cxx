@@ -55,9 +55,10 @@ bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructE
         && isa<CXXNullPtrLiteralExpr>(constructExpr->getArg(0)->IgnoreParenImpCasts()))
     {
         report(DiagnosticsEngine::Warning,
-               "no need to explicitly init this with nullptr, just use default constructor",
+               "no need to explicitly init an instance of %0 with nullptr, just use default "
+               "constructor",
                constructExpr->getSourceRange().getBegin())
-            << constructExpr->getSourceRange();
+            << constructExpr->getType() << constructExpr->getSourceRange();
     }
     return true;
 }
