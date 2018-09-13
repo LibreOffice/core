@@ -58,9 +58,9 @@ public:
     typedef tools::SvRef<OOXMLProperty> Pointer_t;
     enum Type_t { SPRM, ATTRIBUTE };
 private:
-    Id mId;
+    Id const mId;
     mutable OOXMLValue::Pointer_t mpValue;
-    Type_t meType;
+    Type_t const meType;
 
 public:
     OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
@@ -79,7 +79,7 @@ public:
 
 class OOXMLBinaryValue : public OOXMLValue
 {
-    mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
+    OOXMLBinaryObjectReference::Pointer_t const mpBinaryObj;
 public:
     explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const & pBinaryObj);
     virtual ~OOXMLBinaryValue() override;
@@ -93,7 +93,7 @@ public:
 
 class OOXMLBooleanValue : public OOXMLValue
 {
-    bool mbValue;
+    bool const mbValue;
     explicit OOXMLBooleanValue(bool bValue);
 public:
     static OOXMLValue::Pointer_t const & Create (bool bValue);
@@ -116,7 +116,7 @@ public:
 
 class OOXMLStringValue : public OOXMLValue
 {
-    OUString mStr;
+    OUString const mStr;
 public:
     explicit OOXMLStringValue(const OUString & rStr);
     virtual ~OOXMLStringValue() override;
@@ -205,7 +205,7 @@ private:
 
 class OOXMLPropertySetValue : public OOXMLValue
 {
-    OOXMLPropertySet::Pointer_t mpPropertySet;
+    OOXMLPropertySet::Pointer_t const mpPropertySet;
 public:
     explicit OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet);
     virtual ~OOXMLPropertySetValue() override;
@@ -224,7 +224,7 @@ public:
 
 class OOXMLIntegerValue : public OOXMLValue
 {
-    sal_Int32 mnValue;
+    sal_Int32 const mnValue;
     explicit OOXMLIntegerValue(sal_Int32 nValue);
 public:
     static OOXMLValue::Pointer_t Create (sal_Int32 nValue);
@@ -353,7 +353,7 @@ public:
 
 class OOXMLPropertySetEntryToString : public Properties
 {
-    Id mnId;
+    Id const mnId;
     OUString mStr;
 
 public:
@@ -368,7 +368,7 @@ public:
 
 class OOXMLPropertySetEntryToInteger : public Properties
 {
-    Id mnId;
+    Id const mnId;
     int mnValue;
 public:
     explicit OOXMLPropertySetEntryToInteger(Id nId);
@@ -382,7 +382,7 @@ public:
 
 class OOXMLPropertySetEntryToBool : public Properties
 {
-    Id mnId;
+    Id const mnId;
     bool mValue;
 public:
     explicit OOXMLPropertySetEntryToBool(Id nId);

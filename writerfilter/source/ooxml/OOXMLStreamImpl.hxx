@@ -43,9 +43,9 @@ class OOXMLStreamImpl : public OOXMLStream
     css::uno::Reference<css::xml::sax::XFastParser> mxFastParser;
     css::uno::Reference<css::xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
-    StreamType_t mnStreamType;
+    StreamType_t const mnStreamType;
 
-    OUString msId;
+    OUString const msId;
     OUString msPath;
     OUString msTarget;
 
