@@ -40,7 +40,7 @@ const sal_Int64 DIST_GEOMETRIC           = 6;
 const sal_Int64 DIST_NEGATIVE_BINOMIAL   = 7;
 const sal_Int64 DIST_UNIFORM_INTEGER     = 8;
 
-const sal_Int64 PERCISION   = 10000;
+const sal_Int64 PRECISION   = 10000;
 const sal_Int64 DIGITS      = 4;
 
 }
@@ -203,8 +203,8 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     sal_Int64 parameterInteger1 = mpParameter1Value->GetValue();
     sal_Int64 parameterInteger2 = mpParameter2Value->GetValue();
 
-    double parameter1 = parameterInteger1 / static_cast<double>(PERCISION);
-    double parameter2 = parameterInteger2 / static_cast<double>(PERCISION);
+    double parameter1 = parameterInteger1 / static_cast<double>(PRECISION);
+    double parameter2 = parameterInteger2 / static_cast<double>(PRECISION);
 
     boost::optional<sal_Int8> aDecimalPlaces;
     if (mpEnableRounding->IsChecked())
@@ -428,10 +428,10 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
     mpParameter2Value->SetMax(SAL_MAX_INT64);
 
     mpParameter1Value->SetDecimalDigits(DIGITS);
-    mpParameter1Value->SetSpinSize(PERCISION);
+    mpParameter1Value->SetSpinSize(PRECISION);
 
     mpParameter2Value->SetDecimalDigits(DIGITS);
-    mpParameter2Value->SetSpinSize(PERCISION);
+    mpParameter2Value->SetSpinSize(PRECISION);
 
     switch(aSelectedId)
     {
@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         {
             mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
-            mpParameter1Value->SetMax( PERCISION );
+            mpParameter1Value->SetMax( PRECISION );
             mpParameter1Value->SetSpinSize(1000);
 
             mpParameter2Text->Hide();
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         {
             mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
-            mpParameter1Value->SetMax( PERCISION );
+            mpParameter1Value->SetMax( PRECISION );
             mpParameter1Value->SetSpinSize(1000);
 
             mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
