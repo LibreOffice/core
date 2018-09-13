@@ -4025,7 +4025,7 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
 ]
 
 SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
-()
+(SfxStringItem FileName SID_SELECT_BACKGROUND,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem AsLink FN_PARAM_1,SfxStringItem Style FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
