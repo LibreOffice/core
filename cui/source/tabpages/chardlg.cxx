@@ -153,37 +153,37 @@ namespace
     }
 }
 
-inline SvxFont& CharBasePage::GetPreviewFont()
+inline SvxFont& SvxCharBasePage::GetPreviewFont()
 {
     return m_aPreviewWin.GetFont();
 }
 
-inline SvxFont& CharBasePage::GetPreviewCJKFont()
+inline SvxFont& SvxCharBasePage::GetPreviewCJKFont()
 {
     return m_aPreviewWin.GetCJKFont();
 }
 
-inline SvxFont& CharBasePage::GetPreviewCTLFont()
+inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 {
     return m_aPreviewWin.GetCTLFont();
 }
 
-CharBasePage::CharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
     : SfxTabPage(pParent, rUIXMLDescription, rID, &rItemset)
     , m_bPreviewBackgroundToCharacter( false )
 {
 }
 
-CharBasePage::~CharBasePage()
+SvxCharBasePage::~SvxCharBasePage()
 {
 }
 
-void CharBasePage::ActivatePage(const SfxItemSet& rSet)
+void SvxCharBasePage::ActivatePage(const SfxItemSet& rSet)
 {
     m_aPreviewWin.SetFromItemSet(rSet, m_bPreviewBackgroundToCharacter);
 }
 
-void CharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
+void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if (rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT)
@@ -193,7 +193,7 @@ void CharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
     }
 }
 
-void CharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
+void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
 {
     setPrevFontEscapement(GetPreviewFont(),nProp,nEscProp,nEsc);
     setPrevFontEscapement(GetPreviewCJKFont(),nProp,nEscProp,nEsc);
@@ -224,7 +224,7 @@ struct SvxCharNamePage_Impl
 // class SvxCharNamePage -------------------------------------------------
 
 SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : CharBasePage(pParent, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
+    : SvxCharBasePage(pParent, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
     , m_xEastFrame(m_xBuilder->weld_widget("asian"))
     , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
@@ -355,7 +355,7 @@ void SvxCharNamePage::dispose()
     m_xPreviewWin.reset();
     m_xCTLFontLanguageLB.reset();
     m_xEastFontLanguageLB.reset();
-    CharBasePage::dispose();
+    SvxCharBasePage::dispose();
 }
 
 void SvxCharNamePage::Initialize()
@@ -1188,7 +1188,7 @@ void SvxCharNamePage::FontModifyHdl_Impl(const weld::Widget& rNameBox)
 
 void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 {
-    CharBasePage::ActivatePage( rSet );
+    SvxCharBasePage::ActivatePage( rSet );
 
     UpdatePreview_Impl();       // instead of asynchronous calling in ctor
 }
@@ -1322,7 +1322,7 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharEffectsPage ----------------------------------------------
 
 SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : CharBasePage(pParent, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
+    : SvxCharBasePage(pParent, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
@@ -1383,7 +1383,7 @@ void SvxCharEffectsPage::dispose()
     m_xUnderlineColorLB.reset();
     m_xOverlineColorLB.reset();
     m_xFontColorLB.reset();
-    CharBasePage::dispose();
+    SvxCharBasePage::dispose();
 }
 
 void SvxCharEffectsPage::Initialize()
@@ -2444,7 +2444,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : CharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
+    : SvxCharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
     , m_nScaleWidthItemSetVal(100)
@@ -3050,7 +3050,7 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 // class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : CharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
+    : SvxCharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
     , m_xTwoLinesBtn(m_xBuilder->weld_check_button("twolines"))
@@ -3165,7 +3165,7 @@ IMPL_LINK(SvxCharTwoLinesPage, CharacterMapHdl_Impl, weld::TreeView&, rBox, void
 
 void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
 {
-    CharBasePage::ActivatePage(rSet);
+    SvxCharBasePage::ActivatePage(rSet);
 }
 
 DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
