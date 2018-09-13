@@ -29,8 +29,6 @@
 
 module ooo {  module vba { module excel {
 
-
-
 /** Additional attributes for a push button drawing control (this interface
     does not belong to ActiveX form controls).
  */
@@ -52,11 +50,15 @@ interface XButton : com::sun::star::uno::XInterface
         ooo::vba::excel::XlOrientation. */
     [attribute] long Orientation;
 
+    /** OptionButton only hack - are we checked */
+    [attribute] any Value;
+
+    /** OptionButton only hack - another way to get the text */
+    [attribute] string Text;
+
     /** Access to text and text formatting of the button caption. */
     XCharacters Characters( [in] any Start, [in] any Length );
 };
-
-
 
 }; }; };
 
