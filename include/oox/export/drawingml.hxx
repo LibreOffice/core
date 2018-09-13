@@ -81,6 +81,9 @@ namespace io {
 namespace uno {
     class XInterface;
 }
+namespace frame {
+    class XModel;
+}
 }}}
 
 struct EscherConnectorListEntry;
@@ -200,7 +203,8 @@ public:
     void WriteSrcRectXGraphic(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
-    void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+                              css::uno::Reference< css::frame::XModel> const & xModel = nullptr );
 
     void WriteXGraphicStretch(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
