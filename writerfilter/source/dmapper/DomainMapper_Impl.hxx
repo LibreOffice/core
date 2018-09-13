@@ -124,7 +124,7 @@ enum BreakType
  */
 class HeaderFooterContext
 {
-    bool m_bTextInserted;
+    bool const m_bTextInserted;
 public:
     explicit HeaderFooterContext(bool bTextInserted);
     bool getTextInserted();
@@ -264,7 +264,7 @@ struct DeletableTabStop : public css::style::TabStop
 /// helper to remember bookmark start position
 struct BookmarkInsertPosition
 {
-    bool                                                                    m_bIsStartOfText;
+    bool const                                                       m_bIsStartOfText;
     OUString                                                         m_sBookmarkName;
     css::uno::Reference<css::text::XTextRange> m_xTextRange;
     BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName, css::uno::Reference<css::text::XTextRange> const& xTextRange):
@@ -276,8 +276,8 @@ struct BookmarkInsertPosition
 
 struct PermInsertPosition
 {
-    bool        m_bIsStartOfText;
-    sal_Int32   m_Id;
+    bool const        m_bIsStartOfText;
+    sal_Int32 const   m_Id;
     OUString    m_Ed;
     OUString    m_EdGrp;
 
@@ -360,9 +360,9 @@ struct FloatingTableInfo
 {
     css::uno::Reference<css::text::XTextRange> m_xStart;
     css::uno::Reference<css::text::XTextRange> m_xEnd;
-    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
-    sal_Int32 m_nTableWidth;
-    sal_Int32 m_nTableWidthType;
+    css::uno::Sequence<css::beans::PropertyValue> const m_aFrameProperties;
+    sal_Int32 const m_nTableWidth;
+    sal_Int32 const m_nTableWidthType;
     /// Break type of the section that contains this table.
     sal_Int32 m_nBreakType = -1;
 
@@ -405,9 +405,9 @@ public:
     typedef std::map < sal_Int32, PermInsertPosition >    PermMap_t;
 
 private:
-    SourceDocumentType                                                              m_eDocumentType;
+    SourceDocumentType const                                                        m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
-    SvtSaveOptions                                                                  m_aSaveOpt;
+    SvtSaveOptions const                                                            m_aSaveOpt;
     OUString m_aBaseUrl;
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
@@ -541,7 +541,7 @@ private:
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
 private:
-    bool m_bIsNewDoc;
+    bool const m_bIsNewDoc;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,

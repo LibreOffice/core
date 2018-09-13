@@ -28,8 +28,8 @@ namespace dmapper{
 
 class ModelEventListener : public cppu::WeakImplHelper<css::document::XEventListener>
 {
-    bool m_bIndexes;
-    bool m_bControls;
+    bool const m_bIndexes;
+    bool const m_bControls;
 public:
     ModelEventListener(bool bIndexes, bool bControls);
     virtual ~ModelEventListener() override;

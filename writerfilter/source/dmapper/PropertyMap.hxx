@@ -200,7 +200,7 @@ private:
     // 'temporarily' the section page settings are imported as page styles
     // empty strings mark page settings as not yet imported
 
-    bool                                            m_bIsFirstSection;
+    bool const                                      m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
 
     OUString                                        m_sFirstPageStyleName;
@@ -228,8 +228,8 @@ private:
     // Page number type is a value from css::style::NumberingType.
     sal_Int16                                       m_nPageNumberType;
     sal_Int32                                       m_nBreakType;
-    sal_Int32                                       m_nPaperBin;
-    sal_Int32                                       m_nFirstPaperBin;
+    sal_Int32 const                                 m_nPaperBin;
+    sal_Int32 const                                 m_nFirstPaperBin;
 
     sal_Int32                                       m_nLeftMargin;
     sal_Int32                                       m_nRightMargin;
