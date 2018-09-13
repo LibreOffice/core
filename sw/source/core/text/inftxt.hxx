@@ -201,7 +201,7 @@ public:
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
-    SwMultiCreator* GetMultiCreator(TextFrameIndex &rPos, SwMultiPortion const* pM) const;
+    std::unique_ptr<SwMultiCreator> GetMultiCreator(TextFrameIndex &rPos, SwMultiPortion const* pM) const;
 
     bool OnWin() const { return m_bOnWin; }
     void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
