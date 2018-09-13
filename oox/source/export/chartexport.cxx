@@ -2323,7 +2323,7 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
             FSEND );
 
     exportFill( xPropSet );
-    WriteOutline( xPropSet );
+    WriteOutline( xPropSet, getModel() );
 
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 }

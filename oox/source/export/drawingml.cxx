@@ -134,6 +134,25 @@ namespace drawingml {
 #define CGETAD(propName) \
     (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, #propName ))
 
+css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
+    {
+        css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
+        css::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance("com.sun.star.drawing.DashTable"),
+            css::uno::UNO_QUERY );
+        if(xNameAccess.is())
+        {
+            if (!xNameAccess->hasByName(rDashName))
+                return css::uno::Any();
+
+            return xNameAccess->getByName(rDashName);
+        }
+
+        return css::uno::Any();
+    }
+
+
+
 // not thread safe
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
@@ -571,7 +590,7 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
     }
 }
 
-void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
+void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
 
@@ -642,6 +661,17 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
             if (GetProperty(rXPropSet, "LineDash"))
             {
                 aLineDash = mAny.get<drawing::LineDash>();
+                if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 0) {
+                    OUString aLineDashName;
+                    GET(aLineDashName, LineDashName);
+                    if (!aLineDashName.isEmpty()) {
+                        if (xModel) {
+                            css::uno::Any aAny;
+                            aAny = getLineDash(xModel, aLineDashName);
+                            aLineDash = aAny.get<drawing::LineDash>();
+                        }
+                    }
+                }
                 bDashSet = true;
                 if (aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE)
                 {
