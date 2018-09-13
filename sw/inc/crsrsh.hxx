@@ -502,7 +502,7 @@ public:
     bool ShouldWait() const;
 
     // Check if selection is within one paragraph.
-    inline bool IsSelOnePara() const;
+    bool IsSelOnePara() const;
 
     /*
      * Returns SRectangle, at which the cursor is located.
@@ -868,12 +868,6 @@ inline bool SwCursorShell::IsSelection() const
 inline bool SwCursorShell::IsMultiSelection() const
 {
     return m_pCurrentCursor->GetNext() != m_pCurrentCursor;
-}
-
-inline bool SwCursorShell::IsSelOnePara() const
-{
-    return !m_pCurrentCursor->IsMultiSelection() &&
-           m_pCurrentCursor->GetPoint()->nNode == m_pCurrentCursor->GetMark()->nNode;
 }
 
 inline const SwTableNode* SwCursorShell::IsCursorInTable() const
