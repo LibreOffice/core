@@ -1073,7 +1073,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
             type != LOK_CALLBACK_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
-            type != LOK_CALLBACK_TEXT_SELECTION)
+            type != LOK_CALLBACK_TEXT_SELECTION &&
+            type != LOK_CALLBACK_REFERENCE_MARKS)
         {
             SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
             return;
