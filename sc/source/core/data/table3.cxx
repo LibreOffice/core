@@ -1935,15 +1935,14 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
     }
 }
 
-// at least MSC needs this at linkage level to be able to use it in a template
-typedef struct lcl_ScTable_DoSubTotals_RowEntry
+struct RowEntry
 {
     sal_uInt16  nGroupNo;
     SCROW   nSubStartRow;
     SCROW   nDestRow;
     SCROW   nFuncStart;
     SCROW   nFuncEnd;
-} RowEntry;
+};
 
 
 static const char* lcl_GetSubTotalStrId(int id)
