@@ -16,7 +16,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/commaoperator \
     compilerplugins/clang/test/constfields \
     compilerplugins/clang/test/constparams \
-    compilerplugins/clang/test/conststringfield \
     compilerplugins/clang/test/convertlong \
     compilerplugins/clang/test/cppunitassertequals \
     compilerplugins/clang/test/cstylecast \
@@ -51,6 +50,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/simplifybool \
     compilerplugins/clang/test/simplifyconstruct \
     compilerplugins/clang/test/simplifydynamiccast \
+    compilerplugins/clang/test/staticconstfield \
     compilerplugins/clang/test/stringbuffer \
     compilerplugins/clang/test/stringconstant \
     compilerplugins/clang/test/stringloop \

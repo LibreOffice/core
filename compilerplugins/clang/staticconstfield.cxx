@@ -14,11 +14,11 @@
 
 namespace
 {
-class ConstStringField : public loplugin::FilteringPlugin<ConstStringField>
+class StaticConstField : public loplugin::FilteringPlugin<StaticConstField>
 {
 public:
-    explicit ConstStringField(loplugin::InstantiationData const& data)
-        : loplugin::FilteringPlugin<ConstStringField>(data)
+    explicit StaticConstField(loplugin::InstantiationData const& data)
+        : loplugin::FilteringPlugin<StaticConstField>(data)
     {
     }
 
@@ -27,7 +27,7 @@ public:
     bool TraverseConstructorInitializer(CXXCtorInitializer* init);
 };
 
-bool ConstStringField::TraverseConstructorInitializer(CXXCtorInitializer* init)
+bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
 {
     if (!init->getSourceLocation().isValid() || ignoreLocation(init->getSourceLocation()))
         return true;
@@ -51,7 +51,7 @@ bool ConstStringField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     return RecursiveASTVisitor::TraverseConstructorInitializer(init);
 }
 
-loplugin::Plugin::Registration<ConstStringField> X("conststringfield", true);
+loplugin::Plugin::Registration<StaticConstField> X("staticconstfield", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

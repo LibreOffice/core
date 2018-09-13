@@ -12,10 +12,10 @@
 
 class Class1
 {
-    OUString const m_field1; // expected-note {{field here [loplugin:conststringfield]}}
+    OUString const m_field1; // expected-note {{field here [loplugin:staticconstfield]}}
     Class1()
         : m_field1("xxxx")
-    // expected-error@-1 {{string field can be static const [loplugin:conststringfield]}}
+    // expected-error@-1 {{string field can be static const [loplugin:staticconstfield]}}
     {
         (void)m_field1;
     }
@@ -23,10 +23,10 @@ class Class1
 
 class Class2
 {
-    OString const m_field1; // expected-note {{field here [loplugin:conststringfield]}}
+    OString const m_field1; // expected-note {{field here [loplugin:staticconstfield]}}
     Class2()
         : m_field1("xxxx")
-    // expected-error@-1 {{string field can be static const [loplugin:conststringfield]}}
+    // expected-error@-1 {{string field can be static const [loplugin:staticconstfield]}}
     {
         (void)m_field1;
     }
