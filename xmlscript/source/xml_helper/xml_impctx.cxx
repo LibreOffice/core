@@ -395,12 +395,10 @@ sal_Int32 DocumentHandlerImpl::getUidByUri( OUString const & Uri )
 OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
 {
     MGuard guard( m_pMutex );
-    t_OUString2LongMap::const_iterator iPos( m_URI2Uid.begin() );
-    t_OUString2LongMap::const_iterator const iEnd( m_URI2Uid.end() );
-    for ( ; iPos != iEnd; ++iPos )
+    for (const auto& rURIUid : m_URI2Uid)
     {
-        if (iPos->second == Uid)
-            return iPos->first;
+        if (rURIUid.second == Uid)
+            return rURIUid.first;
     }
     throw container::NoSuchElementException( "no such xmlns uid!" , static_cast< OWeakObject * >(this) );
 }

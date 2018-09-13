@@ -503,11 +503,11 @@ TVChildTarget::SearchAndInsert(std::unique_ptr<TVDom> p, TVDom* tvDom)
     }
     else
     {
-        i = tvDom->children.begin();
-        while ((i!=tvDom->children.end()) && (p != nullptr))
+        for (auto& child : tvDom->children)
         {
-            p = SearchAndInsert(std::move(p), i->get());
-            ++i;
+            if (p == nullptr)
+                break;
+            p = SearchAndInsert(std::move(p), child.get());
         }
         return p;
     }
