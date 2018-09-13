@@ -4,6 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
+import org.libreoffice.unotest
+import pathlib
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
@@ -11,12 +14,11 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
 from uitest.debug import sleep
-from uitest.path import get_srcdir_url
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 #Testcases Sorting TCS_Sorting Stable sorting
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class CalcStableSorting(UITestCase):
 
