@@ -685,6 +685,20 @@ typedef enum
      * cell.
      */
     LOK_CALLBACK_TABLE_SELECTED = 44,
+
+    /*
+     * Show reference marks from payload.
+     *
+     * Example payload:
+     * {
+     *     "marks": [
+     *         { "rectangle": "3825, 3315, 1245, 2010", "color": "0000ff", "part": "0" },
+     *         { "rectangle": "8925, 4335, 2520, 735", "color": "ff0000", "part": "0" },
+     *         ...
+     *     ]
+     * }
+     */
+    LOK_CALLBACK_REFERENCE_MARKS = 45,
 }
 LibreOfficeKitCallbackType;
 
@@ -803,6 +817,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_CELL_AUTO_FILL_AREA";
     case LOK_CALLBACK_TABLE_SELECTED:
         return "LOK_CALLBACK_TABLE_SELECTED";
+    case LOK_CALLBACK_REFERENCE_MARKS:
+        return "LOK_CALLBACK_REFERENCE_MARKS";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

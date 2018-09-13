@@ -828,8 +828,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     {
         Color aRefColor( rColorCfg.GetColorValue(svtools::CALCREFERENCE).nColor );
         aOutputData.DrawRefMark( pViewData->GetRefStartX(), pViewData->GetRefStartY(),
-                                 pViewData->GetRefEndX(), pViewData->GetRefEndY(),
-                                 aRefColor, false );
+                                pViewData->GetRefEndX(), pViewData->GetRefEndY(),
+                                aRefColor, false );
     }
 
         // range finder
@@ -1212,7 +1212,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                              -nTopLeftTileRowOffset,
                              nTopLeftTileCol, nTopLeftTileRow,
                              nBottomRightTileCol, nBottomRightTileRow,
-                             fPPTX, fPPTY);
+                             fPPTX, fPPTY, nullptr, nullptr,
+                             nTilePosX, nTilePosY);
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
