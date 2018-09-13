@@ -89,22 +89,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     xmlreader \
 ))
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_libs,vcl,\
-    -framework IOKit \
-    -F/System/Library/PrivateFrameworks \
-    -framework CoreUI \
-    -lobjc \
-))
-endif
-ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-
-endif
-
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Library_use_libraries,vcl,\
     jvmaccess \
@@ -443,8 +427,6 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
 
-# optional parts
-
 vcl_quartz_code= \
     vcl/quartz/salbmp \
     vcl/quartz/utils \
@@ -454,100 +436,6 @@ vcl_quartz_code= \
 vcl_coretext_code= \
     vcl/quartz/ctfonts \
     vcl/quartz/salgdi \
-
-ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
-))
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    $(vcl_coretext_code) \
-))
-
-$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
-    ApplicationServices \
-))
-
-$(eval $(call gb_Library_add_objcxxobjects,vcl,\
-    vcl/osx/a11yactionwrapper \
-    vcl/osx/a11ycomponentwrapper \
-    vcl/osx/a11yfactory \
-    vcl/osx/a11yrolehelper \
-    vcl/osx/a11yselectionwrapper \
-    vcl/osx/a11ytablewrapper \
-    vcl/osx/a11ytextattributeswrapper \
-    vcl/osx/a11ytextwrapper \
-    vcl/osx/a11yutil \
-    vcl/osx/a11yvaluewrapper \
-    vcl/osx/a11ywrapper \
-    vcl/osx/a11ywrapperbutton \
-    vcl/osx/a11ywrappercheckbox \
-    vcl/osx/a11ywrappercombobox \
-    vcl/osx/a11ywrappergroup \
-    vcl/osx/a11ywrapperlist \
-    vcl/osx/a11ywrapperradiobutton \
-    vcl/osx/a11ywrapperradiogroup \
-    vcl/osx/a11ywrapperrow \
-    vcl/osx/a11ywrapperscrollarea \
-    vcl/osx/a11ywrapperscrollbar \
-    vcl/osx/a11ywrappersplitter \
-    vcl/osx/a11ywrapperstatictext \
-    vcl/osx/a11ywrappertabgroup \
-    vcl/osx/a11ywrappertextarea \
-    vcl/osx/a11ywrappertoolbar \
-    vcl/osx/salnstimer \
-    vcl/osx/vclnsapp \
-    vcl/osx/printaccessoryview \
-    vcl/osx/printview \
-    vcl/osx/salframeview \
-    vcl/osx/salnsmenu \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/osx/a11yfocuslistener \
-    vcl/osx/a11yfocustracker \
-    vcl/osx/a11ylistener \
-    vcl/osx/documentfocuslistener \
-    vcl/osx/saldata \
-    vcl/osx/salinst \
-    vcl/osx/salsys \
-    vcl/osx/saltimer \
-    vcl/osx/DataFlavorMapping \
-    vcl/osx/DragActionConversion \
-    vcl/osx/DragSource \
-    vcl/osx/DragSourceContext \
-    vcl/osx/DropTarget \
-    vcl/osx/HtmlFmtFlt \
-    vcl/osx/OSXTransferable \
-    vcl/osx/PictToBmpFlt \
-    vcl/osx/clipboard \
-    vcl/osx/service_entry \
-    $(vcl_quartz_code) \
-    vcl/quartz/salgdiutils \
-    vcl/osx/salnativewidgets \
-    vcl/osx/salprn \
-    vcl/osx/salframe \
-    vcl/osx/salmenu \
-    vcl/osx/salobj \
-))
-$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
-    $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
-    Cocoa \
-    Carbon \
-    CoreFoundation \
-))
-
-ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
-$(eval $(call gb_Library_use_libraries,vcl,\
-    AppleRemote \
-))
-endif
-
-endif
 
 vcl_headless_code= \
     vcl/headless/svpframe \
@@ -709,6 +597,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
+
 ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
@@ -727,7 +616,18 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 ))
 endif
 
-# OS-specific stuff
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+    Cocoa \
+    CoreFoundation \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/osx/salplug \
+))
+endif
+
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\

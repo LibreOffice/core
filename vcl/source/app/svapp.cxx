@@ -1138,7 +1138,7 @@ OUString Application::GetHWOSConfInfo()
         aDetails.append( VclResId(SV_APP_DEFAULT) );
     aDetails.append( "; " );
 
-#if (defined LINUX || defined _WIN32)
+#if (defined LINUX || defined _WIN32 || defined MACOSX)
     aDetails.append( SV_APP_VCLBACKEND );
     aDetails.append( GetToolkitName() );
     aDetails.append( "; " );
