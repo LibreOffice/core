@@ -81,9 +81,10 @@ class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
+    const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
 
 public:
-    SalInstance() {}
+    SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
     virtual ~SalInstance();
 
     //called directly after Application::Init
@@ -135,11 +136,11 @@ public:
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() = 0;
 
     // YieldMutex
-    virtual comphelper::SolarMutex*
-                            GetYieldMutex() = 0;
-    virtual sal_uInt32      ReleaseYieldMutexAll() = 0;
-    virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) = 0;
-    // return true, if yield mutex is owned by this thread, else false
+    comphelper::SolarMutex* GetYieldMutex();
+    sal_uInt32              ReleaseYieldMutexAll();
+    void                    AcquireYieldMutex(sal_uInt32 nCount = 1);
+
+    // return true, if the current thread is the main thread
     virtual bool            IsMainThread() const = 0;
 
     /**

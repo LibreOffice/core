@@ -44,6 +44,9 @@ class COMPHELPER_DLLPUBLIC SolarMutex {
 public:
     typedef void (*BeforeReleaseHandler) ();
 
+    SolarMutex();
+    virtual ~SolarMutex();
+
     void SetBeforeReleaseHandler( const BeforeReleaseHandler& rLink )
          { m_aBeforeReleaseHandler = rLink; }
 
@@ -59,9 +62,6 @@ public:
     static SolarMutex *get();
 
 protected:
-    SolarMutex();
-    virtual ~SolarMutex();
-
     virtual sal_uInt32 doRelease( bool bUnlockAll );
     virtual void doAcquire( sal_uInt32 nLockCount );
 
