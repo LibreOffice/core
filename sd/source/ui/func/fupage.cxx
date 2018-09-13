@@ -26,6 +26,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/prntypes.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <stlsheet.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -111,7 +112,7 @@ rtl::Reference<FuPoor> FuPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-void FuPage::DoExecute( SfxRequest& )
+void FuPage::DoExecute(SfxRequest& rReq)
 {
     mpDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
     DBG_ASSERT( mpDrawViewShell, "sd::FuPage::FuPage(), called without a current DrawViewShell!" );
@@ -129,10 +130,11 @@ void FuPage::DoExecute( SfxRequest& )
         return;
 
     // if there are no arguments given, open the dialog
-    if( !mpArgs )
+    const SfxPoolItem* pItem;
+    if (!mpArgs || mpArgs->GetItemState(SID_SELECT_BACKGROUND, true, &pItem) == SfxItemState::SET)
     {
         mpView->SdrEndTextEdit();
-        mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr);
+        mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, rReq);
     }
 
     // if we now have arguments, apply them to current page
@@ -189,7 +191,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
     }
 }
 
-const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
+const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, SfxRequest& rReq)
 {
     if (!mpDrawViewShell)
         return nullptr;
@@ -288,26 +290,50 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
     }
     else if (nId == SID_SELECT_BACKGROUND)
     {
-        SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE), pParent);
+        OUString aFileName;
+        OUString aFilterName;
+        Graphic aGraphic;
+        ErrCode nError = ERRCODE_GRFILTER_OPENERROR;
 
-        if( aDlg.Execute() == ERRCODE_NONE )
+        const SfxItemSet* pArgs = rReq.GetArgs();
+        const SfxPoolItem* pItem;
+
+        if (pArgs && pArgs->GetItemState(SID_SELECT_BACKGROUND, true, &pItem) == SfxItemState::SET)
         {
-            Graphic     aGraphic;
-            ErrCode nError = aDlg.GetGraphic(aGraphic);
-            if( nError == ERRCODE_NONE )
+            aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+            if (pArgs->GetItemState(FN_PARAM_FILTER, true, &pItem) == SfxItemState::SET)
+                aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+            nError = GraphicFilter::LoadGraphic(aFileName, aFilterName, aGraphic,
+                                                &GraphicFilter::GetGraphicFilter());
+        }
+        else
+        {
+            SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE), pParent);
+
+            nError = aDlg.Execute();
+            if (nError != ERRCODE_NONE)
             {
-                pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
-
-                pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
-
-                // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
-                SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
-                aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
-                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc );
-
-                pTempSet->Put( XFillBmpStretchItem( true ));
-                pTempSet->Put( XFillBmpTileItem( false ));
+                nError = aDlg.GetGraphic(aGraphic);
+                aFileName = aDlg.GetPath();
+                aFilterName = aDlg.GetDetectedFilter();
             }
+        }
+
+        if (nError == ERRCODE_NONE)
+        {
+            pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
+
+            pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
+
+            // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
+            SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
+            aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
+            SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc );
+
+            pTempSet->Put( XFillBmpStretchItem( true ));
+            pTempSet->Put( XFillBmpTileItem( false ));
         }
     }
 
