@@ -167,34 +167,20 @@ Databases::~Databases()
 
     {
         // DatabasesTable
-        DatabasesTable::iterator it = m_aDatabases.begin();
-        while( it != m_aDatabases.end() )
-        {
-            delete it->second;
-            ++it;
-        }
+        for (auto& rDatabase : m_aDatabases)
+            delete rDatabase.second;
     }
 
     {
         //  ModInfoTable
-
-        ModInfoTable::iterator it = m_aModInfo.begin();
-        while( it != m_aModInfo.end() )
-        {
-            delete it->second;
-            ++it;
-        }
+        for (auto& rModInfo : m_aModInfo)
+            delete rModInfo.second;
     }
 
     {
         // KeywordInfoTable
-
-        KeywordInfoTable::iterator it = m_aKeywordInfo.begin();
-        while( it != m_aKeywordInfo.end() )
-        {
-            delete it->second;
-            ++it;
-        }
+        for (auto& rKeywordInfo : m_aKeywordInfo)
+            delete rKeywordInfo.second;
     }
 }
 
