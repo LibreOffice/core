@@ -3390,12 +3390,10 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel,
-                                   const bool bWithFootnote ) const
+                                   const ExpandMode eAdditionalMode) const
 
 {
-    ExpandMode eMode = ExpandMode::ExpandFields;
-    if (bWithFootnote)
-        eMode |= ExpandMode::ExpandFootnote;
+    ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
 
     ModelToViewHelper aConversionMap(*this, eMode);
     const OUString aExpandText = aConversionMap.getViewText();

@@ -19,6 +19,7 @@
 #include <DocumentOutlineNodesManager.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
+#include <modeltoviewhelper.hxx>
 
 namespace sw
 {
@@ -45,7 +46,8 @@ OUString DocumentOutlineNodesManager::getOutlineText( const tSortedOutlineNodeLi
 {
     return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->
                 GetTextNode()->GetExpandText( 0, -1, bWithNumber,
-                                            bWithNumber, bWithSpacesForLevel, bWithFootnote );
+                    bWithNumber, bWithSpacesForLevel,
+                    bWithFootnote ? ExpandMode::ExpandFootnote : ExpandMode(0));
 }
 
 SwTextNode* DocumentOutlineNodesManager::getOutlineNode( const tSortedOutlineNodeList::size_type nIdx ) const

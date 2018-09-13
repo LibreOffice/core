@@ -61,6 +61,7 @@ class SwWrongList;
 class SwGrammarMarkUp;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
+enum class ExpandMode;
 
 namespace sw { namespace mark { enum class RestoreMode; } }
 
@@ -687,7 +688,7 @@ public:
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
-                            const bool bWithFootnote = true ) const;
+                            const ExpandMode eAdditionalMode = ExpandMode(0)) const;
     bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            bool bWithNum = false, bool bWithFootnote = true,
