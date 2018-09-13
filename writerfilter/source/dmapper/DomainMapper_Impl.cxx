@@ -166,7 +166,7 @@ static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rx
 struct FieldConversion
 {
     const sal_Char*     cFieldServiceName;
-    FieldId             eFieldId;
+    FieldId const       eFieldId;
 };
 
 typedef std::unordered_map<OUString, FieldConversion> FieldConversionMap_t;
@@ -2545,7 +2545,7 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
         struct NumberingPairs
         {
             const sal_Char* cWordName;
-            sal_Int16       nType;
+            sal_Int16 const nType;
         };
         static const NumberingPairs aNumberingPairs[] =
         {
@@ -3539,7 +3539,7 @@ void DomainMapper_Impl::handleAuthor
     {
         const sal_Char* pDocPropertyName;
         const sal_Char* pServiceName;
-        sal_uInt8       nFlags;
+        sal_uInt8 const nFlags;
     };
     static const DocPropertyMap aDocProperties[] =
     {

@@ -1644,7 +1644,7 @@ void SectionPropertyMap::ClearHeaderFooterLinkToPrevious( bool bHeader, PageType
 class NamedPropertyValue
 {
 private:
-    OUString m_aName;
+    OUString const m_aName;
 
 public:
     explicit NamedPropertyValue( const OUString& i_aStr )

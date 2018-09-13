@@ -51,7 +51,7 @@ private:
     sal_Int32       m_nLineColor;
     sal_Int32       m_nLineDistance;
     bool            m_bShadow;
-    bool            m_bOOXML;
+    bool const      m_bOOXML;
 
     bool                                        m_aFilledLines[BORDER_COUNT];
     css::table::BorderLine2 m_aBorderLines[BORDER_COUNT];

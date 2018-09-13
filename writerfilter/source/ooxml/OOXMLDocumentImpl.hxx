@@ -53,7 +53,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> aEmbeddings;
     bool mbIsSubstream;
-    bool mbSkipImages;
+    bool const mbSkipImages;
     /// How many paragraphs equal to 1 percent?
     sal_Int32 mnPercentSize;
     /// Position progress when it was last updated, possibly not after every paragraph in case of large documents.
@@ -63,8 +63,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     /// End position, i.e. the estimated number of paragraphs.
     sal_Int32 mnProgressEndPos;
     /// DocumentBaseURL
-    OUString m_rBaseURL;
-    css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
+    OUString const m_rBaseURL;
+    css::uno::Sequence<css::beans::PropertyValue> const maMediaDescriptor;
 
 private:
     void resolveFastSubStream(Stream & rStream,
