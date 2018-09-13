@@ -113,10 +113,7 @@ SdDialogsTest::SdDialogsTest()
     mpImpressDocument(nullptr),
     mpDocShell(nullptr),
     mpViewShell(nullptr),
-    mpDrawView(nullptr),
-    mpSfxItemSetFromSdrObject(nullptr),
-    mpEmptySfxItemSet(nullptr),
-    mpEmptyFillStyleSfxItemSet(nullptr)
+    mpDrawView(nullptr)
 {
 }
 
