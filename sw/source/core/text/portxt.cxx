@@ -745,24 +745,24 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
 
     // #i68503# the hole must have no decoration for a consistent visual appearance
     const SwFont* pOrigFont = rInf.GetFont();
-    SwFont* pHoleFont = nullptr;
-    SwFontSave* pFontSave = nullptr;
+    std::unique_ptr<SwFont> pHoleFont;
+    std::unique_ptr<SwFontSave> pFontSave;
     if( pOrigFont->GetUnderline() != LINESTYLE_NONE
     ||  pOrigFont->GetOverline() != LINESTYLE_NONE
     ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
     {
-        pHoleFont = new SwFont( *pOrigFont );
+        pHoleFont.reset(new SwFont( *pOrigFont ));
         pHoleFont->SetUnderline( LINESTYLE_NONE );
         pHoleFont->SetOverline( LINESTYLE_NONE );
         pHoleFont->SetStrikeout( STRIKEOUT_NONE );
-        pFontSave = new SwFontSave( rInf, pHoleFont );
+        pFontSave.reset(new SwFontSave( rInf, pHoleFont.get() ));
     }
 
     const OUString aText( ' ' );
     rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(1));
 
-    delete pFontSave;
-    delete pHoleFont;
+    pFontSave.reset();
+    pHoleFont.reset();
 }
 
 bool SwHolePortion::Format( SwTextFormatInfo &rInf )
