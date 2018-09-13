@@ -216,10 +216,6 @@ void DeInitSalData();                       // called from Application-Dtor
 
 void InitSalMain();
 
-#ifdef MACOSX
-void postInitVCLinitNSApp();
-#endif
-
 #endif // INCLUDED_VCL_INC_SALINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
