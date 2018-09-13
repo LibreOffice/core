@@ -481,6 +481,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 			AppleRemote \
 		) \
 		fps_aqua \
+		vclplug_osx \
 		MacOSXSpell \
 	) \
 ))
