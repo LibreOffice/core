@@ -24,12 +24,19 @@
 
 // Helper IDs for templates
 #define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
-#define HID_POOLSHEET_TEXT                  (HID_SD_START + 71)
-#define HID_POOLSHEET_TITLE                 (HID_SD_START + 72)
 #define HID_POOLSHEET_OBJWITHOUTFILL        (HID_SD_START + 73)
 #define HID_POOLSHEET_OBJNOLINENOFILL       (HID_SD_START + 74)
-#define HID_POOLSHEET_HEADLINE              (HID_SD_START + 75)
-#define HID_POOLSHEET_MEASURE               (HID_SD_START + 76)
+#define HID_POOLSHEET_TEXT                  (HID_SD_START + 71)
+#define HID_POOLSHEET_A4                    (HID_SD_START + 104)
+#define HID_POOLSHEET_A4_TITLE              (HID_SD_START + 72)
+#define HID_POOLSHEET_A4_HEADLINE           (HID_SD_START + 75)
+#define HID_POOLSHEET_A4_TEXT               (HID_SD_START + 105)
+#define HID_POOLSHEET_A0                    (HID_SD_START + 109)
+#define HID_POOLSHEET_A0_TITLE              (HID_SD_START + 110)
+#define HID_POOLSHEET_A0_HEADLINE           (HID_SD_START + 111)
+#define HID_POOLSHEET_A0_TEXT               (HID_SD_START + 112)
+#define HID_POOLSHEET_GRAPHIC               (HID_SD_START + 106)
+#define HID_POOLSHEET_SHAPES                (HID_SD_START + 107)
 #define HID_POOLSHEET_FILLED                (HID_SD_START + 77)
 #define HID_POOLSHEET_FILLED_BLUE           (HID_SD_START + 78)
 #define HID_POOLSHEET_FILLED_GREEN          (HID_SD_START + 79)
@@ -40,6 +47,10 @@
 #define HID_POOLSHEET_OUTLINE_GREEN         (HID_SD_START + 84)
 #define HID_POOLSHEET_OUTLINE_RED           (HID_SD_START + 102)
 #define HID_POOLSHEET_OUTLINE_YELLOW        (HID_SD_START + 103)
+#define HID_POOLSHEET_LINES                 (HID_SD_START + 108)
+#define HID_POOLSHEET_MEASURE               (HID_SD_START + 76)
+#define HID_POOLSHEET_LINES_DASHED          (HID_SD_START + 113) //dummy
+#define HID_POOLSHEET_LAST                  (HID_SD_START + 114) //dummy
 
 #define HID_PSEUDOSHEET_TITLE               (HID_SD_START + 85)
 #define HID_PSEUDOSHEET_OUTLINE             (HID_SD_START + 86)

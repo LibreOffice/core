@@ -955,9 +955,16 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_POOLSHEET_OBJWITHOUTFILL:  pNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
                 case HID_POOLSHEET_OBJNOLINENOFILL: pNameId = STR_POOLSHEET_OBJNOLINENOFILL;break;
                 case HID_POOLSHEET_TEXT:            pNameId = STR_POOLSHEET_TEXT;           break;
-                case HID_POOLSHEET_TITLE:           pNameId = STR_POOLSHEET_TITLE;          break;
-                case HID_POOLSHEET_HEADLINE:        pNameId = STR_POOLSHEET_HEADLINE;       break;
-                case HID_POOLSHEET_MEASURE:         pNameId = STR_POOLSHEET_MEASURE;        break;
+                case HID_POOLSHEET_A4:              pNameId = STR_POOLSHEET_A4;             break;
+                case HID_POOLSHEET_A4_TITLE:        pNameId = STR_POOLSHEET_A4_TITLE;       break;
+                case HID_POOLSHEET_A4_HEADLINE:     pNameId = STR_POOLSHEET_A4_HEADLINE;    break;
+                case HID_POOLSHEET_A4_TEXT:         pNameId = STR_POOLSHEET_A4_TEXT;        break;
+                case HID_POOLSHEET_A0:              pNameId = STR_POOLSHEET_A0;             break;
+                case HID_POOLSHEET_A0_TITLE:        pNameId = STR_POOLSHEET_A0_TITLE;       break;
+                case HID_POOLSHEET_A0_HEADLINE:     pNameId = STR_POOLSHEET_A0_HEADLINE;    break;
+                case HID_POOLSHEET_A0_TEXT:         pNameId = STR_POOLSHEET_A0_TEXT;        break;
+                case HID_POOLSHEET_GRAPHIC:         pNameId = STR_POOLSHEET_GRAPHIC;        break;
+                case HID_POOLSHEET_SHAPES:          pNameId = STR_POOLSHEET_SHAPES;         break;
                 case HID_POOLSHEET_FILLED:          pNameId = STR_POOLSHEET_FILLED;         break;
                 case HID_POOLSHEET_FILLED_BLUE:     pNameId = STR_POOLSHEET_FILLED_BLUE;    break;
                 case HID_POOLSHEET_FILLED_GREEN:    pNameId = STR_POOLSHEET_FILLED_GREEN;   break;
@@ -968,9 +975,10 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_POOLSHEET_OUTLINE_GREEN:   pNameId = STR_POOLSHEET_OUTLINE_GREEN;  break;
                 case HID_POOLSHEET_OUTLINE_RED:     pNameId = STR_POOLSHEET_OUTLINE_RED;    break;
                 case HID_POOLSHEET_OUTLINE_YELLOW:  pNameId = STR_POOLSHEET_OUTLINE_YELLOW; break;
+                case HID_POOLSHEET_LINES:           pNameId = STR_POOLSHEET_LINES;          break;
+                case HID_POOLSHEET_MEASURE:         pNameId = STR_POOLSHEET_MEASURE;        break;
+                case HID_POOLSHEET_LINES_DASHED:    pNameId = STR_POOLSHEET_LINES_DASHED;   break;
 
-                case HID_PSEUDOSHEET_TITLE:         pNameId = STR_PSEUDOSHEET_TITLE;        break;
-                case HID_PSEUDOSHEET_SUBTITLE:      pNameId = STR_PSEUDOSHEET_SUBTITLE;     break;
                 case HID_PSEUDOSHEET_OUTLINE1:
                 case HID_PSEUDOSHEET_OUTLINE2:
                 case HID_PSEUDOSHEET_OUTLINE3:

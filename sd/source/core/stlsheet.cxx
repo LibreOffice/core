@@ -597,10 +597,19 @@ struct ApiNameMap
         { OUStringLiteral("notes"), HID_PSEUDOSHEET_NOTES },
         { OUStringLiteral("standard"), HID_STANDARD_STYLESHEET_NAME },
         { OUStringLiteral("objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
-        { OUStringLiteral("text"), HID_POOLSHEET_TEXT },
-        { OUStringLiteral("title"), HID_POOLSHEET_TITLE },
-        { OUStringLiteral("headline"), HID_POOLSHEET_HEADLINE },
-        { OUStringLiteral("measure"), HID_POOLSHEET_MEASURE },
+
+        { OUStringLiteral("Text"), HID_POOLSHEET_TEXT },
+        { OUStringLiteral("A4"), HID_POOLSHEET_A4 },
+        { OUStringLiteral("Title A4"), HID_POOLSHEET_A4_TITLE },
+        { OUStringLiteral("Heading A4"), HID_POOLSHEET_A4_HEADLINE },
+        { OUStringLiteral("Text A4"), HID_POOLSHEET_A4_TEXT },
+        { OUStringLiteral("A4"), HID_POOLSHEET_A0 },
+        { OUStringLiteral("Title A0"), HID_POOLSHEET_A0_TITLE },
+        { OUStringLiteral("Heading A0"), HID_POOLSHEET_A0_HEADLINE },
+        { OUStringLiteral("Text A0"), HID_POOLSHEET_A0_TEXT },
+
+        { OUStringLiteral("Graphic"), HID_POOLSHEET_GRAPHIC },
+        { OUStringLiteral("Shapes"), HID_POOLSHEET_SHAPES },
         { OUStringLiteral("Filled"), HID_POOLSHEET_FILLED },
         { OUStringLiteral("Filled Blue"), HID_POOLSHEET_FILLED_BLUE },
         { OUStringLiteral("Filled Green"), HID_POOLSHEET_FILLED_GREEN },
@@ -610,7 +619,11 @@ struct ApiNameMap
         { OUStringLiteral("Outlined Blue"), HID_POOLSHEET_OUTLINE_BLUE },
         { OUStringLiteral("Outlined Green"), HID_POOLSHEET_OUTLINE_GREEN },
         { OUStringLiteral("Outlined Red"), HID_POOLSHEET_OUTLINE_RED },
-        { OUStringLiteral("Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW } };
+        { OUStringLiteral("Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW },
+        { OUStringLiteral("Lines"), HID_POOLSHEET_LINES },
+        { OUStringLiteral("Arrow Line"), HID_POOLSHEET_MEASURE },
+        { OUStringLiteral("Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
+      };
 
 OUString GetApiNameForHelpId(sal_uLong nId)
 {
