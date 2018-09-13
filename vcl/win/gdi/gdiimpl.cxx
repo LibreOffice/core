@@ -2025,7 +2025,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         // and fill polygons. Checked that in a first try, used
         // GraphicsPath::AddPath from Gdiplus combined with below used
         // StartFigure/CloseFigure, worked well (thus the line-draw version
-        // may create non-cloded partial Polygon data).
+        // may create non-closed partial Polygon data).
         //
         // But in current reality it gets not used due to e.g.
         // SdrPathPrimitive2D::create2DDecomposition creating transformed
@@ -2040,7 +2040,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         //
         // A 2nd problem is that the NoLineJoin mode (basegfx::B2DLineJoin::NONE
         // && rLineWidths > 0.0) creates polygon fill infos that are not reusable
-        // for the fill case (see ::drawPolyLine bnelow) - thus we would need a
+        // for the fill case (see ::drawPolyLine below) - thus we would need a
         // bool and/or two system-dependent paths buffered - doable, but complicated.
         //
         // All in all: Make B2DPolyPolygon a SystemDependentDataProvider and buffer
