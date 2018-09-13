@@ -182,13 +182,11 @@ Application::Application()
     osl_setEnvironment(aVar.pData, aValue.pData);
 
     ImplGetSVData()->mpApp = this;
-    InitSalData();
 }
 
 Application::~Application()
 {
     ImplDeInitSVData();
-    DeInitSalData();
     ImplGetSVData()->mpApp = nullptr;
 }
 

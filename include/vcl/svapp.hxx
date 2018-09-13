@@ -259,8 +259,6 @@ public:
     platform specific data structures.
 
     @attention The initialization of the application itself is done in Init()
-
-    @see    InitSalData is implemented by platform specific code.
     */
                                 Application();
 
@@ -268,9 +266,6 @@ public:
 
      Deinitializes the LibreOffice global instance data structure, then
      deinitializes any platform specific data structures.
-
-     @see   ImplDeInitSVData deinitializes the global instance data,
-            DeInitSalData is implemented by platform specific code
     */
     virtual                     ~Application();
 
