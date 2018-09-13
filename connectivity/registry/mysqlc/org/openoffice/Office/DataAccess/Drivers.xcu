@@ -41,6 +41,36 @@
             <value></value>
           </prop>
         </node>
+        <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="IgnoreDriverPrivileges" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="DisplayVersionColumns" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="PreferDosLikeLineEnds" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="BooleanComparisonMode" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="FormsCheckRequiredFields" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
