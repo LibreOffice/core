@@ -70,7 +70,7 @@ public:
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would
      *  be too late for the destructors of the bitmaps in maIconCache)*/
-    void shutdown();
+    VCL_DLLPUBLIC void shutdown();
 };
 
 #endif
