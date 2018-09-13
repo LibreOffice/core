@@ -102,10 +102,16 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
-        case ResourceType::TwipsMeasure:
+        case ResourceType::TwipsMeasure_asSigned:
+        case ResourceType::TwipsMeasure_asZero:
             {
                 const char *pValue = pAttribs->getAsCharByIndex(nAttrIndex);
                 OOXMLValue::Pointer_t xValue(new OOXMLTwipsMeasureValue(pValue));
+                if ( xValue->getInt() < 0 )
+                {
+                    if ( pAttr->m_nResource == ResourceType::TwipsMeasure_asZero )
+                        xValue = OOXMLIntegerValue::Create(0);
+                }
                 pHandler->newProperty(nId, xValue);
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }

@@ -52,7 +52,8 @@ enum class ResourceType {
     PropertyTable,
     Math,
     Any,
-    TwipsMeasure,
+    TwipsMeasure_asSigned,
+    TwipsMeasure_asZero,
     HpsMeasure,
     MeasurementOrPercent
 };
