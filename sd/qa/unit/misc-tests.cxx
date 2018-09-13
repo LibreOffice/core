@@ -520,7 +520,7 @@ void SdMiscTest::testTdf119392()
     sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_MESSAGE( "Item VisibleLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
-    CPPUNIT_ASSERT_EQUAL( 0xbF, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff); // & 0xff forces unambigious types for CPPUNIT_ASSERT_EQUAL
+    CPPUNIT_ASSERT_EQUAL( 0xbF, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff); // & 0xff forces unambiguous types for CPPUNIT_ASSERT_EQUAL
 
     sBase64 = getXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='PrintableLayers']");
     CPPUNIT_ASSERT_MESSAGE( "Item PrintableLayers does not exists.", !sBase64.isEmpty());

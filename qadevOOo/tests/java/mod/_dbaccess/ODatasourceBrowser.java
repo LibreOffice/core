@@ -161,7 +161,7 @@ public class ODatasourceBrowser extends TestCase {
      *      <code>DataSourceBrowser</code> has no view data. </li>
      *  <li> <code>'XInitialization.args'</code> for
      *      {@link ifc.lang._XInitialization} : the arguments for
-     *      tbe initialization</li>
+     *      the initialization</li>
      * </ul>
      *
      * @see com.sun.star.frame.Desktop
