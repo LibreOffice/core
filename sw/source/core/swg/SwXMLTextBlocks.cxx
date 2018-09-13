@@ -388,9 +388,8 @@ ErrCode SwXMLTextBlocks::PutBlock()
 
 ErrCode SwXMLTextBlocks::PutDoc()
 {
-    SwPaM* pPaM = MakePaM();
+    std::unique_ptr<SwPaM> pPaM = MakePaM();
     ErrCode nErr = PutBlock();
-    delete pPaM;
     return nErr;
 }
 

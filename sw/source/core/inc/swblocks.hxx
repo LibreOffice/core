@@ -80,7 +80,7 @@ protected:
     virtual FileType GetFileType() const = 0;
 
     virtual void   ClearDoc();          // Delete Doc content
-    SwPaM* MakePaM();                   // Span PaM over Doc
+    std::unique_ptr<SwPaM> MakePaM();   // Span PaM over Doc
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false );
     bool   IsFileChanged() const;
     void   Touch();
