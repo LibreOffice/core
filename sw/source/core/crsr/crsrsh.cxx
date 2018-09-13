@@ -649,6 +649,32 @@ bool SwCursorShell::isInHiddenTextFrame(SwShellCursor* pShellCursor)
     return !pFrame || (pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow());
 }
 
+// sw_redlinehide: this should work for all cases: GoCurrPara, GoNextPara, GoPrevPara
+static bool IsAtStartOrEndOfFrame(SwCursorShell const*const pShell,
+    SwShellCursor const*const pShellCursor, SwMoveFnCollection const& fnPosPara)
+{
+    SwContentNode *const pCNode = pShellCursor->GetContentNode();
+    assert(pCNode); // surely can't have moved otherwise?
+    SwContentFrame const*const pFrame = pCNode->getLayoutFrame(
+            pShell->GetLayout(), &pShellCursor->GetPtPos(),
+            pShellCursor->GetPoint(), false);
+    if (!pFrame || !pFrame->IsTextFrame())
+    {
+        return false;
+    }
+    SwTextFrame const& rTextFrame(static_cast<SwTextFrame const&>(*pFrame));
+    TextFrameIndex const ix(rTextFrame.MapModelToViewPos(*pShellCursor->GetPoint()));
+    if (&fnParaStart == &fnPosPara)
+    {
+        return ix == TextFrameIndex(0);
+    }
+    else
+    {
+        assert(&fnParaEnd == &fnPosPara);
+        return ix == TextFrameIndex(rTextFrame.GetText().getLength());
+    }
+}
+
 bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPosPara )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
@@ -661,7 +687,8 @@ bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const &
         //which is what SwCursorShell::UpdateCursorPos will reset
         //the position to if we pass it a position in an
         //invisible hidden paragraph field
-        while (isInHiddenTextFrame(pTmpCursor))
+        while (isInHiddenTextFrame(pTmpCursor)
+                || !IsAtStartOrEndOfFrame(this, pTmpCursor, fnPosPara))
         {
             if (!pTmpCursor->MovePara(fnWhichPara, fnPosPara))
                 break;
