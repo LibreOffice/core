@@ -292,12 +292,7 @@ namespace sw {
             if (sw::MergedPara const*const pMerged = rTextFrame.GetMergedPara())
             {
                 sal_uLong const nFirst(pMerged->pFirstNode->GetIndex());
-                sal_uLong nLast(nFirst);
-                // FIXME is this actually the last one? what about delete RL that dels last node until end, what happens to its anchored objs?
-                if (!pMerged->extents.empty())
-                {
-                    nLast = pMerged->extents.back().pNode->GetIndex();
-                }
+                sal_uLong const nLast(pMerged->pLastNode->GetIndex());
                 return (nFirst <= nNodeIndex && nNodeIndex <= nLast);
             }
             else
