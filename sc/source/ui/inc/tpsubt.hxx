@@ -60,7 +60,7 @@ protected:
     const sal_uInt16            nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
     SCCOL                   nFieldArr[SC_MAXFIELDS];
-    const sal_uInt16            nFieldCount;
+    sal_uInt16              nFieldCount;
 
 private:
     void            Init            ();

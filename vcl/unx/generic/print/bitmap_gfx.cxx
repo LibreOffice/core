@@ -277,7 +277,7 @@ private:
     std::array<LZWCTreeNode, 4096>
                     mpTable;    // LZW compression data
     LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
-    sal_uInt16 const mnDataSize;
+    static constexpr sal_uInt16 gnDataSize = 8;
     sal_uInt16 const mnClearCode;
     sal_uInt16 const mnEOICode;
     sal_uInt16      mnTableSize;
@@ -298,11 +298,10 @@ public:
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         Ascii85Encoder (pOutputFile),
         mpPrefix(nullptr),
-        mnDataSize(8),
-        mnClearCode(1 << mnDataSize),
+        mnClearCode(1 << gnDataSize),
         mnEOICode(mnClearCode + 1),
         mnTableSize(mnEOICode + 1),
-        mnCodeSize(mnDataSize + 1),
+        mnCodeSize(gnDataSize + 1),
         mnOffset(32),       // free bits in dwShift
         mdwShift(0)
 {
@@ -375,7 +374,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 for (i = 0; i < mnClearCode; i++)
                     mpTable[i].mpFirstChild = nullptr;
 
-                mnCodeSize = mnDataSize + 1;
+                mnCodeSize = gnDataSize + 1;
                 mnTableSize = mnEOICode + 1;
             }
             else

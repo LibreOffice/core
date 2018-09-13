@@ -529,9 +529,7 @@ bool WinOpenGLContext::ImplInit()
         0, 0, 0                         // Layer Masks Ignored
     };
 
-    if (mbUseDoubleBufferedRendering)
-        PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
-
+    PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
     PixelFormatFront.dwFlags |= PFD_DRAW_TO_WINDOW;
 
     //  we must check whether can set the MSAA
@@ -539,7 +537,7 @@ bool WinOpenGLContext::ImplInit()
     bool bMultiSampleSupport = false;
 
     if (!mbVCLOnly)
-        bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, mbUseDoubleBufferedRendering, false);
+        bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, /*bUseDoubleBufferedRendering*/true, false);
     else
         VCL_GL_INFO("Skipping multisample detection for VCL.");
 

@@ -168,7 +168,6 @@ protected:
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;
-    bool const mbUseDoubleBufferedRendering;
     bool mbVCLOnly;
 
     int mnFramebufferCount;

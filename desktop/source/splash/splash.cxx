@@ -99,7 +99,7 @@ private:
     long        _barheight, _barspace, _textBaseline;
     double      _fXPos, _fYPos;
     double      _fWidth, _fHeight;
-    const long  _xoffset, _yoffset;
+    static constexpr long  _xoffset = 12, _yoffset = 18;
 
 public:
     SplashScreen();
@@ -172,8 +172,6 @@ SplashScreen::SplashScreen()
     , _fYPos(-1.0)
     , _fWidth(-1.0)
     , _fHeight(-1.0)
-    , _xoffset(12)
-    , _yoffset(18)
 {
     loadConfig();
 }
