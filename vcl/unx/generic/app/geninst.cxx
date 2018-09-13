@@ -48,21 +48,6 @@ SalYieldMutex::~SalYieldMutex()
 {
 }
 
-comphelper::SolarMutex* SalGenericInstance::GetYieldMutex()
-{
-    return mpSalYieldMutex.get();
-}
-
-sal_uInt32 SalGenericInstance::ReleaseYieldMutexAll()
-{
-    return mpSalYieldMutex.get()->release( true/*bUnlockAll*/ );
-}
-
-void SalGenericInstance::AcquireYieldMutex( sal_uInt32 nCount )
-{
-    mpSalYieldMutex.get()->acquire( nCount );
-}
-
 SalGenericInstance::~SalGenericInstance()
 {
 }
