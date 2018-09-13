@@ -223,19 +223,19 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::EmptyHeight with swapped frame" );
 
-    SwFont *pFnt;
+    std::unique_ptr<SwFont> pFnt;
     const SwTextNode& rTextNode = *GetTextNodeForParaProps();
     const IDocumentSettingAccess* pIDSA = rTextNode.getIDocumentSettingAccess();
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( rTextNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
-        pFnt = new SwFont( pAttrSet, pIDSA );
+        pFnt.reset(new SwFont( pAttrSet, pIDSA ));
     }
     else
     {
         SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pSh);
-        pFnt = new SwFont( aFontAccess.Get()->GetFont() );
+        pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
 
@@ -274,7 +274,6 @@ SwTwips SwTextFrame::EmptyHeight() const
         pFnt->ChgPhysFnt( pSh, *pOut );
         nRet = pFnt->GetHeight( pSh, *pOut );
     }
-    delete pFnt;
     return nRet;
 }
 
