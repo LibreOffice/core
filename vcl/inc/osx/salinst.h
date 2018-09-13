@@ -76,7 +76,6 @@ class AquaSalInstance : public SalInstance, public SalUserEventList
 public:
     virtual void TriggerUserEventProcessing() override;
 
-    SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     int                                     mnActivePrintJobs;
@@ -113,9 +112,6 @@ public:
     virtual SalTimer*       CreateSalTimer() override;
     virtual SalSystem*      CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
-    virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uInt32      ReleaseYieldMutexAll() override;
-    virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
     virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
     virtual std::unique_ptr<SalMenu>     CreateMenu( bool bMenuBar, Menu* pVCLMenu ) override;

@@ -39,8 +39,8 @@
 
 using namespace com::sun::star;
 
-KDE5SalInstance::KDE5SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
-    : Qt5Instance(std::move(pMutex), true)
+KDE5SalInstance::KDE5SalInstance()
+    : Qt5Instance(true)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("kde5");
@@ -134,7 +134,7 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
 
     QApplication::setQuitOnLastWindowClosed(false);
 
-    KDE5SalInstance* pInstance = new KDE5SalInstance(o3tl::make_unique<SalYieldMutex>());
+    KDE5SalInstance* pInstance = new KDE5SalInstance();
 
     // initialize SalData
     new KDE5SalData(pInstance);

@@ -133,7 +133,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
         if ( pInst->m_nNoYieldLock )
             return;
         // tdf#96887 If this is the main thread, then we must wait for two things:
-        // - the mpSalYieldMutex being freed
+        // - the yield mutex being unlocked
         // - SendMessage() being triggered
         // This can nicely be done using MsgWaitForMultipleObjects. The 2nd one is
         // needed because if we don't reschedule, then we create deadlocks if a
@@ -189,13 +189,13 @@ void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
-        pInst->mpSalYieldMutex->acquire( nCount );
+        pInst->GetYieldMutex()->acquire( nCount );
 }
 
 bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
-    return pInst && pInst->mpSalYieldMutex->tryToAcquire();
+    return pInst && pInst->GetYieldMutex()->tryToAcquire();
 }
 
 void ImplSalYieldMutexRelease()
@@ -204,7 +204,7 @@ void ImplSalYieldMutexRelease()
     if ( pInst )
     {
         GdiFlush();
-        pInst->mpSalYieldMutex->release();
+        pInst->GetYieldMutex()->release();
     }
 }
 
@@ -422,33 +422,17 @@ void DestroySalInstance( SalInstance* pInst )
 }
 
 WinSalInstance::WinSalInstance()
-    : mhComWnd( nullptr )
+    : SalInstance(o3tl::make_unique<SalYieldMutex>())
+    , mhComWnd( nullptr )
     , m_nNoYieldLock( 0 )
 {
-    mpSalYieldMutex = new SalYieldMutex();
-    mpSalYieldMutex->acquire();
+    GetYieldMutex()->acquire();
 }
 
 WinSalInstance::~WinSalInstance()
 {
-    mpSalYieldMutex->release();
-    delete mpSalYieldMutex;
+    GetYieldMutex()->release();
     DestroyWindow( mhComWnd );
-}
-
-comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
-{
-    return mpSalYieldMutex;
-}
-
-sal_uInt32 WinSalInstance::ReleaseYieldMutexAll()
-{
-    return mpSalYieldMutex->release( true/*bUnlockAll*/ );
-}
-
-void WinSalInstance::AcquireYieldMutex( sal_uInt32 nCount )
-{
-    mpSalYieldMutex->acquire( nCount );
 }
 
 static LRESULT ImplSalDispatchMessage( const MSG* pMsg )

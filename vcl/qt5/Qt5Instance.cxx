@@ -43,8 +43,8 @@
 
 #include <headless/svpbmp.hxx>
 
-Qt5Instance::Qt5Instance(std::unique_ptr<SalYieldMutex> pMutex, bool bUseCairo)
-    : SalGenericInstance(std::move(pMutex))
+Qt5Instance::Qt5Instance(bool bUseCairo)
+    : SalGenericInstance(o3tl::make_unique<SalYieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
@@ -286,7 +286,7 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
     QApplication::setQuitOnLastWindowClosed(false);
 
     static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
-    Qt5Instance* pInstance = new Qt5Instance(o3tl::make_unique<SalYieldMutex>(), bUseCairo);
+    Qt5Instance* pInstance = new Qt5Instance(bUseCairo);
 
     // initialize SalData
     new Qt5Data(pInstance);
