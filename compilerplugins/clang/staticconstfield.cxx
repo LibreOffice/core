@@ -33,22 +33,66 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
         return true;
     if (!init->getMember())
         return true;
-    auto tc = loplugin::TypeCheck(init->getMember()->getType());
-    if (!tc.Const().Class("OUString").Namespace("rtl").GlobalNamespace()
-        && !tc.Const().Class("OString").Namespace("rtl").GlobalNamespace())
+    auto type = init->getMember()->getType();
+    auto tc = loplugin::TypeCheck(type);
+    bool found = false;
+    if (!tc.Const())
         return true;
-    if (auto constructExpr = dyn_cast<CXXConstructExpr>(init->getInit()))
+    if (tc.Const().Class("OUString").Namespace("rtl").GlobalNamespace()
+        || tc.Const().Class("OString").Namespace("rtl").GlobalNamespace())
     {
-        if (constructExpr->getNumArgs() >= 1 && isa<clang::StringLiteral>(constructExpr->getArg(0)))
+        if (auto constructExpr = dyn_cast<CXXConstructExpr>(init->getInit()))
         {
-            report(DiagnosticsEngine::Warning, "string field can be static const",
-                   init->getSourceLocation())
-                << init->getSourceRange();
-            report(DiagnosticsEngine::Note, "field here", init->getMember()->getLocation())
-                << init->getMember()->getSourceRange();
+            if (constructExpr->getNumArgs() >= 1
+                && isa<clang::StringLiteral>(constructExpr->getArg(0)))
+                found = true;
         }
     }
-    return RecursiveASTVisitor::TraverseConstructorInitializer(init);
+    else if (type->isIntegerType())
+    {
+        if (isa<IntegerLiteral>(init->getInit()->IgnoreParenImpCasts()))
+            found = true;
+        // isIntegerType includes bool
+        else if (isa<CXXBoolLiteralExpr>(init->getInit()->IgnoreParenImpCasts()))
+            found = true;
+    }
+    else if (type->isFloatingType())
+    {
+        if (isa<FloatingLiteral>(init->getInit()->IgnoreParenImpCasts()))
+            found = true;
+    }
+    else if (type->isEnumeralType())
+    {
+        if (auto declRefExpr = dyn_cast<DeclRefExpr>(init->getInit()->IgnoreParenImpCasts()))
+        {
+            if (isa<EnumConstantDecl>(declRefExpr->getDecl()))
+                found = true;
+        }
+    }
+
+    // If we find more than one non-copy-move constructor, we can't say for sure if a member can be static
+    // because it could be initialised differently in each constructor.
+    if (auto cxxRecordDecl = dyn_cast<CXXRecordDecl>(init->getMember()->getParent()))
+    {
+        int cnt = 0;
+        for (auto it = cxxRecordDecl->ctor_begin(); it != cxxRecordDecl->ctor_end(); ++it)
+        {
+            if (!it->isCopyOrMoveConstructor())
+                cnt++;
+        }
+        if (cnt > 1)
+            return true;
+    }
+
+    if (found)
+    {
+        report(DiagnosticsEngine::Warning, "field can be static const", init->getSourceLocation())
+            << init->getSourceRange();
+        report(DiagnosticsEngine::Note, "field here", init->getMember()->getLocation())
+            << init->getMember()->getSourceRange();
+    }
+
+    return true;
 }
 
 loplugin::Plugin::Registration<StaticConstField> X("staticconstfield", true);

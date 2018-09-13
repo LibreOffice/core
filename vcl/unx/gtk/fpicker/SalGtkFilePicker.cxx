@@ -90,9 +90,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     mbPreviewState( false ),
     mHID_Preview( 0 ),
     m_pPreview( nullptr ),
-    m_pPseudoFilter( nullptr ),
-    m_PreviewImageWidth( 256 ),
-    m_PreviewImageHeight( 256 )
+    m_pPseudoFilter( nullptr )
 {
     int i;
 
@@ -1414,7 +1412,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth()
 
     OSL_ASSERT( m_pDialog != nullptr );
 
-    return m_PreviewImageWidth;
+    return g_PreviewImageWidth;
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
@@ -1423,7 +1421,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
 
     OSL_ASSERT( m_pDialog != nullptr );
 
-    return m_PreviewImageHeight;
+    return g_PreviewImageHeight;
 }
 
 void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno::Any& /*aImage*/ )
@@ -1509,8 +1507,8 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
     {
         pixbuf = gdk_pixbuf_new_from_file_at_size(
                 filename,
-                pobjFP->m_PreviewImageWidth,
-                pobjFP->m_PreviewImageHeight, nullptr );
+                g_PreviewImageWidth,
+                g_PreviewImageHeight, nullptr );
 
         have_preview = ( pixbuf != nullptr );
 

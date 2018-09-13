@@ -33,8 +33,7 @@
 static GlyphCache* pInstance = nullptr;
 
 GlyphCache::GlyphCache()
-:   mnMaxSize( 1500000 ),
-    mnBytesUsed(sizeof(GlyphCache)),
+:   mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
     mnGlyphCount(0),
     mpCurrentGCFont(nullptr)
@@ -226,7 +225,7 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
 
 void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
 {
-    if( (rFreetypeFont.Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
+    if( (rFreetypeFont.Release() <= 0) && (gnMaxSize <= mnBytesUsed) )
     {
         mpCurrentGCFont = &rFreetypeFont;
         GarbageCollect();
@@ -290,7 +289,7 @@ inline void GlyphCache::AddedGlyph( GlyphData& rGlyphData )
     ++mnGlyphCount;
     mnBytesUsed += sizeof( rGlyphData );
     UsingGlyph( rGlyphData );
-    if( mnBytesUsed > mnMaxSize )
+    if( mnBytesUsed > gnMaxSize )
         GarbageCollect();
 }
 

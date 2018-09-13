@@ -387,7 +387,6 @@ class SwOrderIter
 {
     const SwPageFrame *m_pPage;
     const SdrObject *m_pCurrent;
-    const bool m_bFlysOnly;
 
 public:
     SwOrderIter( const SwPageFrame *pPage );

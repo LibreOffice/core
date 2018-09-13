@@ -2242,8 +2242,7 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
 
 SwOrderIter::SwOrderIter( const SwPageFrame *pPg ) :
     m_pPage( pPg ),
-    m_pCurrent( nullptr ),
-    m_bFlysOnly( true )
+    m_pCurrent( nullptr )
 {
 }
 
@@ -2260,7 +2259,7 @@ void SwOrderIter::Top()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp >= nTopOrd )
@@ -2286,7 +2285,7 @@ const SdrObject *SwOrderIter::Bottom()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nBotOrd )
@@ -2314,7 +2313,7 @@ const SdrObject *SwOrderIter::Next()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
@@ -2342,7 +2341,7 @@ void SwOrderIter::Prev()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nCurOrd && nTmp >= nOrd )

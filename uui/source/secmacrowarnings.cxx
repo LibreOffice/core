@@ -69,7 +69,6 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     , mxEnableBtn(m_xBuilder->weld_button("ok"))
     , mxDisableBtn(m_xBuilder->weld_button("cancel"))
     , mpInfos                ( nullptr )
-    , mbSignedMode           ( true )
     , mbShowSignatures       ( _bWithSignatures )
     , mnActSecLevel          ( 0 )
 {
@@ -105,7 +104,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
 {
-    if (mbSignedMode && mxAlwaysTrustCB->get_active())
+    if (mxAlwaysTrustCB->get_active())
     {   // insert path into trusted path list
         uno::Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
