@@ -61,7 +61,8 @@ SwFrameAreaDefinition::SwFrameAreaDefinition()
     maFramePrintArea(),
     mbFrameAreaPositionValid(false),
     mbFrameAreaSizeValid(false),
-    mbFramePrintAreaValid(false)
+    mbFramePrintAreaValid(false),
+    mnFrameId(SwFrameAreaDefinition::mnLastFrameId++)
 {
 }
 
@@ -282,7 +283,6 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
 :   SwFrameAreaDefinition(),
     SwClient( pMod ),
     SfxBroadcaster(),
-    mnFrameId( SwFrame::mnLastFrameId++ ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),
     mpUpper(nullptr),
     mpNext(nullptr),
