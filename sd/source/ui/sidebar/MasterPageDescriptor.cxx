@@ -229,6 +229,7 @@ bool MasterPageDescriptor::UpdatePreview (
         {
             pPage = mpMasterPage;
         }
+        //TODO: Notify LOOL of preview updates.
         maLargePreview = (*mpPreviewProvider)(
             rLargeSize.Width(),
             pPage,
