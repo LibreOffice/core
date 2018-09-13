@@ -199,6 +199,10 @@ public:
     virtual void SAL_CALL setVerticalAlignment( sal_Int32 nAlign ) override;
     virtual sal_Int32 SAL_CALL getOrientation() override;
     virtual void SAL_CALL setOrientation( sal_Int32 nOrientation ) override;
+    virtual css::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const css::uno::Any &nValue ) override;
+    virtual OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const OUString &aText ) override;
 
     // XButton methods
     css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
