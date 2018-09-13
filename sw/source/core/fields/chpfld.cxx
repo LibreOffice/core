@@ -187,7 +187,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
             sNumber = "??";
         }
 
-        sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false, false));
+        sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false));
 
     }
 }
