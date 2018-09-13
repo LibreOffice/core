@@ -22,11 +22,6 @@
 
 using namespace std;
 
-bool operator == (const SwRewriteRule & a, const SwRewriteRule & b)
-{
-    return a.first == b.first;
-}
-
 SwRewriter::SwRewriter()
 {
 }
@@ -37,7 +32,9 @@ void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
 
     vector<SwRewriteRule>::iterator aIt;
 
-    aIt = find(mRules.begin(), mRules.end(), aRule);
+    aIt = find_if(
+        mRules.begin(), mRules.end(),
+        [&aRule](SwRewriteRule const & a) { return a.first == aRule.first; });
 
     if (aIt != mRules.end())
         *aIt = aRule;
