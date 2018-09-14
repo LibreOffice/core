@@ -3135,7 +3135,18 @@ public:
             gtk_widget_show(GTK_WIDGET(m_pImage));
         }
         if (pDevice)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+        {
+            cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
+            if (gtk_check_version(3, 20, 0) == nullptr)
+                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+            else
+            {
+                Size aSize(pDevice->GetOutputSizePixel());
+                GdkPixbuf* pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width(), aSize.Height());
+                gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+                g_object_unref(pixbuf);
+            }
+        }
         else
             gtk_image_set_from_surface(m_pImage, nullptr);
     }
