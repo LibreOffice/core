@@ -90,7 +90,7 @@ SvxTextAnimationPage::SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet
     , m_aLeftState(TRISTATE_INDET)
     , m_aRightState(TRISTATE_INDET)
     , m_aDownState(TRISTATE_INDET)
-    , m_xLbEffect(m_xBuilder->weld_combo_box_text("LB_EFFECT"))
+    , m_xLbEffect(m_xBuilder->weld_combo_box("LB_EFFECT"))
     , m_xBoxDirection(m_xBuilder->weld_widget("boxDIRECTION"))
     , m_xBtnUp(m_xBuilder->weld_toggle_button("BTN_UP"))
     , m_xBtnLeft(m_xBuilder->weld_toggle_button("BTN_LEFT"))
@@ -433,7 +433,7 @@ VclPtr<SfxTabPage> SvxTextAnimationPage::Create(TabPageParent pParent, const Sfx
     return VclPtr<SvxTextAnimationPage>::Create(pParent, *rAttrs);
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, void)
 {
     int nPos = m_xLbEffect->get_active();
     if (nPos != -1)

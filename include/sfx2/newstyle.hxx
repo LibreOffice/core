@@ -38,7 +38,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(OKHdl, weld::TreeView&, void);
     DECL_DLLPRIVATE_LINK(OKClickHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBoxText&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBox&, void);
 
 public:
     SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool&);

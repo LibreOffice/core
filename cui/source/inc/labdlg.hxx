@@ -61,12 +61,12 @@ private:
     const SdrView*      pView;
 
     std::unique_ptr<weld::MetricSpinButton> m_xMF_SPACING;
-    std::unique_ptr<weld::ComboBoxText> m_xLB_EXTENSION;
+    std::unique_ptr<weld::ComboBox> m_xLB_EXTENSION;
     std::unique_ptr<weld::Label> m_xFT_BYFT;
     std::unique_ptr<weld::MetricSpinButton> m_xMF_BY;
     std::unique_ptr<weld::Label> m_xFT_POSITIONFT;
-    std::unique_ptr<weld::ComboBoxText> m_xLB_POSITION;
-    std::unique_ptr<weld::ComboBoxText> m_xLineTypes;
+    std::unique_ptr<weld::ComboBox> m_xLB_POSITION;
+    std::unique_ptr<weld::ComboBox> m_xLineTypes;
     std::unique_ptr<weld::Label> m_xFT_LENGTHFT;
     std::unique_ptr<weld::MetricSpinButton> m_xMF_LENGTH;
     std::unique_ptr<weld::CheckButton> m_xCB_OPTIMAL;
@@ -75,8 +75,8 @@ private:
 
     void            SetupExtension_Impl( sal_uInt16 nType );
     void            SetupType_Impl( SdrCaptionType nType );
-    DECL_LINK(ExtensionSelectHdl_Impl, weld::ComboBoxText&, void);
-    DECL_LINK(PositionSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(ExtensionSelectHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(PositionSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LineOptHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(SelectCaptTypeHdl_Impl, SvtValueSet*, void);
 

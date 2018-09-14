@@ -537,18 +537,18 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet
     , m_xSizeCB(m_xBuilder->weld_check_button("size"))
     , m_xPosFrame(m_xBuilder->weld_widget("posframe"))
     , m_xHoriFT(m_xBuilder->weld_label("horiposft"))
-    , m_xHoriLB(m_xBuilder->weld_combo_box_text("horipos"))
+    , m_xHoriLB(m_xBuilder->weld_combo_box("horipos"))
     , m_xHoriByFT(m_xBuilder->weld_label("horibyft"))
     , m_xHoriByMF(m_xBuilder->weld_metric_spin_button("byhori", FUNIT_CM))
     , m_xHoriToFT(m_xBuilder->weld_label("horitoft"))
-    , m_xHoriToLB(m_xBuilder->weld_combo_box_text("horianchor"))
+    , m_xHoriToLB(m_xBuilder->weld_combo_box("horianchor"))
     , m_xHoriMirrorCB(m_xBuilder->weld_check_button("mirror"))
     , m_xVertFT(m_xBuilder->weld_label("vertposft"))
-    , m_xVertLB(m_xBuilder->weld_combo_box_text("vertpos"))
+    , m_xVertLB(m_xBuilder->weld_combo_box("vertpos"))
     , m_xVertByFT(m_xBuilder->weld_label("vertbyft"))
     , m_xVertByMF(m_xBuilder->weld_metric_spin_button("byvert", FUNIT_CM))
     , m_xVertToFT(m_xBuilder->weld_label("verttoft"))
-    , m_xVertToLB(m_xBuilder->weld_combo_box_text("vertanchor"))
+    , m_xVertToLB(m_xBuilder->weld_combo_box("vertanchor"))
     , m_xFollowCB(m_xBuilder->weld_check_button("followtextflow"))
     , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "preview", m_aExampleWN))
 {
@@ -1210,7 +1210,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, weld::ToggleButton&, void)
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
 }
 
-IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, weld::ComboBoxText&, rLB, void )
+IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, weld::ComboBox&, rLB, void )
 {
     bool bHori = &rLB == m_xHoriToLB.get();
 
@@ -1234,10 +1234,10 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, weld::ComboBoxText&, rLB, void )
     RangeModifyHdl(m_xWidthMF->get_widget());
 }
 
-IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBoxText&, rLB, void)
+IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBox&, rLB, void)
 {
     bool bHori = &rLB == m_xHoriLB.get();
-    weld::ComboBoxText* pRelLB = bHori ? m_xHoriToLB.get() : m_xVertToLB.get();
+    weld::ComboBox* pRelLB = bHori ? m_xHoriToLB.get() : m_xVertToLB.get();
     weld::Label* pRelFT = bHori ? m_xHoriToFT.get() : m_xVertToFT.get();
     FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
 
@@ -1362,7 +1362,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, weld::ToggleButton&, void)
     m_xSizeCB->set_sensitive(m_xPositionCB->get_sensitive() && !m_xPositionCB->get_active());
 }
 
-short SvxSwPosSizeTabPage::GetRelation(const weld::ComboBoxText& rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(const weld::ComboBox& rRelationLB)
 {
     short nRel = 0;
     int nPos = rRelationLB.get_active();
@@ -1375,7 +1375,7 @@ short SvxSwPosSizeTabPage::GetRelation(const weld::ComboBoxText& rRelationLB)
     return nRel;
 }
 
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBoxText& rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBox& rRelationLB)
 {
     short nAlign = 0;
 
@@ -1410,7 +1410,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, 
     return nAlign;
 }
 
-sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap const *pMap, const weld::ComboBoxText& rAlignLB)
+sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap const *pMap, const weld::ComboBox& rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
     int nLBSelPos = rAlignLB.get_active();
@@ -1621,7 +1621,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
 }
 
 void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
-                                    sal_uInt16 nRel, weld::ComboBoxText& rLB, weld::Label& rFT)
+                                    sal_uInt16 nRel, weld::ComboBox& rLB, weld::Label& rFT)
 {
     OUString sSelEntry;
     LB  nLBRelations = LB::NONE;
@@ -1761,7 +1761,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
 sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
                                       sal_uInt16 _nAlign,
                                       const sal_uInt16 _nRel,
-                                      weld::ComboBoxText& _rLB)
+                                      weld::ComboBox& _rLB)
 {
     OUString sSelEntry, sOldEntry;
     sOldEntry = _rLB.get_active_text();

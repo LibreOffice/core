@@ -91,9 +91,9 @@ private:
 
     std::unique_ptr<weld::Button>   m_xOKBtn;
     std::unique_ptr<weld::Label>    m_xFontText;
-    std::unique_ptr<weld::ComboBoxText> m_xFontLB;
+    std::unique_ptr<weld::ComboBox> m_xFontLB;
     std::unique_ptr<weld::Label>    m_xSubsetText;
-    std::unique_ptr<weld::ComboBoxText> m_xSubsetLB;
+    std::unique_ptr<weld::ComboBox> m_xSubsetLB;
     std::unique_ptr<weld::Entry>    m_xSearchText;
     std::unique_ptr<weld::Entry>    m_xHexCodeText;
     std::unique_ptr<weld::Entry>    m_xDecimalCodeText;
@@ -113,8 +113,8 @@ private:
 
     enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
-    DECL_LINK(FontSelectHdl, weld::ComboBoxText&, void);
-    DECL_LINK(SubsetSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(FontSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(SubsetSelectHdl, weld::ComboBox&, void);
     DECL_LINK(CharDoubleClickHdl, SvxShowCharSet*,void);
     DECL_LINK(CharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
@@ -136,7 +136,7 @@ private:
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(SearchFieldGetFocusHdl, weld::Widget&, void);
 
-    static void fillAllSubsets(weld::ComboBoxText& rListBox);
+    static void fillAllSubsets(weld::ComboBox& rListBox);
     void selectCharByCode(Radix radix);
 
 public:

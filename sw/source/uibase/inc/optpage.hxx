@@ -102,10 +102,10 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     std::unique_ptr<weld::CheckButton>  m_xPrintEmptyPagesCB;
     std::unique_ptr<weld::CheckButton>  m_xPaperFromSetupCB;
-    std::unique_ptr<weld::ComboBoxText> m_xFaxLB;
+    std::unique_ptr<weld::ComboBox> m_xFaxLB;
 
     DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
     SwAddPrinterTabPage(TabPageParent pParent, const SfxItemSet& rSet);

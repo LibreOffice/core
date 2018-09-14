@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricS
     InvalidatePreview();
 }
 
-IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, weld::ComboBox&, rListBox, void)
 {
     ModifiedTrgrHdl_Impl(&rListBox);
 }
@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, weld::MetricSp
     ModifiedTrgrHdl_Impl(nullptr);
 }
 
-void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBoxText* pControl)
+void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBox* pControl)
 {
     if (pControl == m_xLbTrgrGradientType.get())
     {
@@ -213,7 +213,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxI
     , m_xRbtTransGradient(m_xBuilder->weld_radio_button("RBT_TRANS_GRADIENT"))
     , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_TRANSPARENT", FUNIT_PERCENT))
     , m_xGridGradient(m_xBuilder->weld_widget("gridGradient"))
-    , m_xLbTrgrGradientType(m_xBuilder->weld_combo_box_text("LB_TRGR_GRADIENT_TYPES"))
+    , m_xLbTrgrGradientType(m_xBuilder->weld_combo_box("LB_TRGR_GRADIENT_TYPES"))
     , m_xFtTrgrCenterX(m_xBuilder->weld_label("FT_TRGR_CENTER_X"))
     , m_xMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("MTR_TRGR_CENTER_X", FUNIT_PERCENT))
     , m_xFtTrgrCenterY(m_xBuilder->weld_label("FT_TRGR_CENTER_Y"))

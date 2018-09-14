@@ -39,12 +39,12 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRbtFix;
     std::unique_ptr<weld::RadioButton> m_xRbtVar;
     std::unique_ptr<LanguageBox> m_xLbLanguage;
-    std::unique_ptr<weld::ComboBoxText> m_xLbFormat;
+    std::unique_ptr<weld::ComboBox> m_xLbFormat;
 
     void                FillFormatList();
     void                FillControls();
 
-    DECL_LINK(LanguageChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(LanguageChangeHdl, weld::ComboBox&, void);
 
 public:
     SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet);

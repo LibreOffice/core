@@ -2094,21 +2094,21 @@ IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea,
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
 //don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
 template <class vcl_type>
-class SalInstanceComboBoxText : public SalInstanceContainer, public virtual weld::ComboBoxText
+class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
 {
 protected:
-    VclPtr<vcl_type> m_xComboBoxText;
+    VclPtr<vcl_type> m_xComboBox;
 
 public:
-    SalInstanceComboBoxText(vcl_type* pComboBoxText, bool bTakeOwnership)
-        : SalInstanceContainer(pComboBoxText, bTakeOwnership)
-        , m_xComboBoxText(pComboBoxText)
+    SalInstanceComboBox(vcl_type* pComboBox, bool bTakeOwnership)
+        : SalInstanceContainer(pComboBox, bTakeOwnership)
+        , m_xComboBox(pComboBox)
     {
     }
 
     virtual int get_active() const override
     {
-        const sal_Int32 nRet = m_xComboBoxText->GetSelectedEntryPos();
+        const sal_Int32 nRet = m_xComboBox->GetSelectedEntryPos();
         if (nRet == LISTBOX_ENTRY_NOTFOUND)
             return -1;
         return nRet;
@@ -2116,12 +2116,12 @@ public:
 
     const OUString* getEntryData(int index) const
     {
-        return static_cast<const OUString*>(m_xComboBoxText->GetEntryData(index));
+        return static_cast<const OUString*>(m_xComboBox->GetEntryData(index));
     }
 
     virtual OUString get_active_id() const override
     {
-        const OUString* pRet = getEntryData(m_xComboBoxText->GetSelectedEntryPos());
+        const OUString* pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
         if (!pRet)
             return OUString();
         return *pRet;
@@ -2135,7 +2135,7 @@ public:
             if (!pId)
                 continue;
             if (*pId == rStr)
-                m_xComboBoxText->SelectEntryPos(i);
+                m_xComboBox->SelectEntryPos(i);
         }
     }
 
@@ -2143,15 +2143,15 @@ public:
     {
         if (pos == -1)
         {
-            m_xComboBoxText->SetNoSelection();
+            m_xComboBox->SetNoSelection();
             return;
         }
-        m_xComboBoxText->SelectEntryPos(pos);
+        m_xComboBox->SelectEntryPos(pos);
     }
 
     virtual OUString get_text(int pos) const override
     {
-        return m_xComboBoxText->GetEntry(pos);
+        return m_xComboBox->GetEntry(pos);
     }
 
     virtual OUString get_id(int pos) const override
@@ -2164,17 +2164,17 @@ public:
 
     virtual void insert_text(int pos, const OUString& rStr) override
     {
-        m_xComboBoxText->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
+        m_xComboBox->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
     }
 
     virtual int get_count() const override
     {
-        return m_xComboBoxText->GetEntryCount();
+        return m_xComboBox->GetEntryCount();
     }
 
     virtual int find_text(const OUString& rStr) const override
     {
-        const sal_Int32 nRet = m_xComboBoxText->GetEntryPos(rStr);
+        const sal_Int32 nRet = m_xComboBox->GetEntryPos(rStr);
         if (nRet == LISTBOX_ENTRY_NOTFOUND)
             return -1;
         return nRet;
@@ -2200,40 +2200,40 @@ public:
             const OUString* pId = getEntryData(i);
             delete pId;
         }
-        return m_xComboBoxText->Clear();
+        return m_xComboBox->Clear();
     }
 
     virtual void make_sorted() override
     {
-        m_xComboBoxText->SetStyle(m_xComboBoxText->GetStyle() | WB_SORT);
+        m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
     }
 
-    virtual ~SalInstanceComboBoxText() override
+    virtual ~SalInstanceComboBox() override
     {
         clear();
     }
 };
 
-class SalInstanceComboBoxTextWithoutEdit : public SalInstanceComboBoxText<ListBox>
+class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
 {
 private:
     DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
-    SalInstanceComboBoxTextWithoutEdit(ListBox* pListBox, bool bTakeOwnership)
-        : SalInstanceComboBoxText<ListBox>(pListBox, bTakeOwnership)
+    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, bool bTakeOwnership)
+        : SalInstanceComboBox<ListBox>(pListBox, bTakeOwnership)
     {
-        m_xComboBoxText->SetSelectHdl(LINK(this, SalInstanceComboBoxTextWithoutEdit, SelectHdl));
+        m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithoutEdit, SelectHdl));
     }
 
     virtual OUString get_active_text() const override
     {
-        return m_xComboBoxText->GetSelectedEntry();
+        return m_xComboBox->GetSelectedEntry();
     }
 
     virtual void remove(int pos) override
     {
-        m_xComboBoxText->RemoveEntry(pos);
+        m_xComboBox->RemoveEntry(pos);
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage) override
@@ -2241,10 +2241,10 @@ public:
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
         if (!pImage)
-            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, nInsertPos);
+            nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
         else
-            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, createImage(*pImage), nInsertPos);
-        m_xComboBoxText->SetEntryData(nInsertedAt, new OUString(rId));
+            nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImage), nInsertPos);
+        m_xComboBox->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
     virtual bool has_entry() const override
@@ -2283,28 +2283,28 @@ public:
         assert(false);
     }
 
-    virtual ~SalInstanceComboBoxTextWithoutEdit() override
+    virtual ~SalInstanceComboBoxWithoutEdit() override
     {
-        m_xComboBoxText->SetSelectHdl(Link<ListBox&, void>());
+        m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceComboBoxTextWithoutEdit, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SalInstanceComboBoxWithoutEdit, SelectHdl, ListBox&, void)
 {
     return signal_changed();
 }
 
-class SalInstanceComboBoxTextWithEdit : public SalInstanceComboBoxText<ComboBox>
+class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
 {
 private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, void);
 public:
-    SalInstanceComboBoxTextWithEdit(ComboBox* pComboBoxText, bool bTakeOwnership)
-        : SalInstanceComboBoxText<ComboBox>(pComboBoxText, bTakeOwnership)
+    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, bool bTakeOwnership)
+        : SalInstanceComboBox<::ComboBox>(pComboBox, bTakeOwnership)
     {
-        m_xComboBoxText->SetModifyHdl(LINK(this, SalInstanceComboBoxTextWithEdit, ChangeHdl));
-        m_xComboBoxText->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxTextWithEdit, EntryActivateHdl));
+        m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
+        m_xComboBox->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxWithEdit, EntryActivateHdl));
     }
 
     virtual bool has_entry() const override
@@ -2315,19 +2315,19 @@ public:
     virtual void set_entry_error(bool bError) override
     {
         if (bError)
-            m_xComboBoxText->SetControlForeground(Color(0xf0, 0, 0));
+            m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
         else
-            m_xComboBoxText->SetControlForeground();
+            m_xComboBox->SetControlForeground();
     }
 
     virtual OUString get_active_text() const override
     {
-        return m_xComboBoxText->GetText();
+        return m_xComboBox->GetText();
     }
 
     virtual void remove(int pos) override
     {
-        m_xComboBoxText->RemoveEntryAt(pos);
+        m_xComboBox->RemoveEntryAt(pos);
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage) override
@@ -2335,53 +2335,53 @@ public:
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
         if (!pImage)
-            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, nInsertPos);
+            nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
         else
-            nInsertedAt = m_xComboBoxText->InsertEntryWithImage(rStr, createImage(*pImage), nInsertPos);
-        m_xComboBoxText->SetEntryData(nInsertedAt, new OUString(rId));
+            nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImage), nInsertPos);
+        m_xComboBox->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
     virtual void set_entry_text(const OUString& rText) override
     {
-        m_xComboBoxText->SetText(rText);
+        m_xComboBox->SetText(rText);
     }
 
     virtual void set_entry_width_chars(int nChars) override
     {
-        m_xComboBoxText->SetWidthInChars(nChars);
+        m_xComboBox->SetWidthInChars(nChars);
     }
 
     virtual void set_entry_completion(bool bEnable) override
     {
-        m_xComboBoxText->EnableAutocomplete(bEnable);
+        m_xComboBox->EnableAutocomplete(bEnable);
     }
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override
     {
-        m_xComboBoxText->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+        m_xComboBox->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
     }
 
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
     {
-        const Selection& rSelection = m_xComboBoxText->GetSelection();
+        const Selection& rSelection = m_xComboBox->GetSelection();
         rStartPos = rSelection.Min();
         rEndPos = rSelection.Max();
         return rSelection.Len();
     }
 
-    virtual ~SalInstanceComboBoxTextWithEdit() override
+    virtual ~SalInstanceComboBoxWithEdit() override
     {
-        m_xComboBoxText->SetEntryActivateHdl(Link<Edit&, void>());
-        m_xComboBoxText->SetModifyHdl(Link<Edit&, void>());
+        m_xComboBox->SetEntryActivateHdl(Link<Edit&, void>());
+        m_xComboBox->SetModifyHdl(Link<Edit&, void>());
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, ChangeHdl, Edit&, void)
+IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
 {
     signal_changed();
 }
 
-IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, EntryActivateHdl, Edit&, void)
+IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, void)
 {
     m_aEntryActivateHdl.Call(*this);
 }
@@ -2617,14 +2617,14 @@ public:
         return pRet;
     }
 
-    virtual std::unique_ptr<weld::ComboBoxText> weld_combo_box_text(const OString &id, bool bTakeOwnership) override
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership) override
     {
-        vcl::Window* pComboBoxText = m_xBuilder->get<vcl::Window>(id);
-        ComboBox* pComboBox = dynamic_cast<ComboBox*>(pComboBoxText);
+        vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+        ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
         if (pComboBox)
-            return o3tl::make_unique<SalInstanceComboBoxTextWithEdit>(pComboBox, bTakeOwnership);
-        ListBox* pListBox = dynamic_cast<ListBox*>(pComboBoxText);
-        return pListBox ? o3tl::make_unique<SalInstanceComboBoxTextWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
+            return o3tl::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, bTakeOwnership);
+        ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
+        return pListBox ? o3tl::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
