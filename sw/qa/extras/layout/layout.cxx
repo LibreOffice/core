@@ -20,12 +20,14 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testTdf118058();
+    void testTdf119875();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf118058);
+    CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -115,6 +117,19 @@ void SwLayoutWriter::testTdf118058()
     SwDoc* pDoc = createDoc("tdf118058.fodt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
+void SwLayoutWriter::testTdf119875()
+{
+    createDoc("tdf119875.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFirstTop
+        = getXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "top").toInt32();
+    sal_Int32 nSecondTop
+        = getXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "top").toInt32();
+    // The first section had the same top value as the second one, so they
+    // overlapped.
+    CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
