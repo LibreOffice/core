@@ -5480,21 +5480,33 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
 
         const SwPosition* pCheckedStt = pRedl->Start();
         const SwPosition* pCheckedEnd = pRedl->End();
+        sal_uLong uStartNodeIndex = pCheckedStt->nNode.GetIndex();
+        sal_uLong uStartCharIndex = pCheckedStt->nContent.GetIndex();
+        sal_uLong uEndNodeIndex   = pCheckedEnd->nNode.GetIndex();
+        sal_uLong uEndCharIndex   = pCheckedEnd->nContent.GetIndex();
+        sal_uLong uNodeIndex = rNode.GetIndex();
 
-        if( pCheckedStt->nNode == rNode )
+        if( uStartNodeIndex <= uNodeIndex && uNodeIndex < uEndNodeIndex )
         {
             if ( !pCheckedEnd )
                 continue;
 
-            sal_uLong uStartNodeIndex = pCheckedStt->nNode.GetIndex();
-            sal_uLong uStartCharIndex = pCheckedStt->nContent.GetIndex();
-            sal_uLong uEndNodeIndex   = pCheckedEnd->nNode.GetIndex();
-            sal_uLong uEndCharIndex   = pCheckedEnd->nContent.GetIndex();
-
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
-            if ( ( uStartNodeIndex == uEndNodeIndex - 1 ) &&
-                 ( uStartCharIndex == static_cast<sal_uLong>(rNode.Len()) ) &&
-                 ( uEndCharIndex == 0)
+            if ( ( uStartNodeIndex < uEndNodeIndex ) &&
+                 // check start:
+                 // 1. start in the same node
+                 (( uStartNodeIndex == uNodeIndex &&
+                    uStartCharIndex == static_cast<sal_uLong>(rNode.Len()) ) ||
+                 // 2. or in a previous node
+                    uStartNodeIndex < uNodeIndex
+                 ) &&
+                 // check end:
+                 // 1. end in the same node
+                 (( uEndNodeIndex == (uNodeIndex + 1) &&
+                    uEndCharIndex == 0) ||
+                 // 2. or end in after that
+                    uEndNodeIndex > (uNodeIndex + 1)
+                 )
                )
             {
                 return &( pRedl->GetRedlineData() );
