@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_2da626c3",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-14T16:43:59Z",
+      "side": 1,
+      "message": "there\u0027s 2 \"aliceblue\" here now",
+      "revId": "23f9d2b092989c5f105144083e79066e3070afbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
