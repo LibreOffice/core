@@ -14,6 +14,8 @@ module com { module sun { module star { module security {
 
 /**
  * Enum definition of a certificate kind ( X509, OpenPGP )
+ *
+ * @since LibreOffice 5.4
  */
 enum CertificateKind
 {
