@@ -1550,18 +1550,18 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
-    SwFontSave *pFontSave;
-    SwFont* pTmpFnt;
+    std::unique_ptr<SwFontSave> pFontSave;
+    std::unique_ptr<SwFont> pTmpFnt;
 
     if( rMulti.IsDouble() )
     {
-        pTmpFnt = new SwFont( *GetInfo().GetFont() );
+        pTmpFnt.reset(new SwFont( *GetInfo().GetFont() ));
         if( rMulti.IsDouble() )
         {
             SetPropFont( 50 );
             pTmpFnt->SetProportion( GetPropFont() );
         }
-        pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
+        pFontSave.reset(new SwFontSave( GetInfo(), pTmpFnt.get(), this ));
     }
     else
     {
@@ -1821,8 +1821,8 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     // Restore the saved values
     GetInfo().X( nOldX );
     GetInfo().SetLen( nOldLen );
-    delete pFontSave;
-    delete pTmpFnt;
+    pFontSave.reset();
+    pTmpFnt.reset();
     SetPropFont( 0 );
 }
 
