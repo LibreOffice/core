@@ -353,7 +353,7 @@ AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
 
 void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 {
-    SwTextBlocks*   pBlock = pGlossaries->GetGroupDoc(pGroup->sName);
+    std::unique_ptr<SwTextBlocks> pBlock = pGlossaries->GetGroupDoc(pGroup->sName);
     pGroup->nCount = pBlock ? pBlock->GetCount() : 0;
     pGroup->sLongNames.clear();
     pGroup->sShortNames.clear();
@@ -367,7 +367,6 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
         pGroup->sShortNames += pBlock->GetShortName(j)
             + OUStringLiteral1(STRING_DELIM);
     }
-    delete pBlock;
 }
 
 // Give back all (not exceeding FIND_MAX_GLOS) found modules

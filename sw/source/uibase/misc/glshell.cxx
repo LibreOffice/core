@@ -201,7 +201,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
 {
     SwDocShellRef xDocSh;
 
-    SwTextBlocks* pGroup = GetGroupDoc( rGroup );
+    std::unique_ptr<SwTextBlocks> pGroup = GetGroupDoc( rGroup );
     if (pGroup && pGroup->GetCount())
     {
         // query which view is registered. In WebWriter there is no normal view
@@ -268,7 +268,6 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         if ( bShow )
             pFrame->GetFrame().Appear();
     }
-    delete pGroup;
     return xDocSh;
 }
 

@@ -771,8 +771,8 @@ IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl, MenuButton *, void)
 // EndDialog must not be called in MenuHdl
     if (m_pEditBtn->GetCurItemIdent() == "edit")
     {
-        SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
-        delete pGroup;
+        std::unique_ptr<SwTextBlocks> pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
+        pGroup.reset();
         EndDialog(RET_EDIT);
     }
 }

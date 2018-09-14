@@ -145,17 +145,16 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     OUString sGroup(rGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroup);
-    SwTextBlocks* pGroup = GetGroupDoc(sGroup);
+    std::unique_ptr<SwTextBlocks> pGroup = GetGroupDoc(sGroup);
     if(pGroup)
     {
         sRet = pGroup->GetName();
-        delete pGroup;
     }
     return sRet;
 }
 
 // supplies the group rName's text block document
-SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
+std::unique_ptr<SwTextBlocks> SwGlossaries::GetGroupDoc(const OUString &rName,
                                         bool bCreate)
 {
     // insert to the list of text blocks if applicable
@@ -186,12 +185,11 @@ bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
     const OUString sNewFilePath(m_PathArr[nNewPath]);
     const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM))
         + OUStringLiteral1(GLOS_DELIM) + sNewPath;
-    SwTextBlocks *pBlock = GetGlosDoc( sNewGroup );
+    std::unique_ptr<SwTextBlocks> pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
     {
         GetNameList().push_back(sNewGroup);
         pBlock->SetName(rTitle);
-        delete pBlock;
         rGroupName = sNewGroup;
         return true;
     }
@@ -273,10 +271,10 @@ SwGlossaries::~SwGlossaries()
 }
 
 // read a block document
-SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) const
+std::unique_ptr<SwTextBlocks> SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) const
 {
     sal_uInt16 nPath = static_cast<sal_uInt16>(rName.getToken(1, GLOS_DELIM).toInt32());
-    SwTextBlocks *pTmp = nullptr;
+    std::unique_ptr<SwTextBlocks> pTmp;
     if (static_cast<size_t>(nPath) < m_PathArr.size())
     {
         const OUString sFileURL =
@@ -288,7 +286,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) co
 
         if (bCreate || bExist)
         {
-            pTmp = new SwTextBlocks( sFileURL );
+            pTmp.reset(new SwTextBlocks( sFileURL ));
             bool bOk = true;
             if( pTmp->GetError() )
             {

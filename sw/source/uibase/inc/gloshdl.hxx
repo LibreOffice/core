@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
 
     SAL_DLLPRIVATE bool  Expand( const OUString& rShortName,
                     SwGlossaries* pGlossaries,
-                    SwTextBlocks *pGlossary );
+                    std::unique_ptr<SwTextBlocks> pGlossary );
 
 public:
     void        GlossaryDlg();
