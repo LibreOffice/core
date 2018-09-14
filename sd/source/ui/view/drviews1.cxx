@@ -53,6 +53,7 @@
 #include <sdmod.hxx>
 #include <fupoor.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <fusel.hxx>
 #include <sdpage.hxx>
 #include <FrameView.hxx>
@@ -1141,24 +1142,19 @@ void DrawViewShell::ResetActualLayer()
     LayerTabBar* pLayerBar = GetLayerTabControl();
     if (pLayerBar != nullptr)
     {
-        // remember old layer count and current layer id
+        // remember old tab count and current tab id
         // this is needed when one layer is renamed to
-        // restore current layer
-        sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount();
-        sal_uInt16 nOldLayerPos = pLayerBar->GetCurPageId();
+        // restore current tab
+        sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount(); // actually it is tab count
+        sal_uInt16 nOldLayerPos = pLayerBar->GetCurPageId(); // actually it is a tab nId
 
         /**
          * Update for LayerTab
          */
         pLayerBar->Clear();
 
-        OUString aName;
+        OUString aName; // a real layer name
         OUString aActiveLayer = mpDrawView->GetActiveLayer();
-        OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
-        OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
-        OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
-        OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
-        OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
         sal_uInt16 nActiveLayerPos = SDRLAYERPOS_NOTFOUND;
         SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
@@ -1172,22 +1168,17 @@ void DrawViewShell::ResetActualLayer()
                 nActiveLayerPos = nLayerPos;
             }
 
-            if ( aName != aBackgroundLayer )
+            if ( aName != sUNO_LayerName_background ) // layer "background" has never a tab
             {
                 if (meEditMode == EditMode::MasterPage)
                 {
                     // don't show page layer onto the masterpage
-                    if (aName != aLayoutLayer   &&
-                        aName != aControlsLayer &&
-                        aName != aMeasureLinesLayer)
+                    if (aName != sUNO_LayerName_layout   &&
+                        aName != sUNO_LayerName_controls &&
+                        aName != sUNO_LayerName_measurelines)
                     {
-                        pLayerBar->InsertPage(nLayerPos+1, aName);
-
-                        // Set page bits for modified tab name display
-
                         TabBarPageBits nBits = TabBarPageBits::NONE;
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
-
                         if (pPV)
                         {
                             if (!pPV->IsLayerVisible(aName))
@@ -1204,22 +1195,15 @@ void DrawViewShell::ResetActualLayer()
                             }
                         }
 
-                        // Save the bits
-
-                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
+                        pLayerBar->InsertPage(nLayerPos+1, aName, nBits); // why +1? It is a nId, not a position. Position is APPEND.
                     }
                 }
                 else
                 {
                     // don't show masterpage layer onto the page
-                    if (aName != aBackgroundObjLayer)
+                    if (aName != sUNO_LayerName_background_objects)
                     {
-                        pLayerBar->InsertPage(nLayerPos+1, aName);
-
-                        // Set page bits for modified tab name display
-
                         TabBarPageBits nBits = TabBarPageBits::NONE;
-
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
                             nBits = TabBarPageBits::Blue;
@@ -1233,9 +1217,7 @@ void DrawViewShell::ResetActualLayer()
                             nBits |= TabBarPageBits::Underline;
                         }
 
-                        // Save the bits
-
-                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
+                        pLayerBar->InsertPage(nLayerPos+1, aName, nBits);// why +1?
                     }
                 }
             }
@@ -1252,7 +1234,7 @@ void DrawViewShell::ResetActualLayer()
                 nActiveLayerPos = ( meEditMode == EditMode::MasterPage ) ? 2 : 0;
             }
 
-            mpDrawView->SetActiveLayer( pLayerBar->GetPageText(nActiveLayerPos + 1) );
+            mpDrawView->SetActiveLayer( pLayerBar->GetLayerName(nActiveLayerPos + 1) );// why +1?
         }
 
         pLayerBar->SetCurPageId(nActiveLayerPos + 1);

@@ -202,6 +202,7 @@ struct ImplTabBarItem
     TabBarPageBits mnBits;
     OUString maText;
     OUString maHelpText;
+    OUString maAuxiliaryText; // used in LayerTabBar for real layer name
     tools::Rectangle maRect;
     long mnWidth;
     OString maHelpId;
@@ -2232,6 +2233,24 @@ OUString TabBar::GetPageText(sal_uInt16 nPageId) const
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->mpItemList[nPos]->maText;
     return OUString();
+}
+
+OUString TabBar::GetAuxiliaryText(sal_uInt16 nPageId) const
+{
+    sal_uInt16 nPos = GetPagePos(nPageId);
+    if (nPos != PAGE_NOT_FOUND)
+        return mpImpl->mpItemList[nPos]->maAuxiliaryText;
+    return OUString();
+}
+
+void TabBar::SetAuxiliaryText(sal_uInt16 nPageId, const OUString& rText )
+{
+    sal_uInt16 nPos = GetPagePos(nPageId);
+    if (nPos != PAGE_NOT_FOUND)
+    {
+        mpImpl->mpItemList[nPos]->maAuxiliaryText = rText;
+        // no redraw bar, no CallEventListener, internal use in LayerTabBar
+    }
 }
 
 OUString TabBar::GetHelpText(sal_uInt16 nPageId) const

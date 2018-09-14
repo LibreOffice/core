@@ -31,6 +31,7 @@
 #include <unmodpg.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <drawdoc.hxx>
 
 
@@ -57,8 +58,8 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     {
         maOldName = mpPage->GetName();
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
@@ -103,8 +104,8 @@ void ModifyPageUndoAction::Undo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
@@ -146,8 +147,8 @@ void ModifyPageUndoAction::Redo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);

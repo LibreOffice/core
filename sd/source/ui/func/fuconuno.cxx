@@ -37,7 +37,7 @@
 #include <ViewShellBase.hxx>
 #include <ToolBarManager.hxx>
 #include <drawdoc.hxx>
-#include <sdresid.hxx>
+#include <unokywds.hxx>
 
 
 namespace sd {
@@ -122,7 +122,7 @@ void FuConstructUnoControl::Activate()
     mpWindow->SetPointer( aNewPointer );
 
     aOldLayer = mpView->GetActiveLayer();
-    mpView->SetActiveLayer( SdResId(STR_LAYER_CONTROLS) );
+    mpView->SetActiveLayer(sUNO_LayerName_controls);
 
     FuConstruct::Activate();
 }

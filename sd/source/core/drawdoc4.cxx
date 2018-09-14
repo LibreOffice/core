@@ -108,6 +108,7 @@
 #include <svl/itemset.hxx>
 #include <app.hrc>
 #include <strings.hxx>
+#include <unokywds.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -989,44 +990,10 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, Sdr
         SfxViewFrame::Current()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
 }
 
-// Replace the unambiguous names of the default layers by their names in the
-// native language
-void SdDrawDocument::RestoreLayerNames()
-{
-    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
 
-    for (sal_uInt16 nLayer = 0; nLayer < nLayerCount; nLayer++)
-    {
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
-
-        if (pLayer)
-        {
-            OUString aLayerName(pLayer->GetName());
-
-            if (aLayerName == "LAYER_LAYOUT")
-            {
-                pLayer->SetName(SdResId(STR_LAYER_LAYOUT));
-            }
-            else if (aLayerName == "LAYER_BCKGRND")
-            {
-                pLayer->SetName(SdResId(STR_LAYER_BCKGRND));
-            }
-            else if (aLayerName == "LAYER_BACKGRNDOBJ")
-            {
-                pLayer->SetName(SdResId(STR_LAYER_BCKGRNDOBJ));
-            }
-            else if (aLayerName == "LAYER_CONTROLS")
-            {
-                pLayer->SetName(SdResId(STR_LAYER_CONTROLS));
-            }
-            else if (aLayerName == "LAYER_MEASURELINES")
-            {
-                pLayer->SetName(SdResId(STR_LAYER_MEASURELINES));
-            }
-        }
-    }
-}
+// RestoreLayerNames() no longer needed. SdrLayer always use the unambiguous names of
+// the default layers as written in file format. Names in native language are only used
+// as display names in the UI.
 
 // Return formatted page number (1, I, i, a, etc.)
 OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const

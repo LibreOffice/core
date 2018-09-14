@@ -387,16 +387,6 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
     else
     {
         uno::Any aRet( mpShape->_getPropertyDefault(aPropertyName) );
-
-        if ( aPropertyName == sUNO_shape_layername )
-        {
-            OUString aName;
-            if( aRet >>= aName )
-            {
-                aName = SdLayer::convertToExternalName( aName );
-                aRet <<= aName;
-            }
-        }
         return aRet;
     }
 }
@@ -660,17 +650,6 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
     else
     {
         uno::Any aAny( aValue );
-
-        if ( aPropertyName == sUNO_shape_layername )
-        {
-            OUString aName;
-            if( aAny >>= aName )
-            {
-                aName = SdLayer::convertToInternalName( aName );
-                aAny <<= aName;
-            }
-        }
-
         mpShape->_setPropertyValue(aPropertyName, aAny);
     }
 
@@ -815,16 +794,6 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
     else
     {
         aRet = mpShape->_getPropertyValue(PropertyName);
-
-        if ( PropertyName == sUNO_shape_layername )
-        {
-            OUString aName;
-            if( aRet >>= aName )
-            {
-                aName = SdLayer::convertToExternalName( aName );
-                aRet <<= aName;
-            }
-        }
     }
 
     return aRet;

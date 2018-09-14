@@ -82,6 +82,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/unoapi.hxx>
+#include <unokywds.hxx>
 
 #include <set>
 
@@ -529,8 +530,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             SdrLayerAdmin& rLayerAdmin(getSdrModelFromSdrPage().GetLayerAdmin());
 
             // background objects of the master page
-            pSdrObj->SetLayer( rLayerAdmin.
-                GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)) );
+            pSdrObj->SetLayer( rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects) );
         }
 
         // Subscribe object at the style sheet

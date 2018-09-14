@@ -29,6 +29,7 @@
 
 #include <sdpage.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <bitmaps.hlst>
 #include <tools/SlotStateListener.hxx>
 #include <DrawController.hxx>
@@ -454,10 +455,8 @@ SfxRequest LayoutMenu::CreateRequest (
     do
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
-        SdrLayerID aBackground (rLayerAdmin.GetLayerID(
-            SdResId(STR_LAYER_BCKGRND)));
-        SdrLayerID aBackgroundObject (rLayerAdmin.GetLayerID(
-            SdResId(STR_LAYER_BCKGRNDOBJ)));
+        SdrLayerID aBackground (rLayerAdmin.GetLayerID(sUNO_LayerName_background));
+        SdrLayerID aBackgroundObject (rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == nullptr)
             break;

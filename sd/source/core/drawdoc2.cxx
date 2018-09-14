@@ -68,6 +68,7 @@
 #include "PageListWatcher.hxx"
 #include <vcl/virdev.hxx>
 #include <customshowlist.hxx>
+#include <unokywds.hxx>
 
 using namespace ::sd;
 
@@ -1342,8 +1343,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
     SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     return DuplicatePage (
@@ -1486,8 +1487,8 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != nullptr)
     {
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);

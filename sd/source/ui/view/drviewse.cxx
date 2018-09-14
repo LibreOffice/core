@@ -80,6 +80,7 @@
 #include <fuconarc.hxx>
 #include <fucon3d.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <Outliner.hxx>
 #include <PresentationViewShell.hxx>
 #include <sdpage.hxx>
@@ -1019,7 +1020,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
             // turn on default layer of MasterPage
-            mpDrawView->SetActiveLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+            mpDrawView->SetActiveLayer(sUNO_LayerName_background_objects);
 
             ChangeEditMode(EditMode::MasterPage, mbIsLayerModeActive);
 

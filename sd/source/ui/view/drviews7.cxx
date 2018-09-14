@@ -81,7 +81,7 @@
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 #include <sdmod.hxx>
-#include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <sdpage.hxx>
 #include <Client.hxx>
 #include <DrawDocShell.hxx>
@@ -862,14 +862,15 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if(GetLayerTabControl()) // #i87182#
         {
             sal_uInt16 nCurrentLayer = GetLayerTabControl()->GetCurPageId();
-            const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
+            const OUString& rName = GetLayerTabControl()->GetLayerName(nCurrentLayer);
 
+            // ToDo: Use IsRealNameOfStandardLayer(), currently in LayerTabBar.
             bool bDisableIt = !IsLayerModeActive();
-            bDisableIt |= (rName == SdResId(STR_LAYER_LAYOUT));
-            bDisableIt |= (rName == SdResId(STR_LAYER_BCKGRND));
-            bDisableIt |= (rName == SdResId(STR_LAYER_BCKGRNDOBJ));
-            bDisableIt |= (rName == SdResId(STR_LAYER_CONTROLS));
-            bDisableIt |= (rName == SdResId(STR_LAYER_MEASURELINES));
+            bDisableIt |= (rName == sUNO_LayerName_layout);
+            bDisableIt |= (rName == sUNO_LayerName_background);
+            bDisableIt |= (rName == sUNO_LayerName_background_objects);
+            bDisableIt |= (rName == sUNO_LayerName_controls);
+            bDisableIt |= (rName == sUNO_LayerName_measurelines);
 
             if (bDisableIt)
             {
@@ -1569,8 +1570,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            SdrLayerID aBackgroundId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-            SdrLayerID aObjectId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+            SdrLayerID aBackgroundId = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+            SdrLayerID aObjectId = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
                     aVisibleLayers.IsSet(aBackgroundId)));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,

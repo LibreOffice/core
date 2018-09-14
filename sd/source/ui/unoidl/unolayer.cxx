@@ -75,61 +75,8 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
     return &aSDLayerPropertySet_Impl;
 }
 
-OUString SdLayer::convertToInternalName( const OUString& rName )
-{
-    if ( rName == sUNO_LayerName_background )
-    {
-        return SdResId( STR_LAYER_BCKGRND );
-    }
-    else if ( rName == sUNO_LayerName_background_objects )
-    {
-        return  SdResId( STR_LAYER_BCKGRNDOBJ );
-    }
-    else if ( rName == sUNO_LayerName_layout )
-    {
-        return  SdResId( STR_LAYER_LAYOUT );
-    }
-    else if ( rName == sUNO_LayerName_controls )
-    {
-        return  SdResId( STR_LAYER_CONTROLS );
-    }
-    else if ( rName == sUNO_LayerName_measurelines )
-    {
-        return  SdResId( STR_LAYER_MEASURELINES );
-    }
-    else
-    {
-        return rName;
-    }
-}
-
-OUString SdLayer::convertToExternalName( const OUString& rName )
-{
-    if( rName == SdResId( STR_LAYER_BCKGRND ) )
-    {
-        return OUString( sUNO_LayerName_background );
-    }
-    else if( rName == SdResId( STR_LAYER_BCKGRNDOBJ ) )
-    {
-        return OUString( sUNO_LayerName_background_objects );
-    }
-    else if( rName == SdResId( STR_LAYER_LAYOUT ) )
-    {
-        return OUString( sUNO_LayerName_layout );
-    }
-    else if( rName == SdResId( STR_LAYER_CONTROLS ) )
-    {
-        return OUString( sUNO_LayerName_controls );
-    }
-    else if( rName == SdResId( STR_LAYER_MEASURELINES ) )
-    {
-        return OUString( sUNO_LayerName_measurelines );
-    }
-    else
-    {
-        return rName;
-    }
-}
+// Convertion between internal and external name is no longer needed. We now use always
+// sUNO_LayerName_*. Localized names are only used as display names in the UI.
 
 SdLayer::SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_)
 : mxLayerManager(pLayerManager_)
@@ -208,7 +155,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         if(!(aValue >>= aName))
             throw lang::IllegalArgumentException();
 
-        pLayer->SetName(SdLayer::convertToInternalName( aName ) );
+        pLayer->SetName(aName);
         mxLayerManager->UpdateLayerView();
         break;
     }
@@ -265,7 +212,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_LAYER_NAME:
     {
-        OUString aRet( SdLayer::convertToExternalName( pLayer->GetName() ) );
+        OUString aRet(pLayer->GetName());
         aValue <<= aRet;
         break;
     }
@@ -614,7 +561,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ) );
+    SdrLayer* pLayer = rLayerAdmin.GetLayer(aName);
     if( pLayer == nullptr )
         throw container::NoSuchElementException();
 
@@ -639,7 +586,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     {
         SdrLayer* pLayer = rLayerAdmin.GetLayer( nLayer );
         if( pLayer )
-            *pStrings++ = SdLayer::convertToExternalName( pLayer->GetName() );
+            *pStrings++ = pLayer->GetName();
     }
 
     return aSeq;
@@ -654,7 +601,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName )
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
 
-    return nullptr != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ) );
+    return nullptr != rLayerAdmin.GetLayer(aName);
 }
 
 // XElementAccess

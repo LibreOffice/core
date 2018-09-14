@@ -35,6 +35,7 @@
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <DrawDocShell.hxx>
 #include <drawview.hxx>
 #include <undolayer.hxx>
@@ -66,6 +67,71 @@ void LayerTabBar::dispose()
     TabBar::dispose();
 }
 
+OUString LayerTabBar::convertToLocalizedName(const OUString& rName) const
+{
+    if ( rName == sUNO_LayerName_background )
+        return SdResId( STR_LAYER_BCKGRND );
+
+    if ( rName == sUNO_LayerName_background_objects )
+        return SdResId( STR_LAYER_BCKGRNDOBJ );
+
+    if ( rName == sUNO_LayerName_layout )
+        return SdResId( STR_LAYER_LAYOUT );
+
+    if ( rName == sUNO_LayerName_controls )
+        return SdResId( STR_LAYER_CONTROLS );
+
+    if ( rName == sUNO_LayerName_measurelines )
+        return SdResId( STR_LAYER_MEASURELINES );
+
+    return rName;
+}
+
+// Use a method name, that is specific to LayerTabBar to make code better readable
+OUString LayerTabBar::GetLayerName(sal_uInt16 nPageId) const
+{
+    return GetAuxiliaryText(nPageId);
+}
+
+void LayerTabBar::SetLayerName( sal_uInt16 nPageId, const OUString& rText )
+{
+    SetAuxiliaryText(nPageId, rText);
+}
+
+// Here "Page" is a tab in the LayerTabBar.
+void LayerTabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
+                                TabBarPageBits nBits, sal_uInt16 nPos)
+{
+    OUString sLocalizedName(convertToLocalizedName(rText));
+    TabBar::InsertPage(nPageId, sLocalizedName, nBits, nPos );
+    SetLayerName(nPageId, rText);
+}
+
+void LayerTabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
+{
+    OUString sLocalizedName(convertToLocalizedName(rText));
+    SetLayerName(nPageId, rText);
+    TabBar::SetPageText(nPageId, sLocalizedName);
+}
+
+bool LayerTabBar::IsLocalizedNameOfStandardLayer(const OUString& rName) const
+{
+    return (   rName == SdResId(STR_LAYER_LAYOUT)
+            || rName == SdResId(STR_LAYER_CONTROLS)
+            || rName == SdResId(STR_LAYER_MEASURELINES)
+            || rName == SdResId(STR_LAYER_BCKGRND)
+            || rName == SdResId(STR_LAYER_BCKGRNDOBJ) );
+}
+
+bool LayerTabBar::IsRealNameOfStandardLayer(const OUString& rName) const
+{
+    return (   rName == sUNO_LayerName_layout
+            || rName == sUNO_LayerName_controls
+            || rName == sUNO_LayerName_measurelines
+            || rName == sUNO_LayerName_background
+            || rName == sUNO_LayerName_background_objects );
+}
+
 void LayerTabBar::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -79,9 +145,9 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft() && !rMEvt.IsMod2())
     {
         Point aPosPixel = rMEvt.GetPosPixel();
-        sal_uInt16 aLayerId = GetPageId( PixelToLogic(aPosPixel) );
+        sal_uInt16 aTabId = GetPageId( PixelToLogic(aPosPixel) );
 
-        if (aLayerId == 0)
+        if (aTabId == 0)
         {
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
             pDispatcher->Execute(SID_INSERTLAYER, SfxCallMode::SYNCHRON);
@@ -92,7 +158,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         {
             // keyboard Shortcuts to change layer attributes
 
-            OUString aName(GetPageText(aLayerId));
+            OUString aName(GetLayerName(aTabId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
 
             // Save old state
@@ -194,9 +260,9 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
-        Point         aPos( PixelToLogic( rEvt.maPosPixel ) );
-        SdrLayerID    nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-            GetPageText( GetPageId( aPos ) ) );
+        Point         aPos( PixelToLogic(rEvt.maPosPixel) );
+        OUString      sLayerName( GetLayerName(GetPageId(aPos)) );
+        SdrLayerID    nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(sLayerName);
 
         nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, SDRPAGE_NOTFOUND, nLayerId );
 
@@ -211,8 +277,10 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
  */
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    SdrLayerID      nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ) );
+    Point         aPos( PixelToLogic(rEvt.maPosPixel) );
+    OUString      sLayerName( GetLayerName(GetPageId(aPos)) );
+    SdrLayerID    nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(sLayerName);
+
     sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, SDRPAGE_NOTFOUND, nLayerId );
 
     EndSwitchPage();
@@ -233,18 +301,11 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
 bool LayerTabBar::StartRenaming()
 {
     bool bOK = true;
-    OUString aLayerName = GetPageText( GetEditPageId() );
-    OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
-    OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
-    OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
-    OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
-    OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
+    OUString aLayerName = GetLayerName( GetEditPageId() );
 
-    if ( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer  ||
-         aLayerName == aMeasureLinesLayer ||
-         aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
+    if ( IsRealNameOfStandardLayer(aLayerName))
     {
-        // It is not allowed to change this names
+        // It is not allowed to change these names
         bOK = false;
     }
     else
@@ -274,7 +335,7 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
     if (aNewName.isEmpty() ||
         (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
-        // Name already exists
+        // Name already exists.
         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDrViewSh->GetViewFrame()->GetWindow().GetFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                    SdResId(STR_WARN_NAME_DUPLICATE)));
@@ -284,17 +345,9 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
 
     if (bOK)
     {
-        OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
-        OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
-        OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
-        OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
-        OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
-
-        if ( aNewName == aLayoutLayer       || aNewName == aControlsLayer  ||
-             aNewName == aMeasureLinesLayer ||
-             aNewName == aBackgroundLayer   || aNewName == aBackgroundObjLayer )
+        if ( IsLocalizedNameOfStandardLayer(aNewName) || IsRealNameOfStandardLayer(aNewName) )
         {
-            // It is not allowed to use his names
+            // Standard layer names may not be changed.
             bOK = false;
         }
     }

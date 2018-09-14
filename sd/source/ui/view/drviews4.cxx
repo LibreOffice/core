@@ -99,11 +99,17 @@ void DrawViewShell::DeleteActualLayer()
     }
 
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
-    const OUString& rName = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
+    sal_uInt16 nId = GetLayerTabControl()->GetCurPageId();
+    const OUString& rName = GetLayerTabControl()->GetLayerName(nId);
+    if( GetLayerTabControl()->IsRealNameOfStandardLayer(rName))
+    {
+        return; // Standard layer may not be deleted. Might this case happen? How to make a debug assert?
+    }
+    const OUString& rDisplayName(GetLayerTabControl()->GetPageText(nId));
     OUString aString(SdResId(STR_ASK_DELETE_LAYER));
 
     // replace placeholder
-    aString = aString.replaceFirst("$", rName);
+    aString = aString.replaceFirst("$", rDisplayName);
 
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
