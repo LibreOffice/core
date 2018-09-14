@@ -20,6 +20,8 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,6 +31,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
@@ -116,10 +119,20 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
 
 IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
 {
+    // Document needs to be saved before selecting a certificate
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    if (!pShell->PrepareForSigning(m_xDialog.get()))
+        return;
+
     Reference<XDocumentDigitalSignatures> xSigner(DocumentDigitalSignatures::createWithVersion(
         comphelper::getProcessComponentContext(), "1.2"));
     OUString aDescription;
-    Reference<XCertificate> xSignCertificate = xSigner->selectSigningCertificate(aDescription);
+    CertificateKind certificateKind = CertificateKind_NONE;
+    // When signing ooxml, we only want X.509 certificates
+    if (pShell->GetMedium()->GetFilter()->IsAlienFormat())
+        certificateKind = CertificateKind_X509;
+    Reference<XCertificate> xSignCertificate
+        = xSigner->selectSigningCertificateWithType(certificateKind, aDescription);
 
     if (xSignCertificate.is())
     {

@@ -23,7 +23,13 @@ enum CertificateKind
 
     /** OpenPGP format of a certificate
      */
-    OPENPGP
+    OPENPGP,
+
+    /** No format specified
+     *
+     * @since LibreOffice 6.2
+     */
+    NONE
 };
 
 } ; } ; } ; } ;
