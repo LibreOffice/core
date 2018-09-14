@@ -35,7 +35,7 @@ public:
     std::unique_ptr<weld::Builder>      m_xBuilder;
     std::unique_ptr<weld::Widget>       m_xContainer;
     std::unique_ptr<weld::Entry>        m_xEDFilterName;
-    std::unique_ptr<weld::ComboBoxText> m_xCBApplication;
+    std::unique_ptr<weld::ComboBox> m_xCBApplication;
     std::unique_ptr<weld::Entry>        m_xEDInterfaceName;
     std::unique_ptr<weld::Entry>        m_xEDExtension;
     std::unique_ptr<weld::TextView>     m_xEDDescription;

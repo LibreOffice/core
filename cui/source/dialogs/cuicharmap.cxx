@@ -93,9 +93,9 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     , m_aShowChar(m_xVirDev)
     , m_xOKBtn(bInsert ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
     , m_xFontText(m_xBuilder->weld_label("fontft"))
-    , m_xFontLB(m_xBuilder->weld_combo_box_text("fontlb"))
+    , m_xFontLB(m_xBuilder->weld_combo_box("fontlb"))
     , m_xSubsetText(m_xBuilder->weld_label("subsetft"))
-    , m_xSubsetLB(m_xBuilder->weld_combo_box_text("subsetlb"))
+    , m_xSubsetLB(m_xBuilder->weld_combo_box("subsetlb"))
     , m_xSearchText(m_xBuilder->weld_entry("search"))
     , m_xHexCodeText(m_xBuilder->weld_entry("hexvalue"))
     , m_xDecimalCodeText(m_xBuilder->weld_entry("decimalvalue"))
@@ -593,7 +593,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
         m_xSubsetLB->set_active(0);
 }
 
-void SvxCharacterMap::fillAllSubsets(weld::ComboBoxText& rListBox)
+void SvxCharacterMap::fillAllSubsets(weld::ComboBox& rListBox)
 {
     SubsetMap aAll(nullptr);
     rListBox.clear();
@@ -634,7 +634,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
     }
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
 {
     const sal_uInt32 nFont = m_xFontLB->get_active_id().toUInt32();
     aFont = m_xVirDev->GetDevFont(nFont);
@@ -715,7 +715,7 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
         m_xCharName->set_label(OUString::createFromAscii(buffer));
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nPos = m_xSubsetLB->get_active();
     const Subset* pSubset = reinterpret_cast<const Subset*>(m_xSubsetLB->get_active_id().toUInt64());

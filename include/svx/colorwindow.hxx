@@ -124,7 +124,7 @@ private:
     std::unique_ptr<ColorValueSet> mxColorSet;
     std::unique_ptr<ColorValueSet> mxRecentColorSet;
     std::unique_ptr<weld::Container> mxTopLevel;
-    std::unique_ptr<weld::ComboBoxText> mxPaletteListBox;
+    std::unique_ptr<weld::ComboBox> mxPaletteListBox;
     std::unique_ptr<weld::Button> mxButtonAutoColor;
     std::unique_ptr<weld::Button> mxButtonNoneColor;
     std::unique_ptr<weld::Button> mxButtonPicker;
@@ -133,7 +133,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
 
     DECL_LINK(SelectHdl, SvtValueSet*, void);
-    DECL_LINK(SelectPaletteHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_LINK(OpenPickerClickHdl, weld::Button&, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);

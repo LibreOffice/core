@@ -28,7 +28,7 @@ private:
 
     std::unique_ptr<weld::Entry> m_xTextInput;
     std::unique_ptr<weld::Button> m_xOKButton;
-    std::unique_ptr<weld::ComboBoxText> m_xFont;
+    std::unique_ptr<weld::ComboBox> m_xFont;
     std::unique_ptr<weld::MetricSpinButton> m_xAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xTransparency;
     std::unique_ptr<ColorListBox> m_xColor;

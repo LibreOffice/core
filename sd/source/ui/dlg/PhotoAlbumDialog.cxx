@@ -51,7 +51,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pA
     , m_xRemoveBtn(m_xBuilder->weld_button("rem_btn"))
     , m_xImagesLst(m_xBuilder->weld_tree_view("images_tree"))
     , m_xImg(new weld::CustomWeld(*m_xBuilder, "preview_img", m_aImg))
-    , m_xInsTypeCombo(m_xBuilder->weld_combo_box_text("opt_combo"))
+    , m_xInsTypeCombo(m_xBuilder->weld_combo_box("opt_combo"))
     , m_xASRCheck(m_xBuilder->weld_check_button("asr_check"))
     , m_xASRCheckCrop(m_xBuilder->weld_check_button("asr_check_crop"))
     , m_xCapCheck(m_xBuilder->weld_check_button("cap_check"))
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, weld::ComboBox&, void)
 {
     // Enable "Fill Slide" only for one image
     // If we want to have it for other images too, we need to implement the actual cropping.

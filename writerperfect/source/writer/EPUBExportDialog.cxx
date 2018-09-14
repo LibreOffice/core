@@ -77,9 +77,9 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     , m_xContext(std::move(xContext))
     , m_rFilterData(rFilterData)
     , m_xSourceDocument(std::move(xDocument))
-    , m_xVersion(m_xBuilder->weld_combo_box_text("versionlb"))
-    , m_xSplit(m_xBuilder->weld_combo_box_text("splitlb"))
-    , m_xLayout(m_xBuilder->weld_combo_box_text("layoutlb"))
+    , m_xVersion(m_xBuilder->weld_combo_box("versionlb"))
+    , m_xSplit(m_xBuilder->weld_combo_box("splitlb"))
+    , m_xLayout(m_xBuilder->weld_combo_box("layoutlb"))
     , m_xCoverPath(m_xBuilder->weld_entry("coverpath"))
     , m_xCoverButton(m_xBuilder->weld_button("coverbutton"))
     , m_xMediaDir(m_xBuilder->weld_entry("mediadir"))
@@ -160,19 +160,19 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     m_xOKButton->connect_clicked(LINK(this, EPUBExportDialog, OKClickHdl));
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBox&, void)
 {
     m_rFilterData["EPUBVersion"] <<= PositionToVersion(m_xVersion->get_active());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, weld::ComboBox&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBSplitMethod.
     m_rFilterData["EPUBSplitMethod"] <<= static_cast<sal_Int32>(m_xSplit->get_active());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBox&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBLayoutMethod.

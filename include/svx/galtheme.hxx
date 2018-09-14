@@ -203,7 +203,7 @@ public:
 
     SAL_DLLPRIVATE SvStream&    WriteData( SvStream& rOut ) const;
     SAL_DLLPRIVATE SvStream&    ReadData( SvStream& rIn );
-    static void                 InsertAllThemes(weld::ComboBoxText& rListBox);
+    static void                 InsertAllThemes(weld::ComboBox& rListBox);
 
     // for buffering PreviewBitmaps and strings for object and path
     SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const;

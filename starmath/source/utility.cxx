@@ -120,14 +120,14 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-SmFontPickListBox::SmFontPickListBox(std::unique_ptr<weld::ComboBoxText> pWidget)
+SmFontPickListBox::SmFontPickListBox(std::unique_ptr<weld::ComboBox> pWidget)
     : SmFontPickList(4)
     , m_xWidget(std::move(pWidget))
 {
     m_xWidget->connect_changed(LINK(this, SmFontPickListBox, SelectHdl));
 }
 
-IMPL_LINK_NOARG(SmFontPickListBox, SelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SmFontPickListBox, SelectHdl, weld::ComboBox&, void)
 {
     OUString aString;
 

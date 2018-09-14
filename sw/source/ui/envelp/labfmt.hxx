@@ -117,13 +117,13 @@ class SwSaveLabelDlg : public weld::GenericDialogController
     SwLabDlg*   m_pLabDialog;
     SwLabRec&   rLabRec;
 
-    std::unique_ptr<weld::ComboBoxText> m_xMakeCB;
+    std::unique_ptr<weld::ComboBox> m_xMakeCB;
     std::unique_ptr<weld::Entry>        m_xTypeED;
     std::unique_ptr<weld::Button>       m_xOKPB;
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
-    DECL_LINK(ModifyComboHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ModifyComboHdl, weld::ComboBox&, void);
 
     void Modify();
 

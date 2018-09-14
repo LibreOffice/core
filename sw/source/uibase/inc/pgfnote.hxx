@@ -52,7 +52,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xMaxHeightBtn;
     std::unique_ptr<weld::MetricSpinButton> m_xMaxHeightEdit;
     std::unique_ptr<weld::MetricSpinButton> m_xDistEdit;
-    std::unique_ptr<weld::ComboBoxText> m_xLinePosBox;
+    std::unique_ptr<weld::ComboBox> m_xLinePosBox;
     std::unique_ptr<SvtLineListBox> m_xLineTypeBox;
     std::unique_ptr<weld::MetricSpinButton> m_xLineWidthEdit;
     std::unique_ptr<ColorListBox> m_xLineColorBox;
