@@ -218,15 +218,20 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         bInCell( false ),
         bInTitle( false )
 {
-    MakeColNoRef( pLocalColOffset.get(), 0, 0, 0, 0 );
+    MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
     MakeColNoRef( &maColOffset, 0, 0, 0, 0 );
 }
 
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
     while ( !aTableStack.empty() )
+    {
+        ScHTMLTableStackEntry * pS = aTableStack.top().get();
+        if ( pS->pLocalColOffset != pLocalColOffset )
+             delete pS->pLocalColOffset;
         aTableStack.pop();
-    pLocalColOffset.reset();
+    }
+    delete pLocalColOffset;
     if ( pTables )
     {
         for( OuterMap::const_iterator it = pTables->begin(); it != pTables->end(); ++it)
@@ -639,7 +644,7 @@ void ScHTMLLayoutParser::SetWidths()
         pLocalColOffset->clear();
         for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
         {
-            MakeColNoRef( pLocalColOffset.get(), nOff, 0, 0, 0 );
+            MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
         nTableWidth = static_cast<sal_uInt16>(pLocalColOffset->back() - pLocalColOffset->front());
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
@@ -729,7 +734,7 @@ void ScHTMLLayoutParser::SetWidths()
             pLocalColOffset->clear();
             for ( nCol = 0; nCol <= nColsPerRow; nCol++ )
             {
-                MakeColNoRef( pLocalColOffset.get(), pOffsets[nCol], 0, 0, 0 );
+                MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
             }
             nTableWidth = pOffsets[nColsPerRow] - pOffsets[0];
 
@@ -793,7 +798,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     }
     pE->nOffset = nColOffset;
     sal_uInt16 nWidth = GetWidth( pE );
-    MakeCol( pLocalColOffset.get(), pE->nOffset, nWidth, nOffsetTolerance, nOffsetTolerance );
+    MakeCol( pLocalColOffset, pE->nOffset, nWidth, nOffsetTolerance, nOffsetTolerance );
     if ( pE->nWidth )
         pE->nWidth = nWidth;
     nColOffset = pE->nOffset + nWidth;
@@ -1026,7 +1031,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
         sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
         Colonize(mxActEntry.get());
         aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
-            mxActEntry, xLockedList, std::move(pLocalColOffset), nFirstTableCell,
+            mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
@@ -1082,7 +1087,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             NextRow( pInfo );
         }
         aTableStack.push( o3tl::make_unique<ScHTMLTableStackEntry>(
-            mxActEntry, xLockedList, std::move(pLocalColOffset), nFirstTableCell,
+            mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
@@ -1115,8 +1120,8 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
     bFirstRow = true;
     nFirstTableCell = maList.size();
 
-    pLocalColOffset.reset( new ScHTMLColOffset );
-    MakeColNoRef( pLocalColOffset.get(), nColOffsetStart, 0, 0, 0 );
+    pLocalColOffset = new ScHTMLColOffset;
+    MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
 }
 
 void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
@@ -1232,7 +1237,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             {
                 sal_uInt16 nOldOffset = pE->nOffset + pE->nWidth;
                 sal_uInt16 nNewOffset = pE->nOffset + nTableWidth;
-                ModifyOffset( pS->pLocalColOffset.get(), nOldOffset, nNewOffset, nOffsetTolerance );
+                ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset, nOffsetTolerance );
                 sal_uInt16 nTmp = nNewOffset - pE->nOffset - pE->nWidth;
                 pE->nWidth = nNewOffset - pE->nOffset;
                 pS->nTableWidth = pS->nTableWidth + nTmp;
@@ -1251,7 +1256,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             nColOffsetStart = pS->nColOffsetStart;
             bFirstRow = pS->bFirstRow;
             xLockedList = pS->xLockedList;
-            pLocalColOffset = std::move( pS->pLocalColOffset );
+            pLocalColOffset = pS->pLocalColOffset;
             // mxActEntry is kept around if a table is started in the same row
             // (anything's possible in HTML); will be deleted by CloseEntry
             mxActEntry = pE;
@@ -1266,9 +1271,10 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
         nTable = 0;
         if ( !aTableStack.empty() )
         {
-            std::unique_ptr<ScHTMLTableStackEntry> pS = std::move(aTableStack.top());
+            ScHTMLTableStackEntry* pS = aTableStack.top().get();
+            delete pLocalColOffset;
+            pLocalColOffset = pS->pLocalColOffset;
             aTableStack.pop();
-            pLocalColOffset = std::move( pS->pLocalColOffset );
         }
     }
 }
@@ -1374,7 +1380,7 @@ void ScHTMLLayoutParser::ColOn( HtmlImportInfo* pInfo )
         if( rOption.GetToken() == HtmlOptionId::WIDTH )
         {
             sal_uInt16 nVal = GetWidthPixel( rOption );
-            MakeCol( pLocalColOffset.get(), nColOffset, nVal, 0, 0 );
+            MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
             nColOffset = nColOffset + nVal;
         }
     }
