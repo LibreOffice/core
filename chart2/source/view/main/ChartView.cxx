@@ -1718,6 +1718,8 @@ bool ChartView::getExplicitValuesForAxis(
                      , ExplicitScaleData&  rExplicitScale
                      , ExplicitIncrementData& rExplicitIncrement )
 {
+    SolarMutexGuard aSolarGuard;
+
     impl_updateView();
 
     if(!xAxis.is())
@@ -2471,6 +2473,8 @@ static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
 
 void ChartView::createShapes()
 {
+    SolarMutexGuard aSolarGuard;
+
     osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
     {
@@ -2484,7 +2488,6 @@ void ChartView::createShapes()
     impl_deleteCoordinateSystems();
     if( m_pDrawModelWrapper )
     {
-        SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
         m_pDrawModelWrapper->getSdrModel().EnableUndo( false );
         m_pDrawModelWrapper->clearMainDrawPage();
@@ -2512,7 +2515,6 @@ void ChartView::createShapes()
     // #i12587# support for shapes in chart
     if ( m_pDrawModelWrapper )
     {
-        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper->getSdrModel().EnableUndo( true );
     }
 
@@ -2960,8 +2962,6 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased, Timer *, void)
 void ChartView::createShapes2D( const awt::Size& rPageSize )
 {
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-
-    SolarMutexGuard aSolarGuard;
 
     // todo: it would be nicer to just pass the page m_xDrawPage and format it,
     // but the draw page does not support XPropertySet
