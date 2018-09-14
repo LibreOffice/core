@@ -152,15 +152,15 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     , mpDefPrinter(nullptr)
     , mbDelPrinter(false)
     , mbEnableDrawingLayerFillStyles(false)
-    , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box_text("comboPageFormat")))
+    , m_xPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("comboPageFormat")))
     , m_xPaperWidthEdit(m_xBuilder->weld_metric_spin_button("spinWidth", FUNIT_CM))
     , m_xPaperHeightEdit(m_xBuilder->weld_metric_spin_button("spinHeight", FUNIT_CM))
     , m_xOrientationFT(m_xBuilder->weld_label("labelOrientation"))
     , m_xPortraitBtn(m_xBuilder->weld_radio_button("radiobuttonPortrait"))
     , m_xLandscapeBtn(m_xBuilder->weld_radio_button("radiobuttonLandscape"))
     , m_xTextFlowLbl(m_xBuilder->weld_label("labelTextFlow"))
-    , m_xTextFlowBox(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box_text("comboTextFlowBox")))
-    , m_xPaperTrayBox(m_xBuilder->weld_combo_box_text("comboPaperTray"))
+    , m_xTextFlowBox(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextFlowBox")))
+    , m_xPaperTrayBox(m_xBuilder->weld_combo_box("comboPaperTray"))
     , m_xLeftMarginLbl(m_xBuilder->weld_label("labelLeftMargin"))
     , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargLeft", FUNIT_CM))
     , m_xRightMarginLbl(m_xBuilder->weld_label("labelRightMargin"))
@@ -168,15 +168,15 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargTop", FUNIT_CM))
     , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FUNIT_CM))
     , m_xPageText(m_xBuilder->weld_label("labelPageLayout"))
-    , m_xLayoutBox(m_xBuilder->weld_combo_box_text("comboPageLayout"))
-    , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box_text("comboLayoutFormat")))
+    , m_xLayoutBox(m_xBuilder->weld_combo_box("comboPageLayout"))
+    , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("comboLayoutFormat")))
     , m_xTblAlignFT(m_xBuilder->weld_label("labelTblAlign"))
     , m_xHorzBox(m_xBuilder->weld_check_button("checkbuttonHorz"))
     , m_xVertBox(m_xBuilder->weld_check_button("checkbuttonVert"))
     , m_xAdaptBox(m_xBuilder->weld_check_button("checkAdaptBox"))
     , m_xRegisterCB(m_xBuilder->weld_check_button("checkRegisterTrue"))
     , m_xRegisterFT(m_xBuilder->weld_label("labelRegisterStyle"))
-    , m_xRegisterLB(m_xBuilder->weld_combo_box_text("comboRegisterStyle"))
+    , m_xRegisterLB(m_xBuilder->weld_combo_box("comboRegisterStyle"))
     // Strings stored in UI
     , m_xInsideLbl(m_xBuilder->weld_label("labelInner"))
     , m_xOutsideLbl(m_xBuilder->weld_label("labelOuter"))
@@ -786,7 +786,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBox&, void)
 {
     // switch inside outside
     const SvxPageUsage nUsage = PosToPageUsage_Impl(m_xLayoutBox->get_active());
@@ -808,7 +808,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBoxText&, void)
     UpdateExample_Impl( true );
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::ComboBox&, void)
 {
     if (m_xPaperTrayBox->get_count() > 1)
         // already filled
@@ -834,7 +834,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::ComboBoxText&, void)
     m_xPaperTrayBox->thaw();
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
 {
     Paper ePaper = m_xPaperSizeBox->GetSelection();
 
@@ -1463,7 +1463,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
     }
 }
 
-IMPL_LINK_NOARG(SvxPageDescPage, FrameDirectionModify_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, FrameDirectionModify_Impl, weld::ComboBox&, void)
 {
     m_aBspWin.SetFrameDirection(m_xTextFlowBox->get_active_id());
     m_aBspWin.Invalidate();

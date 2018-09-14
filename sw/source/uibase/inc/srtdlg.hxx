@@ -32,19 +32,19 @@ class SwSortDlg : public weld::GenericDialogController
 
     std::unique_ptr<weld::CheckButton> m_xKeyCB1;
     std::unique_ptr<weld::SpinButton> m_xColEdt1;
-    std::unique_ptr<weld::ComboBoxText> m_xTypDLB1;
+    std::unique_ptr<weld::ComboBox> m_xTypDLB1;
     std::unique_ptr<weld::RadioButton> m_xSortUp1RB;
     std::unique_ptr<weld::RadioButton> m_xSortDn1RB;
 
     std::unique_ptr<weld::CheckButton> m_xKeyCB2;
     std::unique_ptr<weld::SpinButton> m_xColEdt2;
-    std::unique_ptr<weld::ComboBoxText> m_xTypDLB2;
+    std::unique_ptr<weld::ComboBox> m_xTypDLB2;
     std::unique_ptr<weld::RadioButton> m_xSortUp2RB;
     std::unique_ptr<weld::RadioButton> m_xSortDn2RB;
 
     std::unique_ptr<weld::CheckButton> m_xKeyCB3;
     std::unique_ptr<weld::SpinButton> m_xColEdt3;
-    std::unique_ptr<weld::ComboBoxText> m_xTypDLB3;
+    std::unique_ptr<weld::ComboBox> m_xTypDLB3;
     std::unique_ptr<weld::RadioButton> m_xSortUp3RB;
     std::unique_ptr<weld::RadioButton> m_xSortDn3RB;
 
@@ -75,8 +75,8 @@ class SwSortDlg : public weld::GenericDialogController
 
     DECL_LINK(CheckHdl, weld::ToggleButton&, void);
     DECL_LINK(DelimHdl, weld::ToggleButton&, void );
-    DECL_LINK(LanguageListBoxHdl, weld::ComboBoxText&, void);
-    void LanguageHdl(weld::ComboBoxText const*);
+    DECL_LINK(LanguageListBoxHdl, weld::ComboBox&, void);
+    void LanguageHdl(weld::ComboBox const*);
     DECL_LINK(DelimCharHdl, weld::Button&,void);
 
 public:

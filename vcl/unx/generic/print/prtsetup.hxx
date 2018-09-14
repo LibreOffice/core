@@ -52,7 +52,7 @@ class RTSDialog : public weld::GenericDialogController
     DECL_LINK(ClickButton, weld::Button&, void );
 
     // helper functions
-    void insertAllPPDValues(weld::ComboBoxText&, const psp::PPDParser*, const psp::PPDKey*);
+    void insertAllPPDValues(weld::ComboBox&, const psp::PPDParser*, const psp::PPDKey*);
 public:
     RTSDialog(const ::psp::PrinterInfo& rJobData, weld::Window* pParent);
     virtual ~RTSDialog() override;
@@ -75,18 +75,18 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbFromSetup;
 
     std::unique_ptr<weld::Label> m_xPaperText;
-    std::unique_ptr<weld::ComboBoxText> m_xPaperBox;
+    std::unique_ptr<weld::ComboBox> m_xPaperBox;
 
     std::unique_ptr<weld::Label> m_xOrientText;
-    std::unique_ptr<weld::ComboBoxText> m_xOrientBox;
+    std::unique_ptr<weld::ComboBox> m_xOrientBox;
 
     std::unique_ptr<weld::Label> m_xDuplexText;
-    std::unique_ptr<weld::ComboBoxText> m_xDuplexBox;
+    std::unique_ptr<weld::ComboBox> m_xDuplexBox;
 
     std::unique_ptr<weld::Label> m_xSlotText;
-    std::unique_ptr<weld::ComboBoxText> m_xSlotBox;
+    std::unique_ptr<weld::ComboBox> m_xSlotBox;
 
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
 public:
     RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog);
@@ -110,9 +110,9 @@ private:
     std::unique_ptr<weld::TreeView> m_xPPDValueBox;
     std::unique_ptr<weld::Entry> m_xCustomEdit;
 
-    std::unique_ptr<weld::ComboBoxText> m_xLevelBox;
-    std::unique_ptr<weld::ComboBoxText> m_xSpaceBox;
-    std::unique_ptr<weld::ComboBoxText> m_xDepthBox;
+    std::unique_ptr<weld::ComboBox> m_xLevelBox;
+    std::unique_ptr<weld::ComboBox> m_xSpaceBox;
+    std::unique_ptr<weld::ComboBox> m_xDepthBox;
 
     void FillValueBox( const ::psp::PPDKey* );
     void ValueBoxChanged( const ::psp::PPDKey* );

@@ -182,7 +182,7 @@ class GalleryIdDialog : public weld::GenericDialogController
 private:
     GalleryTheme* m_pThm;
     std::unique_ptr<weld::Button> m_xBtnOk;
-    std::unique_ptr<weld::ComboBoxText> m_xLbResName;
+    std::unique_ptr<weld::ComboBox> m_xLbResName;
 
     DECL_LINK(ClickOkHdl, weld::Button&, void);
 public:

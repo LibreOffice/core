@@ -123,7 +123,7 @@ SwEnvFormatPage::SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xSendLeftField(m_xBuilder->weld_metric_spin_button("leftsender", FUNIT_CM))
     , m_xSendTopField(m_xBuilder->weld_metric_spin_button("topsender", FUNIT_CM))
     , m_xSendEditButton(m_xBuilder->weld_menu_button("senderedit"))
-    , m_xSizeFormatBox(m_xBuilder->weld_combo_box_text("format"))
+    , m_xSizeFormatBox(m_xBuilder->weld_combo_box("format"))
     , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
     , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
     , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
@@ -353,7 +353,7 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
     return pAddrSet.get();
 }
 
-IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, weld::ComboBox&, void)
 {
     long lWidth;
     long lHeight;

@@ -90,7 +90,7 @@ private:
     void    SetLastSortKey( sal_uInt16 nItem );
 
     // Handler ------------------------
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(ScrollToEndHdl, Timer*, void);
 };
 
@@ -134,13 +134,13 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnFormats;
     std::unique_ptr<weld::CheckButton> m_xBtnNaturalSort;
     std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
-    std::unique_ptr<weld::ComboBoxText> m_xLbOutPos;
+    std::unique_ptr<weld::ComboBox> m_xLbOutPos;
     std::unique_ptr<weld::Entry> m_xEdOutPos;
     std::unique_ptr<weld::CheckButton> m_xBtnSortUser;
-    std::unique_ptr<weld::ComboBoxText> m_xLbSortUser;
+    std::unique_ptr<weld::ComboBox> m_xLbSortUser;
     std::unique_ptr<LanguageBox> m_xLbLanguage;
     std::unique_ptr<weld::Label> m_xFtAlgorithm;
-    std::unique_ptr<weld::ComboBoxText> m_xLbAlgorithm;
+    std::unique_ptr<weld::ComboBox> m_xLbAlgorithm;
     std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
     std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
     std::unique_ptr<weld::CheckButton> m_xBtnIncComments;
@@ -152,11 +152,11 @@ private:
 
     // Handler ------------------------
     DECL_LINK( EnableHdl, weld::ToggleButton&, void );
-    DECL_LINK( SelOutPosHdl, weld::ComboBoxText&, void );
+    DECL_LINK( SelOutPosHdl, weld::ComboBox&, void );
     void EdOutPosModHdl();
     DECL_LINK( SortDirHdl, weld::ToggleButton&, void );
     void FillAlgor();
-    DECL_LINK( FillAlgorHdl, weld::ComboBoxText&, void );
+    DECL_LINK( FillAlgorHdl, weld::ComboBox&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSORT_HXX

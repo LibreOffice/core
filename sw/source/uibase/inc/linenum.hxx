@@ -34,9 +34,9 @@ private:
     std::unique_ptr<weld::SpinButton> m_xDivIntervalNF;
     std::unique_ptr<weld::Widget> m_xDivRowsFT;
     std::unique_ptr<weld::SpinButton> m_xNumIntervalNF;
-    std::unique_ptr<weld::ComboBoxText> m_xCharStyleLB;
+    std::unique_ptr<weld::ComboBox> m_xCharStyleLB;
     std::unique_ptr<SwNumberingTypeListBox> m_xFormatLB;
-    std::unique_ptr<weld::ComboBoxText> m_xPosLB;
+    std::unique_ptr<weld::ComboBox> m_xPosLB;
     std::unique_ptr<weld::MetricSpinButton> m_xOffsetMF;
     std::unique_ptr<weld::Entry> m_xDivisorED;
     std::unique_ptr<weld::CheckButton> m_xCountEmptyLinesCB;

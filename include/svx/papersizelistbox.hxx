@@ -46,20 +46,20 @@ public:
 class SVX_DLLPUBLIC SvxPaperSizeListBox
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xControl;
+    std::unique_ptr<weld::ComboBox> m_xControl;
 public:
-    SvxPaperSizeListBox(std::unique_ptr<weld::ComboBoxText> pControl);
+    SvxPaperSizeListBox(std::unique_ptr<weld::ComboBox> pControl);
 
     void FillPaperSizeEntries(PaperSizeApp eApp);
     void SetSelection(Paper eSize);
     Paper GetSelection() const;
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     void clear() { m_xControl->clear(); }
     void save_value() { return m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
 
-    weld::ComboBoxText& get_widget() const { return *m_xControl; }
+    weld::ComboBox& get_widget() const { return *m_xControl; }
 };
 
 #endif

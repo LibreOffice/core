@@ -574,7 +574,7 @@ private:
     std::unique_ptr<weld::Entry> m_xEdtName;
     std::unique_ptr<weld::Button> m_xBtnOK;
 public:
-    std::unique_ptr<weld::ComboBoxText> m_xSaveInListBox;
+    std::unique_ptr<weld::ComboBox> m_xSaveInListBox;
 
     SvxNewToolbarDialog(weld::Window* pWindow, const OUString& rName);
     virtual ~SvxNewToolbarDialog() override;
