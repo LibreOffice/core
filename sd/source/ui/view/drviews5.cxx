@@ -600,7 +600,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
         {
             // Tell the draw view and the tab control of the new active layer.
-            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId (static_cast<sal_uInt16>(nIndex))));
+            mpDrawView->SetActiveLayer (pBar->GetLayerName (pBar->GetPageId (static_cast<sal_uInt16>(nIndex))));
             pBar->SetCurPageId (pBar->GetPageId (static_cast<sal_uInt16>(nIndex)));
             rtl::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
                 *this,
