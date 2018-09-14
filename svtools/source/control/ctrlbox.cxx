@@ -1840,7 +1840,7 @@ void SvtFontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList 
                 OUString    aSizeName = aFontSizeNames.GetIndexName( i );
                 sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
                 OUString sId(OUString::number(-nSize)); // mark as special
-                m_xComboBox->insert(nPos, sId, aSizeName);
+                m_xComboBox->insert(nPos, sId, aSizeName, nullptr);
                 nPos++;
             }
         }
@@ -1854,7 +1854,7 @@ void SvtFontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList 
                 if ( !aSizeName.isEmpty() )
                 {
                     OUString sId(OUString::number(-(*pTempAry))); // mark as special
-                    m_xComboBox->insert(nPos, sId, aSizeName);
+                    m_xComboBox->insert(nPos, sId, aSizeName, nullptr);
                     nPos++;
                 }
                 pTempAry++;
