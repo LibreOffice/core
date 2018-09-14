@@ -27,10 +27,15 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/lokhelper.hxx>
 
+#include <vcl/event.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <tools/svborder.hxx>
 #include <sal/log.hxx>
 
@@ -60,6 +65,20 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
 
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SetLOKNotifier(SfxViewShell::Current());
+
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "deck");
+            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+    }
+
 #ifdef DEBUG
     SetText(OUString("Deck"));
     mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
@@ -75,6 +94,9 @@ Deck::~Deck()
 
 void Deck::dispose()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        ReleaseLOKNotifier();
+
     SharedPanelContainer aPanels;
     aPanels.swap(maPanels);
 
@@ -167,6 +189,20 @@ bool Deck::EventNotify(NotifyEvent& rEvent)
     return Window::EventNotify(rEvent);
 }
 
+void Deck::Resize()
+{
+    Window::Resize();
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "deck");
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+    }
+}
+
 bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
 {
     if ( ! mpVerticalScrollBar)
@@ -217,6 +253,15 @@ void Deck::RequestLayout()
     DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, maPanels,
                              *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
                              *mpFiller, *mpVerticalScrollBar);
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "deck");
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+    }
 }
 
 vcl::Window* Deck::GetPanelParentWindow()
@@ -239,30 +284,38 @@ Panel* Deck::GetPanel(const OUString & panelId)
 
 void Deck::ShowPanel(const Panel& rPanel)
 {
-    if (mpVerticalScrollBar && mpVerticalScrollBar->IsVisible())
+    if (!mpVerticalScrollBar || !mpVerticalScrollBar->IsVisible())
+        return;
+
+    // Get vertical extent of the panel.
+    sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
+    const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
+    // Add the title bar into the extent.
+    if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
+        nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
+
+    // Determine what the new thumb position should be like.
+    // When the whole panel does not fit then make its top visible
+    // and it off at the bottom.
+    sal_Int32 nNewThumbPos (mpVerticalScrollBar->GetThumbPos());
+    if (nPanelBottom >= nNewThumbPos+mpVerticalScrollBar->GetVisibleSize())
+        nNewThumbPos = nPanelBottom - mpVerticalScrollBar->GetVisibleSize();
+    if (nPanelTop < nNewThumbPos)
+        nNewThumbPos = nPanelTop;
+
+    mpVerticalScrollBar->SetThumbPos(nNewThumbPos);
+    mpScrollContainer->SetPosPixel(
+        Point(
+            mpScrollContainer->GetPosPixel().X(),
+            -nNewThumbPos));
+
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
-        // Get vertical extent of the panel.
-        sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
-        const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
-        // Add the title bar into the extent.
-        if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
-            nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
-
-        // Determine what the new thumb position should be like.
-        // When the whole panel does not fit then make its top visible
-        // and it off at the bottom.
-        sal_Int32 nNewThumbPos (mpVerticalScrollBar->GetThumbPos());
-        if (nPanelBottom >= nNewThumbPos+mpVerticalScrollBar->GetVisibleSize())
-            nNewThumbPos = nPanelBottom - mpVerticalScrollBar->GetVisibleSize();
-        if (nPanelTop < nNewThumbPos)
-            nNewThumbPos = nPanelTop;
-
-        mpVerticalScrollBar->SetThumbPos(nNewThumbPos);
-        mpScrollContainer->SetPosPixel(
-            Point(
-                mpScrollContainer->GetPosPixel().X(),
-                -nNewThumbPos));
-
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "deck");
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
 }
 
