@@ -65,6 +65,7 @@
 #include <sdpage.hxx>
 #include <Window.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <Ruler.hxx>
@@ -224,7 +225,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if(bCurPageValid)
             {
-                mpDrawView->SetActiveLayer( GetLayerTabControl()->GetPageText(nCurPage) );
+                OUString aLayerName( GetLayerTabControl()->GetLayerName(nCurPage));
+                if (!aLayerName.isEmpty())
+                {
+                    mpDrawView->SetActiveLayer(aLayerName);
+                }
                 Invalidate();
             }
 
@@ -252,7 +257,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
 
             // turn on default layer of page
-            mpDrawView->SetActiveLayer(SdResId(STR_LAYER_LAYOUT));
+            mpDrawView->SetActiveLayer(sUNO_LayerName_layout);
 
             ChangeEditMode(EditMode::Page, mbIsLayerModeActive);
 
