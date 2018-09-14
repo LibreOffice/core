@@ -320,7 +320,6 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
 ::std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
-
     ::std::shared_ptr<FrameworkHelper> pHelper;
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
@@ -756,12 +755,8 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
         sString += rxResourceId->getResourceURL();
         if (rxResourceId->hasAnchor())
         {
-            Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
-            for (sal_Int32 nIndex=0; nIndex < aAnchorURLs.getLength(); ++nIndex)
-            {
-                sString += " | ";
-                sString += aAnchorURLs[nIndex];
-            }
+            for (const OUString& s : rxResourceId->getAnchorURLs())
+                sString += " | " + s;
         }
     }
     return sString;
