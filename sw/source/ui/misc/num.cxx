@@ -74,13 +74,13 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
     , m_xDistNumFT(m_xBuilder->weld_label("numdist"))
     , m_xDistNumMF(m_xBuilder->weld_metric_spin_button("numdistmf", FUNIT_CM))
     , m_xAlignFT(m_xBuilder->weld_label("numalign"))
-    , m_xAlignLB(m_xBuilder->weld_combo_box_text("numalignlb"))
+    , m_xAlignLB(m_xBuilder->weld_combo_box("numalignlb"))
     , m_xLabelFollowedByFT(m_xBuilder->weld_label("numfollowedby"))
-    , m_xLabelFollowedByLB(m_xBuilder->weld_combo_box_text("numfollowedbylb"))
+    , m_xLabelFollowedByLB(m_xBuilder->weld_combo_box("numfollowedbylb"))
     , m_xListtabFT(m_xBuilder->weld_label("at"))
     , m_xListtabMF(m_xBuilder->weld_metric_spin_button("atmf", FUNIT_CM))
     , m_xAlign2FT(m_xBuilder->weld_label("num2align"))
-    , m_xAlign2LB(m_xBuilder->weld_combo_box_text("num2alignlb"))
+    , m_xAlign2LB(m_xBuilder->weld_combo_box("num2alignlb"))
     , m_xAlignedAtFT(m_xBuilder->weld_label("alignedat"))
     , m_xAlignedAtMF(m_xBuilder->weld_metric_spin_button("alignedatmf", FUNIT_CM))
     , m_xIndentAtFT(m_xBuilder->weld_label("indentat"))
@@ -535,7 +535,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_xIndentAtMF->set_unit( eMetric );
 }
 
-IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl, weld::ComboBox&, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -700,7 +700,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
     bLastRelative = bOn;
 }
 
-IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBox&, void)
 {
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;

@@ -683,7 +683,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(TabPageParent pParent,  const Sfx
     , m_xTopDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_TOPDIST", FUNIT_CM)))
     , m_xBottomDist(new RelativeField(m_xBuilder->weld_metric_spin_button("spinED_BOTTOMDIST", FUNIT_CM)))
     , m_xContextualCB(m_xBuilder->weld_check_button("checkCB_CONTEXTUALSPACING"))
-    , m_xLineDist(m_xBuilder->weld_combo_box_text("comboLB_LINEDIST"))
+    , m_xLineDist(m_xBuilder->weld_combo_box("comboLB_LINEDIST"))
     , m_xLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTPERCENT", FUNIT_PERCENT))
     , m_xLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTMETRIC", FUNIT_CM))
     , m_xLineDistAtLabel(m_xBuilder->weld_label("labelFT_LINEDIST"))
@@ -787,7 +787,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     LineDistHdl_Impl( *m_xLineDist );
 }
 
-IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
 {
     switch (rBox.get_active())
     {
@@ -999,14 +999,14 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet
     , m_xLeftBottom(m_xBuilder->weld_label("labelST_LEFTALIGN_ASIAN"))
     , m_xRightTop(m_xBuilder->weld_label("labelST_RIGHTALIGN_ASIAN"))
     , m_xLastLineFT(m_xBuilder->weld_label("labelLB_LASTLINE"))
-    , m_xLastLineLB(m_xBuilder->weld_combo_box_text("comboLB_LASTLINE"))
+    , m_xLastLineLB(m_xBuilder->weld_combo_box("comboLB_LASTLINE"))
     , m_xExpandCB(m_xBuilder->weld_check_button("checkCB_EXPAND"))
     , m_xSnapToGridCB(m_xBuilder->weld_check_button("checkCB_SNAP"))
     , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWin))
     , m_xVertAlignFL(m_xBuilder->weld_widget("frameFL_VERTALIGN"))
-    , m_xVertAlignLB(m_xBuilder->weld_combo_box_text("comboLB_VERTALIGN"))
+    , m_xVertAlignLB(m_xBuilder->weld_combo_box("comboLB_VERTALIGN"))
     , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
-    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box_text("comboLB_TEXTDIRECTION")))
+    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
     SetExchangeSupport();
 
@@ -1252,7 +1252,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::ToggleButton&, void)
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, weld::ComboBox&, void)
 {
     //fdo#41350 only enable 'Expand last word' if last line is also justified
     bool bLastLineIsBlock = m_xLastLineLB->get_active() == 2;
@@ -1263,7 +1263,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, weld::ComboBoxText&, void
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, weld::ComboBox&, void)
 {
     UpdateExample_Impl();
 }
@@ -1883,11 +1883,11 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(TabPageParent pParent, const SfxI
     //Page break
     , m_xPageBreakBox(m_xBuilder->weld_check_button("checkInsert"))
     , m_xBreakTypeFT(m_xBuilder->weld_label("labelType"))
-    , m_xBreakTypeLB(m_xBuilder->weld_combo_box_text("comboBreakType"))
+    , m_xBreakTypeLB(m_xBuilder->weld_combo_box("comboBreakType"))
     , m_xBreakPositionFT(m_xBuilder->weld_label("labelPosition"))
-    , m_xBreakPositionLB(m_xBuilder->weld_combo_box_text("comboBreakPosition"))
+    , m_xBreakPositionLB(m_xBuilder->weld_combo_box("comboBreakPosition"))
     , m_xApplyCollBtn(m_xBuilder->weld_check_button("checkPageStyle"))
-    , m_xApplyCollBox(m_xBuilder->weld_combo_box_text("comboPageStyle"))
+    , m_xApplyCollBox(m_xBuilder->weld_combo_box("comboPageStyle"))
     , m_xPageNumBox(m_xBuilder->weld_check_button("labelPageNum"))
     , m_xPagenumEdit(m_xBuilder->weld_spin_button("spinPageNumber"))
     // Options
@@ -2074,7 +2074,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, weld::ToggleButt
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageBreakPosHdl_Impl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SvxExtParagraphTabPage, PageBreakPosHdl_Impl, weld::ComboBox&, rListBox, void)
 {
     if (0 == rListBox.get_active())
     {
@@ -2099,7 +2099,7 @@ IMPL_LINK(SvxExtParagraphTabPage, PageBreakPosHdl_Impl, weld::ComboBoxText&, rLi
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, weld::ComboBox&, rListBox, void)
 {
     //column break or break after
     int nBreakPos = m_xBreakPositionLB->get_active();

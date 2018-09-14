@@ -48,10 +48,10 @@ ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, const uno::Reference< r
     , m_xHoldAlive(_xHoldAlive)
     , m_xDate(m_xBuilder->weld_check_button("date"))
     , m_xFTDateFormat(m_xBuilder->weld_label("datelistbox_label"))
-    , m_xDateListBox(m_xBuilder->weld_combo_box_text("datelistbox"))
+    , m_xDateListBox(m_xBuilder->weld_combo_box("datelistbox"))
     , m_xTime(m_xBuilder->weld_check_button("time"))
     , m_xFTTimeFormat(m_xBuilder->weld_label("timelistbox_label"))
-    , m_xTimeListBox(m_xBuilder->weld_combo_box_text("timelistbox"))
+    , m_xTimeListBox(m_xBuilder->weld_combo_box("timelistbox"))
     , m_xPB_OK(m_xBuilder->weld_button("ok"))
 {
     try
@@ -77,7 +77,7 @@ ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, const uno::Reference< r
 void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
 {
     const bool bTime = util::NumberFormat::TIME == _nNumberFormatId;
-    weld::ComboBoxText* pListBox = m_xDateListBox.get();
+    weld::ComboBox* pListBox = m_xDateListBox.get();
     if (bTime)
         pListBox = m_xTimeListBox.get();
 

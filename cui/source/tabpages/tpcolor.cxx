@@ -66,7 +66,7 @@ SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_context(comphelper::getProcessComponentContext())
     , m_xValSetColorList(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
     , m_xValSetRecentList(new ColorValueSet(nullptr))
-    , m_xSelectPalette(m_xBuilder->weld_combo_box_text("paletteselector"))
+    , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
     , m_xRbRGB(m_xBuilder->weld_radio_button("RGB"))
     , m_xRbCMYK(m_xBuilder->weld_radio_button("CMYK"))
     , m_xRGBcustom(m_xBuilder->weld_widget("rgbcustom"))
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
 {
     m_xValSetColorList->Clear();
     sal_Int32 nPos = m_xSelectPalette->get_active();

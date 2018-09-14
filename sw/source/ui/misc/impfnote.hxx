@@ -38,18 +38,18 @@ class SwEndNoteOptionPage : public SfxTabPage
     std::unique_ptr<SwNumberingTypeListBox> m_xNumViewBox;
     std::unique_ptr<weld::Label> m_xOffsetLbl;
     std::unique_ptr<weld::SpinButton> m_xOffsetField;
-    std::unique_ptr<weld::ComboBoxText> m_xNumCountBox;
+    std::unique_ptr<weld::ComboBox> m_xNumCountBox;
     std::unique_ptr<weld::Entry> m_xPrefixED;
     std::unique_ptr<weld::Entry> m_xSuffixED;
     std::unique_ptr<weld::Label> m_xPosFT;
     std::unique_ptr<weld::RadioButton> m_xPosPageBox;
     std::unique_ptr<weld::RadioButton> m_xPosChapterBox;
     std::unique_ptr<weld::Widget> m_xStylesContainer;
-    std::unique_ptr<weld::ComboBoxText> m_xParaTemplBox;
+    std::unique_ptr<weld::ComboBox> m_xParaTemplBox;
     std::unique_ptr<weld::Label> m_xPageTemplLbl;
-    std::unique_ptr<weld::ComboBoxText> m_xPageTemplBox;
-    std::unique_ptr<weld::ComboBoxText> m_xFootnoteCharAnchorTemplBox;
-    std::unique_ptr<weld::ComboBoxText> m_xFootnoteCharTextTemplBox;
+    std::unique_ptr<weld::ComboBox> m_xPageTemplBox;
+    std::unique_ptr<weld::ComboBox> m_xFootnoteCharAnchorTemplBox;
+    std::unique_ptr<weld::ComboBox> m_xFootnoteCharTextTemplBox;
     std::unique_ptr<weld::Entry> m_xContEdit;
     std::unique_ptr<weld::Entry> m_xContFromEdit;
 
@@ -58,7 +58,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 
     DECL_LINK(PosPageHdl, weld::Button&, void);
     DECL_LINK(PosChapterHdl, weld::Button&, void);
-    DECL_LINK(NumCountHdl, weld::ComboBoxText&, void);
+    DECL_LINK(NumCountHdl, weld::ComboBox&, void);
 
 public:
     SwEndNoteOptionPage(TabPageParent pParent, bool bEndNote, const SfxItemSet &rSet);

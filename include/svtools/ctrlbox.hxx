@@ -424,13 +424,13 @@ private:
 
 class SVT_DLLPUBLIC SvtFontStyleBox
 {
-    std::unique_ptr<weld::ComboBoxText> m_xComboBox;
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
 public:
-    SvtFontStyleBox(std::unique_ptr<weld::ComboBoxText> p);
+    SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p);
 
     void Fill(const OUString& rName, const FontList* pList);
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
     void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }
@@ -512,8 +512,8 @@ class SVT_DLLPUBLIC SvtFontSizeBox
                     bRelative:1,
                     bPtRelative:1,
                     bStdSize:1;
-    Link<weld::ComboBoxText&, void> m_aChangeHdl;
-    std::unique_ptr<weld::ComboBoxText> m_xComboBox;
+    Link<weld::ComboBox&, void> m_aChangeHdl;
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
 
     sal_uInt16 GetDecimalDigits() const { return nDecimalDigits; }
     void SetDecimalDigits(sal_uInt16 nDigits) { nDecimalDigits = nDigits; }
@@ -526,10 +526,10 @@ class SVT_DLLPUBLIC SvtFontSizeBox
 
     OUString format_number(int nValue) const;
 
-    DECL_LINK(ModifyHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
     DECL_LINK(ReformatHdl, weld::Widget&, void);
 public:
-    SvtFontSizeBox(std::unique_ptr<weld::ComboBoxText> p);
+    SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p);
 
     void Fill(const FontMetric* pFontMetric, const FontList* pList);
 
@@ -545,7 +545,7 @@ public:
     }
     bool IsPtRelative() const { return bPtRelative; }
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }

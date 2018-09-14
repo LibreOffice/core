@@ -46,7 +46,7 @@ class DataStreamDlg : public weld::GenericDialogController
 
     DECL_LINK(UpdateClickHdl, weld::ToggleButton&, void);
     DECL_LINK(UpdateHdl, weld::Entry&, void);
-    DECL_LINK(UpdateComboBoxHdl, weld::ComboBoxText&, void);
+    DECL_LINK(UpdateComboBoxHdl, weld::ComboBox&, void);
     DECL_LINK(BrowseHdl, weld::Button&, void);
 
     void UpdateEnable();

@@ -225,15 +225,15 @@ SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xAddressFrame(m_xBuilder->weld_widget("addressframe"))
     , m_xAddrBox(m_xBuilder->weld_check_button("address"))
     , m_xWritingEdit(m_xBuilder->weld_text_view("textview"))
-    , m_xDatabaseLB(m_xBuilder->weld_combo_box_text("database"))
-    , m_xTableLB(m_xBuilder->weld_combo_box_text("table"))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box("database"))
+    , m_xTableLB(m_xBuilder->weld_combo_box("table"))
     , m_xInsertBT(m_xBuilder->weld_button("insert"))
-    , m_xDBFieldLB(m_xBuilder->weld_combo_box_text("field"))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box("field"))
     , m_xContButton(m_xBuilder->weld_radio_button("continuous"))
     , m_xSheetButton(m_xBuilder->weld_radio_button("sheet"))
-    , m_xMakeBox(m_xBuilder->weld_combo_box_text("brand"))
-    , m_xTypeBox(m_xBuilder->weld_combo_box_text("type"))
-    , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box_text("hiddentype"))
+    , m_xMakeBox(m_xBuilder->weld_combo_box("brand"))
+    , m_xTypeBox(m_xBuilder->weld_combo_box("type"))
+    , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box("hiddentype"))
     , m_xFormatInfo(m_xBuilder->weld_label("formatinfo"))
 {
     WaitObject aWait(pParent.pParent);
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(SwLabPage, AddrHdl, weld::ToggleButton&, void)
     m_xWritingEdit->grab_focus();
 }
 
-IMPL_LINK( SwLabPage, DatabaseHdl, weld::ComboBoxText&, rListBox, void )
+IMPL_LINK( SwLabPage, DatabaseHdl, weld::ComboBox&, rListBox, void )
 {
     sActDBName = m_xDatabaseLB->get_active_text();
 
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SwLabPage, PageHdl, weld::ToggleButton&, void)
     MakeHdl(*m_xMakeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBox&, void)
 {
     weld::WaitObject aWait(GetParentSwLabDlg()->getDialog());
 
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBoxText&, void)
     TypeHdl(*m_xTypeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBox&, void)
 {
     DisplayFormat();
     aItem.m_aType = m_xTypeBox->get_active_text();
