@@ -19,17 +19,35 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX
 
-#include <vcl/group.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <editeng/tstpitem.hxx>
 #include <svx/flagsdef.hxx>
 
-class TabWin_Impl;
+class SvxTabulatorTabPage;
+
+// class TabWin_Impl -----------------------------------------------------
+
+class TabWin_Impl : public weld::CustomWidgetController
+{
+private:
+    VclPtr<SvxTabulatorTabPage> mpPage;
+    sal_uInt16  nTabStyle;
+
+public:
+
+    TabWin_Impl()
+        : mpPage(nullptr)
+        , nTabStyle(0)
+    {
+    }
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+
+    void SetTabulatorTabPage(SvxTabulatorTabPage* pPage);
+    void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
+};
 
 // class SvxTabulatorTabPage ---------------------------------------------
 /*
@@ -64,37 +82,7 @@ protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
-    // tabulators and positions
-    VclPtr<MetricBox>      m_pTabBox;
-    // TabType
-    VclPtr<RadioButton>    m_pLeftTab;
-    VclPtr<RadioButton>    m_pRightTab;
-    VclPtr<RadioButton>    m_pCenterTab;
-    VclPtr<RadioButton>    m_pDezTab;
-
-    VclPtr<TabWin_Impl>    m_pLeftWin;
-    VclPtr<TabWin_Impl>    m_pRightWin;
-    VclPtr<TabWin_Impl>    m_pCenterWin;
-    VclPtr<TabWin_Impl>    m_pDezWin;
-
-    VclPtr<FixedText>      m_pDezCharLabel;
-    VclPtr<Edit>           m_pDezChar;
-
-    VclPtr<RadioButton>    m_pNoFillChar;
-    VclPtr<RadioButton>    m_pFillPoints;
-    VclPtr<RadioButton>    m_pFillDashLine ;
-    VclPtr<RadioButton>    m_pFillSolidLine;
-    VclPtr<RadioButton>    m_pFillSpecial;
-    VclPtr<Edit>           m_pFillChar;
-
-    VclPtr<PushButton>     m_pNewBtn;
-    VclPtr<PushButton>     m_pDelAllBtn;
-    VclPtr<PushButton>     m_pDelBtn;
-
-    VclPtr<VclContainer>   m_pTypeFrame;
-    VclPtr<VclContainer>   m_pFillFrame;
+    SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     // local variables, internal functions
     SvxTabStop      aCurrentTab;
@@ -102,21 +90,60 @@ private:
     long            nDefDist;
     FieldUnit       eDefUnit;
 
+    TabWin_Impl    m_aLeftWin;
+    TabWin_Impl    m_aRightWin;
+    TabWin_Impl    m_aCenterWin;
+    TabWin_Impl    m_aDezWin;
+
+    // just to format the numbers, not shown
+    std::unique_ptr<weld::MetricSpinButton> m_xTabSpin;
+    // tabulators and positions
+    std::unique_ptr<weld::EntryTreeView> m_xTabBox;
+    // TabType
+    std::unique_ptr<weld::RadioButton> m_xLeftTab;
+    std::unique_ptr<weld::RadioButton> m_xRightTab;
+    std::unique_ptr<weld::RadioButton> m_xCenterTab;
+    std::unique_ptr<weld::RadioButton> m_xDezTab;
+
+    std::unique_ptr<weld::Entry> m_xDezChar;
+    std::unique_ptr<weld::Label> m_xDezCharLabel;
+
+    std::unique_ptr<weld::RadioButton> m_xNoFillChar;
+    std::unique_ptr<weld::RadioButton> m_xFillPoints;
+    std::unique_ptr<weld::RadioButton> m_xFillDashLine ;
+    std::unique_ptr<weld::RadioButton> m_xFillSolidLine;
+    std::unique_ptr<weld::RadioButton> m_xFillSpecial;
+    std::unique_ptr<weld::Entry> m_xFillChar;
+
+    std::unique_ptr<weld::Button> m_xNewBtn;
+    std::unique_ptr<weld::Button> m_xDelAllBtn;
+    std::unique_ptr<weld::Button> m_xDelBtn;
+
+    std::unique_ptr<weld::Container> m_xTypeFrame;
+    std::unique_ptr<weld::Container> m_xFillFrame;
+
+    std::unique_ptr<weld::CustomWeld> m_xLeftWin;
+    std::unique_ptr<weld::CustomWeld> m_xRightWin;
+    std::unique_ptr<weld::CustomWeld> m_xCenterWin;
+    std::unique_ptr<weld::CustomWeld> m_xDezWin;
+
     void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();
+    void            NewHdl_Impl(weld::Button*);
 
     // Handler
-    DECL_LINK( NewHdl_Impl, Button*, void );
-    DECL_LINK( DelHdl_Impl, Button*, void );
-    DECL_LINK( DelAllHdl_Impl, Button*, void );
+    DECL_LINK(NewHdl_Impl, weld::Button&, void);
+    DECL_LINK(DelHdl_Impl, weld::Button&, void);
+    DECL_LINK(DelAllHdl_Impl, weld::Button&, void);
 
-    DECL_LINK( FillTypeCheckHdl_Impl, Button*, void );
-    DECL_LINK( TabTypeCheckHdl_Impl, Button*, void );
+    DECL_LINK(FillTypeCheckHdl_Impl, weld::Button&, void);
+    DECL_LINK(TabTypeCheckHdl_Impl, weld::Button&, void);
 
-    DECL_LINK( SelectHdl_Impl, ComboBox&, void );
-    DECL_LINK( ModifyHdl_Impl, Edit&, void );
-    DECL_LINK( GetFillCharHdl_Impl, Control&, void );
-    DECL_LINK( GetDezCharHdl_Impl, Control&, void );
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(ModifyHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(ReformatHdl_Impl, weld::Widget&, void);
+    DECL_LINK(GetFillCharHdl_Impl, weld::Widget&, void);
+    DECL_LINK(GetDezCharHdl_Impl, weld::Widget&, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
