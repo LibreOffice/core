@@ -87,9 +87,9 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     NumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
-    std::unique_ptr<weld::ComboBoxText> m_xCollBox;
+    std::unique_ptr<weld::ComboBox> m_xCollBox;
     std::unique_ptr<SwNumberingTypeListBox> m_xNumberBox;
-    std::unique_ptr<weld::ComboBoxText> m_xCharFormatLB;
+    std::unique_ptr<weld::ComboBox> m_xCharFormatLB;
     std::unique_ptr<weld::Label> m_xAllLevelFT;
     std::unique_ptr<weld::SpinButton>  m_xAllLevelNF;
     std::unique_ptr<weld::Entry> m_xPrefixED;
@@ -99,12 +99,12 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
     DECL_LINK( LevelHdl, weld::TreeView&, void );
     DECL_LINK( ToggleComplete, weld::SpinButton&, void );
-    DECL_LINK( CollSelect, weld::ComboBoxText&, void );
+    DECL_LINK( CollSelect, weld::ComboBox&, void );
     DECL_LINK( CollSelectGetFocus, weld::Widget&, void );
-    DECL_LINK( NumberSelect, weld::ComboBoxText&, void );
+    DECL_LINK( NumberSelect, weld::ComboBox&, void );
     DECL_LINK( DelimModify, weld::Entry&, void );
     DECL_LINK( StartModified, weld::SpinButton&, void );
-    DECL_LINK( CharFormatHdl, weld::ComboBoxText&, void );
+    DECL_LINK( CharFormatHdl, weld::ComboBox&, void );
 
     void    Update();
 

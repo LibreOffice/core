@@ -102,23 +102,23 @@ class SVT_DLLPUBLIC URLBox
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     bool                            bHistoryDisabled    : 1;
 
-    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+    std::unique_ptr<weld::ComboBox> m_xWidget;
 
     DECL_DLLPRIVATE_LINK(           TryAutoComplete, Timer*, void);
     SVT_DLLPRIVATE void             UpdatePicklistForSmartProtocol_Impl();
-    DECL_DLLPRIVATE_LINK(           ChangedHdl, weld::ComboBoxText&, void);
+    DECL_DLLPRIVATE_LINK(           ChangedHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(           FocusInHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(           FocusOutHdl, weld::Widget&, void);
     SVT_DLLPRIVATE void             Init();
 
 public:
-    URLBox(std::unique_ptr<weld::ComboBoxText> pWidget);
+    URLBox(std::unique_ptr<weld::ComboBox> pWidget);
     ~URLBox();
 
     void                            SetText(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
     void                            Clear() { m_xWidget->clear(); }
-    void connect_entry_activate(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_entry_activate(rLink); }
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_changed(rLink); }
+    void connect_entry_activate(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_entry_activate(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_changed(rLink); }
     void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     OUString                        get_active_text() const { return m_xWidget->get_active_text(); }
     void                            EnableAutocomplete() { m_xWidget->set_entry_completion(true); }

@@ -56,7 +56,7 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
-    , m_xLbGradientType(m_xBuilder->weld_combo_box_text("gradienttypelb"))
+    , m_xLbGradientType(m_xBuilder->weld_combo_box("gradienttypelb"))
     , m_xFtCenter(m_xBuilder->weld_label("centerft"))
     , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button("centerxmtr", FUNIT_PERCENT))
     , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button("centerymtr", FUNIT_PERCENT))
@@ -101,7 +101,7 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     m_xBtnModify->connect_clicked(LINK(this, SvxGradientTabPage, ClickModifyHdl_Impl));
 
     Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedMetricHdl_Impl );
-    Link<weld::ComboBoxText&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
+    Link<weld::ComboBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
     m_xLbGradientType->connect_changed( aLink2 );
     m_xCbIncrement->connect_toggled(LINK(this, SvxGradientTabPage, ChangeAutoStepHdl_Impl));
     m_xMtrIncrement->connect_value_changed(LINK(this, SvxGradientTabPage, ModifiedEditHdl_Impl));
@@ -249,7 +249,7 @@ VclPtr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
     return VclPtr<SvxGradientTabPage>::Create(pWindow, *rOutAttrs);
 }
 
-IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, weld::ComboBoxText&, rListBox, void )
+IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
     // gradient params changed, it is no longer one of the presets

@@ -63,9 +63,9 @@ class SwColumnDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Container> m_xContentArea;
     std::unique_ptr<weld::Button> m_xOkButton;
 
-    DECL_LINK(ObjectListBoxHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ObjectListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
-    void ObjectHdl(const weld::ComboBoxText*);
+    void ObjectHdl(const weld::ComboBox*);
     SfxItemSet* EvalCurrentSelection(void);
 
 public:
@@ -127,7 +127,7 @@ class SwColumnPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xLineHeightLbl;
     std::unique_ptr<weld::MetricSpinButton> m_xLineHeightEdit;
     std::unique_ptr<weld::Label> m_xLinePosLbl;
-    std::unique_ptr<weld::ComboBoxText> m_xLinePosDLB;
+    std::unique_ptr<weld::ComboBox> m_xLinePosDLB;
     std::unique_ptr<weld::Label> m_xTextDirectionFT;
     std::unique_ptr<svx::SvxFrameDirectionListBox> m_xTextDirectionLB;
     std::unique_ptr<ColorListBox> m_xLineColorDLB;
@@ -143,7 +143,7 @@ class SwColumnPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xFrameExampleWN;
 
     std::unique_ptr<weld::Label> m_xApplyToFT;
-    std::unique_ptr<weld::ComboBoxText> m_xApplyToLB;
+    std::unique_ptr<weld::ComboBox> m_xApplyToLB;
 
     // Handler
     DECL_LINK(ColModify, weld::SpinButton&, void);
@@ -156,7 +156,7 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK(Up, weld::Button&, void);
     DECL_LINK(Down, weld::Button&, void);
     DECL_LINK(UpdateColMgr, weld::MetricSpinButton&, void);
-    DECL_LINK(UpdateColMgrListBox, weld::ComboBoxText&, void);
+    DECL_LINK(UpdateColMgrListBox, weld::ComboBox&, void);
     DECL_LINK(UpdateColMgrLineBox, SvtLineListBox&, void);
     DECL_LINK(UpdateColMgrColorBox, ColorListBox&, void);
     void Timeout();
@@ -211,7 +211,7 @@ public:
     }
 
     weld::Label* GetApplyLabel() { return m_xApplyToFT.get(); }
-    weld::ComboBoxText* GetApplyComboBox() { return m_xApplyToLB.get(); }
+    weld::ComboBox* GetApplyComboBox() { return m_xApplyToLB.get(); }
 };
 
 #endif

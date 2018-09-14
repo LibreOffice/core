@@ -30,7 +30,7 @@ class QueueInfo;
 class SVT_DLLPUBLIC PrinterSetupDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::ComboBoxText>        m_xLbName;
+    std::unique_ptr<weld::ComboBox>        m_xLbName;
     std::unique_ptr<weld::Button>     m_xBtnProperties;
     std::unique_ptr<weld::Button>     m_xBtnOptions;
     std::unique_ptr<weld::Label>      m_xFiStatus;
@@ -44,7 +44,7 @@ private:
     SVT_DLLPRIVATE void         ImplSetInfo();
 
     DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, weld::Button&, void );
-    DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, weld::ComboBoxText&, void );
+    DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK( ImplGetFocusHdl, weld::Widget&, void );
     DECL_DLLPRIVATE_LINK( ImplStatusHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK( ImplDataChangedHdl, VclSimpleEvent&, void);
@@ -67,12 +67,12 @@ public:
 #define IMPL_PRINTDLG_STATUS_UPDATE     15000
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
-                            weld::ComboBoxText* pBox, weld::Button* pPropBtn );
-void ImplFreePrnDlgListBox( weld::ComboBoxText* pBox, bool bClear = true );
-Printer* ImplPrnDlgListBoxSelect( weld::ComboBoxText const * pBox, weld::Button* pPropBtn,
+                            weld::ComboBox* pBox, weld::Button* pPropBtn );
+void ImplFreePrnDlgListBox( weld::ComboBox* pBox, bool bClear = true );
+Printer* ImplPrnDlgListBoxSelect( weld::ComboBox const * pBox, weld::Button* pPropBtn,
                                   Printer const * pPrinter, Printer* pTempPrinter );
 Printer* ImplPrnDlgUpdatePrinter( Printer const * pPrinter, Printer* pTempPrinter );
-void ImplPrnDlgUpdateQueueInfo( weld::ComboBoxText const * pBox, QueueInfo& rInfo );
+void ImplPrnDlgUpdateQueueInfo( weld::ComboBox const * pBox, QueueInfo& rInfo );
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
 
 #endif // INCLUDED_SVTOOLS_PRNSETUP_HXX
