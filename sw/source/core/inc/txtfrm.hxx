@@ -742,6 +742,9 @@ public:
 
     void RegisterToNode(SwTextNode &, bool isForceNodeAsFirst = false);
 
+    bool IsSymbolAt(TextFrameIndex) const;
+    OUString GetCurWord(SwPosition const&) const;
+
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
