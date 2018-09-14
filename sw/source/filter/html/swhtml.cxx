@@ -2689,7 +2689,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
     HTMLAttr* pAttr;
     SwContentNode* pCNd;
 
-    HTMLAttrs aFields;
+    std::vector<std::unique_ptr<HTMLAttr>> aFields;
 
     for( auto n = m_aSetAttrTab.size(); n; )
     {
@@ -2884,7 +2884,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         }
                         else
                         {
-                            aFields.push_back( pAttr);
+                            aFields.emplace_back( pAttr);
                         }
                     }
                     pAttrPam->DeleteMark();
@@ -2992,7 +2992,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             m_aMoveFlyCnts.erase( m_aMoveFlyCnts.begin() + n );
         }
     }
-    for (auto const& field : aFields)
+    for (auto & field : aFields)
     {
         pCNd = field->nSttPara.GetNode().GetContentNode();
         pAttrPam->GetPoint()->nNode = field->nSttPara;
@@ -3010,7 +3010,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
         m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *field->pItem );
 
-        delete field;
+        field.reset();
     }
     aFields.clear();
 }
