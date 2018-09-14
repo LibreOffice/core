@@ -175,6 +175,7 @@
 #include <sdgrffilter.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <slideshow.hxx>
 #include <stlpool.hxx>
 #include <undolayer.hxx>
@@ -1810,7 +1811,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                     if( rLayerAdmin.GetLayer( aLayerName )
-                        || aLayerName.isEmpty() )
+                        || aLayerName.isEmpty()
+                        || LayerTabBar::IsLocalizedNameOfStandardLayer( aLayerName) )
                     {
                         // name already exists
                         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
@@ -1918,7 +1920,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
-            OUString aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
+            OUString aLayerName = GetLayerTabControl()->GetLayerName(nCurPage);
             SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName);
 
             OUString aLayerTitle = pLayer->GetTitle();
@@ -1935,20 +1937,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             const SfxItemSet* pArgs = rReq.GetArgs();
             // is it allowed to delete the layer?
-            bool bDelete = true;
-
-            OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
-            OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
-            OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
-            OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
-            OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
-
-            if( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer ||
-                aLayerName == aMeasureLinesLayer ||
-                aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
-            {
-                bDelete = false;
-            }
+            bool bDelete = !( LayerTabBar::IsRealNameOfStandardLayer(aLayerName) );
 
             if (! pArgs)
             {
@@ -1974,18 +1963,24 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     pDlg->GetAttr( aNewAttr );
                     aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
-
-                    if( (rLayerAdmin.GetLayer( aLayerName ) &&
-                         aLayerName != aOldLayerName) || aLayerName.isEmpty() )
+                    if (bDelete)
                     {
-                        // name already exists
-                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                        if( (rLayerAdmin.GetLayer( aLayerName ) && aLayerName != aOldLayerName)
+                            || LayerTabBar::IsRealNameOfStandardLayer(aLayerName)
+                            || LayerTabBar::IsLocalizedNameOfStandardLayer(aLayerName)
+                            || aLayerName.isEmpty() )
+                        {
+                            // name already exists
+                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
                                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                                    SdResId(STR_WARN_NAME_DUPLICATE)));
-                        xWarn->run();
+                             xWarn->run();
+                        }
+                        else
+                            bLoop = false;
                     }
                     else
-                        bLoop = false;
+                        bLoop = false; // altering name is already disabled in the dialog itself
                 }
                 switch (nRet)
                 {
@@ -3279,6 +3274,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // Determine current page and toggle visibility of layers
             // associated with master page background or master page shapes.
+            // FIXME: This solution is wrong, because shapes of master pages need
+            // not be on layer "background" or "backgroundobjects".
+            // See tdf#118613
             SdPage* pPage = GetActualPage();
             if (pPage != nullptr
                 && GetDoc() != nullptr)
@@ -3287,9 +3285,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 SdrLayerID aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+                    aLayerId = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+                    aLayerId = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }

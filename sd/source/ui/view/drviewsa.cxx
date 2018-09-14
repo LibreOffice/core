@@ -70,6 +70,7 @@
 #include <annotationmanager.hxx>
 #include <DrawController.hxx>
 #include <tools/diagnose_ex.h>
+#include <LayerTabBar.hxx>
 
 #include <memory>
 
@@ -701,7 +702,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 if( pLayer )
                 {
                     aOUString += " (" ;
-                    aOUString += pLayer->GetName();
+                    aOUString += LayerTabBar::convertToLocalizedName(pLayer->GetName());
                     aOUString += ")";
                 }
             }

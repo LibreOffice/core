@@ -76,6 +76,7 @@
 #include <DrawDocShell.hxx>
 #include <FrameView.hxx>
 #include <optsitem.hxx>
+#include <unokywds.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
@@ -251,8 +252,8 @@ bool ImplSdPPTImport::Import()
     const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRND ) );
-    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRNDOBJ ) );
+    mnBackgroundLayerID = rAdmin.GetLayerID( sUNO_LayerName_background );
+    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( sUNO_LayerName_background_objects );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if ( pDocShell )
