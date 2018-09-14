@@ -20,7 +20,10 @@
 #include <Qt5Instance.hxx>
 #include <Qt5Instance.moc>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 #include <Qt5Bitmap.hxx>
+#include <Qt5Clipboard.hxx>
 #include <Qt5Data.hxx>
 #include <Qt5FilePicker.hxx>
 #include <Qt5Frame.hxx>
@@ -216,6 +219,26 @@ Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentCo
 {
     return css::uno::Reference<css::ui::dialogs::XFolderPicker2>(
         new Qt5FilePicker(QFileDialog::Directory));
+}
+
+css::uno::Reference<css::uno::XInterface>
+Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
+{
+    OUString sel;
+    if (arguments.getLength() == 0)
+    {
+        sel = "CLIPBOARD";
+    }
+    else if (arguments.getLength() != 1 || !(arguments[0] >>= sel))
+    {
+        throw css::lang::IllegalArgumentException("bad Qt5Instance::CreateClipboard arguments",
+                                                  css::uno::Reference<css::uno::XInterface>(), -1);
+    }
+
+    css::uno::Reference<css::uno::XInterface> xClipboard(
+        static_cast<cppu::OWeakObject*>(new VclQt5Clipboard()));
+
+    return xClipboard;
 }
 
 extern "C" {
