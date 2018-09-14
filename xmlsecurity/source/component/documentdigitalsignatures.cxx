@@ -41,6 +41,7 @@
 #include <vcl/weld.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <comphelper/base64.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -53,6 +54,7 @@
 using namespace css;
 using namespace css::uno;
 using namespace css::lang;
+using namespace css::security;
 using namespace css::xml::crypto;
 
 class DocumentDigitalSignatures
@@ -85,7 +87,8 @@ private:
                          DocumentSignatureMode eMode);
 
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
-    chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction);
+    chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
+                           const CertificateKind certificateKind=CertificateKind_NONE);
 
 public:
     explicit DocumentDigitalSignatures(
@@ -157,6 +160,9 @@ public:
         SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
     css::uno::Reference<css::security::XCertificate>
         SAL_CALL selectSigningCertificate(OUString& rDescription) override;
+    css::uno::Reference<css::security::XCertificate>
+        SAL_CALL selectSigningCertificateWithType(const CertificateKind certificateKind,
+                                                  OUString& rDescription) override;
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
         SAL_CALL chooseEncryptionCertificate() override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
@@ -613,14 +619,19 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction)
+uno::Sequence<Reference<css::security::XCertificate>>
+DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties,
+                                                  const UserAction eAction,
+                                                  const CertificateKind certificateKind)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
     DocumentSignatureManager aSignatureManager(mxCtx, {});
     if (aSignatureManager.init()) {
         xSecContexts.push_back(aSignatureManager.getSecurityContext());
-        xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
+        // Don't include OpenPGP if only X.509 certs are requested
+        if (certificateKind == CertificateKind_NONE || certificateKind == CertificateKind_OPENPGP)
+            xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
     ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts, eAction);
@@ -655,6 +666,17 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSignin
 {
     std::map<OUString, OUString> aProperties;
     Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::SelectSign )[0];
+    rDescription = aProperties["Description"];
+    return xCert;
+}
+
+Reference<css::security::XCertificate>
+DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKind certificateKind,
+                                                            OUString& rDescription)
+{
+    std::map<OUString, OUString> aProperties;
+    Reference<css::security::XCertificate> xCert
+        = chooseCertificatesImpl(aProperties, UserAction::SelectSign, certificateKind)[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
