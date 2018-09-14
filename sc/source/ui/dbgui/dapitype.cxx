@@ -30,7 +30,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
     , m_xBtnNamedRange(m_xBuilder->weld_radio_button("namedrange"))
     , m_xBtnDatabase(m_xBuilder->weld_radio_button("database"))
     , m_xBtnExternal(m_xBuilder->weld_radio_button("external"))
-    , m_xLbNamedRange(m_xBuilder->weld_combo_box_text("rangelb"))
+    , m_xLbNamedRange(m_xBuilder->weld_combo_box("rangelb"))
 {
     m_xBtnSelection->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnNamedRange->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
@@ -92,7 +92,7 @@ IMPL_LINK_NOARG(ScDataPilotSourceTypeDlg, RadioClickHdl, weld::ToggleButton&, vo
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg(weld::Window* pParent, const std::vector<OUString>& rServices)
     : GenericDialogController(pParent, "modules/scalc/ui/dapiservicedialog.ui", "DapiserviceDialog")
-    , m_xLbService(m_xBuilder->weld_combo_box_text("service"))
+    , m_xLbService(m_xBuilder->weld_combo_box("service"))
     , m_xEdSource(m_xBuilder->weld_entry("source"))
     , m_xEdName(m_xBuilder->weld_entry("name"))
     , m_xEdUser(m_xBuilder->weld_entry("user"))

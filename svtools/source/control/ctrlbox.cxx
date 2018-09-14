@@ -1222,7 +1222,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     }
 }
 
-SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBoxText> p)
+SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p)
     : m_xComboBox(std::move(p))
 {
     //Use the standard texts to get an optimal size and stick to that size.
@@ -1698,7 +1698,7 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
     return MetricBox::GetValueFromStringUnit( rStr, eOutUnit );
 }
 
-SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBoxText> p)
+SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
     : pFontList(nullptr)
     , nSavedValue(0)
     , nMin(20)
@@ -1735,7 +1735,7 @@ IMPL_LINK_NOARG(SvtFontSizeBox, ReformatHdl, weld::Widget&, void)
     set_value(get_value());
 }
 
-IMPL_LINK(SvtFontSizeBox, ModifyHdl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SvtFontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
 {
     if (bRelativeMode)
     {

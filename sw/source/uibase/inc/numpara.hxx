@@ -36,9 +36,9 @@ class SwParagraphNumTabPage final : public SfxTabPage
     bool                    bCurNumrule : 1;
 
     std::unique_ptr<weld::Widget> m_xOutlineStartBX;
-    std::unique_ptr<weld::ComboBoxText> m_xOutlineLvLB;
+    std::unique_ptr<weld::ComboBox> m_xOutlineLvLB;
     std::unique_ptr<weld::Widget> m_xNumberStyleBX;
-    std::unique_ptr<weld::ComboBoxText> m_xNumberStyleLB;
+    std::unique_ptr<weld::ComboBox> m_xNumberStyleLB;
     std::unique_ptr<weld::Button> m_xEditNumStyleBtn;
 
     std::unique_ptr<weld::CheckButton> m_xNewStartCB;
@@ -54,10 +54,10 @@ class SwParagraphNumTabPage final : public SfxTabPage
     std::unique_ptr<weld::SpinButton> m_xRestartNF;
 
     DECL_LINK(NewStartHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(StyleHdl_Impl, weld::ComboBoxText&,void);
+    DECL_LINK(StyleHdl_Impl, weld::ComboBox&,void);
     DECL_LINK(LineCountHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(EditNumStyleHdl_Impl, weld::Button&, void);
-    DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBox&, void);
 
     static const sal_uInt16 aPageRg[];
 
@@ -80,7 +80,7 @@ public:
     void                DisableOutline();
     void                DisableNumbering();
 
-    weld::ComboBoxText& GetStyleBox() {return *m_xNumberStyleLB;};
+    weld::ComboBox& GetStyleBox() {return *m_xNumberStyleLB;};
 };
 
 #endif

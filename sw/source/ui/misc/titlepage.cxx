@@ -158,7 +158,7 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     , m_xRestartNumberingNF(m_xBuilder->weld_spin_button("NF_RESTART_NUMBERING"))
     , m_xSetPageNumberCB(m_xBuilder->weld_check_button("CB_SET_PAGE_NUMBER"))
     , m_xSetPageNumberNF(m_xBuilder->weld_spin_button("NF_SET_PAGE_NUMBER"))
-    , m_xPagePropertiesLB(m_xBuilder->weld_combo_box_text("LB_PAGE_PROPERTIES"))
+    , m_xPagePropertiesLB(m_xBuilder->weld_combo_box("LB_PAGE_PROPERTIES"))
     , m_xPagePropertiesPB(m_xBuilder->weld_button("PB_PAGE_PROPERTIES"))
     , m_xOkPB(m_xBuilder->weld_button("ok"))
 {

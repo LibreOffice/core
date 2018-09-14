@@ -54,7 +54,7 @@ IMPL_LINK_NOARG(SfxNewStyleDlg, OKHdl, weld::TreeView&, void)
     OKClickHdl(*m_xOKBtn);
 }
 
-IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBtn->set_sensitive(!rBox.get_active_text().replaceAll(" ", "").isEmpty());
 }

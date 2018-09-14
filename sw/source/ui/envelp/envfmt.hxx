@@ -36,7 +36,7 @@ class SwEnvFormatPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton>  m_xSendLeftField;
     std::unique_ptr<weld::MetricSpinButton>  m_xSendTopField;
     std::unique_ptr<weld::MenuButton> m_xSendEditButton;
-    std::unique_ptr<weld::ComboBoxText> m_xSizeFormatBox;
+    std::unique_ptr<weld::ComboBox> m_xSizeFormatBox;
     std::unique_ptr<weld::MetricSpinButton>  m_xSizeWidthField;
     std::unique_ptr<weld::MetricSpinButton>  m_xSizeHeightField;
     std::unique_ptr<weld::CustomWeld> m_xPreview;
@@ -44,7 +44,7 @@ class SwEnvFormatPage : public SfxTabPage
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(AddrEditHdl, const OString&, void);
     DECL_LINK(SendEditHdl, const OString&, void);
-    DECL_LINK(FormatHdl, weld::ComboBoxText&, void);
+    DECL_LINK(FormatHdl, weld::ComboBox&, void);
 
     void SetMinMax();
 

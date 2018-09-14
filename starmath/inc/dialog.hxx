@@ -342,7 +342,7 @@ class SmSymbolDialog : public weld::GenericDialogController
 
     SmShowSymbol m_aSymbolDisplay;
 
-    std::unique_ptr<weld::ComboBoxText> m_xSymbolSets;
+    std::unique_ptr<weld::ComboBox> m_xSymbolSets;
     std::unique_ptr<SmShowSymbolSet> m_xSymbolSetDisplay;
     std::unique_ptr<weld::CustomWeld> m_xSymbolSetDisplayArea;
     std::unique_ptr<weld::Label> m_xSymbolName;
@@ -350,7 +350,7 @@ class SmSymbolDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xGetBtn;
     std::unique_ptr<weld::Button> m_xEditBtn;
 
-    DECL_LINK(SymbolSetChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SymbolSetChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SymbolChangeHdl, SmShowSymbolSet&, void);
     DECL_LINK(SymbolDblClickHdl, SmShowSymbol&, void);
     DECL_LINK(SymbolDblClickHdl2, SmShowSymbolSet&, void);
@@ -409,13 +409,13 @@ class SmSymDefineDialog : public weld::GenericDialogController
     std::unique_ptr<SmSym> m_xOrigSymbol;
     std::unique_ptr<SubsetMap> m_xSubsetMap;
     std::unique_ptr<FontList> m_xFontList;
-    std::unique_ptr<weld::ComboBoxText> m_xOldSymbols;
-    std::unique_ptr<weld::ComboBoxText> m_xOldSymbolSets;
-    std::unique_ptr<weld::ComboBoxText> m_xSymbols;
-    std::unique_ptr<weld::ComboBoxText> m_xSymbolSets;
-    std::unique_ptr<weld::ComboBoxText> m_xFonts;
-    std::unique_ptr<weld::ComboBoxText> m_xFontsSubsetLB;
-    std::unique_ptr<weld::ComboBoxText> m_xStyles;
+    std::unique_ptr<weld::ComboBox> m_xOldSymbols;
+    std::unique_ptr<weld::ComboBox> m_xOldSymbolSets;
+    std::unique_ptr<weld::ComboBox> m_xSymbols;
+    std::unique_ptr<weld::ComboBox> m_xSymbolSets;
+    std::unique_ptr<weld::ComboBox> m_xFonts;
+    std::unique_ptr<weld::ComboBox> m_xFontsSubsetLB;
+    std::unique_ptr<weld::ComboBox> m_xStyles;
     std::unique_ptr<weld::Label> m_xOldSymbolName;
     std::unique_ptr<weld::Label> m_xOldSymbolSetName;
     std::unique_ptr<weld::Label> m_xSymbolName;
@@ -428,19 +428,19 @@ class SmSymDefineDialog : public weld::GenericDialogController
     std::unique_ptr<SvxShowCharSet>  m_xCharsetDisplay;
     std::unique_ptr<weld::CustomWeld>  m_xCharsetDisplayArea;
 
-    DECL_LINK(OldSymbolChangeHdl, weld::ComboBoxText&, void);
-    DECL_LINK(OldSymbolSetChangeHdl, weld::ComboBoxText&, void);
-    DECL_LINK(ModifyHdl, weld::ComboBoxText&, void);
-    DECL_LINK(FontChangeHdl, weld::ComboBoxText&, void);
-    DECL_LINK(SubsetChangeHdl, weld::ComboBoxText&, void);
-    DECL_LINK(StyleChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(OldSymbolChangeHdl, weld::ComboBox&, void);
+    DECL_LINK(OldSymbolSetChangeHdl, weld::ComboBox&, void);
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(FontChangeHdl, weld::ComboBox&, void);
+    DECL_LINK(SubsetChangeHdl, weld::ComboBox&, void);
+    DECL_LINK(StyleChangeHdl, weld::ComboBox&, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK(AddClickHdl, weld::Button&, void);
     DECL_LINK(ChangeClickHdl, weld::Button&, void);
     DECL_LINK(DeleteClickHdl, weld::Button&, void);
 
-    void    FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteText = true);
-    void    FillSymbolSets(weld::ComboBoxText& rComboBox, bool bDeleteText = true);
+    void    FillSymbols(weld::ComboBox& rComboBox, bool bDeleteText = true);
+    void    FillSymbolSets(weld::ComboBox& rComboBox, bool bDeleteText = true);
     void    FillFonts();
     void    FillStyles();
 
@@ -449,15 +449,15 @@ class SmSymDefineDialog : public weld::GenericDialogController
     void    SetOrigSymbol(const SmSym *pSymbol, const OUString &rSymbolSetName);
     void    UpdateButtons();
 
-    bool    SelectSymbolSet(weld::ComboBoxText &rComboBox, const OUString &rSymbolSetName,
+    bool    SelectSymbolSet(weld::ComboBox &rComboBox, const OUString &rSymbolSetName,
                             bool bDeleteText);
-    bool    SelectSymbol(weld::ComboBoxText& rComboBox, const OUString &rSymbolName,
+    bool    SelectSymbol(weld::ComboBox& rComboBox, const OUString &rSymbolName,
                             bool bDeleteText);
     bool    SelectFont(const OUString &rFontName, bool bApplyFont);
     bool    SelectStyle(const OUString &rStyleName, bool bApplyFont);
 
-    SmSym* GetSymbol(const weld::ComboBoxText& rComboBox);
-    const SmSym* GetSymbol(const weld::ComboBoxText& rComboBox) const
+    SmSym* GetSymbol(const weld::ComboBox& rComboBox);
+    const SmSym* GetSymbol(const weld::ComboBox& rComboBox) const
     {
         return const_cast<SmSymDefineDialog *>(this)->GetSymbol(rComboBox);
     }

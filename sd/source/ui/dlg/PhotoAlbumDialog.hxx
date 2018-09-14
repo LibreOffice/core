@@ -58,7 +58,7 @@ private:
     std::unique_ptr<weld::Button> m_xRemoveBtn;
     std::unique_ptr<weld::TreeView> m_xImagesLst;
     std::unique_ptr<weld::CustomWeld> m_xImg;
-    std::unique_ptr<weld::ComboBoxText> m_xInsTypeCombo;
+    std::unique_ptr<weld::ComboBox> m_xInsTypeCombo;
     std::unique_ptr<weld::CheckButton> m_xASRCheck;
     std::unique_ptr<weld::CheckButton> m_xASRCheckCrop;
     std::unique_ptr<weld::CheckButton> m_xCapCheck;
@@ -73,7 +73,7 @@ private:
     DECL_LINK(RemoveHdl, weld::Button&, void);
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
-    DECL_LINK(TypeSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(TypeSelectHdl, weld::ComboBox&, void);
 
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
         const Reference< drawing::XDrawPages >& xDrawPages);

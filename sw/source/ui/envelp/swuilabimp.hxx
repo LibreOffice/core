@@ -32,23 +32,23 @@ class SwLabPage : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xAddressFrame;
     std::unique_ptr<weld::CheckButton> m_xAddrBox;
     std::unique_ptr<weld::TextView> m_xWritingEdit;
-    std::unique_ptr<weld::ComboBoxText> m_xDatabaseLB;
-    std::unique_ptr<weld::ComboBoxText> m_xTableLB;
+    std::unique_ptr<weld::ComboBox> m_xDatabaseLB;
+    std::unique_ptr<weld::ComboBox> m_xTableLB;
     std::unique_ptr<weld::Button> m_xInsertBT;
-    std::unique_ptr<weld::ComboBoxText> m_xDBFieldLB;
+    std::unique_ptr<weld::ComboBox> m_xDBFieldLB;
     std::unique_ptr<weld::RadioButton> m_xContButton;
     std::unique_ptr<weld::RadioButton> m_xSheetButton;
-    std::unique_ptr<weld::ComboBoxText> m_xMakeBox;
-    std::unique_ptr<weld::ComboBoxText> m_xTypeBox;
-    std::unique_ptr<weld::ComboBoxText> m_xHiddenSortTypeBox;
+    std::unique_ptr<weld::ComboBox> m_xMakeBox;
+    std::unique_ptr<weld::ComboBox> m_xTypeBox;
+    std::unique_ptr<weld::ComboBox> m_xHiddenSortTypeBox;
     std::unique_ptr<weld::Label> m_xFormatInfo;
 
     DECL_LINK(AddrHdl, weld::ToggleButton&, void);
-    DECL_LINK(DatabaseHdl, weld::ComboBoxText&, void );
+    DECL_LINK(DatabaseHdl, weld::ComboBox&, void );
     DECL_LINK(FieldHdl, weld::Button&, void);
     DECL_LINK(PageHdl, weld::ToggleButton&, void);
-    DECL_LINK(MakeHdl, weld::ComboBoxText&, void);
-    DECL_LINK(TypeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(MakeHdl, weld::ComboBox&, void);
+    DECL_LINK(TypeHdl, weld::ComboBox&, void);
 
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();

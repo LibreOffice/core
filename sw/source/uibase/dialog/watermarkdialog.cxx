@@ -24,7 +24,7 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
     , m_rBindings(rBindings)
     , m_xTextInput(m_xBuilder->weld_entry("TextInput"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xFont(m_xBuilder->weld_combo_box_text("FontBox"))
+    , m_xFont(m_xBuilder->weld_combo_box("FontBox"))
     , m_xAngle(m_xBuilder->weld_metric_spin_button("Angle", FUNIT_DEGREE))
     , m_xTransparency(m_xBuilder->weld_metric_spin_button("Transparency", FUNIT_PERCENT))
     , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button("Color"), m_xDialog.get()))
