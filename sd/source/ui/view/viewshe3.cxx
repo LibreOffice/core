@@ -69,6 +69,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <optsitem.hxx>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <undo/undomanager.hxx>
 
 #include <svx/svxids.hrc>
@@ -194,8 +195,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
-    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
     SdrLayerIDSet aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.

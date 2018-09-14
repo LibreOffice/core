@@ -59,6 +59,7 @@
 #include <Window.hxx>
 #include <stlpool.hxx>
 #include <drawdoc.hxx>
+#include <unokywds.hxx>
 
 #include <strings.hrc>
 
@@ -233,8 +234,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
                 SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-                OUString aStr(SdResId(STR_LAYER_MEASURELINES));
-                pObj->SetLayer(rAdmin.GetLayerID(aStr));
+                pObj->SetLayer(rAdmin.GetLayerID(sUNO_LayerName_measurelines));
             }
 
             // init text position when vertical caption object is created
@@ -493,8 +493,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         }
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-        OUString aStr(SdResId(STR_LAYER_MEASURELINES));
-        pObj->SetLayer(rAdmin.GetLayerID(aStr));
+        pObj->SetLayer(rAdmin.GetLayerID(sUNO_LayerName_measurelines));
     }
 }
 

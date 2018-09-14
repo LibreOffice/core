@@ -376,6 +376,8 @@ private:
 
 protected:
     virtual void AddTabClick();
+    OUString     GetAuxiliaryText(sal_uInt16 nPageId) const; // needed in derived class LayerTabBar
+    void         SetAuxiliaryText(sal_uInt16 nPageId, const OUString& rText );
 
 public:
     static const sal_uInt16 APPEND;
@@ -405,7 +407,7 @@ public:
     virtual void    EndRenaming();
     virtual void    Mirror();
 
-    void            InsertPage( sal_uInt16 nPageId, const OUString& rText,
+    virtual void    InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                 TabBarPageBits nBits = TabBarPageBits::NONE,
                                 sal_uInt16 nPos = TabBar::APPEND );
     void            RemovePage( sal_uInt16 nPageId );
@@ -474,7 +476,7 @@ public:
     void            SwitchPage( const Point& rPos );
     void            EndSwitchPage();
 
-    void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
+    virtual void    SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;
     OUString        GetHelpText( sal_uInt16 nPageId ) const;
     OString         GetHelpId( sal_uInt16 nPageId ) const;

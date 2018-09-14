@@ -35,7 +35,7 @@
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <sdmod.hxx>
-#include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <pres.hxx>
 #include <strings.hrc>
 #include <sdiocmpt.hxx>
@@ -207,7 +207,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
         rLayerAdmin.getLockedLayersODF(maLockedLayers);
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
-        SetActiveLayer( SdResId(STR_LAYER_LAYOUT) );
+        SetActiveLayer(sUNO_LayerName_layout);
         mbNoColors = true;
         mbNoAttribs = false;
         maVisArea = ::tools::Rectangle( Point(), Size(0, 0) );
