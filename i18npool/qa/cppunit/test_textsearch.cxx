@@ -60,14 +60,13 @@ private:
 void TestTextSearch::testICU()
 {
     UErrorCode nErr = U_ZERO_ERROR;
-    RegexMatcher* pRegexMatcher;
     sal_uInt32 nSearchFlags = UREGEX_UWORD | UREGEX_CASE_INSENSITIVE;
 
     OUString aString( "abcdefgh" );
     OUString aPattern( "e" );
     IcuUniString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
 
-    pRegexMatcher = new RegexMatcher( aSearchPat, nSearchFlags, nErr );
+    std::unique_ptr<RegexMatcher> pRegexMatcher(new RegexMatcher( aSearchPat, nSearchFlags, nErr ));
 
     IcuUniString aSource( reinterpret_cast<const UChar*>(aString.getStr()), aString.getLength() );
     pRegexMatcher->reset( aSource );
@@ -79,13 +78,11 @@ void TestTextSearch::testICU()
     CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(5), pRegexMatcher->end( nErr ) );
     CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
 
-    delete pRegexMatcher;
-
     OUString aString2( "acababaabcababadcdaa" );
     OUString aPattern2( "a" );
 
     IcuUniString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
-    pRegexMatcher = new RegexMatcher( aSearchPat2, nSearchFlags, nErr );
+    pRegexMatcher.reset(new RegexMatcher( aSearchPat2, nSearchFlags, nErr ));
 
     IcuUniString aSource2( reinterpret_cast<const UChar*>(aString2.getStr()), aString2.getLength() );
     pRegexMatcher->reset( aSource2 );
@@ -96,7 +93,6 @@ void TestTextSearch::testICU()
     CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
     CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(1), pRegexMatcher->end( nErr ) );
     CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
-    delete pRegexMatcher;
 }
 
 void TestTextSearch::testSearches()
