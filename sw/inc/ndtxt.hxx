@@ -405,7 +405,6 @@ public:
         const sal_Int32 nIndex,
         const bool bIncludeInputFieldAtStart = false ) const;
 
-    OUString GetCurWord(sal_Int32) const;
     bool Spell(SwSpellArgs*);
     bool Convert( SwConversionArgs & );
 

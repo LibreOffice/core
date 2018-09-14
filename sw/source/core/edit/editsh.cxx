@@ -416,10 +416,16 @@ OUString SwEditShell::GetCurWord()
 {
     const SwPaM& rPaM = *GetCursor();
     const SwTextNode* pNd = rPaM.GetNode().GetTextNode();
-    OUString aString = pNd ?
-                     pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
-                     OUString();
-    return aString;
+    if (!pNd)
+    {
+        return OUString();
+    }
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNd->getLayoutFrame(GetLayout())));
+    if (pFrame)
+    {
+        return pFrame->GetCurWord(*rPaM.GetPoint());
+    }
+    return OUString();
 }
 
 void SwEditShell::UpdateDocStat( )

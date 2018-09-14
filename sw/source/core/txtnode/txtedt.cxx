@@ -694,36 +694,43 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
 // Search from left to right, so find the word before nPos.
 // Except if at the start of the paragraph, then return the first word.
 // If the first word consists only of whitespace, return an empty string.
-OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
+OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
 {
-    assert(nPos <= m_Text.getLength()); // invalid index
+    TextFrameIndex const nPos(MapModelToViewPos(rPos));
+    SwTextNode *const pTextNode(rPos.nNode.GetNode().GetTextNode());
+    assert(pTextNode);
+    OUString const& rText(GetText());
+    assert(sal_Int32(nPos) <= rText.getLength()); // invalid index
 
-    if (m_Text.isEmpty())
-        return m_Text;
+    if (rText.isEmpty())
+        return OUString();
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
     sal_Int16 nWordType = WordType::DICTIONARY_WORD;
-    lang::Locale aLocale( g_pBreakIt->GetLocale( GetLang( nPos ) ) );
+    lang::Locale aLocale( g_pBreakIt->GetLocale(pTextNode->GetLang(rPos.nContent.GetIndex())) );
     Boundary aBndry =
-        rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, true );
+        rxBreak->getWordBoundary(rText, sal_Int32(nPos), aLocale, nWordType, true);
 
     // if no word was found use previous word (if any)
     if (aBndry.startPos == aBndry.endPos)
     {
-        aBndry = rxBreak->previousWord( m_Text, nPos, aLocale, nWordType );
+        aBndry = rxBreak->previousWord(rText, sal_Int32(nPos), aLocale, nWordType);
     }
 
     // check if word was found and if it uses a symbol font, if so
     // enforce returning an empty string
-    if (aBndry.endPos != aBndry.startPos && IsSymbolAt(aBndry.startPos))
+    if (aBndry.endPos != aBndry.startPos
+        && IsSymbolAt(TextFrameIndex(aBndry.startPos)))
+    {
         aBndry.endPos = aBndry.startPos;
+    }
 
     // can have -1 as start/end of bounds not found
-    aBndry.startPos = clipIndexBounds(m_Text, aBndry.startPos);
-    aBndry.endPos = clipIndexBounds(m_Text, aBndry.endPos);
+    aBndry.startPos = clipIndexBounds(rText, aBndry.startPos);
+    aBndry.endPos = clipIndexBounds(rText, aBndry.endPos);
 
-    return m_Text.copy(aBndry.startPos,
+    return  rText.copy(aBndry.startPos,
                        aBndry.endPos - aBndry.startPos);
 }
 

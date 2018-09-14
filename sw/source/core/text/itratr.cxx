@@ -159,6 +159,13 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
     return m_pFont->IsSymbol( m_pViewShell );
 }
 
+bool SwTextFrame::IsSymbolAt(TextFrameIndex const nPos) const
+{
+    SwTextInfo info(const_cast<SwTextFrame*>(this));
+    SwTextIter iter(const_cast<SwTextFrame*>(this), &info);
+    return iter.IsSymbol(nPos);
+}
+
 bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
     SwTextNode const*const pFirstTextNode(m_pMergedPara ? m_pMergedPara->pFirstNode : m_pTextNode);
