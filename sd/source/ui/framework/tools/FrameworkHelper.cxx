@@ -756,11 +756,10 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
         sString.append(rxResourceId->getResourceURL());
         if (rxResourceId->hasAnchor())
         {
-            Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
-            for (sal_Int32 nIndex=0; nIndex < aAnchorURLs.getLength(); ++nIndex)
+            for (const OUString& s : rxResourceId->getAnchorURLs())
             {
                 sString.append(" | ");
-                sString.append(aAnchorURLs[nIndex]);
+                sString.append(s);
             }
         }
     }
