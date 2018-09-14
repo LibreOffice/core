@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfeb2761_4a3710b2",
+        "filename": "xmlhelp/source/treeview/tvread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-14T06:36:45Z",
+      "side": 1,
+      "message": "while this technically matches the original logic, p cannot be null in the very first iteration, so the null check should  go after the SearchAndInsert",
+      "revId": "bc4469b951d2a20570135ffeb8468f5a7a285f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_2a3ccc91",
+        "filename": "xmlreader/source/xmlreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-14T06:36:45Z",
+      "side": 1,
+      "message": "this can be crbegin(), etc ?",
+      "revId": "bc4469b951d2a20570135ffeb8468f5a7a285f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfeb2761_ea45c418",
+        "filename": "xmlsecurity/source/framework/buffernode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-14T06:36:45Z",
+      "side": 1,
+      "message": "cbegin() ?",
+      "revId": "bc4469b951d2a20570135ffeb8468f5a7a285f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
