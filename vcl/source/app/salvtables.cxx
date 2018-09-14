@@ -1521,6 +1521,24 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
         signal_cursor_position();
 }
 
+namespace
+{
+    Image createImage(const OUString& rImage)
+    {
+        if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
+        {
+            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
+            if (rImage == "dialog-warning")
+                return Image(BitmapEx(IMG_WARN));
+            else if (rImage == "dialog-error")
+                return Image(BitmapEx(IMG_ERROR));
+            else if (rImage == "dialog-information")
+                return Image(BitmapEx(IMG_INFO));
+        }
+        return Image(BitmapEx(rImage));
+    }
+}
+
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -1543,28 +1561,14 @@ public:
         m_xTreeView->InsertEntry(rText, pos == -1 ? LISTBOX_APPEND : pos);
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString& rImage) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage) override
     {
+        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
-        if (rImage.isEmpty())
-            nInsertedAt = m_xTreeView->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
+        if (!pImage)
+            nInsertedAt = m_xTreeView->InsertEntry(rStr, nInsertPos);
         else
-        {
-            Image aImage;
-            if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
-            {
-                assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
-                if (rImage == "dialog-warning")
-                    aImage = Image(BitmapEx(IMG_WARN));
-                else if (rImage == "dialog-error")
-                    aImage = Image(BitmapEx(IMG_ERROR));
-                else if (rImage == "dialog-information")
-                    aImage = Image(BitmapEx(IMG_INFO));
-            }
-            else
-                aImage = Image(BitmapEx(rImage));
-            nInsertedAt = m_xTreeView->InsertEntry(rStr, aImage, pos == -1 ? COMBOBOX_APPEND : pos);
-        }
+            nInsertedAt = m_xTreeView->InsertEntry(rStr, createImage(*pImage), nInsertPos);
         m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
@@ -2163,12 +2167,6 @@ public:
         m_xComboBoxText->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
-    {
-        m_xComboBoxText->SetEntryData(m_xComboBoxText->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos),
-                                      new OUString(rId));
-    }
-
     virtual int get_count() const override
     {
         return m_xComboBoxText->GetEntryCount();
@@ -2236,6 +2234,17 @@ public:
     virtual void remove(int pos) override
     {
         m_xComboBoxText->RemoveEntry(pos);
+    }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage) override
+    {
+        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
+        sal_Int32 nInsertedAt;
+        if (!pImage)
+            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, nInsertPos);
+        else
+            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, createImage(*pImage), nInsertPos);
+        m_xComboBoxText->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
     virtual bool has_entry() const override
@@ -2319,6 +2328,17 @@ public:
     virtual void remove(int pos) override
     {
         m_xComboBoxText->RemoveEntryAt(pos);
+    }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage) override
+    {
+        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
+        sal_Int32 nInsertedAt;
+        if (!pImage)
+            nInsertedAt = m_xComboBoxText->InsertEntry(rStr, nInsertPos);
+        else
+            nInsertedAt = m_xComboBoxText->InsertEntryWithImage(rStr, createImage(*pImage), nInsertPos);
+        m_xComboBoxText->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
     virtual void set_entry_text(const OUString& rText) override
