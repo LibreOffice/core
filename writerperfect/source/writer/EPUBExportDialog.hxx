@@ -29,9 +29,9 @@ public:
     ~EPUBExportDialog() override;
 
 private:
-    DECL_LINK(VersionSelectHdl, weld::ComboBoxText&, void);
-    DECL_LINK(SplitSelectHdl, weld::ComboBoxText&, void);
-    DECL_LINK(LayoutSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(VersionSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(SplitSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(LayoutSelectHdl, weld::ComboBox&, void);
     DECL_LINK(CoverClickHdl, weld::Button&, void);
     DECL_LINK(MediaClickHdl, weld::Button&, void);
     DECL_LINK(OKClickHdl, weld::Button&, void);
@@ -40,9 +40,9 @@ private:
     comphelper::SequenceAsHashMap& m_rFilterData;
     css::uno::Reference<css::lang::XComponent> m_xSourceDocument;
 
-    std::unique_ptr<weld::ComboBoxText> m_xVersion;
-    std::unique_ptr<weld::ComboBoxText> m_xSplit;
-    std::unique_ptr<weld::ComboBoxText> m_xLayout;
+    std::unique_ptr<weld::ComboBox> m_xVersion;
+    std::unique_ptr<weld::ComboBox> m_xSplit;
+    std::unique_ptr<weld::ComboBox> m_xLayout;
     std::unique_ptr<weld::Entry> m_xCoverPath;
     std::unique_ptr<weld::Button> m_xCoverButton;
     std::unique_ptr<weld::Entry> m_xMediaDir;

@@ -63,11 +63,11 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : GenericDialogController(pParent, "modules/swriter/ui/asciifilterdialog.ui", "AsciiFilterDialog")
     , m_bSaveLineStatus(true)
-    , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box_text("charset")))
+    , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , m_xFontFT(m_xBuilder->weld_label("fontft"))
-    , m_xFontLB(m_xBuilder->weld_combo_box_text("font"))
+    , m_xFontLB(m_xBuilder->weld_combo_box("font"))
     , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box_text("language")))
+    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xCRLF_RB(m_xBuilder->weld_radio_button("crlf"))
     , m_xCR_RB(m_xBuilder->weld_radio_button("cr"))
     , m_xLF_RB(m_xBuilder->weld_radio_button("lf"))
@@ -320,7 +320,7 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
     return eEnd;
 }
 
-IMPL_LINK_NOARG( SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void )
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = LineEnd(-1);
     LanguageType nLng = m_xFontLB->get_visible()

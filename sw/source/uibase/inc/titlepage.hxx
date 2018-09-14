@@ -36,7 +36,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xRestartNumberingNF;
     std::unique_ptr<weld::CheckButton> m_xSetPageNumberCB;
     std::unique_ptr<weld::SpinButton> m_xSetPageNumberNF;
-    std::unique_ptr<weld::ComboBoxText> m_xPagePropertiesLB;
+    std::unique_ptr<weld::ComboBox> m_xPagePropertiesLB;
     std::unique_ptr<weld::Button> m_xPagePropertiesPB;
     std::unique_ptr<weld::Button> m_xOkPB;
 

@@ -95,7 +95,7 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
 SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/optnewdictionarydialog.ui", "OptNewDictionaryDialog")
     , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box_text("language")))
+    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xExceptBtn(m_xBuilder->weld_check_button("except"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {

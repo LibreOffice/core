@@ -77,9 +77,9 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConf
     , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
     , mbWriteConfig(bWriteConfig)
     , mxEmptyAsZero(m_xBuilder->weld_check_button("checkEmptyAsZero"))
-    , mxConversion(m_xBuilder->weld_combo_box_text("comboConversion"))
+    , mxConversion(m_xBuilder->weld_combo_box("comboConversion"))
     , mxCurrentDocOnly(m_xBuilder->weld_check_button("current_doc"))
-    , mxSyntax(m_xBuilder->weld_combo_box_text("comboSyntaxRef"))
+    , mxSyntax(m_xBuilder->weld_combo_box("comboSyntaxRef"))
 {
     mxConversion->set_active(static_cast<int>(rConfig.meStringConversion));
     mxConversion->connect_changed(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
@@ -128,13 +128,13 @@ IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, weld::ToggleButton&, rCheckBox
     maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = rCheckBox.get_active();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, weld::ComboBoxText&, rConv, void)
+IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, weld::ComboBox&, rConv, void)
 {
     maConfig.meStringConversion = static_cast<ScCalcConfig::StringConversion>(rConv.get_active());
     CoupleEmptyAsZeroToStringConversion();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, weld::ComboBoxText&, rSyntax, void)
+IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, weld::ComboBox&, rSyntax, void)
 {
     maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.get_active()));
 }
