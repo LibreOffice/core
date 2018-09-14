@@ -50,6 +50,46 @@
     <property name="popup_set_width">False</property>
     <property name="popup_single_match">False</property>
   </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore5">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore6">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore7">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="CharNamePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -370,12 +410,21 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="westlanglb-nocjk">
+                  <object class="GtkComboBox" id="westlanglb-nocjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="model">liststore4</property>
                     <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
@@ -550,10 +599,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="westlanglb-cjk">
+                  <object class="GtkComboBox" id="westlanglb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="model">liststore5</property>
                     <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
@@ -749,9 +807,24 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="eastlanglb">
+                  <object class="GtkComboBox" id="eastlanglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="model">liststore6</property>
+                    <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">True</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -941,9 +1014,24 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="ctllanglb">
+                  <object class="GtkComboBox" id="ctllanglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="model">liststore7</property>
+                    <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext7"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">True</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>

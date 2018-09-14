@@ -735,7 +735,22 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
         aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
     }
 
-    m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry);
+    if (m_bWithCheckmark)
+    {
+        if (!m_xSpellUsedLang)
+        {
+            Reference<XSpellChecker1> xSpell(LinguMgr::GetSpellChecker(), UNO_QUERY);
+            if (xSpell.is())
+                m_xSpellUsedLang.reset(new Sequence<sal_Int16>(xSpell->getLanguages()));
+        }
+
+        bool bFound = m_xSpellUsedLang && lcl_SeqHasLang(*m_xSpellUsedLang, static_cast<sal_uInt16>(nRealLang));
+
+        m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry,
+                           bFound ? RID_SVXBMP_CHECKED: RID_SVXBMP_NOTCHECKED);
+    }
+    else
+        m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry);
 }
 
 IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBoxText&, rControl, void)
