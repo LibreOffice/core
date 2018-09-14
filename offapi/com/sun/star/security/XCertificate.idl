@@ -111,6 +111,8 @@ interface XCertificate : com::sun::star::uno::XInterface
 
     /**
      *  the kind of certificate, X.509 or OpenPGP
+     *
+     * @since LibreOffice 5.4
      */
     [attribute, readonly] com::sun::star::security::CertificateKind CertificateKind;
 
