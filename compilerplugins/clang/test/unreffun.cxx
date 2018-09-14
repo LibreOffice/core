@@ -22,4 +22,18 @@ void h() // expected-error {{Unreferenced externally visible function definition
 {
 }
 
+void i() {}
+
+extern void j(); // expected-error {{Unreferenced function declaration [loplugin:unreffun]}}
+
+extern void
+k() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+{
+}
+
+extern void l(); // expected-note {{first declaration is here [loplugin:unreffun]}}
+void l() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
