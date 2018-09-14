@@ -499,13 +499,13 @@ IMPL_LINK_NOARG(SmFontTypeDialog, DefaultButtonClickHdl, weld::Button&, void)
 SmFontTypeDialog::SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntListDevice)
     : GenericDialogController(pParent, "modules/smath/ui/fonttypedialog.ui", "FontsDialog")
     , pFontListDev(pFntListDevice)
-    , m_xVariableFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("variableCB")))
-    , m_xFunctionFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("functionCB")))
-    , m_xNumberFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("numberCB")))
-    , m_xTextFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("textCB")))
-    , m_xSerifFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("serifCB")))
-    , m_xSansFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("sansCB")))
-    , m_xFixedFont(new SmFontPickListBox(m_xBuilder->weld_combo_box_text("fixedCB")))
+    , m_xVariableFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("variableCB")))
+    , m_xFunctionFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("functionCB")))
+    , m_xNumberFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("numberCB")))
+    , m_xTextFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("textCB")))
+    , m_xSerifFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("serifCB")))
+    , m_xSansFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("sansCB")))
+    , m_xFixedFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("fixedCB")))
     , m_xMenuButton(m_xBuilder->weld_menu_button("modify"))
     , m_xDefaultButton(m_xBuilder->weld_button("default"))
 {
@@ -1231,7 +1231,7 @@ void SmSymbolDialog::FillSymbolSets()
         m_xSymbolSets->append_text(*aIt);
 }
 
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl, weld::ComboBox&, void )
 {
     SelectSymbolSet(m_xSymbolSets->get_active_text());
 }
@@ -1316,7 +1316,7 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     , rViewSh(rViewShell)
     , rSymbolMgr(rMgr)
     , pFontListDev(pFntListDevice)
-    , m_xSymbolSets(m_xBuilder->weld_combo_box_text("symbolset"))
+    , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolset"))
     , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow")))
     , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, "symbolsetdisplay", *m_xSymbolSetDisplay))
     , m_xSymbolName(m_xBuilder->weld_label("symbolname"))
@@ -1457,7 +1457,7 @@ void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
     Invalidate();
 }
 
-void SmSymDefineDialog::FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteText)
+void SmSymDefineDialog::FillSymbols(weld::ComboBox& rComboBox, bool bDeleteText)
 {
     assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong ComboBox");
 
@@ -1465,13 +1465,13 @@ void SmSymDefineDialog::FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteT
     if (bDeleteText)
         rComboBox.set_entry_text(OUString());
 
-    weld::ComboBoxText& rBox = &rComboBox == m_xOldSymbols.get() ? *m_xOldSymbolSets : *m_xSymbolSets;
+    weld::ComboBox& rBox = &rComboBox == m_xOldSymbols.get() ? *m_xOldSymbolSets : *m_xSymbolSets;
     SymbolPtrVec_t aSymSet(m_aSymbolMgrCopy.GetSymbolSet(rBox.get_active_text()));
     for (const SmSym* i : aSymSet)
         rComboBox.append_text(i->GetName());
 }
 
-void SmSymDefineDialog::FillSymbolSets(weld::ComboBoxText& rComboBox, bool bDeleteText)
+void SmSymDefineDialog::FillSymbolSets(weld::ComboBox& rComboBox, bool bDeleteText)
 {
     assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
 
@@ -1519,27 +1519,27 @@ void SmSymDefineDialog::FillStyles()
     }
 }
 
-SmSym* SmSymDefineDialog::GetSymbol(const weld::ComboBoxText& rComboBox)
+SmSym* SmSymDefineDialog::GetSymbol(const weld::ComboBox& rComboBox)
 {
     assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong combobox");
     return m_aSymbolMgrCopy.GetSymbolByName(rComboBox.get_active_text());
 }
 
-IMPL_LINK(SmSymDefineDialog, OldSymbolChangeHdl, weld::ComboBoxText&, rComboBox, void)
+IMPL_LINK(SmSymDefineDialog, OldSymbolChangeHdl, weld::ComboBox&, rComboBox, void)
 {
     (void) rComboBox;
     assert(&rComboBox == m_xOldSymbols.get() && "Sm : wrong argument");
     SelectSymbol(*m_xOldSymbols, m_xOldSymbols->get_active_text(), false);
 }
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, weld::ComboBoxText&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, weld::ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
     assert(&rComboBox == m_xOldSymbolSets.get() && "Sm : wrong argument");
     SelectSymbolSet(*m_xOldSymbolSets, m_xOldSymbolSets->get_active_text(), false);
 }
 
-IMPL_LINK(SmSymDefineDialog, ModifyHdl, weld::ComboBoxText&, rComboBox, void)
+IMPL_LINK(SmSymDefineDialog, ModifyHdl, weld::ComboBox&, rComboBox, void)
 {
     // remember cursor position for later restoring of it
     int nStartPos, nEndPos;
@@ -1566,7 +1566,7 @@ IMPL_LINK(SmSymDefineDialog, ModifyHdl, weld::ComboBoxText&, rComboBox, void)
     UpdateButtons();
 }
 
-IMPL_LINK(SmSymDefineDialog, FontChangeHdl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SmSymDefineDialog, FontChangeHdl, weld::ComboBox&, rListBox, void)
 {
     (void) rListBox;
     assert(&rListBox == m_xFonts.get() && "Sm : wrong argument");
@@ -1574,7 +1574,7 @@ IMPL_LINK(SmSymDefineDialog, FontChangeHdl, weld::ComboBoxText&, rListBox, void)
     SelectFont(m_xFonts->get_active_text());
 }
 
-IMPL_LINK_NOARG(SmSymDefineDialog, SubsetChangeHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SmSymDefineDialog, SubsetChangeHdl, weld::ComboBox&, void)
 {
     int nPos = m_xFontsSubsetLB->get_active();
     if (nPos != -1)
@@ -1587,7 +1587,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, SubsetChangeHdl, weld::ComboBoxText&, void)
     }
 }
 
-IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, weld::ComboBoxText&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, weld::ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
     assert(&rComboBox == m_xStyles.get() && "Sm : wrong argument");
@@ -1747,13 +1747,13 @@ SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntLi
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , m_rSymbolMgr(rMgr)
     , m_xFontList(new FontList(pFntListDevice))
-    , m_xOldSymbols(m_xBuilder->weld_combo_box_text("oldSymbols"))
-    , m_xOldSymbolSets(m_xBuilder->weld_combo_box_text("oldSymbolSets"))
-    , m_xSymbols(m_xBuilder->weld_combo_box_text("symbols"))
-    , m_xSymbolSets(m_xBuilder->weld_combo_box_text("symbolSets"))
-    , m_xFonts(m_xBuilder->weld_combo_box_text("fonts"))
-    , m_xFontsSubsetLB(m_xBuilder->weld_combo_box_text("fontsSubsetLB"))
-    , m_xStyles(m_xBuilder->weld_combo_box_text("styles"))
+    , m_xOldSymbols(m_xBuilder->weld_combo_box("oldSymbols"))
+    , m_xOldSymbolSets(m_xBuilder->weld_combo_box("oldSymbolSets"))
+    , m_xSymbols(m_xBuilder->weld_combo_box("symbols"))
+    , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolSets"))
+    , m_xFonts(m_xBuilder->weld_combo_box("fonts"))
+    , m_xFontsSubsetLB(m_xBuilder->weld_combo_box("fontsSubsetLB"))
+    , m_xStyles(m_xBuilder->weld_combo_box("styles"))
     , m_xOldSymbolName(m_xBuilder->weld_label("oldSymbolName"))
     , m_xOldSymbolSetName(m_xBuilder->weld_label("oldSymbolSetName"))
     , m_xSymbolName(m_xBuilder->weld_label("symbolName"))
@@ -1832,7 +1832,7 @@ void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
     UpdateButtons();
 }
 
-bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBoxText& rComboBox,
+bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBox& rComboBox,
         const OUString &rSymbolSetName, bool bDeleteText)
 {
     assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
@@ -1862,7 +1862,7 @@ bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBoxText& rComboBox,
     rFT.set_label(rComboBox.get_active_text());
 
     // set the symbol name which belongs to the SymbolSet at the associated combobox
-    weld::ComboBoxText& rCB = bIsOld ? *m_xOldSymbols : *m_xSymbols;
+    weld::ComboBox& rCB = bIsOld ? *m_xOldSymbols : *m_xSymbols;
     FillSymbols(rCB, false);
 
     // display a valid respectively no symbol when changing the SymbolSets
@@ -1906,7 +1906,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
 }
 
 
-bool SmSymDefineDialog::SelectSymbol(weld::ComboBoxText& rComboBox,
+bool SmSymDefineDialog::SelectSymbol(weld::ComboBox& rComboBox,
         const OUString &rSymbolName, bool bDeleteText)
 {
     assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong ComboBox");

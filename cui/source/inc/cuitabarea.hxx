@@ -161,7 +161,7 @@ class SvxTransparenceTabPage : public SvxTabPage
 
     // gradient transparency
     std::unique_ptr<weld::Widget> m_xGridGradient;
-    std::unique_ptr<weld::ComboBoxText> m_xLbTrgrGradientType;
+    std::unique_ptr<weld::ComboBox> m_xLbTrgrGradientType;
     std::unique_ptr<weld::Label> m_xFtTrgrCenterX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrCenterX;
     std::unique_ptr<weld::Label> m_xFtTrgrCenterY;
@@ -183,8 +183,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK(ClickTransGradientHdl_Impl, weld::ToggleButton&, void );
     DECL_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifiedTrgrEditHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ModifiedTrgrListBoxHdl_Impl, weld::ComboBoxText&, void);
-    void ModifiedTrgrHdl_Impl(const weld::ComboBoxText*);
+    DECL_LINK(ModifiedTrgrListBoxHdl_Impl, weld::ComboBox&, void);
+    void ModifiedTrgrHdl_Impl(const weld::ComboBox*);
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
@@ -377,7 +377,7 @@ private:
     SfxItemSet&         m_rXFSet;
 
     XRectPreview m_aCtlPreview;
-    std::unique_ptr<weld::ComboBoxText> m_xLbGradientType;
+    std::unique_ptr<weld::ComboBox> m_xLbGradientType;
     std::unique_ptr<weld::Label> m_xFtCenter;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrCenterX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrCenterY;
@@ -407,7 +407,7 @@ private:
     DECL_LINK( ModifiedEditHdl_Impl, weld::SpinButton&, void );
     DECL_LINK( ModifiedMetricHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
-    DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( ChangeAutoStepHdl_Impl, weld::ToggleButton&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, weld::Scale&, void );
     void ModifiedHdl_Impl(void const *);
@@ -461,7 +461,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
     std::unique_ptr<weld::Scale> m_xSliderAngle;
-    std::unique_ptr<weld::ComboBoxText> m_xLbLineType;
+    std::unique_ptr<weld::ComboBox> m_xLbLineType;
     std::unique_ptr<ColorListBox> m_xLbLineColor;
     std::unique_ptr<weld::CheckButton> m_xCbBackgroundColor;
     std::unique_ptr<ColorListBox> m_xLbBackgroundColor;
@@ -474,7 +474,7 @@ private:
     DECL_LINK(ChangeHatchHdl, SvtValueSet*, void);
     void ChangeHatchHdl_Impl();
     DECL_LINK( ModifiedEditHdl_Impl, weld::MetricSpinButton&, void );
-    DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
     DECL_LINK( ToggleHatchBackgroundColor_Impl, weld::ToggleButton&, void );
     DECL_LINK( ModifiedBackgroundHdl_Impl, ColorListBox&, void );
@@ -543,18 +543,18 @@ private:
 
     XRectPreview m_aCtlBitmapPreview;
     std::unique_ptr<PresetListBox>   m_xBitmapLB;
-    std::unique_ptr<weld::ComboBoxText> m_xBitmapStyleLB;
+    std::unique_ptr<weld::ComboBox> m_xBitmapStyleLB;
     std::unique_ptr<weld::Container> m_xSizeBox;
     std::unique_ptr<weld::CheckButton> m_xTsbScale;
     std::unique_ptr<weld::MetricSpinButton> m_xBitmapWidth;
     std::unique_ptr<weld::MetricSpinButton> m_xBitmapHeight;
     std::unique_ptr<weld::Container> m_xPositionBox;
-    std::unique_ptr<weld::ComboBoxText> m_xPositionLB;
+    std::unique_ptr<weld::ComboBox> m_xPositionLB;
     std::unique_ptr<weld::Container> m_xPositionOffBox;
     std::unique_ptr<weld::MetricSpinButton> m_xPositionOffX;
     std::unique_ptr<weld::MetricSpinButton> m_xPositionOffY;
     std::unique_ptr<weld::Container> m_xTileOffBox;
-    std::unique_ptr<weld::ComboBoxText> m_xTileOffLB;
+    std::unique_ptr<weld::ComboBox> m_xTileOffLB;
     std::unique_ptr<weld::MetricSpinButton> m_xTileOffset;
     std::unique_ptr<weld::Button> m_xBtnImport;
     std::unique_ptr<weld::CustomWeld> m_xCtlBitmapPreview;
@@ -562,9 +562,9 @@ private:
 
     DECL_LINK( ModifyBitmapHdl, SvtValueSet*, void );
     DECL_LINK( ClickScaleHdl, weld::Button&, void );
-    DECL_LINK( ModifyBitmapStyleHdl, weld::ComboBoxText&, void );
+    DECL_LINK( ModifyBitmapStyleHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyBitmapSizeHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ModifyBitmapPositionHdl, weld::ComboBoxText&, void );
+    DECL_LINK( ModifyBitmapPositionHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyPositionOffsetHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyTileOffsetHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickRenameHdl, PresetListBox*, void );
@@ -695,7 +695,7 @@ private:
     XRectPreview m_aCtlPreviewNew;
     std::unique_ptr<ColorValueSet> m_xValSetColorList;
     std::unique_ptr<ColorValueSet> m_xValSetRecentList;
-    std::unique_ptr<weld::ComboBoxText> m_xSelectPalette;
+    std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<weld::RadioButton> m_xRbRGB;
     std::unique_ptr<weld::RadioButton> m_xRbCMYK;
     std::unique_ptr<weld::Widget> m_xRGBcustom;
@@ -739,7 +739,7 @@ private:
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
 
-    DECL_LINK(SelectPaletteLBHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, SvtValueSet*, void );
     DECL_LINK( SelectColorModeHdl_Impl, weld::ToggleButton&, void );
     void ChangeColor(const Color &rNewColor, bool bUpdatePreset = true);

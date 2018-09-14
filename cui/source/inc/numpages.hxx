@@ -405,15 +405,15 @@ class SvxNumPositionTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xDistNumFT;
     std::unique_ptr<weld::MetricSpinButton> m_xDistNumMF;
     std::unique_ptr<weld::Label> m_xAlignFT;
-    std::unique_ptr<weld::ComboBoxText> m_xAlignLB;
+    std::unique_ptr<weld::ComboBox> m_xAlignLB;
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
     std::unique_ptr<weld::Label> m_xLabelFollowedByFT;
-    std::unique_ptr<weld::ComboBoxText> m_xLabelFollowedByLB;
+    std::unique_ptr<weld::ComboBox> m_xLabelFollowedByLB;
     std::unique_ptr<weld::Label> m_xListtabFT;
     std::unique_ptr<weld::MetricSpinButton> m_xListtabMF;
     std::unique_ptr<weld::Label>m_xAlign2FT;
-    std::unique_ptr<weld::ComboBoxText> m_xAlign2LB;
+    std::unique_ptr<weld::ComboBox> m_xAlign2LB;
     std::unique_ptr<weld::Label> m_xAlignedAtFT;
     std::unique_ptr<weld::MetricSpinButton> m_xAlignedAtMF;
     std::unique_ptr<weld::Label> m_xIndentAtFT;
@@ -424,7 +424,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     void                InitControls();
 
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(EditModifyHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(EditModifyHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(DistanceHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(DistanceFocusHdl_Impl, Control&, void);
     DECL_LINK(RelativeHdl_Impl, weld::ToggleButton&, void);
@@ -433,7 +433,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK(LabelFollowedByHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(LabelFollowedByHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ListtabPosHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(AlignAtHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(IndentAtHdl_Impl, weld::MetricSpinButton&, void);

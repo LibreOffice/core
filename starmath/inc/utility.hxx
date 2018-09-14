@@ -137,12 +137,12 @@ public:
 class SmFontPickListBox final : public SmFontPickList
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+    std::unique_ptr<weld::ComboBox> m_xWidget;
 
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
-    SmFontPickListBox(std::unique_ptr<weld::ComboBoxText> pWidget);
+    SmFontPickListBox(std::unique_ptr<weld::ComboBox> pWidget);
     SmFontPickListBox& operator = (const SmFontPickList& rList);
     virtual void    Insert(const vcl::Font &rFont) override;
 };

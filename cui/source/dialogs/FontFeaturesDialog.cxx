@@ -28,7 +28,7 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rF
 
 FontFeaturesDialog::~FontFeaturesDialog() {}
 
-void makeEnumComboBox(weld::ComboBoxText& rNameBox,
+void makeEnumComboBox(weld::ComboBox& rNameBox,
                       vcl::font::FeatureDefinition const& rFeatureDefinition)
 {
     for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
@@ -97,7 +97,7 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
         aCurrentItem.m_xContainer->set_grid_left_attach(nGridPositionX);
         aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
 
-        Link<weld::ComboBoxText&, void> aComboBoxSelectHandler
+        Link<weld::ComboBox&, void> aComboBoxSelectHandler
             = LINK(this, FontFeaturesDialog, ComboBoxSelectedHdl);
         Link<weld::ToggleButton&, void> aCheckBoxToggleHandler
             = LINK(this, FontFeaturesDialog, CheckBoxToggledHdl);
@@ -150,7 +150,7 @@ IMPL_LINK_NOARG(FontFeaturesDialog, CheckBoxToggledHdl, weld::ToggleButton&, voi
     updateFontPreview();
 }
 
-IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, weld::ComboBox&, void)
 {
     updateFontPreview();
 }

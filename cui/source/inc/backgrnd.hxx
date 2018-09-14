@@ -144,7 +144,7 @@ private:
 
 class SvxBkgTabPage : public SvxAreaTabPage
 {
-    std::unique_ptr<weld::ComboBoxText> m_xTblLBox;
+    std::unique_ptr<weld::ComboBox> m_xTblLBox;
     bool        bHighlighting       : 1;
 public:
     using SvxAreaTabPage::DeactivatePage;

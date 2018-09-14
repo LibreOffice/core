@@ -2009,7 +2009,7 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
         m_xWidget->clear();
 }
 
-URLBox::URLBox(std::unique_ptr<weld::ComboBoxText> pWidget)
+URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
     : bHistoryDisabled(false)
     , m_xWidget(std::move(pWidget))
 {
@@ -2097,7 +2097,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
     }
 }
 
-IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBox&, void)
 {
     aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
 }

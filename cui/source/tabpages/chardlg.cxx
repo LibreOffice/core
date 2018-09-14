@@ -228,24 +228,24 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
     , m_pImpl(new SvxCharNamePage_Impl)
     , m_xEastFrame(m_xBuilder->weld_widget("asian"))
     , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
-    , m_xEastFontNameLB(m_xBuilder->weld_combo_box_text("eastfontnamelb"))
+    , m_xEastFontNameLB(m_xBuilder->weld_combo_box("eastfontnamelb"))
     , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
-    , m_xEastFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box_text("eaststylelb")))
+    , m_xEastFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
     , m_xEastFontSizeFT(m_xBuilder->weld_label("eastsizeft"))
-    , m_xEastFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box_text("eastsizelb")))
+    , m_xEastFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
     , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
-    , m_xEastFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box_text("eastlanglb")))
+    , m_xEastFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
     , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
     , m_xEastFontFeaturesButton(m_xBuilder->weld_button("east_features_button"))
     , m_xCTLFrame(m_xBuilder->weld_widget("ctl"))
     , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
-    , m_xCTLFontNameLB(m_xBuilder->weld_combo_box_text("ctlfontnamelb"))
+    , m_xCTLFontNameLB(m_xBuilder->weld_combo_box("ctlfontnamelb"))
     , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
-    , m_xCTLFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box_text("ctlstylelb")))
+    , m_xCTLFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
     , m_xCTLFontSizeFT(m_xBuilder->weld_label("ctlsizeft"))
-    , m_xCTLFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box_text("ctlsizelb")))
+    , m_xCTLFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
-    , m_xCTLFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box_text("ctllanglb")))
+    , m_xCTLFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
 {
@@ -262,15 +262,15 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
     {
         m_xWestFrame = m_xBuilder->weld_widget("western");
         m_xWestFontNameFT = m_xBuilder->weld_label("westfontnameft-cjk");
-        m_xWestFontNameLB = m_xBuilder->weld_combo_box_text("westfontnamelb-cjk");
+        m_xWestFontNameLB = m_xBuilder->weld_combo_box("westfontnamelb-cjk");
         m_xWestFontStyleFT = m_xBuilder->weld_label("weststyleft-cjk");
         m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-cjk");
 
-        m_xWestFontStyleLB.reset(new SvtFontStyleBox(m_xBuilder->weld_combo_box_text("weststylelb-cjk")));
-        m_xWestFontSizeLB.reset(new SvtFontSizeBox(m_xBuilder->weld_combo_box_text("westsizelb-cjk")));
+        m_xWestFontStyleLB.reset(new SvtFontStyleBox(m_xBuilder->weld_combo_box("weststylelb-cjk")));
+        m_xWestFontSizeLB.reset(new SvtFontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-cjk");
-        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box_text("westlanglb-cjk")));
+        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box("westlanglb-cjk")));
         m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-cjk");
 
         m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-cjk");
@@ -283,7 +283,7 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
         m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-nocjk");
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-nocjk");
-        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box_text("westlanglb-nocjk")));
+        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box("westlanglb-nocjk")));
         m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-nocjk");
 
         m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-nocjk");
@@ -363,7 +363,7 @@ void SvxCharNamePage::Initialize()
     // to handle the changes of the other pages
     SetExchangeSupport();
 
-    Link<weld::ComboBoxText&,void> aLink = LINK(this, SvxCharNamePage, FontModifyComboBoxHdl_Impl);
+    Link<weld::ComboBox&,void> aLink = LINK(this, SvxCharNamePage, FontModifyComboBoxHdl_Impl);
     m_xWestFontNameLB->connect_changed(aLink);
     m_xWestFontStyleLB->connect_changed(aLink);
     m_xWestFontSizeLB->connect_changed(aLink);
@@ -417,7 +417,7 @@ namespace
 {
     FontMetric calcFontMetrics(  SvxFont& _rFont,
                     SvxCharNamePage const * _pPage,
-                    const weld::ComboBoxText* _pFontNameLB,
+                    const weld::ComboBox* _pFontNameLB,
                     const SvtFontStyleBox* _pFontStyleLB,
                     const SvtFontSizeBox* _pFontSizeLB,
                     const LanguageBox* _pLanguageLB,
@@ -601,7 +601,7 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
 
 namespace
 {
-    void FillFontNames(weld::ComboBoxText& rBox, const FontList& rList)
+    void FillFontNames(weld::ComboBox& rBox, const FontList& rList)
     {
         // insert fonts
         rBox.freeze();
@@ -618,7 +618,7 @@ namespace
 
 void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    weld::ComboBoxText* pNameBox = nullptr;
+    weld::ComboBox* pNameBox = nullptr;
     weld::Label* pStyleLabel = nullptr;
     SvtFontStyleBox* pStyleBox = nullptr;
     weld::Label* pSizeLabel = nullptr;
@@ -844,7 +844,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 {
     bool bModified = false;
 
-    weld::ComboBoxText* pNameBox = nullptr;
+    weld::ComboBox* pNameBox = nullptr;
     SvtFontStyleBox* pStyleBox = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
     LanguageBox* pLangBox = nullptr;
@@ -1133,7 +1133,7 @@ IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl, Timer *, void)
     UpdatePreview_Impl();
 }
 
-IMPL_LINK(SvxCharNamePage, FontModifyComboBoxHdl_Impl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SvxCharNamePage, FontModifyComboBoxHdl_Impl, weld::ComboBox&, rBox, void)
 {
     FontModifyHdl_Impl(rBox);
 }
@@ -1146,7 +1146,7 @@ IMPL_LINK(SvxCharNamePage, FontModifyEditHdl_Impl, weld::Entry&, rBox, void)
 IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, void)
 {
     OUString sFontName;
-    weld::ComboBoxText* pNameBox = nullptr;
+    weld::ComboBox* pNameBox = nullptr;
 
     if (&rButton == m_xWestFontFeaturesButton.get())
     {
@@ -1330,25 +1330,25 @@ SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& 
     , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
     , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pParent.GetFrameWeld()))
     , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
-    , m_xEffectsLB(m_xBuilder->weld_combo_box_text("effectslb"))
+    , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
     , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
-    , m_xReliefLB(m_xBuilder->weld_combo_box_text("relieflb"))
+    , m_xReliefLB(m_xBuilder->weld_combo_box("relieflb"))
     , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
     , m_xShadowBtn(m_xBuilder->weld_check_button("shadowcb"))
     , m_xBlinkingBtn(m_xBuilder->weld_check_button("blinkingcb"))
     , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
-    , m_xOverlineLB(m_xBuilder->weld_combo_box_text("overlinelb"))
+    , m_xOverlineLB(m_xBuilder->weld_combo_box("overlinelb"))
     , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
     , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"), pParent.GetFrameWeld()))
-    , m_xStrikeoutLB(m_xBuilder->weld_combo_box_text("strikeoutlb"))
-    , m_xUnderlineLB(m_xBuilder->weld_combo_box_text("underlinelb"))
+    , m_xStrikeoutLB(m_xBuilder->weld_combo_box("strikeoutlb"))
+    , m_xUnderlineLB(m_xBuilder->weld_combo_box("underlinelb"))
     , m_xUnderlineColorFT(m_xBuilder->weld_label("underlinecolorft"))
     , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pParent.GetFrameWeld()))
     , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
     , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
-    , m_xEmphasisLB(m_xBuilder->weld_combo_box_text("emphasislb"))
+    , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))
     , m_xPositionFT(m_xBuilder->weld_label("positionft"))
-    , m_xPositionLB(m_xBuilder->weld_combo_box_text("positionlb"))
+    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
@@ -1408,7 +1408,7 @@ void SvxCharEffectsPage::Initialize()
     m_xFontColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
 
     // handler
-    Link<weld::ComboBoxText&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
+    Link<weld::ComboBox&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
     m_xUnderlineLB->connect_changed( aLink );
     m_xUnderlineColorLB->SetSelectHdl(LINK(this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl));
     m_xOverlineLB->connect_changed( aLink );
@@ -1606,12 +1606,12 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     return bChanged;
 }
 
-IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBoxText&, rBox, void )
+IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBox&, rBox, void )
 {
     SelectHdl_Impl(&rBox);
 }
 
-void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBoxText* pBox)
+void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBox* pBox)
 {
     if (m_xEmphasisLB.get() == pBox)
     {
@@ -1648,7 +1648,7 @@ void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBoxText* pBox)
     UpdatePreview_Impl();
 }
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, weld::ComboBox&, void)
 {
     bool bEnable = ( ( m_xUnderlineLB->get_active() > 0 ) ||
                      ( m_xOverlineLB->get_active()  > 0 ) ||
