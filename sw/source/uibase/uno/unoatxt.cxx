@@ -340,7 +340,9 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     if(!xTextRange.is())
         throw uno::RuntimeException();
 
-    SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName) : nullptr;
+    std::unique_ptr<SwTextBlocks> pGlosGroup;
+    if (pGlossaries)
+        pGlosGroup = pGlossaries->GetGroupDoc(m_sGroupName);
     const OUString& sShortName(aName);
     const OUString& sLongName(aTitle);
     if (pGlosGroup && !pGlosGroup->GetError())
@@ -398,7 +400,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             throw uno::RuntimeException();
         }
     }
-    delete pGlosGroup;
+    pGlosGroup.reset();
 
     uno::Reference< text::XAutoTextEntry > xEntry;
 

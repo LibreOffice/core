@@ -51,7 +51,7 @@ class SW_DLLPUBLIC SwGlossaries
     std::vector<OUString>   m_GlosArr;
     bool                m_bError;
 
-    SAL_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, bool bCreate = true) const;
+    SAL_DLLPRIVATE std::unique_ptr<SwTextBlocks> GetGlosDoc(const OUString &rName, bool bCreate = true) const;
     SAL_DLLPRIVATE std::vector<OUString> & GetNameList();
 
     // implementation in unoatxt.cxx
@@ -102,7 +102,8 @@ public:
 
     bool            FindGroupName(OUString& rGroup);
 
-    SwTextBlocks*   GetGroupDoc(const OUString &rName,
+    std::unique_ptr<SwTextBlocks>
+                    GetGroupDoc(const OUString &rName,
                                 bool bCreate = false);
     static OUString GetDefName();
     static OUString GetExtension();

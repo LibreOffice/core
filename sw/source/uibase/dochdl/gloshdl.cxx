@@ -138,7 +138,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
     aCurGrp = sGroup;
     if(!bApi)
     {
-        pCurGrp.reset( rStatGlossaries.GetGroupDoc(aCurGrp, true) );
+        pCurGrp = rStatGlossaries.GetGroupDoc(aCurGrp, true);
     }
 }
 
@@ -152,7 +152,7 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
     OUString sRet = rStatGlossaries.GetGroupName(nId);
     if(pTitle)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet);
+        std::unique_ptr<SwTextBlocks> pGroup = rStatGlossaries.GetGroupDoc(sRet);
         if (pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
@@ -161,11 +161,9 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
                 *pTitle = sRet.getToken(0, GLOS_DELIM);
                 pGroup->SetName(*pTitle);
             }
-            delete pGroup;
         }
         else
         {
-            delete pGroup;
             sRet.clear();
         }
     }
@@ -186,11 +184,10 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         FindGroupName(sOldGroup);
     if(rOld == rNew)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sOldGroup);
+        std::unique_ptr<SwTextBlocks> pGroup = rStatGlossaries.GetGroupDoc(sOldGroup);
         if(pGroup)
         {
             pGroup->SetName(rNewTitle);
-            delete pGroup;
         }
     }
     else
@@ -208,12 +205,10 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
 bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
                                 const OUString& rDestGroupName, const OUString& rLongName, bool bMove )
 {
-    SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName);
-    SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName);
+    std::unique_ptr<SwTextBlocks> pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName);
+    std::unique_ptr<SwTextBlocks> pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName);
     if (pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
     {
-        delete pDestGroup;
-        delete pSourceGroup;
         return false;
     }
 
@@ -226,8 +221,6 @@ bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSou
         // the index must be existing
         nRet = pSourceGroup->Delete( nDeleteIdx ) ? ERRCODE_NONE : ErrCode(1);
     }
-    delete pSourceGroup;
-    delete pDestGroup;
     return !nRet;
 }
 
@@ -272,7 +265,7 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
 {
     OUString sReturn;
     SwTextBlocks *pTmp =
-        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc( aCurGrp );
+        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc( aCurGrp ).release();
     if(pTmp)
     {
         sal_uInt16 nIdx = pTmp->GetLongIndex( rName );
@@ -288,7 +281,7 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
 bool SwGlossaryHdl::HasShortName(const OUString& rShortName) const
 {
     SwTextBlocks *pBlock = pCurGrp ? pCurGrp.get()
-                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
+                                   : rStatGlossaries.GetGroupDoc( aCurGrp ).release();
     bool bRet = pBlock->GetIndex( rShortName ) != sal_uInt16(-1);
     if( !pCurGrp )
         delete pBlock;
@@ -300,17 +293,25 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                                 bool bCreateGroup, bool bNoAttr)
 {
     SwTextBlocks *pTmp =
-        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc( aCurGrp, bCreateGroup );
+        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc( aCurGrp, bCreateGroup ).release();
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pTmp)
+    {
+        if (!pCurGrp)
+            delete pTmp;
         return false;
+    }
 
     OUString sOnlyText;
     OUString* pOnlyText = nullptr;
     if( bNoAttr )
     {
         if( !pWrtShell->GetSelectedText( sOnlyText, ParaBreakType::ToOnlyCR ))
+        {
+            if (!pCurGrp)
+                delete pTmp;
             return false;
+        }
         pOnlyText = &sOnlyText;
     }
 
@@ -333,10 +334,14 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
 bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
-                                    : rStatGlossaries.GetGroupDoc(aCurGrp);
+                                    : rStatGlossaries.GetGroupDoc(aCurGrp).release();
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pGlossary)
+    {
+        if( !pCurGrp )
+            delete pGlossary;
         return false;
+    }
 
     sal_uInt16 nIdx = pGlossary->GetIndex( rShortName );
     if( nIdx != sal_uInt16(-1) )
@@ -350,13 +355,12 @@ bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
 bool SwGlossaryHdl::ExpandGlossary()
 {
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
-    SwTextBlocks *pGlossary;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
     OUString sGroupName( (*fnGetCurrGroup)() );
     if (sGroupName.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroupName);
-    pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
+    std::unique_ptr<SwTextBlocks> pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
 
     OUString aShortName;
 
@@ -379,12 +383,12 @@ bool SwGlossaryHdl::ExpandGlossary()
         if(pWrtShell->IsSelection())
             aShortName = pWrtShell->GetSelText();
     }
-    return pGlossary && Expand( aShortName, &rStatGlossaries, pGlossary );
+    return pGlossary && Expand( aShortName, &rStatGlossaries, std::move(pGlossary) );
 }
 
 bool SwGlossaryHdl::Expand( const OUString& rShortName,
                             SwGlossaries *pGlossaries,
-                            SwTextBlocks *pGlossary  )
+                            std::unique_ptr<SwTextBlocks> pGlossary  )
 {
     std::vector<TextBlockInfo_Impl> aFoundArr;
     OUString aShortName( rShortName );
@@ -422,7 +426,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         }
         if( !aFoundArr.empty() )  // one was found
         {
-            delete pGlossary;
+            pGlossary.reset();
             if (1 == aFoundArr.size())
             {
                 TextBlockInfo_Impl& rData = aFoundArr.front();
@@ -462,7 +466,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
     {
         if( !bCancel )
         {
-            delete pGlossary;
+            pGlossary.reset();
 
             const sal_Int32 nMaxLen = 50;
             if(pWrtShell->IsSelection() && aShortName.getLength() > nMaxLen)
@@ -483,7 +487,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
     {
         SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
         SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
-        GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary );
+        GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary.get() );
 
         // StartAction must not be before HasSelection and DelRight,
         // otherwise the possible Shell change gets delayed and
@@ -511,7 +515,6 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         if( aFieldLst.BuildSortLst() )
             pWrtShell->UpdateInputFields( &aFieldLst );
     }
-    delete pGlossary;
     return true;
 }
 
@@ -521,10 +524,14 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
 
     SwTextBlocks *pGlos =
-        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc(aCurGrp);
+        pCurGrp ? pCurGrp.get() : rStatGlossaries.GetGroupDoc(aCurGrp).release();
 
     if (!pGlos)
+    {
+        if (!pCurGrp)
+            delete pGlos;
         return false;
+    }
 
     SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
     SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
@@ -567,7 +574,7 @@ void SwGlossaryHdl::SetMacros(const OUString& rShortName,
 {
     SwTextBlocks *pGlos = pGlossary ? pGlossary :
                                 pCurGrp ? pCurGrp.get()
-                                  : rStatGlossaries.GetGroupDoc( aCurGrp );
+                                  : rStatGlossaries.GetGroupDoc( aCurGrp ).release();
     SvxMacroTableDtor aMacroTable;
     if( pStart )
         aMacroTable.Insert( SvMacroItemId::SwStartInsGlossary, *pStart);
@@ -588,7 +595,7 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
 {
     SwTextBlocks *pGlos = pGlossary ? pGlossary
                                     : pCurGrp ? pCurGrp.get()
-                                        : rStatGlossaries.GetGroupDoc(aCurGrp);
+                                        : rStatGlossaries.GetGroupDoc(aCurGrp).release();
     sal_uInt16 nIndex = pGlos->GetIndex( rShortName );
     if( nIndex != USHRT_MAX )
     {
@@ -628,7 +635,7 @@ bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortN
 {
     bool bRet = false;
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
-                                    : rStatGlossaries.GetGroupDoc(aCurGrp);
+                                    : rStatGlossaries.GetGroupDoc(aCurGrp).release();
     if(pGlossary)
     {
         sal_uInt16 nIdx = pGlossary->GetIndex( rOldShort );
@@ -653,11 +660,11 @@ bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
     SwTextBlocks *pGlossary = nullptr;
 
     if (pGrpNm)
-        pGlossary = rStatGlossaries.GetGroupDoc( *pGrpNm );
+        pGlossary = rStatGlossaries.GetGroupDoc( *pGrpNm ).release();
     else if (pCurGrp)
         pGlossary = pCurGrp.get();
     else
-        pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp);
+        pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp).release();
 
     const bool bRet = !pGlossary || pGlossary->IsReadOnly();
     if( pGrpNm || !pCurGrp )
@@ -668,7 +675,7 @@ bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 bool SwGlossaryHdl::IsOld() const
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
-                                      : rStatGlossaries.GetGroupDoc(aCurGrp);
+                                      : rStatGlossaries.GetGroupDoc(aCurGrp).release();
     bool bRet = pGlossary && pGlossary->IsOld();
     if( !pCurGrp )
         delete pGlossary;
@@ -684,7 +691,7 @@ bool SwGlossaryHdl::FindGroupName(OUString& rGroup)
 bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
-                                    : rStatGlossaries.GetGroupDoc(aCurGrp);
+                                    : rStatGlossaries.GetGroupDoc(aCurGrp).release();
 
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
 
@@ -709,7 +716,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
             pMed->SetFilter( pFilter );
             Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
             if( pR && nullptr != ( pGlossary = pCurGrp ? pCurGrp.get()
-                                    : rStatGlossaries.GetGroupDoc(aCurGrp)) )
+                                    : rStatGlossaries.GetGroupDoc(aCurGrp).release()) )
             {
                 SwReader aReader( *pMed, rName );
                 if( aReader.HasGlossaries( *pR ) )
