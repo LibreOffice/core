@@ -20,7 +20,7 @@ namespace sc {
 DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/datastreams.ui", "DataStreamDialog")
     , m_pDocShell(pDocShell)
-    , m_xCbUrl(new URLBox(m_xBuilder->weld_combo_box_text("url")))
+    , m_xCbUrl(new URLBox(m_xBuilder->weld_combo_box("url")))
     , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
     , m_xRBValuesInLine(m_xBuilder->weld_radio_button("valuesinline"))
     , m_xRBAddressValue(m_xBuilder->weld_radio_button("addressvalue"))
@@ -65,7 +65,7 @@ IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::ToggleButton&, void)
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBox&, void)
 {
     UpdateEnable();
 }

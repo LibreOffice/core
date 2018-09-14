@@ -508,7 +508,7 @@ GalleryIdDialog::GalleryIdDialog(weld::Window* pParent, GalleryTheme* _pThm)
     : GenericDialogController(pParent, "cui/ui/gallerythemeiddialog.ui", "GalleryThemeIDDialog")
     , m_pThm(_pThm)
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xLbResName(m_xBuilder->weld_combo_box_text("entry"))
+    , m_xLbResName(m_xBuilder->weld_combo_box("entry"))
 {
     m_xLbResName->append_text("!!! No Id !!!");
 

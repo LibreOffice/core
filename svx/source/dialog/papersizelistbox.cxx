@@ -84,7 +84,7 @@ Size PaperSizeListBox::GetOptimalSize() const
     return Size(150, ListBox::GetOptimalSize().Height());
 }
 
-SvxPaperSizeListBox::SvxPaperSizeListBox(std::unique_ptr<weld::ComboBoxText> pControl)
+SvxPaperSizeListBox::SvxPaperSizeListBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
 {
     m_xControl->set_size_request(150, -1);

@@ -54,14 +54,14 @@ class SwSequenceOptionDialog : public weld::GenericDialogController
     SwView&         m_rView;
     OUString        m_aFieldTypeName;
 
-    std::unique_ptr<weld::ComboBoxText> m_xLbLevel;
+    std::unique_ptr<weld::ComboBox> m_xLbLevel;
     std::unique_ptr<weld::Entry> m_xEdDelim;
 
-    std::unique_ptr<weld::ComboBoxText> m_xLbCharStyle;
+    std::unique_ptr<weld::ComboBox> m_xLbCharStyle;
     std::unique_ptr<weld::CheckButton> m_xApplyBorderAndShadowCB;
 
     //#i61007# order of captions
-    std::unique_ptr<weld::ComboBoxText> m_xLbCaptionOrder;
+    std::unique_ptr<weld::ComboBox> m_xLbCaptionOrder;
 
 public:
     SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType);
@@ -440,11 +440,11 @@ SwSequenceOptionDialog::SwSequenceOptionDialog(weld::Window *pParent, SwView &rV
     : GenericDialogController(pParent, "modules/swriter/ui/captionoptions.ui", "CaptionOptionsDialog")
     , m_rView(rV)
     , m_aFieldTypeName(rSeqFieldType)
-    , m_xLbLevel(m_xBuilder->weld_combo_box_text("level"))
+    , m_xLbLevel(m_xBuilder->weld_combo_box("level"))
     , m_xEdDelim(m_xBuilder->weld_entry("separator"))
-    , m_xLbCharStyle(m_xBuilder->weld_combo_box_text("style"))
+    , m_xLbCharStyle(m_xBuilder->weld_combo_box("style"))
     , m_xApplyBorderAndShadowCB(m_xBuilder->weld_check_button("border_and_shadow"))
-    , m_xLbCaptionOrder(m_xBuilder->weld_combo_box_text("caption_order"))
+    , m_xLbCaptionOrder(m_xBuilder->weld_combo_box("caption_order"))
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
 

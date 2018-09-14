@@ -41,7 +41,7 @@ private:
 
 public:
     std::unique_ptr<weld::Entry> m_xEDServerName;
-    std::unique_ptr<weld::ComboBoxText> m_xLBServerType;
+    std::unique_ptr<weld::ComboBox> m_xLBServerType;
     std::unique_ptr<weld::Entry> m_xEDUsername;
     std::unique_ptr<weld::Label> m_xFTUsernameLabel;
     std::unique_ptr<weld::Button> m_xBTOk;
@@ -55,7 +55,7 @@ public:
 
     std::unique_ptr<weld::Widget> m_xRepositoryBox;
     std::unique_ptr<weld::Label> m_xFTRepository;
-    std::unique_ptr<weld::ComboBoxText> m_xLBRepository;
+    std::unique_ptr<weld::ComboBox> m_xLBRepository;
 
     std::unique_ptr<weld::Entry> m_xEDShare;
     std::unique_ptr<weld::Label> m_xFTShare;
@@ -96,7 +96,7 @@ private:
     DECL_LINK ( EditHdl, DetailsContainer*, void );
     DECL_LINK ( ModifyHdl, weld::Entry&, void );
     void SelectType(bool bSkipSeparator);
-    DECL_LINK ( SelectTypeHdl, weld::ComboBoxText&, void );
+    DECL_LINK ( SelectTypeHdl, weld::ComboBox&, void );
     DECL_LINK ( EditLabelHdl, weld::Entry&, void );
     DECL_LINK ( EditUsernameHdl, weld::Entry&, void );
 

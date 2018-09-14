@@ -57,13 +57,13 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     , m_xName(m_xBuilder->weld_entry("name"))
     , m_xAutoCB(m_xBuilder->weld_check_button("autoupdate"))
     , m_xFollowFt(m_xBuilder->weld_label("nextstyleft"))
-    , m_xFollowLb(m_xBuilder->weld_combo_box_text("nextstyle"))
+    , m_xFollowLb(m_xBuilder->weld_combo_box("nextstyle"))
     , m_xEditStyleBtn(m_xBuilder->weld_button("editstyle"))
     , m_xBaseFt(m_xBuilder->weld_label("linkedwithft"))
-    , m_xBaseLb(m_xBuilder->weld_combo_box_text("linkedwith"))
+    , m_xBaseLb(m_xBuilder->weld_combo_box("linkedwith"))
     , m_xEditLinkStyleBtn(m_xBuilder->weld_button("editlinkstyle"))
     , m_xFilterFt(m_xBuilder->weld_label("categoryft"))
-    , m_xFilterLb(m_xBuilder->weld_combo_box_text("category"))
+    , m_xFilterLb(m_xBuilder->weld_combo_box("category"))
     , m_xDescFt(m_xBuilder->weld_label("desc"))
     , m_xNameFt(m_xBuilder->weld_label("nameft"))
 {
@@ -250,7 +250,7 @@ void SfxManageStyleSheetPage::dispose()
     SfxTabPage::dispose();
 }
 
-void SfxManageStyleSheetPage::UpdateName_Impl( weld::ComboBoxText* pBox,
+void SfxManageStyleSheetPage::UpdateName_Impl( weld::ComboBox* pBox,
                                                const OUString& rNew )
 
 /*  [Description]
@@ -312,7 +312,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_xDescFt->set_label(pStyle->GetDescription(eUnit));
 }
 
-IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, weld::ComboBox&, void)
 {
     OUString aTemplName(m_xFollowLb->get_active_text());
     OUString aEditTemplName(m_xName->get_text());
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditStyleHdl_Impl, weld::Button&, void)
     Execute_Impl(SID_STYLE_EDIT, aTemplName, static_cast<sal_uInt16>(pStyle->GetFamily()));
 }
 
-IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, weld::ComboBox&, void)
 {
     int linkSelectPos = m_xBaseLb->get_active();
     if ( linkSelectPos == 0 )
