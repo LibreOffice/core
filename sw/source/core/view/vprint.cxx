@@ -492,7 +492,7 @@ bool SwViewShell::PrintOrPDFExport(
     // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here.
-    SwViewShell *pShell = new SwViewShell(*this, nullptr, pOutDev);
+    std::unique_ptr<SwViewShell> pShell(new SwViewShell(*this, nullptr, pOutDev));
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
@@ -503,7 +503,7 @@ bool SwViewShell::PrintOrPDFExport(
 
     {   // additional scope so that the CurrShell is reset before destroying the shell
 
-        SET_CURR_SHELL( pShell );
+        SET_CURR_SHELL( pShell.get() );
 
         //JP 01.02.99: Bug 61335 - the ReadOnly flag is never copied
         if( mpOpt->IsReadonly() )
@@ -519,7 +519,7 @@ bool SwViewShell::PrintOrPDFExport(
             "SwViewShell::PrintOrPDFExport: nPage not valid" );
         SwViewShell *const pViewSh2 = (nPage < 0)
                 ? rPrintData.GetRenderData().m_pPostItShell.get()// post-it page
-                : pShell; // a 'regular' page, not one from the post-it doc
+                : pShell.get(); // a 'regular' page, not one from the post-it doc
 
         SwPageFrame const*const pStPage =
             sw_getPage(*pViewSh2->GetLayout(), abs(nPage));
@@ -577,7 +577,7 @@ bool SwViewShell::PrintOrPDFExport(
         }
     }
 
-    delete pShell;
+    pShell.reset();
 
     // restore settings of OutputDevice (should be done always now since the
     // output device is now provided by a call from outside the Writer)
@@ -591,14 +591,14 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 {
     // For printing a shell is needed. Either the Doc already has one, than we
     // create a new view, or it has none, than we create the first view.
-    SwViewShell *pSh;
+    std::unique_ptr<SwViewShell> pSh;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), nullptr, &rRenderContext,VSHELLFLAG_SHARELAYOUT );
+        pSh.reset(new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), nullptr, &rRenderContext,VSHELLFLAG_SHARELAYOUT ));
     else
-        pSh = new SwViewShell( *pDoc, nullptr, pOpt, &rRenderContext);
+        pSh.reset(new SwViewShell( *pDoc, nullptr, pOpt, &rRenderContext));
 
     {
-        SET_CURR_SHELL( pSh );
+        SET_CURR_SHELL( pSh.get() );
         pSh->PrepareForPrint( rOptions );
         pSh->SetPrtFormatOption( true );
 
@@ -625,7 +625,6 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         rRenderContext.Pop();
         // first the CurrShell object needs to be destroyed!
     }
-    delete pSh;
 }
 
 /// Check if the DocNodesArray contains fields.
