@@ -2323,9 +2323,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 if (rSh.HasReadonlySel() && rKeyCode.GetFunction() == KeyFuncType::PASTE)
                 {
-                    auto xInfo(std::make_shared<weld::GenericDialogController>(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog"));
-                    weld::DialogController::runAsync(xInfo, [](int) {});
-                    eKeyState = SwKeyState::End;
+                    ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
+                                                        "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
+                    eKeyState = KS_End;
                 }
                 else if( m_rView.KeyInput( aKeyEvent ) )
                 {
