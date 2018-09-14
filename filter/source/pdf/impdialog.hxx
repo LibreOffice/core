@@ -189,12 +189,12 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::Widget> mxQualityFrame;
     std::unique_ptr<weld::MetricSpinButton> mxNfQuality;
     std::unique_ptr<weld::CheckButton> mxCbReduceImageResolution;
-    std::unique_ptr<weld::ComboBoxText> mxCoReduceImageResolution;
+    std::unique_ptr<weld::ComboBox> mxCoReduceImageResolution;
     std::unique_ptr<weld::CheckButton> mxCbPDFA1b;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
     std::unique_ptr<weld::Widget> mxFormsFrame;
-    std::unique_ptr<weld::ComboBoxText> mxLbFormsFormat;
+    std::unique_ptr<weld::ComboBox> mxLbFormsFormat;
     std::unique_ptr<weld::CheckButton> mxCbAllowDuplicateFieldNames;
     std::unique_ptr<weld::CheckButton> mxCbExportBookmarks;
     std::unique_ptr<weld::CheckButton> mxCbExportHiddenSlides;
@@ -394,7 +394,7 @@ class ImpPDFTabSigningPage : public SfxTabPage
     std::unique_ptr<weld::Entry> mxEdSignLocation;
     std::unique_ptr<weld::Entry> mxEdSignContactInfo;
     std::unique_ptr<weld::Entry> mxEdSignReason;
-    std::unique_ptr<weld::ComboBoxText> mxLBSignTSA;
+    std::unique_ptr<weld::ComboBox> mxLBSignTSA;
 
     DECL_LINK(ClickmaPbSignCertSelect, weld::Button&, void);
     DECL_LINK(ClickmaPbSignCertClear, weld::Button&, void);

@@ -707,7 +707,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     }
 }
 
-bool SwDBManager::GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBName)
+bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
 {
     bool bRet = false;
     OUString sOldTableName(rBox.get_active_text());
@@ -767,7 +767,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
     GetColumnNames(pListBox, xConnection, rTableName);
 }
 
-void SwDBManager::GetColumnNames(weld::ComboBoxText& rBox,
+void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
                              const OUString& rDBName, const OUString& rTableName)
 {
     SwDBData aData;
@@ -804,7 +804,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
     }
 }
 
-void SwDBManager::GetColumnNames(weld::ComboBoxText& rBox,
+void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
         uno::Reference< sdbc::XConnection> const & xConnection,
         const OUString& rTableName)
 {

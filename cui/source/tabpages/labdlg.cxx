@@ -82,12 +82,12 @@ SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rI
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , m_xMF_SPACING(m_xBuilder->weld_metric_spin_button("spacing", FUNIT_MM))
-    , m_xLB_EXTENSION(m_xBuilder->weld_combo_box_text("extension"))
+    , m_xLB_EXTENSION(m_xBuilder->weld_combo_box("extension"))
     , m_xFT_BYFT(m_xBuilder->weld_label("byft"))
     , m_xMF_BY(m_xBuilder->weld_metric_spin_button("by", FUNIT_MM))
     , m_xFT_POSITIONFT(m_xBuilder->weld_label("positionft"))
-    , m_xLB_POSITION(m_xBuilder->weld_combo_box_text("position"))
-    , m_xLineTypes(m_xBuilder->weld_combo_box_text("linetypes"))
+    , m_xLB_POSITION(m_xBuilder->weld_combo_box("position"))
+    , m_xLineTypes(m_xBuilder->weld_combo_box("linetypes"))
     , m_xFT_LENGTHFT(m_xBuilder->weld_label("lengthft"))
     , m_xMF_LENGTH(m_xBuilder->weld_metric_spin_button("length", FUNIT_MM))
     , m_xCB_OPTIMAL(m_xBuilder->weld_check_button("optimal"))
@@ -402,7 +402,7 @@ void SvxCaptionTabPage::SetupExtension_Impl( sal_uInt16 nType )
     }
 }
 
-IMPL_LINK(SvxCaptionTabPage, ExtensionSelectHdl_Impl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SvxCaptionTabPage, ExtensionSelectHdl_Impl, weld::ComboBox&, rListBox, void)
 {
     if (&rListBox == m_xLB_EXTENSION.get())
     {
@@ -410,7 +410,7 @@ IMPL_LINK(SvxCaptionTabPage, ExtensionSelectHdl_Impl, weld::ComboBoxText&, rList
     }
 }
 
-IMPL_LINK(SvxCaptionTabPage, PositionSelectHdl_Impl, weld::ComboBoxText&, rListBox, void)
+IMPL_LINK(SvxCaptionTabPage, PositionSelectHdl_Impl, weld::ComboBox&, rListBox, void)
 {
     if (&rListBox == m_xLB_POSITION.get())
     {

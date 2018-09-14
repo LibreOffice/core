@@ -23,7 +23,7 @@ struct ScSortKeyItem
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     std::unique_ptr<weld::Frame> m_xFrame;
-    std::unique_ptr<weld::ComboBoxText> m_xLbSort;
+    std::unique_ptr<weld::ComboBox> m_xLbSort;
     std::unique_ptr<weld::RadioButton> m_xBtnUp;
     std::unique_ptr<weld::RadioButton> m_xBtnDown;
 

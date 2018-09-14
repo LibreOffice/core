@@ -26,8 +26,8 @@ public:
     virtual ~ScCalcOptionsDialog() override;
 
     DECL_LINK(AsZeroModifiedHdl, weld::ToggleButton&, void);
-    DECL_LINK(ConversionModifiedHdl, weld::ComboBoxText&, void);
-    DECL_LINK(SyntaxModifiedHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ConversionModifiedHdl, weld::ComboBox&, void);
+    DECL_LINK(SyntaxModifiedHdl, weld::ComboBox&, void);
     DECL_LINK(CurrentDocOnlyHdl, weld::ToggleButton&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
@@ -42,9 +42,9 @@ private:
     bool mbWriteConfig;
 
     std::unique_ptr<weld::CheckButton> mxEmptyAsZero;
-    std::unique_ptr<weld::ComboBoxText> mxConversion;
+    std::unique_ptr<weld::ComboBox> mxConversion;
     std::unique_ptr<weld::CheckButton> mxCurrentDocOnly;
-    std::unique_ptr<weld::ComboBoxText> mxSyntax;
+    std::unique_ptr<weld::ComboBox> mxSyntax;
 };
 
 #endif

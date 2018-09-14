@@ -158,8 +158,8 @@ public:
     };
 
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xControl;
-    Link<weld::ComboBoxText&, void> m_aChangeHdl;
+    std::unique_ptr<weld::ComboBox> m_xControl;
+    Link<weld::ComboBox&, void> m_aChangeHdl;
     OUString m_aAllString;
     std::unique_ptr<css::uno::Sequence<sal_Int16>> m_xSpellUsedLang;
     LanguageType m_eSavedLanguage;
@@ -170,9 +170,9 @@ private:
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
     SVX_DLLPRIVATE void ImplClear();
-    DECL_LINK(ChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 public:
-    LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl);
+    LanguageBox(std::unique_ptr<weld::ComboBox> pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
@@ -182,7 +182,7 @@ public:
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
     sal_Int32           SaveEditedAsEntry();
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     void save_active_id() { m_eSavedLanguage = get_active_id(); }
     LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }

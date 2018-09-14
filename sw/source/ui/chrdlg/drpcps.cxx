@@ -472,7 +472,7 @@ SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xTextText(m_xBuilder->weld_label("labelTXT_TEXT"))
     , m_xTextEdit(m_xBuilder->weld_entry("entryEDT_TEXT"))
     , m_xTemplateText(m_xBuilder->weld_label("labelTXT_TEMPLATE"))
-    , m_xTemplateBox(m_xBuilder->weld_combo_box_text("comboBOX_TEMPLATE"))
+    , m_xTemplateBox(m_xBuilder->weld_combo_box("comboBOX_TEMPLATE"))
     , m_xPict(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aPict))
 {
     m_aPict.SetDropCapsPage(this);
@@ -676,7 +676,7 @@ IMPL_LINK(SwDropCapsPage, MetricValueChangedHdl, weld::MetricSpinButton&, rEdit,
     ModifyEntry(rEdit.get_widget());
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl, weld::ComboBox&, void)
 {
     m_aPict.UpdatePaintSettings();
     bModified = true;
