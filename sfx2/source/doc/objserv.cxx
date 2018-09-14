@@ -1408,24 +1408,28 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     return *pState;
 }
 
-bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
+bool SfxObjectShell::CheckIsSignableFormat(weld::Window* pDialogParent)
 {
-    // Check if it is stored in OASIS format...
-    if  (   GetMedium()
-        &&  GetMedium()->GetFilter()
-        &&  !GetMedium()->GetName().isEmpty()
-        &&  (   (!GetMedium()->GetFilter()->IsOwnFormat() && !GetMedium()->GetFilter()->GetSupportsSigning())
-            ||  (GetMedium()->GetFilter()->IsOwnFormat() && !GetMedium()->HasStorage_Impl())
-            )
-        )
+    // Check if it is stored a format which supports signing
+    if (GetMedium() && GetMedium()->GetFilter() && !GetMedium()->GetName().isEmpty()
+        && ((!GetMedium()->GetFilter()->IsOwnFormat()
+             && !GetMedium()->GetFilter()->GetSupportsSigning())
+            || (GetMedium()->GetFilter()->IsOwnFormat() && !GetMedium()->HasStorage_Impl())))
     {
-        // Only OASIS and OOo6.x formats will be handled further
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pDialogParent,
-                                                  VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            pDialogParent, VclMessageType::Info, VclButtonsType::Ok,
+            SfxResId(STR_INFO_WRONGDOCFORMAT)));
 
         xBox->run();
         return false;
     }
+    return true;
+}
+
+bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
+{
+    if (!CheckIsSignableFormat(pDialogParent))
+        return false;
 
     // check whether the document is signed
     ImplGetSignatureState(); // document signature
@@ -1470,17 +1474,8 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
                 SetModified();
                 ExecFile_Impl( aSaveRequest );
 
-                // Check if it is stored in OASIS format...
-                if ( GetMedium() && GetMedium()->GetFilter()
-                  && ( !GetMedium()->GetFilter()->IsOwnFormat() || !GetMedium()->HasStorage_Impl()
-                    || SotStorage::GetVersion( GetMedium()->GetStorage() ) <= SOFFICE_FILEFORMAT_60 ) )
-                {
-                    // Only OASIS format will be handled further
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pDialogParent,
-                                                              VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
-                    xBox->run();
+                if (!CheckIsSignableFormat(pDialogParent))
                     return false;
-                }
             }
             else
             {

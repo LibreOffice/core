@@ -23,7 +23,11 @@ enum CertificateKind
 
     /** OpenPGP format of a certificate
      */
-    OPENPGP
+    OPENPGP,
+
+    /** No format specified
+     */
+    NONE
 };
 
 } ; } ; } ; } ;

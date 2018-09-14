@@ -357,6 +357,7 @@ public:
     /** Returns to if preparing was successful, else false. */
     bool PrepareForSigning(weld::Window* pDialogParent);
     bool CheckIsReadonly(bool bSignScriptingContent);
+    bool CheckIsSignableFormat(weld::Window* pDialogParent);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
