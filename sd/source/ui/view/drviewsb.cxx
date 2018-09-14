@@ -46,7 +46,7 @@
 #include <sdattr.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <drawview.hxx>
@@ -78,8 +78,8 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // Undo
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
-        SdrLayerID nBackground = rLayerAdmin.GetLayerID( SdResId(STR_LAYER_BCKGRND) );
-        SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SdResId(STR_LAYER_BCKGRNDOBJ) );
+        SdrLayerID nBackground = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID nBgObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
         SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
@@ -168,7 +168,7 @@ void DrawViewShell::ModifyLayer (
         for( nPos = 0; nPos < nPageCount; nPos++ )
         {
             sal_uInt16 nId = GetLayerTabControl()->GetPageId( nPos );
-            if (GetLayerTabControl()->GetPageText(nId) == pLayer->GetName())
+            if (GetLayerTabControl()->GetLayerName(nId) == pLayer->GetName())
             {
                 nCurPage = nId;
                 break;

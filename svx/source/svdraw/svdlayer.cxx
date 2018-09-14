@@ -114,7 +114,7 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLayer(),
     pParent(pNewParent),
     pModel(nullptr),
-    maControlLayerName("Controls")
+    maControlLayerName("controls")
 {
 }
 
@@ -122,7 +122,7 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     aLayer(),
     pParent(nullptr),
     pModel(nullptr),
-    maControlLayerName("Controls")
+    maControlLayerName("controls")
 {
     *this = rSrcLayerAdmin;
 }

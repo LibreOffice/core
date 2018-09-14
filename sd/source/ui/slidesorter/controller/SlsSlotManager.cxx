@@ -51,6 +51,7 @@
 #include <app.hrc>
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <unokywds.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
@@ -940,8 +941,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             // Undo
             SdPage* pUndoPage = pPageToRename;
             SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
-            SdrLayerID nBackground = rLayerAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRND ) );
-            SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRNDOBJ ) );
+            SdrLayerID nBackground = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+            SdrLayerID nBgObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
             SdrLayerIDSet aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)

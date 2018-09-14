@@ -764,7 +764,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(sUNO_LayerName_background), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -784,7 +784,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -1183,7 +1183,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(sUNO_LayerName_background));
             }
             else
             {
@@ -1202,7 +1202,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects));
             }
             else
             {
