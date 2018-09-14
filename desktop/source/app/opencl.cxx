@@ -24,6 +24,8 @@
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <svl/documentlockfile.hxx>
+
 #include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -53,6 +55,15 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     sal_uInt64 nKernelFailures = openclwrapper::kernelFailures;
 
     SAL_INFO("opencl", "Starting CL test spreadsheet");
+
+    // A stale lock file would make the loading fail, so make sure to remove it.
+    try {
+        ::svt::DocumentLockFile lockFile( rURL );
+        lockFile.RemoveFileDirectly();
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
 
     try {
         css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
