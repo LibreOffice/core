@@ -39,6 +39,7 @@
 #include <comphelper/simplefileaccessinteraction.hxx>
 
 #define MAX_RESULTS 9
+#define MAX_DEFAULT_PERSONAS 3
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -428,7 +429,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     sal_Int32 nIndex = 0;
     bool foundOne = false;
 
-    while( aStream.IsOpen() && !aStream.eof() )
+    while( aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS )
     {
         OString aLine;
         aStream.ReadLine( aLine );
