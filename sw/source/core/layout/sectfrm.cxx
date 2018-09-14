@@ -45,6 +45,21 @@
 #include <sortedobjs.hxx>
 #include <hints.hxx>
 
+namespace
+{
+/**
+ * Performs the correct type of position invalidation depending on if we're in
+ * CalcContent().
+ */
+void InvalidateFramePos(SwFrame* pFrame, bool bInCalcContent)
+{
+    if (bInCalcContent)
+        pFrame->InvalidatePos_();
+    else
+        pFrame->InvalidatePos();
+}
+}
+
 SwSectionFrame::SwSectionFrame( SwSection &rSect, SwFrame* pSib )
     : SwLayoutFrame( rSect.GetFormat(), pSib )
     , SwFlowFrame( static_cast<SwFrame&>(*this) )
@@ -2212,15 +2227,20 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                 }
                 if( GetNext() )
                 {
+                    // Own height changed, need to invalidate the position of
+                    // next frames.
                     SwFrame *pFrame = GetNext();
                     while( pFrame && pFrame->IsSctFrame() && !static_cast<SwSectionFrame*>(pFrame)->GetSection() )
+                    {
+                        // Invalidate all in-between frames, otherwise position
+                        // calculation (which only looks back to one relative
+                        // frame) will have an incorrect result.
+                        InvalidateFramePos(pFrame, bInCalcContent);
                         pFrame = pFrame->GetNext();
+                    }
                     if( pFrame )
                     {
-                        if( bInCalcContent )
-                            pFrame->InvalidatePos_();
-                        else
-                            pFrame->InvalidatePos();
+                        InvalidateFramePos(pFrame, bInCalcContent);
                     }
                 }
                 // #i28701# - Due to the new object positioning
