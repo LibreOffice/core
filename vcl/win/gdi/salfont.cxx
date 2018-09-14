@@ -950,7 +950,7 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     }
 
     // now the font is live => update font face
-    const WinFontFace* pFontFace = static_cast<const WinFontFace*>(pFontInstance->GetFontFace());
+    const WinFontFace* pFontFace = pFontInstance->GetFontFace();
     pFontFace->UpdateFromHDC(getHDC());
 }
 
@@ -1004,14 +1004,14 @@ const FontCharMapRef WinSalGraphics::GetFontCharMap() const
         FontCharMapRef xDefFontCharMap( new FontCharMap() );
         return xDefFontCharMap;
     }
-    return static_cast<const WinFontFace*>(mpWinFontEntry[0]->GetFontFace())->GetFontCharMap();
+    return mpWinFontEntry[0]->GetFontFace()->GetFontCharMap();
 }
 
 bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!mpWinFontEntry[0])
         return false;
-    return static_cast<const WinFontFace*>(mpWinFontEntry[0]->GetFontFace())->GetFontCapabilities(rFontCapabilities);
+    return mpWinFontEntry[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
 int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,

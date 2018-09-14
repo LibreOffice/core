@@ -142,7 +142,7 @@ public:
     }
 };
 
-// win32 specific physical font instance
+// win32 specific logical font instance
 class WinFontInstance : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
@@ -164,8 +164,10 @@ public:
     // Used for the ScopedFont handling
     void SetHFONT(HFONT hFont) { m_hFont = hFont; }
 
+    const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
+
 private:
-    explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit WinFontInstance(const WinFontFace&, const FontSelectPattern&);
 
     virtual hb_font_t* ImplInitHbFont() override;
 
