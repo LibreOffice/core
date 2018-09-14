@@ -605,10 +605,6 @@
                         generic-name="Writer Navigator ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>
 
-    <glade-widget-class title="Tab Stop Images" name="cuilo-TabWin_Impl"
-                        generic-name="TabWin_Impl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
     <glade-widget-class title="BmpWindow" name="swuilo-BmpWindow"
                         generic-name="BmpWindow" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
