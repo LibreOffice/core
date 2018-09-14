@@ -1,0 +1,100 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <comphelper/solarmutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <vcl/svapp.hxx>
+
+#include <Qt5Instance_Clipboard.hxx>
+
+VclQt5Clipboard::VclQt5Clipboard()
+    : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
+                                    datatransfer::clipboard::XFlushableClipboard, XServiceInfo>(
+          m_aMutex)
+{
+}
+
+void VclQt5Clipboard::flushClipboard()
+{
+    SolarMutexGuard aGuard;
+    return;
+}
+
+VclQt5Clipboard::~VclQt5Clipboard() {}
+
+OUString VclQt5Clipboard::getImplementationName()
+{
+    return OUString("com.sun.star.datatransfer.VclQt5Clipboard");
+}
+
+Sequence<OUString> VclQt5Clipboard::getSupportedServiceNames()
+{
+    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    return aRet;
+}
+
+sal_Bool VclQt5Clipboard::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+Reference<css::datatransfer::XTransferable> VclQt5Clipboard::getContents() { return m_aContents; }
+
+void VclQt5Clipboard::setContents(
+    const Reference<css::datatransfer::XTransferable>& xTrans,
+    const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    Reference<datatransfer::XTransferable> xOldContents(m_aContents);
+    m_aContents = xTrans;
+    m_aOwner = xClipboardOwner;
+
+    std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
+    datatransfer::clipboard::ClipboardEvent aEv;
+
+    if (m_aContents.is())
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+            = xTrans->getTransferDataFlavors();
+
+    aEv.Contents = getContents();
+
+    aGuard.clear();
+
+    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+    {
+        listener->changedContents(aEv);
+    }
+}
+
+OUString VclQt5Clipboard::getName() { return OUString("CLIPBOARD"); }
+
+sal_Int8 VclQt5Clipboard::getRenderingCapabilities() { return 0; }
+
+void VclQt5Clipboard::addClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    m_aListeners.push_back(listener);
+}
+
+void VclQt5Clipboard::removeClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
+                       m_aListeners.end());
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
