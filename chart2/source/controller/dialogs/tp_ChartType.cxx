@@ -268,10 +268,10 @@ public:
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
 private:
-    DECL_LINK(SplineTypeListBoxHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SplineTypeListBoxHdl, weld::ComboBox&, void);
 
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xLB_Spline_Type;
+    std::unique_ptr<weld::ComboBox> m_xLB_Spline_Type;
     std::unique_ptr<weld::SpinButton> m_xMF_SplineResolution;
     std::unique_ptr<weld::Label> m_xFT_SplineOrder;
     std::unique_ptr<weld::SpinButton> m_xMF_SplineOrder;
@@ -282,7 +282,7 @@ const sal_uInt16 B_SPLINE_POS = 1;
 
 SplinePropertiesDialog::SplinePropertiesDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/schart/ui/smoothlinesdlg.ui", "SmoothLinesDialog")
-    , m_xLB_Spline_Type(m_xBuilder->weld_combo_box_text("SplineTypeComboBox"))
+    , m_xLB_Spline_Type(m_xBuilder->weld_combo_box("SplineTypeComboBox"))
     , m_xMF_SplineResolution(m_xBuilder->weld_spin_button("ResolutionSpinbutton"))
     , m_xFT_SplineOrder(m_xBuilder->weld_label("PolynomialsLabel"))
     , m_xMF_SplineOrder(m_xBuilder->weld_spin_button("PolynomialsSpinButton"))
@@ -327,7 +327,7 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
     rParameter.nSplineOrder = m_xMF_SplineOrder->get_value();
 }
 
-IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, weld::ComboBox&, void)
 {
     m_xFT_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
     m_xMF_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);

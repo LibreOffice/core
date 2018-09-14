@@ -124,7 +124,7 @@ class CmisDetailsContainer : public DetailsContainer
     private:
         void selectRepository( );
         DECL_LINK ( RefreshReposHdl, weld::Button&, void );
-        DECL_LINK ( SelectRepoHdl, weld::ComboBoxText&, void );
+        DECL_LINK ( SelectRepoHdl, weld::ComboBox&, void );
 };
 
 #endif

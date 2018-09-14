@@ -92,10 +92,10 @@ public:
 class SVX_DLLPUBLIC TextEncodingBox
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xControl;
+    std::unique_ptr<weld::ComboBox> m_xControl;
 
 public:
-    TextEncodingBox(std::unique_ptr<weld::ComboBoxText> pControl);
+    TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl);
 
     ~TextEncodingBox();
 
@@ -125,7 +125,7 @@ public:
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
 };
 
 

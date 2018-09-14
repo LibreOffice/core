@@ -77,7 +77,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xWestFrame;
     std::unique_ptr<weld::Label> m_xWestFontNameFT;
-    std::unique_ptr<weld::ComboBoxText> m_xWestFontNameLB;
+    std::unique_ptr<weld::ComboBox> m_xWestFontNameLB;
     std::unique_ptr<weld::Label> m_xWestFontStyleFT;
     std::unique_ptr<SvtFontStyleBox> m_xWestFontStyleLB;
     std::unique_ptr<weld::Label> m_xWestFontSizeFT;
@@ -89,7 +89,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xEastFrame;
     std::unique_ptr<weld::Label> m_xEastFontNameFT;
-    std::unique_ptr<weld::ComboBoxText> m_xEastFontNameLB;
+    std::unique_ptr<weld::ComboBox> m_xEastFontNameLB;
     std::unique_ptr<weld::Label> m_xEastFontStyleFT;
     std::unique_ptr<SvtFontStyleBox> m_xEastFontStyleLB;
     std::unique_ptr<weld::Label> m_xEastFontSizeFT;
@@ -101,7 +101,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xCTLFrame;
     std::unique_ptr<weld::Label> m_xCTLFontNameFT;
-    std::unique_ptr<weld::ComboBoxText> m_xCTLFontNameLB;
+    std::unique_ptr<weld::ComboBox> m_xCTLFontNameLB;
     std::unique_ptr<weld::Label> m_xCTLFontStyleFT;
     std::unique_ptr<SvtFontStyleBox> m_xCTLFontStyleLB;
     std::unique_ptr<weld::Label> m_xCTLFontSizeFT;
@@ -139,7 +139,7 @@ private:
 
     DECL_LINK(UpdateHdl_Impl, Timer *, void );
     DECL_LINK(FontModifyEditHdl_Impl, weld::Entry&, void);
-    DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(FontFeatureButtonClicked, weld::Button&, void);
 
     void FontModifyHdl_Impl(const weld::Widget&);
@@ -188,25 +188,25 @@ private:
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
     std::unique_ptr<weld::Label> m_xEffectsFT;
-    std::unique_ptr<weld::ComboBoxText> m_xEffectsLB;
+    std::unique_ptr<weld::ComboBox> m_xEffectsLB;
     std::unique_ptr<weld::Label> m_xReliefFT;
-    std::unique_ptr<weld::ComboBoxText> m_xReliefLB;
+    std::unique_ptr<weld::ComboBox> m_xReliefLB;
     std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
     std::unique_ptr<weld::CheckButton> m_xShadowBtn;
     std::unique_ptr<weld::CheckButton> m_xBlinkingBtn;
     std::unique_ptr<weld::CheckButton> m_xHiddenBtn;
-    std::unique_ptr<weld::ComboBoxText> m_xOverlineLB;
+    std::unique_ptr<weld::ComboBox> m_xOverlineLB;
     std::unique_ptr<weld::Label> m_xOverlineColorFT;
     std::unique_ptr<ColorListBox> m_xOverlineColorLB;
-    std::unique_ptr<weld::ComboBoxText> m_xStrikeoutLB;
-    std::unique_ptr<weld::ComboBoxText> m_xUnderlineLB;
+    std::unique_ptr<weld::ComboBox> m_xStrikeoutLB;
+    std::unique_ptr<weld::ComboBox> m_xUnderlineLB;
     std::unique_ptr<weld::Label> m_xUnderlineColorFT;
     std::unique_ptr<ColorListBox> m_xUnderlineColorLB;
     std::unique_ptr<weld::CheckButton> m_xIndividualWordsBtn;
     std::unique_ptr<weld::Label> m_xEmphasisFT;
-    std::unique_ptr<weld::ComboBoxText> m_xEmphasisLB;
+    std::unique_ptr<weld::ComboBox> m_xEmphasisLB;
     std::unique_ptr<weld::Label> m_xPositionFT;
-    std::unique_ptr<weld::ComboBoxText> m_xPositionLB;
+    std::unique_ptr<weld::ComboBox> m_xPositionLB;
     std::unique_ptr<weld::Label> m_xA11yWarningFT;
 
     SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rSet);
@@ -219,11 +219,11 @@ private:
     Color               GetPreviewFontColor(const Color& rColor) const;
     void                EnableNoneFontColor();
 
-    void SelectHdl_Impl(weld::ComboBoxText*);
-    DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBoxText&, void);
+    void SelectHdl_Impl(weld::ComboBox*);
+    DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(UpdatePreview_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
 
 public:
@@ -296,7 +296,7 @@ private:
     DECL_LINK(RotationHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(AutoPositionHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(FitToLineHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(KerningSelectHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(KerningSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(KerningModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void);

@@ -45,8 +45,8 @@ SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pI
     , m_pField(pInField)
     , m_xRbtFix(m_xBuilder->weld_radio_button("fixedRB"))
     , m_xRbtVar(m_xBuilder->weld_radio_button("varRB"))
-    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box_text("languageLB")))
-    , m_xLbFormat(m_xBuilder->weld_combo_box_text("formatLB"))
+    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("languageLB")))
+    , m_xLbFormat(m_xBuilder->weld_combo_box("formatLB"))
 {
     m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );
     m_xLbLanguage->connect_changed(LINK(this, SdModifyFieldDlg, LanguageChangeHdl));
@@ -301,7 +301,7 @@ void SdModifyFieldDlg::FillControls()
     m_xLbFormat->save_value();
 }
 
-IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, weld::ComboBox&, void)
 {
     FillFormatList();
 }

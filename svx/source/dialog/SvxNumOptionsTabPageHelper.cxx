@@ -89,7 +89,7 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
     }
 }
 
-void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBoxText& rFmtLB, sal_uInt16 nDoNotRemove)
+void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uInt16 nDoNotRemove)
 {
     Reference<XDefaultNumberingProvider> xDefNum = GetNumberingProvider();
     Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);

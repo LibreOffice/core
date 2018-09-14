@@ -88,7 +88,7 @@ SwFormatTablePage::SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rS
     , m_xTopMF(m_xBuilder->weld_metric_spin_button("abovemf", FUNIT_CM))
     , m_xBottomFT(m_xBuilder->weld_label("belowft"))
     , m_xBottomMF(m_xBuilder->weld_metric_spin_button("belowmf", FUNIT_CM))
-    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box_text("textdirection")))
+    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("textdirection")))
     , m_xProperties(m_xBuilder->weld_widget("properties"))
 {
     //lock these to initial sizes so they don't change on percent to non percent change
@@ -1196,7 +1196,7 @@ SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xPgBrkBeforeRB(m_xBuilder->weld_radio_button("before"))
     , m_xPgBrkAfterRB(m_xBuilder->weld_radio_button("after"))
     , m_xPageCollCB(m_xBuilder->weld_check_button("pagestyle"))
-    , m_xPageCollLB(m_xBuilder->weld_combo_box_text("pagestylelb"))
+    , m_xPageCollLB(m_xBuilder->weld_combo_box("pagestylelb"))
     , m_xPageNoCB(m_xBuilder->weld_check_button("pagenoft"))
     , m_xPageNoNF(m_xBuilder->weld_spin_button("pagenonf"))
     , m_xSplitCB(m_xBuilder->weld_check_button("split"))
@@ -1205,8 +1205,8 @@ SwTextFlowPage::SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xHeadLineCB(m_xBuilder->weld_check_button("headline"))
     , m_xRepeatHeaderCombo(m_xBuilder->weld_widget("repeatheader"))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadernf"))
-    , m_xTextDirectionLB(m_xBuilder->weld_combo_box_text("textdirection"))
-    , m_xVertOrientLB(m_xBuilder->weld_combo_box_text("vertorient"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box("textdirection"))
+    , m_xVertOrientLB(m_xBuilder->weld_combo_box("vertorient"))
 {
     m_xPgBrkCB->connect_toggled(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
     m_xPgBrkBeforeRB->connect_toggled(
