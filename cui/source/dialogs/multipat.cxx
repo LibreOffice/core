@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
         }
         else
         {
-            m_xPathLB->append(aURL, sInsPath, "");
+            m_xPathLB->append(aURL, sInsPath);
         }
 
         SelectHdl_Impl(*m_xPathLB);
@@ -328,7 +328,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-            m_xPathLB->append(sPath, bIsSystemPath ? sSystemPath : sPath, "");
+            m_xPathLB->append(sPath, bIsSystemPath ? sSystemPath : sPath);
         }
         while (nIndex >= 0);
     }

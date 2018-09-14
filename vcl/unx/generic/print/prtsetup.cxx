@@ -47,7 +47,7 @@ void RTSDialog::insertAllPPDValues(weld::ComboBoxText& rBox, const PPDParser* pP
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
             if (nCurrentPos == -1)
-                rBox.insert(-1, sId, aOptionText);
+                rBox.append(sId, aOptionText);
         }
         else
         {
@@ -329,7 +329,7 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
             || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
 
     OUString sStr = m_xLevelBox->get_text(0);
-    m_xLevelBox->insert(0, m_xLevelBox->get_id(0), sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)));
+    m_xLevelBox->insert(0, m_xLevelBox->get_id(0), sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)), nullptr);
     m_xLevelBox->remove(1);
 
     for (int i = 0; i < m_xLevelBox->get_count(); ++i)
@@ -367,7 +367,7 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
                 pKey->getGroup() != "InstallableOptions")
             {
                 OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-                m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry, "");
+                m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry);
             }
         }
     }
@@ -467,7 +467,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
                 aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
             else
                 aEntry = m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption);
-            m_xPPDValueBox->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), aEntry, "");
+            m_xPPDValueBox->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), aEntry);
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
