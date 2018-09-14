@@ -5000,6 +5000,8 @@ public:
         gtk_entry_set_completion(GTK_ENTRY(m_pEntry->getWidget()), nullptr);
     }
 
+    virtual void grab_focus() override { m_xEntry->grab_focus(); }
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         m_xEntry->connect_focus_in(rLink);
@@ -5015,7 +5017,6 @@ public:
         GtkWidget* pWidget = m_pEntry->getWidget();
         g_signal_handler_disconnect(pWidget, m_nKeyPressSignalId);
     }
-
 };
 
 class GtkInstanceExpander : public GtkInstanceContainer, public virtual weld::Expander
