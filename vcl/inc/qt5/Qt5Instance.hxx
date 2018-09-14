@@ -109,6 +109,9 @@ public:
 
     virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
     createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
+
+    virtual css::uno::Reference<css::uno::XInterface>
+    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
