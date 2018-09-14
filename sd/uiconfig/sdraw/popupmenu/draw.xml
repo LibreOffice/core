@@ -16,6 +16,7 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuitem menu:id=".uno:InteractiveGradient"/>
+  <menu:menuitem menu:id=".uno:InteractiveTransparence"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
