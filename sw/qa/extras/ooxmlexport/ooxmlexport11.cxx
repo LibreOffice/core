@@ -537,6 +537,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82177_tblBorders, "tdf82177_tblBorders.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), getProperty<table::BorderLine2>(xCell, "LeftBorder").LineWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCellBorder.docx")
+{
+    //inconsistent in Word even. 2016 positions on last row, 2003 positions on first cell.
+    sal_Int32 nRowLeft = parseDump("/root/page/body/tab[4]/row[1]/infos/bounds", "left").toInt32();
+    sal_Int32 nTextLeft  = parseDump("/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds", "left").toInt32();
+    CPPUNIT_ASSERT( nRowLeft < nTextLeft );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")
 {
     // This was 0, relative size of shape after bitmap was ignored.
