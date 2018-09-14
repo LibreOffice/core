@@ -66,6 +66,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual bool EventNotify(NotifyEvent& rEvent) override;
+    virtual void Resize() override;
 
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
