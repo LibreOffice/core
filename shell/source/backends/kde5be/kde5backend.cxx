@@ -159,7 +159,7 @@ void initQApp()
 
     pFakeArgv[0] = strdup(getExecutable().getStr());
     pFakeArgv[1] = strdup("--nocrashhandler");
-    if (aDisplay.isEmpty())
+    if (!aDisplay.isEmpty())
         pFakeArgv[2] = strdup(aDisplay.getStr());
 
     char* session_manager = nullptr;
