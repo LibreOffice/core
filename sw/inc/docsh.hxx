@@ -231,7 +231,7 @@ public:
                 { return const_cast<SwDocShell*>(this)->GetFEShell(); }
 
     /// For inserting document.
-    Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
+    Reader* StartConvertFrom(SfxMedium& rMedium, std::unique_ptr<SwReader>& rpRdr,
                             SwCursorShell const * pCursorSh = nullptr, SwPaM* pPaM = nullptr);
 
 #if defined(_WIN32)
