@@ -35,16 +35,16 @@ class SwThesaurus;
  */
 extern  SwThesaurus*    pThes;
 
-SW_DLLPUBLIC OUString GetOldGrfCat();
+SW_DLLPUBLIC const OUString& GetOldGrfCat();
 SW_DLLPUBLIC void SetOldGrfCat(const OUString& sStr);
-SW_DLLPUBLIC OUString GetOldTabCat();
+SW_DLLPUBLIC const OUString& GetOldTabCat();
 SW_DLLPUBLIC void SetOldTabCat(const OUString& sStr);
-SW_DLLPUBLIC OUString GetOldFrameCat();
+SW_DLLPUBLIC const OUString& GetOldFrameCat();
 SW_DLLPUBLIC void SetOldFrameCat(const OUString& sStr);
-SW_DLLPUBLIC OUString GetOldDrwCat();
+SW_DLLPUBLIC const OUString& GetOldDrwCat();
 SW_DLLPUBLIC void SetOldDrwCat(const OUString& sStr);
 
-SW_DLLPUBLIC OUString GetCurrGlosGroup();
+SW_DLLPUBLIC const OUString& GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(const OUString& sStr);
 
 // provides textblock management

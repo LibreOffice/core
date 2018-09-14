@@ -56,36 +56,29 @@ enum CachedStringID
     CachedStrings
 };
 
-OUString *StringCache[CachedStrings] = {nullptr};
+OUString StringCache[CachedStrings];
 
-inline OUString GetCachedString(CachedStringID id)
+const OUString& GetCachedString(CachedStringID id)
 {
-    return StringCache[id] ? *StringCache[id] : OUString();
+    return StringCache[id];
 }
 
-inline void SetCachedString(CachedStringID id, const OUString& sStr)
+void SetCachedString(CachedStringID id, const OUString& sStr)
 {
-    if (StringCache[id])
-    {
-        *StringCache[id] = sStr;
-    }
-    else
-    {
-        StringCache[id] = new OUString(sStr);
-    }
+    StringCache[id] = sStr;
 }
 
 void ClearStringCache()
 {
-    for (OUString* p : StringCache)
+    for (auto & s : StringCache)
     {
-        delete p;
+        s.clear();
     }
 }
 
 }
 
-OUString GetOldGrfCat()
+const OUString& GetOldGrfCat()
 {
     return GetCachedString(OldGrfCat);
 }
@@ -95,7 +88,7 @@ void SetOldGrfCat(const OUString& sStr)
     SetCachedString(OldGrfCat, sStr);
 }
 
-OUString GetOldTabCat()
+const OUString& GetOldTabCat()
 {
     return GetCachedString(OldTabCat);
 }
@@ -105,7 +98,7 @@ void SetOldTabCat(const OUString& sStr)
     SetCachedString(OldTabCat, sStr);
 }
 
-OUString GetOldFrameCat()
+const OUString& GetOldFrameCat()
 {
     return GetCachedString(OldFrameCat);
 }
@@ -115,7 +108,7 @@ void SetOldFrameCat(const OUString& sStr)
     SetCachedString(OldFrameCat, sStr);
 }
 
-OUString GetOldDrwCat()
+const OUString& GetOldDrwCat()
 {
     return GetCachedString(OldDrwCat);
 }
@@ -125,7 +118,7 @@ void SetOldDrwCat(const OUString& sStr)
     SetCachedString(OldDrwCat, sStr);
 }
 
-OUString GetCurrGlosGroup()
+const OUString& GetCurrGlosGroup()
 {
     return GetCachedString(CurrGlosGroup);
 }
