@@ -257,8 +257,13 @@ protected:
 public:
     virtual void insert_text(int pos, const OUString& rStr) = 0;
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
-    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage)
+        = 0;
+    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr, nullptr); }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        insert(-1, rId, rStr, &rImage);
+    }
 
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
@@ -315,12 +320,13 @@ protected:
 
 public:
     virtual void insert_text(const OUString& rText, int pos) = 0;
-    virtual void append_text(const OUString& rText) { insert_text(rText, -1); }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString& rImage)
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage)
         = 0;
-    virtual void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    void append_text(const OUString& rText) { insert_text(rText, -1); }
+    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr, nullptr); }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, rImage);
+        insert(-1, rId, rStr, &rImage);
     }
 
     virtual int n_children() const = 0;
@@ -611,9 +617,10 @@ public:
     {
         m_xTreeView->insert_text(rStr, pos);
     }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pImage) override
     {
-        m_xTreeView->insert(pos, rId, rStr, OUString());
+        m_xTreeView->insert(pos, rId, rStr, pImage);
     }
 
     virtual int get_count() const override { return m_xTreeView->n_children(); }
