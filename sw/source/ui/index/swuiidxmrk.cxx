@@ -1008,12 +1008,12 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Container> m_xBox;
     std::unique_ptr<weld::Container> m_xLeft;
     std::unique_ptr<weld::Container> m_xRight;
-    std::unique_ptr<weld::ComboBoxText> m_xTypeListBox;
-    std::unique_ptr<weld::ComboBoxText> m_xIdentifierBox;
+    std::unique_ptr<weld::ComboBox> m_xTypeListBox;
+    std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
 
-    DECL_LINK(IdentifierHdl, weld::ComboBoxText&, void);
+    DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
-    DECL_LINK(EnableHdl, weld::ComboBoxText&, void);
+    DECL_LINK(EnableHdl, weld::ComboBox&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1515,7 +1515,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         m_aFixedTexts.back()->show();
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            m_xTypeListBox = m_aBuilders.back()->weld_combo_box_text("listbox");
+            m_xTypeListBox = m_aBuilders.back()->weld_combo_box("listbox");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xLeft.get());
             else
@@ -1537,7 +1537,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            m_xIdentifierBox = m_aBuilders.back()->weld_combo_box_text("combobox");
+            m_xIdentifierBox = m_aBuilders.back()->weld_combo_box("combobox");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xLeft.get());
             else
@@ -1624,7 +1624,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     return OUString();
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                 rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
@@ -1660,7 +1660,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
     }
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
 };

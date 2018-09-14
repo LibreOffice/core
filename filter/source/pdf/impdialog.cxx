@@ -462,12 +462,12 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
     , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))
     , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FUNIT_PERCENT))
     , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
-    , mxCoReduceImageResolution(m_xBuilder->weld_combo_box_text("resolution"))
+    , mxCoReduceImageResolution(m_xBuilder->weld_combo_box("resolution"))
     , mxCbPDFA1b(m_xBuilder->weld_check_button("pdfa"))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
     , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
     , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
-    , mxLbFormsFormat(m_xBuilder->weld_combo_box_text("format"))
+    , mxLbFormsFormat(m_xBuilder->weld_combo_box("format"))
     , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button("allowdups"))
     , mxCbExportBookmarks(m_xBuilder->weld_check_button("bookmarks"))
     , mxCbExportHiddenSlides(m_xBuilder->weld_check_button("hiddenpages"))
@@ -1458,7 +1458,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemS
     , mxEdSignLocation(m_xBuilder->weld_entry("location"))
     , mxEdSignContactInfo(m_xBuilder->weld_entry("contact"))
     , mxEdSignReason(m_xBuilder->weld_entry("reason"))
-    , mxLBSignTSA(m_xBuilder->weld_combo_box_text("tsa"))
+    , mxLBSignTSA(m_xBuilder->weld_combo_box("tsa"))
 {
     mxPbSignCertSelect->set_sensitive(true);
     mxPbSignCertSelect->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect));

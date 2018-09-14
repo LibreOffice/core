@@ -27,13 +27,13 @@ struct ScImportSourceDesc;
 class ScDataPilotDatabaseDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xLbDatabase;
-    std::unique_ptr<weld::ComboBoxText> m_xCbObject;
-    std::unique_ptr<weld::ComboBoxText> m_xLbType;
+    std::unique_ptr<weld::ComboBox> m_xLbDatabase;
+    std::unique_ptr<weld::ComboBox> m_xCbObject;
+    std::unique_ptr<weld::ComboBox> m_xLbType;
 
     void    FillObjects();
 
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
     ScDataPilotDatabaseDlg(weld::Window* pParent);

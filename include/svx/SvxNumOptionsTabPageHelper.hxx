@@ -46,7 +46,7 @@ public:
             restriction.
     */
     static void GetI18nNumbering(ListBox& rFmtLB, sal_uInt16 nDoNotRemove);
-    static void GetI18nNumbering(weld::ComboBoxText& rFmtLB, sal_uInt16 nDoNotRemove);
+    static void GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uInt16 nDoNotRemove);
 };
 
 #endif

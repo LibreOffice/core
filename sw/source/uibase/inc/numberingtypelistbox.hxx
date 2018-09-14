@@ -43,14 +43,14 @@ struct SwNumberingTypeListBox_Impl;
 
 class SW_DLLPUBLIC SwNumberingTypeListBox
 {
-    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+    std::unique_ptr<weld::ComboBox> m_xWidget;
     std::unique_ptr<SwNumberingTypeListBox_Impl> m_xImpl;
 
 public:
-    SwNumberingTypeListBox(std::unique_ptr<weld::ComboBoxText> pWidget);
+    SwNumberingTypeListBox(std::unique_ptr<weld::ComboBox> pWidget);
     ~SwNumberingTypeListBox();
 
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_changed(rLink); }
 
     void          Reload(SwInsertNumTypes nTypeFlags);
     SvxNumType    GetSelectedNumberingType();

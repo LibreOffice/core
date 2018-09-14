@@ -38,7 +38,7 @@
 ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/externaldata.ui", "ExternalDataDialog")
     , m_pSourceShell(nullptr)
-    , m_xCbUrl(new URLBox(m_xBuilder->weld_combo_box_text("url")))
+    , m_xCbUrl(new URLBox(m_xBuilder->weld_combo_box("url")))
     , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
     , m_xLbRanges(m_xBuilder->weld_tree_view("ranges"))
     , m_xBtnReload(m_xBuilder->weld_check_button("reload"))
@@ -70,7 +70,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl, weld::Button&, void)
     m_xDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, void)
 {
     OUString aEntered = m_xCbUrl->GetURL();
     if (m_pSourceShell)

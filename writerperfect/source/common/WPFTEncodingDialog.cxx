@@ -78,18 +78,15 @@ std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[]
 
 std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);
 
-void insertEncodings(weld::ComboBoxText& box)
+void insertEncodings(weld::ComboBox& box)
 {
     for (std::size_t i = 0; i < numEncodings; ++i)
         box.append(s_encodings[i].first, s_encodings[i].second);
 }
 
-void selectEncoding(weld::ComboBoxText& box, const OUString& encoding)
-{
-    box.set_active_id(encoding);
-}
+void selectEncoding(weld::ComboBox& box, const OUString& encoding) { box.set_active_id(encoding); }
 
-OUString getEncoding(const weld::ComboBoxText& box) { return box.get_active_id(); }
+OUString getEncoding(const weld::ComboBox& box) { return box.get_active_id(); }
 }
 
 WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& title,
@@ -97,7 +94,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
     : GenericDialogController(pParent, "writerperfect/ui/wpftencodingdialog.ui",
                               "WPFTEncodingDialog")
     , m_userHasCancelled(false)
-    , m_xLbCharset(m_xBuilder->weld_combo_box_text("comboboxtext"))
+    , m_xLbCharset(m_xBuilder->weld_combo_box("comboboxtext"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {

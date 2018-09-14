@@ -185,9 +185,9 @@ SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_pDialog(nullptr)
     , m_pSh(nullptr)
     , m_xAddrEdit(m_xBuilder->weld_text_view("addredit"))
-    , m_xDatabaseLB(m_xBuilder->weld_combo_box_text("database"))
-    , m_xTableLB(m_xBuilder->weld_combo_box_text("table"))
-    , m_xDBFieldLB(m_xBuilder->weld_combo_box_text("field"))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box("database"))
+    , m_xTableLB(m_xBuilder->weld_combo_box("table"))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box("field"))
     , m_xInsertBT(m_xBuilder->weld_button("insert"))
     , m_xSenderBox(m_xBuilder->weld_check_button("sender"))
     , m_xSenderEdit(m_xBuilder->weld_text_view("senderedit"))
@@ -229,7 +229,7 @@ SwEnvPage::~SwEnvPage()
     disposeOnce();
 }
 
-IMPL_LINK( SwEnvPage, DatabaseHdl, weld::ComboBoxText&, rListBox, void )
+IMPL_LINK( SwEnvPage, DatabaseHdl, weld::ComboBox&, rListBox, void )
 {
     SwWait aWait( *m_pSh->GetView().GetDocShell(), true );
 

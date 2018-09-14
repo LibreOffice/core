@@ -72,21 +72,21 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
     , pSh(nullptr)
     , bPosDoc(false)
     , bEndNote(bEN)
-    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("numberinglb")))
+    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("numberinglb")))
     , m_xOffsetLbl(m_xBuilder->weld_label("offset"))
     , m_xOffsetField(m_xBuilder->weld_spin_button("offsetnf"))
-    , m_xNumCountBox(m_xBuilder->weld_combo_box_text("countinglb"))
+    , m_xNumCountBox(m_xBuilder->weld_combo_box("countinglb"))
     , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
     , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
     , m_xPosFT(m_xBuilder->weld_label("pos"))
     , m_xPosPageBox(m_xBuilder->weld_radio_button("pospagecb"))
     , m_xPosChapterBox(m_xBuilder->weld_radio_button("posdoccb"))
     , m_xStylesContainer(m_xBuilder->weld_widget("allstyles"))
-    , m_xParaTemplBox(m_xBuilder->weld_combo_box_text("parastylelb"))
+    , m_xParaTemplBox(m_xBuilder->weld_combo_box("parastylelb"))
     , m_xPageTemplLbl(m_xBuilder->weld_label("pagestyleft"))
-    , m_xPageTemplBox(m_xBuilder->weld_combo_box_text("pagestylelb"))
-    , m_xFootnoteCharAnchorTemplBox(m_xBuilder->weld_combo_box_text("charanchorstylelb"))
-    , m_xFootnoteCharTextTemplBox(m_xBuilder->weld_combo_box_text("charstylelb"))
+    , m_xPageTemplBox(m_xBuilder->weld_combo_box("pagestylelb"))
+    , m_xFootnoteCharAnchorTemplBox(m_xBuilder->weld_combo_box("charanchorstylelb"))
+    , m_xFootnoteCharTextTemplBox(m_xBuilder->weld_combo_box("charstylelb"))
     , m_xContEdit(m_xBuilder->weld_entry("conted"))
     , m_xContFromEdit(m_xBuilder->weld_entry("contfromed"))
 {
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, weld::Button&, void)
     m_xPageTemplBox->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBox&, void)
 {
     bool bEnable = true;
     if (m_xNumCountBox->get_count() - 1 != m_xNumCountBox->get_active())

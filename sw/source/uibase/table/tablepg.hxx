@@ -152,7 +152,7 @@ class SwTextFlowPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xPgBrkBeforeRB;
     std::unique_ptr<weld::RadioButton> m_xPgBrkAfterRB;
     std::unique_ptr<weld::CheckButton> m_xPageCollCB;
-    std::unique_ptr<weld::ComboBoxText> m_xPageCollLB;
+    std::unique_ptr<weld::ComboBox> m_xPageCollLB;
     std::unique_ptr<weld::CheckButton> m_xPageNoCB;
     std::unique_ptr<weld::SpinButton> m_xPageNoNF;
     std::unique_ptr<weld::CheckButton> m_xSplitCB;
@@ -161,8 +161,8 @@ class SwTextFlowPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xHeadLineCB;
     std::unique_ptr<weld::Widget> m_xRepeatHeaderCombo;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
-    std::unique_ptr<weld::ComboBoxText> m_xTextDirectionLB;
-    std::unique_ptr<weld::ComboBoxText> m_xVertOrientLB;
+    std::unique_ptr<weld::ComboBox> m_xTextDirectionLB;
+    std::unique_ptr<weld::ComboBox> m_xVertOrientLB;
 
     DECL_LINK(PageBreakHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);

@@ -137,7 +137,7 @@ friend class SwDropCapsPict;
     std::unique_ptr<weld::Label> m_xTextText;
     std::unique_ptr<weld::Entry> m_xTextEdit;
     std::unique_ptr<weld::Label> m_xTemplateText;
-    std::unique_ptr<weld::ComboBoxText> m_xTemplateBox;
+    std::unique_ptr<weld::ComboBox> m_xTemplateBox;
     std::unique_ptr<weld::CustomWeld> m_xPict;
 
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
@@ -149,7 +149,7 @@ friend class SwDropCapsPict;
     DECL_LINK(MetricValueChangedHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl, weld::SpinButton&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
-    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(WholeWordHdl, weld::ToggleButton&, void);
 
     using SfxTabPage::ActivatePage;
