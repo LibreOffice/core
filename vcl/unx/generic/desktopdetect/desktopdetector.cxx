@@ -224,6 +224,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_GNOME;
         if ( aOver.equalsIgnoreAsciiCase( "unity" ) )
             return DESKTOP_UNITY;
+        if ( aOver.equalsIgnoreAsciiCase( "unity:unity7:ubuntu" ) )
+            return DESKTOP_UNITY;
         if ( aOver.equalsIgnoreAsciiCase( "xfce" ) )
             return DESKTOP_XFCE;
         if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
