@@ -132,7 +132,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    bool bFilterResources (!rsResourceURLPrefix.isEmpty());
+    const bool bFilterResources (!rsResourceURLPrefix.isEmpty());
 
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;
