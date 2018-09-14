@@ -593,6 +593,7 @@ typedef enum
      * "type" tells the type of the window the action is associated with
      *  - "dialog" - window is a dialog
      *  - "child" - window is a floating window (combo boxes, etc.)
+     *  - "deck" - window is a docked/floating deck (i.e. the sidebar)
      *
      * "action" can take following values:
      * - "created" - window is created in the backend, client can render it now
