@@ -2420,6 +2420,18 @@ public:
         rEntry.SetAutocompleteHdl(Link<Edit&, void>());
     }
 
+    virtual void grab_focus() override { m_xEntry->grab_focus(); }
+
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
+    {
+        m_xEntry->connect_focus_in(rLink);
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
+    {
+        m_xEntry->connect_focus_out(rLink);
+    }
+
     virtual ~SalInstanceEntryTreeView() override
     {
         Edit& rEntry = m_pEntry->getEntry();
