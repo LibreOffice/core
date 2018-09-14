@@ -1385,7 +1385,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     , mxColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
     , mxRecentColorSet(new ColorValueSet(nullptr))
     , mxTopLevel(m_xBuilder->weld_container("palette_popup_window"))
-    , mxPaletteListBox(m_xBuilder->weld_combo_box_text("palette_listbox"))
+    , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
     , mxButtonAutoColor(m_xBuilder->weld_button("auto_color_button"))
     , mxButtonNoneColor(m_xBuilder->weld_button("none_color_button"))
     , mxButtonPicker(m_xBuilder->weld_button("color_picker_button"))
@@ -1644,7 +1644,7 @@ IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mxPaletteManager->GetColorCount());
 }
 
-IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
 {
     int nPos = mxPaletteListBox->get_active();
     mxPaletteManager->SetPalette( nPos );

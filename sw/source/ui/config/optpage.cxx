@@ -330,7 +330,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
     , m_xInMarginsRB(m_xBuilder->weld_radio_button("inmargins"))
     , m_xPrintEmptyPagesCB(m_xBuilder->weld_check_button("blankpages"))
     , m_xPaperFromSetupCB(m_xBuilder->weld_check_button("papertray"))
-    , m_xFaxLB(m_xBuilder->weld_combo_box_text("fax"))
+    , m_xFaxLB(m_xBuilder->weld_combo_box("fax"))
 {
     Link<weld::ToggleButton&,void> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     m_xGrfCB->connect_toggled( aLk );
@@ -493,7 +493,7 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
     m_xFaxLB->set_active(0);
 }
 
-IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, weld::ComboBox&, void)
 {
     bAttrModified=true;
 }

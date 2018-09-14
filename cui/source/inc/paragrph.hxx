@@ -77,7 +77,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xContextualCB;
 
     // line spacing
-    std::unique_ptr<weld::ComboBoxText> m_xLineDist;
+    std::unique_ptr<weld::ComboBox> m_xLineDist;
     std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtPercentBox;
     std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtMetricBox;
     std::unique_ptr<weld::Label> m_xLineDistAtLabel;
@@ -95,7 +95,7 @@ private:
     void                    UpdateExample_Impl();
     void                    ELRLoseFocus();
 
-    DECL_LINK(LineDistHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(LineDistHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(AutoHdl_Impl, weld::ToggleButton&, void);
 
@@ -145,7 +145,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xRightTop;
 
     std::unique_ptr<weld::Label> m_xLastLineFT;
-    std::unique_ptr<weld::ComboBoxText> m_xLastLineLB;
+    std::unique_ptr<weld::ComboBox> m_xLastLineLB;
     std::unique_ptr<weld::CheckButton> m_xExpandCB;
 
     std::unique_ptr<weld::CheckButton> m_xSnapToGridCB;
@@ -154,14 +154,14 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xExampleWin;
     //vertical alignment
     std::unique_ptr<weld::Widget> m_xVertAlignFL;
-    std::unique_ptr<weld::ComboBoxText> m_xVertAlignLB;
+    std::unique_ptr<weld::ComboBox> m_xVertAlignLB;
 
     std::unique_ptr<weld::Widget> m_xPropertiesFL;
     std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextDirectionLB;
 
     DECL_LINK(AlignHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(LastLineHdl_Impl, weld::ComboBoxText&, void);
-    DECL_LINK(TextDirectionHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(TextDirectionHdl_Impl, weld::ComboBox&, void);
 
     void                    UpdateExample_Impl();
 
@@ -240,11 +240,11 @@ private:
     // pagebreak
     std::unique_ptr<weld::CheckButton> m_xPageBreakBox;
     std::unique_ptr<weld::Label> m_xBreakTypeFT;
-    std::unique_ptr<weld::ComboBoxText> m_xBreakTypeLB;
+    std::unique_ptr<weld::ComboBox> m_xBreakTypeLB;
     std::unique_ptr<weld::Label> m_xBreakPositionFT;
-    std::unique_ptr<weld::ComboBoxText> m_xBreakPositionLB;
+    std::unique_ptr<weld::ComboBox> m_xBreakPositionLB;
     std::unique_ptr<weld::CheckButton> m_xApplyCollBtn;
-    std::unique_ptr<weld::ComboBoxText> m_xApplyCollBox;
+    std::unique_ptr<weld::ComboBox> m_xApplyCollBox;
     std::unique_ptr<weld::CheckButton> m_xPageNumBox;
     std::unique_ptr<weld::SpinButton> m_xPagenumEdit;
 
@@ -267,8 +267,8 @@ private:
     DECL_LINK(OrphanHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(HyphenClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ApplyCollClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(PageBreakPosHdl_Impl, weld::ComboBoxText&, void);
-    DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(PageBreakPosHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PageNumBoxClickHdl_Impl, weld::ToggleButton&, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;

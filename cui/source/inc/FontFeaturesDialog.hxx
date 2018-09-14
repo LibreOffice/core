@@ -27,7 +27,7 @@ struct FontFeatureItem
         , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/fontfragment.ui"))
         , m_xContainer(m_xBuilder->weld_widget("fontentry"))
         , m_xText(m_xBuilder->weld_label("label"))
-        , m_xCombo(m_xBuilder->weld_combo_box_text("combo"))
+        , m_xCombo(m_xBuilder->weld_combo_box("combo"))
         , m_xCheck(m_xBuilder->weld_check_button("check"))
     {
     }
@@ -36,7 +36,7 @@ struct FontFeatureItem
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::Label> m_xText;
-    std::unique_ptr<weld::ComboBoxText> m_xCombo;
+    std::unique_ptr<weld::ComboBox> m_xCombo;
     std::unique_ptr<weld::CheckButton> m_xCheck;
 };
 
@@ -57,7 +57,7 @@ private:
 
     void fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
 
-    DECL_LINK(ComboBoxSelectedHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ComboBoxSelectedHdl, weld::ComboBox&, void);
     DECL_LINK(CheckBoxToggledHdl, weld::ToggleButton&, void);
 
 public:

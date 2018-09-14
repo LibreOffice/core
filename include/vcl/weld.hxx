@@ -243,14 +243,14 @@ public:
     virtual Container* weld_message_area() = 0;
 };
 
-class VCL_DLLPUBLIC ComboBoxText : virtual public Container
+class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
 private:
     OUString m_sSavedValue;
 
 protected:
-    Link<ComboBoxText&, void> m_aChangeHdl;
-    Link<ComboBoxText&, void> m_aEntryActivateHdl;
+    Link<ComboBox&, void> m_aChangeHdl;
+    Link<ComboBox&, void> m_aEntryActivateHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
@@ -288,7 +288,7 @@ public:
     virtual int find_id(const OUString& rId) const = 0;
     void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
-    void connect_changed(const Link<ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_changed(const Link<ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
 
     //entry related
     virtual bool has_entry() const = 0;
@@ -299,10 +299,7 @@ public:
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable) = 0;
 
-    void connect_entry_activate(const Link<ComboBoxText&, void>& rLink)
-    {
-        m_aEntryActivateHdl = rLink;
-    }
+    void connect_entry_activate(const Link<ComboBox&, void>& rLink) { m_aEntryActivateHdl = rLink; }
 
     void save_value() { m_sSavedValue = get_active_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
@@ -599,7 +596,7 @@ public:
 // an entry + treeview pair, where the entry autocompletes from the
 // treeview list, and selecting something in the list sets the
 // entry to that text, i.e. a visually exploded ComboBox
-class VCL_DLLPUBLIC EntryTreeView : virtual public ComboBoxText
+class VCL_DLLPUBLIC EntryTreeView : virtual public ComboBox
 {
 private:
     DECL_DLLPRIVATE_LINK(ClickHdl, weld::TreeView&, void);
@@ -1067,8 +1064,7 @@ public:
     virtual std::unique_ptr<TimeSpinButton>
     weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
         = 0;
-    virtual std::unique_ptr<ComboBoxText> weld_combo_box_text(const OString& id,
-                                                              bool bTakeOwnership = false)
+    virtual std::unique_ptr<ComboBox> weld_combo_box(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<TreeView> weld_tree_view(const OString& id, bool bTakeOwnership = false)
         = 0;

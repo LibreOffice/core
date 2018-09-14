@@ -677,7 +677,7 @@ sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32
     return rToFill.InsertEntry(rEntry, nOffset);
 }
 
-void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset)
+void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBox& rToFill, int nOffset)
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
     const int nCount = rToFill.get_count();
@@ -729,7 +729,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     }
 };
 
-void FillCharStyleListBox(weld::ComboBoxText& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
+void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
 {
     const int nOffset = rToFill.get_count() > 0 ? 1 : 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();

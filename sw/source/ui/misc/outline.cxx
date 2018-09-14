@@ -392,9 +392,9 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
     , pCollNames(nullptr)
     , nActLevel(1)
     , m_xLevelLB(m_xBuilder->weld_tree_view("level"))
-    , m_xCollBox(m_xBuilder->weld_combo_box_text("style"))
-    , m_xNumberBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box_text("numbering")))
-    , m_xCharFormatLB(m_xBuilder->weld_combo_box_text("charstyle"))
+    , m_xCollBox(m_xBuilder->weld_combo_box("style"))
+    , m_xNumberBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("numbering")))
+    , m_xCharFormatLB(m_xBuilder->weld_combo_box("charstyle"))
     , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
     , m_xAllLevelNF(m_xBuilder->weld_spin_button("sublevelsnf"))
     , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
@@ -568,7 +568,7 @@ IMPL_LINK(SwOutlineSettingsTabPage, ToggleComplete, weld::SpinButton&, rEdit, vo
     SetModified();
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, weld::ComboBoxText&, rBox, void )
+IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, weld::ComboBox&, rBox, void )
 {
     sal_uInt8 i;
 
@@ -616,7 +616,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus, weld::Widget&, voi
         aSaveCollNames[i] =  pCollNames[i];
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, NumberSelect, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, NumberSelect, weld::ComboBox&, void)
 {
     sal_uInt16 nMask = 1;
     SvxNumType nNumberType = m_xNumberBox->GetSelectedNumberingType();
@@ -667,7 +667,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, weld::SpinButton&, rEdit, vo
     SetModified();
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl, weld::ComboBox&, void)
 {
     OUString sEntry = m_xCharFormatLB->get_active_text();
     sal_uInt16 nMask = 1;

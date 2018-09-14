@@ -520,7 +520,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
     , bSuccess(false)
     , m_pLabDialog(pParent)
     , rLabRec(rRec)
-    , m_xMakeCB(m_xBuilder->weld_combo_box_text("brand"))
+    , m_xMakeCB(m_xBuilder->weld_combo_box("brand"))
     , m_xTypeED(m_xBuilder->weld_entry("type"))
     , m_xOKPB(m_xBuilder->weld_button("ok"))
 {
@@ -577,7 +577,7 @@ void SwSaveLabelDlg::Modify()
     m_xOKPB->set_sensitive(!m_xMakeCB->get_active_text().isEmpty() && !m_xTypeED->get_text().isEmpty());
 }
 
-IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyComboHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyComboHdl, weld::ComboBox&, void)
 {
     Modify();
 }
