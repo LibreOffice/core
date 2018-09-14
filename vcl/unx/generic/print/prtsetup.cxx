@@ -27,7 +27,7 @@
 
 using namespace psp;
 
-void RTSDialog::insertAllPPDValues(weld::ComboBoxText& rBox, const PPDParser* pParser, const PPDKey* pKey )
+void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
     if( ! pKey || ! pParser )
         return;
@@ -139,13 +139,13 @@ RTSPaperPage::RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog)
     , m_xContainer(m_xBuilder->weld_widget("PrinterPaperPage"))
     , m_xCbFromSetup(m_xBuilder->weld_check_button("papersizefromsetup"))
     , m_xPaperText(m_xBuilder->weld_label("paperft"))
-    , m_xPaperBox(m_xBuilder->weld_combo_box_text("paperlb"))
+    , m_xPaperBox(m_xBuilder->weld_combo_box("paperlb"))
     , m_xOrientText(m_xBuilder->weld_label("orientft"))
-    , m_xOrientBox(m_xBuilder->weld_combo_box_text("orientlb"))
+    , m_xOrientBox(m_xBuilder->weld_combo_box("orientlb"))
     , m_xDuplexText(m_xBuilder->weld_label("duplexft"))
-    , m_xDuplexBox(m_xBuilder->weld_combo_box_text("duplexlb"))
+    , m_xDuplexBox(m_xBuilder->weld_combo_box("duplexlb"))
     , m_xSlotText(m_xBuilder->weld_label("slotft"))
-    , m_xSlotBox(m_xBuilder->weld_combo_box_text("slotlb"))
+    , m_xSlotBox(m_xBuilder->weld_combo_box("slotlb"))
 {
     //PrinterPaperPage
     m_xPaperBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
@@ -230,7 +230,7 @@ void RTSPaperPage::update()
     }
 }
 
-IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBoxText&, rBox, void )
+IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBox&, rBox, void )
 {
     const PPDKey* pKey = nullptr;
     if( &rBox == m_xPaperBox.get() )
@@ -284,9 +284,9 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     , m_xPPDKeyBox(m_xBuilder->weld_tree_view("options"))
     , m_xPPDValueBox(m_xBuilder->weld_tree_view("values"))
     , m_xCustomEdit(m_xBuilder->weld_entry("custom"))
-    , m_xLevelBox(m_xBuilder->weld_combo_box_text("level"))
-    , m_xSpaceBox(m_xBuilder->weld_combo_box_text("colorspace"))
-    , m_xDepthBox(m_xBuilder->weld_combo_box_text("colordepth"))
+    , m_xLevelBox(m_xBuilder->weld_combo_box("level"))
+    , m_xSpaceBox(m_xBuilder->weld_combo_box("colorspace"))
+    , m_xDepthBox(m_xBuilder->weld_combo_box("colordepth"))
 {
     m_aReselectCustomIdle.SetInvokeHandler(LINK(this, RTSDevicePage, ImplHandleReselectHdl));
     m_aReselectCustomIdle.SetDebugName("RTSDevicePage m_aReselectCustomIdle");

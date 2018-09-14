@@ -78,18 +78,18 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
     , m_xBitmapLB(new PresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin")))
-    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box_text("bitmapstyle"))
+    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("bitmapstyle"))
     , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
     , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))
     , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button("width", FUNIT_PERCENT))
     , m_xBitmapHeight(m_xBuilder->weld_metric_spin_button("height", FUNIT_PERCENT))
     , m_xPositionBox(m_xBuilder->weld_container("posbox"))
-    , m_xPositionLB(m_xBuilder->weld_combo_box_text("positionlb"))
+    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xPositionOffBox(m_xBuilder->weld_container("posoffbox"))
     , m_xPositionOffX(m_xBuilder->weld_metric_spin_button("posoffx", FUNIT_PERCENT))
     , m_xPositionOffY(m_xBuilder->weld_metric_spin_button("posoffy", FUNIT_PERCENT))
     , m_xTileOffBox(m_xBuilder->weld_container("tileoffbox"))
-    , m_xTileOffLB(m_xBuilder->weld_combo_box_text("tileofflb"))
+    , m_xTileOffLB(m_xBuilder->weld_combo_box("tileofflb"))
     , m_xTileOffset(m_xBuilder->weld_metric_spin_button("tileoffmtr", FUNIT_PERCENT))
     , m_xBtnImport(m_xBuilder->weld_button("BTN_IMPORT"))
     , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, weld::Button&, void )
     ModifyBitmapStyleHdl( *m_xBitmapStyleLB );
 }
 
-IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
 {
     BitmapStyle eStylePos = static_cast<BitmapStyle>(m_xBitmapStyleLB->get_active());
     bool bIsStretched( eStylePos == STRETCHED );
@@ -667,7 +667,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBoxText&, vo
     m_aCtlBitmapPreview.Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, weld::ComboBox&, void)
 {
     if (m_xPositionLB->get_sensitive())
         m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_xPositionLB->get_active() ) ) );

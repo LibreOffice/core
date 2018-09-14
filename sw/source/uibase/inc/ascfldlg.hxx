@@ -37,14 +37,14 @@ class SwAsciiFilterDlg : public weld::GenericDialogController
 
     std::unique_ptr<TextEncodingBox> m_xCharSetLB;
     std::unique_ptr<weld::Label> m_xFontFT;
-    std::unique_ptr<weld::ComboBoxText> m_xFontLB;
+    std::unique_ptr<weld::ComboBox> m_xFontLB;
     std::unique_ptr<weld::Label> m_xLanguageFT;
     std::unique_ptr<LanguageBox>     m_xLanguageLB;
     std::unique_ptr<weld::RadioButton> m_xCRLF_RB;
     std::unique_ptr<weld::RadioButton> m_xCR_RB;
     std::unique_ptr<weld::RadioButton> m_xLF_RB;
 
-    DECL_LINK(CharSetSelHdl, weld::ComboBoxText&, void);
+    DECL_LINK(CharSetSelHdl, weld::ComboBox&, void);
     DECL_LINK(LineEndHdl, weld::ToggleButton&, void);
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;

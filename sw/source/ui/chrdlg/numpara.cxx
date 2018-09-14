@@ -48,9 +48,9 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(TabPageParent pParent, const SfxIte
     , bModified(false)
     , bCurNumrule(false)
     , m_xOutlineStartBX(m_xBuilder->weld_widget("boxOUTLINE"))
-    , m_xOutlineLvLB(m_xBuilder->weld_combo_box_text("comboLB_OUTLINE_LEVEL"))
+    , m_xOutlineLvLB(m_xBuilder->weld_combo_box("comboLB_OUTLINE_LEVEL"))
     , m_xNumberStyleBX(m_xBuilder->weld_widget("boxNUMBER_STYLE"))
-    , m_xNumberStyleLB(m_xBuilder->weld_combo_box_text("comboLB_NUMBER_STYLE"))
+    , m_xNumberStyleLB(m_xBuilder->weld_combo_box("comboLB_NUMBER_STYLE"))
     , m_xEditNumStyleBtn(m_xBuilder->weld_button("editnumstyle"))
     , m_xNewStartCB(m_xBuilder->weld_check_button("checkCB_NEW_START"))
     , m_xNewStartBX(m_xBuilder->weld_widget("boxNEW_START"))
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::ToggleButton&, v
     m_xRestartBX->set_sensitive(bEnableRestartValue);
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBox&, void)
 {
     int numSelectPos = m_xNumberStyleLB->get_active();
     if (numSelectPos == 0)
@@ -337,7 +337,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
 }
 
-IMPL_LINK(SwParagraphNumTabPage, StyleHdl_Impl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SwParagraphNumTabPage, StyleHdl_Impl, weld::ComboBox&, rBox, void)
 {
     bool bEnable = bCurNumrule || rBox.get_active() > 0;
     m_xNewStartCB->set_sensitive(bEnable);

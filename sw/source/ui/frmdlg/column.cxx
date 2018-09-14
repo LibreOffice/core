@@ -163,7 +163,7 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     // create TabPage
     m_pTabPage = static_cast<SwColumnPage*>(SwColumnPage::Create(TabPageParent(m_xContentArea.get(), this), pColPgSet).get());
     m_pTabPage->GetApplyLabel()->show();
-    weld::ComboBoxText* pApplyToLB = m_pTabPage->GetApplyComboBox();
+    weld::ComboBox* pApplyToLB = m_pTabPage->GetApplyComboBox();
     pApplyToLB->show();
 
     if (pCurrSection && (!m_rWrtShell.HasSelection() || 0 != nFullSectCnt))
@@ -212,12 +212,12 @@ SwColumnDlg::~SwColumnDlg()
     m_pTabPage.disposeAndClear();
 }
 
-IMPL_LINK(SwColumnDlg, ObjectListBoxHdl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SwColumnDlg, ObjectListBoxHdl, weld::ComboBox&, rBox, void)
 {
     ObjectHdl(&rBox);
 }
 
-void SwColumnDlg::ObjectHdl(const weld::ComboBoxText* pBox)
+void SwColumnDlg::ObjectHdl(const weld::ComboBox* pBox)
 {
     SfxItemSet* pSet = EvalCurrentSelection();
 
@@ -225,7 +225,7 @@ void SwColumnDlg::ObjectHdl(const weld::ComboBoxText* pBox)
     {
         m_pTabPage->FillItemSet(pSet);
     }
-    weld::ComboBoxText* pApplyToLB = m_pTabPage->GetApplyComboBox();
+    weld::ComboBox* pApplyToLB = m_pTabPage->GetApplyComboBox();
     m_nOldSelection = pApplyToLB->get_active_id().toInt32();
     long nWidth = m_nSelectionWidth;
     switch(m_nOldSelection)
@@ -400,9 +400,9 @@ SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xLineHeightLbl(m_xBuilder->weld_label("lineheightft"))
     , m_xLineHeightEdit(m_xBuilder->weld_metric_spin_button("lineheightmf", FUNIT_PERCENT))
     , m_xLinePosLbl(m_xBuilder->weld_label("lineposft"))
-    , m_xLinePosDLB(m_xBuilder->weld_combo_box_text("lineposlb"))
+    , m_xLinePosDLB(m_xBuilder->weld_combo_box("lineposlb"))
     , m_xTextDirectionFT(m_xBuilder->weld_label("textdirectionft"))
-    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box_text("textdirectionlb")))
+    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("textdirectionlb")))
     , m_xLineColorDLB(new ColorListBox(m_xBuilder->weld_menu_button("colorlb"), GetFrameWeld()))
     , m_xLineTypeDLB(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xEd1(new SwPercentField(m_xBuilder->weld_metric_spin_button("width1mf", FUNIT_CM)))
@@ -414,7 +414,7 @@ SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xPgeExampleWN(new weld::CustomWeld(*m_xBuilder, "pageexample", m_aPgeExampleWN))
     , m_xFrameExampleWN(new weld::CustomWeld(*m_xBuilder, "frameexample", m_aFrameExampleWN))
     , m_xApplyToFT(m_xBuilder->weld_label("applytoft"))
-    , m_xApplyToLB(m_xBuilder->weld_combo_box_text("applytolb"))
+    , m_xApplyToLB(m_xBuilder->weld_combo_box("applytolb"))
 {
     connectPercentField(*m_xEd1);
     connectPercentField(*m_xEd2);
@@ -631,7 +631,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 }
 
 // update ColumnManager
-IMPL_LINK_NOARG( SwColumnPage, UpdateColMgrListBox, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( SwColumnPage, UpdateColMgrListBox, weld::ComboBox&, void )
 {
     UpdateColMgr(*m_xLineWidthEdit);
 }

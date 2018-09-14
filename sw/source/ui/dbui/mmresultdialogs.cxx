@@ -247,7 +247,7 @@ SwMMResultSaveDialog::~SwMMResultSaveDialog()
 SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
     , m_xPrinterFT(m_xBuilder->weld_label("printerft"))
-    , m_xPrinterLB(m_xBuilder->weld_combo_box_text("printers"))
+    , m_xPrinterLB(m_xBuilder->weld_combo_box("printers"))
     , m_xPrinterSettingsPB(m_xBuilder->weld_button("printersettings"))
     , m_xPrintAllRB(m_xBuilder->weld_radio_button("printallrb"))
     , m_xFromRB(m_xBuilder->weld_radio_button("fromrb"))
@@ -719,7 +719,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, weld::ComboBoxText&, rBox, void)
+IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, weld::ComboBox&, rBox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();

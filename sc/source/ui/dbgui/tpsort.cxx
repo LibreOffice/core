@@ -424,7 +424,7 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 // Handler:
 
-IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBoxText&, rLb, void )
+IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
 {
     OUString aSelEntry = rLb.get_active_text();
     ScSortKeyItems::iterator pIter;
@@ -495,13 +495,13 @@ ScTabPageSortOptions::ScTabPageSortOptions(TabPageParent pParent, const SfxItemS
     , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
     , m_xBtnNaturalSort(m_xBuilder->weld_check_button("naturalsort"))
     , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
-    , m_xLbOutPos(m_xBuilder->weld_combo_box_text("outarealb"))
+    , m_xLbOutPos(m_xBuilder->weld_combo_box("outarealb"))
     , m_xEdOutPos(m_xBuilder->weld_entry("outareaed"))
     , m_xBtnSortUser(m_xBuilder->weld_check_button("sortuser"))
-    , m_xLbSortUser(m_xBuilder->weld_combo_box_text("sortuserlb"))
-    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box_text("language")))
+    , m_xLbSortUser(m_xBuilder->weld_combo_box("sortuserlb"))
+    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xFtAlgorithm(m_xBuilder->weld_label("algorithmft"))
-    , m_xLbAlgorithm(m_xBuilder->weld_combo_box_text("algorithmlb"))
+    , m_xLbAlgorithm(m_xBuilder->weld_combo_box("algorithmlb"))
     , m_xBtnTopDown(m_xBuilder->weld_radio_button("topdown"))
     , m_xBtnLeftRight(m_xBuilder->weld_radio_button("leftright"))
     , m_xBtnIncComments(m_xBuilder->weld_check_button("includenotes"))
@@ -826,7 +826,7 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, weld::ToggleButton&, rButton, void )
     }
 }
 
-IMPL_LINK(ScTabPageSortOptions, SelOutPosHdl, weld::ComboBoxText&, rLb, void)
+IMPL_LINK(ScTabPageSortOptions, SelOutPosHdl, weld::ComboBox&, rLb, void)
 {
     if (&rLb == m_xLbOutPos.get())
     {
@@ -907,7 +907,7 @@ void ScTabPageSortOptions::FillAlgor()
     m_xLbAlgorithm->thaw();
 }
 
-IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, weld::ComboBox&, void)
 {
     FillAlgor();
 }

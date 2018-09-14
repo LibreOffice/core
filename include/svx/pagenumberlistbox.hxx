@@ -37,16 +37,16 @@ public:
 class SVX_DLLPUBLIC SvxPageNumberListBox
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xControl;
+    std::unique_ptr<weld::ComboBox> m_xControl;
 public:
-    SvxPageNumberListBox(std::unique_ptr<weld::ComboBoxText> pControl);
+    SvxPageNumberListBox(std::unique_ptr<weld::ComboBox> pControl);
     int get_count() const { return m_xControl->get_count(); }
     OUString get_id(int pos) const { return m_xControl->get_id(pos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active(int pos) { m_xControl->set_active(pos); }
     void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
-    weld::ComboBoxText& get_widget() const { return *m_xControl; }
+    weld::ComboBox& get_widget() const { return *m_xControl; }
 };
 
 #endif

@@ -59,7 +59,7 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FUNIT_MM))
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FUNIT_DEGREE))
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
-    , m_xLbLineType(m_xBuilder->weld_combo_box_text("linetypelb"))
+    , m_xLbLineType(m_xBuilder->weld_combo_box("linetypelb"))
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
     , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
     , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pParent.GetFrameWeld()))
@@ -103,7 +103,7 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     m_xHatchLB->SetDeleteHdl( LINK( this, SvxHatchTabPage, ClickDeleteHdl_Impl ) );
 
     Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxHatchTabPage, ModifiedEditHdl_Impl );
-    Link<weld::ComboBoxText&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
+    Link<weld::ComboBox&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
     m_xMtrDistance->connect_value_changed( aLink );
     m_xMtrAngle->connect_value_changed( aLink );
     m_xSliderAngle->connect_value_changed(LINK(this, SvxHatchTabPage, ModifiedSliderHdl_Impl));
@@ -284,7 +284,7 @@ VclPtr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
     return VclPtr<SvxHatchTabPage>::Create(pWindow, *rSet);
 }
 
-IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, weld::ComboBoxText&, rListBox, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
     // hatch params have changed, it is no longer one of the presets

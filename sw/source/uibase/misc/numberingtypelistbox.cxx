@@ -38,7 +38,7 @@ struct SwNumberingTypeListBox_Impl
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 
-SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBoxText> pWidget)
+SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBox> pWidget)
     : m_xWidget(std::move(pWidget))
     , m_xImpl(new SwNumberingTypeListBox_Impl)
 {

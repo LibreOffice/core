@@ -43,10 +43,10 @@ class ODateTimeDialog : public weld::GenericDialogController
 
     std::unique_ptr<weld::CheckButton> m_xDate;
     std::unique_ptr<weld::Label> m_xFTDateFormat;
-    std::unique_ptr<weld::ComboBoxText> m_xDateListBox;
+    std::unique_ptr<weld::ComboBox> m_xDateListBox;
     std::unique_ptr<weld::CheckButton> m_xTime;
     std::unique_ptr<weld::Label> m_xFTTimeFormat;
-    std::unique_ptr<weld::ComboBoxText> m_xTimeListBox;
+    std::unique_ptr<weld::ComboBox> m_xTimeListBox;
     std::unique_ptr<weld::Button> m_xPB_OK;
 
     /** returns the format string
