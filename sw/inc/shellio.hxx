@@ -403,6 +403,7 @@ public:
 
     bool m_bBlock : 1;
     bool m_bOrganizerMode : 1;
+    bool m_bHideDeleteRedlines : 1;
 
     Writer();
     virtual ~Writer() override;

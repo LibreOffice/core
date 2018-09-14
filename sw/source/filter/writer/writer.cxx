@@ -118,6 +118,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 Writer::Writer()
     : m_pImpl(o3tl::make_unique<Writer_Impl>())
     , m_pOrigFileName(nullptr), m_pDoc(nullptr), m_pOrigPam(nullptr), m_pCurrentPam(nullptr)
+    , m_bHideDeleteRedlines(false)
 {
     m_bWriteAll = m_bShowProgress = m_bUCS2_WithStartChar = true;
     m_bASCII_NoLastLineEnd = m_bASCII_ParaAsBlank = m_bASCII_ParaAsCR =
