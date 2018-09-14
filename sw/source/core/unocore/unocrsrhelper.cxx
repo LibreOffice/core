@@ -1061,12 +1061,12 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     pMed->Download();   // if necessary: start the download
     if( aRef.is() && 1 < aRef->GetRefCount() )  // Ref still valid?
     {
-        SwReader* pRdr;
+        std::unique_ptr<SwReader> pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, true));
         if(!sPassword.isEmpty())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
-        Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, nullptr, pUnoCursor);
+        Reader *pRead = pDocSh->StartConvertFrom( *pMed, pRdr, nullptr, pUnoCursor);
         if( pRead )
         {
 
@@ -1091,9 +1091,6 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
                     nContent = 0;
                 pUnoCursor->GetMark()->nContent.Assign( pCntNode, nContent );
             }
-
-            delete pRdr;
-
         }
     }
 }

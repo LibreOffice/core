@@ -153,17 +153,16 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
     if (!::sw::XTextRangeToSwPaM(aPam, xInsertPosition))
         return false;
     // similar to SwView::InsertMedium
-    SwReader *pReader(nullptr);
-    Reader *const pRead = StartConvertFrom(rMedium, &pReader, nullptr, &aPam);
+    std::unique_ptr<SwReader> pReader;
+    Reader *const pRead = StartConvertFrom(rMedium, pReader, nullptr, &aPam);
     if (!pRead)
         return false;
     ErrCode const nError = pReader->Read(*pRead);
-    delete pReader;
     return ERRCODE_NONE == nError;
 }
 
 // Prepare loading
-Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
+Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, std::unique_ptr<SwReader>& rpRdr,
                                     SwCursorShell const *pCursorShell,
                                     SwPaM* pPaM )
 {
@@ -195,10 +194,12 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         ? SwReaderType::Storage & pRead->GetReaderType()
         : SwReaderType::Stream & pRead->GetReaderType() )
     {
-        *ppRdr = pPaM ? new SwReader( rMedium, aFileName, *pPaM ) :
-            pCursorShell ?
-                new SwReader( rMedium, aFileName, *pCursorShell->GetCursor() )
-                    : new SwReader( rMedium, aFileName, m_xDoc.get() );
+        if (pPaM)
+            rpRdr.reset(new SwReader( rMedium, aFileName, *pPaM ));
+        else if (pCursorShell)
+            rpRdr.reset(new SwReader( rMedium, aFileName, *pCursorShell->GetCursor() ));
+        else
+            rpRdr.reset(new SwReader( rMedium, aFileName, m_xDoc.get() ));
     }
     else
         return nullptr;
@@ -230,8 +231,8 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 // Loading
 bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    SwReader* pRdr;
-    SwRead pRead = StartConvertFrom(rMedium, &pRdr);
+    std::unique_ptr<SwReader> pRdr;
+    SwRead pRead = StartConvertFrom(rMedium, pRdr);
     if (!pRead)
       return false; // #129881# return if no reader is found
     tools::SvRef<SotStorage> pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
@@ -278,7 +279,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     UpdateFontList();
     InitDrawModelAndDocShell(this, m_xDoc ? m_xDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
-    delete pRdr;
+    pRdr.reset();
 
     SW_MOD()->SetEmbeddedLoadSave( false );
 
