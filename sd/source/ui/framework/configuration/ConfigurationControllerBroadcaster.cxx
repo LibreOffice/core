@@ -84,20 +84,19 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     // for every listener.
     ConfigurationChangeEvent aEvent (rEvent);
 
-    ListenerList::const_iterator iListener;
-    for (iListener=rList.begin(); iListener!=rList.end(); ++iListener)
+    for (const ListenerDescriptor& listener : rList)
     {
         try
         {
-            aEvent.UserData = iListener->maUserData;
-            iListener->mxListener->notifyConfigurationChange(aEvent);
+            aEvent.UserData = listener.maUserData;
+            listener.mxListener->notifyConfigurationChange(aEvent);
         }
         catch (const lang::DisposedException& rException)
         {
             // When the exception comes from the listener itself then
             // unregister it.
-            if (rException.Context == iListener->mxListener)
-                RemoveListener(iListener->mxListener);
+            if (rException.Context == listener.mxListener)
+                RemoveListener(listener.mxListener);
         }
         catch (const RuntimeException&)
         {

@@ -133,16 +133,13 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    bool bFilterResources (!rsResourceURLPrefix.isEmpty());
+    const bool bFilterResources (!rsResourceURLPrefix.isEmpty());
 
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;
-    ResourceContainer::const_iterator iResource;
-    for (iResource=mpResourceContainer->begin();
-         iResource!=mpResourceContainer->end();
-         ++iResource)
+    for (const auto& resource : *mpResourceContainer)
     {
-        if ( ! (*iResource)->isBoundTo(rxAnchorId,eMode))
+        if (!resource->isBoundTo(rxAnchorId, eMode))
             continue;
 
         if (bFilterResources)
@@ -151,19 +148,17 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
             // Make sure that the resource is bound directly to the anchor.
             if (eMode != AnchorBindingMode_DIRECT
-                && ! (*iResource)->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
+                && !resource->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
             {
                 continue;
             }
 
             // Make sure that the resource URL matches the given prefix.
-            if ( ! (*iResource)->getResourceURL().match(rsResourceURLPrefix))
-            {
+            if (!resource->getResourceURL().match(rsResourceURLPrefix))
                 continue;
-            }
         }
 
-        aResources.push_back(*iResource);
+        aResources.emplace_back(resource);
     }
 
     return comphelper::containerToSequence(aResources);
