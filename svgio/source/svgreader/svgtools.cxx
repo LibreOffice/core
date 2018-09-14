@@ -634,158 +634,156 @@ namespace svgio
         {
             typedef std::unordered_map< OUString, Color > ColorTokenMapper;
             typedef std::pair< OUString, Color > ColorTokenValueType;
-            ColorTokenMapper aColorTokenMapperList;
-
-            if(aColorTokenMapperList.empty())
-            {
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("antiquewhite"), Color(250, 235, 215)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aqua"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aquamarine"), Color(127, 255, 212)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("azure"), Color(240, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("beige"), Color(245, 245, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("bisque"), Color(255, 228, 196)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("black"), Color( 0, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blanchedalmond"), Color(255, 235, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blue"), Color( 0, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blueviolet"), Color(138, 43, 226)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("brown"), Color(165, 42, 42)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("burlywood"), Color(222, 184, 135)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cadetblue"), Color( 95, 158, 160)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("chartreuse"), Color(127, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("chocolate"), Color(210, 105, 30)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("coral"), Color(255, 127, 80)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cornflowerblue"), Color(100, 149, 237)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cornsilk"), Color(255, 248, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("crimson"), Color(220, 20, 60)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cyan"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkblue"), Color( 0, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkcyan"), Color( 0, 139, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgoldenrod"), Color(184, 134, 11)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgray"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgreen"), Color( 0, 100, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgrey"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkkhaki"), Color(189, 183, 107)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkmagenta"), Color(139, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkolivegreen"), Color( 85, 107, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkorange"), Color(255, 140, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkorchid"), Color(153, 50, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkred"), Color(139, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darksalmon"), Color(233, 150, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkseagreen"), Color(143, 188, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslateblue"), Color( 72, 61, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslategray"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslategrey"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkturquoise"), Color( 0, 206, 209)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkviolet"), Color(148, 0, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("deeppink"), Color(255, 20, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("deepskyblue"), Color( 0, 191, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dimgray"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dimgrey"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dodgerblue"), Color( 30, 144, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("firebrick"), Color(178, 34, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("floralwhite"), Color(255, 250, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("forestgreen"), Color( 34, 139, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("fuchsia"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gainsboro"), Color(220, 220, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("ghostwhite"), Color(248, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gold"), Color(255, 215, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("goldenrod"), Color(218, 165, 32)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gray"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("grey"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("green"), Color(0, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("greenyellow"), Color(173, 255, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("honeydew"), Color(240, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("hotpink"), Color(255, 105, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("indianred"), Color(205, 92, 92)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("indigo"), Color( 75, 0, 130)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("ivory"), Color(255, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("khaki"), Color(240, 230, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lavender"), Color(230, 230, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lavenderblush"), Color(255, 240, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lawngreen"), Color(124, 252, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lemonchiffon"), Color(255, 250, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightblue"), Color(173, 216, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightcoral"), Color(240, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightcyan"), Color(224, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgoldenrodyellow"), Color(250, 250, 210)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgray"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgreen"), Color(144, 238, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgrey"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightpink"), Color(255, 182, 193)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightsalmon"), Color(255, 160, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightseagreen"), Color( 32, 178, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightskyblue"), Color(135, 206, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightslategray"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightslategrey"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightsteelblue"), Color(176, 196, 222)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightyellow"), Color(255, 255, 224)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lime"), Color( 0, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("limegreen"), Color( 50, 205, 50)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("linen"), Color(250, 240, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("magenta"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("maroon"), Color(128, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumaquamarine"), Color(102, 205, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumblue"), Color( 0, 0, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumorchid"), Color(186, 85, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumpurple"), Color(147, 112, 219)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumseagreen"), Color( 60, 179, 113)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumslateblue"), Color(123, 104, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumspringgreen"), Color( 0, 250, 154)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumturquoise"), Color( 72, 209, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumvioletred"), Color(199, 21, 133)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("midnightblue"), Color( 25, 25, 112)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mintcream"), Color(245, 255, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mistyrose"), Color(255, 228, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("moccasin"), Color(255, 228, 181)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("navajowhite"), Color(255, 222, 173)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("navy"), Color( 0, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("oldlace"), Color(253, 245, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("olive"), Color(128, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("olivedrab"), Color(107, 142, 35)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orange"), Color(255, 165, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orangered"), Color(255, 69, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orchid"), Color(218, 112, 214)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palegoldenrod"), Color(238, 232, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palegreen"), Color(152, 251, 152)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("paleturquoise"), Color(175, 238, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palevioletred"), Color(219, 112, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("papayawhip"), Color(255, 239, 213)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("peachpuff"), Color(255, 218, 185)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("peru"), Color(205, 133, 63)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("pink"), Color(255, 192, 203)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("plum"), Color(221, 160, 221)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("powderblue"), Color(176, 224, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("purple"), Color(128, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("red"), Color(255, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("rosybrown"), Color(188, 143, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("royalblue"), Color( 65, 105, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("saddlebrown"), Color(139, 69, 19)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("salmon"), Color(250, 128, 114)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("sandybrown"), Color(244, 164, 96)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("seagreen"), Color( 46, 139, 87)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("seashell"), Color(255, 245, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("sienna"), Color(160, 82, 45)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("silver"), Color(192, 192, 192)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("skyblue"), Color(135, 206, 235)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slateblue"), Color(106, 90, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slategray"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slategrey"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("snow"), Color(255, 250, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("springgreen"), Color( 0, 255, 127)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("steelblue"), Color( 70, 130, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("tan"), Color(210, 180, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("teal"), Color( 0, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("thistle"), Color(216, 191, 216)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("tomato"), Color(255, 99, 71)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("turquoise"), Color( 64, 224, 208)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("violet"), Color(238, 130, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("wheat"), Color(245, 222, 179)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("white"), Color(255, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("whitesmoke"), Color(245, 245, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("yellow"), Color(255, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50)));
-            }
+            static const ColorTokenMapper aColorTokenMapperList {
+                { ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255)) },
+                { ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255) ) },
+                { ColorTokenValueType(OUString("antiquewhite"), Color(250, 235, 215) ) },
+                { ColorTokenValueType(OUString("aqua"), Color( 0, 255, 255) ) },
+                { ColorTokenValueType(OUString("aquamarine"), Color(127, 255, 212) ) },
+                { ColorTokenValueType(OUString("azure"), Color(240, 255, 255) ) },
+                { ColorTokenValueType(OUString("beige"), Color(245, 245, 220) ) },
+                { ColorTokenValueType(OUString("bisque"), Color(255, 228, 196) ) },
+                { ColorTokenValueType(OUString("black"), Color( 0, 0, 0) ) },
+                { ColorTokenValueType(OUString("blanchedalmond"), Color(255, 235, 205) ) },
+                { ColorTokenValueType(OUString("blue"), Color( 0, 0, 255) ) },
+                { ColorTokenValueType(OUString("blueviolet"), Color(138, 43, 226) ) },
+                { ColorTokenValueType(OUString("brown"), Color(165, 42, 42) ) },
+                { ColorTokenValueType(OUString("burlywood"), Color(222, 184, 135) ) },
+                { ColorTokenValueType(OUString("cadetblue"), Color( 95, 158, 160) ) },
+                { ColorTokenValueType(OUString("chartreuse"), Color(127, 255, 0) ) },
+                { ColorTokenValueType(OUString("chocolate"), Color(210, 105, 30) ) },
+                { ColorTokenValueType(OUString("coral"), Color(255, 127, 80) ) },
+                { ColorTokenValueType(OUString("cornflowerblue"), Color(100, 149, 237) ) },
+                { ColorTokenValueType(OUString("cornsilk"), Color(255, 248, 220) ) },
+                { ColorTokenValueType(OUString("crimson"), Color(220, 20, 60) ) },
+                { ColorTokenValueType(OUString("cyan"), Color( 0, 255, 255) ) },
+                { ColorTokenValueType(OUString("darkblue"), Color( 0, 0, 139) ) },
+                { ColorTokenValueType(OUString("darkcyan"), Color( 0, 139, 139) ) },
+                { ColorTokenValueType(OUString("darkgoldenrod"), Color(184, 134, 11) ) },
+                { ColorTokenValueType(OUString("darkgray"), Color(169, 169, 169) ) },
+                { ColorTokenValueType(OUString("darkgreen"), Color( 0, 100, 0) ) },
+                { ColorTokenValueType(OUString("darkgrey"), Color(169, 169, 169) ) },
+                { ColorTokenValueType(OUString("darkkhaki"), Color(189, 183, 107) ) },
+                { ColorTokenValueType(OUString("darkmagenta"), Color(139, 0, 139) ) },
+                { ColorTokenValueType(OUString("darkolivegreen"), Color( 85, 107, 47) ) },
+                { ColorTokenValueType(OUString("darkorange"), Color(255, 140, 0) ) },
+                { ColorTokenValueType(OUString("darkorchid"), Color(153, 50, 204) ) },
+                { ColorTokenValueType(OUString("darkred"), Color(139, 0, 0) ) },
+                { ColorTokenValueType(OUString("darksalmon"), Color(233, 150, 122) ) },
+                { ColorTokenValueType(OUString("darkseagreen"), Color(143, 188, 143) ) },
+                { ColorTokenValueType(OUString("darkslateblue"), Color( 72, 61, 139) ) },
+                { ColorTokenValueType(OUString("darkslategray"), Color( 47, 79, 79) ) },
+                { ColorTokenValueType(OUString("darkslategrey"), Color( 47, 79, 79) ) },
+                { ColorTokenValueType(OUString("darkturquoise"), Color( 0, 206, 209) ) },
+                { ColorTokenValueType(OUString("darkviolet"), Color(148, 0, 211) ) },
+                { ColorTokenValueType(OUString("deeppink"), Color(255, 20, 147) ) },
+                { ColorTokenValueType(OUString("deepskyblue"), Color( 0, 191, 255) ) },
+                { ColorTokenValueType(OUString("dimgray"), Color(105, 105, 105) ) },
+                { ColorTokenValueType(OUString("dimgrey"), Color(105, 105, 105) ) },
+                { ColorTokenValueType(OUString("dodgerblue"), Color( 30, 144, 255) ) },
+                { ColorTokenValueType(OUString("firebrick"), Color(178, 34, 34) ) },
+                { ColorTokenValueType(OUString("floralwhite"), Color(255, 250, 240) ) },
+                { ColorTokenValueType(OUString("forestgreen"), Color( 34, 139, 34) ) },
+                { ColorTokenValueType(OUString("fuchsia"), Color(255, 0, 255) ) },
+                { ColorTokenValueType(OUString("gainsboro"), Color(220, 220, 220) ) },
+                { ColorTokenValueType(OUString("ghostwhite"), Color(248, 248, 255) ) },
+                { ColorTokenValueType(OUString("gold"), Color(255, 215, 0) ) },
+                { ColorTokenValueType(OUString("goldenrod"), Color(218, 165, 32) ) },
+                { ColorTokenValueType(OUString("gray"), Color(128, 128, 128) ) },
+                { ColorTokenValueType(OUString("grey"), Color(128, 128, 128) ) },
+                { ColorTokenValueType(OUString("green"), Color(0, 128, 0) ) },
+                { ColorTokenValueType(OUString("greenyellow"), Color(173, 255, 47) ) },
+                { ColorTokenValueType(OUString("honeydew"), Color(240, 255, 240) ) },
+                { ColorTokenValueType(OUString("hotpink"), Color(255, 105, 180) ) },
+                { ColorTokenValueType(OUString("indianred"), Color(205, 92, 92) ) },
+                { ColorTokenValueType(OUString("indigo"), Color( 75, 0, 130) ) },
+                { ColorTokenValueType(OUString("ivory"), Color(255, 255, 240) ) },
+                { ColorTokenValueType(OUString("khaki"), Color(240, 230, 140) ) },
+                { ColorTokenValueType(OUString("lavender"), Color(230, 230, 250) ) },
+                { ColorTokenValueType(OUString("lavenderblush"), Color(255, 240, 245) ) },
+                { ColorTokenValueType(OUString("lawngreen"), Color(124, 252, 0) ) },
+                { ColorTokenValueType(OUString("lemonchiffon"), Color(255, 250, 205) ) },
+                { ColorTokenValueType(OUString("lightblue"), Color(173, 216, 230) ) },
+                { ColorTokenValueType(OUString("lightcoral"), Color(240, 128, 128) ) },
+                { ColorTokenValueType(OUString("lightcyan"), Color(224, 255, 255) ) },
+                { ColorTokenValueType(OUString("lightgoldenrodyellow"), Color(250, 250, 210) ) },
+                { ColorTokenValueType(OUString("lightgray"), Color(211, 211, 211) ) },
+                { ColorTokenValueType(OUString("lightgreen"), Color(144, 238, 144) ) },
+                { ColorTokenValueType(OUString("lightgrey"), Color(211, 211, 211) ) },
+                { ColorTokenValueType(OUString("lightpink"), Color(255, 182, 193) ) },
+                { ColorTokenValueType(OUString("lightsalmon"), Color(255, 160, 122) ) },
+                { ColorTokenValueType(OUString("lightseagreen"), Color( 32, 178, 170) ) },
+                { ColorTokenValueType(OUString("lightskyblue"), Color(135, 206, 250) ) },
+                { ColorTokenValueType(OUString("lightslategray"), Color(119, 136, 153) ) },
+                { ColorTokenValueType(OUString("lightslategrey"), Color(119, 136, 153) ) },
+                { ColorTokenValueType(OUString("lightsteelblue"), Color(176, 196, 222) ) },
+                { ColorTokenValueType(OUString("lightyellow"), Color(255, 255, 224) ) },
+                { ColorTokenValueType(OUString("lime"), Color( 0, 255, 0) ) },
+                { ColorTokenValueType(OUString("limegreen"), Color( 50, 205, 50) ) },
+                { ColorTokenValueType(OUString("linen"), Color(250, 240, 230) ) },
+                { ColorTokenValueType(OUString("magenta"), Color(255, 0, 255) ) },
+                { ColorTokenValueType(OUString("maroon"), Color(128, 0, 0) ) },
+                { ColorTokenValueType(OUString("mediumaquamarine"), Color(102, 205, 170) ) },
+                { ColorTokenValueType(OUString("mediumblue"), Color( 0, 0, 205) ) },
+                { ColorTokenValueType(OUString("mediumorchid"), Color(186, 85, 211) ) },
+                { ColorTokenValueType(OUString("mediumpurple"), Color(147, 112, 219) ) },
+                { ColorTokenValueType(OUString("mediumseagreen"), Color( 60, 179, 113) ) },
+                { ColorTokenValueType(OUString("mediumslateblue"), Color(123, 104, 238) ) },
+                { ColorTokenValueType(OUString("mediumspringgreen"), Color( 0, 250, 154) ) },
+                { ColorTokenValueType(OUString("mediumturquoise"), Color( 72, 209, 204) ) },
+                { ColorTokenValueType(OUString("mediumvioletred"), Color(199, 21, 133) ) },
+                { ColorTokenValueType(OUString("midnightblue"), Color( 25, 25, 112) ) },
+                { ColorTokenValueType(OUString("mintcream"), Color(245, 255, 250) ) },
+                { ColorTokenValueType(OUString("mistyrose"), Color(255, 228, 225) ) },
+                { ColorTokenValueType(OUString("moccasin"), Color(255, 228, 181) ) },
+                { ColorTokenValueType(OUString("navajowhite"), Color(255, 222, 173) ) },
+                { ColorTokenValueType(OUString("navy"), Color( 0, 0, 128) ) },
+                { ColorTokenValueType(OUString("oldlace"), Color(253, 245, 230) ) },
+                { ColorTokenValueType(OUString("olive"), Color(128, 128, 0) ) },
+                { ColorTokenValueType(OUString("olivedrab"), Color(107, 142, 35) ) },
+                { ColorTokenValueType(OUString("orange"), Color(255, 165, 0) ) },
+                { ColorTokenValueType(OUString("orangered"), Color(255, 69, 0) ) },
+                { ColorTokenValueType(OUString("orchid"), Color(218, 112, 214) ) },
+                { ColorTokenValueType(OUString("palegoldenrod"), Color(238, 232, 170) ) },
+                { ColorTokenValueType(OUString("palegreen"), Color(152, 251, 152) ) },
+                { ColorTokenValueType(OUString("paleturquoise"), Color(175, 238, 238) ) },
+                { ColorTokenValueType(OUString("palevioletred"), Color(219, 112, 147) ) },
+                { ColorTokenValueType(OUString("papayawhip"), Color(255, 239, 213) ) },
+                { ColorTokenValueType(OUString("peachpuff"), Color(255, 218, 185) ) },
+                { ColorTokenValueType(OUString("peru"), Color(205, 133, 63) ) },
+                { ColorTokenValueType(OUString("pink"), Color(255, 192, 203) ) },
+                { ColorTokenValueType(OUString("plum"), Color(221, 160, 221) ) },
+                { ColorTokenValueType(OUString("powderblue"), Color(176, 224, 230) ) },
+                { ColorTokenValueType(OUString("purple"), Color(128, 0, 128) ) },
+                { ColorTokenValueType(OUString("red"), Color(255, 0, 0) ) },
+                { ColorTokenValueType(OUString("rosybrown"), Color(188, 143, 143) ) },
+                { ColorTokenValueType(OUString("royalblue"), Color( 65, 105, 225) ) },
+                { ColorTokenValueType(OUString("saddlebrown"), Color(139, 69, 19) ) },
+                { ColorTokenValueType(OUString("salmon"), Color(250, 128, 114) ) },
+                { ColorTokenValueType(OUString("sandybrown"), Color(244, 164, 96) ) },
+                { ColorTokenValueType(OUString("seagreen"), Color( 46, 139, 87) ) },
+                { ColorTokenValueType(OUString("seashell"), Color(255, 245, 238) ) },
+                { ColorTokenValueType(OUString("sienna"), Color(160, 82, 45) ) },
+                { ColorTokenValueType(OUString("silver"), Color(192, 192, 192) ) },
+                { ColorTokenValueType(OUString("skyblue"), Color(135, 206, 235) ) },
+                { ColorTokenValueType(OUString("slateblue"), Color(106, 90, 205) ) },
+                { ColorTokenValueType(OUString("slategray"), Color(112, 128, 144) ) },
+                { ColorTokenValueType(OUString("slategrey"), Color(112, 128, 144) ) },
+                { ColorTokenValueType(OUString("snow"), Color(255, 250, 250) ) },
+                { ColorTokenValueType(OUString("springgreen"), Color( 0, 255, 127) ) },
+                { ColorTokenValueType(OUString("steelblue"), Color( 70, 130, 180) ) },
+                { ColorTokenValueType(OUString("tan"), Color(210, 180, 140) ) },
+                { ColorTokenValueType(OUString("teal"), Color( 0, 128, 128) ) },
+                { ColorTokenValueType(OUString("thistle"), Color(216, 191, 216) ) },
+                { ColorTokenValueType(OUString("tomato"), Color(255, 99, 71) ) },
+                { ColorTokenValueType(OUString("turquoise"), Color( 64, 224, 208) ) },
+                { ColorTokenValueType(OUString("violet"), Color(238, 130, 238) ) },
+                { ColorTokenValueType(OUString("wheat"), Color(245, 222, 179) ) },
+                { ColorTokenValueType(OUString("white"), Color(255, 255, 255) ) },
+                { ColorTokenValueType(OUString("whitesmoke"), Color(245, 245, 245) ) },
+                { ColorTokenValueType(OUString("yellow"), Color(255, 255, 0) ) },
+                { ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50) ) },
+            };
 
             ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
 
