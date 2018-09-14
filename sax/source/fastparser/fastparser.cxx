@@ -812,10 +812,9 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
 
     if (rEntity.mbEnableThreads)
     {
-        rtl::Reference<ParserThread> xParser;
-        xParser = new ParserThread(this);
-        aEnsureFree.setThread(xParser);
+        rtl::Reference<ParserThread> xParser(new ParserThread(this));
         xParser->launch();
+        aEnsureFree.setThread(xParser);
         bool done = false;
         do {
             rEntity.maConsumeResume.wait();
