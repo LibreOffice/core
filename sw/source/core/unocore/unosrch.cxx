@@ -116,53 +116,53 @@ const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperti
 void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const
 {
 
-    SfxPoolItem* pBoxItem = nullptr,
-    *pCharBoxItem = nullptr,
-    *pBreakItem = nullptr,
-    *pAutoKernItem  = nullptr,
-    *pWLineItem   = nullptr,
-    *pTabItem  = nullptr,
-    *pSplitItem  = nullptr,
-    *pRegItem  = nullptr,
-    *pLineSpaceItem  = nullptr,
-    *pLineNumItem  = nullptr,
-    *pKeepItem  = nullptr,
-    *pLRItem  = nullptr,
-    *pULItem  = nullptr,
-    *pBackItem  = nullptr,
-    *pAdjItem  = nullptr,
-    *pDescItem  = nullptr,
-    *pInetItem  = nullptr,
-    *pDropItem  = nullptr,
-    *pWeightItem  = nullptr,
-    *pULineItem  = nullptr,
-    *pOLineItem  = nullptr,
-    *pCharFormatItem  = nullptr,
-    *pShadItem  = nullptr,
-    *pPostItem  = nullptr,
-    *pNHyphItem  = nullptr,
-    *pLangItem  = nullptr,
-    *pKernItem  = nullptr,
-    *pFontSizeItem  = nullptr,
-    *pFontItem  = nullptr,
-    *pBlinkItem  = nullptr,
-    *pEscItem  = nullptr,
-    *pCrossedOutItem  = nullptr,
-    *pContourItem  = nullptr,
-    *pCharColorItem  = nullptr,
-    *pCasemapItem  = nullptr,
-    *pBrushItem  = nullptr,
-    *pFontCJKItem = nullptr,
-    *pFontSizeCJKItem = nullptr,
-    *pCJKLangItem = nullptr,
-    *pCJKPostureItem = nullptr,
-    *pCJKWeightItem = nullptr,
-    *pFontCTLItem = nullptr,
-    *pFontSizeCTLItem = nullptr,
-    *pCTLLangItem = nullptr,
-    *pCTLPostureItem = nullptr,
-    *pCTLWeightItem = nullptr,
-    *pShadowItem  = nullptr;
+    std::unique_ptr<SfxPoolItem> pBoxItem,
+    pCharBoxItem,
+    pBreakItem,
+    pAutoKernItem ,
+    pWLineItem  ,
+    pTabItem ,
+    pSplitItem ,
+    pRegItem ,
+    pLineSpaceItem ,
+    pLineNumItem ,
+    pKeepItem ,
+    pLRItem ,
+    pULItem ,
+    pBackItem ,
+    pAdjItem ,
+    pDescItem ,
+    pInetItem ,
+    pDropItem ,
+    pWeightItem ,
+    pULineItem ,
+    pOLineItem ,
+    pCharFormatItem ,
+    pShadItem ,
+    pPostItem ,
+    pNHyphItem ,
+    pLangItem ,
+    pKernItem ,
+    pFontSizeItem ,
+    pFontItem ,
+    pBlinkItem ,
+    pEscItem ,
+    pCrossedOutItem ,
+    pContourItem ,
+    pCharColorItem ,
+    pCasemapItem ,
+    pBrushItem ,
+    pFontCJKItem,
+    pFontSizeCJKItem,
+    pCJKLangItem,
+    pCJKPostureItem,
+    pCJKWeightItem,
+    pFontCTLItem,
+    pFontSizeCTLItem,
+    pCTLLangItem,
+    pCTLPostureItem,
+    pCTLWeightItem,
+    pShadowItem ;
 
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     for(size_t i = 0; i < aPropertyEntries.size(); i++, ++aIt)
@@ -174,238 +174,238 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
             {
                 case  RES_BOX:
                     if(!pBoxItem)
-                        pBoxItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pBoxItem;
+                        pBoxItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pBoxItem.get();
                 break;
                 case  RES_CHRATR_BOX:
                     if(!pCharBoxItem)
-                        pCharBoxItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCharBoxItem;
+                        pCharBoxItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCharBoxItem.get();
                 break;
                 case  RES_BREAK:
                     if(!pBreakItem)
-                        pBreakItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pBreakItem;
+                        pBreakItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pBreakItem.get();
                 break;
                 case  RES_CHRATR_AUTOKERN:
                     if(!pAutoKernItem)
-                        pAutoKernItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pAutoKernItem;
+                        pAutoKernItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pAutoKernItem.get();
                     break;
                 case  RES_CHRATR_BACKGROUND:
                     if(!pBrushItem)
-                        pBrushItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pBrushItem;
+                        pBrushItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pBrushItem.get();
                 break;
                 case  RES_CHRATR_CASEMAP:
                     if(!pCasemapItem)
-                        pCasemapItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCasemapItem;
+                        pCasemapItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCasemapItem.get();
                 break;
                 case  RES_CHRATR_COLOR:
                     if(!pCharColorItem)
-                        pCharColorItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCharColorItem;
+                        pCharColorItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCharColorItem.get();
                 break;
                 case  RES_CHRATR_CONTOUR:
                     if(!pContourItem)
-                        pContourItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pContourItem;
+                        pContourItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pContourItem.get();
                 break;
                 case  RES_CHRATR_CROSSEDOUT:
                     if(!pCrossedOutItem)
-                        pCrossedOutItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCrossedOutItem;
+                        pCrossedOutItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCrossedOutItem.get();
                 break;
                 case  RES_CHRATR_ESCAPEMENT:
                     if(!pEscItem)
-                        pEscItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pEscItem;
+                        pEscItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pEscItem.get();
                 break;
                 case  RES_CHRATR_BLINK:
                     if(!pBlinkItem)
-                        pBlinkItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pBlinkItem;
+                        pBlinkItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pBlinkItem.get();
                 break;
                 case  RES_CHRATR_FONT:
                     if(!pFontItem)
-                        pFontItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontItem;
+                        pFontItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontItem.get();
                 break;
                 case  RES_CHRATR_FONTSIZE:
                     if(!pFontSizeItem)
-                        pFontSizeItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontSizeItem;
+                        pFontSizeItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontSizeItem.get();
                 break;
                 case  RES_CHRATR_KERNING:
                     if(!pKernItem)
-                        pKernItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pKernItem;
+                        pKernItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pKernItem.get();
                 break;
                 case  RES_CHRATR_LANGUAGE:
                     if(!pLangItem)
-                        pLangItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pLangItem;
+                        pLangItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pLangItem.get();
                 break;
                 case  RES_CHRATR_NOHYPHEN:
                     if(!pNHyphItem)
-                        pNHyphItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pNHyphItem;
+                        pNHyphItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pNHyphItem.get();
                 break;
                 case  RES_CHRATR_POSTURE:
                     if(!pPostItem)
-                        pPostItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pPostItem;
+                        pPostItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pPostItem.get();
                 break;
                 case  RES_CHRATR_SHADOWED:
                     if(!pShadItem)
-                        pShadItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pShadItem;
+                        pShadItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pShadItem.get();
                 break;
                 case  RES_TXTATR_CHARFMT:
                     if(!pCharFormatItem)
-                        pCharFormatItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCharFormatItem;
+                        pCharFormatItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCharFormatItem.get();
                 break;
                 case  RES_CHRATR_UNDERLINE:
                     if(!pULineItem)
-                        pULineItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pULineItem;
+                        pULineItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pULineItem.get();
                 break;
                 case  RES_CHRATR_OVERLINE:
                     if(!pOLineItem)
-                        pOLineItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pOLineItem;
+                        pOLineItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pOLineItem.get();
                 break;
                 case  RES_CHRATR_WEIGHT:
                     if(!pWeightItem)
-                        pWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pWeightItem;
+                        pWeightItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pWeightItem.get();
                 break;
                 case  RES_PARATR_DROP:
                     if(!pDropItem)
-                        pDropItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pDropItem;
+                        pDropItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pDropItem.get();
                 break;
                 case  RES_TXTATR_INETFMT:
                     if(!pInetItem)
-                        pInetItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pInetItem;
+                        pInetItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pInetItem.get();
                 break;
                 case  RES_PAGEDESC:
                     if(!pDescItem)
-                        pDescItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pDescItem;
+                        pDescItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pDescItem.get();
                 break;
                 case  RES_PARATR_ADJUST:
                     if(!pAdjItem)
-                        pAdjItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pAdjItem;
+                        pAdjItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pAdjItem.get();
                 break;
                 case  RES_BACKGROUND:
                     if(!pBackItem)
-                        pBackItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pBackItem;
+                        pBackItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pBackItem.get();
                 break;
                 case  RES_UL_SPACE:
                     if(!pULItem)
-                        pULItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pULItem;
+                        pULItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pULItem.get();
                 break;
                 case  RES_LR_SPACE:
                     if(!pLRItem)
-                        pLRItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pLRItem;
+                        pLRItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pLRItem.get();
                 break;
                 case  RES_KEEP:
                     if(!pKeepItem)
-                        pKeepItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pKeepItem;
+                        pKeepItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pKeepItem.get();
                 break;
                 case  RES_LINENUMBER:
                     if(!pLineNumItem)
-                        pLineNumItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pLineNumItem;
+                        pLineNumItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pLineNumItem.get();
                 break;
                 case  RES_PARATR_LINESPACING:
                     if(!pLineSpaceItem)
-                        pLineSpaceItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pLineSpaceItem;
+                        pLineSpaceItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pLineSpaceItem.get();
                 break;
                 case  RES_PARATR_REGISTER:
                     if(!pRegItem)
-                        pRegItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pRegItem;
+                        pRegItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pRegItem.get();
                 break;
                 case  RES_PARATR_SPLIT:
                     if(!pSplitItem)
-                        pSplitItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pSplitItem;
+                        pSplitItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pSplitItem.get();
                 break;
                 case  RES_PARATR_TABSTOP:
                     if(!pTabItem)
-                        pTabItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pTabItem;
+                        pTabItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pTabItem.get();
                 break;
                 case  RES_CHRATR_WORDLINEMODE:
                     if(!pWLineItem)
-                        pWLineItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pWLineItem;
+                        pWLineItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pWLineItem.get();
                 break;
                 case RES_CHRATR_CJK_FONT:
                     if(!pFontCJKItem )
-                        pFontCJKItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontCJKItem;
+                        pFontCJKItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontCJKItem.get();
                 break;
                 case RES_CHRATR_CJK_FONTSIZE:
                     if(!pFontSizeCJKItem )
-                        pFontSizeCJKItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontSizeCJKItem;
+                        pFontSizeCJKItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontSizeCJKItem.get();
                 break;
                 case RES_CHRATR_CJK_LANGUAGE:
                     if(!pCJKLangItem )
-                        pCJKLangItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCJKLangItem;
+                        pCJKLangItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCJKLangItem.get();
                 break;
                 case RES_CHRATR_CJK_POSTURE:
                     if(!pCJKPostureItem )
-                        pCJKPostureItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCJKPostureItem;
+                        pCJKPostureItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCJKPostureItem.get();
                 break;
                 case RES_CHRATR_CJK_WEIGHT:
                     if(!pCJKWeightItem )
-                        pCJKWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCJKWeightItem;
+                        pCJKWeightItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCJKWeightItem.get();
                 break;
                 case RES_CHRATR_CTL_FONT:
                     if(!pFontCTLItem )
-                        pFontCTLItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontCTLItem;
+                        pFontCTLItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontCTLItem.get();
                 break;
                 case RES_CHRATR_CTL_FONTSIZE:
                     if(!pFontSizeCTLItem )
-                        pFontSizeCTLItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pFontSizeCTLItem;
+                        pFontSizeCTLItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pFontSizeCTLItem.get();
                 break;
                 case RES_CHRATR_CTL_LANGUAGE:
                     if(!pCTLLangItem )
-                        pCTLLangItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCTLLangItem;
+                        pCTLLangItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCTLLangItem.get();
                 break;
                 case RES_CHRATR_CTL_POSTURE:
                     if(!pCTLPostureItem )
-                        pCTLPostureItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCTLPostureItem;
+                        pCTLPostureItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCTLPostureItem.get();
                 break;
                 case RES_CHRATR_CTL_WEIGHT:
                     if(!pCTLWeightItem )
-                        pCTLWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCTLWeightItem;
+                        pCTLWeightItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pCTLWeightItem.get();
                 break;
                 case RES_CHRATR_SHADOW:
                     if(!pShadowItem )
-                        pShadowItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pShadowItem;
+                        pShadowItem.reset(rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone());
+                    pTempItem = pShadowItem.get();
                 break;
             }
             if(pTempItem)
@@ -420,43 +420,6 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
             }
         }
     }
-    delete pBoxItem;
-    delete pCharBoxItem;
-    delete pBreakItem;
-    delete pAutoKernItem ;
-    delete pWLineItem;
-    delete pTabItem;
-    delete pSplitItem;
-    delete pRegItem;
-    delete pLineSpaceItem ;
-    delete pLineNumItem  ;
-    delete pKeepItem;
-    delete pLRItem  ;
-    delete pULItem  ;
-    delete pBackItem;
-    delete pAdjItem;
-    delete pDescItem;
-    delete pInetItem;
-    delete pDropItem;
-    delete pWeightItem;
-    delete pULineItem;
-    delete pOLineItem;
-    delete pCharFormatItem  ;
-    delete pShadItem;
-    delete pPostItem;
-    delete pNHyphItem;
-    delete pLangItem;
-    delete pKernItem;
-    delete pFontSizeItem ;
-    delete pFontItem;
-    delete pBlinkItem;
-    delete pEscItem;
-    delete pCrossedOutItem;
-    delete pContourItem  ;
-    delete pCharColorItem;
-    delete pCasemapItem  ;
-    delete pBrushItem  ;
-    delete pShadowItem;
 }
 
 bool SwSearchProperties_Impl::HasAttributes() const
