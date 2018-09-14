@@ -220,7 +220,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         }
 
         static_cast<SwParagraphNumTabPage&>(rPage).EnableNewStart();
-        weld::ComboBoxText& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
+        weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SfxStyleFamily::Pseudo);
         const SfxStyleSheetBase* pBase = pPool->First();

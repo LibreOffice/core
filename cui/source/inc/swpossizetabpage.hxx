@@ -72,26 +72,26 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xSizeCB;
     std::unique_ptr<weld::Widget> m_xPosFrame;
     std::unique_ptr<weld::Label> m_xHoriFT;
-    std::unique_ptr<weld::ComboBoxText> m_xHoriLB;
+    std::unique_ptr<weld::ComboBox> m_xHoriLB;
     std::unique_ptr<weld::Label> m_xHoriByFT;
     std::unique_ptr<weld::MetricSpinButton> m_xHoriByMF;
     std::unique_ptr<weld::Label> m_xHoriToFT;
-    std::unique_ptr<weld::ComboBoxText> m_xHoriToLB;
+    std::unique_ptr<weld::ComboBox> m_xHoriToLB;
     std::unique_ptr<weld::CheckButton> m_xHoriMirrorCB;
     std::unique_ptr<weld::Label> m_xVertFT;
-    std::unique_ptr<weld::ComboBoxText> m_xVertLB;
+    std::unique_ptr<weld::ComboBox> m_xVertLB;
     std::unique_ptr<weld::Label> m_xVertByFT;
     std::unique_ptr<weld::MetricSpinButton> m_xVertByMF;
     std::unique_ptr<weld::Label> m_xVertToFT;
-    std::unique_ptr<weld::ComboBoxText> m_xVertToLB;
+    std::unique_ptr<weld::ComboBox> m_xVertToLB;
     std::unique_ptr<weld::CheckButton> m_xFollowCB;
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
 
     DECL_LINK(RangeModifyHdl, weld::Widget&, void);
     DECL_LINK(RangeModifyClickHdl, weld::ToggleButton&, void);
     DECL_LINK(AnchorTypeHdl, weld::ToggleButton&, void);
-    DECL_LINK(PosHdl, weld::ComboBoxText&, void);
-    DECL_LINK(RelHdl, weld::ComboBoxText&, void);
+    DECL_LINK(PosHdl, weld::ComboBox&, void);
+    DECL_LINK(RelHdl, weld::ComboBox&, void);
     DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ProtectHdl, weld::ToggleButton&, void);
@@ -99,12 +99,12 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     void            InitPos(RndStdIds nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
-    static sal_uInt16   GetMapPos(FrmMap const *pMap, const weld::ComboBoxText& rAlignLB);
-    static short        GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBoxText& rRelationLB);
-    static short        GetRelation(const weld::ComboBoxText& rRelationLB);
+    static sal_uInt16   GetMapPos(FrmMap const *pMap, const weld::ComboBox& rAlignLB);
+    static short        GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBox& rRelationLB);
+    static short        GetRelation(const weld::ComboBox& rRelationLB);
     RndStdIds           GetAnchorType(bool* pbHasChanged = nullptr);
-    void                FillRelLB(FrmMap const *pMap, sal_uInt16 nLBSelPos, sal_uInt16 nAlign, sal_uInt16 nRel, weld::ComboBoxText& rLB, weld::Label& rFT);
-    sal_uInt16          FillPosLB(FrmMap const *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, weld::ComboBoxText& rLB);
+    void                FillRelLB(FrmMap const *pMap, sal_uInt16 nLBSelPos, sal_uInt16 nAlign, sal_uInt16 nRel, weld::ComboBox& rLB, weld::Label& rFT);
+    sal_uInt16          FillPosLB(FrmMap const *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, weld::ComboBox& rLB);
 
     void            UpdateExample();
 

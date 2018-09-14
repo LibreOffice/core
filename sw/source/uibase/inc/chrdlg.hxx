@@ -54,11 +54,11 @@ class SwCharURLPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xTextFT;
     std::unique_ptr<weld::Entry> m_xTextED;
     std::unique_ptr<weld::Entry> m_xNameED;
-    std::unique_ptr<weld::ComboBoxText> m_xTargetFrameLB;
+    std::unique_ptr<weld::ComboBox> m_xTargetFrameLB;
     std::unique_ptr<weld::Button> m_xURLPB;
     std::unique_ptr<weld::Button> m_xEventPB;
-    std::unique_ptr<weld::ComboBoxText> m_xVisitedLB;
-    std::unique_ptr<weld::ComboBoxText> m_xNotVisitedLB;
+    std::unique_ptr<weld::ComboBox> m_xVisitedLB;
+    std::unique_ptr<weld::ComboBox> m_xNotVisitedLB;
     std::unique_ptr<weld::Widget> m_xCharStyleContainer;
 
     DECL_LINK(InsertFileHdl, weld::Button&, void);

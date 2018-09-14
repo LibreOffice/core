@@ -43,7 +43,7 @@ private:
     std::unique_ptr<weld::CheckButton>  m_xReduceResolutionCB;
     std::unique_ptr<weld::SpinButton>   m_xMFNewWidth;
     std::unique_ptr<weld::SpinButton>   m_xMFNewHeight;
-    std::unique_ptr<weld::ComboBoxText> m_xResolutionLB;
+    std::unique_ptr<weld::ComboBox> m_xResolutionLB;
     std::unique_ptr<weld::RadioButton>  m_xLosslessRB;
     std::unique_ptr<weld::RadioButton>  m_xJpegCompRB;
     std::unique_ptr<weld::SpinButton>   m_xCompressionMF;
@@ -51,7 +51,7 @@ private:
     std::unique_ptr<weld::SpinButton>   m_xQualityMF;
     std::unique_ptr<weld::Scale>        m_xQualitySlider;
     std::unique_ptr<weld::Button>       m_xBtnCalculate;
-    std::unique_ptr<weld::ComboBoxText> m_xInterpolationCombo;
+    std::unique_ptr<weld::ComboBox> m_xInterpolationCombo;
 
     SdrGrafObj*     m_xGraphicObj;
     Graphic         m_aGraphic;
@@ -64,12 +64,12 @@ private:
     void Initialize();
 
     DECL_LINK( SlideHdl, weld::Scale&, void );
-    DECL_LINK( NewInterpolationModifiedHdl, weld::ComboBoxText&, void );
+    DECL_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
     DECL_LINK( NewQualityModifiedHdl, weld::Entry&, void );
     DECL_LINK( NewCompressionModifiedHdl, weld::Entry&, void );
     DECL_LINK( NewWidthModifiedHdl, weld::Entry&, void );
     DECL_LINK( NewHeightModifiedHdl, weld::Entry&, void );
-    DECL_LINK( ResolutionModifiedHdl, weld::ComboBoxText&, void );
+    DECL_LINK( ResolutionModifiedHdl, weld::ComboBox&, void );
     DECL_LINK( ToggleCompressionRB, weld::ToggleButton&, void );
     DECL_LINK( ToggleReduceResolutionRB, weld::ToggleButton&, void );
 

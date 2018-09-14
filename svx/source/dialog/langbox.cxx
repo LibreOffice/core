@@ -753,7 +753,7 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
         m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry);
 }
 
-IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBoxText&, rControl, void)
+IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)
 {
     if (rControl.has_entry())
     {
@@ -826,7 +826,7 @@ IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBoxText&, rControl, void)
     m_aChangeHdl.Call(rControl);
 }
 
-LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBoxText> pControl)
+LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
     , m_aAllString(SvxResId(RID_SVXSTR_LANGUAGE_ALL))
     , m_eSavedLanguage(LANGUAGE_DONTKNOW)

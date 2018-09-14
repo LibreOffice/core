@@ -224,7 +224,7 @@ void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
         SelectEntryPos( nAt );
 }
 
-TextEncodingBox::TextEncodingBox(std::unique_ptr<weld::ComboBoxText> pControl)
+TextEncodingBox::TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
 {
     m_xControl->make_sorted();

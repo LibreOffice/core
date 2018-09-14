@@ -94,15 +94,15 @@ class SwEnvPage : public SfxTabPage
 
     SwEnvPreview m_aPreview;
     std::unique_ptr<weld::TextView> m_xAddrEdit;
-    std::unique_ptr<weld::ComboBoxText> m_xDatabaseLB;
-    std::unique_ptr<weld::ComboBoxText> m_xTableLB;
-    std::unique_ptr<weld::ComboBoxText> m_xDBFieldLB;
+    std::unique_ptr<weld::ComboBox> m_xDatabaseLB;
+    std::unique_ptr<weld::ComboBox> m_xTableLB;
+    std::unique_ptr<weld::ComboBox> m_xDBFieldLB;
     std::unique_ptr<weld::Button> m_xInsertBT;
     std::unique_ptr<weld::CheckButton> m_xSenderBox;
     std::unique_ptr<weld::TextView> m_xSenderEdit;
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
-    DECL_LINK(DatabaseHdl, weld::ComboBoxText&, void);
+    DECL_LINK(DatabaseHdl, weld::ComboBox&, void);
     DECL_LINK(FieldHdl, weld::Button&, void);
     DECL_LINK(SenderHdl, weld::Button&, void);
 

@@ -70,7 +70,7 @@ class SwMMResultPrintDialog : public weld::GenericDialogController
     VclPtr<Printer>        m_pTempPrinter;
 
     std::unique_ptr<weld::Label>        m_xPrinterFT;
-    std::unique_ptr<weld::ComboBoxText> m_xPrinterLB;
+    std::unique_ptr<weld::ComboBox> m_xPrinterLB;
     std::unique_ptr<weld::Button>       m_xPrinterSettingsPB;
     std::unique_ptr<weld::RadioButton>  m_xPrintAllRB;
     std::unique_ptr<weld::RadioButton>  m_xFromRB;
@@ -79,7 +79,7 @@ class SwMMResultPrintDialog : public weld::GenericDialogController
     std::unique_ptr<weld::SpinButton>   m_xToNF;
     std::unique_ptr<weld::Button>       m_xOKButton;
 
-    DECL_LINK(PrinterChangeHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK(PrinterChangeHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(PrintHdl_Impl, weld::Button&, void);
     DECL_LINK(PrinterSetupHdl_Impl, weld::Button&, void );
     DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);

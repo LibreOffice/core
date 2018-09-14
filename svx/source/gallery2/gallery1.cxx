@@ -187,7 +187,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-void GalleryTheme::InsertAllThemes(weld::ComboBoxText& rListBox)
+void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
         rListBox.append_text(OUString::createFromAscii(aUnlocalized[i].second));

@@ -85,9 +85,9 @@ void CompressGraphicsDialog::Initialize()
     m_xReduceResolutionCB = m_xBuilder->weld_check_button("checkbox-reduce-resolution");
     m_xMFNewWidth = m_xBuilder->weld_spin_button("spin-new-width");
     m_xMFNewHeight = m_xBuilder->weld_spin_button("spin-new-height");
-    m_xResolutionLB = m_xBuilder->weld_combo_box_text("combo-resolution");
+    m_xResolutionLB = m_xBuilder->weld_combo_box("combo-resolution");
     m_xBtnCalculate = m_xBuilder->weld_button("calculate");
-    m_xInterpolationCombo = m_xBuilder->weld_combo_box_text("interpolation-method-combo");
+    m_xInterpolationCombo = m_xBuilder->weld_combo_box("interpolation-method-combo");
 
     m_xInterpolationCombo->set_active_text("Lanczos");
 
@@ -289,7 +289,7 @@ IMPL_LINK( CompressGraphicsDialog, SlideHdl, weld::Scale&, rScale, void )
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewInterpolationModifiedHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewInterpolationModifiedHdl, weld::ComboBox&, void )
 {
     Update();
 }
@@ -315,7 +315,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl, weld::Entry&, voi
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl, weld::ComboBox&, void )
 {
     m_dResolution = static_cast<double>(m_xResolutionLB->get_active_text().toInt32());
 

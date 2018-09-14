@@ -56,9 +56,9 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFrameDirectionListBox
 {
 private:
-    std::unique_ptr<weld::ComboBoxText> m_xControl;
+    std::unique_ptr<weld::ComboBox> m_xControl;
 public:
-    explicit SvxFrameDirectionListBox(std::unique_ptr<weld::ComboBoxText> pControl)
+    explicit SvxFrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
         : m_xControl(std::move(pControl))
     {
     }
@@ -77,7 +77,7 @@ public:
     {
         m_xControl->append(OUString::number(static_cast<sal_uInt32>(eDirection)), rString);
     }
-    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
 };
 
 /** Wrapper for usage of a FrameDirectionListBox in item connections. */

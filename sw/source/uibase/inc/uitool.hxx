@@ -31,7 +31,7 @@ class SwPageDesc;
 class SvxTabStopItem;
 class SwWrtShell;
 class ListBox;
-namespace weld { class ComboBoxText; }
+namespace weld { class ComboBox; }
 class SwDocShell;
 class SwFrameFormat;
 class SwTabCols;
@@ -87,11 +87,11 @@ void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 
 // fill ListBox with all char style templates, except the standard ones
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
-SW_DLLPUBLIC void FillCharStyleListBox(weld::ComboBoxText& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
+SW_DLLPUBLIC void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
 SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
-SW_DLLPUBLIC void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset);
+SW_DLLPUBLIC void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBox& rToFill, int nOffset);
 
 // Get table width and alignment
 SwTwips GetTableWidth( SwFrameFormat const * pFormat, SwTabCols const & rCols, sal_uInt16 *pPercent,

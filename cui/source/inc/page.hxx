@@ -107,7 +107,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xLandscapeBtn;
     std::unique_ptr<weld::Label> m_xTextFlowLbl;
     std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextFlowBox;
-    std::unique_ptr<weld::ComboBoxText> m_xPaperTrayBox;
+    std::unique_ptr<weld::ComboBox> m_xPaperTrayBox;
     // Margins
     std::unique_ptr<weld::Label> m_xLeftMarginLbl;
     std::unique_ptr<weld::MetricSpinButton> m_xLeftMarginEdit;
@@ -117,7 +117,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xBottomMarginEdit;
     // layout settings
     std::unique_ptr<weld::Label> m_xPageText;
-    std::unique_ptr<weld::ComboBoxText> m_xLayoutBox;
+    std::unique_ptr<weld::ComboBox> m_xLayoutBox;
     std::unique_ptr<SvxPageNumberListBox> m_xNumberFormatBox;
     //Extras Calc
     std::unique_ptr<weld::Label> m_xTblAlignFT;
@@ -128,15 +128,15 @@ private:
     //Register Writer
     std::unique_ptr<weld::CheckButton> m_xRegisterCB;
     std::unique_ptr<weld::Label> m_xRegisterFT;
-    std::unique_ptr<weld::ComboBoxText> m_xRegisterLB;
+    std::unique_ptr<weld::ComboBox> m_xRegisterLB;
     std::unique_ptr<weld::Label> m_xInsideLbl;
     std::unique_ptr<weld::Label> m_xOutsideLbl;
     std::unique_ptr<weld::Label> m_xPrintRangeQueryText;
     std::unique_ptr<weld::CustomWeld> m_xBspWin;
 
     void                Init_Impl();
-    DECL_LINK(LayoutHdl_Impl, weld::ComboBoxText&, void);
-    DECL_LINK(PaperBinHdl_Impl, weld::ComboBoxText&, void);
+    DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(PaperBinHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(SwapOrientation_Impl, weld::Button&, void);
     void SwapFirstValues_Impl( bool bSet );
     DECL_LINK(BorderModify_Impl, weld::MetricSpinButton&, void);
@@ -144,10 +144,10 @@ private:
     DECL_LINK(CenterHdl_Impl, weld::ToggleButton&, void);
     void UpdateExample_Impl( bool bResetbackground = false );
 
-    DECL_LINK(PaperSizeSelect_Impl, weld::ComboBoxText&, void );
+    DECL_LINK(PaperSizeSelect_Impl, weld::ComboBox&, void );
     DECL_LINK(PaperSizeModify_Impl, weld::MetricSpinButton&, void);
 
-    DECL_LINK(FrameDirectionModify_Impl, weld::ComboBoxText&, void );
+    DECL_LINK(FrameDirectionModify_Impl, weld::ComboBox&, void );
 
     void ResetBackground_Impl( const SfxItemSet& rSet );
 

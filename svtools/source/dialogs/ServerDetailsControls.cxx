@@ -482,7 +482,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
     {}
 }
 
-IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl, weld::ComboBoxText&, void )
+IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl, weld::ComboBox&, void )
 {
     selectRepository( );
 }
