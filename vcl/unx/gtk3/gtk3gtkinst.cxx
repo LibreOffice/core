@@ -3579,6 +3579,52 @@ namespace
     }
 }
 
+namespace
+{
+    void insert_row(GtkListStore* pListStore, int pos, const OUString& rId, const OUString& rText, const OUString* pImage)
+    {
+        GtkTreeIter iter;
+        gtk_list_store_insert(pListStore, &iter, pos);
+        if (!pImage)
+        {
+            gtk_list_store_set(pListStore, &iter,
+                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                    -1);
+        }
+        else
+        {
+            GdkPixbuf* pixbuf = nullptr;
+
+            if (pImage->lastIndexOf('.') != pImage->getLength() - 4)
+            {
+                assert((*pImage == "dialog-warning" || *pImage == "dialog-error" || *pImage == "dialog-information") && "unknown stock image");
+
+                GError *error = nullptr;
+                GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+                pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(*pImage, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+            }
+            else
+            {
+                const AllSettings& rSettings = Application::GetSettings();
+                pixbuf = load_icon_by_name(*pImage,
+                                           rSettings.GetStyleSettings().DetermineIconTheme(),
+                                           rSettings.GetUILanguageTag().getBcp47());
+            }
+
+            gtk_list_store_set(pListStore, &iter,
+                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                    2, pixbuf,
+                    -1);
+
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+    }
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -3643,48 +3689,10 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString& rImage) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pImage) override
     {
         disable_notify_events();
-        GtkTreeIter iter;
-        gtk_list_store_insert(m_pListStore, &iter, pos);
-        if (rImage.isEmpty())
-        {
-            gtk_list_store_set(m_pListStore, &iter,
-                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                    -1);
-        }
-        else
-        {
-            GdkPixbuf* pixbuf = nullptr;
-
-            if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
-            {
-                assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
-
-                GError *error = nullptr;
-                GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-                pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rImage, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
-            }
-            else
-            {
-                const AllSettings& rSettings = Application::GetSettings();
-                pixbuf = load_icon_by_name(rImage,
-                                           rSettings.GetStyleSettings().DetermineIconTheme(),
-                                           rSettings.GetUILanguageTag().getBcp47());
-            }
-
-            gtk_list_store_set(m_pListStore, &iter,
-                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                    2, pixbuf,
-                    -1);
-
-            if (pixbuf)
-                g_object_unref(pixbuf);
-        }
+        insert_row(m_pListStore, pos, rId, rText, pImage);
         enable_notify_events();
     }
 
@@ -4548,7 +4556,7 @@ namespace
 class GtkInstanceComboBoxText : public GtkInstanceContainer, public virtual weld::ComboBoxText
 {
 private:
-    GtkComboBoxText* m_pComboBoxText;
+    GtkComboBox* m_pComboBoxText;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     gboolean m_bPopupActive;
     gulong m_nChangedSignalId;
@@ -4600,7 +4608,7 @@ private:
     OUString get(int pos, int col) const
     {
         OUString sRet;
-        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBoxText);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
         {
@@ -4614,7 +4622,7 @@ private:
 
     int find(const OUString& rStr, int col) const
     {
-        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBoxText);
         GtkTreeIter iter;
         if (!gtk_tree_model_get_iter_first(pModel, &iter))
             return -1;
@@ -4648,7 +4656,7 @@ private:
         if (gtk_entry_get_completion(pEntry))
             return;
         GtkEntryCompletion* pCompletion = gtk_entry_completion_new();
-        gtk_entry_completion_set_model(pCompletion, gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText)));
+        gtk_entry_completion_set_model(pCompletion, gtk_combo_box_get_model(m_pComboBoxText));
         gtk_entry_completion_set_text_column(pCompletion, 0);
         gtk_entry_completion_set_inline_selection(pCompletion, true);
         gtk_entry_completion_set_inline_completion(pCompletion, true);
@@ -4658,7 +4666,7 @@ private:
     }
 
 public:
-    GtkInstanceComboBoxText(GtkComboBoxText* pComboBoxText, bool bTakeOwnership)
+    GtkInstanceComboBoxText(GtkComboBox* pComboBoxText, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBoxText), bTakeOwnership)
         , m_pComboBoxText(pComboBoxText)
         , m_bPopupActive(false)
@@ -4670,6 +4678,12 @@ public:
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBoxText));
         GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
         g_object_set(G_OBJECT(cell), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
+        if (g_list_length(cells) == 2 && has_entry())
+        {
+            //The ComboBox is always going to show the column for associated with the entry, left to its
+            //own devices this image column will be after it, but we want it before
+            gtk_cell_layout_reorder(GTK_CELL_LAYOUT(m_pComboBoxText), cell, 1);
+        }
         g_list_free(cells);
 
         if (GtkEntry* pEntry = get_entry())
@@ -4683,12 +4697,12 @@ public:
 
     virtual int get_active() const override
     {
-        return gtk_combo_box_get_active(GTK_COMBO_BOX(m_pComboBoxText));
+        return gtk_combo_box_get_active(m_pComboBoxText);
     }
 
     virtual OUString get_active_id() const override
     {
-        const gchar* pText = gtk_combo_box_get_active_id(GTK_COMBO_BOX(m_pComboBoxText));
+        const gchar* pText = gtk_combo_box_get_active_id(m_pComboBoxText);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
@@ -4696,7 +4710,7 @@ public:
     {
         disable_notify_events();
         OString aId(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
-        gtk_combo_box_set_active_id(GTK_COMBO_BOX(m_pComboBoxText), aId.getStr());
+        gtk_combo_box_set_active_id(m_pComboBoxText, aId.getStr());
         enable_notify_events();
     }
 
@@ -4716,15 +4730,30 @@ public:
     virtual void set_active(int pos) override
     {
         disable_notify_events();
-        gtk_combo_box_set_active(GTK_COMBO_BOX(m_pComboBoxText), pos);
+        gtk_combo_box_set_active(m_pComboBoxText, pos);
         enable_notify_events();
     }
 
     virtual OUString get_active_text() const override
     {
-        gchar* pText = gtk_combo_box_text_get_active_text(m_pComboBoxText);
-        OUString sRet(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
-        g_free(pText);
+        if (gtk_combo_box_get_has_entry(m_pComboBoxText))
+        {
+            GtkWidget *pEntry = gtk_bin_get_child(GTK_BIN(m_pComboBoxText));
+            const gchar* pText = gtk_entry_get_text(GTK_ENTRY(pEntry));
+            return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+        }
+
+        GtkTreeIter iter;
+        if (!gtk_combo_box_get_active_iter(m_pComboBoxText, &iter))
+            return OUString();
+
+        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBoxText);
+        gint col = gtk_combo_box_get_entry_text_column(m_pComboBoxText);
+        gchar* pStr = nullptr;
+        gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+
         return sRet;
     }
 
@@ -4735,36 +4764,40 @@ public:
 
     virtual OUString get_id(int pos) const override
     {
-        gint id_column = gtk_combo_box_get_id_column(GTK_COMBO_BOX(m_pComboBoxText));
+        gint id_column = gtk_combo_box_get_id_column(m_pComboBoxText);
         return get(pos, id_column);
     }
 
-    virtual void insert_text(int pos, const OUString& rStr) override
+    virtual void insert_text(int pos, const OUString& rText) override
     {
         disable_notify_events();
-        gtk_combo_box_text_insert_text(m_pComboBoxText, pos, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        GtkTreeIter iter;
+        GtkListStore* pListStore = GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBoxText));
+        gtk_list_store_insert(pListStore, &iter, pos);
+        gtk_list_store_set(pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
         enable_notify_events();
     }
 
     virtual void remove(int pos) override
     {
         disable_notify_events();
-        gtk_combo_box_text_remove(m_pComboBoxText, pos);
+        GtkTreeIter iter;
+        GtkListStore* pListStore = GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBoxText));
+        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(pListStore), &iter, nullptr, pos);
+        gtk_list_store_remove(pListStore, &iter);
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pImage) override
     {
         disable_notify_events();
-        gtk_combo_box_text_insert(m_pComboBoxText, pos,
-                                  OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                                  OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        insert_row(GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBoxText)), pos, rId, rText, pImage);
         enable_notify_events();
     }
 
     virtual int get_count() const override
     {
-        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBoxText);
         return gtk_tree_model_iter_n_children(pModel, nullptr);
     }
 
@@ -4781,7 +4814,7 @@ public:
     virtual void clear() override
     {
         disable_notify_events();
-        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBoxText);
         gtk_list_store_clear(GTK_LIST_STORE(pModel));
         enable_notify_events();
     }
@@ -4791,7 +4824,7 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
-        GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBoxText);
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
         gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
@@ -4799,7 +4832,7 @@ public:
 
     virtual bool has_entry() const override
     {
-        return gtk_combo_box_get_has_entry(GTK_COMBO_BOX(m_pComboBoxText));
+        return gtk_combo_box_get_has_entry(m_pComboBoxText);
     }
 
     virtual void set_entry_error(bool bError) override
@@ -4882,7 +4915,7 @@ public:
         GtkInstanceContainer::freeze();
         if (m_xSorter)
         {
-            GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+            GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBoxText);
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
         }
@@ -4892,7 +4925,7 @@ public:
     {
         if (m_xSorter)
         {
-            GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+            GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBoxText);
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
         }
@@ -5451,7 +5484,7 @@ public:
 
     virtual std::unique_ptr<weld::ComboBoxText> weld_combo_box_text(const OString &id, bool bTakeOwnership) override
     {
-        GtkComboBoxText* pComboBoxText = GTK_COMBO_BOX_TEXT(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        GtkComboBox* pComboBoxText = GTK_COMBO_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pComboBoxText)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pComboBoxText));
