@@ -161,6 +161,7 @@ private:
     std::unique_ptr<weld::ComboBoxText> m_xControl;
     Link<weld::ComboBoxText&, void> m_aChangeHdl;
     OUString m_aAllString;
+    std::unique_ptr<css::uno::Sequence<sal_Int16>> m_xSpellUsedLang;
     LanguageType m_eSavedLanguage;
     EditedAndValid  m_eEditedAndValid;
     bool m_bHasLangNone;
