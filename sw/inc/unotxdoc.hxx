@@ -133,7 +133,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    std::deque<UnoActionContext*> aActionArr;
+    std::deque<std::unique_ptr<UnoActionContext>> maActionArr;
 
     const SfxItemPropertySet* pPropSet;
 

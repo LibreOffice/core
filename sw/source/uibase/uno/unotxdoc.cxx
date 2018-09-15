@@ -545,25 +545,22 @@ void SwXTextDocument::lockControllers()
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    UnoActionContext* pContext = new UnoActionContext(pDocShell->GetDoc());
-    aActionArr.push_front(pContext);
+    maActionArr.emplace_front(new UnoActionContext(pDocShell->GetDoc()));
 }
 
 void SwXTextDocument::unlockControllers()
 {
     SolarMutexGuard aGuard;
-    if(aActionArr.empty())
+    if(maActionArr.empty())
         throw RuntimeException("Nothing to unlock");
 
-    UnoActionContext* pContext = aActionArr.front();
-    aActionArr.pop_front();
-    delete pContext;
+    maActionArr.pop_front();
 }
 
 sal_Bool SwXTextDocument::hasControllersLocked()
 {
     SolarMutexGuard aGuard;
-    return !aActionArr.empty();
+    return !maActionArr.empty();
 }
 
 Reference< frame::XController >  SwXTextDocument::getCurrentController()
