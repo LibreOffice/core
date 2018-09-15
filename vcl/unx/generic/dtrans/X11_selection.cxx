@@ -1156,7 +1156,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                         memcpy( rData.getArray(), pBytes, nOutSize );
                         bSuccess = true;
                     }
-                    X11_freeBmp( pBytes );
+                    std::free( pBytes );
                 }
             }
         }

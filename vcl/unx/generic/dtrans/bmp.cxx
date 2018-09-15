@@ -350,11 +350,6 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
     return pBmp;
 }
 
-void x11::X11_freeBmp( sal_uInt8* pBmp )
-{
-    std::free( pBmp );
-}
-
 /*
  *  PixmapHolder
  */
