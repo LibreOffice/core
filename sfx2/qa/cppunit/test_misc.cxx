@@ -187,7 +187,8 @@ void MiscTest::testHardLinks()
     CPPUNIT_ASSERT(buf.st_nlink > 1);
 
     // Test that symlinks are presreved as well.
-    remove(aNew.getStr());
+    nRet = remove(aNew.getStr());
+    CPPUNIT_ASSERT_EQUAL(0, nRet);
     symlink(aOld.getStr(), aNew.getStr());
     xStorable->storeToURL(aURL + ".2", {});
     nRet = lstat(aNew.getStr(), &buf);
