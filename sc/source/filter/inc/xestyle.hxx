@@ -27,7 +27,6 @@
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
-#include <conditio.hxx>
 #include <fonthelper.hxx>
 #include <memory>
 #include <vector>
@@ -118,8 +117,6 @@ private:
 };
 
 // FONT record - font information =============================================
-
-class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
 
@@ -266,7 +263,6 @@ struct XclExpNumFmt
     void SaveXml( XclExpXmlStream& rStrm );
 };
 
-class SvNumberFormatter;
 typedef ::std::unique_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */

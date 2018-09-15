@@ -70,6 +70,7 @@
 #include <xehelper.hxx>
 #include <xepage.hxx>
 #include <xestyle.hxx>
+#include <xltools.hxx>
 
 #include <memory>
 

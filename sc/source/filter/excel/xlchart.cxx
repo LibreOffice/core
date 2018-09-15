@@ -50,6 +50,7 @@
 #include <global.hxx>
 #include <xlroot.hxx>
 #include <xlstyle.hxx>
+#include <xltools.hxx>
 
 using namespace css;
 

@@ -22,6 +22,7 @@
 
 #include "xlformula.hxx"
 #include "xiroot.hxx"
+#include "xltools.hxx"
 #include "formel.hxx"
 
 #include <vector>

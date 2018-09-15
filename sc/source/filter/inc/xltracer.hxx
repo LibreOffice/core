@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTRACER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLTRACER_HXX
 
-#include <global.hxx>
-#include "xltools.hxx"
+#include <address.hxx>
+#include <vector>
 
 // As Trace features become implemented, we can safely delete the enum entry as
 // we use the member mnID to keep track of the actual trace tag ID value.

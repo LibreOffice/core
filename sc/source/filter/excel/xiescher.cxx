@@ -83,6 +83,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xbitmap.hxx>
 #include <svtools/embedhlp.hxx>
+#include <sot/storage.hxx>
 
 #include <document.hxx>
 #include <drwlayer.hxx>

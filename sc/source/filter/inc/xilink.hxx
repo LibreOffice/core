@@ -24,6 +24,7 @@
 #include <map>
 #include "xllink.hxx"
 #include "xiroot.hxx"
+#include "ftools.hxx"
 #include <types.hxx>
 
 namespace svl {

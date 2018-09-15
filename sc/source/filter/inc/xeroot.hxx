@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEROOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEROOT_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
-
 #include "xlroot.hxx"
 #include <compiler.hxx>
 #include <memory>
 
 // Forward declarations of objects in public use ==============================
+
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
 
 class XclExpRecordBase;
 class XclExpString;

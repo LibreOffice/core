@@ -19,7 +19,9 @@
 
 #include <xerecord.hxx>
 #include <xeroot.hxx>
+#include <xltools.hxx>
 
+#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <osl/diagnose.h>
 

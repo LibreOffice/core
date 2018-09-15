@@ -68,6 +68,7 @@
 #include <editutil.hxx>
 #include <formula/errorcodes.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/token/tokens.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
 #include <root.hxx>
@@ -78,6 +79,7 @@
 #include <xelink.hxx>
 #include <xename.hxx>
 #include <xecontent.hxx>
+#include <xlname.hxx>
 
 #include <xcl97rec.hxx>
 #include <tabprotection.hxx>

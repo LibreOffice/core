@@ -21,6 +21,7 @@
 #include <xlstyle.hxx>
 #include <xistream.hxx>
 #include <xiroot.hxx>
+#include <xltools.hxx>
 #include <sal/log.hxx>
 
 // Byte/Unicode strings =======================================================

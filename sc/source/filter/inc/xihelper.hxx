@@ -24,7 +24,7 @@
 #include <types.hxx>
 #include "xladdress.hxx"
 #include "xiroot.hxx"
-#include "xistring.hxx"
+#include "xltools.hxx"
 #include <memory>
 #include <vector>
 
@@ -128,7 +128,6 @@ public:
 // Header/footer conversion ===================================================
 
 class EditEngine;
-class EditTextObject;
 class SfxItemSet;
 class SvxFieldItem;
 struct XclFontData;

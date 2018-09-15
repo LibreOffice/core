@@ -24,7 +24,6 @@
 #include "xerecord.hxx"
 
 class ScDBData;
-class XclExpTablesManagerImpl;
 
 class XclExpTables : public XclExpRecordBase, protected XclExpRoot
 {

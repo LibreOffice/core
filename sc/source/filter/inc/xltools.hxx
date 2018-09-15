@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
 
-#include <address.hxx>
+#include <types.hxx>
 #include "ftools.hxx"
 
 class SfxObjectShell;

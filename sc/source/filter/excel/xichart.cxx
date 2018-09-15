@@ -93,6 +93,7 @@
 #include <chartlis.hxx>
 #include <fprogressbar.hxx>
 #include <xltracer.hxx>
+#include <xltools.hxx>
 #include <xistream.hxx>
 #include <xiformula.hxx>
 #include <xistyle.hxx>

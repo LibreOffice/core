@@ -48,15 +48,20 @@
 #include <sal/log.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <document.hxx>
+#include <documentimport.hxx>
 #include <docpool.hxx>
 #include <attrib.hxx>
+#include <patattr.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <attarray.hxx>
+#include <xladdress.hxx>
+#include <xlcontent.hxx>
 #include <xltracer.hxx>
+#include <xltools.hxx>
 #include <xistream.hxx>
 #include <xicontent.hxx>
 

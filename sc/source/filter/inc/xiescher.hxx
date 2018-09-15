@@ -20,13 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <filter/msfilter/msdffimp.hxx>
-#include <svx/svdobj.hxx>
 #include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
-#include "xistring.hxx"
 #include <oox/ole/olehelper.hxx>
 #include <rtl/ustring.hxx>
 #include <map>
@@ -38,6 +35,8 @@ namespace com { namespace sun { namespace star {
     namespace form { class XForm; }
 } } }
 
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+
 class SdrObjList;
 class ScfProgressBar;
 class ScfPropertySet;
@@ -45,6 +44,8 @@ class ScRangeList;
 class XclImpChart;
 class XclImpDffConverter;
 class XclImpDrawing;
+
+struct SdrObjectFreeOp;
 
 // Drawing objects ============================================================
 

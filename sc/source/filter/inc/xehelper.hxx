@@ -21,9 +21,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
 
 #include <memory>
+#include <rangelst.hxx>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
-#include "xestring.hxx"
+#include "xlstring.hxx"
 
 // Export progress bar ========================================================
 
@@ -325,8 +326,6 @@ public:
 };
 
 // Header/footer conversion ===================================================
-
-class EditEngine;
 
 /** Converts edit engine text objects to an Excel header/footer string.
     @descr  Header/footer content is divided into three parts: Left, center and

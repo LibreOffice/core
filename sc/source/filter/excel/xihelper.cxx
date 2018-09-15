@@ -32,6 +32,7 @@
 #include <attrib.hxx>
 #include <xltracer.hxx>
 #include <xistream.hxx>
+#include <xistring.hxx>
 #include <xistyle.hxx>
 #include <excform.hxx>
 #include <stringutil.hxx>

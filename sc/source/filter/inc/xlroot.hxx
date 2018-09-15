@@ -20,23 +20,19 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
-
 #include <i18nlangtag/lang.h>
-#include <sot/storage.hxx>
+#include <tools/ref.hxx>
 #include "xlconst.hxx"
-#include "xltools.hxx"
-#include <documentimport.hxx>
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
 namespace comphelper { class IDocPasswordVerifier; }
 
 // Forward declarations of objects in public use ==============================
 
 class DateTime;
-
-struct XclAddress;
-struct XclRange;
+class SotStorage;
+class SotStorageStream;
 
 // Global data ================================================================
 
