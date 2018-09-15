@@ -46,12 +46,11 @@ OUString GetOUString( CFStringRef rStr )
         return OUString( reinterpret_cast<sal_Unicode const *>(pConstStr), nLength );
     }
 
-    UniChar* pStr = static_cast<UniChar*>( std::malloc( sizeof(UniChar)*nLength ) );
+    std::unique_ptr<UniChar[]> pStr(new UniChar[nLength]);
     CFRange aRange = { 0, nLength };
-    CFStringGetCharacters( rStr, aRange, pStr );
+    CFStringGetCharacters( rStr, aRange, pStr.get() );
 
-    OUString aRet( reinterpret_cast<sal_Unicode *>(pStr), nLength );
-    std::free( pStr );
+    OUString aRet( reinterpret_cast<sal_Unicode *>(pStr.get()), nLength );
     return aRet;
 }
 
