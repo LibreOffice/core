@@ -3050,14 +3050,14 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     sal_Unicode* pBuffer = pStr->buffer;
     sal_Unicode* pWork = pBuffer;
 
-    sal_Char* p8Bits = nullptr;
+    std::unique_ptr<sal_Char[]> p8Bits;
 
     rtl_TextToUnicodeConverter hConverter = nullptr;
     if (!m_bIsUnicode || m_bVer67)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
 
     if (!m_bIsUnicode)
-        p8Bits = new sal_Char[nStrLen];
+        p8Bits.reset( new sal_Char[nStrLen] );
 
     // read the stream data
     sal_uInt8   nBCode = 0;
@@ -3083,7 +3083,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         {
             rPos = WW8_CP_MAX-10; // -> eof or other error
             std::free(pStr);
-            delete [] p8Bits;
             return true;
         }
 
@@ -3122,7 +3121,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     if (nL2)
     {
         const sal_Int32 nEndUsed = !m_bIsUnicode
-            ? Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen)
+            ? Custom8BitToUnicode(hConverter, p8Bits.get(), nL2, pBuffer, nStrLen)
             : pWork - pBuffer;
 
         if (m_bRegardHindiDigits && m_bBidi && LangUsesHindiNumbers(nCTLLang))
@@ -3145,7 +3144,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         rtl_destroyTextToUnicodeConverter(hConverter);
     if (pStr)
         rtl_uString_release(pStr);
-    delete [] p8Bits;
     return nL2 >= nStrLen;
 }
 
