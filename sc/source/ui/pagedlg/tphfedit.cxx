@@ -201,8 +201,9 @@ void ScEditWindow::SetCharAttributes()
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
+        vcl::Window* pWin = GetParent();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-            GetParent(),  &aSet, pDocSh));
+            pWin ? pWin->GetFrameWeld() : nullptr,  &aSet, pDocSh));
         pDlg->SetText( ScResId( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {
