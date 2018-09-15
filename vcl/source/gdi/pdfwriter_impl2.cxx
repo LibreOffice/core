@@ -1938,8 +1938,9 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
     BitStreamState aBitState;
 
     // the first reference line is virtual and completely empty
-    const Scanline pFirstRefLine = static_cast<Scanline>(rtl_allocateZeroMemory( nW/8 + 1 ));
-    Scanline pRefLine = pFirstRefLine;
+    std::unique_ptr<sal_uInt8[]> pFirstRefLine(new  sal_uInt8[nW/8 + 1]);
+    memset(pFirstRefLine.get(), 0, nW/8 + 1);
+    Scanline pRefLine = pFirstRefLine.get();
     for( long nY = 0; nY < nH; nY++ )
     {
         const Scanline pCurLine = i_pBitmap->GetScanline( nY );
@@ -2012,8 +2013,6 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
         writeBuffer( &aBitState.getByte(), 1 );
         aBitState.flush();
     }
-
-    std::free( pFirstRefLine );
 }
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
