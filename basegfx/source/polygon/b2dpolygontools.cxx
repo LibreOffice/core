@@ -2133,7 +2133,9 @@ namespace basegfx
             return ((fCrossA > 0.0) == (fCrossB > 0.0));
         }
 
-        void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget)
+        void addTriangleFan(
+            const B2DPolygon& rCandidate,
+            triangulator::B2DTriangleVector& rTarget)
         {
             const sal_uInt32 nCount(rCandidate.count());
 
@@ -2145,9 +2147,10 @@ namespace basegfx
                 for(sal_uInt32 a(2); a < nCount; a++)
                 {
                     const B2DPoint aCurrent(rCandidate.getB2DPoint(a));
-                    rTarget.append(aStart);
-                    rTarget.append(aLast);
-                    rTarget.append(aCurrent);
+                    rTarget.emplace_back(
+                        aStart,
+                        aLast,
+                        aCurrent);
 
                     // prepare next
                     aLast = aCurrent;
