@@ -49,6 +49,7 @@
 #include "basegfx/matrix/b2dhommatrixtools.hxx"
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 #include "basegfx/polygon/b2dtrapezoid.hxx"
+#include <basegfx/tools/systemdependentdata.hxx>
 
 #undef SALGDI2_TESTTRANS
 
@@ -1592,6 +1593,110 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
     return true;
 }
 
+bool X11SalGraphicsImpl::drawFilledTriangles(
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+     const basegfx::triangulator::B2DTriangleVector& rTriangles,
+     double fTransparency,
+     bool bPixelOffset)
+{
+    if(rTriangles.empty())
+        return true;
+
+    Picture aDstPic = GetXRenderPicture();
+    // check xrender support for this drawable
+    if( !aDstPic )
+    {
+        return false;
+    }
+
+    // prepare transformation for ObjectToDevice coordinate system
+    basegfx::B2DHomMatrix aObjectToDevice(rObjectToDevice);
+
+    if(bPixelOffset)
+    {
+        aObjectToDevice = basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) * aObjectToDevice;
+    }
+
+     // convert the Triangles into XRender-Triangles
+    std::vector<XTriangle> aTriVector(rTriangles.size());
+    sal_uInt32 nIndex(0);
+
+    for(const auto& rCandidate : rTriangles)
+    {
+        const basegfx::B2DPoint aP1(aObjectToDevice * rCandidate.getA());
+        const basegfx::B2DPoint aP2(aObjectToDevice * rCandidate.getB());
+        const basegfx::B2DPoint aP3(aObjectToDevice * rCandidate.getC());
+        XTriangle& rTri(aTriVector[nIndex++]);
+
+        rTri.p1.x = XDoubleToFixed(aP1.getX());
+        rTri.p1.y = XDoubleToFixed(aP1.getY());
+
+        rTri.p2.x = XDoubleToFixed(aP2.getX());
+        rTri.p2.y = XDoubleToFixed(aP2.getY());
+
+        rTri.p3.x = XDoubleToFixed(aP3.getX());
+        rTri.p3.y = XDoubleToFixed(aP3.getY());
+    }
+
+    // get xrender Picture for polygon foreground
+    // TODO: cache it like the target picture which uses GetXRenderPicture()
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    SalDisplay::RenderEntry& rEntry = mrParent.GetDisplay()->GetRenderEntries( mrParent.m_nXScreen )[ 32 ];
+    if( !rEntry.m_aPicture )
+    {
+        Display* pXDisplay = mrParent.GetXDisplay();
+
+        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.hDrawable_, 1, 1, 32 );
+        XRenderPictureAttributes aAttr;
+        aAttr.repeat = int(true);
+
+        XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat( PictStandardARGB32 );
+        rEntry.m_aPicture = rRenderPeer.CreatePicture( rEntry.m_aPixmap, pXRPF, CPRepeat, &aAttr );
+    }
+
+    // set polygon foreground color and opacity
+    XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency );
+    rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
+
+    // set clipping
+    // TODO: move into GetXRenderPicture?
+    if( mrParent.mpClipRegion && !XEmptyRegion( mrParent.mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mrParent.mpClipRegion );
+
+    // render the trapezoids
+    const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
+    rRenderPeer.CompositeTriangles( PictOpOver,
+        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, &aTriVector[0], aTriVector.size() );
+
+    return true;
+}
+
+class SystemDependentData_Triangulation : public basegfx::SystemDependentData
+{
+private:
+    basegfx::triangulator::B2DTriangleVector    maTriangles;
+    basegfx::B2DVector                          maLineWidth;
+
+public:
+    SystemDependentData_Triangulation(
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        const basegfx::triangulator::B2DTriangleVector& rTriangles,
+        const basegfx::B2DVector& rLineWidth);
+
+    const basegfx::triangulator::B2DTriangleVector& getTriangles() const { return maTriangles; }
+    const basegfx::B2DVector& getLineWidth() const { return maLineWidth; }
+};
+
+SystemDependentData_Triangulation::SystemDependentData_Triangulation(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    const basegfx::triangulator::B2DTriangleVector& rTriangles,
+    const basegfx::B2DVector& rLineWidth)
+:   basegfx::SystemDependentData(rSystemDependentDataManager),
+    maTriangles(rTriangles),
+    maLineWidth(rLineWidth)
+{
+}
+
 bool X11SalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
@@ -1602,91 +1707,121 @@ bool X11SalGraphicsImpl::drawPolyLine(
     double fMiterMinimumAngle,
     bool bPixelSnapHairline)
 {
-    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
-    const bool bIsHairline((aLineWidth.getX() == aLineWidth.getY()) && (aLineWidth.getX() <= 1.2));
-
-    // #i101491#
-    if( !bIsHairline && (rPolygon.count() > 1000) )
+    // short circuit if there is nothing to do
+    if(0 == rPolygon.count() || fTransparency < 0.0 || fTransparency >= 1.0)
     {
-        // the used basegfx::tools::createAreaGeometry is simply too
-        // expensive with very big polygons; fallback to caller (who
-        // should use ImplLineConverter normally)
-        // AW: ImplLineConverter had to be removed since it does not even
-        // know LineJoins, so the fallback will now prepare the line geometry
-        // the same way.
-        return false;
+        return true;
     }
 
-    // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolygon aPolyLine(rPolygon);
-    aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    basegfx::B2DVector aLineWidth(rLineWidth);
+    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
+    const basegfx::B2DVector aDeviceLineWidths(bObjectToDeviceIsIdentity ? rLineWidth : rObjectToDevice * rLineWidth);
+    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0 && aLineWidth.getX() >= 1.0);
+    basegfx::B2DHomMatrix aObjectToDeviceInv;
+    basegfx::B2DPolygon aPolygon(rPolygon);
+
+    if(bCorrectLineWidth)
+    {
+        if(aObjectToDeviceInv.isIdentity())
+        {
+            aObjectToDeviceInv = rObjectToDevice;
+            aObjectToDeviceInv.invert();
+        }
+
+        // calculate-back logical LineWidth for a hairline
+        aLineWidth = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+    }
+
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_Triangulation> pSystemDependentData_Triangulation(
+        rPolygon.getSystemDependentData<SystemDependentData_Triangulation>());
+
+    if(pSystemDependentData_Triangulation)
+    {
+        // check data validity
+        if(pSystemDependentData_Triangulation->getLineWidth() != aLineWidth)
+        {
+            // sometimes small inconsistencies, use a percentage tolerance
+            const double fFactorX(basegfx::fTools::equalZero(aLineWidth.getX())
+                ? 0.0
+                : fabs(1.0 - (pSystemDependentData_Triangulation->getLineWidth().getX() / aLineWidth.getX())));
+            const double fFactorY(basegfx::fTools::equalZero(aLineWidth.getY())
+                ? 0.0
+                : fabs(1.0 - (pSystemDependentData_Triangulation->getLineWidth().getY() / aLineWidth.getY())));
+
+            // compare with 5.0% tolerance
+            if(basegfx::fTools::more(fFactorX, 0.05) || basegfx::fTools::more(fFactorY, 0.05))
+            {
+                // data invalid, forget
+                pSystemDependentData_Triangulation.reset();
+            }
+        }
+    }
+
+    if(!pSystemDependentData_Triangulation)
+    {
+        // try to create data
+        if(bPixelSnapHairline)
+        {
+            if(!bObjectToDeviceIsIdentity)
+            {
+                aPolygon.transform(rObjectToDevice);
+            }
+
+            aPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aPolygon);
+
+            if(!bObjectToDeviceIsIdentity)
+            {
+                if(aObjectToDeviceInv.isIdentity())
+                {
+                    aObjectToDeviceInv = rObjectToDevice;
+                    aObjectToDeviceInv.invert();
+                }
+
+                aPolygon.transform(aObjectToDeviceInv);
+            }
+        }
+
+        basegfx::triangulator::B2DTriangleVector aTriangles;
+        const basegfx::B2DPolyPolygon aAreaPolyPoly(
+            basegfx::tools::createAreaGeometry(
+                aPolygon,
+                0.5 * aLineWidth.getX(),
+                eLineJoin,
+                eLineCap,
+                basegfx::deg2rad(12.5),
+                0.4,
+                fMiterMinimumAngle,
+                &aTriangles));
+
+        if(!aTriangles.empty())
+        {
+            // add to buffering mechanism
+            pSystemDependentData_Triangulation = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_Triangulation>(
+                SalGraphics::getSystemDependentDataManager(),
+                aTriangles,
+                aLineWidth);
+        }
+    }
+
+    if(!pSystemDependentData_Triangulation)
+    {
+        return false;
+    }
 
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
     const SalColor aKeepBrushColor = mnBrushColor;
     mnBrushColor = mnPenColor;
 
-    // #i11575#desc5#b adjust B2D tessellation result to raster positions
-    // basegfx::B2DPolygon aPolygon = rPolygon;
-    const double fHalfWidth = 0.5 * aLineWidth.getX();
-
-    // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
-    // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
-    aPolyLine.transform( basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) );
-
-    // shortcut for hairline drawing to improve performance
-    bool bDrawnOk = true;
-    if( bIsHairline )
-    {
-        // hairlines can benefit from a simplified tesselation
-        // e.g. for hairlines the linejoin style can be ignored
-        basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolyLine, aLineWidth.getX() );
-
-        // draw tesselation result
-        const int nTrapCount = aB2DTrapVector.size();
-        if( nTrapCount > 0 )
-            bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
-
-        // restore the original brush GC
-        mnBrushColor = aKeepBrushColor;
-        return bDrawnOk;
-    }
-
-    // get the area polygon for the line polygon
-    if( (aLineWidth.getX() != aLineWidth.getY()) && !basegfx::fTools::equalZero( aLineWidth.getY() ) )
-    {
-        // prepare for createAreaGeometry() with anisotropic linewidth
-        aPolyLine.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, aLineWidth.getX() / aLineWidth.getY()));
-    }
-
     // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly(
-        basegfx::tools::createAreaGeometry(
-            aPolyLine,
-            fHalfWidth,
-            eLineJoin,
-            eLineCap,
-            fMiterMinimumAngle));
-
-    if( (aLineWidth.getX() != aLineWidth.getY()) && !basegfx::fTools::equalZero( aLineWidth.getX() ) )
-    {
-        // postprocess createAreaGeometry() for anisotropic linewidth
-        aPolyLine.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, aLineWidth.getY() / aLineWidth.getX()));
-    }
-
-    // draw each area polypolygon component individually
-    // to emulate the polypolygon winding rule "non-zero"
-    const int nPolyCount = aAreaPolyPoly.count();
-    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
-    {
-        const basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawnOk = drawPolyPolygon( aOnePoly, fTransparency );
-        if( !bDrawnOk )
-            break;
-    }
+    const bool bDrawnOk(
+        drawFilledTriangles(
+            rObjectToDevice,
+            pSystemDependentData_Triangulation->getTriangles(),
+            fTransparency,
+            true));
 
     // restore the original brush GC
     mnBrushColor = aKeepBrushColor;

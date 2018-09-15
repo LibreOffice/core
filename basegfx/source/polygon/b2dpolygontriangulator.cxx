@@ -116,7 +116,7 @@ namespace basegfx
             EdgeEntry*                                      mpList;
             EdgeEntries                                     maStartEntries;
             EdgeEntryPointers                               maNewEdgeEntries;
-            B2DPolygon                                      maResult;
+            triangulator::B2DTriangleVector                 maResult;
 
             void handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd);
             bool CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry* pEdgeB, const B2DPoint& rTestPoint);
@@ -126,7 +126,7 @@ namespace basegfx
             explicit Triangulator(const B2DPolyPolygon& rCandidate);
             ~Triangulator();
 
-            const B2DPolygon& getResult() const { return maResult; }
+            const triangulator::B2DTriangleVector& getResult() const { return maResult; }
         };
 
         void Triangulator::handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd)
@@ -210,9 +210,10 @@ namespace basegfx
 
         void Triangulator::createTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC)
         {
-            maResult.append(rA);
-            maResult.append(rB);
-            maResult.append(rC);
+            maResult.emplace_back(
+                rA,
+                rB,
+                rC);
         }
 
         // consume as long as there are edges
@@ -387,9 +388,9 @@ namespace basegfx
 {
     namespace triangulator
     {
-        B2DPolygon triangulate(const B2DPolygon& rCandidate)
+        B2DTriangleVector triangulate(const B2DPolygon& rCandidate)
         {
-            B2DPolygon aRetval;
+            B2DTriangleVector aRetval;
 
             // subdivide locally (triangulate does not work with beziers), remove double and neutral points
             B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
@@ -399,7 +400,10 @@ namespace basegfx
             if(2L == aCandidate.count())
             {
                 // candidate IS a triangle, just append
-                aRetval.append(aCandidate);
+                aRetval.emplace_back(
+                    aCandidate.getB2DPoint(0),
+                    aCandidate.getB2DPoint(1),
+                    aCandidate.getB2DPoint(2));
             }
             else if(aCandidate.count() > 2L)
             {
@@ -413,6 +417,7 @@ namespace basegfx
                     // polygon is concave.
                     const B2DPolyPolygon aCandPolyPoly(aCandidate);
                     Triangulator aTriangulator(aCandPolyPoly);
+
                     aRetval = aTriangulator.getResult();
                 }
             }
@@ -420,9 +425,9 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolygon triangulate(const B2DPolyPolygon& rCandidate)
+        B2DTriangleVector triangulate(const B2DPolyPolygon& rCandidate)
         {
-            B2DPolygon aRetval;
+            B2DTriangleVector aRetval;
 
             // subdivide locally (triangulate does not work with beziers)
             B2DPolyPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
@@ -431,11 +436,13 @@ namespace basegfx
             {
                 // single polygon -> single polygon triangulation
                 const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0));
+
                 aRetval = triangulate(aSinglePolygon);
             }
             else
             {
                 Triangulator aTriangulator(aCandidate);
+
                 aRetval = aTriangulator.getResult();
             }
 

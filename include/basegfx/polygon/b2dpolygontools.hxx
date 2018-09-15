@@ -25,6 +25,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <vector>
@@ -359,7 +360,9 @@ namespace basegfx
         // add triangles for given rCandidate to rTarget. For each triangle, 3 points will be added to rCandidate.
         // All triangles will go from the start point of rCandidate to two consecutive points, building (rCandidate.count() - 2)
         // triangles.
-        BASEGFX_DLLPUBLIC void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget);
+        BASEGFX_DLLPUBLIC void addTriangleFan(
+            const B2DPolygon& rCandidate,
+            triangulator::B2DTriangleVector& rTarget);
 
         // grow for polygon. Move all geometry in each point in the direction of the normal in that point
         // with the given amount. Value may be negative.
