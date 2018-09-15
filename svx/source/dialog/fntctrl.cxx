@@ -1611,9 +1611,6 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
             }
 
             if (pImpl->maText.isEmpty())
-                pImpl->maText = OUString();
-
-            if (pImpl->maText.isEmpty())
             {   // fdo#58427: still no text? let's try that one...
                 pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
             }
