@@ -331,7 +331,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         SetLen( aInf.GetLen() );
         CalcTextSize( aInf );
 
-        Insert( pHyphPor.get() );
+        Insert( pHyphPor.release() );
 
         short nKern = rInf.GetFont()->CheckKerning();
         if( nKern )
