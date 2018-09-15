@@ -346,7 +346,9 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 {
     // Make sure we write qFormat for well-known style names.
-    assertXPath(parseExport("word/styles.xml"), "//w:style[@w:styleId='Normal']/w:qFormat", 1);
+    xmlDocPtr pXmlDocCT = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlDocCT);
+    assertXPath(pXmlDocCT, "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
 
 struct SingleLineBorders {
