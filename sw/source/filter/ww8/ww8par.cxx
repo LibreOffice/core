@@ -5450,9 +5450,9 @@ ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStr
 
 namespace
 {
-    utl::TempFile *MakeTemp(SvFileStream &rSt)
+    std::unique_ptr<utl::TempFile> MakeTemp(SvFileStream &rSt)
     {
-        utl::TempFile *pT = new utl::TempFile;
+        std::unique_ptr<utl::TempFile> pT(new utl::TempFile);
         pT->EnableKillingFile();
         rSt.Open(pT->GetFileName(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
         return pT;
@@ -5688,9 +5688,9 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (!nErrRet)
         nErrRet = SetSubStreams(xTableStream, xDataStream);
 
-    utl::TempFile *pTempMain = nullptr;
-    utl::TempFile *pTempTable = nullptr;
-    utl::TempFile *pTempData = nullptr;
+    std::unique_ptr<utl::TempFile> pTempMain;
+    std::unique_ptr<utl::TempFile> pTempTable;
+    std::unique_ptr<utl::TempFile> pTempData;
     SvFileStream aDecryptMain;
     SvFileStream aDecryptTable;
     SvFileStream aDecryptData;
@@ -5858,9 +5858,9 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (!nErrRet)
         nErrRet = CoreLoad(pGloss);
 
-    delete pTempMain;
-    delete pTempTable;
-    delete pTempData;
+    pTempMain.reset();
+    pTempTable.reset();
+    pTempData.reset();
 
     m_xWwFib.reset();
     return nErrRet;
