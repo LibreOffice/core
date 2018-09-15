@@ -591,7 +591,10 @@ DeactivateRC SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 {
-    SwLabItem aItem = static_cast<const SwLabItem&>(GetDialogExampleSet()->Get(FN_LABEL));
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
+    assert(pExampleSet);
+    SwLabItem aItem = static_cast<const SwLabItem&>(pExampleSet->Get(FN_LABEL));
+
     aItem.m_aPrivFirstName = m_xFirstNameED->get_text();
     aItem.m_aPrivName      = m_xNameED->get_text();
     aItem.m_aPrivShortCut  = m_xShortCutED->get_text();
@@ -681,7 +684,9 @@ DeactivateRC SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
 {
-    SwLabItem aItem = static_cast<const SwLabItem&>(GetDialogExampleSet()->Get(FN_LABEL));
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
+    assert(pExampleSet);
+    SwLabItem aItem = static_cast<const SwLabItem&>(pExampleSet->Get(FN_LABEL));
 
     aItem.m_aCompCompany   = m_xCompanyED->get_text();
     aItem.m_aCompCompanyExt= m_xCompanyExtED->get_text();
