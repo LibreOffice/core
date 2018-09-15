@@ -1150,20 +1150,6 @@ EncHashTransporter* EncHashTransporter::getEncHashTransporter( const uno::Refere
     return pResult;
 }
 
-bool PDFWriterImpl::checkEncryptionBufferSize( sal_Int32 newSize )
-{
-    if( m_nEncryptionBufferSize < newSize )
-    {
-        /* reallocate the buffer */
-        m_pEncryptionBuffer = static_cast<sal_uInt8*>(std::realloc( m_pEncryptionBuffer, newSize ));
-        if( m_pEncryptionBuffer )
-            m_nEncryptionBufferSize = newSize;
-        else
-            m_nEncryptionBufferSize = 0;
-    }
-    return ( m_nEncryptionBufferSize != 0 );
-}
-
 void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
 {
     if( m_aContext.Encryption.Encrypt() )

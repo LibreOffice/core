@@ -786,12 +786,8 @@ i12626
     /* string to hold the PDF creation date, for PDF/A metadata */
     OString                            m_aCreationMetaDateString;
     /* the buffer where the data are encrypted, dynamically allocated */
-    sal_uInt8                               *m_pEncryptionBuffer;
-    /* size of the buffer */
-    sal_Int32                               m_nEncryptionBufferSize;
+    std::vector<sal_uInt8>                  m_vEncryptionBuffer;
 
-    /* check and reallocate the buffer for encryption */
-    bool checkEncryptionBufferSize( sal_Int32 newSize );
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( sal_Int32 nObject );
 
