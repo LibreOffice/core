@@ -208,7 +208,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 
     SwFlyFrameFormat *pRet = nullptr;
 
-    SfxItemSet *pMathFlySet = nullptr;
+    std::unique_ptr<SfxItemSet> pMathFlySet;
     uno::Reference < embed::XClassifiedObject > xClass( rObject.GetObjRef(), uno::UNO_QUERY );
     if( xClass.is() )
     {
@@ -216,8 +216,8 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
         if (SotExchange::IsMath(aClassName))
         {
             // StarMath sets it own fixed size, so its counter productive to use
-            // the size word says it is. i.e. Don't attempt to override its size.
-            pMathFlySet = new SfxItemSet(rFlySet);
+            // the size Word says it is. i.e. Don't attempt to override its size.
+            pMathFlySet.reset(new SfxItemSet(rFlySet));
             pMathFlySet->ClearItem(RES_FRM_SIZE);
         }
     }
@@ -236,10 +236,9 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     OSL_ENSURE(bSuccess, "Insert OLE failed");
     if (bSuccess)
     {
-        const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
+        const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet.get() : &rFlySet;
         pRet = m_rDoc.getIDocumentContentOperations().InsertOLE(*m_pPaM, sNewName, rObject.GetAspect(), pFlySet, rGrfSet);
     }
-    delete pMathFlySet;
     return pRet;
 }
 
@@ -255,13 +254,13 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
 
     // create flyset
-    SfxItemSet* pTempSet = nullptr;
+    std::unique_ptr<SfxItemSet> pTempSet;
     if( !pFlySet )
     {
-        pTempSet = new SfxItemSet( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-            RES_FRMATR_END-1>{});
+        pTempSet.reset( new SfxItemSet( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1>{}) );
 
-        pFlySet = pTempSet;
+        pFlySet = pTempSet.get();
 
         // Remove distance/borders
         if (!m_bNewDoc)
@@ -305,7 +304,6 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             *m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
             pGrfSet, nullptr);
     }
-    delete pTempSet;
     return pFormat;
 }
 
