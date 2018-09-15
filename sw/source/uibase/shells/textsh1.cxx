@@ -1048,7 +1048,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     sDefPage = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, false, sDefPage ));
+                pDlg.reset(pFact->CreateSwParaDlg(GetView().GetFrameWeld(), GetView(), aCoreSet, false, sDefPage));
             }
 
             if ( !bUseDialog )
@@ -1101,6 +1101,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                         sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, rWrtSh.GetCursor());
                     }
+                    pDlg->disposeOnce();
                 });
             }
         }
