@@ -24,7 +24,7 @@
 
 body {
 	font: 87.5% sans-serif;
-	background: url(http://www.libreoffice.org/themes/libo/images/background-page.png) repeat-x #FFF;
+	background: url(https://api.libreoffice.org/themes/libo/images/background-page.png) repeat-x #FFF;
 }
 
 /* Styles go from the top of the page to the bottom (generally) */
@@ -39,21 +39,21 @@ body {
 	width: 218px;
 	height: 45px;
 	padding: 18px 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/logo.png) no-repeat 18px 20px;
+	background: url(https://api.libreoffice.org/themes/libo/images/logo.png) no-repeat 18px 20px;
 	*float:left;/* hack for IE7 that doesn't respect inline-block */
 }
 #TopHeader { height: 88px;/* needed for IE7 */}
 #TopHeader, #BottomHeader {
 	padding-left: 5px;
 	padding-right: 5px;
-	background-image: url(http://www.libreoffice.org/themes/libo/images/header.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/header.png);
 	background-repeat: no-repeat;
 }
 #Layout {
 	padding: 0 5px;
 }
 #HeaderTagLine {
-	float: right; 
+	float: right;
 	padding-top: 30px;
 	padding-right: 20px;
 	color: #18A303;
@@ -130,7 +130,7 @@ body {
 	background-color: #43C330;
 }
 #SecondNavigation li.current, #SecondNavigation li.section {
-	background: url(http://www.libreoffice.org/themes/libo/images/navigation-second-current.png) center bottom no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/navigation-second-current.png) center bottom no-repeat;
 }
 
 #Layout #ThirdNavigation {
@@ -171,7 +171,7 @@ body {
 }
 
 #Layout #ThirdNavigation li a:hover {
-	background: url(http://www.libreoffice.org/themes/libo/images/heading-green.png) repeat-x 0 bottom;
+	background: url(https://api.libreoffice.org/themes/libo/images/heading-green.png) repeat-x 0 bottom;
 }
 
 #Layout #ThirdNavigation li a.current {
@@ -188,7 +188,7 @@ body {
 	height: 44px;
 	font-size: 1.5em;
 	color: #18A303;
-	background: url(http://www.libreoffice.org/themes/libo/images/download-button.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/download-button.png) no-repeat;
 }
 
 #DownloadButton:hover {
@@ -229,11 +229,11 @@ body {
 	margin: 3px 0 20px 18px;
 	width: 88px;
 	height: 30px;
-	background: url(http://www.libreoffice.org/themes/libo/images/creative-commons-license.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/creative-commons-license.png) no-repeat;
 }
 
 div.HalfBlockLeft, div.HalfBlockRight {
-	width: 440px; 
+	width: 440px;
 	float: left;
 	display: block;
 }
@@ -261,7 +261,7 @@ div.faqsList {
 }
 
 a#toTop {
-	background-image: url(http://www.libreoffice.org/themes/libo/images/tango_totop.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/tango_totop.png);
 	text-indent: 48px;
 	white-space: nowrap;
 	width: 48px;
@@ -332,7 +332,7 @@ a, .typography a {
 a:hover, .typography a:hover {
 	color: #106802;
 	text-decoration: underline;
-} 
+}
 a:visited, .typography a:visited  {
 	color: #106802;
 }
@@ -343,21 +343,21 @@ a:visited, .typography a:visited  {
 .typography a.pdf {
 	padding: 2px;
 	padding-left: 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/page_white_acrobat.png) no-repeat left center;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/page_white_acrobat.png) no-repeat left center;
 }
 .typography a[href$=".doc"],
 .typography a[href$=".DOC"],
 .typography a.doc {
 	padding: 2px;
 	padding-left: 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/page_word.png) no-repeat left center;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/page_word.png) no-repeat left center;
 }
 .typography a[href$=".xls"],
 .typography a[href$=".XLS"],
 .typography a.xls {
 	padding: 2px;
 	padding-left: 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/page_excel.png) no-repeat left center;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/page_excel.png) no-repeat left center;
 }
 .typography a[href$=".gz"],
 .typography a[href$=".GZ"],
@@ -368,14 +368,14 @@ a:visited, .typography a:visited  {
 .typography a.archive {
 	padding: 2px;
 	padding-left: 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/page_white_zip.png) no-repeat left center;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/page_white_zip.png) no-repeat left center;
 }
 .typography a[href$=".exe"],
 .typography a[href$=".EXE"],
 .typography a.application {
 	padding: 2px;
 	padding-left: 20px;
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/application.png) no-repeat left center;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/application.png) no-repeat left center;
 }
 
 /* LIST STYLES
@@ -385,14 +385,14 @@ ul, .typography ul {
 }
 
 .typography ul li {
-	background: url(http://www.libreoffice.org/themes/libo/images/bullet-green.png) no-repeat 0 6px;
+	background: url(https://api.libreoffice.org/themes/libo/images/bullet-green.png) no-repeat 0 6px;
 	color: 333;
 	line-height: 170%;
 	padding: 0 0 8px 18px;
 }
 #Layout[dir="rtl"] ul li {
 	padding-left: 0;
-	padding-right: 18px; 
+	padding-right: 18px;
 	background-position: right 6px;
 }
 
@@ -402,7 +402,7 @@ ul, .typography ul {
 }
 
 .typography ul ul li {
-	background: url(http://www.libreoffice.org/themes/libo/images/bullet-blue.png) no-repeat 0 6px;
+	background: url(https://api.libreoffice.org/themes/libo/images/bullet-blue.png) no-repeat 0 6px;
 }
 
 .typography .Widget a {
@@ -414,7 +414,7 @@ ul, .typography ul {
 }
 
 .typography #Twitter li {
-	background: url(http://www.libreoffice.org/themes/libo/images/tweet.png) no-repeat 0 12px !important;
+	background: url(https://api.libreoffice.org/themes/libo/images/tweet.png) no-repeat 0 12px !important;
 	padding: 6px 0 6px 40px !important;
 	direction: ltr;
 	font-size: .9em;
@@ -423,7 +423,7 @@ ul, .typography ul {
 
 .typography #Blog li {
 	display: block;
-	background: url(http://www.libreoffice.org/themes/libo/images/bullet-large-blue.png) no-repeat 0 10px !important;
+	background: url(https://api.libreoffice.org/themes/libo/images/bullet-large-blue.png) no-repeat 0 10px !important;
 	padding: 6px 0 6px 30px !important;
 	direction: ltr;
 	border-bottom: 1px solid #CCF4C6;
@@ -452,7 +452,7 @@ ul, .typography ul {
 
 /* used by FolderPage */
 .typography li.folder {
-	background: url(http://www.libreoffice.org/themes/libo/images/icons/folder_open.png) no-repeat left top;
+	background: url(https://api.libreoffice.org/themes/libo/images/icons/folder_open.png) no-repeat left top;
 	margin-left: -12px;
 	padding-left: 22px;
 	list-style-type: none;
@@ -482,19 +482,19 @@ ul, .typography ul {
 }
 
 .typography .ButtonBar li a.irc {
-	background-image: url(http://www.libreoffice.org/themes/libo/images/chat.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/chat.png);
 }
 
 .typography .ButtonBar li a.facebook {
-	background-image: url(http://www.libreoffice.org/themes/libo/images/facebook.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/facebook.png);
 }
 
 .typography .ButtonBar li a.template {
-	background-image: url(http://www.libreoffice.org/themes/libo/images/template.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/template.png);
 }
 
 .typography .ButtonBar li a.extension {
-	background-image: url(http://www.libreoffice.org/themes/libo/images/extension.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/extension.png);
 }
 
 
@@ -506,7 +506,7 @@ ul, .typography ul {
 }
 
 .typography h1 {
-	background: url(http://www.libreoffice.org/themes/libo/images/heading-green.png) 0 bottom repeat-x;
+	background: url(https://api.libreoffice.org/themes/libo/images/heading-green.png) 0 bottom repeat-x;
 	border-bottom: 1px solid #92E285;
 	padding: .2em 0 .1em 2px;
 	color: #18A303;
@@ -604,7 +604,7 @@ ul.ul-libreoffice li {
 	position: relative;
 	list-style: none;
 	margin-left: 0px;
-	background: url(http://www.libreoffice.org/themes/libo/images/li-bullet-single-dark.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/li-bullet-single-dark.png) no-repeat;
 	background-position: 4px 3px;
 	padding-left: 30px;
 	display: block;
@@ -640,7 +640,7 @@ p.roles {
 }
 
 /* STRONG
--------------------------------------------- 
+--------------------------------------------
 .typography strong {
 	color: #18A303;
 }*/
@@ -760,45 +760,45 @@ hr {
 
 .typography p.tick {
 	padding-left: 50px;
-	background-image: url(http://www.libreoffice.org/themes/libo/images/tick.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/tick.png);
 	background-position: 10px 5px;
 	background-repeat: no-repeat;
 }
 .typography ul.tick {
-	background: url(http://www.libreoffice.org/themes/libo/images/tick.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/tick.png) no-repeat;
 	padding-left: 40px;
 }
 
 .typography p.information {
 	padding-left: 50px;
-	background-image: url(http://www.libreoffice.org/themes/libo/images/information.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/information.png);
 	background-position: 10px 5px;
 	background-repeat: no-repeat;
 }
 .typography ul.information {
-	background: url(http://www.libreoffice.org/themes/libo/images/information.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/information.png) no-repeat;
 	padding-left: 40px;
 }
 
 .typography p.warning {
 	padding-left: 50px;
-	background-image: url(http://www.libreoffice.org/themes/libo/images/warning.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/warning.png);
 	background-position: 10px 5px;
 	background-repeat: no-repeat;
 }
 .typography ul.warning {
-	background: url(http://www.libreoffice.org/themes/libo/images/warning.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/warning.png) no-repeat;
 	padding-left: 40px;
 }
 
 .typography p.error {
 	padding-left: 50px;
-	background-image: url(http://www.libreoffice.org/themes/libo/images/error.png);
+	background-image: url(https://api.libreoffice.org/themes/libo/images/error.png);
 	background-position: 10px 5px;
 	background-repeat: no-repeat;
 }
 .typography ul.error {
-	background: url(http://www.libreoffice.org/themes/libo/images/error.png) no-repeat;
+	background: url(https://api.libreoffice.org/themes/libo/images/error.png) no-repeat;
 	padding-left: 40px;
 }
 
@@ -862,7 +862,7 @@ hr {
 
 .note { font-size: 20;
         font-weight: bold;
-	font-style: italic; 
+	font-style: italic;
 	text-align: center; }
 
 .table1 { width: 100%;
@@ -881,32 +881,14 @@ hr {
 	  padding: 0; }
 
 .table4 { width: 100%;
-	  border-width: 2px; 
+	  border-width: 2px;
 	  border-style: groove;
 	  border-color: #CCCCCC;
-	  border-spacing: 0; 
+	  border-spacing: 0;
 	  border-collapse: collapse; }
 
-.cell15 { width: 15%; 
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
-	  border-spacing: 0;
-	  border-collapse: collapse; 
-	  padding: 4;
-	  color: #000000; }
-
-.cell20 { width: 20%; 
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
-	  border-spacing: 0;
-	  border-collapse: collapse; 
-	  padding: 4;
-	  color: #000000; }
-
-.cell80 { width: 80%;
-	  border-width: 2px; 
+.cell15 { width: 15%;
+	  border-width: 2px;
 	  border-style: groove;
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
@@ -914,13 +896,31 @@ hr {
 	  padding: 4;
 	  color: #000000; }
 
-.cell85 { width: 85%; 
-	  border-width: 2px; 
+.cell20 { width: 20%;
+	  border-width: 2px;
 	  border-style: groove;
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
-	  border-collapse: collapse; 
-	  padding: 4; 
+	  border-collapse: collapse;
+	  padding: 4;
+	  color: #000000; }
+
+.cell80 { width: 80%;
+	  border-width: 2px;
+	  border-style: groove;
+	  border-color: #CCCCCC;
+	  border-spacing: 0;
+	  border-collapse: collapse;
+	  padding: 4;
+	  color: #000000; }
+
+.cell85 { width: 85%;
+	  border-width: 2px;
+	  border-style: groove;
+	  border-color: #CCCCCC;
+	  border-spacing: 0;
+	  border-collapse: collapse;
+	  padding: 4;
 	  color: #000000;}
 
 .nothing1 { width: 20;
@@ -942,7 +942,7 @@ hr {
 
 .line { width: 100%;
         height: 5;
-	border: 0; 
+	border: 0;
 	vertical-align: middle; }
 
 
