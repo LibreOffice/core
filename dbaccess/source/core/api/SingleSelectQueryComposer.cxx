@@ -788,9 +788,26 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         }
         catch( const Exception& ) { }
 
-        try
+        if ( !xResultSetMeta.is() && xPreparedStatement.is() )
         {
-            if ( !xResultSetMeta.is() )
+            try
+            {
+                //@see issue http://qa.openoffice.org/issues/show_bug.cgi?id=110111
+                // access returns a different order of column names when executing select * from
+                // and asking the columns from the metadata.
+                Reference< XParameters > xParameters( xPreparedStatement, UNO_QUERY_THROW );
+                Reference< XIndexAccess > xPara = getParameters();
+                for(sal_Int32 i = 1;i <= xPara->getCount();++i)
+                    xParameters->setNull(i,DataType::VARCHAR);
+                xResMetaDataSup.set(xPreparedStatement->executeQuery(), UNO_QUERY_THROW );
+                xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            }
+            catch( const Exception& ) { }
+        }
+
+        if ( !xResultSetMeta.is() )
+        {
+            try
             {
                 xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
                 Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
@@ -799,18 +816,12 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                 xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
                 xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
             }
-        }
-        catch( const Exception& )
-        {
-            //@see issue http://qa.openoffice.org/issues/show_bug.cgi?id=110111
-            // access returns a different order of column names when executing select * from
-            // and asking the columns from the metadata.
-            Reference< XParameters > xParameters( xPreparedStatement, UNO_QUERY_THROW );
-            Reference< XIndexAccess > xPara = getParameters();
-            for(sal_Int32 i = 1;i <= xPara->getCount();++i)
-                xParameters->setNull(i,DataType::VARCHAR);
-            xResMetaDataSup.set(xPreparedStatement->executeQuery(), UNO_QUERY_THROW );
-            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            catch( const Exception& ) { }
+
+            if (xResultSetMeta.is())
+            {
+                SAL_WARN("dbaccess", "OSingleSelectQueryComposer::getColumns failed to get xResultSetMeta from executed PreparedStatement, but got it from 'no escape processing' statement. SQL command:\n\t" << sSQL );
+            }
         }
 
         if ( aSelectColumns->get().empty() )
