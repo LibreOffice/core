@@ -37,6 +37,7 @@
 #include <document.hxx>
 #include <optuno.hxx>
 #include <xistream.hxx>
+#include <xltools.hxx>
 
 #include <docsh.hxx>
 #include <scerrors.hxx>

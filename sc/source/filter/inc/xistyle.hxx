@@ -23,11 +23,12 @@
 #include <vector>
 #include <memory>
 #include <rangelst.hxx>
-#include <patattr.hxx>
-#include "xladdress.hxx"
 #include "xlstyle.hxx"
 #include "xiroot.hxx"
 
+class ScPatternAttr;
+
+struct XclRange;
 struct ScAttrEntry;
 enum class SvxBoxItemLine;
 

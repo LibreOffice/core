@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLSTRING_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLSTRING_HXX
 
-#include "ftools.hxx"
+#include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
 // Constants and enumerations =================================================

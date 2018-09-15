@@ -20,17 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XELINK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XELINK_HXX
 
-#include <markdata.hxx>
-#include "xllink.hxx"
 #include "xerecord.hxx"
-#include "xehelper.hxx"
-#include "xeformula.hxx"
+#include "xeroot.hxx"
 #include <externalrefmgr.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+namespace o3tl { template <typename T> struct typed_flags; }
 
 struct ScSingleRefData;
 struct ScComplexRefData;
+struct XclExpRefLogEntry;
 
 /* ============================================================================
 Classes for export of different kinds of internal/external references.

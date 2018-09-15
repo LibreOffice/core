@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
@@ -51,6 +52,7 @@
 #include <xlstyle.hxx>
 #include <xlchart.hxx>
 #include <xltracer.hxx>
+#include <xltools.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <root.hxx>

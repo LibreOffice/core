@@ -22,8 +22,8 @@
 
 #include <memory>
 #include "excrecds.hxx"
-#include "xcl97esc.hxx"
-#include "xlstyle.hxx"
+#include "xlescher.hxx"
+#include "xestring.hxx"
 #include <tabprotection.hxx>
 #include <svx/svdobj.hxx>
 
@@ -32,6 +32,7 @@ class XclExpMsoDrawing;
 class SdrCaptionObj;
 class SdrTextObj;
 class XclTxo;
+class XclEscherEx;
 
 class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {

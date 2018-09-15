@@ -50,6 +50,7 @@
 #include <arealink.hxx>
 #include <stlsheet.hxx>
 #include <scextopt.hxx>
+#include <xlcontent.hxx>
 #include <xlformula.hxx>
 #include <xltracer.hxx>
 #include <xistream.hxx>

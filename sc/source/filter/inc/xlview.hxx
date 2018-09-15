@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLVIEW_HXX
 
 #include <tools/color.hxx>
-#include "ftools.hxx"
 #include "xladdress.hxx"
 #include <map>
 #include <memory>

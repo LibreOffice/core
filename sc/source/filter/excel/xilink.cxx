@@ -25,6 +25,7 @@
 #include <xistream.hxx>
 #include <xihelper.hxx>
 #include <xiname.hxx>
+#include <xltools.hxx>
 #include <excform.hxx>
 #include <tokenarray.hxx>
 #include <externalrefmgr.hxx>

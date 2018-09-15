@@ -31,6 +31,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <set>
 #include <rtl/ustrbuf.h>
@@ -50,11 +51,15 @@
 #include <postit.hxx>
 
 #include <fapihelper.hxx>
+#include <xcl97esc.hxx>
 #include <xechart.hxx>
 #include <xeformula.hxx>
+#include <xehelper.hxx>
 #include <xelink.hxx>
 #include <xename.hxx>
 #include <xestyle.hxx>
+#include <xllink.hxx>
+#include <xltools.hxx>
 #include <userdat.hxx>
 #include <drwlayer.hxx>
 #include <svl/itemset.hxx>

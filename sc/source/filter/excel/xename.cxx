@@ -29,9 +29,14 @@
 #include <xelink.hxx>
 #include <globalnames.hxx>
 #include <excrecds.hxx>
+#include <xlname.hxx>
+#include <xeformula.hxx>
+#include <xestring.hxx>
+#include <xltools.hxx>
 
 #include <formula/grammar.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox;
 
