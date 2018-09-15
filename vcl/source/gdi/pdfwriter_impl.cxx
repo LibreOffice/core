@@ -1706,8 +1706,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nRC4KeyLength(0),
         m_bEncryptThisStream( false ),
         m_nAccessPermissions(0),
-        m_pEncryptionBuffer( nullptr ),
-        m_nEncryptionBufferSize( 0 ),
         m_bIsPDF_A1( false ),
         m_rOuterFace( i_rOuterFace )
 {
@@ -1755,12 +1753,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 
     /* the size of the Codec default maximum */
     /* is this 0x4000 required to be the same as MAX_SIGNATURE_CONTENT_LENGTH or just coincidentally the same at the moment? */
-    if (!checkEncryptionBufferSize(0x4000))
-    {
-        m_aFile.close();
-        m_bOpen = false;
-        return;
-    }
+    m_vEncryptionBuffer.reserve(0x4000);
 
     if( xEnc.is() )
         prepareEncryption( xEnc );
@@ -1819,8 +1812,6 @@ PDFWriterImpl::~PDFWriterImpl()
 
     if( m_aCipher )
         rtl_cipher_destroyARCFOUR( m_aCipher );
-
-    std::free( m_pEncryptionBuffer );
 }
 
 void PDFWriterImpl::setupDocInfo()
@@ -1990,27 +1981,25 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         const sal_Unicode* pStr = rInString.getStr();
         sal_Int32 nLen = rInString.getLength();
         //prepare a unicode string, encrypt it
-        if( checkEncryptionBufferSize( nLen*2 ) )
+        m_vEncryptionBuffer.reserve(nLen*2);
+        enableStringEncryption( nInObjectNumber );
+        sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
+        sal_Int32 nChars = 2;
+        *pCopy++ = 0xFE;
+        *pCopy++ = 0xFF;
+        // we need to prepare a byte stream from the unicode string buffer
+        for( int i = 0; i < nLen; i++ )
         {
-            enableStringEncryption( nInObjectNumber );
-            sal_uInt8 *pCopy = m_pEncryptionBuffer;
-            sal_Int32 nChars = 2;
-            *pCopy++ = 0xFE;
-            *pCopy++ = 0xFF;
-            // we need to prepare a byte stream from the unicode string buffer
-            for( int i = 0; i < nLen; i++ )
-            {
-                sal_Unicode aUnChar = pStr[i];
-                *pCopy++ = static_cast<sal_uInt8>( aUnChar >> 8 );
-                *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
-                nChars += 2;
-            }
-            //encrypt in place
-            rtl_cipher_encodeARCFOUR( m_aCipher, m_pEncryptionBuffer, nChars, m_pEncryptionBuffer, nChars );
-            //now append, hexadecimal (appendHex), the encrypted result
-            for(int i = 0; i < nChars; i++)
-                appendHex( m_pEncryptionBuffer[i], rOutBuffer );
+            sal_Unicode aUnChar = pStr[i];
+            *pCopy++ = static_cast<sal_uInt8>( aUnChar >> 8 );
+            *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
+            nChars += 2;
         }
+        //encrypt in place
+        rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars );
+        //now append, hexadecimal (appendHex), the encrypted result
+        for(int i = 0; i < nChars; i++)
+            appendHex( m_vEncryptionBuffer[i], rOutBuffer );
     }
     else
         PDFWriter::AppendUnicodeTextString(rInString, rOutBuffer);
@@ -2022,12 +2011,13 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rIn
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.getLength();
     //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
-    if( m_aContext.Encryption.Encrypt() && checkEncryptionBufferSize( nChars ) )
+    if( m_aContext.Encryption.Encrypt() )
     {
+        m_vEncryptionBuffer.reserve( nChars );
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
-        rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_pEncryptionBuffer, nChars );
-        appendLiteralString( reinterpret_cast<sal_Char*>(m_pEncryptionBuffer), nChars, rOutBuffer );
+        rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_vEncryptionBuffer.data(), nChars );
+        appendLiteralString( reinterpret_cast<sal_Char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
         appendLiteralString( rInString.getStr(), nChars , rOutBuffer );
@@ -2147,14 +2137,14 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         if( m_bEncryptThisStream )
         {
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
-            buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) );
+            m_vEncryptionBuffer.reserve( nBytes );
             if( buffOK )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
                                           pBuffer, static_cast<sal_Size>(nBytes),
-                                          m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
+                                          m_vEncryptionBuffer.data(), static_cast<sal_Size>(nBytes) );
         }
 
-        const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_pEncryptionBuffer  : pBuffer;
+        const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_vEncryptionBuffer.data()  : pBuffer;
         m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
 
         if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
@@ -9583,27 +9573,25 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             {
                 enableStringEncryption( rObject.m_nObject );
                 //check encryption buffer size
-                if( checkEncryptionBufferSize( pAccess->GetPaletteEntryCount()*3 ) )
+                m_vEncryptionBuffer.reserve( pAccess->GetPaletteEntryCount()*3 );
+                int nChar = 0;
+                //fill the encryption buffer
+                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                 {
-                    int nChar = 0;
-                    //fill the encryption buffer
-                    for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
-                    {
-                        const BitmapColor& rColor = pAccess->GetPaletteColor( i );
-                        m_pEncryptionBuffer[nChar++] = rColor.GetRed();
-                        m_pEncryptionBuffer[nChar++] = rColor.GetGreen();
-                        m_pEncryptionBuffer[nChar++] = rColor.GetBlue();
-                    }
-                    //encrypt the colorspace lookup table
-                    rtl_cipher_encodeARCFOUR( m_aCipher, m_pEncryptionBuffer, nChar, m_pEncryptionBuffer, nChar );
-                    //now queue the data for output
-                    nChar = 0;
-                    for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
-                    {
-                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
-                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
-                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
-                    }
+                    const BitmapColor& rColor = pAccess->GetPaletteColor( i );
+                    m_vEncryptionBuffer[nChar++] = rColor.GetRed();
+                    m_vEncryptionBuffer[nChar++] = rColor.GetGreen();
+                    m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
+                }
+                //encrypt the colorspace lookup table
+                rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar );
+                //now queue the data for output
+                nChar = 0;
+                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                {
+                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
+                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
+                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
                 }
             }
             else //no encryption requested (PDF/A-1a program flow drops here)
