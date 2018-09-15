@@ -111,15 +111,28 @@ namespace canvas
                              const ::basegfx::B2DPolyPolygon& rClipPoly,
                              const ::basegfx::B2DHomMatrix&   rTransform )
     {
-        const ::basegfx::B2DPolygon& rTriangulatedPolygon(
+        const ::basegfx::triangulator::B2DTriangleVector& rTriangulatedVector(
             ::basegfx::triangulator::triangulate(rClipPoly));
+
+        // we have now an explicit ::B2DTriangle and ::B2DTriangleVector,
+        // but I do not know enough about 'drawWithClip' or 'clipTriangleListOnRange'
+        // to adapt to that. Convert back to old three-point-in-polygon convention
+        ::basegfx::B2DPolygon aTriangulatedPolygon;
+        aTriangulatedPolygon.reserve(rTriangulatedVector.size() * 3);
+
+        for(const auto& rCandidate : rTriangulatedVector)
+        {
+            aTriangulatedPolygon.append(rCandidate.getA());
+            aTriangulatedPolygon.append(rCandidate.getB());
+            aTriangulatedPolygon.append(rCandidate.getC());
+        }
 
         // dump polygons
         SAL_INFO("canvas", "Original clip polygon: " <<  basegfx::utils::exportToSvgD( rClipPoly, true, true, false ));
-        SAL_INFO("canvas", "Triangulated polygon: " <<  basegfx::utils::exportToSvgD(basegfx::B2DPolyPolygon(rTriangulatedPolygon), true, true, false ));
+        SAL_INFO("canvas", "Triangulated polygon: " <<  basegfx::utils::exportToSvgD(basegfx::B2DPolyPolygon(aTriangulatedPolygon), true, true, false ));
 
         for( const auto& rSurfacePtr : maSurfaceList )
-            rSurfacePtr->drawWithClip( fAlpha, rPos, rTriangulatedPolygon, rTransform );
+            rSurfacePtr->drawWithClip( fAlpha, rPos, aTriangulatedPolygon, rTransform );
 
         return true;
     }
