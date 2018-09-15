@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 class Button;
+class ComboBox;
 class ListBox;
 class MessageDialog;
 class NumericFormatter;
@@ -218,6 +219,7 @@ private:
 
     const ListStore* get_model_by_name(const OString& sID) const;
     void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
+    void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
     const TextBuffer* get_buffer_by_name(const OString& sID) const;
