@@ -22,6 +22,7 @@
 
 #include "xlconst.hxx"
 #include "xestream.hxx"
+#include "xlstream.hxx"
 #include <memory>
 
 // Base classes to export Excel records =======================================

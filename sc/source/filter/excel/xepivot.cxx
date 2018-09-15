@@ -18,11 +18,14 @@
  */
 
 #include <xepivot.hxx>
+#include <xehelper.hxx>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
 #include <algorithm>
 #include <math.h>

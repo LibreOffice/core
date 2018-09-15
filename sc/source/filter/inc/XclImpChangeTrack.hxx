@@ -20,16 +20,14 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCLIMPCHANGETRACK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XCLIMPCHANGETRACK_HXX
 
-#include <tools/datetime.hxx>
 #include "xiroot.hxx"
 #include "xistream.hxx"
 #include "excform.hxx"
-#include "imp_op.hxx"
 
 struct ScCellValue;
 class ScChangeAction;
 class ScChangeTrack;
-class XclImpChTrFmlConverter;
+class DateTime;
 
 struct XclImpChTrRecHeader
 {

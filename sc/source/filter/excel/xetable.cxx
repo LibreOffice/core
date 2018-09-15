@@ -33,10 +33,14 @@
 #include <xecontent.hxx>
 #include <xeescher.hxx>
 #include <xeextlst.hxx>
+#include <xeformula.hxx>
+#include <xlcontent.hxx>
+#include <xltools.hxx>
 #include <tokenarray.hxx>
 #include <formula/errorcodes.hxx>
 #include <thread>
 #include <comphelper/threadpool.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 
 using namespace ::oox;

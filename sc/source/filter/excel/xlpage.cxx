@@ -18,6 +18,7 @@
  */
 
 #include <xlpage.hxx>
+#include <xltools.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/paperinf.hxx>

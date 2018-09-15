@@ -23,13 +23,10 @@
 #include <memory>
 #include <stack>
 #include <filter/msfilter/escherex.hxx>
-#include "xlescher.hxx"
 #include "xeroot.hxx"
-#include <vector>
+#include <unotools/tempfile.hxx>
 
-namespace utl { class TempFile; }
-
-class SvStream;
+namespace com { namespace sun { namespace star { namespace awt { class XControlModel; } } } }
 
 class XclEscherExGlobal : public EscherExGlobal, protected XclExpRoot
 {
@@ -53,7 +50,6 @@ class XclEscherClientTextbox;
 class XclExpOcxControlObj;
 class XclExpTbxControlObj;
 class XclExpShapeObj;
-class EscherExHostAppData;
 class ShapeInteractionHelper
 {
 public:

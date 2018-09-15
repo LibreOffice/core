@@ -22,13 +22,12 @@
 
 #include <memory>
 #include <rangelst.hxx>
-#include "xlcontent.hxx"
 #include "xladdress.hxx"
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
-#include "xeformula.hxx"
 #include "xeextlst.hxx"
+#include "xlformula.hxx"
 
 #include <colorscale.hxx>
 
@@ -163,7 +162,6 @@ private:
 
 // Conditional formatting =====================================================
 
-class ScCondFormatEntry;
 class XclExpCFImpl;
 
 /** Represents a CF record that contains one condition of a conditional format. */
@@ -219,8 +217,6 @@ public:
 private:
     const Color& mrColor;
 };
-
-class ScConditionalFormat;
 
 /** Represents a CONDFMT record that contains all conditions of a conditional format.
     @descr  Contains the conditions which are stored in CF records. */

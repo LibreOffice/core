@@ -41,6 +41,7 @@
 #include <sal/log.hxx>
 
 #include <sot/exchange.hxx>
+#include <sot/storage.hxx>
 #include <xeescher.hxx>
 
 #include <global.hxx>

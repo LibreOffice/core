@@ -46,7 +46,9 @@
 #include <xecontent.hxx>
 #include <xeescher.hxx>
 #include <xestyle.hxx>
+#include <xehelper.hxx>
 #include <xelink.hxx>
+#include <xlcontent.hxx>
 
 #include <scitems.hxx>
 

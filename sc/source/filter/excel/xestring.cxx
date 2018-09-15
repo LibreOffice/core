@@ -25,6 +25,7 @@
 #include <xestyle.hxx>
 #include <xestream.hxx>
 #include <xestring.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox;
 

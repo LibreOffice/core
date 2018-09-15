@@ -388,3 +388,9 @@ blacklist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFilterFormulaParser.hpp
+    sc/source/filter/inc/xerecord.hxx:
+    # Needed for member access
+    - xestream.hxx
+    sc/source/filter/inc/xlstring.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

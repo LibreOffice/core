@@ -23,6 +23,9 @@
 #include <viewopti.hxx>
 #include <xelink.hxx>
 #include <xestyle.hxx>
+#include <xehelper.hxx>
+#include <xltools.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 
 using namespace ::oox;

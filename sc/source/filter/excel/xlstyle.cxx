@@ -20,6 +20,7 @@
 #include <xlstyle.hxx>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
@@ -33,6 +34,7 @@
 #include <editeng/svxfont.hxx>
 #include <global.hxx>
 #include <xlroot.hxx>
+#include <xltools.hxx>
 // Color data =================================================================
 
 /** Standard EGA colors, bright. */

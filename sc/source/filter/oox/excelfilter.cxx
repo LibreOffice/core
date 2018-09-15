@@ -30,6 +30,7 @@
 #include <themebuffer.hxx>
 #include <workbookfragment.hxx>
 #include <xestream.hxx>
+#include <xlstream.hxx>
 
 #include <addressconverter.hxx>
 #include <document.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <xiname.hxx>
+#include <xlname.hxx>
 #include <rangenam.hxx>
 #include <xistream.hxx>
 #include <excform.hxx>

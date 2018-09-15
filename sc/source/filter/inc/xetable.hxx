@@ -25,15 +25,15 @@
 #include <vector>
 #include "xladdress.hxx"
 #include "xerecord.hxx"
-#include "xestring.hxx"
-#include "xeformula.hxx"
 #include "xestyle.hxx"
-#include "xeextlst.hxx"
+#include "xlformula.hxx"
 
 #include <map>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
+
+class XclExtLst;
 
 /* ============================================================================
 Export of cell tables including row and column description.
@@ -202,8 +202,6 @@ private:
 };
 
 // Multiple operations ========================================================
-
-struct XclMultipleOpRefs;
 
 /** Represents a TABLEOP record for a multiple operations range. */
 class XclExpTableop : public XclExpRangeFmlaBase

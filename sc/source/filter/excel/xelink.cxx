@@ -32,6 +32,10 @@
 #include <externalrefmgr.hxx>
 #include <tokenarray.hxx>
 #include <xecontent.hxx>
+#include <xeformula.hxx>
+#include <xehelper.hxx>
+#include <xllink.hxx>
+#include <xltools.hxx>
 
 #include <vector>
 #include <memory>

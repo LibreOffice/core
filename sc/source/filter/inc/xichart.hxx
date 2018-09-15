@@ -21,14 +21,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XICHART_HXX
 
 #include <set>
-#include <list>
 #include <map>
 #include <memory>
 #include <vector>
 
-#include <svl/itemset.hxx>
-
-#include <rangelst.hxx>
 #include <types.hxx>
 #include "xlchart.hxx"
 #include "xlstyle.hxx"

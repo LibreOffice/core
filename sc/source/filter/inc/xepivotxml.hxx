@@ -18,7 +18,6 @@
 #include <unordered_map>
 
 class ScDPCache;
-class ScDPCollection;
 class ScDPObject;
 
 class XclExpXmlPivotCaches : public XclExpRecordBase, protected XclExpRoot

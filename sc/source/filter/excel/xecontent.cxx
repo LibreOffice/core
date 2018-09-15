@@ -44,6 +44,9 @@
 #include <xehelper.hxx>
 #include <xestyle.hxx>
 #include <xename.hxx>
+#include <xlcontent.hxx>
+#include <xltools.hxx>
+#include <xeformula.hxx>
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
 #include <oox/export/utils.hxx>

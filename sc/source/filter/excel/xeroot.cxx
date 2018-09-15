@@ -40,6 +40,9 @@
 #include <xeroot.hxx>
 #include <xepivotxml.hxx>
 #include <xedbdata.hxx>
+#include <xlcontent.hxx>
+#include <xlname.hxx>
+#include <xllink.hxx>
 
 #include <excrecds.hxx>
 #include <tabprotection.hxx>
