@@ -212,6 +212,7 @@
                           <object class="GtkComboBoxText" id="comboLB_LASTLINE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="active">0</property>
                             <items>
                               <item id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
                               <item id="1" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
@@ -324,6 +325,7 @@
                       <object class="GtkComboBoxText" id="comboLB_VERTALIGN">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="active">0</property>
                         <items>
                           <item id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Automatic</item>
                           <item id="1" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Base line</item>
