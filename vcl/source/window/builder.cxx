@@ -483,12 +483,16 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     //Set ComboBox models when everything has been imported
     for (auto const& elem : m_pParserState->m_aModelMaps)
     {
-        ListBox *pTarget = get<ListBox>(elem.m_sID);
+        vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
+        ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
+        ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
-        SAL_WARN_IF(!pTarget, "vcl", "missing elements of combobox");
-        if (pTarget && pStore)
-            mungeModel(*pTarget, *pStore, elem.m_nActiveId);
+        SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget, "vcl", "missing elements of combobox");
+        if (pListBoxTarget && pStore)
+            mungeModel(*pListBoxTarget, *pStore, elem.m_nActiveId);
+        else if (pComboBoxTarget && pStore)
+            mungeModel(*pComboBoxTarget, *pStore, elem.m_nActiveId);
     }
 
     //Set TextView buffers when everything has been imported
@@ -3911,6 +3915,30 @@ const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OString& 
     if (aI != m_pParserState->m_aAdjustments.end())
         return &(aI->second);
     return nullptr;
+}
+
+void VclBuilder::mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
+{
+    for (auto const& entry : rStore.m_aEntries)
+    {
+        const ListStore::row &rRow = entry;
+        sal_uInt16 nEntry = rTarget.InsertEntry(rRow[0]);
+        if (rRow.size() > 1)
+        {
+            if (m_bLegacy)
+            {
+                sal_IntPtr nValue = rRow[1].toInt32();
+                rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
+            }
+            else
+            {
+                if (!rRow[1].isEmpty())
+                    rTarget.SetEntryData(nEntry, new OUString(rRow[1]));
+            }
+        }
+    }
+    if (nActiveId < rStore.m_aEntries.size())
+        rTarget.SelectEntryPos(nActiveId);
 }
 
 void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
