@@ -486,7 +486,7 @@ DECLARE_ODFIMPORT_TEST(testFdo55814, "fdo55814.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
 }
 
-void lcl_CheckShape(
+static void lcl_CheckShape(
     uno::Reference<drawing::XShape> const& xShape, OUString const& rExpected)
 {
     uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY);

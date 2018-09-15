@@ -71,7 +71,7 @@ using ::rtl::OString;
 
 /** get binary Path.
 */
-inline ::rtl::OUString getExecutablePath()
+static inline ::rtl::OUString getExecutablePath()
 {
     ::rtl::OUString dirPath;
     osl::Module::getUrlFromAddress(
@@ -143,7 +143,7 @@ namespace
     }
 }
 
-    void read_parent_environment(std::vector<OString>* env_container)
+    static void read_parent_environment(std::vector<OString>* env_container)
     {
         for (int i = 0; environ[i] != nullptr; i++)
             env_container->push_back(OString(environ[i]));

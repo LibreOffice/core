@@ -475,7 +475,7 @@ void Converter::convertMeasurePx( OUStringBuffer& rBuffer, sal_Int32 nValue )
     rBuffer.append( 'x' );
 }
 
-int lcl_gethex( int nChar )
+static int lcl_gethex( int nChar )
 {
     if( nChar >= '0' && nChar <= '9' )
         return nChar - '0';

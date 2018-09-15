@@ -79,7 +79,7 @@ T3SQLFreeHandle pODBC3SQLFreeHandle;
 T3SQLGetCursorName pODBC3SQLGetCursorName;
 T3SQLNativeSql pODBC3SQLNativeSql;
 
-bool LoadFunctions(oslModule pODBCso);
+static bool LoadFunctions(oslModule pODBCso);
 
 // Take care of Dynamically loading of the DLL/shared lib and Addresses:
 // Returns sal_True at success

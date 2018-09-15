@@ -146,7 +146,7 @@ static bool InitializeFontWorkData(
     return bNoErr;
 }
 
-double GetLength( const tools::Polygon& rPolygon )
+static double GetLength( const tools::Polygon& rPolygon )
 {
     double fLength = 0;
     if ( rPolygon.GetSize() > 1 )
@@ -161,7 +161,7 @@ double GetLength( const tools::Polygon& rPolygon )
 
 /* CalculateHorizontalScalingFactor returns the horizontal scaling factor for
 the whole text object, so that each text will match its corresponding 2d Outline */
-void CalculateHorizontalScalingFactor(
+static void CalculateHorizontalScalingFactor(
     const SdrObjCustomShape& rSdrObjCustomShape,
     FWData& rFWData,
     const tools::PolyPolygon& rOutline2d)
@@ -259,7 +259,7 @@ void CalculateHorizontalScalingFactor(
     rFWData.fHorizontalTextScaling = fScalingFactor;
 }
 
-void GetTextAreaOutline(
+static void GetTextAreaOutline(
     const FWData& rFWData,
     const SdrObjCustomShape& rSdrObjCustomShape,
     FWTextArea& rTextArea,
@@ -468,7 +468,7 @@ void GetTextAreaOutline(
     }
 }
 
-bool GetFontWorkOutline(
+static bool GetFontWorkOutline(
     FWData& rFWData,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
@@ -617,7 +617,7 @@ bool GetFontWorkOutline(
     return true;
 }
 
-basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
+static basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
 {
     basegfx::B2DPolyPolygon aOutlines2d;
 
@@ -639,7 +639,7 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
     return aOutlines2d;
 }
 
-void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistances )
+static void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistances )
 {
     sal_uInt16 i, nCount = rPoly.GetSize();
     if ( nCount > 1 )
@@ -661,7 +661,7 @@ void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistanc
     }
 }
 
-void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
+static void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
                                  const tools::Rectangle& rTextAreaBoundRect, tools::Polygon& rPoly )
 {
     sal_uInt16 nSize = rPoly.GetSize();
@@ -715,7 +715,7 @@ void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
     }
 }
 
-void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
+static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
 {
     fy1 = fx1 = 0.0;
     if ( rPoly.GetSize() > 1 )
@@ -743,7 +743,7 @@ void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistan
     }
 }
 
-void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWData& rFWData )
+static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWData& rFWData )
 {
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
@@ -911,7 +911,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
     }
 }
 
-SdrObject* CreateSdrObjectFromParagraphOutlines(
+static SdrObject* CreateSdrObjectFromParagraphOutlines(
     const FWData& rFWData,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {

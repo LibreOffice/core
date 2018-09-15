@@ -301,7 +301,7 @@ namespace canvas
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    bool impIsEqualB2DRange(const basegfx::B2DRange& rRangeA, const basegfx::B2DRange& rRangeB, double fSmallValue)
+    static bool impIsEqualB2DRange(const basegfx::B2DRange& rRangeA, const basegfx::B2DRange& rRangeB, double fSmallValue)
     {
         return fabs(rRangeB.getMinX() - rRangeA.getMinX()) <= fSmallValue
             && fabs(rRangeB.getMinY() - rRangeA.getMinY()) <= fSmallValue
@@ -309,7 +309,7 @@ namespace canvas
             && fabs(rRangeB.getMaxY() - rRangeA.getMaxY()) <= fSmallValue;
     }
 
-    bool impIsEqualB2DVector(const basegfx::B2DVector& rVecA, const basegfx::B2DVector& rVecB, double fSmallValue)
+    static bool impIsEqualB2DVector(const basegfx::B2DVector& rVecA, const basegfx::B2DVector& rVecB, double fSmallValue)
     {
         return fabs(rVecB.getX() - rVecA.getX()) <= fSmallValue
             && fabs(rVecB.getY() - rVecA.getY()) <= fSmallValue;

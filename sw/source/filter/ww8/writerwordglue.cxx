@@ -54,7 +54,7 @@ using namespace css;
 
 namespace myImplHelpers
 {
-    SwTwips CalcHdFtDist(const SwFrameFormat& rFormat, sal_uInt16 nSpacing)
+    static SwTwips CalcHdFtDist(const SwFrameFormat& rFormat, sal_uInt16 nSpacing)
     {
         /*
         The normal case for reexporting word docs is to have dynamic spacing,
@@ -94,12 +94,12 @@ namespace myImplHelpers
         return nDist;
     }
 
-    SwTwips CalcHdDist(const SwFrameFormat& rFormat)
+    static SwTwips CalcHdDist(const SwFrameFormat& rFormat)
     {
         return CalcHdFtDist(rFormat, rFormat.GetULSpace().GetUpper());
     }
 
-    SwTwips CalcFtDist(const SwFrameFormat& rFormat)
+    static SwTwips CalcFtDist(const SwFrameFormat& rFormat)
     {
         return CalcHdFtDist(rFormat, rFormat.GetULSpace().GetLower());
     }
@@ -313,7 +313,7 @@ namespace myImplHelpers
         return pColl ? 0 : maHelper.MakeStyle(aName);
     }
 
-    OUString FindBestMSSubstituteFont(const OUString &rFont)
+    static OUString FindBestMSSubstituteFont(const OUString &rFont)
     {
         if (IsStarSymbol(rFont))
             return OUString("Arial Unicode MS");
@@ -756,7 +756,7 @@ namespace sw
         /** Find cFind in rParams if not embedded in " double quotes.
             Will NOT find '\\' or '"'.
          */
-        sal_Int32 findUnquoted( const OUString& rParams, sal_Unicode cFind, sal_Int32 nFromPos )
+        static sal_Int32 findUnquoted( const OUString& rParams, sal_Unicode cFind, sal_Int32 nFromPos )
         {
             const sal_Int32 nLen = rParams.getLength();
             if (nFromPos < 0 || nLen <= nFromPos)
@@ -789,7 +789,7 @@ namespace sw
         /** Find all rFind in rParams if not embedded in " double quotes and
             replace with rReplace. Will NOT find '\\' or '"'.
          */
-        bool replaceUnquoted( OUString& rParams, const OUString& rFind, const OUString& rReplace )
+        static bool replaceUnquoted( OUString& rParams, const OUString& rFind, const OUString& rReplace )
         {
             bool bReplaced = false;
             if (rFind.isEmpty())

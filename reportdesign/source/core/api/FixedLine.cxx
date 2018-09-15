@@ -35,7 +35,7 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-uno::Sequence< OUString > lcl_getLineOptionals()
+static uno::Sequence< OUString > lcl_getLineOptionals()
 {
     OUString pProps[] = {
              OUString(PROPERTY_DATAFIELD)

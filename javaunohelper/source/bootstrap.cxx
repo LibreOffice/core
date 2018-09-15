@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 namespace javaunohelper
 {
 
-inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
+static inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 {
     OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
     jsize len = jni_env->GetStringLength( jstr );

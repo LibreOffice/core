@@ -155,7 +155,7 @@ SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 
 typedef std::map< OUString, OUString > tMakeStringStringMap;
 //static
-const tMakeStringStringMap& lcl_getChartTypeNameMap()
+static const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     //shape property -- chart model object property
     static const tMakeStringStringMap g_aChartTypeNameMap{

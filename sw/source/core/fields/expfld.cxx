@@ -135,7 +135,7 @@ OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
     return sRes;
 }
 
-SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
+static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
                             const SwContentFrame *pCFrame, Point &rPt )
 {
     SwTextNode* pTextNode = nullptr;

@@ -879,7 +879,7 @@ void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
 /** Helper function to put from rItem below the Which-ID in the pool of the
     Item Sets rSet.
 */
-void MappedPut_Impl(SfxAllItemSet &rSet, const SfxPoolItem &rItem)
+static void MappedPut_Impl(SfxAllItemSet &rSet, const SfxPoolItem &rItem)
 {
     // Put with mapped Which-Id if possible
     const SfxItemPool *pPool = rSet.GetPool();
@@ -1614,9 +1614,13 @@ void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
     GetBindings()->InvalidateAll(true);
 }
 
-extern "C" int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
+extern "C" {
+
+static int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 {
     return static_cast<long>(*static_cast<sal_uInt16 const *>(pSmaller)) - static_cast<long>(*static_cast<sal_uInt16 const *>(pBigger));
+}
+
 }
 
 /** Searches for 'nSID' in the Filter set by <SetSlotFilter()> and

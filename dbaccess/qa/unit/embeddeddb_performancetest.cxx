@@ -38,13 +38,13 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-void normaliseTimeValue(TimeValue* pVal)
+static void normaliseTimeValue(TimeValue* pVal)
 {
     pVal->Seconds += pVal->Nanosec / 1000000000;
     pVal->Nanosec %= 1000000000;
 }
 
-void getTimeDifference(const TimeValue* pTimeStart,
+static void getTimeDifference(const TimeValue* pTimeStart,
                        const TimeValue* pTimeEnd,
                        TimeValue* pTimeDifference)
 {
@@ -56,7 +56,7 @@ void getTimeDifference(const TimeValue* pTimeStart,
     normaliseTimeValue(pTimeDifference);
 }
 
-OUString getPrintableTimeValue(const TimeValue* pTimeValue)
+static OUString getPrintableTimeValue(const TimeValue* pTimeValue)
 {
     return OUString::number(
         (sal_uInt64(pTimeValue->Seconds) * SAL_CONST_UINT64(1000000000)

@@ -37,7 +37,7 @@ public:
     ImplAccelList maIdList; // Id-List
 };
 
-sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
+static sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
                                sal_uInt16* pIndex = nullptr )
 {
     size_t  nLow;

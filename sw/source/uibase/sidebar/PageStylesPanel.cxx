@@ -58,7 +58,7 @@ const SvxPageUsage aArr[] =
 };
 
 
-sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
+static sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 {
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
         if ( aArr[i] == nUsage )
@@ -67,7 +67,7 @@ sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 }
 
 
-SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
+static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
         return SvxPageUsage::NONE;

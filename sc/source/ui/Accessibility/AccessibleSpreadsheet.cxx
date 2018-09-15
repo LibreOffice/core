@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-bool CompMinCol(const std::pair<sal_uInt16,sal_uInt16> & pc1,const std::pair<sal_uInt16,sal_uInt16>  &pc2)
+static bool CompMinCol(const std::pair<sal_uInt16,sal_uInt16> & pc1,const std::pair<sal_uInt16,sal_uInt16>  &pc2)
 {
     return pc1.first < pc2.first;
 }

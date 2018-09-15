@@ -43,7 +43,7 @@ AxisLabelAlignment::AxisLabelAlignment() :
     mfInnerTickDirection(1.0),
     meAlignment(LABEL_ALIGN_RIGHT_TOP) {}
 
-sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
+static sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
     sal_Int32 const nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
     double fPercent = 1.0;
@@ -67,7 +67,7 @@ sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
     return static_cast<sal_Int32>(nWidth*fPercent);
 }
 
-double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
+static double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
 {
     double fPercent = 0.0; //0<=fPercent<=1
     //0.0: completely inner
@@ -180,7 +180,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
 {
 }
 
-LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
+static LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );
     if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)
@@ -188,7 +188,7 @@ LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisPropert
     return aRet;
 }
 
-LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisProperties )
+static LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );
     if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)
@@ -196,7 +196,7 @@ LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisPropert
     return aRet;
 }
 
-LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxisProperties )
+static LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_BOTTOM );
     if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)

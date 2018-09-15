@@ -43,7 +43,7 @@ namespace reportdesign
     using namespace comphelper;
 
 
-uno::Sequence< OUString> lcl_getGroupAbsent()
+static uno::Sequence< OUString> lcl_getGroupAbsent()
 {
     const OUString pProps[] = {
                 OUString(PROPERTY_CANGROW)
@@ -54,7 +54,7 @@ uno::Sequence< OUString> lcl_getGroupAbsent()
 }
 
 
-uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
+static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
 {
     if ( _bPageSection )
     {

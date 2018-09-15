@@ -38,7 +38,7 @@ namespace svt
 
 using namespace ::com::sun::star;
 
-bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, css::table::CellRangeAddress& aAddress )
+static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, css::table::CellRangeAddress& aAddress )
 {
     bool bRes = false;
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;

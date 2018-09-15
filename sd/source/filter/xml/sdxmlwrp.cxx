@@ -147,7 +147,7 @@ struct XML_SERVICES
     const sal_Char* mpSettings;
 };
 
-XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
+static XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 {
     static XML_SERVICES gServices[] =
     {
@@ -416,7 +416,7 @@ ErrCode ReadThroughComponent(
 //But there exist documents which were saved previous to that modification
 //so here we detect such cases and fix them up to ensure the previews
 //numbering level matches that of the outline level it previews
-void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
+static void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
 {
     for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PageKind::Standard); ++i)
     {

@@ -183,7 +183,7 @@ void FuMorph::DoExecute( SfxRequest& )
     }
 }
 
-::basegfx::B2DPolygon ImpGetExpandedPolygon(
+static ::basegfx::B2DPolygon ImpGetExpandedPolygon(
     const ::basegfx::B2DPolygon& rCandidate,
     sal_uInt32 nNum
 )

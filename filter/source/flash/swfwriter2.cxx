@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 
-sal_uInt16 getMaxBitsUnsigned( sal_uInt32 nValue )
+static sal_uInt16 getMaxBitsUnsigned( sal_uInt32 nValue )
 {
     sal_uInt16 nBits = 0;
 
@@ -484,7 +484,7 @@ FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DH
 }
 
 
-FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
+static FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 {
     switch( rGradient.GetStyle() )
     {

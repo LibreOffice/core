@@ -358,13 +358,13 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter, void )
     m_aSplitter->SetSplitPosPixel(m_aSplitter->LogicToPixel(Size(0,nSplitPos)).Height());
 }
 
-void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)
+static void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)
 {
     _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y());
     _rWindow.Invalidate(InvalidateFlags::Transparent);
 }
 
-void lcl_setOrigin(vcl::Window& _rWindow,long _nX, long _nY)
+static void lcl_setOrigin(vcl::Window& _rWindow,long _nX, long _nY)
 {
     MapMode aMap = _rWindow.GetMapMode();
     aMap.SetOrigin( Point(- _nX, - _nY));

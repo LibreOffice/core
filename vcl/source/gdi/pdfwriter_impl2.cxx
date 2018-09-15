@@ -1561,12 +1561,12 @@ static const long setRun[256] =
     4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, /* 0xf0 - 0xff */
 };
 
-inline bool isSet( const Scanline i_pLine, long i_nIndex )
+static inline bool isSet( const Scanline i_pLine, long i_nIndex )
 {
     return (i_pLine[ i_nIndex/8 ] & (0x80 >> (i_nIndex&7))) != 0;
 }
 
-long findBitRunImpl( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet )
+static long findBitRunImpl( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet )
 {
     long nIndex = i_nStartIndex;
     if( nIndex < i_nW )
@@ -1629,7 +1629,7 @@ long findBitRunImpl( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool
     return std::min(nIndex, i_nW);
 }
 
-long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet)
+static long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet)
 {
     if (i_nStartIndex < 0)
         return i_nW;
@@ -1637,7 +1637,7 @@ long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bS
     return findBitRunImpl(i_pLine, i_nStartIndex, i_nW, i_bSet);
 }
 
-long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW)
+static long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW)
 {
     if (i_nStartIndex < 0)
         return i_nW;

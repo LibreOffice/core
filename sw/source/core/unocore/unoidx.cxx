@@ -105,7 +105,7 @@ lcl_AnyToBool(uno::Any const& rVal)
 
 /// @throws lang::IllegalArgumentException
 template<typename T>
-void lcl_AnyToBitMask(uno::Any const& rValue,
+static void lcl_AnyToBitMask(uno::Any const& rValue,
         T & rBitMask, const T nBit)
 {
     rBitMask = lcl_AnyToBool(rValue)
@@ -114,7 +114,7 @@ void lcl_AnyToBitMask(uno::Any const& rValue,
 }
 
 template<typename T>
-void lcl_BitMaskToAny(uno::Any & o_rValue,
+static void lcl_BitMaskToAny(uno::Any & o_rValue,
         const T nBitMask, const T nBit)
 {
     const bool bRet(nBitMask & nBit);
@@ -1230,7 +1230,7 @@ SwXDocumentIndex::removeVetoableChangeListener(
     OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
 
-void lcl_CalcLayout(SwDoc *pDoc)
+static void lcl_CalcLayout(SwDoc *pDoc)
 {
     SwViewShell *pViewShell = nullptr;
     SwEditShell* pEditShell = nullptr;

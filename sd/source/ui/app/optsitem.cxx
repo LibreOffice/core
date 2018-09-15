@@ -34,7 +34,7 @@
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 
-template< class T > T getSafeValue( const Any& rAny )
+template< class T > static T getSafeValue( const Any& rAny )
 {
     T value = T();
     bool bOk = (rAny >>= value);

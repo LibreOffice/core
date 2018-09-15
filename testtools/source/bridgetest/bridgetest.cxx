@@ -71,7 +71,7 @@ using namespace test::testtools::bridgetest;
 namespace bridge_test
 {
 template<typename T, typename U = T>
-Sequence<T> cloneSequence(const Sequence<T>& val);
+static Sequence<T> cloneSequence(const Sequence<T>& val);
 
 
 inline static Sequence< OUString > getSupportedServiceNames()
@@ -998,7 +998,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
 
 /* Returns an acquired sequence
  */
-uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
+static uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
 {
     TypeDescription td(type);
     td.makeComplete();
@@ -1045,7 +1045,7 @@ Sequence<T> cloneSequence(const Sequence<T>& val)
 }
 
 template< class T >
-inline bool makeSurrogate(
+static inline bool makeSurrogate(
     Reference< T > & rOut, Reference< T > const & rOriginal )
 {
     rOut.clear();

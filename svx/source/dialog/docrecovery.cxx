@@ -828,7 +828,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 }
 
 
-short impl_askUserForWizardCancel(weld::Widget* pParent, const char* pRes)
+static short impl_askUserForWizardCancel(weld::Widget* pParent, const char* pRes)
 {
     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(pParent,
                                                 VclMessageType::Question, VclButtonsType::YesNo, SvxResId(pRes)));

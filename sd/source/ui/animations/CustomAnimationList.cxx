@@ -759,7 +759,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     }
 }
 
-void selectShape( SvTreeListBox* pTreeList, const Reference< XShape >& xShape )
+static void selectShape( SvTreeListBox* pTreeList, const Reference< XShape >& xShape )
 {
     CustomAnimationListEntry* pEntry = static_cast< CustomAnimationListEntry* >(pTreeList->First());
     while( pEntry )

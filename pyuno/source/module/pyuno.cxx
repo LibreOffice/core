@@ -71,9 +71,9 @@ using com::sun::star::container::XNameReplace;
 namespace pyuno
 {
 
-PyObject *PyUNO_str( PyObject * self );
+static PyObject *PyUNO_str( PyObject * self );
 
-void PyUNO_del (PyObject* self)
+static void PyUNO_del (PyObject* self)
 {
     PyUNO* me = reinterpret_cast< PyUNO* > (self);
     {
@@ -309,7 +309,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     return buf.makeStringAndClear();
 }
 
-sal_Int32 lcl_PyNumber_AsSal_Int32( PyObject *pObj )
+static sal_Int32 lcl_PyNumber_AsSal_Int32( PyObject *pObj )
 {
     // Check object is an index
     PyRef rIndex( PyNumber_Index( pObj ), SAL_NO_ACQUIRE );
@@ -333,7 +333,7 @@ sal_Int32 lcl_PyNumber_AsSal_Int32( PyObject *pObj )
     return nResult;
 }
 
-int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nStart, sal_Int32 *nStop, sal_Int32 *nStep, sal_Int32 *nSliceLength )
+static int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nStart, sal_Int32 *nStop, sal_Int32 *nStep, sal_Int32 *nSliceLength )
 {
     Py_ssize_t nStart_ssize, nStop_ssize, nStep_ssize, nSliceLength_ssize;
 
@@ -363,7 +363,7 @@ int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nSta
     return 0;
 }
 
-bool lcl_hasInterfaceByName( Any const &object, OUString const & interfaceName )
+static bool lcl_hasInterfaceByName( Any const &object, OUString const & interfaceName )
 {
     Reference< XInterface > xInterface( object, UNO_QUERY );
     TypeDescription typeDesc( interfaceName );
@@ -372,12 +372,12 @@ bool lcl_hasInterfaceByName( Any const &object, OUString const & interfaceName )
     return aInterface.hasValue();
 }
 
-PyObject *PyUNO_repr( PyObject  * self )
+static PyObject *PyUNO_repr( PyObject  * self )
 {
     return PyUNO_str( self );
 }
 
-Py_hash_t PyUNO_hash( PyObject *self )
+static Py_hash_t PyUNO_hash( PyObject *self )
 {
 
     PyUNO *me = reinterpret_cast<PyUNO *>(self);
@@ -476,7 +476,7 @@ PyObject *PyUNO_str( PyObject * self )
     return PyStr_FromString( buf.getStr() );
 }
 
-PyObject* PyUNO_dir (PyObject* self)
+static PyObject* PyUNO_dir (PyObject* self)
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -501,7 +501,7 @@ PyObject* PyUNO_dir (PyObject* self)
     return member_list;
 }
 
-sal_Int32 lcl_detach_getLength( PyUNO const *me )
+static sal_Int32 lcl_detach_getLength( PyUNO const *me )
 {
     PyThreadDetach antiguard;
 
@@ -527,7 +527,7 @@ sal_Int32 lcl_detach_getLength( PyUNO const *me )
     return -1;
 }
 
-int PyUNO_bool( PyObject* self )
+static int PyUNO_bool( PyObject* self )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -548,7 +548,7 @@ int PyUNO_bool( PyObject* self )
     return -1;
 }
 
-Py_ssize_t PyUNO_len( PyObject* self )
+static Py_ssize_t PyUNO_len( PyObject* self )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -568,7 +568,7 @@ Py_ssize_t PyUNO_len( PyObject* self )
     return -1;
 }
 
-void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& nColumns )
+static void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& nColumns )
 {
     Sequence<short> aOutParamIndex;
     Sequence<Any> aOutParam;
@@ -583,7 +583,7 @@ void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& nColumns
     nColumns = xIndexAccessCols->getCount();
 }
 
-PyRef lcl_indexToSlice( const PyRef& rIndex )
+static PyRef lcl_indexToSlice( const PyRef& rIndex )
 {
     Py_ssize_t nIndex = PyNumber_AsSsize_t( rIndex.get(), PyExc_IndexError );
     if (nIndex == -1 && PyErr_Occurred())
@@ -596,7 +596,7 @@ PyRef lcl_indexToSlice( const PyRef& rIndex )
     return rSlice;
 }
 
-PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
+static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
 {
     Runtime runtime;
 
@@ -717,7 +717,7 @@ PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
     return nullptr;
 }
 
-PyObject* lcl_getitem_index( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
+static PyObject* lcl_getitem_index( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
 {
     Any aRet;
     sal_Int32 nIndex;
@@ -746,7 +746,7 @@ PyObject* lcl_getitem_index( PyUNO const *me, PyObject *pKey, Runtime const & ru
     return nullptr;
 }
 
-PyObject* lcl_getitem_slice( PyUNO const *me, PyObject *pKey )
+static PyObject* lcl_getitem_slice( PyUNO const *me, PyObject *pKey )
 {
     Runtime runtime;
 
@@ -789,7 +789,7 @@ PyObject* lcl_getitem_slice( PyUNO const *me, PyObject *pKey )
     return nullptr;
 }
 
-PyObject* lcl_getitem_string( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
+static PyObject* lcl_getitem_string( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
 {
     OUString sKey = pyString2ustring( pKey );
     Any aRet;
@@ -812,7 +812,7 @@ PyObject* lcl_getitem_string( PyUNO const *me, PyObject *pKey, Runtime const & r
     return nullptr;
 }
 
-PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
+static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
     Runtime runtime;
@@ -899,7 +899,7 @@ PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
     return nullptr;
 }
 
-int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue )
+static int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     Runtime runtime;
 
@@ -967,7 +967,7 @@ int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
+static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     // XIndexContainer insert/remove/replace by slice
     Runtime runtime;
@@ -1085,7 +1085,7 @@ int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue )
+static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     Runtime runtime;
 
@@ -1157,7 +1157,7 @@ int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
+static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -1210,7 +1210,7 @@ int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-PyObject* PyUNO_iter( PyObject *self )
+static PyObject* PyUNO_iter( PyObject *self )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -1286,7 +1286,7 @@ PyObject* PyUNO_iter( PyObject *self )
     return nullptr;
 }
 
-int PyUNO_contains( PyObject *self, PyObject *pKey )
+static int PyUNO_contains( PyObject *self, PyObject *pKey )
 {
     PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
@@ -1375,7 +1375,7 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
     return -1;
 }
 
-PyObject* PyUNO_getattr (PyObject* self, char* name)
+static PyObject* PyUNO_getattr (PyObject* self, char* name)
 {
     PyUNO* me;
 
@@ -1455,7 +1455,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
     return nullptr;
 }
 
-int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
+static int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
 {
     PyUNO* me;
 

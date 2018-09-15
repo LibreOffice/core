@@ -351,7 +351,7 @@ struct ExtendSet
     ExtendSet() : mfExtLeft(0.0), mfExtRight(0.0) {}
 };
 
-void getCutSet(
+static void getCutSet(
     CutSet& rCutSet,
     const basegfx::B2DPoint& rLeft,
     const basegfx::B2DPoint& rRight,
@@ -393,7 +393,7 @@ void getCutSet(
         &rCutSet.mfORMR);
 }
 
-void getExtends(
+static void getExtends(
     std::vector<ExtendSet>& rExtendSet,                         // target Left/Right values to fill
     const basegfx::B2DPoint& rOrigin,                           // own vector start
     const StyleVectorCombination& rCombination,                 // own vector and offsets for lines

@@ -35,7 +35,7 @@ namespace basegfx
             }
         }
 
-        void skipSpacesAndCommas(sal_Int32&      io_rPos,
+        static void skipSpacesAndCommas(sal_Int32&      io_rPos,
                                  const OUString& rStr,
                                  const sal_Int32 nLen)
         {
@@ -46,7 +46,7 @@ namespace basegfx
             }
         }
 
-        bool getDoubleChar(double&         o_fRetval,
+        static bool getDoubleChar(double&         o_fRetval,
                            sal_Int32&      io_rPos,
                            const OUString& rStr)
         {

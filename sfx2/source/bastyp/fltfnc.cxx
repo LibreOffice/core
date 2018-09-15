@@ -119,7 +119,7 @@ static void CreateFilterArr()
     theSfxFilterListener::get();
 }
 
-inline OUString ToUpper_Impl( const OUString &rStr )
+static inline OUString ToUpper_Impl( const OUString &rStr )
 {
     return SvtSysLocale().GetCharClass().uppercase( rStr );
 }
@@ -859,7 +859,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcherIter::Next()
     helper to build own formatted string from given stringlist by
     using given separator
   ---------------------------------------------------------------*/
-OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
+static OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
                                                  sal_Unicode                                        cSeparator,
                                                  const OUString&                                    sPrefix   )
 {

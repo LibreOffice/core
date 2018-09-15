@@ -327,7 +327,7 @@ void SbRtl_Asc(StarBASIC *, SbxArray & rPar, bool)
     }
 }
 
-void implChr( SbxArray& rPar, bool bChrW )
+static void implChr( SbxArray& rPar, bool bChrW )
 {
     if ( rPar.Count() < 2 )
     {
@@ -631,7 +631,7 @@ void SbRtl_MkDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 
 // In OSL only empty directories can be deleted
 // so we have to delete all files recursively
-void implRemoveDirRecursive( const OUString& aDirPath )
+static void implRemoveDirRecursive( const OUString& aDirPath )
 {
     DirectoryItem aItem;
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
@@ -2521,7 +2521,7 @@ void SbRtl_IsMissing(StarBASIC *, SbxArray & rPar, bool)
 }
 
 // Function looks for wildcards, removes them and always returns the pure path
-OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
+static OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 {
     static sal_Char cDelim1 = '/';
     static sal_Char cDelim2 = '\\';
@@ -2587,7 +2587,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     return aPathStr;
 }
 
-inline bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
+static inline bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
 {
     bool bMatch = true;
 
@@ -2599,7 +2599,7 @@ inline bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLDat
 }
 
 
-bool isRootDir( const OUString& aDirURLStr )
+static bool isRootDir( const OUString& aDirURLStr )
 {
     INetURLObject aDirURLObj( aDirURLStr );
     bool bRoot = false;
@@ -3725,7 +3725,7 @@ OUString getBasicTypeName( SbxDataType eType )
     return OUString::createFromAscii(pTypeNames[nPos]);
 }
 
-OUString getObjectTypeName( SbxVariable* pVar )
+static OUString getObjectTypeName( SbxVariable* pVar )
 {
     OUString sRet( "Object" );
     if ( pVar )

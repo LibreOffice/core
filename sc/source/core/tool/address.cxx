@@ -1994,7 +1994,7 @@ static inline void lcl_string_append(OStringBuffer &rString, const OUString &sSt
     rString.append(OUStringToOString( sString, RTL_TEXTENCODING_UTF8  ));
 }
 
-template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCOL nCol, ScRefFlags nFlags,
+template<typename T > static inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCOL nCol, ScRefFlags nFlags,
                                   const ScDocument* pDoc,
                                   const ScAddress::Details& rDetails)
 {

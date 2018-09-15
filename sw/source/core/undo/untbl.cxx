@@ -177,7 +177,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 0
 #include <shellio.hxx>
-void CheckTable( const SwTable& );
+static void CheckTable( const SwTable& );
 #define CHECKTABLE(t) CheckTable( t );
 #else
 #define CHECKTABLE(t)

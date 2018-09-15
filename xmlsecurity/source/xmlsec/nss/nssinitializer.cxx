@@ -54,8 +54,11 @@ using namespace com::sun::star;
 
 #define ROOT_CERTS "Root Certs for OpenOffice.org"
 
-extern "C" void nsscrypto_finalize();
+extern "C" {
 
+static void nsscrypto_finalize();
+
+}
 
 namespace
 {

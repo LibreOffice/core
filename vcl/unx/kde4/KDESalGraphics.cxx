@@ -41,7 +41,7 @@
   @param nControlState State of the widget (default, focused, ...) in Native Widget Framework.
   @param aValue Value held by the widget (on, off, ...)
 */
-QStyle::State vclStateValue2StateFlag( ControlState nControlState,
+static QStyle::State vclStateValue2StateFlag( ControlState nControlState,
     const ImplControlValue& aValue )
 {
     QStyle::State nState =
@@ -67,7 +67,7 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
  @param rControlRegion The tools::Rectangle to convert.
  @return The matching QRect
 */
-QRect region2QRect( const tools::Rectangle& rControlRegion )
+static QRect region2QRect( const tools::Rectangle& rControlRegion )
 {
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }

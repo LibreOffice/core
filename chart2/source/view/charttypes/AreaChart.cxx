@@ -162,7 +162,7 @@ void AreaChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot
     VSeriesPlotter::addSeries( std::move(pSeries), zSlot, xSlot, ySlot );
 }
 
-void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, PlottingPositionHelper& rPosHelper )
+static void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, PlottingPositionHelper& rPosHelper )
 {
     sal_Int32 nPolyCount = rPolyPoly.SequenceX.getLength();
     if(!nPolyCount)

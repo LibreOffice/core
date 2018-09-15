@@ -1038,7 +1038,7 @@ ImplEESdrObject::~ImplEESdrObject()
 {
 }
 
-basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape)
+static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape)
 {
     basegfx::B2DRange aRetval;
 

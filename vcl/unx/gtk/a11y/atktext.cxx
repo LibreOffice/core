@@ -409,7 +409,7 @@ text_wrapper_set_caret_offset (AtkText *text,
 }
 
 // #i92232#
-AtkAttributeSet*
+static AtkAttributeSet*
 handle_text_markup_as_run_attribute( css::uno::Reference<css::accessibility::XAccessibleTextMarkup> const & pTextMarkup,
                                      const gint nTextMarkupType,
                                      const gint offset,

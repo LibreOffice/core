@@ -401,7 +401,7 @@ bool SfxShell::IsConditionalFastCall( const SfxRequest &rReq )
 }
 
 
-void ShellCall_Impl( void* pObj, void* pArg )
+static void ShellCall_Impl( void* pObj, void* pArg )
 {
     static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg) );
 }
@@ -514,8 +514,8 @@ const SfxPoolItem* SfxShell::GetSlotState
     return pTemp;
 }
 
-SFX_EXEC_STUB(SfxShell, VerbExec)
-void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
+static SFX_EXEC_STUB(SfxShell, VerbExec)
+static void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
 {
     SfxShell::VerbState( rSet );
 }
@@ -653,7 +653,7 @@ bool SfxShell::HasUIFeature(SfxShellFeature) const
     return false;
 }
 
-void DispatcherUpdate_Impl( void*, void* pArg )
+static void DispatcherUpdate_Impl( void*, void* pArg )
 {
     static_cast<SfxDispatcher*>(pArg)->Update_Impl( true );
     static_cast<SfxDispatcher*>(pArg)->GetBindings()->InvalidateAll(false);

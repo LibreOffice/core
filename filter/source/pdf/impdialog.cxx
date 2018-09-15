@@ -43,7 +43,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
-OUString PDFFilterResId(const char* pId)
+static OUString PDFFilterResId(const char* pId)
 {
     return Translate::get(pId, Translate::Create("flt"));
 }

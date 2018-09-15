@@ -364,7 +364,7 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
 }
 
 /// @throws Exception
-uno::Reference< XInterface >
+static uno::Reference< XInterface >
     DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     uno::Reference< XInterface > xService = static_cast<cppu::OWeakObject *>(new DicList);

@@ -50,7 +50,7 @@ CellColorHandler::~CellColorHandler()
 
 // ST_Shd strings are converted to integers by the tokenizer, store strings in
 // the InteropGrabBag
-uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
+static uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
 {
     OUString aRet;
     // This should be in sync with the ST_Shd list in ooxml's model.xml.

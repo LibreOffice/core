@@ -83,7 +83,7 @@ using namespace ::com::sun::star::presentation;
 namespace ppt
 {
 
-void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMode )
+static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMode )
 {
     if ( eTranslateMode != TRANSLATE_NONE )
     {

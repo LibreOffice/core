@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using namespace utl;
 using namespace ::comphelper;
 
-OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
+static OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
 {
     OUString sId;
     uno::Reference< report::XFixedLine> xFixedLine(_xElement,uno::UNO_QUERY);
@@ -76,7 +76,7 @@ OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& _xEleme
     return sId;
 }
 
-OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
+static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
 {
     OSL_ENSURE(_xElement.is(),"Found report element which is NULL!");
     OUString sTempName;

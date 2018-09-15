@@ -472,7 +472,7 @@ void writeConsoleWithStream(OUString const & sText, HANDLE stream)
         sText.getLength() * 2, &nWrittenChars, nullptr);
 }
 #else
-void writeConsoleWithStream(OUString const & sText, FILE * stream)
+static void writeConsoleWithStream(OUString const & sText, FILE * stream)
 {
     OString s = OUStringToOString(sText, osl_getThreadTextEncoding());
     fprintf(stream, "%s", s.getStr());

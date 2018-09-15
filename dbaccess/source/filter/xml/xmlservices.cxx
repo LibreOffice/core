@@ -26,7 +26,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void createRegistryInfo_dbaxml()
+extern "C" {
+
+static void createRegistryInfo_dbaxml()
 {
     static bool bInit = false;
     if (!bInit)
@@ -39,6 +41,8 @@ extern "C" void createRegistryInfo_dbaxml()
         createRegistryInfo_DBContentLoader2();
         bInit = true;
     }
+}
+
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* dbaxml_component_getFactory(

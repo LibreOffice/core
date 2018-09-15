@@ -204,7 +204,7 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 
 // #i37011# create a clone with all attributes changed to shadow attributes
 // and translation executed, too.
-SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
+static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
     SdrObject* pRetval = nullptr;
     const bool bShadow(rOriginalSet.Get(SDRATTR_SHADOW).GetValue());

@@ -49,7 +49,7 @@
 
 using namespace css;
 
-std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
+static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 {
     os << static_cast<sal_Int32>(id); return os;
 }

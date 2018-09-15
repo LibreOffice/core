@@ -613,7 +613,7 @@ FTPDirentry FTPURL::direntry() const
 
 extern "C" {
 
-    size_t memory_read(void *ptr,size_t size,size_t nmemb,void *stream)
+    static size_t memory_read(void *ptr,size_t size,size_t nmemb,void *stream)
     {
         sal_Int32 nRequested = sal_Int32(size*nmemb);
         CurlInput *curlInput = static_cast<CurlInput*>(stream);

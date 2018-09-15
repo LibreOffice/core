@@ -77,7 +77,7 @@ SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 {
 }
 
-long HundMMToTwips( long nIn )
+static long HundMMToTwips( long nIn )
 {
     long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::Map100thMM, MapUnit::MapTwip );
     return nRet;

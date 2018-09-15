@@ -27,7 +27,7 @@
 
 namespace accessibility {
 
-AccessibleShape* CreateSvxAccessibleShape (
+static AccessibleShape* CreateSvxAccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     ShapeTypeId nId)

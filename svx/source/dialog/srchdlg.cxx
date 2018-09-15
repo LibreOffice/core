@@ -143,7 +143,7 @@ struct SearchDlg_Impl
     }
 };
 
-void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
+static void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
 {
     const SfxStringListItem* pSrchItem =
         static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
@@ -160,7 +160,7 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
     }
 }
 
-void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
+static void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
     SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );

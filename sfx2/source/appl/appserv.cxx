@@ -1225,7 +1225,7 @@ extern "C" rtl_uString* basicide_choose_macro(void*, void*, sal_Bool);
 
 #endif
 
-OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, const Reference< XFrame >& xDocFrame, bool bChooseOnly )
+static OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, const Reference< XFrame >& xDocFrame, bool bChooseOnly )
 {
 #ifndef DISABLE_DYNLOADING
     osl::Module aMod;

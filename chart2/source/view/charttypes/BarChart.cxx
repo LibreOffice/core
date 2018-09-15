@@ -432,7 +432,7 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     }
 }
 
-E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
+static E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
 {
     E3dScene* pScene = nullptr;
 

@@ -83,17 +83,17 @@ using namespace ::ooo::vba;
 static const char DELIM[] = "::";
 static const sal_Int32 DELIMLEN = strlen(DELIM);
 
-bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
+static bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
     return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
 }
 
-bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
+static bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
 {
     return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
 }
 
-Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
+static Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
 {
     awt::MouseEvent evt;
 
@@ -104,7 +104,7 @@ Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
     return params;
 }
 
-Sequence< Any > ooMouseEvtToVBAMouseEvt( const Sequence< Any >& params )
+static Sequence< Any > ooMouseEvtToVBAMouseEvt( const Sequence< Any >& params )
 {
     Sequence< Any > translatedParams;
     awt::MouseEvent evt;
@@ -125,7 +125,7 @@ Sequence< Any > ooMouseEvtToVBAMouseEvt( const Sequence< Any >& params )
     return translatedParams;
 }
 
-Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
+static Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
 {
     Sequence< Any > translatedParams;
     awt::KeyEvent evt;
@@ -140,7 +140,7 @@ Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
     return  translatedParams;
 }
 
-Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
+static Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 {
     Sequence< Any > translatedParams;
     awt::KeyEvent evt;
@@ -182,10 +182,10 @@ struct TranslatePropMap
     TranslateInfo aTransInfo;
 };
 
-bool ApproveAll(const ScriptEvent& evt, void const * pPara); //allow all types of controls to execute the event
-bool ApproveType(const ScriptEvent& evt, void const * pPara); //certain types of controls should execute the event, those types are given by pPara
-bool DenyType(const ScriptEvent& evt, void const * pPara);    //certain types of controls should not execute the event, those types are given by pPara
-bool DenyMouseDrag(const ScriptEvent& evt, void const * pPara); //used for VBA MouseMove event when "Shift" key is pressed
+static bool ApproveAll(const ScriptEvent& evt, void const * pPara); //allow all types of controls to execute the event
+static bool ApproveType(const ScriptEvent& evt, void const * pPara); //certain types of controls should execute the event, those types are given by pPara
+static bool DenyType(const ScriptEvent& evt, void const * pPara);    //certain types of controls should not execute the event, those types are given by pPara
+static bool DenyMouseDrag(const ScriptEvent& evt, void const * pPara); //used for VBA MouseMove event when "Shift" key is pressed
 
 struct TypeList
 {
@@ -254,7 +254,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
 };
 
-EventInfoHash& getEventTransInfo()
+static EventInfoHash& getEventTransInfo()
 {
     static bool initialised = false;
     static EventInfoHash eventTransInfo;
@@ -299,7 +299,7 @@ private:
     bool m_bDispose;
 };
 
-bool
+static bool
 eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& evtDesc, const OUString& sCodeName )
 {
     // format of ControlListener is TypeName::methodname e.g.
@@ -742,7 +742,7 @@ bool ApproveAll(SAL_UNUSED_PARAMETER const ScriptEvent&, SAL_UNUSED_PARAMETER vo
 }
 
 //for the given control type in evt.Arguments[0], look for if it appears in the type list in pPara
-bool FindControl(const ScriptEvent& evt, void const * pPara)
+static bool FindControl(const ScriptEvent& evt, void const * pPara)
 {
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;

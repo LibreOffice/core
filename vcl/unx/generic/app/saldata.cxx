@@ -461,7 +461,7 @@ void SalXLib::Init()
 }
 
 extern "C" {
-void EmitFontpathWarning()
+static void EmitFontpathWarning()
 {
     static Bool bOnce = False;
     if ( !bOnce )

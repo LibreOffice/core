@@ -60,7 +60,7 @@ using std::endl;
 using namespace com::sun::star;
 
 
-std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
+static std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     // Create thw new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rItem );
@@ -481,7 +481,7 @@ void EditTextObjectImpl::Dump() const
 }
 #endif
 
-EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
+static EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 {
     EditEngineItemPool* pRetval = dynamic_cast< EditEngineItemPool* >(pPool);
 

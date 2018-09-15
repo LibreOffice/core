@@ -954,7 +954,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     return pNewPor;
 }
 
-OUString lcl_GetPageNumber( const SwPageFrame* pPage )
+static OUString lcl_GetPageNumber( const SwPageFrame* pPage )
 {
     OSL_ENSURE( pPage, "GetPageNumber: Homeless TextFrame" );
     const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();

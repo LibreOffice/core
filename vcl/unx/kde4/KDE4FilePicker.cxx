@@ -98,13 +98,13 @@ namespace
     }
 }
 
-OUString toOUString(const QString& s)
+static OUString toOUString(const QString& s)
 {
     // QString stores UTF16, just like OUString
     return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
-QString toQString(const OUString& s)
+static QString toQString(const OUString& s)
 {
     return QString::fromUtf16(
         reinterpret_cast<ushort const *>(s.getStr()), s.getLength());

@@ -28,7 +28,7 @@
 #include <memory>
 
 #define BR 0x8000
-bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bMoveAlways )
+static bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bMoveAlways )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
     sal_uLong nC1 = 0;
@@ -81,7 +81,7 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bMove
 
 //This function gets a system path to a file [fname], creates a temp file in
 //the same folder as [fname] and returns the system path of the temp file.
-inline OUString tempFileHelper(OUString const & fname)
+static inline OUString tempFileHelper(OUString const & fname)
 {
     OUString aTmpFile;
 

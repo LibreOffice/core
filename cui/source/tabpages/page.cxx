@@ -84,7 +84,7 @@ const SvxPageUsage aArr[] =
 };
 
 
-sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
+static sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 {
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
         if ( aArr[i] ==  nUsage )
@@ -93,7 +93,7 @@ sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 }
 
 
-SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
+static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
         return SvxPageUsage::NONE;
@@ -101,7 +101,7 @@ SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 }
 
 
-Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBox )
+static Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBox )
 {
     Size aSz;
     aSz.setHeight( rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ) + rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) );
@@ -112,12 +112,12 @@ Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBo
 }
 
 
-long ConvertLong_Impl( const long nIn, MapUnit eUnit )
+static long ConvertLong_Impl( const long nIn, MapUnit eUnit )
 {
     return OutputDevice::LogicToLogic( nIn, eUnit, MapUnit::MapTwip );
 }
 
-bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
+static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 {
     if ( pSize )
     {

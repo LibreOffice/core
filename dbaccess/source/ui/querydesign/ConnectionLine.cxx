@@ -191,14 +191,14 @@ tools::Rectangle OConnectionLine::GetBoundingRect()
     return aBoundingRect;
 }
 
-void calcPointX1(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
+static void calcPointX1(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
     _rNewConPos.setX( _pWin->GetPosPixel().X() + _pWin->GetSizePixel().Width() );
     _rNewDescrPos.setX( _rNewConPos.X() );
     _rNewConPos.AdjustX(DESCRIPT_LINE_WIDTH );
 }
 
-void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
+static void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
     _rNewConPos.setX( _pWin->GetPosPixel().X() );
     _rNewDescrPos.setX( _rNewConPos.X() );
@@ -292,7 +292,7 @@ bool OConnectionLine::IsValid() const
     return m_pData.is();
 }
 
-double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
+static double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
 {
     Point v(p2 - p1);
     Point w(pM - p1);

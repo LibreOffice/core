@@ -497,7 +497,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
     }
 }
 
-void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInfo )
+static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInfo )
 {
     uno::Reference< script::XLibraryContainer > xScriptCont( rInfo.mxScriptCont.get() );
     if ( !xScriptCont.is() )
@@ -1771,7 +1771,7 @@ void ModuleContainer_Impl::removeByName( const OUString& Name )
 }
 
 
-uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
+static uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
 {
     SvMemoryStream aMemStream;
     pDialog->Store( aMemStream );
@@ -1784,7 +1784,7 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     return aData;
 }
 
-SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
+static SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
 {
     sal_Int8* pData = const_cast< uno::Sequence< sal_Int8 >& >(aData).getArray();
     SvMemoryStream aMemStream( pData, aData.getLength(), StreamMode::READ );

@@ -54,7 +54,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 
-const char* SvxOpenGrfErr2ResId( ErrCode err )
+static const char* SvxOpenGrfErr2ResId( ErrCode err )
 {
     if (err == ERRCODE_GRFILTER_OPENERROR)
         return RID_SVXSTR_GRFILTER_OPENERROR;

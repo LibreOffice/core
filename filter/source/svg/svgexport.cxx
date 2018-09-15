@@ -302,7 +302,7 @@ public:
 };
 
 
-bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
+static bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextField )
 {
     return aLhsTextField.equalTo( aRhsTextField );
 }
@@ -439,7 +439,7 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
 } // end anonymous namespace
 
 
-void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
+static void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
 {
     const MetaActionType nType = pAction->GetType();
     switch( nType )
@@ -878,7 +878,7 @@ bool SVGFilter::implExportDocument()
 
 /// Append aField to aFieldSet if it is not already present in the set and create the field id sFieldId
 template< typename TextFieldType >
-OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
+static OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
                               const TextFieldType & aField,
                               const OUString & sOOOElemField,
                               const Reference< css::drawing::XDrawPage >& xMasterPage )

@@ -80,7 +80,7 @@ static OUString inv_getImplementationName()
 }
 
 // TODO: Implement centrally
-inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
+static inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
 {
     return xRefl->forName( rType.getTypeName() );
 }
@@ -1134,7 +1134,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 }
 
 /// @throws RuntimeException
-Reference<XInterface> InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
+static Reference<XInterface> InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
 {
     Reference<XInterface> xService( *new InvocationService( xCtx ) );
     return xService;

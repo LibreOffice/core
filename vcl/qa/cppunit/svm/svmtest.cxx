@@ -138,7 +138,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
+static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
 {
     rDevice.SetConnectMetaFile(&rMeta);
     Size aVDSize(10, 10);
@@ -147,7 +147,7 @@ void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
     rDevice.Erase();
 }
 
-GDIMetaFile readMetafile(const OUString& rUrl)
+static GDIMetaFile readMetafile(const OUString& rUrl)
 {
     SvFileStream aFileStream(rUrl, StreamMode::READ);
     GDIMetaFile aResultMetafile;
@@ -156,7 +156,7 @@ GDIMetaFile readMetafile(const OUString& rUrl)
     return aResultMetafile;
 }
 
-void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
+static void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
 {
     SvFileStream aFileStream(rUrl, StreamMode::WRITE);
     aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -164,7 +164,7 @@ void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
     aFileStream.Close();
 }
 
-GDIMetaFile writeAndRead(GDIMetaFile& rMetaFile, const OUString& sUrl)
+static GDIMetaFile writeAndRead(GDIMetaFile& rMetaFile, const OUString& sUrl)
 {
     // Turn on to output the SVM bitstreams to files (using the input URL)
     // to inspect the content or to create a reference file, otherwise leave

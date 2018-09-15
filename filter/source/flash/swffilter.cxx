@@ -183,7 +183,7 @@ FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxCon
 {
 }
 
-OUString exportBackground(FlashExporter &aFlashExporter, const Reference< XDrawPage >& xDrawPage, const OUString& sPath, sal_uInt32 nPage, const char* suffix)
+static OUString exportBackground(FlashExporter &aFlashExporter, const Reference< XDrawPage >& xDrawPage, const OUString& sPath, sal_uInt32 nPage, const char* suffix)
 {
     OUString filename = "slide" + OUString::number(nPage+1) + OUString::createFromAscii(suffix) + ".swf";
     OUString fullpath = sPath + "/" + filename;
@@ -207,7 +207,7 @@ OUString exportBackground(FlashExporter &aFlashExporter, const Reference< XDrawP
 }
 
 template <typename TYPE>
-TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const sal_Char* name, TYPE def)
+static TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const sal_Char* name, TYPE def)
 {
     TYPE temp = TYPE();
 

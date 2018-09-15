@@ -1800,7 +1800,7 @@ XclExpDefaultRowData::XclExpDefaultRowData( const XclExpRow& rRow ) :
     ::set_flag( mnFlags, EXC_DEFROW_UNSYNCED, rRow.IsUnsynced() );
 }
 
-bool operator<( const XclExpDefaultRowData& rLeft, const XclExpDefaultRowData& rRight )
+static bool operator<( const XclExpDefaultRowData& rLeft, const XclExpDefaultRowData& rRight )
 {
     return (rLeft.mnHeight < rRight.mnHeight) ||
         ((rLeft.mnHeight == rRight.mnHeight) && (rLeft.mnFlags < rRight.mnFlags));

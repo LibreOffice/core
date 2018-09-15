@@ -101,10 +101,10 @@ void exportXForms( SvXMLExport& rExport )
 }
 
 
-void exportXFormsInstance( SvXMLExport&, const Sequence<PropertyValue>& );
-void exportXFormsBinding( SvXMLExport&, const Reference<XPropertySet>& );
-void exportXFormsSubmission( SvXMLExport&, const Reference<XPropertySet>& );
-void exportXFormsSchemas( SvXMLExport&, const Reference<css::xforms::XModel>& );
+static void exportXFormsInstance( SvXMLExport&, const Sequence<PropertyValue>& );
+static void exportXFormsBinding( SvXMLExport&, const Reference<XPropertySet>& );
+static void exportXFormsSubmission( SvXMLExport&, const Reference<XPropertySet>& );
+static void exportXFormsSchemas( SvXMLExport&, const Reference<css::xforms::XModel>& );
 
 
 typedef OUString (*convert_t)( const Any& );
@@ -123,15 +123,15 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
 #define TABLE_END { nullptr, 0, 0, nullptr }
 
 // any conversion functions
-OUString xforms_string( const Any& );
-OUString xforms_bool( const Any& );
-OUString xforms_whitespace( const Any& );
-template<typename T, void (*FUNC)( OUStringBuffer&, T )> OUString xforms_convert( const Any& );
-template<typename T, void (*FUNC)( OUStringBuffer&, const T& )> OUString xforms_convertRef( const Any& );
+static OUString xforms_string( const Any& );
+static OUString xforms_bool( const Any& );
+static OUString xforms_whitespace( const Any& );
+template<typename T, void (*FUNC)( OUStringBuffer&, T )> static OUString xforms_convert( const Any& );
+template<typename T, void (*FUNC)( OUStringBuffer&, const T& )> static OUString xforms_convertRef( const Any& );
 
-void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& aDate );
-void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& aTime );
-void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime );
+static void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& aDate );
+static void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& aTime );
+static void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime );
 
 static void convertNumber(OUStringBuffer & b, sal_Int32 n) {
     b.append(n);

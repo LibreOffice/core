@@ -280,7 +280,7 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
 
 }
 
-bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, SCTAB nTab )
+static bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, SCTAB nTab )
 {
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
@@ -486,7 +486,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     bShrink = pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet ).GetValue();
 }
 
-inline bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
+static inline bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
 {
     return rOldCell.meType == CELLTYPE_VALUE && rCell.meType == CELLTYPE_VALUE &&
         rCell.mfValue == rOldCell.mfValue;
@@ -991,7 +991,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     return true;
 }
 
-inline bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr* pNewPattern )
+static inline bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr* pNewPattern )
 {
     OSL_ENSURE( pNewPattern, "pNewPattern" );
 
@@ -1078,7 +1078,7 @@ static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDo
     }
 }
 
-inline bool IsAmbiguousScript( SvtScriptType nScript )
+static inline bool IsAmbiguousScript( SvtScriptType nScript )
 {
     return ( nScript != SvtScriptType::LATIN &&
              nScript != SvtScriptType::ASIAN &&

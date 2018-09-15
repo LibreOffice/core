@@ -105,7 +105,7 @@ public:
     SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
 };
 
-const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
+static const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSdTextPortionPropertyEntries[] =
     {

@@ -97,7 +97,7 @@ namespace
         : public rtl::Static< OUString, Extension > {};
 }
 
-OUString ReplaceProductNameHookProc( const OUString& rStr )
+static OUString ReplaceProductNameHookProc( const OUString& rStr )
 {
     if (rStr.indexOf( "%PRODUCT" ) == -1)
         return rStr;

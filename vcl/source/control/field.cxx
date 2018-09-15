@@ -1807,7 +1807,7 @@ static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
     return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
-inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
+static inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number

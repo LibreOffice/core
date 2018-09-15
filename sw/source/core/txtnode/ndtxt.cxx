@@ -1483,7 +1483,7 @@ static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, cons
     return nullptr;
 }
 
-void lcl_CopyHint(
+static void lcl_CopyHint(
     const sal_uInt16 nWhich,
     const SwTextAttr * const pHt,
     SwTextAttr *const pNewHt,

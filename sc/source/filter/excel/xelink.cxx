@@ -384,7 +384,7 @@ struct XclExpXti
                             { rStrm << mnSupbook << mnFirstSBTab << mnLastSBTab; }
 };
 
-inline bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
+static inline bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
 {
     return
         (rLeft.mnSupbook    == rRight.mnSupbook)    &&

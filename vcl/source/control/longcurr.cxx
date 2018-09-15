@@ -212,7 +212,7 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
 
 } // namespace
 
-inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
+static inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     return ImplCurrencyGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper );

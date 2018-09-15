@@ -242,7 +242,7 @@ void TabDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
-vcl::Window* findTabControl(vcl::Window* pCurrent)
+static vcl::Window* findTabControl(vcl::Window* pCurrent)
 {
     if (!pCurrent)
     {

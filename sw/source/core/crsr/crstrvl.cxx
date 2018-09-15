@@ -638,7 +638,7 @@ const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
 }
 
 /// jump to next/previous field type
-void lcl_MakeFieldLst(
+static void lcl_MakeFieldLst(
     SetGetExpFields& rLst,
     const SwFieldType& rFieldType,
     const bool bInReadOnly,

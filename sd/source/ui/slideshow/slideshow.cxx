@@ -94,7 +94,7 @@ namespace {
     };
 }
 
-const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
+static const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =

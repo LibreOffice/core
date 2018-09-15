@@ -118,7 +118,7 @@ static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
     }
 }
 
-sal_uInt16 GetItemId_Impl( ValueSet const & rValueSet, const Color& rCol )
+static sal_uInt16 GetItemId_Impl( ValueSet const & rValueSet, const Color& rCol )
 {
     bool    bFound = false;
     sal_uInt16  nCount = rValueSet.GetItemCount();

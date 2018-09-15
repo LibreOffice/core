@@ -8227,7 +8227,7 @@ void DocxAttributeOutput::FormatAnchor( const SwFormatAnchor& )
     // Fly frames: anchors here aren't matching the anchors in docx
 }
 
-boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
+static boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 {
     boost::optional<sal_Int32> oRet;
     sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();

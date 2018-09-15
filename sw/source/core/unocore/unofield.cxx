@@ -317,7 +317,7 @@ static sal_Int32 lcl_PropName2TokenPos(const OUString& rPropertyName)
     return SAL_MAX_INT32;
 }
 
-sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
+static sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
 {
     sal_uInt16 nId = lcl_GetPropMapIdForFieldType( rTyp.Which() );
     const SfxItemPropertySet* pSet = aSwMapProvider.GetPropertySet( nId );

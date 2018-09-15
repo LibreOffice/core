@@ -70,7 +70,7 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
 // Handle deletion of text in a preedit_draw_callback
 // from and howmuch are guaranteed to be nonnegative
 
-void
+static void
 Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 {
     // If we've been asked to delete no text then just set
@@ -116,7 +116,7 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 
 // reallocate the textbuffer with sufficiently large size 2^x
 // nnewlimit is presupposed to be larger than ptext->size
-void
+static void
 enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 {
       size_t nnewsize = ptext->nSize;
@@ -134,7 +134,7 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 // Handle insertion of text in a preedit_draw_callback
 // string field of XIMText struct is guaranteed to be != NULL
 
-void
+static void
 Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 {
     sal_Unicode *pInsertTextString;
@@ -224,7 +224,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 
 // Handle the change of attributes in a preedit_draw_callback
 
-void
+static void
 Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback const * feedback,
         int from, int amount )
 {
@@ -245,7 +245,7 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback const * feedback,
 // Convert the XIM feedback values into appropriate VCL
 // EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
-ExtTextInputAttr*
+static ExtTextInputAttr*
 Preedit_FeedbackToSAL ( const XIMFeedback* pfeedback, int nlength, std::vector<ExtTextInputAttr>& rSalAttr )
 {
     ExtTextInputAttr *psalattr;

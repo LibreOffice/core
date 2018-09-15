@@ -47,8 +47,8 @@ using namespace com::sun::star::sdbc;
 
 static std::string wild("%");
 
-void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int32 _nType,
-                       const std::vector<std::vector<Any>>& _rRows)
+static void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int32 _nType,
+                              const std::vector<std::vector<Any>>& _rRows)
 {
     Reference<XInitialization> xIni(_xResultSet, UNO_QUERY);
     Sequence<Any> aArgs(2);

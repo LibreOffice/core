@@ -43,7 +43,7 @@ using ::rtl::OUStringToOString;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-inline void printUString( const ::rtl::OUString & str, const sal_Char * msg )
+static inline void printUString( const ::rtl::OUString & str, const sal_Char * msg )
 {
     if ( msg != nullptr )
     {
@@ -54,7 +54,7 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg )
     printf("%s\n", aString.getStr( ) );
 }
 
-inline ::rtl::OUString getModulePath()
+static inline ::rtl::OUString getModulePath()
 {
     ::rtl::OUString suDirPath;
     ::osl::Module::getUrlFromAddress(
@@ -144,7 +144,7 @@ public:
 /************************************************************************
  * For diagnostics( from sal/test/testuuid.cxx )
  ************************************************************************/
-void printUuid( const sal_uInt8 *pNode )
+static void printUuid( const sal_uInt8 *pNode )
 {
     printf("# UUID is: ");
     for( sal_Int32 i1 = 0 ; i1 < 4 ; i1++ )
@@ -168,7 +168,7 @@ void printUuid( const sal_uInt8 *pNode )
 /**************************************************************************
  *  output UUID to a string
  **************************************************************************/
-void printUuidtoBuffer( const sal_uInt8 *pNode, sal_Char * pBuffer )
+static void printUuidtoBuffer( const sal_uInt8 *pNode, sal_Char * pBuffer )
 {
     sal_Int8 nPtr = 0;
     for( sal_Int32 i1 = 0 ; i1 < 16 ; i1++ )

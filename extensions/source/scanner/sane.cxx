@@ -40,7 +40,7 @@
 #else
 #define dump_state( a, b, c, d ) ;
 #endif
-inline void dbg_msg( const char* pString, ... )
+static inline void dbg_msg( const char* pString, ... )
 {
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
     va_list ap;

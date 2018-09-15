@@ -140,7 +140,7 @@ static bool readOption( bool * pbOpt, const sal_Char * pOpt,
 
 /// @throws Exception
 template< class T >
-void createInstance(
+static void createInstance(
     Reference< T > & rxOut,
     const Reference< XComponentContext > & xContext,
     const OUString & rServiceName )

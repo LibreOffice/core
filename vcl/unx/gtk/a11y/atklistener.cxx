@@ -64,7 +64,7 @@ AtkListener::~AtkListener()
 
 /*****************************************************************************/
 
-AtkStateType mapState( const uno::Any &rAny )
+static AtkStateType mapState( const uno::Any &rAny )
 {
     sal_Int16 nState = accessibility::AccessibleStateType::INVALID;
     rAny >>= nState;

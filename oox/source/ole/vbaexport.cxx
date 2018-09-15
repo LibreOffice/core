@@ -100,7 +100,7 @@ VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_
 {
 }
 
-void setUInt16(sal_uInt8* pBuffer, size_t nPos, sal_uInt16 nVal)
+static void setUInt16(sal_uInt8* pBuffer, size_t nPos, sal_uInt16 nVal)
 {
     pBuffer[nPos] = nVal & 0xFF;
     pBuffer[nPos+1] = (nVal & 0xFF00) >> 8;

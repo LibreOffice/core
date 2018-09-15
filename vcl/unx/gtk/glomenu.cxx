@@ -169,7 +169,7 @@ g_lo_menu_new()
     return G_LO_MENU( g_object_new (G_TYPE_LO_MENU, nullptr) );
 }
 
-void
+static void
 g_lo_menu_set_attribute_value (GLOMenu     *menu,
                                gint         position,
                                const gchar *attribute,
@@ -190,7 +190,7 @@ g_lo_menu_set_attribute_value (GLOMenu     *menu,
         g_hash_table_remove (menu_item.attributes, attribute);
 }
 
-GVariant*
+static GVariant*
 g_lo_menu_get_attribute_value_from_item_in_section (GLOMenu            *menu,
                                                     gint                section,
                                                     gint                position,
@@ -468,7 +468,7 @@ g_lo_menu_get_command_from_item_in_section (GLOMenu *menu,
     return command;
 }
 
-void
+static void
 g_lo_menu_set_link (GLOMenu     *menu,
                     gint         position,
                     const gchar *link,

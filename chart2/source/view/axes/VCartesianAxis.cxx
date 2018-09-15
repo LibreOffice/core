@@ -76,7 +76,7 @@ VCartesianAxis::~VCartesianAxis()
     m_pPosHelper = nullptr;
 }
 
-void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape > const & xShape2DText,
+static void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape > const & xShape2DText,
                                              const AxisLabelProperties& rAxisLabelProperties,
                                              const OUString& rLabel,
                                              const tNameSequence& rPropNames,
@@ -123,7 +123,7 @@ void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape > const 
     }
 }
 
-Reference< drawing::XShape > createSingleLabel(
+static Reference< drawing::XShape > createSingleLabel(
             const Reference< lang::XMultiServiceFactory>& xShapeFactory
           , const Reference< drawing::XShapes >& xTarget
           , const awt::Point& rAnchorScreenPosition2D
@@ -154,7 +154,7 @@ Reference< drawing::XShape > createSingleLabel(
     return xShape2DText;
 }
 
-bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShape
+static bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShape
                        , double fRotationAngleDegree
                        , const basegfx::B2DVector& rTickScreenPosition )
 {
@@ -169,7 +169,7 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
     return aShapeRect.isInside(aPosition);
 }
 
-void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aRect, const awt::Point &aPos, const double fRotationAngleDegree )
+static void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aRect, const awt::Point &aPos, const double fRotationAngleDegree )
 {
     aPoly = basegfx::utils::createPolygonFromRect( aRect );
 
@@ -189,7 +189,7 @@ void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aR
     aPoly.transform( aMatrix );
 }
 
-bool doesOverlap( const Reference< drawing::XShape >& xShape1
+static bool doesOverlap( const Reference< drawing::XShape >& xShape1
                 , const Reference< drawing::XShape >& xShape2
                 , double fRotationAngleDegree )
 {
@@ -212,7 +212,7 @@ bool doesOverlap( const Reference< drawing::XShape >& xShape1
     return (overlapPoly.count() > 0);
 }
 
-void removeShapesAtWrongRhythm( TickIter& rIter
+static void removeShapesAtWrongRhythm( TickIter& rIter
                               , sal_Int32 nCorrectRhythm
                               , sal_Int32 nMaxTickToCheck
                               , const Reference< drawing::XShapes >& xTarget )
@@ -309,7 +309,7 @@ TickInfo* LabelIterator::nextInfo()
     return pTickInfo;
 }
 
-B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText, double fRotationAngleDegree )
+static B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText, double fRotationAngleDegree )
 {
     //calculates the height or width of a line of labels
     //thus a following line of labels can be shifted for that distance
@@ -349,7 +349,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
     return aRet;
 }
 
-void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
+static void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
 {
     if(rStaggerDistance.getLength()==0.0)
         return;
@@ -369,7 +369,7 @@ void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
     }
 }
 
-bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
+static bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
 {
     if (!xShape.is())
         return false;
@@ -411,7 +411,7 @@ bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
     return false;
 }
 
-OUString getTextLabelString(
+static OUString getTextLabelString(
     const FixedNumberFormatter& rFixedNumberFormatter, const uno::Sequence<OUString>* pCategories,
     const TickInfo* pTickInfo, bool bComplexCat, Color& rExtraColor, bool& rHasExtraColor )
 {
@@ -435,7 +435,7 @@ OUString getTextLabelString(
     return rFixedNumberFormatter.getFormattedString(pTickInfo->getUnscaledTickValue(), rExtraColor, rHasExtraColor);
 }
 
-void getAxisLabelProperties(
+static void getAxisLabelProperties(
     tNameSequence& rPropNames, tAnySequence& rPropValues, const AxisProperties& rAxisProp,
     const AxisLabelProperties& rAxisLabelProp,
     sal_Int32 nLimitedSpaceForText, bool bLimitedHeight )
@@ -1475,7 +1475,7 @@ TickFactory2D* VCartesianAxis::createTickFactory2D()
     return new TickFactory2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
 
-void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
+static void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
 {
     TickInfo* pPrevTickInfo = rTickIter.firstInfo();
     if (!pPrevTickInfo)

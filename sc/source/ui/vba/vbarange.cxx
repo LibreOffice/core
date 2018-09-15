@@ -386,7 +386,7 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
 
 // assume that xIf is infact a ScCellRangesBase
 /// @throws uno::RuntimeException
-ScDocShell*
+static ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
 {
     ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
@@ -396,7 +396,7 @@ getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
 }
 
 /// @throws uno::RuntimeException
-ScDocShell*
+static ScDocShell*
 getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     // need the ScCellRangesBase to get docshell
@@ -405,7 +405,7 @@ getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange )
 }
 
 /// @throws uno::RuntimeException
-ScDocShell*
+static ScDocShell*
 getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges )
 {
     // need the ScCellRangesBase to get docshell
@@ -414,21 +414,21 @@ getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& 
 }
 
 /// @throws uno::RuntimeException
-uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf )
+static uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf )
 {
     ScDocShell* pDocShell = getDocShellFromIf(xIf );
     return pDocShell->GetModel();
 }
 
 /// @throws uno::RuntimeException
-uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange )
+static uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     // the XInterface for getImplementation can be any derived interface, no need for queryInterface
     uno::Reference< uno::XInterface > xIf( xRange );
     return getModelFromXIf( xIf );
 }
 
-ScDocument&
+static ScDocument&
 getDocumentFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     ScDocShell* pDocShell = getDocShellFromRange( xRange );
@@ -1230,7 +1230,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
 }
 
 /// @throws uno::RuntimeException
-ScVbaRange*
+static ScVbaRange*
 getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const OUString& sName, ScDocShell* pDocSh, const table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 )
 {
     ScRangeList aCellRanges;
@@ -1371,7 +1371,7 @@ ScVbaRange::getRangeObjectForName(
 }
 
 /// @throws uno::RuntimeException
-table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh )
+static table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh )
 {
     uno::Reference< table::XCellRange > xRangeParam;
     switch ( aParam.getValueTypeClass() )
@@ -2263,13 +2263,13 @@ ScVbaRange::Select()
     }
 }
 
-bool cellInRange( const table::CellRangeAddress& rAddr, sal_Int32 nCol, sal_Int32 nRow )
+static bool cellInRange( const table::CellRangeAddress& rAddr, sal_Int32 nCol, sal_Int32 nRow )
 {
     return nCol >= rAddr.StartColumn && nCol <= rAddr.EndColumn &&
         nRow >= rAddr.StartRow && nRow <= rAddr.EndRow;
 }
 
-void setCursor( SCCOL nCol, SCROW nRow, const uno::Reference< frame::XModel >& xModel,  bool bInSel = true )
+static void setCursor( SCCOL nCol, SCROW nRow, const uno::Reference< frame::XModel >& xModel,  bool bInSel = true )
 {
     ScTabViewShell* pShell = excel::getBestViewShell( xModel );
     if ( pShell )
@@ -2953,7 +2953,7 @@ ScVbaRange::getComment()
 }
 
 /// @throws uno::RuntimeException
-uno::Reference< beans::XPropertySet >
+static uno::Reference< beans::XPropertySet >
 getRowOrColumnProps( const uno::Reference< table::XCellRange >& xCellRange, bool bRows )
 {
     uno::Reference< table::XColumnRowRange > xColRow( xCellRange, uno::UNO_QUERY_THROW );
@@ -3280,7 +3280,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     return uno::Reference< excel::XRange >();
 }
 
-uno::Reference< table::XCellRange > processKey( const uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
+static uno::Reference< table::XCellRange > processKey( const uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
 {
     uno::Reference< excel::XRange > xKeyRange;
     if ( Key.getValueType() == cppu::UnoType<excel::XRange>::get() )
@@ -3305,7 +3305,7 @@ uno::Reference< table::XCellRange > processKey( const uno::Any& Key, const uno::
 
 // helper method for Sort
 /// @throws uno::RuntimeException
-sal_Int32 findSortPropertyIndex( const uno::Sequence< beans::PropertyValue >& props,
+static sal_Int32 findSortPropertyIndex( const uno::Sequence< beans::PropertyValue >& props,
 const OUString& sPropName )
 {
     const beans::PropertyValue* pProp = props.getConstArray();
@@ -3322,7 +3322,7 @@ const OUString& sPropName )
 
 // helper method for Sort
 /// @throws uno::RuntimeException
-void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRange,
+static void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRange,
     const uno::Reference< table::XCellRange >& xColRowKey, sal_Int16 nOrder,
     table::TableSortField& aTableField, bool bIsSortColumn, bool bMatchCase )
 {
@@ -3744,7 +3744,7 @@ ScVbaRange::getCalcRowHeight(const table::CellRangeAddress& rAddress)
 }
 
 // return Char Width in points
-double getDefaultCharWidth( ScDocShell* pDocShell )
+static double getDefaultCharWidth( ScDocShell* pDocShell )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     OutputDevice* pRefDevice = rDoc.GetRefDevice();
@@ -4103,7 +4103,7 @@ ScVbaRange::getTop()
     return uno::makeAny( lcl_hmmToPoints( aPoint.Y ) );
 }
 
-uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
+static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
 {
     uno::Reference< beans::XPropertySet > xProps( xIf, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );

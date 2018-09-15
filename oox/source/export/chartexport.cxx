@@ -156,7 +156,7 @@ private:
     OUString m_aRole;
 };
 
-Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
+static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
     try
@@ -197,7 +197,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     return xResult;
 }
 
-Reference< chart2::data::XLabeledDataSequence >
+static Reference< chart2::data::XLabeledDataSequence >
     lcl_getDataSequenceByRole(
         const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aLabeledSeq,
         const OUString & rRole )
@@ -215,7 +215,7 @@ Reference< chart2::data::XLabeledDataSequence >
     return aNoResult;
 }
 
-bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc )
+static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc )
 {
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
@@ -223,7 +223,7 @@ bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc
     return xCategories.is();
 }
 
-bool lcl_isSeriesAttachedToFirstAxis(
+static bool lcl_isSeriesAttachedToFirstAxis(
     const Reference< chart2::XDataSeries > & xDataSeries )
 {
     bool bResult=true;
@@ -243,7 +243,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     return bResult;
 }
 
-OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
+static OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
 {
     OUStringBuffer aResult;
     bool bPrecedeWithSpace = false;
@@ -260,7 +260,7 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xLabelSeq )
+static OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xLabelSeq )
 {
     Sequence< OUString > aLabels;
 
@@ -280,7 +280,7 @@ OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xL
     return lcl_flattenStringSequence( aLabels );
 }
 
-void lcl_fillCategoriesIntoStringVector(
+static void lcl_fillCategoriesIntoStringVector(
     const Reference< chart2::data::XDataSequence > & xCategories,
     ::std::vector< OUString > & rOutCategories )
 {
@@ -304,7 +304,7 @@ void lcl_fillCategoriesIntoStringVector(
     }
 }
 
-::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
+static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
@@ -327,7 +327,7 @@ void lcl_fillCategoriesIntoStringVector(
     return aResult;
 }
 
-sal_Int32 lcl_getChartType( const OUString& sChartType )
+static sal_Int32 lcl_getChartType( const OUString& sChartType )
 {
     chart::TypeId eChartTypeId = chart::TYPEID_UNKNOWN;
     if( sChartType == "com.sun.star.chart.BarDiagram"
@@ -364,7 +364,7 @@ sal_Int32 lcl_getChartType( const OUString& sChartType )
     return eChartTypeId;
 }
 
-sal_Int32 lcl_generateRandomValue()
+static sal_Int32 lcl_generateRandomValue()
 {
     return comphelper::rng::uniform_int_distribution(0, 100000000-1);
 }

@@ -105,7 +105,7 @@ using namespace sw::types;
 using namespace sw::util;
 
 // helper methods
-Color WW8TransCol(SVBT32 nWC)
+static Color WW8TransCol(SVBT32 nWC)
 {
 #if 1               // 1 = use predefined color, 0 = ignore
 
@@ -460,7 +460,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &
     return pObj;
 }
 
-ESelection GetESelection(EditEngine const &rDrawEditEngine, long nCpStart, long nCpEnd)
+static ESelection GetESelection(EditEngine const &rDrawEditEngine, long nCpStart, long nCpEnd)
 {
     sal_Int32 nPCnt = rDrawEditEngine.GetParagraphCount();
     sal_Int32 nSP = 0;
@@ -920,7 +920,7 @@ sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStar
 //how EditEngine does it, but preserve the length and replace the extra
 //chars with placeholders, record the position of the placeholders and
 //remove those extra chars after attributes have been inserted
-std::vector<sal_Int32> replaceDosLineEndsButPreserveLength(OUString &rIn)
+static std::vector<sal_Int32> replaceDosLineEndsButPreserveLength(OUString &rIn)
 {
     OUStringBuffer aNewData(rIn);
     std::vector<sal_Int32> aDosLineEndDummies;
@@ -946,7 +946,7 @@ std::vector<sal_Int32> replaceDosLineEndsButPreserveLength(OUString &rIn)
     return aDosLineEndDummies;
 }
 
-void removePositions(EditEngine &rDrawEditEngine, const std::vector<sal_Int32>& rDosLineEndDummies)
+static void removePositions(EditEngine &rDrawEditEngine, const std::vector<sal_Int32>& rDosLineEndDummies)
 {
     for (auto aIter = rDosLineEndDummies.rbegin(); aIter != rDosLineEndDummies.rend(); ++aIter)
     {

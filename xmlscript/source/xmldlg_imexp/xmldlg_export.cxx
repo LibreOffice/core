@@ -1237,7 +1237,7 @@ void ElementDescriptor::readEvents()
     }
 }
 
-inline bool equalFont( Style const & style1, Style const & style2 )
+static inline bool equalFont( Style const & style1, Style const & style2 )
 {
     awt::FontDescriptor const & f1 = style1._descr;
     awt::FontDescriptor const & f2 = style2._descr;

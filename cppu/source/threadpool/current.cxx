@@ -134,7 +134,9 @@ public:
     }
 };
 
-extern "C" void delete_IdContainer( void * p )
+extern "C" {
+
+static void delete_IdContainer( void * p )
 {
     if (p)
     {
@@ -153,6 +155,8 @@ extern "C" void delete_IdContainer( void * p )
         }
         delete pId;
     }
+}
+
 }
 
 IdContainer * getIdContainer()

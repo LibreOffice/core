@@ -701,7 +701,7 @@ OUString Hyphenator::makeInitCap(const OUString& aTerm, CharClass const * pCC)
 }
 
 /// @throws Exception
-Reference< XInterface > Hyphenator_CreateInstance(
+static Reference< XInterface > Hyphenator_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Hyphenator);

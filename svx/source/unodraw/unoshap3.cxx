@@ -649,7 +649,7 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
 {
 }
 
-bool PolyPolygonShape3D_to_B3dPolyPolygon(
+static bool PolyPolygonShape3D_to_B3dPolyPolygon(
     const Any& rValue,
     basegfx::B3DPolyPolygon& rResultPolygon,
     bool bCorrectPolygon)

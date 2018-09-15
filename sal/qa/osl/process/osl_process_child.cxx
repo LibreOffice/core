@@ -45,7 +45,7 @@
 #   define SLEEP(t) (sleep((t)))
 #endif
 
-void wait_for_seconds(char* time)
+static void wait_for_seconds(char* time)
 {
     SLEEP(atoi(time));
 }
@@ -74,7 +74,7 @@ void w_to_a(LPCWSTR strW, LPSTR strA, DWORD size)
         FreeEnvironmentStringsW(env);
     }
 #else
-    void dump_env(char* file_path)
+    static void dump_env(char* file_path)
     {
         std::ofstream file(file_path);
         for (int i = 0; environ[i] != nullptr; ++i)

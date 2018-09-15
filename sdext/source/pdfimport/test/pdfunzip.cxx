@@ -31,7 +31,7 @@
 using namespace pdfparse;
 
 
-void printHelp( const char* pExe )
+static void printHelp( const char* pExe )
 {
     fprintf( stdout,
     "USAGE: %s [-h,--help]\n"
@@ -212,7 +212,7 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
 
 typedef int(*PDFFileHdl)(const char*, const char*, PDFFile*);
 
-int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword, PDFFileHdl pHdl )
+static int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword, PDFFileHdl pHdl )
 {
 
     PDFReader aParser;
@@ -236,7 +236,7 @@ int handleFile( const char* pInFile, const char* pOutFile, const char* pPassword
     return nRet;
 }
 
-int write_unzipFile( const char* pInFile, const char* pOutFile, PDFFile* pPDFFile )
+static int write_unzipFile( const char* pInFile, const char* pOutFile, PDFFile* pPDFFile )
 {
     FileEmitContext aContext( pOutFile, pInFile, pPDFFile );
     aContext.m_bDecrypt = pPDFFile->isEncrypted();
@@ -244,7 +244,7 @@ int write_unzipFile( const char* pInFile, const char* pOutFile, PDFFile* pPDFFil
     return 0;
 }
 
-int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFile* pPDFFile, const char* pInFile )
+static int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFile* pPDFFile, const char* pInFile )
 {
     int nRet = 0;
     unsigned int nArrayElements = pStreams->m_aSubElements.size();
@@ -285,7 +285,7 @@ int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFile* pPD
     return nRet;
 }
 
-int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFile )
+static int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFile )
 {
     // find all trailers
     int nRet = 0;
@@ -309,7 +309,7 @@ int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFi
     return nRet;
 }
 
-int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
+static int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
 {
     int nRet = 0;
     unsigned int nElements = i_pPDFFile->m_aSubElements.size();
@@ -395,7 +395,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
 
 static std::vector< std::pair< sal_Int32, sal_Int32 > > s_aEmitObjects;
 
-int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
+static int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
 {
     int nRet = 0;
     unsigned int nElements = s_aEmitObjects.size();

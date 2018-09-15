@@ -299,7 +299,7 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
 //  Function to set the controls' visibility according
 //  to the dialog's "Step" property
 
-void implUpdateVisibility
+static void implUpdateVisibility
 (
     sal_Int32 nDialogStep,
     const uno::Reference< awt::XControlContainer >& xControlContainer

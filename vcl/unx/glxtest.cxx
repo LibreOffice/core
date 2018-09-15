@@ -101,7 +101,7 @@ x_error_handler(Display *, XErrorEvent *ev)
   return 0;
 }
 
-void glxtest()
+static void glxtest()
 {
   signal(SIGPIPE, SIG_IGN);
   // we want to redirect to /dev/null stdout, stderr, and while we're at it,

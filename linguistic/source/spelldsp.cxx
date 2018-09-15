@@ -154,7 +154,7 @@ std::vector< OUString > ProposalList::GetVector() const
     return aRes;
 }
 
-bool SvcListHasLanguage(
+static bool SvcListHasLanguage(
         const LangSvcEntries_Spell &rEntry,
         LanguageType nLanguage )
 {

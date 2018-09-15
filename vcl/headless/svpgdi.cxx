@@ -820,7 +820,7 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
         0.0);
 }
 
-basegfx::B2DPoint impPixelSnap(
+static basegfx::B2DPoint impPixelSnap(
     const basegfx::B2DPolygon& rPolygon,
     const basegfx::B2DHomMatrix& rObjectToDevice,
     basegfx::B2DHomMatrix& rObjectToDeviceInv,

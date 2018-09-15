@@ -2132,7 +2132,7 @@ private:
     cl_mem mpClmem2;
 };
 
-DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
+static DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
     const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
     int nResultSize )
 {
@@ -2140,7 +2140,7 @@ DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
 }
 
 template<class Base>
-DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::string& s,
+static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::string& s,
     const FormulaTreeNodeRef& ft,
     std::shared_ptr<SlidingFunctionBase>& pCodeGen,
     int index )

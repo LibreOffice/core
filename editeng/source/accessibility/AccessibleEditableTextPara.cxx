@@ -83,7 +83,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
+    static const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
     {
         // PropertyMap for character and paragraph properties
         static const SfxItemPropertyMapEntry aPropMap[] =

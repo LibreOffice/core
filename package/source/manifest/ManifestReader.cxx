@@ -80,7 +80,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
 }
 // Component functions
 
-Reference < XInterface > ManifestReader_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
+static Reference < XInterface > ManifestReader_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
 {
     return *new ManifestReader( comphelper::getComponentContext(rServiceFactory) );
 }

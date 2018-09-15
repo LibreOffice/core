@@ -81,7 +81,7 @@ using namespace SWUnoHelper;
 
 typedef ::utl::SharedUNOComponent< XInterface > SharedComponent;
 
-osl::Mutex &    GetMailMergeMutex()
+static osl::Mutex &    GetMailMergeMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;

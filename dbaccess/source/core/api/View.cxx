@@ -38,7 +38,7 @@ namespace dbaccess
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XMultiServiceFactory;
 
-    OUString lcl_getServiceNameForSetting(const Reference< css::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
+    static OUString lcl_getServiceNameForSetting(const Reference< css::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
     {
         OUString sSupportService;
         Any aValue;

@@ -32,7 +32,7 @@
 
 #ifndef TESTDRIVER
 
-void WriteUsage()
+static void WriteUsage()
 {
     std::cout
         << (" Syntax: Helpex -[m]i FileIn -o FileOut [-m DataBase] [-l Lang]\n"

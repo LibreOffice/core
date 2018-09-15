@@ -28,8 +28,8 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rF
 
 FontFeaturesDialog::~FontFeaturesDialog() {}
 
-void makeEnumComboBox(weld::ComboBoxText& rNameBox,
-                      vcl::font::FeatureDefinition const& rFeatureDefinition)
+static void makeEnumComboBox(weld::ComboBoxText& rNameBox,
+                             vcl::font::FeatureDefinition const& rFeatureDefinition)
 {
     for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
         rNameBox.append_text(rParameter.getDescription());

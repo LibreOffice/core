@@ -220,7 +220,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
     return nFormat;
 }
 
-Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
+static Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
 {
     Reference< XConnection> xConnection(xParent, UNO_QUERY);
     if (!xConnection.is())
@@ -232,7 +232,7 @@ Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
     return xConnection;
 }
 
-Reference< XDataSource> getDataSource_allowException(
+static Reference< XDataSource> getDataSource_allowException(
             const OUString& _rsTitleOrPath,
             const Reference< XComponentContext >& _rxContext )
 {
@@ -260,7 +260,7 @@ Reference< XDataSource > getDataSource(
     return xDS;
 }
 
-Reference< XConnection > getConnection_allowException(
+static Reference< XConnection > getConnection_allowException(
             const OUString& _rsTitleOrPath,
             const OUString& _rsUser,
             const OUString& _rsPwd,
@@ -337,7 +337,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet)
 // helper function which allows to implement both the connectRowset and the ensureRowSetConnection semantics
 // if connectRowset (which is deprecated) is removed, this function and one of its parameters are
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
-SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
+static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
         bool _bAttachAutoDisposer )
 {
     SharedConnection xConnection;
@@ -1197,7 +1197,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     return xDataSource;
 }
 
-Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
+static Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
 {
     Reference< XSingleSelectQueryComposer > xComposer;
     try

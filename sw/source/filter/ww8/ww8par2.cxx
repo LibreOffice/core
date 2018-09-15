@@ -1613,7 +1613,7 @@ enum wwTableSprm
     sprmTDefTableNewShd, sprmTCellPadding, sprmTCellPaddingDefault
 };
 
-wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
+static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
 {
     switch (eVer)
     {
@@ -3072,7 +3072,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     }
 }
 
-SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
+static SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
 {
     SvxFrameDirection eDir = SvxFrameDirection::Environment;
     // 1: Asian layout with rotated CJK characters

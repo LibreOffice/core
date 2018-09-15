@@ -80,7 +80,7 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
     }
 }
 
-void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
+static void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {

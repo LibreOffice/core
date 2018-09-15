@@ -1066,7 +1066,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNam
     return aRet;
 }
 
-uno::Sequence< OUString > const & getAttributeNames()
+static uno::Sequence< OUString > const & getAttributeNames()
 {
     static uno::Sequence< OUString >* pNames = nullptr;
 
@@ -1099,7 +1099,7 @@ uno::Sequence< OUString > const & getAttributeNames()
     return *pNames;
 }
 
-uno::Sequence< OUString > const & getSupplementalAttributeNames()
+static uno::Sequence< OUString > const & getSupplementalAttributeNames()
 {
     static uno::Sequence< OUString >* pNames = nullptr;
 
